@@ -11,9 +11,30 @@
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {})));
 }(this, (function (exports) { 'use strict';
 
-var __TEMP__ = -1;
+/**
+ * Coerces a data-bound value (typically a string) to a boolean.
+ * @param {?} value
+ * @return {?}
+ */
+function coerceBooleanProperty(value) {
+    return value != null && "" + value !== 'false';
+}
+/**
+ * Coerces a data-bound value (typically a string) to a number.
+ * @param {?} value
+ * @param {?=} fallbackValue
+ * @return {?}
+ */
+function coerceNumberProperty(value, fallbackValue) {
+    if (fallbackValue === void 0) { fallbackValue = 0; }
+    // parseFloat(value) handles most of the cases we're interested in (it treats null, empty string,
+    // and other non-number values as NaN, where Number just uses 0) but it considers the string
+    // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
+    return isNaN(parseFloat(/** @type {?} */ (value))) || isNaN(Number(value)) ? fallbackValue : Number(value);
+}
 
-exports.__TEMP__ = __TEMP__;
+exports.coerceBooleanProperty = coerceBooleanProperty;
+exports.coerceNumberProperty = coerceNumberProperty;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
