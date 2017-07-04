@@ -2763,6 +2763,117 @@ PortalModule.decorators = [
  * @nocollapse
  */
 PortalModule.ctorParameters = function () { return []; };
+/**
+ * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
+ * \@docs-private
+ */
+var MdMutationObserverFactory = (function () {
+    function MdMutationObserverFactory() {
+    }
+    /**
+     * @param {?} callback
+     * @return {?}
+     */
+    MdMutationObserverFactory.prototype.create = function (callback) {
+        return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
+    };
+    return MdMutationObserverFactory;
+}());
+MdMutationObserverFactory.decorators = [
+    { type: _angular_core.Injectable },
+];
+/**
+ * @nocollapse
+ */
+MdMutationObserverFactory.ctorParameters = function () { return []; };
+/**
+ * Directive that triggers a callback whenever the content of
+ * its associated element has changed.
+ */
+var ObserveContent = (function () {
+    /**
+     * @param {?} _mutationObserverFactory
+     * @param {?} _elementRef
+     */
+    function ObserveContent(_mutationObserverFactory, _elementRef) {
+        this._mutationObserverFactory = _mutationObserverFactory;
+        this._elementRef = _elementRef;
+        /**
+         * Event emitted for each change in the element's content.
+         */
+        this.event = new _angular_core.EventEmitter();
+        /**
+         * Used for debouncing the emitted values to the observeContent event.
+         */
+        this._debouncer = new rxjs_Subject.Subject();
+    }
+    /**
+     * @return {?}
+     */
+    ObserveContent.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        if (this.debounce > 0) {
+            RxChain.from(this._debouncer)
+                .call(debounceTime$1, this.debounce)
+                .subscribe(function (mutations) { return _this.event.emit(mutations); });
+        }
+        else {
+            this._debouncer.subscribe(function (mutations) { return _this.event.emit(mutations); });
+        }
+        this._observer = this._mutationObserverFactory.create(function (mutations) {
+            _this._debouncer.next(mutations);
+        });
+        if (this._observer) {
+            this._observer.observe(this._elementRef.nativeElement, {
+                characterData: true,
+                childList: true,
+                subtree: true
+            });
+        }
+    };
+    /**
+     * @return {?}
+     */
+    ObserveContent.prototype.ngOnDestroy = function () {
+        if (this._observer) {
+            this._observer.disconnect();
+            this._debouncer.complete();
+        }
+    };
+    return ObserveContent;
+}());
+ObserveContent.decorators = [
+    { type: _angular_core.Directive, args: [{
+                selector: '[cdkObserveContent]'
+            },] },
+];
+/**
+ * @nocollapse
+ */
+ObserveContent.ctorParameters = function () { return [
+    { type: MdMutationObserverFactory, },
+    { type: _angular_core.ElementRef, },
+]; };
+ObserveContent.propDecorators = {
+    'event': [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
+    'debounce': [{ type: _angular_core.Input },],
+};
+var ObserveContentModule = (function () {
+    function ObserveContentModule() {
+    }
+    return ObserveContentModule;
+}());
+ObserveContentModule.decorators = [
+    { type: _angular_core.NgModule, args: [{
+                exports: [ObserveContent],
+                declarations: [ObserveContent],
+                providers: [MdMutationObserverFactory]
+            },] },
+];
+/**
+ * @nocollapse
+ */
+ObserveContentModule.ctorParameters = function () { return []; };
 
 exports.A11yModule = A11yModule;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
@@ -2841,6 +2952,9 @@ exports.startWith = startWith$1;
 exports.debounceTime = debounceTime$1;
 exports.auditTime = auditTime$1;
 exports.takeUntil = takeUntil$1;
+exports.MdMutationObserverFactory = MdMutationObserverFactory;
+exports.ObserveContent = ObserveContent;
+exports.ObserveContentModule = ObserveContentModule;
 exports.UP_ARROW = UP_ARROW;
 exports.DOWN_ARROW = DOWN_ARROW;
 exports.RIGHT_ARROW = RIGHT_ARROW;

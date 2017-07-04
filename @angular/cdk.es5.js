@@ -2751,7 +2751,118 @@ PortalModule.decorators = [
  */
 PortalModule.ctorParameters = function () { return []; };
 /**
+ * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
+ * \@docs-private
+ */
+var MdMutationObserverFactory = /*@__PURE__*/(function () {
+    function MdMutationObserverFactory() {
+    }
+    /**
+     * @param {?} callback
+     * @return {?}
+     */
+    MdMutationObserverFactory.prototype.create = function (callback) {
+        return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
+    };
+    return MdMutationObserverFactory;
+}());
+MdMutationObserverFactory.decorators = [
+    { type: Injectable },
+];
+/**
+ * @nocollapse
+ */
+MdMutationObserverFactory.ctorParameters = function () { return []; };
+/**
+ * Directive that triggers a callback whenever the content of
+ * its associated element has changed.
+ */
+var ObserveContent = /*@__PURE__*/(function () {
+    /**
+     * @param {?} _mutationObserverFactory
+     * @param {?} _elementRef
+     */
+    function ObserveContent(_mutationObserverFactory, _elementRef) {
+        this._mutationObserverFactory = _mutationObserverFactory;
+        this._elementRef = _elementRef;
+        /**
+         * Event emitted for each change in the element's content.
+         */
+        this.event = new EventEmitter();
+        /**
+         * Used for debouncing the emitted values to the observeContent event.
+         */
+        this._debouncer = new Subject();
+    }
+    /**
+     * @return {?}
+     */
+    ObserveContent.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        if (this.debounce > 0) {
+            RxChain.from(this._debouncer)
+                .call(debounceTime$1, this.debounce)
+                .subscribe(function (mutations) { return _this.event.emit(mutations); });
+        }
+        else {
+            this._debouncer.subscribe(function (mutations) { return _this.event.emit(mutations); });
+        }
+        this._observer = this._mutationObserverFactory.create(function (mutations) {
+            _this._debouncer.next(mutations);
+        });
+        if (this._observer) {
+            this._observer.observe(this._elementRef.nativeElement, {
+                characterData: true,
+                childList: true,
+                subtree: true
+            });
+        }
+    };
+    /**
+     * @return {?}
+     */
+    ObserveContent.prototype.ngOnDestroy = function () {
+        if (this._observer) {
+            this._observer.disconnect();
+            this._debouncer.complete();
+        }
+    };
+    return ObserveContent;
+}());
+ObserveContent.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkObserveContent]'
+            },] },
+];
+/**
+ * @nocollapse
+ */
+ObserveContent.ctorParameters = function () { return [
+    { type: MdMutationObserverFactory, },
+    { type: ElementRef, },
+]; };
+ObserveContent.propDecorators = {
+    'event': [{ type: Output, args: ['cdkObserveContent',] },],
+    'debounce': [{ type: Input },],
+};
+var ObserveContentModule = /*@__PURE__*/(function () {
+    function ObserveContentModule() {
+    }
+    return ObserveContentModule;
+}());
+ObserveContentModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [ObserveContent],
+                declarations: [ObserveContent],
+                providers: [MdMutationObserverFactory]
+            },] },
+];
+/**
+ * @nocollapse
+ */
+ObserveContentModule.ctorParameters = function () { return []; };
+/**
  * Generated bundle index. Do not edit.
  */
-export { A11yModule, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, isFakeMousedownFromScreenReader, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, FocusTrapDirective, InteractivityChecker, ListKeyManager, ActiveDescendantKeyManager, FocusKeyManager, Directionality, DIRECTIONALITY_PROVIDER_FACTORY, DIRECTIONALITY_PROVIDER, DIR_DOCUMENT, Dir, BidiModule, coerceBooleanProperty, coerceNumberProperty, CdkTableModule, DataSource, getTableUnknownColumnError, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow, PlatformModule, Platform, getSupportedInputTypes, Portal, ComponentPortal, TemplatePortal, BasePortalHost, DomPortalHost, TemplatePortalDirective, PortalHostDirective, PortalModule, RxChain, FinallyBrand, CatchBrand, DoBrand, MapBrand, FilterBrand, ShareBrand, FirstBrand, SwitchMapBrand, StartWithBrand, DebounceTimeBrand, AuditTimeBrand, TakeUntilBrand, finallyOperator, catchOperator, doOperator, map$1 as map, filter$1 as filter, share$1 as share, first$1 as first, switchMap$1 as switchMap, startWith$1 as startWith, debounceTime$1 as debounceTime, auditTime$1 as auditTime, takeUntil$1 as takeUntil, UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE };
+export { A11yModule, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, isFakeMousedownFromScreenReader, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, FocusTrapDirective, InteractivityChecker, ListKeyManager, ActiveDescendantKeyManager, FocusKeyManager, Directionality, DIRECTIONALITY_PROVIDER_FACTORY, DIRECTIONALITY_PROVIDER, DIR_DOCUMENT, Dir, BidiModule, coerceBooleanProperty, coerceNumberProperty, CdkTableModule, DataSource, getTableUnknownColumnError, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow, PlatformModule, Platform, getSupportedInputTypes, Portal, ComponentPortal, TemplatePortal, BasePortalHost, DomPortalHost, TemplatePortalDirective, PortalHostDirective, PortalModule, RxChain, FinallyBrand, CatchBrand, DoBrand, MapBrand, FilterBrand, ShareBrand, FirstBrand, SwitchMapBrand, StartWithBrand, DebounceTimeBrand, AuditTimeBrand, TakeUntilBrand, finallyOperator, catchOperator, doOperator, map$1 as map, filter$1 as filter, share$1 as share, first$1 as first, switchMap$1 as switchMap, startWith$1 as startWith, debounceTime$1 as debounceTime, auditTime$1 as auditTime, takeUntil$1 as takeUntil, MdMutationObserverFactory, ObserveContent, ObserveContentModule, UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE };
 //# sourceMappingURL=cdk.es5.js.map
