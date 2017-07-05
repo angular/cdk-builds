@@ -1086,7 +1086,7 @@ var ListKeyManager = (function () {
                 break;
             case TAB:
                 // Note that we shouldn't prevent the default action on tab.
-                this._tabOut.next(null);
+                this._tabOut.next();
                 return;
             default:
                 return;
@@ -1095,7 +1095,7 @@ var ListKeyManager = (function () {
     };
     Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
         /**
-         * Returns the index of the currently active item.
+         * Index of the currently active item.
          * @return {?}
          */
         get: function () {
@@ -1106,7 +1106,7 @@ var ListKeyManager = (function () {
     });
     Object.defineProperty(ListKeyManager.prototype, "activeItem", {
         /**
-         * Returns the currently active item.
+         * The active item.
          * @return {?}
          */
         get: function () {

@@ -1013,7 +1013,7 @@ class ListKeyManager {
                 break;
             case TAB:
                 // Note that we shouldn't prevent the default action on tab.
-                this._tabOut.next(null);
+                this._tabOut.next();
                 return;
             default:
                 return;
@@ -1021,14 +1021,14 @@ class ListKeyManager {
         event.preventDefault();
     }
     /**
-     * Returns the index of the currently active item.
+     * Index of the currently active item.
      * @return {?}
      */
     get activeItemIndex() {
         return this._activeItemIndex;
     }
     /**
-     * Returns the currently active item.
+     * The active item.
      * @return {?}
      */
     get activeItem() {

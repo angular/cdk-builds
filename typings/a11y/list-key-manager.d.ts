@@ -43,9 +43,9 @@ export declare class ListKeyManager<T extends CanDisable> {
      * @param event Keyboard event to be used for determining which element should be active.
      */
     onKeydown(event: KeyboardEvent): void;
-    /** Returns the index of the currently active item. */
+    /** Index of the currently active item. */
     readonly activeItemIndex: number | null;
-    /** Returns the currently active item. */
+    /** The active item. */
     readonly activeItem: T | null;
     /** Sets the active item to the first enabled item in the list. */
     setFirstItemActive(): void;
@@ -64,7 +64,7 @@ export declare class ListKeyManager<T extends CanDisable> {
      * Observable that emits any time the TAB key is pressed, so components can react
      * when focus is shifted off of the list.
      */
-    readonly tabOut: Observable<null>;
+    readonly tabOut: Observable<void>;
     /**
      * This method sets the active item, given a list of items and the delta between the
      * currently active item and the new active item. It will calculate differently
