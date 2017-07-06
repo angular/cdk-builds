@@ -27,8 +27,11 @@ export declare class CdkHeaderCellDef {
  * Defines a set of cells available for a table column.
  */
 export declare class CdkColumnDef {
+    /** Unique name for this column. */
     name: string;
+    /** @docs-private */
     cell: CdkCellDef;
+    /** @docs-private */
     headerCell: CdkHeaderCellDef;
 }
 /** Header cell template container that adds the right classes and role. */

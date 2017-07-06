@@ -2171,14 +2171,20 @@ var DataSource = /*@__PURE__*/(function () {
     function DataSource() {
     }
     /**
+     * Connects a collection viewer (such as a data-table) to this data source.
      * @abstract
-     * @param {?} collectionViewer
-     * @return {?}
+     * @param {?} collectionViewer The component that exposes a view over the data provided by this
+     *     data source.
+     * @return {?} Observable that emits a new value when the data changes.
      */
     DataSource.prototype.connect = function (collectionViewer) { };
     /**
+     * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
+     * to perform any clean-up or tear-down operations when a view is being destroyed.
+     *
      * @abstract
-     * @param {?} collectionViewer
+     * @param {?} collectionViewer The component that exposes a view over the data provided by this
+     *     data source.
      * @return {?}
      */
     DataSource.prototype.disconnect = function (collectionViewer) { };
