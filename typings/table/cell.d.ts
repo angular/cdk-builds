@@ -36,15 +36,9 @@ export declare class CdkColumnDef {
 }
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell {
-    private columnDef;
-    private elementRef;
-    private renderer;
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef, renderer: Renderer2);
 }
 /** Cell template container that adds the right classes and role. */
 export declare class CdkCell {
-    private columnDef;
-    private elementRef;
-    private renderer;
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef, renderer: Renderer2);
 }

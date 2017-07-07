@@ -1712,10 +1712,7 @@ var CdkHeaderCell = /*@__PURE__*/(function () {
      * @param {?} renderer
      */
     function CdkHeaderCell(columnDef, elementRef, renderer) {
-        this.columnDef = columnDef;
-        this.elementRef = elementRef;
-        this.renderer = renderer;
-        this.renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
+        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
     }
     return CdkHeaderCell;
 }());
@@ -1746,10 +1743,7 @@ var CdkCell = /*@__PURE__*/(function () {
      * @param {?} renderer
      */
     function CdkCell(columnDef, elementRef, renderer) {
-        this.columnDef = columnDef;
-        this.elementRef = elementRef;
-        this.renderer = renderer;
-        this.renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
+        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
     }
     return CdkCell;
 }());

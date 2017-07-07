@@ -1604,10 +1604,7 @@ class CdkHeaderCell {
      * @param {?} renderer
      */
     constructor(columnDef, elementRef, renderer) {
-        this.columnDef = columnDef;
-        this.elementRef = elementRef;
-        this.renderer = renderer;
-        this.renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
+        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
     }
 }
 CdkHeaderCell.decorators = [
@@ -1637,10 +1634,7 @@ class CdkCell {
      * @param {?} renderer
      */
     constructor(columnDef, elementRef, renderer) {
-        this.columnDef = columnDef;
-        this.elementRef = elementRef;
-        this.renderer = renderer;
-        this.renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
+        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
     }
 }
 CdkCell.decorators = [
