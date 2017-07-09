@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, Optional } from '@angular/core';
+import { InjectionToken, Optional, OnDestroy } from '@angular/core';
 import { Platform } from '../platform/platform';
 export declare const LIVE_ANNOUNCER_ELEMENT_TOKEN: InjectionToken<HTMLElement>;
 /** Possible politeness levels. */
 export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
-export declare class LiveAnnouncer {
+export declare class LiveAnnouncer implements OnDestroy {
     private _liveElement;
     constructor(elementToken: any, platform: Platform);
     /**
@@ -19,8 +19,7 @@ export declare class LiveAnnouncer {
      * @param politeness The politeness of the announcer element
      */
     announce(message: string, politeness?: AriaLivePoliteness): void;
-    /** Removes the aria-live element from the DOM. */
-    _removeLiveElement(): void;
+    ngOnDestroy(): void;
     private _createLiveElement();
 }
 export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, platform: Platform): LiveAnnouncer;

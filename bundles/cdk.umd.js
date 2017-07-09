@@ -890,10 +890,9 @@ var LiveAnnouncer = (function () {
         setTimeout(function () { return _this._liveElement.textContent = message; }, 100);
     };
     /**
-     * Removes the aria-live element from the DOM.
      * @return {?}
      */
-    LiveAnnouncer.prototype._removeLiveElement = function () {
+    LiveAnnouncer.prototype.ngOnDestroy = function () {
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
         }
