@@ -23,8 +23,8 @@ export declare const DIR_DOCUMENT: InjectionToken<Document>;
  * Exposes the current direction and a stream of direction changes.
  */
 export declare class Directionality {
-    value: Direction;
-    change: EventEmitter<void>;
+    readonly value: Direction;
+    readonly change: EventEmitter<void>;
     constructor(_document?: any);
 }
 export declare function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality: any, _document: any): any;

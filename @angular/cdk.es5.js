@@ -6,7 +6,7 @@ import * as tslib_1 from "tslib";
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ContentChild, ContentChildren, Directive, ElementRef, EventEmitter, HostBinding, Inject, Injectable, InjectionToken, Input, IterableDiffers, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ContentChild, ContentChildren, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, IterableDiffers, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { _finally } from 'rxjs/operator/finally';
 import { _catch } from 'rxjs/operator/catch';
 import { _do } from 'rxjs/operator/do';
@@ -1388,11 +1388,6 @@ var Dir = /*@__PURE__*/(function () {
          * @return {?}
          */
         get: function () { return this.dir; },
-        /**
-         * @param {?} v
-         * @return {?}
-         */
-        set: function (v) { this.dir = v; },
         enumerable: true,
         configurable: true
     });
@@ -1408,11 +1403,9 @@ var Dir = /*@__PURE__*/(function () {
 Dir.decorators = [
     { type: Directive, args: [{
                 selector: '[dir]',
-                // TODO(hansl): maybe `$implicit` isn't the best option here, but for now that's the best we got.
-                exportAs: '$implicit',
-                providers: [
-                    { provide: Directionality, useExisting: Dir }
-                ]
+                providers: [{ provide: Directionality, useExisting: Dir }],
+                host: { '[dir]': 'dir' },
+                exportAs: 'dir',
             },] },
 ];
 /**
@@ -1421,7 +1414,7 @@ Dir.decorators = [
 Dir.ctorParameters = function () { return []; };
 Dir.propDecorators = {
     'change': [{ type: Output, args: ['dirChange',] },],
-    'dir': [{ type: HostBinding, args: ['attr.dir',] }, { type: Input, args: ['dir',] },],
+    'dir': [{ type: Input, args: ['dir',] },],
 };
 var BidiModule = /*@__PURE__*/(function () {
     function BidiModule() {

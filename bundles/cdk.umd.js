@@ -1401,11 +1401,6 @@ var Dir = (function () {
          * @return {?}
          */
         get: function () { return this.dir; },
-        /**
-         * @param {?} v
-         * @return {?}
-         */
-        set: function (v) { this.dir = v; },
         enumerable: true,
         configurable: true
     });
@@ -1421,11 +1416,9 @@ var Dir = (function () {
 Dir.decorators = [
     { type: _angular_core.Directive, args: [{
                 selector: '[dir]',
-                // TODO(hansl): maybe `$implicit` isn't the best option here, but for now that's the best we got.
-                exportAs: '$implicit',
-                providers: [
-                    { provide: Directionality, useExisting: Dir }
-                ]
+                providers: [{ provide: Directionality, useExisting: Dir }],
+                host: { '[dir]': 'dir' },
+                exportAs: 'dir',
             },] },
 ];
 /**
@@ -1434,7 +1427,7 @@ Dir.decorators = [
 Dir.ctorParameters = function () { return []; };
 Dir.propDecorators = {
     'change': [{ type: _angular_core.Output, args: ['dirChange',] },],
-    'dir': [{ type: _angular_core.HostBinding, args: ['attr.dir',] }, { type: _angular_core.Input, args: ['dir',] },],
+    'dir': [{ type: _angular_core.Input, args: ['dir',] },],
 };
 var BidiModule = (function () {
     function BidiModule() {

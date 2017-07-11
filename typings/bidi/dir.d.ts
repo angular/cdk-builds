@@ -22,7 +22,7 @@ export declare class Dir implements Directionality {
     /** @docs-private */
     dir: Direction;
     /** Current layout direction of the element. */
-    value: Direction;
+    readonly value: Direction;
     /** Initialize once default value has been set. */
     ngAfterContentInit(): void;
 }
