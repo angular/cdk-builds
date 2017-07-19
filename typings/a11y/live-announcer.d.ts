@@ -22,7 +22,9 @@ export declare class LiveAnnouncer implements OnDestroy {
     ngOnDestroy(): void;
     private _createLiveElement();
 }
+/** @docs-private */
 export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, platform: Platform): LiveAnnouncer;
+/** @docs-private */
 export declare const LIVE_ANNOUNCER_PROVIDER: {
     provide: typeof LiveAnnouncer;
     deps: (typeof Platform | Optional[])[];

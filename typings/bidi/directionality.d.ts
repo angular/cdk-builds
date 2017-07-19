@@ -27,7 +27,9 @@ export declare class Directionality {
     readonly change: EventEmitter<void>;
     constructor(_document?: any);
 }
+/** @docs-private */
 export declare function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality: any, _document: any): any;
+/** @docs-private */
 export declare const DIRECTIONALITY_PROVIDER: {
     provide: typeof Directionality;
     deps: Optional[][];

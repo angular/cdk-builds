@@ -908,6 +908,7 @@ LiveAnnouncer.ctorParameters = function () { return [
     { type: Platform, },
 ]; };
 /**
+ * \@docs-private
  * @param {?} parentDispatcher
  * @param {?} liveElement
  * @param {?} platform
@@ -916,6 +917,9 @@ LiveAnnouncer.ctorParameters = function () { return [
 function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, platform) {
     return parentDispatcher || new LiveAnnouncer(liveElement, platform);
 }
+/**
+ * \@docs-private
+ */
 var LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
     provide: LiveAnnouncer,
@@ -1327,6 +1331,7 @@ Directionality.ctorParameters = function () { return [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
 ]; };
 /**
+ * \@docs-private
  * @param {?} parentDirectionality
  * @param {?} _document
  * @return {?}
@@ -1334,6 +1339,9 @@ Directionality.ctorParameters = function () { return [
 function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality, _document) {
     return parentDirectionality || new Directionality(_document);
 }
+/**
+ * \@docs-private
+ */
 var DIRECTIONALITY_PROVIDER = {
     // If there is already a Directionality available, use that. Otherwise, provide a new one.
     provide: Directionality,
