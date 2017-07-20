@@ -1922,6 +1922,8 @@ var CdkTable = (function () {
      * @return {?}
      */
     CdkTable.prototype.ngOnDestroy = function () {
+        this._rowPlaceholder.viewContainer.clear();
+        this._headerRowPlaceholder.viewContainer.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
         if (this.dataSource) {
@@ -2098,7 +2100,7 @@ var CdkTable = (function () {
             viewRef.context.first = index === 0;
             viewRef.context.last = index === count - 1;
             viewRef.context.even = index % 2 === 0;
-            viewRef.context.odd = index % 2 !== 0;
+            viewRef.context.odd = !viewRef.context.even;
         }
     };
     /**
