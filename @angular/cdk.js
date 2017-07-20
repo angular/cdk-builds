@@ -1714,7 +1714,7 @@ const CDK_TABLE_TEMPLATE = `
   <ng-container headerRowPlaceholder></ng-container>
   <ng-container rowPlaceholder></ng-container>`;
 /**
- * A data table that connects with a data source to retrieve data of type T and renders
+ * A data table that connects with a data source to retrieve data of type `T` and renders
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
 class CdkTable {
@@ -1746,7 +1746,7 @@ class CdkTable {
          */
         this._columnDefinitionsByName = new Map();
         /**
-         * Stream containing the latest information on what rows are being displayed on screen.
+         * Stream containing the latest information on the range of rows being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
@@ -1756,7 +1756,7 @@ class CdkTable {
     }
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
-     * to ngFor trackBy function. Optimize row operations by identifying a row based on its data
+     * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
      * relative to the function to know if a row should be added/removed/moved.
      * Accepts a function that takes two parameters, `index` and `item`.
      * @param {?} fn
