@@ -46,8 +46,6 @@ export declare class CdkTable<T> implements CollectionViewer {
     private readonly _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
-    /** Flag set to true after the component has been initialized. */
-    private _isViewInitialized;
     /** Latest data provided by the data source through the connect interface. */
     private _data;
     /** Subscription that listens for the data provided by the data source. */
@@ -96,8 +94,7 @@ export declare class CdkTable<T> implements CollectionViewer {
     ngOnDestroy(): void;
     ngOnInit(): void;
     ngAfterContentInit(): void;
-    ngAfterViewInit(): void;
-    ngDoCheck(): void;
+    ngAfterContentChecked(): void;
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by

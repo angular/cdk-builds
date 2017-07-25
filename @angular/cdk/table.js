@@ -49,8 +49,10 @@ class BaseRowDef {
     ngOnChanges(changes) {
         // Create a new columns differ if one does not yet exist. Initialize it based on initial value
         // of the columns property.
-        if (!this._columnsDiffer && changes['columns'].currentValue) {
-            this._columnsDiffer = this._differs.find(changes['columns'].currentValue).create();
+        const /** @type {?} */ columns = changes['columns'].currentValue;
+        if (!this._columnsDiffer && columns) {
+            this._columnsDiffer = this._differs.find(columns).create();
+            this._columnsDiffer.diff(columns);
         }
     }
     /**
@@ -381,10 +383,6 @@ class CdkTable {
          */
         this._onDestroy = new Subject();
         /**
-         * Flag set to true after the component has been initialized.
-         */
-        this._isViewInitialized = false;
-        /**
          * Latest data provided by the data source through the connect interface.
          */
         this._data = [];
@@ -454,6 +452,7 @@ class CdkTable {
     ngOnInit() {
         // TODO(andrewseguin): Setup a listener for scroll events
         //   and emit the calculated view to this.viewChange
+        this._dataDiffer = this._differs.find([]).create(this._trackByFn);
     }
     /**
      * @return {?}
@@ -477,24 +476,14 @@ class CdkTable {
             this._headerRowPlaceholder.viewContainer.clear();
             this._renderHeaderRow();
         });
+        this._renderHeaderRow();
     }
     /**
      * @return {?}
      */
-    ngAfterViewInit() {
-        // Find and construct an iterable differ that can be used to find the diff in an array.
-        this._dataDiffer = this._differs.find([]).create(this._trackByFn);
-        this._isViewInitialized = true;
-    }
-    /**
-     * @return {?}
-     */
-    ngDoCheck() {
-        if (this._isViewInitialized && this.dataSource && !this._renderChangeSubscription) {
-            this._renderHeaderRow();
-            if (this.dataSource && !this._renderChangeSubscription) {
-                this._observeRenderChanges();
-            }
+    ngAfterContentChecked() {
+        if (this.dataSource && !this._renderChangeSubscription) {
+            this._observeRenderChanges();
         }
     }
     /**
@@ -506,21 +495,19 @@ class CdkTable {
      */
     _switchDataSource(dataSource) {
         this._data = [];
-        if (this._dataSource) {
+        if (this.dataSource) {
             this.dataSource.disconnect(this);
         }
-        this._dataSource = dataSource;
-        if (this._isViewInitialized) {
-            if (this._renderChangeSubscription) {
-                this._renderChangeSubscription.unsubscribe();
-            }
-            if (this._dataSource) {
-                this._observeRenderChanges();
-            }
-            else {
-                this._rowPlaceholder.viewContainer.clear();
-            }
+        // Stop listening for data from the previous data source.
+        if (this._renderChangeSubscription) {
+            this._renderChangeSubscription.unsubscribe();
+            this._renderChangeSubscription = null;
         }
+        // Remove the table's rows if there is now no data source
+        if (!dataSource) {
+            this._rowPlaceholder.viewContainer.clear();
+        }
+        this._dataSource = dataSource;
     }
     /**
      * Set up a subscription for the data provided by the data source.
@@ -691,7 +678,9 @@ CdkTable.propDecorators = {
  */
 class DataSource {
     /**
-     * Connects a collection viewer (such as a data-table) to this data source.
+     * Connects a collection viewer (such as a data-table) to this data source. Note that
+     * the stream provided will be accessed during change detection and should not directly change
+     * values that are bound in template views.
      * @abstract
      * @param {?} collectionViewer The component that exposes a view over the data provided by this
      *     data source.
