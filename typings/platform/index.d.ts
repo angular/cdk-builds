@@ -1,4 +1,4 @@
-export declare class PlatformModule {
-}
-export * from './platform';
-export * from './features';
+/**
+ * Generated bundle index. Do not edit.
+ */
+export * from './public_api';

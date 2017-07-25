@@ -1,6 +1,4 @@
-export * from './data-source';
-export * from './table';
-export * from './cell';
-export * from './row';
-export declare class CdkTableModule {
-}
+/**
+ * Generated bundle index. Do not edit.
+ */
+export * from './public_api';
