@@ -6,15 +6,17 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {})));
-}(this, (function (exports) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}),global.ng.core));
+}(this, (function (exports,_angular_core) { 'use strict';
 
-// TODO(jelbourn): add version here
-var __TMP__ = 0;
+/**
+ * Current version of the Angular Component Development Kit.
+ */
+var VERSION = new _angular_core.Version('2.0.0-beta.8');
 
-exports.__TMP__ = __TMP__;
+exports.VERSION = VERSION;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

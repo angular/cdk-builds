@@ -5,9 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { IterableDiffer, IterableDiffers, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { IterableChanges, IterableDiffer, IterableDiffers, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkCellDef } from './cell';
-import { Subject } from 'rxjs/Subject';
 /**
  * The row template that can be used by the md-table. Should not be used outside of the
  * material library.
@@ -22,15 +21,15 @@ export declare abstract class BaseRowDef {
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */
     columns: string[];
-    /** Event stream that emits when changes are made to the columns. */
-    columnsChange: Subject<void>;
     /** Differ used to check if any changes were made to the columns. */
     protected _columnsDiffer: IterableDiffer<any>;
-    private viewInitialized;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
-    ngAfterViewInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
-    ngDoCheck(): void;
+    /**
+     * Returns the difference between the current columns and the columns from the last diff, or null
+     * if there is no difference.
+     */
+    getColumnsDiff(): IterableChanges<any> | null;
 }
 /**
  * Header row definition for the CDK table.

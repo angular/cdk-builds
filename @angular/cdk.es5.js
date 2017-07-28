@@ -5,10 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// TODO(jelbourn): add version here
-var __TMP__ = 0;
+import { Version } from '@angular/core';
+/**
+ * Current version of the Angular Component Development Kit.
+ */
+var VERSION = new Version('2.0.0-beta.8');
 /**
  * Generated bundle index. Do not edit.
  */
-export { __TMP__ };
+export { VERSION };
 //# sourceMappingURL=cdk.es5.js.map

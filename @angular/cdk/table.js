@@ -7,10 +7,9 @@
  */
 import { CommonModule } from '@angular/common';
 import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { merge } from 'rxjs/observable/merge';
 import { takeUntil } from 'rxjs/operator/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 /**
  * The row template that can be used by the md-table. Should not be used outside of the
@@ -30,17 +29,6 @@ class BaseRowDef {
     constructor(template, _differs) {
         this.template = template;
         this._differs = _differs;
-        /**
-         * Event stream that emits when changes are made to the columns.
-         */
-        this.columnsChange = new Subject();
-        this.viewInitialized = false;
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterViewInit() {
-        this.viewInitialized = true;
     }
     /**
      * @param {?} changes
@@ -56,17 +44,12 @@ class BaseRowDef {
         }
     }
     /**
+     * Returns the difference between the current columns and the columns from the last diff, or null
+     * if there is no difference.
      * @return {?}
      */
-    ngDoCheck() {
-        if (!this.viewInitialized || !this._columnsDiffer || !this.columns) {
-            return;
-        }
-        // Notify the table if there are any changes to the columns.
-        const /** @type {?} */ changes = this._columnsDiffer.diff(this.columns);
-        if (changes) {
-            this.columnsChange.next();
-        }
+    getColumnsDiff() {
+        return this._columnsDiffer.diff(this.columns);
     }
 }
 /**
@@ -312,8 +295,18 @@ CdkCell.ctorParameters = () => [
  * @return {?}
  */
 function getTableUnknownColumnError(id) {
-    return new Error(`cdk-table: Could not find column with id "${id}".`);
+    return Error(`cdk-table: Could not find column with id "${id}".`);
 }
+/**
+ * Returns an error to be thrown when two column definitions have the same name.
+ * \@docs-private
+ * @param {?} name
+ * @return {?}
+ */
+function getTableDuplicateColumnNameError(name) {
+    return Error(`cdk-table: Duplicate column definition name provided: "${name}".`);
+}
+
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
@@ -387,12 +380,11 @@ class CdkTable {
          */
         this._data = [];
         /**
-         * Map of all the user's defined columns identified by name.
-         * Contains the header and data-cell templates.
+         * Map of all the user's defined columns (header and data cell template) identified by name.
          */
         this._columnDefinitionsByName = new Map();
         /**
-         * Stream containing the latest information on the range of rows being displayed on screen.
+         * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
@@ -437,6 +429,30 @@ class CdkTable {
     /**
      * @return {?}
      */
+    ngOnInit() {
+        // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
+        this._dataDiffer = this._differs.find([]).create(this._trackByFn);
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterContentInit() {
+        this._cacheColumnDefinitionsByName();
+        this._columnDefinitions.changes.subscribe(() => this._cacheColumnDefinitionsByName());
+        this._renderHeaderRow();
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterContentChecked() {
+        this._renderUpdatedColumns();
+        if (this.dataSource && !this._renderChangeSubscription) {
+            this._observeRenderChanges();
+        }
+    }
+    /**
+     * @return {?}
+     */
     ngOnDestroy() {
         this._rowPlaceholder.viewContainer.clear();
         this._headerRowPlaceholder.viewContainer.clear();
@@ -447,43 +463,37 @@ class CdkTable {
         }
     }
     /**
+     * Update the map containing the content's column definitions.
      * @return {?}
      */
-    ngOnInit() {
-        // TODO(andrewseguin): Setup a listener for scroll events
-        //   and emit the calculated view to this.viewChange
-        this._dataDiffer = this._differs.find([]).create(this._trackByFn);
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        // TODO(andrewseguin): Throw an error if two columns share the same name
+    _cacheColumnDefinitionsByName() {
+        this._columnDefinitionsByName.clear();
         this._columnDefinitions.forEach(columnDef => {
+            if (this._columnDefinitionsByName.has(columnDef.name)) {
+                throw getTableDuplicateColumnNameError(columnDef.name);
+            }
             this._columnDefinitionsByName.set(columnDef.name, columnDef);
         });
-        // Re-render the rows if any of their columns change.
-        // TODO(andrewseguin): Determine how to only re-render the rows that have their columns changed.
-        const /** @type {?} */ columnChangeEvents = this._rowDefinitions.map(rowDef => rowDef.columnsChange);
-        takeUntil.call(merge(...columnChangeEvents), this._onDestroy).subscribe(() => {
-            // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
-            this._rowPlaceholder.viewContainer.clear();
-            this._dataDiffer.diff([]);
-            this._renderRowChanges();
-        });
-        // Re-render the header row if the columns change
-        takeUntil.call(this._headerDefinition.columnsChange, this._onDestroy).subscribe(() => {
-            this._headerRowPlaceholder.viewContainer.clear();
-            this._renderHeaderRow();
-        });
-        this._renderHeaderRow();
     }
     /**
+     * Check if the header or rows have changed what columns they want to display. If there is a diff,
+     * then re-render that section.
      * @return {?}
      */
-    ngAfterContentChecked() {
-        if (this.dataSource && !this._renderChangeSubscription) {
-            this._observeRenderChanges();
+    _renderUpdatedColumns() {
+        // Re-render the rows when the row definition columns change.
+        this._rowDefinitions.forEach(rowDefinition => {
+            if (!!rowDefinition.getColumnsDiff()) {
+                // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
+                this._dataDiffer.diff([]);
+                this._rowPlaceholder.viewContainer.clear();
+                this._renderRowChanges();
+            }
+        });
+        // Re-render the header row if there is a difference in its columns.
+        if (this._headerDefinition.getColumnsDiff()) {
+            this._headerRowPlaceholder.viewContainer.clear();
+            this._renderHeaderRow();
         }
     }
     /**
@@ -732,5 +742,5 @@ CdkTableModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { CdkTableModule, DataSource, getTableUnknownColumnError, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow };
+export { CdkTableModule, DataSource, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow };
 //# sourceMappingURL=table.js.map

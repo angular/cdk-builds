@@ -11,12 +11,6 @@ import { CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CdkColumnDef } from './cell';
 /**
- * Returns an error to be thrown when attempting to find an unexisting column.
- * @param id Id whose lookup failed.
- * @docs-private
- */
-export declare function getTableUnknownColumnError(id: string): Error;
-/**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
  */
@@ -50,10 +44,7 @@ export declare class CdkTable<T> implements CollectionViewer {
     private _data;
     /** Subscription that listens for the data provided by the data source. */
     private _renderChangeSubscription;
-    /**
-     * Map of all the user's defined columns identified by name.
-     * Contains the header and data-cell templates.
-     */
+    /** Map of all the user's defined columns (header and data cell template) identified by name. */
     private _columnDefinitionsByName;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
@@ -66,19 +57,19 @@ export declare class CdkTable<T> implements CollectionViewer {
     trackBy: TrackByFunction<T>;
     private _trackByFn;
     /**
-     * Stream containing the latest information on the range of rows being displayed on screen.
+     * Provides a stream containing the latest data array to render. Influenced by the table's
+     * stream of view window (what rows are currently on screen).
+     */
+    dataSource: DataSource<T>;
+    private _dataSource;
+    /**
+     * Stream containing the latest information on what rows are being displayed on screen.
      * Can be used by the data source to as a heuristic of what data should be provided.
      */
     viewChange: BehaviorSubject<{
         start: number;
         end: number;
     }>;
-    /**
-     * Provides a stream containing the latest data array to render. Influenced by the table's
-     * stream of view window (what rows are currently on screen).
-     */
-    dataSource: DataSource<T>;
-    private _dataSource;
     _rowPlaceholder: RowPlaceholder;
     _headerRowPlaceholder: HeaderRowPlaceholder;
     /**
@@ -91,10 +82,17 @@ export declare class CdkTable<T> implements CollectionViewer {
     /** Set of templates that used as the data row containers. */
     _rowDefinitions: QueryList<CdkRowDef>;
     constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer2, role: string);
-    ngOnDestroy(): void;
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
+    ngOnDestroy(): void;
+    /** Update the map containing the content's column definitions. */
+    private _cacheColumnDefinitionsByName();
+    /**
+     * Check if the header or rows have changed what columns they want to display. If there is a diff,
+     * then re-render that section.
+     */
+    private _renderUpdatedColumns();
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
