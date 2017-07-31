@@ -22,7 +22,7 @@ export declare class RxChain<T> {
      * Starts a new chain and specifies the initial `this` value.
      * @param context Initial `this` value for the chain.
      */
-    static from<T>(context: Observable<T>): StrictRxChain<T>;
+    static from<O>(context: Observable<O>): StrictRxChain<O>;
     /**
      * Invokes an RxJS operator as a part of the chain.
      * @param operator Operator to be invoked.

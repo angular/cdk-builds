@@ -34,7 +34,7 @@ class RxChain {
     }
     /**
      * Starts a new chain and specifies the initial `this` value.
-     * @template T
+     * @template O
      * @param {?} context Initial `this` value for the chain.
      * @return {?}
      */
