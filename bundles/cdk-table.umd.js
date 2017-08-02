@@ -255,6 +255,23 @@ CdkHeaderCellDef.ctorParameters = function () { return [
 var CdkColumnDef = (function () {
     function CdkColumnDef() {
     }
+    Object.defineProperty(CdkColumnDef.prototype, "name", {
+        /**
+         * Unique name for this column.
+         * @return {?}
+         */
+        get: function () { return this._name; },
+        /**
+         * @param {?} name
+         * @return {?}
+         */
+        set: function (name) {
+            this._name = name;
+            this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+        },
+        enumerable: true,
+        configurable: true
+    });
     return CdkColumnDef;
 }());
 CdkColumnDef.decorators = [
@@ -279,7 +296,7 @@ var CdkHeaderCell = (function () {
      * @param {?} renderer
      */
     function CdkHeaderCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
+        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
     }
     return CdkHeaderCell;
 }());
@@ -310,7 +327,7 @@ var CdkCell = (function () {
      * @param {?} renderer
      */
     function CdkCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.name);
+        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
     }
     return CdkCell;
 }());

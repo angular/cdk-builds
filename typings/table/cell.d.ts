@@ -29,10 +29,17 @@ export declare class CdkHeaderCellDef {
 export declare class CdkColumnDef {
     /** Unique name for this column. */
     name: string;
+    _name: string;
     /** @docs-private */
     cell: CdkCellDef;
     /** @docs-private */
     headerCell: CdkHeaderCellDef;
+    /**
+     * Transformed version of the column name that can be used as part of a CSS classname. Excludes
+     * all non-alphanumeric characters and the special characters '-' and '_'. Any characters that
+     * do not match are replaced by the '-' character.
+     */
+    cssClassFriendlyName: string;
 }
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell {

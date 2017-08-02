@@ -214,6 +214,19 @@ CdkHeaderCellDef.ctorParameters = () => [
  * Defines a set of cells available for a table column.
  */
 class CdkColumnDef {
+    /**
+     * Unique name for this column.
+     * @return {?}
+     */
+    get name() { return this._name; }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    set name(name) {
+        this._name = name;
+        this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+    }
 }
 CdkColumnDef.decorators = [
     { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
@@ -237,7 +250,7 @@ class CdkHeaderCell {
      * @param {?} renderer
      */
     constructor(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
+        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
 CdkHeaderCell.decorators = [
@@ -267,7 +280,7 @@ class CdkCell {
      * @param {?} renderer
      */
     constructor(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.name}`);
+        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
 CdkCell.decorators = [
