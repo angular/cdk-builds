@@ -329,8 +329,12 @@ class FocusTrap {
             this._endAnchor = this._createAnchor();
         }
         this._ngZone.runOutsideAngular(() => {
-            ((this._startAnchor)).addEventListener('focus', () => this.focusLastTabbableElement()); /** @type {?} */
-            ((this._endAnchor)).addEventListener('focus', () => this.focusFirstTabbableElement());
+            ((this._startAnchor)).addEventListener('focus', () => {
+                this.focusLastTabbableElement();
+            }); /** @type {?} */
+            ((this._endAnchor)).addEventListener('focus', () => {
+                this.focusFirstTabbableElement();
+            });
             if (this._element.parentNode) {
                 this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
                 this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
@@ -339,27 +343,36 @@ class FocusTrap {
     }
     /**
      * Waits for the zone to stabilize, then either focuses the first element that the
-     * user specified, or the first tabbable element..
-     * @return {?}
+     * user specified, or the first tabbable element.
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
     focusInitialElementWhenReady() {
-        this._executeOnStable(() => this.focusInitialElement());
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusInitialElement()));
+        });
     }
     /**
      * Waits for the zone to stabilize, then focuses
      * the first tabbable element within the focus trap region.
-     * @return {?}
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
     focusFirstTabbableElementWhenReady() {
-        this._executeOnStable(() => this.focusFirstTabbableElement());
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusFirstTabbableElement()));
+        });
     }
     /**
      * Waits for the zone to stabilize, then focuses
      * the last tabbable element within the focus trap region.
-     * @return {?}
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
     focusLastTabbableElementWhenReady() {
-        this._executeOnStable(() => this.focusLastTabbableElement());
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusLastTabbableElement()));
+        });
     }
     /**
      * Get the specified boundary element of the trapped region.
@@ -384,36 +397,37 @@ class FocusTrap {
     }
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
-     * @return {?}
+     * @return {?} Returns whether focus was moved successfuly.
      */
     focusInitialElement() {
-        let /** @type {?} */ redirectToElement = (this._element.querySelector('[cdk-focus-initial]'));
+        const /** @type {?} */ redirectToElement = (this._element.querySelector('[cdk-focus-initial]'));
         if (redirectToElement) {
             redirectToElement.focus();
+            return true;
         }
-        else {
-            this.focusFirstTabbableElement();
-        }
+        return this.focusFirstTabbableElement();
     }
     /**
      * Focuses the first tabbable element within the focus trap region.
-     * @return {?}
+     * @return {?} Returns whether focus was moved successfuly.
      */
     focusFirstTabbableElement() {
-        let /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
+        const /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
         if (redirectToElement) {
             redirectToElement.focus();
         }
+        return !!redirectToElement;
     }
     /**
      * Focuses the last tabbable element within the focus trap region.
-     * @return {?}
+     * @return {?} Returns whether focus was moved successfuly.
      */
     focusLastTabbableElement() {
-        let /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
+        const /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
         if (redirectToElement) {
             redirectToElement.focus();
         }
+        return !!redirectToElement;
     }
     /**
      * Get the first tabbable element from a DOM subtree (inclusive).

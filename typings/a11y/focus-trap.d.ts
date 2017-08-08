@@ -36,31 +36,46 @@ export declare class FocusTrap {
     attachAnchors(): void;
     /**
      * Waits for the zone to stabilize, then either focuses the first element that the
-     * user specified, or the first tabbable element..
+     * user specified, or the first tabbable element.
+     * @returns Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
-    focusInitialElementWhenReady(): void;
+    focusInitialElementWhenReady(): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the first tabbable element within the focus trap region.
+     * @returns Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
-    focusFirstTabbableElementWhenReady(): void;
+    focusFirstTabbableElementWhenReady(): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the last tabbable element within the focus trap region.
+     * @returns Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
      */
-    focusLastTabbableElementWhenReady(): void;
+    focusLastTabbableElementWhenReady(): Promise<boolean>;
     /**
      * Get the specified boundary element of the trapped region.
      * @param bound The boundary to get (start or end of trapped region).
      * @returns The boundary element.
      */
     private _getRegionBoundary(bound);
-    /** Focuses the element that should be focused when the focus trap is initialized. */
-    focusInitialElement(): void;
-    /** Focuses the first tabbable element within the focus trap region. */
-    focusFirstTabbableElement(): void;
-    /** Focuses the last tabbable element within the focus trap region. */
-    focusLastTabbableElement(): void;
+    /**
+     * Focuses the element that should be focused when the focus trap is initialized.
+     * @returns Returns whether focus was moved successfuly.
+     */
+    focusInitialElement(): boolean;
+    /**
+     * Focuses the first tabbable element within the focus trap region.
+     * @returns Returns whether focus was moved successfuly.
+     */
+    focusFirstTabbableElement(): boolean;
+    /**
+     * Focuses the last tabbable element within the focus trap region.
+     * @returns Returns whether focus was moved successfuly.
+     */
+    focusLastTabbableElement(): boolean;
     /** Get the first tabbable element from a DOM subtree (inclusive). */
     private _getFirstTabbableElement(root);
     /** Get the last tabbable element from a DOM subtree (inclusive). */
