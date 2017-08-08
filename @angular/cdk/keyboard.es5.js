@@ -19,8 +19,10 @@ var TAB = 9;
 var ESCAPE = 27;
 var BACKSPACE = 8;
 var DELETE = 46;
+var A = 65;
+var Z = 90;
 /**
  * Generated bundle index. Do not edit.
  */
-export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE };
+export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z };
 //# sourceMappingURL=keyboard.es5.js.map

@@ -19,10 +19,12 @@ const TAB = 9;
 const ESCAPE = 27;
 const BACKSPACE = 8;
 const DELETE = 46;
+const A = 65;
+const Z = 90;
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE };
+export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z };
 //# sourceMappingURL=keyboard.js.map

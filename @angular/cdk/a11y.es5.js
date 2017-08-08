@@ -9,10 +9,10 @@ import * as tslib_1 from "tslib";
 import { Directive, ElementRef, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
-import { first } from '@angular/cdk/rxjs';
+import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
-import { DOWN_ARROW, TAB, UP_ARROW } from '@angular/cdk/keyboard';
+import { A, DOWN_ARROW, TAB, UP_ARROW, Z } from '@angular/cdk/keyboard';
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
  * tabbable.
@@ -770,22 +770,56 @@ var ListKeyManager = (function () {
     function ListKeyManager(_items) {
         this._items = _items;
         this._activeItemIndex = -1;
-        this._tabOut = new Subject();
         this._wrap = false;
+        this._nonNavigationKeyStream = new Subject();
+        this._pressedInputKeys = [];
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
-     *
-     * @return {?} The ListKeyManager that the method was called on.
+     * @return {?}
      */
     ListKeyManager.prototype.withWrap = function () {
         this._wrap = true;
         return this;
     };
     /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withTypeAhead = function (debounceInterval) {
+        var _this = this;
+        if (debounceInterval === void 0) { debounceInterval = 200; }
+        if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
+            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+        }
+        if (this._typeaheadSubscription) {
+            this._typeaheadSubscription.unsubscribe();
+        }
+        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
+        // and convert those letters back into a string. Afterwards find the first item that starts
+        // with that string and select it.
+        this._typeaheadSubscription = RxChain.from(this._nonNavigationKeyStream)
+            .call(filter, function (keyCode) { return keyCode >= A && keyCode <= Z; })
+            .call(doOperator, function (keyCode) { return _this._pressedInputKeys.push(keyCode); })
+            .call(debounceTime, debounceInterval)
+            .call(filter, function () { return _this._pressedInputKeys.length > 0; })
+            .call(map, function () { return String.fromCharCode.apply(String, _this._pressedInputKeys); })
+            .subscribe(function (inputString) {
+            var /** @type {?} */ items = _this._items.toArray();
+            for (var /** @type {?} */ i = 0; i < items.length; i++) {
+                if (((items[i].getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                    _this.setActiveItem(i);
+                    break;
+                }
+            }
+            _this._pressedInputKeys = [];
+        });
+        return this;
+    };
+    /**
      * Sets the active item to the item at the index specified.
-     *
      * @param {?} index The index of the item to be set as active.
      * @return {?}
      */
@@ -806,13 +840,13 @@ var ListKeyManager = (function () {
             case UP_ARROW:
                 this.setPreviousItemActive();
                 break;
-            case TAB:
-                // Note that we shouldn't prevent the default action on tab.
-                this._tabOut.next();
-                return;
+            // Note that we return here, in order to avoid preventing
+            // the default action of unsupported keys.
             default:
+                this._nonNavigationKeyStream.next(event.keyCode);
                 return;
         }
+        this._pressedInputKeys = [];
         event.preventDefault();
     };
     Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
@@ -881,7 +915,7 @@ var ListKeyManager = (function () {
          * @return {?}
          */
         get: function () {
-            return this._tabOut.asObservable();
+            return filter.call(this._nonNavigationKeyStream, function (keyCode) { return keyCode === TAB; });
         },
         enumerable: true,
         configurable: true
@@ -982,11 +1016,8 @@ var ActiveDescendantKeyManager = (function (_super) {
 }(ListKeyManager));
 var FocusKeyManager = (function (_super) {
     tslib_1.__extends(FocusKeyManager, _super);
-    /**
-     * @param {?} items
-     */
-    function FocusKeyManager(items) {
-        return _super.call(this, items) || this;
+    function FocusKeyManager() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
      * This method sets the active item to the item at the specified index.

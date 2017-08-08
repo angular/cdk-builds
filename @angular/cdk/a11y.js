@@ -8,10 +8,10 @@
 import { Directive, ElementRef, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
-import { first } from '@angular/cdk/rxjs';
+import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
-import { DOWN_ARROW, TAB, UP_ARROW } from '@angular/cdk/keyboard';
+import { A, DOWN_ARROW, TAB, UP_ARROW, Z } from '@angular/cdk/keyboard';
 
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
@@ -748,22 +748,54 @@ class ListKeyManager {
     constructor(_items) {
         this._items = _items;
         this._activeItemIndex = -1;
-        this._tabOut = new Subject();
         this._wrap = false;
+        this._nonNavigationKeyStream = new Subject();
+        this._pressedInputKeys = [];
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
-     *
-     * @return {?} The ListKeyManager that the method was called on.
+     * @return {?}
      */
     withWrap() {
         this._wrap = true;
         return this;
     }
     /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
+     * @return {?}
+     */
+    withTypeAhead(debounceInterval = 200) {
+        if (this._items.length && this._items.some(item => typeof item.getLabel !== 'function')) {
+            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+        }
+        if (this._typeaheadSubscription) {
+            this._typeaheadSubscription.unsubscribe();
+        }
+        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
+        // and convert those letters back into a string. Afterwards find the first item that starts
+        // with that string and select it.
+        this._typeaheadSubscription = RxChain.from(this._nonNavigationKeyStream)
+            .call(filter, keyCode => keyCode >= A && keyCode <= Z)
+            .call(doOperator, keyCode => this._pressedInputKeys.push(keyCode))
+            .call(debounceTime, debounceInterval)
+            .call(filter, () => this._pressedInputKeys.length > 0)
+            .call(map, () => String.fromCharCode(...this._pressedInputKeys))
+            .subscribe(inputString => {
+            const /** @type {?} */ items = this._items.toArray();
+            for (let /** @type {?} */ i = 0; i < items.length; i++) {
+                if (((items[i].getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                    this.setActiveItem(i);
+                    break;
+                }
+            }
+            this._pressedInputKeys = [];
+        });
+        return this;
+    }
+    /**
      * Sets the active item to the item at the index specified.
-     *
      * @param {?} index The index of the item to be set as active.
      * @return {?}
      */
@@ -784,13 +816,13 @@ class ListKeyManager {
             case UP_ARROW:
                 this.setPreviousItemActive();
                 break;
-            case TAB:
-                // Note that we shouldn't prevent the default action on tab.
-                this._tabOut.next();
-                return;
+            // Note that we return here, in order to avoid preventing
+            // the default action of unsupported keys.
             default:
+                this._nonNavigationKeyStream.next(event.keyCode);
                 return;
         }
+        this._pressedInputKeys = [];
         event.preventDefault();
     }
     /**
@@ -850,7 +882,7 @@ class ListKeyManager {
      * @return {?}
      */
     get tabOut() {
-        return this._tabOut.asObservable();
+        return filter.call(this._nonNavigationKeyStream, keyCode => keyCode === TAB);
     }
     /**
      * This method sets the active item, given a list of items and the delta between the
@@ -940,12 +972,6 @@ class ActiveDescendantKeyManager extends ListKeyManager {
 }
 
 class FocusKeyManager extends ListKeyManager {
-    /**
-     * @param {?} items
-     */
-    constructor(items) {
-        super(items);
-    }
     /**
      * This method sets the active item to the item at the specified index.
      * It also adds focuses the newly active item.

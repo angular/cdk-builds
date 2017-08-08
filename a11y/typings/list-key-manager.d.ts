@@ -8,33 +8,37 @@
 import { QueryList } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 /**
- * This interface is for items that can be disabled. The type passed into
- * ListKeyManager must extend this interface.
+ * This interface is for items that can be passed to a ListKeyManager.
  */
-export interface CanDisable {
+export interface ListKeyManagerOption {
     disabled?: boolean;
+    getLabel?(): string;
 }
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
  */
-export declare class ListKeyManager<T extends CanDisable> {
+export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _items;
     private _activeItemIndex;
     private _activeItem;
-    private _tabOut;
     private _wrap;
+    private _nonNavigationKeyStream;
+    private _typeaheadSubscription;
+    private _pressedInputKeys;
     constructor(_items: QueryList<T>);
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
-     *
-     * @returns The ListKeyManager that the method was called on.
      */
     withWrap(): this;
     /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param debounceInterval Time to wait after the last keystroke before setting the active item.
+     */
+    withTypeAhead(debounceInterval?: number): this;
+    /**
      * Sets the active item to the item at the index specified.
-     *
      * @param index The index of the item to be set as active.
      */
     setActiveItem(index: number): void;

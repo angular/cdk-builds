@@ -794,22 +794,56 @@ var ListKeyManager = (function () {
     function ListKeyManager(_items) {
         this._items = _items;
         this._activeItemIndex = -1;
-        this._tabOut = new rxjs_Subject.Subject();
         this._wrap = false;
+        this._nonNavigationKeyStream = new rxjs_Subject.Subject();
+        this._pressedInputKeys = [];
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
-     *
-     * @return {?} The ListKeyManager that the method was called on.
+     * @return {?}
      */
     ListKeyManager.prototype.withWrap = function () {
         this._wrap = true;
         return this;
     };
     /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withTypeAhead = function (debounceInterval) {
+        var _this = this;
+        if (debounceInterval === void 0) { debounceInterval = 200; }
+        if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
+            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+        }
+        if (this._typeaheadSubscription) {
+            this._typeaheadSubscription.unsubscribe();
+        }
+        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
+        // and convert those letters back into a string. Afterwards find the first item that starts
+        // with that string and select it.
+        this._typeaheadSubscription = _angular_cdk_rxjs.RxChain.from(this._nonNavigationKeyStream)
+            .call(_angular_cdk_rxjs.filter, function (keyCode) { return keyCode >= _angular_cdk_keyboard.A && keyCode <= _angular_cdk_keyboard.Z; })
+            .call(_angular_cdk_rxjs.doOperator, function (keyCode) { return _this._pressedInputKeys.push(keyCode); })
+            .call(_angular_cdk_rxjs.debounceTime, debounceInterval)
+            .call(_angular_cdk_rxjs.filter, function () { return _this._pressedInputKeys.length > 0; })
+            .call(_angular_cdk_rxjs.map, function () { return String.fromCharCode.apply(String, _this._pressedInputKeys); })
+            .subscribe(function (inputString) {
+            var /** @type {?} */ items = _this._items.toArray();
+            for (var /** @type {?} */ i = 0; i < items.length; i++) {
+                if (((items[i].getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                    _this.setActiveItem(i);
+                    break;
+                }
+            }
+            _this._pressedInputKeys = [];
+        });
+        return this;
+    };
+    /**
      * Sets the active item to the item at the index specified.
-     *
      * @param {?} index The index of the item to be set as active.
      * @return {?}
      */
@@ -830,13 +864,13 @@ var ListKeyManager = (function () {
             case _angular_cdk_keyboard.UP_ARROW:
                 this.setPreviousItemActive();
                 break;
-            case _angular_cdk_keyboard.TAB:
-                // Note that we shouldn't prevent the default action on tab.
-                this._tabOut.next();
-                return;
+            // Note that we return here, in order to avoid preventing
+            // the default action of unsupported keys.
             default:
+                this._nonNavigationKeyStream.next(event.keyCode);
                 return;
         }
+        this._pressedInputKeys = [];
         event.preventDefault();
     };
     Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
@@ -905,7 +939,7 @@ var ListKeyManager = (function () {
          * @return {?}
          */
         get: function () {
-            return this._tabOut.asObservable();
+            return _angular_cdk_rxjs.filter.call(this._nonNavigationKeyStream, function (keyCode) { return keyCode === _angular_cdk_keyboard.TAB; });
         },
         enumerable: true,
         configurable: true
@@ -1006,11 +1040,8 @@ var ActiveDescendantKeyManager = (function (_super) {
 }(ListKeyManager));
 var FocusKeyManager = (function (_super) {
     __extends(FocusKeyManager, _super);
-    /**
-     * @param {?} items
-     */
-    function FocusKeyManager(items) {
-        return _super.call(this, items) || this;
+    function FocusKeyManager() {
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
      * This method sets the active item to the item at the specified index.
