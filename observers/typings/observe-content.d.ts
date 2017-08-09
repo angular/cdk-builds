@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, EventEmitter, OnDestroy, AfterContentInit } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, AfterContentInit, NgZone } from '@angular/core';
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private
@@ -20,6 +20,7 @@ export declare class MdMutationObserverFactory {
 export declare class ObserveContent implements AfterContentInit, OnDestroy {
     private _mutationObserverFactory;
     private _elementRef;
+    private _ngZone;
     private _observer;
     /** Event emitted for each change in the element's content. */
     event: EventEmitter<MutationRecord[]>;
@@ -27,7 +28,7 @@ export declare class ObserveContent implements AfterContentInit, OnDestroy {
     private _debouncer;
     /** Debounce interval for emitting the changes. */
     debounce: number;
-    constructor(_mutationObserverFactory: MdMutationObserverFactory, _elementRef: ElementRef);
+    constructor(_mutationObserverFactory: MdMutationObserverFactory, _elementRef: ElementRef, _ngZone: NgZone);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
 }

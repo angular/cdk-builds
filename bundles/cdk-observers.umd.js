@@ -42,10 +42,12 @@ var ObserveContent = (function () {
     /**
      * @param {?} _mutationObserverFactory
      * @param {?} _elementRef
+     * @param {?} _ngZone
      */
-    function ObserveContent(_mutationObserverFactory, _elementRef) {
+    function ObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
+        this._ngZone = _ngZone;
         /**
          * Event emitted for each change in the element's content.
          */
@@ -61,15 +63,19 @@ var ObserveContent = (function () {
     ObserveContent.prototype.ngAfterContentInit = function () {
         var _this = this;
         if (this.debounce > 0) {
-            _angular_cdk_rxjs.RxChain.from(this._debouncer)
-                .call(_angular_cdk_rxjs.debounceTime, this.debounce)
-                .subscribe(function (mutations) { return _this.event.emit(mutations); });
+            this._ngZone.runOutsideAngular(function () {
+                _angular_cdk_rxjs.RxChain.from(_this._debouncer)
+                    .call(_angular_cdk_rxjs.debounceTime, _this.debounce)
+                    .subscribe(function (mutations) { return _this.event.emit(mutations); });
+            });
         }
         else {
             this._debouncer.subscribe(function (mutations) { return _this.event.emit(mutations); });
         }
-        this._observer = this._mutationObserverFactory.create(function (mutations) {
-            _this._debouncer.next(mutations);
+        this._observer = this._ngZone.runOutsideAngular(function () {
+            return _this._mutationObserverFactory.create(function (mutations) {
+                _this._debouncer.next(mutations);
+            });
         });
         if (this._observer) {
             this._observer.observe(this._elementRef.nativeElement, {
@@ -85,8 +91,8 @@ var ObserveContent = (function () {
     ObserveContent.prototype.ngOnDestroy = function () {
         if (this._observer) {
             this._observer.disconnect();
-            this._debouncer.complete();
         }
+        this._debouncer.complete();
     };
     return ObserveContent;
 }());
@@ -101,6 +107,7 @@ ObserveContent.decorators = [
 ObserveContent.ctorParameters = function () { return [
     { type: MdMutationObserverFactory, },
     { type: _angular_core.ElementRef, },
+    { type: _angular_core.NgZone, },
 ]; };
 ObserveContent.propDecorators = {
     'event': [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],

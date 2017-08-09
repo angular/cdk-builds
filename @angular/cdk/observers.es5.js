@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { RxChain, debounceTime } from '@angular/cdk/rxjs';
 /**
@@ -39,10 +39,12 @@ var ObserveContent = (function () {
     /**
      * @param {?} _mutationObserverFactory
      * @param {?} _elementRef
+     * @param {?} _ngZone
      */
-    function ObserveContent(_mutationObserverFactory, _elementRef) {
+    function ObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
+        this._ngZone = _ngZone;
         /**
          * Event emitted for each change in the element's content.
          */
@@ -58,15 +60,19 @@ var ObserveContent = (function () {
     ObserveContent.prototype.ngAfterContentInit = function () {
         var _this = this;
         if (this.debounce > 0) {
-            RxChain.from(this._debouncer)
-                .call(debounceTime, this.debounce)
-                .subscribe(function (mutations) { return _this.event.emit(mutations); });
+            this._ngZone.runOutsideAngular(function () {
+                RxChain.from(_this._debouncer)
+                    .call(debounceTime, _this.debounce)
+                    .subscribe(function (mutations) { return _this.event.emit(mutations); });
+            });
         }
         else {
             this._debouncer.subscribe(function (mutations) { return _this.event.emit(mutations); });
         }
-        this._observer = this._mutationObserverFactory.create(function (mutations) {
-            _this._debouncer.next(mutations);
+        this._observer = this._ngZone.runOutsideAngular(function () {
+            return _this._mutationObserverFactory.create(function (mutations) {
+                _this._debouncer.next(mutations);
+            });
         });
         if (this._observer) {
             this._observer.observe(this._elementRef.nativeElement, {
@@ -82,8 +88,8 @@ var ObserveContent = (function () {
     ObserveContent.prototype.ngOnDestroy = function () {
         if (this._observer) {
             this._observer.disconnect();
-            this._debouncer.complete();
         }
+        this._debouncer.complete();
     };
     return ObserveContent;
 }());
@@ -98,6 +104,7 @@ ObserveContent.decorators = [
 ObserveContent.ctorParameters = function () { return [
     { type: MdMutationObserverFactory, },
     { type: ElementRef, },
+    { type: NgZone, },
 ]; };
 ObserveContent.propDecorators = {
     'event': [{ type: Output, args: ['cdkObserveContent',] },],

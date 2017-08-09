@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, Output } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { RxChain, debounceTime } from '@angular/cdk/rxjs';
 
@@ -37,10 +37,12 @@ class ObserveContent {
     /**
      * @param {?} _mutationObserverFactory
      * @param {?} _elementRef
+     * @param {?} _ngZone
      */
-    constructor(_mutationObserverFactory, _elementRef) {
+    constructor(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
+        this._ngZone = _ngZone;
         /**
          * Event emitted for each change in the element's content.
          */
@@ -55,15 +57,19 @@ class ObserveContent {
      */
     ngAfterContentInit() {
         if (this.debounce > 0) {
-            RxChain.from(this._debouncer)
-                .call(debounceTime, this.debounce)
-                .subscribe((mutations) => this.event.emit(mutations));
+            this._ngZone.runOutsideAngular(() => {
+                RxChain.from(this._debouncer)
+                    .call(debounceTime, this.debounce)
+                    .subscribe((mutations) => this.event.emit(mutations));
+            });
         }
         else {
             this._debouncer.subscribe(mutations => this.event.emit(mutations));
         }
-        this._observer = this._mutationObserverFactory.create((mutations) => {
-            this._debouncer.next(mutations);
+        this._observer = this._ngZone.runOutsideAngular(() => {
+            return this._mutationObserverFactory.create((mutations) => {
+                this._debouncer.next(mutations);
+            });
         });
         if (this._observer) {
             this._observer.observe(this._elementRef.nativeElement, {
@@ -79,8 +85,8 @@ class ObserveContent {
     ngOnDestroy() {
         if (this._observer) {
             this._observer.disconnect();
-            this._debouncer.complete();
         }
+        this._debouncer.complete();
     }
 }
 ObserveContent.decorators = [
@@ -94,6 +100,7 @@ ObserveContent.decorators = [
 ObserveContent.ctorParameters = () => [
     { type: MdMutationObserverFactory, },
     { type: ElementRef, },
+    { type: NgZone, },
 ];
 ObserveContent.propDecorators = {
     'event': [{ type: Output, args: ['cdkObserveContent',] },],
