@@ -5,9 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, Output } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { RxChain, debounceTime } from '@angular/cdk/rxjs';
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('@angular/cdk/rxjs')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', '@angular/cdk/rxjs'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = global.ng.cdk.observers || {}),global.ng.core,global.Rx,global.ng.cdk.rxjs));
+}(this, (function (exports,_angular_core,rxjs_Subject,_angular_cdk_rxjs) { 'use strict';
+
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
@@ -25,7 +28,7 @@ var MdMutationObserverFactory = (function () {
     return MdMutationObserverFactory;
 }());
 MdMutationObserverFactory.decorators = [
-    { type: Injectable },
+    { type: _angular_core.Injectable },
 ];
 /**
  * @nocollapse
@@ -46,11 +49,11 @@ var ObserveContent = (function () {
         /**
          * Event emitted for each change in the element's content.
          */
-        this.event = new EventEmitter();
+        this.event = new _angular_core.EventEmitter();
         /**
          * Used for debouncing the emitted values to the observeContent event.
          */
-        this._debouncer = new Subject();
+        this._debouncer = new rxjs_Subject.Subject();
     }
     /**
      * @return {?}
@@ -58,8 +61,8 @@ var ObserveContent = (function () {
     ObserveContent.prototype.ngAfterContentInit = function () {
         var _this = this;
         if (this.debounce > 0) {
-            RxChain.from(this._debouncer)
-                .call(debounceTime, this.debounce)
+            _angular_cdk_rxjs.RxChain.from(this._debouncer)
+                .call(_angular_cdk_rxjs.debounceTime, this.debounce)
                 .subscribe(function (mutations) { return _this.event.emit(mutations); });
         }
         else {
@@ -88,7 +91,7 @@ var ObserveContent = (function () {
     return ObserveContent;
 }());
 ObserveContent.decorators = [
-    { type: Directive, args: [{
+    { type: _angular_core.Directive, args: [{
                 selector: '[cdkObserveContent]'
             },] },
 ];
@@ -97,19 +100,19 @@ ObserveContent.decorators = [
  */
 ObserveContent.ctorParameters = function () { return [
     { type: MdMutationObserverFactory, },
-    { type: ElementRef, },
+    { type: _angular_core.ElementRef, },
 ]; };
 ObserveContent.propDecorators = {
-    'event': [{ type: Output, args: ['cdkObserveContent',] },],
-    'debounce': [{ type: Input },],
+    'event': [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
+    'debounce': [{ type: _angular_core.Input },],
 };
-var ObserveContentModule = (function () {
-    function ObserveContentModule() {
+var ObserversModule = (function () {
+    function ObserversModule() {
     }
-    return ObserveContentModule;
+    return ObserversModule;
 }());
-ObserveContentModule.decorators = [
-    { type: NgModule, args: [{
+ObserversModule.decorators = [
+    { type: _angular_core.NgModule, args: [{
                 exports: [ObserveContent],
                 declarations: [ObserveContent],
                 providers: [MdMutationObserverFactory]
@@ -118,9 +121,13 @@ ObserveContentModule.decorators = [
 /**
  * @nocollapse
  */
-ObserveContentModule.ctorParameters = function () { return []; };
-/**
- * Generated bundle index. Do not edit.
- */
-export { MdMutationObserverFactory, ObserveContent, ObserveContentModule };
-//# sourceMappingURL=observe-content.es5.js.map
+ObserversModule.ctorParameters = function () { return []; };
+
+exports.MdMutationObserverFactory = MdMutationObserverFactory;
+exports.ObserveContent = ObserveContent;
+exports.ObserversModule = ObserversModule;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+//# sourceMappingURL=cdk-observers.umd.js.map

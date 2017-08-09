@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.keyboard = global.ng.cdk.keyboard || {})));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.keycodes = global.ng.cdk.keycodes || {})));
 }(this, (function (exports) { 'use strict';
 
 var UP_ARROW = 38;
@@ -48,4 +48,4 @@ exports.Z = Z;
 Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=cdk-keyboard.umd.js.map
+//# sourceMappingURL=cdk-keycodes.umd.js.map

@@ -99,9 +99,9 @@ ObserveContent.propDecorators = {
     'event': [{ type: Output, args: ['cdkObserveContent',] },],
     'debounce': [{ type: Input },],
 };
-class ObserveContentModule {
+class ObserversModule {
 }
-ObserveContentModule.decorators = [
+ObserversModule.decorators = [
     { type: NgModule, args: [{
                 exports: [ObserveContent],
                 declarations: [ObserveContent],
@@ -111,11 +111,11 @@ ObserveContentModule.decorators = [
 /**
  * @nocollapse
  */
-ObserveContentModule.ctorParameters = () => [];
+ObserversModule.ctorParameters = () => [];
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { MdMutationObserverFactory, ObserveContent, ObserveContentModule };
-//# sourceMappingURL=observe-content.js.map
+export { MdMutationObserverFactory, ObserveContent, ObserversModule };
+//# sourceMappingURL=observers.js.map

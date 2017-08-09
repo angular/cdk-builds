@@ -11,7 +11,7 @@ import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
-import { A, DOWN_ARROW, TAB, UP_ARROW, Z } from '@angular/cdk/keyboard';
+import { A, DOWN_ARROW, TAB, UP_ARROW, Z } from '@angular/cdk/keycodes';
 
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or

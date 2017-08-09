@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/rxjs'), require('@angular/common'), require('rxjs/Subject'), require('@angular/cdk/keyboard')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/rxjs', '@angular/common', 'rxjs/Subject', '@angular/cdk/keyboard'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.ng.cdk.rxjs,global.ng.common,global.Rx,global.ng.cdk.keyboard));
-}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,_angular_cdk_rxjs,_angular_common,rxjs_Subject,_angular_cdk_keyboard) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/rxjs'), require('@angular/common'), require('rxjs/Subject'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/rxjs', '@angular/common', 'rxjs/Subject', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.ng.cdk.rxjs,global.ng.common,global.Rx,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,_angular_cdk_rxjs,_angular_common,rxjs_Subject,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -825,7 +825,7 @@ var ListKeyManager = (function () {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         this._typeaheadSubscription = _angular_cdk_rxjs.RxChain.from(this._nonNavigationKeyStream)
-            .call(_angular_cdk_rxjs.filter, function (keyCode) { return keyCode >= _angular_cdk_keyboard.A && keyCode <= _angular_cdk_keyboard.Z; })
+            .call(_angular_cdk_rxjs.filter, function (keyCode) { return keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z; })
             .call(_angular_cdk_rxjs.doOperator, function (keyCode) { return _this._pressedInputKeys.push(keyCode); })
             .call(_angular_cdk_rxjs.debounceTime, debounceInterval)
             .call(_angular_cdk_rxjs.filter, function () { return _this._pressedInputKeys.length > 0; })
@@ -858,10 +858,10 @@ var ListKeyManager = (function () {
      */
     ListKeyManager.prototype.onKeydown = function (event) {
         switch (event.keyCode) {
-            case _angular_cdk_keyboard.DOWN_ARROW:
+            case _angular_cdk_keycodes.DOWN_ARROW:
                 this.setNextItemActive();
                 break;
-            case _angular_cdk_keyboard.UP_ARROW:
+            case _angular_cdk_keycodes.UP_ARROW:
                 this.setPreviousItemActive();
                 break;
             // Note that we return here, in order to avoid preventing
@@ -939,7 +939,7 @@ var ListKeyManager = (function () {
          * @return {?}
          */
         get: function () {
-            return _angular_cdk_rxjs.filter.call(this._nonNavigationKeyStream, function (keyCode) { return keyCode === _angular_cdk_keyboard.TAB; });
+            return _angular_cdk_rxjs.filter.call(this._nonNavigationKeyStream, function (keyCode) { return keyCode === _angular_cdk_keycodes.TAB; });
         },
         enumerable: true,
         configurable: true

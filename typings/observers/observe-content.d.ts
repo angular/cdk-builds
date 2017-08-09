@@ -31,5 +31,5 @@ export declare class ObserveContent implements AfterContentInit, OnDestroy {
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
 }
-export declare class ObserveContentModule {
+export declare class ObserversModule {
 }

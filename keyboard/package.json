@@ -1,7 +1,0 @@
-{
-  "name": "@angular/cdk/keyboard",
-  "typings": "../keyboard.d.ts",
-  "main": "../bundles/cdk-keyboard.umd.js",
-  "module": "../@angular/cdk/keyboard.es5.js",
-  "es2015": "../@angular/cdk/keyboard.js"
-}
