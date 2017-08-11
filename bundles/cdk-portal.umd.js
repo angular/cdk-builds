@@ -67,7 +67,7 @@ function throwPortalHostAlreadyDisposedError() {
  * @return {?}
  */
 function throwUnknownPortalTypeError() {
-    throw Error('Attempting to attach an unknown Portal type. BasePortalHost accepts either' +
+    throw Error('Attempting to attach an unknown Portal type. BasePortalHost accepts either ' +
         'a ComponentPortal or a TemplatePortal.');
 }
 /**
