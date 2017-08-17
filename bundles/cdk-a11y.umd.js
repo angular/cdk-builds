@@ -795,8 +795,13 @@ var ListKeyManager = (function () {
         this._items = _items;
         this._activeItemIndex = -1;
         this._wrap = false;
-        this._nonNavigationKeyStream = new rxjs_Subject.Subject();
-        this._pressedInputKeys = [];
+        this._letterKeyStream = new rxjs_Subject.Subject();
+        this._pressedLetters = [];
+        /**
+         * Stream that emits any time the TAB key is pressed, so components can react
+         * when focus is shifted off of the list.
+         */
+        this.tabOut = new rxjs_Subject.Subject();
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
@@ -824,12 +829,11 @@ var ListKeyManager = (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = _angular_cdk_rxjs.RxChain.from(this._nonNavigationKeyStream)
-            .call(_angular_cdk_rxjs.filter, function (keyCode) { return keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z; })
-            .call(_angular_cdk_rxjs.doOperator, function (keyCode) { return _this._pressedInputKeys.push(keyCode); })
+        this._typeaheadSubscription = _angular_cdk_rxjs.RxChain.from(this._letterKeyStream)
+            .call(_angular_cdk_rxjs.doOperator, function (keyCode) { return _this._pressedLetters.push(keyCode); })
             .call(_angular_cdk_rxjs.debounceTime, debounceInterval)
-            .call(_angular_cdk_rxjs.filter, function () { return _this._pressedInputKeys.length > 0; })
-            .call(_angular_cdk_rxjs.map, function () { return String.fromCharCode.apply(String, _this._pressedInputKeys); })
+            .call(_angular_cdk_rxjs.filter, function () { return _this._pressedLetters.length > 0; })
+            .call(_angular_cdk_rxjs.map, function () { return _this._pressedLetters.join(''); })
             .subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             for (var /** @type {?} */ i = 0; i < items.length; i++) {
@@ -838,7 +842,7 @@ var ListKeyManager = (function () {
                     break;
                 }
             }
-            _this._pressedInputKeys = [];
+            _this._pressedLetters = [];
         });
         return this;
     };
@@ -864,13 +868,22 @@ var ListKeyManager = (function () {
             case _angular_cdk_keycodes.UP_ARROW:
                 this.setPreviousItemActive();
                 break;
-            // Note that we return here, in order to avoid preventing
-            // the default action of unsupported keys.
+            case _angular_cdk_keycodes.TAB:
+                this.tabOut.next();
+                return;
             default:
-                this._nonNavigationKeyStream.next(event.keyCode);
+                if (event.keyCode >= _angular_cdk_keycodes.A && event.keyCode <= _angular_cdk_keycodes.Z) {
+                    // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+                    // otherwise fall back to `keyCode` and `fromCharCode` which always resolve to English.
+                    this._letterKeyStream.next(event.key ?
+                        event.key.toLocaleUpperCase() :
+                        String.fromCharCode(event.keyCode));
+                }
+                // Note that we return here, in order to avoid preventing
+                // the default action of non-navigational keys.
                 return;
         }
-        this._pressedInputKeys = [];
+        this._pressedLetters = [];
         event.preventDefault();
     };
     Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
@@ -932,18 +945,6 @@ var ListKeyManager = (function () {
     ListKeyManager.prototype.updateActiveItemIndex = function (index) {
         this._activeItemIndex = index;
     };
-    Object.defineProperty(ListKeyManager.prototype, "tabOut", {
-        /**
-         * Observable that emits any time the TAB key is pressed, so components can react
-         * when focus is shifted off of the list.
-         * @return {?}
-         */
-        get: function () {
-            return _angular_cdk_rxjs.filter.call(this._nonNavigationKeyStream, function (keyCode) { return keyCode === _angular_cdk_keycodes.TAB; });
-        },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * This method sets the active item, given a list of items and the delta between the
      * currently active item and the new active item. It will calculate differently

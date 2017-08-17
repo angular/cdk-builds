@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { QueryList } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 /**
  * This interface is for items that can be passed to a ListKeyManager.
  */
@@ -23,10 +23,15 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _activeItemIndex;
     private _activeItem;
     private _wrap;
-    private _nonNavigationKeyStream;
+    private _letterKeyStream;
     private _typeaheadSubscription;
-    private _pressedInputKeys;
+    private _pressedLetters;
     constructor(_items: QueryList<T>);
+    /**
+     * Stream that emits any time the TAB key is pressed, so components can react
+     * when focus is shifted off of the list.
+     */
+    tabOut: Subject<void>;
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
@@ -64,11 +69,6 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param index The new activeItemIndex.
      */
     updateActiveItemIndex(index: number): void;
-    /**
-     * Observable that emits any time the TAB key is pressed, so components can react
-     * when focus is shifted off of the list.
-     */
-    readonly tabOut: Observable<void>;
     /**
      * This method sets the active item, given a list of items and the delta between the
      * currently active item and the new active item. It will calculate differently
