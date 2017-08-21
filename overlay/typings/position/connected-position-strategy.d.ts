@@ -119,15 +119,9 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * Gets the view properties of the trigger and overlay, including whether they are clipped
      * or completely outside the view of any of the strategy's scrollables.
      */
-    private getScrollableViewProperties(overlay);
-    /** Whether the element is completely out of the view of any of the containers. */
-    private isElementOutsideView(elementBounds, containersBounds);
-    /** Whether the element is clipped by any of the containers. */
-    private isElementClipped(elementBounds, containersBounds);
+    private _getScrollVisibility(overlay);
     /** Physically positions the overlay element to the given coordinate. */
     private _setElementPosition(element, overlayRect, overlayPoint, pos);
-    /** Returns the bounding positions of the provided element with respect to the viewport. */
-    private _getElementBounds(element);
     /**
      * Subtracts the amount that an element is overflowing on an axis from it's length.
      */

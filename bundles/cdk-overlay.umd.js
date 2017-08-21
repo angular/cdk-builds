@@ -671,10 +671,10 @@ var ConnectionPositionPair = (function () {
  *  |                        |
  *  --------------------------
  */
-var ScrollableViewProperties = (function () {
-    function ScrollableViewProperties() {
+var ScrollingVisibility = (function () {
+    function ScrollingVisibility() {
     }
-    return ScrollableViewProperties;
+    return ScrollingVisibility;
 }());
 /**
  * The change event emitted by the strategy when a fallback position is used.
@@ -695,8 +695,40 @@ var ConnectedOverlayPositionChange = (function () {
  */
 ConnectedOverlayPositionChange.ctorParameters = function () { return [
     { type: ConnectionPositionPair, },
-    { type: ScrollableViewProperties, decorators: [{ type: _angular_core.Optional },] },
+    { type: ScrollingVisibility, decorators: [{ type: _angular_core.Optional },] },
 ]; };
+/**
+ * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
+ * \@docs-private
+ * @param {?} element Dimensions of the element (from getBoundingClientRect)
+ * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
+ * @return {?} Whether the element is scrolled out of view
+ */
+function isElementScrolledOutsideView(element, scrollContainers) {
+    return scrollContainers.some(function (containerBounds) {
+        var /** @type {?} */ outsideAbove = element.bottom < containerBounds.top;
+        var /** @type {?} */ outsideBelow = element.top > containerBounds.bottom;
+        var /** @type {?} */ outsideLeft = element.right < containerBounds.left;
+        var /** @type {?} */ outsideRight = element.left > containerBounds.right;
+        return outsideAbove || outsideBelow || outsideLeft || outsideRight;
+    });
+}
+/**
+ * Gets whether an element is clipped by any of its scrolling containers.
+ * \@docs-private
+ * @param {?} element Dimensions of the element (from getBoundingClientRect)
+ * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
+ * @return {?} Whether the element is clipped
+ */
+function isElementClippedByScrolling(element, scrollContainers) {
+    return scrollContainers.some(function (scrollContainerRect) {
+        var /** @type {?} */ clippedAbove = element.top < scrollContainerRect.top;
+        var /** @type {?} */ clippedBelow = element.bottom > scrollContainerRect.bottom;
+        var /** @type {?} */ clippedLeft = element.left < scrollContainerRect.left;
+        var /** @type {?} */ clippedRight = element.right > scrollContainerRect.right;
+        return clippedAbove || clippedBelow || clippedLeft || clippedRight;
+    });
+}
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -974,49 +1006,16 @@ var ConnectedPositionStrategy = (function () {
      * @param {?} overlay
      * @return {?}
      */
-    ConnectedPositionStrategy.prototype.getScrollableViewProperties = function (overlay) {
-        var _this = this;
-        var /** @type {?} */ originBounds = this._getElementBounds(this._origin);
-        var /** @type {?} */ overlayBounds = this._getElementBounds(overlay);
-        var /** @type {?} */ scrollContainerBounds = this.scrollables.map(function (scrollable) {
-            return _this._getElementBounds(scrollable.getElementRef().nativeElement);
-        });
+    ConnectedPositionStrategy.prototype._getScrollVisibility = function (overlay) {
+        var /** @type {?} */ originBounds = this._origin.getBoundingClientRect();
+        var /** @type {?} */ overlayBounds = overlay.getBoundingClientRect();
+        var /** @type {?} */ scrollContainerBounds = this.scrollables.map(function (s) { return s.getElementRef().nativeElement.getBoundingClientRect(); });
         return {
-            isOriginClipped: this.isElementClipped(originBounds, scrollContainerBounds),
-            isOriginOutsideView: this.isElementOutsideView(originBounds, scrollContainerBounds),
-            isOverlayClipped: this.isElementClipped(overlayBounds, scrollContainerBounds),
-            isOverlayOutsideView: this.isElementOutsideView(overlayBounds, scrollContainerBounds),
+            isOriginClipped: isElementClippedByScrolling(originBounds, scrollContainerBounds),
+            isOriginOutsideView: isElementScrolledOutsideView(originBounds, scrollContainerBounds),
+            isOverlayClipped: isElementClippedByScrolling(overlayBounds, scrollContainerBounds),
+            isOverlayOutsideView: isElementScrolledOutsideView(overlayBounds, scrollContainerBounds),
         };
-    };
-    /**
-     * Whether the element is completely out of the view of any of the containers.
-     * @param {?} elementBounds
-     * @param {?} containersBounds
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype.isElementOutsideView = function (elementBounds, containersBounds) {
-        return containersBounds.some(function (containerBounds) {
-            var /** @type {?} */ outsideAbove = elementBounds.bottom < containerBounds.top;
-            var /** @type {?} */ outsideBelow = elementBounds.top > containerBounds.bottom;
-            var /** @type {?} */ outsideLeft = elementBounds.right < containerBounds.left;
-            var /** @type {?} */ outsideRight = elementBounds.left > containerBounds.right;
-            return outsideAbove || outsideBelow || outsideLeft || outsideRight;
-        });
-    };
-    /**
-     * Whether the element is clipped by any of the containers.
-     * @param {?} elementBounds
-     * @param {?} containersBounds
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype.isElementClipped = function (elementBounds, containersBounds) {
-        return containersBounds.some(function (containerBounds) {
-            var /** @type {?} */ clippedAbove = elementBounds.top < containerBounds.top;
-            var /** @type {?} */ clippedBelow = elementBounds.bottom > containerBounds.bottom;
-            var /** @type {?} */ clippedLeft = elementBounds.left < containerBounds.left;
-            var /** @type {?} */ clippedRight = elementBounds.right > containerBounds.right;
-            return clippedAbove || clippedBelow || clippedLeft || clippedRight;
-        });
     };
     /**
      * Physically positions the overlay element to the given coordinate.
@@ -1057,23 +1056,9 @@ var ConnectedPositionStrategy = (function () {
         element.style[verticalStyleProperty] = y + "px";
         element.style[horizontalStyleProperty] = x + "px";
         // Notify that the position has been changed along with its change properties.
-        var /** @type {?} */ scrollableViewProperties = this.getScrollableViewProperties(element);
+        var /** @type {?} */ scrollableViewProperties = this._getScrollVisibility(element);
         var /** @type {?} */ positionChange = new ConnectedOverlayPositionChange(pos, scrollableViewProperties);
         this._onPositionChange.next(positionChange);
-    };
-    /**
-     * Returns the bounding positions of the provided element with respect to the viewport.
-     * @param {?} element
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype._getElementBounds = function (element) {
-        var /** @type {?} */ boundingClientRect = element.getBoundingClientRect();
-        return {
-            top: boundingClientRect.top,
-            right: boundingClientRect.left + boundingClientRect.width,
-            bottom: boundingClientRect.top + boundingClientRect.height,
-            left: boundingClientRect.left
-        };
     };
     /**
      * Subtracts the amount that an element is overflowing on an axis from it's length.
@@ -2409,7 +2394,7 @@ exports.GlobalPositionStrategy = GlobalPositionStrategy;
 exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
 exports.VIEWPORT_RULER_PROVIDER = VIEWPORT_RULER_PROVIDER;
 exports.ConnectionPositionPair = ConnectionPositionPair;
-exports.ScrollableViewProperties = ScrollableViewProperties;
+exports.ScrollingVisibility = ScrollingVisibility;
 exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
 exports.Scrollable = Scrollable;
 exports.ScrollDispatcher = ScrollDispatcher;
