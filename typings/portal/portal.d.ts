@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { TemplateRef, ViewContainerRef, ElementRef, ComponentRef, Injector } from '@angular/core';
+import { TemplateRef, ViewContainerRef, ElementRef, ComponentRef, EmbeddedViewRef, Injector } from '@angular/core';
 export interface ComponentType<T> {
     new (...args: any[]): T;
 }
@@ -46,21 +46,20 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
  */
-export declare class TemplatePortal extends Portal<Map<string, any>> {
+export declare class TemplatePortal<C> extends Portal<C> {
     /** The embedded template that will be used to instantiate an embedded View in the host. */
-    templateRef: TemplateRef<any>;
+    templateRef: TemplateRef<C>;
     /** Reference to the ViewContainer into which the template will be stamped out. */
     viewContainerRef: ViewContainerRef;
-    /**
-     * Additional locals for the instantiated embedded view.
-     * These locals can be seen as "exports" for the template, such as how ngFor has
-     * index / event / odd.
-     * See https://angular.io/docs/ts/latest/api/core/EmbeddedViewRef-class.html
-     */
-    locals: Map<string, any>;
-    constructor(template: TemplateRef<any>, viewContainerRef: ViewContainerRef);
+    context: C | undefined;
+    constructor(template: TemplateRef<any>, viewContainerRef: ViewContainerRef, context?: C);
     readonly origin: ElementRef;
-    attach(host: PortalHost, locals?: Map<string, any>): Map<string, any>;
+    /**
+     * Attach the the portal to the provided `PortalHost`.
+     * When a context is provided it will override the `context` property of the `TemplatePortal`
+     * instance.
+     */
+    attach(host: PortalHost, context?: C | undefined): C;
     detach(): void;
 }
 /**
@@ -87,7 +86,7 @@ export declare abstract class BasePortalHost implements PortalHost {
     hasAttached(): boolean;
     attach(portal: Portal<any>): any;
     abstract attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
-    abstract attachTemplatePortal(portal: TemplatePortal): Map<string, any>;
+    abstract attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
     detach(): void;
     dispose(): void;
     setDisposeFn(fn: () => void): void;

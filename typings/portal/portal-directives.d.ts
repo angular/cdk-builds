@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy } from '@angular/core';
+import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy } from '@angular/core';
 import { Portal, TemplatePortal, ComponentPortal, BasePortalHost } from './portal';
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -16,7 +16,7 @@ import { Portal, TemplatePortal, ComponentPortal, BasePortalHost } from './porta
  *   <p> Hello {{name}} </p>
  * </ng-template>
  */
-export declare class TemplatePortalDirective extends TemplatePortal {
+export declare class TemplatePortalDirective extends TemplatePortal<any> {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
 /**
@@ -47,7 +47,7 @@ export declare class PortalHostDirective extends BasePortalHost implements OnDes
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
      * @param portal Portal to be attached.
      */
-    attachTemplatePortal(portal: TemplatePortal): Map<string, any>;
+    attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
 }
 export declare class PortalModule {
 }

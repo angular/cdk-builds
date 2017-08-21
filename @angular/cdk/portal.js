@@ -132,18 +132,15 @@ class TemplatePortal extends Portal {
     /**
      * @param {?} template
      * @param {?} viewContainerRef
+     * @param {?=} context
      */
-    constructor(template, viewContainerRef) {
+    constructor(template, viewContainerRef, context) {
         super();
-        /**
-         * Additional locals for the instantiated embedded view.
-         * These locals can be seen as "exports" for the template, such as how ngFor has
-         * index / event / odd.
-         * See https://angular.io/docs/ts/latest/api/core/EmbeddedViewRef-class.html
-         */
-        this.locals = new Map();
         this.templateRef = template;
         this.viewContainerRef = viewContainerRef;
+        if (context) {
+            this.context = context;
+        }
     }
     /**
      * @return {?}
@@ -152,19 +149,22 @@ class TemplatePortal extends Portal {
         return this.templateRef.elementRef;
     }
     /**
+     * Attach the the portal to the provided `PortalHost`.
+     * When a context is provided it will override the `context` property of the `TemplatePortal`
+     * instance.
      * @param {?} host
-     * @param {?=} locals
+     * @param {?=} context
      * @return {?}
      */
-    attach(host, locals) {
-        this.locals = locals == null ? new Map() : locals;
+    attach(host, context = this.context) {
+        this.context = context;
         return super.attach(host);
     }
     /**
      * @return {?}
      */
     detach() {
-        this.locals = new Map();
+        this.context = undefined;
         return super.detach();
     }
 }
@@ -220,6 +220,7 @@ class BasePortalHost {
     attachComponentPortal(portal) { }
     /**
      * @abstract
+     * @template C
      * @param {?} portal
      * @return {?}
      */
@@ -314,12 +315,13 @@ class DomPortalHost extends BasePortalHost {
     }
     /**
      * Attaches a template portal to the DOM as an embedded view.
+     * @template C
      * @param {?} portal Portal to be attached.
      * @return {?}
      */
     attachTemplatePortal(portal) {
         let /** @type {?} */ viewContainer = portal.viewContainerRef;
-        let /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef);
+        let /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
         viewRef.detectChanges();
         // The method `createEmbeddedView` will add the view as a child of the viewContainer.
         // But for the DomPortalHost the view can be added everywhere in the DOM (e.g Overlay Container)
@@ -332,7 +334,7 @@ class DomPortalHost extends BasePortalHost {
             }
         }));
         // TODO(jelbourn): Return locals from view.
-        return new Map();
+        return viewRef;
     }
     /**
      * Clears out a portal from the DOM.
@@ -465,16 +467,16 @@ class PortalHostDirective extends BasePortalHost {
     }
     /**
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
+     * @template C
      * @param {?} portal Portal to be attached.
      * @return {?}
      */
     attachTemplatePortal(portal) {
         portal.setAttachedHost(this);
-        this._viewContainerRef.createEmbeddedView(portal.templateRef);
+        const /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
         super.setDisposeFn(() => this._viewContainerRef.clear());
         this._portal = portal;
-        // TODO(jelbourn): return locals from view
-        return new Map();
+        return viewRef;
     }
 }
 PortalHostDirective.decorators = [

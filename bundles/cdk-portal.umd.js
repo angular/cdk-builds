@@ -172,18 +172,15 @@ var TemplatePortal = (function (_super) {
     /**
      * @param {?} template
      * @param {?} viewContainerRef
+     * @param {?=} context
      */
-    function TemplatePortal(template, viewContainerRef) {
+    function TemplatePortal(template, viewContainerRef, context) {
         var _this = _super.call(this) || this;
-        /**
-         * Additional locals for the instantiated embedded view.
-         * These locals can be seen as "exports" for the template, such as how ngFor has
-         * index / event / odd.
-         * See https://angular.io/docs/ts/latest/api/core/EmbeddedViewRef-class.html
-         */
-        _this.locals = new Map();
         _this.templateRef = template;
         _this.viewContainerRef = viewContainerRef;
+        if (context) {
+            _this.context = context;
+        }
         return _this;
     }
     Object.defineProperty(TemplatePortal.prototype, "origin", {
@@ -197,19 +194,23 @@ var TemplatePortal = (function (_super) {
         configurable: true
     });
     /**
+     * Attach the the portal to the provided `PortalHost`.
+     * When a context is provided it will override the `context` property of the `TemplatePortal`
+     * instance.
      * @param {?} host
-     * @param {?=} locals
+     * @param {?=} context
      * @return {?}
      */
-    TemplatePortal.prototype.attach = function (host, locals) {
-        this.locals = locals == null ? new Map() : locals;
+    TemplatePortal.prototype.attach = function (host, context) {
+        if (context === void 0) { context = this.context; }
+        this.context = context;
         return _super.prototype.attach.call(this, host);
     };
     /**
      * @return {?}
      */
     TemplatePortal.prototype.detach = function () {
-        this.locals = new Map();
+        this.context = undefined;
         return _super.prototype.detach.call(this);
     };
     return TemplatePortal;
@@ -266,6 +267,7 @@ var BasePortalHost = (function () {
     BasePortalHost.prototype.attachComponentPortal = function (portal) { };
     /**
      * @abstract
+     * @template C
      * @param {?} portal
      * @return {?}
      */
@@ -363,13 +365,14 @@ var DomPortalHost = (function (_super) {
     };
     /**
      * Attaches a template portal to the DOM as an embedded view.
+     * @template C
      * @param {?} portal Portal to be attached.
      * @return {?}
      */
     DomPortalHost.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         var /** @type {?} */ viewContainer = portal.viewContainerRef;
-        var /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef);
+        var /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
         viewRef.detectChanges();
         // The method `createEmbeddedView` will add the view as a child of the viewContainer.
         // But for the DomPortalHost the view can be added everywhere in the DOM (e.g Overlay Container)
@@ -382,7 +385,7 @@ var DomPortalHost = (function (_super) {
             }
         }));
         // TODO(jelbourn): Return locals from view.
-        return new Map();
+        return viewRef;
     };
     /**
      * Clears out a portal from the DOM.
@@ -527,17 +530,17 @@ var PortalHostDirective = (function (_super) {
     };
     /**
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
+     * @template C
      * @param {?} portal Portal to be attached.
      * @return {?}
      */
     PortalHostDirective.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         portal.setAttachedHost(this);
-        this._viewContainerRef.createEmbeddedView(portal.templateRef);
+        var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
         _super.prototype.setDisposeFn.call(this, function () { return _this._viewContainerRef.clear(); });
         this._portal = portal;
-        // TODO(jelbourn): return locals from view
-        return new Map();
+        return viewRef;
     };
     return PortalHostDirective;
 }(BasePortalHost));

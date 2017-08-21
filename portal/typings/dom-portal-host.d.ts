@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ComponentRef, ApplicationRef, Injector } from '@angular/core';
+import { ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, ApplicationRef, Injector } from '@angular/core';
 import { BasePortalHost, ComponentPortal, TemplatePortal } from './portal';
 /**
  * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
@@ -28,7 +28,7 @@ export declare class DomPortalHost extends BasePortalHost {
      * Attaches a template portal to the DOM as an embedded view.
      * @param portal Portal to be attached.
      */
-    attachTemplatePortal(portal: TemplatePortal): Map<string, any>;
+    attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
     /**
      * Clears out a portal from the DOM.
      */
