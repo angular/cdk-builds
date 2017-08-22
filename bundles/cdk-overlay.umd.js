@@ -1330,6 +1330,14 @@ var OverlayContainer = (function () {
         configurable: true
     });
     /**
+     * @return {?}
+     */
+    OverlayContainer.prototype.ngOnDestroy = function () {
+        if (this._containerElement && this._containerElement.parentNode) {
+            this._containerElement.parentNode.removeChild(this._containerElement);
+        }
+    };
+    /**
      * This method returns the overlay container element.  It will lazily
      * create the element the first time  it is called to facilitate using
      * the container in non-browser environments.

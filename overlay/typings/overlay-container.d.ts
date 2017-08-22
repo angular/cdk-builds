@@ -5,18 +5,19 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional } from '@angular/core';
+import { Optional, OnDestroy } from '@angular/core';
 /**
  * The OverlayContainer is the container in which all overlays will load.
  * It should be provided in the root component to ensure it is properly shared.
  */
-export declare class OverlayContainer {
+export declare class OverlayContainer implements OnDestroy {
     protected _containerElement: HTMLElement;
     private _themeClass;
     /**
      * Base theme to be applied to all overlay-based components.
      */
     themeClass: string;
+    ngOnDestroy(): void;
     /**
      * This method returns the overlay container element.  It will lazily
      * create the element the first time  it is called to facilitate using
