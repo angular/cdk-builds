@@ -12,6 +12,7 @@ import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosi
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { Scrollable } from '../scroll/scrollable';
+import { OverlayRef } from '../overlay-ref';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -24,6 +25,8 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     private _originPos;
     private _overlayPos;
     private _viewportRuler;
+    /** The overlay to which this strategy is attached. */
+    private _overlayRef;
     private _dir;
     /** The offset in pixels for the overlay connection point on the x-axis */
     private _offsetX;
@@ -47,19 +50,17 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     constructor(_connectedTo: ElementRef, _originPos: OriginConnectionPosition, _overlayPos: OverlayConnectionPosition, _viewportRuler: ViewportRuler);
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
-    /**
-     * To be used to for any cleanup after the element gets destroyed.
-     */
+    attach(overlayRef: OverlayRef): void;
+    /** Performs any cleanup after the element is destroyed. */
     dispose(): void;
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.
      * @docs-private
      *
-     * @param element Element to which to apply the CSS styles.
      * @returns Resolves when the styles have been applied.
      */
-    apply(element: HTMLElement): void;
+    apply(): void;
     /**
      * This re-aligns the overlay element with the trigger in its last calculated position,
      * even if a position higher in the "preferred positions" list would now fit. This

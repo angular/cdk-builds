@@ -122,6 +122,9 @@ var OverlayRef = (function () {
     OverlayRef.prototype.attach = function (portal) {
         var _this = this;
         var /** @type {?} */ attachResult = this._portalHost.attach(portal);
+        if (this._state.positionStrategy) {
+            this._state.positionStrategy.attach(this);
+        }
         // Update the pane element with the given state configuration.
         this._updateStackingOrder();
         this.updateSize();
@@ -219,7 +222,7 @@ var OverlayRef = (function () {
      */
     OverlayRef.prototype.updatePosition = function () {
         if (this._state.positionStrategy) {
-            this._state.positionStrategy.apply(this._pane);
+            this._state.positionStrategy.apply();
         }
     };
     /**
@@ -245,6 +248,12 @@ var OverlayRef = (function () {
         }
         if (this._state.minHeight || this._state.minHeight === 0) {
             this._pane.style.minHeight = formatCssUnit(this._state.minHeight);
+        }
+        if (this._state.maxWidth || this._state.maxWidth === 0) {
+            this._pane.style.maxWidth = formatCssUnit(this._state.maxWidth);
+        }
+        if (this._state.maxHeight || this._state.maxHeight === 0) {
+            this._pane.style.maxHeight = formatCssUnit(this._state.maxHeight);
         }
     };
     /**
@@ -794,7 +803,15 @@ var ConnectedPositionStrategy = (function () {
         configurable: true
     });
     /**
-     * To be used to for any cleanup after the element gets destroyed.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    ConnectedPositionStrategy.prototype.attach = function (overlayRef) {
+        this._overlayRef = overlayRef;
+        this._pane = overlayRef.overlayElement;
+    };
+    /**
+     * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.dispose = function () { };
@@ -803,14 +820,12 @@ var ConnectedPositionStrategy = (function () {
      * to the origin fits on-screen.
      * \@docs-private
      *
-     * @param {?} element Element to which to apply the CSS styles.
      * @return {?} Resolves when the styles have been applied.
      */
-    ConnectedPositionStrategy.prototype.apply = function (element) {
-        // Cache the overlay pane element in case re-calculating position is necessary
-        this._pane = element;
+    ConnectedPositionStrategy.prototype.apply = function () {
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
+        var /** @type {?} */ element = this._pane;
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = element.getBoundingClientRect();
         // We use the viewport rect to determine whether a position would go off-screen.
@@ -1088,6 +1103,13 @@ var GlobalPositionStrategy = (function () {
         this._wrapper = null;
     }
     /**
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    GlobalPositionStrategy.prototype.attach = function (overlayRef) {
+        this._overlayRef = overlayRef;
+    };
+    /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
      * @param {?=} value New top offset.
      * @return {?}
@@ -1195,10 +1217,10 @@ var GlobalPositionStrategy = (function () {
      * Apply the position to the element.
      * \@docs-private
      *
-     * @param {?} element Element to which to apply the CSS.
      * @return {?} Resolved when the styles have been applied.
      */
-    GlobalPositionStrategy.prototype.apply = function (element) {
+    GlobalPositionStrategy.prototype.apply = function () {
+        var /** @type {?} */ element = this._overlayRef.overlayElement;
         if (!this._wrapper && element.parentNode) {
             this._wrapper = document.createElement('div');
             this._wrapper.classList.add('cdk-global-overlay-wrapper');

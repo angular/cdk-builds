@@ -115,6 +115,9 @@ class OverlayRef {
      */
     attach(portal) {
         let /** @type {?} */ attachResult = this._portalHost.attach(portal);
+        if (this._state.positionStrategy) {
+            this._state.positionStrategy.attach(this);
+        }
         // Update the pane element with the given state configuration.
         this._updateStackingOrder();
         this.updateSize();
@@ -212,7 +215,7 @@ class OverlayRef {
      */
     updatePosition() {
         if (this._state.positionStrategy) {
-            this._state.positionStrategy.apply(this._pane);
+            this._state.positionStrategy.apply();
         }
     }
     /**
@@ -238,6 +241,12 @@ class OverlayRef {
         }
         if (this._state.minHeight || this._state.minHeight === 0) {
             this._pane.style.minHeight = formatCssUnit(this._state.minHeight);
+        }
+        if (this._state.maxWidth || this._state.maxWidth === 0) {
+            this._pane.style.maxWidth = formatCssUnit(this._state.maxWidth);
+        }
+        if (this._state.maxHeight || this._state.maxHeight === 0) {
+            this._pane.style.maxHeight = formatCssUnit(this._state.maxHeight);
         }
     }
     /**
@@ -775,7 +784,15 @@ class ConnectedPositionStrategy {
         return this._preferredPositions;
     }
     /**
-     * To be used to for any cleanup after the element gets destroyed.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    attach(overlayRef) {
+        this._overlayRef = overlayRef;
+        this._pane = overlayRef.overlayElement;
+    }
+    /**
+     * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
     dispose() { }
@@ -784,14 +801,12 @@ class ConnectedPositionStrategy {
      * to the origin fits on-screen.
      * \@docs-private
      *
-     * @param {?} element Element to which to apply the CSS styles.
      * @return {?} Resolves when the styles have been applied.
      */
-    apply(element) {
-        // Cache the overlay pane element in case re-calculating position is necessary
-        this._pane = element;
+    apply() {
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
+        const /** @type {?} */ element = this._pane;
         const /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         const /** @type {?} */ overlayRect = element.getBoundingClientRect();
         // We use the viewport rect to determine whether a position would go off-screen.
@@ -1064,6 +1079,13 @@ class GlobalPositionStrategy {
         this._wrapper = null;
     }
     /**
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    attach(overlayRef) {
+        this._overlayRef = overlayRef;
+    }
+    /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
      * @param {?=} value New top offset.
      * @return {?}
@@ -1163,10 +1185,10 @@ class GlobalPositionStrategy {
      * Apply the position to the element.
      * \@docs-private
      *
-     * @param {?} element Element to which to apply the CSS.
      * @return {?} Resolved when the styles have been applied.
      */
-    apply(element) {
+    apply() {
+        const /** @type {?} */ element = this._overlayRef.overlayElement;
         if (!this._wrapper && element.parentNode) {
             this._wrapper = document.createElement('div');
             this._wrapper.classList.add('cdk-global-overlay-wrapper');

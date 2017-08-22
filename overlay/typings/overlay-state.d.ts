@@ -31,6 +31,10 @@ export declare class OverlayState {
     minWidth?: number | string;
     /** The min-height of the overlay panel. If a number is provided, pixel units are assumed. */
     minHeight?: number | string;
+    /** The max-width of the overlay panel. If a number is provided, pixel units are assumed. */
+    maxWidth?: number | string;
+    /** The max-height of the overlay panel. If a number is provided, pixel units are assumed. */
+    maxHeight?: number | string;
     /** The direction of the text in the overlay panel. */
     direction?: Direction;
 }

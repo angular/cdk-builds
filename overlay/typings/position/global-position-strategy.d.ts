@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { PositionStrategy } from './position-strategy';
+import { OverlayRef } from '../overlay-ref';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -13,6 +14,8 @@ import { PositionStrategy } from './position-strategy';
  * element to become blurry.
  */
 export declare class GlobalPositionStrategy implements PositionStrategy {
+    /** The overlay to which this strategy is attached. */
+    private _overlayRef;
     private _cssPosition;
     private _topOffset;
     private _bottomOffset;
@@ -23,6 +26,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _width;
     private _height;
     private _wrapper;
+    attach(overlayRef: OverlayRef): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
      * @param value New top offset.
@@ -71,12 +75,9 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
      * Apply the position to the element.
      * @docs-private
      *
-     * @param element Element to which to apply the CSS.
      * @returns Resolved when the styles have been applied.
      */
-    apply(element: HTMLElement): void;
-    /**
-     * Removes the wrapper element from the DOM.
-     */
+    apply(): void;
+    /** Removes the wrapper element from the DOM. */
     dispose(): void;
 }
