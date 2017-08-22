@@ -21,10 +21,12 @@ const BACKSPACE = 8;
 const DELETE = 46;
 const A = 65;
 const Z = 90;
+const ZERO = 48;
+const NINE = 91;
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z };
+export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z, ZERO, NINE };
 //# sourceMappingURL=keycodes.js.map

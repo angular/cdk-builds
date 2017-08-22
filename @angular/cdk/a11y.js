@@ -11,7 +11,7 @@ import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
-import { A, DOWN_ARROW, TAB, UP_ARROW, Z } from '@angular/cdk/keycodes';
+import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
 
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
@@ -824,12 +824,14 @@ class ListKeyManager {
                 this.tabOut.next();
                 return;
             default:
-                if (event.keyCode >= A && event.keyCode <= Z) {
-                    // Attempt to use the `event.key` which also maps it to the user's keyboard language,
-                    // otherwise fall back to `keyCode` and `fromCharCode` which always resolve to English.
-                    this._letterKeyStream.next(event.key ?
-                        event.key.toLocaleUpperCase() :
-                        String.fromCharCode(event.keyCode));
+                const /** @type {?} */ keyCode = event.keyCode;
+                // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+                // otherwise fall back to resolving alphanumeric characters via the keyCode.
+                if (event.key && event.key.length === 1) {
+                    this._letterKeyStream.next(event.key.toLocaleUpperCase());
+                }
+                else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
+                    this._letterKeyStream.next(String.fromCharCode(keyCode));
                 }
                 // Note that we return here, in order to avoid preventing
                 // the default action of non-navigational keys.

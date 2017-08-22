@@ -21,3 +21,5 @@ export declare const BACKSPACE = 8;
 export declare const DELETE = 46;
 export declare const A = 65;
 export declare const Z = 90;
+export declare const ZERO = 48;
+export declare const NINE = 91;

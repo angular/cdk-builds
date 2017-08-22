@@ -27,6 +27,8 @@ var BACKSPACE = 8;
 var DELETE = 46;
 var A = 65;
 var Z = 90;
+var ZERO = 48;
+var NINE = 91;
 
 exports.UP_ARROW = UP_ARROW;
 exports.DOWN_ARROW = DOWN_ARROW;
@@ -44,6 +46,8 @@ exports.BACKSPACE = BACKSPACE;
 exports.DELETE = DELETE;
 exports.A = A;
 exports.Z = Z;
+exports.ZERO = ZERO;
+exports.NINE = NINE;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

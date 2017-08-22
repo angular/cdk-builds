@@ -872,12 +872,14 @@ var ListKeyManager = (function () {
                 this.tabOut.next();
                 return;
             default:
-                if (event.keyCode >= _angular_cdk_keycodes.A && event.keyCode <= _angular_cdk_keycodes.Z) {
-                    // Attempt to use the `event.key` which also maps it to the user's keyboard language,
-                    // otherwise fall back to `keyCode` and `fromCharCode` which always resolve to English.
-                    this._letterKeyStream.next(event.key ?
-                        event.key.toLocaleUpperCase() :
-                        String.fromCharCode(event.keyCode));
+                var /** @type {?} */ keyCode = event.keyCode;
+                // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+                // otherwise fall back to resolving alphanumeric characters via the keyCode.
+                if (event.key && event.key.length === 1) {
+                    this._letterKeyStream.next(event.key.toLocaleUpperCase());
+                }
+                else if ((keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z) || (keyCode >= _angular_cdk_keycodes.ZERO && keyCode <= _angular_cdk_keycodes.NINE)) {
+                    this._letterKeyStream.next(String.fromCharCode(keyCode));
                 }
                 // Note that we return here, in order to avoid preventing
                 // the default action of non-navigational keys.
