@@ -149,6 +149,7 @@ CdkHeaderRow.decorators = [
                     'role': 'row',
                 },
                 changeDetection: ChangeDetectionStrategy.OnPush,
+                encapsulation: ViewEncapsulation.None,
             },] },
 ];
 /**
@@ -172,6 +173,7 @@ CdkRow.decorators = [
                     'role': 'row',
                 },
                 changeDetection: ChangeDetectionStrategy.OnPush,
+                encapsulation: ViewEncapsulation.None,
             },] },
 ];
 /**

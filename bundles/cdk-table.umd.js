@@ -175,6 +175,7 @@ CdkHeaderRow.decorators = [
                     'role': 'row',
                 },
                 changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
+                encapsulation: _angular_core.ViewEncapsulation.None,
             },] },
 ];
 /**
@@ -198,6 +199,7 @@ CdkRow.decorators = [
                     'role': 'row',
                 },
                 changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
+                encapsulation: _angular_core.ViewEncapsulation.None,
             },] },
 ];
 /**
