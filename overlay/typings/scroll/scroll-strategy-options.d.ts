@@ -1,8 +1,8 @@
 import { CloseScrollStrategy } from './close-scroll-strategy';
 import { NoopScrollStrategy } from './noop-scroll-strategy';
 import { BlockScrollStrategy } from './block-scroll-strategy';
-import { ScrollDispatcher } from './scroll-dispatcher';
-import { ViewportRuler } from '../position/viewport-ruler';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { RepositionScrollStrategy, RepositionScrollStrategyConfig } from './reposition-scroll-strategy';
 /**
  * Options for how an overlay will handle scrolling.

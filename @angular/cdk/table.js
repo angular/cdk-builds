@@ -10,6 +10,7 @@ import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, Conte
 import { takeUntil } from 'rxjs/operator/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
+import { DataSource } from '@angular/cdk/collections';
 
 /**
  * The row template that can be used by the md-table. Should not be used outside of the
@@ -698,32 +699,6 @@ CdkTable.propDecorators = {
     '_rowDefinitions': [{ type: ContentChildren, args: [CdkRowDef,] },],
 };
 
-/**
- * @abstract
- */
-class DataSource {
-    /**
-     * Connects a collection viewer (such as a data-table) to this data source. Note that
-     * the stream provided will be accessed during change detection and should not directly change
-     * values that are bound in template views.
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?} Observable that emits a new value when the data changes.
-     */
-    connect(collectionViewer) { }
-    /**
-     * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
-     * to perform any clean-up or tear-down operations when a view is being destroyed.
-     *
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?}
-     */
-    disconnect(collectionViewer) { }
-}
-
 const EXPORTED_DECLARATIONS = [
     CdkTable,
     CdkRowDef,
@@ -757,5 +732,5 @@ CdkTableModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { CdkTableModule, DataSource, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow };
+export { DataSource, CdkTableModule, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow };
 //# sourceMappingURL=table.js.map

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Optional } from '@angular/core';
-import { ScrollDispatcher } from '../scroll/scroll-dispatcher';
+import { ScrollDispatcher } from './scroll-dispatcher';
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * @docs-private

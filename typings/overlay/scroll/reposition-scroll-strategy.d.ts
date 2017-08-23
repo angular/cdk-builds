@@ -1,6 +1,6 @@
 import { ScrollStrategy } from './scroll-strategy';
 import { OverlayRef } from '../overlay-ref';
-import { ScrollDispatcher } from './scroll-dispatcher';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 /**
  * Config options for the RepositionScrollStrategy.
  */

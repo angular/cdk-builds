@@ -1,10 +1,14 @@
-export { Scrollable } from './scrollable';
-export { ScrollDispatcher } from './scroll-dispatcher';
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+export { Scrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 export { ScrollStrategy } from './scroll-strategy';
 export { ScrollStrategyOptions } from './scroll-strategy-options';
 export { RepositionScrollStrategy } from './reposition-scroll-strategy';
 export { CloseScrollStrategy } from './close-scroll-strategy';
 export { NoopScrollStrategy } from './noop-scroll-strategy';
 export { BlockScrollStrategy } from './block-scroll-strategy';
-export declare class ScrollDispatchModule {
-}

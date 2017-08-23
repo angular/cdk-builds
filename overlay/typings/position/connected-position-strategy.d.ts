@@ -7,11 +7,11 @@
  */
 import { PositionStrategy } from './position-strategy';
 import { ElementRef } from '@angular/core';
-import { ViewportRuler } from './viewport-ruler';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition, ConnectedOverlayPositionChange } from './connected-position';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Scrollable } from '../scroll/scrollable';
+import { Scrollable } from '@angular/cdk/scrolling';
 import { OverlayRef } from '../overlay-ref';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/operator/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Subject')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/operator/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Subject'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = global.ng.cdk.table || {}),global.ng.common,global.ng.core,global.Rx.Observable.prototype,global.Rx,global.Rx));
-}(this, (function (exports,_angular_common,_angular_core,rxjs_operator_takeUntil,rxjs_BehaviorSubject,rxjs_Subject) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/operator/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('@angular/cdk/collections')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/operator/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Subject', '@angular/cdk/collections'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = global.ng.cdk.table || {}),global.ng.common,global.ng.core,global.Rx.Observable.prototype,global.Rx,global.Rx,global.ng.cdk.collections));
+}(this, (function (exports,_angular_common,_angular_core,rxjs_operator_takeUntil,rxjs_BehaviorSubject,rxjs_Subject,_angular_cdk_collections) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -759,34 +759,6 @@ CdkTable.propDecorators = {
     '_headerDefinition': [{ type: _angular_core.ContentChild, args: [CdkHeaderRowDef,] },],
     '_rowDefinitions': [{ type: _angular_core.ContentChildren, args: [CdkRowDef,] },],
 };
-/**
- * @abstract
- */
-var DataSource = (function () {
-    function DataSource() {
-    }
-    /**
-     * Connects a collection viewer (such as a data-table) to this data source. Note that
-     * the stream provided will be accessed during change detection and should not directly change
-     * values that are bound in template views.
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?} Observable that emits a new value when the data changes.
-     */
-    DataSource.prototype.connect = function (collectionViewer) { };
-    /**
-     * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
-     * to perform any clean-up or tear-down operations when a view is being destroyed.
-     *
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?}
-     */
-    DataSource.prototype.disconnect = function (collectionViewer) { };
-    return DataSource;
-}());
 var EXPORTED_DECLARATIONS = [
     CdkTable,
     CdkRowDef,
@@ -819,8 +791,8 @@ CdkTableModule.decorators = [
  */
 CdkTableModule.ctorParameters = function () { return []; };
 
+exports.DataSource = _angular_cdk_collections.DataSource;
 exports.CdkTableModule = CdkTableModule;
-exports.DataSource = DataSource;
 exports.RowPlaceholder = RowPlaceholder;
 exports.HeaderRowPlaceholder = HeaderRowPlaceholder;
 exports.CDK_TABLE_TEMPLATE = CDK_TABLE_TEMPLATE;

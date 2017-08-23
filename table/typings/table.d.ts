@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ChangeDetectorRef, ElementRef, IterableDiffers, QueryList, Renderer2, TrackByFunction, ViewContainerRef } from '@angular/core';
-import { CollectionViewer, DataSource } from './data-source';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CdkColumnDef } from './cell';

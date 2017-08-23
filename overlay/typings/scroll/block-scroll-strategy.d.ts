@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ScrollStrategy } from './scroll-strategy';
-import { ViewportRuler } from '../position/viewport-ruler';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */

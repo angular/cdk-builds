@@ -6,12 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Observable } from 'rxjs/Observable';
-export interface CollectionViewer {
-    viewChange: Observable<{
-        start: number;
-        end: number;
-    }>;
-}
+import { CollectionViewer } from './collection-viewer';
 export declare abstract class DataSource<T> {
     /**
      * Connects a collection viewer (such as a data-table) to this data source. Note that

@@ -7,9 +7,9 @@
  */
 import { ElementRef, NgZone, Optional } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { Scrollable } from './scrollable';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import { Scrollable } from './scrollable';
 /** Time in ms to throttle the scrolling events by default. */
 export declare const DEFAULT_SCROLL_TIME = 20;
 /**
