@@ -37,7 +37,10 @@ class NoopScrollStrategy {
  * overlay.
  */
 class OverlayState {
-    constructor() {
+    /**
+     * @param {?=} state
+     */
+    constructor(state) {
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -58,10 +61,9 @@ class OverlayState {
          * The direction of the text in the overlay panel.
          */
         this.direction = 'ltr';
-        // TODO(jelbourn): configuration still to add
-        // - focus trap
-        // - disable pointer events
-        // - z-index
+        if (state) {
+            Object.keys(state).forEach(key => this[key] = state[key]);
+        }
     }
 }
 
@@ -85,7 +87,9 @@ class OverlayRef {
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
-        _state.scrollStrategy.attach(this);
+        if (_state.scrollStrategy) {
+            _state.scrollStrategy.attach(this);
+        }
     }
     /**
      * The overlay's HTML element
@@ -109,7 +113,9 @@ class OverlayRef {
         this.updateSize();
         this.updateDirection();
         this.updatePosition();
-        this._state.scrollStrategy.enable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.enable();
+        }
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._state.hasBackdrop) {
@@ -138,7 +144,9 @@ class OverlayRef {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
-        this._state.scrollStrategy.disable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.disable();
+        }
         let /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
         this._detachments.next();
@@ -152,7 +160,9 @@ class OverlayRef {
         if (this._state.positionStrategy) {
             this._state.positionStrategy.dispose();
         }
-        this._state.scrollStrategy.disable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.disable();
+        }
         this.detachBackdrop();
         this._portalHost.dispose();
         this._attachments.complete();
@@ -428,15 +438,13 @@ function isElementClippedByScrolling(element, scrollContainers) {
  */
 class ConnectedPositionStrategy {
     /**
+     * @param {?} originPos
+     * @param {?} overlayPos
      * @param {?} _connectedTo
-     * @param {?} _originPos
-     * @param {?} _overlayPos
      * @param {?} _viewportRuler
      */
-    constructor(_connectedTo, _originPos, _overlayPos, _viewportRuler) {
+    constructor(originPos, overlayPos, _connectedTo, _viewportRuler) {
         this._connectedTo = _connectedTo;
-        this._originPos = _originPos;
-        this._overlayPos = _overlayPos;
         this._viewportRuler = _viewportRuler;
         this._dir = 'ltr';
         /**
@@ -457,7 +465,7 @@ class ConnectedPositionStrategy {
         this._preferredPositions = [];
         this._onPositionChange = new Subject();
         this._origin = this._connectedTo.nativeElement;
-        this.withFallbackPosition(_originPos, _overlayPos);
+        this.withFallbackPosition(originPos, overlayPos);
     }
     /**
      * Whether the we're dealing with an RTL context
@@ -941,7 +949,7 @@ class OverlayPositionBuilder {
      * @return {?}
      */
     connectedTo(elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(elementRef, originPos, overlayPos, this._viewportRuler);
+        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler);
     }
 }
 OverlayPositionBuilder.decorators = [
@@ -1639,7 +1647,12 @@ class ConnectedOverlayDirective {
      * @return {?}
      */
     _buildConfig() {
-        let /** @type {?} */ overlayConfig = new OverlayState();
+        const /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
+        const /** @type {?} */ overlayConfig = new OverlayState({
+            positionStrategy,
+            scrollStrategy: this.scrollStrategy,
+            hasBackdrop: this.hasBackdrop
+        });
         if (this.width || this.width === 0) {
             overlayConfig.width = this.width;
         }
@@ -1652,13 +1665,9 @@ class ConnectedOverlayDirective {
         if (this.minHeight || this.minHeight === 0) {
             overlayConfig.minHeight = this.minHeight;
         }
-        overlayConfig.hasBackdrop = this.hasBackdrop;
         if (this.backdropClass) {
             overlayConfig.backdropClass = this.backdropClass;
         }
-        this._position = (this._createPositionStrategy());
-        overlayConfig.positionStrategy = this._position;
-        overlayConfig.scrollStrategy = this.scrollStrategy;
         return overlayConfig;
     }
     /**

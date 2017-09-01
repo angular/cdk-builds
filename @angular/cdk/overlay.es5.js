@@ -39,7 +39,11 @@ var NoopScrollStrategy = (function () {
  * overlay.
  */
 var OverlayState = (function () {
-    function OverlayState() {
+    /**
+     * @param {?=} state
+     */
+    function OverlayState(state) {
+        var _this = this;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -60,10 +64,9 @@ var OverlayState = (function () {
          * The direction of the text in the overlay panel.
          */
         this.direction = 'ltr';
-        // TODO(jelbourn): configuration still to add
-        // - focus trap
-        // - disable pointer events
-        // - z-index
+        if (state) {
+            Object.keys(state).forEach(function (key) { return _this[key] = state[key]; });
+        }
     }
     return OverlayState;
 }());
@@ -87,7 +90,9 @@ var OverlayRef = (function () {
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
-        _state.scrollStrategy.attach(this);
+        if (_state.scrollStrategy) {
+            _state.scrollStrategy.attach(this);
+        }
     }
     Object.defineProperty(OverlayRef.prototype, "overlayElement", {
         /**
@@ -116,7 +121,9 @@ var OverlayRef = (function () {
         this.updateSize();
         this.updateDirection();
         this.updatePosition();
-        this._state.scrollStrategy.enable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.enable();
+        }
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._state.hasBackdrop) {
@@ -145,7 +152,9 @@ var OverlayRef = (function () {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
-        this._state.scrollStrategy.disable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.disable();
+        }
         var /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
         this._detachments.next();
@@ -159,7 +168,9 @@ var OverlayRef = (function () {
         if (this._state.positionStrategy) {
             this._state.positionStrategy.dispose();
         }
-        this._state.scrollStrategy.disable();
+        if (this._state.scrollStrategy) {
+            this._state.scrollStrategy.disable();
+        }
         this.detachBackdrop();
         this._portalHost.dispose();
         this._attachments.complete();
@@ -440,15 +451,13 @@ function isElementClippedByScrolling(element, scrollContainers) {
  */
 var ConnectedPositionStrategy = (function () {
     /**
+     * @param {?} originPos
+     * @param {?} overlayPos
      * @param {?} _connectedTo
-     * @param {?} _originPos
-     * @param {?} _overlayPos
      * @param {?} _viewportRuler
      */
-    function ConnectedPositionStrategy(_connectedTo, _originPos, _overlayPos, _viewportRuler) {
+    function ConnectedPositionStrategy(originPos, overlayPos, _connectedTo, _viewportRuler) {
         this._connectedTo = _connectedTo;
-        this._originPos = _originPos;
-        this._overlayPos = _overlayPos;
         this._viewportRuler = _viewportRuler;
         this._dir = 'ltr';
         /**
@@ -469,7 +478,7 @@ var ConnectedPositionStrategy = (function () {
         this._preferredPositions = [];
         this._onPositionChange = new Subject();
         this._origin = this._connectedTo.nativeElement;
-        this.withFallbackPosition(_originPos, _overlayPos);
+        this.withFallbackPosition(originPos, overlayPos);
     }
     Object.defineProperty(ConnectedPositionStrategy.prototype, "_isRtl", {
         /**
@@ -978,7 +987,7 @@ var OverlayPositionBuilder = (function () {
      * @return {?}
      */
     OverlayPositionBuilder.prototype.connectedTo = function (elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(elementRef, originPos, overlayPos, this._viewportRuler);
+        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler);
     };
     return OverlayPositionBuilder;
 }());
@@ -1754,7 +1763,12 @@ var ConnectedOverlayDirective = (function () {
      * @return {?}
      */
     ConnectedOverlayDirective.prototype._buildConfig = function () {
-        var /** @type {?} */ overlayConfig = new OverlayState();
+        var /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
+        var /** @type {?} */ overlayConfig = new OverlayState({
+            positionStrategy: positionStrategy,
+            scrollStrategy: this.scrollStrategy,
+            hasBackdrop: this.hasBackdrop
+        });
         if (this.width || this.width === 0) {
             overlayConfig.width = this.width;
         }
@@ -1767,13 +1781,9 @@ var ConnectedOverlayDirective = (function () {
         if (this.minHeight || this.minHeight === 0) {
             overlayConfig.minHeight = this.minHeight;
         }
-        overlayConfig.hasBackdrop = this.hasBackdrop;
         if (this.backdropClass) {
             overlayConfig.backdropClass = this.backdropClass;
         }
-        this._position = (this._createPositionStrategy());
-        overlayConfig.positionStrategy = this._position;
-        overlayConfig.scrollStrategy = this.scrollStrategy;
         return overlayConfig;
     };
     /**
