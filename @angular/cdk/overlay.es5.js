@@ -13,6 +13,7 @@ import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROV
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { Subscription } from 'rxjs/Subscription';
 /**
  * Scroll strategy that doesn't do anything.
  */
@@ -1448,8 +1449,11 @@ var ConnectedOverlayDirective = (function () {
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._hasBackdrop = false;
+        this._backdropSubscription = Subscription.EMPTY;
+        this._positionSubscription = Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
+        this._escapeListener = function () { };
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -1830,13 +1834,8 @@ var ConnectedOverlayDirective = (function () {
             this._overlayRef.detach();
             this.detach.emit();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-            this._backdropSubscription = null;
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._escapeListener();
     };
     /**
      * Destroys the overlay created by this directive.
@@ -1846,15 +1845,9 @@ var ConnectedOverlayDirective = (function () {
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-        }
-        if (this._positionSubscription) {
-            this._positionSubscription.unsubscribe();
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._positionSubscription.unsubscribe();
+        this._escapeListener();
     };
     /**
      * Sets the event listener that closes the overlay when pressing Escape.

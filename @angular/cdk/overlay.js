@@ -12,6 +12,7 @@ import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROV
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Scroll strategy that doesn't do anything.
@@ -1401,8 +1402,11 @@ class ConnectedOverlayDirective {
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._hasBackdrop = false;
+        this._backdropSubscription = Subscription.EMPTY;
+        this._positionSubscription = Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
+        this._escapeListener = () => { };
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -1713,13 +1717,8 @@ class ConnectedOverlayDirective {
             this._overlayRef.detach();
             this.detach.emit();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-            this._backdropSubscription = null;
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._escapeListener();
     }
     /**
      * Destroys the overlay created by this directive.
@@ -1729,15 +1728,9 @@ class ConnectedOverlayDirective {
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-        }
-        if (this._positionSubscription) {
-            this._positionSubscription.unsubscribe();
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._positionSubscription.unsubscribe();
+        this._escapeListener();
     }
     /**
      * Sets the event listener that closes the overlay when pressing Escape.

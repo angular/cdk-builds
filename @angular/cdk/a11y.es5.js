@@ -12,6 +12,7 @@ import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
@@ -772,6 +773,7 @@ var ListKeyManager = (function () {
         this._activeItemIndex = -1;
         this._wrap = false;
         this._letterKeyStream = new Subject();
+        this._typeaheadSubscription = Subscription.EMPTY;
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
@@ -799,9 +801,7 @@ var ListKeyManager = (function () {
         if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
             throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
         }
-        if (this._typeaheadSubscription) {
-            this._typeaheadSubscription.unsubscribe();
-        }
+        this._typeaheadSubscription.unsubscribe();
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.

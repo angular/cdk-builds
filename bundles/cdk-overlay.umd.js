@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('rxjs/Subscription')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', 'rxjs/Subscription'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.Rx));
+}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes,rxjs_Subscription) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1472,8 +1472,11 @@ var ConnectedOverlayDirective = (function () {
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._hasBackdrop = false;
+        this._backdropSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._positionSubscription = rxjs_Subscription.Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
+        this._escapeListener = function () { };
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -1854,13 +1857,8 @@ var ConnectedOverlayDirective = (function () {
             this._overlayRef.detach();
             this.detach.emit();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-            this._backdropSubscription = null;
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._escapeListener();
     };
     /**
      * Destroys the overlay created by this directive.
@@ -1870,15 +1868,9 @@ var ConnectedOverlayDirective = (function () {
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
-        if (this._backdropSubscription) {
-            this._backdropSubscription.unsubscribe();
-        }
-        if (this._positionSubscription) {
-            this._positionSubscription.unsubscribe();
-        }
-        if (this._escapeListener) {
-            this._escapeListener();
-        }
+        this._backdropSubscription.unsubscribe();
+        this._positionSubscription.unsubscribe();
+        this._escapeListener();
     };
     /**
      * Sets the event listener that closes the overlay when pressing Escape.
