@@ -126,8 +126,7 @@ var CdkStep = (function () {
     return CdkStep;
 }());
 CdkStep.decorators = [
-    { type: _angular_core.Component, args: [{
-                selector: 'cdk-step',
+    { type: _angular_core.Component, args: [{ selector: 'cdk-step',
                 template: "<ng-template><ng-content></ng-content></ng-template>",
                 encapsulation: _angular_core.ViewEncapsulation.None
             },] },
