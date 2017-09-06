@@ -85,6 +85,9 @@ export declare class CdkStepper {
     _getIndicatorType(index: number): 'number' | 'edit' | 'done';
     private _emitStepperSelectionEvent(newIndex);
     _onKeydown(event: KeyboardEvent): void;
+    private _focusNextStep();
+    private _focusPreviousStep();
     private _focusStep(index);
     private _anyControlsInvalid(index);
+    private _layoutDirection();
 }

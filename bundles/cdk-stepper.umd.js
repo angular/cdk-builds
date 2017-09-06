@@ -213,8 +213,7 @@ var CdkStepper = (function () {
          * @return {?}
          */
         set: function (step) {
-            var /** @type {?} */ index = this._steps.toArray().indexOf(step);
-            this.selectedIndex = index;
+            this.selectedIndex = this._steps.toArray().indexOf(step);
         },
         enumerable: true,
         configurable: true
@@ -257,14 +256,12 @@ var CdkStepper = (function () {
     CdkStepper.prototype._getAnimationDirection = function (index) {
         var /** @type {?} */ position = index - this._selectedIndex;
         if (position < 0) {
-            return 'previous';
+            return this._layoutDirection() === 'rtl' ? 'next' : 'previous';
         }
         else if (position > 0) {
-            return 'next';
+            return this._layoutDirection() === 'rtl' ? 'previous' : 'next';
         }
-        else {
-            return 'current';
-        }
+        return 'current';
     };
     /**
      * Returns the type of icon to be displayed.
@@ -301,19 +298,19 @@ var CdkStepper = (function () {
     CdkStepper.prototype._onKeydown = function (event) {
         switch (event.keyCode) {
             case _angular_cdk_keycodes.RIGHT_ARROW:
-                if (this._dir && this._dir.value === 'rtl') {
-                    this._focusStep((this._focusIndex + this._steps.length - 1) % this._steps.length);
+                if (this._layoutDirection() === 'rtl') {
+                    this._focusPreviousStep();
                 }
                 else {
-                    this._focusStep((this._focusIndex + 1) % this._steps.length);
+                    this._focusNextStep();
                 }
                 break;
             case _angular_cdk_keycodes.LEFT_ARROW:
-                if (this._dir && this._dir.value === 'rtl') {
-                    this._focusStep((this._focusIndex + 1) % this._steps.length);
+                if (this._layoutDirection() === 'rtl') {
+                    this._focusNextStep();
                 }
                 else {
-                    this._focusStep((this._focusIndex + this._steps.length - 1) % this._steps.length);
+                    this._focusPreviousStep();
                 }
                 break;
             case _angular_cdk_keycodes.SPACE:
@@ -325,6 +322,18 @@ var CdkStepper = (function () {
                 return;
         }
         event.preventDefault();
+    };
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype._focusNextStep = function () {
+        this._focusStep((this._focusIndex + 1) % this._steps.length);
+    };
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype._focusPreviousStep = function () {
+        this._focusStep((this._focusIndex + this._steps.length - 1) % this._steps.length);
     };
     /**
      * @param {?} index
@@ -339,12 +348,17 @@ var CdkStepper = (function () {
      * @return {?}
      */
     CdkStepper.prototype._anyControlsInvalid = function (index) {
-        var /** @type {?} */ stepsArray = this._steps.toArray();
-        stepsArray[this._selectedIndex].interacted = true;
-        if (this._linear) {
-            return stepsArray.slice(0, index).some(function (step) { return step.stepControl.invalid; });
+        this._steps.toArray()[this._selectedIndex].interacted = true;
+        if (this._linear && index >= 0) {
+            return this._steps.toArray().slice(0, index).some(function (step) { return step.stepControl.invalid; });
         }
         return false;
+    };
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype._layoutDirection = function () {
+        return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
     return CdkStepper;
 }());
