@@ -167,8 +167,7 @@ var CdkHeaderRow = (function () {
     return CdkHeaderRow;
 }());
 CdkHeaderRow.decorators = [
-    { type: _angular_core.Component, args: [{
-                selector: 'cdk-header-row',
+    { type: _angular_core.Component, args: [{ selector: 'cdk-header-row',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-header-row',
@@ -191,8 +190,7 @@ var CdkRow = (function () {
     return CdkRow;
 }());
 CdkRow.decorators = [
-    { type: _angular_core.Component, args: [{
-                selector: 'cdk-row',
+    { type: _angular_core.Component, args: [{ selector: 'cdk-row',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-row',
@@ -730,8 +728,7 @@ var CdkTable = (function () {
     return CdkTable;
 }());
 CdkTable.decorators = [
-    { type: _angular_core.Component, args: [{
-                selector: 'cdk-table',
+    { type: _angular_core.Component, args: [{ selector: 'cdk-table',
                 template: CDK_TABLE_TEMPLATE,
                 host: {
                     'class': 'cdk-table',

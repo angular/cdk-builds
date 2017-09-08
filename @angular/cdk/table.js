@@ -133,8 +133,7 @@ CdkCellOutlet.ctorParameters = () => [
 class CdkHeaderRow {
 }
 CdkHeaderRow.decorators = [
-    { type: Component, args: [{
-                selector: 'cdk-header-row',
+    { type: Component, args: [{selector: 'cdk-header-row',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-header-row',
@@ -154,8 +153,7 @@ CdkHeaderRow.ctorParameters = () => [];
 class CdkRow {
 }
 CdkRow.decorators = [
-    { type: Component, args: [{
-                selector: 'cdk-row',
+    { type: Component, args: [{selector: 'cdk-row',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-row',
@@ -669,8 +667,7 @@ class CdkTable {
     }
 }
 CdkTable.decorators = [
-    { type: Component, args: [{
-                selector: 'cdk-table',
+    { type: Component, args: [{selector: 'cdk-table',
                 template: CDK_TABLE_TEMPLATE,
                 host: {
                     'class': 'cdk-table',
