@@ -726,17 +726,269 @@ const LIVE_ANNOUNCER_PROVIDER = {
 };
 
 /**
- * Screenreaders will often fire fake mousedown events when a focusable element
- * is activated using the keyboard. We can typically distinguish between these faked
- * mousedown events and real mousedown events using the "buttons" property. While
- * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
- * the left mouse button), faked mousedowns will usually set the property value to 0.
- * @param {?} event
+ * IDs are deliminated by an empty space, as per the spec.
+ */
+const ID_DELIMINATOR = ' ';
+/**
+ * Adds the given ID to the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
  * @return {?}
  */
-function isFakeMousedownFromScreenReader(event) {
-    return event.buttons === 0;
+function addAriaReferencedId(el, attr, id) {
+    const /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    if (ids.some(existingId => existingId.trim() == id.trim())) {
+        return;
+    }
+    ids.push(id.trim());
+    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
 }
+/**
+ * Removes the given ID from the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
+ * @return {?}
+ */
+function removeAriaReferencedId(el, attr, id) {
+    const /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    const /** @type {?} */ filteredIds = ids.filter(val => val != id.trim());
+    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+}
+/**
+ * Gets the list of IDs referenced by the given ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @return {?}
+ */
+function getAriaReferenceIds(el, attr) {
+    // Get string array of all individual ids (whitespace deliminated) in the attribute value
+    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
+}
+
+/**
+ * ID used for the body container where all messages are appended.
+ */
+const MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+/**
+ * ID prefix used for each created message element.
+ */
+const CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+/**
+ * Attribute given to each host element that is described by a message element.
+ */
+const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+/**
+ * Global incremental identifier for each registered message element.
+ */
+let nextId = 0;
+/**
+ * Global map of all registered message elements that have been placed into the document.
+ */
+const messageRegistry = new Map();
+/**
+ * Container for all registered messages.
+ */
+let messagesContainer = null;
+/**
+ * Utility that creates visually hidden elements with a message content. Useful for elements that
+ * want to use aria-describedby to further describe themselves without adding additional visual
+ * content.
+ * \@docs-private
+ */
+class AriaDescriber {
+    /**
+     * @param {?} _platform
+     */
+    constructor(_platform) {
+        this._platform = _platform;
+    }
+    /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    describe(hostElement, message) {
+        if (!this._platform.isBrowser || !`${message}`.trim()) {
+            return;
+        }
+        if (!messageRegistry.has(message)) {
+            createMessageElement(message);
+        }
+        if (!isElementDescribedByMessage(hostElement, message)) {
+            addMessageReference(hostElement, message);
+        }
+    }
+    /**
+     * Removes the host element's aria-describedby reference to the message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    removeDescription(hostElement, message) {
+        if (!this._platform.isBrowser || !`${message}`.trim()) {
+            return;
+        }
+        if (isElementDescribedByMessage(hostElement, message)) {
+            removeMessageReference(hostElement, message);
+        }
+        if (((messageRegistry.get(message))).referenceCount === 0) {
+            deleteMessageElement(message);
+        }
+        if (((messagesContainer)).childNodes.length === 0) {
+            deleteMessagesContainer();
+        }
+    }
+    /**
+     * Unregisters all created message elements and removes the message container.
+     * @return {?}
+     */
+    ngOnDestroy() {
+        if (!this._platform.isBrowser) {
+            return;
+        }
+        const /** @type {?} */ describedElements = document.querySelectorAll(`[${CDK_DESCRIBEDBY_HOST_ATTRIBUTE}]`);
+        for (let /** @type {?} */ i = 0; i < describedElements.length; i++) {
+            removeCdkDescribedByReferenceIds(describedElements[i]);
+            describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+        }
+        if (messagesContainer) {
+            deleteMessagesContainer();
+        }
+        messageRegistry.clear();
+    }
+}
+AriaDescriber.decorators = [
+    { type: Injectable },
+];
+/**
+ * @nocollapse
+ */
+AriaDescriber.ctorParameters = () => [
+    { type: Platform, },
+];
+/**
+ * Creates a new element in the visually hidden message container element with the message
+ * as its content and adds it to the message registry.
+ * @param {?} message
+ * @return {?}
+ */
+function createMessageElement(message) {
+    const /** @type {?} */ messageElement = document.createElement('div');
+    messageElement.setAttribute('id', `${CDK_DESCRIBEDBY_ID_PREFIX}-${nextId++}`);
+    messageElement.appendChild(/** @type {?} */ ((document.createTextNode(message))));
+    if (!messagesContainer) {
+        createMessagesContainer();
+    } /** @type {?} */
+    ((messagesContainer)).appendChild(messageElement);
+    messageRegistry.set(message, { messageElement, referenceCount: 0 });
+}
+/**
+ * Deletes the message element from the global messages container.
+ * @param {?} message
+ * @return {?}
+ */
+function deleteMessageElement(message) {
+    const /** @type {?} */ messageElement = ((messageRegistry.get(message))).messageElement; /** @type {?} */
+    ((messagesContainer)).removeChild(messageElement);
+    messageRegistry.delete(message);
+}
+/**
+ * Creates the global container for all aria-describedby messages.
+ * @return {?}
+ */
+function createMessagesContainer() {
+    messagesContainer = document.createElement('div');
+    messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
+    messagesContainer.setAttribute('aria-hidden', 'true');
+    messagesContainer.style.display = 'none';
+    document.body.appendChild(messagesContainer);
+}
+/**
+ * Deletes the global messages container.
+ * @return {?}
+ */
+function deleteMessagesContainer() {
+    document.body.removeChild(/** @type {?} */ ((messagesContainer)));
+    messagesContainer = null;
+}
+/**
+ * Removes all cdk-describedby messages that are hosted through the element.
+ * @param {?} element
+ * @return {?}
+ */
+function removeCdkDescribedByReferenceIds(element) {
+    // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
+    const /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+        .filter(id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0);
+    element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
+}
+/**
+ * Adds a message reference to the element using aria-describedby and increments the registered
+ * message's reference count.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function addMessageReference(element, message) {
+    const /** @type {?} */ registeredMessage = ((messageRegistry.get(message)));
+    // Add the aria-describedby reference and set the describedby_host attribute to mark the element.
+    addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+    element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
+    registeredMessage.referenceCount++;
+}
+/**
+ * Removes a message reference from the element using aria-describedby and decrements the registered
+ * message's reference count.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function removeMessageReference(element, message) {
+    const /** @type {?} */ registeredMessage = ((messageRegistry.get(message)));
+    registeredMessage.referenceCount--;
+    removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+    element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+}
+/**
+ * Returns true if the element has been described by the provided message ID.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function isElementDescribedByMessage(element, message) {
+    const /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+    const /** @type {?} */ messageId = ((messageRegistry.get(message))).messageElement.id;
+    return referenceIds.indexOf(messageId) != -1;
+}
+/**
+ * \@docs-private
+ * @param {?} parentDispatcher
+ * @param {?} platform
+ * @return {?}
+ */
+function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, platform) {
+    return parentDispatcher || new AriaDescriber(platform);
+}
+/**
+ * \@docs-private
+ */
+const ARIA_DESCRIBER_PROVIDER = {
+    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
+    provide: AriaDescriber,
+    deps: [
+        [new Optional(), new SkipSelf(), AriaDescriber],
+        Platform
+    ],
+    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
+};
 
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
@@ -978,6 +1230,19 @@ class ActiveDescendantKeyManager extends ListKeyManager {
     }
 }
 
+/**
+ * Screenreaders will often fire fake mousedown events when a focusable element
+ * is activated using the keyboard. We can typically distinguish between these faked
+ * mousedown events and real mousedown events using the "buttons" property. While
+ * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
+ * the left mouse button), faked mousedowns will usually set the property value to 0.
+ * @param {?} event
+ * @return {?}
+ */
+function isFakeMousedownFromScreenReader(event) {
+    return event.buttons === 0;
+}
+
 class FocusKeyManager extends ListKeyManager {
     /**
      * This method sets the active item to the item at the specified index.
@@ -1000,7 +1265,13 @@ A11yModule.decorators = [
                 imports: [CommonModule, PlatformModule],
                 declarations: [FocusTrapDirective, FocusTrapDeprecatedDirective],
                 exports: [FocusTrapDirective, FocusTrapDeprecatedDirective],
-                providers: [InteractivityChecker, FocusTrapFactory, LIVE_ANNOUNCER_PROVIDER]
+                providers: [
+                    InteractivityChecker,
+                    FocusTrapFactory,
+                    AriaDescriber,
+                    LIVE_ANNOUNCER_PROVIDER,
+                    ARIA_DESCRIBER_PROVIDER
+                ]
             },] },
 ];
 /**
@@ -1012,5 +1283,5 @@ A11yModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, isFakeMousedownFromScreenReader, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, FocusTrapDirective, InteractivityChecker, ListKeyManager, ActiveDescendantKeyManager, FocusKeyManager };
+export { A11yModule, ActiveDescendantKeyManager, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, isFakeMousedownFromScreenReader, FocusKeyManager, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, FocusTrapDirective, InteractivityChecker, ListKeyManager, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER };
 //# sourceMappingURL=a11y.js.map
