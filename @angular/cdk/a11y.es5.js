@@ -838,7 +838,7 @@ var AriaDescriber = (function () {
      * @return {?}
      */
     AriaDescriber.prototype.describe = function (hostElement, message) {
-        if (!this._platform.isBrowser || !("" + message).trim()) {
+        if (!this._platform.isBrowser || !message.trim()) {
             return;
         }
         if (!messageRegistry.has(message)) {
@@ -855,16 +855,17 @@ var AriaDescriber = (function () {
      * @return {?}
      */
     AriaDescriber.prototype.removeDescription = function (hostElement, message) {
-        if (!this._platform.isBrowser || !("" + message).trim()) {
+        if (!this._platform.isBrowser || !message.trim()) {
             return;
         }
         if (isElementDescribedByMessage(hostElement, message)) {
             removeMessageReference(hostElement, message);
         }
-        if (((messageRegistry.get(message))).referenceCount === 0) {
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        if (registeredMessage && registeredMessage.referenceCount === 0) {
             deleteMessageElement(message);
         }
-        if (((messagesContainer)).childNodes.length === 0) {
+        if (messagesContainer && messagesContainer.childNodes.length === 0) {
             deleteMessagesContainer();
         }
     };
@@ -919,8 +920,11 @@ function createMessageElement(message) {
  * @return {?}
  */
 function deleteMessageElement(message) {
-    var /** @type {?} */ messageElement = ((messageRegistry.get(message))).messageElement; /** @type {?} */
-    ((messagesContainer)).removeChild(messageElement);
+    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+    if (messagesContainer && messageElement) {
+        messagesContainer.removeChild(messageElement);
+    }
     messageRegistry.delete(message);
 }
 /**
@@ -988,8 +992,9 @@ function removeMessageReference(element, message) {
  */
 function isElementDescribedByMessage(element, message) {
     var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-    var /** @type {?} */ messageId = ((messageRegistry.get(message))).messageElement.id;
-    return referenceIds.indexOf(messageId) != -1;
+    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+    return !!messageId && referenceIds.indexOf(messageId) != -1;
 }
 /**
  * \@docs-private

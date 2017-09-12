@@ -816,7 +816,7 @@ class AriaDescriber {
      * @return {?}
      */
     describe(hostElement, message) {
-        if (!this._platform.isBrowser || !`${message}`.trim()) {
+        if (!this._platform.isBrowser || !message.trim()) {
             return;
         }
         if (!messageRegistry.has(message)) {
@@ -833,16 +833,17 @@ class AriaDescriber {
      * @return {?}
      */
     removeDescription(hostElement, message) {
-        if (!this._platform.isBrowser || !`${message}`.trim()) {
+        if (!this._platform.isBrowser || !message.trim()) {
             return;
         }
         if (isElementDescribedByMessage(hostElement, message)) {
             removeMessageReference(hostElement, message);
         }
-        if (((messageRegistry.get(message))).referenceCount === 0) {
+        const /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        if (registeredMessage && registeredMessage.referenceCount === 0) {
             deleteMessageElement(message);
         }
-        if (((messagesContainer)).childNodes.length === 0) {
+        if (messagesContainer && messagesContainer.childNodes.length === 0) {
             deleteMessagesContainer();
         }
     }
@@ -896,8 +897,11 @@ function createMessageElement(message) {
  * @return {?}
  */
 function deleteMessageElement(message) {
-    const /** @type {?} */ messageElement = ((messageRegistry.get(message))).messageElement; /** @type {?} */
-    ((messagesContainer)).removeChild(messageElement);
+    const /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    const /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+    if (messagesContainer && messageElement) {
+        messagesContainer.removeChild(messageElement);
+    }
     messageRegistry.delete(message);
 }
 /**
@@ -965,8 +969,9 @@ function removeMessageReference(element, message) {
  */
 function isElementDescribedByMessage(element, message) {
     const /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-    const /** @type {?} */ messageId = ((messageRegistry.get(message))).messageElement.id;
-    return referenceIds.indexOf(messageId) != -1;
+    const /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    const /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+    return !!messageId && referenceIds.indexOf(messageId) != -1;
 }
 /**
  * \@docs-private
