@@ -503,7 +503,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            first.call(this._ngZone.onStable).subscribe(fn);
+            first.call(this._ngZone.onStable.asObservable()).subscribe(fn);
         }
     };
     return FocusTrap;

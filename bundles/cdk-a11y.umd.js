@@ -526,7 +526,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            _angular_cdk_rxjs.first.call(this._ngZone.onStable).subscribe(fn);
+            _angular_cdk_rxjs.first.call(this._ngZone.onStable.asObservable()).subscribe(fn);
         }
     };
     return FocusTrap;
