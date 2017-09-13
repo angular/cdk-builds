@@ -10,9 +10,8 @@ import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { auditTime } from 'rxjs/operator/auditTime';
 import { merge } from 'rxjs/observable/merge';
-import { of } from 'rxjs/observable/of';
+import { auditTime } from 'rxjs/operator/auditTime';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -91,7 +90,7 @@ class ScrollDispatcher {
         this._scrolledCount++;
         if (!this._globalSubscription) {
             this._globalSubscription = this._ngZone.runOutsideAngular(() => {
-                return fromEvent(window.document, 'scroll').subscribe(() => this._notify());
+                return merge(fromEvent(window.document, 'scroll'), fromEvent(window, 'resize')).subscribe(() => this._notify());
             });
         }
         // Note that we need to do the subscribing from here, in order to be able to remove
@@ -246,34 +245,16 @@ Scrollable.ctorParameters = () => [
 ];
 
 /**
- * Time in ms to throttle the resize events by default.
- */
-const DEFAULT_RESIZE_TIME = 20;
-/**
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
  */
 class ViewportRuler {
     /**
-     * @param {?} platform
-     * @param {?} ngZone
      * @param {?} scrollDispatcher
      */
-    constructor(platform, ngZone, scrollDispatcher) {
-        this._change = platform.isBrowser ? ngZone.runOutsideAngular(() => {
-            return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
-        }) : of();
+    constructor(scrollDispatcher) {
         // Subscribe to scroll and resize events and update the document rectangle on changes.
-        this._invalidateCacheSubscriptions = [
-            scrollDispatcher.scrolled(0, () => this._cacheViewportGeometry()),
-            this.change().subscribe(() => this._cacheViewportGeometry())
-        ];
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._invalidateCacheSubscriptions.forEach(subscription => subscription.unsubscribe());
+        scrollDispatcher.scrolled(0, () => this._cacheViewportGeometry());
     }
     /**
      * Gets a ClientRect for the viewport's bounds.
@@ -331,14 +312,6 @@ class ViewportRuler {
         return { top, left };
     }
     /**
-     * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime
-     * @return {?}
-     */
-    change(throttleTime = DEFAULT_RESIZE_TIME) {
-        return throttleTime > 0 ? auditTime.call(this._change, throttleTime) : this._change;
-    }
-    /**
      * Caches the latest client rectangle of the document element.
      * @return {?}
      */
@@ -353,20 +326,16 @@ ViewportRuler.decorators = [
  * @nocollapse
  */
 ViewportRuler.ctorParameters = () => [
-    { type: Platform, },
-    { type: NgZone, },
     { type: ScrollDispatcher, },
 ];
 /**
  * \@docs-private
  * @param {?} parentRuler
- * @param {?} platform
- * @param {?} ngZone
  * @param {?} scrollDispatcher
  * @return {?}
  */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDispatcher) {
-    return parentRuler || new ViewportRuler(platform, ngZone, scrollDispatcher);
+function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, scrollDispatcher) {
+    return parentRuler || new ViewportRuler(scrollDispatcher);
 }
 /**
  * \@docs-private
@@ -374,7 +343,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDi
 const VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
-    deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone, ScrollDispatcher],
+    deps: [[new Optional(), new SkipSelf(), ViewportRuler], ScrollDispatcher],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 
@@ -397,5 +366,5 @@ ScrollDispatchModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { ScrollDispatchModule, DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, Scrollable, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER };
+export { ScrollDispatchModule, DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, Scrollable, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER };
 //# sourceMappingURL=scrolling.js.map
