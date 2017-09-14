@@ -6,12 +6,15 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Version } from '@angular/core';
+
 /**
  * Current version of the Angular Component Development Kit.
  */
-var VERSION = new Version('2.0.0-beta.11-2f1f0fd');
+const VERSION = new Version('2.0.0-beta.11-1cb8907');
+
 /**
  * Generated bundle index. Do not edit.
  */
+
 export { VERSION };
-//# sourceMappingURL=cdk.es5.js.map
+//# sourceMappingURL=cdk.js.map
