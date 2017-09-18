@@ -8,3 +8,4 @@ export * from './focus-trap';
 export * from './interactivity-checker';
 export * from './list-key-manager';
 export * from './live-announcer';
+export * from './focus-monitor';
