@@ -128,7 +128,8 @@ var CdkStep = (function () {
 CdkStep.decorators = [
     { type: _angular_core.Component, args: [{ selector: 'cdk-step',
                 template: "<ng-template><ng-content></ng-content></ng-template>",
-                encapsulation: _angular_core.ViewEncapsulation.None
+                encapsulation: _angular_core.ViewEncapsulation.None,
+                preserveWhitespaces: false,
             },] },
 ];
 /**

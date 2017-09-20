@@ -108,7 +108,8 @@ class CdkStep {
 CdkStep.decorators = [
     { type: Component, args: [{selector: 'cdk-step',
                 template: "<ng-template><ng-content></ng-content></ng-template>",
-                encapsulation: ViewEncapsulation.None
+                encapsulation: ViewEncapsulation.None,
+                preserveWhitespaces: false,
             },] },
 ];
 /**
