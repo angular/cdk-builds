@@ -968,26 +968,6 @@ OverlayPositionBuilder.ctorParameters = () => [
  */
 class OverlayContainer {
     /**
-     * Base theme to be applied to all overlay-based components.
-     * @return {?}
-     */
-    get themeClass() { return this._themeClass; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set themeClass(value) {
-        if (this._containerElement) {
-            if (this._themeClass) {
-                this._containerElement.classList.remove(this._themeClass);
-            }
-            if (value) {
-                this._containerElement.classList.add(value);
-            }
-        }
-        this._themeClass = value;
-    }
-    /**
      * @return {?}
      */
     ngOnDestroy() {
@@ -996,7 +976,7 @@ class OverlayContainer {
         }
     }
     /**
-     * This method returns the overlay container element.  It will lazily
+     * This method returns the overlay container element. It will lazily
      * create the element the first time  it is called to facilitate using
      * the container in non-browser environments.
      * @return {?} the container element
@@ -1015,9 +995,6 @@ class OverlayContainer {
     _createContainer() {
         let /** @type {?} */ container = document.createElement('div');
         container.classList.add('cdk-overlay-container');
-        if (this._themeClass) {
-            container.classList.add(this._themeClass);
-        }
         document.body.appendChild(container);
         this._containerElement = container;
     }
