@@ -13,7 +13,7 @@ export { Overlay } from './overlay';
 export { OverlayContainer } from './overlay-container';
 export { FullscreenOverlayContainer } from './fullscreen-overlay-container';
 export { OverlayRef } from './overlay-ref';
-export { OverlayState } from './overlay-state';
+export { OverlayConfig } from './overlay-config';
 export { ConnectedOverlayDirective, OverlayOrigin } from './overlay-directives';
 export { ViewportRuler } from '@angular/cdk/scrolling';
 export { ComponentType } from '@angular/cdk/portal';

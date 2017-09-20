@@ -35,14 +35,13 @@ var NoopScrollStrategy = (function () {
     return NoopScrollStrategy;
 }());
 /**
- * OverlayState is a bag of values for either the initial configuration or current state of an
- * overlay.
+ * OverlayConfig captures the initial configuration used when opening an overlay.
  */
-var OverlayState = (function () {
+var OverlayConfig = (function () {
     /**
      * @param {?=} state
      */
-    function OverlayState(state) {
+    function OverlayConfig(state) {
         var _this = this;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
@@ -68,7 +67,7 @@ var OverlayState = (function () {
             Object.keys(state).forEach(function (key) { return _this[key] = state[key]; });
         }
     }
-    return OverlayState;
+    return OverlayConfig;
 }());
 /**
  * Reference to an overlay that has been created with the Overlay service.
@@ -1278,7 +1277,7 @@ var nextUniqueId = 0;
 /**
  * The default state for newly created overlays.
  */
-var defaultState = new OverlayState();
+var defaultState = new OverlayConfig();
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
@@ -1737,7 +1736,7 @@ var ConnectedOverlayDirective = (function () {
      */
     ConnectedOverlayDirective.prototype._buildConfig = function () {
         var /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
-        var /** @type {?} */ overlayConfig = new OverlayState({
+        var /** @type {?} */ overlayConfig = new OverlayConfig({
             positionStrategy: positionStrategy,
             scrollStrategy: this.scrollStrategy,
             hasBackdrop: this.hasBackdrop
@@ -1993,5 +1992,5 @@ OverlayModule.ctorParameters = function () { return []; };
 /**
  * Generated bundle index. Do not edit.
  */
-export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, OverlayState, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, OverlayConfig, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.es5.js.map

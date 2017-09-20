@@ -8,11 +8,8 @@
 import { PositionStrategy } from './position/position-strategy';
 import { Direction } from '@angular/cdk/bidi';
 import { ScrollStrategy } from './scroll/scroll-strategy';
-/**
- * OverlayState is a bag of values for either the initial configuration or current state of an
- * overlay.
- */
-export declare class OverlayState {
+/** OverlayConfig captures the initial configuration used when opening an overlay. */
+export declare class OverlayConfig {
     /** Strategy with which to position the overlay. */
     positionStrategy?: PositionStrategy;
     /** Strategy to be used when handling scroll events while the overlay is open. */
@@ -37,5 +34,5 @@ export declare class OverlayState {
     maxHeight?: number | string;
     /** The direction of the text in the overlay panel. */
     direction?: Direction;
-    constructor(state?: OverlayState);
+    constructor(state?: OverlayConfig);
 }
