@@ -37,8 +37,8 @@ var BaseRowDef = (function () {
      */
     BaseRowDef.prototype.ngOnChanges = function (changes) {
         // Create a new columns differ if one does not yet exist. Initialize it based on initial value
-        // of the columns property or an empty array if none is provided.
-        var /** @type {?} */ columns = changes['columns'].currentValue || [];
+        // of the columns property.
+        var /** @type {?} */ columns = changes['columns'].currentValue;
         if (!this._columnsDiffer && columns) {
             this._columnsDiffer = this._differs.find(columns).create();
             this._columnsDiffer.diff(columns);
