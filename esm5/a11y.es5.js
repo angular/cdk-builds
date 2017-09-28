@@ -11,8 +11,8 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
 import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
+import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
 /**

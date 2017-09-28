@@ -1090,7 +1090,7 @@ var OVERLAY_CONTAINER_PROVIDER = {
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
  * @return {?}
  */
-function getMdScrollStrategyAlreadyAttachedError() {
+function getMatScrollStrategyAlreadyAttachedError() {
     return Error("Scroll strategy has already been attached.");
 }
 /**
@@ -1110,7 +1110,7 @@ var CloseScrollStrategy = (function () {
      */
     CloseScrollStrategy.prototype.attach = function (overlayRef) {
         if (this._overlayRef) {
-            throw getMdScrollStrategyAlreadyAttachedError();
+            throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
     };
@@ -1220,7 +1220,7 @@ var RepositionScrollStrategy = (function () {
      */
     RepositionScrollStrategy.prototype.attach = function (overlayRef) {
         if (this._overlayRef) {
-            throw getMdScrollStrategyAlreadyAttachedError();
+            throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
     };
@@ -1393,22 +1393,22 @@ var defaultPositionList = [
 /**
  * Injection token that determines the scroll handling while the connected overlay is open.
  */
-var MD_CONNECTED_OVERLAY_SCROLL_STRATEGY = new _angular_core.InjectionToken('md-connected-overlay-scroll-strategy');
+var MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY = new _angular_core.InjectionToken('mat-connected-overlay-scroll-strategy');
 /**
  * \@docs-private
  * @param {?} overlay
  * @return {?}
  */
-function MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
+function MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return function () { return overlay.scrollStrategies.reposition(); };
 }
 /**
  * \@docs-private
  */
-var MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
-    provide: MD_CONNECTED_OVERLAY_SCROLL_STRATEGY,
+var MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
+    provide: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,
     deps: [Overlay],
-    useFactory: MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
+    useFactory: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
@@ -1882,7 +1882,7 @@ ConnectedOverlayDirective.ctorParameters = function () { return [
     { type: _angular_core.Renderer2, },
     { type: _angular_core.TemplateRef, },
     { type: _angular_core.ViewContainerRef, },
-    { type: undefined, decorators: [{ type: _angular_core.Inject, args: [MD_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
+    { type: undefined, decorators: [{ type: _angular_core.Inject, args: [MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
     { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
 ]; };
 ConnectedOverlayDirective.propDecorators = {
@@ -1993,7 +1993,7 @@ var OVERLAY_PROVIDERS = [
     OverlayPositionBuilder,
     _angular_cdk_scrolling.VIEWPORT_RULER_PROVIDER,
     OVERLAY_CONTAINER_PROVIDER,
-    MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+    MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];
 var OverlayModule = (function () {
     function OverlayModule() {
@@ -2038,9 +2038,9 @@ exports.NoopScrollStrategy = NoopScrollStrategy;
 exports.BlockScrollStrategy = BlockScrollStrategy;
 exports.ɵb = OVERLAY_CONTAINER_PROVIDER;
 exports.ɵa = OVERLAY_CONTAINER_PROVIDER_FACTORY;
-exports.ɵc = MD_CONNECTED_OVERLAY_SCROLL_STRATEGY;
-exports.ɵe = MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
-exports.ɵd = MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+exports.ɵc = MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY;
+exports.ɵe = MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
+exports.ɵd = MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
 exports.ɵf = OverlayPositionBuilder;
 
 Object.defineProperty(exports, '__esModule', { value: true });

@@ -21,7 +21,7 @@
  * We also can't re-provide the DOCUMENT token from platform-brower because the unit tests
  * themselves use things like `querySelector` in test code.
  */
-var DIR_DOCUMENT = new _angular_core.InjectionToken('md-dir-doc');
+var DIR_DOCUMENT = new _angular_core.InjectionToken('mat-dir-doc');
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.

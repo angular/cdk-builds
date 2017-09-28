@@ -218,7 +218,7 @@ var SelectionModel = (function () {
     return SelectionModel;
 }());
 /**
- * Describes an event emitted when the value of a MdSelectionModel has changed.
+ * Describes an event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
  */
 var SelectionChange = (function () {

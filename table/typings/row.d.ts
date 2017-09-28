@@ -8,7 +8,7 @@
 import { IterableChanges, IterableDiffer, IterableDiffers, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkCellDef } from './cell';
 /**
- * The row template that can be used by the md-table. Should not be used outside of the
+ * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
 export declare const CDK_ROW_TEMPLATE: string;

@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { DataSource } from '@angular/cdk/collections';
 /**
- * The row template that can be used by the md-table. Should not be used outside of the
+ * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
 var CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
@@ -388,7 +388,7 @@ HeaderRowPlaceholder.ctorParameters = function () { return [
     { type: ViewContainerRef, },
 ]; };
 /**
- * The table template that can be used by the md-table. Should not be used outside of the
+ * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
 var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";

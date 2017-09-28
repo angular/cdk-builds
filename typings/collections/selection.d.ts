@@ -67,7 +67,7 @@ export declare class SelectionModel<T> {
     private _unmarkAll();
 }
 /**
- * Describes an event emitted when the value of a MdSelectionModel has changed.
+ * Describes an event emitted when the value of a MatSelectionModel has changed.
  * @docs-private
  */
 export declare class SelectionChange<T> {

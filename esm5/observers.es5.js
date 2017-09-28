@@ -12,25 +12,25 @@ import { RxChain, debounceTime } from '@angular/cdk/rxjs';
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-var MdMutationObserverFactory = (function () {
-    function MdMutationObserverFactory() {
+var MatMutationObserverFactory = (function () {
+    function MatMutationObserverFactory() {
     }
     /**
      * @param {?} callback
      * @return {?}
      */
-    MdMutationObserverFactory.prototype.create = function (callback) {
+    MatMutationObserverFactory.prototype.create = function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
-    return MdMutationObserverFactory;
+    return MatMutationObserverFactory;
 }());
-MdMutationObserverFactory.decorators = [
+MatMutationObserverFactory.decorators = [
     { type: Injectable },
 ];
 /**
  * @nocollapse
  */
-MdMutationObserverFactory.ctorParameters = function () { return []; };
+MatMutationObserverFactory.ctorParameters = function () { return []; };
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -102,7 +102,7 @@ ObserveContent.decorators = [
  * @nocollapse
  */
 ObserveContent.ctorParameters = function () { return [
-    { type: MdMutationObserverFactory, },
+    { type: MatMutationObserverFactory, },
     { type: ElementRef, },
     { type: NgZone, },
 ]; };
@@ -119,7 +119,7 @@ ObserversModule.decorators = [
     { type: NgModule, args: [{
                 exports: [ObserveContent],
                 declarations: [ObserveContent],
-                providers: [MdMutationObserverFactory]
+                providers: [MatMutationObserverFactory]
             },] },
 ];
 /**
@@ -129,5 +129,5 @@ ObserversModule.ctorParameters = function () { return []; };
 /**
  * Generated bundle index. Do not edit.
  */
-export { MdMutationObserverFactory, ObserveContent, ObserversModule };
+export { MatMutationObserverFactory, ObserveContent, ObserversModule };
 //# sourceMappingURL=observers.es5.js.map

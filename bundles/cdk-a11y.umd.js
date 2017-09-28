@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/rxjs'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/observable/of'), require('rxjs/Subscription'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/rxjs', '@angular/common', 'rxjs/Subject', 'rxjs/observable/of', 'rxjs/Subscription', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.ng.cdk.rxjs,global.ng.common,global.Rx,global.Rx.Observable,global.Rx,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,_angular_cdk_rxjs,_angular_common,rxjs_Subject,rxjs_observable_of,rxjs_Subscription,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/rxjs'), require('@angular/common'), require('rxjs/observable/of'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/rxjs', '@angular/common', 'rxjs/observable/of', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.ng.cdk.rxjs,global.ng.common,global.Rx.Observable,global.Rx,global.Rx,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,_angular_cdk_rxjs,_angular_common,rxjs_observable_of,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.

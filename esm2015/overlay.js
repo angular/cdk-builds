@@ -1027,7 +1027,7 @@ const OVERLAY_CONTAINER_PROVIDER = {
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
  * @return {?}
  */
-function getMdScrollStrategyAlreadyAttachedError() {
+function getMatScrollStrategyAlreadyAttachedError() {
     return Error(`Scroll strategy has already been attached.`);
 }
 
@@ -1048,7 +1048,7 @@ class CloseScrollStrategy {
      */
     attach(overlayRef) {
         if (this._overlayRef) {
-            throw getMdScrollStrategyAlreadyAttachedError();
+            throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
     }
@@ -1157,7 +1157,7 @@ class RepositionScrollStrategy {
      */
     attach(overlayRef) {
         if (this._overlayRef) {
-            throw getMdScrollStrategyAlreadyAttachedError();
+            throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
     }
@@ -1327,22 +1327,22 @@ const defaultPositionList = [
 /**
  * Injection token that determines the scroll handling while the connected overlay is open.
  */
-const MD_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('md-connected-overlay-scroll-strategy');
+const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('mat-connected-overlay-scroll-strategy');
 /**
  * \@docs-private
  * @param {?} overlay
  * @return {?}
  */
-function MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
+function MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return () => overlay.scrollStrategies.reposition();
 }
 /**
  * \@docs-private
  */
-const MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
-    provide: MD_CONNECTED_OVERLAY_SCROLL_STRATEGY,
+const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
+    provide: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,
     deps: [Overlay],
-    useFactory: MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
+    useFactory: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
@@ -1743,7 +1743,7 @@ ConnectedOverlayDirective.ctorParameters = () => [
     { type: Renderer2, },
     { type: TemplateRef, },
     { type: ViewContainerRef, },
-    { type: undefined, decorators: [{ type: Inject, args: [MD_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
     { type: Directionality, decorators: [{ type: Optional },] },
 ];
 ConnectedOverlayDirective.propDecorators = {
@@ -1850,7 +1850,7 @@ const OVERLAY_PROVIDERS = [
     OverlayPositionBuilder,
     VIEWPORT_RULER_PROVIDER,
     OVERLAY_CONTAINER_PROVIDER,
-    MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+    MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];
 class OverlayModule {
 }
@@ -1871,5 +1871,5 @@ OverlayModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MD_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.js.map

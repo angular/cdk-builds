@@ -575,6 +575,34 @@ PortalModule.decorators = [
  * @nocollapse
  */
 PortalModule.ctorParameters = function () { return []; };
+/**
+ * Custom injector to be used when providing custom
+ * injection tokens to components inside a portal.
+ * \@docs-private
+ */
+var PortalInjector = (function () {
+    /**
+     * @param {?} _parentInjector
+     * @param {?} _customTokens
+     */
+    function PortalInjector(_parentInjector, _customTokens) {
+        this._parentInjector = _parentInjector;
+        this._customTokens = _customTokens;
+    }
+    /**
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
+     */
+    PortalInjector.prototype.get = function (token, notFoundValue) {
+        var /** @type {?} */ value = this._customTokens.get(token);
+        if (typeof value !== 'undefined') {
+            return value;
+        }
+        return this._parentInjector.get(token, notFoundValue);
+    };
+    return PortalInjector;
+}());
 
 exports.Portal = Portal;
 exports.ComponentPortal = ComponentPortal;
@@ -584,6 +612,7 @@ exports.DomPortalHost = DomPortalHost;
 exports.TemplatePortalDirective = TemplatePortalDirective;
 exports.PortalHostDirective = PortalHostDirective;
 exports.PortalModule = PortalModule;
+exports.PortalInjector = PortalInjector;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

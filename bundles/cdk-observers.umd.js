@@ -15,25 +15,25 @@
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-var MdMutationObserverFactory = (function () {
-    function MdMutationObserverFactory() {
+var MatMutationObserverFactory = (function () {
+    function MatMutationObserverFactory() {
     }
     /**
      * @param {?} callback
      * @return {?}
      */
-    MdMutationObserverFactory.prototype.create = function (callback) {
+    MatMutationObserverFactory.prototype.create = function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
-    return MdMutationObserverFactory;
+    return MatMutationObserverFactory;
 }());
-MdMutationObserverFactory.decorators = [
+MatMutationObserverFactory.decorators = [
     { type: _angular_core.Injectable },
 ];
 /**
  * @nocollapse
  */
-MdMutationObserverFactory.ctorParameters = function () { return []; };
+MatMutationObserverFactory.ctorParameters = function () { return []; };
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -105,7 +105,7 @@ ObserveContent.decorators = [
  * @nocollapse
  */
 ObserveContent.ctorParameters = function () { return [
-    { type: MdMutationObserverFactory, },
+    { type: MatMutationObserverFactory, },
     { type: _angular_core.ElementRef, },
     { type: _angular_core.NgZone, },
 ]; };
@@ -122,7 +122,7 @@ ObserversModule.decorators = [
     { type: _angular_core.NgModule, args: [{
                 exports: [ObserveContent],
                 declarations: [ObserveContent],
-                providers: [MdMutationObserverFactory]
+                providers: [MatMutationObserverFactory]
             },] },
 ];
 /**
@@ -130,7 +130,7 @@ ObserversModule.decorators = [
  */
 ObserversModule.ctorParameters = function () { return []; };
 
-exports.MdMutationObserverFactory = MdMutationObserverFactory;
+exports.MatMutationObserverFactory = MatMutationObserverFactory;
 exports.ObserveContent = ObserveContent;
 exports.ObserversModule = ObserversModule;
 

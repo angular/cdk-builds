@@ -38,7 +38,7 @@ function __extends(d, b) {
 }
 
 /**
- * The row template that can be used by the md-table. Should not be used outside of the
+ * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
 var CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
@@ -413,7 +413,7 @@ HeaderRowPlaceholder.ctorParameters = function () { return [
     { type: _angular_core.ViewContainerRef, },
 ]; };
 /**
- * The table template that can be used by the md-table. Should not be used outside of the
+ * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
 var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";

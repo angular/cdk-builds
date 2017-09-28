@@ -10,7 +10,7 @@ import { ElementRef, EventEmitter, OnDestroy, AfterContentInit, NgZone } from '@
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private
  */
-export declare class MdMutationObserverFactory {
+export declare class MatMutationObserverFactory {
     create(callback: any): MutationObserver | null;
 }
 /**
@@ -28,7 +28,7 @@ export declare class ObserveContent implements AfterContentInit, OnDestroy {
     private _debouncer;
     /** Debounce interval for emitting the changes. */
     debounce: number;
-    constructor(_mutationObserverFactory: MdMutationObserverFactory, _elementRef: ElementRef, _ngZone: NgZone);
+    constructor(_mutationObserverFactory: MatMutationObserverFactory, _elementRef: ElementRef, _ngZone: NgZone);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
 }
