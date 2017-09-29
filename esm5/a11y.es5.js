@@ -1399,7 +1399,8 @@ var ListKeyManager = (function () {
             .subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             for (var /** @type {?} */ i = 0; i < items.length; i++) {
-                if (((items[i].getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                var /** @type {?} */ item = items[i];
+                if (!item.disabled && ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     _this.setActiveItem(i);
                     break;
                 }

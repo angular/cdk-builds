@@ -1369,7 +1369,8 @@ class ListKeyManager {
             .subscribe(inputString => {
             const /** @type {?} */ items = this._items.toArray();
             for (let /** @type {?} */ i = 0; i < items.length; i++) {
-                if (((items[i].getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                let /** @type {?} */ item = items[i];
+                if (!item.disabled && ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     this.setActiveItem(i);
                     break;
                 }
