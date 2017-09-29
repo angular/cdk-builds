@@ -37,9 +37,9 @@ class NoopScrollStrategy {
  */
 class OverlayConfig {
     /**
-     * @param {?=} state
+     * @param {?=} config
      */
-    constructor(state) {
+    constructor(config) {
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -60,8 +60,8 @@ class OverlayConfig {
          * The direction of the text in the overlay panel.
          */
         this.direction = 'ltr';
-        if (state) {
-            Object.keys(state).forEach(key => this[key] = state[key]);
+        if (config) {
+            Object.keys(config).forEach(key => this[key] = config[key]);
         }
     }
 }
@@ -74,20 +74,20 @@ class OverlayRef {
     /**
      * @param {?} _portalHost
      * @param {?} _pane
-     * @param {?} _state
+     * @param {?} _config
      * @param {?} _ngZone
      */
-    constructor(_portalHost, _pane, _state, _ngZone) {
+    constructor(_portalHost, _pane, _config, _ngZone) {
         this._portalHost = _portalHost;
         this._pane = _pane;
-        this._state = _state;
+        this._config = _config;
         this._ngZone = _ngZone;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
-        if (_state.scrollStrategy) {
-            _state.scrollStrategy.attach(this);
+        if (_config.scrollStrategy) {
+            _config.scrollStrategy.attach(this);
         }
     }
     /**
@@ -104,29 +104,29 @@ class OverlayRef {
      */
     attach(portal) {
         let /** @type {?} */ attachResult = this._portalHost.attach(portal);
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.attach(this);
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.attach(this);
         }
-        // Update the pane element with the given state configuration.
+        // Update the pane element with the given configuration.
         this._updateStackingOrder();
         this.updateSize();
         this.updateDirection();
         this.updatePosition();
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.enable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.enable();
         }
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
-        if (this._state.hasBackdrop) {
+        if (this._config.hasBackdrop) {
             this._attachBackdrop();
         }
-        if (this._state.panelClass) {
+        if (this._config.panelClass) {
             // We can't do a spread here, because IE doesn't support setting multiple classes.
-            if (Array.isArray(this._state.panelClass)) {
-                this._state.panelClass.forEach(cls => this._pane.classList.add(cls));
+            if (Array.isArray(this._config.panelClass)) {
+                this._config.panelClass.forEach(cls => this._pane.classList.add(cls));
             }
             else {
-                this._pane.classList.add(this._state.panelClass);
+                this._pane.classList.add(this._config.panelClass);
             }
         }
         // Only emit the `attachments` event once all other setup is done.
@@ -143,8 +143,8 @@ class OverlayRef {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.disable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.disable();
         }
         let /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
@@ -156,11 +156,11 @@ class OverlayRef {
      * @return {?}
      */
     dispose() {
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.dispose();
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.dispose();
         }
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.disable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
         this._portalHost.dispose();
@@ -198,19 +198,19 @@ class OverlayRef {
         return this._detachments.asObservable();
     }
     /**
-     * Gets the current state config of the overlay.
+     * Gets the current config of the overlay.
      * @return {?}
      */
-    getState() {
-        return this._state;
+    getConfig() {
+        return this._config;
     }
     /**
      * Updates the position of the overlay based on the position strategy.
      * @return {?}
      */
     updatePosition() {
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.apply();
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.apply();
         }
     }
     /**
@@ -218,30 +218,30 @@ class OverlayRef {
      * @return {?}
      */
     updateDirection() {
-        this._pane.setAttribute('dir', /** @type {?} */ ((this._state.direction)));
+        this._pane.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
     }
     /**
      * Updates the size of the overlay based on the overlay config.
      * @return {?}
      */
     updateSize() {
-        if (this._state.width || this._state.width === 0) {
-            this._pane.style.width = formatCssUnit(this._state.width);
+        if (this._config.width || this._config.width === 0) {
+            this._pane.style.width = formatCssUnit(this._config.width);
         }
-        if (this._state.height || this._state.height === 0) {
-            this._pane.style.height = formatCssUnit(this._state.height);
+        if (this._config.height || this._config.height === 0) {
+            this._pane.style.height = formatCssUnit(this._config.height);
         }
-        if (this._state.minWidth || this._state.minWidth === 0) {
-            this._pane.style.minWidth = formatCssUnit(this._state.minWidth);
+        if (this._config.minWidth || this._config.minWidth === 0) {
+            this._pane.style.minWidth = formatCssUnit(this._config.minWidth);
         }
-        if (this._state.minHeight || this._state.minHeight === 0) {
-            this._pane.style.minHeight = formatCssUnit(this._state.minHeight);
+        if (this._config.minHeight || this._config.minHeight === 0) {
+            this._pane.style.minHeight = formatCssUnit(this._config.minHeight);
         }
-        if (this._state.maxWidth || this._state.maxWidth === 0) {
-            this._pane.style.maxWidth = formatCssUnit(this._state.maxWidth);
+        if (this._config.maxWidth || this._config.maxWidth === 0) {
+            this._pane.style.maxWidth = formatCssUnit(this._config.maxWidth);
         }
-        if (this._state.maxHeight || this._state.maxHeight === 0) {
-            this._pane.style.maxHeight = formatCssUnit(this._state.maxHeight);
+        if (this._config.maxHeight || this._config.maxHeight === 0) {
+            this._pane.style.maxHeight = formatCssUnit(this._config.maxHeight);
         }
     }
     /**
@@ -259,8 +259,8 @@ class OverlayRef {
     _attachBackdrop() {
         this._backdropElement = document.createElement('div');
         this._backdropElement.classList.add('cdk-overlay-backdrop');
-        if (this._state.backdropClass) {
-            this._backdropElement.classList.add(this._state.backdropClass);
+        if (this._config.backdropClass) {
+            this._backdropElement.classList.add(this._config.backdropClass);
         } /** @type {?} */
         ((
         // Insert the backdrop before the pane in the DOM order,
@@ -309,8 +309,8 @@ class OverlayRef {
                 }
             };
             backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
-            if (this._state.backdropClass) {
-                backdropToDetach.classList.remove(this._state.backdropClass);
+            if (this._config.backdropClass) {
+                backdropToDetach.classList.remove(this._config.backdropClass);
             }
             backdropToDetach.addEventListener('transitionend', finishDetach);
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
@@ -1233,9 +1233,9 @@ ScrollStrategyOptions.ctorParameters = () => [
  */
 let nextUniqueId = 0;
 /**
- * The default state for newly created overlays.
+ * The default config for newly created overlays.
  */
-let defaultState = new OverlayConfig();
+let defaultConfig = new OverlayConfig();
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
@@ -1265,13 +1265,13 @@ class Overlay {
     }
     /**
      * Creates an overlay.
-     * @param {?=} state State to apply to the overlay.
+     * @param {?=} config Config to apply to the overlay.
      * @return {?} Reference to the created overlay.
      */
-    create(state = defaultState) {
+    create(config = defaultConfig) {
         const /** @type {?} */ pane = this._createPaneElement();
         const /** @type {?} */ portalHost = this._createPortalHost(pane);
-        return new OverlayRef(portalHost, pane, state, this._ngZone);
+        return new OverlayRef(portalHost, pane, config, this._ngZone);
     }
     /**
      * Returns a position builder that can be used, via fluent API,
@@ -1681,7 +1681,7 @@ class ConnectedOverlayDirective {
             this._createOverlay();
         }
         this._position.withDirection(this.dir);
-        this._overlayRef.getState().direction = this.dir;
+        this._overlayRef.getConfig().direction = this.dir;
         this._initEscapeListener();
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);

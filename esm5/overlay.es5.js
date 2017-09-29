@@ -39,9 +39,9 @@ var NoopScrollStrategy = (function () {
  */
 var OverlayConfig = (function () {
     /**
-     * @param {?=} state
+     * @param {?=} config
      */
-    function OverlayConfig(state) {
+    function OverlayConfig(config) {
         var _this = this;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
@@ -63,8 +63,8 @@ var OverlayConfig = (function () {
          * The direction of the text in the overlay panel.
          */
         this.direction = 'ltr';
-        if (state) {
-            Object.keys(state).forEach(function (key) { return _this[key] = state[key]; });
+        if (config) {
+            Object.keys(config).forEach(function (key) { return _this[key] = config[key]; });
         }
     }
     return OverlayConfig;
@@ -77,20 +77,20 @@ var OverlayRef = (function () {
     /**
      * @param {?} _portalHost
      * @param {?} _pane
-     * @param {?} _state
+     * @param {?} _config
      * @param {?} _ngZone
      */
-    function OverlayRef(_portalHost, _pane, _state, _ngZone) {
+    function OverlayRef(_portalHost, _pane, _config, _ngZone) {
         this._portalHost = _portalHost;
         this._pane = _pane;
-        this._state = _state;
+        this._config = _config;
         this._ngZone = _ngZone;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
-        if (_state.scrollStrategy) {
-            _state.scrollStrategy.attach(this);
+        if (_config.scrollStrategy) {
+            _config.scrollStrategy.attach(this);
         }
     }
     Object.defineProperty(OverlayRef.prototype, "overlayElement", {
@@ -112,29 +112,29 @@ var OverlayRef = (function () {
     OverlayRef.prototype.attach = function (portal) {
         var _this = this;
         var /** @type {?} */ attachResult = this._portalHost.attach(portal);
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.attach(this);
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.attach(this);
         }
-        // Update the pane element with the given state configuration.
+        // Update the pane element with the given configuration.
         this._updateStackingOrder();
         this.updateSize();
         this.updateDirection();
         this.updatePosition();
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.enable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.enable();
         }
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
-        if (this._state.hasBackdrop) {
+        if (this._config.hasBackdrop) {
             this._attachBackdrop();
         }
-        if (this._state.panelClass) {
+        if (this._config.panelClass) {
             // We can't do a spread here, because IE doesn't support setting multiple classes.
-            if (Array.isArray(this._state.panelClass)) {
-                this._state.panelClass.forEach(function (cls) { return _this._pane.classList.add(cls); });
+            if (Array.isArray(this._config.panelClass)) {
+                this._config.panelClass.forEach(function (cls) { return _this._pane.classList.add(cls); });
             }
             else {
-                this._pane.classList.add(this._state.panelClass);
+                this._pane.classList.add(this._config.panelClass);
             }
         }
         // Only emit the `attachments` event once all other setup is done.
@@ -151,8 +151,8 @@ var OverlayRef = (function () {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.disable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.disable();
         }
         var /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
@@ -164,11 +164,11 @@ var OverlayRef = (function () {
      * @return {?}
      */
     OverlayRef.prototype.dispose = function () {
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.dispose();
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.dispose();
         }
-        if (this._state.scrollStrategy) {
-            this._state.scrollStrategy.disable();
+        if (this._config.scrollStrategy) {
+            this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
         this._portalHost.dispose();
@@ -206,19 +206,19 @@ var OverlayRef = (function () {
         return this._detachments.asObservable();
     };
     /**
-     * Gets the current state config of the overlay.
+     * Gets the current config of the overlay.
      * @return {?}
      */
-    OverlayRef.prototype.getState = function () {
-        return this._state;
+    OverlayRef.prototype.getConfig = function () {
+        return this._config;
     };
     /**
      * Updates the position of the overlay based on the position strategy.
      * @return {?}
      */
     OverlayRef.prototype.updatePosition = function () {
-        if (this._state.positionStrategy) {
-            this._state.positionStrategy.apply();
+        if (this._config.positionStrategy) {
+            this._config.positionStrategy.apply();
         }
     };
     /**
@@ -226,30 +226,30 @@ var OverlayRef = (function () {
      * @return {?}
      */
     OverlayRef.prototype.updateDirection = function () {
-        this._pane.setAttribute('dir', /** @type {?} */ ((this._state.direction)));
+        this._pane.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
     };
     /**
      * Updates the size of the overlay based on the overlay config.
      * @return {?}
      */
     OverlayRef.prototype.updateSize = function () {
-        if (this._state.width || this._state.width === 0) {
-            this._pane.style.width = formatCssUnit(this._state.width);
+        if (this._config.width || this._config.width === 0) {
+            this._pane.style.width = formatCssUnit(this._config.width);
         }
-        if (this._state.height || this._state.height === 0) {
-            this._pane.style.height = formatCssUnit(this._state.height);
+        if (this._config.height || this._config.height === 0) {
+            this._pane.style.height = formatCssUnit(this._config.height);
         }
-        if (this._state.minWidth || this._state.minWidth === 0) {
-            this._pane.style.minWidth = formatCssUnit(this._state.minWidth);
+        if (this._config.minWidth || this._config.minWidth === 0) {
+            this._pane.style.minWidth = formatCssUnit(this._config.minWidth);
         }
-        if (this._state.minHeight || this._state.minHeight === 0) {
-            this._pane.style.minHeight = formatCssUnit(this._state.minHeight);
+        if (this._config.minHeight || this._config.minHeight === 0) {
+            this._pane.style.minHeight = formatCssUnit(this._config.minHeight);
         }
-        if (this._state.maxWidth || this._state.maxWidth === 0) {
-            this._pane.style.maxWidth = formatCssUnit(this._state.maxWidth);
+        if (this._config.maxWidth || this._config.maxWidth === 0) {
+            this._pane.style.maxWidth = formatCssUnit(this._config.maxWidth);
         }
-        if (this._state.maxHeight || this._state.maxHeight === 0) {
-            this._pane.style.maxHeight = formatCssUnit(this._state.maxHeight);
+        if (this._config.maxHeight || this._config.maxHeight === 0) {
+            this._pane.style.maxHeight = formatCssUnit(this._config.maxHeight);
         }
     };
     /**
@@ -268,8 +268,8 @@ var OverlayRef = (function () {
         var _this = this;
         this._backdropElement = document.createElement('div');
         this._backdropElement.classList.add('cdk-overlay-backdrop');
-        if (this._state.backdropClass) {
-            this._backdropElement.classList.add(this._state.backdropClass);
+        if (this._config.backdropClass) {
+            this._backdropElement.classList.add(this._config.backdropClass);
         } /** @type {?} */
         ((
         // Insert the backdrop before the pane in the DOM order,
@@ -319,8 +319,8 @@ var OverlayRef = (function () {
                 }
             };
             backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
-            if (this._state.backdropClass) {
-                backdropToDetach.classList.remove(this._state.backdropClass);
+            if (this._config.backdropClass) {
+                backdropToDetach.classList.remove(this._config.backdropClass);
             }
             backdropToDetach.addEventListener('transitionend', finishDetach_1);
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
@@ -1275,9 +1275,9 @@ ScrollStrategyOptions.ctorParameters = function () { return [
  */
 var nextUniqueId = 0;
 /**
- * The default state for newly created overlays.
+ * The default config for newly created overlays.
  */
-var defaultState = new OverlayConfig();
+var defaultConfig = new OverlayConfig();
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
@@ -1307,14 +1307,14 @@ var Overlay = (function () {
     }
     /**
      * Creates an overlay.
-     * @param {?=} state State to apply to the overlay.
+     * @param {?=} config Config to apply to the overlay.
      * @return {?} Reference to the created overlay.
      */
-    Overlay.prototype.create = function (state) {
-        if (state === void 0) { state = defaultState; }
+    Overlay.prototype.create = function (config) {
+        if (config === void 0) { config = defaultConfig; }
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalHost = this._createPortalHost(pane);
-        return new OverlayRef(portalHost, pane, state, this._ngZone);
+        return new OverlayRef(portalHost, pane, config, this._ngZone);
     };
     /**
      * Returns a position builder that can be used, via fluent API,
@@ -1795,7 +1795,7 @@ var ConnectedOverlayDirective = (function () {
             this._createOverlay();
         }
         this._position.withDirection(this.dir);
-        this._overlayRef.getState().direction = this.dir;
+        this._overlayRef.getConfig().direction = this.dir;
         this._initEscapeListener();
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
