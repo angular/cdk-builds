@@ -208,7 +208,7 @@ var CdkStepper = (function () {
          * The step that is selected.
          * @return {?}
          */
-        get: function () { return this._steps[this.selectedIndex]; },
+        get: function () { return this._steps.toArray()[this.selectedIndex]; },
         /**
          * @param {?} step
          * @return {?}

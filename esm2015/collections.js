@@ -84,20 +84,22 @@ class SelectionModel {
     }
     /**
      * Selects a value or an array of values.
-     * @param {?} value
+     * @param {...?} values
      * @return {?}
      */
-    select(value) {
-        this._markSelected(value);
+    select(...values) {
+        this._verifyValueAssignment(values);
+        values.forEach(value => this._markSelected(value));
         this._emitChangeEvent();
     }
     /**
      * Deselects a value or an array of values.
-     * @param {?} value
+     * @param {...?} values
      * @return {?}
      */
-    deselect(value) {
-        this._unmarkSelected(value);
+    deselect(...values) {
+        this._verifyValueAssignment(values);
+        values.forEach(value => this._unmarkSelected(value));
         this._emitChangeEvent();
     }
     /**
@@ -201,6 +203,17 @@ class SelectionModel {
             this._selection.forEach(value => this._unmarkSelected(value));
         }
     }
+    /**
+     * Verifies the value assignment and throws an error if the specified value array is
+     * including multiple values while the selection model is not supporting multiple values.
+     * @param {?} values
+     * @return {?}
+     */
+    _verifyValueAssignment(values) {
+        if (values.length > 1 && !this._isMulti) {
+            throw getMultipleValuesInSingleSelectionError();
+        }
+    }
 }
 /**
  * Describes an event emitted when the value of a MatSelectionModel has changed.
@@ -216,10 +229,18 @@ class SelectionChange {
         this.removed = removed;
     }
 }
+/**
+ * Returns an error that reports that multiple values are passed into a selection model
+ * with a single value.
+ * @return {?}
+ */
+function getMultipleValuesInSingleSelectionError() {
+    return Error('Cannot pass multiple values into SelectionModel with single-value mode.');
+}
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { DataSource, SelectionModel, SelectionChange };
+export { DataSource, SelectionModel, SelectionChange, getMultipleValuesInSingleSelectionError };
 //# sourceMappingURL=collections.js.map

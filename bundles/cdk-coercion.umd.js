@@ -32,9 +32,19 @@ function coerceNumberProperty(value, fallbackValue) {
     // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
     return isNaN(parseFloat(/** @type {?} */ (value))) || isNaN(Number(value)) ? fallbackValue : Number(value);
 }
+/**
+ * Wraps the provided value in an array, unless the provided value is an array.
+ * @template T
+ * @param {?} value
+ * @return {?}
+ */
+function coerceArray(value) {
+    return Array.isArray(value) ? value : [value];
+}
 
 exports.coerceBooleanProperty = coerceBooleanProperty;
 exports.coerceNumberProperty = coerceNumberProperty;
+exports.coerceArray = coerceArray;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

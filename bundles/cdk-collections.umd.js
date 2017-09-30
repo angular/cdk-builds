@@ -97,20 +97,32 @@ var SelectionModel = (function () {
     });
     /**
      * Selects a value or an array of values.
-     * @param {?} value
+     * @param {...?} values
      * @return {?}
      */
-    SelectionModel.prototype.select = function (value) {
-        this._markSelected(value);
+    SelectionModel.prototype.select = function () {
+        var _this = this;
+        var values = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            values[_i] = arguments[_i];
+        }
+        this._verifyValueAssignment(values);
+        values.forEach(function (value) { return _this._markSelected(value); });
         this._emitChangeEvent();
     };
     /**
      * Deselects a value or an array of values.
-     * @param {?} value
+     * @param {...?} values
      * @return {?}
      */
-    SelectionModel.prototype.deselect = function (value) {
-        this._unmarkSelected(value);
+    SelectionModel.prototype.deselect = function () {
+        var _this = this;
+        var values = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            values[_i] = arguments[_i];
+        }
+        this._verifyValueAssignment(values);
+        values.forEach(function (value) { return _this._unmarkSelected(value); });
         this._emitChangeEvent();
     };
     /**
@@ -215,6 +227,17 @@ var SelectionModel = (function () {
             this._selection.forEach(function (value) { return _this._unmarkSelected(value); });
         }
     };
+    /**
+     * Verifies the value assignment and throws an error if the specified value array is
+     * including multiple values while the selection model is not supporting multiple values.
+     * @param {?} values
+     * @return {?}
+     */
+    SelectionModel.prototype._verifyValueAssignment = function (values) {
+        if (values.length > 1 && !this._isMulti) {
+            throw getMultipleValuesInSingleSelectionError();
+        }
+    };
     return SelectionModel;
 }());
 /**
@@ -232,10 +255,19 @@ var SelectionChange = (function () {
     }
     return SelectionChange;
 }());
+/**
+ * Returns an error that reports that multiple values are passed into a selection model
+ * with a single value.
+ * @return {?}
+ */
+function getMultipleValuesInSingleSelectionError() {
+    return Error('Cannot pass multiple values into SelectionModel with single-value mode.');
+}
 
 exports.DataSource = DataSource;
 exports.SelectionModel = SelectionModel;
 exports.SelectionChange = SelectionChange;
+exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -27,7 +27,16 @@ function coerceNumberProperty(value, fallbackValue) {
     return isNaN(parseFloat(/** @type {?} */ (value))) || isNaN(Number(value)) ? fallbackValue : Number(value);
 }
 /**
+ * Wraps the provided value in an array, unless the provided value is an array.
+ * @template T
+ * @param {?} value
+ * @return {?}
+ */
+function coerceArray(value) {
+    return Array.isArray(value) ? value : [value];
+}
+/**
  * Generated bundle index. Do not edit.
  */
-export { coerceBooleanProperty, coerceNumberProperty };
+export { coerceBooleanProperty, coerceNumberProperty, coerceArray };
 //# sourceMappingURL=coercion.es5.js.map

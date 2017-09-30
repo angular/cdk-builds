@@ -179,7 +179,7 @@ class CdkStepper {
      * The step that is selected.
      * @return {?}
      */
-    get selected() { return this._steps[this.selectedIndex]; }
+    get selected() { return this._steps.toArray()[this.selectedIndex]; }
     /**
      * @param {?} step
      * @return {?}
