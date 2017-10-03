@@ -1,4 +1,3 @@
-import * as tslib_1 from "tslib";
 /**
  * @license
  * Copyright Google Inc. All Rights Reserved.
@@ -10,10 +9,13 @@ import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventE
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
 import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { __extends } from 'tslib';
+import * as tslib_1 from 'tslib';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { Subscription } from 'rxjs/Subscription';
+
 /**
  * Scroll strategy that doesn't do anything.
  */
@@ -34,6 +36,7 @@ var NoopScrollStrategy = (function () {
     NoopScrollStrategy.prototype.attach = function () { };
     return NoopScrollStrategy;
 }());
+
 /**
  * OverlayConfig captures the initial configuration used when opening an overlay.
  */
@@ -69,6 +72,7 @@ var OverlayConfig = (function () {
     }
     return OverlayConfig;
 }());
+
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
@@ -343,6 +347,7 @@ var OverlayRef = (function () {
 function formatCssUnit(value) {
     return typeof value === 'string' ? (value) : value + "px";
 }
+
 /** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
 /**
  * The points of the origin element and the overlay element to connect.
@@ -400,15 +405,16 @@ var ConnectedOverlayPositionChange = (function () {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
+    /**
+     * @nocollapse
+     */
+    ConnectedOverlayPositionChange.ctorParameters = function () { return [
+        { type: ConnectionPositionPair, },
+        { type: ScrollingVisibility, decorators: [{ type: Optional },] },
+    ]; };
     return ConnectedOverlayPositionChange;
 }());
-/**
- * @nocollapse
- */
-ConnectedOverlayPositionChange.ctorParameters = function () { return [
-    { type: ConnectionPositionPair, },
-    { type: ScrollingVisibility, decorators: [{ type: Optional },] },
-]; };
+
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
  * \@docs-private
@@ -441,6 +447,7 @@ function isElementClippedByScrolling(element, scrollContainers) {
         return clippedAbove || clippedBelow || clippedLeft || clippedRight;
     });
 }
+
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -793,6 +800,7 @@ var ConnectedPositionStrategy = (function () {
     };
     return ConnectedPositionStrategy;
 }());
+
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -961,6 +969,7 @@ var GlobalPositionStrategy = (function () {
     };
     return GlobalPositionStrategy;
 }());
+
 /**
  * Builder for overlay position strategy.
  */
@@ -988,17 +997,18 @@ var OverlayPositionBuilder = (function () {
     OverlayPositionBuilder.prototype.connectedTo = function (elementRef, originPos, overlayPos) {
         return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler);
     };
+    OverlayPositionBuilder.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    OverlayPositionBuilder.ctorParameters = function () { return [
+        { type: ViewportRuler, },
+    ]; };
     return OverlayPositionBuilder;
 }());
-OverlayPositionBuilder.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-OverlayPositionBuilder.ctorParameters = function () { return [
-    { type: ViewportRuler, },
-]; };
+
 /**
  * The OverlayContainer is the container in which all overlays will load.
  * It should be provided in the root component to ensure it is properly shared.
@@ -1037,15 +1047,15 @@ var OverlayContainer = (function () {
         document.body.appendChild(container);
         this._containerElement = container;
     };
+    OverlayContainer.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    OverlayContainer.ctorParameters = function () { return []; };
     return OverlayContainer;
 }());
-OverlayContainer.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-OverlayContainer.ctorParameters = function () { return []; };
 /**
  * \@docs-private
  * @param {?} parentContainer
@@ -1063,6 +1073,7 @@ var OVERLAY_CONTAINER_PROVIDER = {
     deps: [[new Optional(), new SkipSelf(), OverlayContainer]],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
+
 /**
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
  * @return {?}
@@ -1070,6 +1081,7 @@ var OVERLAY_CONTAINER_PROVIDER = {
 function getMatScrollStrategyAlreadyAttachedError() {
     return Error("Scroll strategy has already been attached.");
 }
+
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
@@ -1116,6 +1128,7 @@ var CloseScrollStrategy = (function () {
     };
     return CloseScrollStrategy;
 }());
+
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -1178,6 +1191,7 @@ var BlockScrollStrategy = (function () {
     };
     return BlockScrollStrategy;
 }());
+
 /**
  * Strategy that will update the element position as the user is scrolling.
  */
@@ -1224,6 +1238,7 @@ var RepositionScrollStrategy = (function () {
     };
     return RepositionScrollStrategy;
 }());
+
 /**
  * Options for how an overlay will handle scrolling.
  *
@@ -1256,20 +1271,23 @@ var ScrollStrategyOptions = (function () {
          * @param config Configuration to be used inside the scroll strategy.
          * Allows debouncing the reposition calls.
          */
-        this.reposition = function (config) { return new RepositionScrollStrategy(_this._scrollDispatcher, config); };
+        this.reposition = function (config) {
+            return new RepositionScrollStrategy(_this._scrollDispatcher, config);
+        };
     }
+    ScrollStrategyOptions.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    ScrollStrategyOptions.ctorParameters = function () { return [
+        { type: ScrollDispatcher, },
+        { type: ViewportRuler, },
+    ]; };
     return ScrollStrategyOptions;
 }());
-ScrollStrategyOptions.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-ScrollStrategyOptions.ctorParameters = function () { return [
-    { type: ScrollDispatcher, },
-    { type: ViewportRuler, },
-]; };
+
 /**
  * Next overlay unique ID.
  */
@@ -1343,23 +1361,98 @@ var Overlay = (function () {
     Overlay.prototype._createPortalHost = function (pane) {
         return new DomPortalHost(pane, this._componentFactoryResolver, this._appRef, this._injector);
     };
+    Overlay.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    Overlay.ctorParameters = function () { return [
+        { type: ScrollStrategyOptions, },
+        { type: OverlayContainer, },
+        { type: ComponentFactoryResolver, },
+        { type: OverlayPositionBuilder, },
+        { type: ApplicationRef, },
+        { type: Injector, },
+        { type: NgZone, },
+    ]; };
     return Overlay;
 }());
-Overlay.decorators = [
-    { type: Injectable },
-];
+
 /**
- * @nocollapse
+ * The FullscreenOverlayContainer is the alternative to OverlayContainer
+ * that supports correct displaying of overlay elements in Fullscreen mode
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+ * It should be provided in the root component that way:
+ * providers: [
+ *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
+ * ],
  */
-Overlay.ctorParameters = function () { return [
-    { type: ScrollStrategyOptions, },
-    { type: OverlayContainer, },
-    { type: ComponentFactoryResolver, },
-    { type: OverlayPositionBuilder, },
-    { type: ApplicationRef, },
-    { type: Injector, },
-    { type: NgZone, },
-]; };
+var FullscreenOverlayContainer = (function (_super) {
+    __extends(FullscreenOverlayContainer, _super);
+    function FullscreenOverlayContainer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype._createContainer = function () {
+        var _this = this;
+        _super.prototype._createContainer.call(this);
+        this._adjustParentForFullscreenChange();
+        this._addFullscreenChangeListener(function () { return _this._adjustParentForFullscreenChange(); });
+    };
+    /**
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype._adjustParentForFullscreenChange = function () {
+        if (!this._containerElement) {
+            return;
+        }
+        var /** @type {?} */ fullscreenElement = this.getFullscreenElement();
+        var /** @type {?} */ parent = fullscreenElement || document.body;
+        parent.appendChild(this._containerElement);
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype._addFullscreenChangeListener = function (fn) {
+        if (document.fullscreenEnabled) {
+            document.addEventListener('fullscreenchange', fn);
+        }
+        else if (document.webkitFullscreenEnabled) {
+            document.addEventListener('webkitfullscreenchange', fn);
+        }
+        else if (((document)).mozFullScreenEnabled) {
+            document.addEventListener('mozfullscreenchange', fn);
+        }
+        else if (((document)).msFullscreenEnabled) {
+            document.addEventListener('MSFullscreenChange', fn);
+        }
+    };
+    /**
+     * When the page is put into fullscreen mode, a specific element is specified.
+     * Only that element and its children are visible when in fullscreen mode.
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype.getFullscreenElement = function () {
+        return document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            ((document)).mozFullScreenElement ||
+            ((document)).msFullscreenElement ||
+            null;
+    };
+    FullscreenOverlayContainer.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    FullscreenOverlayContainer.ctorParameters = function () { return []; };
+    return FullscreenOverlayContainer;
+}(OverlayContainer));
+
 /**
  * Default set of positions for the overlay. Follows the behavior of a dropdown.
  */
@@ -1398,20 +1491,20 @@ var OverlayOrigin = (function () {
     function OverlayOrigin(elementRef) {
         this.elementRef = elementRef;
     }
+    OverlayOrigin.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
+                    exportAs: 'cdkOverlayOrigin',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    OverlayOrigin.ctorParameters = function () { return [
+        { type: ElementRef, },
+    ]; };
     return OverlayOrigin;
 }());
-OverlayOrigin.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
-                exportAs: 'cdkOverlayOrigin',
-            },] },
-];
-/**
- * @nocollapse
- */
-OverlayOrigin.ctorParameters = function () { return [
-    { type: ElementRef, },
-]; };
 /**
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
  */
@@ -1843,128 +1936,56 @@ var ConnectedOverlayDirective = (function () {
             }
         });
     };
+    ConnectedOverlayDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
+                    exportAs: 'cdkConnectedOverlay'
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ConnectedOverlayDirective.ctorParameters = function () { return [
+        { type: Overlay, },
+        { type: Renderer2, },
+        { type: TemplateRef, },
+        { type: ViewContainerRef, },
+        { type: undefined, decorators: [{ type: Inject, args: [MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
+        { type: Directionality, decorators: [{ type: Optional },] },
+    ]; };
+    ConnectedOverlayDirective.propDecorators = {
+        'origin': [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
+        'positions': [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
+        'offsetX': [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
+        'offsetY': [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] },],
+        'width': [{ type: Input, args: ['cdkConnectedOverlayWidth',] },],
+        'height': [{ type: Input, args: ['cdkConnectedOverlayHeight',] },],
+        'minWidth': [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
+        'minHeight': [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
+        'backdropClass': [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
+        'scrollStrategy': [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
+        'open': [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
+        'hasBackdrop': [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
+        '_deprecatedOrigin': [{ type: Input, args: ['origin',] },],
+        '_deprecatedPositions': [{ type: Input, args: ['positions',] },],
+        '_deprecatedOffsetX': [{ type: Input, args: ['offsetX',] },],
+        '_deprecatedOffsetY': [{ type: Input, args: ['offsetY',] },],
+        '_deprecatedWidth': [{ type: Input, args: ['width',] },],
+        '_deprecatedHeight': [{ type: Input, args: ['height',] },],
+        '_deprecatedMinWidth': [{ type: Input, args: ['minWidth',] },],
+        '_deprecatedMinHeight': [{ type: Input, args: ['minHeight',] },],
+        '_deprecatedBackdropClass': [{ type: Input, args: ['backdropClass',] },],
+        '_deprecatedScrollStrategy': [{ type: Input, args: ['scrollStrategy',] },],
+        '_deprecatedOpen': [{ type: Input, args: ['open',] },],
+        '_deprecatedHasBackdrop': [{ type: Input, args: ['hasBackdrop',] },],
+        'backdropClick': [{ type: Output },],
+        'positionChange': [{ type: Output },],
+        'attach': [{ type: Output },],
+        'detach': [{ type: Output },],
+    };
     return ConnectedOverlayDirective;
 }());
-ConnectedOverlayDirective.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
-                exportAs: 'cdkConnectedOverlay'
-            },] },
-];
-/**
- * @nocollapse
- */
-ConnectedOverlayDirective.ctorParameters = function () { return [
-    { type: Overlay, },
-    { type: Renderer2, },
-    { type: TemplateRef, },
-    { type: ViewContainerRef, },
-    { type: undefined, decorators: [{ type: Inject, args: [MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
-    { type: Directionality, decorators: [{ type: Optional },] },
-]; };
-ConnectedOverlayDirective.propDecorators = {
-    'origin': [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
-    'positions': [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
-    'offsetX': [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
-    'offsetY': [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] },],
-    'width': [{ type: Input, args: ['cdkConnectedOverlayWidth',] },],
-    'height': [{ type: Input, args: ['cdkConnectedOverlayHeight',] },],
-    'minWidth': [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
-    'minHeight': [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
-    'backdropClass': [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
-    'scrollStrategy': [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
-    'open': [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
-    'hasBackdrop': [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
-    '_deprecatedOrigin': [{ type: Input, args: ['origin',] },],
-    '_deprecatedPositions': [{ type: Input, args: ['positions',] },],
-    '_deprecatedOffsetX': [{ type: Input, args: ['offsetX',] },],
-    '_deprecatedOffsetY': [{ type: Input, args: ['offsetY',] },],
-    '_deprecatedWidth': [{ type: Input, args: ['width',] },],
-    '_deprecatedHeight': [{ type: Input, args: ['height',] },],
-    '_deprecatedMinWidth': [{ type: Input, args: ['minWidth',] },],
-    '_deprecatedMinHeight': [{ type: Input, args: ['minHeight',] },],
-    '_deprecatedBackdropClass': [{ type: Input, args: ['backdropClass',] },],
-    '_deprecatedScrollStrategy': [{ type: Input, args: ['scrollStrategy',] },],
-    '_deprecatedOpen': [{ type: Input, args: ['open',] },],
-    '_deprecatedHasBackdrop': [{ type: Input, args: ['hasBackdrop',] },],
-    'backdropClick': [{ type: Output },],
-    'positionChange': [{ type: Output },],
-    'attach': [{ type: Output },],
-    'detach': [{ type: Output },],
-};
-/**
- * The FullscreenOverlayContainer is the alternative to OverlayContainer
- * that supports correct displaying of overlay elements in Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- * It should be provided in the root component that way:
- * providers: [
- *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
- * ],
- */
-var FullscreenOverlayContainer = (function (_super) {
-    tslib_1.__extends(FullscreenOverlayContainer, _super);
-    function FullscreenOverlayContainer() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    /**
-     * @return {?}
-     */
-    FullscreenOverlayContainer.prototype._createContainer = function () {
-        var _this = this;
-        _super.prototype._createContainer.call(this);
-        this._adjustParentForFullscreenChange();
-        this._addFullscreenChangeListener(function () { return _this._adjustParentForFullscreenChange(); });
-    };
-    /**
-     * @return {?}
-     */
-    FullscreenOverlayContainer.prototype._adjustParentForFullscreenChange = function () {
-        if (!this._containerElement) {
-            return;
-        }
-        var /** @type {?} */ fullscreenElement = this.getFullscreenElement();
-        var /** @type {?} */ parent = fullscreenElement || document.body;
-        parent.appendChild(this._containerElement);
-    };
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-    FullscreenOverlayContainer.prototype._addFullscreenChangeListener = function (fn) {
-        if (document.fullscreenEnabled) {
-            document.addEventListener('fullscreenchange', fn);
-        }
-        else if (document.webkitFullscreenEnabled) {
-            document.addEventListener('webkitfullscreenchange', fn);
-        }
-        else if (((document)).mozFullScreenEnabled) {
-            document.addEventListener('mozfullscreenchange', fn);
-        }
-        else if (((document)).msFullscreenEnabled) {
-            document.addEventListener('MSFullscreenChange', fn);
-        }
-    };
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     * @return {?}
-     */
-    FullscreenOverlayContainer.prototype.getFullscreenElement = function () {
-        return document.fullscreenElement ||
-            document.webkitFullscreenElement ||
-            ((document)).mozFullScreenElement ||
-            ((document)).msFullscreenElement ||
-            null;
-    };
-    return FullscreenOverlayContainer;
-}(OverlayContainer));
-FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-FullscreenOverlayContainer.ctorParameters = function () { return []; };
+
 var OVERLAY_PROVIDERS = [
     Overlay,
     OverlayPositionBuilder,
@@ -1975,22 +1996,24 @@ var OVERLAY_PROVIDERS = [
 var OverlayModule = (function () {
     function OverlayModule() {
     }
+    OverlayModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [PortalModule, ScrollDispatchModule],
+                    exports: [ConnectedOverlayDirective, OverlayOrigin, ScrollDispatchModule],
+                    declarations: [ConnectedOverlayDirective, OverlayOrigin],
+                    providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    OverlayModule.ctorParameters = function () { return []; };
     return OverlayModule;
 }());
-OverlayModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [PortalModule, ScrollDispatchModule],
-                exports: [ConnectedOverlayDirective, OverlayOrigin, ScrollDispatchModule],
-                declarations: [ConnectedOverlayDirective, OverlayOrigin],
-                providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
-            },] },
-];
-/**
- * @nocollapse
- */
-OverlayModule.ctorParameters = function () { return []; };
+
 /**
  * Generated bundle index. Do not edit.
  */
-export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+
+export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.es5.js.map

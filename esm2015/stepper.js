@@ -414,5 +414,5 @@ CdkStepperModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { CdkStepperModule, StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious };
+export { StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };
 //# sourceMappingURL=stepper.js.map

@@ -42,17 +42,17 @@ var MediaMatcher = (function () {
         }
         return this._matchMedia(query);
     };
+    MediaMatcher.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    MediaMatcher.ctorParameters = function () { return [
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
     return MediaMatcher;
 }());
-MediaMatcher.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-MediaMatcher.ctorParameters = function () { return [
-    { type: _angular_cdk_platform.Platform, },
-]; };
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when there is at least one CSS
  * selector for the respective media query.
@@ -90,6 +90,7 @@ function noopMatchMedia(query) {
         removeListener: function () { }
     };
 }
+
 /**
  * Utility for checking the matching state of \@media queries.
  */
@@ -177,18 +178,19 @@ var BreakpointObserver = (function () {
         this._queries.set(query, output);
         return output;
     };
+    BreakpointObserver.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    BreakpointObserver.ctorParameters = function () { return [
+        { type: MediaMatcher, },
+        { type: _angular_core.NgZone, },
+    ]; };
     return BreakpointObserver;
 }());
-BreakpointObserver.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-BreakpointObserver.ctorParameters = function () { return [
-    { type: MediaMatcher, },
-    { type: _angular_core.NgZone, },
-]; };
+
 // PascalCase is being used as Breakpoints is used like an enum.
 // tslint:disable-next-line:variable-name
 var Breakpoints = {
@@ -205,21 +207,22 @@ var Breakpoints = {
     TabletLandscape: '(min-width: 960px) and (max-width: 1279px) and (orientation: landscape)',
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
+
 var LayoutModule = (function () {
     function LayoutModule() {
     }
+    LayoutModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    providers: [BreakpointObserver, MediaMatcher],
+                    imports: [_angular_cdk_platform.PlatformModule],
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
-LayoutModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                providers: [BreakpointObserver, MediaMatcher],
-                imports: [_angular_cdk_platform.PlatformModule],
-            },] },
-];
-/**
- * @nocollapse
- */
-LayoutModule.ctorParameters = function () { return []; };
 
 exports.LayoutModule = LayoutModule;
 exports.BreakpointObserver = BreakpointObserver;

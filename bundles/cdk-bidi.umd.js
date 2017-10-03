@@ -43,17 +43,17 @@ var Directionality = (function () {
             this.value = (bodyDir || htmlDir || 'ltr');
         }
     }
+    Directionality.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    Directionality.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [DIR_DOCUMENT,] },] },
+    ]; };
     return Directionality;
 }());
-Directionality.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-Directionality.ctorParameters = function () { return [
-    { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [DIR_DOCUMENT,] },] },
-]; };
 /**
  * \@docs-private
  * @param {?} parentDirectionality
@@ -72,6 +72,7 @@ var DIRECTIONALITY_PROVIDER = {
     deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), Directionality], [new _angular_core.Optional(), _angular_platformBrowser.DOCUMENT]],
     useFactory: DIRECTIONALITY_PROVIDER_FACTORY
 };
+
 /**
  * Directive to listen for changes of direction of part of the DOM.
  *
@@ -130,43 +131,44 @@ var Dir = (function () {
     Dir.prototype.ngAfterContentInit = function () {
         this._isInitialized = true;
     };
+    Dir.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[dir]': 'dir' },
+                    exportAs: 'dir',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    Dir.ctorParameters = function () { return []; };
+    Dir.propDecorators = {
+        'change': [{ type: _angular_core.Output, args: ['dirChange',] },],
+        'dir': [{ type: _angular_core.Input, args: ['dir',] },],
+    };
     return Dir;
 }());
-Dir.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[dir]',
-                providers: [{ provide: Directionality, useExisting: Dir }],
-                host: { '[dir]': 'dir' },
-                exportAs: 'dir',
-            },] },
-];
-/**
- * @nocollapse
- */
-Dir.ctorParameters = function () { return []; };
-Dir.propDecorators = {
-    'change': [{ type: _angular_core.Output, args: ['dirChange',] },],
-    'dir': [{ type: _angular_core.Input, args: ['dir',] },],
-};
+
 var BidiModule = (function () {
     function BidiModule() {
     }
+    BidiModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                    providers: [
+                        { provide: DIR_DOCUMENT, useExisting: _angular_platformBrowser.DOCUMENT },
+                        Directionality,
+                    ]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    BidiModule.ctorParameters = function () { return []; };
     return BidiModule;
 }());
-BidiModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                exports: [Dir],
-                declarations: [Dir],
-                providers: [
-                    { provide: DIR_DOCUMENT, useExisting: _angular_platformBrowser.DOCUMENT },
-                    Directionality,
-                ]
-            },] },
-];
-/**
- * @nocollapse
- */
-BidiModule.ctorParameters = function () { return []; };
 
 exports.Directionality = Directionality;
 exports.DIRECTIONALITY_PROVIDER_FACTORY = DIRECTIONALITY_PROVIDER_FACTORY;

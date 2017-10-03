@@ -1318,6 +1318,74 @@ Overlay.ctorParameters = () => [
 ];
 
 /**
+ * The FullscreenOverlayContainer is the alternative to OverlayContainer
+ * that supports correct displaying of overlay elements in Fullscreen mode
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+ * It should be provided in the root component that way:
+ * providers: [
+ *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
+ * ],
+ */
+class FullscreenOverlayContainer extends OverlayContainer {
+    /**
+     * @return {?}
+     */
+    _createContainer() {
+        super._createContainer();
+        this._adjustParentForFullscreenChange();
+        this._addFullscreenChangeListener(() => this._adjustParentForFullscreenChange());
+    }
+    /**
+     * @return {?}
+     */
+    _adjustParentForFullscreenChange() {
+        if (!this._containerElement) {
+            return;
+        }
+        let /** @type {?} */ fullscreenElement = this.getFullscreenElement();
+        let /** @type {?} */ parent = fullscreenElement || document.body;
+        parent.appendChild(this._containerElement);
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    _addFullscreenChangeListener(fn) {
+        if (document.fullscreenEnabled) {
+            document.addEventListener('fullscreenchange', fn);
+        }
+        else if (document.webkitFullscreenEnabled) {
+            document.addEventListener('webkitfullscreenchange', fn);
+        }
+        else if (((document)).mozFullScreenEnabled) {
+            document.addEventListener('mozfullscreenchange', fn);
+        }
+        else if (((document)).msFullscreenEnabled) {
+            document.addEventListener('MSFullscreenChange', fn);
+        }
+    }
+    /**
+     * When the page is put into fullscreen mode, a specific element is specified.
+     * Only that element and its children are visible when in fullscreen mode.
+     * @return {?}
+     */
+    getFullscreenElement() {
+        return document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            ((document)).mozFullScreenElement ||
+            ((document)).msFullscreenElement ||
+            null;
+    }
+}
+FullscreenOverlayContainer.decorators = [
+    { type: Injectable },
+];
+/**
+ * @nocollapse
+ */
+FullscreenOverlayContainer.ctorParameters = () => [];
+
+/**
  * Default set of positions for the overlay. Follows the behavior of a dropdown.
  */
 const defaultPositionList = [
@@ -1777,74 +1845,6 @@ ConnectedOverlayDirective.propDecorators = {
     'detach': [{ type: Output },],
 };
 
-/**
- * The FullscreenOverlayContainer is the alternative to OverlayContainer
- * that supports correct displaying of overlay elements in Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- * It should be provided in the root component that way:
- * providers: [
- *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
- * ],
- */
-class FullscreenOverlayContainer extends OverlayContainer {
-    /**
-     * @return {?}
-     */
-    _createContainer() {
-        super._createContainer();
-        this._adjustParentForFullscreenChange();
-        this._addFullscreenChangeListener(() => this._adjustParentForFullscreenChange());
-    }
-    /**
-     * @return {?}
-     */
-    _adjustParentForFullscreenChange() {
-        if (!this._containerElement) {
-            return;
-        }
-        let /** @type {?} */ fullscreenElement = this.getFullscreenElement();
-        let /** @type {?} */ parent = fullscreenElement || document.body;
-        parent.appendChild(this._containerElement);
-    }
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-    _addFullscreenChangeListener(fn) {
-        if (document.fullscreenEnabled) {
-            document.addEventListener('fullscreenchange', fn);
-        }
-        else if (document.webkitFullscreenEnabled) {
-            document.addEventListener('webkitfullscreenchange', fn);
-        }
-        else if (((document)).mozFullScreenEnabled) {
-            document.addEventListener('mozfullscreenchange', fn);
-        }
-        else if (((document)).msFullscreenEnabled) {
-            document.addEventListener('MSFullscreenChange', fn);
-        }
-    }
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     * @return {?}
-     */
-    getFullscreenElement() {
-        return document.fullscreenElement ||
-            document.webkitFullscreenElement ||
-            ((document)).mozFullScreenElement ||
-            ((document)).msFullscreenElement ||
-            null;
-    }
-}
-FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-FullscreenOverlayContainer.ctorParameters = () => [];
-
 const OVERLAY_PROVIDERS = [
     Overlay,
     OverlayPositionBuilder,
@@ -1871,5 +1871,5 @@ OverlayModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { OVERLAY_PROVIDERS, OverlayModule, Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.js.map

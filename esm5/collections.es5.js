@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Subject } from 'rxjs/Subject';
+
 /**
  * @abstract
  */
@@ -34,6 +35,7 @@ var DataSource = (function () {
     DataSource.prototype.disconnect = function (collectionViewer) { };
     return DataSource;
 }());
+
 /**
  * Class to be used to power selecting one or more options from a list.
  */
@@ -258,8 +260,10 @@ var SelectionChange = (function () {
 function getMultipleValuesInSingleSelectionError() {
     return Error('Cannot pass multiple values into SelectionModel with single-value mode.');
 }
+
 /**
  * Generated bundle index. Do not edit.
  */
+
 export { DataSource, SelectionModel, SelectionChange, getMultipleValuesInSingleSelectionError };
 //# sourceMappingURL=collections.es5.js.map

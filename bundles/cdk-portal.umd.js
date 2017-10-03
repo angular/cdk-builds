@@ -86,6 +86,7 @@ function throwNullPortalHostError() {
 function throwNoPortalAttachedError() {
     throw Error('Attempting to detach a portal that is not attached to a host');
 }
+
 /**
  * A `Portal` is something that you want to render somewhere else.
  * It can be attach to / detached from a `PortalHost`.
@@ -310,6 +311,7 @@ var BasePortalHost = (function () {
     };
     return BasePortalHost;
 }());
+
 /**
  * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
@@ -407,6 +409,7 @@ var DomPortalHost = (function (_super) {
     };
     return DomPortalHost;
 }(BasePortalHost));
+
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
@@ -425,21 +428,21 @@ var TemplatePortalDirective = (function (_super) {
     function TemplatePortalDirective(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
+    TemplatePortalDirective.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-portal], [cdkPortal], [portal]',
+                    exportAs: 'cdkPortal',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    TemplatePortalDirective.ctorParameters = function () { return [
+        { type: _angular_core.TemplateRef, },
+        { type: _angular_core.ViewContainerRef, },
+    ]; };
     return TemplatePortalDirective;
 }(TemplatePortal));
-TemplatePortalDirective.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdk-portal], [cdkPortal], [portal]',
-                exportAs: 'cdkPortal',
-            },] },
-];
-/**
- * @nocollapse
- */
-TemplatePortalDirective.ctorParameters = function () { return [
-    { type: _angular_core.TemplateRef, },
-    { type: _angular_core.ViewContainerRef, },
-]; };
 /**
  * Directive version of a PortalHost. Because the directive *is* a PortalHost, portals can be
  * directly attached to it, enabling declarative use.
@@ -542,39 +545,40 @@ var PortalHostDirective = (function (_super) {
         this._portal = portal;
         return viewRef;
     };
+    PortalHostDirective.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkPortalHost], [portalHost]',
+                    inputs: ['portal: cdkPortalHost']
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    PortalHostDirective.ctorParameters = function () { return [
+        { type: _angular_core.ComponentFactoryResolver, },
+        { type: _angular_core.ViewContainerRef, },
+    ]; };
+    PortalHostDirective.propDecorators = {
+        '_deprecatedPortal': [{ type: _angular_core.Input, args: ['portalHost',] },],
+    };
     return PortalHostDirective;
 }(BasePortalHost));
-PortalHostDirective.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdkPortalHost], [portalHost]',
-                inputs: ['portal: cdkPortalHost']
-            },] },
-];
-/**
- * @nocollapse
- */
-PortalHostDirective.ctorParameters = function () { return [
-    { type: _angular_core.ComponentFactoryResolver, },
-    { type: _angular_core.ViewContainerRef, },
-]; };
-PortalHostDirective.propDecorators = {
-    '_deprecatedPortal': [{ type: _angular_core.Input, args: ['portalHost',] },],
-};
 var PortalModule = (function () {
     function PortalModule() {
     }
+    PortalModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [TemplatePortalDirective, PortalHostDirective],
+                    declarations: [TemplatePortalDirective, PortalHostDirective],
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
-PortalModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                exports: [TemplatePortalDirective, PortalHostDirective],
-                declarations: [TemplatePortalDirective, PortalHostDirective],
-            },] },
-];
-/**
- * @nocollapse
- */
-PortalModule.ctorParameters = function () { return []; };
+
 /**
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.

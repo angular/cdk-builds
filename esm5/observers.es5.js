@@ -8,6 +8,7 @@
 import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { RxChain, debounceTime } from '@angular/cdk/rxjs';
+
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
@@ -22,15 +23,15 @@ var MatMutationObserverFactory = (function () {
     MatMutationObserverFactory.prototype.create = function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
+    MatMutationObserverFactory.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    MatMutationObserverFactory.ctorParameters = function () { return []; };
     return MatMutationObserverFactory;
 }());
-MatMutationObserverFactory.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-MatMutationObserverFactory.ctorParameters = function () { return []; };
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -91,43 +92,45 @@ var ObserveContent = (function () {
         }
         this._debouncer.complete();
     };
+    ObserveContent.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkObserveContent]'
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ObserveContent.ctorParameters = function () { return [
+        { type: MatMutationObserverFactory, },
+        { type: ElementRef, },
+        { type: NgZone, },
+    ]; };
+    ObserveContent.propDecorators = {
+        'event': [{ type: Output, args: ['cdkObserveContent',] },],
+        'debounce': [{ type: Input },],
+    };
     return ObserveContent;
 }());
-ObserveContent.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkObserveContent]'
-            },] },
-];
-/**
- * @nocollapse
- */
-ObserveContent.ctorParameters = function () { return [
-    { type: MatMutationObserverFactory, },
-    { type: ElementRef, },
-    { type: NgZone, },
-]; };
-ObserveContent.propDecorators = {
-    'event': [{ type: Output, args: ['cdkObserveContent',] },],
-    'debounce': [{ type: Input },],
-};
 var ObserversModule = (function () {
     function ObserversModule() {
     }
+    ObserversModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [ObserveContent],
+                    declarations: [ObserveContent],
+                    providers: [MatMutationObserverFactory]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
-ObserversModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [ObserveContent],
-                declarations: [ObserveContent],
-                providers: [MatMutationObserverFactory]
-            },] },
-];
-/**
- * @nocollapse
- */
-ObserversModule.ctorParameters = function () { return []; };
+
 /**
  * Generated bundle index. Do not edit.
  */
+
 export { MatMutationObserverFactory, ObserveContent, ObserversModule };
 //# sourceMappingURL=observers.es5.js.map

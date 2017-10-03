@@ -146,18 +146,18 @@ var ScrollDispatcher = (function () {
     ScrollDispatcher.prototype._notify = function () {
         this._scrolled.next();
     };
+    ScrollDispatcher.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    ScrollDispatcher.ctorParameters = function () { return [
+        { type: _angular_core.NgZone, },
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
     return ScrollDispatcher;
 }());
-ScrollDispatcher.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-ScrollDispatcher.ctorParameters = function () { return [
-    { type: _angular_core.NgZone, },
-    { type: _angular_cdk_platform.Platform, },
-]; };
 /**
  * \@docs-private
  * @param {?} parentDispatcher
@@ -177,6 +177,7 @@ var SCROLL_DISPATCHER_PROVIDER = {
     deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ScrollDispatcher], _angular_core.NgZone, _angular_cdk_platform.Platform],
     useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
 };
+
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
@@ -231,22 +232,23 @@ var Scrollable = (function () {
     Scrollable.prototype.getElementRef = function () {
         return this._elementRef;
     };
+    Scrollable.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-scrollable], [cdkScrollable]'
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    Scrollable.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+        { type: ScrollDispatcher, },
+        { type: _angular_core.NgZone, },
+        { type: _angular_core.Renderer2, },
+    ]; };
     return Scrollable;
 }());
-Scrollable.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdk-scrollable], [cdkScrollable]'
-            },] },
-];
-/**
- * @nocollapse
- */
-Scrollable.ctorParameters = function () { return [
-    { type: _angular_core.ElementRef, },
-    { type: ScrollDispatcher, },
-    { type: _angular_core.NgZone, },
-    { type: _angular_core.Renderer2, },
-]; };
+
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
@@ -324,17 +326,17 @@ var ViewportRuler = (function () {
     ViewportRuler.prototype._cacheViewportGeometry = function () {
         this._documentRect = document.documentElement.getBoundingClientRect();
     };
+    ViewportRuler.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    ViewportRuler.ctorParameters = function () { return [
+        { type: ScrollDispatcher, },
+    ]; };
     return ViewportRuler;
 }());
-ViewportRuler.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-ViewportRuler.ctorParameters = function () { return [
-    { type: ScrollDispatcher, },
-]; };
 /**
  * \@docs-private
  * @param {?} parentRuler
@@ -353,25 +355,25 @@ var VIEWPORT_RULER_PROVIDER = {
     deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], ScrollDispatcher],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
+
 var ScrollDispatchModule = (function () {
     function ScrollDispatchModule() {
     }
+    ScrollDispatchModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_cdk_platform.PlatformModule],
+                    exports: [Scrollable],
+                    declarations: [Scrollable],
+                    providers: [SCROLL_DISPATCHER_PROVIDER],
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());
-ScrollDispatchModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                imports: [_angular_cdk_platform.PlatformModule],
-                exports: [Scrollable],
-                declarations: [Scrollable],
-                providers: [SCROLL_DISPATCHER_PROVIDER],
-            },] },
-];
-/**
- * @nocollapse
- */
-ScrollDispatchModule.ctorParameters = function () { return []; };
 
-exports.ScrollDispatchModule = ScrollDispatchModule;
 exports.DEFAULT_SCROLL_TIME = DEFAULT_SCROLL_TIME;
 exports.ScrollDispatcher = ScrollDispatcher;
 exports.SCROLL_DISPATCHER_PROVIDER_FACTORY = SCROLL_DISPATCHER_PROVIDER_FACTORY;
@@ -380,6 +382,7 @@ exports.Scrollable = Scrollable;
 exports.ViewportRuler = ViewportRuler;
 exports.VIEWPORT_RULER_PROVIDER_FACTORY = VIEWPORT_RULER_PROVIDER_FACTORY;
 exports.VIEWPORT_RULER_PROVIDER = VIEWPORT_RULER_PROVIDER;
+exports.ScrollDispatchModule = ScrollDispatchModule;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

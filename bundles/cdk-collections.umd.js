@@ -39,6 +39,7 @@ var DataSource = (function () {
     DataSource.prototype.disconnect = function (collectionViewer) { };
     return DataSource;
 }());
+
 /**
  * Class to be used to power selecting one or more options from a list.
  */

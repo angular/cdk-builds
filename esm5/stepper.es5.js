@@ -10,6 +10,7 @@ import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { CommonModule } from '@angular/common';
+
 var CdkStepLabel = (function () {
     /**
      * @param {?} template
@@ -17,19 +18,20 @@ var CdkStepLabel = (function () {
     function CdkStepLabel(template) {
         this.template = template;
     }
+    CdkStepLabel.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepLabel.ctorParameters = function () { return [
+        { type: TemplateRef, },
+    ]; };
     return CdkStepLabel;
 }());
-CdkStepLabel.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepLabel]',
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepLabel.ctorParameters = function () { return [
-    { type: TemplateRef, },
-]; };
+
 /**
  * Used to generate unique ID for each stepper component.
  */
@@ -122,30 +124,30 @@ var CdkStep = (function () {
     CdkStep.prototype.select = function () {
         this._stepper.selected = this;
     };
+    CdkStep.decorators = [
+        { type: Component, args: [{selector: 'cdk-step',
+                    template: "<ng-template><ng-content></ng-content></ng-template>",
+                    encapsulation: ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStep.ctorParameters = function () { return [
+        { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(function () { return CdkStepper; }),] },] },
+    ]; };
+    CdkStep.propDecorators = {
+        'stepLabel': [{ type: ContentChild, args: [CdkStepLabel,] },],
+        'content': [{ type: ViewChild, args: [TemplateRef,] },],
+        'stepControl': [{ type: Input },],
+        'label': [{ type: Input },],
+        'editable': [{ type: Input },],
+        'optional': [{ type: Input },],
+        'completed': [{ type: Input },],
+    };
     return CdkStep;
 }());
-CdkStep.decorators = [
-    { type: Component, args: [{ selector: 'cdk-step',
-                template: "<ng-template><ng-content></ng-content></ng-template>",
-                encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStep.ctorParameters = function () { return [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(function () { return CdkStepper; }),] },] },
-]; };
-CdkStep.propDecorators = {
-    'stepLabel': [{ type: ContentChild, args: [CdkStepLabel,] },],
-    'content': [{ type: ViewChild, args: [TemplateRef,] },],
-    'stepControl': [{ type: Input },],
-    'label': [{ type: Input },],
-    'editable': [{ type: Input },],
-    'optional': [{ type: Input },],
-    'completed': [{ type: Input },],
-};
 var CdkStepper = (function () {
     /**
      * @param {?} _dir
@@ -360,26 +362,27 @@ var CdkStepper = (function () {
     CdkStepper.prototype._layoutDirection = function () {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
+    CdkStepper.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepper]',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepper.ctorParameters = function () { return [
+        { type: Directionality, decorators: [{ type: Optional },] },
+    ]; };
+    CdkStepper.propDecorators = {
+        '_steps': [{ type: ContentChildren, args: [CdkStep,] },],
+        'linear': [{ type: Input },],
+        'selectedIndex': [{ type: Input },],
+        'selected': [{ type: Input },],
+        'selectionChange': [{ type: Output },],
+    };
     return CdkStepper;
 }());
-CdkStepper.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepper]',
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepper.ctorParameters = function () { return [
-    { type: Directionality, decorators: [{ type: Optional },] },
-]; };
-CdkStepper.propDecorators = {
-    '_steps': [{ type: ContentChildren, args: [CdkStep,] },],
-    'linear': [{ type: Input },],
-    'selectedIndex': [{ type: Input },],
-    'selected': [{ type: Input },],
-    'selectionChange': [{ type: Output },],
-};
+
 /**
  * Button that moves to the next step in a stepper workflow.
  */
@@ -390,20 +393,20 @@ var CdkStepperNext = (function () {
     function CdkStepperNext(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperNext.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperNext]',
+                    host: { '(click)': '_stepper.next()' }
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperNext.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperNext;
 }());
-CdkStepperNext.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperNext]',
-                host: { '(click)': '_stepper.next()' }
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperNext.ctorParameters = function () { return [
-    { type: CdkStepper, },
-]; };
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
@@ -414,38 +417,41 @@ var CdkStepperPrevious = (function () {
     function CdkStepperPrevious(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperPrevious.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperPrevious]',
+                    host: { '(click)': '_stepper.previous()' }
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperPrevious.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperPrevious;
 }());
-CdkStepperPrevious.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperPrevious]',
-                host: { '(click)': '_stepper.previous()' }
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperPrevious.ctorParameters = function () { return [
-    { type: CdkStepper, },
-]; };
+
 var CdkStepperModule = (function () {
     function CdkStepperModule() {
     }
+    CdkStepperModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule, CommonModule],
+                    exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
+                    declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperModule.ctorParameters = function () { return []; };
     return CdkStepperModule;
 }());
-CdkStepperModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [BidiModule, CommonModule],
-                exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
-                declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperModule.ctorParameters = function () { return []; };
+
 /**
  * Generated bundle index. Do not edit.
  */
-export { CdkStepperModule, StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious };
+
+export { StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };
 //# sourceMappingURL=stepper.es5.js.map

@@ -25,15 +25,15 @@ var MatMutationObserverFactory = (function () {
     MatMutationObserverFactory.prototype.create = function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
+    MatMutationObserverFactory.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    MatMutationObserverFactory.ctorParameters = function () { return []; };
     return MatMutationObserverFactory;
 }());
-MatMutationObserverFactory.decorators = [
-    { type: _angular_core.Injectable },
-];
-/**
- * @nocollapse
- */
-MatMutationObserverFactory.ctorParameters = function () { return []; };
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -94,41 +94,41 @@ var ObserveContent = (function () {
         }
         this._debouncer.complete();
     };
+    ObserveContent.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkObserveContent]'
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ObserveContent.ctorParameters = function () { return [
+        { type: MatMutationObserverFactory, },
+        { type: _angular_core.ElementRef, },
+        { type: _angular_core.NgZone, },
+    ]; };
+    ObserveContent.propDecorators = {
+        'event': [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
+        'debounce': [{ type: _angular_core.Input },],
+    };
     return ObserveContent;
 }());
-ObserveContent.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdkObserveContent]'
-            },] },
-];
-/**
- * @nocollapse
- */
-ObserveContent.ctorParameters = function () { return [
-    { type: MatMutationObserverFactory, },
-    { type: _angular_core.ElementRef, },
-    { type: _angular_core.NgZone, },
-]; };
-ObserveContent.propDecorators = {
-    'event': [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
-    'debounce': [{ type: _angular_core.Input },],
-};
 var ObserversModule = (function () {
     function ObserversModule() {
     }
+    ObserversModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [ObserveContent],
+                    declarations: [ObserveContent],
+                    providers: [MatMutationObserverFactory]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
-ObserversModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                exports: [ObserveContent],
-                declarations: [ObserveContent],
-                providers: [MatMutationObserverFactory]
-            },] },
-];
-/**
- * @nocollapse
- */
-ObserversModule.ctorParameters = function () { return []; };
 
 exports.MatMutationObserverFactory = MatMutationObserverFactory;
 exports.ObserveContent = ObserveContent;

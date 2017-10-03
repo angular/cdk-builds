@@ -18,19 +18,20 @@ var CdkStepLabel = (function () {
     function CdkStepLabel(template) {
         this.template = template;
     }
+    CdkStepLabel.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepLabel.ctorParameters = function () { return [
+        { type: _angular_core.TemplateRef, },
+    ]; };
     return CdkStepLabel;
 }());
-CdkStepLabel.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdkStepLabel]',
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepLabel.ctorParameters = function () { return [
-    { type: _angular_core.TemplateRef, },
-]; };
+
 /**
  * Used to generate unique ID for each stepper component.
  */
@@ -123,30 +124,30 @@ var CdkStep = (function () {
     CdkStep.prototype.select = function () {
         this._stepper.selected = this;
     };
+    CdkStep.decorators = [
+        { type: _angular_core.Component, args: [{selector: 'cdk-step',
+                    template: "<ng-template><ng-content></ng-content></ng-template>",
+                    encapsulation: _angular_core.ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStep.ctorParameters = function () { return [
+        { type: CdkStepper, decorators: [{ type: _angular_core.Inject, args: [_angular_core.forwardRef(function () { return CdkStepper; }),] },] },
+    ]; };
+    CdkStep.propDecorators = {
+        'stepLabel': [{ type: _angular_core.ContentChild, args: [CdkStepLabel,] },],
+        'content': [{ type: _angular_core.ViewChild, args: [_angular_core.TemplateRef,] },],
+        'stepControl': [{ type: _angular_core.Input },],
+        'label': [{ type: _angular_core.Input },],
+        'editable': [{ type: _angular_core.Input },],
+        'optional': [{ type: _angular_core.Input },],
+        'completed': [{ type: _angular_core.Input },],
+    };
     return CdkStep;
 }());
-CdkStep.decorators = [
-    { type: _angular_core.Component, args: [{ selector: 'cdk-step',
-                template: "<ng-template><ng-content></ng-content></ng-template>",
-                encapsulation: _angular_core.ViewEncapsulation.None,
-                preserveWhitespaces: false,
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStep.ctorParameters = function () { return [
-    { type: CdkStepper, decorators: [{ type: _angular_core.Inject, args: [_angular_core.forwardRef(function () { return CdkStepper; }),] },] },
-]; };
-CdkStep.propDecorators = {
-    'stepLabel': [{ type: _angular_core.ContentChild, args: [CdkStepLabel,] },],
-    'content': [{ type: _angular_core.ViewChild, args: [_angular_core.TemplateRef,] },],
-    'stepControl': [{ type: _angular_core.Input },],
-    'label': [{ type: _angular_core.Input },],
-    'editable': [{ type: _angular_core.Input },],
-    'optional': [{ type: _angular_core.Input },],
-    'completed': [{ type: _angular_core.Input },],
-};
 var CdkStepper = (function () {
     /**
      * @param {?} _dir
@@ -361,26 +362,27 @@ var CdkStepper = (function () {
     CdkStepper.prototype._layoutDirection = function () {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
+    CdkStepper.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkStepper]',
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepper.ctorParameters = function () { return [
+        { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
+    ]; };
+    CdkStepper.propDecorators = {
+        '_steps': [{ type: _angular_core.ContentChildren, args: [CdkStep,] },],
+        'linear': [{ type: _angular_core.Input },],
+        'selectedIndex': [{ type: _angular_core.Input },],
+        'selected': [{ type: _angular_core.Input },],
+        'selectionChange': [{ type: _angular_core.Output },],
+    };
     return CdkStepper;
 }());
-CdkStepper.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: '[cdkStepper]',
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepper.ctorParameters = function () { return [
-    { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
-]; };
-CdkStepper.propDecorators = {
-    '_steps': [{ type: _angular_core.ContentChildren, args: [CdkStep,] },],
-    'linear': [{ type: _angular_core.Input },],
-    'selectedIndex': [{ type: _angular_core.Input },],
-    'selected': [{ type: _angular_core.Input },],
-    'selectionChange': [{ type: _angular_core.Output },],
-};
+
 /**
  * Button that moves to the next step in a stepper workflow.
  */
@@ -391,20 +393,20 @@ var CdkStepperNext = (function () {
     function CdkStepperNext(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperNext.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'button[cdkStepperNext]',
+                    host: { '(click)': '_stepper.next()' }
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperNext.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperNext;
 }());
-CdkStepperNext.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: 'button[cdkStepperNext]',
-                host: { '(click)': '_stepper.next()' }
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperNext.ctorParameters = function () { return [
-    { type: CdkStepper, },
-]; };
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
@@ -415,44 +417,45 @@ var CdkStepperPrevious = (function () {
     function CdkStepperPrevious(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperPrevious.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'button[cdkStepperPrevious]',
+                    host: { '(click)': '_stepper.previous()' }
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperPrevious.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperPrevious;
 }());
-CdkStepperPrevious.decorators = [
-    { type: _angular_core.Directive, args: [{
-                selector: 'button[cdkStepperPrevious]',
-                host: { '(click)': '_stepper.previous()' }
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperPrevious.ctorParameters = function () { return [
-    { type: CdkStepper, },
-]; };
+
 var CdkStepperModule = (function () {
     function CdkStepperModule() {
     }
+    CdkStepperModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_cdk_bidi.BidiModule, _angular_common.CommonModule],
+                    exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
+                    declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    CdkStepperModule.ctorParameters = function () { return []; };
     return CdkStepperModule;
 }());
-CdkStepperModule.decorators = [
-    { type: _angular_core.NgModule, args: [{
-                imports: [_angular_cdk_bidi.BidiModule, _angular_common.CommonModule],
-                exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
-                declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
-            },] },
-];
-/**
- * @nocollapse
- */
-CdkStepperModule.ctorParameters = function () { return []; };
 
-exports.CdkStepperModule = CdkStepperModule;
 exports.StepperSelectionEvent = StepperSelectionEvent;
 exports.CdkStep = CdkStep;
 exports.CdkStepper = CdkStepper;
 exports.CdkStepLabel = CdkStepLabel;
 exports.CdkStepperNext = CdkStepperNext;
 exports.CdkStepperPrevious = CdkStepperPrevious;
+exports.CdkStepperModule = CdkStepperModule;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

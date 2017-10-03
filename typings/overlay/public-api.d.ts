@@ -5,10 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Provider } from '@angular/core';
-export declare const OVERLAY_PROVIDERS: Provider[];
-export declare class OverlayModule {
-}
 export * from './overlay-config';
 export { Overlay } from './overlay';
 export { OverlayContainer } from './overlay-container';
@@ -19,6 +15,7 @@ export { ViewportRuler } from '@angular/cdk/scrolling';
 export { ComponentType } from '@angular/cdk/portal';
 export * from './position/connected-position';
 export * from './scroll/index';
+export * from './overlay-module';
 export { PositionStrategy } from './position/position-strategy';
 export { GlobalPositionStrategy } from './position/global-position-strategy';
 export { ConnectedPositionStrategy } from './position/connected-position-strategy';

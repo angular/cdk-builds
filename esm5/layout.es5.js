@@ -12,6 +12,7 @@ import { RxChain, map, startWith, takeUntil } from '@angular/cdk/rxjs';
 import { coerceArray } from '@angular/cdk/coercion';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
+
 /**
  * Global registry for all dynamically-created, injected style tags.
  */
@@ -43,17 +44,17 @@ var MediaMatcher = (function () {
         }
         return this._matchMedia(query);
     };
+    MediaMatcher.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    MediaMatcher.ctorParameters = function () { return [
+        { type: Platform, },
+    ]; };
     return MediaMatcher;
 }());
-MediaMatcher.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-MediaMatcher.ctorParameters = function () { return [
-    { type: Platform, },
-]; };
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when there is at least one CSS
  * selector for the respective media query.
@@ -91,6 +92,7 @@ function noopMatchMedia(query) {
         removeListener: function () { }
     };
 }
+
 /**
  * Utility for checking the matching state of \@media queries.
  */
@@ -178,18 +180,19 @@ var BreakpointObserver = (function () {
         this._queries.set(query, output);
         return output;
     };
+    BreakpointObserver.decorators = [
+        { type: Injectable },
+    ];
+    /**
+     * @nocollapse
+     */
+    BreakpointObserver.ctorParameters = function () { return [
+        { type: MediaMatcher, },
+        { type: NgZone, },
+    ]; };
     return BreakpointObserver;
 }());
-BreakpointObserver.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-BreakpointObserver.ctorParameters = function () { return [
-    { type: MediaMatcher, },
-    { type: NgZone, },
-]; };
+
 // PascalCase is being used as Breakpoints is used like an enum.
 // tslint:disable-next-line:variable-name
 var Breakpoints = {
@@ -206,23 +209,26 @@ var Breakpoints = {
     TabletLandscape: '(min-width: 960px) and (max-width: 1279px) and (orientation: landscape)',
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
+
 var LayoutModule = (function () {
     function LayoutModule() {
     }
+    LayoutModule.decorators = [
+        { type: NgModule, args: [{
+                    providers: [BreakpointObserver, MediaMatcher],
+                    imports: [PlatformModule],
+                },] },
+    ];
+    /**
+     * @nocollapse
+     */
+    LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
-LayoutModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [BreakpointObserver, MediaMatcher],
-                imports: [PlatformModule],
-            },] },
-];
-/**
- * @nocollapse
- */
-LayoutModule.ctorParameters = function () { return []; };
+
 /**
  * Generated bundle index. Do not edit.
  */
+
 export { LayoutModule, BreakpointObserver, Breakpoints, MediaMatcher };
 //# sourceMappingURL=layout.es5.js.map
