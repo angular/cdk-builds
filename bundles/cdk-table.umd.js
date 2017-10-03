@@ -109,7 +109,8 @@ var CdkHeaderRowDef = (function (_super) {
 }(BaseRowDef));
 /**
  * Data row definition for the CDK table.
- * Captures the header row's template and other row properties such as the columns to display.
+ * Captures the header row's template and other row properties such as the columns to display and
+ * a when predicate that describes when this row should be used.
  */
 var CdkRowDef = (function (_super) {
     __extends(CdkRowDef, _super);
@@ -123,7 +124,7 @@ var CdkRowDef = (function (_super) {
     CdkRowDef.decorators = [
         { type: _angular_core.Directive, args: [{
                     selector: '[cdkRowDef]',
-                    inputs: ['columns: cdkRowDefColumns'],
+                    inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
                 },] },
     ];
     /**
@@ -370,6 +371,22 @@ function getTableUnknownColumnError(id) {
 function getTableDuplicateColumnNameError(name) {
     return Error("cdk-table: Duplicate column definition name provided: \"" + name + "\".");
 }
+/**
+ * Returns an error to be thrown when there are multiple rows that are missing a when function.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMultipleDefaultRowDefsError() {
+    return Error("cdk-table: There can only be one default row without a when predicate function.");
+}
+/**
+ * Returns an error to be thrown when there are no matching row defs for a particular set of data.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMissingMatchingRowDefError() {
+    return Error("cdk-table: Could not find a matching row definition for the provided row data.");
+}
 
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
@@ -446,7 +463,7 @@ var CdkTable = (function () {
         /**
          * Map of all the user's defined columns (header and data cell template) identified by name.
          */
-        this._columnDefinitionsByName = new Map();
+        this._columnDefsByName = new Map();
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
@@ -510,8 +527,8 @@ var CdkTable = (function () {
      */
     CdkTable.prototype.ngAfterContentInit = function () {
         var _this = this;
-        this._cacheColumnDefinitionsByName();
-        this._columnDefinitions.changes.subscribe(function () { return _this._cacheColumnDefinitionsByName(); });
+        this._cacheColumnDefsByName();
+        this._columnDefs.changes.subscribe(function () { return _this._cacheColumnDefsByName(); });
         this._renderHeaderRow();
     };
     /**
@@ -519,6 +536,11 @@ var CdkTable = (function () {
      */
     CdkTable.prototype.ngAfterContentChecked = function () {
         this._renderUpdatedColumns();
+        var /** @type {?} */ defaultRowDefs = this._rowDefs.filter(function (def) { return !def.when; });
+        if (defaultRowDefs.length > 1) {
+            throw getTableMultipleDefaultRowDefsError();
+        }
+        this._defaultRowDef = defaultRowDefs[0];
         if (this.dataSource && !this._renderChangeSubscription) {
             this._observeRenderChanges();
         }
@@ -539,14 +561,14 @@ var CdkTable = (function () {
      * Update the map containing the content's column definitions.
      * @return {?}
      */
-    CdkTable.prototype._cacheColumnDefinitionsByName = function () {
+    CdkTable.prototype._cacheColumnDefsByName = function () {
         var _this = this;
-        this._columnDefinitionsByName.clear();
-        this._columnDefinitions.forEach(function (columnDef) {
-            if (_this._columnDefinitionsByName.has(columnDef.name)) {
+        this._columnDefsByName.clear();
+        this._columnDefs.forEach(function (columnDef) {
+            if (_this._columnDefsByName.has(columnDef.name)) {
                 throw getTableDuplicateColumnNameError(columnDef.name);
             }
-            _this._columnDefinitionsByName.set(columnDef.name, columnDef);
+            _this._columnDefsByName.set(columnDef.name, columnDef);
         });
     };
     /**
@@ -557,8 +579,8 @@ var CdkTable = (function () {
     CdkTable.prototype._renderUpdatedColumns = function () {
         var _this = this;
         // Re-render the rows when the row definition columns change.
-        this._rowDefinitions.forEach(function (rowDefinition) {
-            if (!!rowDefinition.getColumnsDiff()) {
+        this._rowDefs.forEach(function (def) {
+            if (!!def.getColumnsDiff()) {
                 // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 _this._dataDiffer.diff([]);
                 _this._rowPlaceholder.viewContainer.clear();
@@ -566,7 +588,7 @@ var CdkTable = (function () {
             }
         });
         // Re-render the header row if there is a difference in its columns.
-        if (this._headerDefinition.getColumnsDiff()) {
+        if (this._headerDef.getColumnsDiff()) {
             this._headerRowPlaceholder.viewContainer.clear();
             this._renderHeaderRow();
         }
@@ -611,7 +633,7 @@ var CdkTable = (function () {
      * @return {?}
      */
     CdkTable.prototype._renderHeaderRow = function () {
-        var /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerDefinition);
+        var /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerDef);
         if (!cells.length) {
             return;
         }
@@ -619,7 +641,7 @@ var CdkTable = (function () {
         //   one CdkCellOutlet was instantiated as a result
         //   of `createEmbeddedView`.
         this._headerRowPlaceholder.viewContainer
-            .createEmbeddedView(this._headerDefinition.template, { cells: cells });
+            .createEmbeddedView(this._headerDef.template, { cells: cells });
         cells.forEach(function (cell) {
             CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, {});
         });
@@ -651,6 +673,25 @@ var CdkTable = (function () {
         this._updateRowContext();
     };
     /**
+     * Finds the matching row definition that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * predicate that returns true with the data. If none return true, return the default row
+     * definition.
+     * @param {?} data
+     * @param {?} i
+     * @return {?}
+     */
+    CdkTable.prototype._getRowDef = function (data, i) {
+        if (this._rowDefs.length == 1) {
+            return this._rowDefs.first;
+        }
+        var /** @type {?} */ rowDef = this._rowDefs.find(function (def) { return def.when && def.when(data, i); }) || this._defaultRowDef;
+        if (!rowDef) {
+            throw getTableMissingMatchingRowDefError();
+        }
+        return rowDef;
+    };
+    /**
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
      * @param {?} rowData
@@ -658,10 +699,7 @@ var CdkTable = (function () {
      * @return {?}
      */
     CdkTable.prototype._insertRow = function (rowData, index) {
-        // TODO(andrewseguin): Add when predicates to the row definitions
-        //   to find the right template to used based on
-        //   the data rather than choosing the first row definition.
-        var /** @type {?} */ row = this._rowDefinitions.first;
+        var /** @type {?} */ row = this._getRowDef(rowData, index);
         // Row context that will be provided to both the created embedded row view and its cells.
         var /** @type {?} */ context = { $implicit: rowData };
         // TODO(andrewseguin): add some code to enforce that exactly one
@@ -704,7 +742,7 @@ var CdkTable = (function () {
             return [];
         }
         return headerDef.columns.map(function (columnId) {
-            var /** @type {?} */ column = _this._columnDefinitionsByName.get(columnId);
+            var /** @type {?} */ column = _this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
@@ -723,7 +761,7 @@ var CdkTable = (function () {
             return [];
         }
         return rowDef.columns.map(function (columnId) {
-            var /** @type {?} */ column = _this._columnDefinitionsByName.get(columnId);
+            var /** @type {?} */ column = _this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
@@ -756,9 +794,9 @@ var CdkTable = (function () {
         'dataSource': [{ type: _angular_core.Input },],
         '_rowPlaceholder': [{ type: _angular_core.ViewChild, args: [RowPlaceholder,] },],
         '_headerRowPlaceholder': [{ type: _angular_core.ViewChild, args: [HeaderRowPlaceholder,] },],
-        '_columnDefinitions': [{ type: _angular_core.ContentChildren, args: [CdkColumnDef,] },],
-        '_headerDefinition': [{ type: _angular_core.ContentChild, args: [CdkHeaderRowDef,] },],
-        '_rowDefinitions': [{ type: _angular_core.ContentChildren, args: [CdkRowDef,] },],
+        '_columnDefs': [{ type: _angular_core.ContentChildren, args: [CdkColumnDef,] },],
+        '_headerDef': [{ type: _angular_core.ContentChild, args: [CdkHeaderRowDef,] },],
+        '_rowDefs': [{ type: _angular_core.ContentChildren, args: [CdkRowDef,] },],
     };
     return CdkTable;
 }());

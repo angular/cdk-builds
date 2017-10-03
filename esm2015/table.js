@@ -81,7 +81,8 @@ CdkHeaderRowDef.ctorParameters = () => [
 ];
 /**
  * Data row definition for the CDK table.
- * Captures the header row's template and other row properties such as the columns to display.
+ * Captures the header row's template and other row properties such as the columns to display and
+ * a when predicate that describes when this row should be used.
  */
 class CdkRowDef extends BaseRowDef {
     /**
@@ -95,7 +96,7 @@ class CdkRowDef extends BaseRowDef {
 CdkRowDef.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkRowDef]',
-                inputs: ['columns: cdkRowDefColumns'],
+                inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
             },] },
 ];
 /**
@@ -322,6 +323,22 @@ function getTableUnknownColumnError(id) {
 function getTableDuplicateColumnNameError(name) {
     return Error(`cdk-table: Duplicate column definition name provided: "${name}".`);
 }
+/**
+ * Returns an error to be thrown when there are multiple rows that are missing a when function.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMultipleDefaultRowDefsError() {
+    return Error(`cdk-table: There can only be one default row without a when predicate function.`);
+}
+/**
+ * Returns an error to be thrown when there are no matching row defs for a particular set of data.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMissingMatchingRowDefError() {
+    return Error(`cdk-table: Could not find a matching row definition for the provided row data.`);
+}
 
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
@@ -398,7 +415,7 @@ class CdkTable {
         /**
          * Map of all the user's defined columns (header and data cell template) identified by name.
          */
-        this._columnDefinitionsByName = new Map();
+        this._columnDefsByName = new Map();
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
@@ -453,8 +470,8 @@ class CdkTable {
      * @return {?}
      */
     ngAfterContentInit() {
-        this._cacheColumnDefinitionsByName();
-        this._columnDefinitions.changes.subscribe(() => this._cacheColumnDefinitionsByName());
+        this._cacheColumnDefsByName();
+        this._columnDefs.changes.subscribe(() => this._cacheColumnDefsByName());
         this._renderHeaderRow();
     }
     /**
@@ -462,6 +479,11 @@ class CdkTable {
      */
     ngAfterContentChecked() {
         this._renderUpdatedColumns();
+        const /** @type {?} */ defaultRowDefs = this._rowDefs.filter(def => !def.when);
+        if (defaultRowDefs.length > 1) {
+            throw getTableMultipleDefaultRowDefsError();
+        }
+        this._defaultRowDef = defaultRowDefs[0];
         if (this.dataSource && !this._renderChangeSubscription) {
             this._observeRenderChanges();
         }
@@ -482,13 +504,13 @@ class CdkTable {
      * Update the map containing the content's column definitions.
      * @return {?}
      */
-    _cacheColumnDefinitionsByName() {
-        this._columnDefinitionsByName.clear();
-        this._columnDefinitions.forEach(columnDef => {
-            if (this._columnDefinitionsByName.has(columnDef.name)) {
+    _cacheColumnDefsByName() {
+        this._columnDefsByName.clear();
+        this._columnDefs.forEach(columnDef => {
+            if (this._columnDefsByName.has(columnDef.name)) {
                 throw getTableDuplicateColumnNameError(columnDef.name);
             }
-            this._columnDefinitionsByName.set(columnDef.name, columnDef);
+            this._columnDefsByName.set(columnDef.name, columnDef);
         });
     }
     /**
@@ -498,8 +520,8 @@ class CdkTable {
      */
     _renderUpdatedColumns() {
         // Re-render the rows when the row definition columns change.
-        this._rowDefinitions.forEach(rowDefinition => {
-            if (!!rowDefinition.getColumnsDiff()) {
+        this._rowDefs.forEach(def => {
+            if (!!def.getColumnsDiff()) {
                 // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 this._dataDiffer.diff([]);
                 this._rowPlaceholder.viewContainer.clear();
@@ -507,7 +529,7 @@ class CdkTable {
             }
         });
         // Re-render the header row if there is a difference in its columns.
-        if (this._headerDefinition.getColumnsDiff()) {
+        if (this._headerDef.getColumnsDiff()) {
             this._headerRowPlaceholder.viewContainer.clear();
             this._renderHeaderRow();
         }
@@ -551,7 +573,7 @@ class CdkTable {
      * @return {?}
      */
     _renderHeaderRow() {
-        const /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerDefinition);
+        const /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerDef);
         if (!cells.length) {
             return;
         }
@@ -559,7 +581,7 @@ class CdkTable {
         //   one CdkCellOutlet was instantiated as a result
         //   of `createEmbeddedView`.
         this._headerRowPlaceholder.viewContainer
-            .createEmbeddedView(this._headerDefinition.template, { cells });
+            .createEmbeddedView(this._headerDef.template, { cells });
         cells.forEach(cell => {
             CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, {});
         });
@@ -590,6 +612,25 @@ class CdkTable {
         this._updateRowContext();
     }
     /**
+     * Finds the matching row definition that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * predicate that returns true with the data. If none return true, return the default row
+     * definition.
+     * @param {?} data
+     * @param {?} i
+     * @return {?}
+     */
+    _getRowDef(data, i) {
+        if (this._rowDefs.length == 1) {
+            return this._rowDefs.first;
+        }
+        let /** @type {?} */ rowDef = this._rowDefs.find(def => def.when && def.when(data, i)) || this._defaultRowDef;
+        if (!rowDef) {
+            throw getTableMissingMatchingRowDefError();
+        }
+        return rowDef;
+    }
+    /**
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
      * @param {?} rowData
@@ -597,10 +638,7 @@ class CdkTable {
      * @return {?}
      */
     _insertRow(rowData, index) {
-        // TODO(andrewseguin): Add when predicates to the row definitions
-        //   to find the right template to used based on
-        //   the data rather than choosing the first row definition.
-        const /** @type {?} */ row = this._rowDefinitions.first;
+        const /** @type {?} */ row = this._getRowDef(rowData, index);
         // Row context that will be provided to both the created embedded row view and its cells.
         const /** @type {?} */ context = { $implicit: rowData };
         // TODO(andrewseguin): add some code to enforce that exactly one
@@ -642,7 +680,7 @@ class CdkTable {
             return [];
         }
         return headerDef.columns.map(columnId => {
-            const /** @type {?} */ column = this._columnDefinitionsByName.get(columnId);
+            const /** @type {?} */ column = this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
@@ -660,7 +698,7 @@ class CdkTable {
             return [];
         }
         return rowDef.columns.map(columnId => {
-            const /** @type {?} */ column = this._columnDefinitionsByName.get(columnId);
+            const /** @type {?} */ column = this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
@@ -694,9 +732,9 @@ CdkTable.propDecorators = {
     'dataSource': [{ type: Input },],
     '_rowPlaceholder': [{ type: ViewChild, args: [RowPlaceholder,] },],
     '_headerRowPlaceholder': [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
-    '_columnDefinitions': [{ type: ContentChildren, args: [CdkColumnDef,] },],
-    '_headerDefinition': [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
-    '_rowDefinitions': [{ type: ContentChildren, args: [CdkRowDef,] },],
+    '_columnDefs': [{ type: ContentChildren, args: [CdkColumnDef,] },],
+    '_headerDef': [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
+    '_rowDefs': [{ type: ContentChildren, args: [CdkRowDef,] },],
 };
 
 const EXPORTED_DECLARATIONS = [

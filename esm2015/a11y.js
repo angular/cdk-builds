@@ -244,15 +244,13 @@ class ActiveDescendantKeyManager extends ListKeyManager {
      * @return {?}
      */
     setActiveItem(index) {
-        Promise.resolve().then(() => {
-            if (this.activeItem) {
-                this.activeItem.setInactiveStyles();
-            }
-            super.setActiveItem(index);
-            if (this.activeItem) {
-                this.activeItem.setActiveStyles();
-            }
-        });
+        if (this.activeItem) {
+            this.activeItem.setInactiveStyles();
+        }
+        super.setActiveItem(index);
+        if (this.activeItem) {
+            this.activeItem.setActiveStyles();
+        }
     }
 }
 

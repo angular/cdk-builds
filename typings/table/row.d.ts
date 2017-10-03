@@ -40,9 +40,17 @@ export declare class CdkHeaderRowDef extends BaseRowDef {
 }
 /**
  * Data row definition for the CDK table.
- * Captures the header row's template and other row properties such as the columns to display.
+ * Captures the header row's template and other row properties such as the columns to display and
+ * a when predicate that describes when this row should be used.
  */
-export declare class CdkRowDef extends BaseRowDef {
+export declare class CdkRowDef<T> extends BaseRowDef {
+    /**
+     * Function that should return true if this row template should be used for the provided row data
+     * and index. If left undefined, this row will be considered the default row template to use when
+     * no other when functions return true for the data.
+     * For every row, there must be at least one when function that passes or an undefined to default.
+     */
+    when: (rowData: T, index: number) => boolean;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
 }
 /** Context provided to the row cells */
