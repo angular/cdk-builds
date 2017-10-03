@@ -168,7 +168,7 @@ var OverlayRef = (function () {
     };
     /**
      * Detaches an overlay from a portal.
-     * @return {?} Resolves when the overlay has been detached.
+     * @return {?} The portal detachment result.
      */
     OverlayRef.prototype.detach = function () {
         this.detachBackdrop();

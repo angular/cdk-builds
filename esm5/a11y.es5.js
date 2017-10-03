@@ -69,10 +69,13 @@ var ListKeyManager = (function () {
             .call(map, function () { return _this._pressedLetters.join(''); })
             .subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
-            for (var /** @type {?} */ i = 0; i < items.length; i++) {
-                var /** @type {?} */ item = items[i];
+            // Start at 1 because we want to start searching at the item immediately
+            // following the current active item.
+            for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
+                var /** @type {?} */ index = (_this._activeItemIndex + i) % items.length;
+                var /** @type {?} */ item = items[index];
                 if (!item.disabled && ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
-                    _this.setActiveItem(i);
+                    _this.setActiveItem(index);
                     break;
                 }
             }

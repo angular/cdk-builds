@@ -135,7 +135,7 @@ class OverlayRef {
     }
     /**
      * Detaches an overlay from a portal.
-     * @return {?} Resolves when the overlay has been detached.
+     * @return {?} The portal detachment result.
      */
     detach() {
         this.detachBackdrop();
@@ -146,7 +146,7 @@ class OverlayRef {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
-        let /** @type {?} */ detachmentResult = this._portalHost.detach();
+        const /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
         this._detachments.next();
         return detachmentResult;

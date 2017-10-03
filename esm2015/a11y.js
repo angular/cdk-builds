@@ -65,10 +65,13 @@ class ListKeyManager {
             .call(map, () => this._pressedLetters.join(''))
             .subscribe(inputString => {
             const /** @type {?} */ items = this._items.toArray();
-            for (let /** @type {?} */ i = 0; i < items.length; i++) {
-                let /** @type {?} */ item = items[i];
+            // Start at 1 because we want to start searching at the item immediately
+            // following the current active item.
+            for (let /** @type {?} */ i = 1; i < items.length + 1; i++) {
+                const /** @type {?} */ index = (this._activeItemIndex + i) % items.length;
+                const /** @type {?} */ item = items[index];
                 if (!item.disabled && ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
-                    this.setActiveItem(i);
+                    this.setActiveItem(index);
                     break;
                 }
             }

@@ -33,9 +33,9 @@ export declare class OverlayRef implements PortalHost {
     attach(portal: Portal<any>): any;
     /**
      * Detaches an overlay from a portal.
-     * @returns Resolves when the overlay has been detached.
+     * @returns The portal detachment result.
      */
-    detach(): Promise<any>;
+    detach(): any;
     /**
      * Cleans up the overlay from the DOM.
      */
