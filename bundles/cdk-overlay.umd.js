@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('rxjs/Subscription')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', 'rxjs/Subscription'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.Rx));
-}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes,rxjs_Subscription) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('@angular/cdk/scrolling'), require('rxjs/Subscription'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', '@angular/cdk/scrolling', 'rxjs/Subscription', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.ng.cdk.scrolling,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,_angular_cdk_scrolling,rxjs_Subscription,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -176,6 +176,9 @@ var OverlayRef = (function () {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
+        if (this._config.positionStrategy && this._config.positionStrategy.detach) {
+            this._config.positionStrategy.detach();
+        }
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
@@ -486,6 +489,9 @@ var ConnectedPositionStrategy = (function () {
     function ConnectedPositionStrategy(originPos, overlayPos, _connectedTo, _viewportRuler) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
+        /**
+         * Layout direction of the position strategy.
+         */
         this._dir = 'ltr';
         /**
          * The offset in pixels for the overlay connection point on the x-axis
@@ -499,6 +505,10 @@ var ConnectedPositionStrategy = (function () {
          * The Scrollable containers used to check scrollable view properties on position change.
          */
         this.scrollables = [];
+        /**
+         * Subscription to viewport resize events.
+         */
+        this._resizeSubscription = rxjs_Subscription.Subscription.EMPTY;
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -545,14 +555,26 @@ var ConnectedPositionStrategy = (function () {
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.attach = function (overlayRef) {
+        var _this = this;
         this._overlayRef = overlayRef;
         this._pane = overlayRef.overlayElement;
+        this._resizeSubscription.unsubscribe();
+        this._resizeSubscription = this._viewportRuler.change().subscribe(function () { return _this.apply(); });
     };
     /**
      * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
-    ConnectedPositionStrategy.prototype.dispose = function () { };
+    ConnectedPositionStrategy.prototype.dispose = function () {
+        this._resizeSubscription.unsubscribe();
+    };
+    /**
+     * \@docs-private
+     * @return {?}
+     */
+    ConnectedPositionStrategy.prototype.detach = function () {
+        this._resizeSubscription.unsubscribe();
+    };
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.

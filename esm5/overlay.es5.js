@@ -9,12 +9,12 @@ import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventE
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
 import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { Subscription } from 'rxjs/Subscription';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Scroll strategy that doesn't do anything.
@@ -155,6 +155,9 @@ var OverlayRef = (function () {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
+        if (this._config.positionStrategy && this._config.positionStrategy.detach) {
+            this._config.positionStrategy.detach();
+        }
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
@@ -465,6 +468,9 @@ var ConnectedPositionStrategy = (function () {
     function ConnectedPositionStrategy(originPos, overlayPos, _connectedTo, _viewportRuler) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
+        /**
+         * Layout direction of the position strategy.
+         */
         this._dir = 'ltr';
         /**
          * The offset in pixels for the overlay connection point on the x-axis
@@ -478,6 +484,10 @@ var ConnectedPositionStrategy = (function () {
          * The Scrollable containers used to check scrollable view properties on position change.
          */
         this.scrollables = [];
+        /**
+         * Subscription to viewport resize events.
+         */
+        this._resizeSubscription = Subscription.EMPTY;
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -524,14 +534,26 @@ var ConnectedPositionStrategy = (function () {
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.attach = function (overlayRef) {
+        var _this = this;
         this._overlayRef = overlayRef;
         this._pane = overlayRef.overlayElement;
+        this._resizeSubscription.unsubscribe();
+        this._resizeSubscription = this._viewportRuler.change().subscribe(function () { return _this.apply(); });
     };
     /**
      * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
-    ConnectedPositionStrategy.prototype.dispose = function () { };
+    ConnectedPositionStrategy.prototype.dispose = function () {
+        this._resizeSubscription.unsubscribe();
+    };
+    /**
+     * \@docs-private
+     * @return {?}
+     */
+    ConnectedPositionStrategy.prototype.detach = function () {
+        this._resizeSubscription.unsubscribe();
+    };
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.

@@ -770,6 +770,7 @@ var CdkTable = (function () {
     };
     CdkTable.decorators = [
         { type: _angular_core.Component, args: [{selector: 'cdk-table',
+                    exportAs: 'cdkTable',
                     template: CDK_TABLE_TEMPLATE,
                     host: {
                         'class': 'cdk-table',

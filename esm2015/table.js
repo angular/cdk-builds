@@ -708,6 +708,7 @@ class CdkTable {
 }
 CdkTable.decorators = [
     { type: Component, args: [{selector: 'cdk-table',
+                exportAs: 'cdkTable',
                 template: CDK_TABLE_TEMPLATE,
                 host: {
                     'class': 'cdk-table',

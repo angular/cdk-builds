@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
@@ -47,7 +47,7 @@ class CdkStep {
     constructor(_stepper) {
         this._stepper = _stepper;
         /**
-         * Whether user has seen the expanded step content or not .
+         * Whether user has seen the expanded step content or not.
          */
         this.interacted = false;
         this._editable = true;
@@ -104,12 +104,22 @@ class CdkStep {
     select() {
         this._stepper.selected = this;
     }
+    /**
+     * @return {?}
+     */
+    ngOnChanges() {
+        // Since basically all inputs of the MdStep get proxied through the view down to the
+        // underlying MdStepHeader, we have to make sure that change detection runs correctly.
+        this._stepper._stateChanged();
+    }
 }
 CdkStep.decorators = [
     { type: Component, args: [{selector: 'cdk-step',
+                exportAs: 'cdkStep',
                 template: "<ng-template><ng-content></ng-content></ng-template>",
                 encapsulation: ViewEncapsulation.None,
                 preserveWhitespaces: false,
+                changeDetection: ChangeDetectionStrategy.OnPush,
             },] },
 ];
 /**
@@ -130,9 +140,11 @@ CdkStep.propDecorators = {
 class CdkStepper {
     /**
      * @param {?} _dir
+     * @param {?} _changeDetectorRef
      */
-    constructor(_dir) {
+    constructor(_dir, _changeDetectorRef) {
         this._dir = _dir;
+        this._changeDetectorRef = _changeDetectorRef;
         this._linear = false;
         this._selectedIndex = 0;
         /**
@@ -218,6 +230,13 @@ class CdkStepper {
         return `mat-step-content-${this._groupId}-${i}`;
     }
     /**
+     * Marks the component to be change detected.
+     * @return {?}
+     */
+    _stateChanged() {
+        this._changeDetectorRef.markForCheck();
+    }
+    /**
      * Returns position state of the step with the given index.
      * @param {?} index
      * @return {?}
@@ -259,6 +278,7 @@ class CdkStepper {
             previouslySelectedStep: stepsArray[this._selectedIndex],
         });
         this._selectedIndex = newIndex;
+        this._stateChanged();
     }
     /**
      * @param {?} event
@@ -333,6 +353,7 @@ class CdkStepper {
 CdkStepper.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkStepper]',
+                exportAs: 'cdkStepper',
             },] },
 ];
 /**
@@ -340,6 +361,7 @@ CdkStepper.decorators = [
  */
 CdkStepper.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional },] },
+    { type: ChangeDetectorRef, },
 ];
 CdkStepper.propDecorators = {
     '_steps': [{ type: ContentChildren, args: [CdkStep,] },],

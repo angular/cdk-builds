@@ -91,7 +91,8 @@ class ObserveContent {
 }
 ObserveContent.decorators = [
     { type: Directive, args: [{
-                selector: '[cdkObserveContent]'
+                selector: '[cdkObserveContent]',
+                exportAs: 'cdkObserveContent',
             },] },
 ];
 /**

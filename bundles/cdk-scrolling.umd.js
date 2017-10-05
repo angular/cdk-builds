@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Subscription'), require('rxjs/observable/fromEvent'), require('rxjs/observable/merge'), require('rxjs/operator/auditTime')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Subscription', 'rxjs/observable/fromEvent', 'rxjs/observable/merge', 'rxjs/operator/auditTime'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Subscription,rxjs_observable_fromEvent,rxjs_observable_merge,rxjs_operator_auditTime) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Subscription'), require('rxjs/observable/fromEvent'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge'), require('rxjs/observable/of')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Subscription', 'rxjs/observable/fromEvent', 'rxjs/operator/auditTime', 'rxjs/observable/merge', 'rxjs/observable/of'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable,global.Rx.Observable));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Subscription,rxjs_observable_fromEvent,rxjs_operator_auditTime,rxjs_observable_merge,rxjs_observable_of) { 'use strict';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -91,7 +91,7 @@ var ScrollDispatcher = (function () {
         this._scrolledCount++;
         if (!this._globalSubscription) {
             this._globalSubscription = this._ngZone.runOutsideAngular(function () {
-                return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window.document, 'scroll'), rxjs_observable_fromEvent.fromEvent(window, 'resize')).subscribe(function () { return _this._notify(); });
+                return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._notify(); });
             });
         }
         // Note that we need to do the subscribing from here, in order to be able to remove
@@ -250,18 +250,36 @@ var Scrollable = (function () {
 }());
 
 /**
+ * Time in ms to throttle the resize events by default.
+ */
+var DEFAULT_RESIZE_TIME = 20;
+/**
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
  */
 var ViewportRuler = (function () {
     /**
+     * @param {?} platform
+     * @param {?} ngZone
      * @param {?} scrollDispatcher
      */
-    function ViewportRuler(scrollDispatcher) {
+    function ViewportRuler(platform, ngZone, scrollDispatcher) {
         var _this = this;
+        this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
+            return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
+        }) : rxjs_observable_of.of();
         // Subscribe to scroll and resize events and update the document rectangle on changes.
-        scrollDispatcher.scrolled(0, function () { return _this._cacheViewportGeometry(); });
+        this._invalidateCacheSubscriptions = [
+            scrollDispatcher.scrolled(0, function () { return _this._cacheViewportGeometry(); }),
+            this.change().subscribe(function () { return _this._cacheViewportGeometry(); })
+        ];
     }
+    /**
+     * @return {?}
+     */
+    ViewportRuler.prototype.ngOnDestroy = function () {
+        this._invalidateCacheSubscriptions.forEach(function (subscription) { return subscription.unsubscribe(); });
+    };
     /**
      * Gets a ClientRect for the viewport's bounds.
      * @param {?=} documentRect
@@ -320,6 +338,15 @@ var ViewportRuler = (function () {
         return { top: top, left: left };
     };
     /**
+     * Returns a stream that emits whenever the size of the viewport changes.
+     * @param {?=} throttleTime
+     * @return {?}
+     */
+    ViewportRuler.prototype.change = function (throttleTime) {
+        if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
+        return throttleTime > 0 ? rxjs_operator_auditTime.auditTime.call(this._change, throttleTime) : this._change;
+    };
+    /**
      * Caches the latest client rectangle of the document element.
      * @return {?}
      */
@@ -333,6 +360,8 @@ var ViewportRuler = (function () {
      * @nocollapse
      */
     ViewportRuler.ctorParameters = function () { return [
+        { type: _angular_cdk_platform.Platform, },
+        { type: _angular_core.NgZone, },
         { type: ScrollDispatcher, },
     ]; };
     return ViewportRuler;
@@ -340,11 +369,13 @@ var ViewportRuler = (function () {
 /**
  * \@docs-private
  * @param {?} parentRuler
+ * @param {?} platform
+ * @param {?} ngZone
  * @param {?} scrollDispatcher
  * @return {?}
  */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, scrollDispatcher) {
-    return parentRuler || new ViewportRuler(scrollDispatcher);
+function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDispatcher) {
+    return parentRuler || new ViewportRuler(platform, ngZone, scrollDispatcher);
 }
 /**
  * \@docs-private
@@ -352,7 +383,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, scrollDispatcher) {
 var VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], ScrollDispatcher],
+    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], _angular_cdk_platform.Platform, _angular_core.NgZone, ScrollDispatcher],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 
@@ -379,6 +410,7 @@ exports.ScrollDispatcher = ScrollDispatcher;
 exports.SCROLL_DISPATCHER_PROVIDER_FACTORY = SCROLL_DISPATCHER_PROVIDER_FACTORY;
 exports.SCROLL_DISPATCHER_PROVIDER = SCROLL_DISPATCHER_PROVIDER;
 exports.Scrollable = Scrollable;
+exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;
 exports.ViewportRuler = ViewportRuler;
 exports.VIEWPORT_RULER_PROVIDER_FACTORY = VIEWPORT_RULER_PROVIDER_FACTORY;
 exports.VIEWPORT_RULER_PROVIDER = VIEWPORT_RULER_PROVIDER;

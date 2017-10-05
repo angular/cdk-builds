@@ -96,7 +96,8 @@ var ObserveContent = (function () {
     };
     ObserveContent.decorators = [
         { type: _angular_core.Directive, args: [{
-                    selector: '[cdkObserveContent]'
+                    selector: '[cdkObserveContent]',
+                    exportAs: 'cdkObserveContent',
                 },] },
     ];
     /**

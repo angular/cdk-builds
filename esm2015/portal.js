@@ -482,6 +482,7 @@ class PortalHostDirective extends BasePortalHost {
 PortalHostDirective.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkPortalHost], [portalHost]',
+                exportAs: 'cdkPortalHost',
                 inputs: ['portal: cdkPortalHost']
             },] },
 ];

@@ -548,6 +548,7 @@ var PortalHostDirective = (function (_super) {
     PortalHostDirective.decorators = [
         { type: _angular_core.Directive, args: [{
                     selector: '[cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalHost',
                     inputs: ['portal: cdkPortalHost']
                 },] },
     ];

@@ -11,7 +11,7 @@ import { ElementRef, EventEmitter, OnDestroy, AfterContentInit, NgZone } from '@
  * @docs-private
  */
 export declare class MatMutationObserverFactory {
-    create(callback: any): MutationObserver | null;
+    create(callback: MutationCallback): MutationObserver | null;
 }
 /**
  * Directive that triggers a callback whenever the content of

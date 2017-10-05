@@ -9,10 +9,10 @@ import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventE
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
 import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { Subscription } from 'rxjs/Subscription';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Scroll strategy that doesn't do anything.
@@ -143,6 +143,9 @@ class OverlayRef {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
+        if (this._config.positionStrategy && this._config.positionStrategy.detach) {
+            this._config.positionStrategy.detach();
+        }
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
@@ -445,6 +448,9 @@ class ConnectedPositionStrategy {
     constructor(originPos, overlayPos, _connectedTo, _viewportRuler) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
+        /**
+         * Layout direction of the position strategy.
+         */
         this._dir = 'ltr';
         /**
          * The offset in pixels for the overlay connection point on the x-axis
@@ -458,6 +464,10 @@ class ConnectedPositionStrategy {
          * The Scrollable containers used to check scrollable view properties on position change.
          */
         this.scrollables = [];
+        /**
+         * Subscription to viewport resize events.
+         */
+        this._resizeSubscription = Subscription.EMPTY;
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -494,12 +504,23 @@ class ConnectedPositionStrategy {
     attach(overlayRef) {
         this._overlayRef = overlayRef;
         this._pane = overlayRef.overlayElement;
+        this._resizeSubscription.unsubscribe();
+        this._resizeSubscription = this._viewportRuler.change().subscribe(() => this.apply());
     }
     /**
      * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
-    dispose() { }
+    dispose() {
+        this._resizeSubscription.unsubscribe();
+    }
+    /**
+     * \@docs-private
+     * @return {?}
+     */
+    detach() {
+        this._resizeSubscription.unsubscribe();
+    }
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.
