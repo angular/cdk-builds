@@ -12,7 +12,7 @@ import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROV
 import { Subscription } from 'rxjs/Subscription';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
-import { Directionality } from '@angular/cdk/bidi';
+import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
@@ -2020,7 +2020,7 @@ var OverlayModule = (function () {
     }
     OverlayModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [PortalModule, ScrollDispatchModule],
+                    imports: [BidiModule, PortalModule, ScrollDispatchModule],
                     exports: [ConnectedOverlayDirective, OverlayOrigin, ScrollDispatchModule],
                     declarations: [ConnectedOverlayDirective, OverlayOrigin],
                     providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],

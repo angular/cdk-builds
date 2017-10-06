@@ -2041,7 +2041,7 @@ var OverlayModule = (function () {
     }
     OverlayModule.decorators = [
         { type: _angular_core.NgModule, args: [{
-                    imports: [_angular_cdk_portal.PortalModule, _angular_cdk_scrolling.ScrollDispatchModule],
+                    imports: [_angular_cdk_bidi.BidiModule, _angular_cdk_portal.PortalModule, _angular_cdk_scrolling.ScrollDispatchModule],
                     exports: [ConnectedOverlayDirective, OverlayOrigin, _angular_cdk_scrolling.ScrollDispatchModule],
                     declarations: [ConnectedOverlayDirective, OverlayOrigin],
                     providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],

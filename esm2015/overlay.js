@@ -10,7 +10,7 @@ import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal
 import { Subject } from 'rxjs/Subject';
 import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
-import { Directionality } from '@angular/cdk/bidi';
+import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
@@ -1877,7 +1877,7 @@ class OverlayModule {
 }
 OverlayModule.decorators = [
     { type: NgModule, args: [{
-                imports: [PortalModule, ScrollDispatchModule],
+                imports: [BidiModule, PortalModule, ScrollDispatchModule],
                 exports: [ConnectedOverlayDirective, OverlayOrigin, ScrollDispatchModule],
                 declarations: [ConnectedOverlayDirective, OverlayOrigin],
                 providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
