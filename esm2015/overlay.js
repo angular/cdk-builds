@@ -1078,7 +1078,7 @@ class CloseScrollStrategy {
      */
     enable() {
         if (!this._scrollSubscription) {
-            this._scrollSubscription = this._scrollDispatcher.scrolled(0, () => {
+            this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(() => {
                 if (this._overlayRef.hasAttached()) {
                     this._overlayRef.detach();
                 }
@@ -1188,7 +1188,7 @@ class RepositionScrollStrategy {
     enable() {
         if (!this._scrollSubscription) {
             let /** @type {?} */ throttle = this._config ? this._config.scrollThrottle : 0;
-            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle, () => {
+            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle).subscribe(() => {
                 this._overlayRef.updatePosition();
             });
         }

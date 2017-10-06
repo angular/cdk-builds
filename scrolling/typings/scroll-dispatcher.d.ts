@@ -7,8 +7,8 @@
  */
 import { ElementRef, NgZone, Optional } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { Scrollable } from './scrollable';
 /** Time in ms to throttle the scrolling events by default. */
 export declare const DEFAULT_SCROLL_TIME = 20;
@@ -21,7 +21,7 @@ export declare class ScrollDispatcher {
     private _platform;
     constructor(_ngZone: NgZone, _platform: Platform);
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
-    _scrolled: Subject<void>;
+    private _scrolled;
     /** Keeps track of the global `scroll` and `resize` subscriptions. */
     _globalSubscription: Subscription | null;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
@@ -43,17 +43,17 @@ export declare class ScrollDispatcher {
      */
     deregister(scrollable: Scrollable): void;
     /**
-     * Subscribes to an observable that emits an event whenever any of the registered Scrollable
+     * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
      * to override the default "throttle" time.
      */
-    scrolled(auditTimeInMs: number | undefined, callback: () => any): Subscription;
+    scrolled(auditTimeInMs?: number): Observable<void>;
     /** Returns all registered Scrollables that contain the provided element. */
     getScrollContainers(elementRef: ElementRef): Scrollable[];
     /** Returns true if the element is contained within the provided Scrollable. */
     scrollableContainsElement(scrollable: Scrollable, elementRef: ElementRef): boolean;
-    /** Sends a notification that a scroll event has been fired. */
-    _notify(): void;
+    /** Sets up the global scroll and resize listeners. */
+    private _addGlobalListener();
 }
 /** @docs-private */
 export declare function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher: ScrollDispatcher, ngZone: NgZone, platform: Platform): ScrollDispatcher;

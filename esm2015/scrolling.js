@@ -8,11 +8,12 @@
 import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import { fromEvent } from 'rxjs/observable/fromEvent';
+import { of } from 'rxjs/observable/of';
 import { auditTime } from 'rxjs/operator/auditTime';
 import { merge } from 'rxjs/observable/merge';
-import { of } from 'rxjs/observable/of';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -55,7 +56,7 @@ class ScrollDispatcher {
      * @return {?}
      */
     register(scrollable) {
-        const /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(() => this._notify());
+        const /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(() => this._scrolled.next());
         this.scrollableReferences.set(scrollable, scrollSubscription);
     }
     /**
@@ -71,40 +72,32 @@ class ScrollDispatcher {
         }
     }
     /**
-     * Subscribes to an observable that emits an event whenever any of the registered Scrollable
+     * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
      * to override the default "throttle" time.
      * @param {?=} auditTimeInMs
-     * @param {?=} callback
      * @return {?}
      */
-    scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME, callback) {
-        // Scroll events can only happen on the browser, so do nothing if we're not on the browser.
-        if (!this._platform.isBrowser) {
-            return Subscription.EMPTY;
-        }
-        // In the case of a 0ms delay, use an observable without auditTime
-        // since it does add a perceptible delay in processing overhead.
-        let /** @type {?} */ observable = auditTimeInMs > 0 ?
-            auditTime.call(this._scrolled.asObservable(), auditTimeInMs) :
-            this._scrolled.asObservable();
-        this._scrolledCount++;
-        if (!this._globalSubscription) {
-            this._globalSubscription = this._ngZone.runOutsideAngular(() => {
-                return fromEvent(window.document, 'scroll').subscribe(() => this._notify());
-            });
-        }
-        // Note that we need to do the subscribing from here, in order to be able to remove
-        // the global event listeners once there are no more subscriptions.
-        let /** @type {?} */ subscription = observable.subscribe(callback);
-        subscription.add(() => {
-            this._scrolledCount--;
-            if (this._globalSubscription && !this.scrollableReferences.size && !this._scrolledCount) {
-                this._globalSubscription.unsubscribe();
-                this._globalSubscription = null;
+    scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME) {
+        return this._platform.isBrowser ? Observable.create(observer => {
+            if (!this._globalSubscription) {
+                this._addGlobalListener();
             }
-        });
-        return subscription;
+            // In the case of a 0ms delay, use an observable without auditTime
+            // since it does add a perceptible delay in processing overhead.
+            const /** @type {?} */ subscription = auditTimeInMs > 0 ?
+                auditTime.call(this._scrolled, auditTimeInMs).subscribe(observer) :
+                this._scrolled.subscribe(observer);
+            this._scrolledCount++;
+            return () => {
+                subscription.unsubscribe();
+                this._scrolledCount--;
+                if (this._globalSubscription && !this.scrollableReferences.size && !this._scrolledCount) {
+                    this._globalSubscription.unsubscribe();
+                    this._globalSubscription = null;
+                }
+            };
+        }) : of();
     }
     /**
      * Returns all registered Scrollables that contain the provided element.
@@ -139,11 +132,13 @@ class ScrollDispatcher {
         return false;
     }
     /**
-     * Sends a notification that a scroll event has been fired.
+     * Sets up the global scroll and resize listeners.
      * @return {?}
      */
-    _notify() {
-        this._scrolled.next();
+    _addGlobalListener() {
+        this._globalSubscription = this._ngZone.runOutsideAngular(() => {
+            return fromEvent(window.document, 'scroll').subscribe(() => this._scrolled.next());
+        });
     }
 }
 ScrollDispatcher.decorators = [
@@ -260,20 +255,22 @@ class ViewportRuler {
      * @param {?} scrollDispatcher
      */
     constructor(platform, ngZone, scrollDispatcher) {
+        /**
+         * Subscriptions to streams that invalidate the cached viewport dimensions.
+         */
+        this._invalidateCacheSubscription = Subscription.EMPTY;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(() => {
             return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
         }) : of();
         // Subscribe to scroll and resize events and update the document rectangle on changes.
-        this._invalidateCacheSubscriptions = [
-            scrollDispatcher.scrolled(0, () => this._cacheViewportGeometry()),
-            this.change().subscribe(() => this._cacheViewportGeometry())
-        ];
+        this._invalidateCacheSubscription = merge(scrollDispatcher.scrolled(0), this.change())
+            .subscribe(() => this._cacheViewportGeometry());
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
-        this._invalidateCacheSubscriptions.forEach(subscription => subscription.unsubscribe());
+        this._invalidateCacheSubscription.unsubscribe();
     }
     /**
      * Gets a ClientRect for the viewport's bounds.

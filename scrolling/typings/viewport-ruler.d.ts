@@ -21,7 +21,7 @@ export declare class ViewportRuler implements OnDestroy {
     /** Stream of viewport change events. */
     private _change;
     /** Subscriptions to streams that invalidate the cached viewport dimensions. */
-    private _invalidateCacheSubscriptions;
+    private _invalidateCacheSubscription;
     constructor(platform: Platform, ngZone: NgZone, scrollDispatcher: ScrollDispatcher);
     ngOnDestroy(): void;
     /** Gets a ClientRect for the viewport's bounds. */

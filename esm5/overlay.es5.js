@@ -1131,7 +1131,7 @@ var CloseScrollStrategy = (function () {
     CloseScrollStrategy.prototype.enable = function () {
         var _this = this;
         if (!this._scrollSubscription) {
-            this._scrollSubscription = this._scrollDispatcher.scrolled(0, function () {
+            this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(function () {
                 if (_this._overlayRef.hasAttached()) {
                     _this._overlayRef.detach();
                 }
@@ -1244,7 +1244,7 @@ var RepositionScrollStrategy = (function () {
         var _this = this;
         if (!this._scrollSubscription) {
             var /** @type {?} */ throttle = this._config ? this._config.scrollThrottle : 0;
-            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle, function () {
+            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle).subscribe(function () {
                 _this._overlayRef.updatePosition();
             });
         }

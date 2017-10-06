@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Subscription'), require('rxjs/observable/fromEvent'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge'), require('rxjs/observable/of')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Subscription', 'rxjs/observable/fromEvent', 'rxjs/operator/auditTime', 'rxjs/observable/merge', 'rxjs/observable/of'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Subscription,rxjs_observable_fromEvent,rxjs_operator_auditTime,rxjs_observable_merge,rxjs_observable_of) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge'), require('rxjs/Subscription')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operator/auditTime', 'rxjs/observable/merge', 'rxjs/Subscription'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable,global.Rx));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,rxjs_operator_auditTime,rxjs_observable_merge,rxjs_Subscription) { 'use strict';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -53,7 +53,7 @@ var ScrollDispatcher = (function () {
      */
     ScrollDispatcher.prototype.register = function (scrollable) {
         var _this = this;
-        var /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(function () { return _this._notify(); });
+        var /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(function () { return _this._scrolled.next(); });
         this.scrollableReferences.set(scrollable, scrollSubscription);
     };
     /**
@@ -69,42 +69,34 @@ var ScrollDispatcher = (function () {
         }
     };
     /**
-     * Subscribes to an observable that emits an event whenever any of the registered Scrollable
+     * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
      * to override the default "throttle" time.
      * @param {?=} auditTimeInMs
-     * @param {?=} callback
      * @return {?}
      */
-    ScrollDispatcher.prototype.scrolled = function (auditTimeInMs, callback) {
+    ScrollDispatcher.prototype.scrolled = function (auditTimeInMs) {
         var _this = this;
         if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
-        // Scroll events can only happen on the browser, so do nothing if we're not on the browser.
-        if (!this._platform.isBrowser) {
-            return rxjs_Subscription.Subscription.EMPTY;
-        }
-        // In the case of a 0ms delay, use an observable without auditTime
-        // since it does add a perceptible delay in processing overhead.
-        var /** @type {?} */ observable = auditTimeInMs > 0 ?
-            rxjs_operator_auditTime.auditTime.call(this._scrolled.asObservable(), auditTimeInMs) :
-            this._scrolled.asObservable();
-        this._scrolledCount++;
-        if (!this._globalSubscription) {
-            this._globalSubscription = this._ngZone.runOutsideAngular(function () {
-                return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._notify(); });
-            });
-        }
-        // Note that we need to do the subscribing from here, in order to be able to remove
-        // the global event listeners once there are no more subscriptions.
-        var /** @type {?} */ subscription = observable.subscribe(callback);
-        subscription.add(function () {
-            _this._scrolledCount--;
-            if (_this._globalSubscription && !_this.scrollableReferences.size && !_this._scrolledCount) {
-                _this._globalSubscription.unsubscribe();
-                _this._globalSubscription = null;
+        return this._platform.isBrowser ? rxjs_Observable.Observable.create(function (observer) {
+            if (!_this._globalSubscription) {
+                _this._addGlobalListener();
             }
-        });
-        return subscription;
+            // In the case of a 0ms delay, use an observable without auditTime
+            // since it does add a perceptible delay in processing overhead.
+            var /** @type {?} */ subscription = auditTimeInMs > 0 ?
+                rxjs_operator_auditTime.auditTime.call(_this._scrolled, auditTimeInMs).subscribe(observer) :
+                _this._scrolled.subscribe(observer);
+            _this._scrolledCount++;
+            return function () {
+                subscription.unsubscribe();
+                _this._scrolledCount--;
+                if (_this._globalSubscription && !_this.scrollableReferences.size && !_this._scrolledCount) {
+                    _this._globalSubscription.unsubscribe();
+                    _this._globalSubscription = null;
+                }
+            };
+        }) : rxjs_observable_of.of();
     };
     /**
      * Returns all registered Scrollables that contain the provided element.
@@ -140,11 +132,14 @@ var ScrollDispatcher = (function () {
         return false;
     };
     /**
-     * Sends a notification that a scroll event has been fired.
+     * Sets up the global scroll and resize listeners.
      * @return {?}
      */
-    ScrollDispatcher.prototype._notify = function () {
-        this._scrolled.next();
+    ScrollDispatcher.prototype._addGlobalListener = function () {
+        var _this = this;
+        this._globalSubscription = this._ngZone.runOutsideAngular(function () {
+            return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
+        });
     };
     ScrollDispatcher.decorators = [
         { type: _angular_core.Injectable },
@@ -265,20 +260,22 @@ var ViewportRuler = (function () {
      */
     function ViewportRuler(platform, ngZone, scrollDispatcher) {
         var _this = this;
+        /**
+         * Subscriptions to streams that invalidate the cached viewport dimensions.
+         */
+        this._invalidateCacheSubscription = rxjs_Subscription.Subscription.EMPTY;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
             return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
         }) : rxjs_observable_of.of();
         // Subscribe to scroll and resize events and update the document rectangle on changes.
-        this._invalidateCacheSubscriptions = [
-            scrollDispatcher.scrolled(0, function () { return _this._cacheViewportGeometry(); }),
-            this.change().subscribe(function () { return _this._cacheViewportGeometry(); })
-        ];
+        this._invalidateCacheSubscription = rxjs_observable_merge.merge(scrollDispatcher.scrolled(0), this.change())
+            .subscribe(function () { return _this._cacheViewportGeometry(); });
     }
     /**
      * @return {?}
      */
     ViewportRuler.prototype.ngOnDestroy = function () {
-        this._invalidateCacheSubscriptions.forEach(function (subscription) { return subscription.unsubscribe(); });
+        this._invalidateCacheSubscription.unsubscribe();
     };
     /**
      * Gets a ClientRect for the viewport's bounds.
