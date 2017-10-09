@@ -686,7 +686,8 @@ InteractivityChecker.ctorParameters = () => [
 function hasGeometry(element) {
     // Use logic from jQuery to check for an invisible element.
     // See https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js#L12
-    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    return !!(element.offsetWidth || element.offsetHeight ||
+        (typeof element.getClientRects === 'function' && element.getClientRects().length));
 }
 /**
  * Gets whether an element's
@@ -922,6 +923,9 @@ class FocusTrap {
      * @return {?} The boundary element.
      */
     _getRegionBoundary(bound) {
+        if (!this._platform.isBrowser) {
+            return null;
+        }
         // Contains the deprecated version of selector, for temporary backwards comparability.
         let /** @type {?} */ markers = (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
             `[cdk-focus-${bound}]`));
@@ -942,6 +946,9 @@ class FocusTrap {
      * @return {?} Returns whether focus was moved successfuly.
      */
     focusInitialElement() {
+        if (!this._platform.isBrowser) {
+            return false;
+        }
         const /** @type {?} */ redirectToElement = (this._element.querySelector('[cdk-focus-initial]'));
         if (redirectToElement) {
             redirectToElement.focus();
