@@ -32,6 +32,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * when focus is shifted off of the list.
      */
     tabOut: Subject<void>;
+    /** Stream that emits whenever the active item of the list manager changes. */
+    change: Subject<number>;
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.

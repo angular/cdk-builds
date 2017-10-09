@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge'), require('rxjs/Subscription')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operator/auditTime', 'rxjs/observable/merge', 'rxjs/Subscription'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable,global.Rx));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,rxjs_operator_auditTime,rxjs_observable_merge,rxjs_Subscription) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operator/auditTime', 'rxjs/observable/merge'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,rxjs_operator_auditTime,rxjs_observable_merge) { 'use strict';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -91,7 +91,7 @@ var ScrollDispatcher = (function () {
             return function () {
                 subscription.unsubscribe();
                 _this._scrolledCount--;
-                if (_this._globalSubscription && !_this.scrollableReferences.size && !_this._scrolledCount) {
+                if (_this._globalSubscription && !_this._scrolledCount) {
                     _this._globalSubscription.unsubscribe();
                     _this._globalSubscription = null;
                 }
@@ -256,26 +256,19 @@ var ViewportRuler = (function () {
     /**
      * @param {?} platform
      * @param {?} ngZone
-     * @param {?} scrollDispatcher
      */
-    function ViewportRuler(platform, ngZone, scrollDispatcher) {
+    function ViewportRuler(platform, ngZone) {
         var _this = this;
-        /**
-         * Subscriptions to streams that invalidate the cached viewport dimensions.
-         */
-        this._invalidateCacheSubscription = rxjs_Subscription.Subscription.EMPTY;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
             return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
         }) : rxjs_observable_of.of();
-        // Subscribe to scroll and resize events and update the document rectangle on changes.
-        this._invalidateCacheSubscription = rxjs_observable_merge.merge(scrollDispatcher.scrolled(0), this.change())
-            .subscribe(function () { return _this._cacheViewportGeometry(); });
+        this._invalidateCache = this.change().subscribe(function () { return _this._cacheViewportGeometry(); });
     }
     /**
      * @return {?}
      */
     ViewportRuler.prototype.ngOnDestroy = function () {
-        this._invalidateCacheSubscription.unsubscribe();
+        this._invalidateCache.unsubscribe();
     };
     /**
      * Gets a ClientRect for the viewport's bounds.
@@ -359,7 +352,6 @@ var ViewportRuler = (function () {
     ViewportRuler.ctorParameters = function () { return [
         { type: _angular_cdk_platform.Platform, },
         { type: _angular_core.NgZone, },
-        { type: ScrollDispatcher, },
     ]; };
     return ViewportRuler;
 }());
@@ -368,11 +360,10 @@ var ViewportRuler = (function () {
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
- * @param {?} scrollDispatcher
  * @return {?}
  */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDispatcher) {
-    return parentRuler || new ViewportRuler(platform, ngZone, scrollDispatcher);
+function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
+    return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
  * \@docs-private
@@ -380,7 +371,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDi
 var VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], _angular_cdk_platform.Platform, _angular_core.NgZone, ScrollDispatcher],
+    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], _angular_cdk_platform.Platform, _angular_core.NgZone],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 

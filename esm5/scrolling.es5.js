@@ -13,7 +13,6 @@ import { fromEvent } from 'rxjs/observable/fromEvent';
 import { of } from 'rxjs/observable/of';
 import { auditTime } from 'rxjs/operator/auditTime';
 import { merge } from 'rxjs/observable/merge';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -95,7 +94,7 @@ var ScrollDispatcher = (function () {
             return function () {
                 subscription.unsubscribe();
                 _this._scrolledCount--;
-                if (_this._globalSubscription && !_this.scrollableReferences.size && !_this._scrolledCount) {
+                if (_this._globalSubscription && !_this._scrolledCount) {
                     _this._globalSubscription.unsubscribe();
                     _this._globalSubscription = null;
                 }
@@ -260,26 +259,19 @@ var ViewportRuler = (function () {
     /**
      * @param {?} platform
      * @param {?} ngZone
-     * @param {?} scrollDispatcher
      */
-    function ViewportRuler(platform, ngZone, scrollDispatcher) {
+    function ViewportRuler(platform, ngZone) {
         var _this = this;
-        /**
-         * Subscriptions to streams that invalidate the cached viewport dimensions.
-         */
-        this._invalidateCacheSubscription = Subscription.EMPTY;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
             return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
         }) : of();
-        // Subscribe to scroll and resize events and update the document rectangle on changes.
-        this._invalidateCacheSubscription = merge(scrollDispatcher.scrolled(0), this.change())
-            .subscribe(function () { return _this._cacheViewportGeometry(); });
+        this._invalidateCache = this.change().subscribe(function () { return _this._cacheViewportGeometry(); });
     }
     /**
      * @return {?}
      */
     ViewportRuler.prototype.ngOnDestroy = function () {
-        this._invalidateCacheSubscription.unsubscribe();
+        this._invalidateCache.unsubscribe();
     };
     /**
      * Gets a ClientRect for the viewport's bounds.
@@ -363,7 +355,6 @@ var ViewportRuler = (function () {
     ViewportRuler.ctorParameters = function () { return [
         { type: Platform, },
         { type: NgZone, },
-        { type: ScrollDispatcher, },
     ]; };
     return ViewportRuler;
 }());
@@ -372,11 +363,10 @@ var ViewportRuler = (function () {
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
- * @param {?} scrollDispatcher
  * @return {?}
  */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDispatcher) {
-    return parentRuler || new ViewportRuler(platform, ngZone, scrollDispatcher);
+function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
+    return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
  * \@docs-private
@@ -384,7 +374,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone, scrollDi
 var VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
-    deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone, ScrollDispatcher],
+    deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 

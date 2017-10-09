@@ -7,7 +7,6 @@
  */
 import { Optional, NgZone, OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { ScrollDispatcher } from './scroll-dispatcher';
 import { Observable } from 'rxjs/Observable';
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
@@ -20,9 +19,9 @@ export declare class ViewportRuler implements OnDestroy {
     private _documentRect?;
     /** Stream of viewport change events. */
     private _change;
-    /** Subscriptions to streams that invalidate the cached viewport dimensions. */
-    private _invalidateCacheSubscription;
-    constructor(platform: Platform, ngZone: NgZone, scrollDispatcher: ScrollDispatcher);
+    /** Subscription to streams that invalidate the cached viewport dimensions. */
+    private _invalidateCache;
+    constructor(platform: Platform, ngZone: NgZone);
     ngOnDestroy(): void;
     /** Gets a ClientRect for the viewport's bounds. */
     getViewportRect(documentRect?: ClientRect | undefined): ClientRect;
@@ -43,10 +42,10 @@ export declare class ViewportRuler implements OnDestroy {
     _cacheViewportGeometry(): void;
 }
 /** @docs-private */
-export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone, scrollDispatcher: ScrollDispatcher): ViewportRuler;
+export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone): ViewportRuler;
 /** @docs-private */
 export declare const VIEWPORT_RULER_PROVIDER: {
     provide: typeof ViewportRuler;
-    deps: (typeof ScrollDispatcher | Optional[] | typeof NgZone | typeof Platform)[];
-    useFactory: (parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone, scrollDispatcher: ScrollDispatcher) => ViewportRuler;
+    deps: (Optional[] | typeof NgZone | typeof Platform)[];
+    useFactory: (parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone) => ViewportRuler;
 };
