@@ -37,6 +37,10 @@ var ListKeyManager = (function () {
          * when focus is shifted off of the list.
          */
         this.tabOut = new Subject();
+        /**
+         * Stream that emits whenever the active item of the list manager changes.
+         */
+        this.change = new Subject();
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
@@ -91,6 +95,7 @@ var ListKeyManager = (function () {
     ListKeyManager.prototype.setActiveItem = function (index) {
         this._activeItemIndex = index;
         this._activeItem = this._items.toArray()[index];
+        this.change.next(index);
     };
     /**
      * Sets the active item depending on the key event passed in.
