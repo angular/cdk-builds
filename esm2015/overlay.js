@@ -8,7 +8,8 @@
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { first } from 'rxjs/operator/first';
+import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -111,10 +112,15 @@ class OverlayRef {
         this._updateStackingOrder();
         this.updateSize();
         this.updateDirection();
-        this.updatePosition();
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.enable();
         }
+        // Update the position once the zone is stable so that the overlay will be fully rendered
+        // before attempting to position it, as the position may depend on the size of the rendered
+        // content.
+        first.call(this._ngZone.onStable.asObservable()).subscribe(() => {
+            this.updatePosition();
+        });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._config.hasBackdrop) {
@@ -344,8 +350,12 @@ class ConnectionPositionPair {
     /**
      * @param {?} origin
      * @param {?} overlay
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      */
-    constructor(origin, overlay) {
+    constructor(origin, overlay, offsetX, offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.originX = origin.originX;
         this.originY = origin.originY;
         this.overlayX = overlay.overlayX;
@@ -569,6 +579,10 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     recalculateLastPosition() {
+        // If the overlay has never been positioned before, do nothing.
+        if (!this._lastConnectedPosition) {
+            return;
+        }
         const /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         const /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
         const /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
@@ -591,10 +605,13 @@ class ConnectedPositionStrategy {
      * Adds a new preferred fallback position.
      * @param {?} originPos
      * @param {?} overlayPos
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      * @return {?}
      */
-    withFallbackPosition(originPos, overlayPos) {
-        this._preferredPositions.push(new ConnectionPositionPair(originPos, overlayPos));
+    withFallbackPosition(originPos, overlayPos, offsetX, offsetY) {
+        const /** @type {?} */ position = new ConnectionPositionPair(originPos, overlayPos, offsetX, offsetY);
+        this._preferredPositions.push(position);
         return this;
     }
     /**
@@ -695,9 +712,12 @@ class ConnectedPositionStrategy {
         else {
             overlayStartY = pos.overlayY == 'top' ? 0 : -overlayRect.height;
         }
+        // The (x, y) offsets of the overlay based on the current position.
+        let /** @type {?} */ offsetX = typeof pos.offsetX === 'undefined' ? this._offsetX : pos.offsetX;
+        let /** @type {?} */ offsetY = typeof pos.offsetY === 'undefined' ? this._offsetY : pos.offsetY;
         // The (x, y) coordinates of the overlay.
-        let /** @type {?} */ x = originPoint.x + overlayStartX + this._offsetX;
-        let /** @type {?} */ y = originPoint.y + overlayStartY + this._offsetY;
+        let /** @type {?} */ x = originPoint.x + overlayStartX + offsetX;
+        let /** @type {?} */ y = originPoint.y + overlayStartY + offsetY;
         // How much the overlay would overflow at this position, on each side.
         let /** @type {?} */ leftOverflow = 0 - x;
         let /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportRect.width;
@@ -1892,5 +1912,5 @@ OverlayModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.js.map

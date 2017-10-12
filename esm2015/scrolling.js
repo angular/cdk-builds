@@ -11,8 +11,9 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { of } from 'rxjs/observable/of';
-import { auditTime } from 'rxjs/operator/auditTime';
+import { auditTime, filter } from '@angular/cdk/rxjs';
 import { merge } from 'rxjs/observable/merge';
+import { auditTime as auditTime$1 } from 'rxjs/operator/auditTime';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -46,17 +47,18 @@ class ScrollDispatcher {
          * Map of all the scrollable references that are registered with the service and their
          * scroll event subscriptions.
          */
-        this.scrollableReferences = new Map();
+        this.scrollContainers = new Map();
     }
     /**
-     * Registers a Scrollable with the service and listens for its scrolled events. When the
-     * scrollable is scrolled, the service emits the event in its scrolled observable.
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
      * @param {?} scrollable Scrollable instance to be registered.
      * @return {?}
      */
     register(scrollable) {
-        const /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(() => this._scrolled.next());
-        this.scrollableReferences.set(scrollable, scrollSubscription);
+        const /** @type {?} */ scrollSubscription = scrollable.elementScrolled()
+            .subscribe(() => this._scrolled.next(scrollable));
+        this.scrollContainers.set(scrollable, scrollSubscription);
     }
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
@@ -64,10 +66,10 @@ class ScrollDispatcher {
      * @return {?}
      */
     deregister(scrollable) {
-        const /** @type {?} */ scrollableReference = this.scrollableReferences.get(scrollable);
+        const /** @type {?} */ scrollableReference = this.scrollContainers.get(scrollable);
         if (scrollableReference) {
             scrollableReference.unsubscribe();
-            this.scrollableReferences.delete(scrollable);
+            this.scrollContainers.delete(scrollable);
         }
     }
     /**
@@ -99,14 +101,27 @@ class ScrollDispatcher {
         }) : of();
     }
     /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
+     * @param {?} elementRef Element whose ancestors to listen for.
+     * @param {?=} auditTimeInMs Time to throttle the scroll events.
+     * @return {?}
+     */
+    ancestorScrolled(elementRef, auditTimeInMs) {
+        const /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
+        return filter.call(this.scrolled(auditTimeInMs), target => {
+            return !target || ancestors.indexOf(target) > -1;
+        });
+    }
+    /**
      * Returns all registered Scrollables that contain the provided element.
      * @param {?} elementRef
      * @return {?}
      */
-    getScrollContainers(elementRef) {
+    getAncestorScrollContainers(elementRef) {
         const /** @type {?} */ scrollingContainers = [];
-        this.scrollableReferences.forEach((_subscription, scrollable) => {
-            if (this.scrollableContainsElement(scrollable, elementRef)) {
+        this.scrollContainers.forEach((_subscription, scrollable) => {
+            if (this._scrollableContainsElement(scrollable, elementRef)) {
                 scrollingContainers.push(scrollable);
             }
         });
@@ -118,7 +133,7 @@ class ScrollDispatcher {
      * @param {?} elementRef
      * @return {?}
      */
-    scrollableContainsElement(scrollable, elementRef) {
+    _scrollableContainsElement(scrollable, elementRef) {
         let /** @type {?} */ element = elementRef.nativeElement;
         let /** @type {?} */ scrollableElement = scrollable.getElementRef().nativeElement;
         // Traverse through the element parents until we reach null, checking if any of the elements
@@ -175,7 +190,7 @@ const SCROLL_DISPATCHER_PROVIDER = {
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-class Scrollable {
+class CdkScrollable {
     /**
      * @param {?} _elementRef
      * @param {?} _scroll
@@ -224,7 +239,7 @@ class Scrollable {
         return this._elementRef;
     }
 }
-Scrollable.decorators = [
+CdkScrollable.decorators = [
     { type: Directive, args: [{
                 selector: '[cdk-scrollable], [cdkScrollable]'
             },] },
@@ -232,7 +247,7 @@ Scrollable.decorators = [
 /**
  * @nocollapse
  */
-Scrollable.ctorParameters = () => [
+CdkScrollable.ctorParameters = () => [
     { type: ElementRef, },
     { type: ScrollDispatcher, },
     { type: NgZone, },
@@ -325,7 +340,7 @@ class ViewportRuler {
      * @return {?}
      */
     change(throttleTime = DEFAULT_RESIZE_TIME) {
-        return throttleTime > 0 ? auditTime.call(this._change, throttleTime) : this._change;
+        return throttleTime > 0 ? auditTime$1.call(this._change, throttleTime) : this._change;
     }
     /**
      * Caches the latest client rectangle of the document element.
@@ -370,8 +385,8 @@ class ScrollDispatchModule {
 ScrollDispatchModule.decorators = [
     { type: NgModule, args: [{
                 imports: [PlatformModule],
-                exports: [Scrollable],
-                declarations: [Scrollable],
+                exports: [CdkScrollable],
+                declarations: [CdkScrollable],
                 providers: [SCROLL_DISPATCHER_PROVIDER],
             },] },
 ];
@@ -384,5 +399,5 @@ ScrollDispatchModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, Scrollable, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER, ScrollDispatchModule };
+export { DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, CdkScrollable, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER, ScrollDispatchModule };
 //# sourceMappingURL=scrolling.js.map

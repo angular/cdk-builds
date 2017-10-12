@@ -17,6 +17,7 @@ import { startWith } from 'rxjs/operator/startWith';
 import { debounceTime } from 'rxjs/operator/debounceTime';
 import { auditTime } from 'rxjs/operator/auditTime';
 import { takeUntil } from 'rxjs/operator/takeUntil';
+import { combineLatest } from 'rxjs/operator/combineLatest';
 import { delay } from 'rxjs/operator/delay';
 
 /**
@@ -134,12 +135,17 @@ var TakeUntilBrand = (function () {
     }
     return TakeUntilBrand;
 }());
+var CombineLatestBrand = (function () {
+    function CombineLatestBrand() {
+    }
+    return CombineLatestBrand;
+}());
 var DelayBrand = (function () {
     function DelayBrand() {
     }
     return DelayBrand;
 }());
-// We add `Function` to the type intersection to make this nomically different from
+// We add `Function` to the type intersection to make this nominally different from
 // `finallyOperatorType` while still being structurally the same. Without this, TypeScript tries to
 // reduce `typeof _finallyOperator & FinallyBrand` to `finallyOperatorType<T>` and then fails
 // because `T` isn't known.
@@ -155,11 +161,12 @@ var startWith$1 = (startWith);
 var debounceTime$1 = (debounceTime);
 var auditTime$1 = (auditTime);
 var takeUntil$1 = (takeUntil);
+var combineLatest$1 = (combineLatest);
 var delay$1 = (delay);
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { RxChain, FinallyBrand, CatchBrand, DoBrand, MapBrand, FilterBrand, ShareBrand, FirstBrand, SwitchMapBrand, StartWithBrand, DebounceTimeBrand, AuditTimeBrand, TakeUntilBrand, DelayBrand, finallyOperator, catchOperator, doOperator, map$1 as map, filter$1 as filter, share$1 as share, first$1 as first, switchMap$1 as switchMap, startWith$1 as startWith, debounceTime$1 as debounceTime, auditTime$1 as auditTime, takeUntil$1 as takeUntil, delay$1 as delay };
+export { RxChain, FinallyBrand, CatchBrand, DoBrand, MapBrand, FilterBrand, ShareBrand, FirstBrand, SwitchMapBrand, StartWithBrand, DebounceTimeBrand, AuditTimeBrand, TakeUntilBrand, CombineLatestBrand, DelayBrand, finallyOperator, catchOperator, doOperator, map$1 as map, filter$1 as filter, share$1 as share, first$1 as first, switchMap$1 as switchMap, startWith$1 as startWith, debounceTime$1 as debounceTime, auditTime$1 as auditTime, takeUntil$1 as takeUntil, combineLatest$1 as combineLatest, delay$1 as delay };
 //# sourceMappingURL=rxjs.es5.js.map

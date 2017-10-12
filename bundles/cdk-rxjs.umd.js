@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/operator/finally'), require('rxjs/operator/catch'), require('rxjs/operator/do'), require('rxjs/operator/map'), require('rxjs/operator/filter'), require('rxjs/operator/share'), require('rxjs/operator/first'), require('rxjs/operator/switchMap'), require('rxjs/operator/startWith'), require('rxjs/operator/debounceTime'), require('rxjs/operator/auditTime'), require('rxjs/operator/takeUntil'), require('rxjs/operator/delay')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/operator/finally', 'rxjs/operator/catch', 'rxjs/operator/do', 'rxjs/operator/map', 'rxjs/operator/filter', 'rxjs/operator/share', 'rxjs/operator/first', 'rxjs/operator/switchMap', 'rxjs/operator/startWith', 'rxjs/operator/debounceTime', 'rxjs/operator/auditTime', 'rxjs/operator/takeUntil', 'rxjs/operator/delay'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.rxjs = global.ng.cdk.rxjs || {}),global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype));
-}(this, (function (exports,rxjs_operator_finally,rxjs_operator_catch,rxjs_operator_do,rxjs_operator_map,rxjs_operator_filter,rxjs_operator_share,rxjs_operator_first,rxjs_operator_switchMap,rxjs_operator_startWith,rxjs_operator_debounceTime,rxjs_operator_auditTime,rxjs_operator_takeUntil,rxjs_operator_delay) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/operator/finally'), require('rxjs/operator/catch'), require('rxjs/operator/do'), require('rxjs/operator/map'), require('rxjs/operator/filter'), require('rxjs/operator/share'), require('rxjs/operator/first'), require('rxjs/operator/switchMap'), require('rxjs/operator/startWith'), require('rxjs/operator/debounceTime'), require('rxjs/operator/auditTime'), require('rxjs/operator/takeUntil'), require('rxjs/operator/combineLatest'), require('rxjs/operator/delay')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/operator/finally', 'rxjs/operator/catch', 'rxjs/operator/do', 'rxjs/operator/map', 'rxjs/operator/filter', 'rxjs/operator/share', 'rxjs/operator/first', 'rxjs/operator/switchMap', 'rxjs/operator/startWith', 'rxjs/operator/debounceTime', 'rxjs/operator/auditTime', 'rxjs/operator/takeUntil', 'rxjs/operator/combineLatest', 'rxjs/operator/delay'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.rxjs = global.ng.cdk.rxjs || {}),global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype));
+}(this, (function (exports,rxjs_operator_finally,rxjs_operator_catch,rxjs_operator_do,rxjs_operator_map,rxjs_operator_filter,rxjs_operator_share,rxjs_operator_first,rxjs_operator_switchMap,rxjs_operator_startWith,rxjs_operator_debounceTime,rxjs_operator_auditTime,rxjs_operator_takeUntil,rxjs_operator_combineLatest,rxjs_operator_delay) { 'use strict';
 
 /**
  * Utility class used to chain RxJS operators.
@@ -126,12 +126,17 @@ var TakeUntilBrand = (function () {
     }
     return TakeUntilBrand;
 }());
+var CombineLatestBrand = (function () {
+    function CombineLatestBrand() {
+    }
+    return CombineLatestBrand;
+}());
 var DelayBrand = (function () {
     function DelayBrand() {
     }
     return DelayBrand;
 }());
-// We add `Function` to the type intersection to make this nomically different from
+// We add `Function` to the type intersection to make this nominally different from
 // `finallyOperatorType` while still being structurally the same. Without this, TypeScript tries to
 // reduce `typeof _finallyOperator & FinallyBrand` to `finallyOperatorType<T>` and then fails
 // because `T` isn't known.
@@ -147,6 +152,7 @@ var startWith$1 = (rxjs_operator_startWith.startWith);
 var debounceTime$1 = (rxjs_operator_debounceTime.debounceTime);
 var auditTime$1 = (rxjs_operator_auditTime.auditTime);
 var takeUntil$1 = (rxjs_operator_takeUntil.takeUntil);
+var combineLatest$1 = (rxjs_operator_combineLatest.combineLatest);
 var delay$1 = (rxjs_operator_delay.delay);
 
 exports.RxChain = RxChain;
@@ -162,6 +168,7 @@ exports.StartWithBrand = StartWithBrand;
 exports.DebounceTimeBrand = DebounceTimeBrand;
 exports.AuditTimeBrand = AuditTimeBrand;
 exports.TakeUntilBrand = TakeUntilBrand;
+exports.CombineLatestBrand = CombineLatestBrand;
 exports.DelayBrand = DelayBrand;
 exports.finallyOperator = finallyOperator;
 exports.catchOperator = catchOperator;
@@ -175,6 +182,7 @@ exports.startWith = startWith$1;
 exports.debounceTime = debounceTime$1;
 exports.auditTime = auditTime$1;
 exports.takeUntil = takeUntil$1;
+exports.combineLatest = combineLatest$1;
 exports.delay = delay$1;
 
 Object.defineProperty(exports, '__esModule', { value: true });

@@ -13,7 +13,7 @@ import { ScrollDispatcher } from './scroll-dispatcher';
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-export declare class Scrollable implements OnInit, OnDestroy {
+export declare class CdkScrollable implements OnInit, OnDestroy {
     private _elementRef;
     private _scroll;
     private _ngZone;

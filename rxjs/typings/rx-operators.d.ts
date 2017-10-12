@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Observable, ObservableInput } from 'rxjs/Observable';
+import { Observable, ObservableInput, Subscribable } from 'rxjs/Observable';
 import { PartialObserver } from 'rxjs/Observer';
 import { Subscription } from 'rxjs/Subscription';
 import { IScheduler } from 'rxjs/Scheduler';
@@ -21,6 +21,7 @@ import { startWith as startWithOperator } from 'rxjs/operator/startWith';
 import { debounceTime as debounceTimeOperator } from 'rxjs/operator/debounceTime';
 import { auditTime as auditTimeOperator } from 'rxjs/operator/auditTime';
 import { takeUntil as takeUntilOperator } from 'rxjs/operator/takeUntil';
+import { combineLatest as combineLatestOperator } from 'rxjs/operator/combineLatest';
 import { delay as delayOperator } from 'rxjs/operator/delay';
 /**
  * Represents a strongly-typed chain of RxJS operators.
@@ -49,6 +50,7 @@ export interface StrictRxChain<T> {
     call(operator: debounceTimeOperatorType<T>, dueTime: number, scheduler?: IScheduler): StrictRxChain<T>;
     call(operator: auditTimeOperatorType<T>, duration: number, scheduler?: IScheduler): StrictRxChain<T>;
     call(operator: takeUntilOperatorType<T>, notifier: Observable<any>): StrictRxChain<T>;
+    call<T2>(operator: combineLatestOperatorType<T, T2>, v2: ObservableInput<T2>): StrictRxChain<[T, T2]>;
     call(operator: delayOperatorType<T>, delay: number | Date, scheduler?: IScheduler): StrictRxChain<T>;
     subscribe(fn: (t: T) => void): Subscription;
     result(): Observable<T>;
@@ -89,6 +91,9 @@ export declare class AuditTimeBrand {
 export declare class TakeUntilBrand {
     private _;
 }
+export declare class CombineLatestBrand {
+    private _;
+}
 export declare class DelayBrand {
     private _;
 }
@@ -104,6 +109,7 @@ export declare type startWithOperatorType<T> = typeof startWithOperator & StartW
 export declare type debounceTimeOperatorType<T> = typeof debounceTimeOperator & DebounceTimeBrand;
 export declare type auditTimeOperatorType<T> = typeof auditTimeOperator & AuditTimeBrand;
 export declare type takeUntilOperatorType<T> = typeof takeUntilOperator & TakeUntilBrand;
+export declare type combineLatestOperatorType<T, R> = typeof combineLatestOperator & CombineLatestBrand;
 export declare type delayOperatorType<T> = typeof delayOperator & DelayBrand;
 export declare const finallyOperator: (<T>(this: Observable<T>, callback: () => void) => Observable<T>) & FinallyBrand & Function;
 export declare const catchOperator: (<T, R>(this: Observable<T>, selector: (err: any, caught: Observable<T>) => ObservableInput<R>) => Observable<T | R>) & CatchBrand & Function;
@@ -141,4 +147,20 @@ export declare const startWith: {
 export declare const debounceTime: (<T>(this: Observable<T>, dueTime: number, scheduler?: IScheduler | undefined) => Observable<T>) & DebounceTimeBrand & Function;
 export declare const auditTime: (<T>(this: Observable<T>, duration: number, scheduler?: IScheduler | undefined) => Observable<T>) & AuditTimeBrand & Function;
 export declare const takeUntil: (<T>(this: Observable<T>, notifier: Observable<any>) => Observable<T>) & TakeUntilBrand & Function;
+export declare const combineLatest: {
+    <T, R>(this: Observable<T>, project: (v1: T) => R): Observable<R>;
+    <T, T2, R>(this: Observable<T>, v2: ObservableInput<T2>, project: (v1: T, v2: T2) => R): Observable<R>;
+    <T, T2, T3, R>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, project: (v1: T, v2: T2, v3: T3) => R): Observable<R>;
+    <T, T2, T3, T4, R>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>, project: (v1: T, v2: T2, v3: T3, v4: T4) => R): Observable<R>;
+    <T, T2, T3, T4, T5, R>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>, v5: ObservableInput<T5>, project: (v1: T, v2: T2, v3: T3, v4: T4, v5: T5) => R): Observable<R>;
+    <T, T2, T3, T4, T5, T6, R>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>, v5: ObservableInput<T5>, v6: ObservableInput<T6>, project: (v1: T, v2: T2, v3: T3, v4: T4, v5: T5, v6: T6) => R): Observable<R>;
+    <T, T2>(this: Observable<T>, v2: ObservableInput<T2>): Observable<[T, T2]>;
+    <T, T2, T3>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>): Observable<[T, T2, T3]>;
+    <T, T2, T3, T4>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>): Observable<[T, T2, T3, T4]>;
+    <T, T2, T3, T4, T5>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>, v5: ObservableInput<T5>): Observable<[T, T2, T3, T4, T5]>;
+    <T, T2, T3, T4, T5, T6>(this: Observable<T>, v2: ObservableInput<T2>, v3: ObservableInput<T3>, v4: ObservableInput<T4>, v5: ObservableInput<T5>, v6: ObservableInput<T6>): Observable<[T, T2, T3, T4, T5, T6]>;
+    <T, R>(this: Observable<T>, ...observables: (Subscribable<T> | PromiseLike<T> | ArrayLike<T> | ((...values: T[]) => R))[]): Observable<R>;
+    <T, R>(this: Observable<T>, array: ObservableInput<T>[]): Observable<T[]>;
+    <T, TOther, R>(this: Observable<T>, array: ObservableInput<TOther>[], project: (v1: T, ...values: TOther[]) => R): Observable<R>;
+} & CombineLatestBrand & Function;
 export declare const delay: (<T>(this: Observable<T>, delay: number | Date, scheduler?: IScheduler | undefined) => Observable<T>) & DelayBrand & Function;

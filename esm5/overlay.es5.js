@@ -8,7 +8,8 @@
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { ScrollDispatchModule, ScrollDispatcher, Scrollable, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { first } from 'rxjs/operator/first';
+import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
@@ -123,10 +124,15 @@ var OverlayRef = (function () {
         this._updateStackingOrder();
         this.updateSize();
         this.updateDirection();
-        this.updatePosition();
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.enable();
         }
+        // Update the position once the zone is stable so that the overlay will be fully rendered
+        // before attempting to position it, as the position may depend on the size of the rendered
+        // content.
+        first.call(this._ngZone.onStable.asObservable()).subscribe(function () {
+            _this.updatePosition();
+        });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._config.hasBackdrop) {
@@ -359,8 +365,12 @@ var ConnectionPositionPair = (function () {
     /**
      * @param {?} origin
      * @param {?} overlay
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      */
-    function ConnectionPositionPair(origin, overlay) {
+    function ConnectionPositionPair(origin, overlay, offsetX, offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.originX = origin.originX;
         this.originY = origin.originY;
         this.overlayX = overlay.overlayX;
@@ -603,6 +613,10 @@ var ConnectedPositionStrategy = (function () {
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.recalculateLastPosition = function () {
+        // If the overlay has never been positioned before, do nothing.
+        if (!this._lastConnectedPosition) {
+            return;
+        }
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
         var /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
@@ -625,10 +639,13 @@ var ConnectedPositionStrategy = (function () {
      * Adds a new preferred fallback position.
      * @param {?} originPos
      * @param {?} overlayPos
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      * @return {?}
      */
-    ConnectedPositionStrategy.prototype.withFallbackPosition = function (originPos, overlayPos) {
-        this._preferredPositions.push(new ConnectionPositionPair(originPos, overlayPos));
+    ConnectedPositionStrategy.prototype.withFallbackPosition = function (originPos, overlayPos, offsetX, offsetY) {
+        var /** @type {?} */ position = new ConnectionPositionPair(originPos, overlayPos, offsetX, offsetY);
+        this._preferredPositions.push(position);
         return this;
     };
     /**
@@ -729,9 +746,12 @@ var ConnectedPositionStrategy = (function () {
         else {
             overlayStartY = pos.overlayY == 'top' ? 0 : -overlayRect.height;
         }
+        // The (x, y) offsets of the overlay based on the current position.
+        var /** @type {?} */ offsetX = typeof pos.offsetX === 'undefined' ? this._offsetX : pos.offsetX;
+        var /** @type {?} */ offsetY = typeof pos.offsetY === 'undefined' ? this._offsetY : pos.offsetY;
         // The (x, y) coordinates of the overlay.
-        var /** @type {?} */ x = originPoint.x + overlayStartX + this._offsetX;
-        var /** @type {?} */ y = originPoint.y + overlayStartY + this._offsetY;
+        var /** @type {?} */ x = originPoint.x + overlayStartX + offsetX;
+        var /** @type {?} */ y = originPoint.y + overlayStartY + offsetY;
         // How much the overlay would overflow at this position, on each side.
         var /** @type {?} */ leftOverflow = 0 - x;
         var /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportRect.width;
@@ -2037,5 +2057,5 @@ var OverlayModule = (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, Scrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.es5.js.map

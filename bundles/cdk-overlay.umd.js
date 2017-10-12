@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('@angular/cdk/scrolling'), require('rxjs/Subscription'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', '@angular/cdk/scrolling', 'rxjs/Subscription', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.ng.cdk.scrolling,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,_angular_cdk_scrolling,rxjs_Subscription,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('rxjs/operator/first'), require('@angular/cdk/scrolling'), require('rxjs/Subscription'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/portal', 'rxjs/Subject', 'rxjs/operator/first', '@angular/cdk/scrolling', 'rxjs/Subscription', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.portal,global.Rx,global.Rx.Observable.prototype,global.ng.cdk.scrolling,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_portal,rxjs_Subject,rxjs_operator_first,_angular_cdk_scrolling,rxjs_Subscription,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -144,10 +144,15 @@ var OverlayRef = (function () {
         this._updateStackingOrder();
         this.updateSize();
         this.updateDirection();
-        this.updatePosition();
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.enable();
         }
+        // Update the position once the zone is stable so that the overlay will be fully rendered
+        // before attempting to position it, as the position may depend on the size of the rendered
+        // content.
+        rxjs_operator_first.first.call(this._ngZone.onStable.asObservable()).subscribe(function () {
+            _this.updatePosition();
+        });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
         if (this._config.hasBackdrop) {
@@ -380,8 +385,12 @@ var ConnectionPositionPair = (function () {
     /**
      * @param {?} origin
      * @param {?} overlay
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      */
-    function ConnectionPositionPair(origin, overlay) {
+    function ConnectionPositionPair(origin, overlay, offsetX, offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
         this.originX = origin.originX;
         this.originY = origin.originY;
         this.overlayX = overlay.overlayX;
@@ -624,6 +633,10 @@ var ConnectedPositionStrategy = (function () {
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.recalculateLastPosition = function () {
+        // If the overlay has never been positioned before, do nothing.
+        if (!this._lastConnectedPosition) {
+            return;
+        }
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
         var /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
@@ -646,10 +659,13 @@ var ConnectedPositionStrategy = (function () {
      * Adds a new preferred fallback position.
      * @param {?} originPos
      * @param {?} overlayPos
+     * @param {?=} offsetX
+     * @param {?=} offsetY
      * @return {?}
      */
-    ConnectedPositionStrategy.prototype.withFallbackPosition = function (originPos, overlayPos) {
-        this._preferredPositions.push(new ConnectionPositionPair(originPos, overlayPos));
+    ConnectedPositionStrategy.prototype.withFallbackPosition = function (originPos, overlayPos, offsetX, offsetY) {
+        var /** @type {?} */ position = new ConnectionPositionPair(originPos, overlayPos, offsetX, offsetY);
+        this._preferredPositions.push(position);
         return this;
     };
     /**
@@ -750,9 +766,12 @@ var ConnectedPositionStrategy = (function () {
         else {
             overlayStartY = pos.overlayY == 'top' ? 0 : -overlayRect.height;
         }
+        // The (x, y) offsets of the overlay based on the current position.
+        var /** @type {?} */ offsetX = typeof pos.offsetX === 'undefined' ? this._offsetX : pos.offsetX;
+        var /** @type {?} */ offsetY = typeof pos.offsetY === 'undefined' ? this._offsetY : pos.offsetY;
         // The (x, y) coordinates of the overlay.
-        var /** @type {?} */ x = originPoint.x + overlayStartX + this._offsetX;
-        var /** @type {?} */ y = originPoint.y + overlayStartY + this._offsetY;
+        var /** @type {?} */ x = originPoint.x + overlayStartX + offsetX;
+        var /** @type {?} */ y = originPoint.y + overlayStartY + offsetY;
         // How much the overlay would overflow at this position, on each side.
         var /** @type {?} */ leftOverflow = 0 - x;
         var /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportRect.width;
@@ -2068,7 +2087,7 @@ exports.OverlayConfig = OverlayConfig;
 exports.ConnectionPositionPair = ConnectionPositionPair;
 exports.ScrollingVisibility = ScrollingVisibility;
 exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
-exports.Scrollable = _angular_cdk_scrolling.Scrollable;
+exports.CdkScrollable = _angular_cdk_scrolling.CdkScrollable;
 exports.ScrollDispatcher = _angular_cdk_scrolling.ScrollDispatcher;
 exports.ScrollStrategyOptions = ScrollStrategyOptions;
 exports.RepositionScrollStrategy = RepositionScrollStrategy;

@@ -13,11 +13,13 @@ export interface OverlayConnectionPosition {
 }
 /** The points of the origin element and the overlay element to connect. */
 export declare class ConnectionPositionPair {
+    offsetX: number | undefined;
+    offsetY: number | undefined;
     originX: HorizontalConnectionPos;
     originY: VerticalConnectionPos;
     overlayX: HorizontalConnectionPos;
     overlayY: VerticalConnectionPos;
-    constructor(origin: OriginConnectionPosition, overlay: OverlayConnectionPosition);
+    constructor(origin: OriginConnectionPosition, overlay: OverlayConnectionPosition, offsetX?: number | undefined, offsetY?: number | undefined);
 }
 /**
  * Set of properties regarding the position of the origin and overlay relative to the viewport

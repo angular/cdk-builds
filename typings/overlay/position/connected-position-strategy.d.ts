@@ -11,7 +11,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition, ConnectedOverlayPositionChange } from './connected-position';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { Scrollable } from '@angular/cdk/scrolling';
+import { CdkScrollable } from '@angular/cdk/scrolling';
 import { OverlayRef } from '../overlay-ref';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -75,13 +75,13 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
      */
-    withScrollableContainers(scrollables: Scrollable[]): void;
+    withScrollableContainers(scrollables: CdkScrollable[]): void;
     /**
      * Adds a new preferred fallback position.
      * @param originPos
      * @param overlayPos
      */
-    withFallbackPosition(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition): this;
+    withFallbackPosition(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, offsetX?: number, offsetY?: number): this;
     /**
      * Sets the layout direction so the overlay's position can be adjusted to match.
      * @param dir New layout direction.

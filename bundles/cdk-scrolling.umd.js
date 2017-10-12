@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operator/auditTime'), require('rxjs/observable/merge')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operator/auditTime', 'rxjs/observable/merge'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,rxjs_operator_auditTime,rxjs_observable_merge) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('@angular/cdk/rxjs'), require('rxjs/observable/merge'), require('rxjs/operator/auditTime')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', '@angular/cdk/rxjs', 'rxjs/observable/merge', 'rxjs/operator/auditTime'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.ng.cdk.rxjs,global.Rx.Observable,global.Rx.Observable.prototype));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,_angular_cdk_rxjs,rxjs_observable_merge,rxjs_operator_auditTime) { 'use strict';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -43,18 +43,19 @@ var ScrollDispatcher = (function () {
          * Map of all the scrollable references that are registered with the service and their
          * scroll event subscriptions.
          */
-        this.scrollableReferences = new Map();
+        this.scrollContainers = new Map();
     }
     /**
-     * Registers a Scrollable with the service and listens for its scrolled events. When the
-     * scrollable is scrolled, the service emits the event in its scrolled observable.
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
      * @param {?} scrollable Scrollable instance to be registered.
      * @return {?}
      */
     ScrollDispatcher.prototype.register = function (scrollable) {
         var _this = this;
-        var /** @type {?} */ scrollSubscription = scrollable.elementScrolled().subscribe(function () { return _this._scrolled.next(); });
-        this.scrollableReferences.set(scrollable, scrollSubscription);
+        var /** @type {?} */ scrollSubscription = scrollable.elementScrolled()
+            .subscribe(function () { return _this._scrolled.next(scrollable); });
+        this.scrollContainers.set(scrollable, scrollSubscription);
     };
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
@@ -62,10 +63,10 @@ var ScrollDispatcher = (function () {
      * @return {?}
      */
     ScrollDispatcher.prototype.deregister = function (scrollable) {
-        var /** @type {?} */ scrollableReference = this.scrollableReferences.get(scrollable);
+        var /** @type {?} */ scrollableReference = this.scrollContainers.get(scrollable);
         if (scrollableReference) {
             scrollableReference.unsubscribe();
-            this.scrollableReferences.delete(scrollable);
+            this.scrollContainers.delete(scrollable);
         }
     };
     /**
@@ -85,7 +86,7 @@ var ScrollDispatcher = (function () {
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
             var /** @type {?} */ subscription = auditTimeInMs > 0 ?
-                rxjs_operator_auditTime.auditTime.call(_this._scrolled, auditTimeInMs).subscribe(observer) :
+                _angular_cdk_rxjs.auditTime.call(_this._scrolled, auditTimeInMs).subscribe(observer) :
                 _this._scrolled.subscribe(observer);
             _this._scrolledCount++;
             return function () {
@@ -99,15 +100,28 @@ var ScrollDispatcher = (function () {
         }) : rxjs_observable_of.of();
     };
     /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
+     * @param {?} elementRef Element whose ancestors to listen for.
+     * @param {?=} auditTimeInMs Time to throttle the scroll events.
+     * @return {?}
+     */
+    ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
+        var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
+        return _angular_cdk_rxjs.filter.call(this.scrolled(auditTimeInMs), function (target) {
+            return !target || ancestors.indexOf(target) > -1;
+        });
+    };
+    /**
      * Returns all registered Scrollables that contain the provided element.
      * @param {?} elementRef
      * @return {?}
      */
-    ScrollDispatcher.prototype.getScrollContainers = function (elementRef) {
+    ScrollDispatcher.prototype.getAncestorScrollContainers = function (elementRef) {
         var _this = this;
         var /** @type {?} */ scrollingContainers = [];
-        this.scrollableReferences.forEach(function (_subscription, scrollable) {
-            if (_this.scrollableContainsElement(scrollable, elementRef)) {
+        this.scrollContainers.forEach(function (_subscription, scrollable) {
+            if (_this._scrollableContainsElement(scrollable, elementRef)) {
                 scrollingContainers.push(scrollable);
             }
         });
@@ -119,7 +133,7 @@ var ScrollDispatcher = (function () {
      * @param {?} elementRef
      * @return {?}
      */
-    ScrollDispatcher.prototype.scrollableContainsElement = function (scrollable, elementRef) {
+    ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
         var /** @type {?} */ element = elementRef.nativeElement;
         var /** @type {?} */ scrollableElement = scrollable.getElementRef().nativeElement;
         // Traverse through the element parents until we reach null, checking if any of the elements
@@ -178,14 +192,14 @@ var SCROLL_DISPATCHER_PROVIDER = {
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-var Scrollable = (function () {
+var CdkScrollable = (function () {
     /**
      * @param {?} _elementRef
      * @param {?} _scroll
      * @param {?} _ngZone
      * @param {?} _renderer
      */
-    function Scrollable(_elementRef, _scroll, _ngZone, _renderer) {
+    function CdkScrollable(_elementRef, _scroll, _ngZone, _renderer) {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
@@ -195,7 +209,7 @@ var Scrollable = (function () {
     /**
      * @return {?}
      */
-    Scrollable.prototype.ngOnInit = function () {
+    CdkScrollable.prototype.ngOnInit = function () {
         var _this = this;
         this._scrollListener = this._ngZone.runOutsideAngular(function () {
             return _this._renderer.listen(_this.getElementRef().nativeElement, 'scroll', function (event) {
@@ -207,7 +221,7 @@ var Scrollable = (function () {
     /**
      * @return {?}
      */
-    Scrollable.prototype.ngOnDestroy = function () {
+    CdkScrollable.prototype.ngOnDestroy = function () {
         this._scroll.deregister(this);
         if (this._scrollListener) {
             this._scrollListener();
@@ -218,16 +232,16 @@ var Scrollable = (function () {
      * Returns observable that emits when a scroll event is fired on the host element.
      * @return {?}
      */
-    Scrollable.prototype.elementScrolled = function () {
+    CdkScrollable.prototype.elementScrolled = function () {
         return this._elementScrolled.asObservable();
     };
     /**
      * @return {?}
      */
-    Scrollable.prototype.getElementRef = function () {
+    CdkScrollable.prototype.getElementRef = function () {
         return this._elementRef;
     };
-    Scrollable.decorators = [
+    CdkScrollable.decorators = [
         { type: _angular_core.Directive, args: [{
                     selector: '[cdk-scrollable], [cdkScrollable]'
                 },] },
@@ -235,13 +249,13 @@ var Scrollable = (function () {
     /**
      * @nocollapse
      */
-    Scrollable.ctorParameters = function () { return [
+    CdkScrollable.ctorParameters = function () { return [
         { type: _angular_core.ElementRef, },
         { type: ScrollDispatcher, },
         { type: _angular_core.NgZone, },
         { type: _angular_core.Renderer2, },
     ]; };
-    return Scrollable;
+    return CdkScrollable;
 }());
 
 /**
@@ -381,8 +395,8 @@ var ScrollDispatchModule = (function () {
     ScrollDispatchModule.decorators = [
         { type: _angular_core.NgModule, args: [{
                     imports: [_angular_cdk_platform.PlatformModule],
-                    exports: [Scrollable],
-                    declarations: [Scrollable],
+                    exports: [CdkScrollable],
+                    declarations: [CdkScrollable],
                     providers: [SCROLL_DISPATCHER_PROVIDER],
                 },] },
     ];
@@ -397,7 +411,7 @@ exports.DEFAULT_SCROLL_TIME = DEFAULT_SCROLL_TIME;
 exports.ScrollDispatcher = ScrollDispatcher;
 exports.SCROLL_DISPATCHER_PROVIDER_FACTORY = SCROLL_DISPATCHER_PROVIDER_FACTORY;
 exports.SCROLL_DISPATCHER_PROVIDER = SCROLL_DISPATCHER_PROVIDER;
-exports.Scrollable = Scrollable;
+exports.CdkScrollable = CdkScrollable;
 exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;
 exports.ViewportRuler = ViewportRuler;
 exports.VIEWPORT_RULER_PROVIDER_FACTORY = VIEWPORT_RULER_PROVIDER_FACTORY;

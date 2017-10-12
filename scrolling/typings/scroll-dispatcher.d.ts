@@ -9,7 +9,7 @@ import { ElementRef, NgZone, Optional } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { Scrollable } from './scrollable';
+import { CdkScrollable } from './scrollable';
 /** Time in ms to throttle the scrolling events by default. */
 export declare const DEFAULT_SCROLL_TIME = 20;
 /**
@@ -30,28 +30,35 @@ export declare class ScrollDispatcher {
      * Map of all the scrollable references that are registered with the service and their
      * scroll event subscriptions.
      */
-    scrollableReferences: Map<Scrollable, Subscription>;
+    scrollContainers: Map<CdkScrollable, Subscription>;
     /**
-     * Registers a Scrollable with the service and listens for its scrolled events. When the
-     * scrollable is scrolled, the service emits the event in its scrolled observable.
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
      * @param scrollable Scrollable instance to be registered.
      */
-    register(scrollable: Scrollable): void;
+    register(scrollable: CdkScrollable): void;
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
      * @param scrollable Scrollable instance to be deregistered.
      */
-    deregister(scrollable: Scrollable): void;
+    deregister(scrollable: CdkScrollable): void;
     /**
      * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
      * to override the default "throttle" time.
      */
-    scrolled(auditTimeInMs?: number): Observable<void>;
+    scrolled(auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
+     * @param elementRef Element whose ancestors to listen for.
+     * @param auditTimeInMs Time to throttle the scroll events.
+     */
+    ancestorScrolled(elementRef: ElementRef, auditTimeInMs?: number): Observable<CdkScrollable>;
     /** Returns all registered Scrollables that contain the provided element. */
-    getScrollContainers(elementRef: ElementRef): Scrollable[];
+    getAncestorScrollContainers(elementRef: ElementRef): CdkScrollable[];
     /** Returns true if the element is contained within the provided Scrollable. */
-    scrollableContainsElement(scrollable: Scrollable, elementRef: ElementRef): boolean;
+    private _scrollableContainsElement(scrollable, elementRef);
     /** Sets up the global scroll and resize listeners. */
     private _addGlobalListener();
 }
