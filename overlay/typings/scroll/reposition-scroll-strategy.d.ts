@@ -16,10 +16,7 @@ export declare class RepositionScrollStrategy implements ScrollStrategy {
     private _scrollSubscription;
     private _overlayRef;
     constructor(_scrollDispatcher: ScrollDispatcher, _config?: RepositionScrollStrategyConfig | undefined);
-    /** Attaches this scroll strategy to an overlay. */
     attach(overlayRef: OverlayRef): void;
-    /** Enables repositioning of the attached overlay on scroll. */
     enable(): void;
-    /** Disables repositioning of the attached overlay on scroll. */
     disable(): void;
 }

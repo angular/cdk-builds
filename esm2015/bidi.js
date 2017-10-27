@@ -28,13 +28,7 @@ class Directionality {
      * @param {?=} _document
      */
     constructor(_document) {
-        /**
-         * The current 'ltr' or 'rtl' value.
-         */
         this.value = 'ltr';
-        /**
-         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
-         */
         this.change = new EventEmitter();
         if (_document) {
             // TODO: handle 'auto' value -
@@ -78,11 +72,13 @@ const DIRECTIONALITY_PROVIDER = {
 /**
  * Directive to listen for changes of direction of part of the DOM.
  *
- * Provides itself as Directionality such that descendant directives only need to ever inject
- * Directionality to get the closest direction.
+ * Would provide itself in case a component looks for the Directionality service
  */
 class Dir {
     constructor() {
+        /**
+         * Layout direction of the element.
+         */
         this._dir = 'ltr';
         /**
          * Whether the `value` has been set to its initial value.
@@ -97,7 +93,9 @@ class Dir {
      * \@docs-private
      * @return {?}
      */
-    get dir() { return this._dir; }
+    get dir() {
+        return this._dir;
+    }
     /**
      * @param {?} v
      * @return {?}

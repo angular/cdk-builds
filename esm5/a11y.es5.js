@@ -836,9 +836,10 @@ function getWindow(node) {
 /**
  * Class that allows for trapping focus within a DOM element.
  *
- * This class currently uses a relatively simple approach to focus trapping.
+ * NOTE: This class currently uses a very simple (naive) approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
+ * This will be replaced with a more intelligent solution before the library is considered stable.
  */
 var FocusTrap = (function () {
     /**
@@ -968,16 +969,11 @@ var FocusTrap = (function () {
         }
         // Contains the deprecated version of selector, for temporary backwards comparability.
         var /** @type {?} */ markers = (this._element.querySelectorAll("[cdk-focus-region-" + bound + "], " +
-            ("[cdkFocusRegion" + bound + "], ") +
             ("[cdk-focus-" + bound + "]")));
         for (var /** @type {?} */ i = 0; i < markers.length; i++) {
             if (markers[i].hasAttribute("cdk-focus-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-" + bound + "'," +
-                    (" use 'cdkFocusRegion" + bound + "' instead."), markers[i]);
-            }
-            else if (markers[i].hasAttribute("cdk-focus-region-" + bound)) {
-                console.warn("Found use of deprecated attribute 'cdk-focus-region-" + bound + "'," +
-                    (" use 'cdkFocusRegion" + bound + "' instead."), markers[i]);
+                    (" use 'cdk-focus-region-" + bound + "' instead."), markers[i]);
             }
         }
         if (bound == 'start') {
@@ -988,19 +984,13 @@ var FocusTrap = (function () {
     };
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
-     * @return {?} Whether focus was moved successfuly.
+     * @return {?} Returns whether focus was moved successfuly.
      */
     FocusTrap.prototype.focusInitialElement = function () {
         if (!this._platform.isBrowser) {
             return false;
         }
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        var /** @type {?} */ redirectToElement = (this._element.querySelector("[cdk-focus-initial], " +
-            "[cdkFocusInitial]"));
-        if (this._element.hasAttribute("cdk-focus-initial")) {
-            console.warn("Found use of deprecated attribute 'cdk-focus-initial'," +
-                " use 'cdkFocusInitial' instead.", this._element);
-        }
+        var /** @type {?} */ redirectToElement = (this._element.querySelector('[cdk-focus-initial]'));
         if (redirectToElement) {
             redirectToElement.focus();
             return true;
@@ -1009,7 +999,7 @@ var FocusTrap = (function () {
     };
     /**
      * Focuses the first tabbable element within the focus trap region.
-     * @return {?} Whether focus was moved successfuly.
+     * @return {?} Returns whether focus was moved successfuly.
      */
     FocusTrap.prototype.focusFirstTabbableElement = function () {
         var /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
@@ -1020,7 +1010,7 @@ var FocusTrap = (function () {
     };
     /**
      * Focuses the last tabbable element within the focus trap region.
-     * @return {?} Whether focus was moved successfuly.
+     * @return {?} Returns whether focus was moved successfuly.
      */
     FocusTrap.prototype.focusLastTabbableElement = function () {
         var /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
@@ -1113,15 +1103,13 @@ var FocusTrapFactory = (function () {
         this._ngZone = _ngZone;
     }
     /**
-     * Creates a focus-trapped region around the given element.
-     * @param {?} element The element around which focus will be trapped.
-     * @param {?=} deferCaptureElements Defers the creation of focus-capturing elements to be done
-     *     manually by the user.
-     * @return {?} The created focus trap instance.
+     * @param {?} element
+     * @param {?=} deferAnchors
+     * @return {?}
      */
-    FocusTrapFactory.prototype.create = function (element, deferCaptureElements) {
-        if (deferCaptureElements === void 0) { deferCaptureElements = false; }
-        return new FocusTrap(element, this._platform, this._checker, this._ngZone, deferCaptureElements);
+    FocusTrapFactory.prototype.create = function (element, deferAnchors) {
+        if (deferAnchors === void 0) { deferAnchors = false; }
+        return new FocusTrap(element, this._platform, this._checker, this._ngZone, deferAnchors);
     };
     FocusTrapFactory.decorators = [
         { type: Injectable },
@@ -1138,7 +1126,6 @@ var FocusTrapFactory = (function () {
 }());
 /**
  * Directive for trapping focus within a region.
- * \@docs-private
  * @deprecated
  */
 var FocusTrapDeprecatedDirective = (function () {

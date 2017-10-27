@@ -430,10 +430,6 @@ class CdkTable {
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
      * relative to the function to know if a row should be added/removed/moved.
      * Accepts a function that takes two parameters, `index` and `item`.
-     * @return {?}
-     */
-    get trackBy() { return this._trackByFn; }
-    /**
      * @param {?} fn
      * @return {?}
      */
@@ -444,6 +440,10 @@ class CdkTable {
         }
         this._trackByFn = fn;
     }
+    /**
+     * @return {?}
+     */
+    get trackBy() { return this._trackByFn; }
     /**
      * Provides a stream containing the latest data array to render. Influenced by the table's
      * stream of view window (what rows are currently on screen).

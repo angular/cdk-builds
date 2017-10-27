@@ -6,12 +6,11 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ScrollStrategy } from './scroll-strategy';
-/** Scroll strategy that doesn't do anything. */
+/**
+ * Scroll strategy that doesn't do anything.
+ */
 export declare class NoopScrollStrategy implements ScrollStrategy {
-    /** Does nothing, as this scroll strategy is a no-op. */
     enable(): void;
-    /** Does nothing, as this scroll strategy is a no-op. */
     disable(): void;
-    /** Does nothing, as this scroll strategy is a no-op. */
     attach(): void;
 }

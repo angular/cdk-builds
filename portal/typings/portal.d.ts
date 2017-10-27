@@ -72,8 +72,8 @@ export interface PortalHost {
     hasAttached(): boolean;
 }
 /**
- * Partial implementation of PortalHost that handles attaching
- * ComponentPortal and TemplatePortal.
+ * Partial implementation of PortalHost that only deals with attaching either a
+ * ComponentPortal or a TemplatePortal.
  */
 export declare abstract class BasePortalHost implements PortalHost {
     /** The portal currently attached to the host. */
@@ -84,15 +84,11 @@ export declare abstract class BasePortalHost implements PortalHost {
     private _isDisposed;
     /** Whether this host has an attached portal. */
     hasAttached(): boolean;
-    /** Attaches a portal. */
     attach(portal: Portal<any>): any;
     abstract attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     abstract attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
-    /** Detaches a previously attached portal. */
     detach(): void;
-    /** Permanently dispose of this portal host. */
     dispose(): void;
-    /** @docs-private */
     setDisposeFn(fn: () => void): void;
     private _invokeDisposeFn();
 }

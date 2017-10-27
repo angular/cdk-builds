@@ -60,7 +60,6 @@ var CdkStep = (function () {
     }
     Object.defineProperty(CdkStep.prototype, "editable", {
         /**
-         * Whether the user can return to this step once it has been marked as complted.
          * @return {?}
          */
         get: function () { return this._editable; },
@@ -76,7 +75,7 @@ var CdkStep = (function () {
     });
     Object.defineProperty(CdkStep.prototype, "optional", {
         /**
-         * Whether the completion of step is optional.
+         * Whether the completion of step is optional or not.
          * @return {?}
          */
         get: function () { return this._optional; },
@@ -92,7 +91,7 @@ var CdkStep = (function () {
     });
     Object.defineProperty(CdkStep.prototype, "completed", {
         /**
-         * Whether step is marked as completed.
+         * Return whether step is completed or not.
          * @return {?}
          */
         get: function () {

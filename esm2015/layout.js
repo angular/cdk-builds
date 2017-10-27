@@ -33,8 +33,6 @@ class MediaMatcher {
             noopMatchMedia;
     }
     /**
-     * Evaluates the given media query and returns the native MediaQueryList from which results
-     * can be retrieved.
      * Confirms the layout engine will trigger for the selector query provided and returns the
      * MediaQueryList for the query provided.
      * @param {?} query
@@ -123,9 +121,9 @@ class BreakpointObserver {
         this._destroySubject.complete();
     }
     /**
-     * Whether one or more media queries match the current viewport size.
-     * @param {?} value One or more media queries to check.
-     * @return {?} Whether any of the media queries match.
+     * Whether the query currently is matched.
+     * @param {?} value
+     * @return {?}
      */
     isMatched(value) {
         let /** @type {?} */ queries = coerceArray(value);
@@ -135,7 +133,7 @@ class BreakpointObserver {
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
      * @param {?} value
-     * @return {?} A stream of matches for the given queries.
+     * @return {?}
      */
     observe(value) {
         let /** @type {?} */ queries = coerceArray(value);

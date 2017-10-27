@@ -23,9 +23,7 @@ export declare const DIR_DOCUMENT: InjectionToken<Document>;
  * Exposes the current direction and a stream of direction changes.
  */
 export declare class Directionality {
-    /** The current 'ltr' or 'rtl' value. */
     readonly value: Direction;
-    /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
     readonly change: EventEmitter<void>;
     constructor(_document?: any);
 }

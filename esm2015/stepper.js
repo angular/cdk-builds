@@ -55,7 +55,6 @@ class CdkStep {
         this._customCompleted = null;
     }
     /**
-     * Whether the user can return to this step once it has been marked as complted.
      * @return {?}
      */
     get editable() { return this._editable; }
@@ -67,7 +66,7 @@ class CdkStep {
         this._editable = coerceBooleanProperty(value);
     }
     /**
-     * Whether the completion of step is optional.
+     * Whether the completion of step is optional or not.
      * @return {?}
      */
     get optional() { return this._optional; }
@@ -79,7 +78,7 @@ class CdkStep {
         this._optional = coerceBooleanProperty(value);
     }
     /**
-     * Whether step is marked as completed.
+     * Return whether step is completed or not.
      * @return {?}
      */
     get completed() {

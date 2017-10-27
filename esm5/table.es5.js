@@ -464,14 +464,14 @@ var CdkTable = (function () {
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
         /**
-         * Tracking function that will be used to check the differences in data changes. Used similarly
-         * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
-         * relative to the function to know if a row should be added/removed/moved.
-         * Accepts a function that takes two parameters, `index` and `item`.
          * @return {?}
          */
         get: function () { return this._trackByFn; },
         /**
+         * Tracking function that will be used to check the differences in data changes. Used similarly
+         * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
+         * relative to the function to know if a row should be added/removed/moved.
+         * Accepts a function that takes two parameters, `index` and `item`.
          * @param {?} fn
          * @return {?}
          */

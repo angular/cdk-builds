@@ -31,13 +31,7 @@ var Directionality = (function () {
      * @param {?=} _document
      */
     function Directionality(_document) {
-        /**
-         * The current 'ltr' or 'rtl' value.
-         */
         this.value = 'ltr';
-        /**
-         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
-         */
         this.change = new _angular_core.EventEmitter();
         if (_document) {
             // TODO: handle 'auto' value -
@@ -82,11 +76,13 @@ var DIRECTIONALITY_PROVIDER = {
 /**
  * Directive to listen for changes of direction of part of the DOM.
  *
- * Provides itself as Directionality such that descendant directives only need to ever inject
- * Directionality to get the closest direction.
+ * Would provide itself in case a component looks for the Directionality service
  */
 var Dir = (function () {
     function Dir() {
+        /**
+         * Layout direction of the element.
+         */
         this._dir = 'ltr';
         /**
          * Whether the `value` has been set to its initial value.
@@ -102,7 +98,9 @@ var Dir = (function () {
          * \@docs-private
          * @return {?}
          */
-        get: function () { return this._dir; },
+        get: function () {
+            return this._dir;
+        },
         /**
          * @param {?} v
          * @return {?}

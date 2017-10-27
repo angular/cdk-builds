@@ -11,8 +11,6 @@ import { Subject } from 'rxjs/Subject';
 import { first } from 'rxjs/operator/first';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
-import { RxChain, filter } from '@angular/cdk/rxjs';
-import { fromEvent } from 'rxjs/observable/fromEvent';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
@@ -26,17 +24,14 @@ var NoopScrollStrategy = (function () {
     function NoopScrollStrategy() {
     }
     /**
-     * Does nothing, as this scroll strategy is a no-op.
      * @return {?}
      */
     NoopScrollStrategy.prototype.enable = function () { };
     /**
-     * Does nothing, as this scroll strategy is a no-op.
      * @return {?}
      */
     NoopScrollStrategy.prototype.disable = function () { };
     /**
-     * Does nothing, as this scroll strategy is a no-op.
      * @return {?}
      */
     NoopScrollStrategy.prototype.attach = function () { };
@@ -44,7 +39,7 @@ var NoopScrollStrategy = (function () {
 }());
 
 /**
- * Initial configuration used when creating an overlay.
+ * OverlayConfig captures the initial configuration used when opening an overlay.
  */
 var OverlayConfig = (function () {
     /**
@@ -89,22 +84,16 @@ var OverlayRef = (function () {
      * @param {?} _pane
      * @param {?} _config
      * @param {?} _ngZone
-     * @param {?} _keyboardDispatcher
      */
-    function OverlayRef(_portalHost, _pane, _config, _ngZone, _keyboardDispatcher) {
+    function OverlayRef(_portalHost, _pane, _config, _ngZone) {
         this._portalHost = _portalHost;
         this._pane = _pane;
         this._config = _config;
         this._ngZone = _ngZone;
-        this._keyboardDispatcher = _keyboardDispatcher;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
-        /**
-         * Stream of keydown events dispatched to this overlay.
-         */
-        this._keydownEvents = new Subject();
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -160,8 +149,6 @@ var OverlayRef = (function () {
         }
         // Only emit the `attachments` event once all other setup is done.
         this._attachments.next();
-        // Track this overlay by the keyboard dispatcher
-        this._keyboardDispatcher.add(this);
         return attachResult;
     };
     /**
@@ -183,8 +170,6 @@ var OverlayRef = (function () {
         var /** @type {?} */ detachmentResult = this._portalHost.detach();
         // Only emit after everything is detached.
         this._detachments.next();
-        // Remove this overlay from keyboard dispatcher tracking
-        this._keyboardDispatcher.remove(this);
         return detachmentResult;
     };
     /**
@@ -213,32 +198,25 @@ var OverlayRef = (function () {
         return this._portalHost.hasAttached();
     };
     /**
-     * Gets an observable that emits when the backdrop has been clicked.
+     * Returns an observable that emits when the backdrop has been clicked.
      * @return {?}
      */
     OverlayRef.prototype.backdropClick = function () {
         return this._backdropClick.asObservable();
     };
     /**
-     * Gets an observable that emits when the overlay has been attached.
+     * Returns an observable that emits when the overlay has been attached.
      * @return {?}
      */
     OverlayRef.prototype.attachments = function () {
         return this._attachments.asObservable();
     };
     /**
-     * Gets an observable that emits when the overlay has been detached.
+     * Returns an observable that emits when the overlay has been detached.
      * @return {?}
      */
     OverlayRef.prototype.detachments = function () {
         return this._detachments.asObservable();
-    };
-    /**
-     * Gets an observable of keydown events targeted to this overlay.
-     * @return {?}
-     */
-    OverlayRef.prototype.keydownEvents = function () {
-        return this._keydownEvents.asObservable();
     };
     /**
      * Gets the current config of the overlay.
@@ -422,8 +400,6 @@ var ConnectionPositionPair = (function () {
  *  |      Scrollable        |
  *  |                        |
  *  --------------------------
- *
- *  \@docs-private
  */
 var ScrollingVisibility = (function () {
     function ScrollingVisibility() {
@@ -564,7 +540,6 @@ var ConnectedPositionStrategy = (function () {
         configurable: true
     });
     /**
-     * Attach this position strategy to an overlay.
      * @param {?} overlayRef
      * @return {?}
      */
@@ -576,7 +551,7 @@ var ConnectedPositionStrategy = (function () {
         this._resizeSubscription = this._viewportRuler.change().subscribe(function () { return _this.apply(); });
     };
     /**
-     * Disposes all resources used by the position strategy.
+     * Performs any cleanup after the element is destroyed.
      * @return {?}
      */
     ConnectedPositionStrategy.prototype.dispose = function () {
@@ -632,7 +607,7 @@ var ConnectedPositionStrategy = (function () {
         this._setElementPosition(element, overlayRect, /** @type {?} */ ((fallbackPoint)), /** @type {?} */ ((fallbackPosition)));
     };
     /**
-     * Re-positions the overlay element with the trigger in its last calculated position,
+     * This re-aligns the overlay element with the trigger in its last calculated position,
      * even if a position higher in the "preferred positions" list would now fit. This
      * allows one to re-align the panel without changing the orientation of the panel.
      * @return {?}
@@ -1077,108 +1052,8 @@ var OverlayPositionBuilder = (function () {
 }());
 
 /**
- * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
- * if any. It maintains a list of attached overlays to determine best suited overlay based
- * on event target and order of overlay opens.
- */
-var OverlayKeyboardDispatcher = (function () {
-    function OverlayKeyboardDispatcher() {
-        /**
-         * Currently attached overlays in the order they were attached.
-         */
-        this._attachedOverlays = [];
-    }
-    /**
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.ngOnDestroy = function () {
-        if (this._keydownEventSubscription) {
-            this._keydownEventSubscription.unsubscribe();
-            this._keydownEventSubscription = null;
-        }
-    };
-    /**
-     * Add a new overlay to the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.add = function (overlayRef) {
-        // Lazily start dispatcher once first overlay is added
-        if (!this._keydownEventSubscription) {
-            this._subscribeToKeydownEvents();
-        }
-        this._attachedOverlays.push(overlayRef);
-    };
-    /**
-     * Remove an overlay from the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.remove = function (overlayRef) {
-        var /** @type {?} */ index = this._attachedOverlays.indexOf(overlayRef);
-        if (index > -1) {
-            this._attachedOverlays.splice(index, 1);
-        }
-    };
-    /**
-     * Subscribe to keydown events that land on the body and dispatch those
-     * events to the appropriate overlay.
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._subscribeToKeydownEvents = function () {
-        var _this = this;
-        var /** @type {?} */ bodyKeydownEvents = fromEvent(document.body, 'keydown');
-        this._keydownEventSubscription = RxChain.from(bodyKeydownEvents)
-            .call(filter, function () { return !!_this._attachedOverlays.length; })
-            .subscribe(function (event) {
-            // Dispatch keydown event to correct overlay reference
-            _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
-        });
-    };
-    /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._selectOverlayFromEvent = function (event) {
-        // Check if any overlays contain the event
-        var /** @type {?} */ targetedOverlay = this._attachedOverlays.find(function (overlay) {
-            return overlay.overlayElement === event.target ||
-                overlay.overlayElement.contains(/** @type {?} */ (event.target));
-        });
-        // Use that overlay if it exists, otherwise choose the most recently attached one
-        return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
-    };
-    OverlayKeyboardDispatcher.decorators = [
-        { type: Injectable },
-    ];
-    /**
-     * @nocollapse
-     */
-    OverlayKeyboardDispatcher.ctorParameters = function () { return []; };
-    return OverlayKeyboardDispatcher;
-}());
-/**
- * \@docs-private
- * @param {?} dispatcher
- * @return {?}
- */
-function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher) {
-    return dispatcher || new OverlayKeyboardDispatcher();
-}
-/**
- * \@docs-private
- */
-var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
-    // If there is already an OverlayKeyboardDispatcher available, use that.
-    // Otherwise, provide a new one.
-    provide: OverlayKeyboardDispatcher,
-    deps: [[new Optional(), new SkipSelf(), OverlayKeyboardDispatcher]],
-    useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
-};
-
-/**
- * Container inside which all overlays will render.
+ * The OverlayContainer is the container in which all overlays will load.
+ * It should be provided in the root component to ensure it is properly shared.
  */
 var OverlayContainer = (function () {
     function OverlayContainer() {
@@ -1261,7 +1136,6 @@ var CloseScrollStrategy = (function () {
         this._scrollSubscription = null;
     }
     /**
-     * Attaches this scroll strategy to an overlay.
      * @param {?} overlayRef
      * @return {?}
      */
@@ -1272,7 +1146,6 @@ var CloseScrollStrategy = (function () {
         this._overlayRef = overlayRef;
     };
     /**
-     * Enables the closing of the attached on scroll.
      * @return {?}
      */
     CloseScrollStrategy.prototype.enable = function () {
@@ -1287,7 +1160,6 @@ var CloseScrollStrategy = (function () {
         }
     };
     /**
-     * Disables the closing the attached overlay on scroll.
      * @return {?}
      */
     CloseScrollStrategy.prototype.disable = function () {
@@ -1312,12 +1184,10 @@ var BlockScrollStrategy = (function () {
         this._isEnabled = false;
     }
     /**
-     * Attaches this scroll strategy to an overlay.
      * @return {?}
      */
     BlockScrollStrategy.prototype.attach = function () { };
     /**
-     * Blocks page-level scroll while the attached overlay is open.
      * @return {?}
      */
     BlockScrollStrategy.prototype.enable = function () {
@@ -1336,7 +1206,6 @@ var BlockScrollStrategy = (function () {
         }
     };
     /**
-     * Unblocks page-level scroll while the attached overlay is open.
      * @return {?}
      */
     BlockScrollStrategy.prototype.disable = function () {
@@ -1379,7 +1248,6 @@ var RepositionScrollStrategy = (function () {
         this._scrollSubscription = null;
     }
     /**
-     * Attaches this scroll strategy to an overlay.
      * @param {?} overlayRef
      * @return {?}
      */
@@ -1390,7 +1258,6 @@ var RepositionScrollStrategy = (function () {
         this._overlayRef = overlayRef;
     };
     /**
-     * Enables repositioning of the attached overlay on scroll.
      * @return {?}
      */
     RepositionScrollStrategy.prototype.enable = function () {
@@ -1403,7 +1270,6 @@ var RepositionScrollStrategy = (function () {
         }
     };
     /**
-     * Disables repositioning of the attached overlay on scroll.
      * @return {?}
      */
     RepositionScrollStrategy.prototype.disable = function () {
@@ -1486,36 +1352,34 @@ var Overlay = (function () {
      * @param {?} _overlayContainer
      * @param {?} _componentFactoryResolver
      * @param {?} _positionBuilder
-     * @param {?} _keyboardDispatcher
      * @param {?} _appRef
      * @param {?} _injector
      * @param {?} _ngZone
      */
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _appRef, _injector, _ngZone) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
         this._positionBuilder = _positionBuilder;
-        this._keyboardDispatcher = _keyboardDispatcher;
         this._appRef = _appRef;
         this._injector = _injector;
         this._ngZone = _ngZone;
     }
     /**
      * Creates an overlay.
-     * @param {?=} config Configuration applied to the overlay.
+     * @param {?=} config Config to apply to the overlay.
      * @return {?} Reference to the created overlay.
      */
     Overlay.prototype.create = function (config) {
         if (config === void 0) { config = defaultConfig; }
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalHost = this._createPortalHost(pane);
-        return new OverlayRef(portalHost, pane, config, this._ngZone, this._keyboardDispatcher);
+        return new OverlayRef(portalHost, pane, config, this._ngZone);
     };
     /**
-     * Gets a position builder that can be used, via fluent API,
+     * Returns a position builder that can be used, via fluent API,
      * to construct and configure a position strategy.
-     * @return {?} An overlay position builder.
+     * @return {?}
      */
     Overlay.prototype.position = function () {
         return this._positionBuilder;
@@ -1550,7 +1414,6 @@ var Overlay = (function () {
         { type: OverlayContainer, },
         { type: ComponentFactoryResolver, },
         { type: OverlayPositionBuilder, },
-        { type: OverlayKeyboardDispatcher, },
         { type: ApplicationRef, },
         { type: Injector, },
         { type: NgZone, },
@@ -1559,11 +1422,13 @@ var Overlay = (function () {
 }());
 
 /**
- * Alternative to OverlayContainer that supports correct displaying of overlay elements in
- * Fullscreen mode
+ * The FullscreenOverlayContainer is the alternative to OverlayContainer
+ * that supports correct displaying of overlay elements in Fullscreen mode
  * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- *
- * Should be provided in the root component.
+ * It should be provided in the root component that way:
+ * providers: [
+ *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
+ * ],
  */
 var FullscreenOverlayContainer = (function (_super) {
     __extends(FullscreenOverlayContainer, _super);
@@ -2166,7 +2031,6 @@ var ConnectedOverlayDirective = (function () {
 var OVERLAY_PROVIDERS = [
     Overlay,
     OverlayPositionBuilder,
-    OVERLAY_KEYBOARD_DISPATCHER_PROVIDER,
     VIEWPORT_RULER_PROVIDER,
     OVERLAY_CONTAINER_PROVIDER,
     MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
@@ -2193,5 +2057,5 @@ var OverlayModule = (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵi, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵh, OverlayKeyboardDispatcher as ɵg, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.es5.js.map

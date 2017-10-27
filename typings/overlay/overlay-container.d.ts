@@ -6,7 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Optional, OnDestroy } from '@angular/core';
-/** Container inside which all overlays will render. */
+/**
+ * The OverlayContainer is the container in which all overlays will load.
+ * It should be provided in the root component to ensure it is properly shared.
+ */
 export declare class OverlayContainer implements OnDestroy {
     protected _containerElement: HTMLElement;
     ngOnDestroy(): void;

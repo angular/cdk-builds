@@ -11,16 +11,16 @@ import { ElementRef, Renderer2, TemplateRef } from '@angular/core';
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 export declare class CdkCellDef {
-    /** @docs-private */ template: TemplateRef<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>);
+    template: TemplateRef<any>;
+    constructor(template: TemplateRef<any>);
 }
 /**
  * Header cell definition for a CDK table.
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 export declare class CdkHeaderCellDef {
-    /** @docs-private */ template: TemplateRef<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>);
+    template: TemplateRef<any>;
+    constructor(template: TemplateRef<any>);
 }
 /**
  * Column definition for the CDK table.
