@@ -9,6 +9,7 @@ import { ComponentFactoryResolver, ApplicationRef, Injector, NgZone } from '@ang
 import { OverlayConfig } from './overlay-config';
 import { OverlayRef } from './overlay-ref';
 import { OverlayPositionBuilder } from './position/overlay-position-builder';
+import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayContainer } from './overlay-container';
 import { ScrollStrategyOptions } from './scroll/index';
 /**
@@ -20,23 +21,28 @@ import { ScrollStrategyOptions } from './scroll/index';
  * An overlay *is* a PortalHost, so any kind of Portal can be loaded into one.
  */
 export declare class Overlay {
+    /** Scrolling strategies that can be used when creating an overlay. */
     scrollStrategies: ScrollStrategyOptions;
     private _overlayContainer;
     private _componentFactoryResolver;
     private _positionBuilder;
+    private _keyboardDispatcher;
     private _appRef;
     private _injector;
     private _ngZone;
-    constructor(scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _appRef: ApplicationRef, _injector: Injector, _ngZone: NgZone);
+    constructor(
+        /** Scrolling strategies that can be used when creating an overlay. */
+        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _appRef: ApplicationRef, _injector: Injector, _ngZone: NgZone);
     /**
      * Creates an overlay.
-     * @param config Config to apply to the overlay.
+     * @param config Configuration applied to the overlay.
      * @returns Reference to the created overlay.
      */
     create(config?: OverlayConfig): OverlayRef;
     /**
-     * Returns a position builder that can be used, via fluent API,
+     * Gets a position builder that can be used, via fluent API,
      * to construct and configure a position strategy.
+     * @returns An overlay position builder.
      */
     position(): OverlayPositionBuilder;
     /**

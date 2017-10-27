@@ -51,8 +51,9 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, _connectedTo: ElementRef, _viewportRuler: ViewportRuler);
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
+    /** Attach this position strategy to an overlay. */
     attach(overlayRef: OverlayRef): void;
-    /** Performs any cleanup after the element is destroyed. */
+    /** Disposes all resources used by the position strategy. */
     dispose(): void;
     /** @docs-private */
     detach(): void;
@@ -65,7 +66,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      */
     apply(): void;
     /**
-     * This re-aligns the overlay element with the trigger in its last calculated position,
+     * Re-positions the overlay element with the trigger in its last calculated position,
      * even if a position higher in the "preferred positions" list would now fit. This
      * allows one to re-align the panel without changing the orientation of the panel.
      */

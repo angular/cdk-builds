@@ -7,9 +7,7 @@
  */
 import { QueryList } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-/**
- * This interface is for items that can be passed to a ListKeyManager.
- */
+/** This interface is for items that can be passed to a ListKeyManager. */
 export interface ListKeyManagerOption {
     disabled?: boolean;
     getLabel?(): string;

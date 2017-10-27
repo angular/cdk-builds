@@ -10,11 +10,6 @@ import { Portal, TemplatePortal, ComponentPortal, BasePortalHost } from './porta
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
- *
- * Usage:
- * <ng-template portal #greeting>
- *   <p> Hello {{name}} </p>
- * </ng-template>
  */
 export declare class TemplatePortalDirective extends TemplatePortal<any> {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
@@ -41,11 +36,13 @@ export declare class PortalHostDirective extends BasePortalHost implements OnDes
      * Attach the given ComponentPortal to this PortalHost using the ComponentFactoryResolver.
      *
      * @param portal Portal to be attached to the portal host.
+     * @returns Reference to the created component.
      */
     attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     /**
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
      * @param portal Portal to be attached.
+     * @returns Reference to the created embedded view.
      */
     attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
 }

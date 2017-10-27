@@ -16,7 +16,10 @@ export declare class CloseScrollStrategy implements ScrollStrategy {
     private _scrollSubscription;
     private _overlayRef;
     constructor(_scrollDispatcher: ScrollDispatcher);
+    /** Attaches this scroll strategy to an overlay. */
     attach(overlayRef: OverlayRef): void;
+    /** Enables the closing of the attached on scroll. */
     enable(): void;
+    /** Disables the closing the attached overlay on scroll. */
     disable(): void;
 }

@@ -15,9 +15,13 @@ export interface OverlayConnectionPosition {
 export declare class ConnectionPositionPair {
     offsetX: number | undefined;
     offsetY: number | undefined;
+    /** X-axis attachment point for connected overlay origin. Can be 'start', 'end', or 'center'. */
     originX: HorizontalConnectionPos;
+    /** Y-axis attachment point for connected overlay origin. Can be 'top', 'bottom', or 'center'. */
     originY: VerticalConnectionPos;
+    /** X-axis attachment point for connected overlay. Can be 'start', 'end', or 'center'. */
     overlayX: HorizontalConnectionPos;
+    /** Y-axis attachment point for connected overlay. Can be 'top', 'bottom', or 'center'. */
     overlayY: VerticalConnectionPos;
     constructor(origin: OriginConnectionPosition, overlay: OverlayConnectionPosition, offsetX?: number | undefined, offsetY?: number | undefined);
 }
@@ -43,6 +47,8 @@ export declare class ConnectionPositionPair {
  *  |      Scrollable        |
  *  |                        |
  *  --------------------------
+ *
+ *  @docs-private
  */
 export declare class ScrollingVisibility {
     isOriginClipped: boolean;
@@ -52,7 +58,13 @@ export declare class ScrollingVisibility {
 }
 /** The change event emitted by the strategy when a fallback position is used. */
 export declare class ConnectedOverlayPositionChange {
+    /** The position used as a result of this change. */
     connectionPair: ConnectionPositionPair;
+    /** @docs-private */
     scrollableViewProperties: ScrollingVisibility;
-    constructor(connectionPair: ConnectionPositionPair, scrollableViewProperties: ScrollingVisibility);
+    constructor(
+        /** The position used as a result of this change. */
+        connectionPair: ConnectionPositionPair, 
+        /** @docs-private */
+        scrollableViewProperties: ScrollingVisibility);
 }

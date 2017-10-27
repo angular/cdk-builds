@@ -169,8 +169,8 @@ class TemplatePortal extends Portal {
     }
 }
 /**
- * Partial implementation of PortalHost that only deals with attaching either a
- * ComponentPortal or a TemplatePortal.
+ * Partial implementation of PortalHost that handles attaching
+ * ComponentPortal and TemplatePortal.
  * @abstract
  */
 class BasePortalHost {
@@ -188,6 +188,7 @@ class BasePortalHost {
         return !!this._attachedPortal;
     }
     /**
+     * Attaches a portal.
      * @param {?} portal
      * @return {?}
      */
@@ -226,6 +227,7 @@ class BasePortalHost {
      */
     attachTemplatePortal(portal) { }
     /**
+     * Detaches a previously attached portal.
      * @return {?}
      */
     detach() {
@@ -236,6 +238,7 @@ class BasePortalHost {
         this._invokeDisposeFn();
     }
     /**
+     * Permanently dispose of this portal host.
      * @return {?}
      */
     dispose() {
@@ -246,6 +249,7 @@ class BasePortalHost {
         this._isDisposed = true;
     }
     /**
+     * \@docs-private
      * @param {?} fn
      * @return {?}
      */
@@ -266,8 +270,6 @@ class BasePortalHost {
 /**
  * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
- *
- * This is the only part of the portal core that directly touches the DOM.
  */
 class DomPortalHost extends BasePortalHost {
     /**
@@ -287,7 +289,7 @@ class DomPortalHost extends BasePortalHost {
      * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
      * @template T
      * @param {?} portal Portal to be attached
-     * @return {?}
+     * @return {?} Reference to the created component.
      */
     attachComponentPortal(portal) {
         let /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
@@ -317,7 +319,7 @@ class DomPortalHost extends BasePortalHost {
      * Attaches a template portal to the DOM as an embedded view.
      * @template C
      * @param {?} portal Portal to be attached.
-     * @return {?}
+     * @return {?} Reference to the created embedded view.
      */
     attachTemplatePortal(portal) {
         let /** @type {?} */ viewContainer = portal.viewContainerRef;
@@ -359,11 +361,6 @@ class DomPortalHost extends BasePortalHost {
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
- *
- * Usage:
- * <ng-template portal #greeting>
- *   <p> Hello {{name}} </p>
- * </ng-template>
  */
 class TemplatePortalDirective extends TemplatePortal {
     /**
@@ -450,7 +447,7 @@ class PortalHostDirective extends BasePortalHost {
      *
      * @template T
      * @param {?} portal Portal to be attached to the portal host.
-     * @return {?}
+     * @return {?} Reference to the created component.
      */
     attachComponentPortal(portal) {
         portal.setAttachedHost(this);
@@ -469,7 +466,7 @@ class PortalHostDirective extends BasePortalHost {
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
      * @template C
      * @param {?} portal Portal to be attached.
-     * @return {?}
+     * @return {?} Reference to the created embedded view.
      */
     attachTemplatePortal(portal) {
         portal.setAttachedHost(this);

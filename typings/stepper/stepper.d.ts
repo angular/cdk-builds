@@ -37,13 +37,14 @@ export declare class CdkStep implements OnChanges {
     interacted: boolean;
     /** Label of the step. */
     label: string;
-    editable: any;
+    /** Whether the user can return to this step once it has been marked as complted. */
+    editable: boolean;
     private _editable;
-    /** Whether the completion of step is optional or not. */
-    optional: any;
+    /** Whether the completion of step is optional. */
+    optional: boolean;
     private _optional;
-    /** Return whether step is completed or not. */
-    completed: any;
+    /** Whether step is marked as completed. */
+    completed: boolean;
     private _customCompleted;
     private readonly _defaultCompleted;
     constructor(_stepper: CdkStepper);
@@ -59,7 +60,7 @@ export declare class CdkStepper {
     /** The list of step headers of the steps in the stepper. */
     _stepHeader: QueryList<ElementRef>;
     /** Whether the validity of previous steps should be checked or not. */
-    linear: any;
+    linear: boolean;
     private _linear;
     /** The index of the selected step. */
     selectedIndex: number;
