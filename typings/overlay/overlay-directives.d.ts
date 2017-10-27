@@ -26,8 +26,11 @@ export declare const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
  * ConnectedPositionStrategy.
  */
 export declare class OverlayOrigin {
+    /** Reference to the element on which the directive is applied. */
     elementRef: ElementRef;
-    constructor(elementRef: ElementRef);
+    constructor(
+        /** Reference to the element on which the directive is applied. */
+        elementRef: ElementRef);
 }
 /**
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.

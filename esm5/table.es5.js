@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { takeUntil } from 'rxjs/operator/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
@@ -415,6 +415,18 @@ var HeaderRowPlaceholder = (function () {
  */
 var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";
 /**
+ * Class used to conveniently type the embedded view ref for rows with a context.
+ * \@docs-private
+ * @abstract
+ */
+var RowViewRef = (function (_super) {
+    __extends(RowViewRef, _super);
+    function RowViewRef() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return RowViewRef;
+}(EmbeddedViewRef));
+/**
  * A data table that connects with a data source to retrieve data of type `T` and renders
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
@@ -452,14 +464,14 @@ var CdkTable = (function () {
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
         /**
-         * @return {?}
-         */
-        get: function () { return this._trackByFn; },
-        /**
          * Tracking function that will be used to check the differences in data changes. Used similarly
          * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
          * relative to the function to know if a row should be added/removed/moved.
          * Accepts a function that takes two parameters, `index` and `item`.
+         * @return {?}
+         */
+        get: function () { return this._trackByFn; },
+        /**
          * @param {?} fn
          * @return {?}
          */
@@ -625,7 +637,8 @@ var CdkTable = (function () {
         this._changeDetectorRef.markForCheck();
     };
     /**
-     * Check for changes made in the data and render each change (row added/removed/moved).
+     * Check for changes made in the data and render each change (row added/removed/moved) and update
+     * row contexts.
      * @return {?}
      */
     CdkTable.prototype._renderRowChanges = function () {
@@ -635,19 +648,26 @@ var CdkTable = (function () {
             return;
         }
         var /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
-        changes.forEachOperation(function (item, adjustedPreviousIndex, currentIndex) {
-            if (item.previousIndex == null) {
-                _this._insertRow(_this._data[currentIndex], currentIndex);
+        changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
+            if (record.previousIndex == null) {
+                _this._insertRow(record.item, currentIndex);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
             }
             else {
-                var /** @type {?} */ view = viewContainer.get(adjustedPreviousIndex);
+                var /** @type {?} */ view = (viewContainer.get(adjustedPreviousIndex));
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
-        this._updateRowContext();
+        // Update the meta context of a row's context data (index, count, first, last, ...)
+        this._updateRowIndexContext();
+        // Update rows that did not get added/removed/moved but may have had their identity changed,
+        // e.g. if trackBy matched data on some property but the actual data reference changed.
+        changes.forEachIdentityChange(function (record) {
+            var /** @type {?} */ rowView = (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
+            rowView.context.$implicit = record.item;
+        });
     };
     /**
      * Finds the matching row definition that should be used for this row data. If there is only
@@ -690,12 +710,11 @@ var CdkTable = (function () {
         this._changeDetectorRef.markForCheck();
     };
     /**
-     * Updates the context for each row to reflect any data changes that may have caused
-     * rows to be added, removed, or moved. The view container contains the same context
-     * that was provided to each of its cells.
+     * Updates the index-related context for each row to reflect any changes in the index of the rows,
+     * e.g. first/last/even/odd.
      * @return {?}
      */
-    CdkTable.prototype._updateRowContext = function () {
+    CdkTable.prototype._updateRowIndexContext = function () {
         var /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
         for (var /** @type {?} */ index = 0, /** @type {?} */ count = viewContainer.length; index < count; index++) {
             var /** @type {?} */ viewRef = (viewContainer.get(index));

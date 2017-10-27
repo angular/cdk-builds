@@ -217,8 +217,8 @@ var TemplatePortal = (function (_super) {
     return TemplatePortal;
 }(Portal));
 /**
- * Partial implementation of PortalHost that only deals with attaching either a
- * ComponentPortal or a TemplatePortal.
+ * Partial implementation of PortalHost that handles attaching
+ * ComponentPortal and TemplatePortal.
  * @abstract
  */
 var BasePortalHost = (function () {
@@ -236,6 +236,7 @@ var BasePortalHost = (function () {
         return !!this._attachedPortal;
     };
     /**
+     * Attaches a portal.
      * @param {?} portal
      * @return {?}
      */
@@ -274,6 +275,7 @@ var BasePortalHost = (function () {
      */
     BasePortalHost.prototype.attachTemplatePortal = function (portal) { };
     /**
+     * Detaches a previously attached portal.
      * @return {?}
      */
     BasePortalHost.prototype.detach = function () {
@@ -284,6 +286,7 @@ var BasePortalHost = (function () {
         this._invokeDisposeFn();
     };
     /**
+     * Permanently dispose of this portal host.
      * @return {?}
      */
     BasePortalHost.prototype.dispose = function () {
@@ -294,6 +297,7 @@ var BasePortalHost = (function () {
         this._isDisposed = true;
     };
     /**
+     * \@docs-private
      * @param {?} fn
      * @return {?}
      */
@@ -315,8 +319,6 @@ var BasePortalHost = (function () {
 /**
  * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
- *
- * This is the only part of the portal core that directly touches the DOM.
  */
 var DomPortalHost = (function (_super) {
     __extends(DomPortalHost, _super);
@@ -338,7 +340,7 @@ var DomPortalHost = (function (_super) {
      * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
      * @template T
      * @param {?} portal Portal to be attached
-     * @return {?}
+     * @return {?} Reference to the created component.
      */
     DomPortalHost.prototype.attachComponentPortal = function (portal) {
         var _this = this;
@@ -369,7 +371,7 @@ var DomPortalHost = (function (_super) {
      * Attaches a template portal to the DOM as an embedded view.
      * @template C
      * @param {?} portal Portal to be attached.
-     * @return {?}
+     * @return {?} Reference to the created embedded view.
      */
     DomPortalHost.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
@@ -413,11 +415,6 @@ var DomPortalHost = (function (_super) {
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
- *
- * Usage:
- * <ng-template portal #greeting>
- *   <p> Hello {{name}} </p>
- * </ng-template>
  */
 var TemplatePortalDirective = (function (_super) {
     __extends(TemplatePortalDirective, _super);
@@ -516,7 +513,7 @@ var PortalHostDirective = (function (_super) {
      *
      * @template T
      * @param {?} portal Portal to be attached to the portal host.
-     * @return {?}
+     * @return {?} Reference to the created component.
      */
     PortalHostDirective.prototype.attachComponentPortal = function (portal) {
         portal.setAttachedHost(this);
@@ -535,7 +532,7 @@ var PortalHostDirective = (function (_super) {
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
      * @template C
      * @param {?} portal Portal to be attached.
-     * @return {?}
+     * @return {?} Reference to the created embedded view.
      */
     PortalHostDirective.prototype.attachTemplatePortal = function (portal) {
         var _this = this;

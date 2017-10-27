@@ -11,10 +11,9 @@ import { InteractivityChecker } from './interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.
  *
- * NOTE: This class currently uses a very simple (naive) approach to focus trapping.
+ * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
- * This will be replaced with a more intelligent solution before the library is considered stable.
  */
 export declare class FocusTrap {
     private _element;
@@ -63,17 +62,17 @@ export declare class FocusTrap {
     private _getRegionBoundary(bound);
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
-     * @returns Returns whether focus was moved successfuly.
+     * @returns Whether focus was moved successfuly.
      */
     focusInitialElement(): boolean;
     /**
      * Focuses the first tabbable element within the focus trap region.
-     * @returns Returns whether focus was moved successfuly.
+     * @returns Whether focus was moved successfuly.
      */
     focusFirstTabbableElement(): boolean;
     /**
      * Focuses the last tabbable element within the focus trap region.
-     * @returns Returns whether focus was moved successfuly.
+     * @returns Whether focus was moved successfuly.
      */
     focusLastTabbableElement(): boolean;
     /** Get the first tabbable element from a DOM subtree (inclusive). */
@@ -91,10 +90,18 @@ export declare class FocusTrapFactory {
     private _platform;
     private _ngZone;
     constructor(_checker: InteractivityChecker, _platform: Platform, _ngZone: NgZone);
-    create(element: HTMLElement, deferAnchors?: boolean): FocusTrap;
+    /**
+     * Creates a focus-trapped region around the given element.
+     * @param element The element around which focus will be trapped.
+     * @param deferCaptureElements Defers the creation of focus-capturing elements to be done
+     *     manually by the user.
+     * @returns The created focus trap instance.
+     */
+    create(element: HTMLElement, deferCaptureElements?: boolean): FocusTrap;
 }
 /**
  * Directive for trapping focus within a region.
+ * @docs-private
  * @deprecated
  */
 export declare class FocusTrapDeprecatedDirective implements OnDestroy, AfterContentInit {
@@ -111,6 +118,7 @@ export declare class FocusTrapDeprecatedDirective implements OnDestroy, AfterCon
 export declare class FocusTrapDirective implements OnDestroy, AfterContentInit {
     private _elementRef;
     private _focusTrapFactory;
+    /** Underlying FocusTrap instance. */
     focusTrap: FocusTrap;
     /** Whether the focus trap is active. */
     enabled: boolean;

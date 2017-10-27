@@ -430,6 +430,10 @@ class CdkTable {
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
      * relative to the function to know if a row should be added/removed/moved.
      * Accepts a function that takes two parameters, `index` and `item`.
+     * @return {?}
+     */
+    get trackBy() { return this._trackByFn; }
+    /**
      * @param {?} fn
      * @return {?}
      */
@@ -440,10 +444,6 @@ class CdkTable {
         }
         this._trackByFn = fn;
     }
-    /**
-     * @return {?}
-     */
-    get trackBy() { return this._trackByFn; }
     /**
      * Provides a stream containing the latest data array to render. Influenced by the table's
      * stream of view window (what rows are currently on screen).
@@ -588,7 +588,8 @@ class CdkTable {
         this._changeDetectorRef.markForCheck();
     }
     /**
-     * Check for changes made in the data and render each change (row added/removed/moved).
+     * Check for changes made in the data and render each change (row added/removed/moved) and update
+     * row contexts.
      * @return {?}
      */
     _renderRowChanges() {
@@ -597,19 +598,26 @@ class CdkTable {
             return;
         }
         const /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
-        changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
-            if (item.previousIndex == null) {
-                this._insertRow(this._data[currentIndex], currentIndex);
+        changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
+            if (record.previousIndex == null) {
+                this._insertRow(record.item, currentIndex);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
             }
             else {
-                const /** @type {?} */ view = viewContainer.get(adjustedPreviousIndex);
+                const /** @type {?} */ view = (viewContainer.get(adjustedPreviousIndex));
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
-        this._updateRowContext();
+        // Update the meta context of a row's context data (index, count, first, last, ...)
+        this._updateRowIndexContext();
+        // Update rows that did not get added/removed/moved but may have had their identity changed,
+        // e.g. if trackBy matched data on some property but the actual data reference changed.
+        changes.forEachIdentityChange((record) => {
+            const /** @type {?} */ rowView = (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
+            rowView.context.$implicit = record.item;
+        });
     }
     /**
      * Finds the matching row definition that should be used for this row data. If there is only
@@ -652,12 +660,11 @@ class CdkTable {
         this._changeDetectorRef.markForCheck();
     }
     /**
-     * Updates the context for each row to reflect any data changes that may have caused
-     * rows to be added, removed, or moved. The view container contains the same context
-     * that was provided to each of its cells.
+     * Updates the index-related context for each row to reflect any changes in the index of the rows,
+     * e.g. first/last/even/odd.
      * @return {?}
      */
-    _updateRowContext() {
+    _updateRowIndexContext() {
         const /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
         for (let /** @type {?} */ index = 0, /** @type {?} */ count = viewContainer.length; index < count; index++) {
             const /** @type {?} */ viewRef = (viewContainer.get(index));
