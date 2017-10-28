@@ -37,7 +37,7 @@ export declare class ViewportRuler implements OnDestroy {
      * Returns a stream that emits whenever the size of the viewport changes.
      * @param throttle Time in milliseconds to throttle the stream.
      */
-    change(throttleTime?: number): Observable<string>;
+    change(throttleTime?: number): Observable<Event>;
     /** Caches the latest client rectangle of the document element. */
     _cacheViewportGeometry(): void;
 }

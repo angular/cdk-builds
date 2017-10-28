@@ -54,7 +54,7 @@ export declare class ScrollDispatcher {
      * @param elementRef Element whose ancestors to listen for.
      * @param auditTimeInMs Time to throttle the scroll events.
      */
-    ancestorScrolled(elementRef: ElementRef, auditTimeInMs?: number): Observable<CdkScrollable>;
+    ancestorScrolled(elementRef: ElementRef, auditTimeInMs?: number): Observable<CdkScrollable | void>;
     /** Returns all registered Scrollables that contain the provided element. */
     getAncestorScrollContainers(elementRef: ElementRef): CdkScrollable[];
     /** Returns true if the element is contained within the provided Scrollable. */

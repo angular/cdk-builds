@@ -8,7 +8,7 @@
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
-import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
+import { debounceTime, filter, first, map, tap } from 'rxjs/operators';
 import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -62,12 +62,7 @@ class ListKeyManager {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = RxChain.from(this._letterKeyStream)
-            .call(doOperator, keyCode => this._pressedLetters.push(keyCode))
-            .call(debounceTime, debounceInterval)
-            .call(filter, () => this._pressedLetters.length > 0)
-            .call(map, () => this._pressedLetters.join(''))
-            .subscribe(inputString => {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(tap(keyCode => this._pressedLetters.push(keyCode)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join(''))).subscribe(inputString => {
             const /** @type {?} */ items = this._items.toArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -1057,7 +1052,7 @@ class FocusTrap {
             fn();
         }
         else {
-            first.call(this._ngZone.onStable.asObservable()).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(first()).subscribe(fn);
         }
     }
 }

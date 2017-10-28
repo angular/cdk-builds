@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('@angular/cdk/rxjs'), require('rxjs/observable/merge'), require('rxjs/operator/auditTime')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', '@angular/cdk/rxjs', 'rxjs/observable/merge', 'rxjs/operator/auditTime'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.ng.cdk.rxjs,global.Rx.Observable,global.Rx.Observable.prototype));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_fromEvent,rxjs_observable_of,_angular_cdk_rxjs,rxjs_observable_merge,rxjs_operator_auditTime) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/observable/fromEvent'), require('rxjs/operators'), require('rxjs/observable/merge')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/observable/fromEvent', 'rxjs/operators', 'rxjs/observable/merge'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_of,rxjs_observable_fromEvent,rxjs_operators,rxjs_observable_merge) { 'use strict';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -86,7 +86,7 @@ var ScrollDispatcher = (function () {
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
             var /** @type {?} */ subscription = auditTimeInMs > 0 ?
-                _angular_cdk_rxjs.auditTime.call(_this._scrolled, auditTimeInMs).subscribe(observer) :
+                _this._scrolled.pipe(rxjs_operators.auditTime(auditTimeInMs)).subscribe(observer) :
                 _this._scrolled.subscribe(observer);
             _this._scrolledCount++;
             return function () {
@@ -108,9 +108,9 @@ var ScrollDispatcher = (function () {
      */
     ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
         var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
-        return _angular_cdk_rxjs.filter.call(this.scrolled(auditTimeInMs), function (target) {
+        return this.scrolled(auditTimeInMs).pipe(rxjs_operators.filter(function (target) {
             return !target || ancestors.indexOf(target) > -1;
-        });
+        }));
     };
     /**
      * Returns all registered Scrollables that contain the provided element.
@@ -348,7 +348,7 @@ var ViewportRuler = (function () {
      */
     ViewportRuler.prototype.change = function (throttleTime) {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
-        return throttleTime > 0 ? rxjs_operator_auditTime.auditTime.call(this._change, throttleTime) : this._change;
+        return throttleTime > 0 ? this._change.pipe(rxjs_operators.auditTime(throttleTime)) : this._change;
     };
     /**
      * Caches the latest client rectangle of the document element.

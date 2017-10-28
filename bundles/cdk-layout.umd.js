@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('@angular/cdk/rxjs'), require('@angular/cdk/coercion'), require('rxjs/observable/combineLatest'), require('rxjs/observable/fromEventPattern')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', '@angular/cdk/rxjs', '@angular/cdk/coercion', 'rxjs/observable/combineLatest', 'rxjs/observable/fromEventPattern'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = global.ng.cdk.layout || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.ng.cdk.rxjs,global.ng.cdk.coercion,global.Rx.Observable,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,_angular_cdk_rxjs,_angular_cdk_coercion,rxjs_observable_combineLatest,rxjs_observable_fromEventPattern) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('rxjs/observable/combineLatest'), require('rxjs/observable/fromEventPattern')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/operators', '@angular/cdk/coercion', 'rxjs/observable/combineLatest', 'rxjs/observable/fromEventPattern'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = global.ng.cdk.layout || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx.Observable,global.ng.cdk.coercion,global.Rx.Observable,global.Rx.Observable));
+}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_operators,_angular_cdk_coercion,rxjs_observable_combineLatest,rxjs_observable_fromEventPattern) { 'use strict';
 
 /**
  * Global registry for all dynamically-created, injected style tags.
@@ -160,7 +160,7 @@ var BreakpointObserver = (function () {
         }
         var /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
-        var /** @type {?} */ queryObservable = _angular_cdk_rxjs.RxChain.from(rxjs_observable_fromEventPattern.fromEventPattern(
+        var /** @type {?} */ queryObservable = rxjs_observable_fromEventPattern.fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -170,11 +170,8 @@ var BreakpointObserver = (function () {
             mql.addListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
         }, function (listener) {
             mql.removeListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
-        }))
-            .call(_angular_cdk_rxjs.takeUntil, this._destroySubject)
-            .call(_angular_cdk_rxjs.startWith, mql)
-            .call(_angular_cdk_rxjs.map, function (nextMql) { return ({ matches: nextMql.matches }); })
-            .result();
+        })
+            .pipe(rxjs_operators.takeUntil(this._destroySubject), rxjs_operators.startWith(mql), rxjs_operators.map(function (nextMql) { return ({ matches: nextMql.matches }); }));
         // Add the MediaQueryList to the set of queries.
         var /** @type {?} */ output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);

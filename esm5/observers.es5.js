@@ -7,7 +7,7 @@
  */
 import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { RxChain, debounceTime } from '@angular/cdk/rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -62,8 +62,7 @@ var ObserveContent = (function () {
         var _this = this;
         if (this.debounce > 0) {
             this._ngZone.runOutsideAngular(function () {
-                RxChain.from(_this._debouncer)
-                    .call(debounceTime, _this.debounce)
+                _this._debouncer.pipe(debounceTime(_this.debounce))
                     .subscribe(function (mutations) { return _this.event.emit(mutations); });
             });
         }

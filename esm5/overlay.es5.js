@@ -8,10 +8,9 @@
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { first } from 'rxjs/operator/first';
+import { filter, first } from 'rxjs/operators';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
-import { RxChain, filter } from '@angular/cdk/rxjs';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
@@ -141,7 +140,7 @@ var OverlayRef = (function () {
         // Update the position once the zone is stable so that the overlay will be fully rendered
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
-        first.call(this._ngZone.onStable.asObservable()).subscribe(function () {
+        this._ngZone.onStable.asObservable().pipe(first()).subscribe(function () {
             _this.updatePosition();
         });
         // Enable pointer events for the overlay pane element.
@@ -1128,9 +1127,7 @@ var OverlayKeyboardDispatcher = (function () {
     OverlayKeyboardDispatcher.prototype._subscribeToKeydownEvents = function () {
         var _this = this;
         var /** @type {?} */ bodyKeydownEvents = fromEvent(document.body, 'keydown');
-        this._keydownEventSubscription = RxChain.from(bodyKeydownEvents)
-            .call(filter, function () { return !!_this._attachedOverlays.length; })
-            .subscribe(function (event) {
+        this._keydownEventSubscription = bodyKeydownEvents.pipe(filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
             // Dispatch keydown event to correct overlay reference
             _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });

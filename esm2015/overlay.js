@@ -8,10 +8,9 @@
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { first } from 'rxjs/operator/first';
+import { filter, first } from 'rxjs/operators';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
-import { RxChain, filter } from '@angular/cdk/rxjs';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -129,7 +128,7 @@ class OverlayRef {
         // Update the position once the zone is stable so that the overlay will be fully rendered
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
-        first.call(this._ngZone.onStable.asObservable()).subscribe(() => {
+        this._ngZone.onStable.asObservable().pipe(first()).subscribe(() => {
             this.updatePosition();
         });
         // Enable pointer events for the overlay pane element.
@@ -1078,9 +1077,7 @@ class OverlayKeyboardDispatcher {
      */
     _subscribeToKeydownEvents() {
         const /** @type {?} */ bodyKeydownEvents = fromEvent(document.body, 'keydown');
-        this._keydownEventSubscription = RxChain.from(bodyKeydownEvents)
-            .call(filter, () => !!this._attachedOverlays.length)
-            .subscribe(event => {
+        this._keydownEventSubscription = bodyKeydownEvents.pipe(filter(() => !!this._attachedOverlays.length)).subscribe(event => {
             // Dispatch keydown event to correct overlay reference
             this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });

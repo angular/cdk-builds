@@ -9,11 +9,10 @@ import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import { fromEvent } from 'rxjs/observable/fromEvent';
 import { of } from 'rxjs/observable/of';
-import { auditTime, filter } from '@angular/cdk/rxjs';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { auditTime, filter } from 'rxjs/operators';
 import { merge } from 'rxjs/observable/merge';
-import { auditTime as auditTime$1 } from 'rxjs/operator/auditTime';
 
 /**
  * Time in ms to throttle the scrolling events by default.
@@ -90,7 +89,7 @@ var ScrollDispatcher = (function () {
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
             var /** @type {?} */ subscription = auditTimeInMs > 0 ?
-                auditTime.call(_this._scrolled, auditTimeInMs).subscribe(observer) :
+                _this._scrolled.pipe(auditTime(auditTimeInMs)).subscribe(observer) :
                 _this._scrolled.subscribe(observer);
             _this._scrolledCount++;
             return function () {
@@ -112,9 +111,9 @@ var ScrollDispatcher = (function () {
      */
     ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
         var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
-        return filter.call(this.scrolled(auditTimeInMs), function (target) {
+        return this.scrolled(auditTimeInMs).pipe(filter(function (target) {
             return !target || ancestors.indexOf(target) > -1;
-        });
+        }));
     };
     /**
      * Returns all registered Scrollables that contain the provided element.
@@ -352,7 +351,7 @@ var ViewportRuler = (function () {
      */
     ViewportRuler.prototype.change = function (throttleTime) {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
-        return throttleTime > 0 ? auditTime$1.call(this._change, throttleTime) : this._change;
+        return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
     };
     /**
      * Caches the latest client rectangle of the document element.

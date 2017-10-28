@@ -10,7 +10,7 @@ import * as tslib_1 from 'tslib';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
-import { RxChain, debounceTime, doOperator, filter, first, map } from '@angular/cdk/rxjs';
+import { debounceTime, filter, first, map, tap } from 'rxjs/operators';
 import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -66,12 +66,7 @@ var ListKeyManager = (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = RxChain.from(this._letterKeyStream)
-            .call(doOperator, function (keyCode) { return _this._pressedLetters.push(keyCode); })
-            .call(debounceTime, debounceInterval)
-            .call(filter, function () { return _this._pressedLetters.length > 0; })
-            .call(map, function () { return _this._pressedLetters.join(''); })
-            .subscribe(function (inputString) {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), debounceTime(debounceInterval), filter(function () { return _this._pressedLetters.length > 0; }), map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -1093,7 +1088,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            first.call(this._ngZone.onStable.asObservable()).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(first()).subscribe(fn);
         }
     };
     return FocusTrap;

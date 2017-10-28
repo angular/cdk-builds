@@ -8,7 +8,7 @@
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
 import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
-import { takeUntil } from 'rxjs/operator/takeUntil';
+import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
@@ -611,7 +611,7 @@ var CdkTable = (function () {
      */
     CdkTable.prototype._observeRenderChanges = function () {
         var _this = this;
-        this._renderChangeSubscription = takeUntil.call(this.dataSource.connect(this), this._onDestroy)
+        this._renderChangeSubscription = this.dataSource.connect(this).pipe(takeUntil(this._onDestroy))
             .subscribe(function (data) {
             _this._data = data;
             _this._renderRowChanges();
