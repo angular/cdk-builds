@@ -389,16 +389,16 @@ var DomPortalOutlet = (function (_super) {
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
-var TemplatePortalDirective = (function (_super) {
-    __extends(TemplatePortalDirective, _super);
+var CdkPortal = (function (_super) {
+    __extends(CdkPortal, _super);
     /**
      * @param {?} templateRef
      * @param {?} viewContainerRef
      */
-    function TemplatePortalDirective(templateRef, viewContainerRef) {
+    function CdkPortal(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
-    TemplatePortalDirective.decorators = [
+    CdkPortal.decorators = [
         { type: Directive, args: [{
                     selector: '[cdk-portal], [cdkPortal], [portal]',
                     exportAs: 'cdkPortal',
@@ -407,11 +407,11 @@ var TemplatePortalDirective = (function (_super) {
     /**
      * @nocollapse
      */
-    TemplatePortalDirective.ctorParameters = function () { return [
+    CdkPortal.ctorParameters = function () { return [
         { type: TemplateRef, },
         { type: ViewContainerRef, },
     ]; };
-    return TemplatePortalDirective;
+    return CdkPortal;
 }(TemplatePortal));
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
@@ -420,13 +420,13 @@ var TemplatePortalDirective = (function (_super) {
  * Usage:
  * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-var PortalOutletDirective = (function (_super) {
-    __extends(PortalOutletDirective, _super);
+var CdkPortalOutlet = (function (_super) {
+    __extends(CdkPortalOutlet, _super);
     /**
      * @param {?} _componentFactoryResolver
      * @param {?} _viewContainerRef
      */
-    function PortalOutletDirective(_componentFactoryResolver, _viewContainerRef) {
+    function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef) {
         var _this = _super.call(this) || this;
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._viewContainerRef = _viewContainerRef;
@@ -436,7 +436,7 @@ var PortalOutletDirective = (function (_super) {
         _this._portal = null;
         return _this;
     }
-    Object.defineProperty(PortalOutletDirective.prototype, "_deprecatedPortal", {
+    Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
         /**
          * @deprecated
          * @return {?}
@@ -450,7 +450,7 @@ var PortalOutletDirective = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PortalOutletDirective.prototype, "_deprecatedPortalHost", {
+    Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortalHost", {
         /**
          * @deprecated
          * @return {?}
@@ -464,7 +464,7 @@ var PortalOutletDirective = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PortalOutletDirective.prototype, "portal", {
+    Object.defineProperty(CdkPortalOutlet.prototype, "portal", {
         /**
          * Portal associated with the Portal outlet.
          * @return {?}
@@ -491,7 +491,7 @@ var PortalOutletDirective = (function (_super) {
     /**
      * @return {?}
      */
-    PortalOutletDirective.prototype.ngOnDestroy = function () {
+    CdkPortalOutlet.prototype.ngOnDestroy = function () {
         _super.prototype.dispose.call(this);
         this._portal = null;
     };
@@ -502,7 +502,7 @@ var PortalOutletDirective = (function (_super) {
      * @param {?} portal Portal to be attached to the portal outlet.
      * @return {?} Reference to the created component.
      */
-    PortalOutletDirective.prototype.attachComponentPortal = function (portal) {
+    CdkPortalOutlet.prototype.attachComponentPortal = function (portal) {
         portal.setAttachedHost(this);
         // If the portal specifies an origin, use that as the logical location of the component
         // in the application tree. Otherwise use the location of this PortalOutlet.
@@ -521,7 +521,7 @@ var PortalOutletDirective = (function (_super) {
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
      */
-    PortalOutletDirective.prototype.attachTemplatePortal = function (portal) {
+    CdkPortalOutlet.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         portal.setAttachedHost(this);
         var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
@@ -529,7 +529,7 @@ var PortalOutletDirective = (function (_super) {
         this._portal = portal;
         return viewRef;
     };
-    PortalOutletDirective.decorators = [
+    CdkPortalOutlet.decorators = [
         { type: Directive, args: [{
                     selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
                     exportAs: 'cdkPortalOutlet, cdkPortalHost',
@@ -539,23 +539,23 @@ var PortalOutletDirective = (function (_super) {
     /**
      * @nocollapse
      */
-    PortalOutletDirective.ctorParameters = function () { return [
+    CdkPortalOutlet.ctorParameters = function () { return [
         { type: ComponentFactoryResolver, },
         { type: ViewContainerRef, },
     ]; };
-    PortalOutletDirective.propDecorators = {
+    CdkPortalOutlet.propDecorators = {
         '_deprecatedPortal': [{ type: Input, args: ['portalHost',] },],
         '_deprecatedPortalHost': [{ type: Input, args: ['cdkPortalHost',] },],
     };
-    return PortalOutletDirective;
+    return CdkPortalOutlet;
 }(BasePortalOutlet));
 var PortalModule = (function () {
     function PortalModule() {
     }
     PortalModule.decorators = [
         { type: NgModule, args: [{
-                    exports: [TemplatePortalDirective, PortalOutletDirective],
-                    declarations: [TemplatePortalDirective, PortalOutletDirective],
+                    exports: [CdkPortal, CdkPortalOutlet],
+                    declarations: [CdkPortal, CdkPortalOutlet],
                 },] },
     ];
     /**
@@ -598,5 +598,5 @@ var PortalInjector = (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { DomPortalOutlet as DomPortalHost, PortalOutletDirective as PortalHostDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, TemplatePortalDirective, PortalOutletDirective, PortalModule, PortalInjector };
+export { DomPortalOutlet as DomPortalHost, CdkPortalOutlet as PortalHostDirective, CdkPortal as TemplatePortalDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, CdkPortal, CdkPortalOutlet, PortalModule, PortalInjector };
 //# sourceMappingURL=portal.es5.js.map

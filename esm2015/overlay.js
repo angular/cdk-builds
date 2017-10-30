@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
+import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
 import { filter, first } from 'rxjs/operators';
-import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { Subscription } from 'rxjs/Subscription';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
@@ -70,6 +70,288 @@ class OverlayConfig {
         }
     }
 }
+
+/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
+/**
+ * The points of the origin element and the overlay element to connect.
+ */
+class ConnectionPositionPair {
+    /**
+     * @param {?} origin
+     * @param {?} overlay
+     * @param {?=} offsetX
+     * @param {?=} offsetY
+     */
+    constructor(origin, overlay, offsetX, offsetY) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.originX = origin.originX;
+        this.originY = origin.originY;
+        this.overlayX = overlay.overlayX;
+        this.overlayY = overlay.overlayY;
+    }
+}
+/**
+ * Set of properties regarding the position of the origin and overlay relative to the viewport
+ * with respect to the containing Scrollable elements.
+ *
+ * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
+ * bounds of any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ * The overlay and origin are outside view if there is no overlap between their bounding client
+ * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ *       -----------                    -----------
+ *       | outside |                    | clipped |
+ *       |  view   |              --------------------------
+ *       |         |              |     |         |        |
+ *       ----------               |     -----------        |
+ *  --------------------------    |                        |
+ *  |                        |    |      Scrollable        |
+ *  |                        |    |                        |
+ *  |                        |     --------------------------
+ *  |      Scrollable        |
+ *  |                        |
+ *  --------------------------
+ *
+ *  \@docs-private
+ */
+class ScrollingVisibility {
+}
+/**
+ * The change event emitted by the strategy when a fallback position is used.
+ */
+class ConnectedOverlayPositionChange {
+    /**
+     * @param {?} connectionPair
+     * @param {?} scrollableViewProperties
+     */
+    constructor(connectionPair, scrollableViewProperties) {
+        this.connectionPair = connectionPair;
+        this.scrollableViewProperties = scrollableViewProperties;
+    }
+}
+/**
+ * @nocollapse
+ */
+ConnectedOverlayPositionChange.ctorParameters = () => [
+    { type: ConnectionPositionPair, },
+    { type: ScrollingVisibility, decorators: [{ type: Optional },] },
+];
+
+/**
+ * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
+ * @return {?}
+ */
+function getMatScrollStrategyAlreadyAttachedError() {
+    return Error(`Scroll strategy has already been attached.`);
+}
+
+/**
+ * Strategy that will close the overlay as soon as the user starts scrolling.
+ */
+class CloseScrollStrategy {
+    /**
+     * @param {?} _scrollDispatcher
+     */
+    constructor(_scrollDispatcher) {
+        this._scrollDispatcher = _scrollDispatcher;
+        this._scrollSubscription = null;
+    }
+    /**
+     * Attaches this scroll strategy to an overlay.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    attach(overlayRef) {
+        if (this._overlayRef) {
+            throw getMatScrollStrategyAlreadyAttachedError();
+        }
+        this._overlayRef = overlayRef;
+    }
+    /**
+     * Enables the closing of the attached on scroll.
+     * @return {?}
+     */
+    enable() {
+        if (!this._scrollSubscription) {
+            this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(() => {
+                if (this._overlayRef.hasAttached()) {
+                    this._overlayRef.detach();
+                }
+                this.disable();
+            });
+        }
+    }
+    /**
+     * Disables the closing the attached overlay on scroll.
+     * @return {?}
+     */
+    disable() {
+        if (this._scrollSubscription) {
+            this._scrollSubscription.unsubscribe();
+            this._scrollSubscription = null;
+        }
+    }
+}
+
+/**
+ * Strategy that will prevent the user from scrolling while the overlay is visible.
+ */
+class BlockScrollStrategy {
+    /**
+     * @param {?} _viewportRuler
+     */
+    constructor(_viewportRuler) {
+        this._viewportRuler = _viewportRuler;
+        this._previousHTMLStyles = { top: '', left: '' };
+        this._isEnabled = false;
+    }
+    /**
+     * Attaches this scroll strategy to an overlay.
+     * @return {?}
+     */
+    attach() { }
+    /**
+     * Blocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    enable() {
+        if (this._canBeEnabled()) {
+            const /** @type {?} */ root = document.documentElement;
+            this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
+            // Cache the previous inline styles in case the user had set them.
+            this._previousHTMLStyles.left = root.style.left || '';
+            this._previousHTMLStyles.top = root.style.top || '';
+            // Note: we're using the `html` node, instead of the `body`, because the `body` may
+            // have the user agent margin, whereas the `html` is guaranteed not to have one.
+            root.style.left = `${-this._previousScrollPosition.left}px`;
+            root.style.top = `${-this._previousScrollPosition.top}px`;
+            root.classList.add('cdk-global-scrollblock');
+            this._isEnabled = true;
+        }
+    }
+    /**
+     * Unblocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    disable() {
+        if (this._isEnabled) {
+            this._isEnabled = false;
+            document.documentElement.style.left = this._previousHTMLStyles.left;
+            document.documentElement.style.top = this._previousHTMLStyles.top;
+            document.documentElement.classList.remove('cdk-global-scrollblock');
+            window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
+        }
+    }
+    /**
+     * @return {?}
+     */
+    _canBeEnabled() {
+        // Since the scroll strategies can't be singletons, we have to use a global CSS class
+        // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
+        // scrolling multiple times.
+        if (document.documentElement.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
+            return false;
+        }
+        const /** @type {?} */ body = document.body;
+        const /** @type {?} */ viewport = this._viewportRuler.getViewportRect();
+        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
+    }
+}
+
+/**
+ * Strategy that will update the element position as the user is scrolling.
+ */
+class RepositionScrollStrategy {
+    /**
+     * @param {?} _scrollDispatcher
+     * @param {?=} _config
+     */
+    constructor(_scrollDispatcher, _config) {
+        this._scrollDispatcher = _scrollDispatcher;
+        this._config = _config;
+        this._scrollSubscription = null;
+    }
+    /**
+     * Attaches this scroll strategy to an overlay.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    attach(overlayRef) {
+        if (this._overlayRef) {
+            throw getMatScrollStrategyAlreadyAttachedError();
+        }
+        this._overlayRef = overlayRef;
+    }
+    /**
+     * Enables repositioning of the attached overlay on scroll.
+     * @return {?}
+     */
+    enable() {
+        if (!this._scrollSubscription) {
+            let /** @type {?} */ throttle = this._config ? this._config.scrollThrottle : 0;
+            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle).subscribe(() => {
+                this._overlayRef.updatePosition();
+            });
+        }
+    }
+    /**
+     * Disables repositioning of the attached overlay on scroll.
+     * @return {?}
+     */
+    disable() {
+        if (this._scrollSubscription) {
+            this._scrollSubscription.unsubscribe();
+            this._scrollSubscription = null;
+        }
+    }
+}
+
+/**
+ * Options for how an overlay will handle scrolling.
+ *
+ * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
+ * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
+ */
+class ScrollStrategyOptions {
+    /**
+     * @param {?} _scrollDispatcher
+     * @param {?} _viewportRuler
+     */
+    constructor(_scrollDispatcher, _viewportRuler) {
+        this._scrollDispatcher = _scrollDispatcher;
+        this._viewportRuler = _viewportRuler;
+        /**
+         * Do nothing on scroll.
+         */
+        this.noop = () => new NoopScrollStrategy();
+        /**
+         * Close the overlay as soon as the user scrolls.
+         */
+        this.close = () => new CloseScrollStrategy(this._scrollDispatcher);
+        /**
+         * Block scrolling.
+         */
+        this.block = () => new BlockScrollStrategy(this._viewportRuler);
+        /**
+         * Update the overlay's position on scroll.
+         * @param config Configuration to be used inside the scroll strategy.
+         * Allows debouncing the reposition calls.
+         */
+        this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, config);
+    }
+}
+ScrollStrategyOptions.decorators = [
+    { type: Injectable },
+];
+/**
+ * @nocollapse
+ */
+ScrollStrategyOptions.ctorParameters = () => [
+    { type: ScrollDispatcher, },
+    { type: ViewportRuler, },
+];
 
 /**
  * Reference to an overlay that has been created with the Overlay service.
@@ -362,74 +644,6 @@ class OverlayRef {
 function formatCssUnit(value) {
     return typeof value === 'string' ? (value) : `${value}px`;
 }
-
-/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
-/**
- * The points of the origin element and the overlay element to connect.
- */
-class ConnectionPositionPair {
-    /**
-     * @param {?} origin
-     * @param {?} overlay
-     * @param {?=} offsetX
-     * @param {?=} offsetY
-     */
-    constructor(origin, overlay, offsetX, offsetY) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.originX = origin.originX;
-        this.originY = origin.originY;
-        this.overlayX = overlay.overlayX;
-        this.overlayY = overlay.overlayY;
-    }
-}
-/**
- * Set of properties regarding the position of the origin and overlay relative to the viewport
- * with respect to the containing Scrollable elements.
- *
- * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
- * bounds of any one of the strategy's Scrollable's bounding client rectangle.
- *
- * The overlay and origin are outside view if there is no overlap between their bounding client
- * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
- *
- *       -----------                    -----------
- *       | outside |                    | clipped |
- *       |  view   |              --------------------------
- *       |         |              |     |         |        |
- *       ----------               |     -----------        |
- *  --------------------------    |                        |
- *  |                        |    |      Scrollable        |
- *  |                        |    |                        |
- *  |                        |     --------------------------
- *  |      Scrollable        |
- *  |                        |
- *  --------------------------
- *
- *  \@docs-private
- */
-class ScrollingVisibility {
-}
-/**
- * The change event emitted by the strategy when a fallback position is used.
- */
-class ConnectedOverlayPositionChange {
-    /**
-     * @param {?} connectionPair
-     * @param {?} scrollableViewProperties
-     */
-    constructor(connectionPair, scrollableViewProperties) {
-        this.connectionPair = connectionPair;
-        this.scrollableViewProperties = scrollableViewProperties;
-    }
-}
-/**
- * @nocollapse
- */
-ConnectedOverlayPositionChange.ctorParameters = () => [
-    { type: ConnectionPositionPair, },
-    { type: ScrollingVisibility, decorators: [{ type: Optional },] },
-];
 
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
@@ -1185,220 +1399,6 @@ const OVERLAY_CONTAINER_PROVIDER = {
 };
 
 /**
- * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
- * @return {?}
- */
-function getMatScrollStrategyAlreadyAttachedError() {
-    return Error(`Scroll strategy has already been attached.`);
-}
-
-/**
- * Strategy that will close the overlay as soon as the user starts scrolling.
- */
-class CloseScrollStrategy {
-    /**
-     * @param {?} _scrollDispatcher
-     */
-    constructor(_scrollDispatcher) {
-        this._scrollDispatcher = _scrollDispatcher;
-        this._scrollSubscription = null;
-    }
-    /**
-     * Attaches this scroll strategy to an overlay.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    attach(overlayRef) {
-        if (this._overlayRef) {
-            throw getMatScrollStrategyAlreadyAttachedError();
-        }
-        this._overlayRef = overlayRef;
-    }
-    /**
-     * Enables the closing of the attached on scroll.
-     * @return {?}
-     */
-    enable() {
-        if (!this._scrollSubscription) {
-            this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(() => {
-                if (this._overlayRef.hasAttached()) {
-                    this._overlayRef.detach();
-                }
-                this.disable();
-            });
-        }
-    }
-    /**
-     * Disables the closing the attached overlay on scroll.
-     * @return {?}
-     */
-    disable() {
-        if (this._scrollSubscription) {
-            this._scrollSubscription.unsubscribe();
-            this._scrollSubscription = null;
-        }
-    }
-}
-
-/**
- * Strategy that will prevent the user from scrolling while the overlay is visible.
- */
-class BlockScrollStrategy {
-    /**
-     * @param {?} _viewportRuler
-     */
-    constructor(_viewportRuler) {
-        this._viewportRuler = _viewportRuler;
-        this._previousHTMLStyles = { top: '', left: '' };
-        this._isEnabled = false;
-    }
-    /**
-     * Attaches this scroll strategy to an overlay.
-     * @return {?}
-     */
-    attach() { }
-    /**
-     * Blocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    enable() {
-        if (this._canBeEnabled()) {
-            const /** @type {?} */ root = document.documentElement;
-            this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
-            // Cache the previous inline styles in case the user had set them.
-            this._previousHTMLStyles.left = root.style.left || '';
-            this._previousHTMLStyles.top = root.style.top || '';
-            // Note: we're using the `html` node, instead of the `body`, because the `body` may
-            // have the user agent margin, whereas the `html` is guaranteed not to have one.
-            root.style.left = `${-this._previousScrollPosition.left}px`;
-            root.style.top = `${-this._previousScrollPosition.top}px`;
-            root.classList.add('cdk-global-scrollblock');
-            this._isEnabled = true;
-        }
-    }
-    /**
-     * Unblocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    disable() {
-        if (this._isEnabled) {
-            this._isEnabled = false;
-            document.documentElement.style.left = this._previousHTMLStyles.left;
-            document.documentElement.style.top = this._previousHTMLStyles.top;
-            document.documentElement.classList.remove('cdk-global-scrollblock');
-            window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
-        }
-    }
-    /**
-     * @return {?}
-     */
-    _canBeEnabled() {
-        // Since the scroll strategies can't be singletons, we have to use a global CSS class
-        // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
-        // scrolling multiple times.
-        if (document.documentElement.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
-            return false;
-        }
-        const /** @type {?} */ body = document.body;
-        const /** @type {?} */ viewport = this._viewportRuler.getViewportRect();
-        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
-    }
-}
-
-/**
- * Strategy that will update the element position as the user is scrolling.
- */
-class RepositionScrollStrategy {
-    /**
-     * @param {?} _scrollDispatcher
-     * @param {?=} _config
-     */
-    constructor(_scrollDispatcher, _config) {
-        this._scrollDispatcher = _scrollDispatcher;
-        this._config = _config;
-        this._scrollSubscription = null;
-    }
-    /**
-     * Attaches this scroll strategy to an overlay.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    attach(overlayRef) {
-        if (this._overlayRef) {
-            throw getMatScrollStrategyAlreadyAttachedError();
-        }
-        this._overlayRef = overlayRef;
-    }
-    /**
-     * Enables repositioning of the attached overlay on scroll.
-     * @return {?}
-     */
-    enable() {
-        if (!this._scrollSubscription) {
-            let /** @type {?} */ throttle = this._config ? this._config.scrollThrottle : 0;
-            this._scrollSubscription = this._scrollDispatcher.scrolled(throttle).subscribe(() => {
-                this._overlayRef.updatePosition();
-            });
-        }
-    }
-    /**
-     * Disables repositioning of the attached overlay on scroll.
-     * @return {?}
-     */
-    disable() {
-        if (this._scrollSubscription) {
-            this._scrollSubscription.unsubscribe();
-            this._scrollSubscription = null;
-        }
-    }
-}
-
-/**
- * Options for how an overlay will handle scrolling.
- *
- * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
- * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
- */
-class ScrollStrategyOptions {
-    /**
-     * @param {?} _scrollDispatcher
-     * @param {?} _viewportRuler
-     */
-    constructor(_scrollDispatcher, _viewportRuler) {
-        this._scrollDispatcher = _scrollDispatcher;
-        this._viewportRuler = _viewportRuler;
-        /**
-         * Do nothing on scroll.
-         */
-        this.noop = () => new NoopScrollStrategy();
-        /**
-         * Close the overlay as soon as the user scrolls.
-         */
-        this.close = () => new CloseScrollStrategy(this._scrollDispatcher);
-        /**
-         * Block scrolling.
-         */
-        this.block = () => new BlockScrollStrategy(this._viewportRuler);
-        /**
-         * Update the overlay's position on scroll.
-         * @param config Configuration to be used inside the scroll strategy.
-         * Allows debouncing the reposition calls.
-         */
-        this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, config);
-    }
-}
-ScrollStrategyOptions.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-ScrollStrategyOptions.ctorParameters = () => [
-    { type: ScrollDispatcher, },
-    { type: ViewportRuler, },
-];
-
-/**
  * Next overlay unique ID.
  */
 let nextUniqueId = 0;
@@ -1491,72 +1491,6 @@ Overlay.ctorParameters = () => [
 ];
 
 /**
- * Alternative to OverlayContainer that supports correct displaying of overlay elements in
- * Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- *
- * Should be provided in the root component.
- */
-class FullscreenOverlayContainer extends OverlayContainer {
-    /**
-     * @return {?}
-     */
-    _createContainer() {
-        super._createContainer();
-        this._adjustParentForFullscreenChange();
-        this._addFullscreenChangeListener(() => this._adjustParentForFullscreenChange());
-    }
-    /**
-     * @return {?}
-     */
-    _adjustParentForFullscreenChange() {
-        if (!this._containerElement) {
-            return;
-        }
-        let /** @type {?} */ fullscreenElement = this.getFullscreenElement();
-        let /** @type {?} */ parent = fullscreenElement || document.body;
-        parent.appendChild(this._containerElement);
-    }
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-    _addFullscreenChangeListener(fn) {
-        if (document.fullscreenEnabled) {
-            document.addEventListener('fullscreenchange', fn);
-        }
-        else if (document.webkitFullscreenEnabled) {
-            document.addEventListener('webkitfullscreenchange', fn);
-        }
-        else if (((document)).mozFullScreenEnabled) {
-            document.addEventListener('mozfullscreenchange', fn);
-        }
-        else if (((document)).msFullscreenEnabled) {
-            document.addEventListener('MSFullscreenChange', fn);
-        }
-    }
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     * @return {?}
-     */
-    getFullscreenElement() {
-        return document.fullscreenElement ||
-            document.webkitFullscreenElement ||
-            ((document)).mozFullScreenElement ||
-            ((document)).msFullscreenElement ||
-            null;
-    }
-}
-FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
-];
-/**
- * @nocollapse
- */
-FullscreenOverlayContainer.ctorParameters = () => [];
-
-/**
  * Default set of positions for the overlay. Follows the behavior of a dropdown.
  */
 const defaultPositionList = [
@@ -1566,28 +1500,28 @@ const defaultPositionList = [
 /**
  * Injection token that determines the scroll handling while the connected overlay is open.
  */
-const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('mat-connected-overlay-scroll-strategy');
+const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy');
 /**
  * \@docs-private
  * @param {?} overlay
  * @return {?}
  */
-function MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
+function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return () => overlay.scrollStrategies.reposition();
 }
 /**
  * \@docs-private
  */
-const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
-    provide: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,
+const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
+    provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
     deps: [Overlay],
-    useFactory: MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
+    useFactory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
  */
-class OverlayOrigin {
+class CdkOverlayOrigin {
     /**
      * @param {?} elementRef
      */
@@ -1595,7 +1529,7 @@ class OverlayOrigin {
         this.elementRef = elementRef;
     }
 }
-OverlayOrigin.decorators = [
+CdkOverlayOrigin.decorators = [
     { type: Directive, args: [{
                 selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
                 exportAs: 'cdkOverlayOrigin',
@@ -1604,13 +1538,13 @@ OverlayOrigin.decorators = [
 /**
  * @nocollapse
  */
-OverlayOrigin.ctorParameters = () => [
+CdkOverlayOrigin.ctorParameters = () => [
     { type: ElementRef, },
 ];
 /**
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
  */
-class ConnectedOverlayDirective {
+class CdkConnectedOverlay {
     /**
      * @param {?} _overlay
      * @param {?} _renderer
@@ -1968,7 +1902,7 @@ class ConnectedOverlayDirective {
         });
     }
 }
-ConnectedOverlayDirective.decorators = [
+CdkConnectedOverlay.decorators = [
     { type: Directive, args: [{
                 selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
                 exportAs: 'cdkConnectedOverlay'
@@ -1977,15 +1911,15 @@ ConnectedOverlayDirective.decorators = [
 /**
  * @nocollapse
  */
-ConnectedOverlayDirective.ctorParameters = () => [
+CdkConnectedOverlay.ctorParameters = () => [
     { type: Overlay, },
     { type: Renderer2, },
     { type: TemplateRef, },
     { type: ViewContainerRef, },
-    { type: undefined, decorators: [{ type: Inject, args: [MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
     { type: Directionality, decorators: [{ type: Optional },] },
 ];
-ConnectedOverlayDirective.propDecorators = {
+CdkConnectedOverlay.propDecorators = {
     'origin': [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
     'positions': [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
     'offsetX': [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
@@ -2022,15 +1956,15 @@ const OVERLAY_PROVIDERS = [
     OVERLAY_KEYBOARD_DISPATCHER_PROVIDER,
     VIEWPORT_RULER_PROVIDER,
     OVERLAY_CONTAINER_PROVIDER,
-    MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+    CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];
 class OverlayModule {
 }
 OverlayModule.decorators = [
     { type: NgModule, args: [{
                 imports: [BidiModule, PortalModule, ScrollDispatchModule],
-                exports: [ConnectedOverlayDirective, OverlayOrigin, ScrollDispatchModule],
-                declarations: [ConnectedOverlayDirective, OverlayOrigin],
+                exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollDispatchModule],
+                declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
                 providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
             },] },
 ];
@@ -2040,8 +1974,74 @@ OverlayModule.decorators = [
 OverlayModule.ctorParameters = () => [];
 
 /**
+ * Alternative to OverlayContainer that supports correct displaying of overlay elements in
+ * Fullscreen mode
+ * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+ *
+ * Should be provided in the root component.
+ */
+class FullscreenOverlayContainer extends OverlayContainer {
+    /**
+     * @return {?}
+     */
+    _createContainer() {
+        super._createContainer();
+        this._adjustParentForFullscreenChange();
+        this._addFullscreenChangeListener(() => this._adjustParentForFullscreenChange());
+    }
+    /**
+     * @return {?}
+     */
+    _adjustParentForFullscreenChange() {
+        if (!this._containerElement) {
+            return;
+        }
+        let /** @type {?} */ fullscreenElement = this.getFullscreenElement();
+        let /** @type {?} */ parent = fullscreenElement || document.body;
+        parent.appendChild(this._containerElement);
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    _addFullscreenChangeListener(fn) {
+        if (document.fullscreenEnabled) {
+            document.addEventListener('fullscreenchange', fn);
+        }
+        else if (document.webkitFullscreenEnabled) {
+            document.addEventListener('webkitfullscreenchange', fn);
+        }
+        else if (((document)).mozFullScreenEnabled) {
+            document.addEventListener('mozfullscreenchange', fn);
+        }
+        else if (((document)).msFullscreenEnabled) {
+            document.addEventListener('MSFullscreenChange', fn);
+        }
+    }
+    /**
+     * When the page is put into fullscreen mode, a specific element is specified.
+     * Only that element and its children are visible when in fullscreen mode.
+     * @return {?}
+     */
+    getFullscreenElement() {
+        return document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            ((document)).mozFullScreenElement ||
+            ((document)).msFullscreenElement ||
+            null;
+    }
+}
+FullscreenOverlayContainer.decorators = [
+    { type: Injectable },
+];
+/**
+ * @nocollapse
+ */
+FullscreenOverlayContainer.ctorParameters = () => [];
+
+/**
  * Generated bundle index. Do not edit.
  */
 
-export { Overlay, OverlayContainer, FullscreenOverlayContainer, OverlayRef, ConnectedOverlayDirective, OverlayOrigin, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵi, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵh, OverlayKeyboardDispatcher as ɵg, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
+export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, ViewportRuler, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, CdkConnectedOverlay as ConnectedOverlayDirective, CdkOverlayOrigin as OverlayOrigin, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵi, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵh, OverlayKeyboardDispatcher as ɵg, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd, OverlayPositionBuilder as ɵf };
 //# sourceMappingURL=overlay.js.map

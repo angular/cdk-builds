@@ -6,3 +6,5 @@
  * found in the LICENSE file at https://angular.io/license
  */
 export * from './observe-content';
+/** @deprecated Use CdkObserveContent */
+export { CdkObserveContent as ObserveContent } from './observe-content';

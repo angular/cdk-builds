@@ -11,7 +11,7 @@ import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './por
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
-export declare class TemplatePortalDirective extends TemplatePortal<any> {
+export declare class CdkPortal extends TemplatePortal<any> {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
 /**
@@ -21,7 +21,7 @@ export declare class TemplatePortalDirective extends TemplatePortal<any> {
  * Usage:
  * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-export declare class PortalOutletDirective extends BasePortalOutlet implements OnDestroy {
+export declare class CdkPortalOutlet extends BasePortalOutlet implements OnDestroy {
     private _componentFactoryResolver;
     private _viewContainerRef;
     /** The attached portal. */

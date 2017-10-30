@@ -13,7 +13,7 @@ import { debounceTime } from 'rxjs/operators';
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-class MatMutationObserverFactory {
+class MutationObserverFactory {
     /**
      * @param {?} callback
      * @return {?}
@@ -22,18 +22,18 @@ class MatMutationObserverFactory {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     }
 }
-MatMutationObserverFactory.decorators = [
+MutationObserverFactory.decorators = [
     { type: Injectable },
 ];
 /**
  * @nocollapse
  */
-MatMutationObserverFactory.ctorParameters = () => [];
+MutationObserverFactory.ctorParameters = () => [];
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
  */
-class ObserveContent {
+class CdkObserveContent {
     /**
      * @param {?} _mutationObserverFactory
      * @param {?} _elementRef
@@ -88,7 +88,7 @@ class ObserveContent {
         this._debouncer.complete();
     }
 }
-ObserveContent.decorators = [
+CdkObserveContent.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkObserveContent]',
                 exportAs: 'cdkObserveContent',
@@ -97,12 +97,12 @@ ObserveContent.decorators = [
 /**
  * @nocollapse
  */
-ObserveContent.ctorParameters = () => [
-    { type: MatMutationObserverFactory, },
+CdkObserveContent.ctorParameters = () => [
+    { type: MutationObserverFactory, },
     { type: ElementRef, },
     { type: NgZone, },
 ];
-ObserveContent.propDecorators = {
+CdkObserveContent.propDecorators = {
     'event': [{ type: Output, args: ['cdkObserveContent',] },],
     'debounce': [{ type: Input },],
 };
@@ -110,9 +110,9 @@ class ObserversModule {
 }
 ObserversModule.decorators = [
     { type: NgModule, args: [{
-                exports: [ObserveContent],
-                declarations: [ObserveContent],
-                providers: [MatMutationObserverFactory]
+                exports: [CdkObserveContent],
+                declarations: [CdkObserveContent],
+                providers: [MutationObserverFactory]
             },] },
 ];
 /**
@@ -124,5 +124,5 @@ ObserversModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { MatMutationObserverFactory, ObserveContent, ObserversModule };
+export { CdkObserveContent as ObserveContent, MutationObserverFactory, CdkObserveContent, ObserversModule };
 //# sourceMappingURL=observers.js.map

@@ -13,36 +13,36 @@ import { debounceTime } from 'rxjs/operators';
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-var MatMutationObserverFactory = (function () {
-    function MatMutationObserverFactory() {
+var MutationObserverFactory = (function () {
+    function MutationObserverFactory() {
     }
     /**
      * @param {?} callback
      * @return {?}
      */
-    MatMutationObserverFactory.prototype.create = function (callback) {
+    MutationObserverFactory.prototype.create = function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
-    MatMutationObserverFactory.decorators = [
+    MutationObserverFactory.decorators = [
         { type: Injectable },
     ];
     /**
      * @nocollapse
      */
-    MatMutationObserverFactory.ctorParameters = function () { return []; };
-    return MatMutationObserverFactory;
+    MutationObserverFactory.ctorParameters = function () { return []; };
+    return MutationObserverFactory;
 }());
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
  */
-var ObserveContent = (function () {
+var CdkObserveContent = (function () {
     /**
      * @param {?} _mutationObserverFactory
      * @param {?} _elementRef
      * @param {?} _ngZone
      */
-    function ObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
+    function CdkObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
@@ -58,7 +58,7 @@ var ObserveContent = (function () {
     /**
      * @return {?}
      */
-    ObserveContent.prototype.ngAfterContentInit = function () {
+    CdkObserveContent.prototype.ngAfterContentInit = function () {
         var _this = this;
         if (this.debounce > 0) {
             this._ngZone.runOutsideAngular(function () {
@@ -85,13 +85,13 @@ var ObserveContent = (function () {
     /**
      * @return {?}
      */
-    ObserveContent.prototype.ngOnDestroy = function () {
+    CdkObserveContent.prototype.ngOnDestroy = function () {
         if (this._observer) {
             this._observer.disconnect();
         }
         this._debouncer.complete();
     };
-    ObserveContent.decorators = [
+    CdkObserveContent.decorators = [
         { type: Directive, args: [{
                     selector: '[cdkObserveContent]',
                     exportAs: 'cdkObserveContent',
@@ -100,25 +100,25 @@ var ObserveContent = (function () {
     /**
      * @nocollapse
      */
-    ObserveContent.ctorParameters = function () { return [
-        { type: MatMutationObserverFactory, },
+    CdkObserveContent.ctorParameters = function () { return [
+        { type: MutationObserverFactory, },
         { type: ElementRef, },
         { type: NgZone, },
     ]; };
-    ObserveContent.propDecorators = {
+    CdkObserveContent.propDecorators = {
         'event': [{ type: Output, args: ['cdkObserveContent',] },],
         'debounce': [{ type: Input },],
     };
-    return ObserveContent;
+    return CdkObserveContent;
 }());
 var ObserversModule = (function () {
     function ObserversModule() {
     }
     ObserversModule.decorators = [
         { type: NgModule, args: [{
-                    exports: [ObserveContent],
-                    declarations: [ObserveContent],
-                    providers: [MatMutationObserverFactory]
+                    exports: [CdkObserveContent],
+                    declarations: [CdkObserveContent],
+                    providers: [MutationObserverFactory]
                 },] },
     ];
     /**
@@ -132,5 +132,5 @@ var ObserversModule = (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { MatMutationObserverFactory, ObserveContent, ObserversModule };
+export { CdkObserveContent as ObserveContent, MutationObserverFactory, CdkObserveContent, ObserversModule };
 //# sourceMappingURL=observers.es5.js.map

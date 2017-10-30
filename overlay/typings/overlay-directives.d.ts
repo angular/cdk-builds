@@ -12,11 +12,11 @@ import { OverlayRef } from './overlay-ref';
 import { ConnectedOverlayPositionChange, ConnectionPositionPair } from './position/connected-position';
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
-export declare const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
+export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
 /** @docs-private */
-export declare function MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;
+export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;
 /** @docs-private */
-export declare const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
+export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
     provide: InjectionToken<() => ScrollStrategy>;
     deps: typeof Overlay[];
     useFactory: (overlay: Overlay) => () => RepositionScrollStrategy;
@@ -25,7 +25,7 @@ export declare const MAT_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
  */
-export declare class OverlayOrigin {
+export declare class CdkOverlayOrigin {
     /** Reference to the element on which the directive is applied. */
     elementRef: ElementRef;
     constructor(
@@ -35,7 +35,7 @@ export declare class OverlayOrigin {
 /**
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
  */
-export declare class ConnectedOverlayDirective implements OnDestroy, OnChanges {
+export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _overlay;
     private _renderer;
     private _scrollStrategy;
@@ -50,7 +50,7 @@ export declare class ConnectedOverlayDirective implements OnDestroy, OnChanges {
     private _position;
     private _escapeListener;
     /** Origin for the connected overlay. */
-    origin: OverlayOrigin;
+    origin: CdkOverlayOrigin;
     /** Registered connected position pairs. */
     positions: ConnectionPositionPair[];
     /** The offset in pixels for the overlay connection point on the x-axis */
@@ -74,7 +74,7 @@ export declare class ConnectedOverlayDirective implements OnDestroy, OnChanges {
     /** Whether or not the overlay should attach a backdrop. */
     hasBackdrop: any;
     /** @deprecated */
-    _deprecatedOrigin: OverlayOrigin;
+    _deprecatedOrigin: CdkOverlayOrigin;
     /** @deprecated */
     _deprecatedPositions: ConnectionPositionPair[];
     /** @deprecated */

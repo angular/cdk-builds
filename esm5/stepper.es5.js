@@ -253,7 +253,7 @@ var CdkStepper = (function () {
      * @return {?}
      */
     CdkStepper.prototype._getStepLabelId = function (i) {
-        return "mat-step-label-" + this._groupId + "-" + i;
+        return "cdk-step-label-" + this._groupId + "-" + i;
     };
     /**
      * Returns unique id for each step content element.
@@ -261,7 +261,7 @@ var CdkStepper = (function () {
      * @return {?}
      */
     CdkStepper.prototype._getStepContentId = function (i) {
-        return "mat-step-content-" + this._groupId + "-" + i;
+        return "cdk-step-content-" + this._groupId + "-" + i;
     };
     /**
      * Marks the component to be change detected.
