@@ -10,7 +10,7 @@ import { Version } from '@angular/core';
 /**
  * Current version of the Angular Component Development Kit.
  */
-var VERSION = new Version('2.0.0-beta.12-00de3f6');
+var VERSION = new Version('2.0.0-beta.12-b2dd17a');
 
 /**
  * Generated bundle index. Do not edit.
