@@ -6,12 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, ApplicationRef, Injector } from '@angular/core';
-import { BasePortalHost, ComponentPortal, TemplatePortal } from './portal';
+import { BasePortalOutlet, ComponentPortal, TemplatePortal } from './portal';
 /**
- * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
+ * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
-export declare class DomPortalHost extends BasePortalHost {
+export declare class DomPortalOutlet extends BasePortalOutlet {
     private _hostDomElement;
     private _componentFactoryResolver;
     private _appRef;

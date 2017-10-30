@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgZone } from '@angular/core';
-import { PortalHost, Portal } from '@angular/cdk/portal';
+import { PortalOutlet, Portal } from '@angular/cdk/portal';
 import { OverlayConfig } from './overlay-config';
 import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { Observable } from 'rxjs/Observable';
@@ -15,8 +15,8 @@ import { Subject } from 'rxjs/Subject';
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
  */
-export declare class OverlayRef implements PortalHost {
-    private _portalHost;
+export declare class OverlayRef implements PortalOutlet {
+    private _portalOutlet;
     private _pane;
     private _config;
     private _ngZone;
@@ -27,7 +27,7 @@ export declare class OverlayRef implements PortalHost {
     private _detachments;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;
-    constructor(_portalHost: PortalHost, _pane: HTMLElement, _config: OverlayConfig, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher);
+    constructor(_portalOutlet: PortalOutlet, _pane: HTMLElement, _config: OverlayConfig, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
     /**

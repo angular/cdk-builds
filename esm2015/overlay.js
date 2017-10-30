@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
-import { DomPortalHost, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
 import { filter, first } from 'rxjs/operators';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
@@ -77,14 +77,14 @@ class OverlayConfig {
  */
 class OverlayRef {
     /**
-     * @param {?} _portalHost
+     * @param {?} _portalOutlet
      * @param {?} _pane
      * @param {?} _config
      * @param {?} _ngZone
      * @param {?} _keyboardDispatcher
      */
-    constructor(_portalHost, _pane, _config, _ngZone, _keyboardDispatcher) {
-        this._portalHost = _portalHost;
+    constructor(_portalOutlet, _pane, _config, _ngZone, _keyboardDispatcher) {
+        this._portalOutlet = _portalOutlet;
         this._pane = _pane;
         this._config = _config;
         this._ngZone = _ngZone;
@@ -114,7 +114,7 @@ class OverlayRef {
      * @return {?} The portal attachment result.
      */
     attach(portal) {
-        let /** @type {?} */ attachResult = this._portalHost.attach(portal);
+        let /** @type {?} */ attachResult = this._portalOutlet.attach(portal);
         if (this._config.positionStrategy) {
             this._config.positionStrategy.attach(this);
         }
@@ -167,7 +167,7 @@ class OverlayRef {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
-        const /** @type {?} */ detachmentResult = this._portalHost.detach();
+        const /** @type {?} */ detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking
@@ -186,7 +186,7 @@ class OverlayRef {
             this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
-        this._portalHost.dispose();
+        this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
         this._detachments.next();
@@ -197,7 +197,7 @@ class OverlayRef {
      * @return {?}
      */
     hasAttached() {
-        return this._portalHost.hasAttached();
+        return this._portalOutlet.hasAttached();
     }
     /**
      * Gets an observable that emits when the backdrop has been clicked.
@@ -1412,7 +1412,7 @@ let defaultConfig = new OverlayConfig();
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
  * of re-usable components rather than developers building end-user applications.
  *
- * An overlay *is* a PortalHost, so any kind of Portal can be loaded into one.
+ * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 class Overlay {
     /**
@@ -1442,8 +1442,8 @@ class Overlay {
      */
     create(config = defaultConfig) {
         const /** @type {?} */ pane = this._createPaneElement();
-        const /** @type {?} */ portalHost = this._createPortalHost(pane);
-        return new OverlayRef(portalHost, pane, config, this._ngZone, this._keyboardDispatcher);
+        const /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
+        return new OverlayRef(portalOutlet, pane, config, this._ngZone, this._keyboardDispatcher);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -1465,12 +1465,12 @@ class Overlay {
         return pane;
     }
     /**
-     * Create a DomPortalHost into which the overlay content can be loaded.
-     * @param {?} pane The DOM element to turn into a portal host.
-     * @return {?} A portal host for the given DOM element.
+     * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @param {?} pane The DOM element to turn into a portal outlet.
+     * @return {?} A portal outlet for the given DOM element.
      */
-    _createPortalHost(pane) {
-        return new DomPortalHost(pane, this._componentFactoryResolver, this._appRef, this._injector);
+    _createPortalOutlet(pane) {
+        return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     }
 }
 Overlay.decorators = [

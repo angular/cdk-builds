@@ -103,14 +103,14 @@ var OverlayConfig = (function () {
  */
 var OverlayRef = (function () {
     /**
-     * @param {?} _portalHost
+     * @param {?} _portalOutlet
      * @param {?} _pane
      * @param {?} _config
      * @param {?} _ngZone
      * @param {?} _keyboardDispatcher
      */
-    function OverlayRef(_portalHost, _pane, _config, _ngZone, _keyboardDispatcher) {
-        this._portalHost = _portalHost;
+    function OverlayRef(_portalOutlet, _pane, _config, _ngZone, _keyboardDispatcher) {
+        this._portalOutlet = _portalOutlet;
         this._pane = _pane;
         this._config = _config;
         this._ngZone = _ngZone;
@@ -145,7 +145,7 @@ var OverlayRef = (function () {
      */
     OverlayRef.prototype.attach = function (portal) {
         var _this = this;
-        var /** @type {?} */ attachResult = this._portalHost.attach(portal);
+        var /** @type {?} */ attachResult = this._portalOutlet.attach(portal);
         if (this._config.positionStrategy) {
             this._config.positionStrategy.attach(this);
         }
@@ -198,7 +198,7 @@ var OverlayRef = (function () {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
-        var /** @type {?} */ detachmentResult = this._portalHost.detach();
+        var /** @type {?} */ detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking
@@ -217,7 +217,7 @@ var OverlayRef = (function () {
             this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
-        this._portalHost.dispose();
+        this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
         this._detachments.next();
@@ -228,7 +228,7 @@ var OverlayRef = (function () {
      * @return {?}
      */
     OverlayRef.prototype.hasAttached = function () {
-        return this._portalHost.hasAttached();
+        return this._portalOutlet.hasAttached();
     };
     /**
      * Gets an observable that emits when the backdrop has been clicked.
@@ -1494,7 +1494,7 @@ var defaultConfig = new OverlayConfig();
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
  * of re-usable components rather than developers building end-user applications.
  *
- * An overlay *is* a PortalHost, so any kind of Portal can be loaded into one.
+ * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = (function () {
     /**
@@ -1525,8 +1525,8 @@ var Overlay = (function () {
     Overlay.prototype.create = function (config) {
         if (config === void 0) { config = defaultConfig; }
         var /** @type {?} */ pane = this._createPaneElement();
-        var /** @type {?} */ portalHost = this._createPortalHost(pane);
-        return new OverlayRef(portalHost, pane, config, this._ngZone, this._keyboardDispatcher);
+        var /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
+        return new OverlayRef(portalOutlet, pane, config, this._ngZone, this._keyboardDispatcher);
     };
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -1548,12 +1548,12 @@ var Overlay = (function () {
         return pane;
     };
     /**
-     * Create a DomPortalHost into which the overlay content can be loaded.
-     * @param {?} pane The DOM element to turn into a portal host.
-     * @return {?} A portal host for the given DOM element.
+     * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @param {?} pane The DOM element to turn into a portal outlet.
+     * @return {?} A portal outlet for the given DOM element.
      */
-    Overlay.prototype._createPortalHost = function (pane) {
-        return new _angular_cdk_portal.DomPortalHost(pane, this._componentFactoryResolver, this._appRef, this._injector);
+    Overlay.prototype._createPortalOutlet = function (pane) {
+        return new _angular_cdk_portal.DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     };
     Overlay.decorators = [
         { type: _angular_core.Injectable },

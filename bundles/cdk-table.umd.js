@@ -725,9 +725,7 @@ var CdkTable = (function () {
         // TODO(andrewseguin): add some code to enforce that exactly one
         //   CdkCellOutlet was instantiated as a result  of `createEmbeddedView`.
         this._rowPlaceholder.viewContainer.createEmbeddedView(row.template, context, index);
-        // Insert empty cells if there is no data to improve rendering time.
-        var /** @type {?} */ cells = rowData ? this._getCellTemplatesForRow(row) : [];
-        cells.forEach(function (cell) {
+        this._getCellTemplatesForRow(row).forEach(function (cell) {
             CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, context);
         });
         this._changeDetectorRef.markForCheck();

@@ -18,7 +18,7 @@ import { ScrollStrategyOptions } from './scroll/index';
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
  * of re-usable components rather than developers building end-user applications.
  *
- * An overlay *is* a PortalHost, so any kind of Portal can be loaded into one.
+ * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 export declare class Overlay {
     /** Scrolling strategies that can be used when creating an overlay. */
@@ -51,9 +51,9 @@ export declare class Overlay {
      */
     private _createPaneElement();
     /**
-     * Create a DomPortalHost into which the overlay content can be loaded.
-     * @param pane The DOM element to turn into a portal host.
-     * @returns A portal host for the given DOM element.
+     * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @param pane The DOM element to turn into a portal outlet.
+     * @returns A portal outlet for the given DOM element.
      */
-    private _createPortalHost(pane);
+    private _createPortalOutlet(pane);
 }

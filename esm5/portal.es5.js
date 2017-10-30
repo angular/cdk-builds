@@ -30,8 +30,8 @@ function throwPortalAlreadyAttachedError() {
  * \@docs-private
  * @return {?}
  */
-function throwPortalHostAlreadyDisposedError() {
-    throw Error('This PortalHost has already been disposed');
+function throwPortalOutletAlreadyDisposedError() {
+    throw Error('This PortalOutlet has already been disposed');
 }
 /**
  * Throws an exception when attempting to attach an unknown portal type.
@@ -39,7 +39,7 @@ function throwPortalHostAlreadyDisposedError() {
  * @return {?}
  */
 function throwUnknownPortalTypeError() {
-    throw Error('Attempting to attach an unknown Portal type. BasePortalHost accepts either ' +
+    throw Error('Attempting to attach an unknown Portal type. BasePortalOutlet accepts either ' +
         'a ComponentPortal or a TemplatePortal.');
 }
 /**
@@ -47,8 +47,8 @@ function throwUnknownPortalTypeError() {
  * \@docs-private
  * @return {?}
  */
-function throwNullPortalHostError() {
-    throw Error('Attempting to attach a portal to a null PortalHost');
+function throwNullPortalOutletError() {
+    throw Error('Attempting to attach a portal to a null PortalOutlet');
 }
 /**
  * Throws an exception when attempting to detach a portal that is not attached.
@@ -61,7 +61,7 @@ function throwNoPortalAttachedError() {
 
 /**
  * A `Portal` is something that you want to render somewhere else.
- * It can be attach to / detached from a `PortalHost`.
+ * It can be attach to / detached from a `PortalOutlet`.
  * @abstract
  */
 var Portal = (function () {
@@ -74,7 +74,7 @@ var Portal = (function () {
      */
     Portal.prototype.attach = function (host) {
         if (host == null) {
-            throwNullPortalHostError();
+            throwNullPortalOutletError();
         }
         if (host.hasAttached()) {
             throwPortalAlreadyAttachedError();
@@ -108,8 +108,8 @@ var Portal = (function () {
         configurable: true
     });
     /**
-     * Sets the PortalHost reference without performing `attach()`. This is used directly by
-     * the PortalHost when it is performing an `attach()` or `detach()`.
+     * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
+     * the PortalOutlet when it is performing an `attach()` or `detach()`.
      * @param {?} host
      * @return {?}
      */
@@ -167,7 +167,7 @@ var TemplatePortal = (function (_super) {
         configurable: true
     });
     /**
-     * Attach the the portal to the provided `PortalHost`.
+     * Attach the the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      * @param {?} host
@@ -189,12 +189,12 @@ var TemplatePortal = (function (_super) {
     return TemplatePortal;
 }(Portal));
 /**
- * Partial implementation of PortalHost that handles attaching
+ * Partial implementation of PortalOutlet that handles attaching
  * ComponentPortal and TemplatePortal.
  * @abstract
  */
-var BasePortalHost = (function () {
-    function BasePortalHost() {
+var BasePortalOutlet = (function () {
+    function BasePortalOutlet() {
         /**
          * Whether this host has already been permanently disposed.
          */
@@ -204,7 +204,7 @@ var BasePortalHost = (function () {
      * Whether this host has an attached portal.
      * @return {?}
      */
-    BasePortalHost.prototype.hasAttached = function () {
+    BasePortalOutlet.prototype.hasAttached = function () {
         return !!this._attachedPortal;
     };
     /**
@@ -212,7 +212,7 @@ var BasePortalHost = (function () {
      * @param {?} portal
      * @return {?}
      */
-    BasePortalHost.prototype.attach = function (portal) {
+    BasePortalOutlet.prototype.attach = function (portal) {
         if (!portal) {
             throwNullPortalError();
         }
@@ -220,7 +220,7 @@ var BasePortalHost = (function () {
             throwPortalAlreadyAttachedError();
         }
         if (this._isDisposed) {
-            throwPortalHostAlreadyDisposedError();
+            throwPortalOutletAlreadyDisposedError();
         }
         if (portal instanceof ComponentPortal) {
             this._attachedPortal = portal;
@@ -238,19 +238,19 @@ var BasePortalHost = (function () {
      * @param {?} portal
      * @return {?}
      */
-    BasePortalHost.prototype.attachComponentPortal = function (portal) { };
+    BasePortalOutlet.prototype.attachComponentPortal = function (portal) { };
     /**
      * @abstract
      * @template C
      * @param {?} portal
      * @return {?}
      */
-    BasePortalHost.prototype.attachTemplatePortal = function (portal) { };
+    BasePortalOutlet.prototype.attachTemplatePortal = function (portal) { };
     /**
      * Detaches a previously attached portal.
      * @return {?}
      */
-    BasePortalHost.prototype.detach = function () {
+    BasePortalOutlet.prototype.detach = function () {
         if (this._attachedPortal) {
             this._attachedPortal.setAttachedHost(null);
             this._attachedPortal = null;
@@ -261,7 +261,7 @@ var BasePortalHost = (function () {
      * Permanently dispose of this portal host.
      * @return {?}
      */
-    BasePortalHost.prototype.dispose = function () {
+    BasePortalOutlet.prototype.dispose = function () {
         if (this.hasAttached()) {
             this.detach();
         }
@@ -273,34 +273,34 @@ var BasePortalHost = (function () {
      * @param {?} fn
      * @return {?}
      */
-    BasePortalHost.prototype.setDisposeFn = function (fn) {
+    BasePortalOutlet.prototype.setDisposeFn = function (fn) {
         this._disposeFn = fn;
     };
     /**
      * @return {?}
      */
-    BasePortalHost.prototype._invokeDisposeFn = function () {
+    BasePortalOutlet.prototype._invokeDisposeFn = function () {
         if (this._disposeFn) {
             this._disposeFn();
             this._disposeFn = null;
         }
     };
-    return BasePortalHost;
+    return BasePortalOutlet;
 }());
 
 /**
- * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
+ * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
-var DomPortalHost = (function (_super) {
-    __extends(DomPortalHost, _super);
+var DomPortalOutlet = (function (_super) {
+    __extends(DomPortalOutlet, _super);
     /**
      * @param {?} _hostDomElement
      * @param {?} _componentFactoryResolver
      * @param {?} _appRef
      * @param {?} _defaultInjector
      */
-    function DomPortalHost(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
+    function DomPortalOutlet(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
         var _this = _super.call(this) || this;
         _this._hostDomElement = _hostDomElement;
         _this._componentFactoryResolver = _componentFactoryResolver;
@@ -314,7 +314,7 @@ var DomPortalHost = (function (_super) {
      * @param {?} portal Portal to be attached
      * @return {?} Reference to the created component.
      */
-    DomPortalHost.prototype.attachComponentPortal = function (portal) {
+    DomPortalOutlet.prototype.attachComponentPortal = function (portal) {
         var _this = this;
         var /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         var /** @type {?} */ componentRef;
@@ -345,14 +345,15 @@ var DomPortalHost = (function (_super) {
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
      */
-    DomPortalHost.prototype.attachTemplatePortal = function (portal) {
+    DomPortalOutlet.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         var /** @type {?} */ viewContainer = portal.viewContainerRef;
         var /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
         viewRef.detectChanges();
         // The method `createEmbeddedView` will add the view as a child of the viewContainer.
-        // But for the DomPortalHost the view can be added everywhere in the DOM (e.g Overlay Container)
-        // To move the view to the specified host element. We just re-append the existing root nodes.
+        // But for the DomPortalOutlet the view can be added everywhere in the DOM
+        // (e.g Overlay Container) To move the view to the specified host element. We just
+        // re-append the existing root nodes.
         viewRef.rootNodes.forEach(function (rootNode) { return _this._hostDomElement.appendChild(rootNode); });
         this.setDisposeFn((function () {
             var /** @type {?} */ index = viewContainer.indexOf(viewRef);
@@ -367,7 +368,7 @@ var DomPortalHost = (function (_super) {
      * Clears out a portal from the DOM.
      * @return {?}
      */
-    DomPortalHost.prototype.dispose = function () {
+    DomPortalOutlet.prototype.dispose = function () {
         _super.prototype.dispose.call(this);
         if (this._hostDomElement.parentNode != null) {
             this._hostDomElement.parentNode.removeChild(this._hostDomElement);
@@ -378,11 +379,11 @@ var DomPortalHost = (function (_super) {
      * @param {?} componentRef
      * @return {?}
      */
-    DomPortalHost.prototype._getComponentRootNode = function (componentRef) {
+    DomPortalOutlet.prototype._getComponentRootNode = function (componentRef) {
         return (((componentRef.hostView)).rootNodes[0]);
     };
-    return DomPortalHost;
-}(BasePortalHost));
+    return DomPortalOutlet;
+}(BasePortalOutlet));
 
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -413,19 +414,19 @@ var TemplatePortalDirective = (function (_super) {
     return TemplatePortalDirective;
 }(TemplatePortal));
 /**
- * Directive version of a PortalHost. Because the directive *is* a PortalHost, portals can be
+ * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
  *
  * Usage:
- * <ng-template [cdkPortalHost]="greeting"></ng-template>
+ * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-var PortalHostDirective = (function (_super) {
-    __extends(PortalHostDirective, _super);
+var PortalOutletDirective = (function (_super) {
+    __extends(PortalOutletDirective, _super);
     /**
      * @param {?} _componentFactoryResolver
      * @param {?} _viewContainerRef
      */
-    function PortalHostDirective(_componentFactoryResolver, _viewContainerRef) {
+    function PortalOutletDirective(_componentFactoryResolver, _viewContainerRef) {
         var _this = _super.call(this) || this;
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._viewContainerRef = _viewContainerRef;
@@ -435,7 +436,7 @@ var PortalHostDirective = (function (_super) {
         _this._portal = null;
         return _this;
     }
-    Object.defineProperty(PortalHostDirective.prototype, "_deprecatedPortal", {
+    Object.defineProperty(PortalOutletDirective.prototype, "_deprecatedPortal", {
         /**
          * @deprecated
          * @return {?}
@@ -449,9 +450,23 @@ var PortalHostDirective = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(PortalHostDirective.prototype, "portal", {
+    Object.defineProperty(PortalOutletDirective.prototype, "_deprecatedPortalHost", {
         /**
-         * Portal associated with the Portal host.
+         * @deprecated
+         * @return {?}
+         */
+        get: function () { return this.portal; },
+        /**
+         * @param {?} v
+         * @return {?}
+         */
+        set: function (v) { this.portal = v; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(PortalOutletDirective.prototype, "portal", {
+        /**
+         * Portal associated with the Portal outlet.
          * @return {?}
          */
         get: function () {
@@ -476,21 +491,21 @@ var PortalHostDirective = (function (_super) {
     /**
      * @return {?}
      */
-    PortalHostDirective.prototype.ngOnDestroy = function () {
+    PortalOutletDirective.prototype.ngOnDestroy = function () {
         _super.prototype.dispose.call(this);
         this._portal = null;
     };
     /**
-     * Attach the given ComponentPortal to this PortalHost using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
      *
      * @template T
-     * @param {?} portal Portal to be attached to the portal host.
+     * @param {?} portal Portal to be attached to the portal outlet.
      * @return {?} Reference to the created component.
      */
-    PortalHostDirective.prototype.attachComponentPortal = function (portal) {
+    PortalOutletDirective.prototype.attachComponentPortal = function (portal) {
         portal.setAttachedHost(this);
         // If the portal specifies an origin, use that as the logical location of the component
-        // in the application tree. Otherwise use the location of this PortalHost.
+        // in the application tree. Otherwise use the location of this PortalOutlet.
         var /** @type {?} */ viewContainerRef = portal.viewContainerRef != null ?
             portal.viewContainerRef :
             this._viewContainerRef;
@@ -506,7 +521,7 @@ var PortalHostDirective = (function (_super) {
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
      */
-    PortalHostDirective.prototype.attachTemplatePortal = function (portal) {
+    PortalOutletDirective.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         portal.setAttachedHost(this);
         var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
@@ -514,32 +529,33 @@ var PortalHostDirective = (function (_super) {
         this._portal = portal;
         return viewRef;
     };
-    PortalHostDirective.decorators = [
+    PortalOutletDirective.decorators = [
         { type: Directive, args: [{
-                    selector: '[cdkPortalHost], [portalHost]',
-                    exportAs: 'cdkPortalHost',
-                    inputs: ['portal: cdkPortalHost']
+                    selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalOutlet, cdkPortalHost',
+                    inputs: ['portal: cdkPortalOutlet']
                 },] },
     ];
     /**
      * @nocollapse
      */
-    PortalHostDirective.ctorParameters = function () { return [
+    PortalOutletDirective.ctorParameters = function () { return [
         { type: ComponentFactoryResolver, },
         { type: ViewContainerRef, },
     ]; };
-    PortalHostDirective.propDecorators = {
+    PortalOutletDirective.propDecorators = {
         '_deprecatedPortal': [{ type: Input, args: ['portalHost',] },],
+        '_deprecatedPortalHost': [{ type: Input, args: ['cdkPortalHost',] },],
     };
-    return PortalHostDirective;
-}(BasePortalHost));
+    return PortalOutletDirective;
+}(BasePortalOutlet));
 var PortalModule = (function () {
     function PortalModule() {
     }
     PortalModule.decorators = [
         { type: NgModule, args: [{
-                    exports: [TemplatePortalDirective, PortalHostDirective],
-                    declarations: [TemplatePortalDirective, PortalHostDirective],
+                    exports: [TemplatePortalDirective, PortalOutletDirective],
+                    declarations: [TemplatePortalDirective, PortalOutletDirective],
                 },] },
     ];
     /**
@@ -582,5 +598,5 @@ var PortalInjector = (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { Portal, ComponentPortal, TemplatePortal, BasePortalHost, DomPortalHost, TemplatePortalDirective, PortalHostDirective, PortalModule, PortalInjector };
+export { DomPortalOutlet as DomPortalHost, PortalOutletDirective as PortalHostDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, TemplatePortalDirective, PortalOutletDirective, PortalModule, PortalInjector };
 //# sourceMappingURL=portal.es5.js.map

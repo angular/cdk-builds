@@ -11,21 +11,21 @@ export interface ComponentType<T> {
 }
 /**
  * A `Portal` is something that you want to render somewhere else.
- * It can be attach to / detached from a `PortalHost`.
+ * It can be attach to / detached from a `PortalOutlet`.
  */
 export declare abstract class Portal<T> {
     private _attachedHost;
     /** Attach this portal to a host. */
-    attach(host: PortalHost): T;
+    attach(host: PortalOutlet): T;
     /** Detach this portal from its host */
     detach(): void;
     /** Whether this portal is attached to a host. */
     readonly isAttached: boolean;
     /**
-     * Sets the PortalHost reference without performing `attach()`. This is used directly by
-     * the PortalHost when it is performing an `attach()` or `detach()`.
+     * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
+     * the PortalOutlet when it is performing an `attach()` or `detach()`.
      */
-    setAttachedHost(host: PortalHost | null): void;
+    setAttachedHost(host: PortalOutlet | null): void;
 }
 /**
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
@@ -35,7 +35,7 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
     component: ComponentType<T>;
     /**
      * [Optional] Where the attached component should live in Angular's *logical* component tree.
-     * This is different from where the component *renders*, which is determined by the PortalHost.
+     * This is different from where the component *renders*, which is determined by the PortalOutlet.
      * The origin is necessary when the host is outside of the Angular application context.
      */
     viewContainerRef?: ViewContainerRef | null;
@@ -55,27 +55,27 @@ export declare class TemplatePortal<C> extends Portal<C> {
     constructor(template: TemplateRef<any>, viewContainerRef: ViewContainerRef, context?: C);
     readonly origin: ElementRef;
     /**
-     * Attach the the portal to the provided `PortalHost`.
+     * Attach the the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      */
-    attach(host: PortalHost, context?: C | undefined): C;
+    attach(host: PortalOutlet, context?: C | undefined): C;
     detach(): void;
 }
 /**
- * A `PortalHost` is an space that can contain a single `Portal`.
+ * A `PortalOutlet` is an space that can contain a single `Portal`.
  */
-export interface PortalHost {
+export interface PortalOutlet {
     attach(portal: Portal<any>): any;
     detach(): any;
     dispose(): void;
     hasAttached(): boolean;
 }
 /**
- * Partial implementation of PortalHost that handles attaching
+ * Partial implementation of PortalOutlet that handles attaching
  * ComponentPortal and TemplatePortal.
  */
-export declare abstract class BasePortalHost implements PortalHost {
+export declare abstract class BasePortalOutlet implements PortalOutlet {
     /** The portal currently attached to the host. */
     private _attachedPortal;
     /** A function that will permanently dispose this host. */

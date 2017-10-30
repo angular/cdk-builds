@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy } from '@angular/core';
-import { Portal, TemplatePortal, ComponentPortal, BasePortalHost } from './portal';
+import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './portal';
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
@@ -15,13 +15,13 @@ export declare class TemplatePortalDirective extends TemplatePortal<any> {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
 /**
- * Directive version of a PortalHost. Because the directive *is* a PortalHost, portals can be
+ * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
  *
  * Usage:
- * <ng-template [cdkPortalHost]="greeting"></ng-template>
+ * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-export declare class PortalHostDirective extends BasePortalHost implements OnDestroy {
+export declare class PortalOutletDirective extends BasePortalOutlet implements OnDestroy {
     private _componentFactoryResolver;
     private _viewContainerRef;
     /** The attached portal. */
@@ -29,13 +29,15 @@ export declare class PortalHostDirective extends BasePortalHost implements OnDes
     constructor(_componentFactoryResolver: ComponentFactoryResolver, _viewContainerRef: ViewContainerRef);
     /** @deprecated */
     _deprecatedPortal: Portal<any> | null;
-    /** Portal associated with the Portal host. */
+    /** @deprecated */
+    _deprecatedPortalHost: Portal<any> | null;
+    /** Portal associated with the Portal outlet. */
     portal: Portal<any> | null;
     ngOnDestroy(): void;
     /**
-     * Attach the given ComponentPortal to this PortalHost using the ComponentFactoryResolver.
+     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
      *
-     * @param portal Portal to be attached to the portal host.
+     * @param portal Portal to be attached to the portal outlet.
      * @returns Reference to the created component.
      */
     attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
