@@ -705,7 +705,7 @@ var CdkTable = (function () {
         if (this._rowDefs.length == 1) {
             return this._rowDefs.first;
         }
-        var /** @type {?} */ rowDef = this._rowDefs.find(function (def) { return def.when && def.when(data, i); }) || this._defaultRowDef;
+        var /** @type {?} */ rowDef = this._rowDefs.find(function (def) { return def.when && def.when(i, data); }) || this._defaultRowDef;
         if (!rowDef) {
             throw getTableMissingMatchingRowDefError();
         }

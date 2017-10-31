@@ -632,7 +632,7 @@ class CdkTable {
         if (this._rowDefs.length == 1) {
             return this._rowDefs.first;
         }
-        let /** @type {?} */ rowDef = this._rowDefs.find(def => def.when && def.when(data, i)) || this._defaultRowDef;
+        let /** @type {?} */ rowDef = this._rowDefs.find(def => def.when && def.when(i, data)) || this._defaultRowDef;
         if (!rowDef) {
             throw getTableMissingMatchingRowDefError();
         }
