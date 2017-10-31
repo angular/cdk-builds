@@ -40,7 +40,7 @@ var CdkAccordion = (function () {
     });
     CdkAccordion.decorators = [
         { type: Directive, args: [{
-                    selector: 'cdk-accordion, [cdk-accordion]',
+                    selector: 'cdk-accordion, [cdkAccordion]',
                     exportAs: 'cdkAccordion',
                 },] },
     ];

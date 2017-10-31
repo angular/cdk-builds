@@ -8,7 +8,9 @@
 import { Injectable, NgModule, NgZone } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
-import { map, startWith, takeUntil } from 'rxjs/operators';
+import { map } from 'rxjs/operators/map';
+import { startWith } from 'rxjs/operators/startWith';
+import { takeUntil } from 'rxjs/operators/takeUntil';
 import { coerceArray } from '@angular/cdk/coercion';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { fromEventPattern } from 'rxjs/observable/fromEventPattern';

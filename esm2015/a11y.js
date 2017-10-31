@@ -8,10 +8,14 @@
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
-import { debounceTime, filter, first, map, tap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators/debounceTime';
+import { filter } from 'rxjs/operators/filter';
+import { map } from 'rxjs/operators/map';
+import { tap } from 'rxjs/operators/tap';
 import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { first } from 'rxjs/operators/first';
 import { of } from 'rxjs/observable/of';
 import { CommonModule } from '@angular/common';
 

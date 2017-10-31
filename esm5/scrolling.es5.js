@@ -11,7 +11,8 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { auditTime, filter } from 'rxjs/operators';
+import { auditTime } from 'rxjs/operators/auditTime';
+import { filter } from 'rxjs/operators/filter';
 import { merge } from 'rxjs/observable/merge';
 
 /**

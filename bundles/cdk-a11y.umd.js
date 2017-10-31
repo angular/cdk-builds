@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/observable/of'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/core', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/observable/of', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.ng.core,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.Observable,global.ng.common));
-}(this, (function (exports,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators,_angular_core,_angular_cdk_platform,_angular_cdk_coercion,rxjs_observable_of,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('@angular/core'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/first'), require('rxjs/observable/of'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', '@angular/core', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/first', 'rxjs/observable/of', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.ng.core,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.Observable,global.Rx.Observable,global.ng.common));
+}(this, (function (exports,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,_angular_core,_angular_cdk_platform,_angular_cdk_coercion,rxjs_operators_first,rxjs_observable_of,_angular_common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -86,7 +86,7 @@ var ListKeyManager = (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(rxjs_operators.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), rxjs_operators.debounceTime(debounceInterval), rxjs_operators.filter(function () { return _this._pressedLetters.length > 0; }), rxjs_operators.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(rxjs_operators_tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), rxjs_operators_debounceTime.debounceTime(debounceInterval), rxjs_operators_filter.filter(function () { return _this._pressedLetters.length > 0; }), rxjs_operators_map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -1108,7 +1108,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(rxjs_operators.first()).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(rxjs_operators_first.first()).subscribe(fn);
         }
     };
     return FocusTrap;

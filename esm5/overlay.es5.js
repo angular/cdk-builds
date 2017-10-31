@@ -10,8 +10,9 @@ import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_P
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { filter, first } from 'rxjs/operators';
+import { first } from 'rxjs/operators/first';
 import { Subscription } from 'rxjs/Subscription';
+import { filter } from 'rxjs/operators/filter';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';

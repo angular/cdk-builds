@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/operators')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/operators'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/operators/debounceTime')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/operators/debounceTime'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = global.ng.cdk.observers || {}),global.ng.core,global.Rx,global.Rx.Observable));
-}(this, (function (exports,_angular_core,rxjs_Subject,rxjs_operators) { 'use strict';
+}(this, (function (exports,_angular_core,rxjs_Subject,rxjs_operators_debounceTime) { 'use strict';
 
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -64,7 +64,7 @@ var CdkObserveContent = (function () {
         var _this = this;
         if (this.debounce > 0) {
             this._ngZone.runOutsideAngular(function () {
-                _this._debouncer.pipe(rxjs_operators.debounceTime(_this.debounce))
+                _this._debouncer.pipe(rxjs_operators_debounceTime.debounceTime(_this.debounce))
                     .subscribe(function (mutations) { return _this.event.emit(mutations); });
             });
         }

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('rxjs/operators'), require('rxjs/Subscription'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/Subject', 'rxjs/operators', 'rxjs/Subscription', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx,global.Rx.Observable,global.Rx,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_Subject,rxjs_operators,rxjs_Subscription,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('rxjs/operators/first'), require('rxjs/Subscription'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/Subject', 'rxjs/operators/first', 'rxjs/Subscription', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx,global.Rx.Observable,global.Rx,global.Rx.Observable,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_Subject,rxjs_operators_first,rxjs_Subscription,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -455,7 +455,7 @@ var OverlayRef = (function () {
         // Update the position once the zone is stable so that the overlay will be fully rendered
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
-        this._ngZone.onStable.asObservable().pipe(rxjs_operators.first()).subscribe(function () {
+        this._ngZone.onStable.asObservable().pipe(rxjs_operators_first.first()).subscribe(function () {
             _this.updatePosition();
         });
         // Enable pointer events for the overlay pane element.
@@ -1369,7 +1369,7 @@ var OverlayKeyboardDispatcher = (function () {
     OverlayKeyboardDispatcher.prototype._subscribeToKeydownEvents = function () {
         var _this = this;
         var /** @type {?} */ bodyKeydownEvents = rxjs_observable_fromEvent.fromEvent(document.body, 'keydown');
-        this._keydownEventSubscription = bodyKeydownEvents.pipe(rxjs_operators.filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
+        this._keydownEventSubscription = bodyKeydownEvents.pipe(rxjs_operators_filter.filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
             // Dispatch keydown event to correct overlay reference
             _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });
