@@ -37,7 +37,7 @@ class CdkAccordion {
 }
 CdkAccordion.decorators = [
     { type: Directive, args: [{
-                selector: 'cdk-accordion, [cdkAccordion]',
+                selector: 'cdk-accordion, [cdk-accordion]',
                 exportAs: 'cdkAccordion',
             },] },
 ];
