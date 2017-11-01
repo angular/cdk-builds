@@ -16,6 +16,11 @@ import { filter } from 'rxjs/operators/filter';
 import { merge } from 'rxjs/observable/merge';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Time in ms to throttle the scrolling events by default.
  */
 const DEFAULT_SCROLL_TIME = 20;
@@ -158,9 +163,7 @@ class ScrollDispatcher {
 ScrollDispatcher.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ScrollDispatcher.ctorParameters = () => [
     { type: NgZone, },
     { type: Platform, },
@@ -184,6 +187,11 @@ const SCROLL_DISPATCHER_PROVIDER = {
     deps: [[new Optional(), new SkipSelf(), ScrollDispatcher], NgZone, Platform],
     useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
@@ -244,15 +252,18 @@ CdkScrollable.decorators = [
                 selector: '[cdk-scrollable], [cdkScrollable]'
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkScrollable.ctorParameters = () => [
     { type: ElementRef, },
     { type: ScrollDispatcher, },
     { type: NgZone, },
     { type: Renderer2, },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Time in ms to throttle the resize events by default.
@@ -328,9 +339,9 @@ class ViewportRuler {
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
-        const /** @type {?} */ top = -((documentRect)).top || document.body.scrollTop || window.scrollY ||
+        const /** @type {?} */ top = -/** @type {?} */ ((documentRect)).top || document.body.scrollTop || window.scrollY ||
             document.documentElement.scrollTop || 0;
-        const /** @type {?} */ left = -((documentRect)).left || document.body.scrollLeft || window.scrollX ||
+        const /** @type {?} */ left = -/** @type {?} */ ((documentRect)).left || document.body.scrollLeft || window.scrollX ||
             document.documentElement.scrollLeft || 0;
         return { top, left };
     }
@@ -353,9 +364,7 @@ class ViewportRuler {
 ViewportRuler.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ViewportRuler.ctorParameters = () => [
     { type: Platform, },
     { type: NgZone, },
@@ -380,6 +389,11 @@ const VIEWPORT_RULER_PROVIDER = {
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 class ScrollDispatchModule {
 }
 ScrollDispatchModule.decorators = [
@@ -390,11 +404,18 @@ ScrollDispatchModule.decorators = [
                 providers: [SCROLL_DISPATCHER_PROVIDER],
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ScrollDispatchModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

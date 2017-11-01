@@ -11,6 +11,11 @@
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.keycodes = global.ng.cdk.keycodes || {})));
 }(this, (function (exports) { 'use strict';
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var UP_ARROW = 38;
 var DOWN_ARROW = 40;
 var RIGHT_ARROW = 39;

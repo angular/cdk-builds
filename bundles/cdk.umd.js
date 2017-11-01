@@ -12,9 +12,14 @@
 }(this, (function (exports,_angular_core) { 'use strict';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Current version of the Angular Component Development Kit.
  */
-var VERSION = new _angular_core.Version('2.0.0-beta.12-a2129fc');
+var VERSION = new _angular_core.Version('2.0.0-beta.12-dfe8091');
 
 exports.VERSION = VERSION;
 

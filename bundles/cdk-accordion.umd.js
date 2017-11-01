@@ -12,6 +12,11 @@
 }(this, (function (exports,_angular_core,_angular_cdk_collections,_angular_cdk_coercion) { 'use strict';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Used to generate unique ID for each accordion.
  */
 var nextId$1 = 0;
@@ -27,16 +32,16 @@ var CdkAccordion = (function () {
         this._multi = false;
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
-        /**
+        get: /**
          * Whether the accordion should allow multiple expanded accordion items simulateously.
          * @return {?}
          */
-        get: function () { return this._multi; },
-        /**
+        function () { return this._multi; },
+        set: /**
          * @param {?} multi
          * @return {?}
          */
-        set: function (multi) { this._multi = _angular_cdk_coercion.coerceBooleanProperty(multi); },
+        function (multi) { this._multi = _angular_cdk_coercion.coerceBooleanProperty(multi); },
         enumerable: true,
         configurable: true
     });
@@ -46,15 +51,18 @@ var CdkAccordion = (function () {
                     exportAs: 'cdkAccordion',
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkAccordion.ctorParameters = function () { return []; };
     CdkAccordion.propDecorators = {
-        'multi': [{ type: _angular_core.Input },],
+        "multi": [{ type: _angular_core.Input },],
     };
     return CdkAccordion;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Used to generate unique ID for each accordion item.
@@ -65,11 +73,6 @@ var nextId = 0;
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
 var CdkAccordionItem = (function () {
-    /**
-     * @param {?} accordion
-     * @param {?} _changeDetectorRef
-     * @param {?} _expansionDispatcher
-     */
     function CdkAccordionItem(accordion, _changeDetectorRef, _expansionDispatcher) {
         var _this = this;
         this.accordion = accordion;
@@ -104,16 +107,16 @@ var CdkAccordionItem = (function () {
             });
     }
     Object.defineProperty(CdkAccordionItem.prototype, "expanded", {
-        /**
+        get: /**
          * Whether the AccordionItem is expanded.
          * @return {?}
          */
-        get: function () { return this._expanded; },
-        /**
+        function () { return this._expanded; },
+        set: /**
          * @param {?} expanded
          * @return {?}
          */
-        set: function (expanded) {
+        function (expanded) {
             // Only emit events and update the internal value if the value changes.
             if (this._expanded !== expanded) {
                 this._expanded = expanded;
@@ -123,7 +126,7 @@ var CdkAccordionItem = (function () {
                      * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                      * the name value is the id of the accordion.
                      */
-                    var accordionId = this.accordion ? this.accordion.id : this.id;
+                    var /** @type {?} */ accordionId = this.accordion ? this.accordion.id : this.id;
                     this._expansionDispatcher.notify(this.id, accordionId);
                 }
                 else {
@@ -137,33 +140,53 @@ var CdkAccordionItem = (function () {
         enumerable: true,
         configurable: true
     });
+    /** Emits an event for the accordion item being destroyed. */
     /**
      * Emits an event for the accordion item being destroyed.
      * @return {?}
      */
-    CdkAccordionItem.prototype.ngOnDestroy = function () {
+    CdkAccordionItem.prototype.ngOnDestroy = /**
+     * Emits an event for the accordion item being destroyed.
+     * @return {?}
+     */
+    function () {
         this.destroyed.emit();
         this._removeUniqueSelectionListener();
     };
+    /** Toggles the expanded state of the accordion item. */
     /**
      * Toggles the expanded state of the accordion item.
      * @return {?}
      */
-    CdkAccordionItem.prototype.toggle = function () {
+    CdkAccordionItem.prototype.toggle = /**
+     * Toggles the expanded state of the accordion item.
+     * @return {?}
+     */
+    function () {
         this.expanded = !this.expanded;
     };
+    /** Sets the expanded state of the accordion item to false. */
     /**
      * Sets the expanded state of the accordion item to false.
      * @return {?}
      */
-    CdkAccordionItem.prototype.close = function () {
+    CdkAccordionItem.prototype.close = /**
+     * Sets the expanded state of the accordion item to false.
+     * @return {?}
+     */
+    function () {
         this.expanded = false;
     };
+    /** Sets the expanded state of the accordion item to true. */
     /**
      * Sets the expanded state of the accordion item to true.
      * @return {?}
      */
-    CdkAccordionItem.prototype.open = function () {
+    CdkAccordionItem.prototype.open = /**
+     * Sets the expanded state of the accordion item to true.
+     * @return {?}
+     */
+    function () {
         this.expanded = true;
     };
     CdkAccordionItem.decorators = [
@@ -172,22 +195,25 @@ var CdkAccordionItem = (function () {
                     exportAs: 'cdkAccordionItem',
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkAccordionItem.ctorParameters = function () { return [
         { type: CdkAccordion, decorators: [{ type: _angular_core.Optional },] },
         { type: _angular_core.ChangeDetectorRef, },
         { type: _angular_cdk_collections.UniqueSelectionDispatcher, },
     ]; };
     CdkAccordionItem.propDecorators = {
-        'closed': [{ type: _angular_core.Output },],
-        'opened': [{ type: _angular_core.Output },],
-        'destroyed': [{ type: _angular_core.Output },],
-        'expanded': [{ type: _angular_core.Input },],
+        "closed": [{ type: _angular_core.Output },],
+        "opened": [{ type: _angular_core.Output },],
+        "destroyed": [{ type: _angular_core.Output },],
+        "expanded": [{ type: _angular_core.Input },],
     };
     return CdkAccordionItem;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 var CdkAccordionModule = (function () {
     function CdkAccordionModule() {
@@ -199,9 +225,7 @@ var CdkAccordionModule = (function () {
                     providers: [_angular_cdk_collections.UNIQUE_SELECTION_DISPATCHER_PROVIDER],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkAccordionModule.ctorParameters = function () { return []; };
     return CdkAccordionModule;
 }());

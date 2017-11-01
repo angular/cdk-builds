@@ -16,6 +16,11 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Global registry for all dynamically-created, injected style tags.
  */
 var styleElementForWebkitCompatibility = new Map();
@@ -23,9 +28,6 @@ var styleElementForWebkitCompatibility = new Map();
  * A utility for calling matchMedia queries.
  */
 var MediaMatcher = (function () {
-    /**
-     * @param {?} platform
-     */
     function MediaMatcher(platform) {
         this.platform = platform;
         this._matchMedia = this.platform.isBrowser ?
@@ -39,10 +41,24 @@ var MediaMatcher = (function () {
      * can be retrieved.
      * Confirms the layout engine will trigger for the selector query provided and returns the
      * MediaQueryList for the query provided.
+     */
+    /**
+     * Evaluates the given media query and returns the native MediaQueryList from which results
+     * can be retrieved.
+     * Confirms the layout engine will trigger for the selector query provided and returns the
+     * MediaQueryList for the query provided.
      * @param {?} query
      * @return {?}
      */
-    MediaMatcher.prototype.matchMedia = function (query) {
+    MediaMatcher.prototype.matchMedia = /**
+     * Evaluates the given media query and returns the native MediaQueryList from which results
+     * can be retrieved.
+     * Confirms the layout engine will trigger for the selector query provided and returns the
+     * MediaQueryList for the query provided.
+     * @param {?} query
+     * @return {?}
+     */
+    function (query) {
         if (this.platform.WEBKIT) {
             createEmptyStyleRule(query);
         }
@@ -51,9 +67,7 @@ var MediaMatcher = (function () {
     MediaMatcher.decorators = [
         { type: Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     MediaMatcher.ctorParameters = function () { return [
         { type: Platform, },
     ]; };
@@ -78,7 +92,7 @@ function createEmptyStyleRule(query) {
             // Store in private global registry
             styleElementForWebkitCompatibility.set(query, style);
         }
-        catch (e) {
+        catch (/** @type {?} */ e) {
             console.error(e);
         }
     }
@@ -98,13 +112,19 @@ function noopMatchMedia(query) {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * The current state of a layout breakpoint.
+ * @record
+ */
+
+/**
  * Utility for checking the matching state of \@media queries.
  */
 var BreakpointObserver = (function () {
-    /**
-     * @param {?} mediaMatcher
-     * @param {?} zone
-     */
     function BreakpointObserver(mediaMatcher, zone) {
         this.mediaMatcher = mediaMatcher;
         this.zone = zone;
@@ -117,20 +137,35 @@ var BreakpointObserver = (function () {
          */
         this._destroySubject = new Subject();
     }
+    /** Completes the active subject, signalling to all other observables to complete. */
     /**
      * Completes the active subject, signalling to all other observables to complete.
      * @return {?}
      */
-    BreakpointObserver.prototype.ngOnDestroy = function () {
+    BreakpointObserver.prototype.ngOnDestroy = /**
+     * Completes the active subject, signalling to all other observables to complete.
+     * @return {?}
+     */
+    function () {
         this._destroySubject.next();
         this._destroySubject.complete();
     };
     /**
      * Whether one or more media queries match the current viewport size.
+     * @param value One or more media queries to check.
+     * @returns Whether any of the media queries match.
+     */
+    /**
+     * Whether one or more media queries match the current viewport size.
      * @param {?} value One or more media queries to check.
      * @return {?} Whether any of the media queries match.
      */
-    BreakpointObserver.prototype.isMatched = function (value) {
+    BreakpointObserver.prototype.isMatched = /**
+     * Whether one or more media queries match the current viewport size.
+     * @param {?} value One or more media queries to check.
+     * @return {?} Whether any of the media queries match.
+     */
+    function (value) {
         var _this = this;
         var /** @type {?} */ queries = coerceArray(value);
         return queries.some(function (mediaQuery) { return _this._registerQuery(mediaQuery).mql.matches; });
@@ -138,10 +173,21 @@ var BreakpointObserver = (function () {
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
+     * @returns A stream of matches for the given queries.
+     */
+    /**
+     * Gets an observable of results for the given queries that will emit new results for any changes
+     * in matching of the given queries.
      * @param {?} value
      * @return {?} A stream of matches for the given queries.
      */
-    BreakpointObserver.prototype.observe = function (value) {
+    BreakpointObserver.prototype.observe = /**
+     * Gets an observable of results for the given queries that will emit new results for any changes
+     * in matching of the given queries.
+     * @param {?} value
+     * @return {?} A stream of matches for the given queries.
+     */
+    function (value) {
         var _this = this;
         var /** @type {?} */ queries = coerceArray(value);
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
@@ -156,15 +202,25 @@ var BreakpointObserver = (function () {
      * @param {?} query
      * @return {?}
      */
-    BreakpointObserver.prototype._registerQuery = function (query) {
+    BreakpointObserver.prototype._registerQuery = /**
+     * Registers a specific query to be listened for.
+     * @param {?} query
+     * @return {?}
+     */
+    function (query) {
         var _this = this;
         // Only set up a new MediaQueryList if it is not already being listened for.
         if (this._queries.has(query)) {
-            return ((this._queries.get(query)));
+            return /** @type {?} */ ((this._queries.get(query)));
         }
         var /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
         var /** @type {?} */ queryObservable = fromEventPattern(
+        // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
+        // back into the zone because matchMedia is only included in Zone.js by loading the
+        // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
+        // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
+        // patches it.
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -184,9 +240,7 @@ var BreakpointObserver = (function () {
     BreakpointObserver.decorators = [
         { type: Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     BreakpointObserver.ctorParameters = function () { return [
         { type: MediaMatcher, },
         { type: NgZone, },
@@ -194,8 +248,11 @@ var BreakpointObserver = (function () {
     return BreakpointObserver;
 }());
 
-// PascalCase is being used as Breakpoints is used like an enum.
-// tslint:disable-next-line:variable-name
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var Breakpoints = {
     Handset: '(max-width: 599px) and (orientation: portrait), ' +
         '(max-width: 959px) and (orientation: landscape)',
@@ -211,6 +268,11 @@ var Breakpoints = {
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var LayoutModule = (function () {
     function LayoutModule() {
     }
@@ -220,13 +282,15 @@ var LayoutModule = (function () {
                     imports: [PlatformModule],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

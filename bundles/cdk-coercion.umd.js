@@ -12,6 +12,10 @@
 }(this, (function (exports) { 'use strict';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Coerces a data-bound value (typically a string) to a boolean.
  * @param {?} value
  * @return {?}
@@ -20,6 +24,10 @@ function coerceBooleanProperty(value) {
     return value != null && "" + value !== 'false';
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Coerces a data-bound value (typically a string) to a number.
  * @param {?} value
@@ -34,6 +42,10 @@ function coerceNumberProperty(value, fallbackValue) {
     return isNaN(parseFloat(/** @type {?} */ (value))) || isNaN(Number(value)) ? fallbackValue : Number(value);
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Wraps the provided value in an array, unless the provided value is an array.
  * @template T

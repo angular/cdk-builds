@@ -8,12 +8,16 @@
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
 import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
+import { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
-import { DataSource } from '@angular/cdk/collections';
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -25,10 +29,6 @@ var CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
  * @abstract
  */
 var BaseRowDef = (function () {
-    /**
-     * @param {?} template
-     * @param {?} _differs
-     */
     function BaseRowDef(template, _differs) {
         this.template = template;
         this._differs = _differs;
@@ -37,7 +37,11 @@ var BaseRowDef = (function () {
      * @param {?} changes
      * @return {?}
      */
-    BaseRowDef.prototype.ngOnChanges = function (changes) {
+    BaseRowDef.prototype.ngOnChanges = /**
+     * @param {?} changes
+     * @return {?}
+     */
+    function (changes) {
         // Create a new columns differ if one does not yet exist. Initialize it based on initial value
         // of the columns property or an empty array if none is provided.
         var /** @type {?} */ columns = changes['columns'].currentValue || [];
@@ -49,9 +53,18 @@ var BaseRowDef = (function () {
     /**
      * Returns the difference between the current columns and the columns from the last diff, or null
      * if there is no difference.
+     */
+    /**
+     * Returns the difference between the current columns and the columns from the last diff, or null
+     * if there is no difference.
      * @return {?}
      */
-    BaseRowDef.prototype.getColumnsDiff = function () {
+    BaseRowDef.prototype.getColumnsDiff = /**
+     * Returns the difference between the current columns and the columns from the last diff, or null
+     * if there is no difference.
+     * @return {?}
+     */
+    function () {
         return this._columnsDiffer.diff(this.columns);
     };
     return BaseRowDef;
@@ -62,10 +75,6 @@ var BaseRowDef = (function () {
  */
 var CdkHeaderRowDef = (function (_super) {
     __extends(CdkHeaderRowDef, _super);
-    /**
-     * @param {?} template
-     * @param {?} _differs
-     */
     function CdkHeaderRowDef(template, _differs) {
         return _super.call(this, template, _differs) || this;
     }
@@ -75,9 +84,7 @@ var CdkHeaderRowDef = (function (_super) {
                     inputs: ['columns: cdkHeaderRowDef'],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkHeaderRowDef.ctorParameters = function () { return [
         { type: TemplateRef, },
         { type: IterableDiffers, },
@@ -91,10 +98,8 @@ var CdkHeaderRowDef = (function (_super) {
  */
 var CdkRowDef = (function (_super) {
     __extends(CdkRowDef, _super);
-    /**
-     * @param {?} template
-     * @param {?} _differs
-     */
+    // TODO(andrewseguin): Add an input for providing a switch function to determine
+    //   if this template should be used.
     function CdkRowDef(template, _differs) {
         return _super.call(this, template, _differs) || this;
     }
@@ -104,9 +109,7 @@ var CdkRowDef = (function (_super) {
                     inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkRowDef.ctorParameters = function () { return [
         { type: TemplateRef, },
         { type: IterableDiffers, },
@@ -114,23 +117,31 @@ var CdkRowDef = (function (_super) {
     return CdkRowDef;
 }(BaseRowDef));
 /**
+ * Context provided to the row cells
+ * @record
+ */
+
+/**
  * Outlet for rendering cells inside of a row or header row.
  * \@docs-private
  */
 var CdkCellOutlet = (function () {
-    /**
-     * @param {?} _viewContainer
-     */
     function CdkCellOutlet(_viewContainer) {
         this._viewContainer = _viewContainer;
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
+    /**
+     * Static property containing the latest constructed instance of this class.
+     * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
+     * createEmbeddedView. After one of these components are created, this property will provide
+     * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
+     * construct the cells with the provided context.
+     */
+    CdkCellOutlet.mostRecentCellOutlet = null;
     CdkCellOutlet.decorators = [
         { type: Directive, args: [{ selector: '[cdkCellOutlet]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkCellOutlet.ctorParameters = function () { return [
         { type: ViewContainerRef, },
     ]; };
@@ -154,9 +165,7 @@ var CdkHeaderRow = (function () {
                     preserveWhitespaces: false,
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkHeaderRow.ctorParameters = function () { return []; };
     return CdkHeaderRow;
 }());
@@ -178,30 +187,28 @@ var CdkRow = (function () {
                     preserveWhitespaces: false,
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkRow.ctorParameters = function () { return []; };
     return CdkRow;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Cell definition for a CDK table.
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 var CdkCellDef = (function () {
-    /**
-     * @param {?} template
-     */
     function CdkCellDef(template) {
         this.template = template;
     }
     CdkCellDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkCellDef]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkCellDef.ctorParameters = function () { return [
         { type: TemplateRef, },
     ]; };
@@ -212,18 +219,13 @@ var CdkCellDef = (function () {
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 var CdkHeaderCellDef = (function () {
-    /**
-     * @param {?} template
-     */
     function CdkHeaderCellDef(template) {
         this.template = template;
     }
     CdkHeaderCellDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkHeaderCellDef.ctorParameters = function () { return [
         { type: TemplateRef, },
     ]; };
@@ -237,16 +239,16 @@ var CdkColumnDef = (function () {
     function CdkColumnDef() {
     }
     Object.defineProperty(CdkColumnDef.prototype, "name", {
-        /**
+        get: /**
          * Unique name for this column.
          * @return {?}
          */
-        get: function () { return this._name; },
-        /**
+        function () { return this._name; },
+        set: /**
          * @param {?} name
          * @return {?}
          */
-        set: function (name) {
+        function (name) {
             this._name = name;
             this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
         },
@@ -256,14 +258,12 @@ var CdkColumnDef = (function () {
     CdkColumnDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkColumnDef.ctorParameters = function () { return []; };
     CdkColumnDef.propDecorators = {
-        'name': [{ type: Input, args: ['cdkColumnDef',] },],
-        'cell': [{ type: ContentChild, args: [CdkCellDef,] },],
-        'headerCell': [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
+        "name": [{ type: Input, args: ['cdkColumnDef',] },],
+        "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
+        "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
     };
     return CdkColumnDef;
 }());
@@ -271,11 +271,6 @@ var CdkColumnDef = (function () {
  * Header cell template container that adds the right classes and role.
  */
 var CdkHeaderCell = (function () {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     * @param {?} renderer
-     */
     function CdkHeaderCell(columnDef, elementRef, renderer) {
         renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
     }
@@ -288,9 +283,7 @@ var CdkHeaderCell = (function () {
                     },
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkHeaderCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: ElementRef, },
@@ -302,11 +295,6 @@ var CdkHeaderCell = (function () {
  * Cell template container that adds the right classes and role.
  */
 var CdkCell = (function () {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     * @param {?} renderer
-     */
     function CdkCell(columnDef, elementRef, renderer) {
         renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
     }
@@ -319,9 +307,7 @@ var CdkCell = (function () {
                     },
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: ElementRef, },
@@ -330,6 +316,10 @@ var CdkCell = (function () {
     return CdkCell;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Returns an error to be thrown when attempting to find an unexisting column.
  * \@docs-private
@@ -366,22 +356,21 @@ function getTableMissingMatchingRowDefError() {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
  */
 var RowPlaceholder = (function () {
-    /**
-     * @param {?} viewContainer
-     */
     function RowPlaceholder(viewContainer) {
         this.viewContainer = viewContainer;
     }
     RowPlaceholder.decorators = [
         { type: Directive, args: [{ selector: '[rowPlaceholder]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     RowPlaceholder.ctorParameters = function () { return [
         { type: ViewContainerRef, },
     ]; };
@@ -392,18 +381,13 @@ var RowPlaceholder = (function () {
  * \@docs-private
  */
 var HeaderRowPlaceholder = (function () {
-    /**
-     * @param {?} viewContainer
-     */
     function HeaderRowPlaceholder(viewContainer) {
         this.viewContainer = viewContainer;
     }
     HeaderRowPlaceholder.decorators = [
         { type: Directive, args: [{ selector: '[headerRowPlaceholder]' },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     HeaderRowPlaceholder.ctorParameters = function () { return [
         { type: ViewContainerRef, },
     ]; };
@@ -431,13 +415,6 @@ var RowViewRef = (function (_super) {
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
 var CdkTable = (function () {
-    /**
-     * @param {?} _differs
-     * @param {?} _changeDetectorRef
-     * @param {?} elementRef
-     * @param {?} renderer
-     * @param {?} role
-     */
     function CdkTable(_differs, _changeDetectorRef, elementRef, renderer, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
@@ -463,21 +440,21 @@ var CdkTable = (function () {
         }
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
-        /**
+        get: /**
          * Tracking function that will be used to check the differences in data changes. Used similarly
          * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
          * relative to the function to know if a row should be added/removed/moved.
          * Accepts a function that takes two parameters, `index` and `item`.
          * @return {?}
          */
-        get: function () { return this._trackByFn; },
-        /**
+        function () { return this._trackByFn; },
+        set: /**
          * @param {?} fn
          * @return {?}
          */
-        set: function (fn) {
+        function (fn) {
             if (isDevMode() &&
-                fn != null && typeof fn !== 'function' && (console) && (console.warn)) {
+                fn != null && typeof fn !== 'function' && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
                 console.warn("trackBy must be a function, but received " + JSON.stringify(fn) + ".");
             }
             this._trackByFn = fn;
@@ -486,17 +463,17 @@ var CdkTable = (function () {
         configurable: true
     });
     Object.defineProperty(CdkTable.prototype, "dataSource", {
-        /**
+        get: /**
          * Provides a stream containing the latest data array to render. Influenced by the table's
          * stream of view window (what rows are currently on screen).
          * @return {?}
          */
-        get: function () { return this._dataSource; },
-        /**
+        function () { return this._dataSource; },
+        set: /**
          * @param {?} dataSource
          * @return {?}
          */
-        set: function (dataSource) {
+        function (dataSource) {
             if (this._dataSource !== dataSource) {
                 this._switchDataSource(dataSource);
             }
@@ -507,14 +484,20 @@ var CdkTable = (function () {
     /**
      * @return {?}
      */
-    CdkTable.prototype.ngOnInit = function () {
+    CdkTable.prototype.ngOnInit = /**
+     * @return {?}
+     */
+    function () {
         // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
         this._dataDiffer = this._differs.find([]).create(this._trackByFn);
     };
     /**
      * @return {?}
      */
-    CdkTable.prototype.ngAfterContentInit = function () {
+    CdkTable.prototype.ngAfterContentInit = /**
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._cacheColumnDefsByName();
         this._columnDefs.changes.subscribe(function () { return _this._cacheColumnDefsByName(); });
@@ -523,7 +506,10 @@ var CdkTable = (function () {
     /**
      * @return {?}
      */
-    CdkTable.prototype.ngAfterContentChecked = function () {
+    CdkTable.prototype.ngAfterContentChecked = /**
+     * @return {?}
+     */
+    function () {
         this._renderUpdatedColumns();
         var /** @type {?} */ defaultRowDefs = this._rowDefs.filter(function (def) { return !def.when; });
         if (defaultRowDefs.length > 1) {
@@ -537,7 +523,10 @@ var CdkTable = (function () {
     /**
      * @return {?}
      */
-    CdkTable.prototype.ngOnDestroy = function () {
+    CdkTable.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
         this._rowPlaceholder.viewContainer.clear();
         this._headerRowPlaceholder.viewContainer.clear();
         this._onDestroy.next();
@@ -550,7 +539,11 @@ var CdkTable = (function () {
      * Update the map containing the content's column definitions.
      * @return {?}
      */
-    CdkTable.prototype._cacheColumnDefsByName = function () {
+    CdkTable.prototype._cacheColumnDefsByName = /**
+     * Update the map containing the content's column definitions.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._columnDefsByName.clear();
         this._columnDefs.forEach(function (columnDef) {
@@ -565,11 +558,17 @@ var CdkTable = (function () {
      * then re-render that section.
      * @return {?}
      */
-    CdkTable.prototype._renderUpdatedColumns = function () {
+    CdkTable.prototype._renderUpdatedColumns = /**
+     * Check if the header or rows have changed what columns they want to display. If there is a diff,
+     * then re-render that section.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         // Re-render the rows when the row definition columns change.
         this._rowDefs.forEach(function (def) {
             if (!!def.getColumnsDiff()) {
+                // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 _this._dataDiffer.diff([]);
                 _this._rowPlaceholder.viewContainer.clear();
@@ -589,7 +588,14 @@ var CdkTable = (function () {
      * @param {?} dataSource
      * @return {?}
      */
-    CdkTable.prototype._switchDataSource = function (dataSource) {
+    CdkTable.prototype._switchDataSource = /**
+     * Switch to the provided data source by resetting the data and unsubscribing from the current
+     * render change subscription if one exists. If the data source is null, interpret this by
+     * clearing the row placeholder. Otherwise start listening for new data.
+     * @param {?} dataSource
+     * @return {?}
+     */
+    function (dataSource) {
         this._data = [];
         if (this.dataSource) {
             this.dataSource.disconnect(this);
@@ -609,7 +615,11 @@ var CdkTable = (function () {
      * Set up a subscription for the data provided by the data source.
      * @return {?}
      */
-    CdkTable.prototype._observeRenderChanges = function () {
+    CdkTable.prototype._observeRenderChanges = /**
+     * Set up a subscription for the data provided by the data source.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._renderChangeSubscription = this.dataSource.connect(this).pipe(takeUntil(this._onDestroy))
             .subscribe(function (data) {
@@ -621,7 +631,11 @@ var CdkTable = (function () {
      * Create the embedded view for the header template and place it in the header row view container.
      * @return {?}
      */
-    CdkTable.prototype._renderHeaderRow = function () {
+    CdkTable.prototype._renderHeaderRow = /**
+     * Create the embedded view for the header template and place it in the header row view container.
+     * @return {?}
+     */
+    function () {
         var /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerDef);
         if (!cells.length) {
             return;
@@ -632,7 +646,9 @@ var CdkTable = (function () {
         this._headerRowPlaceholder.viewContainer
             .createEmbeddedView(this._headerDef.template, { cells: cells });
         cells.forEach(function (cell) {
-            CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, {});
+            if (CdkCellOutlet.mostRecentCellOutlet) {
+                CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, {});
+            }
         });
         this._changeDetectorRef.markForCheck();
     };
@@ -641,7 +657,12 @@ var CdkTable = (function () {
      * row contexts.
      * @return {?}
      */
-    CdkTable.prototype._renderRowChanges = function () {
+    CdkTable.prototype._renderRowChanges = /**
+     * Check for changes made in the data and render each change (row added/removed/moved) and update
+     * row contexts.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         var /** @type {?} */ changes = this._dataDiffer.diff(this._data);
         if (!changes) {
@@ -656,7 +677,7 @@ var CdkTable = (function () {
                 viewContainer.remove(adjustedPreviousIndex);
             }
             else {
-                var /** @type {?} */ view = (viewContainer.get(adjustedPreviousIndex));
+                var /** @type {?} */ view = /** @type {?} */ (viewContainer.get(adjustedPreviousIndex));
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
@@ -665,10 +686,16 @@ var CdkTable = (function () {
         // Update rows that did not get added/removed/moved but may have had their identity changed,
         // e.g. if trackBy matched data on some property but the actual data reference changed.
         changes.forEachIdentityChange(function (record) {
-            var /** @type {?} */ rowView = (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
+            var /** @type {?} */ rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
             rowView.context.$implicit = record.item;
         });
     };
+    /**
+     * Finds the matching row definition that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * predicate that returns true with the data. If none return true, return the default row
+     * definition.
+     */
     /**
      * Finds the matching row definition that should be used for this row data. If there is only
      * one row definition, it is returned. Otherwise, find the row definition that has a when
@@ -678,7 +705,16 @@ var CdkTable = (function () {
      * @param {?} i
      * @return {?}
      */
-    CdkTable.prototype._getRowDef = function (data, i) {
+    CdkTable.prototype._getRowDef = /**
+     * Finds the matching row definition that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * predicate that returns true with the data. If none return true, return the default row
+     * definition.
+     * @param {?} data
+     * @param {?} i
+     * @return {?}
+     */
+    function (data, i) {
         if (this._rowDefs.length == 1) {
             return this._rowDefs.first;
         }
@@ -695,7 +731,14 @@ var CdkTable = (function () {
      * @param {?} index
      * @return {?}
      */
-    CdkTable.prototype._insertRow = function (rowData, index) {
+    CdkTable.prototype._insertRow = /**
+     * Create the embedded view for the data row template and place it in the correct index location
+     * within the data row view container.
+     * @param {?} rowData
+     * @param {?} index
+     * @return {?}
+     */
+    function (rowData, index) {
         var /** @type {?} */ row = this._getRowDef(rowData, index);
         // Row context that will be provided to both the created embedded row view and its cells.
         var /** @type {?} */ context = { $implicit: rowData };
@@ -703,7 +746,10 @@ var CdkTable = (function () {
         //   CdkCellOutlet was instantiated as a result  of `createEmbeddedView`.
         this._rowPlaceholder.viewContainer.createEmbeddedView(row.template, context, index);
         this._getCellTemplatesForRow(row).forEach(function (cell) {
-            CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, context);
+            if (CdkCellOutlet.mostRecentCellOutlet) {
+                CdkCellOutlet.mostRecentCellOutlet._viewContainer
+                    .createEmbeddedView(cell.template, context);
+            }
         });
         this._changeDetectorRef.markForCheck();
     };
@@ -712,10 +758,15 @@ var CdkTable = (function () {
      * e.g. first/last/even/odd.
      * @return {?}
      */
-    CdkTable.prototype._updateRowIndexContext = function () {
+    CdkTable.prototype._updateRowIndexContext = /**
+     * Updates the index-related context for each row to reflect any changes in the index of the rows,
+     * e.g. first/last/even/odd.
+     * @return {?}
+     */
+    function () {
         var /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
         for (var /** @type {?} */ index = 0, /** @type {?} */ count = viewContainer.length; index < count; index++) {
-            var /** @type {?} */ viewRef = (viewContainer.get(index));
+            var /** @type {?} */ viewRef = /** @type {?} */ (viewContainer.get(index));
             viewRef.context.index = index;
             viewRef.context.count = count;
             viewRef.context.first = index === 0;
@@ -730,7 +781,13 @@ var CdkTable = (function () {
      * @param {?} headerDef
      * @return {?}
      */
-    CdkTable.prototype._getHeaderCellTemplatesForRow = function (headerDef) {
+    CdkTable.prototype._getHeaderCellTemplatesForRow = /**
+     * Returns the cell template definitions to insert into the header
+     * as defined by its list of columns to display.
+     * @param {?} headerDef
+     * @return {?}
+     */
+    function (headerDef) {
         var _this = this;
         if (!headerDef.columns) {
             return [];
@@ -749,7 +806,13 @@ var CdkTable = (function () {
      * @param {?} rowDef
      * @return {?}
      */
-    CdkTable.prototype._getCellTemplatesForRow = function (rowDef) {
+    CdkTable.prototype._getCellTemplatesForRow = /**
+     * Returns the cell template definitions to insert in the provided row
+     * as defined by its list of columns to display.
+     * @param {?} rowDef
+     * @return {?}
+     */
+    function (rowDef) {
         var _this = this;
         if (!rowDef.columns) {
             return [];
@@ -774,9 +837,7 @@ var CdkTable = (function () {
                     changeDetection: ChangeDetectionStrategy.OnPush,
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkTable.ctorParameters = function () { return [
         { type: IterableDiffers, },
         { type: ChangeDetectorRef, },
@@ -785,16 +846,21 @@ var CdkTable = (function () {
         { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
     ]; };
     CdkTable.propDecorators = {
-        'trackBy': [{ type: Input },],
-        'dataSource': [{ type: Input },],
-        '_rowPlaceholder': [{ type: ViewChild, args: [RowPlaceholder,] },],
-        '_headerRowPlaceholder': [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
-        '_columnDefs': [{ type: ContentChildren, args: [CdkColumnDef,] },],
-        '_headerDef': [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
-        '_rowDefs': [{ type: ContentChildren, args: [CdkRowDef,] },],
+        "trackBy": [{ type: Input },],
+        "dataSource": [{ type: Input },],
+        "_rowPlaceholder": [{ type: ViewChild, args: [RowPlaceholder,] },],
+        "_headerRowPlaceholder": [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
+        "_columnDefs": [{ type: ContentChildren, args: [CdkColumnDef,] },],
+        "_headerDef": [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
+        "_rowDefs": [{ type: ContentChildren, args: [CdkRowDef,] },],
     };
     return CdkTable;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 var EXPORTED_DECLARATIONS = [
     CdkTable,
@@ -821,13 +887,20 @@ var CdkTableModule = (function () {
                     declarations: [EXPORTED_DECLARATIONS]
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkTableModule.ctorParameters = function () { return []; };
     return CdkTableModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

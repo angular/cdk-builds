@@ -8,8 +8,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
 import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import '@angular/forms';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { CommonModule } from '@angular/common';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 class CdkStepLabel {
     /**
@@ -24,12 +30,15 @@ CdkStepLabel.decorators = [
                 selector: '[cdkStepLabel]',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStepLabel.ctorParameters = () => [
     { type: TemplateRef, },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Used to generate unique ID for each stepper component.
@@ -123,20 +132,18 @@ CdkStep.decorators = [
                 changeDetection: ChangeDetectionStrategy.OnPush,
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStep.ctorParameters = () => [
     { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] },] },
 ];
 CdkStep.propDecorators = {
-    'stepLabel': [{ type: ContentChild, args: [CdkStepLabel,] },],
-    'content': [{ type: ViewChild, args: [TemplateRef,] },],
-    'stepControl': [{ type: Input },],
-    'label': [{ type: Input },],
-    'editable': [{ type: Input },],
-    'optional': [{ type: Input },],
-    'completed': [{ type: Input },],
+    "stepLabel": [{ type: ContentChild, args: [CdkStepLabel,] },],
+    "content": [{ type: ViewChild, args: [TemplateRef,] },],
+    "stepControl": [{ type: Input },],
+    "label": [{ type: Input },],
+    "editable": [{ type: Input },],
+    "optional": [{ type: Input },],
+    "completed": [{ type: Input },],
 };
 class CdkStepper {
     /**
@@ -357,20 +364,23 @@ CdkStepper.decorators = [
                 exportAs: 'cdkStepper',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStepper.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional },] },
     { type: ChangeDetectorRef, },
 ];
 CdkStepper.propDecorators = {
-    '_steps': [{ type: ContentChildren, args: [CdkStep,] },],
-    'linear': [{ type: Input },],
-    'selectedIndex': [{ type: Input },],
-    'selected': [{ type: Input },],
-    'selectionChange': [{ type: Output },],
+    "_steps": [{ type: ContentChildren, args: [CdkStep,] },],
+    "linear": [{ type: Input },],
+    "selectedIndex": [{ type: Input },],
+    "selected": [{ type: Input },],
+    "selectionChange": [{ type: Output },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Button that moves to the next step in a stepper workflow.
@@ -389,9 +399,7 @@ CdkStepperNext.decorators = [
                 host: { '(click)': '_stepper.next()' }
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStepperNext.ctorParameters = () => [
     { type: CdkStepper, },
 ];
@@ -412,12 +420,15 @@ CdkStepperPrevious.decorators = [
                 host: { '(click)': '_stepper.previous()' }
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStepperPrevious.ctorParameters = () => [
     { type: CdkStepper, },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 class CdkStepperModule {
 }
@@ -428,11 +439,18 @@ CdkStepperModule.decorators = [
                 declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkStepperModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

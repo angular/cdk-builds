@@ -16,6 +16,11 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
 import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Global registry for all dynamically-created, injected style tags.
  */
 const styleElementForWebkitCompatibility = new Map();
@@ -52,9 +57,7 @@ class MediaMatcher {
 MediaMatcher.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 MediaMatcher.ctorParameters = () => [
     { type: Platform, },
 ];
@@ -77,7 +80,7 @@ function createEmptyStyleRule(query) {
             // Store in private global registry
             styleElementForWebkitCompatibility.set(query, style);
         }
-        catch (e) {
+        catch (/** @type {?} */ e) {
             console.error(e);
         }
     }
@@ -95,6 +98,16 @@ function noopMatchMedia(query) {
         removeListener: () => { }
     };
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * The current state of a layout breakpoint.
+ * @record
+ */
 
 /**
  * Utility for checking the matching state of \@media queries.
@@ -156,7 +169,7 @@ class BreakpointObserver {
     _registerQuery(query) {
         // Only set up a new MediaQueryList if it is not already being listened for.
         if (this._queries.has(query)) {
-            return ((this._queries.get(query)));
+            return /** @type {?} */ ((this._queries.get(query)));
         }
         let /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
@@ -181,16 +194,17 @@ class BreakpointObserver {
 BreakpointObserver.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 BreakpointObserver.ctorParameters = () => [
     { type: MediaMatcher, },
     { type: NgZone, },
 ];
 
-// PascalCase is being used as Breakpoints is used like an enum.
-// tslint:disable-next-line:variable-name
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 const Breakpoints = {
     Handset: '(max-width: 599px) and (orientation: portrait), ' +
         '(max-width: 959px) and (orientation: landscape)',
@@ -206,6 +220,11 @@ const Breakpoints = {
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 class LayoutModule {
 }
 LayoutModule.decorators = [
@@ -214,11 +233,13 @@ LayoutModule.decorators = [
                 imports: [PlatformModule],
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 LayoutModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

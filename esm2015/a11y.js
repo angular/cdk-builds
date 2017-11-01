@@ -20,6 +20,15 @@ import { of } from 'rxjs/observable/of';
 import { CommonModule } from '@angular/common';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * This interface is for items that can be passed to a ListKeyManager.
+ * @record
+ */
+
+/**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
  */
@@ -73,7 +82,7 @@ class ListKeyManager {
             for (let /** @type {?} */ i = 1; i < items.length + 1; i++) {
                 const /** @type {?} */ index = (this._activeItemIndex + i) % items.length;
                 const /** @type {?} */ item = items[index];
-                if (!item.disabled && ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                if (!item.disabled && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     this.setActiveItem(index);
                     break;
                 }
@@ -242,6 +251,18 @@ class ListKeyManager {
     }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
+ * Each item must know how to style itself as active or inactive and whether or not it is
+ * currently disabled.
+ * @record
+ */
+
 class ActiveDescendantKeyManager extends ListKeyManager {
     /**
      * This method sets the active item to the item at the specified index.
@@ -261,6 +282,10 @@ class ActiveDescendantKeyManager extends ListKeyManager {
     }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * IDs are deliminated by an empty space, as per the spec.
  */
@@ -305,6 +330,17 @@ function getAriaReferenceIds(el, attr) {
     // Get string array of all individual ids (whitespace deliminated) in the attribute value
     return (el.getAttribute(attr) || '').match(/\S+/g) || [];
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * Interface used to register message elements and keep a count of how many registrations have
+ * the same message and the reference to the message element used for the aria-describedby.
+ * @record
+ */
 
 /**
  * ID used for the body container where all messages are appended.
@@ -405,9 +441,7 @@ class AriaDescriber {
 AriaDescriber.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 AriaDescriber.ctorParameters = () => [
     { type: Platform, },
 ];
@@ -478,7 +512,7 @@ function removeCdkDescribedByReferenceIds(element) {
  * @return {?}
  */
 function addMessageReference(element, message) {
-    const /** @type {?} */ registeredMessage = ((messageRegistry.get(message)));
+    const /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
     // Add the aria-describedby reference and set the describedby_host attribute to mark the element.
     addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
     element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
@@ -492,7 +526,7 @@ function addMessageReference(element, message) {
  * @return {?}
  */
 function removeMessageReference(element, message) {
-    const /** @type {?} */ registeredMessage = ((messageRegistry.get(message)));
+    const /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
     registeredMessage.referenceCount--;
     removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
     element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
@@ -532,6 +566,10 @@ const ARIA_DESCRIBER_PROVIDER = {
 };
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Screenreaders will often fire fake mousedown events when a focusable element
  * is activated using the keyboard. We can typically distinguish between these faked
  * mousedown events and real mousedown events using the "buttons" property. While
@@ -543,6 +581,18 @@ const ARIA_DESCRIBER_PROVIDER = {
 function isFakeMousedownFromScreenReader(event) {
     return event.buttons === 0;
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * This is the interface for focusable items (used by the FocusKeyManager).
+ * Each item must know how to focus itself, whether or not it is currently disabled
+ * and be able to supply it's label.
+ * @record
+ */
 
 class FocusKeyManager extends ListKeyManager {
     /**
@@ -558,6 +608,11 @@ class FocusKeyManager extends ListKeyManager {
         }
     }
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
@@ -605,7 +660,7 @@ class InteractivityChecker {
         if (!this._platform.isBrowser) {
             return false;
         }
-        let /** @type {?} */ frameElement = (getWindow(element).frameElement);
+        let /** @type {?} */ frameElement = /** @type {?} */ (getWindow(element).frameElement);
         if (frameElement) {
             let /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
             // Frame elements inherit their tabindex onto all child elements.
@@ -676,9 +731,7 @@ class InteractivityChecker {
 InteractivityChecker.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 InteractivityChecker.ctorParameters = () => [
     { type: Platform, },
 ];
@@ -774,7 +827,7 @@ function getTabIndexValue(element) {
  */
 function isPotentiallyTabbableIOS(element) {
     let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-    let /** @type {?} */ inputType = nodeName === 'input' && ((element)).type;
+    let /** @type {?} */ inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
     return inputType === 'text'
         || inputType === 'password'
         || nodeName === 'select'
@@ -804,6 +857,11 @@ function isPotentiallyFocusable(element) {
 function getWindow(node) {
     return node.ownerDocument.defaultView || window;
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -875,7 +933,7 @@ class FocusTrap {
             this._endAnchor = this._createAnchor();
         }
         this._ngZone.runOutsideAngular(() => {
-            ((this._startAnchor)).addEventListener('focus', () => {
+            /** @type {?} */ ((this._startAnchor)).addEventListener('focus', () => {
                 this.focusLastTabbableElement();
             }); /** @type {?} */
             ((this._endAnchor)).addEventListener('focus', () => {
@@ -930,7 +988,7 @@ class FocusTrap {
             return null;
         }
         // Contains the deprecated version of selector, for temporary backwards comparability.
-        let /** @type {?} */ markers = (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
+        let /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
             `[cdkFocusRegion${bound}], ` +
             `[cdk-focus-${bound}]`));
         for (let /** @type {?} */ i = 0; i < markers.length; i++) {
@@ -958,7 +1016,7 @@ class FocusTrap {
             return false;
         }
         // Contains the deprecated version of selector, for temporary backwards comparability.
-        const /** @type {?} */ redirectToElement = (this._element.querySelector(`[cdk-focus-initial], ` +
+        const /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
             `[cdkFocusInitial]`));
         if (this._element.hasAttribute(`cdk-focus-initial`)) {
             console.warn(`Found use of deprecated attribute 'cdk-focus-initial',` +
@@ -1088,9 +1146,7 @@ class FocusTrapFactory {
 FocusTrapFactory.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 FocusTrapFactory.ctorParameters = () => [
     { type: InteractivityChecker, },
     { type: Platform, },
@@ -1141,15 +1197,13 @@ FocusTrapDeprecatedDirective.decorators = [
                 selector: 'cdk-focus-trap',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 FocusTrapDeprecatedDirective.ctorParameters = () => [
     { type: ElementRef, },
     { type: FocusTrapFactory, },
 ];
 FocusTrapDeprecatedDirective.propDecorators = {
-    'disabled': [{ type: Input },],
+    "disabled": [{ type: Input },],
 };
 /**
  * Directive for trapping focus within a region.
@@ -1193,16 +1247,19 @@ FocusTrapDirective.decorators = [
                 exportAs: 'cdkTrapFocus',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 FocusTrapDirective.ctorParameters = () => [
     { type: ElementRef, },
     { type: FocusTrapFactory, },
 ];
 FocusTrapDirective.propDecorators = {
-    'enabled': [{ type: Input, args: ['cdkTrapFocus',] },],
+    "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement');
 class LiveAnnouncer {
@@ -1259,9 +1316,7 @@ class LiveAnnouncer {
 LiveAnnouncer.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 LiveAnnouncer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
     { type: Platform, },
@@ -1289,6 +1344,11 @@ const LIVE_ANNOUNCER_PROVIDER = {
     ],
     useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
@@ -1335,7 +1395,7 @@ class FocusMonitor {
         if (this._elementInfo.has(element)) {
             let /** @type {?} */ cachedInfo = this._elementInfo.get(element); /** @type {?} */
             ((cachedInfo)).checkChildren = checkChildren;
-            return ((cachedInfo)).subject.asObservable();
+            return /** @type {?} */ ((cachedInfo)).subject.asObservable();
         }
         // Create monitored element info.
         let /** @type {?} */ info = {
@@ -1539,9 +1599,7 @@ class FocusMonitor {
 FocusMonitor.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 FocusMonitor.ctorParameters = () => [
     { type: NgZone, },
     { type: Platform, },
@@ -1581,16 +1639,14 @@ CdkMonitorFocus.decorators = [
                 selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkMonitorFocus.ctorParameters = () => [
     { type: ElementRef, },
     { type: FocusMonitor, },
     { type: Renderer2, },
 ];
 CdkMonitorFocus.propDecorators = {
-    'cdkFocusChange': [{ type: Output },],
+    "cdkFocusChange": [{ type: Output },],
 };
 /**
  * \@docs-private
@@ -1612,6 +1668,11 @@ const FOCUS_MONITOR_PROVIDER = {
     useFactory: FOCUS_MONITOR_PROVIDER_FACTORY
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 class A11yModule {
 }
 A11yModule.decorators = [
@@ -1629,11 +1690,18 @@ A11yModule.decorators = [
                 ]
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 A11yModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

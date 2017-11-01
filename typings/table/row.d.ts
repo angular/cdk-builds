@@ -87,7 +87,7 @@ export declare class CdkCellOutlet {
      * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
      * construct the cells with the provided context.
      */
-    static mostRecentCellOutlet: CdkCellOutlet;
+    static mostRecentCellOutlet: CdkCellOutlet | null;
     constructor(_viewContainer: ViewContainerRef);
 }
 /** Header template container that contains the cell outlet. Adds the right class and role. */

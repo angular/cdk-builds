@@ -9,6 +9,11 @@ import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgM
 import { DOCUMENT } from '@angular/platform-browser';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
  *
@@ -24,9 +29,6 @@ var DIR_DOCUMENT = new InjectionToken('cdk-dir-doc');
  * Exposes the current direction and a stream of direction changes.
  */
 var Directionality = (function () {
-    /**
-     * @param {?=} _document
-     */
     function Directionality(_document) {
         /**
          * The current 'ltr' or 'rtl' value.
@@ -41,17 +43,15 @@ var Directionality = (function () {
             // We still need to account for dir="auto".
             // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
             // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
-            var bodyDir = _document.body ? _document.body.dir : null;
-            var htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            this.value = (bodyDir || htmlDir || 'ltr');
+            var /** @type {?} */ bodyDir = _document.body ? _document.body.dir : null;
+            var /** @type {?} */ htmlDir = _document.documentElement ? _document.documentElement.dir : null;
+            this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
     Directionality.decorators = [
         { type: Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     Directionality.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
     ]; };
@@ -77,6 +77,11 @@ var DIRECTIONALITY_PROVIDER = {
 };
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Directive to listen for changes of direction of part of the DOM.
  *
  * Provides itself as Directionality such that descendant directives only need to ever inject
@@ -95,16 +100,16 @@ var Dir = (function () {
         this.change = new EventEmitter();
     }
     Object.defineProperty(Dir.prototype, "dir", {
-        /**
+        get: /**
          * \@docs-private
          * @return {?}
          */
-        get: function () { return this._dir; },
-        /**
+        function () { return this._dir; },
+        set: /**
          * @param {?} v
          * @return {?}
          */
-        set: function (v) {
+        function (v) {
             var /** @type {?} */ old = this._dir;
             this._dir = v;
             if (old !== this._dir && this._isInitialized) {
@@ -115,19 +120,25 @@ var Dir = (function () {
         configurable: true
     });
     Object.defineProperty(Dir.prototype, "value", {
-        /**
+        /** Current layout direction of the element. */
+        get: /**
          * Current layout direction of the element.
          * @return {?}
          */
-        get: function () { return this.dir; },
+        function () { return this.dir; },
         enumerable: true,
         configurable: true
     });
+    /** Initialize once default value has been set. */
     /**
      * Initialize once default value has been set.
      * @return {?}
      */
-    Dir.prototype.ngAfterContentInit = function () {
+    Dir.prototype.ngAfterContentInit = /**
+     * Initialize once default value has been set.
+     * @return {?}
+     */
+    function () {
         this._isInitialized = true;
     };
     Dir.decorators = [
@@ -138,16 +149,19 @@ var Dir = (function () {
                     exportAs: 'dir',
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     Dir.ctorParameters = function () { return []; };
     Dir.propDecorators = {
-        'change': [{ type: Output, args: ['dirChange',] },],
-        'dir': [{ type: Input, args: ['dir',] },],
+        "change": [{ type: Output, args: ['dirChange',] },],
+        "dir": [{ type: Input, args: ['dir',] },],
     };
     return Dir;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 var BidiModule = (function () {
     function BidiModule() {
@@ -162,13 +176,20 @@ var BidiModule = (function () {
                     ]
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     BidiModule.ctorParameters = function () { return []; };
     return BidiModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

@@ -18,6 +18,10 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Scroll strategy that doesn't do anything.
  */
 class NoopScrollStrategy {
@@ -38,6 +42,10 @@ class NoopScrollStrategy {
     attach() { }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Initial configuration used when creating an overlay.
  */
@@ -72,7 +80,22 @@ class OverlayConfig {
     }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 /** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
+/**
+ * A connection point on the origin element.
+ * @record
+ */
+
+/**
+ * A connection point on the overlay element.
+ * @record
+ */
+
 /**
  * The points of the origin element and the overlay element to connect.
  */
@@ -127,18 +150,27 @@ class ConnectedOverlayPositionChange {
      * @param {?} connectionPair
      * @param {?} scrollableViewProperties
      */
-    constructor(connectionPair, scrollableViewProperties) {
+    constructor(connectionPair, /** @docs-private */
+        scrollableViewProperties) {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
 }
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ConnectedOverlayPositionChange.ctorParameters = () => [
     { type: ConnectionPositionPair, },
     { type: ScrollingVisibility, decorators: [{ type: Optional },] },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Describes a strategy that will be used by an overlay
+ * to handle scroll events while it is open.
+ * @record
+ */
 
 /**
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
@@ -147,6 +179,11 @@ ConnectedOverlayPositionChange.ctorParameters = () => [
 function getMatScrollStrategyAlreadyAttachedError() {
     return Error(`Scroll strategy has already been attached.`);
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
@@ -196,6 +233,10 @@ class CloseScrollStrategy {
     }
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -262,6 +303,15 @@ class BlockScrollStrategy {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Config options for the RepositionScrollStrategy.
+ * @record
+ */
+
+/**
  * Strategy that will update the element position as the user is scrolling.
  */
 class RepositionScrollStrategy {
@@ -310,6 +360,11 @@ class RepositionScrollStrategy {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Options for how an overlay will handle scrolling.
  *
  * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
@@ -346,14 +401,21 @@ class ScrollStrategyOptions {
 ScrollStrategyOptions.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ScrollStrategyOptions.ctorParameters = () => [
     { type: ScrollDispatcher, },
     { type: ViewportRuler, },
 ];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
@@ -599,7 +661,7 @@ class OverlayRef {
      */
     _updateStackingOrder() {
         if (this._pane.nextSibling) {
-            ((this._pane.parentNode)).appendChild(this._pane);
+            /** @type {?} */ ((this._pane.parentNode)).appendChild(this._pane);
         }
     }
     /**
@@ -643,9 +705,13 @@ class OverlayRef {
  * @return {?}
  */
 function formatCssUnit(value) {
-    return typeof value === 'string' ? (value) : `${value}px`;
+    return typeof value === 'string' ? /** @type {?} */ (value) : `${value}px`;
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
  * \@docs-private
@@ -679,6 +745,10 @@ function isElementClippedByScrolling(element, scrollContainers) {
     });
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -1044,6 +1114,10 @@ class ConnectedPositionStrategy {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
  * transforms, in order to avoid issues with subpixel rendering which can cause the
@@ -1180,7 +1254,7 @@ class GlobalPositionStrategy {
             this._wrapper.appendChild(element);
         }
         let /** @type {?} */ styles = element.style;
-        let /** @type {?} */ parentStyles = ((element.parentNode)).style;
+        let /** @type {?} */ parentStyles = (/** @type {?} */ (element.parentNode)).style;
         styles.position = this._cssPosition;
         styles.marginTop = this._topOffset;
         styles.marginLeft = this._leftOffset;
@@ -1202,6 +1276,11 @@ class GlobalPositionStrategy {
         }
     }
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Builder for overlay position strategy.
@@ -1234,12 +1313,15 @@ class OverlayPositionBuilder {
 OverlayPositionBuilder.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 OverlayPositionBuilder.ctorParameters = () => [
     { type: ViewportRuler, },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
@@ -1315,9 +1397,7 @@ class OverlayKeyboardDispatcher {
 OverlayKeyboardDispatcher.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 OverlayKeyboardDispatcher.ctorParameters = () => [];
 /**
  * \@docs-private
@@ -1337,6 +1417,11 @@ const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     deps: [[new Optional(), new SkipSelf(), OverlayKeyboardDispatcher]],
     useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Container inside which all overlays will render.
@@ -1377,9 +1462,7 @@ class OverlayContainer {
 OverlayContainer.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 OverlayContainer.ctorParameters = () => [];
 /**
  * \@docs-private
@@ -1398,6 +1481,11 @@ const OVERLAY_CONTAINER_PROVIDER = {
     deps: [[new Optional(), new SkipSelf(), OverlayContainer]],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Next overlay unique ID.
@@ -1477,9 +1565,7 @@ class Overlay {
 Overlay.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 Overlay.ctorParameters = () => [
     { type: ScrollStrategyOptions, },
     { type: OverlayContainer, },
@@ -1490,6 +1576,11 @@ Overlay.ctorParameters = () => [
     { type: Injector, },
     { type: NgZone, },
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Default set of positions for the overlay. Follows the behavior of a dropdown.
@@ -1536,9 +1627,7 @@ CdkOverlayOrigin.decorators = [
                 exportAs: 'cdkOverlayOrigin',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkOverlayOrigin.ctorParameters = () => [
     { type: ElementRef, },
 ];
@@ -1909,9 +1998,7 @@ CdkConnectedOverlay.decorators = [
                 exportAs: 'cdkConnectedOverlay'
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkConnectedOverlay.ctorParameters = () => [
     { type: Overlay, },
     { type: Renderer2, },
@@ -1921,35 +2008,40 @@ CdkConnectedOverlay.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional },] },
 ];
 CdkConnectedOverlay.propDecorators = {
-    'origin': [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
-    'positions': [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
-    'offsetX': [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
-    'offsetY': [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] },],
-    'width': [{ type: Input, args: ['cdkConnectedOverlayWidth',] },],
-    'height': [{ type: Input, args: ['cdkConnectedOverlayHeight',] },],
-    'minWidth': [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
-    'minHeight': [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
-    'backdropClass': [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
-    'scrollStrategy': [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
-    'open': [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
-    'hasBackdrop': [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
-    '_deprecatedOrigin': [{ type: Input, args: ['origin',] },],
-    '_deprecatedPositions': [{ type: Input, args: ['positions',] },],
-    '_deprecatedOffsetX': [{ type: Input, args: ['offsetX',] },],
-    '_deprecatedOffsetY': [{ type: Input, args: ['offsetY',] },],
-    '_deprecatedWidth': [{ type: Input, args: ['width',] },],
-    '_deprecatedHeight': [{ type: Input, args: ['height',] },],
-    '_deprecatedMinWidth': [{ type: Input, args: ['minWidth',] },],
-    '_deprecatedMinHeight': [{ type: Input, args: ['minHeight',] },],
-    '_deprecatedBackdropClass': [{ type: Input, args: ['backdropClass',] },],
-    '_deprecatedScrollStrategy': [{ type: Input, args: ['scrollStrategy',] },],
-    '_deprecatedOpen': [{ type: Input, args: ['open',] },],
-    '_deprecatedHasBackdrop': [{ type: Input, args: ['hasBackdrop',] },],
-    'backdropClick': [{ type: Output },],
-    'positionChange': [{ type: Output },],
-    'attach': [{ type: Output },],
-    'detach': [{ type: Output },],
+    "origin": [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
+    "positions": [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
+    "offsetX": [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
+    "offsetY": [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] },],
+    "width": [{ type: Input, args: ['cdkConnectedOverlayWidth',] },],
+    "height": [{ type: Input, args: ['cdkConnectedOverlayHeight',] },],
+    "minWidth": [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
+    "minHeight": [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
+    "backdropClass": [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
+    "scrollStrategy": [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
+    "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
+    "hasBackdrop": [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
+    "_deprecatedOrigin": [{ type: Input, args: ['origin',] },],
+    "_deprecatedPositions": [{ type: Input, args: ['positions',] },],
+    "_deprecatedOffsetX": [{ type: Input, args: ['offsetX',] },],
+    "_deprecatedOffsetY": [{ type: Input, args: ['offsetY',] },],
+    "_deprecatedWidth": [{ type: Input, args: ['width',] },],
+    "_deprecatedHeight": [{ type: Input, args: ['height',] },],
+    "_deprecatedMinWidth": [{ type: Input, args: ['minWidth',] },],
+    "_deprecatedMinHeight": [{ type: Input, args: ['minHeight',] },],
+    "_deprecatedBackdropClass": [{ type: Input, args: ['backdropClass',] },],
+    "_deprecatedScrollStrategy": [{ type: Input, args: ['scrollStrategy',] },],
+    "_deprecatedOpen": [{ type: Input, args: ['open',] },],
+    "_deprecatedHasBackdrop": [{ type: Input, args: ['hasBackdrop',] },],
+    "backdropClick": [{ type: Output },],
+    "positionChange": [{ type: Output },],
+    "attach": [{ type: Output },],
+    "detach": [{ type: Output },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 const OVERLAY_PROVIDERS = [
     Overlay,
@@ -1969,10 +2061,13 @@ OverlayModule.decorators = [
                 providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 OverlayModule.ctorParameters = () => [];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
@@ -2012,10 +2107,10 @@ class FullscreenOverlayContainer extends OverlayContainer {
         else if (document.webkitFullscreenEnabled) {
             document.addEventListener('webkitfullscreenchange', fn);
         }
-        else if (((document)).mozFullScreenEnabled) {
+        else if ((/** @type {?} */ (document)).mozFullScreenEnabled) {
             document.addEventListener('mozfullscreenchange', fn);
         }
-        else if (((document)).msFullscreenEnabled) {
+        else if ((/** @type {?} */ (document)).msFullscreenEnabled) {
             document.addEventListener('MSFullscreenChange', fn);
         }
     }
@@ -2027,19 +2122,26 @@ class FullscreenOverlayContainer extends OverlayContainer {
     getFullscreenElement() {
         return document.fullscreenElement ||
             document.webkitFullscreenElement ||
-            ((document)).mozFullScreenElement ||
-            ((document)).msFullscreenElement ||
+            (/** @type {?} */ (document)).mozFullScreenElement ||
+            (/** @type {?} */ (document)).msFullscreenElement ||
             null;
     }
 }
 FullscreenOverlayContainer.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 FullscreenOverlayContainer.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

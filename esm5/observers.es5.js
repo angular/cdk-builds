@@ -10,6 +10,11 @@ import { Subject } from 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
@@ -20,15 +25,17 @@ var MutationObserverFactory = (function () {
      * @param {?} callback
      * @return {?}
      */
-    MutationObserverFactory.prototype.create = function (callback) {
+    MutationObserverFactory.prototype.create = /**
+     * @param {?} callback
+     * @return {?}
+     */
+    function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
     MutationObserverFactory.decorators = [
         { type: Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     MutationObserverFactory.ctorParameters = function () { return []; };
     return MutationObserverFactory;
 }());
@@ -37,11 +44,6 @@ var MutationObserverFactory = (function () {
  * its associated element has changed.
  */
 var CdkObserveContent = (function () {
-    /**
-     * @param {?} _mutationObserverFactory
-     * @param {?} _elementRef
-     * @param {?} _ngZone
-     */
     function CdkObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
@@ -58,7 +60,10 @@ var CdkObserveContent = (function () {
     /**
      * @return {?}
      */
-    CdkObserveContent.prototype.ngAfterContentInit = function () {
+    CdkObserveContent.prototype.ngAfterContentInit = /**
+     * @return {?}
+     */
+    function () {
         var _this = this;
         if (this.debounce > 0) {
             this._ngZone.runOutsideAngular(function () {
@@ -85,7 +90,10 @@ var CdkObserveContent = (function () {
     /**
      * @return {?}
      */
-    CdkObserveContent.prototype.ngOnDestroy = function () {
+    CdkObserveContent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
         if (this._observer) {
             this._observer.disconnect();
         }
@@ -97,17 +105,15 @@ var CdkObserveContent = (function () {
                     exportAs: 'cdkObserveContent',
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkObserveContent.ctorParameters = function () { return [
         { type: MutationObserverFactory, },
         { type: ElementRef, },
         { type: NgZone, },
     ]; };
     CdkObserveContent.propDecorators = {
-        'event': [{ type: Output, args: ['cdkObserveContent',] },],
-        'debounce': [{ type: Input },],
+        "event": [{ type: Output, args: ['cdkObserveContent',] },],
+        "debounce": [{ type: Input },],
     };
     return CdkObserveContent;
 }());
@@ -121,13 +127,20 @@ var ObserversModule = (function () {
                     providers: [MutationObserverFactory]
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

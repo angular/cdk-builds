@@ -12,6 +12,11 @@
 }(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_of,rxjs_observable_fromEvent,rxjs_operators_auditTime,rxjs_operators_filter,rxjs_observable_merge) { 'use strict';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Time in ms to throttle the scrolling events by default.
  */
 var DEFAULT_SCROLL_TIME = 20;
@@ -20,10 +25,6 @@ var DEFAULT_SCROLL_TIME = 20;
  * Scrollable references emit a scrolled event.
  */
 var ScrollDispatcher = (function () {
-    /**
-     * @param {?} _ngZone
-     * @param {?} _platform
-     */
     function ScrollDispatcher(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
@@ -48,10 +49,21 @@ var ScrollDispatcher = (function () {
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
      * scrollable is scrolled, the service emits the event to its scrolled observable.
+     * @param scrollable Scrollable instance to be registered.
+     */
+    /**
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
      * @param {?} scrollable Scrollable instance to be registered.
      * @return {?}
      */
-    ScrollDispatcher.prototype.register = function (scrollable) {
+    ScrollDispatcher.prototype.register = /**
+     * Registers a scrollable instance with the service and listens for its scrolled events. When the
+     * scrollable is scrolled, the service emits the event to its scrolled observable.
+     * @param {?} scrollable Scrollable instance to be registered.
+     * @return {?}
+     */
+    function (scrollable) {
         var _this = this;
         var /** @type {?} */ scrollSubscription = scrollable.elementScrolled()
             .subscribe(function () { return _this._scrolled.next(scrollable); });
@@ -59,10 +71,19 @@ var ScrollDispatcher = (function () {
     };
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
+     * @param scrollable Scrollable instance to be deregistered.
+     */
+    /**
+     * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
      * @param {?} scrollable Scrollable instance to be deregistered.
      * @return {?}
      */
-    ScrollDispatcher.prototype.deregister = function (scrollable) {
+    ScrollDispatcher.prototype.deregister = /**
+     * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
+     * @param {?} scrollable Scrollable instance to be deregistered.
+     * @return {?}
+     */
+    function (scrollable) {
         var /** @type {?} */ scrollableReference = this.scrollContainers.get(scrollable);
         if (scrollableReference) {
             scrollableReference.unsubscribe();
@@ -73,10 +94,22 @@ var ScrollDispatcher = (function () {
      * Returns an observable that emits an event whenever any of the registered Scrollable
      * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
      * to override the default "throttle" time.
+     */
+    /**
+     * Returns an observable that emits an event whenever any of the registered Scrollable
+     * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
+     * to override the default "throttle" time.
      * @param {?=} auditTimeInMs
      * @return {?}
      */
-    ScrollDispatcher.prototype.scrolled = function (auditTimeInMs) {
+    ScrollDispatcher.prototype.scrolled = /**
+     * Returns an observable that emits an event whenever any of the registered Scrollable
+     * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
+     * to override the default "throttle" time.
+     * @param {?=} auditTimeInMs
+     * @return {?}
+     */
+    function (auditTimeInMs) {
         var _this = this;
         if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
         return this._platform.isBrowser ? rxjs_Observable.Observable.create(function (observer) {
@@ -102,22 +135,41 @@ var ScrollDispatcher = (function () {
     /**
      * Returns an observable that emits whenever any of the
      * scrollable ancestors of an element are scrolled.
+     * @param elementRef Element whose ancestors to listen for.
+     * @param auditTimeInMs Time to throttle the scroll events.
+     */
+    /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
      * @param {?} elementRef Element whose ancestors to listen for.
      * @param {?=} auditTimeInMs Time to throttle the scroll events.
      * @return {?}
      */
-    ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
+    ScrollDispatcher.prototype.ancestorScrolled = /**
+     * Returns an observable that emits whenever any of the
+     * scrollable ancestors of an element are scrolled.
+     * @param {?} elementRef Element whose ancestors to listen for.
+     * @param {?=} auditTimeInMs Time to throttle the scroll events.
+     * @return {?}
+     */
+    function (elementRef, auditTimeInMs) {
         var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
         return this.scrolled(auditTimeInMs).pipe(rxjs_operators_filter.filter(function (target) {
             return !target || ancestors.indexOf(target) > -1;
         }));
     };
+    /** Returns all registered Scrollables that contain the provided element. */
     /**
      * Returns all registered Scrollables that contain the provided element.
      * @param {?} elementRef
      * @return {?}
      */
-    ScrollDispatcher.prototype.getAncestorScrollContainers = function (elementRef) {
+    ScrollDispatcher.prototype.getAncestorScrollContainers = /**
+     * Returns all registered Scrollables that contain the provided element.
+     * @param {?} elementRef
+     * @return {?}
+     */
+    function (elementRef) {
         var _this = this;
         var /** @type {?} */ scrollingContainers = [];
         this.scrollContainers.forEach(function (_subscription, scrollable) {
@@ -133,7 +185,13 @@ var ScrollDispatcher = (function () {
      * @param {?} elementRef
      * @return {?}
      */
-    ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
+    ScrollDispatcher.prototype._scrollableContainsElement = /**
+     * Returns true if the element is contained within the provided Scrollable.
+     * @param {?} scrollable
+     * @param {?} elementRef
+     * @return {?}
+     */
+    function (scrollable, elementRef) {
         var /** @type {?} */ element = elementRef.nativeElement;
         var /** @type {?} */ scrollableElement = scrollable.getElementRef().nativeElement;
         // Traverse through the element parents until we reach null, checking if any of the elements
@@ -149,7 +207,11 @@ var ScrollDispatcher = (function () {
      * Sets up the global scroll and resize listeners.
      * @return {?}
      */
-    ScrollDispatcher.prototype._addGlobalListener = function () {
+    ScrollDispatcher.prototype._addGlobalListener = /**
+     * Sets up the global scroll and resize listeners.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._globalSubscription = this._ngZone.runOutsideAngular(function () {
             return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
@@ -158,9 +220,7 @@ var ScrollDispatcher = (function () {
     ScrollDispatcher.decorators = [
         { type: _angular_core.Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     ScrollDispatcher.ctorParameters = function () { return [
         { type: _angular_core.NgZone, },
         { type: _angular_cdk_platform.Platform, },
@@ -188,17 +248,16 @@ var SCROLL_DISPATCHER_PROVIDER = {
 };
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Sends an event when the directive's element is scrolled. Registers itself with the
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
 var CdkScrollable = (function () {
-    /**
-     * @param {?} _elementRef
-     * @param {?} _scroll
-     * @param {?} _ngZone
-     * @param {?} _renderer
-     */
     function CdkScrollable(_elementRef, _scroll, _ngZone, _renderer) {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
@@ -209,7 +268,10 @@ var CdkScrollable = (function () {
     /**
      * @return {?}
      */
-    CdkScrollable.prototype.ngOnInit = function () {
+    CdkScrollable.prototype.ngOnInit = /**
+     * @return {?}
+     */
+    function () {
         var _this = this;
         this._scrollListener = this._ngZone.runOutsideAngular(function () {
             return _this._renderer.listen(_this.getElementRef().nativeElement, 'scroll', function (event) {
@@ -221,7 +283,10 @@ var CdkScrollable = (function () {
     /**
      * @return {?}
      */
-    CdkScrollable.prototype.ngOnDestroy = function () {
+    CdkScrollable.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
         this._scroll.deregister(this);
         if (this._scrollListener) {
             this._scrollListener();
@@ -230,15 +295,25 @@ var CdkScrollable = (function () {
     };
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
+     */
+    /**
+     * Returns observable that emits when a scroll event is fired on the host element.
      * @return {?}
      */
-    CdkScrollable.prototype.elementScrolled = function () {
+    CdkScrollable.prototype.elementScrolled = /**
+     * Returns observable that emits when a scroll event is fired on the host element.
+     * @return {?}
+     */
+    function () {
         return this._elementScrolled.asObservable();
     };
     /**
      * @return {?}
      */
-    CdkScrollable.prototype.getElementRef = function () {
+    CdkScrollable.prototype.getElementRef = /**
+     * @return {?}
+     */
+    function () {
         return this._elementRef;
     };
     CdkScrollable.decorators = [
@@ -246,9 +321,7 @@ var CdkScrollable = (function () {
                     selector: '[cdk-scrollable], [cdkScrollable]'
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkScrollable.ctorParameters = function () { return [
         { type: _angular_core.ElementRef, },
         { type: ScrollDispatcher, },
@@ -259,6 +332,11 @@ var CdkScrollable = (function () {
 }());
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Time in ms to throttle the resize events by default.
  */
 var DEFAULT_RESIZE_TIME = 20;
@@ -267,10 +345,6 @@ var DEFAULT_RESIZE_TIME = 20;
  * \@docs-private
  */
 var ViewportRuler = (function () {
-    /**
-     * @param {?} platform
-     * @param {?} ngZone
-     */
     function ViewportRuler(platform, ngZone) {
         var _this = this;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
@@ -281,15 +355,24 @@ var ViewportRuler = (function () {
     /**
      * @return {?}
      */
-    ViewportRuler.prototype.ngOnDestroy = function () {
+    ViewportRuler.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
         this._invalidateCache.unsubscribe();
     };
+    /** Gets a ClientRect for the viewport's bounds. */
     /**
      * Gets a ClientRect for the viewport's bounds.
      * @param {?=} documentRect
      * @return {?}
      */
-    ViewportRuler.prototype.getViewportRect = function (documentRect) {
+    ViewportRuler.prototype.getViewportRect = /**
+     * Gets a ClientRect for the viewport's bounds.
+     * @param {?=} documentRect
+     * @return {?}
+     */
+    function (documentRect) {
         if (documentRect === void 0) { documentRect = this._documentRect; }
         // Cache the document bounding rect so that we don't recompute it for multiple calls.
         if (!documentRect) {
@@ -319,10 +402,19 @@ var ViewportRuler = (function () {
     };
     /**
      * Gets the (top, left) scroll position of the viewport.
+     * @param documentRect
+     */
+    /**
+     * Gets the (top, left) scroll position of the viewport.
      * @param {?=} documentRect
      * @return {?}
      */
-    ViewportRuler.prototype.getViewportScrollPosition = function (documentRect) {
+    ViewportRuler.prototype.getViewportScrollPosition = /**
+     * Gets the (top, left) scroll position of the viewport.
+     * @param {?=} documentRect
+     * @return {?}
+     */
+    function (documentRect) {
         if (documentRect === void 0) { documentRect = this._documentRect; }
         // Cache the document bounding rect so that we don't recompute it for multiple calls.
         if (!documentRect) {
@@ -335,34 +427,46 @@ var ViewportRuler = (function () {
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
-        var /** @type {?} */ top = -((documentRect)).top || document.body.scrollTop || window.scrollY ||
+        var /** @type {?} */ top = -/** @type {?} */ ((documentRect)).top || document.body.scrollTop || window.scrollY ||
             document.documentElement.scrollTop || 0;
-        var /** @type {?} */ left = -((documentRect)).left || document.body.scrollLeft || window.scrollX ||
+        var /** @type {?} */ left = -/** @type {?} */ ((documentRect)).left || document.body.scrollLeft || window.scrollX ||
             document.documentElement.scrollLeft || 0;
         return { top: top, left: left };
     };
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
+     * @param throttle Time in milliseconds to throttle the stream.
+     */
+    /**
+     * Returns a stream that emits whenever the size of the viewport changes.
      * @param {?=} throttleTime
      * @return {?}
      */
-    ViewportRuler.prototype.change = function (throttleTime) {
+    ViewportRuler.prototype.change = /**
+     * Returns a stream that emits whenever the size of the viewport changes.
+     * @param {?=} throttleTime
+     * @return {?}
+     */
+    function (throttleTime) {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
         return throttleTime > 0 ? this._change.pipe(rxjs_operators_auditTime.auditTime(throttleTime)) : this._change;
     };
+    /** Caches the latest client rectangle of the document element. */
     /**
      * Caches the latest client rectangle of the document element.
      * @return {?}
      */
-    ViewportRuler.prototype._cacheViewportGeometry = function () {
+    ViewportRuler.prototype._cacheViewportGeometry = /**
+     * Caches the latest client rectangle of the document element.
+     * @return {?}
+     */
+    function () {
         this._documentRect = document.documentElement.getBoundingClientRect();
     };
     ViewportRuler.decorators = [
         { type: _angular_core.Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     ViewportRuler.ctorParameters = function () { return [
         { type: _angular_cdk_platform.Platform, },
         { type: _angular_core.NgZone, },
@@ -389,6 +493,11 @@ var VIEWPORT_RULER_PROVIDER = {
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var ScrollDispatchModule = (function () {
     function ScrollDispatchModule() {
     }
@@ -400,9 +509,7 @@ var ScrollDispatchModule = (function () {
                     providers: [SCROLL_DISPATCHER_PROVIDER],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());

@@ -10,6 +10,10 @@ import * as tslib_1 from 'tslib';
 import { ComponentFactoryResolver, Directive, Input, NgModule, TemplateRef, ViewContainerRef } from '@angular/core';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Throws an exception when attempting to attach a null portal to a host.
  * \@docs-private
  * @return {?}
@@ -60,6 +64,14 @@ function throwNoPortalAttachedError() {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @record
+ */
+
+/**
  * A `Portal` is something that you want to render somewhere else.
  * It can be attach to / detached from a `PortalOutlet`.
  * @abstract
@@ -67,12 +79,18 @@ function throwNoPortalAttachedError() {
 var Portal = (function () {
     function Portal() {
     }
+    /** Attach this portal to a host. */
     /**
      * Attach this portal to a host.
      * @param {?} host
      * @return {?}
      */
-    Portal.prototype.attach = function (host) {
+    Portal.prototype.attach = /**
+     * Attach this portal to a host.
+     * @param {?} host
+     * @return {?}
+     */
+    function (host) {
         if (host == null) {
             throwNullPortalOutletError();
         }
@@ -80,13 +98,18 @@ var Portal = (function () {
             throwPortalAlreadyAttachedError();
         }
         this._attachedHost = host;
-        return (host.attach(this));
+        return /** @type {?} */ (host.attach(this));
     };
+    /** Detach this portal from its host */
     /**
      * Detach this portal from its host
      * @return {?}
      */
-    Portal.prototype.detach = function () {
+    Portal.prototype.detach = /**
+     * Detach this portal from its host
+     * @return {?}
+     */
+    function () {
         var /** @type {?} */ host = this._attachedHost;
         if (host == null) {
             throwNoPortalAttachedError();
@@ -97,11 +120,12 @@ var Portal = (function () {
         }
     };
     Object.defineProperty(Portal.prototype, "isAttached", {
-        /**
+        /** Whether this portal is attached to a host. */
+        get: /**
          * Whether this portal is attached to a host.
          * @return {?}
          */
-        get: function () {
+        function () {
             return this._attachedHost != null;
         },
         enumerable: true,
@@ -110,10 +134,20 @@ var Portal = (function () {
     /**
      * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
      * the PortalOutlet when it is performing an `attach()` or `detach()`.
+     */
+    /**
+     * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
+     * the PortalOutlet when it is performing an `attach()` or `detach()`.
      * @param {?} host
      * @return {?}
      */
-    Portal.prototype.setAttachedHost = function (host) {
+    Portal.prototype.setAttachedHost = /**
+     * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
+     * the PortalOutlet when it is performing an `attach()` or `detach()`.
+     * @param {?} host
+     * @return {?}
+     */
+    function (host) {
         this._attachedHost = host;
     };
     return Portal;
@@ -123,11 +157,6 @@ var Portal = (function () {
  */
 var ComponentPortal = (function (_super) {
     __extends(ComponentPortal, _super);
-    /**
-     * @param {?} component
-     * @param {?=} viewContainerRef
-     * @param {?=} injector
-     */
     function ComponentPortal(component, viewContainerRef, injector) {
         var _this = _super.call(this) || this;
         _this.component = component;
@@ -142,11 +171,6 @@ var ComponentPortal = (function (_super) {
  */
 var TemplatePortal = (function (_super) {
     __extends(TemplatePortal, _super);
-    /**
-     * @param {?} template
-     * @param {?} viewContainerRef
-     * @param {?=} context
-     */
     function TemplatePortal(template, viewContainerRef, context) {
         var _this = _super.call(this) || this;
         _this.templateRef = template;
@@ -157,10 +181,10 @@ var TemplatePortal = (function (_super) {
         return _this;
     }
     Object.defineProperty(TemplatePortal.prototype, "origin", {
-        /**
+        get: /**
          * @return {?}
          */
-        get: function () {
+        function () {
             return this.templateRef.elementRef;
         },
         enumerable: true,
@@ -170,11 +194,24 @@ var TemplatePortal = (function (_super) {
      * Attach the the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
+     */
+    /**
+     * Attach the the portal to the provided `PortalOutlet`.
+     * When a context is provided it will override the `context` property of the `TemplatePortal`
+     * instance.
      * @param {?} host
      * @param {?=} context
      * @return {?}
      */
-    TemplatePortal.prototype.attach = function (host, context) {
+    TemplatePortal.prototype.attach = /**
+     * Attach the the portal to the provided `PortalOutlet`.
+     * When a context is provided it will override the `context` property of the `TemplatePortal`
+     * instance.
+     * @param {?} host
+     * @param {?=} context
+     * @return {?}
+     */
+    function (host, context) {
         if (context === void 0) { context = this.context; }
         this.context = context;
         return _super.prototype.attach.call(this, host);
@@ -182,12 +219,20 @@ var TemplatePortal = (function (_super) {
     /**
      * @return {?}
      */
-    TemplatePortal.prototype.detach = function () {
+    TemplatePortal.prototype.detach = /**
+     * @return {?}
+     */
+    function () {
         this.context = undefined;
         return _super.prototype.detach.call(this);
     };
     return TemplatePortal;
 }(Portal));
+/**
+ * A `PortalOutlet` is an space that can contain a single `Portal`.
+ * @record
+ */
+
 /**
  * Partial implementation of PortalOutlet that handles attaching
  * ComponentPortal and TemplatePortal.
@@ -200,19 +245,30 @@ var BasePortalOutlet = (function () {
          */
         this._isDisposed = false;
     }
+    /** Whether this host has an attached portal. */
     /**
      * Whether this host has an attached portal.
      * @return {?}
      */
-    BasePortalOutlet.prototype.hasAttached = function () {
+    BasePortalOutlet.prototype.hasAttached = /**
+     * Whether this host has an attached portal.
+     * @return {?}
+     */
+    function () {
         return !!this._attachedPortal;
     };
+    /** Attaches a portal. */
     /**
      * Attaches a portal.
      * @param {?} portal
      * @return {?}
      */
-    BasePortalOutlet.prototype.attach = function (portal) {
+    BasePortalOutlet.prototype.attach = /**
+     * Attaches a portal.
+     * @param {?} portal
+     * @return {?}
+     */
+    function (portal) {
         if (!portal) {
             throwNullPortalError();
         }
@@ -232,54 +288,59 @@ var BasePortalOutlet = (function () {
         }
         throwUnknownPortalTypeError();
     };
-    /**
-     * @abstract
-     * @template T
-     * @param {?} portal
-     * @return {?}
-     */
-    BasePortalOutlet.prototype.attachComponentPortal = function (portal) { };
-    /**
-     * @abstract
-     * @template C
-     * @param {?} portal
-     * @return {?}
-     */
-    BasePortalOutlet.prototype.attachTemplatePortal = function (portal) { };
+    /** Detaches a previously attached portal. */
     /**
      * Detaches a previously attached portal.
      * @return {?}
      */
-    BasePortalOutlet.prototype.detach = function () {
+    BasePortalOutlet.prototype.detach = /**
+     * Detaches a previously attached portal.
+     * @return {?}
+     */
+    function () {
         if (this._attachedPortal) {
             this._attachedPortal.setAttachedHost(null);
             this._attachedPortal = null;
         }
         this._invokeDisposeFn();
     };
+    /** Permanently dispose of this portal host. */
     /**
      * Permanently dispose of this portal host.
      * @return {?}
      */
-    BasePortalOutlet.prototype.dispose = function () {
+    BasePortalOutlet.prototype.dispose = /**
+     * Permanently dispose of this portal host.
+     * @return {?}
+     */
+    function () {
         if (this.hasAttached()) {
             this.detach();
         }
         this._invokeDisposeFn();
         this._isDisposed = true;
     };
+    /** @docs-private */
     /**
      * \@docs-private
      * @param {?} fn
      * @return {?}
      */
-    BasePortalOutlet.prototype.setDisposeFn = function (fn) {
+    BasePortalOutlet.prototype.setDisposeFn = /**
+     * \@docs-private
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) {
         this._disposeFn = fn;
     };
     /**
      * @return {?}
      */
-    BasePortalOutlet.prototype._invokeDisposeFn = function () {
+    BasePortalOutlet.prototype._invokeDisposeFn = /**
+     * @return {?}
+     */
+    function () {
         if (this._disposeFn) {
             this._disposeFn();
             this._disposeFn = null;
@@ -289,17 +350,15 @@ var BasePortalOutlet = (function () {
 }());
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
 var DomPortalOutlet = (function (_super) {
     __extends(DomPortalOutlet, _super);
-    /**
-     * @param {?} _hostDomElement
-     * @param {?} _componentFactoryResolver
-     * @param {?} _appRef
-     * @param {?} _defaultInjector
-     */
     function DomPortalOutlet(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
         var _this = _super.call(this) || this;
         _this._hostDomElement = _hostDomElement;
@@ -310,11 +369,22 @@ var DomPortalOutlet = (function (_super) {
     }
     /**
      * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
+     * @param portal Portal to be attached
+     * @returns Reference to the created component.
+     */
+    /**
+     * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
      * @template T
      * @param {?} portal Portal to be attached
      * @return {?} Reference to the created component.
      */
-    DomPortalOutlet.prototype.attachComponentPortal = function (portal) {
+    DomPortalOutlet.prototype.attachComponentPortal = /**
+     * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
+     * @template T
+     * @param {?} portal Portal to be attached
+     * @return {?} Reference to the created component.
+     */
+    function (portal) {
         var _this = this;
         var /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         var /** @type {?} */ componentRef;
@@ -341,11 +411,22 @@ var DomPortalOutlet = (function (_super) {
     };
     /**
      * Attaches a template portal to the DOM as an embedded view.
+     * @param portal Portal to be attached.
+     * @returns Reference to the created embedded view.
+     */
+    /**
+     * Attaches a template portal to the DOM as an embedded view.
      * @template C
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
      */
-    DomPortalOutlet.prototype.attachTemplatePortal = function (portal) {
+    DomPortalOutlet.prototype.attachTemplatePortal = /**
+     * Attaches a template portal to the DOM as an embedded view.
+     * @template C
+     * @param {?} portal Portal to be attached.
+     * @return {?} Reference to the created embedded view.
+     */
+    function (portal) {
         var _this = this;
         var /** @type {?} */ viewContainer = portal.viewContainerRef;
         var /** @type {?} */ viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
@@ -366,9 +447,16 @@ var DomPortalOutlet = (function (_super) {
     };
     /**
      * Clears out a portal from the DOM.
+     */
+    /**
+     * Clears out a portal from the DOM.
      * @return {?}
      */
-    DomPortalOutlet.prototype.dispose = function () {
+    DomPortalOutlet.prototype.dispose = /**
+     * Clears out a portal from the DOM.
+     * @return {?}
+     */
+    function () {
         _super.prototype.dispose.call(this);
         if (this._hostDomElement.parentNode != null) {
             this._hostDomElement.parentNode.removeChild(this._hostDomElement);
@@ -379,22 +467,27 @@ var DomPortalOutlet = (function (_super) {
      * @param {?} componentRef
      * @return {?}
      */
-    DomPortalOutlet.prototype._getComponentRootNode = function (componentRef) {
-        return (((componentRef.hostView)).rootNodes[0]);
+    DomPortalOutlet.prototype._getComponentRootNode = /**
+     * Gets the root HTMLElement for an instantiated component.
+     * @param {?} componentRef
+     * @return {?}
+     */
+    function (componentRef) {
+        return /** @type {?} */ ((/** @type {?} */ (componentRef.hostView)).rootNodes[0]);
     };
     return DomPortalOutlet;
 }(BasePortalOutlet));
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
 var CdkPortal = (function (_super) {
     __extends(CdkPortal, _super);
-    /**
-     * @param {?} templateRef
-     * @param {?} viewContainerRef
-     */
     function CdkPortal(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
@@ -404,9 +497,7 @@ var CdkPortal = (function (_super) {
                     exportAs: 'cdkPortal',
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkPortal.ctorParameters = function () { return [
         { type: TemplateRef, },
         { type: ViewContainerRef, },
@@ -422,10 +513,6 @@ var CdkPortal = (function (_super) {
  */
 var CdkPortalOutlet = (function (_super) {
     __extends(CdkPortalOutlet, _super);
-    /**
-     * @param {?} _componentFactoryResolver
-     * @param {?} _viewContainerRef
-     */
     function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef) {
         var _this = _super.call(this) || this;
         _this._componentFactoryResolver = _componentFactoryResolver;
@@ -437,46 +524,47 @@ var CdkPortalOutlet = (function (_super) {
         return _this;
     }
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
-        /**
+        get: /**
          * @deprecated
          * @return {?}
          */
-        get: function () { return this.portal; },
-        /**
+        function () { return this.portal; },
+        set: /**
          * @param {?} v
          * @return {?}
          */
-        set: function (v) { this.portal = v; },
+        function (v) { this.portal = v; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortalHost", {
-        /**
+        get: /**
          * @deprecated
          * @return {?}
          */
-        get: function () { return this.portal; },
-        /**
+        function () { return this.portal; },
+        set: /**
          * @param {?} v
          * @return {?}
          */
-        set: function (v) { this.portal = v; },
+        function (v) { this.portal = v; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CdkPortalOutlet.prototype, "portal", {
-        /**
+        /** Portal associated with the Portal outlet. */
+        get: /**
          * Portal associated with the Portal outlet.
          * @return {?}
          */
-        get: function () {
+        function () {
             return this._portal;
         },
-        /**
+        set: /**
          * @param {?} portal
          * @return {?}
          */
-        set: function (portal) {
+        function (portal) {
             if (this.hasAttached()) {
                 _super.prototype.detach.call(this);
             }
@@ -491,10 +579,19 @@ var CdkPortalOutlet = (function (_super) {
     /**
      * @return {?}
      */
-    CdkPortalOutlet.prototype.ngOnDestroy = function () {
+    CdkPortalOutlet.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
         _super.prototype.dispose.call(this);
         this._portal = null;
     };
+    /**
+     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
+     *
+     * @param portal Portal to be attached to the portal outlet.
+     * @returns Reference to the created component.
+     */
     /**
      * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
      *
@@ -502,7 +599,14 @@ var CdkPortalOutlet = (function (_super) {
      * @param {?} portal Portal to be attached to the portal outlet.
      * @return {?} Reference to the created component.
      */
-    CdkPortalOutlet.prototype.attachComponentPortal = function (portal) {
+    CdkPortalOutlet.prototype.attachComponentPortal = /**
+     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
+     *
+     * @template T
+     * @param {?} portal Portal to be attached to the portal outlet.
+     * @return {?} Reference to the created component.
+     */
+    function (portal) {
         portal.setAttachedHost(this);
         // If the portal specifies an origin, use that as the logical location of the component
         // in the application tree. Otherwise use the location of this PortalOutlet.
@@ -517,11 +621,22 @@ var CdkPortalOutlet = (function (_super) {
     };
     /**
      * Attach the given TemplatePortal to this PortlHost as an embedded View.
+     * @param portal Portal to be attached.
+     * @returns Reference to the created embedded view.
+     */
+    /**
+     * Attach the given TemplatePortal to this PortlHost as an embedded View.
      * @template C
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
      */
-    CdkPortalOutlet.prototype.attachTemplatePortal = function (portal) {
+    CdkPortalOutlet.prototype.attachTemplatePortal = /**
+     * Attach the given TemplatePortal to this PortlHost as an embedded View.
+     * @template C
+     * @param {?} portal Portal to be attached.
+     * @return {?} Reference to the created embedded view.
+     */
+    function (portal) {
         var _this = this;
         portal.setAttachedHost(this);
         var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
@@ -536,16 +651,14 @@ var CdkPortalOutlet = (function (_super) {
                     inputs: ['portal: cdkPortalOutlet']
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     CdkPortalOutlet.ctorParameters = function () { return [
         { type: ComponentFactoryResolver, },
         { type: ViewContainerRef, },
     ]; };
     CdkPortalOutlet.propDecorators = {
-        '_deprecatedPortal': [{ type: Input, args: ['portalHost',] },],
-        '_deprecatedPortalHost': [{ type: Input, args: ['cdkPortalHost',] },],
+        "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
+        "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
     };
     return CdkPortalOutlet;
 }(BasePortalOutlet));
@@ -558,23 +671,21 @@ var PortalModule = (function () {
                     declarations: [CdkPortal, CdkPortalOutlet],
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.
  * \@docs-private
  */
 var PortalInjector = (function () {
-    /**
-     * @param {?} _parentInjector
-     * @param {?} _customTokens
-     */
     function PortalInjector(_parentInjector, _customTokens) {
         this._parentInjector = _parentInjector;
         this._customTokens = _customTokens;
@@ -584,7 +695,12 @@ var PortalInjector = (function () {
      * @param {?=} notFoundValue
      * @return {?}
      */
-    PortalInjector.prototype.get = function (token, notFoundValue) {
+    PortalInjector.prototype.get = /**
+     * @param {?} token
+     * @param {?=} notFoundValue
+     * @return {?}
+     */
+    function (token, notFoundValue) {
         var /** @type {?} */ value = this._customTokens.get(token);
         if (typeof value !== 'undefined') {
             return value;
@@ -594,6 +710,15 @@ var PortalInjector = (function () {
     return PortalInjector;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

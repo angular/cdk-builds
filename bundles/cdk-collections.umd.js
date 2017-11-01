@@ -12,43 +12,27 @@
 }(this, (function (exports,rxjs_Subject,_angular_core) { 'use strict';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @abstract
  */
 var DataSource = (function () {
     function DataSource() {
     }
-    /**
-     * Connects a collection viewer (such as a data-table) to this data source. Note that
-     * the stream provided will be accessed during change detection and should not directly change
-     * values that are bound in template views.
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?} Observable that emits a new value when the data changes.
-     */
-    DataSource.prototype.connect = function (collectionViewer) { };
-    /**
-     * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
-     * to perform any clean-up or tear-down operations when a view is being destroyed.
-     *
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?}
-     */
-    DataSource.prototype.disconnect = function (collectionViewer) { };
     return DataSource;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Class to be used to power selecting one or more options from a list.
  */
 var SelectionModel = (function () {
-    /**
-     * @param {?=} _isMulti
-     * @param {?=} initiallySelectedValues
-     * @param {?=} _emitChanges
-     */
     function SelectionModel(_isMulti, initiallySelectedValues, _emitChanges) {
         if (_isMulti === void 0) { _isMulti = false; }
         if (_emitChanges === void 0) { _emitChanges = true; }
@@ -83,11 +67,12 @@ var SelectionModel = (function () {
         }
     }
     Object.defineProperty(SelectionModel.prototype, "selected", {
-        /**
+        /** Selected value(s). */
+        get: /**
          * Selected value(s).
          * @return {?}
          */
-        get: function () {
+        function () {
             if (!this._selected) {
                 this._selected = Array.from(this._selection.values());
             }
@@ -98,10 +83,18 @@ var SelectionModel = (function () {
     });
     /**
      * Selects a value or an array of values.
+     */
+    /**
+     * Selects a value or an array of values.
      * @param {...?} values
      * @return {?}
      */
-    SelectionModel.prototype.select = function () {
+    SelectionModel.prototype.select = /**
+     * Selects a value or an array of values.
+     * @param {...?} values
+     * @return {?}
+     */
+    function () {
         var _this = this;
         var values = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -113,10 +106,18 @@ var SelectionModel = (function () {
     };
     /**
      * Deselects a value or an array of values.
+     */
+    /**
+     * Deselects a value or an array of values.
      * @param {...?} values
      * @return {?}
      */
-    SelectionModel.prototype.deselect = function () {
+    SelectionModel.prototype.deselect = /**
+     * Deselects a value or an array of values.
+     * @param {...?} values
+     * @return {?}
+     */
+    function () {
         var _this = this;
         var values = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -128,48 +129,93 @@ var SelectionModel = (function () {
     };
     /**
      * Toggles a value between selected and deselected.
+     */
+    /**
+     * Toggles a value between selected and deselected.
      * @param {?} value
      * @return {?}
      */
-    SelectionModel.prototype.toggle = function (value) {
+    SelectionModel.prototype.toggle = /**
+     * Toggles a value between selected and deselected.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
         this.isSelected(value) ? this.deselect(value) : this.select(value);
     };
     /**
      * Clears all of the selected values.
+     */
+    /**
+     * Clears all of the selected values.
      * @return {?}
      */
-    SelectionModel.prototype.clear = function () {
+    SelectionModel.prototype.clear = /**
+     * Clears all of the selected values.
+     * @return {?}
+     */
+    function () {
         this._unmarkAll();
         this._emitChangeEvent();
     };
     /**
      * Determines whether a value is selected.
+     */
+    /**
+     * Determines whether a value is selected.
      * @param {?} value
      * @return {?}
      */
-    SelectionModel.prototype.isSelected = function (value) {
+    SelectionModel.prototype.isSelected = /**
+     * Determines whether a value is selected.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
         return this._selection.has(value);
     };
     /**
      * Determines whether the model does not have a value.
+     */
+    /**
+     * Determines whether the model does not have a value.
      * @return {?}
      */
-    SelectionModel.prototype.isEmpty = function () {
+    SelectionModel.prototype.isEmpty = /**
+     * Determines whether the model does not have a value.
+     * @return {?}
+     */
+    function () {
         return this._selection.size === 0;
     };
     /**
      * Determines whether the model has a value.
+     */
+    /**
+     * Determines whether the model has a value.
      * @return {?}
      */
-    SelectionModel.prototype.hasValue = function () {
+    SelectionModel.prototype.hasValue = /**
+     * Determines whether the model has a value.
+     * @return {?}
+     */
+    function () {
         return !this.isEmpty();
     };
+    /**
+     * Sorts the selected values based on a predicate function.
+     */
     /**
      * Sorts the selected values based on a predicate function.
      * @param {?=} predicate
      * @return {?}
      */
-    SelectionModel.prototype.sort = function (predicate) {
+    SelectionModel.prototype.sort = /**
+     * Sorts the selected values based on a predicate function.
+     * @param {?=} predicate
+     * @return {?}
+     */
+    function (predicate) {
         if (this._isMulti && this._selected) {
             this._selected.sort(predicate);
         }
@@ -178,7 +224,11 @@ var SelectionModel = (function () {
      * Emits a change event and clears the records of selected and deselected values.
      * @return {?}
      */
-    SelectionModel.prototype._emitChangeEvent = function () {
+    SelectionModel.prototype._emitChangeEvent = /**
+     * Emits a change event and clears the records of selected and deselected values.
+     * @return {?}
+     */
+    function () {
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
             var /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
@@ -194,7 +244,12 @@ var SelectionModel = (function () {
      * @param {?} value
      * @return {?}
      */
-    SelectionModel.prototype._markSelected = function (value) {
+    SelectionModel.prototype._markSelected = /**
+     * Selects a value.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
         if (!this.isSelected(value)) {
             if (!this._isMulti) {
                 this._unmarkAll();
@@ -210,7 +265,12 @@ var SelectionModel = (function () {
      * @param {?} value
      * @return {?}
      */
-    SelectionModel.prototype._unmarkSelected = function (value) {
+    SelectionModel.prototype._unmarkSelected = /**
+     * Deselects a value.
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
         if (this.isSelected(value)) {
             this._selection.delete(value);
             if (this._emitChanges) {
@@ -222,7 +282,11 @@ var SelectionModel = (function () {
      * Clears out the selected values.
      * @return {?}
      */
-    SelectionModel.prototype._unmarkAll = function () {
+    SelectionModel.prototype._unmarkAll = /**
+     * Clears out the selected values.
+     * @return {?}
+     */
+    function () {
         var _this = this;
         if (!this.isEmpty()) {
             this._selection.forEach(function (value) { return _this._unmarkSelected(value); });
@@ -234,7 +298,13 @@ var SelectionModel = (function () {
      * @param {?} values
      * @return {?}
      */
-    SelectionModel.prototype._verifyValueAssignment = function (values) {
+    SelectionModel.prototype._verifyValueAssignment = /**
+     * Verifies the value assignment and throws an error if the specified value array is
+     * including multiple values while the selection model is not supporting multiple values.
+     * @param {?} values
+     * @return {?}
+     */
+    function (values) {
         if (values.length > 1 && !this._isMulti) {
             throw getMultipleValuesInSingleSelectionError();
         }
@@ -246,10 +316,6 @@ var SelectionModel = (function () {
  * \@docs-private
  */
 var SelectionChange = (function () {
-    /**
-     * @param {?=} added
-     * @param {?=} removed
-     */
     function SelectionChange(added, removed) {
         this.added = added;
         this.removed = removed;
@@ -266,6 +332,11 @@ function getMultipleValuesInSingleSelectionError() {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
  * This service is needed because native radio change events are only fired on the item currently
@@ -280,11 +351,22 @@ var UniqueSelectionDispatcher = (function () {
     }
     /**
      * Notify other items that selection for the given name has been set.
+     * @param id ID of the item.
+     * @param name Name of the item.
+     */
+    /**
+     * Notify other items that selection for the given name has been set.
      * @param {?} id ID of the item.
      * @param {?} name Name of the item.
      * @return {?}
      */
-    UniqueSelectionDispatcher.prototype.notify = function (id, name) {
+    UniqueSelectionDispatcher.prototype.notify = /**
+     * Notify other items that selection for the given name has been set.
+     * @param {?} id ID of the item.
+     * @param {?} name Name of the item.
+     * @return {?}
+     */
+    function (id, name) {
         for (var _i = 0, _a = this._listeners; _i < _a.length; _i++) {
             var listener = _a[_i];
             listener(id, name);
@@ -292,10 +374,19 @@ var UniqueSelectionDispatcher = (function () {
     };
     /**
      * Listen for future changes to item selection.
+     * @return Function used to deregister listener
+     */
+    /**
+     * Listen for future changes to item selection.
      * @param {?} listener
      * @return {?} Function used to deregister listener
      */
-    UniqueSelectionDispatcher.prototype.listen = function (listener) {
+    UniqueSelectionDispatcher.prototype.listen = /**
+     * Listen for future changes to item selection.
+     * @param {?} listener
+     * @return {?} Function used to deregister listener
+     */
+    function (listener) {
         var _this = this;
         this._listeners.push(listener);
         return function () {
@@ -307,9 +398,7 @@ var UniqueSelectionDispatcher = (function () {
     UniqueSelectionDispatcher.decorators = [
         { type: _angular_core.Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     UniqueSelectionDispatcher.ctorParameters = function () { return []; };
     return UniqueSelectionDispatcher;
 }());

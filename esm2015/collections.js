@@ -9,30 +9,19 @@ import { Subject } from 'rxjs/Subject';
 import { Injectable, Optional, SkipSelf } from '@angular/core';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * @abstract
  */
 class DataSource {
-    /**
-     * Connects a collection viewer (such as a data-table) to this data source. Note that
-     * the stream provided will be accessed during change detection and should not directly change
-     * values that are bound in template views.
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?} Observable that emits a new value when the data changes.
-     */
-    connect(collectionViewer) { }
-    /**
-     * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
-     * to perform any clean-up or tear-down operations when a view is being destroyed.
-     *
-     * @abstract
-     * @param {?} collectionViewer The component that exposes a view over the data provided by this
-     *     data source.
-     * @return {?}
-     */
-    disconnect(collectionViewer) { }
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Class to be used to power selecting one or more options from a list.
@@ -240,6 +229,11 @@ function getMultipleValuesInSingleSelectionError() {
 }
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
  * This service is needed because native radio change events are only fired on the item currently
@@ -280,9 +274,7 @@ class UniqueSelectionDispatcher {
 UniqueSelectionDispatcher.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 UniqueSelectionDispatcher.ctorParameters = () => [];
 /**
  * \@docs-private
@@ -302,6 +294,15 @@ const UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
     useFactory: UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY
 };
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

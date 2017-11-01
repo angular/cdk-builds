@@ -9,6 +9,11 @@ import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgM
 import { DOCUMENT } from '@angular/platform-browser';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
  *
@@ -41,18 +46,16 @@ class Directionality {
             // We still need to account for dir="auto".
             // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
             // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
-            const bodyDir = _document.body ? _document.body.dir : null;
-            const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            this.value = (bodyDir || htmlDir || 'ltr');
+            const /** @type {?} */ bodyDir = _document.body ? _document.body.dir : null;
+            const /** @type {?} */ htmlDir = _document.documentElement ? _document.documentElement.dir : null;
+            this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
 }
 Directionality.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 Directionality.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
 ];
@@ -74,6 +77,11 @@ const DIRECTIONALITY_PROVIDER = {
     deps: [[new Optional(), new SkipSelf(), Directionality], [new Optional(), DOCUMENT]],
     useFactory: DIRECTIONALITY_PROVIDER_FACTORY
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -130,14 +138,17 @@ Dir.decorators = [
                 exportAs: 'dir',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 Dir.ctorParameters = () => [];
 Dir.propDecorators = {
-    'change': [{ type: Output, args: ['dirChange',] },],
-    'dir': [{ type: Input, args: ['dir',] },],
+    "change": [{ type: Output, args: ['dirChange',] },],
+    "dir": [{ type: Input, args: ['dir',] },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 class BidiModule {
 }
@@ -151,11 +162,18 @@ BidiModule.decorators = [
                 ]
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 BidiModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

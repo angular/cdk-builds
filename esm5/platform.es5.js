@@ -7,9 +7,14 @@
  */
 import { Injectable, NgModule } from '@angular/core';
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
-var hasV8BreakIterator = (typeof (Intl) !== 'undefined' && ((Intl)).v8BreakIterator);
+var hasV8BreakIterator = (typeof (Intl) !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
@@ -25,7 +30,7 @@ var Platform = (function () {
         this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
         // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
         this.BLINK = this.isBrowser &&
-            (!!(((window)).chrome || hasV8BreakIterator) && !!CSS && !this.EDGE && !this.TRIDENT);
+            (!!((/** @type {?} */ (window)).chrome || hasV8BreakIterator) && !!CSS && !this.EDGE && !this.TRIDENT);
         // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
         // ensure that Webkit runs standalone and is not used as another engine's base.
         this.WEBKIT = this.isBrowser &&
@@ -33,7 +38,7 @@ var Platform = (function () {
         /**
          * Browsers and Platform Types
          */
-        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) && !(/** @type {?} */ (window)).MSStream;
         // It's difficult to detect the plain Gecko engine, because most of the browsers identify
         // them self as Gecko-like browsers and modify the userAgent's according to that.
         // Since we only cover one explicit Firefox case, we can simply check for Firefox
@@ -49,13 +54,15 @@ var Platform = (function () {
     Platform.decorators = [
         { type: Injectable },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     Platform.ctorParameters = function () { return []; };
     return Platform;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Cached result Set of input types support by the current browser.
  */
@@ -64,10 +71,6 @@ var supportedInputTypes;
  * Types of <input> that *might* be supported.
  */
 var candidateInputTypes = [
-    // `color` must come first. Chrome 56 shows a warning if we change the type to `color` after
-    // first changing it to something else:
-    // The specified value "" does not conform to the required format.
-    // The format is "#rrggbb" where rr, gg, bb are two-digit hexadecimal numbers.
     'color',
     'button',
     'checkbox',
@@ -114,6 +117,11 @@ function getSupportedInputTypes() {
     return supportedInputTypes;
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var PlatformModule = (function () {
     function PlatformModule() {
     }
@@ -122,13 +130,20 @@ var PlatformModule = (function () {
                     providers: [Platform]
                 },] },
     ];
-    /**
-     * @nocollapse
-     */
+    /** @nocollapse */
     PlatformModule.ctorParameters = function () { return []; };
     return PlatformModule;
 }());
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

@@ -10,6 +10,11 @@ import { UNIQUE_SELECTION_DISPATCHER_PROVIDER, UniqueSelectionDispatcher } from 
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Used to generate unique ID for each accordion.
  */
 let nextId$1 = 0;
@@ -41,13 +46,16 @@ CdkAccordion.decorators = [
                 exportAs: 'cdkAccordion',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkAccordion.ctorParameters = () => [];
 CdkAccordion.propDecorators = {
-    'multi': [{ type: Input },],
+    "multi": [{ type: Input },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 /**
  * Used to generate unique ID for each accordion item.
@@ -114,7 +122,7 @@ class CdkAccordionItem {
                  * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                  * the name value is the id of the accordion.
                  */
-                const accordionId = this.accordion ? this.accordion.id : this.id;
+                const /** @type {?} */ accordionId = this.accordion ? this.accordion.id : this.id;
                 this._expansionDispatcher.notify(this.id, accordionId);
             }
             else {
@@ -161,20 +169,23 @@ CdkAccordionItem.decorators = [
                 exportAs: 'cdkAccordionItem',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkAccordionItem.ctorParameters = () => [
     { type: CdkAccordion, decorators: [{ type: Optional },] },
     { type: ChangeDetectorRef, },
     { type: UniqueSelectionDispatcher, },
 ];
 CdkAccordionItem.propDecorators = {
-    'closed': [{ type: Output },],
-    'opened': [{ type: Output },],
-    'destroyed': [{ type: Output },],
-    'expanded': [{ type: Input },],
+    "closed": [{ type: Output },],
+    "opened": [{ type: Output },],
+    "destroyed": [{ type: Output },],
+    "expanded": [{ type: Input },],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 class CdkAccordionModule {
 }
@@ -185,11 +196,18 @@ CdkAccordionModule.decorators = [
                 providers: [UNIQUE_SELECTION_DISPATCHER_PROVIDER],
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkAccordionModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */

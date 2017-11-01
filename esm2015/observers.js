@@ -10,6 +10,11 @@ import { Subject } from 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
 /**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
@@ -25,9 +30,7 @@ class MutationObserverFactory {
 MutationObserverFactory.decorators = [
     { type: Injectable },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 MutationObserverFactory.ctorParameters = () => [];
 /**
  * Directive that triggers a callback whenever the content of
@@ -94,17 +97,15 @@ CdkObserveContent.decorators = [
                 exportAs: 'cdkObserveContent',
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 CdkObserveContent.ctorParameters = () => [
     { type: MutationObserverFactory, },
     { type: ElementRef, },
     { type: NgZone, },
 ];
 CdkObserveContent.propDecorators = {
-    'event': [{ type: Output, args: ['cdkObserveContent',] },],
-    'debounce': [{ type: Input },],
+    "event": [{ type: Output, args: ['cdkObserveContent',] },],
+    "debounce": [{ type: Input },],
 };
 class ObserversModule {
 }
@@ -115,11 +116,18 @@ ObserversModule.decorators = [
                 providers: [MutationObserverFactory]
             },] },
 ];
-/**
- * @nocollapse
- */
+/** @nocollapse */
 ObserversModule.ctorParameters = () => [];
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Generated bundle index. Do not edit.
  */
