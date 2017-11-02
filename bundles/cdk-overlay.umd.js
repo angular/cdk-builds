@@ -338,11 +338,20 @@ var BlockScrollStrategy = (function () {
      */
     function () {
         if (this._isEnabled) {
+            var /** @type {?} */ html = document.documentElement;
+            var /** @type {?} */ body = document.body;
+            var /** @type {?} */ previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
+            var /** @type {?} */ previousBodyScrollBehavior = body.style['scrollBehavior'] || '';
             this._isEnabled = false;
-            document.documentElement.style.left = this._previousHTMLStyles.left;
-            document.documentElement.style.top = this._previousHTMLStyles.top;
-            document.documentElement.classList.remove('cdk-global-scrollblock');
+            html.style.left = this._previousHTMLStyles.left;
+            html.style.top = this._previousHTMLStyles.top;
+            html.classList.remove('cdk-global-scrollblock');
+            // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
+            // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
+            html.style['scrollBehavior'] = body.style['scrollBehavior'] = 'auto';
             window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
+            html.style['scrollBehavior'] = previousHtmlScrollBehavior;
+            body.style['scrollBehavior'] = previousBodyScrollBehavior;
         }
     };
     /**
