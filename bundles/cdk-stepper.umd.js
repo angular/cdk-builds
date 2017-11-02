@@ -208,14 +208,19 @@ var CdkStepper = (function () {
          * @return {?}
          */
         function (index) {
-            if (this._anyControlsInvalid(index)
-                || index < this._selectedIndex && !this._steps.toArray()[index].editable) {
-                // remove focus from clicked step header if the step is not able to be selected
-                this._stepHeader.toArray()[index].nativeElement.blur();
+            if (this._steps) {
+                if (this._anyControlsInvalid(index) || index < this._selectedIndex &&
+                    !this._steps.toArray()[index].editable) {
+                    // remove focus from clicked step header if the step is not able to be selected
+                    this._stepHeader.toArray()[index].nativeElement.blur();
+                }
+                else if (this._selectedIndex != index) {
+                    this._emitStepperSelectionEvent(index);
+                    this._focusIndex = this._selectedIndex;
+                }
             }
-            else if (this._selectedIndex != index) {
-                this._emitStepperSelectionEvent(index);
-                this._focusIndex = this._selectedIndex;
+            else {
+                this._selectedIndex = this._focusIndex = index;
             }
         },
         enumerable: true,
@@ -436,9 +441,10 @@ var CdkStepper = (function () {
      * @return {?}
      */
     function (index) {
-        this._steps.toArray()[this._selectedIndex].interacted = true;
+        var /** @type {?} */ steps = this._steps.toArray();
+        steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
-            return this._steps.toArray().slice(0, index).some(function (step) { return step.stepControl.invalid; });
+            return steps.slice(0, index).some(function (step) { return step.stepControl && step.stepControl.invalid; });
         }
         return false;
     };
