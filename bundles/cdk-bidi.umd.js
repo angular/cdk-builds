@@ -60,24 +60,6 @@ var Directionality = (function () {
     ]; };
     return Directionality;
 }());
-/**
- * \@docs-private
- * @param {?} parentDirectionality
- * @param {?} _document
- * @return {?}
- */
-function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality, _document) {
-    return parentDirectionality || new Directionality(_document);
-}
-/**
- * \@docs-private
- */
-var DIRECTIONALITY_PROVIDER = {
-    // If there is already a Directionality available, use that. Otherwise, provide a new one.
-    provide: Directionality,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), Directionality], [new _angular_core.Optional(), _angular_platformBrowser.DOCUMENT]],
-    useFactory: DIRECTIONALITY_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -185,8 +167,6 @@ var BidiModule = (function () {
 }());
 
 exports.Directionality = Directionality;
-exports.DIRECTIONALITY_PROVIDER_FACTORY = DIRECTIONALITY_PROVIDER_FACTORY;
-exports.DIRECTIONALITY_PROVIDER = DIRECTIONALITY_PROVIDER;
 exports.DIR_DOCUMENT = DIR_DOCUMENT;
 exports.Dir = Dir;
 exports.BidiModule = BidiModule;

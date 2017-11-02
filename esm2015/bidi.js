@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output, SkipSelf } from '@angular/core';
+import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 
 /**
@@ -59,24 +59,6 @@ Directionality.decorators = [
 Directionality.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
 ];
-/**
- * \@docs-private
- * @param {?} parentDirectionality
- * @param {?} _document
- * @return {?}
- */
-function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality, _document) {
-    return parentDirectionality || new Directionality(_document);
-}
-/**
- * \@docs-private
- */
-const DIRECTIONALITY_PROVIDER = {
-    // If there is already a Directionality available, use that. Otherwise, provide a new one.
-    provide: Directionality,
-    deps: [[new Optional(), new SkipSelf(), Directionality], [new Optional(), DOCUMENT]],
-    useFactory: DIRECTIONALITY_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -178,5 +160,5 @@ BidiModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { Directionality, DIRECTIONALITY_PROVIDER_FACTORY, DIRECTIONALITY_PROVIDER, DIR_DOCUMENT, Dir, BidiModule };
+export { Directionality, DIR_DOCUMENT, Dir, BidiModule };
 //# sourceMappingURL=bidi.js.map

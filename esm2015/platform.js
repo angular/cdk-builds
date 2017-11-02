@@ -63,6 +63,28 @@ Platform.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * Cached result of whether the user's browser supports passive event listeners.
+ */
+let supportsPassiveEvents;
+/**
+ * Checks whether the user's browser supports passive event listeners.
+ * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
+ * @return {?}
+ */
+function supportsPassiveEventListeners() {
+    if (supportsPassiveEvents == null) {
+        try {
+            window.addEventListener('test', /** @type {?} */ ((null)), Object.defineProperty({}, 'passive', {
+                get: () => supportsPassiveEvents = true
+            }));
+        }
+        finally {
+            supportsPassiveEvents = supportsPassiveEvents || false;
+        }
+    }
+    return supportsPassiveEvents;
+}
+/**
  * Cached result Set of input types support by the current browser.
  */
 let supportedInputTypes;
@@ -144,5 +166,5 @@ PlatformModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, getSupportedInputTypes, PlatformModule };
+export { Platform, supportsPassiveEventListeners, getSupportedInputTypes, PlatformModule };
 //# sourceMappingURL=platform.js.map

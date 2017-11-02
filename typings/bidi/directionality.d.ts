@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter, Optional, InjectionToken } from '@angular/core';
+import { EventEmitter, InjectionToken } from '@angular/core';
 export declare type Direction = 'ltr' | 'rtl';
 /**
  * Injection token used to inject the document into Directionality.
@@ -29,11 +29,3 @@ export declare class Directionality {
     readonly change: EventEmitter<void>;
     constructor(_document?: any);
 }
-/** @docs-private */
-export declare function DIRECTIONALITY_PROVIDER_FACTORY(parentDirectionality: any, _document: any): any;
-/** @docs-private */
-export declare const DIRECTIONALITY_PROVIDER: {
-    provide: typeof Directionality;
-    deps: Optional[][];
-    useFactory: (parentDirectionality: any, _document: any) => any;
-};

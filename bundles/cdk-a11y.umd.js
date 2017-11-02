@@ -1891,7 +1891,9 @@ var FocusMonitor = (function () {
             }
             _this._lastTouchTarget = event.target;
             _this._touchTimeout = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
-        }, true);
+            // Note that we need to cast the event options to `any`, because at the time of writing
+            // (TypeScript 2.5), the built-in types don't support the `addEventListener` options param.
+        }, _angular_cdk_platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
         // Make a note of when the window regains focus, so we can restore the origin info for the
         // focused element.
         window.addEventListener('focus', function () {
