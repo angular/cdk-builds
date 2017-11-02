@@ -26,8 +26,3 @@ export declare function getTableMultipleDefaultRowDefsError(): Error;
  * @docs-private
  */
 export declare function getTableMissingMatchingRowDefError(): Error;
-/**
- * Returns an error to be thrown when there is no row definitions present in the content.
- * @docs-private
- */
-export declare function getTableMissingRowDefsError(): Error;
