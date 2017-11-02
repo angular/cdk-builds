@@ -1,11 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-import { NgZone } from '@angular/core';
 import { CloseScrollStrategy } from './close-scroll-strategy';
 import { NoopScrollStrategy } from './noop-scroll-strategy';
 import { BlockScrollStrategy } from './block-scroll-strategy';
@@ -21,8 +13,7 @@ import { RepositionScrollStrategy, RepositionScrollStrategyConfig } from './repo
 export declare class ScrollStrategyOptions {
     private _scrollDispatcher;
     private _viewportRuler;
-    private _ngZone;
-    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone);
+    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler);
     /** Do nothing on scroll. */
     noop: () => NoopScrollStrategy;
     /** Close the overlay as soon as the user scrolls. */

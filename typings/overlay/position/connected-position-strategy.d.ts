@@ -119,7 +119,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * origin point to which the overlay should be connected, as well as how much of the element
      * would be inside the viewport at that position.
      */
-    private _getOverlayPoint(originPoint, overlayRect, viewportSize, pos);
+    private _getOverlayPoint(originPoint, overlayRect, viewportRect, pos);
     /**
      * Gets the view properties of the trigger and overlay, including whether they are clipped
      * or completely outside the view of any of the strategy's scrollables.

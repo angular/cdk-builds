@@ -68,28 +68,6 @@ var Platform = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Cached result of whether the user's browser supports passive event listeners.
- */
-var supportsPassiveEvents;
-/**
- * Checks whether the user's browser supports passive event listeners.
- * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
- * @return {?}
- */
-function supportsPassiveEventListeners() {
-    if (supportsPassiveEvents == null) {
-        try {
-            window.addEventListener('test', /** @type {?} */ ((null)), Object.defineProperty({}, 'passive', {
-                get: function () { return supportsPassiveEvents = true; }
-            }));
-        }
-        finally {
-            supportsPassiveEvents = supportsPassiveEvents || false;
-        }
-    }
-    return supportsPassiveEvents;
-}
-/**
  * Cached result Set of input types support by the current browser.
  */
 var supportedInputTypes;
@@ -162,7 +140,6 @@ var PlatformModule = (function () {
 }());
 
 exports.Platform = Platform;
-exports.supportsPassiveEventListeners = supportsPassiveEventListeners;
 exports.getSupportedInputTypes = getSupportedInputTypes;
 exports.PlatformModule = PlatformModule;
 
