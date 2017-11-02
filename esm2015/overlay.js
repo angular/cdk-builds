@@ -184,16 +184,17 @@ function getMatScrollStrategyAlreadyAttachedError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
 class CloseScrollStrategy {
     /**
      * @param {?} _scrollDispatcher
+     * @param {?} _ngZone
      */
-    constructor(_scrollDispatcher) {
+    constructor(_scrollDispatcher, _ngZone) {
         this._scrollDispatcher = _scrollDispatcher;
+        this._ngZone = _ngZone;
         this._scrollSubscription = null;
     }
     /**
@@ -214,10 +215,12 @@ class CloseScrollStrategy {
     enable() {
         if (!this._scrollSubscription) {
             this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(() => {
-                if (this._overlayRef.hasAttached()) {
-                    this._overlayRef.detach();
-                }
-                this.disable();
+                this._ngZone.run(() => {
+                    this.disable();
+                    if (this._overlayRef.hasAttached()) {
+                        this._overlayRef.detach();
+                    }
+                });
             });
         }
     }
@@ -306,7 +309,7 @@ class BlockScrollStrategy {
             return false;
         }
         const /** @type {?} */ body = document.body;
-        const /** @type {?} */ viewport = this._viewportRuler.getViewportRect();
+        const /** @type {?} */ viewport = this._viewportRuler.getViewportSize();
         return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
     }
 }
@@ -383,10 +386,12 @@ class ScrollStrategyOptions {
     /**
      * @param {?} _scrollDispatcher
      * @param {?} _viewportRuler
+     * @param {?} _ngZone
      */
-    constructor(_scrollDispatcher, _viewportRuler) {
+    constructor(_scrollDispatcher, _viewportRuler, _ngZone) {
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
+        this._ngZone = _ngZone;
         /**
          * Do nothing on scroll.
          */
@@ -394,7 +399,7 @@ class ScrollStrategyOptions {
         /**
          * Close the overlay as soon as the user scrolls.
          */
-        this.close = () => new CloseScrollStrategy(this._scrollDispatcher);
+        this.close = () => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone);
         /**
          * Block scrolling.
          */
@@ -414,6 +419,7 @@ ScrollStrategyOptions.decorators = [
 ScrollStrategyOptions.ctorParameters = () => [
     { type: ScrollDispatcher, },
     { type: ViewportRuler, },
+    { type: NgZone, },
 ];
 
 /**
@@ -510,6 +516,9 @@ class OverlayRef {
      * @return {?} The portal detachment result.
      */
     detach() {
+        if (!this.hasAttached()) {
+            return;
+        }
         this.detachBackdrop();
         // When the overlay is detached, the pane element should disable pointer events.
         // This is necessary because otherwise the pane element will cover the page and disable
@@ -533,6 +542,7 @@ class OverlayRef {
      * @return {?}
      */
     dispose() {
+        const /** @type {?} */ isAttached = this.hasAttached();
         if (this._config.positionStrategy) {
             this._config.positionStrategy.dispose();
         }
@@ -543,7 +553,9 @@ class OverlayRef {
         this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
-        this._detachments.next();
+        if (isAttached) {
+            this._detachments.next();
+        }
         this._detachments.complete();
     }
     /**
@@ -862,8 +874,8 @@ class ConnectedPositionStrategy {
         const /** @type {?} */ element = this._pane;
         const /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         const /** @type {?} */ overlayRect = element.getBoundingClientRect();
-        // We use the viewport rect to determine whether a position would go off-screen.
-        const /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
+        // We use the viewport size to determine whether a position would go off-screen.
+        const /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
         // Fallback point if none of the fallbacks fit into the viewport.
         let /** @type {?} */ fallbackPoint;
         let /** @type {?} */ fallbackPosition;
@@ -873,7 +885,7 @@ class ConnectedPositionStrategy {
             // Get the (x, y) point of connection on the origin, and then use that to get the
             // (top, left) coordinate for the overlay at `pos`.
             let /** @type {?} */ originPoint = this._getOriginConnectionPoint(originRect, pos);
-            let /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportRect, pos);
+            let /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportSize, pos);
             // If the overlay in the calculated position fits on-screen, put it there and we're done.
             if (overlayPoint.fitsInViewport) {
                 this._setElementPosition(element, overlayRect, overlayPoint, pos);
@@ -903,10 +915,10 @@ class ConnectedPositionStrategy {
         }
         const /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         const /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
-        const /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
+        const /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
         const /** @type {?} */ lastPosition = this._lastConnectedPosition || this._preferredPositions[0];
         let /** @type {?} */ originPoint = this._getOriginConnectionPoint(originRect, lastPosition);
-        let /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportRect, lastPosition);
+        let /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportSize, lastPosition);
         this._setElementPosition(this._pane, overlayRect, overlayPoint, lastPosition);
     }
     /**
@@ -1006,11 +1018,11 @@ class ConnectedPositionStrategy {
      * would be inside the viewport at that position.
      * @param {?} originPoint
      * @param {?} overlayRect
-     * @param {?} viewportRect
+     * @param {?} viewportSize
      * @param {?} pos
      * @return {?}
      */
-    _getOverlayPoint(originPoint, overlayRect, viewportRect, pos) {
+    _getOverlayPoint(originPoint, overlayRect, viewportSize, pos) {
         // Calculate the (overlayStartX, overlayStartY), the start of the potential overlay position
         // relative to the origin point.
         let /** @type {?} */ overlayStartX;
@@ -1038,9 +1050,9 @@ class ConnectedPositionStrategy {
         let /** @type {?} */ y = originPoint.y + overlayStartY + offsetY;
         // How much the overlay would overflow at this position, on each side.
         let /** @type {?} */ leftOverflow = 0 - x;
-        let /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportRect.width;
+        let /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportSize.width;
         let /** @type {?} */ topOverflow = 0 - y;
-        let /** @type {?} */ bottomOverflow = (y + overlayRect.height) - viewportRect.height;
+        let /** @type {?} */ bottomOverflow = (y + overlayRect.height) - viewportSize.height;
         // Visible parts of the element on each axis.
         let /** @type {?} */ visibleWidth = this._subtractOverflows(overlayRect.width, leftOverflow, rightOverflow);
         let /** @type {?} */ visibleHeight = this._subtractOverflows(overlayRect.height, topOverflow, bottomOverflow);

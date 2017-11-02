@@ -28,6 +28,7 @@ const A = 65;
 const Z = 90;
 const ZERO = 48;
 const NINE = 91;
+const COMMA = 188;
 
 /**
  * @fileoverview added by tsickle
@@ -42,5 +43,5 @@ const NINE = 91;
  * Generated bundle index. Do not edit.
  */
 
-export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z, ZERO, NINE };
+export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z, ZERO, NINE, COMMA };
 //# sourceMappingURL=keycodes.js.map

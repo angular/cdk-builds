@@ -350,7 +350,7 @@ var ViewportRuler = (function () {
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
             return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
         }) : rxjs_observable_of.of();
-        this._invalidateCache = this.change().subscribe(function () { return _this._cacheViewportGeometry(); });
+        this._invalidateCache = this.change().subscribe(function () { return _this._updateViewportSize(); });
     }
     /**
      * @return {?}
@@ -361,24 +361,31 @@ var ViewportRuler = (function () {
     function () {
         this._invalidateCache.unsubscribe();
     };
+    /** Returns the viewport's width and height. */
+    /**
+     * Returns the viewport's width and height.
+     * @return {?}
+     */
+    ViewportRuler.prototype.getViewportSize = /**
+     * Returns the viewport's width and height.
+     * @return {?}
+     */
+    function () {
+        if (!this._viewportSize) {
+            this._updateViewportSize();
+        }
+        return { width: this._viewportSize.width, height: this._viewportSize.height };
+    };
     /** Gets a ClientRect for the viewport's bounds. */
     /**
      * Gets a ClientRect for the viewport's bounds.
-     * @param {?=} documentRect
      * @return {?}
      */
     ViewportRuler.prototype.getViewportRect = /**
      * Gets a ClientRect for the viewport's bounds.
-     * @param {?=} documentRect
      * @return {?}
      */
-    function (documentRect) {
-        if (documentRect === void 0) { documentRect = this._documentRect; }
-        // Cache the document bounding rect so that we don't recompute it for multiple calls.
-        if (!documentRect) {
-            this._cacheViewportGeometry();
-            documentRect = this._documentRect;
-        }
+    function () {
         // Use the document element's bounding rect rather than the window scroll properties
         // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
         // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
@@ -388,9 +395,8 @@ var ViewportRuler = (function () {
         // We use the documentElement instead of the body because, by default (without a css reset)
         // browsers typically give the document body an 8px margin, which is not included in
         // getBoundingClientRect().
-        var /** @type {?} */ scrollPosition = this.getViewportScrollPosition(documentRect);
-        var /** @type {?} */ height = window.innerHeight;
-        var /** @type {?} */ width = window.innerWidth;
+        var /** @type {?} */ scrollPosition = this.getViewportScrollPosition();
+        var _a = this.getViewportSize(), width = _a.width, height = _a.height;
         return {
             top: scrollPosition.top,
             left: scrollPosition.left,
@@ -400,36 +406,26 @@ var ViewportRuler = (function () {
             width: width,
         };
     };
+    /** Gets the (top, left) scroll position of the viewport. */
     /**
      * Gets the (top, left) scroll position of the viewport.
-     * @param documentRect
-     */
-    /**
-     * Gets the (top, left) scroll position of the viewport.
-     * @param {?=} documentRect
      * @return {?}
      */
     ViewportRuler.prototype.getViewportScrollPosition = /**
      * Gets the (top, left) scroll position of the viewport.
-     * @param {?=} documentRect
      * @return {?}
      */
-    function (documentRect) {
-        if (documentRect === void 0) { documentRect = this._documentRect; }
-        // Cache the document bounding rect so that we don't recompute it for multiple calls.
-        if (!documentRect) {
-            this._cacheViewportGeometry();
-            documentRect = this._documentRect;
-        }
+    function () {
         // The top-left-corner of the viewport is determined by the scroll position of the document
         // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
         // whether `document.body` or `document.documentElement` is the scrolled element, so reading
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
-        var /** @type {?} */ top = -/** @type {?} */ ((documentRect)).top || document.body.scrollTop || window.scrollY ||
+        var /** @type {?} */ documentRect = document.documentElement.getBoundingClientRect();
+        var /** @type {?} */ top = -documentRect.top || document.body.scrollTop || window.scrollY ||
             document.documentElement.scrollTop || 0;
-        var /** @type {?} */ left = -/** @type {?} */ ((documentRect)).left || document.body.scrollLeft || window.scrollX ||
+        var /** @type {?} */ left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
             document.documentElement.scrollLeft || 0;
         return { top: top, left: left };
     };
@@ -451,17 +447,16 @@ var ViewportRuler = (function () {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
         return throttleTime > 0 ? this._change.pipe(rxjs_operators_auditTime.auditTime(throttleTime)) : this._change;
     };
-    /** Caches the latest client rectangle of the document element. */
     /**
-     * Caches the latest client rectangle of the document element.
+     * Updates the cached viewport size.
      * @return {?}
      */
-    ViewportRuler.prototype._cacheViewportGeometry = /**
-     * Caches the latest client rectangle of the document element.
+    ViewportRuler.prototype._updateViewportSize = /**
+     * Updates the cached viewport size.
      * @return {?}
      */
     function () {
-        this._documentRect = document.documentElement.getBoundingClientRect();
+        this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     };
     ViewportRuler.decorators = [
         { type: _angular_core.Injectable },

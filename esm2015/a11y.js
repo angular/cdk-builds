@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators/filter';
 import { map } from 'rxjs/operators/map';
 import { tap } from 'rxjs/operators/tap';
 import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
-import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { Platform, PlatformModule, supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { first } from 'rxjs/operators/first';
 import { of } from 'rxjs/observable/of';
@@ -97,9 +97,12 @@ class ListKeyManager {
      * @return {?}
      */
     setActiveItem(index) {
+        const /** @type {?} */ previousIndex = this._activeItemIndex;
         this._activeItemIndex = index;
         this._activeItem = this._items.toArray()[index];
-        this.change.next(index);
+        if (this._activeItemIndex !== previousIndex) {
+            this.change.next(index);
+        }
     }
     /**
      * Sets the active item depending on the key event passed in.
@@ -1475,7 +1478,9 @@ class FocusMonitor {
             }
             this._lastTouchTarget = event.target;
             this._touchTimeout = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
-        }, true);
+            // Note that we need to cast the event options to `any`, because at the time of writing
+            // (TypeScript 2.5), the built-in types don't support the `addEventListener` options param.
+        }, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
         // Make a note of when the window regains focus, so we can restore the origin info for the
         // focused element.
         window.addEventListener('focus', () => {

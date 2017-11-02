@@ -319,7 +319,7 @@ CdkCell.ctorParameters = () => [
  * @return {?}
  */
 function getTableUnknownColumnError(id) {
-    return Error(`cdk-table: Could not find column with id "${id}".`);
+    return Error(`Could not find column with id "${id}".`);
 }
 /**
  * Returns an error to be thrown when two column definitions have the same name.
@@ -328,7 +328,7 @@ function getTableUnknownColumnError(id) {
  * @return {?}
  */
 function getTableDuplicateColumnNameError(name) {
-    return Error(`cdk-table: Duplicate column definition name provided: "${name}".`);
+    return Error(`Duplicate column definition name provided: "${name}".`);
 }
 /**
  * Returns an error to be thrown when there are multiple rows that are missing a when function.
@@ -336,7 +336,7 @@ function getTableDuplicateColumnNameError(name) {
  * @return {?}
  */
 function getTableMultipleDefaultRowDefsError() {
-    return Error(`cdk-table: There can only be one default row without a when predicate function.`);
+    return Error(`There can only be one default row without a when predicate function.`);
 }
 /**
  * Returns an error to be thrown when there are no matching row defs for a particular set of data.
@@ -344,7 +344,16 @@ function getTableMultipleDefaultRowDefsError() {
  * @return {?}
  */
 function getTableMissingMatchingRowDefError() {
-    return Error(`cdk-table: Could not find a matching row definition for the provided row data.`);
+    return Error(`Could not find a matching row definition for the provided row data.`);
+}
+/**
+ * Returns an error to be thrown when there is no row definitions present in the content.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMissingRowDefsError() {
+    return Error('Missing definitions for header and row, ' +
+        'cannot determine which columns should be rendered.');
 }
 
 /**
@@ -478,6 +487,9 @@ class CdkTable {
      * @return {?}
      */
     ngAfterContentInit() {
+        if (!this._headerDef && !this._rowDefs.length) {
+            throw getTableMissingRowDefsError();
+        }
         this._cacheColumnDefsByName();
         this._columnDefs.changes.subscribe(() => this._cacheColumnDefsByName());
         this._renderHeaderRow();

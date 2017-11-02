@@ -15,21 +15,23 @@ export declare const DEFAULT_RESIZE_TIME = 20;
  * @docs-private
  */
 export declare class ViewportRuler implements OnDestroy {
-    /** Cached document client rectangle. */
-    private _documentRect?;
+    /** Cached viewport dimensions. */
+    private _viewportSize;
     /** Stream of viewport change events. */
     private _change;
     /** Subscription to streams that invalidate the cached viewport dimensions. */
     private _invalidateCache;
     constructor(platform: Platform, ngZone: NgZone);
     ngOnDestroy(): void;
+    /** Returns the viewport's width and height. */
+    getViewportSize(): Readonly<{
+        width: number;
+        height: number;
+    }>;
     /** Gets a ClientRect for the viewport's bounds. */
-    getViewportRect(documentRect?: ClientRect | undefined): ClientRect;
-    /**
-     * Gets the (top, left) scroll position of the viewport.
-     * @param documentRect
-     */
-    getViewportScrollPosition(documentRect?: ClientRect | undefined): {
+    getViewportRect(): ClientRect;
+    /** Gets the (top, left) scroll position of the viewport. */
+    getViewportScrollPosition(): {
         top: number;
         left: number;
     };
@@ -38,8 +40,8 @@ export declare class ViewportRuler implements OnDestroy {
      * @param throttle Time in milliseconds to throttle the stream.
      */
     change(throttleTime?: number): Observable<Event>;
-    /** Caches the latest client rectangle of the document element. */
-    _cacheViewportGeometry(): void;
+    /** Updates the cached viewport size. */
+    private _updateViewportSize();
 }
 /** @docs-private */
 export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone): ViewportRuler;

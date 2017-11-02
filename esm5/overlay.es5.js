@@ -198,13 +198,13 @@ function getMatScrollStrategyAlreadyAttachedError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
 var CloseScrollStrategy = (function () {
-    function CloseScrollStrategy(_scrollDispatcher) {
+    function CloseScrollStrategy(_scrollDispatcher, _ngZone) {
         this._scrollDispatcher = _scrollDispatcher;
+        this._ngZone = _ngZone;
         this._scrollSubscription = null;
     }
     /** Attaches this scroll strategy to an overlay. */
@@ -237,10 +237,12 @@ var CloseScrollStrategy = (function () {
         var _this = this;
         if (!this._scrollSubscription) {
             this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(function () {
-                if (_this._overlayRef.hasAttached()) {
-                    _this._overlayRef.detach();
-                }
-                _this.disable();
+                _this._ngZone.run(function () {
+                    _this.disable();
+                    if (_this._overlayRef.hasAttached()) {
+                        _this._overlayRef.detach();
+                    }
+                });
             });
         }
     };
@@ -350,7 +352,7 @@ var BlockScrollStrategy = (function () {
             return false;
         }
         var /** @type {?} */ body = document.body;
-        var /** @type {?} */ viewport = this._viewportRuler.getViewportRect();
+        var /** @type {?} */ viewport = this._viewportRuler.getViewportSize();
         return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
     };
     return BlockScrollStrategy;
@@ -439,10 +441,11 @@ var RepositionScrollStrategy = (function () {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 var ScrollStrategyOptions = (function () {
-    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler) {
+    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone) {
         var _this = this;
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
+        this._ngZone = _ngZone;
         /**
          * Do nothing on scroll.
          */
@@ -450,7 +453,7 @@ var ScrollStrategyOptions = (function () {
         /**
          * Close the overlay as soon as the user scrolls.
          */
-        this.close = function () { return new CloseScrollStrategy(_this._scrollDispatcher); };
+        this.close = function () { return new CloseScrollStrategy(_this._scrollDispatcher, _this._ngZone); };
         /**
          * Block scrolling.
          */
@@ -471,6 +474,7 @@ var ScrollStrategyOptions = (function () {
     ScrollStrategyOptions.ctorParameters = function () { return [
         { type: ScrollDispatcher, },
         { type: ViewportRuler, },
+        { type: NgZone, },
     ]; };
     return ScrollStrategyOptions;
 }());
@@ -586,6 +590,9 @@ var OverlayRef = (function () {
      * @return {?} The portal detachment result.
      */
     function () {
+        if (!this.hasAttached()) {
+            return;
+        }
         this.detachBackdrop();
         // When the overlay is detached, the pane element should disable pointer events.
         // This is necessary because otherwise the pane element will cover the page and disable
@@ -616,6 +623,7 @@ var OverlayRef = (function () {
      * @return {?}
      */
     function () {
+        var /** @type {?} */ isAttached = this.hasAttached();
         if (this._config.positionStrategy) {
             this._config.positionStrategy.dispose();
         }
@@ -626,7 +634,9 @@ var OverlayRef = (function () {
         this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
-        this._detachments.next();
+        if (isAttached) {
+            this._detachments.next();
+        }
         this._detachments.complete();
     };
     /**
@@ -1060,8 +1070,8 @@ var ConnectedPositionStrategy = (function () {
         var /** @type {?} */ element = this._pane;
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = element.getBoundingClientRect();
-        // We use the viewport rect to determine whether a position would go off-screen.
-        var /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
+        // We use the viewport size to determine whether a position would go off-screen.
+        var /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
         // Fallback point if none of the fallbacks fit into the viewport.
         var /** @type {?} */ fallbackPoint;
         var /** @type {?} */ fallbackPosition;
@@ -1072,7 +1082,7 @@ var ConnectedPositionStrategy = (function () {
             // Get the (x, y) point of connection on the origin, and then use that to get the
             // (top, left) coordinate for the overlay at `pos`.
             var /** @type {?} */ originPoint = this._getOriginConnectionPoint(originRect, pos);
-            var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportRect, pos);
+            var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportSize, pos);
             // If the overlay in the calculated position fits on-screen, put it there and we're done.
             if (overlayPoint.fitsInViewport) {
                 this._setElementPosition(element, overlayRect, overlayPoint, pos);
@@ -1113,10 +1123,10 @@ var ConnectedPositionStrategy = (function () {
         }
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
-        var /** @type {?} */ viewportRect = this._viewportRuler.getViewportRect();
+        var /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
         var /** @type {?} */ lastPosition = this._lastConnectedPosition || this._preferredPositions[0];
         var /** @type {?} */ originPoint = this._getOriginConnectionPoint(originRect, lastPosition);
-        var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportRect, lastPosition);
+        var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, overlayRect, viewportSize, lastPosition);
         this._setElementPosition(this._pane, overlayRect, overlayPoint, lastPosition);
     };
     /**
@@ -1284,7 +1294,7 @@ var ConnectedPositionStrategy = (function () {
      * would be inside the viewport at that position.
      * @param {?} originPoint
      * @param {?} overlayRect
-     * @param {?} viewportRect
+     * @param {?} viewportSize
      * @param {?} pos
      * @return {?}
      */
@@ -1294,11 +1304,11 @@ var ConnectedPositionStrategy = (function () {
      * would be inside the viewport at that position.
      * @param {?} originPoint
      * @param {?} overlayRect
-     * @param {?} viewportRect
+     * @param {?} viewportSize
      * @param {?} pos
      * @return {?}
      */
-    function (originPoint, overlayRect, viewportRect, pos) {
+    function (originPoint, overlayRect, viewportSize, pos) {
         // Calculate the (overlayStartX, overlayStartY), the start of the potential overlay position
         // relative to the origin point.
         var /** @type {?} */ overlayStartX;
@@ -1326,9 +1336,9 @@ var ConnectedPositionStrategy = (function () {
         var /** @type {?} */ y = originPoint.y + overlayStartY + offsetY;
         // How much the overlay would overflow at this position, on each side.
         var /** @type {?} */ leftOverflow = 0 - x;
-        var /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportRect.width;
+        var /** @type {?} */ rightOverflow = (x + overlayRect.width) - viewportSize.width;
         var /** @type {?} */ topOverflow = 0 - y;
-        var /** @type {?} */ bottomOverflow = (y + overlayRect.height) - viewportRect.height;
+        var /** @type {?} */ bottomOverflow = (y + overlayRect.height) - viewportSize.height;
         // Visible parts of the element on each axis.
         var /** @type {?} */ visibleWidth = this._subtractOverflows(overlayRect.width, leftOverflow, rightOverflow);
         var /** @type {?} */ visibleHeight = this._subtractOverflows(overlayRect.height, topOverflow, bottomOverflow);

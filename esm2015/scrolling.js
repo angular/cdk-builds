@@ -282,7 +282,7 @@ class ViewportRuler {
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(() => {
             return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
         }) : of();
-        this._invalidateCache = this.change().subscribe(() => this._cacheViewportGeometry());
+        this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
     }
     /**
      * @return {?}
@@ -291,16 +291,20 @@ class ViewportRuler {
         this._invalidateCache.unsubscribe();
     }
     /**
-     * Gets a ClientRect for the viewport's bounds.
-     * @param {?=} documentRect
+     * Returns the viewport's width and height.
      * @return {?}
      */
-    getViewportRect(documentRect = this._documentRect) {
-        // Cache the document bounding rect so that we don't recompute it for multiple calls.
-        if (!documentRect) {
-            this._cacheViewportGeometry();
-            documentRect = this._documentRect;
+    getViewportSize() {
+        if (!this._viewportSize) {
+            this._updateViewportSize();
         }
+        return { width: this._viewportSize.width, height: this._viewportSize.height };
+    }
+    /**
+     * Gets a ClientRect for the viewport's bounds.
+     * @return {?}
+     */
+    getViewportRect() {
         // Use the document element's bounding rect rather than the window scroll properties
         // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
         // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
@@ -310,9 +314,8 @@ class ViewportRuler {
         // We use the documentElement instead of the body because, by default (without a css reset)
         // browsers typically give the document body an 8px margin, which is not included in
         // getBoundingClientRect().
-        const /** @type {?} */ scrollPosition = this.getViewportScrollPosition(documentRect);
-        const /** @type {?} */ height = window.innerHeight;
-        const /** @type {?} */ width = window.innerWidth;
+        const /** @type {?} */ scrollPosition = this.getViewportScrollPosition();
+        const { width, height } = this.getViewportSize();
         return {
             top: scrollPosition.top,
             left: scrollPosition.left,
@@ -324,24 +327,19 @@ class ViewportRuler {
     }
     /**
      * Gets the (top, left) scroll position of the viewport.
-     * @param {?=} documentRect
      * @return {?}
      */
-    getViewportScrollPosition(documentRect = this._documentRect) {
-        // Cache the document bounding rect so that we don't recompute it for multiple calls.
-        if (!documentRect) {
-            this._cacheViewportGeometry();
-            documentRect = this._documentRect;
-        }
+    getViewportScrollPosition() {
         // The top-left-corner of the viewport is determined by the scroll position of the document
         // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
         // whether `document.body` or `document.documentElement` is the scrolled element, so reading
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
-        const /** @type {?} */ top = -/** @type {?} */ ((documentRect)).top || document.body.scrollTop || window.scrollY ||
+        const /** @type {?} */ documentRect = document.documentElement.getBoundingClientRect();
+        const /** @type {?} */ top = -documentRect.top || document.body.scrollTop || window.scrollY ||
             document.documentElement.scrollTop || 0;
-        const /** @type {?} */ left = -/** @type {?} */ ((documentRect)).left || document.body.scrollLeft || window.scrollX ||
+        const /** @type {?} */ left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
             document.documentElement.scrollLeft || 0;
         return { top, left };
     }
@@ -354,11 +352,11 @@ class ViewportRuler {
         return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
     }
     /**
-     * Caches the latest client rectangle of the document element.
+     * Updates the cached viewport size.
      * @return {?}
      */
-    _cacheViewportGeometry() {
-        this._documentRect = document.documentElement.getBoundingClientRect();
+    _updateViewportSize() {
+        this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     }
 }
 ViewportRuler.decorators = [

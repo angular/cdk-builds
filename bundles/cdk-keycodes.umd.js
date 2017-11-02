@@ -34,6 +34,7 @@ var A = 65;
 var Z = 90;
 var ZERO = 48;
 var NINE = 91;
+var COMMA = 188;
 
 exports.UP_ARROW = UP_ARROW;
 exports.DOWN_ARROW = DOWN_ARROW;
@@ -53,6 +54,7 @@ exports.A = A;
 exports.Z = Z;
 exports.ZERO = ZERO;
 exports.NINE = NINE;
+exports.COMMA = COMMA;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
