@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('@angular/core'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/first'), require('rxjs/observable/of'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', '@angular/core', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/first', 'rxjs/observable/of', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.ng.core,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.Observable,global.Rx.Observable,global.ng.common));
-}(this, (function (exports,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,_angular_core,_angular_cdk_platform,_angular_cdk_coercion,rxjs_operators_first,rxjs_observable_of,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('rxjs/operators/first'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', 'rxjs/operators/first', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.Rx.Observable,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.ng.common));
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,rxjs_operators_first,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of,_angular_common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -36,762 +36,6 @@ function __extends(d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * This interface is for items that can be passed to a ListKeyManager.
- * @record
- */
-
-/**
- * This class manages keyboard events for selectable lists. If you pass it a query list
- * of items, it will set the active item correctly when arrow events occur.
- */
-var ListKeyManager = (function () {
-    function ListKeyManager(_items) {
-        this._items = _items;
-        this._activeItemIndex = -1;
-        this._wrap = false;
-        this._letterKeyStream = new rxjs_Subject.Subject();
-        this._typeaheadSubscription = rxjs_Subscription.Subscription.EMPTY;
-        this._pressedLetters = [];
-        /**
-         * Stream that emits any time the TAB key is pressed, so components can react
-         * when focus is shifted off of the list.
-         */
-        this.tabOut = new rxjs_Subject.Subject();
-        /**
-         * Stream that emits whenever the active item of the list manager changes.
-         */
-        this.change = new rxjs_Subject.Subject();
-    }
-    /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
-     * the other end of list when there are no more items in the given direction.
-     */
-    /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
-     * the other end of list when there are no more items in the given direction.
-     * @return {?}
-     */
-    ListKeyManager.prototype.withWrap = /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
-     * the other end of list when there are no more items in the given direction.
-     * @return {?}
-     */
-    function () {
-        this._wrap = true;
-        return this;
-    };
-    /**
-     * Turns on typeahead mode which allows users to set the active item by typing.
-     * @param debounceInterval Time to wait after the last keystroke before setting the active item.
-     */
-    /**
-     * Turns on typeahead mode which allows users to set the active item by typing.
-     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
-     * @return {?}
-     */
-    ListKeyManager.prototype.withTypeAhead = /**
-     * Turns on typeahead mode which allows users to set the active item by typing.
-     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
-     * @return {?}
-     */
-    function (debounceInterval) {
-        var _this = this;
-        if (debounceInterval === void 0) { debounceInterval = 200; }
-        if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
-            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
-        }
-        this._typeaheadSubscription.unsubscribe();
-        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
-        // and convert those letters back into a string. Afterwards find the first item that starts
-        // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(rxjs_operators_tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), rxjs_operators_debounceTime.debounceTime(debounceInterval), rxjs_operators_filter.filter(function () { return _this._pressedLetters.length > 0; }), rxjs_operators_map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
-            var /** @type {?} */ items = _this._items.toArray();
-            // Start at 1 because we want to start searching at the item immediately
-            // following the current active item.
-            for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
-                var /** @type {?} */ index = (_this._activeItemIndex + i) % items.length;
-                var /** @type {?} */ item = items[index];
-                if (!item.disabled && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
-                    _this.setActiveItem(index);
-                    break;
-                }
-            }
-            _this._pressedLetters = [];
-        });
-        return this;
-    };
-    /**
-     * Sets the active item to the item at the index specified.
-     * @param index The index of the item to be set as active.
-     */
-    /**
-     * Sets the active item to the item at the index specified.
-     * @param {?} index The index of the item to be set as active.
-     * @return {?}
-     */
-    ListKeyManager.prototype.setActiveItem = /**
-     * Sets the active item to the item at the index specified.
-     * @param {?} index The index of the item to be set as active.
-     * @return {?}
-     */
-    function (index) {
-        var /** @type {?} */ previousIndex = this._activeItemIndex;
-        this._activeItemIndex = index;
-        this._activeItem = this._items.toArray()[index];
-        if (this._activeItemIndex !== previousIndex) {
-            this.change.next(index);
-        }
-    };
-    /**
-     * Sets the active item depending on the key event passed in.
-     * @param event Keyboard event to be used for determining which element should be active.
-     */
-    /**
-     * Sets the active item depending on the key event passed in.
-     * @param {?} event Keyboard event to be used for determining which element should be active.
-     * @return {?}
-     */
-    ListKeyManager.prototype.onKeydown = /**
-     * Sets the active item depending on the key event passed in.
-     * @param {?} event Keyboard event to be used for determining which element should be active.
-     * @return {?}
-     */
-    function (event) {
-        switch (event.keyCode) {
-            case _angular_cdk_keycodes.DOWN_ARROW:
-                this.setNextItemActive();
-                break;
-            case _angular_cdk_keycodes.UP_ARROW:
-                this.setPreviousItemActive();
-                break;
-            case _angular_cdk_keycodes.TAB:
-                this.tabOut.next();
-                return;
-            default:
-                var /** @type {?} */ keyCode = event.keyCode;
-                // Attempt to use the `event.key` which also maps it to the user's keyboard language,
-                // otherwise fall back to resolving alphanumeric characters via the keyCode.
-                if (event.key && event.key.length === 1) {
-                    this._letterKeyStream.next(event.key.toLocaleUpperCase());
-                }
-                else if ((keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z) || (keyCode >= _angular_cdk_keycodes.ZERO && keyCode <= _angular_cdk_keycodes.NINE)) {
-                    this._letterKeyStream.next(String.fromCharCode(keyCode));
-                }
-                // Note that we return here, in order to avoid preventing
-                // the default action of non-navigational keys.
-                return;
-        }
-        this._pressedLetters = [];
-        event.preventDefault();
-    };
-    Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
-        /** Index of the currently active item. */
-        get: /**
-         * Index of the currently active item.
-         * @return {?}
-         */
-        function () {
-            return this._activeItemIndex;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ListKeyManager.prototype, "activeItem", {
-        /** The active item. */
-        get: /**
-         * The active item.
-         * @return {?}
-         */
-        function () {
-            return this._activeItem;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /** Sets the active item to the first enabled item in the list. */
-    /**
-     * Sets the active item to the first enabled item in the list.
-     * @return {?}
-     */
-    ListKeyManager.prototype.setFirstItemActive = /**
-     * Sets the active item to the first enabled item in the list.
-     * @return {?}
-     */
-    function () {
-        this._setActiveItemByIndex(0, 1);
-    };
-    /** Sets the active item to the last enabled item in the list. */
-    /**
-     * Sets the active item to the last enabled item in the list.
-     * @return {?}
-     */
-    ListKeyManager.prototype.setLastItemActive = /**
-     * Sets the active item to the last enabled item in the list.
-     * @return {?}
-     */
-    function () {
-        this._setActiveItemByIndex(this._items.length - 1, -1);
-    };
-    /** Sets the active item to the next enabled item in the list. */
-    /**
-     * Sets the active item to the next enabled item in the list.
-     * @return {?}
-     */
-    ListKeyManager.prototype.setNextItemActive = /**
-     * Sets the active item to the next enabled item in the list.
-     * @return {?}
-     */
-    function () {
-        this._activeItemIndex < 0 ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
-    };
-    /** Sets the active item to a previous enabled item in the list. */
-    /**
-     * Sets the active item to a previous enabled item in the list.
-     * @return {?}
-     */
-    ListKeyManager.prototype.setPreviousItemActive = /**
-     * Sets the active item to a previous enabled item in the list.
-     * @return {?}
-     */
-    function () {
-        this._activeItemIndex < 0 && this._wrap ? this.setLastItemActive()
-            : this._setActiveItemByDelta(-1);
-    };
-    /**
-     * Allows setting of the activeItemIndex without any other effects.
-     * @param index The new activeItemIndex.
-     */
-    /**
-     * Allows setting of the activeItemIndex without any other effects.
-     * @param {?} index The new activeItemIndex.
-     * @return {?}
-     */
-    ListKeyManager.prototype.updateActiveItemIndex = /**
-     * Allows setting of the activeItemIndex without any other effects.
-     * @param {?} index The new activeItemIndex.
-     * @return {?}
-     */
-    function (index) {
-        this._activeItemIndex = index;
-    };
-    /**
-     * This method sets the active item, given a list of items and the delta between the
-     * currently active item and the new active item. It will calculate differently
-     * depending on whether wrap mode is turned on.
-     * @param {?} delta
-     * @param {?=} items
-     * @return {?}
-     */
-    ListKeyManager.prototype._setActiveItemByDelta = /**
-     * This method sets the active item, given a list of items and the delta between the
-     * currently active item and the new active item. It will calculate differently
-     * depending on whether wrap mode is turned on.
-     * @param {?} delta
-     * @param {?=} items
-     * @return {?}
-     */
-    function (delta, items) {
-        if (items === void 0) { items = this._items.toArray(); }
-        this._wrap ? this._setActiveInWrapMode(delta, items)
-            : this._setActiveInDefaultMode(delta, items);
-    };
-    /**
-     * Sets the active item properly given "wrap" mode. In other words, it will continue to move
-     * down the list until it finds an item that is not disabled, and it will wrap if it
-     * encounters either end of the list.
-     * @param {?} delta
-     * @param {?} items
-     * @return {?}
-     */
-    ListKeyManager.prototype._setActiveInWrapMode = /**
-     * Sets the active item properly given "wrap" mode. In other words, it will continue to move
-     * down the list until it finds an item that is not disabled, and it will wrap if it
-     * encounters either end of the list.
-     * @param {?} delta
-     * @param {?} items
-     * @return {?}
-     */
-    function (delta, items) {
-        // when active item would leave menu, wrap to beginning or end
-        this._activeItemIndex =
-            (this._activeItemIndex + delta + items.length) % items.length;
-        // skip all disabled menu items recursively until an enabled one is reached
-        if (items[this._activeItemIndex].disabled) {
-            this._setActiveInWrapMode(delta, items);
-        }
-        else {
-            this.setActiveItem(this._activeItemIndex);
-        }
-    };
-    /**
-     * Sets the active item properly given the default mode. In other words, it will
-     * continue to move down the list until it finds an item that is not disabled. If
-     * it encounters either end of the list, it will stop and not wrap.
-     * @param {?} delta
-     * @param {?} items
-     * @return {?}
-     */
-    ListKeyManager.prototype._setActiveInDefaultMode = /**
-     * Sets the active item properly given the default mode. In other words, it will
-     * continue to move down the list until it finds an item that is not disabled. If
-     * it encounters either end of the list, it will stop and not wrap.
-     * @param {?} delta
-     * @param {?} items
-     * @return {?}
-     */
-    function (delta, items) {
-        this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
-    };
-    /**
-     * Sets the active item to the first enabled item starting at the index specified. If the
-     * item is disabled, it will move in the fallbackDelta direction until it either
-     * finds an enabled item or encounters the end of the list.
-     * @param {?} index
-     * @param {?} fallbackDelta
-     * @param {?=} items
-     * @return {?}
-     */
-    ListKeyManager.prototype._setActiveItemByIndex = /**
-     * Sets the active item to the first enabled item starting at the index specified. If the
-     * item is disabled, it will move in the fallbackDelta direction until it either
-     * finds an enabled item or encounters the end of the list.
-     * @param {?} index
-     * @param {?} fallbackDelta
-     * @param {?=} items
-     * @return {?}
-     */
-    function (index, fallbackDelta, items) {
-        if (items === void 0) { items = this._items.toArray(); }
-        if (!items[index]) {
-            return;
-        }
-        while (items[index].disabled) {
-            index += fallbackDelta;
-            if (!items[index]) {
-                return;
-            }
-        }
-        this.setActiveItem(index);
-    };
-    return ListKeyManager;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
- * Each item must know how to style itself as active or inactive and whether or not it is
- * currently disabled.
- * @record
- */
-
-var ActiveDescendantKeyManager = (function (_super) {
-    __extends(ActiveDescendantKeyManager, _super);
-    function ActiveDescendantKeyManager() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
-     */
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
-     * @param {?} index
-     * @return {?}
-     */
-    ActiveDescendantKeyManager.prototype.setActiveItem = /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
-     * @param {?} index
-     * @return {?}
-     */
-    function (index) {
-        if (this.activeItem) {
-            this.activeItem.setInactiveStyles();
-        }
-        _super.prototype.setActiveItem.call(this, index);
-        if (this.activeItem) {
-            this.activeItem.setActiveStyles();
-        }
-    };
-    return ActiveDescendantKeyManager;
-}(ListKeyManager));
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * IDs are deliminated by an empty space, as per the spec.
- */
-var ID_DELIMINATOR = ' ';
-/**
- * Adds the given ID to the specified ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @param {?} id
- * @return {?}
- */
-function addAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
-        return;
-    }
-    ids.push(id.trim());
-    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
-}
-/**
- * Removes the given ID from the specified ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @param {?} id
- * @return {?}
- */
-function removeAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    var /** @type {?} */ filteredIds = ids.filter(function (val) { return val != id.trim(); });
-    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
-}
-/**
- * Gets the list of IDs referenced by the given ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @return {?}
- */
-function getAriaReferenceIds(el, attr) {
-    // Get string array of all individual ids (whitespace deliminated) in the attribute value
-    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * Interface used to register message elements and keep a count of how many registrations have
- * the same message and the reference to the message element used for the aria-describedby.
- * @record
- */
-
-/**
- * ID used for the body container where all messages are appended.
- */
-var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
-/**
- * ID prefix used for each created message element.
- */
-var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
-/**
- * Attribute given to each host element that is described by a message element.
- */
-var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
-/**
- * Global incremental identifier for each registered message element.
- */
-var nextId = 0;
-/**
- * Global map of all registered message elements that have been placed into the document.
- */
-var messageRegistry = new Map();
-/**
- * Container for all registered messages.
- */
-var messagesContainer = null;
-/**
- * Utility that creates visually hidden elements with a message content. Useful for elements that
- * want to use aria-describedby to further describe themselves without adding additional visual
- * content.
- * \@docs-private
- */
-var AriaDescriber = (function () {
-    function AriaDescriber(_platform) {
-        this._platform = _platform;
-    }
-    /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     */
-    /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype.describe = /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    function (hostElement, message) {
-        if (!this._platform.isBrowser || !message.trim()) {
-            return;
-        }
-        if (!messageRegistry.has(message)) {
-            createMessageElement(message);
-        }
-        if (!isElementDescribedByMessage(hostElement, message)) {
-            addMessageReference(hostElement, message);
-        }
-    };
-    /** Removes the host element's aria-describedby reference to the message element. */
-    /**
-     * Removes the host element's aria-describedby reference to the message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype.removeDescription = /**
-     * Removes the host element's aria-describedby reference to the message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    function (hostElement, message) {
-        if (!this._platform.isBrowser || !message.trim()) {
-            return;
-        }
-        if (isElementDescribedByMessage(hostElement, message)) {
-            removeMessageReference(hostElement, message);
-        }
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        if (registeredMessage && registeredMessage.referenceCount === 0) {
-            deleteMessageElement(message);
-        }
-        if (messagesContainer && messagesContainer.childNodes.length === 0) {
-            deleteMessagesContainer();
-        }
-    };
-    /** Unregisters all created message elements and removes the message container. */
-    /**
-     * Unregisters all created message elements and removes the message container.
-     * @return {?}
-     */
-    AriaDescriber.prototype.ngOnDestroy = /**
-     * Unregisters all created message elements and removes the message container.
-     * @return {?}
-     */
-    function () {
-        if (!this._platform.isBrowser) {
-            return;
-        }
-        var /** @type {?} */ describedElements = document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
-        for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
-            removeCdkDescribedByReferenceIds(describedElements[i]);
-            describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
-        }
-        if (messagesContainer) {
-            deleteMessagesContainer();
-        }
-        messageRegistry.clear();
-    };
-    AriaDescriber.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    AriaDescriber.ctorParameters = function () { return [
-        { type: _angular_cdk_platform.Platform, },
-    ]; };
-    return AriaDescriber;
-}());
-/**
- * Creates a new element in the visually hidden message container element with the message
- * as its content and adds it to the message registry.
- * @param {?} message
- * @return {?}
- */
-function createMessageElement(message) {
-    var /** @type {?} */ messageElement = document.createElement('div');
-    messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
-    messageElement.appendChild(/** @type {?} */ ((document.createTextNode(message))));
-    if (!messagesContainer) {
-        createMessagesContainer();
-    } /** @type {?} */
-    ((messagesContainer)).appendChild(messageElement);
-    messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
-}
-/**
- * Deletes the message element from the global messages container.
- * @param {?} message
- * @return {?}
- */
-function deleteMessageElement(message) {
-    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-    var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
-    if (messagesContainer && messageElement) {
-        messagesContainer.removeChild(messageElement);
-    }
-    messageRegistry.delete(message);
-}
-/**
- * Creates the global container for all aria-describedby messages.
- * @return {?}
- */
-function createMessagesContainer() {
-    messagesContainer = document.createElement('div');
-    messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
-    messagesContainer.setAttribute('aria-hidden', 'true');
-    messagesContainer.style.display = 'none';
-    document.body.appendChild(messagesContainer);
-}
-/**
- * Deletes the global messages container.
- * @return {?}
- */
-function deleteMessagesContainer() {
-    document.body.removeChild(/** @type {?} */ ((messagesContainer)));
-    messagesContainer = null;
-}
-/**
- * Removes all cdk-describedby messages that are hosted through the element.
- * @param {?} element
- * @return {?}
- */
-function removeCdkDescribedByReferenceIds(element) {
-    // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-    var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-        .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
-    element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
-}
-/**
- * Adds a message reference to the element using aria-describedby and increments the registered
- * message's reference count.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function addMessageReference(element, message) {
-    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-    // Add the aria-describedby reference and set the describedby_host attribute to mark the element.
-    addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-    element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
-    registeredMessage.referenceCount++;
-}
-/**
- * Removes a message reference from the element using aria-describedby and decrements the registered
- * message's reference count.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function removeMessageReference(element, message) {
-    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-    registeredMessage.referenceCount--;
-    removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-    element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
-}
-/**
- * Returns true if the element has been described by the provided message ID.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function isElementDescribedByMessage(element, message) {
-    var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-    var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
-    return !!messageId && referenceIds.indexOf(messageId) != -1;
-}
-/**
- * \@docs-private
- * @param {?} parentDispatcher
- * @param {?} platform
- * @return {?}
- */
-function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, platform) {
-    return parentDispatcher || new AriaDescriber(platform);
-}
-/**
- * \@docs-private
- */
-var ARIA_DESCRIBER_PROVIDER = {
-    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
-    provide: AriaDescriber,
-    deps: [
-        [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
-        _angular_cdk_platform.Platform
-    ],
-    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
-};
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Screenreaders will often fire fake mousedown events when a focusable element
- * is activated using the keyboard. We can typically distinguish between these faked
- * mousedown events and real mousedown events using the "buttons" property. While
- * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
- * the left mouse button), faked mousedowns will usually set the property value to 0.
- * @param {?} event
- * @return {?}
- */
-function isFakeMousedownFromScreenReader(event) {
-    return event.buttons === 0;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * This is the interface for focusable items (used by the FocusKeyManager).
- * Each item must know how to focus itself, whether or not it is currently disabled
- * and be able to supply it's label.
- * @record
- */
-
-var FocusKeyManager = (function (_super) {
-    __extends(FocusKeyManager, _super);
-    function FocusKeyManager() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     */
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     * @param {?} index
-     * @return {?}
-     */
-    FocusKeyManager.prototype.setActiveItem = /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     * @param {?} index
-     * @return {?}
-     */
-    function (index) {
-        _super.prototype.setActiveItem.call(this, index);
-        if (this.activeItem) {
-            this.activeItem.focus();
-        }
-    };
-    return FocusKeyManager;
-}(ListKeyManager));
 
 /**
  * @fileoverview added by tsickle
@@ -1565,13 +809,18 @@ var FocusTrapDeprecatedDirective = (function () {
 /**
  * Directive for trapping focus within a region.
  */
-var FocusTrapDirective = (function () {
-    function FocusTrapDirective(_elementRef, _focusTrapFactory) {
+var CdkTrapFocus = (function () {
+    function CdkTrapFocus(_elementRef, _focusTrapFactory, _platform) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
+        this._platform = _platform;
+        /**
+         * Previously focused element to restore focus to upon destroy when using autoCapture.
+         */
+        this._previouslyFocusedElement = null;
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
-    Object.defineProperty(FocusTrapDirective.prototype, "enabled", {
+    Object.defineProperty(CdkTrapFocus.prototype, "enabled", {
         get: /**
          * Whether the focus trap is active.
          * @return {?}
@@ -1585,40 +834,823 @@ var FocusTrapDirective = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(CdkTrapFocus.prototype, "autoCapture", {
+        get: /**
+         * Whether the directive should automatially move focus into the trapped region upon
+         * initialization and return focus to the previous activeElement upon destruction.
+         * @return {?}
+         */
+        function () { return this._autoCapture; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) { this._autoCapture = _angular_cdk_coercion.coerceBooleanProperty(value); },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
-    FocusTrapDirective.prototype.ngOnDestroy = /**
+    CdkTrapFocus.prototype.ngOnDestroy = /**
      * @return {?}
      */
     function () {
         this.focusTrap.destroy();
+        // If we stored a previously focused element when using autoCapture, return focus to that
+        // element now that the trapped region is being destroyed.
+        if (this._previouslyFocusedElement) {
+            this._previouslyFocusedElement.focus();
+            this._previouslyFocusedElement = null;
+        }
     };
     /**
      * @return {?}
      */
-    FocusTrapDirective.prototype.ngAfterContentInit = /**
+    CdkTrapFocus.prototype.ngAfterContentInit = /**
      * @return {?}
      */
     function () {
         this.focusTrap.attachAnchors();
+        if (this.autoCapture && this._platform.isBrowser) {
+            this._previouslyFocusedElement = /** @type {?} */ (document.activeElement);
+            this.focusTrap.focusInitialElementWhenReady();
+        }
     };
-    FocusTrapDirective.decorators = [
+    CdkTrapFocus.decorators = [
         { type: _angular_core.Directive, args: [{
                     selector: '[cdkTrapFocus]',
                     exportAs: 'cdkTrapFocus',
                 },] },
     ];
     /** @nocollapse */
-    FocusTrapDirective.ctorParameters = function () { return [
+    CdkTrapFocus.ctorParameters = function () { return [
         { type: _angular_core.ElementRef, },
         { type: FocusTrapFactory, },
+        { type: _angular_cdk_platform.Platform, },
     ]; };
-    FocusTrapDirective.propDecorators = {
+    CdkTrapFocus.propDecorators = {
         "enabled": [{ type: _angular_core.Input, args: ['cdkTrapFocus',] },],
+        "autoCapture": [{ type: _angular_core.Input, args: ['cdkTrapFocusAutoCapture',] },],
     };
-    return FocusTrapDirective;
+    return CdkTrapFocus;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * This interface is for items that can be passed to a ListKeyManager.
+ * @record
+ */
+
+/**
+ * This class manages keyboard events for selectable lists. If you pass it a query list
+ * of items, it will set the active item correctly when arrow events occur.
+ */
+var ListKeyManager = (function () {
+    function ListKeyManager(_items) {
+        this._items = _items;
+        this._activeItemIndex = -1;
+        this._wrap = false;
+        this._letterKeyStream = new rxjs_Subject.Subject();
+        this._typeaheadSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._pressedLetters = [];
+        /**
+         * Stream that emits any time the TAB key is pressed, so components can react
+         * when focus is shifted off of the list.
+         */
+        this.tabOut = new rxjs_Subject.Subject();
+        /**
+         * Stream that emits whenever the active item of the list manager changes.
+         */
+        this.change = new rxjs_Subject.Subject();
+    }
+    /**
+     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * the other end of list when there are no more items in the given direction.
+     */
+    /**
+     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * the other end of list when there are no more items in the given direction.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withWrap = /**
+     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * the other end of list when there are no more items in the given direction.
+     * @return {?}
+     */
+    function () {
+        this._wrap = true;
+        return this;
+    };
+    /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param debounceInterval Time to wait after the last keystroke before setting the active item.
+     */
+    /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withTypeAhead = /**
+     * Turns on typeahead mode which allows users to set the active item by typing.
+     * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
+     * @return {?}
+     */
+    function (debounceInterval) {
+        var _this = this;
+        if (debounceInterval === void 0) { debounceInterval = 200; }
+        if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
+            throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
+        }
+        this._typeaheadSubscription.unsubscribe();
+        // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
+        // and convert those letters back into a string. Afterwards find the first item that starts
+        // with that string and select it.
+        this._typeaheadSubscription = this._letterKeyStream.pipe(rxjs_operators_tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), rxjs_operators_debounceTime.debounceTime(debounceInterval), rxjs_operators_filter.filter(function () { return _this._pressedLetters.length > 0; }), rxjs_operators_map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
+            var /** @type {?} */ items = _this._items.toArray();
+            // Start at 1 because we want to start searching at the item immediately
+            // following the current active item.
+            for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
+                var /** @type {?} */ index = (_this._activeItemIndex + i) % items.length;
+                var /** @type {?} */ item = items[index];
+                if (!item.disabled && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                    _this.setActiveItem(index);
+                    break;
+                }
+            }
+            _this._pressedLetters = [];
+        });
+        return this;
+    };
+    /**
+     * Sets the active item to the item at the index specified.
+     * @param index The index of the item to be set as active.
+     */
+    /**
+     * Sets the active item to the item at the index specified.
+     * @param {?} index The index of the item to be set as active.
+     * @return {?}
+     */
+    ListKeyManager.prototype.setActiveItem = /**
+     * Sets the active item to the item at the index specified.
+     * @param {?} index The index of the item to be set as active.
+     * @return {?}
+     */
+    function (index) {
+        var /** @type {?} */ previousIndex = this._activeItemIndex;
+        this._activeItemIndex = index;
+        this._activeItem = this._items.toArray()[index];
+        if (this._activeItemIndex !== previousIndex) {
+            this.change.next(index);
+        }
+    };
+    /**
+     * Sets the active item depending on the key event passed in.
+     * @param event Keyboard event to be used for determining which element should be active.
+     */
+    /**
+     * Sets the active item depending on the key event passed in.
+     * @param {?} event Keyboard event to be used for determining which element should be active.
+     * @return {?}
+     */
+    ListKeyManager.prototype.onKeydown = /**
+     * Sets the active item depending on the key event passed in.
+     * @param {?} event Keyboard event to be used for determining which element should be active.
+     * @return {?}
+     */
+    function (event) {
+        switch (event.keyCode) {
+            case _angular_cdk_keycodes.DOWN_ARROW:
+                this.setNextItemActive();
+                break;
+            case _angular_cdk_keycodes.UP_ARROW:
+                this.setPreviousItemActive();
+                break;
+            case _angular_cdk_keycodes.TAB:
+                this.tabOut.next();
+                return;
+            default:
+                var /** @type {?} */ keyCode = event.keyCode;
+                // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+                // otherwise fall back to resolving alphanumeric characters via the keyCode.
+                if (event.key && event.key.length === 1) {
+                    this._letterKeyStream.next(event.key.toLocaleUpperCase());
+                }
+                else if ((keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z) || (keyCode >= _angular_cdk_keycodes.ZERO && keyCode <= _angular_cdk_keycodes.NINE)) {
+                    this._letterKeyStream.next(String.fromCharCode(keyCode));
+                }
+                // Note that we return here, in order to avoid preventing
+                // the default action of non-navigational keys.
+                return;
+        }
+        this._pressedLetters = [];
+        event.preventDefault();
+    };
+    Object.defineProperty(ListKeyManager.prototype, "activeItemIndex", {
+        /** Index of the currently active item. */
+        get: /**
+         * Index of the currently active item.
+         * @return {?}
+         */
+        function () {
+            return this._activeItemIndex;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ListKeyManager.prototype, "activeItem", {
+        /** The active item. */
+        get: /**
+         * The active item.
+         * @return {?}
+         */
+        function () {
+            return this._activeItem;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /** Sets the active item to the first enabled item in the list. */
+    /**
+     * Sets the active item to the first enabled item in the list.
+     * @return {?}
+     */
+    ListKeyManager.prototype.setFirstItemActive = /**
+     * Sets the active item to the first enabled item in the list.
+     * @return {?}
+     */
+    function () {
+        this._setActiveItemByIndex(0, 1);
+    };
+    /** Sets the active item to the last enabled item in the list. */
+    /**
+     * Sets the active item to the last enabled item in the list.
+     * @return {?}
+     */
+    ListKeyManager.prototype.setLastItemActive = /**
+     * Sets the active item to the last enabled item in the list.
+     * @return {?}
+     */
+    function () {
+        this._setActiveItemByIndex(this._items.length - 1, -1);
+    };
+    /** Sets the active item to the next enabled item in the list. */
+    /**
+     * Sets the active item to the next enabled item in the list.
+     * @return {?}
+     */
+    ListKeyManager.prototype.setNextItemActive = /**
+     * Sets the active item to the next enabled item in the list.
+     * @return {?}
+     */
+    function () {
+        this._activeItemIndex < 0 ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
+    };
+    /** Sets the active item to a previous enabled item in the list. */
+    /**
+     * Sets the active item to a previous enabled item in the list.
+     * @return {?}
+     */
+    ListKeyManager.prototype.setPreviousItemActive = /**
+     * Sets the active item to a previous enabled item in the list.
+     * @return {?}
+     */
+    function () {
+        this._activeItemIndex < 0 && this._wrap ? this.setLastItemActive()
+            : this._setActiveItemByDelta(-1);
+    };
+    /**
+     * Allows setting of the activeItemIndex without any other effects.
+     * @param index The new activeItemIndex.
+     */
+    /**
+     * Allows setting of the activeItemIndex without any other effects.
+     * @param {?} index The new activeItemIndex.
+     * @return {?}
+     */
+    ListKeyManager.prototype.updateActiveItemIndex = /**
+     * Allows setting of the activeItemIndex without any other effects.
+     * @param {?} index The new activeItemIndex.
+     * @return {?}
+     */
+    function (index) {
+        this._activeItemIndex = index;
+    };
+    /**
+     * This method sets the active item, given a list of items and the delta between the
+     * currently active item and the new active item. It will calculate differently
+     * depending on whether wrap mode is turned on.
+     * @param {?} delta
+     * @param {?=} items
+     * @return {?}
+     */
+    ListKeyManager.prototype._setActiveItemByDelta = /**
+     * This method sets the active item, given a list of items and the delta between the
+     * currently active item and the new active item. It will calculate differently
+     * depending on whether wrap mode is turned on.
+     * @param {?} delta
+     * @param {?=} items
+     * @return {?}
+     */
+    function (delta, items) {
+        if (items === void 0) { items = this._items.toArray(); }
+        this._wrap ? this._setActiveInWrapMode(delta, items)
+            : this._setActiveInDefaultMode(delta, items);
+    };
+    /**
+     * Sets the active item properly given "wrap" mode. In other words, it will continue to move
+     * down the list until it finds an item that is not disabled, and it will wrap if it
+     * encounters either end of the list.
+     * @param {?} delta
+     * @param {?} items
+     * @return {?}
+     */
+    ListKeyManager.prototype._setActiveInWrapMode = /**
+     * Sets the active item properly given "wrap" mode. In other words, it will continue to move
+     * down the list until it finds an item that is not disabled, and it will wrap if it
+     * encounters either end of the list.
+     * @param {?} delta
+     * @param {?} items
+     * @return {?}
+     */
+    function (delta, items) {
+        // when active item would leave menu, wrap to beginning or end
+        this._activeItemIndex =
+            (this._activeItemIndex + delta + items.length) % items.length;
+        // skip all disabled menu items recursively until an enabled one is reached
+        if (items[this._activeItemIndex].disabled) {
+            this._setActiveInWrapMode(delta, items);
+        }
+        else {
+            this.setActiveItem(this._activeItemIndex);
+        }
+    };
+    /**
+     * Sets the active item properly given the default mode. In other words, it will
+     * continue to move down the list until it finds an item that is not disabled. If
+     * it encounters either end of the list, it will stop and not wrap.
+     * @param {?} delta
+     * @param {?} items
+     * @return {?}
+     */
+    ListKeyManager.prototype._setActiveInDefaultMode = /**
+     * Sets the active item properly given the default mode. In other words, it will
+     * continue to move down the list until it finds an item that is not disabled. If
+     * it encounters either end of the list, it will stop and not wrap.
+     * @param {?} delta
+     * @param {?} items
+     * @return {?}
+     */
+    function (delta, items) {
+        this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
+    };
+    /**
+     * Sets the active item to the first enabled item starting at the index specified. If the
+     * item is disabled, it will move in the fallbackDelta direction until it either
+     * finds an enabled item or encounters the end of the list.
+     * @param {?} index
+     * @param {?} fallbackDelta
+     * @param {?=} items
+     * @return {?}
+     */
+    ListKeyManager.prototype._setActiveItemByIndex = /**
+     * Sets the active item to the first enabled item starting at the index specified. If the
+     * item is disabled, it will move in the fallbackDelta direction until it either
+     * finds an enabled item or encounters the end of the list.
+     * @param {?} index
+     * @param {?} fallbackDelta
+     * @param {?=} items
+     * @return {?}
+     */
+    function (index, fallbackDelta, items) {
+        if (items === void 0) { items = this._items.toArray(); }
+        if (!items[index]) {
+            return;
+        }
+        while (items[index].disabled) {
+            index += fallbackDelta;
+            if (!items[index]) {
+                return;
+            }
+        }
+        this.setActiveItem(index);
+    };
+    return ListKeyManager;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
+ * Each item must know how to style itself as active or inactive and whether or not it is
+ * currently disabled.
+ * @record
+ */
+
+var ActiveDescendantKeyManager = (function (_super) {
+    __extends(ActiveDescendantKeyManager, _super);
+    function ActiveDescendantKeyManager() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds active styles to the newly active item and removes active
+     * styles from the previously active item.
+     */
+    /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds active styles to the newly active item and removes active
+     * styles from the previously active item.
+     * @param {?} index
+     * @return {?}
+     */
+    ActiveDescendantKeyManager.prototype.setActiveItem = /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds active styles to the newly active item and removes active
+     * styles from the previously active item.
+     * @param {?} index
+     * @return {?}
+     */
+    function (index) {
+        if (this.activeItem) {
+            this.activeItem.setInactiveStyles();
+        }
+        _super.prototype.setActiveItem.call(this, index);
+        if (this.activeItem) {
+            this.activeItem.setActiveStyles();
+        }
+    };
+    return ActiveDescendantKeyManager;
+}(ListKeyManager));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * IDs are deliminated by an empty space, as per the spec.
+ */
+var ID_DELIMINATOR = ' ';
+/**
+ * Adds the given ID to the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
+ * @return {?}
+ */
+function addAriaReferencedId(el, attr, id) {
+    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
+        return;
+    }
+    ids.push(id.trim());
+    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
+}
+/**
+ * Removes the given ID from the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
+ * @return {?}
+ */
+function removeAriaReferencedId(el, attr, id) {
+    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    var /** @type {?} */ filteredIds = ids.filter(function (val) { return val != id.trim(); });
+    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+}
+/**
+ * Gets the list of IDs referenced by the given ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @return {?}
+ */
+function getAriaReferenceIds(el, attr) {
+    // Get string array of all individual ids (whitespace deliminated) in the attribute value
+    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * Interface used to register message elements and keep a count of how many registrations have
+ * the same message and the reference to the message element used for the aria-describedby.
+ * @record
+ */
+
+/**
+ * ID used for the body container where all messages are appended.
+ */
+var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+/**
+ * ID prefix used for each created message element.
+ */
+var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+/**
+ * Attribute given to each host element that is described by a message element.
+ */
+var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+/**
+ * Global incremental identifier for each registered message element.
+ */
+var nextId = 0;
+/**
+ * Global map of all registered message elements that have been placed into the document.
+ */
+var messageRegistry = new Map();
+/**
+ * Container for all registered messages.
+ */
+var messagesContainer = null;
+/**
+ * Utility that creates visually hidden elements with a message content. Useful for elements that
+ * want to use aria-describedby to further describe themselves without adding additional visual
+ * content.
+ * \@docs-private
+ */
+var AriaDescriber = (function () {
+    function AriaDescriber(_platform) {
+        this._platform = _platform;
+    }
+    /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     */
+    /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype.describe = /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    function (hostElement, message) {
+        if (!this._platform.isBrowser || !message.trim()) {
+            return;
+        }
+        if (!messageRegistry.has(message)) {
+            createMessageElement(message);
+        }
+        if (!isElementDescribedByMessage(hostElement, message)) {
+            addMessageReference(hostElement, message);
+        }
+    };
+    /** Removes the host element's aria-describedby reference to the message element. */
+    /**
+     * Removes the host element's aria-describedby reference to the message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype.removeDescription = /**
+     * Removes the host element's aria-describedby reference to the message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    function (hostElement, message) {
+        if (!this._platform.isBrowser || !message.trim()) {
+            return;
+        }
+        if (isElementDescribedByMessage(hostElement, message)) {
+            removeMessageReference(hostElement, message);
+        }
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        if (registeredMessage && registeredMessage.referenceCount === 0) {
+            deleteMessageElement(message);
+        }
+        if (messagesContainer && messagesContainer.childNodes.length === 0) {
+            deleteMessagesContainer();
+        }
+    };
+    /** Unregisters all created message elements and removes the message container. */
+    /**
+     * Unregisters all created message elements and removes the message container.
+     * @return {?}
+     */
+    AriaDescriber.prototype.ngOnDestroy = /**
+     * Unregisters all created message elements and removes the message container.
+     * @return {?}
+     */
+    function () {
+        if (!this._platform.isBrowser) {
+            return;
+        }
+        var /** @type {?} */ describedElements = document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
+        for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
+            removeCdkDescribedByReferenceIds(describedElements[i]);
+            describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+        }
+        if (messagesContainer) {
+            deleteMessagesContainer();
+        }
+        messageRegistry.clear();
+    };
+    AriaDescriber.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    AriaDescriber.ctorParameters = function () { return [
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
+    return AriaDescriber;
+}());
+/**
+ * Creates a new element in the visually hidden message container element with the message
+ * as its content and adds it to the message registry.
+ * @param {?} message
+ * @return {?}
+ */
+function createMessageElement(message) {
+    var /** @type {?} */ messageElement = document.createElement('div');
+    messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
+    messageElement.appendChild(/** @type {?} */ ((document.createTextNode(message))));
+    if (!messagesContainer) {
+        createMessagesContainer();
+    } /** @type {?} */
+    ((messagesContainer)).appendChild(messageElement);
+    messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
+}
+/**
+ * Deletes the message element from the global messages container.
+ * @param {?} message
+ * @return {?}
+ */
+function deleteMessageElement(message) {
+    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+    if (messagesContainer && messageElement) {
+        messagesContainer.removeChild(messageElement);
+    }
+    messageRegistry.delete(message);
+}
+/**
+ * Creates the global container for all aria-describedby messages.
+ * @return {?}
+ */
+function createMessagesContainer() {
+    messagesContainer = document.createElement('div');
+    messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
+    messagesContainer.setAttribute('aria-hidden', 'true');
+    messagesContainer.style.display = 'none';
+    document.body.appendChild(messagesContainer);
+}
+/**
+ * Deletes the global messages container.
+ * @return {?}
+ */
+function deleteMessagesContainer() {
+    document.body.removeChild(/** @type {?} */ ((messagesContainer)));
+    messagesContainer = null;
+}
+/**
+ * Removes all cdk-describedby messages that are hosted through the element.
+ * @param {?} element
+ * @return {?}
+ */
+function removeCdkDescribedByReferenceIds(element) {
+    // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
+    var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+        .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
+    element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
+}
+/**
+ * Adds a message reference to the element using aria-describedby and increments the registered
+ * message's reference count.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function addMessageReference(element, message) {
+    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+    // Add the aria-describedby reference and set the describedby_host attribute to mark the element.
+    addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+    element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
+    registeredMessage.referenceCount++;
+}
+/**
+ * Removes a message reference from the element using aria-describedby and decrements the registered
+ * message's reference count.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function removeMessageReference(element, message) {
+    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+    registeredMessage.referenceCount--;
+    removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+    element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+}
+/**
+ * Returns true if the element has been described by the provided message ID.
+ * @param {?} element
+ * @param {?} message
+ * @return {?}
+ */
+function isElementDescribedByMessage(element, message) {
+    var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+    var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+    return !!messageId && referenceIds.indexOf(messageId) != -1;
+}
+/**
+ * \@docs-private
+ * @param {?} parentDispatcher
+ * @param {?} platform
+ * @return {?}
+ */
+function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, platform) {
+    return parentDispatcher || new AriaDescriber(platform);
+}
+/**
+ * \@docs-private
+ */
+var ARIA_DESCRIBER_PROVIDER = {
+    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
+    provide: AriaDescriber,
+    deps: [
+        [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
+        _angular_cdk_platform.Platform
+    ],
+    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Screenreaders will often fire fake mousedown events when a focusable element
+ * is activated using the keyboard. We can typically distinguish between these faked
+ * mousedown events and real mousedown events using the "buttons" property. While
+ * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
+ * the left mouse button), faked mousedowns will usually set the property value to 0.
+ * @param {?} event
+ * @return {?}
+ */
+function isFakeMousedownFromScreenReader(event) {
+    return event.buttons === 0;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * This is the interface for focusable items (used by the FocusKeyManager).
+ * Each item must know how to focus itself, whether or not it is currently disabled
+ * and be able to supply it's label.
+ * @record
+ */
+
+var FocusKeyManager = (function (_super) {
+    __extends(FocusKeyManager, _super);
+    function FocusKeyManager() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds focuses the newly active item.
+     */
+    /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds focuses the newly active item.
+     * @param {?} index
+     * @return {?}
+     */
+    FocusKeyManager.prototype.setActiveItem = /**
+     * This method sets the active item to the item at the specified index.
+     * It also adds focuses the newly active item.
+     * @param {?} index
+     * @return {?}
+     */
+    function (index) {
+        _super.prototype.setActiveItem.call(this, index);
+        if (this.activeItem) {
+            this.activeItem.focus();
+        }
+    };
+    return FocusKeyManager;
+}(ListKeyManager));
 
 /**
  * @fileoverview added by tsickle
@@ -2135,8 +2167,8 @@ var A11yModule = (function () {
     A11yModule.decorators = [
         { type: _angular_core.NgModule, args: [{
                     imports: [_angular_common.CommonModule, _angular_cdk_platform.PlatformModule],
-                    declarations: [FocusTrapDirective, FocusTrapDeprecatedDirective, CdkMonitorFocus],
-                    exports: [FocusTrapDirective, FocusTrapDeprecatedDirective, CdkMonitorFocus],
+                    declarations: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
+                    exports: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
                     providers: [
                         InteractivityChecker,
                         FocusTrapFactory,
@@ -2152,6 +2184,7 @@ var A11yModule = (function () {
     return A11yModule;
 }());
 
+exports.FocusTrapDirective = CdkTrapFocus;
 exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
 exports.MESSAGES_CONTAINER_ID = MESSAGES_CONTAINER_ID;
 exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
@@ -2164,7 +2197,7 @@ exports.FocusKeyManager = FocusKeyManager;
 exports.FocusTrap = FocusTrap;
 exports.FocusTrapFactory = FocusTrapFactory;
 exports.FocusTrapDeprecatedDirective = FocusTrapDeprecatedDirective;
-exports.FocusTrapDirective = FocusTrapDirective;
+exports.CdkTrapFocus = CdkTrapFocus;
 exports.InteractivityChecker = InteractivityChecker;
 exports.ListKeyManager = ListKeyManager;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;

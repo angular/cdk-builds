@@ -115,14 +115,23 @@ export declare class FocusTrapDeprecatedDirective implements OnDestroy, AfterCon
     ngAfterContentInit(): void;
 }
 /** Directive for trapping focus within a region. */
-export declare class FocusTrapDirective implements OnDestroy, AfterContentInit {
+export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
     private _elementRef;
     private _focusTrapFactory;
+    private _platform;
     /** Underlying FocusTrap instance. */
     focusTrap: FocusTrap;
+    /** Previously focused element to restore focus to upon destroy when using autoCapture. */
+    private _previouslyFocusedElement;
     /** Whether the focus trap is active. */
     enabled: boolean;
-    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory);
+    /**
+     * Whether the directive should automatially move focus into the trapped region upon
+     * initialization and return focus to the previous activeElement upon destruction.
+     */
+    autoCapture: boolean;
+    private _autoCapture;
+    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _platform: Platform);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
 }
