@@ -83,9 +83,9 @@ var CdkObserveContent = (function () {
         });
         if (this._observer) {
             this._observer.observe(this._elementRef.nativeElement, {
-                characterData: true,
-                childList: true,
-                subtree: true
+                'characterData': true,
+                'childList': true,
+                'subtree': true
             });
         }
     };
