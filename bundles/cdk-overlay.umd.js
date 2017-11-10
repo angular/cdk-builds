@@ -2825,7 +2825,6 @@ exports.CdkConnectedOverlay = CdkConnectedOverlay;
 exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
 exports.OverlayRef = OverlayRef;
 exports.ViewportRuler = _angular_cdk_scrolling.ViewportRuler;
-exports.OverlayKeyboardDispatcher = OverlayKeyboardDispatcher;
 exports.GlobalPositionStrategy = GlobalPositionStrategy;
 exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
 exports.VIEWPORT_RULER_PROVIDER = _angular_cdk_scrolling.VIEWPORT_RULER_PROVIDER;
@@ -2844,14 +2843,15 @@ exports.NoopScrollStrategy = NoopScrollStrategy;
 exports.BlockScrollStrategy = BlockScrollStrategy;
 exports.OVERLAY_PROVIDERS = OVERLAY_PROVIDERS;
 exports.OverlayModule = OverlayModule;
-exports.ɵg = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
-exports.ɵf = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
+exports.ɵi = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
+exports.ɵh = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
+exports.ɵg = OverlayKeyboardDispatcher;
 exports.ɵb = OVERLAY_CONTAINER_PROVIDER;
 exports.ɵa = OVERLAY_CONTAINER_PROVIDER_FACTORY;
 exports.ɵc = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
 exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
 exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
-exports.ɵh = OverlayPositionBuilder;
+exports.ɵf = OverlayPositionBuilder;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
