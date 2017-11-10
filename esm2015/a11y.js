@@ -1408,17 +1408,27 @@ class FocusMonitor {
          * Weak map of elements being monitored to their info.
          */
         this._elementInfo = new WeakMap();
-        this._ngZone.runOutsideAngular(() => this._registerDocumentEvents());
+        /**
+         * A map of global objects to lists of current listeners.
+         */
+        this._unregisterGlobalListeners = () => { };
+        /**
+         * The number of elements currently being monitored.
+         */
+        this._monitoredElementCount = 0;
     }
     /**
-     * Monitors focus on an element and applies appropriate CSS classes.
-     * @param {?} element The element to monitor
-     * @param {?} renderer The renderer to use to apply CSS classes to the element.
-     * @param {?} checkChildren Whether to count the element as focused when its children are focused.
-     * @return {?} An observable that emits when the focus state of the element changes.
-     *     When the element is blurred, null will be emitted.
+     * @param {?} element
+     * @param {?} renderer
+     * @param {?=} checkChildren
+     * @return {?}
      */
     monitor(element, renderer, checkChildren) {
+        // TODO(mmalerba): clean up after deprecated signature is removed.
+        if (!(renderer instanceof Renderer2)) {
+            checkChildren = renderer;
+        }
+        checkChildren = !!checkChildren;
         // Do nothing if we're not on the browser platform.
         if (!this._platform.isBrowser) {
             return of(null);
@@ -1433,10 +1443,10 @@ class FocusMonitor {
         let /** @type {?} */ info = {
             unlisten: () => { },
             checkChildren: checkChildren,
-            renderer: renderer,
             subject: new Subject()
         };
         this._elementInfo.set(element, info);
+        this._incrementMonitoredElementCount();
         // Start listening. We need to listen in capture phase since focus events don't bubble.
         let /** @type {?} */ focusListener = (event) => this._onFocus(event, element);
         let /** @type {?} */ blurListener = (event) => this._onBlur(event, element);
@@ -1463,6 +1473,7 @@ class FocusMonitor {
             elementInfo.subject.complete();
             this._setClasses(element);
             this._elementInfo.delete(element);
+            this._decrementMonitoredElementCount();
         }
     }
     /**
@@ -1479,43 +1490,67 @@ class FocusMonitor {
      * Register necessary event listeners on the document and window.
      * @return {?}
      */
-    _registerDocumentEvents() {
+    _registerGlobalListeners() {
         // Do nothing if we're not on the browser platform.
         if (!this._platform.isBrowser) {
             return;
         }
-        // Note: we listen to events in the capture phase so we can detect them even if the user stops
-        // propagation.
         // On keydown record the origin and clear any touch event that may be in progress.
-        document.addEventListener('keydown', () => {
+        let /** @type {?} */ documentKeydownListener = () => {
             this._lastTouchTarget = null;
             this._setOriginForCurrentEventQueue('keyboard');
-        }, true);
+        };
         // On mousedown record the origin only if there is not touch target, since a mousedown can
         // happen as a result of a touch event.
-        document.addEventListener('mousedown', () => {
+        let /** @type {?} */ documentMousedownListener = () => {
             if (!this._lastTouchTarget) {
                 this._setOriginForCurrentEventQueue('mouse');
             }
-        }, true);
+        };
         // When the touchstart event fires the focus event is not yet in the event queue. This means
         // we can't rely on the trick used above (setting timeout of 0ms). Instead we wait 650ms to
         // see if a focus happens.
-        document.addEventListener('touchstart', (event) => {
+        let /** @type {?} */ documentTouchstartListener = (event) => {
             if (this._touchTimeout != null) {
                 clearTimeout(this._touchTimeout);
             }
             this._lastTouchTarget = event.target;
             this._touchTimeout = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
-            // Note that we need to cast the event options to `any`, because at the time of writing
-            // (TypeScript 2.5), the built-in types don't support the `addEventListener` options param.
-        }, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+        };
         // Make a note of when the window regains focus, so we can restore the origin info for the
         // focused element.
-        window.addEventListener('focus', () => {
+        let /** @type {?} */ windowFocusListener = () => {
             this._windowFocused = true;
             setTimeout(() => this._windowFocused = false, 0);
+        };
+        // Note: we listen to events in the capture phase so we can detect them even if the user stops
+        // propagation.
+        this._ngZone.runOutsideAngular(() => {
+            document.addEventListener('keydown', documentKeydownListener, true);
+            document.addEventListener('mousedown', documentMousedownListener, true);
+            document.addEventListener('touchstart', documentTouchstartListener, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            window.addEventListener('focus', windowFocusListener);
         });
+        this._unregisterGlobalListeners = () => {
+            document.removeEventListener('keydown', documentKeydownListener, true);
+            document.removeEventListener('mousedown', documentMousedownListener, true);
+            document.removeEventListener('touchstart', documentTouchstartListener, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            window.removeEventListener('focus', windowFocusListener);
+        };
+    }
+    /**
+     * @param {?} element
+     * @param {?} className
+     * @param {?} shouldSet
+     * @return {?}
+     */
+    _toggleClass(element, className, shouldSet) {
+        if (shouldSet) {
+            element.classList.add(className);
+        }
+        else {
+            element.classList.remove(className);
+        }
     }
     /**
      * Sets the focus classes on the element based on the given focus origin.
@@ -1526,15 +1561,11 @@ class FocusMonitor {
     _setClasses(element, origin) {
         const /** @type {?} */ elementInfo = this._elementInfo.get(element);
         if (elementInfo) {
-            const /** @type {?} */ toggleClass = (className, shouldSet) => {
-                shouldSet ? elementInfo.renderer.addClass(element, className) :
-                    elementInfo.renderer.removeClass(element, className);
-            };
-            toggleClass('cdk-focused', !!origin);
-            toggleClass('cdk-touch-focused', origin === 'touch');
-            toggleClass('cdk-keyboard-focused', origin === 'keyboard');
-            toggleClass('cdk-mouse-focused', origin === 'mouse');
-            toggleClass('cdk-program-focused', origin === 'program');
+            this._toggleClass(element, 'cdk-focused', !!origin);
+            this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
+            this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
+            this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
+            this._toggleClass(element, 'cdk-program-focused', origin === 'program');
         }
     }
     /**
@@ -1563,7 +1594,7 @@ class FocusMonitor {
         // result, this code will still consider it to have been caused by the touch event and will
         // apply the cdk-touch-focused class rather than the cdk-program-focused class. This is a
         // relatively small edge-case that can be worked around by using
-        // focusVia(parentEl, renderer,  'program') to focus the parent element.
+        // focusVia(parentEl, 'program') to focus the parent element.
         //
         // If we decide that we absolutely must handle this case correctly, we can do so by listening
         // for the first focus event after the touchstart, and then the first blur event after that
@@ -1629,6 +1660,25 @@ class FocusMonitor {
         this._setClasses(element);
         elementInfo.subject.next(null);
     }
+    /**
+     * @return {?}
+     */
+    _incrementMonitoredElementCount() {
+        // Register global listeners when first element is monitored.
+        if (++this._monitoredElementCount == 1) {
+            this._registerGlobalListeners();
+        }
+    }
+    /**
+     * @return {?}
+     */
+    _decrementMonitoredElementCount() {
+        // Unregister global listeners when last element is unmonitored.
+        if (!--this._monitoredElementCount) {
+            this._unregisterGlobalListeners();
+            this._unregisterGlobalListeners = () => { };
+        }
+    }
 }
 FocusMonitor.decorators = [
     { type: Injectable },
@@ -1651,13 +1701,12 @@ class CdkMonitorFocus {
     /**
      * @param {?} _elementRef
      * @param {?} _focusMonitor
-     * @param {?} renderer
      */
-    constructor(_elementRef, _focusMonitor, renderer) {
+    constructor(_elementRef, _focusMonitor) {
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
         this.cdkFocusChange = new EventEmitter();
-        this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, renderer, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
+        this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(origin => this.cdkFocusChange.emit(origin));
     }
     /**
@@ -1677,7 +1726,6 @@ CdkMonitorFocus.decorators = [
 CdkMonitorFocus.ctorParameters = () => [
     { type: ElementRef, },
     { type: FocusMonitor, },
-    { type: Renderer2, },
 ];
 CdkMonitorFocus.propDecorators = {
     "cdkFocusChange": [{ type: Output },],

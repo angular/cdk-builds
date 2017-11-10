@@ -26,16 +26,24 @@ export declare class FocusMonitor {
     private _touchTimeout;
     /** Weak map of elements being monitored to their info. */
     private _elementInfo;
+    /** A map of global objects to lists of current listeners. */
+    private _unregisterGlobalListeners;
+    /** The number of elements currently being monitored. */
+    private _monitoredElementCount;
     constructor(_ngZone: NgZone, _platform: Platform);
+    /**
+     * @docs-private
+     * @deprecated renderer param no longer needed.
+     */
+    monitor(element: HTMLElement, renderer: Renderer2, checkChildren: boolean): Observable<FocusOrigin>;
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
-     * @param renderer The renderer to use to apply CSS classes to the element.
      * @param checkChildren Whether to count the element as focused when its children are focused.
      * @returns An observable that emits when the focus state of the element changes.
      *     When the element is blurred, null will be emitted.
      */
-    monitor(element: HTMLElement, renderer: Renderer2, checkChildren: boolean): Observable<FocusOrigin>;
+    monitor(element: HTMLElement, checkChildren: boolean): Observable<FocusOrigin>;
     /**
      * Stops monitoring an element and removes all focus classes.
      * @param element The element to stop monitoring.
@@ -48,7 +56,8 @@ export declare class FocusMonitor {
      */
     focusVia(element: HTMLElement, origin: FocusOrigin): void;
     /** Register necessary event listeners on the document and window. */
-    private _registerDocumentEvents();
+    private _registerGlobalListeners();
+    private _toggleClass(element, className, shouldSet);
     /**
      * Sets the focus classes on the element based on the given focus origin.
      * @param element The element to update the classes on.
@@ -78,6 +87,8 @@ export declare class FocusMonitor {
      * @param element The monitored element.
      */
     _onBlur(event: FocusEvent, element: HTMLElement): void;
+    private _incrementMonitoredElementCount();
+    private _decrementMonitoredElementCount();
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
@@ -93,7 +104,7 @@ export declare class CdkMonitorFocus implements OnDestroy {
     private _focusMonitor;
     private _monitorSubscription;
     cdkFocusChange: EventEmitter<FocusOrigin>;
-    constructor(_elementRef: ElementRef, _focusMonitor: FocusMonitor, renderer: Renderer2);
+    constructor(_elementRef: ElementRef, _focusMonitor: FocusMonitor);
     ngOnDestroy(): void;
 }
 /** @docs-private */
