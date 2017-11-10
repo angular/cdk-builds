@@ -29,7 +29,6 @@ function coerceBooleanProperty(value) {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Coerces a data-bound value (typically a string) to a number.
  * @param {?} value
  * @param {?=} fallbackValue
  * @return {?}

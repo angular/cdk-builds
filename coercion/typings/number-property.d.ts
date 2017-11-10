@@ -6,4 +6,5 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /** Coerces a data-bound value (typically a string) to a number. */
-export declare function coerceNumberProperty(value: any, fallbackValue?: number): number;
+export declare function coerceNumberProperty(value: any): number;
+export declare function coerceNumberProperty<D>(value: any, fallback: D): number | D;

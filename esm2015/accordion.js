@@ -113,6 +113,7 @@ class CdkAccordionItem {
      * @return {?}
      */
     set expanded(expanded) {
+        expanded = coerceBooleanProperty(expanded);
         // Only emit events and update the internal value if the value changes.
         if (this._expanded !== expanded) {
             this._expanded = expanded;

@@ -117,6 +117,7 @@ var CdkAccordionItem = (function () {
          * @return {?}
          */
         function (expanded) {
+            expanded = _angular_cdk_coercion.coerceBooleanProperty(expanded);
             // Only emit events and update the internal value if the value changes.
             if (this._expanded !== expanded) {
                 this._expanded = expanded;
