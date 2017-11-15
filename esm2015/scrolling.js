@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgZone, Optional, SkipSelf } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
-import 'rxjs/Subject';
+import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
+import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -36,6 +36,23 @@ class ScrollDispatcher {
     constructor(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        /**
+         * Subject for notifying that a registered scrollable reference element has been scrolled.
+         */
+        this._scrolled = new Subject();
+        /**
+         * Keeps track of the global `scroll` and `resize` subscriptions.
+         */
+        this._globalSubscription = null;
+        /**
+         * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
+         */
+        this._scrolledCount = 0;
+        /**
+         * Map of all the scrollable references that are registered with the service and their
+         * scroll event subscriptions.
+         */
+        this.scrollContainers = new Map();
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -143,6 +160,14 @@ class ScrollDispatcher {
         });
     }
 }
+ScrollDispatcher.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+ScrollDispatcher.ctorParameters = () => [
+    { type: NgZone, },
+    { type: Platform, },
+];
 /**
  * \@docs-private
  * @param {?} parentDispatcher
@@ -185,6 +210,7 @@ class CdkScrollable {
         this._scroll = _scroll;
         this._ngZone = _ngZone;
         this._renderer = _renderer;
+        this._elementScrolled = new Subject();
     }
     /**
      * @return {?}
@@ -221,6 +247,18 @@ class CdkScrollable {
         return this._elementRef;
     }
 }
+CdkScrollable.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdk-scrollable], [cdkScrollable]'
+            },] },
+];
+/** @nocollapse */
+CdkScrollable.ctorParameters = () => [
+    { type: ElementRef, },
+    { type: ScrollDispatcher, },
+    { type: NgZone, },
+    { type: Renderer2, },
+];
 
 /**
  * @fileoverview added by tsickle
@@ -321,6 +359,14 @@ class ViewportRuler {
         this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     }
 }
+ViewportRuler.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+ViewportRuler.ctorParameters = () => [
+    { type: Platform, },
+    { type: NgZone, },
+];
 /**
  * \@docs-private
  * @param {?} parentRuler
@@ -348,6 +394,16 @@ const VIEWPORT_RULER_PROVIDER = {
 
 class ScrollDispatchModule {
 }
+ScrollDispatchModule.decorators = [
+    { type: NgModule, args: [{
+                imports: [PlatformModule],
+                exports: [CdkScrollable],
+                declarations: [CdkScrollable],
+                providers: [SCROLL_DISPATCHER_PROVIDER],
+            },] },
+];
+/** @nocollapse */
+ScrollDispatchModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

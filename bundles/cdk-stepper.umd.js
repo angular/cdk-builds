@@ -8,18 +8,27 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/keycodes'), require('@angular/cdk/coercion'), require('@angular/forms'), require('@angular/cdk/bidi'), require('@angular/common')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/keycodes', '@angular/cdk/coercion', '@angular/forms', '@angular/cdk/bidi', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = global.ng.cdk.stepper || {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion));
-}(this, (function (exports,_angular_core,_angular_cdk_keycodes,_angular_cdk_coercion) { 'use strict';
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = global.ng.cdk.stepper || {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion,global.ng.forms,global.ng.cdk.bidi,global.ng.common));
+}(this, (function (exports,_angular_core,_angular_cdk_keycodes,_angular_cdk_coercion,_angular_forms,_angular_cdk_bidi,_angular_common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
 
-var CdkStepLabel = /** @class */ (function () {
+var CdkStepLabel = (function () {
     function CdkStepLabel(template) {
         this.template = template;
     }
+    CdkStepLabel.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepLabel.ctorParameters = function () { return [
+        { type: _angular_core.TemplateRef, },
+    ]; };
     return CdkStepLabel;
 }());
 
@@ -35,14 +44,21 @@ var nextId = 0;
 /**
  * Change event emitted on selection changes.
  */
-var StepperSelectionEvent = /** @class */ (function () {
+var StepperSelectionEvent = (function () {
     function StepperSelectionEvent() {
     }
     return StepperSelectionEvent;
 }());
-var CdkStep = /** @class */ (function () {
+var CdkStep = (function () {
     function CdkStep(_stepper) {
         this._stepper = _stepper;
+        /**
+         * Whether user has seen the expanded step content or not.
+         */
+        this.interacted = false;
+        this._editable = true;
+        this._optional = false;
+        this._customCompleted = null;
     }
     Object.defineProperty(CdkStep.prototype, "editable", {
         get: /**
@@ -127,12 +143,44 @@ var CdkStep = /** @class */ (function () {
         // underlying MdStepHeader, we have to make sure that change detection runs correctly.
         this._stepper._stateChanged();
     };
+    CdkStep.decorators = [
+        { type: _angular_core.Component, args: [{selector: 'cdk-step',
+                    exportAs: 'cdkStep',
+                    template: "<ng-template><ng-content></ng-content></ng-template>",
+                    encapsulation: _angular_core.ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                    changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStep.ctorParameters = function () { return [
+        { type: CdkStepper, decorators: [{ type: _angular_core.Inject, args: [_angular_core.forwardRef(function () { return CdkStepper; }),] },] },
+    ]; };
+    CdkStep.propDecorators = {
+        "stepLabel": [{ type: _angular_core.ContentChild, args: [CdkStepLabel,] },],
+        "content": [{ type: _angular_core.ViewChild, args: [_angular_core.TemplateRef,] },],
+        "stepControl": [{ type: _angular_core.Input },],
+        "label": [{ type: _angular_core.Input },],
+        "editable": [{ type: _angular_core.Input },],
+        "optional": [{ type: _angular_core.Input },],
+        "completed": [{ type: _angular_core.Input },],
+    };
     return CdkStep;
 }());
-var CdkStepper = /** @class */ (function () {
+var CdkStepper = (function () {
     function CdkStepper(_dir, _changeDetectorRef) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        this._linear = false;
+        this._selectedIndex = 0;
+        /**
+         * Event emitted when the selected step has changed.
+         */
+        this.selectionChange = new _angular_core.EventEmitter();
+        /**
+         * The index of the step that the focus can be set.
+         */
+        this._focusIndex = 0;
         this._groupId = nextId++;
     }
     Object.defineProperty(CdkStepper.prototype, "linear", {
@@ -409,6 +457,24 @@ var CdkStepper = /** @class */ (function () {
     function () {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
+    CdkStepper.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkStepper]',
+                    exportAs: 'cdkStepper',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepper.ctorParameters = function () { return [
+        { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
+        { type: _angular_core.ChangeDetectorRef, },
+    ]; };
+    CdkStepper.propDecorators = {
+        "_steps": [{ type: _angular_core.ContentChildren, args: [CdkStep,] },],
+        "linear": [{ type: _angular_core.Input },],
+        "selectedIndex": [{ type: _angular_core.Input },],
+        "selected": [{ type: _angular_core.Input },],
+        "selectionChange": [{ type: _angular_core.Output },],
+    };
     return CdkStepper;
 }());
 
@@ -420,19 +486,39 @@ var CdkStepper = /** @class */ (function () {
 /**
  * Button that moves to the next step in a stepper workflow.
  */
-var CdkStepperNext = /** @class */ (function () {
+var CdkStepperNext = (function () {
     function CdkStepperNext(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperNext.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'button[cdkStepperNext]',
+                    host: { '(click)': '_stepper.next()' }
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepperNext.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperNext;
 }());
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
-var CdkStepperPrevious = /** @class */ (function () {
+var CdkStepperPrevious = (function () {
     function CdkStepperPrevious(_stepper) {
         this._stepper = _stepper;
     }
+    CdkStepperPrevious.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'button[cdkStepperPrevious]',
+                    host: { '(click)': '_stepper.previous()' }
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepperPrevious.ctorParameters = function () { return [
+        { type: CdkStepper, },
+    ]; };
     return CdkStepperPrevious;
 }());
 
@@ -441,9 +527,18 @@ var CdkStepperPrevious = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-var CdkStepperModule = /** @class */ (function () {
+var CdkStepperModule = (function () {
     function CdkStepperModule() {
     }
+    CdkStepperModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_cdk_bidi.BidiModule, _angular_common.CommonModule],
+                    exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
+                    declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepperModule.ctorParameters = function () { return []; };
     return CdkStepperModule;
 }());
 

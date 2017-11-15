@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import '@angular/core';
-import '@angular/cdk/platform';
-import 'rxjs/Subject';
+import { Injectable, NgModule, NgZone } from '@angular/core';
+import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { Subject } from 'rxjs/Subject';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
 import { takeUntil } from 'rxjs/operators/takeUntil';
@@ -27,7 +27,7 @@ var styleElementForWebkitCompatibility = new Map();
 /**
  * A utility for calling matchMedia queries.
  */
-var MediaMatcher = /** @class */ (function () {
+var MediaMatcher = (function () {
     function MediaMatcher(platform) {
         this.platform = platform;
         this._matchMedia = this.platform.isBrowser ?
@@ -64,6 +64,13 @@ var MediaMatcher = /** @class */ (function () {
         }
         return this._matchMedia(query);
     };
+    MediaMatcher.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    MediaMatcher.ctorParameters = function () { return [
+        { type: Platform, },
+    ]; };
     return MediaMatcher;
 }());
 /**
@@ -117,10 +124,18 @@ function noopMatchMedia(query) {
 /**
  * Utility for checking the matching state of \@media queries.
  */
-var BreakpointObserver = /** @class */ (function () {
+var BreakpointObserver = (function () {
     function BreakpointObserver(mediaMatcher, zone) {
         this.mediaMatcher = mediaMatcher;
         this.zone = zone;
+        /**
+         * A map of all media queries currently being listened for.
+         */
+        this._queries = new Map();
+        /**
+         * A subject for all other observables to takeUntil based on.
+         */
+        this._destroySubject = new Subject();
     }
     /** Completes the active subject, signalling to all other observables to complete. */
     /**
@@ -222,6 +237,14 @@ var BreakpointObserver = /** @class */ (function () {
         this._queries.set(query, output);
         return output;
     };
+    BreakpointObserver.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    BreakpointObserver.ctorParameters = function () { return [
+        { type: MediaMatcher, },
+        { type: NgZone, },
+    ]; };
     return BreakpointObserver;
 }());
 
@@ -250,9 +273,17 @@ var Breakpoints = {
  * @suppress {checkTypes} checked by tsc
  */
 
-var LayoutModule = /** @class */ (function () {
+var LayoutModule = (function () {
     function LayoutModule() {
     }
+    LayoutModule.decorators = [
+        { type: NgModule, args: [{
+                    providers: [BreakpointObserver, MediaMatcher],
+                    imports: [PlatformModule],
+                },] },
+    ];
+    /** @nocollapse */
+    LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
 

@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { isDevMode } from '@angular/core';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
-import 'rxjs/BehaviorSubject';
-import 'rxjs/Subject';
-import '@angular/common';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -71,6 +71,17 @@ class CdkHeaderRowDef extends BaseRowDef {
         super(template, _differs);
     }
 }
+CdkHeaderRowDef.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkHeaderRowDef]',
+                inputs: ['columns: cdkHeaderRowDef'],
+            },] },
+];
+/** @nocollapse */
+CdkHeaderRowDef.ctorParameters = () => [
+    { type: TemplateRef, },
+    { type: IterableDiffers, },
+];
 /**
  * Data row definition for the CDK table.
  * Captures the header row's template and other row properties such as the columns to display and
@@ -85,6 +96,17 @@ class CdkRowDef extends BaseRowDef {
         super(template, _differs);
     }
 }
+CdkRowDef.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkRowDef]',
+                inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
+            },] },
+];
+/** @nocollapse */
+CdkRowDef.ctorParameters = () => [
+    { type: TemplateRef, },
+    { type: IterableDiffers, },
+];
 /**
  * Context provided to the row cells
  * @record
@@ -104,15 +126,58 @@ class CdkCellOutlet {
     }
 }
 /**
+ * Static property containing the latest constructed instance of this class.
+ * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
+ * createEmbeddedView. After one of these components are created, this property will provide
+ * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
+ * construct the cells with the provided context.
+ */
+CdkCellOutlet.mostRecentCellOutlet = null;
+CdkCellOutlet.decorators = [
+    { type: Directive, args: [{ selector: '[cdkCellOutlet]' },] },
+];
+/** @nocollapse */
+CdkCellOutlet.ctorParameters = () => [
+    { type: ViewContainerRef, },
+];
+/**
  * Header template container that contains the cell outlet. Adds the right class and role.
  */
 class CdkHeaderRow {
 }
+CdkHeaderRow.decorators = [
+    { type: Component, args: [{selector: 'cdk-header-row',
+                template: CDK_ROW_TEMPLATE,
+                host: {
+                    'class': 'cdk-header-row',
+                    'role': 'row',
+                },
+                changeDetection: ChangeDetectionStrategy.OnPush,
+                encapsulation: ViewEncapsulation.None,
+                preserveWhitespaces: false,
+            },] },
+];
+/** @nocollapse */
+CdkHeaderRow.ctorParameters = () => [];
 /**
  * Data row template container that contains the cell outlet. Adds the right class and role.
  */
 class CdkRow {
 }
+CdkRow.decorators = [
+    { type: Component, args: [{selector: 'cdk-row',
+                template: CDK_ROW_TEMPLATE,
+                host: {
+                    'class': 'cdk-row',
+                    'role': 'row',
+                },
+                changeDetection: ChangeDetectionStrategy.OnPush,
+                encapsulation: ViewEncapsulation.None,
+                preserveWhitespaces: false,
+            },] },
+];
+/** @nocollapse */
+CdkRow.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -131,6 +196,13 @@ class CdkCellDef {
         this.template = template;
     }
 }
+CdkCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkCellDef]' },] },
+];
+/** @nocollapse */
+CdkCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
 /**
  * Header cell definition for a CDK table.
  * Captures the template of a column's header cell and as well as cell-specific properties.
@@ -143,6 +215,13 @@ class CdkHeaderCellDef {
         this.template = template;
     }
 }
+CdkHeaderCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] },
+];
+/** @nocollapse */
+CdkHeaderCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
@@ -162,6 +241,16 @@ class CdkColumnDef {
         this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
     }
 }
+CdkColumnDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
+];
+/** @nocollapse */
+CdkColumnDef.ctorParameters = () => [];
+CdkColumnDef.propDecorators = {
+    "name": [{ type: Input, args: ['cdkColumnDef',] },],
+    "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
+    "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
+};
 /**
  * Header cell template container that adds the right classes and role.
  */
@@ -175,6 +264,21 @@ class CdkHeaderCell {
         renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
+CdkHeaderCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-header-cell',
+                host: {
+                    'class': 'cdk-header-cell',
+                    'role': 'columnheader',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkHeaderCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+    { type: Renderer2, },
+];
 /**
  * Cell template container that adds the right classes and role.
  */
@@ -188,6 +292,21 @@ class CdkCell {
         renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
+CdkCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-cell',
+                host: {
+                    'class': 'cdk-cell',
+                    'role': 'gridcell',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+    { type: Renderer2, },
+];
 
 /**
  * @fileoverview added by tsickle
@@ -254,6 +373,13 @@ class RowPlaceholder {
         this.viewContainer = viewContainer;
     }
 }
+RowPlaceholder.decorators = [
+    { type: Directive, args: [{ selector: '[rowPlaceholder]' },] },
+];
+/** @nocollapse */
+RowPlaceholder.ctorParameters = () => [
+    { type: ViewContainerRef, },
+];
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
  * \@docs-private
@@ -266,6 +392,13 @@ class HeaderRowPlaceholder {
         this.viewContainer = viewContainer;
     }
 }
+HeaderRowPlaceholder.decorators = [
+    { type: Directive, args: [{ selector: '[headerRowPlaceholder]' },] },
+];
+/** @nocollapse */
+HeaderRowPlaceholder.ctorParameters = () => [
+    { type: ViewContainerRef, },
+];
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -288,6 +421,23 @@ class CdkTable {
     constructor(_differs, _changeDetectorRef, elementRef, renderer, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
+        /**
+         * Subject that emits when the component has been destroyed.
+         */
+        this._onDestroy = new Subject();
+        /**
+         * Latest data provided by the data source through the connect interface.
+         */
+        this._data = [];
+        /**
+         * Map of all the user's defined columns (header and data cell template) identified by name.
+         */
+        this._columnDefsByName = new Map();
+        /**
+         * Stream containing the latest information on what rows are being displayed on screen.
+         * Can be used by the data source to as a heuristic of what data should be provided.
+         */
+        this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
             renderer.setAttribute(elementRef.nativeElement, 'role', 'grid');
         }
@@ -586,14 +736,67 @@ class CdkTable {
         });
     }
 }
+CdkTable.decorators = [
+    { type: Component, args: [{selector: 'cdk-table',
+                exportAs: 'cdkTable',
+                template: CDK_TABLE_TEMPLATE,
+                host: {
+                    'class': 'cdk-table',
+                },
+                encapsulation: ViewEncapsulation.None,
+                preserveWhitespaces: false,
+                changeDetection: ChangeDetectionStrategy.OnPush,
+            },] },
+];
+/** @nocollapse */
+CdkTable.ctorParameters = () => [
+    { type: IterableDiffers, },
+    { type: ChangeDetectorRef, },
+    { type: ElementRef, },
+    { type: Renderer2, },
+    { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
+];
+CdkTable.propDecorators = {
+    "trackBy": [{ type: Input },],
+    "dataSource": [{ type: Input },],
+    "_rowPlaceholder": [{ type: ViewChild, args: [RowPlaceholder,] },],
+    "_headerRowPlaceholder": [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
+    "_columnDefs": [{ type: ContentChildren, args: [CdkColumnDef,] },],
+    "_headerDef": [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
+    "_rowDefs": [{ type: ContentChildren, args: [CdkRowDef,] },],
+};
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
 
+const EXPORTED_DECLARATIONS = [
+    CdkTable,
+    CdkRowDef,
+    CdkCellDef,
+    CdkCellOutlet,
+    CdkHeaderCellDef,
+    CdkColumnDef,
+    CdkCell,
+    CdkRow,
+    CdkHeaderCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    RowPlaceholder,
+    HeaderRowPlaceholder,
+];
 class CdkTableModule {
 }
+CdkTableModule.decorators = [
+    { type: NgModule, args: [{
+                imports: [CommonModule],
+                exports: [EXPORTED_DECLARATIONS],
+                declarations: [EXPORTED_DECLARATIONS]
+            },] },
+];
+/** @nocollapse */
+CdkTableModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

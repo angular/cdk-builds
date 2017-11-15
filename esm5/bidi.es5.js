@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken } from '@angular/core';
-import '@angular/platform-browser';
+import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 
 /**
  * @fileoverview added by tsickle
@@ -28,8 +28,16 @@ var DIR_DOCUMENT = new InjectionToken('cdk-dir-doc');
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
  */
-var Directionality = /** @class */ (function () {
+var Directionality = (function () {
     function Directionality(_document) {
+        /**
+         * The current 'ltr' or 'rtl' value.
+         */
+        this.value = 'ltr';
+        /**
+         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
+         */
+        this.change = new EventEmitter();
         if (_document) {
             // TODO: handle 'auto' value -
             // We still need to account for dir="auto".
@@ -40,6 +48,13 @@ var Directionality = /** @class */ (function () {
             this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
+    Directionality.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    Directionality.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
+    ]; };
     return Directionality;
 }());
 
@@ -54,8 +69,17 @@ var Directionality = /** @class */ (function () {
  * Provides itself as Directionality such that descendant directives only need to ever inject
  * Directionality to get the closest direction.
  */
-var Dir = /** @class */ (function () {
+var Dir = (function () {
     function Dir() {
+        this._dir = 'ltr';
+        /**
+         * Whether the `value` has been set to its initial value.
+         */
+        this._isInitialized = false;
+        /**
+         * Event emitted when the direction changes.
+         */
+        this.change = new EventEmitter();
     }
     Object.defineProperty(Dir.prototype, "dir", {
         get: /**
@@ -99,6 +123,20 @@ var Dir = /** @class */ (function () {
     function () {
         this._isInitialized = true;
     };
+    Dir.decorators = [
+        { type: Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[dir]': 'dir' },
+                    exportAs: 'dir',
+                },] },
+    ];
+    /** @nocollapse */
+    Dir.ctorParameters = function () { return []; };
+    Dir.propDecorators = {
+        "change": [{ type: Output, args: ['dirChange',] },],
+        "dir": [{ type: Input, args: ['dir',] },],
+    };
     return Dir;
 }());
 
@@ -107,9 +145,21 @@ var Dir = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-var BidiModule = /** @class */ (function () {
+var BidiModule = (function () {
     function BidiModule() {
     }
+    BidiModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                    providers: [
+                        { provide: DIR_DOCUMENT, useExisting: DOCUMENT },
+                        Directionality,
+                    ]
+                },] },
+    ];
+    /** @nocollapse */
+    BidiModule.ctorParameters = function () { return []; };
     return BidiModule;
 }());
 

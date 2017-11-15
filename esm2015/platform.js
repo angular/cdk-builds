@@ -5,19 +5,68 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import '@angular/core';
+import { Injectable, NgModule } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
 
+// Whether the current platform supports the V8 Break Iterator. The V8 check
+// is necessary to detect all Blink based browsers.
+const hasV8BreakIterator = (typeof (Intl) !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
  */
 class Platform {
+    constructor() {
+        /**
+         * Whether the Angular application is being rendered in the browser.
+         */
+        this.isBrowser = typeof document === 'object' && !!document;
+        /**
+         * Whether the current browser is Microsoft Edge.
+         */
+        this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+        /**
+         * Whether the current rendering engine is Microsoft Trident.
+         */
+        this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+        /**
+         * Whether the current rendering engine is Blink.
+         */
+        this.BLINK = this.isBrowser &&
+            (!!((/** @type {?} */ (window)).chrome || hasV8BreakIterator) && !!CSS && !this.EDGE && !this.TRIDENT);
+        /**
+         * Whether the current rendering engine is WebKit.
+         */
+        this.WEBKIT = this.isBrowser &&
+            /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
+        /**
+         * Whether the current platform is Apple iOS.
+         */
+        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+            !(/** @type {?} */ (window)).MSStream;
+        /**
+         * Whether the current browser is Firefox.
+         */
+        this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+        /**
+         * Whether the current platform is Android.
+         */
+        this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+        /**
+         * Whether the current browser is Safari.
+         */
+        this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+    }
 }
+Platform.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+Platform.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -106,6 +155,13 @@ function getSupportedInputTypes() {
 
 class PlatformModule {
 }
+PlatformModule.decorators = [
+    { type: NgModule, args: [{
+                providers: [Platform]
+            },] },
+];
+/** @nocollapse */
+PlatformModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

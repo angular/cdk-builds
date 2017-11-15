@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import '@angular/core';
-import 'rxjs/Subject';
+import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
 /**
@@ -18,7 +18,7 @@ import { debounceTime } from 'rxjs/operators/debounceTime';
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-var MutationObserverFactory = /** @class */ (function () {
+var MutationObserverFactory = (function () {
     function MutationObserverFactory() {
     }
     /**
@@ -32,17 +32,30 @@ var MutationObserverFactory = /** @class */ (function () {
     function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
+    MutationObserverFactory.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    MutationObserverFactory.ctorParameters = function () { return []; };
     return MutationObserverFactory;
 }());
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
  */
-var CdkObserveContent = /** @class */ (function () {
+var CdkObserveContent = (function () {
     function CdkObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
+        /**
+         * Event emitted for each change in the element's content.
+         */
+        this.event = new EventEmitter();
+        /**
+         * Used for debouncing the emitted values to the observeContent event.
+         */
+        this._debouncer = new Subject();
     }
     /**
      * @return {?}
@@ -86,11 +99,36 @@ var CdkObserveContent = /** @class */ (function () {
         }
         this._debouncer.complete();
     };
+    CdkObserveContent.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkObserveContent]',
+                    exportAs: 'cdkObserveContent',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkObserveContent.ctorParameters = function () { return [
+        { type: MutationObserverFactory, },
+        { type: ElementRef, },
+        { type: NgZone, },
+    ]; };
+    CdkObserveContent.propDecorators = {
+        "event": [{ type: Output, args: ['cdkObserveContent',] },],
+        "debounce": [{ type: Input },],
+    };
     return CdkObserveContent;
 }());
-var ObserversModule = /** @class */ (function () {
+var ObserversModule = (function () {
     function ObserversModule() {
     }
+    ObserversModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkObserveContent],
+                    declarations: [CdkObserveContent],
+                    providers: [MutationObserverFactory]
+                },] },
+    ];
+    /** @nocollapse */
+    ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
 

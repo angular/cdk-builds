@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgZone, Optional, SkipSelf } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
-import 'rxjs/Subject';
+import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
+import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -28,10 +28,27 @@ var DEFAULT_SCROLL_TIME = 20;
  * Service contained all registered Scrollable references and emits an event when any one of the
  * Scrollable references emit a scrolled event.
  */
-var ScrollDispatcher = /** @class */ (function () {
+var ScrollDispatcher = (function () {
     function ScrollDispatcher(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        /**
+         * Subject for notifying that a registered scrollable reference element has been scrolled.
+         */
+        this._scrolled = new Subject();
+        /**
+         * Keeps track of the global `scroll` and `resize` subscriptions.
+         */
+        this._globalSubscription = null;
+        /**
+         * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
+         */
+        this._scrolledCount = 0;
+        /**
+         * Map of all the scrollable references that are registered with the service and their
+         * scroll event subscriptions.
+         */
+        this.scrollContainers = new Map();
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -204,6 +221,14 @@ var ScrollDispatcher = /** @class */ (function () {
             return fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
+    ScrollDispatcher.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    ScrollDispatcher.ctorParameters = function () { return [
+        { type: NgZone, },
+        { type: Platform, },
+    ]; };
     return ScrollDispatcher;
 }());
 /**
@@ -236,12 +261,13 @@ var SCROLL_DISPATCHER_PROVIDER = {
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
  * can be listened to through the service.
  */
-var CdkScrollable = /** @class */ (function () {
+var CdkScrollable = (function () {
     function CdkScrollable(_elementRef, _scroll, _ngZone, _renderer) {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
         this._renderer = _renderer;
+        this._elementScrolled = new Subject();
     }
     /**
      * @return {?}
@@ -294,6 +320,18 @@ var CdkScrollable = /** @class */ (function () {
     function () {
         return this._elementRef;
     };
+    CdkScrollable.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-scrollable], [cdkScrollable]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkScrollable.ctorParameters = function () { return [
+        { type: ElementRef, },
+        { type: ScrollDispatcher, },
+        { type: NgZone, },
+        { type: Renderer2, },
+    ]; };
     return CdkScrollable;
 }());
 
@@ -310,7 +348,7 @@ var DEFAULT_RESIZE_TIME = 20;
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
  */
-var ViewportRuler = /** @class */ (function () {
+var ViewportRuler = (function () {
     function ViewportRuler(platform, ngZone) {
         var _this = this;
         this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
@@ -424,6 +462,14 @@ var ViewportRuler = /** @class */ (function () {
     function () {
         this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     };
+    ViewportRuler.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    ViewportRuler.ctorParameters = function () { return [
+        { type: Platform, },
+        { type: NgZone, },
+    ]; };
     return ViewportRuler;
 }());
 /**
@@ -451,9 +497,19 @@ var VIEWPORT_RULER_PROVIDER = {
  * @suppress {checkTypes} checked by tsc
  */
 
-var ScrollDispatchModule = /** @class */ (function () {
+var ScrollDispatchModule = (function () {
     function ScrollDispatchModule() {
     }
+    ScrollDispatchModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [PlatformModule],
+                    exports: [CdkScrollable],
+                    declarations: [CdkScrollable],
+                    providers: [SCROLL_DISPATCHER_PROVIDER],
+                },] },
+    ];
+    /** @nocollapse */
+    ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());
 

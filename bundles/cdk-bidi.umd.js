@@ -8,8 +8,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/platform-browser')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/platform-browser'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = global.ng.cdk.bidi || {}),global.ng.core));
-}(this, (function (exports,_angular_core) { 'use strict';
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = global.ng.cdk.bidi || {}),global.ng.core,global.ng.platformBrowser));
+}(this, (function (exports,_angular_core,_angular_platformBrowser) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -31,8 +31,16 @@ var DIR_DOCUMENT = new _angular_core.InjectionToken('cdk-dir-doc');
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
  */
-var Directionality = /** @class */ (function () {
+var Directionality = (function () {
     function Directionality(_document) {
+        /**
+         * The current 'ltr' or 'rtl' value.
+         */
+        this.value = 'ltr';
+        /**
+         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
+         */
+        this.change = new _angular_core.EventEmitter();
         if (_document) {
             // TODO: handle 'auto' value -
             // We still need to account for dir="auto".
@@ -43,6 +51,13 @@ var Directionality = /** @class */ (function () {
             this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
+    Directionality.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    Directionality.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [DIR_DOCUMENT,] },] },
+    ]; };
     return Directionality;
 }());
 
@@ -57,8 +72,17 @@ var Directionality = /** @class */ (function () {
  * Provides itself as Directionality such that descendant directives only need to ever inject
  * Directionality to get the closest direction.
  */
-var Dir = /** @class */ (function () {
+var Dir = (function () {
     function Dir() {
+        this._dir = 'ltr';
+        /**
+         * Whether the `value` has been set to its initial value.
+         */
+        this._isInitialized = false;
+        /**
+         * Event emitted when the direction changes.
+         */
+        this.change = new _angular_core.EventEmitter();
     }
     Object.defineProperty(Dir.prototype, "dir", {
         get: /**
@@ -102,6 +126,20 @@ var Dir = /** @class */ (function () {
     function () {
         this._isInitialized = true;
     };
+    Dir.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[dir]': 'dir' },
+                    exportAs: 'dir',
+                },] },
+    ];
+    /** @nocollapse */
+    Dir.ctorParameters = function () { return []; };
+    Dir.propDecorators = {
+        "change": [{ type: _angular_core.Output, args: ['dirChange',] },],
+        "dir": [{ type: _angular_core.Input, args: ['dir',] },],
+    };
     return Dir;
 }());
 
@@ -110,9 +148,21 @@ var Dir = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-var BidiModule = /** @class */ (function () {
+var BidiModule = (function () {
     function BidiModule() {
     }
+    BidiModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                    providers: [
+                        { provide: DIR_DOCUMENT, useExisting: _angular_platformBrowser.DOCUMENT },
+                        Directionality,
+                    ]
+                },] },
+    ];
+    /** @nocollapse */
+    BidiModule.ctorParameters = function () { return []; };
     return BidiModule;
 }());
 
