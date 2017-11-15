@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, Directive, Input, NgModule, TemplateRef, ViewContainerRef } from '@angular/core';
+import '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -191,12 +191,6 @@ class TemplatePortal extends Portal {
  * @abstract
  */
 class BasePortalOutlet {
-    constructor() {
-        /**
-         * Whether this host has already been permanently disposed.
-         */
-        this._isDisposed = false;
-    }
     /**
      * Whether this host has an attached portal.
      * @return {?}
@@ -384,17 +378,6 @@ class CdkPortal extends TemplatePortal {
         super(templateRef, viewContainerRef);
     }
 }
-CdkPortal.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-portal], [cdkPortal], [portal]',
-                exportAs: 'cdkPortal',
-            },] },
-];
-/** @nocollapse */
-CdkPortal.ctorParameters = () => [
-    { type: TemplateRef, },
-    { type: ViewContainerRef, },
-];
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
@@ -411,10 +394,6 @@ class CdkPortalOutlet extends BasePortalOutlet {
         super();
         this._componentFactoryResolver = _componentFactoryResolver;
         this._viewContainerRef = _viewContainerRef;
-        /**
-         * The attached portal.
-         */
-        this._portal = null;
     }
     /**
      * @deprecated
@@ -497,32 +476,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
         return viewRef;
     }
 }
-CdkPortalOutlet.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
-                exportAs: 'cdkPortalOutlet, cdkPortalHost',
-                inputs: ['portal: cdkPortalOutlet']
-            },] },
-];
-/** @nocollapse */
-CdkPortalOutlet.ctorParameters = () => [
-    { type: ComponentFactoryResolver, },
-    { type: ViewContainerRef, },
-];
-CdkPortalOutlet.propDecorators = {
-    "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
-    "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
-};
 class PortalModule {
 }
-PortalModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [CdkPortal, CdkPortalOutlet],
-                declarations: [CdkPortal, CdkPortalOutlet],
-            },] },
-];
-/** @nocollapse */
-PortalModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

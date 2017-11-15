@@ -7,7 +7,7 @@
  */
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
-import { ComponentFactoryResolver, Directive, Input, NgModule, TemplateRef, ViewContainerRef } from '@angular/core';
+import '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -76,7 +76,7 @@ function throwNoPortalAttachedError() {
  * It can be attach to / detached from a `PortalOutlet`.
  * @abstract
  */
-var Portal = (function () {
+var Portal = /** @class */ (function () {
     function Portal() {
     }
     /** Attach this portal to a host. */
@@ -155,7 +155,7 @@ var Portal = (function () {
 /**
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
  */
-var ComponentPortal = (function (_super) {
+var ComponentPortal = /** @class */ (function (_super) {
     __extends(ComponentPortal, _super);
     function ComponentPortal(component, viewContainerRef, injector) {
         var _this = _super.call(this) || this;
@@ -169,7 +169,7 @@ var ComponentPortal = (function (_super) {
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
  */
-var TemplatePortal = (function (_super) {
+var TemplatePortal = /** @class */ (function (_super) {
     __extends(TemplatePortal, _super);
     function TemplatePortal(template, viewContainerRef, context) {
         var _this = _super.call(this) || this;
@@ -238,12 +238,8 @@ var TemplatePortal = (function (_super) {
  * ComponentPortal and TemplatePortal.
  * @abstract
  */
-var BasePortalOutlet = (function () {
+var BasePortalOutlet = /** @class */ (function () {
     function BasePortalOutlet() {
-        /**
-         * Whether this host has already been permanently disposed.
-         */
-        this._isDisposed = false;
     }
     /** Whether this host has an attached portal. */
     /**
@@ -357,7 +353,7 @@ var BasePortalOutlet = (function () {
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
-var DomPortalOutlet = (function (_super) {
+var DomPortalOutlet = /** @class */ (function (_super) {
     __extends(DomPortalOutlet, _super);
     function DomPortalOutlet(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
         var _this = _super.call(this) || this;
@@ -486,22 +482,11 @@ var DomPortalOutlet = (function (_super) {
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
-var CdkPortal = (function (_super) {
+var CdkPortal = /** @class */ (function (_super) {
     __extends(CdkPortal, _super);
     function CdkPortal(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
-    CdkPortal.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdk-portal], [cdkPortal], [portal]',
-                    exportAs: 'cdkPortal',
-                },] },
-    ];
-    /** @nocollapse */
-    CdkPortal.ctorParameters = function () { return [
-        { type: TemplateRef, },
-        { type: ViewContainerRef, },
-    ]; };
     return CdkPortal;
 }(TemplatePortal));
 /**
@@ -511,16 +496,12 @@ var CdkPortal = (function (_super) {
  * Usage:
  * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-var CdkPortalOutlet = (function (_super) {
+var CdkPortalOutlet = /** @class */ (function (_super) {
     __extends(CdkPortalOutlet, _super);
     function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef) {
         var _this = _super.call(this) || this;
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._viewContainerRef = _viewContainerRef;
-        /**
-         * The attached portal.
-         */
-        _this._portal = null;
         return _this;
     }
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
@@ -644,35 +625,11 @@ var CdkPortalOutlet = (function (_super) {
         this._portal = portal;
         return viewRef;
     };
-    CdkPortalOutlet.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
-                    exportAs: 'cdkPortalOutlet, cdkPortalHost',
-                    inputs: ['portal: cdkPortalOutlet']
-                },] },
-    ];
-    /** @nocollapse */
-    CdkPortalOutlet.ctorParameters = function () { return [
-        { type: ComponentFactoryResolver, },
-        { type: ViewContainerRef, },
-    ]; };
-    CdkPortalOutlet.propDecorators = {
-        "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
-        "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
-    };
     return CdkPortalOutlet;
 }(BasePortalOutlet));
-var PortalModule = (function () {
+var PortalModule = /** @class */ (function () {
     function PortalModule() {
     }
-    PortalModule.decorators = [
-        { type: NgModule, args: [{
-                    exports: [CdkPortal, CdkPortalOutlet],
-                    declarations: [CdkPortal, CdkPortalOutlet],
-                },] },
-    ];
-    /** @nocollapse */
-    PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
 
@@ -685,7 +642,7 @@ var PortalModule = (function () {
  * injection tokens to components inside a portal.
  * \@docs-private
  */
-var PortalInjector = (function () {
+var PortalInjector = /** @class */ (function () {
     function PortalInjector(_parentInjector, _customTokens) {
         this._parentInjector = _parentInjector;
         this._customTokens = _customTokens;

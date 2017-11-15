@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
+import '@angular/core';
 import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
-import { BidiModule, Directionality } from '@angular/cdk/bidi';
-import { CommonModule } from '@angular/common';
+import '@angular/cdk/bidi';
+import '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -25,15 +25,6 @@ class CdkStepLabel {
         this.template = template;
     }
 }
-CdkStepLabel.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepLabel]',
-            },] },
-];
-/** @nocollapse */
-CdkStepLabel.ctorParameters = () => [
-    { type: TemplateRef, },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -55,13 +46,6 @@ class CdkStep {
      */
     constructor(_stepper) {
         this._stepper = _stepper;
-        /**
-         * Whether user has seen the expanded step content or not.
-         */
-        this.interacted = false;
-        this._editable = true;
-        this._optional = false;
-        this._customCompleted = null;
     }
     /**
      * Whether the user can return to this step once it has been marked as complted.
@@ -123,28 +107,6 @@ class CdkStep {
         this._stepper._stateChanged();
     }
 }
-CdkStep.decorators = [
-    { type: Component, args: [{selector: 'cdk-step',
-                exportAs: 'cdkStep',
-                template: "<ng-template><ng-content></ng-content></ng-template>",
-                encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
-                changeDetection: ChangeDetectionStrategy.OnPush,
-            },] },
-];
-/** @nocollapse */
-CdkStep.ctorParameters = () => [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] },] },
-];
-CdkStep.propDecorators = {
-    "stepLabel": [{ type: ContentChild, args: [CdkStepLabel,] },],
-    "content": [{ type: ViewChild, args: [TemplateRef,] },],
-    "stepControl": [{ type: Input },],
-    "label": [{ type: Input },],
-    "editable": [{ type: Input },],
-    "optional": [{ type: Input },],
-    "completed": [{ type: Input },],
-};
 class CdkStepper {
     /**
      * @param {?} _dir
@@ -153,16 +115,6 @@ class CdkStepper {
     constructor(_dir, _changeDetectorRef) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
-        this._linear = false;
-        this._selectedIndex = 0;
-        /**
-         * Event emitted when the selected step has changed.
-         */
-        this.selectionChange = new EventEmitter();
-        /**
-         * The index of the step that the focus can be set.
-         */
-        this._focusIndex = 0;
         this._groupId = nextId++;
     }
     /**
@@ -364,24 +316,6 @@ class CdkStepper {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     }
 }
-CdkStepper.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepper]',
-                exportAs: 'cdkStepper',
-            },] },
-];
-/** @nocollapse */
-CdkStepper.ctorParameters = () => [
-    { type: Directionality, decorators: [{ type: Optional },] },
-    { type: ChangeDetectorRef, },
-];
-CdkStepper.propDecorators = {
-    "_steps": [{ type: ContentChildren, args: [CdkStep,] },],
-    "linear": [{ type: Input },],
-    "selectedIndex": [{ type: Input },],
-    "selected": [{ type: Input },],
-    "selectionChange": [{ type: Output },],
-};
 
 /**
  * @fileoverview added by tsickle
@@ -399,16 +333,6 @@ class CdkStepperNext {
         this._stepper = _stepper;
     }
 }
-CdkStepperNext.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperNext]',
-                host: { '(click)': '_stepper.next()' }
-            },] },
-];
-/** @nocollapse */
-CdkStepperNext.ctorParameters = () => [
-    { type: CdkStepper, },
-];
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
@@ -420,16 +344,6 @@ class CdkStepperPrevious {
         this._stepper = _stepper;
     }
 }
-CdkStepperPrevious.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperPrevious]',
-                host: { '(click)': '_stepper.previous()' }
-            },] },
-];
-/** @nocollapse */
-CdkStepperPrevious.ctorParameters = () => [
-    { type: CdkStepper, },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -438,15 +352,6 @@ CdkStepperPrevious.ctorParameters = () => [
 
 class CdkStepperModule {
 }
-CdkStepperModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [BidiModule, CommonModule],
-                exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
-                declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
-            },] },
-];
-/** @nocollapse */
-CdkStepperModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

@@ -11,7 +11,7 @@ import { CdkCellDef } from './cell';
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
-export declare const CDK_ROW_TEMPLATE: string;
+export declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
 /**
  * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
  * for changes and notifying the table.

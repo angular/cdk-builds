@@ -20,7 +20,7 @@
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * \@docs-private
  */
-var MutationObserverFactory = (function () {
+var MutationObserverFactory = /** @class */ (function () {
     function MutationObserverFactory() {
     }
     /**
@@ -34,30 +34,17 @@ var MutationObserverFactory = (function () {
     function (callback) {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
-    MutationObserverFactory.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    MutationObserverFactory.ctorParameters = function () { return []; };
     return MutationObserverFactory;
 }());
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
  */
-var CdkObserveContent = (function () {
+var CdkObserveContent = /** @class */ (function () {
     function CdkObserveContent(_mutationObserverFactory, _elementRef, _ngZone) {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
-        /**
-         * Event emitted for each change in the element's content.
-         */
-        this.event = new _angular_core.EventEmitter();
-        /**
-         * Used for debouncing the emitted values to the observeContent event.
-         */
-        this._debouncer = new rxjs_Subject.Subject();
     }
     /**
      * @return {?}
@@ -101,36 +88,11 @@ var CdkObserveContent = (function () {
         }
         this._debouncer.complete();
     };
-    CdkObserveContent.decorators = [
-        { type: _angular_core.Directive, args: [{
-                    selector: '[cdkObserveContent]',
-                    exportAs: 'cdkObserveContent',
-                },] },
-    ];
-    /** @nocollapse */
-    CdkObserveContent.ctorParameters = function () { return [
-        { type: MutationObserverFactory, },
-        { type: _angular_core.ElementRef, },
-        { type: _angular_core.NgZone, },
-    ]; };
-    CdkObserveContent.propDecorators = {
-        "event": [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
-        "debounce": [{ type: _angular_core.Input },],
-    };
     return CdkObserveContent;
 }());
-var ObserversModule = (function () {
+var ObserversModule = /** @class */ (function () {
     function ObserversModule() {
     }
-    ObserversModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    exports: [CdkObserveContent],
-                    declarations: [CdkObserveContent],
-                    providers: [MutationObserverFactory]
-                },] },
-    ];
-    /** @nocollapse */
-    ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
 

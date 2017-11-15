@@ -23,7 +23,7 @@ var styleElementForWebkitCompatibility = new Map();
 /**
  * A utility for calling matchMedia queries.
  */
-var MediaMatcher = (function () {
+var MediaMatcher = /** @class */ (function () {
     function MediaMatcher(platform) {
         this.platform = platform;
         this._matchMedia = this.platform.isBrowser ?
@@ -60,13 +60,6 @@ var MediaMatcher = (function () {
         }
         return this._matchMedia(query);
     };
-    MediaMatcher.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    MediaMatcher.ctorParameters = function () { return [
-        { type: _angular_cdk_platform.Platform, },
-    ]; };
     return MediaMatcher;
 }());
 /**
@@ -120,18 +113,10 @@ function noopMatchMedia(query) {
 /**
  * Utility for checking the matching state of \@media queries.
  */
-var BreakpointObserver = (function () {
+var BreakpointObserver = /** @class */ (function () {
     function BreakpointObserver(mediaMatcher, zone) {
         this.mediaMatcher = mediaMatcher;
         this.zone = zone;
-        /**
-         * A map of all media queries currently being listened for.
-         */
-        this._queries = new Map();
-        /**
-         * A subject for all other observables to takeUntil based on.
-         */
-        this._destroySubject = new rxjs_Subject.Subject();
     }
     /** Completes the active subject, signalling to all other observables to complete. */
     /**
@@ -233,14 +218,6 @@ var BreakpointObserver = (function () {
         this._queries.set(query, output);
         return output;
     };
-    BreakpointObserver.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    BreakpointObserver.ctorParameters = function () { return [
-        { type: MediaMatcher, },
-        { type: _angular_core.NgZone, },
-    ]; };
     return BreakpointObserver;
 }());
 
@@ -269,17 +246,9 @@ var Breakpoints = {
  * @suppress {checkTypes} checked by tsc
  */
 
-var LayoutModule = (function () {
+var LayoutModule = /** @class */ (function () {
     function LayoutModule() {
     }
-    LayoutModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    providers: [BreakpointObserver, MediaMatcher],
-                    imports: [_angular_cdk_platform.PlatformModule],
-                },] },
-    ];
-    /** @nocollapse */
-    LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
 

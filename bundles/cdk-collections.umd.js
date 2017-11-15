@@ -18,7 +18,7 @@
 /**
  * @abstract
  */
-var DataSource = (function () {
+var DataSource = /** @class */ (function () {
     function DataSource() {
     }
     return DataSource;
@@ -32,29 +32,13 @@ var DataSource = (function () {
 /**
  * Class to be used to power selecting one or more options from a list.
  */
-var SelectionModel = (function () {
+var SelectionModel = /** @class */ (function () {
     function SelectionModel(_isMulti, initiallySelectedValues, _emitChanges) {
         if (_isMulti === void 0) { _isMulti = false; }
         if (_emitChanges === void 0) { _emitChanges = true; }
         var _this = this;
         this._isMulti = _isMulti;
         this._emitChanges = _emitChanges;
-        /**
-         * Currently-selected values.
-         */
-        this._selection = new Set();
-        /**
-         * Keeps track of the deselected options that haven't been emitted by the change event.
-         */
-        this._deselectedToEmit = [];
-        /**
-         * Keeps track of the selected option that haven't been emitted by the change event.
-         */
-        this._selectedToEmit = [];
-        /**
-         * Event emitted when the value has changed.
-         */
-        this.onChange = this._emitChanges ? new rxjs_Subject.Subject() : null;
         if (initiallySelectedValues) {
             if (_isMulti) {
                 initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });
@@ -315,7 +299,7 @@ var SelectionModel = (function () {
  * Describes an event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
  */
-var SelectionChange = (function () {
+var SelectionChange = /** @class */ (function () {
     function SelectionChange(added, removed) {
         this.added = added;
         this.removed = removed;
@@ -345,9 +329,8 @@ function getMultipleValuesInSingleSelectionError() {
  * This service does not *store* any IDs and names because they may change at any time, so it is
  * less error-prone if they are simply passed through when the events occur.
  */
-var UniqueSelectionDispatcher = (function () {
+var UniqueSelectionDispatcher = /** @class */ (function () {
     function UniqueSelectionDispatcher() {
-        this._listeners = [];
     }
     /**
      * Notify other items that selection for the given name has been set.
@@ -395,11 +378,6 @@ var UniqueSelectionDispatcher = (function () {
             });
         };
     };
-    UniqueSelectionDispatcher.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    UniqueSelectionDispatcher.ctorParameters = function () { return []; };
     return UniqueSelectionDispatcher;
 }());
 /**
