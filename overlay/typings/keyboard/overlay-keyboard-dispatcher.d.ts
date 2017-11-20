@@ -28,6 +28,8 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
      * events to the appropriate overlay.
      */
     private _subscribeToKeydownEvents();
+    /** Removes the global keydown subscription. */
+    private _unsubscribeFromKeydownEvents();
     /** Select the appropriate overlay from a keydown event. */
     private _selectOverlayFromEvent(event);
 }

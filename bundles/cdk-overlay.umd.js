@@ -652,6 +652,7 @@ var OverlayRef = (function () {
         this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
+        this._keydownEvents.complete();
         if (isAttached) {
             this._detachments.next();
         }
@@ -1825,10 +1826,7 @@ var OverlayKeyboardDispatcher = (function () {
      * @return {?}
      */
     function () {
-        if (this._keydownEventSubscription) {
-            this._keydownEventSubscription.unsubscribe();
-            this._keydownEventSubscription = null;
-        }
+        this._unsubscribeFromKeydownEvents();
     };
     /** Add a new overlay to the list of attached overlay refs. */
     /**
@@ -1864,6 +1862,10 @@ var OverlayKeyboardDispatcher = (function () {
         if (index > -1) {
             this._attachedOverlays.splice(index, 1);
         }
+        // Remove the global listener once there are no more overlays.
+        if (this._attachedOverlays.length === 0) {
+            this._unsubscribeFromKeydownEvents();
+        }
     };
     /**
      * Subscribe to keydown events that land on the body and dispatch those
@@ -1883,6 +1885,20 @@ var OverlayKeyboardDispatcher = (function () {
             // Dispatch keydown event to correct overlay reference
             _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });
+    };
+    /**
+     * Removes the global keydown subscription.
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype._unsubscribeFromKeydownEvents = /**
+     * Removes the global keydown subscription.
+     * @return {?}
+     */
+    function () {
+        if (this._keydownEventSubscription) {
+            this._keydownEventSubscription.unsubscribe();
+            this._keydownEventSubscription = null;
+        }
     };
     /**
      * Select the appropriate overlay from a keydown event.

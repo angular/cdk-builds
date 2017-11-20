@@ -554,6 +554,7 @@ class OverlayRef {
         this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
+        this._keydownEvents.complete();
         if (isAttached) {
             this._detachments.next();
         }
@@ -1374,10 +1375,7 @@ class OverlayKeyboardDispatcher {
      * @return {?}
      */
     ngOnDestroy() {
-        if (this._keydownEventSubscription) {
-            this._keydownEventSubscription.unsubscribe();
-            this._keydownEventSubscription = null;
-        }
+        this._unsubscribeFromKeydownEvents();
     }
     /**
      * Add a new overlay to the list of attached overlay refs.
@@ -1401,6 +1399,10 @@ class OverlayKeyboardDispatcher {
         if (index > -1) {
             this._attachedOverlays.splice(index, 1);
         }
+        // Remove the global listener once there are no more overlays.
+        if (this._attachedOverlays.length === 0) {
+            this._unsubscribeFromKeydownEvents();
+        }
     }
     /**
      * Subscribe to keydown events that land on the body and dispatch those
@@ -1413,6 +1415,16 @@ class OverlayKeyboardDispatcher {
             // Dispatch keydown event to correct overlay reference
             this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });
+    }
+    /**
+     * Removes the global keydown subscription.
+     * @return {?}
+     */
+    _unsubscribeFromKeydownEvents() {
+        if (this._keydownEventSubscription) {
+            this._keydownEventSubscription.unsubscribe();
+            this._keydownEventSubscription = null;
+        }
     }
     /**
      * Select the appropriate overlay from a keydown event.
