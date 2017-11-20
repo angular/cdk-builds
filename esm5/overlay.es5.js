@@ -364,6 +364,43 @@ var BlockScrollStrategy = (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
+ * \@docs-private
+ * @param {?} element Dimensions of the element (from getBoundingClientRect)
+ * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
+ * @return {?} Whether the element is scrolled out of view
+ */
+function isElementScrolledOutsideView(element, scrollContainers) {
+    return scrollContainers.some(function (containerBounds) {
+        var /** @type {?} */ outsideAbove = element.bottom < containerBounds.top;
+        var /** @type {?} */ outsideBelow = element.top > containerBounds.bottom;
+        var /** @type {?} */ outsideLeft = element.right < containerBounds.left;
+        var /** @type {?} */ outsideRight = element.left > containerBounds.right;
+        return outsideAbove || outsideBelow || outsideLeft || outsideRight;
+    });
+}
+/**
+ * Gets whether an element is clipped by any of its scrolling containers.
+ * \@docs-private
+ * @param {?} element Dimensions of the element (from getBoundingClientRect)
+ * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
+ * @return {?} Whether the element is clipped
+ */
+function isElementClippedByScrolling(element, scrollContainers) {
+    return scrollContainers.some(function (scrollContainerRect) {
+        var /** @type {?} */ clippedAbove = element.top < scrollContainerRect.top;
+        var /** @type {?} */ clippedBelow = element.bottom > scrollContainerRect.bottom;
+        var /** @type {?} */ clippedLeft = element.left < scrollContainerRect.left;
+        var /** @type {?} */ clippedRight = element.right > scrollContainerRect.right;
+        return clippedAbove || clippedBelow || clippedLeft || clippedRight;
+    });
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
  * Config options for the RepositionScrollStrategy.
  * @record
  */
@@ -372,8 +409,10 @@ var BlockScrollStrategy = (function () {
  * Strategy that will update the element position as the user is scrolling.
  */
 var RepositionScrollStrategy = (function () {
-    function RepositionScrollStrategy(_scrollDispatcher, _config) {
+    function RepositionScrollStrategy(_scrollDispatcher, _viewportRuler, _ngZone, _config) {
         this._scrollDispatcher = _scrollDispatcher;
+        this._viewportRuler = _viewportRuler;
+        this._ngZone = _ngZone;
         this._config = _config;
         this._scrollSubscription = null;
     }
@@ -409,6 +448,18 @@ var RepositionScrollStrategy = (function () {
             var /** @type {?} */ throttle = this._config ? this._config.scrollThrottle : 0;
             this._scrollSubscription = this._scrollDispatcher.scrolled(throttle).subscribe(function () {
                 _this._overlayRef.updatePosition();
+                // TODO(crisbeto): make `close` on by default once all components can handle it.
+                if (_this._config && _this._config.autoClose) {
+                    var /** @type {?} */ overlayRect = _this._overlayRef.overlayElement.getBoundingClientRect();
+                    var _a = _this._viewportRuler.getViewportSize(), width = _a.width, height = _a.height;
+                    // TODO(crisbeto): include all ancestor scroll containers here once
+                    // we have a way of exposing the trigger element to the scroll strategy.
+                    var /** @type {?} */ parentRects = [{ width: width, height: height, bottom: height, right: width, top: 0, left: 0 }];
+                    if (isElementScrolledOutsideView(overlayRect, parentRects)) {
+                        _this.disable();
+                        _this._ngZone.run(function () { return _this._overlayRef.detach(); });
+                    }
+                }
             });
         }
     };
@@ -465,7 +516,7 @@ var ScrollStrategyOptions = (function () {
          * Allows debouncing the reposition calls.
          */
         this.reposition = function (config) {
-            return new RepositionScrollStrategy(_this._scrollDispatcher, config);
+            return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config);
         };
     }
     ScrollStrategyOptions.decorators = [
@@ -885,43 +936,6 @@ var OverlayRef = (function () {
  */
 function formatCssUnit(value) {
     return typeof value === 'string' ? /** @type {?} */ (value) : value + "px";
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
- * \@docs-private
- * @param {?} element Dimensions of the element (from getBoundingClientRect)
- * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
- * @return {?} Whether the element is scrolled out of view
- */
-function isElementScrolledOutsideView(element, scrollContainers) {
-    return scrollContainers.some(function (containerBounds) {
-        var /** @type {?} */ outsideAbove = element.bottom < containerBounds.top;
-        var /** @type {?} */ outsideBelow = element.top > containerBounds.bottom;
-        var /** @type {?} */ outsideLeft = element.right < containerBounds.left;
-        var /** @type {?} */ outsideRight = element.left > containerBounds.right;
-        return outsideAbove || outsideBelow || outsideLeft || outsideRight;
-    });
-}
-/**
- * Gets whether an element is clipped by any of its scrolling containers.
- * \@docs-private
- * @param {?} element Dimensions of the element (from getBoundingClientRect)
- * @param {?} scrollContainers Dimensions of element's scrolling containers (from getBoundingClientRect)
- * @return {?} Whether the element is clipped
- */
-function isElementClippedByScrolling(element, scrollContainers) {
-    return scrollContainers.some(function (scrollContainerRect) {
-        var /** @type {?} */ clippedAbove = element.top < scrollContainerRect.top;
-        var /** @type {?} */ clippedBelow = element.bottom > scrollContainerRect.bottom;
-        var /** @type {?} */ clippedLeft = element.left < scrollContainerRect.left;
-        var /** @type {?} */ clippedRight = element.right > scrollContainerRect.right;
-        return clippedAbove || clippedBelow || clippedLeft || clippedRight;
-    });
 }
 
 /**
