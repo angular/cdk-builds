@@ -5,10 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter, QueryList, ElementRef, TemplateRef, ChangeDetectorRef, OnChanges } from '@angular/core';
+import { EventEmitter, QueryList, ElementRef, TemplateRef, ChangeDetectorRef, OnChanges, OnDestroy } from '@angular/core';
 import { CdkStepLabel } from './step-label';
 import { AbstractControl } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
+import { Subject } from 'rxjs/Subject';
 /**
  * Position state of the content of each step in stepper that is used for transitioning
  * the content into correct position upon step selection change.
@@ -52,9 +53,11 @@ export declare class CdkStep implements OnChanges {
     select(): void;
     ngOnChanges(): void;
 }
-export declare class CdkStepper {
+export declare class CdkStepper implements OnDestroy {
     private _dir;
     private _changeDetectorRef;
+    /** Emits when the component is destroyed. */
+    protected _destroyed: Subject<void>;
     /** The list of step components that the stepper is holding. */
     _steps: QueryList<CdkStep>;
     /** The list of step headers of the steps in the stepper. */
@@ -74,6 +77,7 @@ export declare class CdkStepper {
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
     constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef);
+    ngOnDestroy(): void;
     /** Selects and focuses the next step in list. */
     next(): void;
     /** Selects and focuses the previous step in list. */

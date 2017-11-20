@@ -10,6 +10,7 @@ import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
+import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -153,6 +154,10 @@ class CdkStepper {
     constructor(_dir, _changeDetectorRef) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        /**
+         * Emits when the component is destroyed.
+         */
+        this._destroyed = new Subject();
         this._linear = false;
         this._selectedIndex = 0;
         /**
@@ -211,6 +216,13 @@ class CdkStepper {
      */
     set selected(step) {
         this.selectedIndex = this._steps.toArray().indexOf(step);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._destroyed.next();
+        this._destroyed.complete();
     }
     /**
      * Selects and focuses the next step in list.

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/keycodes'), require('@angular/cdk/coercion'), require('@angular/forms'), require('@angular/cdk/bidi'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/keycodes', '@angular/cdk/coercion', '@angular/forms', '@angular/cdk/bidi', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = global.ng.cdk.stepper || {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion,global.ng.forms,global.ng.cdk.bidi,global.ng.common));
-}(this, (function (exports,_angular_core,_angular_cdk_keycodes,_angular_cdk_coercion,_angular_forms,_angular_cdk_bidi,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/keycodes'), require('@angular/cdk/coercion'), require('@angular/forms'), require('@angular/cdk/bidi'), require('rxjs/Subject'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/keycodes', '@angular/cdk/coercion', '@angular/forms', '@angular/cdk/bidi', 'rxjs/Subject', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = global.ng.cdk.stepper || {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion,global.ng.forms,global.ng.cdk.bidi,global.Rx,global.ng.common));
+}(this, (function (exports,_angular_core,_angular_cdk_keycodes,_angular_cdk_coercion,_angular_forms,_angular_cdk_bidi,rxjs_Subject,_angular_common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -171,6 +171,10 @@ var CdkStepper = (function () {
     function CdkStepper(_dir, _changeDetectorRef) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        /**
+         * Emits when the component is destroyed.
+         */
+        this._destroyed = new rxjs_Subject.Subject();
         this._linear = false;
         this._selectedIndex = 0;
         /**
@@ -242,6 +246,16 @@ var CdkStepper = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._destroyed.next();
+        this._destroyed.complete();
+    };
     /** Selects and focuses the next step in list. */
     /**
      * Selects and focuses the next step in list.
