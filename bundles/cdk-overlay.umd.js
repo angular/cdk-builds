@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('rxjs/operators/first'), require('rxjs/Subscription'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/Subject', 'rxjs/operators/first', 'rxjs/Subscription', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx,global.Rx.Observable,global.Rx,global.Rx.Observable,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_Subject,rxjs_operators_first,rxjs_Subscription,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/Subject'), require('rxjs/operators/first'), require('rxjs/Subscription'), require('@angular/common'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/Subject', 'rxjs/operators/first', 'rxjs/Subscription', '@angular/common', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx,global.Rx.Observable,global.Rx,global.ng.common,global.Rx.Observable,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_Subject,rxjs_operators_first,rxjs_Subscription,_angular_common,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -952,9 +952,10 @@ function isElementClippedByScrolling(element, scrollContainers) {
  * of the overlay.
  */
 var ConnectedPositionStrategy = (function () {
-    function ConnectedPositionStrategy(originPos, overlayPos, _connectedTo, _viewportRuler) {
+    function ConnectedPositionStrategy(originPos, overlayPos, _connectedTo, _viewportRuler, _document) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
+        this._document = _document;
         /**
          * Layout direction of the position strategy.
          */
@@ -1412,7 +1413,7 @@ var ConnectedPositionStrategy = (function () {
         // from the bottom of the viewport rather than the top.
         var /** @type {?} */ y = verticalStyleProperty === 'top' ?
             overlayPoint.y :
-            document.documentElement.clientHeight - (overlayPoint.y + overlayRect.height);
+            this._document.documentElement.clientHeight - (overlayPoint.y + overlayRect.height);
         // We want to set either `left` or `right` based on whether the overlay wants to appear "before"
         // or "after" the origin, which determines the direction in which the element will expand.
         // For the horizontal axis, the meaning of "before" and "after" change based on whether the
@@ -1428,7 +1429,7 @@ var ConnectedPositionStrategy = (function () {
         // from the right edge of the viewport rather than the left edge.
         var /** @type {?} */ x = horizontalStyleProperty === 'left' ?
             overlayPoint.x :
-            document.documentElement.clientWidth - (overlayPoint.x + overlayRect.width);
+            this._document.documentElement.clientWidth - (overlayPoint.x + overlayRect.width);
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
         ['top', 'bottom', 'left', 'right'].forEach(function (p) { return element.style[p] = null; });
@@ -1474,7 +1475,8 @@ var ConnectedPositionStrategy = (function () {
  * element to become blurry.
  */
 var GlobalPositionStrategy = (function () {
-    function GlobalPositionStrategy() {
+    function GlobalPositionStrategy(_document) {
+        this._document = _document;
         this._cssPosition = 'static';
         this._topOffset = '';
         this._bottomOffset = '';
@@ -1702,10 +1704,10 @@ var GlobalPositionStrategy = (function () {
     function () {
         var /** @type {?} */ element = this._overlayRef.overlayElement;
         if (!this._wrapper && element.parentNode) {
-            this._wrapper = document.createElement('div');
-            this._wrapper.classList.add('cdk-global-overlay-wrapper');
-            element.parentNode.insertBefore(this._wrapper, element);
-            this._wrapper.appendChild(element);
+            this._wrapper = this._document.createElement('div'); /** @type {?} */
+            ((this._wrapper)).classList.add('cdk-global-overlay-wrapper');
+            element.parentNode.insertBefore(/** @type {?} */ ((this._wrapper)), element); /** @type {?} */
+            ((this._wrapper)).appendChild(element);
         }
         var /** @type {?} */ styles = element.style;
         var /** @type {?} */ parentStyles = (/** @type {?} */ (element.parentNode)).style;
@@ -1746,8 +1748,9 @@ var GlobalPositionStrategy = (function () {
  * Builder for overlay position strategy.
  */
 var OverlayPositionBuilder = (function () {
-    function OverlayPositionBuilder(_viewportRuler) {
+    function OverlayPositionBuilder(_viewportRuler, _document) {
         this._viewportRuler = _viewportRuler;
+        this._document = _document;
     }
     /**
      * Creates a global position strategy.
@@ -1761,7 +1764,7 @@ var OverlayPositionBuilder = (function () {
      * @return {?}
      */
     function () {
-        return new GlobalPositionStrategy();
+        return new GlobalPositionStrategy(this._document);
     };
     /**
      * Creates a relative position strategy.
@@ -1784,7 +1787,7 @@ var OverlayPositionBuilder = (function () {
      * @return {?}
      */
     function (elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler);
+        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document);
     };
     OverlayPositionBuilder.decorators = [
         { type: _angular_core.Injectable },
@@ -1792,6 +1795,7 @@ var OverlayPositionBuilder = (function () {
     /** @nocollapse */
     OverlayPositionBuilder.ctorParameters = function () { return [
         { type: _angular_cdk_scrolling.ViewportRuler, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return OverlayPositionBuilder;
 }());
@@ -1807,7 +1811,8 @@ var OverlayPositionBuilder = (function () {
  * on event target and order of overlay opens.
  */
 var OverlayKeyboardDispatcher = (function () {
-    function OverlayKeyboardDispatcher() {
+    function OverlayKeyboardDispatcher(_document) {
+        this._document = _document;
         /**
          * Currently attached overlays in the order they were attached.
          */
@@ -1872,7 +1877,7 @@ var OverlayKeyboardDispatcher = (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ bodyKeydownEvents = rxjs_observable_fromEvent.fromEvent(document.body, 'keydown');
+        var /** @type {?} */ bodyKeydownEvents = rxjs_observable_fromEvent.fromEvent(this._document.body, 'keydown');
         this._keydownEventSubscription = bodyKeydownEvents.pipe(rxjs_operators_filter.filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
             // Dispatch keydown event to correct overlay reference
             // Dispatch keydown event to correct overlay reference
@@ -1902,16 +1907,19 @@ var OverlayKeyboardDispatcher = (function () {
         { type: _angular_core.Injectable },
     ];
     /** @nocollapse */
-    OverlayKeyboardDispatcher.ctorParameters = function () { return []; };
+    OverlayKeyboardDispatcher.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return OverlayKeyboardDispatcher;
 }());
 /**
  * \@docs-private
  * @param {?} dispatcher
+ * @param {?} _document
  * @return {?}
  */
-function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher) {
-    return dispatcher || new OverlayKeyboardDispatcher();
+function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
+    return dispatcher || new OverlayKeyboardDispatcher(_document);
 }
 /**
  * \@docs-private
@@ -1920,7 +1928,13 @@ var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     // If there is already an OverlayKeyboardDispatcher available, use that.
     // Otherwise, provide a new one.
     provide: OverlayKeyboardDispatcher,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), OverlayKeyboardDispatcher]],
+    deps: [
+        [new _angular_core.Optional(), new _angular_core.SkipSelf(), OverlayKeyboardDispatcher],
+        /** @type {?} */ (
+        // Coerce to `InjectionToken` so that the `deps` match the "shape"
+        // of the type expected by Angular
+        _angular_common.DOCUMENT)
+    ],
     useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
 };
 
@@ -1933,7 +1947,8 @@ var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
  * Container inside which all overlays will render.
  */
 var OverlayContainer = (function () {
-    function OverlayContainer() {
+    function OverlayContainer(_document) {
+        this._document = _document;
     }
     /**
      * @return {?}
@@ -1985,25 +2000,28 @@ var OverlayContainer = (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ container = document.createElement('div');
+        var /** @type {?} */ container = this._document.createElement('div');
         container.classList.add('cdk-overlay-container');
-        document.body.appendChild(container);
+        this._document.body.appendChild(container);
         this._containerElement = container;
     };
     OverlayContainer.decorators = [
         { type: _angular_core.Injectable },
     ];
     /** @nocollapse */
-    OverlayContainer.ctorParameters = function () { return []; };
+    OverlayContainer.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return OverlayContainer;
 }());
 /**
  * \@docs-private
  * @param {?} parentContainer
+ * @param {?} _document
  * @return {?}
  */
-function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer) {
-    return parentContainer || new OverlayContainer();
+function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
+    return parentContainer || new OverlayContainer(_document);
 }
 /**
  * \@docs-private
@@ -2011,7 +2029,11 @@ function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer) {
 var OVERLAY_CONTAINER_PROVIDER = {
     // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
     provide: OverlayContainer,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), OverlayContainer]],
+    deps: [
+        [new _angular_core.Optional(), new _angular_core.SkipSelf(), OverlayContainer],
+        /** @type {?} */ (_angular_common.DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+        ) // We need to use the InjectionToken somewhere to keep TS happy
+    ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
 
@@ -2037,7 +2059,7 @@ var defaultConfig = new OverlayConfig();
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -2046,6 +2068,7 @@ var Overlay = (function () {
         this._appRef = _appRef;
         this._injector = _injector;
         this._ngZone = _ngZone;
+        this._document = _document;
     }
     /**
      * Creates an overlay.
@@ -2095,7 +2118,7 @@ var Overlay = (function () {
      * @return {?} Newly-created pane element
      */
     function () {
-        var /** @type {?} */ pane = document.createElement('div');
+        var /** @type {?} */ pane = this._document.createElement('div');
         pane.id = "cdk-overlay-" + nextUniqueId++;
         pane.classList.add('cdk-overlay-pane');
         this._overlayContainer.getContainerElement().appendChild(pane);
@@ -2127,6 +2150,7 @@ var Overlay = (function () {
         { type: _angular_core.ApplicationRef, },
         { type: _angular_core.Injector, },
         { type: _angular_core.NgZone, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return Overlay;
 }());

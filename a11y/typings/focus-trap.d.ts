@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, NgZone, OnDestroy, AfterContentInit } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 import { InteractivityChecker } from './interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -17,15 +16,15 @@ import { InteractivityChecker } from './interactivity-checker';
  */
 export declare class FocusTrap {
     private _element;
-    private _platform;
     private _checker;
     private _ngZone;
+    private _document;
     private _startAnchor;
     private _endAnchor;
     /** Whether the focus trap is active. */
     enabled: boolean;
     private _enabled;
-    constructor(_element: HTMLElement, _platform: Platform, _checker: InteractivityChecker, _ngZone: NgZone, deferAnchors?: boolean);
+    constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean);
     /** Destroys the focus trap by cleaning up the anchors. */
     destroy(): void;
     /**
@@ -87,9 +86,9 @@ export declare class FocusTrap {
 /** Factory that allows easy instantiation of focus traps. */
 export declare class FocusTrapFactory {
     private _checker;
-    private _platform;
     private _ngZone;
-    constructor(_checker: InteractivityChecker, _platform: Platform, _ngZone: NgZone);
+    private _document;
+    constructor(_checker: InteractivityChecker, _ngZone: NgZone, _document: any);
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -118,7 +117,7 @@ export declare class FocusTrapDeprecatedDirective implements OnDestroy, AfterCon
 export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
     private _elementRef;
     private _focusTrapFactory;
-    private _platform;
+    private _document;
     /** Underlying FocusTrap instance. */
     focusTrap: FocusTrap;
     /** Previously focused element to restore focus to upon destroy when using autoCapture. */
@@ -131,7 +130,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
      */
     autoCapture: boolean;
     private _autoCapture;
-    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _platform: Platform);
+    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
 }

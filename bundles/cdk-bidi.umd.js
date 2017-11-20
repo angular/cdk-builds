@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/platform-browser')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/platform-browser'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = global.ng.cdk.bidi || {}),global.ng.core,global.ng.platformBrowser));
-}(this, (function (exports,_angular_core,_angular_platformBrowser) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = global.ng.cdk.bidi || {}),global.ng.core,global.ng.common));
+}(this, (function (exports,_angular_core,_angular_common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -156,7 +156,7 @@ var BidiModule = (function () {
                     exports: [Dir],
                     declarations: [Dir],
                     providers: [
-                        { provide: DIR_DOCUMENT, useExisting: _angular_platformBrowser.DOCUMENT },
+                        { provide: DIR_DOCUMENT, useExisting: _angular_common.DOCUMENT },
                         Directionality,
                     ]
                 },] },

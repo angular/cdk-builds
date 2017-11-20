@@ -5,8 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
+import { InjectionToken, Optional } from '@angular/core';
 /**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the aria-describedby.
@@ -28,8 +27,8 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  * @docs-private
  */
 export declare class AriaDescriber {
-    private _platform;
-    constructor(_platform: Platform);
+    private _document;
+    constructor(_document: any);
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
@@ -40,12 +39,37 @@ export declare class AriaDescriber {
     removeDescription(hostElement: Element, message: string): void;
     /** Unregisters all created message elements and removes the message container. */
     ngOnDestroy(): void;
+    /**
+     * Creates a new element in the visually hidden message container element with the message
+     * as its content and adds it to the message registry.
+     */
+    private _createMessageElement(message);
+    /** Deletes the message element from the global messages container. */
+    private _deleteMessageElement(message);
+    /** Creates the global container for all aria-describedby messages. */
+    private _createMessagesContainer();
+    /** Deletes the global messages container. */
+    private _deleteMessagesContainer();
+    /** Removes all cdk-describedby messages that are hosted through the element. */
+    private _removeCdkDescribedByReferenceIds(element);
+    /**
+     * Adds a message reference to the element using aria-describedby and increments the registered
+     * message's reference count.
+     */
+    private _addMessageReference(element, message);
+    /**
+     * Removes a message reference from the element using aria-describedby
+     * and decrements the registered message's reference count.
+     */
+    private _removeMessageReference(element, message);
+    /** Returns true if the element has been described by the provided message ID. */
+    private _isElementDescribedByMessage(element, message);
 }
 /** @docs-private */
-export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, platform: Platform): AriaDescriber;
+export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
 /** @docs-private */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
-    deps: (Optional[] | typeof Platform)[];
-    useFactory: (parentDispatcher: AriaDescriber, platform: Platform) => AriaDescriber;
+    deps: (Optional[] | InjectionToken<any>)[];
+    useFactory: (parentDispatcher: AriaDescriber, _document: any) => AriaDescriber;
 };

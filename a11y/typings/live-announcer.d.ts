@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, Optional, OnDestroy } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
 export declare const LIVE_ANNOUNCER_ELEMENT_TOKEN: InjectionToken<HTMLElement>;
 /** Possible politeness levels. */
 export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
 export declare class LiveAnnouncer implements OnDestroy {
+    private _document;
     private _liveElement;
-    constructor(elementToken: any, platform: Platform);
+    constructor(elementToken: any, _document: any);
     /**
      * Announces a message to screenreaders.
      * @param message Message to be announced to the screenreader
@@ -23,10 +23,10 @@ export declare class LiveAnnouncer implements OnDestroy {
     private _createLiveElement();
 }
 /** @docs-private */
-export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, platform: Platform): LiveAnnouncer;
+export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, _document: any): LiveAnnouncer;
 /** @docs-private */
 export declare const LIVE_ANNOUNCER_PROVIDER: {
     provide: typeof LiveAnnouncer;
-    deps: (Optional[] | typeof Platform)[];
-    useFactory: (parentDispatcher: LiveAnnouncer, liveElement: any, platform: Platform) => LiveAnnouncer;
+    deps: (InjectionToken<Document> | Optional[])[];
+    useFactory: (parentDispatcher: LiveAnnouncer, liveElement: any, _document: any) => LiveAnnouncer;
 };

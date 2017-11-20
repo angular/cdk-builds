@@ -112,6 +112,6 @@ export declare function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher: FocusMo
 /** @docs-private */
 export declare const FOCUS_MONITOR_PROVIDER: {
     provide: typeof FocusMonitor;
-    deps: (Optional[] | typeof Platform | typeof NgZone)[];
+    deps: (Optional[] | typeof NgZone | typeof Platform)[];
     useFactory: (parentDispatcher: FocusMonitor, ngZone: NgZone, platform: Platform) => FocusMonitor;
 };

@@ -30,9 +30,10 @@ export declare class Overlay {
     private _appRef;
     private _injector;
     private _ngZone;
+    private _document;
     constructor(
         /** Scrolling strategies that can be used when creating an overlay. */
-        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _appRef: ApplicationRef, _injector: Injector, _ngZone: NgZone);
+        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _appRef: ApplicationRef, _injector: Injector, _ngZone: NgZone, _document: any);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.

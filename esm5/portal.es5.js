@@ -68,6 +68,7 @@ function throwNoPortalAttachedError() {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * Interface that can be used to generically type a class.
  * @record
  */
 

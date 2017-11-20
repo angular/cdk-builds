@@ -13,7 +13,8 @@ import { OverlayConnectionPosition, OriginConnectionPosition } from './connected
 /** Builder for overlay position strategy. */
 export declare class OverlayPositionBuilder {
     private _viewportRuler;
-    constructor(_viewportRuler: ViewportRuler);
+    private _document;
+    constructor(_viewportRuler: ViewportRuler, _document: any);
     /**
      * Creates a global position strategy.
      */

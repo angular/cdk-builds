@@ -12,6 +12,7 @@ import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/port
 import { Subject } from 'rxjs/Subject';
 import { first } from 'rxjs/operators/first';
 import { Subscription } from 'rxjs/Subscription';
+import { DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators/filter';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -783,10 +784,12 @@ class ConnectedPositionStrategy {
      * @param {?} overlayPos
      * @param {?} _connectedTo
      * @param {?} _viewportRuler
+     * @param {?} _document
      */
-    constructor(originPos, overlayPos, _connectedTo, _viewportRuler) {
+    constructor(originPos, overlayPos, _connectedTo, _viewportRuler, _document) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
+        this._document = _document;
         /**
          * Layout direction of the position strategy.
          */
@@ -1094,7 +1097,7 @@ class ConnectedPositionStrategy {
         // from the bottom of the viewport rather than the top.
         let /** @type {?} */ y = verticalStyleProperty === 'top' ?
             overlayPoint.y :
-            document.documentElement.clientHeight - (overlayPoint.y + overlayRect.height);
+            this._document.documentElement.clientHeight - (overlayPoint.y + overlayRect.height);
         // We want to set either `left` or `right` based on whether the overlay wants to appear "before"
         // or "after" the origin, which determines the direction in which the element will expand.
         // For the horizontal axis, the meaning of "before" and "after" change based on whether the
@@ -1110,7 +1113,7 @@ class ConnectedPositionStrategy {
         // from the right edge of the viewport rather than the left edge.
         let /** @type {?} */ x = horizontalStyleProperty === 'left' ?
             overlayPoint.x :
-            document.documentElement.clientWidth - (overlayPoint.x + overlayRect.width);
+            this._document.documentElement.clientWidth - (overlayPoint.x + overlayRect.width);
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
         ['top', 'bottom', 'left', 'right'].forEach(p => element.style[p] = null);
@@ -1145,7 +1148,11 @@ class ConnectedPositionStrategy {
  * element to become blurry.
  */
 class GlobalPositionStrategy {
-    constructor() {
+    /**
+     * @param {?} _document
+     */
+    constructor(_document) {
+        this._document = _document;
         this._cssPosition = 'static';
         this._topOffset = '';
         this._bottomOffset = '';
@@ -1269,10 +1276,10 @@ class GlobalPositionStrategy {
     apply() {
         const /** @type {?} */ element = this._overlayRef.overlayElement;
         if (!this._wrapper && element.parentNode) {
-            this._wrapper = document.createElement('div');
-            this._wrapper.classList.add('cdk-global-overlay-wrapper');
-            element.parentNode.insertBefore(this._wrapper, element);
-            this._wrapper.appendChild(element);
+            this._wrapper = this._document.createElement('div'); /** @type {?} */
+            ((this._wrapper)).classList.add('cdk-global-overlay-wrapper');
+            element.parentNode.insertBefore(/** @type {?} */ ((this._wrapper)), element); /** @type {?} */
+            ((this._wrapper)).appendChild(element);
         }
         let /** @type {?} */ styles = element.style;
         let /** @type {?} */ parentStyles = (/** @type {?} */ (element.parentNode)).style;
@@ -1309,16 +1316,18 @@ class GlobalPositionStrategy {
 class OverlayPositionBuilder {
     /**
      * @param {?} _viewportRuler
+     * @param {?} _document
      */
-    constructor(_viewportRuler) {
+    constructor(_viewportRuler, _document) {
         this._viewportRuler = _viewportRuler;
+        this._document = _document;
     }
     /**
      * Creates a global position strategy.
      * @return {?}
      */
     global() {
-        return new GlobalPositionStrategy();
+        return new GlobalPositionStrategy(this._document);
     }
     /**
      * Creates a relative position strategy.
@@ -1328,7 +1337,7 @@ class OverlayPositionBuilder {
      * @return {?}
      */
     connectedTo(elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler);
+        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document);
     }
 }
 OverlayPositionBuilder.decorators = [
@@ -1337,6 +1346,7 @@ OverlayPositionBuilder.decorators = [
 /** @nocollapse */
 OverlayPositionBuilder.ctorParameters = () => [
     { type: ViewportRuler, },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 
 /**
@@ -1350,7 +1360,11 @@ OverlayPositionBuilder.ctorParameters = () => [
  * on event target and order of overlay opens.
  */
 class OverlayKeyboardDispatcher {
-    constructor() {
+    /**
+     * @param {?} _document
+     */
+    constructor(_document) {
+        this._document = _document;
         /**
          * Currently attached overlays in the order they were attached.
          */
@@ -1394,7 +1408,7 @@ class OverlayKeyboardDispatcher {
      * @return {?}
      */
     _subscribeToKeydownEvents() {
-        const /** @type {?} */ bodyKeydownEvents = fromEvent(document.body, 'keydown');
+        const /** @type {?} */ bodyKeydownEvents = fromEvent(this._document.body, 'keydown');
         this._keydownEventSubscription = bodyKeydownEvents.pipe(filter(() => !!this._attachedOverlays.length)).subscribe(event => {
             // Dispatch keydown event to correct overlay reference
             this._selectOverlayFromEvent(event)._keydownEvents.next(event);
@@ -1419,14 +1433,17 @@ OverlayKeyboardDispatcher.decorators = [
     { type: Injectable },
 ];
 /** @nocollapse */
-OverlayKeyboardDispatcher.ctorParameters = () => [];
+OverlayKeyboardDispatcher.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+];
 /**
  * \@docs-private
  * @param {?} dispatcher
+ * @param {?} _document
  * @return {?}
  */
-function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher) {
-    return dispatcher || new OverlayKeyboardDispatcher();
+function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
+    return dispatcher || new OverlayKeyboardDispatcher(_document);
 }
 /**
  * \@docs-private
@@ -1435,7 +1452,13 @@ const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     // If there is already an OverlayKeyboardDispatcher available, use that.
     // Otherwise, provide a new one.
     provide: OverlayKeyboardDispatcher,
-    deps: [[new Optional(), new SkipSelf(), OverlayKeyboardDispatcher]],
+    deps: [
+        [new Optional(), new SkipSelf(), OverlayKeyboardDispatcher],
+        /** @type {?} */ (
+        // Coerce to `InjectionToken` so that the `deps` match the "shape"
+        // of the type expected by Angular
+        DOCUMENT)
+    ],
     useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
 };
 
@@ -1448,6 +1471,12 @@ const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
  * Container inside which all overlays will render.
  */
 class OverlayContainer {
+    /**
+     * @param {?} _document
+     */
+    constructor(_document) {
+        this._document = _document;
+    }
     /**
      * @return {?}
      */
@@ -1474,9 +1503,9 @@ class OverlayContainer {
      * @return {?}
      */
     _createContainer() {
-        let /** @type {?} */ container = document.createElement('div');
+        const /** @type {?} */ container = this._document.createElement('div');
         container.classList.add('cdk-overlay-container');
-        document.body.appendChild(container);
+        this._document.body.appendChild(container);
         this._containerElement = container;
     }
 }
@@ -1484,14 +1513,17 @@ OverlayContainer.decorators = [
     { type: Injectable },
 ];
 /** @nocollapse */
-OverlayContainer.ctorParameters = () => [];
+OverlayContainer.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+];
 /**
  * \@docs-private
  * @param {?} parentContainer
+ * @param {?} _document
  * @return {?}
  */
-function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer) {
-    return parentContainer || new OverlayContainer();
+function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
+    return parentContainer || new OverlayContainer(_document);
 }
 /**
  * \@docs-private
@@ -1499,7 +1531,11 @@ function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer) {
 const OVERLAY_CONTAINER_PROVIDER = {
     // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
     provide: OverlayContainer,
-    deps: [[new Optional(), new SkipSelf(), OverlayContainer]],
+    deps: [
+        [new Optional(), new SkipSelf(), OverlayContainer],
+        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+        ) // We need to use the InjectionToken somewhere to keep TS happy
+    ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
 
@@ -1534,8 +1570,9 @@ class Overlay {
      * @param {?} _appRef
      * @param {?} _injector
      * @param {?} _ngZone
+     * @param {?} _document
      */
-    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone) {
+    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -1544,6 +1581,7 @@ class Overlay {
         this._appRef = _appRef;
         this._injector = _injector;
         this._ngZone = _ngZone;
+        this._document = _document;
     }
     /**
      * Creates an overlay.
@@ -1568,7 +1606,7 @@ class Overlay {
      * @return {?} Newly-created pane element
      */
     _createPaneElement() {
-        let /** @type {?} */ pane = document.createElement('div');
+        const /** @type {?} */ pane = this._document.createElement('div');
         pane.id = `cdk-overlay-${nextUniqueId++}`;
         pane.classList.add('cdk-overlay-pane');
         this._overlayContainer.getContainerElement().appendChild(pane);
@@ -1596,6 +1634,7 @@ Overlay.ctorParameters = () => [
     { type: ApplicationRef, },
     { type: Injector, },
     { type: NgZone, },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 
 /**

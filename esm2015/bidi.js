@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { DOCUMENT } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle

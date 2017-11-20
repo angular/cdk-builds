@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { TemplateRef, ViewContainerRef, ElementRef, ComponentRef, EmbeddedViewRef, Injector } from '@angular/core';
+/** Interface that can be used to generically type a class. */
 export interface ComponentType<T> {
     new (...args: any[]): T;
 }

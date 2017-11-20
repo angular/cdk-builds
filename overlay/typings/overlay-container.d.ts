@@ -5,10 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, OnDestroy } from '@angular/core';
+import { InjectionToken, Optional, OnDestroy } from '@angular/core';
 /** Container inside which all overlays will render. */
 export declare class OverlayContainer implements OnDestroy {
+    private _document;
     protected _containerElement: HTMLElement;
+    constructor(_document: any);
     ngOnDestroy(): void;
     /**
      * This method returns the overlay container element. It will lazily
@@ -24,10 +26,10 @@ export declare class OverlayContainer implements OnDestroy {
     protected _createContainer(): void;
 }
 /** @docs-private */
-export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer): OverlayContainer;
+export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer, _document: any): OverlayContainer;
 /** @docs-private */
 export declare const OVERLAY_CONTAINER_PROVIDER: {
     provide: typeof OverlayContainer;
-    deps: Optional[][];
-    useFactory: (parentContainer: OverlayContainer) => OverlayContainer;
+    deps: (Optional[] | InjectionToken<any>)[];
+    useFactory: (parentContainer: OverlayContainer, _document: any) => OverlayContainer;
 };

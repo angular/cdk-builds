@@ -14,6 +14,7 @@ import { OverlayRef } from '../overlay-ref';
  * element to become blurry.
  */
 export declare class GlobalPositionStrategy implements PositionStrategy {
+    private _document;
     /** The overlay to which this strategy is attached. */
     private _overlayRef;
     private _cssPosition;
@@ -26,6 +27,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _width;
     private _height;
     private _wrapper;
+    constructor(_document: any);
     attach(overlayRef: OverlayRef): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.

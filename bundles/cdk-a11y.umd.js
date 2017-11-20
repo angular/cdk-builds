@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('rxjs/operators/first'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', 'rxjs/operators/first', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.platform,global.Rx.Observable,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.ng.common));
-}(this, (function (exports,_angular_core,_angular_cdk_coercion,_angular_cdk_platform,rxjs_operators_first,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/operators/first'), require('@angular/cdk/platform'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/operators/first', '@angular/cdk/platform', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.Rx.Observable,global.ng.cdk.platform,global.ng.common,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable));
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,rxjs_operators_first,_angular_cdk_platform,_angular_common,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -352,12 +352,12 @@ function getWindow(node) {
  * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
  */
 var FocusTrap = (function () {
-    function FocusTrap(_element, _platform, _checker, _ngZone, deferAnchors) {
+    function FocusTrap(_element, _checker, _ngZone, _document, deferAnchors) {
         if (deferAnchors === void 0) { deferAnchors = false; }
         this._element = _element;
-        this._platform = _platform;
         this._checker = _checker;
         this._ngZone = _ngZone;
+        this._document = _document;
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -417,10 +417,6 @@ var FocusTrap = (function () {
      */
     function () {
         var _this = this;
-        // If we're not on the browser, there can be no focus to trap.
-        if (!this._platform.isBrowser) {
-            return;
-        }
         if (!this._startAnchor) {
             this._startAnchor = this._createAnchor();
         }
@@ -523,9 +519,6 @@ var FocusTrap = (function () {
      * @return {?} The boundary element.
      */
     function (bound) {
-        if (!this._platform.isBrowser) {
-            return null;
-        }
         // Contains the deprecated version of selector, for temporary backwards comparability.
         var /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll("[cdk-focus-region-" + bound + "], " +
             ("[cdkFocusRegion" + bound + "], ") +
@@ -559,9 +552,6 @@ var FocusTrap = (function () {
      * @return {?} Whether focus was moved successfuly.
      */
     function () {
-        if (!this._platform.isBrowser) {
-            return false;
-        }
         // Contains the deprecated version of selector, for temporary backwards comparability.
         var /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector("[cdk-focus-initial], " +
             "[cdkFocusInitial]"));
@@ -675,7 +665,7 @@ var FocusTrap = (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ anchor = document.createElement('div');
+        var /** @type {?} */ anchor = this._document.createElement('div');
         anchor.tabIndex = this._enabled ? 0 : -1;
         anchor.classList.add('cdk-visually-hidden');
         anchor.classList.add('cdk-focus-trap-anchor');
@@ -705,10 +695,10 @@ var FocusTrap = (function () {
  * Factory that allows easy instantiation of focus traps.
  */
 var FocusTrapFactory = (function () {
-    function FocusTrapFactory(_checker, _platform, _ngZone) {
+    function FocusTrapFactory(_checker, _ngZone, _document) {
         this._checker = _checker;
-        this._platform = _platform;
         this._ngZone = _ngZone;
+        this._document = _document;
     }
     /**
      * Creates a focus-trapped region around the given element.
@@ -733,7 +723,7 @@ var FocusTrapFactory = (function () {
      */
     function (element, deferCaptureElements) {
         if (deferCaptureElements === void 0) { deferCaptureElements = false; }
-        return new FocusTrap(element, this._platform, this._checker, this._ngZone, deferCaptureElements);
+        return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     };
     FocusTrapFactory.decorators = [
         { type: _angular_core.Injectable },
@@ -741,8 +731,8 @@ var FocusTrapFactory = (function () {
     /** @nocollapse */
     FocusTrapFactory.ctorParameters = function () { return [
         { type: InteractivityChecker, },
-        { type: _angular_cdk_platform.Platform, },
         { type: _angular_core.NgZone, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return FocusTrapFactory;
 }());
@@ -810,14 +800,14 @@ var FocusTrapDeprecatedDirective = (function () {
  * Directive for trapping focus within a region.
  */
 var CdkTrapFocus = (function () {
-    function CdkTrapFocus(_elementRef, _focusTrapFactory, _platform) {
+    function CdkTrapFocus(_elementRef, _focusTrapFactory, _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
-        this._platform = _platform;
         /**
          * Previously focused element to restore focus to upon destroy when using autoCapture.
          */
         this._previouslyFocusedElement = null;
+        this._document = _document;
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
     Object.defineProperty(CdkTrapFocus.prototype, "enabled", {
@@ -872,8 +862,8 @@ var CdkTrapFocus = (function () {
      */
     function () {
         this.focusTrap.attachAnchors();
-        if (this.autoCapture && this._platform.isBrowser) {
-            this._previouslyFocusedElement = /** @type {?} */ (document.activeElement);
+        if (this.autoCapture) {
+            this._previouslyFocusedElement = /** @type {?} */ (this._document.activeElement);
             this.focusTrap.focusInitialElementWhenReady();
         }
     };
@@ -887,7 +877,7 @@ var CdkTrapFocus = (function () {
     CdkTrapFocus.ctorParameters = function () { return [
         { type: _angular_core.ElementRef, },
         { type: FocusTrapFactory, },
-        { type: _angular_cdk_platform.Platform, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     CdkTrapFocus.propDecorators = {
         "enabled": [{ type: _angular_core.Input, args: ['cdkTrapFocus',] },],
@@ -1379,8 +1369,8 @@ var messagesContainer = null;
  * \@docs-private
  */
 var AriaDescriber = (function () {
-    function AriaDescriber(_platform) {
-        this._platform = _platform;
+    function AriaDescriber(_document) {
+        this._document = _document;
     }
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
@@ -1404,14 +1394,14 @@ var AriaDescriber = (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (!this._platform.isBrowser || !message.trim()) {
+        if (!message.trim()) {
             return;
         }
         if (!messageRegistry.has(message)) {
-            createMessageElement(message);
+            this._createMessageElement(message);
         }
-        if (!isElementDescribedByMessage(hostElement, message)) {
-            addMessageReference(hostElement, message);
+        if (!this._isElementDescribedByMessage(hostElement, message)) {
+            this._addMessageReference(hostElement, message);
         }
     };
     /** Removes the host element's aria-describedby reference to the message element. */
@@ -1428,18 +1418,18 @@ var AriaDescriber = (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (!this._platform.isBrowser || !message.trim()) {
+        if (!message.trim()) {
             return;
         }
-        if (isElementDescribedByMessage(hostElement, message)) {
-            removeMessageReference(hostElement, message);
+        if (this._isElementDescribedByMessage(hostElement, message)) {
+            this._removeMessageReference(hostElement, message);
         }
         var /** @type {?} */ registeredMessage = messageRegistry.get(message);
         if (registeredMessage && registeredMessage.referenceCount === 0) {
-            deleteMessageElement(message);
+            this._deleteMessageElement(message);
         }
         if (messagesContainer && messagesContainer.childNodes.length === 0) {
-            deleteMessagesContainer();
+            this._deleteMessagesContainer();
         }
     };
     /** Unregisters all created message elements and removes the message container. */
@@ -1452,134 +1442,176 @@ var AriaDescriber = (function () {
      * @return {?}
      */
     function () {
-        if (!this._platform.isBrowser) {
-            return;
-        }
-        var /** @type {?} */ describedElements = document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
+        var /** @type {?} */ describedElements = this._document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
         for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
-            removeCdkDescribedByReferenceIds(describedElements[i]);
+            this._removeCdkDescribedByReferenceIds(describedElements[i]);
             describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
         }
         if (messagesContainer) {
-            deleteMessagesContainer();
+            this._deleteMessagesContainer();
         }
         messageRegistry.clear();
+    };
+    /**
+     * Creates a new element in the visually hidden message container element with the message
+     * as its content and adds it to the message registry.
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._createMessageElement = /**
+     * Creates a new element in the visually hidden message container element with the message
+     * as its content and adds it to the message registry.
+     * @param {?} message
+     * @return {?}
+     */
+    function (message) {
+        var /** @type {?} */ messageElement = this._document.createElement('div');
+        messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
+        messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
+        if (!messagesContainer) {
+            this._createMessagesContainer();
+        } /** @type {?} */
+        ((messagesContainer)).appendChild(messageElement);
+        messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
+    };
+    /**
+     * Deletes the message element from the global messages container.
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._deleteMessageElement = /**
+     * Deletes the message element from the global messages container.
+     * @param {?} message
+     * @return {?}
+     */
+    function (message) {
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+        if (messagesContainer && messageElement) {
+            messagesContainer.removeChild(messageElement);
+        }
+        messageRegistry.delete(message);
+    };
+    /**
+     * Creates the global container for all aria-describedby messages.
+     * @return {?}
+     */
+    AriaDescriber.prototype._createMessagesContainer = /**
+     * Creates the global container for all aria-describedby messages.
+     * @return {?}
+     */
+    function () {
+        messagesContainer = this._document.createElement('div');
+        messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
+        messagesContainer.setAttribute('aria-hidden', 'true');
+        messagesContainer.style.display = 'none';
+        this._document.body.appendChild(messagesContainer);
+    };
+    /**
+     * Deletes the global messages container.
+     * @return {?}
+     */
+    AriaDescriber.prototype._deleteMessagesContainer = /**
+     * Deletes the global messages container.
+     * @return {?}
+     */
+    function () {
+        this._document.body.removeChild(/** @type {?} */ ((messagesContainer)));
+        messagesContainer = null;
+    };
+    /**
+     * Removes all cdk-describedby messages that are hosted through the element.
+     * @param {?} element
+     * @return {?}
+     */
+    AriaDescriber.prototype._removeCdkDescribedByReferenceIds = /**
+     * Removes all cdk-describedby messages that are hosted through the element.
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
+        var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+            .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
+        element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
+    };
+    /**
+     * Adds a message reference to the element using aria-describedby and increments the registered
+     * message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._addMessageReference = /**
+     * Adds a message reference to the element using aria-describedby and increments the registered
+     * message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        // Add the aria-describedby reference and set the
+        // describedby_host attribute to mark the element.
+        addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+        element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
+        registeredMessage.referenceCount++;
+    };
+    /**
+     * Removes a message reference from the element using aria-describedby
+     * and decrements the registered message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._removeMessageReference = /**
+     * Removes a message reference from the element using aria-describedby
+     * and decrements the registered message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        registeredMessage.referenceCount--;
+        removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+        element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+    };
+    /**
+     * Returns true if the element has been described by the provided message ID.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._isElementDescribedByMessage = /**
+     * Returns true if the element has been described by the provided message ID.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+        return !!messageId && referenceIds.indexOf(messageId) != -1;
     };
     AriaDescriber.decorators = [
         { type: _angular_core.Injectable },
     ];
     /** @nocollapse */
     AriaDescriber.ctorParameters = function () { return [
-        { type: _angular_cdk_platform.Platform, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return AriaDescriber;
 }());
 /**
- * Creates a new element in the visually hidden message container element with the message
- * as its content and adds it to the message registry.
- * @param {?} message
- * @return {?}
- */
-function createMessageElement(message) {
-    var /** @type {?} */ messageElement = document.createElement('div');
-    messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
-    messageElement.appendChild(/** @type {?} */ ((document.createTextNode(message))));
-    if (!messagesContainer) {
-        createMessagesContainer();
-    } /** @type {?} */
-    ((messagesContainer)).appendChild(messageElement);
-    messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
-}
-/**
- * Deletes the message element from the global messages container.
- * @param {?} message
- * @return {?}
- */
-function deleteMessageElement(message) {
-    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-    var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
-    if (messagesContainer && messageElement) {
-        messagesContainer.removeChild(messageElement);
-    }
-    messageRegistry.delete(message);
-}
-/**
- * Creates the global container for all aria-describedby messages.
- * @return {?}
- */
-function createMessagesContainer() {
-    messagesContainer = document.createElement('div');
-    messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
-    messagesContainer.setAttribute('aria-hidden', 'true');
-    messagesContainer.style.display = 'none';
-    document.body.appendChild(messagesContainer);
-}
-/**
- * Deletes the global messages container.
- * @return {?}
- */
-function deleteMessagesContainer() {
-    document.body.removeChild(/** @type {?} */ ((messagesContainer)));
-    messagesContainer = null;
-}
-/**
- * Removes all cdk-describedby messages that are hosted through the element.
- * @param {?} element
- * @return {?}
- */
-function removeCdkDescribedByReferenceIds(element) {
-    // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-    var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-        .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
-    element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
-}
-/**
- * Adds a message reference to the element using aria-describedby and increments the registered
- * message's reference count.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function addMessageReference(element, message) {
-    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-    // Add the aria-describedby reference and set the describedby_host attribute to mark the element.
-    addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-    element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
-    registeredMessage.referenceCount++;
-}
-/**
- * Removes a message reference from the element using aria-describedby and decrements the registered
- * message's reference count.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function removeMessageReference(element, message) {
-    var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-    registeredMessage.referenceCount--;
-    removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-    element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
-}
-/**
- * Returns true if the element has been described by the provided message ID.
- * @param {?} element
- * @param {?} message
- * @return {?}
- */
-function isElementDescribedByMessage(element, message) {
-    var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-    var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-    var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
-    return !!messageId && referenceIds.indexOf(messageId) != -1;
-}
-/**
  * \@docs-private
  * @param {?} parentDispatcher
- * @param {?} platform
+ * @param {?} _document
  * @return {?}
  */
-function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, platform) {
-    return parentDispatcher || new AriaDescriber(platform);
+function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
+    return parentDispatcher || new AriaDescriber(_document);
 }
 /**
  * \@docs-private
@@ -1589,7 +1621,7 @@ var ARIA_DESCRIBER_PROVIDER = {
     provide: AriaDescriber,
     deps: [
         [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
-        _angular_cdk_platform.Platform
+        /** @type {?} */ (_angular_common.DOCUMENT)
     ],
     useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
 };
@@ -1659,14 +1691,12 @@ var FocusKeyManager = (function (_super) {
 
 var LIVE_ANNOUNCER_ELEMENT_TOKEN = new _angular_core.InjectionToken('liveAnnouncerElement');
 var LiveAnnouncer = (function () {
-    function LiveAnnouncer(elementToken, platform) {
-        // Only do anything if we're on the browser platform.
-        if (platform.isBrowser) {
-            // We inject the live element as `any` because the constructor signature cannot reference
-            // browser globals (HTMLElement) on non-browser environments, since having a class decorator
-            // causes TypeScript to preserve the constructor signature types.
-            this._liveElement = elementToken || this._createLiveElement();
-        }
+    function LiveAnnouncer(elementToken, _document) {
+        this._document = _document;
+        // We inject the live element as `any` because the constructor signature cannot reference
+        // browser globals (HTMLElement) on non-browser environments, since having a class decorator
+        // causes TypeScript to preserve the constructor signature types.
+        this._liveElement = elementToken || this._createLiveElement();
     }
     /**
      * Announces a message to screenreaders.
@@ -1716,11 +1746,11 @@ var LiveAnnouncer = (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ liveEl = document.createElement('div');
+        var /** @type {?} */ liveEl = this._document.createElement('div');
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
         liveEl.setAttribute('aria-live', 'polite');
-        document.body.appendChild(liveEl);
+        this._document.body.appendChild(liveEl);
         return liveEl;
     };
     LiveAnnouncer.decorators = [
@@ -1729,7 +1759,7 @@ var LiveAnnouncer = (function () {
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-        { type: _angular_cdk_platform.Platform, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return LiveAnnouncer;
 }());
@@ -1737,11 +1767,11 @@ var LiveAnnouncer = (function () {
  * \@docs-private
  * @param {?} parentDispatcher
  * @param {?} liveElement
- * @param {?} platform
+ * @param {?} _document
  * @return {?}
  */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, platform) {
-    return parentDispatcher || new LiveAnnouncer(liveElement, platform);
+function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document) {
+    return parentDispatcher || new LiveAnnouncer(liveElement, _document);
 }
 /**
  * \@docs-private
@@ -1752,7 +1782,7 @@ var LIVE_ANNOUNCER_PROVIDER = {
     deps: [
         [new _angular_core.Optional(), new _angular_core.SkipSelf(), LiveAnnouncer],
         [new _angular_core.Optional(), new _angular_core.Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
-        _angular_cdk_platform.Platform,
+        _angular_common.DOCUMENT,
     ],
     useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
 };

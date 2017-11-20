@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, OnDestroy } from '@angular/core';
+import { InjectionToken, Optional, OnDestroy } from '@angular/core';
 import { OverlayRef } from '../overlay-ref';
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
@@ -13,9 +13,11 @@ import { OverlayRef } from '../overlay-ref';
  * on event target and order of overlay opens.
  */
 export declare class OverlayKeyboardDispatcher implements OnDestroy {
+    private _document;
     /** Currently attached overlays in the order they were attached. */
     _attachedOverlays: OverlayRef[];
     private _keydownEventSubscription;
+    constructor(_document: any);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
@@ -30,10 +32,10 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
     private _selectOverlayFromEvent(event);
 }
 /** @docs-private */
-export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher): OverlayKeyboardDispatcher;
+export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;
 /** @docs-private */
 export declare const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER: {
     provide: typeof OverlayKeyboardDispatcher;
-    deps: Optional[][];
-    useFactory: (dispatcher: OverlayKeyboardDispatcher) => OverlayKeyboardDispatcher;
+    deps: (Optional[] | InjectionToken<any>)[];
+    useFactory: (dispatcher: OverlayKeyboardDispatcher, _document: any) => OverlayKeyboardDispatcher;
 };
