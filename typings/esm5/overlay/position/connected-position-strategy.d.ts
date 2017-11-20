@@ -9,7 +9,6 @@ import { PositionStrategy } from './position-strategy';
 import { ElementRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition, ConnectedOverlayPositionChange } from './connected-position';
-import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { OverlayRef } from '../overlay-ref';
@@ -46,7 +45,11 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     private _pane;
     /** The last position to have been calculated as the best fit position. */
     private _lastConnectedPosition;
-    _onPositionChange: Subject<ConnectedOverlayPositionChange>;
+    /** Whether the position strategy is applied currently. */
+    private _applied;
+    /** Whether the overlay position is locked. */
+    private _positionLocked;
+    private _onPositionChange;
     /** Emits an event when the connection point changes. */
     readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
     constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, _connectedTo: ElementRef, _viewportRuler: ViewportRuler, _document: any);
@@ -62,8 +65,6 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.
      * @docs-private
-     *
-     * @returns Resolves when the styles have been applied.
      */
     apply(): void;
     /**
@@ -99,6 +100,13 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * @param  offset New offset in the Y axis.
      */
     withOffsetY(offset: number): this;
+    /**
+     * Sets whether the overlay's position should be locked in after it is positioned
+     * initially. When an overlay is locked in, it won't attempt to reposition itself
+     * when the position is re-applied (e.g. when the user scrolls away).
+     * @param isLocked Whether the overlay should locked in.
+     */
+    withLockedPosition(isLocked: boolean): this;
     /**
      * Gets the horizontal (x) "start" dimension based on whether the overlay is in an RTL context.
      * @param rect

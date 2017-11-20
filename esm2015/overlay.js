@@ -815,6 +815,14 @@ class ConnectedPositionStrategy {
          * Ordered list of preferred positions, from most to least desirable.
          */
         this._preferredPositions = [];
+        /**
+         * Whether the position strategy is applied currently.
+         */
+        this._applied = false;
+        /**
+         * Whether the overlay position is locked.
+         */
+        this._positionLocked = false;
         this._onPositionChange = new Subject();
         this._origin = this._connectedTo.nativeElement;
         this.withFallbackPosition(originPos, overlayPos);
@@ -856,6 +864,7 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     dispose() {
+        this._applied = false;
         this._resizeSubscription.unsubscribe();
     }
     /**
@@ -863,16 +872,24 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     detach() {
+        this._applied = false;
         this._resizeSubscription.unsubscribe();
     }
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin fits on-screen.
      * \@docs-private
-     *
-     * @return {?} Resolves when the styles have been applied.
+     * @return {?}
      */
     apply() {
+        // If the position has been applied already (e.g. when the overlay was opened) and the
+        // consumer opted into locking in the position, re-use the  old position, in order to
+        // prevent the overlay from jumping around.
+        if (this._applied && this._positionLocked && this._lastConnectedPosition) {
+            this.recalculateLastPosition();
+            return;
+        }
+        this._applied = true;
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
         const /** @type {?} */ element = this._pane;
@@ -973,6 +990,17 @@ class ConnectedPositionStrategy {
      */
     withOffsetY(offset) {
         this._offsetY = offset;
+        return this;
+    }
+    /**
+     * Sets whether the overlay's position should be locked in after it is positioned
+     * initially. When an overlay is locked in, it won't attempt to reposition itself
+     * when the position is re-applied (e.g. when the user scrolls away).
+     * @param {?} isLocked Whether the overlay should locked in.
+     * @return {?}
+     */
+    withLockedPosition(isLocked) {
+        this._positionLocked = isLocked;
         return this;
     }
     /**
