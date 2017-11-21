@@ -1318,7 +1318,7 @@ function getAriaReferenceIds(el, attr) {
 
 /**
  * Interface used to register message elements and keep a count of how many registrations have
- * the same message and the reference to the message element used for the aria-describedby.
+ * the same message and the reference to the message element used for the `aria-describedby`.
  * @record
  */
 

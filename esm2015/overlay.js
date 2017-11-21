@@ -168,8 +168,7 @@ ConnectedOverlayPositionChange.ctorParameters = () => [
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Describes a strategy that will be used by an overlay
- * to handle scroll events while it is open.
+ * Describes a strategy that will be used by an overlay to handle scroll events while it is open.
  * @record
  */
 

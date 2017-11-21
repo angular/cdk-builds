@@ -10,6 +10,7 @@ import { MediaMatcher } from './media-matcher';
 import { Observable } from 'rxjs/Observable';
 /** The current state of a layout breakpoint. */
 export interface BreakpointState {
+    /** Whether the breakpoint is currently matching. */
     matches: boolean;
 }
 /** Utility for checking the matching state of @media queries. */
