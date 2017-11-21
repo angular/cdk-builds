@@ -7,7 +7,7 @@
  */
 import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { first } from 'rxjs/operators/first';
+import { take } from 'rxjs/operators/take';
 import { Platform, PlatformModule, supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { __extends } from 'tslib';
@@ -670,7 +670,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(first()).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(fn);
         }
     };
     return FocusTrap;

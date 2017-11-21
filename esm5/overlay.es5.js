@@ -10,7 +10,7 @@ import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_P
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { Subject } from 'rxjs/Subject';
-import { first } from 'rxjs/operators/first';
+import { take } from 'rxjs/operators/take';
 import { Subscription } from 'rxjs/Subscription';
 import { DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators/filter';
@@ -605,7 +605,7 @@ var OverlayRef = (function () {
         // Update the position once the zone is stable so that the overlay will be fully rendered
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
-        this._ngZone.onStable.asObservable().pipe(first()).subscribe(function () {
+        this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(function () {
             _this.updatePosition();
         });
         // Enable pointer events for the overlay pane element.

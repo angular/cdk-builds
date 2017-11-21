@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/operators/first'), require('@angular/cdk/platform'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/operators/first', '@angular/cdk/platform', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('@angular/cdk/platform'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/operators/take', '@angular/cdk/platform', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.Rx.Observable,global.ng.cdk.platform,global.ng.common,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_coercion,rxjs_operators_first,_angular_cdk_platform,_angular_common,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of) { 'use strict';
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,rxjs_operators_take,_angular_cdk_platform,_angular_common,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -686,7 +686,7 @@ var FocusTrap = (function () {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(rxjs_operators_first.first()).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(rxjs_operators_take.take(1)).subscribe(fn);
         }
     };
     return FocusTrap;
