@@ -294,8 +294,8 @@ var CdkColumnDef = (function () {
  * Header cell template container that adds the right classes and role.
  */
 var CdkHeaderCell = (function () {
-    function CdkHeaderCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
+    function CdkHeaderCell(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
     CdkHeaderCell.decorators = [
         { type: _angular_core.Directive, args: [{
@@ -310,7 +310,6 @@ var CdkHeaderCell = (function () {
     CdkHeaderCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: _angular_core.ElementRef, },
-        { type: _angular_core.Renderer2, },
     ]; };
     return CdkHeaderCell;
 }());
@@ -318,8 +317,8 @@ var CdkHeaderCell = (function () {
  * Cell template container that adds the right classes and role.
  */
 var CdkCell = (function () {
-    function CdkCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
+    function CdkCell(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
     CdkCell.decorators = [
         { type: _angular_core.Directive, args: [{
@@ -334,7 +333,6 @@ var CdkCell = (function () {
     CdkCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: _angular_core.ElementRef, },
-        { type: _angular_core.Renderer2, },
     ]; };
     return CdkCell;
 }());
@@ -447,7 +445,7 @@ var RowViewRef = (function (_super) {
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
 var CdkTable = (function () {
-    function CdkTable(_differs, _changeDetectorRef, elementRef, renderer, role) {
+    function CdkTable(_differs, _changeDetectorRef, elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         /**
@@ -468,7 +466,7 @@ var CdkTable = (function () {
          */
         this.viewChange = new rxjs_BehaviorSubject.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            renderer.setAttribute(elementRef.nativeElement, 'role', 'grid');
+            elementRef.nativeElement.setAttribute('role', 'grid');
         }
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
@@ -877,7 +875,6 @@ var CdkTable = (function () {
         { type: _angular_core.IterableDiffers, },
         { type: _angular_core.ChangeDetectorRef, },
         { type: _angular_core.ElementRef, },
-        { type: _angular_core.Renderer2, },
         { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['role',] },] },
     ]; };
     CdkTable.propDecorators = {

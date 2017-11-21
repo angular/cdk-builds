@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, Renderer2, TemplateRef } from '@angular/core';
+import { ElementRef, TemplateRef } from '@angular/core';
 /**
  * Cell definition for a CDK table.
  * Captures the template of a column's data row cell as well as cell-specific properties.
@@ -43,9 +43,9 @@ export declare class CdkColumnDef {
 }
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef, renderer: Renderer2);
+    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
 }
 /** Cell template container that adds the right classes and role. */
 export declare class CdkCell {
-    constructor(columnDef: CdkColumnDef, elementRef: ElementRef, renderer: Renderer2);
+    constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
 }

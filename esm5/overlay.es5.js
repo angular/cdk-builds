@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
@@ -2262,17 +2262,17 @@ var CdkOverlayOrigin = (function () {
  */
 var CdkConnectedOverlay = (function () {
     // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
-    function CdkConnectedOverlay(_overlay, _renderer, templateRef, viewContainerRef, _scrollStrategy, _dir) {
+    function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir, _document) {
+        var _this = this;
         this._overlay = _overlay;
-        this._renderer = _renderer;
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
+        this._document = _document;
         this._hasBackdrop = false;
         this._backdropSubscription = Subscription.EMPTY;
         this._positionSubscription = Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
-        this._escapeListener = function () { };
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -2297,6 +2297,14 @@ var CdkConnectedOverlay = (function () {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new EventEmitter();
+        /**
+         * Event listener that will close the overlay when the user presses escape.
+         */
+        this._escapeListener = function (event) {
+            if (event.keyCode === ESCAPE) {
+                _this._detachOverlay();
+            }
+        };
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     Object.defineProperty(CdkConnectedOverlay.prototype, "offsetX", {
@@ -2663,7 +2671,7 @@ var CdkConnectedOverlay = (function () {
         }
         this._position.withDirection(this.dir);
         this._overlayRef.getConfig().direction = this.dir;
-        this._initEscapeListener();
+        this._document.addEventListener('keydown', this._escapeListener);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
@@ -2688,7 +2696,7 @@ var CdkConnectedOverlay = (function () {
             this.detach.emit();
         }
         this._backdropSubscription.unsubscribe();
-        this._escapeListener();
+        this._document.removeEventListener('keydown', this._escapeListener);
     };
     /**
      * Destroys the overlay created by this directive.
@@ -2704,23 +2712,7 @@ var CdkConnectedOverlay = (function () {
         }
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
-        this._escapeListener();
-    };
-    /**
-     * Sets the event listener that closes the overlay when pressing Escape.
-     * @return {?}
-     */
-    CdkConnectedOverlay.prototype._initEscapeListener = /**
-     * Sets the event listener that closes the overlay when pressing Escape.
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        this._escapeListener = this._renderer.listen('document', 'keydown', function (event) {
-            if (event.keyCode === ESCAPE) {
-                _this._detachOverlay();
-            }
-        });
+        this._document.removeEventListener('keydown', this._escapeListener);
     };
     CdkConnectedOverlay.decorators = [
         { type: Directive, args: [{
@@ -2731,11 +2723,11 @@ var CdkConnectedOverlay = (function () {
     /** @nocollapse */
     CdkConnectedOverlay.ctorParameters = function () { return [
         { type: Overlay, },
-        { type: Renderer2, },
         { type: TemplateRef, },
         { type: ViewContainerRef, },
         { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
         { type: Directionality, decorators: [{ type: Optional },] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] },] },
     ]; };
     CdkConnectedOverlay.propDecorators = {
         "origin": [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],

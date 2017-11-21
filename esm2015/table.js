@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -258,10 +258,9 @@ class CdkHeaderCell {
     /**
      * @param {?} columnDef
      * @param {?} elementRef
-     * @param {?} renderer
      */
-    constructor(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
+    constructor(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add(`cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
 CdkHeaderCell.decorators = [
@@ -277,7 +276,6 @@ CdkHeaderCell.decorators = [
 CdkHeaderCell.ctorParameters = () => [
     { type: CdkColumnDef, },
     { type: ElementRef, },
-    { type: Renderer2, },
 ];
 /**
  * Cell template container that adds the right classes and role.
@@ -286,10 +284,9 @@ class CdkCell {
     /**
      * @param {?} columnDef
      * @param {?} elementRef
-     * @param {?} renderer
      */
-    constructor(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, `cdk-column-${columnDef.cssClassFriendlyName}`);
+    constructor(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add(`cdk-column-${columnDef.cssClassFriendlyName}`);
     }
 }
 CdkCell.decorators = [
@@ -305,7 +302,6 @@ CdkCell.decorators = [
 CdkCell.ctorParameters = () => [
     { type: CdkColumnDef, },
     { type: ElementRef, },
-    { type: Renderer2, },
 ];
 
 /**
@@ -415,10 +411,9 @@ class CdkTable {
      * @param {?} _differs
      * @param {?} _changeDetectorRef
      * @param {?} elementRef
-     * @param {?} renderer
      * @param {?} role
      */
-    constructor(_differs, _changeDetectorRef, elementRef, renderer, role) {
+    constructor(_differs, _changeDetectorRef, elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         /**
@@ -439,7 +434,7 @@ class CdkTable {
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            renderer.setAttribute(elementRef.nativeElement, 'role', 'grid');
+            elementRef.nativeElement.setAttribute('role', 'grid');
         }
     }
     /**
@@ -753,7 +748,6 @@ CdkTable.ctorParameters = () => [
     { type: IterableDiffers, },
     { type: ChangeDetectorRef, },
     { type: ElementRef, },
-    { type: Renderer2, },
     { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
 ];
 CdkTable.propDecorators = {

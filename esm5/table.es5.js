@@ -7,7 +7,7 @@
  */
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
-import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -271,8 +271,8 @@ var CdkColumnDef = (function () {
  * Header cell template container that adds the right classes and role.
  */
 var CdkHeaderCell = (function () {
-    function CdkHeaderCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
+    function CdkHeaderCell(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
     CdkHeaderCell.decorators = [
         { type: Directive, args: [{
@@ -287,7 +287,6 @@ var CdkHeaderCell = (function () {
     CdkHeaderCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: ElementRef, },
-        { type: Renderer2, },
     ]; };
     return CdkHeaderCell;
 }());
@@ -295,8 +294,8 @@ var CdkHeaderCell = (function () {
  * Cell template container that adds the right classes and role.
  */
 var CdkCell = (function () {
-    function CdkCell(columnDef, elementRef, renderer) {
-        renderer.addClass(elementRef.nativeElement, "cdk-column-" + columnDef.cssClassFriendlyName);
+    function CdkCell(columnDef, elementRef) {
+        elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
     CdkCell.decorators = [
         { type: Directive, args: [{
@@ -311,7 +310,6 @@ var CdkCell = (function () {
     CdkCell.ctorParameters = function () { return [
         { type: CdkColumnDef, },
         { type: ElementRef, },
-        { type: Renderer2, },
     ]; };
     return CdkCell;
 }());
@@ -424,7 +422,7 @@ var RowViewRef = (function (_super) {
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
 var CdkTable = (function () {
-    function CdkTable(_differs, _changeDetectorRef, elementRef, renderer, role) {
+    function CdkTable(_differs, _changeDetectorRef, elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         /**
@@ -445,7 +443,7 @@ var CdkTable = (function () {
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            renderer.setAttribute(elementRef.nativeElement, 'role', 'grid');
+            elementRef.nativeElement.setAttribute('role', 'grid');
         }
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
@@ -854,7 +852,6 @@ var CdkTable = (function () {
         { type: IterableDiffers, },
         { type: ChangeDetectorRef, },
         { type: ElementRef, },
-        { type: Renderer2, },
         { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
     ]; };
     CdkTable.propDecorators = {

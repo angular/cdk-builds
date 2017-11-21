@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectorRef, ElementRef, IterableDiffers, QueryList, Renderer2, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, IterableDiffers, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -83,7 +83,7 @@ export declare class CdkTable<T> implements CollectionViewer {
     _headerDef: CdkHeaderRowDef;
     /** Set of template definitions that used as the data row containers. */
     _rowDefs: QueryList<CdkRowDef<T>>;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, renderer: Renderer2, role: string);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, role: string);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngAfterContentChecked(): void;

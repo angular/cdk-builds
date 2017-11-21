@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
+import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -208,23 +208,20 @@ class CdkScrollable {
      * @param {?} _elementRef
      * @param {?} _scroll
      * @param {?} _ngZone
-     * @param {?} _renderer
      */
-    constructor(_elementRef, _scroll, _ngZone, _renderer) {
+    constructor(_elementRef, _scroll, _ngZone) {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._renderer = _renderer;
         this._elementScrolled = new Subject();
+        this._scrollListener = (event) => this._elementScrolled.next(event);
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        this._scrollListener = this._ngZone.runOutsideAngular(() => {
-            return this._renderer.listen(this.getElementRef().nativeElement, 'scroll', (event) => {
-                this._elementScrolled.next(event);
-            });
+        this._ngZone.runOutsideAngular(() => {
+            this.getElementRef().nativeElement.addEventListener('scroll', this._scrollListener);
         });
         this._scroll.register(this);
     }
@@ -234,8 +231,7 @@ class CdkScrollable {
     ngOnDestroy() {
         this._scroll.deregister(this);
         if (this._scrollListener) {
-            this._scrollListener();
-            this._scrollListener = null;
+            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
         }
     }
     /**
@@ -262,7 +258,6 @@ CdkScrollable.ctorParameters = () => [
     { type: ElementRef, },
     { type: ScrollDispatcher, },
     { type: NgZone, },
-    { type: Renderer2, },
 ];
 
 /**

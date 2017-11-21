@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
+import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -277,12 +277,13 @@ var SCROLL_DISPATCHER_PROVIDER = {
  * can be listened to through the service.
  */
 var CdkScrollable = (function () {
-    function CdkScrollable(_elementRef, _scroll, _ngZone, _renderer) {
+    function CdkScrollable(_elementRef, _scroll, _ngZone) {
+        var _this = this;
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._renderer = _renderer;
         this._elementScrolled = new Subject();
+        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
      * @return {?}
@@ -292,10 +293,8 @@ var CdkScrollable = (function () {
      */
     function () {
         var _this = this;
-        this._scrollListener = this._ngZone.runOutsideAngular(function () {
-            return _this._renderer.listen(_this.getElementRef().nativeElement, 'scroll', function (event) {
-                _this._elementScrolled.next(event);
-            });
+        this._ngZone.runOutsideAngular(function () {
+            _this.getElementRef().nativeElement.addEventListener('scroll', _this._scrollListener);
         });
         this._scroll.register(this);
     };
@@ -308,8 +307,7 @@ var CdkScrollable = (function () {
     function () {
         this._scroll.deregister(this);
         if (this._scrollListener) {
-            this._scrollListener();
-            this._scrollListener = null;
+            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
         }
     };
     /**
@@ -345,7 +343,6 @@ var CdkScrollable = (function () {
         { type: ElementRef, },
         { type: ScrollDispatcher, },
         { type: NgZone, },
-        { type: Renderer2, },
     ]; };
     return CdkScrollable;
 }());

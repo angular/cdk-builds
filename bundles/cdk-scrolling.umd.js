@@ -273,12 +273,13 @@ var SCROLL_DISPATCHER_PROVIDER = {
  * can be listened to through the service.
  */
 var CdkScrollable = (function () {
-    function CdkScrollable(_elementRef, _scroll, _ngZone, _renderer) {
+    function CdkScrollable(_elementRef, _scroll, _ngZone) {
+        var _this = this;
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._renderer = _renderer;
         this._elementScrolled = new rxjs_Subject.Subject();
+        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
      * @return {?}
@@ -288,10 +289,8 @@ var CdkScrollable = (function () {
      */
     function () {
         var _this = this;
-        this._scrollListener = this._ngZone.runOutsideAngular(function () {
-            return _this._renderer.listen(_this.getElementRef().nativeElement, 'scroll', function (event) {
-                _this._elementScrolled.next(event);
-            });
+        this._ngZone.runOutsideAngular(function () {
+            _this.getElementRef().nativeElement.addEventListener('scroll', _this._scrollListener);
         });
         this._scroll.register(this);
     };
@@ -304,8 +303,7 @@ var CdkScrollable = (function () {
     function () {
         this._scroll.deregister(this);
         if (this._scrollListener) {
-            this._scrollListener();
-            this._scrollListener = null;
+            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
         }
     };
     /**
@@ -341,7 +339,6 @@ var CdkScrollable = (function () {
         { type: _angular_core.ElementRef, },
         { type: ScrollDispatcher, },
         { type: _angular_core.NgZone, },
-        { type: _angular_core.Renderer2, },
     ]; };
     return CdkScrollable;
 }());

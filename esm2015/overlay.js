@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
@@ -1752,23 +1752,22 @@ CdkOverlayOrigin.ctorParameters = () => [
 class CdkConnectedOverlay {
     /**
      * @param {?} _overlay
-     * @param {?} _renderer
      * @param {?} templateRef
      * @param {?} viewContainerRef
      * @param {?} _scrollStrategy
      * @param {?} _dir
+     * @param {?} _document
      */
-    constructor(_overlay, _renderer, templateRef, viewContainerRef, _scrollStrategy, _dir) {
+    constructor(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir, _document) {
         this._overlay = _overlay;
-        this._renderer = _renderer;
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
+        this._document = _document;
         this._hasBackdrop = false;
         this._backdropSubscription = Subscription.EMPTY;
         this._positionSubscription = Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
-        this._escapeListener = () => { };
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -1793,6 +1792,14 @@ class CdkConnectedOverlay {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new EventEmitter();
+        /**
+         * Event listener that will close the overlay when the user presses escape.
+         */
+        this._escapeListener = (event) => {
+            if (event.keyCode === ESCAPE) {
+                this._detachOverlay();
+            }
+        };
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     /**
@@ -2060,7 +2067,7 @@ class CdkConnectedOverlay {
         }
         this._position.withDirection(this.dir);
         this._overlayRef.getConfig().direction = this.dir;
-        this._initEscapeListener();
+        this._document.addEventListener('keydown', this._escapeListener);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
@@ -2081,7 +2088,7 @@ class CdkConnectedOverlay {
             this.detach.emit();
         }
         this._backdropSubscription.unsubscribe();
-        this._escapeListener();
+        this._document.removeEventListener('keydown', this._escapeListener);
     }
     /**
      * Destroys the overlay created by this directive.
@@ -2093,18 +2100,7 @@ class CdkConnectedOverlay {
         }
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
-        this._escapeListener();
-    }
-    /**
-     * Sets the event listener that closes the overlay when pressing Escape.
-     * @return {?}
-     */
-    _initEscapeListener() {
-        this._escapeListener = this._renderer.listen('document', 'keydown', (event) => {
-            if (event.keyCode === ESCAPE) {
-                this._detachOverlay();
-            }
-        });
+        this._document.removeEventListener('keydown', this._escapeListener);
     }
 }
 CdkConnectedOverlay.decorators = [
@@ -2116,11 +2112,11 @@ CdkConnectedOverlay.decorators = [
 /** @nocollapse */
 CdkConnectedOverlay.ctorParameters = () => [
     { type: Overlay, },
-    { type: Renderer2, },
     { type: TemplateRef, },
     { type: ViewContainerRef, },
     { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
     { type: Directionality, decorators: [{ type: Optional },] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] },] },
 ];
 CdkConnectedOverlay.propDecorators = {
     "origin": [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
