@@ -682,6 +682,7 @@ var OverlayRef = (function () {
             this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
+        this._keyboardDispatcher.remove(this);
         this._portalOutlet.dispose();
         this._attachments.complete();
         this._backdropClick.complete();
