@@ -87,8 +87,9 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
     private _isDisposed;
     /** Whether this host has an attached portal. */
     hasAttached(): boolean;
-    /** Attaches a portal. */
-    attach(portal: Portal<any>): any;
+    attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
+    attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
+    attach(portal: any): any;
     abstract attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     abstract attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
     /** Detaches a previously attached portal. */

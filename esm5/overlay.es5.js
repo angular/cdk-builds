@@ -9,16 +9,16 @@ import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventE
 import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
 import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { Subject } from 'rxjs/Subject';
+import { __assign, __extends } from 'tslib';
+import * as tslib_1 from 'tslib';
 import { take } from 'rxjs/operators/take';
+import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators/filter';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { __extends } from 'tslib';
-import * as tslib_1 from 'tslib';
 
 /**
  * @fileoverview added by tsickle
@@ -575,17 +575,23 @@ var OverlayRef = (function () {
         configurable: true
     });
     /**
-     * Attaches the overlay to a portal instance and adds the backdrop.
+     * Attaches content, given via a Portal, to the overlay.
+     * If the overlay is configured to have a backdrop, it will be created.
+     *
      * @param portal Portal instance to which to attach the overlay.
      * @returns The portal attachment result.
      */
     /**
-     * Attaches the overlay to a portal instance and adds the backdrop.
+     * Attaches content, given via a Portal, to the overlay.
+     * If the overlay is configured to have a backdrop, it will be created.
+     *
      * @param {?} portal Portal instance to which to attach the overlay.
      * @return {?} The portal attachment result.
      */
     OverlayRef.prototype.attach = /**
-     * Attaches the overlay to a portal instance and adds the backdrop.
+     * Attaches content, given via a Portal, to the overlay.
+     * If the overlay is configured to have a backdrop, it will be created.
+     *
      * @param {?} portal Portal instance to which to attach the overlay.
      * @return {?} The portal attachment result.
      */
@@ -597,8 +603,8 @@ var OverlayRef = (function () {
         }
         // Update the pane element with the given configuration.
         this._updateStackingOrder();
-        this.updateSize();
-        this.updateDirection();
+        this._updateElementSize();
+        this._updateElementDirection();
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.enable();
         }
@@ -662,9 +668,7 @@ var OverlayRef = (function () {
         this._keyboardDispatcher.remove(this);
         return detachmentResult;
     };
-    /**
-     * Cleans up the overlay from the DOM.
-     */
+    /** Cleans up the overlay from the DOM. */
     /**
      * Cleans up the overlay from the DOM.
      * @return {?}
@@ -692,23 +696,19 @@ var OverlayRef = (function () {
         }
         this._detachments.complete();
     };
+    /** Whether the overlay has attached content. */
     /**
-     * Checks whether the overlay has been attached.
-     */
-    /**
-     * Checks whether the overlay has been attached.
+     * Whether the overlay has attached content.
      * @return {?}
      */
     OverlayRef.prototype.hasAttached = /**
-     * Checks whether the overlay has been attached.
+     * Whether the overlay has attached content.
      * @return {?}
      */
     function () {
         return this._portalOutlet.hasAttached();
     };
-    /**
-     * Gets an observable that emits when the backdrop has been clicked.
-     */
+    /** Gets an observable that emits when the backdrop has been clicked. */
     /**
      * Gets an observable that emits when the backdrop has been clicked.
      * @return {?}
@@ -756,15 +756,13 @@ var OverlayRef = (function () {
     function () {
         return this._keydownEvents.asObservable();
     };
+    /** Gets the the current overlay configuration, which is immutable. */
     /**
-     * Gets the current config of the overlay.
-     */
-    /**
-     * Gets the current config of the overlay.
+     * Gets the the current overlay configuration, which is immutable.
      * @return {?}
      */
     OverlayRef.prototype.getConfig = /**
-     * Gets the current config of the overlay.
+     * Gets the the current overlay configuration, which is immutable.
      * @return {?}
      */
     function () {
@@ -784,24 +782,53 @@ var OverlayRef = (function () {
             this._config.positionStrategy.apply();
         }
     };
+    /** Update the size properties of the overlay. */
+    /**
+     * Update the size properties of the overlay.
+     * @param {?} sizeConfig
+     * @return {?}
+     */
+    OverlayRef.prototype.updateSize = /**
+     * Update the size properties of the overlay.
+     * @param {?} sizeConfig
+     * @return {?}
+     */
+    function (sizeConfig) {
+        this._config = __assign({}, this._config, sizeConfig);
+        this._updateElementSize();
+    };
+    /** Sets the LTR/RTL direction for the overlay. */
+    /**
+     * Sets the LTR/RTL direction for the overlay.
+     * @param {?} dir
+     * @return {?}
+     */
+    OverlayRef.prototype.setDirection = /**
+     * Sets the LTR/RTL direction for the overlay.
+     * @param {?} dir
+     * @return {?}
+     */
+    function (dir) {
+        this._config = __assign({}, this._config, { direction: dir });
+        this._updateElementDirection();
+    };
     /**
      * Updates the text direction of the overlay panel.
      * @return {?}
      */
-    OverlayRef.prototype.updateDirection = /**
+    OverlayRef.prototype._updateElementDirection = /**
      * Updates the text direction of the overlay panel.
      * @return {?}
      */
     function () {
         this._pane.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
     };
-    /** Updates the size of the overlay based on the overlay config. */
     /**
-     * Updates the size of the overlay based on the overlay config.
+     * Updates the size of the overlay element based on the overlay config.
      * @return {?}
      */
-    OverlayRef.prototype.updateSize = /**
-     * Updates the size of the overlay based on the overlay config.
+    OverlayRef.prototype._updateElementSize = /**
+     * Updates the size of the overlay element based on the overlay config.
      * @return {?}
      */
     function () {
@@ -860,10 +887,12 @@ var OverlayRef = (function () {
         // action desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
         // Add class to fade-in the backdrop after one frame.
-        requestAnimationFrame(function () {
-            if (_this._backdropElement) {
-                _this._backdropElement.classList.add('cdk-overlay-backdrop-showing');
-            }
+        this._ngZone.runOutsideAngular(function () {
+            requestAnimationFrame(function () {
+                if (_this._backdropElement) {
+                    _this._backdropElement.classList.add('cdk-overlay-backdrop-showing');
+                }
+            });
         });
     };
     /**
@@ -937,6 +966,10 @@ var OverlayRef = (function () {
 function formatCssUnit(value) {
     return typeof value === 'string' ? /** @type {?} */ (value) : value + "px";
 }
+/**
+ * Size properties for an overlay.
+ * @record
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -2671,7 +2704,7 @@ var CdkConnectedOverlay = (function () {
             this._createOverlay();
         }
         this._position.withDirection(this.dir);
-        this._overlayRef.getConfig().direction = this.dir;
+        this._overlayRef.setDirection(this.dir);
         this._document.addEventListener('keydown', this._escapeListener);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
