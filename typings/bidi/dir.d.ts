@@ -18,7 +18,7 @@ export declare class Dir implements Directionality {
     /** Whether the `value` has been set to its initial value. */
     private _isInitialized;
     /** Event emitted when the direction changes. */
-    change: EventEmitter<void>;
+    change: EventEmitter<Direction>;
     /** @docs-private */
     dir: Direction;
     /** Current layout direction of the element. */

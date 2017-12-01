@@ -95,7 +95,7 @@ var Dir = (function () {
             var /** @type {?} */ old = this._dir;
             this._dir = v;
             if (old !== this._dir && this._isInitialized) {
-                this.change.emit();
+                this.change.emit(this._dir);
             }
         },
         enumerable: true,

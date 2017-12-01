@@ -26,6 +26,6 @@ export declare class Directionality {
     /** The current 'ltr' or 'rtl' value. */
     readonly value: Direction;
     /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
-    readonly change: EventEmitter<void>;
+    readonly change: EventEmitter<Direction>;
     constructor(_document?: any);
 }
