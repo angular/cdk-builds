@@ -226,6 +226,8 @@ var SelectionModel = (function () {
      * @return {?}
      */
     function () {
+        // Clear the selected values so they can be re-cached.
+        this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
             var /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
@@ -234,7 +236,6 @@ var SelectionModel = (function () {
             this._deselectedToEmit = [];
             this._selectedToEmit = [];
         }
-        this._selected = null;
     };
     /**
      * Selects a value.

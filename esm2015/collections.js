@@ -145,15 +145,16 @@ class SelectionModel {
      * @return {?}
      */
     _emitChangeEvent() {
+        // Clear the selected values so they can be re-cached.
+        this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            let /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
+            const /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
                 this.onChange.next(eventData);
             }
             this._deselectedToEmit = [];
             this._selectedToEmit = [];
         }
-        this._selected = null;
     }
     /**
      * Selects a value.
