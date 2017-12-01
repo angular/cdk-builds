@@ -97,6 +97,6 @@ export declare class CdkStepper implements OnDestroy {
     private _focusNextStep();
     private _focusPreviousStep();
     private _focusStep(index);
-    private _anyControlsInvalid(index);
+    private _anyControlsInvalidOrPending(index);
     private _layoutDirection();
 }
