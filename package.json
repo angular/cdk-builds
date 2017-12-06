@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "5.0.0-cb2eac2",
+  "version": "5.0.0-ab83f8e",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/angular/material2#readme",
   "peerDependencies": {
-    "@angular/core": "^5.0.0-cb2eac2",
-    "@angular/common": "^5.0.0-cb2eac2"
+    "@angular/core": "^5.0.0-ab83f8e",
+    "@angular/common": "^5.0.0-ab83f8e"
   },
   "dependencies": {
     "tslib": "^1.7.1"
