@@ -207,6 +207,13 @@ var InteractivityChecker = /** @class */ (function () {
         // Again, naive approach that does not capture many edge cases and browser quirks.
         return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
     };
+    InteractivityChecker.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    InteractivityChecker.ctorParameters = function () { return [
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
     return InteractivityChecker;
 }());
 /**
@@ -351,6 +358,7 @@ var FocusTrap = /** @class */ (function () {
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
         }
@@ -717,6 +725,15 @@ var FocusTrapFactory = /** @class */ (function () {
         if (deferCaptureElements === void 0) { deferCaptureElements = false; }
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     };
+    FocusTrapFactory.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    FocusTrapFactory.ctorParameters = function () { return [
+        { type: InteractivityChecker, },
+        { type: _angular_core.NgZone, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return FocusTrapFactory;
 }());
 /**
@@ -764,6 +781,19 @@ var FocusTrapDeprecatedDirective = /** @class */ (function () {
     function () {
         this.focusTrap.attachAnchors();
     };
+    FocusTrapDeprecatedDirective.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'cdk-focus-trap',
+                },] },
+    ];
+    /** @nocollapse */
+    FocusTrapDeprecatedDirective.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+        { type: FocusTrapFactory, },
+    ]; };
+    FocusTrapDeprecatedDirective.propDecorators = {
+        "disabled": [{ type: _angular_core.Input },],
+    };
     return FocusTrapDeprecatedDirective;
 }());
 /**
@@ -773,6 +803,10 @@ var CdkTrapFocus = /** @class */ (function () {
     function CdkTrapFocus(_elementRef, _focusTrapFactory, _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
+        /**
+         * Previously focused element to restore focus to upon destroy when using autoCapture.
+         */
+        this._previouslyFocusedElement = null;
         this._document = _document;
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
@@ -833,6 +867,22 @@ var CdkTrapFocus = /** @class */ (function () {
             this.focusTrap.focusInitialElementWhenReady();
         }
     };
+    CdkTrapFocus.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkTrapFocus]',
+                    exportAs: 'cdkTrapFocus',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkTrapFocus.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+        { type: FocusTrapFactory, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
+    CdkTrapFocus.propDecorators = {
+        "enabled": [{ type: _angular_core.Input, args: ['cdkTrapFocus',] },],
+        "autoCapture": [{ type: _angular_core.Input, args: ['cdkTrapFocusAutoCapture',] },],
+    };
     return CdkTrapFocus;
 }());
 
@@ -840,6 +890,7 @@ var CdkTrapFocus = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * This interface is for items that can be passed to a ListKeyManager.
  * @record
@@ -852,6 +903,20 @@ var CdkTrapFocus = /** @class */ (function () {
 var ListKeyManager = /** @class */ (function () {
     function ListKeyManager(_items) {
         this._items = _items;
+        this._activeItemIndex = -1;
+        this._wrap = false;
+        this._letterKeyStream = new rxjs_Subject.Subject();
+        this._typeaheadSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._pressedLetters = [];
+        /**
+         * Stream that emits any time the TAB key is pressed, so components can react
+         * when focus is shifted off of the list.
+         */
+        this.tabOut = new rxjs_Subject.Subject();
+        /**
+         * Stream that emits whenever the active item of the list manager changes.
+         */
+        this.change = new rxjs_Subject.Subject();
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
@@ -1171,6 +1236,7 @@ var ListKeyManager = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
  * Each item must know how to style itself as active or inactive and whether or not it is
@@ -1218,6 +1284,7 @@ var ActiveDescendantKeyManager = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * IDs are deliminated by an empty space, as per the spec.
  */
@@ -1531,6 +1598,13 @@ var AriaDescriber = /** @class */ (function () {
         var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
     };
+    AriaDescriber.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    AriaDescriber.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return AriaDescriber;
 }());
 /**
@@ -1559,6 +1633,7 @@ var ARIA_DESCRIBER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Screenreaders will often fire fake mousedown events when a focusable element
  * is activated using the keyboard. We can typically distinguish between these faked
@@ -1576,6 +1651,7 @@ function isFakeMousedownFromScreenReader(event) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * This is the interface for focusable items (used by the FocusKeyManager).
  * Each item must know how to focus itself, whether or not it is currently disabled
@@ -1682,6 +1758,14 @@ var LiveAnnouncer = /** @class */ (function () {
         this._document.body.appendChild(liveEl);
         return liveEl;
     };
+    LiveAnnouncer.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    LiveAnnouncer.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return LiveAnnouncer;
 }());
 /**
@@ -1723,6 +1807,26 @@ var FocusMonitor = /** @class */ (function () {
     function FocusMonitor(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        /**
+         * The focus origin that the next focus event is a result of.
+         */
+        this._origin = null;
+        /**
+         * Whether the window has just been focused.
+         */
+        this._windowFocused = false;
+        /**
+         * Weak map of elements being monitored to their info.
+         */
+        this._elementInfo = new WeakMap();
+        /**
+         * A map of global objects to lists of current listeners.
+         */
+        this._unregisterGlobalListeners = function () { };
+        /**
+         * The number of elements currently being monitored.
+         */
+        this._monitoredElementCount = 0;
     }
     /**
      * @param {?} element
@@ -2064,6 +2168,14 @@ var FocusMonitor = /** @class */ (function () {
             this._unregisterGlobalListeners = function () { };
         }
     };
+    FocusMonitor.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    FocusMonitor.ctorParameters = function () { return [
+        { type: _angular_core.NgZone, },
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
     return FocusMonitor;
 }());
 /**
@@ -2080,6 +2192,7 @@ var CdkMonitorFocus = /** @class */ (function () {
         var _this = this;
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
+        this.cdkFocusChange = new _angular_core.EventEmitter();
         this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
     }
@@ -2092,6 +2205,19 @@ var CdkMonitorFocus = /** @class */ (function () {
     function () {
         this._focusMonitor.stopMonitoring(this._elementRef.nativeElement);
         this._monitorSubscription.unsubscribe();
+    };
+    CdkMonitorFocus.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkMonitorFocus.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+        { type: FocusMonitor, },
+    ]; };
+    CdkMonitorFocus.propDecorators = {
+        "cdkFocusChange": [{ type: _angular_core.Output },],
     };
     return CdkMonitorFocus;
 }());
@@ -2123,6 +2249,23 @@ var FOCUS_MONITOR_PROVIDER = {
 var A11yModule = /** @class */ (function () {
     function A11yModule() {
     }
+    A11yModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_common.CommonModule, _angular_cdk_platform.PlatformModule],
+                    declarations: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
+                    exports: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
+                    providers: [
+                        InteractivityChecker,
+                        FocusTrapFactory,
+                        AriaDescriber,
+                        LIVE_ANNOUNCER_PROVIDER,
+                        ARIA_DESCRIBER_PROVIDER,
+                        FOCUS_MONITOR_PROVIDER,
+                    ]
+                },] },
+    ];
+    /** @nocollapse */
+    A11yModule.ctorParameters = function () { return []; };
     return A11yModule;
 }());
 

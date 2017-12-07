@@ -8,8 +8,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/common'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', '@angular/common', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx.operators,global.Rx,global.Rx,global.ng.common,global.Rx.operators,global.Rx.Observable,global.ng.cdk.coercion));
-}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_operators_take,rxjs_Subject,rxjs_Subscription,_angular_common,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion) { 'use strict';
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx.operators,global.Rx,global.Rx,global.ng.common,global.Rx.operators,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_operators_take,rxjs_Subject,rxjs_Subscription,_angular_common,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -49,6 +49,7 @@ var __assign = Object.assign || function __assign(t) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Scroll strategy that doesn't do anything.
  */
@@ -92,12 +93,33 @@ var NoopScrollStrategy = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Initial configuration used when creating an overlay.
  */
 var OverlayConfig = /** @class */ (function () {
     function OverlayConfig(config) {
         var _this = this;
+        /**
+         * Strategy to be used when handling scroll events while the overlay is open.
+         */
+        this.scrollStrategy = new NoopScrollStrategy();
+        /**
+         * Custom class to add to the overlay pane.
+         */
+        this.panelClass = '';
+        /**
+         * Whether the overlay has a backdrop.
+         */
+        this.hasBackdrop = false;
+        /**
+         * Custom class to add to the backdrop
+         */
+        this.backdropClass = 'cdk-overlay-dark-backdrop';
+        /**
+         * The direction of the text in the overlay panel.
+         */
+        this.direction = 'ltr';
         if (config) {
             Object.keys(config).forEach(function (key) { return _this[key] = config[key]; });
         }
@@ -174,6 +196,11 @@ var ConnectedOverlayPositionChange = /** @class */ (function () {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
+    /** @nocollapse */
+    ConnectedOverlayPositionChange.ctorParameters = function () { return [
+        { type: ConnectionPositionPair, },
+        { type: ScrollingVisibility, decorators: [{ type: _angular_core.Optional },] },
+    ]; };
     return ConnectedOverlayPositionChange;
 }());
 
@@ -181,6 +208,7 @@ var ConnectedOverlayPositionChange = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Describes a strategy that will be used by an overlay to handle scroll events while it is open.
  * @record
@@ -198,6 +226,7 @@ function getMatScrollStrategyAlreadyAttachedError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
  */
@@ -205,6 +234,7 @@ var CloseScrollStrategy = /** @class */ (function () {
     function CloseScrollStrategy(_scrollDispatcher, _ngZone) {
         this._scrollDispatcher = _scrollDispatcher;
         this._ngZone = _ngZone;
+        this._scrollSubscription = null;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -267,12 +297,15 @@ var CloseScrollStrategy = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
 var BlockScrollStrategy = /** @class */ (function () {
     function BlockScrollStrategy(_viewportRuler) {
         this._viewportRuler = _viewportRuler;
+        this._previousHTMLStyles = { top: '', left: '' };
+        this._isEnabled = false;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -359,6 +392,9 @@ var BlockScrollStrategy = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
+// TODO(jelbourn): move this to live with the rest of the scrolling code
+// TODO(jelbourn): someday replace this with IntersectionObservers
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
  * \@docs-private
@@ -396,6 +432,7 @@ function isElementClippedByScrolling(element, scrollContainers) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Config options for the RepositionScrollStrategy.
  * @record
@@ -410,6 +447,7 @@ var RepositionScrollStrategy = /** @class */ (function () {
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
         this._config = _config;
+        this._scrollSubscription = null;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -489,10 +527,40 @@ var RepositionScrollStrategy = /** @class */ (function () {
  */
 var ScrollStrategyOptions = /** @class */ (function () {
     function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone) {
+        var _this = this;
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
+        /**
+         * Do nothing on scroll.
+         */
+        this.noop = function () { return new NoopScrollStrategy(); };
+        /**
+         * Close the overlay as soon as the user scrolls.
+         */
+        this.close = function () { return new CloseScrollStrategy(_this._scrollDispatcher, _this._ngZone); };
+        /**
+         * Block scrolling.
+         */
+        this.block = function () { return new BlockScrollStrategy(_this._viewportRuler); };
+        /**
+         * Update the overlay's position on scroll.
+         * @param config Configuration to be used inside the scroll strategy.
+         * Allows debouncing the reposition calls.
+         */
+        this.reposition = function (config) {
+            return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config);
+        };
     }
+    ScrollStrategyOptions.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    ScrollStrategyOptions.ctorParameters = function () { return [
+        { type: _angular_cdk_scrolling.ScrollDispatcher, },
+        { type: _angular_cdk_scrolling.ViewportRuler, },
+        { type: _angular_core.NgZone, },
+    ]; };
     return ScrollStrategyOptions;
 }());
 
@@ -505,6 +573,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
@@ -516,6 +585,14 @@ var OverlayRef = /** @class */ (function () {
         this._config = _config;
         this._ngZone = _ngZone;
         this._keyboardDispatcher = _keyboardDispatcher;
+        this._backdropElement = null;
+        this._backdropClick = new rxjs_Subject.Subject();
+        this._attachments = new rxjs_Subject.Subject();
+        this._detachments = new rxjs_Subject.Subject();
+        /**
+         * Stream of keydown events dispatched to this overlay.
+         */
+        this._keydownEvents = new rxjs_Subject.Subject();
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -933,6 +1010,7 @@ function formatCssUnit(value) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -945,6 +1023,39 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
+        /**
+         * Layout direction of the position strategy.
+         */
+        this._dir = 'ltr';
+        /**
+         * The offset in pixels for the overlay connection point on the x-axis
+         */
+        this._offsetX = 0;
+        /**
+         * The offset in pixels for the overlay connection point on the y-axis
+         */
+        this._offsetY = 0;
+        /**
+         * The Scrollable containers used to check scrollable view properties on position change.
+         */
+        this.scrollables = [];
+        /**
+         * Subscription to viewport resize events.
+         */
+        this._resizeSubscription = rxjs_Subscription.Subscription.EMPTY;
+        /**
+         * Ordered list of preferred positions, from most to least desirable.
+         */
+        this._preferredPositions = [];
+        /**
+         * Whether the position strategy is applied currently.
+         */
+        this._applied = false;
+        /**
+         * Whether the overlay position is locked.
+         */
+        this._positionLocked = false;
+        this._onPositionChange = new rxjs_Subject.Subject();
         this._origin = this._connectedTo.nativeElement;
         this.withFallbackPosition(originPos, overlayPos);
     }
@@ -1462,6 +1573,7 @@ var ConnectedPositionStrategy = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -1471,6 +1583,16 @@ var ConnectedPositionStrategy = /** @class */ (function () {
 var GlobalPositionStrategy = /** @class */ (function () {
     function GlobalPositionStrategy(_document) {
         this._document = _document;
+        this._cssPosition = 'static';
+        this._topOffset = '';
+        this._bottomOffset = '';
+        this._leftOffset = '';
+        this._rightOffset = '';
+        this._alignItems = '';
+        this._justifyContent = '';
+        this._width = '';
+        this._height = '';
+        this._wrapper = null;
     }
     /**
      * @param {?} overlayRef
@@ -1773,6 +1895,14 @@ var OverlayPositionBuilder = /** @class */ (function () {
     function (elementRef, originPos, overlayPos) {
         return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document);
     };
+    OverlayPositionBuilder.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    OverlayPositionBuilder.ctorParameters = function () { return [
+        { type: _angular_cdk_scrolling.ViewportRuler, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return OverlayPositionBuilder;
 }());
 
@@ -1789,6 +1919,10 @@ var OverlayPositionBuilder = /** @class */ (function () {
 var OverlayKeyboardDispatcher = /** @class */ (function () {
     function OverlayKeyboardDispatcher(_document) {
         this._document = _document;
+        /**
+         * Currently attached overlays in the order they were attached.
+         */
+        this._attachedOverlays = [];
     }
     /**
      * @return {?}
@@ -1890,6 +2024,13 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
         // Use that overlay if it exists, otherwise choose the most recently attached one
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     };
+    OverlayKeyboardDispatcher.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    OverlayKeyboardDispatcher.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return OverlayKeyboardDispatcher;
 }());
 /**
@@ -1985,6 +2126,13 @@ var OverlayContainer = /** @class */ (function () {
         this._document.body.appendChild(container);
         this._containerElement = container;
     };
+    OverlayContainer.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    OverlayContainer.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return OverlayContainer;
 }());
 /**
@@ -2110,6 +2258,21 @@ var Overlay = /** @class */ (function () {
     function (pane) {
         return new _angular_cdk_portal.DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     };
+    Overlay.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    Overlay.ctorParameters = function () { return [
+        { type: ScrollStrategyOptions, },
+        { type: OverlayContainer, },
+        { type: _angular_core.ComponentFactoryResolver, },
+        { type: OverlayPositionBuilder, },
+        { type: OverlayKeyboardDispatcher, },
+        { type: _angular_core.ApplicationRef, },
+        { type: _angular_core.Injector, },
+        { type: _angular_core.NgZone, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
     return Overlay;
 }());
 
@@ -2155,6 +2318,16 @@ var CdkOverlayOrigin = /** @class */ (function () {
     function CdkOverlayOrigin(elementRef) {
         this.elementRef = elementRef;
     }
+    CdkOverlayOrigin.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
+                    exportAs: 'cdkOverlayOrigin',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkOverlayOrigin.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+    ]; };
     return CdkOverlayOrigin;
 }());
 /**
@@ -2163,10 +2336,48 @@ var CdkOverlayOrigin = /** @class */ (function () {
 var CdkConnectedOverlay = /** @class */ (function () {
     // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
     function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir, _document) {
+        var _this = this;
         this._overlay = _overlay;
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._document = _document;
+        this._hasBackdrop = false;
+        this._backdropSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._positionSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._offsetX = 0;
+        this._offsetY = 0;
+        /**
+         * Strategy to be used when handling scroll events while the overlay is open.
+         */
+        this.scrollStrategy = this._scrollStrategy();
+        /**
+         * Whether the overlay is open.
+         */
+        this.open = false;
+        /**
+         * Event emitted when the backdrop is clicked.
+         */
+        this.backdropClick = new _angular_core.EventEmitter();
+        /**
+         * Event emitted when the position has changed.
+         */
+        this.positionChange = new _angular_core.EventEmitter();
+        /**
+         * Event emitted when the overlay has been attached.
+         */
+        this.attach = new _angular_core.EventEmitter();
+        /**
+         * Event emitted when the overlay has been detached.
+         */
+        this.detach = new _angular_core.EventEmitter();
+        /**
+         * Event listener that will close the overlay when the user presses escape.
+         */
+        this._escapeListener = function (event) {
+            if (event.keyCode === _angular_cdk_keycodes.ESCAPE) {
+                _this._detachOverlay();
+            }
+        };
         this._templatePortal = new _angular_cdk_portal.TemplatePortal(templateRef, viewContainerRef);
     }
     Object.defineProperty(CdkConnectedOverlay.prototype, "offsetX", {
@@ -2576,6 +2787,51 @@ var CdkConnectedOverlay = /** @class */ (function () {
         this._positionSubscription.unsubscribe();
         this._document.removeEventListener('keydown', this._escapeListener);
     };
+    CdkConnectedOverlay.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
+                    exportAs: 'cdkConnectedOverlay'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkConnectedOverlay.ctorParameters = function () { return [
+        { type: Overlay, },
+        { type: _angular_core.TemplateRef, },
+        { type: _angular_core.ViewContainerRef, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
+        { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
+        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
+    CdkConnectedOverlay.propDecorators = {
+        "origin": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayOrigin',] },],
+        "positions": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayPositions',] },],
+        "offsetX": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayOffsetX',] },],
+        "offsetY": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayOffsetY',] },],
+        "width": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayWidth',] },],
+        "height": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayHeight',] },],
+        "minWidth": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayMinWidth',] },],
+        "minHeight": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayMinHeight',] },],
+        "backdropClass": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayBackdropClass',] },],
+        "scrollStrategy": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
+        "open": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayOpen',] },],
+        "hasBackdrop": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
+        "_deprecatedOrigin": [{ type: _angular_core.Input, args: ['origin',] },],
+        "_deprecatedPositions": [{ type: _angular_core.Input, args: ['positions',] },],
+        "_deprecatedOffsetX": [{ type: _angular_core.Input, args: ['offsetX',] },],
+        "_deprecatedOffsetY": [{ type: _angular_core.Input, args: ['offsetY',] },],
+        "_deprecatedWidth": [{ type: _angular_core.Input, args: ['width',] },],
+        "_deprecatedHeight": [{ type: _angular_core.Input, args: ['height',] },],
+        "_deprecatedMinWidth": [{ type: _angular_core.Input, args: ['minWidth',] },],
+        "_deprecatedMinHeight": [{ type: _angular_core.Input, args: ['minHeight',] },],
+        "_deprecatedBackdropClass": [{ type: _angular_core.Input, args: ['backdropClass',] },],
+        "_deprecatedScrollStrategy": [{ type: _angular_core.Input, args: ['scrollStrategy',] },],
+        "_deprecatedOpen": [{ type: _angular_core.Input, args: ['open',] },],
+        "_deprecatedHasBackdrop": [{ type: _angular_core.Input, args: ['hasBackdrop',] },],
+        "backdropClick": [{ type: _angular_core.Output },],
+        "positionChange": [{ type: _angular_core.Output },],
+        "attach": [{ type: _angular_core.Output },],
+        "detach": [{ type: _angular_core.Output },],
+    };
     return CdkConnectedOverlay;
 }());
 
@@ -2595,6 +2851,16 @@ var OVERLAY_PROVIDERS = [
 var OverlayModule = /** @class */ (function () {
     function OverlayModule() {
     }
+    OverlayModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_cdk_bidi.BidiModule, _angular_cdk_portal.PortalModule, _angular_cdk_scrolling.ScrollDispatchModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, _angular_cdk_scrolling.ScrollDispatchModule],
+                    declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
+                    providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
+                },] },
+    ];
+    /** @nocollapse */
+    OverlayModule.ctorParameters = function () { return []; };
     return OverlayModule;
 }());
 
@@ -2602,6 +2868,7 @@ var OverlayModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
  * Fullscreen mode
@@ -2683,6 +2950,11 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
             (/** @type {?} */ (document)).msFullscreenElement ||
             null;
     };
+    FullscreenOverlayContainer.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    FullscreenOverlayContainer.ctorParameters = function () { return []; };
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

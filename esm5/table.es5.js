@@ -7,17 +7,18 @@
  */
 import { __extends } from 'tslib';
 import * as tslib_1 from 'tslib';
-import { EmbeddedViewRef, isDevMode } from '@angular/core';
+import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
-import 'rxjs/BehaviorSubject';
-import 'rxjs/Subject';
-import '@angular/common';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -78,6 +79,17 @@ var CdkHeaderRowDef = /** @class */ (function (_super) {
     function CdkHeaderRowDef(template, _differs) {
         return _super.call(this, template, _differs) || this;
     }
+    CdkHeaderRowDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkHeaderRowDef]',
+                    inputs: ['columns: cdkHeaderRowDef'],
+                },] },
+    ];
+    /** @nocollapse */
+    CdkHeaderRowDef.ctorParameters = function () { return [
+        { type: TemplateRef, },
+        { type: IterableDiffers, },
+    ]; };
     return CdkHeaderRowDef;
 }(BaseRowDef));
 /**
@@ -92,6 +104,17 @@ var CdkRowDef = /** @class */ (function (_super) {
     function CdkRowDef(template, _differs) {
         return _super.call(this, template, _differs) || this;
     }
+    CdkRowDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkRowDef]',
+                    inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
+                },] },
+    ];
+    /** @nocollapse */
+    CdkRowDef.ctorParameters = function () { return [
+        { type: TemplateRef, },
+        { type: IterableDiffers, },
+    ]; };
     return CdkRowDef;
 }(BaseRowDef));
 /**
@@ -108,6 +131,21 @@ var CdkCellOutlet = /** @class */ (function () {
         this._viewContainer = _viewContainer;
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
+    /**
+     * Static property containing the latest constructed instance of this class.
+     * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
+     * createEmbeddedView. After one of these components are created, this property will provide
+     * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
+     * construct the cells with the provided context.
+     */
+    CdkCellOutlet.mostRecentCellOutlet = null;
+    CdkCellOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[cdkCellOutlet]' },] },
+    ];
+    /** @nocollapse */
+    CdkCellOutlet.ctorParameters = function () { return [
+        { type: ViewContainerRef, },
+    ]; };
     return CdkCellOutlet;
 }());
 /**
@@ -116,6 +154,20 @@ var CdkCellOutlet = /** @class */ (function () {
 var CdkHeaderRow = /** @class */ (function () {
     function CdkHeaderRow() {
     }
+    CdkHeaderRow.decorators = [
+        { type: Component, args: [{selector: 'cdk-header-row',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-header-row',
+                        'role': 'row',
+                    },
+                    changeDetection: ChangeDetectionStrategy.OnPush,
+                    encapsulation: ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                },] },
+    ];
+    /** @nocollapse */
+    CdkHeaderRow.ctorParameters = function () { return []; };
     return CdkHeaderRow;
 }());
 /**
@@ -124,6 +176,20 @@ var CdkHeaderRow = /** @class */ (function () {
 var CdkRow = /** @class */ (function () {
     function CdkRow() {
     }
+    CdkRow.decorators = [
+        { type: Component, args: [{selector: 'cdk-row',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-row',
+                        'role': 'row',
+                    },
+                    changeDetection: ChangeDetectionStrategy.OnPush,
+                    encapsulation: ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                },] },
+    ];
+    /** @nocollapse */
+    CdkRow.ctorParameters = function () { return []; };
     return CdkRow;
 }());
 
@@ -140,6 +206,13 @@ var CdkCellDef = /** @class */ (function () {
     function CdkCellDef(template) {
         this.template = template;
     }
+    CdkCellDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkCellDef]' },] },
+    ];
+    /** @nocollapse */
+    CdkCellDef.ctorParameters = function () { return [
+        { type: TemplateRef, },
+    ]; };
     return CdkCellDef;
 }());
 /**
@@ -150,6 +223,13 @@ var CdkHeaderCellDef = /** @class */ (function () {
     function CdkHeaderCellDef(template) {
         this.template = template;
     }
+    CdkHeaderCellDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] },
+    ];
+    /** @nocollapse */
+    CdkHeaderCellDef.ctorParameters = function () { return [
+        { type: TemplateRef, },
+    ]; };
     return CdkHeaderCellDef;
 }());
 /**
@@ -176,6 +256,16 @@ var CdkColumnDef = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    CdkColumnDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
+    ];
+    /** @nocollapse */
+    CdkColumnDef.ctorParameters = function () { return []; };
+    CdkColumnDef.propDecorators = {
+        "name": [{ type: Input, args: ['cdkColumnDef',] },],
+        "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
+        "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
+    };
     return CdkColumnDef;
 }());
 /**
@@ -185,6 +275,20 @@ var CdkHeaderCell = /** @class */ (function () {
     function CdkHeaderCell(columnDef, elementRef) {
         elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
+    CdkHeaderCell.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-header-cell',
+                    host: {
+                        'class': 'cdk-header-cell',
+                        'role': 'columnheader',
+                    },
+                },] },
+    ];
+    /** @nocollapse */
+    CdkHeaderCell.ctorParameters = function () { return [
+        { type: CdkColumnDef, },
+        { type: ElementRef, },
+    ]; };
     return CdkHeaderCell;
 }());
 /**
@@ -194,6 +298,20 @@ var CdkCell = /** @class */ (function () {
     function CdkCell(columnDef, elementRef) {
         elementRef.nativeElement.classList.add("cdk-column-" + columnDef.cssClassFriendlyName);
     }
+    CdkCell.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-cell',
+                    host: {
+                        'class': 'cdk-cell',
+                        'role': 'gridcell',
+                    },
+                },] },
+    ];
+    /** @nocollapse */
+    CdkCell.ctorParameters = function () { return [
+        { type: CdkColumnDef, },
+        { type: ElementRef, },
+    ]; };
     return CdkCell;
 }());
 
@@ -201,6 +319,7 @@ var CdkCell = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Returns an error to be thrown when attempting to find an unexisting column.
  * \@docs-private
@@ -249,6 +368,7 @@ function getTableMissingRowDefsError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
@@ -257,6 +377,13 @@ var RowPlaceholder = /** @class */ (function () {
     function RowPlaceholder(viewContainer) {
         this.viewContainer = viewContainer;
     }
+    RowPlaceholder.decorators = [
+        { type: Directive, args: [{ selector: '[rowPlaceholder]' },] },
+    ];
+    /** @nocollapse */
+    RowPlaceholder.ctorParameters = function () { return [
+        { type: ViewContainerRef, },
+    ]; };
     return RowPlaceholder;
 }());
 /**
@@ -267,6 +394,13 @@ var HeaderRowPlaceholder = /** @class */ (function () {
     function HeaderRowPlaceholder(viewContainer) {
         this.viewContainer = viewContainer;
     }
+    HeaderRowPlaceholder.decorators = [
+        { type: Directive, args: [{ selector: '[headerRowPlaceholder]' },] },
+    ];
+    /** @nocollapse */
+    HeaderRowPlaceholder.ctorParameters = function () { return [
+        { type: ViewContainerRef, },
+    ]; };
     return HeaderRowPlaceholder;
 }());
 /**
@@ -294,6 +428,23 @@ var CdkTable = /** @class */ (function () {
     function CdkTable(_differs, _changeDetectorRef, elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
+        /**
+         * Subject that emits when the component has been destroyed.
+         */
+        this._onDestroy = new Subject();
+        /**
+         * Latest data provided by the data source through the connect interface.
+         */
+        this._data = [];
+        /**
+         * Map of all the user's defined columns (header and data cell template) identified by name.
+         */
+        this._columnDefsByName = new Map();
+        /**
+         * Stream containing the latest information on what rows are being displayed on screen.
+         * Can be used by the data source to as a heuristic of what data should be provided.
+         */
+        this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
             elementRef.nativeElement.setAttribute('role', 'grid');
         }
@@ -687,6 +838,34 @@ var CdkTable = /** @class */ (function () {
             return column.cell;
         });
     };
+    CdkTable.decorators = [
+        { type: Component, args: [{selector: 'cdk-table',
+                    exportAs: 'cdkTable',
+                    template: CDK_TABLE_TEMPLATE,
+                    host: {
+                        'class': 'cdk-table',
+                    },
+                    encapsulation: ViewEncapsulation.None,
+                    preserveWhitespaces: false,
+                    changeDetection: ChangeDetectionStrategy.OnPush,
+                },] },
+    ];
+    /** @nocollapse */
+    CdkTable.ctorParameters = function () { return [
+        { type: IterableDiffers, },
+        { type: ChangeDetectorRef, },
+        { type: ElementRef, },
+        { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
+    ]; };
+    CdkTable.propDecorators = {
+        "trackBy": [{ type: Input },],
+        "dataSource": [{ type: Input },],
+        "_rowPlaceholder": [{ type: ViewChild, args: [RowPlaceholder,] },],
+        "_headerRowPlaceholder": [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
+        "_columnDefs": [{ type: ContentChildren, args: [CdkColumnDef,] },],
+        "_headerDef": [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
+        "_rowDefs": [{ type: ContentChildren, args: [CdkRowDef,] },],
+    };
     return CdkTable;
 }());
 
@@ -695,9 +874,33 @@ var CdkTable = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
+var EXPORTED_DECLARATIONS = [
+    CdkTable,
+    CdkRowDef,
+    CdkCellDef,
+    CdkCellOutlet,
+    CdkHeaderCellDef,
+    CdkColumnDef,
+    CdkCell,
+    CdkRow,
+    CdkHeaderCell,
+    CdkHeaderRow,
+    CdkHeaderRowDef,
+    RowPlaceholder,
+    HeaderRowPlaceholder,
+];
 var CdkTableModule = /** @class */ (function () {
     function CdkTableModule() {
     }
+    CdkTableModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [CommonModule],
+                    exports: [EXPORTED_DECLARATIONS],
+                    declarations: [EXPORTED_DECLARATIONS]
+                },] },
+    ];
+    /** @nocollapse */
+    CdkTableModule.ctorParameters = function () { return []; };
     return CdkTableModule;
 }());
 

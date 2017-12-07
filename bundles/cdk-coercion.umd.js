@@ -15,6 +15,7 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Coerces a data-bound value (typically a string) to a boolean.
  * @param {?} value
@@ -28,6 +29,7 @@ function coerceBooleanProperty(value) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * @param {?} value
  * @param {?=} fallbackValue
@@ -45,6 +47,7 @@ function coerceNumberProperty(value, fallbackValue) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Wraps the provided value in an array, unless the provided value is an array.
  * @template T

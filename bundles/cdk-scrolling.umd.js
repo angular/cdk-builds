@@ -28,6 +28,23 @@ var ScrollDispatcher = /** @class */ (function () {
     function ScrollDispatcher(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        /**
+         * Subject for notifying that a registered scrollable reference element has been scrolled.
+         */
+        this._scrolled = new rxjs_Subject.Subject();
+        /**
+         * Keeps track of the global `scroll` and `resize` subscriptions.
+         */
+        this._globalSubscription = null;
+        /**
+         * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
+         */
+        this._scrolledCount = 0;
+        /**
+         * Map of all the scrollable references that are registered with the service and their
+         * scroll event subscriptions.
+         */
+        this.scrollContainers = new Map();
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -215,6 +232,14 @@ var ScrollDispatcher = /** @class */ (function () {
             return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
+    ScrollDispatcher.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    ScrollDispatcher.ctorParameters = function () { return [
+        { type: _angular_core.NgZone, },
+        { type: _angular_cdk_platform.Platform, },
+    ]; };
     return ScrollDispatcher;
 }());
 /**
@@ -249,9 +274,12 @@ var SCROLL_DISPATCHER_PROVIDER = {
  */
 var CdkScrollable = /** @class */ (function () {
     function CdkScrollable(_elementRef, _scroll, _ngZone) {
+        var _this = this;
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
+        this._elementScrolled = new rxjs_Subject.Subject();
+        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
      * @return {?}
@@ -301,6 +329,17 @@ var CdkScrollable = /** @class */ (function () {
     function () {
         return this._elementRef;
     };
+    CdkScrollable.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-scrollable], [cdkScrollable]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkScrollable.ctorParameters = function () { return [
+        { type: _angular_core.ElementRef, },
+        { type: ScrollDispatcher, },
+        { type: _angular_core.NgZone, },
+    ]; };
     return CdkScrollable;
 }());
 
@@ -431,6 +470,14 @@ var ViewportRuler = /** @class */ (function () {
     function () {
         this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     };
+    ViewportRuler.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    ViewportRuler.ctorParameters = function () { return [
+        { type: _angular_cdk_platform.Platform, },
+        { type: _angular_core.NgZone, },
+    ]; };
     return ViewportRuler;
 }());
 /**
@@ -461,6 +508,16 @@ var VIEWPORT_RULER_PROVIDER = {
 var ScrollDispatchModule = /** @class */ (function () {
     function ScrollDispatchModule() {
     }
+    ScrollDispatchModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    imports: [_angular_cdk_platform.PlatformModule],
+                    exports: [CdkScrollable],
+                    declarations: [CdkScrollable],
+                    providers: [SCROLL_DISPATCHER_PROVIDER],
+                },] },
+    ];
+    /** @nocollapse */
+    ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());
 

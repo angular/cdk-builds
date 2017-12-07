@@ -5,13 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import 'rxjs/Subject';
-import { Optional, SkipSelf } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
+import { Injectable, Optional, SkipSelf } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * @abstract
  */
@@ -35,6 +36,22 @@ class SelectionModel {
     constructor(_isMulti = false, initiallySelectedValues, _emitChanges = true) {
         this._isMulti = _isMulti;
         this._emitChanges = _emitChanges;
+        /**
+         * Currently-selected values.
+         */
+        this._selection = new Set();
+        /**
+         * Keeps track of the deselected options that haven't been emitted by the change event.
+         */
+        this._deselectedToEmit = [];
+        /**
+         * Keeps track of the selected option that haven't been emitted by the change event.
+         */
+        this._selectedToEmit = [];
+        /**
+         * Event emitted when the value has changed.
+         */
+        this.onChange = this._emitChanges ? new Subject() : null;
         if (initiallySelectedValues) {
             if (_isMulti) {
                 initiallySelectedValues.forEach(value => this._markSelected(value));
@@ -228,6 +245,9 @@ function getMultipleValuesInSingleSelectionError() {
  * less error-prone if they are simply passed through when the events occur.
  */
 class UniqueSelectionDispatcher {
+    constructor() {
+        this._listeners = [];
+    }
     /**
      * Notify other items that selection for the given name has been set.
      * @param {?} id ID of the item.
@@ -253,6 +273,11 @@ class UniqueSelectionDispatcher {
         };
     }
 }
+UniqueSelectionDispatcher.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+UniqueSelectionDispatcher.ctorParameters = () => [];
 /**
  * \@docs-private
  * @param {?} parentDispatcher

@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgZone, Optional, SkipSelf } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
-import 'rxjs/Subject';
+import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -32,6 +32,23 @@ var ScrollDispatcher = /** @class */ (function () {
     function ScrollDispatcher(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        /**
+         * Subject for notifying that a registered scrollable reference element has been scrolled.
+         */
+        this._scrolled = new Subject();
+        /**
+         * Keeps track of the global `scroll` and `resize` subscriptions.
+         */
+        this._globalSubscription = null;
+        /**
+         * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
+         */
+        this._scrolledCount = 0;
+        /**
+         * Map of all the scrollable references that are registered with the service and their
+         * scroll event subscriptions.
+         */
+        this.scrollContainers = new Map();
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -219,6 +236,14 @@ var ScrollDispatcher = /** @class */ (function () {
             return fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
+    ScrollDispatcher.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    ScrollDispatcher.ctorParameters = function () { return [
+        { type: NgZone, },
+        { type: Platform, },
+    ]; };
     return ScrollDispatcher;
 }());
 /**
@@ -253,9 +278,12 @@ var SCROLL_DISPATCHER_PROVIDER = {
  */
 var CdkScrollable = /** @class */ (function () {
     function CdkScrollable(_elementRef, _scroll, _ngZone) {
+        var _this = this;
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
+        this._elementScrolled = new Subject();
+        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
      * @return {?}
@@ -305,6 +333,17 @@ var CdkScrollable = /** @class */ (function () {
     function () {
         return this._elementRef;
     };
+    CdkScrollable.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-scrollable], [cdkScrollable]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkScrollable.ctorParameters = function () { return [
+        { type: ElementRef, },
+        { type: ScrollDispatcher, },
+        { type: NgZone, },
+    ]; };
     return CdkScrollable;
 }());
 
@@ -435,6 +474,14 @@ var ViewportRuler = /** @class */ (function () {
     function () {
         this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
     };
+    ViewportRuler.decorators = [
+        { type: Injectable },
+    ];
+    /** @nocollapse */
+    ViewportRuler.ctorParameters = function () { return [
+        { type: Platform, },
+        { type: NgZone, },
+    ]; };
     return ViewportRuler;
 }());
 /**
@@ -465,6 +512,16 @@ var VIEWPORT_RULER_PROVIDER = {
 var ScrollDispatchModule = /** @class */ (function () {
     function ScrollDispatchModule() {
     }
+    ScrollDispatchModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [PlatformModule],
+                    exports: [CdkScrollable],
+                    declarations: [CdkScrollable],
+                    providers: [SCROLL_DISPATCHER_PROVIDER],
+                },] },
+    ];
+    /** @nocollapse */
+    ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());
 

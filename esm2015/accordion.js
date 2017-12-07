@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import '@angular/core';
-import '@angular/cdk/collections';
+import { ChangeDetectorRef, Directive, EventEmitter, Input, NgModule, Optional, Output } from '@angular/core';
+import { UNIQUE_SELECTION_DISPATCHER_PROVIDER, UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
@@ -15,9 +15,20 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
  */
 
 /**
+ * Used to generate unique ID for each accordion.
+ */
+let nextId$1 = 0;
+/**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
 class CdkAccordion {
+    constructor() {
+        /**
+         * A readonly id value to use for unique selection coordination.
+         */
+        this.id = `cdk-accordion-${nextId$1++}`;
+        this._multi = false;
+    }
     /**
      * Whether the accordion should allow multiple expanded accordion items simulateously.
      * @return {?}
@@ -29,12 +40,27 @@ class CdkAccordion {
      */
     set multi(multi) { this._multi = coerceBooleanProperty(multi); }
 }
+CdkAccordion.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-accordion, [cdkAccordion]',
+                exportAs: 'cdkAccordion',
+            },] },
+];
+/** @nocollapse */
+CdkAccordion.ctorParameters = () => [];
+CdkAccordion.propDecorators = {
+    "multi": [{ type: Input },],
+};
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
 
+/**
+ * Used to generate unique ID for each accordion item.
+ */
+let nextId = 0;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -49,6 +75,26 @@ class CdkAccordionItem {
         this.accordion = accordion;
         this._changeDetectorRef = _changeDetectorRef;
         this._expansionDispatcher = _expansionDispatcher;
+        /**
+         * Event emitted every time the AccordionItem is closed.
+         */
+        this.closed = new EventEmitter();
+        /**
+         * Event emitted every time the AccordionItem is opened.
+         */
+        this.opened = new EventEmitter();
+        /**
+         * Event emitted when the AccordionItem is destroyed.
+         */
+        this.destroyed = new EventEmitter();
+        /**
+         * The unique AccordionItem id.
+         */
+        this.id = `cdk-accordion-child-${nextId++}`;
+        /**
+         * Unregister function for _expansionDispatcher.
+         */
+        this._removeUniqueSelectionListener = () => { };
         this._removeUniqueSelectionListener =
             _expansionDispatcher.listen((id, accordionId) => {
                 if (this.accordion && !this.accordion.multi &&
@@ -118,6 +164,24 @@ class CdkAccordionItem {
         this.expanded = true;
     }
 }
+CdkAccordionItem.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-accordion-item',
+                exportAs: 'cdkAccordionItem',
+            },] },
+];
+/** @nocollapse */
+CdkAccordionItem.ctorParameters = () => [
+    { type: CdkAccordion, decorators: [{ type: Optional },] },
+    { type: ChangeDetectorRef, },
+    { type: UniqueSelectionDispatcher, },
+];
+CdkAccordionItem.propDecorators = {
+    "closed": [{ type: Output },],
+    "opened": [{ type: Output },],
+    "destroyed": [{ type: Output },],
+    "expanded": [{ type: Input },],
+};
 
 /**
  * @fileoverview added by tsickle
@@ -126,6 +190,15 @@ class CdkAccordionItem {
 
 class CdkAccordionModule {
 }
+CdkAccordionModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [CdkAccordion, CdkAccordionItem],
+                declarations: [CdkAccordion, CdkAccordionItem],
+                providers: [UNIQUE_SELECTION_DISPATCHER_PROVIDER],
+            },] },
+];
+/** @nocollapse */
+CdkAccordionModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

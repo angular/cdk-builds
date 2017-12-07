@@ -17,10 +17,19 @@
  */
 
 /**
+ * Used to generate unique ID for each accordion.
+ */
+var nextId$1 = 0;
+/**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
 var CdkAccordion = /** @class */ (function () {
     function CdkAccordion() {
+        /**
+         * A readonly id value to use for unique selection coordination.
+         */
+        this.id = "cdk-accordion-" + nextId$1++;
+        this._multi = false;
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
         get: /**
@@ -36,6 +45,17 @@ var CdkAccordion = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    CdkAccordion.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'cdk-accordion, [cdkAccordion]',
+                    exportAs: 'cdkAccordion',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkAccordion.ctorParameters = function () { return []; };
+    CdkAccordion.propDecorators = {
+        "multi": [{ type: _angular_core.Input },],
+    };
     return CdkAccordion;
 }());
 
@@ -44,6 +64,10 @@ var CdkAccordion = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
+/**
+ * Used to generate unique ID for each accordion item.
+ */
+var nextId = 0;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -54,6 +78,26 @@ var CdkAccordionItem = /** @class */ (function () {
         this.accordion = accordion;
         this._changeDetectorRef = _changeDetectorRef;
         this._expansionDispatcher = _expansionDispatcher;
+        /**
+         * Event emitted every time the AccordionItem is closed.
+         */
+        this.closed = new _angular_core.EventEmitter();
+        /**
+         * Event emitted every time the AccordionItem is opened.
+         */
+        this.opened = new _angular_core.EventEmitter();
+        /**
+         * Event emitted when the AccordionItem is destroyed.
+         */
+        this.destroyed = new _angular_core.EventEmitter();
+        /**
+         * The unique AccordionItem id.
+         */
+        this.id = "cdk-accordion-child-" + nextId++;
+        /**
+         * Unregister function for _expansionDispatcher.
+         */
+        this._removeUniqueSelectionListener = function () { };
         this._removeUniqueSelectionListener =
             _expansionDispatcher.listen(function (id, accordionId) {
                 if (_this.accordion && !_this.accordion.multi &&
@@ -146,6 +190,24 @@ var CdkAccordionItem = /** @class */ (function () {
     function () {
         this.expanded = true;
     };
+    CdkAccordionItem.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: 'cdk-accordion-item',
+                    exportAs: 'cdkAccordionItem',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkAccordionItem.ctorParameters = function () { return [
+        { type: CdkAccordion, decorators: [{ type: _angular_core.Optional },] },
+        { type: _angular_core.ChangeDetectorRef, },
+        { type: _angular_cdk_collections.UniqueSelectionDispatcher, },
+    ]; };
+    CdkAccordionItem.propDecorators = {
+        "closed": [{ type: _angular_core.Output },],
+        "opened": [{ type: _angular_core.Output },],
+        "destroyed": [{ type: _angular_core.Output },],
+        "expanded": [{ type: _angular_core.Input },],
+    };
     return CdkAccordionItem;
 }());
 
@@ -157,6 +219,15 @@ var CdkAccordionItem = /** @class */ (function () {
 var CdkAccordionModule = /** @class */ (function () {
     function CdkAccordionModule() {
     }
+    CdkAccordionModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [CdkAccordion, CdkAccordionItem],
+                    declarations: [CdkAccordion, CdkAccordionItem],
+                    providers: [_angular_cdk_collections.UNIQUE_SELECTION_DISPATCHER_PROVIDER],
+                },] },
+    ];
+    /** @nocollapse */
+    CdkAccordionModule.ctorParameters = function () { return []; };
     return CdkAccordionModule;
 }());
 

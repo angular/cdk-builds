@@ -8,8 +8,8 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
 	typeof define === 'function' && define.amd ? define(['exports', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.portal = global.ng.cdk.portal || {})));
-}(this, (function (exports) { 'use strict';
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.portal = global.ng.cdk.portal || {}),global.ng.core));
+}(this, (function (exports,_angular_core) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -41,6 +41,7 @@ function __extends(d, b) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Throws an exception when attempting to attach a null portal to a host.
  * \@docs-private
@@ -95,6 +96,7 @@ function throwNoPortalAttachedError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Interface that can be used to generically type a class.
  * @record
@@ -269,6 +271,10 @@ var TemplatePortal = /** @class */ (function (_super) {
  */
 var BasePortalOutlet = /** @class */ (function () {
     function BasePortalOutlet() {
+        /**
+         * Whether this host has already been permanently disposed.
+         */
+        this._isDisposed = false;
     }
     /** Whether this host has an attached portal. */
     /**
@@ -378,6 +384,7 @@ var BasePortalOutlet = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
@@ -507,6 +514,7 @@ var DomPortalOutlet = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
@@ -516,6 +524,17 @@ var CdkPortal = /** @class */ (function (_super) {
     function CdkPortal(templateRef, viewContainerRef) {
         return _super.call(this, templateRef, viewContainerRef) || this;
     }
+    CdkPortal.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdk-portal], [cdkPortal], [portal]',
+                    exportAs: 'cdkPortal',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkPortal.ctorParameters = function () { return [
+        { type: _angular_core.TemplateRef, },
+        { type: _angular_core.ViewContainerRef, },
+    ]; };
     return CdkPortal;
 }(TemplatePortal));
 /**
@@ -531,6 +550,10 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._viewContainerRef = _viewContainerRef;
+        /**
+         * The attached portal.
+         */
+        _this._portal = null;
         return _this;
     }
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
@@ -654,11 +677,35 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         this._portal = portal;
         return viewRef;
     };
+    CdkPortalOutlet.decorators = [
+        { type: _angular_core.Directive, args: [{
+                    selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalOutlet, cdkPortalHost',
+                    inputs: ['portal: cdkPortalOutlet']
+                },] },
+    ];
+    /** @nocollapse */
+    CdkPortalOutlet.ctorParameters = function () { return [
+        { type: _angular_core.ComponentFactoryResolver, },
+        { type: _angular_core.ViewContainerRef, },
+    ]; };
+    CdkPortalOutlet.propDecorators = {
+        "_deprecatedPortal": [{ type: _angular_core.Input, args: ['portalHost',] },],
+        "_deprecatedPortalHost": [{ type: _angular_core.Input, args: ['cdkPortalHost',] },],
+    };
     return CdkPortalOutlet;
 }(BasePortalOutlet));
 var PortalModule = /** @class */ (function () {
     function PortalModule() {
     }
+    PortalModule.decorators = [
+        { type: _angular_core.NgModule, args: [{
+                    exports: [CdkPortal, CdkPortalOutlet],
+                    declarations: [CdkPortal, CdkPortalOutlet],
+                },] },
+    ];
+    /** @nocollapse */
+    PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
 
@@ -666,6 +713,7 @@ var PortalModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.

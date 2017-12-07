@@ -15,6 +15,7 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
 /**
  * @abstract
  */
@@ -39,6 +40,22 @@ var SelectionModel = /** @class */ (function () {
         var _this = this;
         this._isMulti = _isMulti;
         this._emitChanges = _emitChanges;
+        /**
+         * Currently-selected values.
+         */
+        this._selection = new Set();
+        /**
+         * Keeps track of the deselected options that haven't been emitted by the change event.
+         */
+        this._deselectedToEmit = [];
+        /**
+         * Keeps track of the selected option that haven't been emitted by the change event.
+         */
+        this._selectedToEmit = [];
+        /**
+         * Event emitted when the value has changed.
+         */
+        this.onChange = this._emitChanges ? new rxjs_Subject.Subject() : null;
         if (initiallySelectedValues) {
             if (_isMulti) {
                 initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });
@@ -332,6 +349,7 @@ function getMultipleValuesInSingleSelectionError() {
  */
 var UniqueSelectionDispatcher = /** @class */ (function () {
     function UniqueSelectionDispatcher() {
+        this._listeners = [];
     }
     /**
      * Notify other items that selection for the given name has been set.
@@ -379,6 +397,11 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
             });
         };
     };
+    UniqueSelectionDispatcher.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    UniqueSelectionDispatcher.ctorParameters = function () { return []; };
     return UniqueSelectionDispatcher;
 }());
 /**
