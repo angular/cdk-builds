@@ -5,18 +5,18 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ApplicationRef, ComponentFactoryResolver, Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Injector, Input, NgModule, NgZone, Optional, Output, SkipSelf, TemplateRef, ViewContainerRef } from '@angular/core';
-import { CdkScrollable, ScrollDispatchModule, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
-import { BidiModule, Directionality } from '@angular/cdk/bidi';
-import { DomPortalOutlet, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { InjectionToken, Optional, SkipSelf } from '@angular/core';
+import { CdkScrollable, ScrollDispatcher, VIEWPORT_RULER_PROVIDER, ViewportRuler } from '@angular/cdk/scrolling';
+import '@angular/cdk/bidi';
+import { DomPortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { take } from 'rxjs/operators/take';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/Subject';
+import 'rxjs/Subscription';
 import { DOCUMENT } from '@angular/common';
 import { filter } from 'rxjs/operators/filter';
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ESCAPE } from '@angular/cdk/keycodes';
+import '@angular/cdk/keycodes';
 
 /**
  * @fileoverview added by tsickle
@@ -55,26 +55,6 @@ class OverlayConfig {
      * @param {?=} config
      */
     constructor(config) {
-        /**
-         * Strategy to be used when handling scroll events while the overlay is open.
-         */
-        this.scrollStrategy = new NoopScrollStrategy();
-        /**
-         * Custom class to add to the overlay pane.
-         */
-        this.panelClass = '';
-        /**
-         * Whether the overlay has a backdrop.
-         */
-        this.hasBackdrop = false;
-        /**
-         * Custom class to add to the backdrop
-         */
-        this.backdropClass = 'cdk-overlay-dark-backdrop';
-        /**
-         * The direction of the text in the overlay panel.
-         */
-        this.direction = 'ltr';
         if (config) {
             Object.keys(config).forEach(key => this[key] = config[key]);
         }
@@ -157,11 +137,6 @@ class ConnectedOverlayPositionChange {
         this.scrollableViewProperties = scrollableViewProperties;
     }
 }
-/** @nocollapse */
-ConnectedOverlayPositionChange.ctorParameters = () => [
-    { type: ConnectionPositionPair, },
-    { type: ScrollingVisibility, decorators: [{ type: Optional },] },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -195,7 +170,6 @@ class CloseScrollStrategy {
     constructor(_scrollDispatcher, _ngZone) {
         this._scrollDispatcher = _scrollDispatcher;
         this._ngZone = _ngZone;
-        this._scrollSubscription = null;
     }
     /**
      * Attaches this scroll strategy to an overlay.
@@ -249,8 +223,6 @@ class BlockScrollStrategy {
      */
     constructor(_viewportRuler) {
         this._viewportRuler = _viewportRuler;
-        this._previousHTMLStyles = { top: '', left: '' };
-        this._isEnabled = false;
     }
     /**
      * Attaches this scroll strategy to an overlay.
@@ -375,7 +347,6 @@ class RepositionScrollStrategy {
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
         this._config = _config;
-        this._scrollSubscription = null;
     }
     /**
      * Attaches this scroll strategy to an overlay.
@@ -445,35 +416,8 @@ class ScrollStrategyOptions {
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
-        /**
-         * Do nothing on scroll.
-         */
-        this.noop = () => new NoopScrollStrategy();
-        /**
-         * Close the overlay as soon as the user scrolls.
-         */
-        this.close = () => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone);
-        /**
-         * Block scrolling.
-         */
-        this.block = () => new BlockScrollStrategy(this._viewportRuler);
-        /**
-         * Update the overlay's position on scroll.
-         * @param config Configuration to be used inside the scroll strategy.
-         * Allows debouncing the reposition calls.
-         */
-        this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config);
     }
 }
-ScrollStrategyOptions.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-ScrollStrategyOptions.ctorParameters = () => [
-    { type: ScrollDispatcher, },
-    { type: ViewportRuler, },
-    { type: NgZone, },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -502,14 +446,6 @@ class OverlayRef {
         this._config = _config;
         this._ngZone = _ngZone;
         this._keyboardDispatcher = _keyboardDispatcher;
-        this._backdropElement = null;
-        this._backdropClick = new Subject();
-        this._attachments = new Subject();
-        this._detachments = new Subject();
-        /**
-         * Stream of keydown events dispatched to this overlay.
-         */
-        this._keydownEvents = new Subject();
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -833,39 +769,6 @@ class ConnectedPositionStrategy {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
-        /**
-         * Layout direction of the position strategy.
-         */
-        this._dir = 'ltr';
-        /**
-         * The offset in pixels for the overlay connection point on the x-axis
-         */
-        this._offsetX = 0;
-        /**
-         * The offset in pixels for the overlay connection point on the y-axis
-         */
-        this._offsetY = 0;
-        /**
-         * The Scrollable containers used to check scrollable view properties on position change.
-         */
-        this.scrollables = [];
-        /**
-         * Subscription to viewport resize events.
-         */
-        this._resizeSubscription = Subscription.EMPTY;
-        /**
-         * Ordered list of preferred positions, from most to least desirable.
-         */
-        this._preferredPositions = [];
-        /**
-         * Whether the position strategy is applied currently.
-         */
-        this._applied = false;
-        /**
-         * Whether the overlay position is locked.
-         */
-        this._positionLocked = false;
-        this._onPositionChange = new Subject();
         this._origin = this._connectedTo.nativeElement;
         this.withFallbackPosition(originPos, overlayPos);
     }
@@ -1224,16 +1127,6 @@ class GlobalPositionStrategy {
      */
     constructor(_document) {
         this._document = _document;
-        this._cssPosition = 'static';
-        this._topOffset = '';
-        this._bottomOffset = '';
-        this._leftOffset = '';
-        this._rightOffset = '';
-        this._alignItems = '';
-        this._justifyContent = '';
-        this._width = '';
-        this._height = '';
-        this._wrapper = null;
     }
     /**
      * @param {?} overlayRef
@@ -1411,14 +1304,6 @@ class OverlayPositionBuilder {
         return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document);
     }
 }
-OverlayPositionBuilder.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-OverlayPositionBuilder.ctorParameters = () => [
-    { type: ViewportRuler, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -1436,10 +1321,6 @@ class OverlayKeyboardDispatcher {
      */
     constructor(_document) {
         this._document = _document;
-        /**
-         * Currently attached overlays in the order they were attached.
-         */
-        this._attachedOverlays = [];
     }
     /**
      * @return {?}
@@ -1511,13 +1392,6 @@ class OverlayKeyboardDispatcher {
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     }
 }
-OverlayKeyboardDispatcher.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-OverlayKeyboardDispatcher.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 /**
  * \@docs-private
  * @param {?} dispatcher
@@ -1591,13 +1465,6 @@ class OverlayContainer {
         this._containerElement = container;
     }
 }
-OverlayContainer.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-OverlayContainer.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 /**
  * \@docs-private
  * @param {?} parentContainer
@@ -1703,21 +1570,6 @@ class Overlay {
         return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     }
 }
-Overlay.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-Overlay.ctorParameters = () => [
-    { type: ScrollStrategyOptions, },
-    { type: OverlayContainer, },
-    { type: ComponentFactoryResolver, },
-    { type: OverlayPositionBuilder, },
-    { type: OverlayKeyboardDispatcher, },
-    { type: ApplicationRef, },
-    { type: Injector, },
-    { type: NgZone, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -1765,16 +1617,6 @@ class CdkOverlayOrigin {
         this.elementRef = elementRef;
     }
 }
-CdkOverlayOrigin.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
-                exportAs: 'cdkOverlayOrigin',
-            },] },
-];
-/** @nocollapse */
-CdkOverlayOrigin.ctorParameters = () => [
-    { type: ElementRef, },
-];
 /**
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
  */
@@ -1792,43 +1634,6 @@ class CdkConnectedOverlay {
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._document = _document;
-        this._hasBackdrop = false;
-        this._backdropSubscription = Subscription.EMPTY;
-        this._positionSubscription = Subscription.EMPTY;
-        this._offsetX = 0;
-        this._offsetY = 0;
-        /**
-         * Strategy to be used when handling scroll events while the overlay is open.
-         */
-        this.scrollStrategy = this._scrollStrategy();
-        /**
-         * Whether the overlay is open.
-         */
-        this.open = false;
-        /**
-         * Event emitted when the backdrop is clicked.
-         */
-        this.backdropClick = new EventEmitter();
-        /**
-         * Event emitted when the position has changed.
-         */
-        this.positionChange = new EventEmitter();
-        /**
-         * Event emitted when the overlay has been attached.
-         */
-        this.attach = new EventEmitter();
-        /**
-         * Event emitted when the overlay has been detached.
-         */
-        this.detach = new EventEmitter();
-        /**
-         * Event listener that will close the overlay when the user presses escape.
-         */
-        this._escapeListener = (event) => {
-            if (event.keyCode === ESCAPE) {
-                this._detachOverlay();
-            }
-        };
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     /**
@@ -2132,51 +1937,6 @@ class CdkConnectedOverlay {
         this._document.removeEventListener('keydown', this._escapeListener);
     }
 }
-CdkConnectedOverlay.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
-                exportAs: 'cdkConnectedOverlay'
-            },] },
-];
-/** @nocollapse */
-CdkConnectedOverlay.ctorParameters = () => [
-    { type: Overlay, },
-    { type: TemplateRef, },
-    { type: ViewContainerRef, },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
-    { type: Directionality, decorators: [{ type: Optional },] },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] },] },
-];
-CdkConnectedOverlay.propDecorators = {
-    "origin": [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],
-    "positions": [{ type: Input, args: ['cdkConnectedOverlayPositions',] },],
-    "offsetX": [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] },],
-    "offsetY": [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] },],
-    "width": [{ type: Input, args: ['cdkConnectedOverlayWidth',] },],
-    "height": [{ type: Input, args: ['cdkConnectedOverlayHeight',] },],
-    "minWidth": [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
-    "minHeight": [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
-    "backdropClass": [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
-    "scrollStrategy": [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
-    "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
-    "hasBackdrop": [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
-    "_deprecatedOrigin": [{ type: Input, args: ['origin',] },],
-    "_deprecatedPositions": [{ type: Input, args: ['positions',] },],
-    "_deprecatedOffsetX": [{ type: Input, args: ['offsetX',] },],
-    "_deprecatedOffsetY": [{ type: Input, args: ['offsetY',] },],
-    "_deprecatedWidth": [{ type: Input, args: ['width',] },],
-    "_deprecatedHeight": [{ type: Input, args: ['height',] },],
-    "_deprecatedMinWidth": [{ type: Input, args: ['minWidth',] },],
-    "_deprecatedMinHeight": [{ type: Input, args: ['minHeight',] },],
-    "_deprecatedBackdropClass": [{ type: Input, args: ['backdropClass',] },],
-    "_deprecatedScrollStrategy": [{ type: Input, args: ['scrollStrategy',] },],
-    "_deprecatedOpen": [{ type: Input, args: ['open',] },],
-    "_deprecatedHasBackdrop": [{ type: Input, args: ['hasBackdrop',] },],
-    "backdropClick": [{ type: Output },],
-    "positionChange": [{ type: Output },],
-    "attach": [{ type: Output },],
-    "detach": [{ type: Output },],
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2193,16 +1953,6 @@ const OVERLAY_PROVIDERS = [
 ];
 class OverlayModule {
 }
-OverlayModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [BidiModule, PortalModule, ScrollDispatchModule],
-                exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollDispatchModule],
-                declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
-                providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
-            },] },
-];
-/** @nocollapse */
-OverlayModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -2267,11 +2017,6 @@ class FullscreenOverlayContainer extends OverlayContainer {
             null;
     }
 }
-FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-FullscreenOverlayContainer.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

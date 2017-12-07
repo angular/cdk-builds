@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { InjectionToken } from '@angular/core';
+import '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -33,14 +33,6 @@ class Directionality {
      * @param {?=} _document
      */
     constructor(_document) {
-        /**
-         * The current 'ltr' or 'rtl' value.
-         */
-        this.value = 'ltr';
-        /**
-         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
-         */
-        this.change = new EventEmitter();
         if (_document) {
             // TODO: handle 'auto' value -
             // We still need to account for dir="auto".
@@ -52,13 +44,6 @@ class Directionality {
         }
     }
 }
-Directionality.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-Directionality.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -72,17 +57,6 @@ Directionality.ctorParameters = () => [
  * Directionality to get the closest direction.
  */
 class Dir {
-    constructor() {
-        this._dir = 'ltr';
-        /**
-         * Whether the `value` has been set to its initial value.
-         */
-        this._isInitialized = false;
-        /**
-         * Event emitted when the direction changes.
-         */
-        this.change = new EventEmitter();
-    }
     /**
      * \@docs-private
      * @return {?}
@@ -112,20 +86,6 @@ class Dir {
         this._isInitialized = true;
     }
 }
-Dir.decorators = [
-    { type: Directive, args: [{
-                selector: '[dir]',
-                providers: [{ provide: Directionality, useExisting: Dir }],
-                host: { '[dir]': 'dir' },
-                exportAs: 'dir',
-            },] },
-];
-/** @nocollapse */
-Dir.ctorParameters = () => [];
-Dir.propDecorators = {
-    "change": [{ type: Output, args: ['dirChange',] },],
-    "dir": [{ type: Input, args: ['dir',] },],
-};
 
 /**
  * @fileoverview added by tsickle
@@ -134,18 +94,6 @@ Dir.propDecorators = {
 
 class BidiModule {
 }
-BidiModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [Dir],
-                declarations: [Dir],
-                providers: [
-                    { provide: DIR_DOCUMENT, useExisting: DOCUMENT },
-                    Directionality,
-                ]
-            },] },
-];
-/** @nocollapse */
-BidiModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

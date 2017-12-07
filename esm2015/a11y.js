@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
+import { Inject, InjectionToken, NgZone, Optional, Renderer2, SkipSelf } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { take } from 'rxjs/operators/take';
-import { Platform, PlatformModule, supportsPassiveEventListeners } from '@angular/cdk/platform';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { Platform, supportsPassiveEventListeners } from '@angular/cdk/platform';
+import { DOCUMENT } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/Subscription';
 import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { filter } from 'rxjs/operators/filter';
@@ -138,13 +138,6 @@ class InteractivityChecker {
         return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
     }
 }
-InteractivityChecker.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-InteractivityChecker.ctorParameters = () => [
-    { type: Platform, },
-];
 /**
  * Checks whether the specified element has any geometry / rectangles.
  * @param {?} element
@@ -293,7 +286,6 @@ class FocusTrap {
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
-        this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
         }
@@ -543,15 +535,6 @@ class FocusTrapFactory {
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     }
 }
-FocusTrapFactory.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-FocusTrapFactory.ctorParameters = () => [
-    { type: InteractivityChecker, },
-    { type: NgZone, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 /**
  * Directive for trapping focus within a region.
  * \@docs-private
@@ -592,19 +575,6 @@ class FocusTrapDeprecatedDirective {
         this.focusTrap.attachAnchors();
     }
 }
-FocusTrapDeprecatedDirective.decorators = [
-    { type: Directive, args: [{
-                selector: 'cdk-focus-trap',
-            },] },
-];
-/** @nocollapse */
-FocusTrapDeprecatedDirective.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusTrapFactory, },
-];
-FocusTrapDeprecatedDirective.propDecorators = {
-    "disabled": [{ type: Input },],
-};
 /**
  * Directive for trapping focus within a region.
  */
@@ -617,10 +587,6 @@ class CdkTrapFocus {
     constructor(_elementRef, _focusTrapFactory, _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
-        /**
-         * Previously focused element to restore focus to upon destroy when using autoCapture.
-         */
-        this._previouslyFocusedElement = null;
         this._document = _document;
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
@@ -668,22 +634,6 @@ class CdkTrapFocus {
         }
     }
 }
-CdkTrapFocus.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkTrapFocus]',
-                exportAs: 'cdkTrapFocus',
-            },] },
-];
-/** @nocollapse */
-CdkTrapFocus.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusTrapFactory, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
-CdkTrapFocus.propDecorators = {
-    "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
-    "autoCapture": [{ type: Input, args: ['cdkTrapFocusAutoCapture',] },],
-};
 
 /**
  * @fileoverview added by tsickle
@@ -704,20 +654,6 @@ class ListKeyManager {
      */
     constructor(_items) {
         this._items = _items;
-        this._activeItemIndex = -1;
-        this._wrap = false;
-        this._letterKeyStream = new Subject();
-        this._typeaheadSubscription = Subscription.EMPTY;
-        this._pressedLetters = [];
-        /**
-         * Stream that emits any time the TAB key is pressed, so components can react
-         * when focus is shifted off of the list.
-         */
-        this.tabOut = new Subject();
-        /**
-         * Stream that emits whenever the active item of the list manager changes.
-         */
-        this.change = new Subject();
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
@@ -1203,13 +1139,6 @@ class AriaDescriber {
         return !!messageId && referenceIds.indexOf(messageId) != -1;
     }
 }
-AriaDescriber.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-AriaDescriber.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 /**
  * \@docs-private
  * @param {?} parentDispatcher
@@ -1331,14 +1260,6 @@ class LiveAnnouncer {
         return liveEl;
     }
 }
-LiveAnnouncer.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-LiveAnnouncer.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
 /**
  * \@docs-private
  * @param {?} parentDispatcher
@@ -1382,26 +1303,6 @@ class FocusMonitor {
     constructor(_ngZone, _platform) {
         this._ngZone = _ngZone;
         this._platform = _platform;
-        /**
-         * The focus origin that the next focus event is a result of.
-         */
-        this._origin = null;
-        /**
-         * Whether the window has just been focused.
-         */
-        this._windowFocused = false;
-        /**
-         * Weak map of elements being monitored to their info.
-         */
-        this._elementInfo = new WeakMap();
-        /**
-         * A map of global objects to lists of current listeners.
-         */
-        this._unregisterGlobalListeners = () => { };
-        /**
-         * The number of elements currently being monitored.
-         */
-        this._monitoredElementCount = 0;
     }
     /**
      * @param {?} element
@@ -1666,14 +1567,6 @@ class FocusMonitor {
         }
     }
 }
-FocusMonitor.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-FocusMonitor.ctorParameters = () => [
-    { type: NgZone, },
-    { type: Platform, },
-];
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.
@@ -1691,7 +1584,6 @@ class CdkMonitorFocus {
     constructor(_elementRef, _focusMonitor) {
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
-        this.cdkFocusChange = new EventEmitter();
         this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(origin => this.cdkFocusChange.emit(origin));
     }
@@ -1703,19 +1595,6 @@ class CdkMonitorFocus {
         this._monitorSubscription.unsubscribe();
     }
 }
-CdkMonitorFocus.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
-            },] },
-];
-/** @nocollapse */
-CdkMonitorFocus.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusMonitor, },
-];
-CdkMonitorFocus.propDecorators = {
-    "cdkFocusChange": [{ type: Output },],
-};
 /**
  * \@docs-private
  * @param {?} parentDispatcher
@@ -1743,23 +1622,6 @@ const FOCUS_MONITOR_PROVIDER = {
 
 class A11yModule {
 }
-A11yModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [CommonModule, PlatformModule],
-                declarations: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
-                exports: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
-                providers: [
-                    InteractivityChecker,
-                    FocusTrapFactory,
-                    AriaDescriber,
-                    LIVE_ANNOUNCER_PROVIDER,
-                    ARIA_DESCRIBER_PROVIDER,
-                    FOCUS_MONITOR_PROVIDER,
-                ]
-            },] },
-];
-/** @nocollapse */
-A11yModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

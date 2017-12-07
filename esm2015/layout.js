@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgModule, NgZone } from '@angular/core';
-import { Platform, PlatformModule } from '@angular/cdk/platform';
-import { Subject } from 'rxjs/Subject';
+import '@angular/core';
+import '@angular/cdk/platform';
+import 'rxjs/Subject';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
 import { takeUntil } from 'rxjs/operators/takeUntil';
@@ -54,13 +54,6 @@ class MediaMatcher {
         return this._matchMedia(query);
     }
 }
-MediaMatcher.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-MediaMatcher.ctorParameters = () => [
-    { type: Platform, },
-];
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when there is at least one CSS
  * selector for the respective media query.
@@ -120,14 +113,6 @@ class BreakpointObserver {
     constructor(mediaMatcher, zone) {
         this.mediaMatcher = mediaMatcher;
         this.zone = zone;
-        /**
-         * A map of all media queries currently being listened for.
-         */
-        this._queries = new Map();
-        /**
-         * A subject for all other observables to takeUntil based on.
-         */
-        this._destroySubject = new Subject();
     }
     /**
      * Completes the active subject, signalling to all other observables to complete.
@@ -191,14 +176,6 @@ class BreakpointObserver {
         return output;
     }
 }
-BreakpointObserver.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-BreakpointObserver.ctorParameters = () => [
-    { type: MediaMatcher, },
-    { type: NgZone, },
-];
 
 /**
  * @fileoverview added by tsickle
@@ -227,14 +204,6 @@ const Breakpoints = {
 
 class LayoutModule {
 }
-LayoutModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [BreakpointObserver, MediaMatcher],
-                imports: [PlatformModule],
-            },] },
-];
-/** @nocollapse */
-LayoutModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

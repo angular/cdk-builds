@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import '@angular/core';
+import 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
 /**
@@ -27,11 +27,6 @@ class MutationObserverFactory {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     }
 }
-MutationObserverFactory.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-MutationObserverFactory.ctorParameters = () => [];
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -46,14 +41,6 @@ class CdkObserveContent {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
-        /**
-         * Event emitted for each change in the element's content.
-         */
-        this.event = new EventEmitter();
-        /**
-         * Used for debouncing the emitted values to the observeContent event.
-         */
-        this._debouncer = new Subject();
     }
     /**
      * @return {?}
@@ -91,33 +78,8 @@ class CdkObserveContent {
         this._debouncer.complete();
     }
 }
-CdkObserveContent.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkObserveContent]',
-                exportAs: 'cdkObserveContent',
-            },] },
-];
-/** @nocollapse */
-CdkObserveContent.ctorParameters = () => [
-    { type: MutationObserverFactory, },
-    { type: ElementRef, },
-    { type: NgZone, },
-];
-CdkObserveContent.propDecorators = {
-    "event": [{ type: Output, args: ['cdkObserveContent',] },],
-    "debounce": [{ type: Input },],
-};
 class ObserversModule {
 }
-ObserversModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [CdkObserveContent],
-                declarations: [CdkObserveContent],
-                providers: [MutationObserverFactory]
-            },] },
-];
-/** @nocollapse */
-ObserversModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
