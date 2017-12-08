@@ -551,9 +551,9 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._viewContainerRef = _viewContainerRef;
         /**
-         * The attached portal.
+         * Whether the portal component is initialized.
          */
-        _this._portal = null;
+        _this._isInitialized = false;
         return _this;
     }
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
@@ -591,24 +591,40 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
          * @return {?}
          */
         function () {
-            return this._portal;
+            return this._attachedPortal;
         },
         set: /**
          * @param {?} portal
          * @return {?}
          */
         function (portal) {
+            // Ignore the cases where the `portal` is set to a falsy value before the lifecycle hooks have
+            // run. This handles the cases where the user might do something like `<div cdkPortalOutlet>`
+            // and attach a portal programmatically in the parent component. When Angular does the first CD
+            // round, it will fire the setter with empty string, causing the user's content to be cleared.
+            if (this.hasAttached() && !portal && !this._isInitialized) {
+                return;
+            }
             if (this.hasAttached()) {
                 _super.prototype.detach.call(this);
             }
             if (portal) {
                 _super.prototype.attach.call(this, portal);
             }
-            this._portal = portal;
+            this._attachedPortal = portal;
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
+    CdkPortalOutlet.prototype.ngOnInit = /**
+     * @return {?}
+     */
+    function () {
+        this._isInitialized = true;
+    };
     /**
      * @return {?}
      */
@@ -617,7 +633,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
      */
     function () {
         _super.prototype.dispose.call(this);
-        this._portal = null;
+        this._attachedPortal = null;
     };
     /**
      * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
@@ -649,7 +665,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         var /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         var /** @type {?} */ ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.parentInjector);
         _super.prototype.setDisposeFn.call(this, function () { return ref.destroy(); });
-        this._portal = portal;
+        this._attachedPortal = portal;
         return ref;
     };
     /**
@@ -674,7 +690,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         portal.setAttachedHost(this);
         var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
         _super.prototype.setDisposeFn.call(this, function () { return _this._viewContainerRef.clear(); });
-        this._portal = portal;
+        this._attachedPortal = portal;
         return viewRef;
     };
     CdkPortalOutlet.decorators = [

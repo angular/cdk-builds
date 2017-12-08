@@ -80,7 +80,7 @@ export interface PortalOutlet {
  */
 export declare abstract class BasePortalOutlet implements PortalOutlet {
     /** The portal currently attached to the host. */
-    private _attachedPortal;
+    protected _attachedPortal: Portal<any> | null;
     /** A function that will permanently dispose this host. */
     private _disposeFn;
     /** Whether this host has already been permanently disposed. */

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy } from '@angular/core';
+import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy, OnInit } from '@angular/core';
 import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './portal';
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -21,11 +21,11 @@ export declare class CdkPortal extends TemplatePortal<any> {
  * Usage:
  * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
  */
-export declare class CdkPortalOutlet extends BasePortalOutlet implements OnDestroy {
+export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDestroy {
     private _componentFactoryResolver;
     private _viewContainerRef;
-    /** The attached portal. */
-    private _portal;
+    /** Whether the portal component is initialized. */
+    private _isInitialized;
     constructor(_componentFactoryResolver: ComponentFactoryResolver, _viewContainerRef: ViewContainerRef);
     /** @deprecated */
     _deprecatedPortal: Portal<any> | null;
@@ -33,6 +33,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnDestr
     _deprecatedPortalHost: Portal<any> | null;
     /** Portal associated with the Portal outlet. */
     portal: Portal<any> | null;
+    ngOnInit(): void;
     ngOnDestroy(): void;
     /**
      * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
