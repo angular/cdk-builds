@@ -1801,6 +1801,12 @@ var GlobalPositionStrategy = /** @class */ (function () {
      * @return {?} Resolved when the styles have been applied.
      */
     function () {
+        // Since the overlay ref applies the strategy asynchronously, it could
+        // have been disposed before it ends up being applied. If that is the
+        // case, we shouldn't do anything.
+        if (!this._overlayRef.hasAttached()) {
+            return;
+        }
         var /** @type {?} */ element = this._overlayRef.overlayElement;
         if (!this._wrapper && element.parentNode) {
             this._wrapper = this._document.createElement('div'); /** @type {?} */
