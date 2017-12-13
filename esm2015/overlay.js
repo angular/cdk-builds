@@ -187,6 +187,10 @@ function getMatScrollStrategyAlreadyAttachedError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * Config options for the CloseScrollStrategy.
+ * @record
+ */
 
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
@@ -195,11 +199,24 @@ class CloseScrollStrategy {
     /**
      * @param {?} _scrollDispatcher
      * @param {?} _ngZone
+     * @param {?} _viewportRuler
+     * @param {?=} _config
      */
-    constructor(_scrollDispatcher, _ngZone) {
+    constructor(_scrollDispatcher, _ngZone, _viewportRuler, _config) {
         this._scrollDispatcher = _scrollDispatcher;
         this._ngZone = _ngZone;
+        this._viewportRuler = _viewportRuler;
+        this._config = _config;
         this._scrollSubscription = null;
+        /**
+         * Detaches the overlay ref and disables the scroll strategy.
+         */
+        this._detach = () => {
+            this.disable();
+            if (this._overlayRef.hasAttached()) {
+                this._ngZone.run(() => this._overlayRef.detach());
+            }
+        };
     }
     /**
      * Attaches this scroll strategy to an overlay.
@@ -213,19 +230,28 @@ class CloseScrollStrategy {
         this._overlayRef = overlayRef;
     }
     /**
-     * Enables the closing of the attached on scroll.
+     * Enables the closing of the attached overlay on scroll.
      * @return {?}
      */
     enable() {
-        if (!this._scrollSubscription) {
-            this._scrollSubscription = this._scrollDispatcher.scrolled(0).subscribe(() => {
-                this._ngZone.run(() => {
-                    this.disable();
-                    if (this._overlayRef.hasAttached()) {
-                        this._overlayRef.detach();
-                    }
-                });
+        if (this._scrollSubscription) {
+            return;
+        }
+        const /** @type {?} */ stream = this._scrollDispatcher.scrolled(0);
+        if (this._config && this._config.threshold && this._config.threshold > 1) {
+            this._initialScrollPosition = this._viewportRuler.getViewportScrollPosition().top;
+            this._scrollSubscription = stream.subscribe(() => {
+                const /** @type {?} */ scrollPosition = this._viewportRuler.getViewportScrollPosition().top;
+                if (Math.abs(scrollPosition - this._initialScrollPosition) > /** @type {?} */ ((/** @type {?} */ ((this._config)).threshold))) {
+                    this._detach();
+                }
+                else {
+                    this._overlayRef.updatePosition();
+                }
             });
+        }
+        else {
+            this._scrollSubscription = stream.subscribe(this._detach);
         }
     }
     /**
@@ -460,8 +486,9 @@ class ScrollStrategyOptions {
         this.noop = () => new NoopScrollStrategy();
         /**
          * Close the overlay as soon as the user scrolls.
+         * @param config Configuration to be used inside the scroll strategy.
          */
-        this.close = () => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone);
+        this.close = (config) => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone, this._viewportRuler, config);
         /**
          * Block scrolling.
          */
