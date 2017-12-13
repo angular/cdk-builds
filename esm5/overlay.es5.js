@@ -1331,6 +1331,24 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         return this;
     };
     /**
+     * Overwrites the current set of positions with an array of new ones.
+     * @param positions Position pairs to be set on the strategy.
+     */
+    /**
+     * Overwrites the current set of positions with an array of new ones.
+     * @param {?} positions Position pairs to be set on the strategy.
+     * @return {?}
+     */
+    ConnectedPositionStrategy.prototype.withPositions = /**
+     * Overwrites the current set of positions with an array of new ones.
+     * @param {?} positions Position pairs to be set on the strategy.
+     * @return {?}
+     */
+    function (positions) {
+        this._preferredPositions = positions.slice();
+        return this;
+    };
+    /**
      * Gets the horizontal (x) "start" dimension based on whether the overlay is in an RTL context.
      * @param {?} rect
      * @return {?}
