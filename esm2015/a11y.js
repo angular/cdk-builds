@@ -1150,8 +1150,10 @@ class AriaDescriber {
      * @return {?}
      */
     _deleteMessagesContainer() {
-        this._document.body.removeChild(/** @type {?} */ ((messagesContainer)));
-        messagesContainer = null;
+        if (messagesContainer && messagesContainer.parentNode) {
+            messagesContainer.parentNode.removeChild(messagesContainer);
+            messagesContainer = null;
+        }
     }
     /**
      * Removes all cdk-describedby messages that are hosted through the element.

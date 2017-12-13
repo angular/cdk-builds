@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectorRef, ElementRef, IterableDiffers, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -35,7 +35,7 @@ export declare const CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholde
  * A data table that connects with a data source to retrieve data of type `T` and renders
  * a header row and data rows. Updates the rows when new data is provided by the data source.
  */
-export declare class CdkTable<T> implements CollectionViewer {
+export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterContentChecked {
     private readonly _differs;
     private readonly _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
@@ -44,12 +44,30 @@ export declare class CdkTable<T> implements CollectionViewer {
     private _data;
     /** Subscription that listens for the data provided by the data source. */
     private _renderChangeSubscription;
-    /** Map of all the user's defined columns (header and data cell template) identified by name. */
+    /**
+     * Map of all the user's defined columns (header and data cell template) identified by name.
+     * Collection populated by the column definitions gathered by `ContentChildren` as well as any
+     * custom column definitions added to `_customColumnDefs`.
+     */
     private _columnDefsByName;
+    /**
+     * Set of all row defitions that can be used by this table. Populated by the rows gathered by
+     * using `ContentChildren` as well as any custom row definitions added to `_customRowDefs`.
+     */
+    private _rowDefs;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
     /** Stores the row definition that does not have a when predicate. */
     private _defaultRowDef;
+    /** Column definitions that were defined outside of the direct content children of the table. */
+    private _customColumnDefs;
+    /** Row definitions that were defined outside of the direct content children of the table. */
+    private _customRowDefs;
+    /**
+     * Whether the header row definition has been changed. Triggers an update to the header row after
+     * content is checked.
+     */
+    private _headerRowDefChanged;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
@@ -78,18 +96,38 @@ export declare class CdkTable<T> implements CollectionViewer {
      * The column definitions provided by the user that contain what the header and cells should
      * render for each column.
      */
-    _columnDefs: QueryList<CdkColumnDef>;
-    /** Template definition used as the header container. */
-    _headerDef: CdkHeaderRowDef;
+    _contentColumnDefs: QueryList<CdkColumnDef>;
     /** Set of template definitions that used as the data row containers. */
-    _rowDefs: QueryList<CdkRowDef<T>>;
+    _contentRowDefs: QueryList<CdkRowDef<T>>;
+    /**
+     * Template definition used as the header container. By default it stores the header row
+     * definition found as a direct content child. Override this value through `setHeaderRowDef` if
+     * the header row definition should be changed or was not defined as a part of the table's
+     * content.
+     */
+    _headerRowDef: CdkHeaderRowDef;
     constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, role: string);
     ngOnInit(): void;
-    ngAfterContentInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
+    /**
+     * Sets the header row definition to be used. Overrides the header row definition gathered by
+     * using `ContentChild`, if one exists. Sets a flag that will re-render the header row after the
+     * table's content is checked.
+     */
+    setHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
+    /** Adds a column definition that was not included as part of the direct content children. */
+    addColumnDef(columnDef: CdkColumnDef): void;
+    /** Removes a column definition that was not included as part of the direct content children. */
+    removeColumnDef(columnDef: CdkColumnDef): void;
+    /** Adds a column definition that was not included as part of the direct content children. */
+    addRowDef(rowDef: CdkRowDef<T>): void;
+    /** Removes a column definition that was not included as part of the direct content children. */
+    removeRowDef(rowDef: CdkRowDef<T>): void;
     /** Update the map containing the content's column definitions. */
-    private _cacheColumnDefsByName();
+    private _cacheColumnDefs();
+    /** Update the list of all available row definitions that can be used. */
+    private _cacheRowDefs();
     /**
      * Check if the header or rows have changed what columns they want to display. If there is a diff,
      * then re-render that section.
@@ -104,7 +142,8 @@ export declare class CdkTable<T> implements CollectionViewer {
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges();
     /**
-     * Create the embedded view for the header template and place it in the header row view container.
+     * Clears any existing content in the header row placeholder and creates a new embedded view
+     * in the placeholder using the header row definition.
      */
     private _renderHeaderRow();
     /**
