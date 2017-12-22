@@ -119,8 +119,8 @@ class CdkStep {
      * @return {?}
      */
     ngOnChanges() {
-        // Since basically all inputs of the MdStep get proxied through the view down to the
-        // underlying MdStepHeader, we have to make sure that change detection runs correctly.
+        // Since basically all inputs of the MatStep get proxied through the view down to the
+        // underlying MatStepHeader, we have to make sure that change detection runs correctly.
         this._stepper._stateChanged();
     }
 }
