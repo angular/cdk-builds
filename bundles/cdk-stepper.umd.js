@@ -459,7 +459,8 @@ var CdkStepper = /** @class */ (function () {
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(function (step) {
-                return step.stepControl && (step.stepControl.invalid || step.stepControl.pending);
+                var /** @type {?} */ control = step.stepControl;
+                return control ? (control.invalid || control.pending) : !step.completed;
             });
         }
         return false;
