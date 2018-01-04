@@ -33,7 +33,7 @@ class MediaMatcher {
      */
     constructor(platform) {
         this.platform = platform;
-        this._matchMedia = this.platform.isBrowser ?
+        this._matchMedia = this.platform.isBrowser && window.matchMedia ?
             // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
             // call it from a different scope.
             window.matchMedia.bind(window) :
