@@ -93,7 +93,7 @@ class Dir {
      * @return {?}
      */
     set dir(v) {
-        let /** @type {?} */ old = this._dir;
+        const /** @type {?} */ old = this._dir;
         this._dir = v;
         if (old !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
@@ -110,6 +110,12 @@ class Dir {
      */
     ngAfterContentInit() {
         this._isInitialized = true;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.change.complete();
     }
 }
 Dir.decorators = [

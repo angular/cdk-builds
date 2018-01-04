@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, AfterContentInit, OnDestroy } from '@angular/core';
 import { Direction, Directionality } from './directionality';
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -13,7 +13,7 @@ import { Direction, Directionality } from './directionality';
  * Provides itself as Directionality such that descendant directives only need to ever inject
  * Directionality to get the closest direction.
  */
-export declare class Dir implements Directionality {
+export declare class Dir implements Directionality, AfterContentInit, OnDestroy {
     _dir: Direction;
     /** Whether the `value` has been set to its initial value. */
     private _isInitialized;
@@ -25,4 +25,5 @@ export declare class Dir implements Directionality {
     readonly value: Direction;
     /** Initialize once default value has been set. */
     ngAfterContentInit(): void;
+    ngOnDestroy(): void;
 }
