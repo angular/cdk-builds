@@ -274,6 +274,12 @@ function getWindow(node) {
  */
 
 /**
+ * Node type of element nodes. Used instead of Node.ELEMENT_NODE
+ * which is unsupported in Universal.
+ * \@docs-private
+ */
+const ELEMENT_NODE_TYPE = 1;
+/**
  * Class that allows for trapping focus within a DOM element.
  *
  * This class currently uses a relatively simple approach to focus trapping.
@@ -463,7 +469,7 @@ class FocusTrap {
         // back to `childNodes` which includes text nodes, comments etc.
         let /** @type {?} */ children = root.children || root.childNodes;
         for (let /** @type {?} */ i = 0; i < children.length; i++) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === Node.ELEMENT_NODE ?
+            let /** @type {?} */ tabbableChild = children[i].nodeType === ELEMENT_NODE_TYPE ?
                 this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -484,7 +490,7 @@ class FocusTrap {
         // Iterate in reverse DOM order.
         let /** @type {?} */ children = root.children || root.childNodes;
         for (let /** @type {?} */ i = children.length - 1; i >= 0; i--) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === Node.ELEMENT_NODE ?
+            let /** @type {?} */ tabbableChild = children[i].nodeType === ELEMENT_NODE_TYPE ?
                 this._getLastTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
