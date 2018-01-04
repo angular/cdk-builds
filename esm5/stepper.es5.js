@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE } from '@angular/cdk/keycodes';
+import { DOWN_ARROW, ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE, UP_ARROW } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
@@ -187,6 +187,7 @@ var CdkStepper = /** @class */ (function () {
          * The index of the step that the focus can be set.
          */
         this._focusIndex = 0;
+        this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
     Object.defineProperty(CdkStepper.prototype, "linear", {
@@ -391,32 +392,26 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        switch (event.keyCode) {
-            case RIGHT_ARROW:
-                if (this._layoutDirection() === 'rtl') {
-                    this._focusPreviousStep();
-                }
-                else {
-                    this._focusNextStep();
-                }
-                break;
-            case LEFT_ARROW:
-                if (this._layoutDirection() === 'rtl') {
-                    this._focusNextStep();
-                }
-                else {
-                    this._focusPreviousStep();
-                }
-                break;
-            case SPACE:
-            case ENTER:
-                this.selectedIndex = this._focusIndex;
-                break;
-            default:
-                // Return to avoid calling preventDefault on keys that are not explicitly handled.
-                return;
+        var /** @type {?} */ keyCode = event.keyCode;
+        // Note that the left/right arrows work both in vertical and horizontal mode.
+        if (keyCode === RIGHT_ARROW) {
+            this._layoutDirection() === 'rtl' ? this._focusPreviousStep() : this._focusNextStep();
+            event.preventDefault();
         }
-        event.preventDefault();
+        if (keyCode === LEFT_ARROW) {
+            this._layoutDirection() === 'rtl' ? this._focusNextStep() : this._focusPreviousStep();
+            event.preventDefault();
+        }
+        // Note that the up/down arrows only work in vertical mode.
+        // See: https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel
+        if (this._orientation === 'vertical' && (keyCode === UP_ARROW || keyCode === DOWN_ARROW)) {
+            keyCode === UP_ARROW ? this._focusPreviousStep() : this._focusNextStep();
+            event.preventDefault();
+        }
+        if (keyCode === SPACE || keyCode === ENTER) {
+            this.selectedIndex = this._focusIndex;
+            event.preventDefault();
+        }
     };
     /**
      * @return {?}

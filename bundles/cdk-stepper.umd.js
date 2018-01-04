@@ -185,6 +185,7 @@ var CdkStepper = /** @class */ (function () {
          * The index of the step that the focus can be set.
          */
         this._focusIndex = 0;
+        this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
     Object.defineProperty(CdkStepper.prototype, "linear", {
@@ -389,32 +390,26 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        switch (event.keyCode) {
-            case _angular_cdk_keycodes.RIGHT_ARROW:
-                if (this._layoutDirection() === 'rtl') {
-                    this._focusPreviousStep();
-                }
-                else {
-                    this._focusNextStep();
-                }
-                break;
-            case _angular_cdk_keycodes.LEFT_ARROW:
-                if (this._layoutDirection() === 'rtl') {
-                    this._focusNextStep();
-                }
-                else {
-                    this._focusPreviousStep();
-                }
-                break;
-            case _angular_cdk_keycodes.SPACE:
-            case _angular_cdk_keycodes.ENTER:
-                this.selectedIndex = this._focusIndex;
-                break;
-            default:
-                // Return to avoid calling preventDefault on keys that are not explicitly handled.
-                return;
+        var /** @type {?} */ keyCode = event.keyCode;
+        // Note that the left/right arrows work both in vertical and horizontal mode.
+        if (keyCode === _angular_cdk_keycodes.RIGHT_ARROW) {
+            this._layoutDirection() === 'rtl' ? this._focusPreviousStep() : this._focusNextStep();
+            event.preventDefault();
         }
-        event.preventDefault();
+        if (keyCode === _angular_cdk_keycodes.LEFT_ARROW) {
+            this._layoutDirection() === 'rtl' ? this._focusNextStep() : this._focusPreviousStep();
+            event.preventDefault();
+        }
+        // Note that the up/down arrows only work in vertical mode.
+        // See: https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel
+        if (this._orientation === 'vertical' && (keyCode === _angular_cdk_keycodes.UP_ARROW || keyCode === _angular_cdk_keycodes.DOWN_ARROW)) {
+            keyCode === _angular_cdk_keycodes.UP_ARROW ? this._focusPreviousStep() : this._focusNextStep();
+            event.preventDefault();
+        }
+        if (keyCode === _angular_cdk_keycodes.SPACE || keyCode === _angular_cdk_keycodes.ENTER) {
+            this.selectedIndex = this._focusIndex;
+            event.preventDefault();
+        }
     };
     /**
      * @return {?}

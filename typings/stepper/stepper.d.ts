@@ -15,6 +15,8 @@ import { Subject } from 'rxjs/Subject';
  * the content into correct position upon step selection change.
  */
 export declare type StepContentPositionState = 'previous' | 'current' | 'next';
+/** Possible orientation of a stepper. */
+export declare type StepperOrientation = 'horizontal' | 'vertical';
 /** Change event emitted on selection changes. */
 export declare class StepperSelectionEvent {
     /** Index of the step now selected. */
@@ -76,6 +78,7 @@ export declare class CdkStepper implements OnDestroy {
     _focusIndex: number;
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
+    protected _orientation: StepperOrientation;
     constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef);
     ngOnDestroy(): void;
     /** Selects and focuses the next step in list. */
