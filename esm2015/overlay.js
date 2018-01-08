@@ -1839,13 +1839,11 @@ class CdkConnectedOverlay {
      * @param {?} viewContainerRef
      * @param {?} _scrollStrategy
      * @param {?} _dir
-     * @param {?} _document
      */
-    constructor(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir, _document) {
+    constructor(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir) {
         this._overlay = _overlay;
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
-        this._document = _document;
         this._hasBackdrop = false;
         this._backdropSubscription = Subscription.EMPTY;
         this._positionSubscription = Subscription.EMPTY;
@@ -1875,14 +1873,6 @@ class CdkConnectedOverlay {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new EventEmitter();
-        /**
-         * Event listener that will close the overlay when the user presses escape.
-         */
-        this._escapeListener = (event) => {
-            if (event.keyCode === ESCAPE) {
-                this._detachOverlay();
-            }
-        };
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     /**
@@ -2146,11 +2136,15 @@ class CdkConnectedOverlay {
      */
     _attachOverlay() {
         if (!this._overlayRef) {
-            this._createOverlay();
+            this._createOverlay(); /** @type {?} */
+            ((this._overlayRef)).keydownEvents().subscribe((event) => {
+                if (event.keyCode === ESCAPE) {
+                    this._detachOverlay();
+                }
+            });
         }
         this._position.withDirection(this.dir);
         this._overlayRef.setDirection(this.dir);
-        this._document.addEventListener('keydown', this._escapeListener);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
@@ -2171,7 +2165,6 @@ class CdkConnectedOverlay {
             this.detach.emit();
         }
         this._backdropSubscription.unsubscribe();
-        this._document.removeEventListener('keydown', this._escapeListener);
     }
     /**
      * Destroys the overlay created by this directive.
@@ -2183,7 +2176,6 @@ class CdkConnectedOverlay {
         }
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
-        this._document.removeEventListener('keydown', this._escapeListener);
     }
 }
 CdkConnectedOverlay.decorators = [
@@ -2199,7 +2191,6 @@ CdkConnectedOverlay.ctorParameters = () => [
     { type: ViewContainerRef, },
     { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
     { type: Directionality, decorators: [{ type: Optional },] },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] },] },
 ];
 CdkConnectedOverlay.propDecorators = {
     "origin": [{ type: Input, args: ['cdkConnectedOverlayOrigin',] },],

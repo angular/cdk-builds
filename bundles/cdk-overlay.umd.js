@@ -2387,12 +2387,10 @@ var CdkOverlayOrigin = /** @class */ (function () {
  */
 var CdkConnectedOverlay = /** @class */ (function () {
     // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
-    function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir, _document) {
-        var _this = this;
+    function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir) {
         this._overlay = _overlay;
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
-        this._document = _document;
         this._hasBackdrop = false;
         this._backdropSubscription = rxjs_Subscription.Subscription.EMPTY;
         this._positionSubscription = rxjs_Subscription.Subscription.EMPTY;
@@ -2422,14 +2420,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new _angular_core.EventEmitter();
-        /**
-         * Event listener that will close the overlay when the user presses escape.
-         */
-        this._escapeListener = function (event) {
-            if (event.keyCode === _angular_cdk_keycodes.ESCAPE) {
-                _this._detachOverlay();
-            }
-        };
         this._templatePortal = new _angular_cdk_portal.TemplatePortal(templateRef, viewContainerRef);
     }
     Object.defineProperty(CdkConnectedOverlay.prototype, "offsetX", {
@@ -2792,11 +2782,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function () {
         var _this = this;
         if (!this._overlayRef) {
-            this._createOverlay();
+            this._createOverlay(); /** @type {?} */
+            ((this._overlayRef)).keydownEvents().subscribe(function (event) {
+                if (event.keyCode === _angular_cdk_keycodes.ESCAPE) {
+                    _this._detachOverlay();
+                }
+            });
         }
         this._position.withDirection(this.dir);
         this._overlayRef.setDirection(this.dir);
-        this._document.addEventListener('keydown', this._escapeListener);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
@@ -2821,7 +2815,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
             this.detach.emit();
         }
         this._backdropSubscription.unsubscribe();
-        this._document.removeEventListener('keydown', this._escapeListener);
     };
     /**
      * Destroys the overlay created by this directive.
@@ -2837,7 +2830,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         }
         this._backdropSubscription.unsubscribe();
         this._positionSubscription.unsubscribe();
-        this._document.removeEventListener('keydown', this._escapeListener);
     };
     CdkConnectedOverlay.decorators = [
         { type: _angular_core.Directive, args: [{
@@ -2852,7 +2844,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         { type: _angular_core.ViewContainerRef, },
         { type: undefined, decorators: [{ type: _angular_core.Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] },] },
         { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
-        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     CdkConnectedOverlay.propDecorators = {
         "origin": [{ type: _angular_core.Input, args: ['cdkConnectedOverlayOrigin',] },],

@@ -39,7 +39,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _overlay;
     private _scrollStrategy;
     private _dir;
-    private _document;
     private _overlayRef;
     private _templatePortal;
     private _hasBackdrop;
@@ -104,7 +103,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     attach: EventEmitter<void>;
     /** Event emitted when the overlay has been detached. */
     detach: EventEmitter<void>;
-    constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, _scrollStrategy: any, _dir: Directionality, _document: any);
+    constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, _scrollStrategy: any, _dir: Directionality);
     /** The associated overlay reference. */
     readonly overlayRef: OverlayRef;
     /** The element's layout direction. */
@@ -124,6 +123,4 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _detachOverlay();
     /** Destroys the overlay created by this directive. */
     private _destroyOverlay();
-    /** Event listener that will close the overlay when the user presses escape. */
-    private _escapeListener;
 }
