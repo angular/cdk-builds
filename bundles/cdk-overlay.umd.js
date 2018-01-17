@@ -1669,7 +1669,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
         if (value === void 0) { value = ''; }
         this._bottomOffset = '';
         this._topOffset = value;
-        this._justifyContent = 'flex-start';
+        this._alignItems = 'flex-start';
         return this;
     };
     /**
@@ -1690,7 +1690,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
         if (value === void 0) { value = ''; }
         this._rightOffset = '';
         this._leftOffset = value;
-        this._alignItems = 'flex-start';
+        this._justifyContent = 'flex-start';
         return this;
     };
     /**
@@ -1711,7 +1711,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
         if (value === void 0) { value = ''; }
         this._topOffset = '';
         this._bottomOffset = value;
-        this._justifyContent = 'flex-end';
+        this._alignItems = 'flex-end';
         return this;
     };
     /**
@@ -1732,7 +1732,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
         if (value === void 0) { value = ''; }
         this._leftOffset = '';
         this._rightOffset = value;
-        this._alignItems = 'flex-end';
+        this._justifyContent = 'flex-end';
         return this;
     };
     /**
@@ -1806,7 +1806,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
     function (offset) {
         if (offset === void 0) { offset = ''; }
         this.left(offset);
-        this._alignItems = 'center';
+        this._justifyContent = 'center';
         return this;
     };
     /**
@@ -1832,7 +1832,7 @@ var GlobalPositionStrategy = /** @class */ (function () {
     function (offset) {
         if (offset === void 0) { offset = ''; }
         this.top(offset);
-        this._justifyContent = 'center';
+        this._alignItems = 'center';
         return this;
     };
     /**
