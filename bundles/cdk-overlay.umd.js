@@ -1638,6 +1638,9 @@ var GlobalPositionStrategy = /** @class */ (function () {
         this._justifyContent = '';
         this._width = '';
         this._height = '';
+        /**
+         * A lazily-created wrapper for the overlay element that is used as a flex container.
+         */
         this._wrapper = null;
     }
     /**
@@ -2975,7 +2978,7 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     /**
      * When the page is put into fullscreen mode, a specific element is specified.
      * Only that element and its children are visible when in fullscreen mode.
-    */
+     */
     /**
      * When the page is put into fullscreen mode, a specific element is specified.
      * Only that element and its children are visible when in fullscreen mode.

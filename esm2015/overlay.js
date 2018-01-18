@@ -1281,6 +1281,9 @@ class GlobalPositionStrategy {
         this._justifyContent = '';
         this._width = '';
         this._height = '';
+        /**
+         * A lazily-created wrapper for the overlay element that is used as a flex container.
+         */
         this._wrapper = null;
     }
     /**
