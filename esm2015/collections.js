@@ -29,12 +29,12 @@ class DataSource {
  */
 class SelectionModel {
     /**
-     * @param {?=} _isMulti
+     * @param {?=} _multiple
      * @param {?=} initiallySelectedValues
      * @param {?=} _emitChanges
      */
-    constructor(_isMulti = false, initiallySelectedValues, _emitChanges = true) {
-        this._isMulti = _isMulti;
+    constructor(_multiple = false, initiallySelectedValues, _emitChanges = true) {
+        this._multiple = _multiple;
         this._emitChanges = _emitChanges;
         /**
          * Currently-selected values.
@@ -45,15 +45,15 @@ class SelectionModel {
          */
         this._deselectedToEmit = [];
         /**
-         * Keeps track of the selected option that haven't been emitted by the change event.
+         * Keeps track of the selected options that haven't been emitted by the change event.
          */
         this._selectedToEmit = [];
         /**
          * Event emitted when the value has changed.
          */
         this.onChange = this._emitChanges ? new Subject() : null;
-        if (initiallySelectedValues) {
-            if (_isMulti) {
+        if (initiallySelectedValues && initiallySelectedValues.length) {
+            if (_multiple) {
                 initiallySelectedValues.forEach(value => this._markSelected(value));
             }
             else {
@@ -64,7 +64,7 @@ class SelectionModel {
         }
     }
     /**
-     * Selected value(s).
+     * Selected values.
      * @return {?}
      */
     get selected() {
@@ -137,7 +137,7 @@ class SelectionModel {
      * @return {?}
      */
     sort(predicate) {
-        if (this._isMulti && this._selected) {
+        if (this._multiple && this._selected) {
             this._selected.sort(predicate);
         }
     }
@@ -164,7 +164,7 @@ class SelectionModel {
      */
     _markSelected(value) {
         if (!this.isSelected(value)) {
-            if (!this._isMulti) {
+            if (!this._multiple) {
                 this._unmarkAll();
             }
             this._selection.add(value);
@@ -202,7 +202,7 @@ class SelectionModel {
      * @return {?}
      */
     _verifyValueAssignment(values) {
-        if (values.length > 1 && !this._isMulti) {
+        if (values.length > 1 && !this._multiple) {
             throw getMultipleValuesInSingleSelectionError();
         }
     }

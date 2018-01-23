@@ -10,21 +10,21 @@ import { Subject } from 'rxjs/Subject';
  * Class to be used to power selecting one or more options from a list.
  */
 export declare class SelectionModel<T> {
-    private _isMulti;
+    private _multiple;
     private _emitChanges;
     /** Currently-selected values. */
     private _selection;
     /** Keeps track of the deselected options that haven't been emitted by the change event. */
     private _deselectedToEmit;
-    /** Keeps track of the selected option that haven't been emitted by the change event. */
+    /** Keeps track of the selected options that haven't been emitted by the change event. */
     private _selectedToEmit;
     /** Cache for the array value of the selected items. */
     private _selected;
-    /** Selected value(s). */
+    /** Selected values. */
     readonly selected: T[];
     /** Event emitted when the value has changed. */
     onChange: Subject<SelectionChange<T>> | null;
-    constructor(_isMulti?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
+    constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
     /**
      * Selects a value or an array of values.
      */
