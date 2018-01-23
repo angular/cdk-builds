@@ -427,18 +427,28 @@ class CdkStepperNext {
      */
     constructor(_stepper) {
         this._stepper = _stepper;
+        /**
+         * Type of the next button. Defaults to "submit" if not specified.
+         */
+        this.type = 'submit';
     }
 }
 CdkStepperNext.decorators = [
     { type: Directive, args: [{
                 selector: 'button[cdkStepperNext]',
-                host: { '(click)': '_stepper.next()' }
+                host: {
+                    '(click)': '_stepper.next()',
+                    '[type]': 'type',
+                }
             },] },
 ];
 /** @nocollapse */
 CdkStepperNext.ctorParameters = () => [
     { type: CdkStepper, },
 ];
+CdkStepperNext.propDecorators = {
+    "type": [{ type: Input },],
+};
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
@@ -448,18 +458,28 @@ class CdkStepperPrevious {
      */
     constructor(_stepper) {
         this._stepper = _stepper;
+        /**
+         * Type of the previous button. Defaults to "button" if not specified.
+         */
+        this.type = 'button';
     }
 }
 CdkStepperPrevious.decorators = [
     { type: Directive, args: [{
                 selector: 'button[cdkStepperPrevious]',
-                host: { '(click)': '_stepper.previous()' }
+                host: {
+                    '(click)': '_stepper.previous()',
+                    '[type]': 'type',
+                }
             },] },
 ];
 /** @nocollapse */
 CdkStepperPrevious.ctorParameters = () => [
     { type: CdkStepper, },
 ];
+CdkStepperPrevious.propDecorators = {
+    "type": [{ type: Input },],
+};
 
 /**
  * @fileoverview added by tsickle

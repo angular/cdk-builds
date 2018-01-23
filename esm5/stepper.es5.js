@@ -533,17 +533,27 @@ var CdkStepper = /** @class */ (function () {
 var CdkStepperNext = /** @class */ (function () {
     function CdkStepperNext(_stepper) {
         this._stepper = _stepper;
+        /**
+         * Type of the next button. Defaults to "submit" if not specified.
+         */
+        this.type = 'submit';
     }
     CdkStepperNext.decorators = [
         { type: Directive, args: [{
                     selector: 'button[cdkStepperNext]',
-                    host: { '(click)': '_stepper.next()' }
+                    host: {
+                        '(click)': '_stepper.next()',
+                        '[type]': 'type',
+                    }
                 },] },
     ];
     /** @nocollapse */
     CdkStepperNext.ctorParameters = function () { return [
         { type: CdkStepper, },
     ]; };
+    CdkStepperNext.propDecorators = {
+        "type": [{ type: Input },],
+    };
     return CdkStepperNext;
 }());
 /**
@@ -552,17 +562,27 @@ var CdkStepperNext = /** @class */ (function () {
 var CdkStepperPrevious = /** @class */ (function () {
     function CdkStepperPrevious(_stepper) {
         this._stepper = _stepper;
+        /**
+         * Type of the previous button. Defaults to "button" if not specified.
+         */
+        this.type = 'button';
     }
     CdkStepperPrevious.decorators = [
         { type: Directive, args: [{
                     selector: 'button[cdkStepperPrevious]',
-                    host: { '(click)': '_stepper.previous()' }
+                    host: {
+                        '(click)': '_stepper.previous()',
+                        '[type]': 'type',
+                    }
                 },] },
     ];
     /** @nocollapse */
     CdkStepperPrevious.ctorParameters = function () { return [
         { type: CdkStepper, },
     ]; };
+    CdkStepperPrevious.propDecorators = {
+        "type": [{ type: Input },],
+    };
     return CdkStepperPrevious;
 }());
 
