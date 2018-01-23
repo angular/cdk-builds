@@ -12,7 +12,7 @@ import { Platform, PlatformModule, supportsPassiveEventListeners } from '@angula
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { A, DOWN_ARROW, NINE, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
+import { A, DOWN_ARROW, LEFT_ARROW, NINE, RIGHT_ARROW, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { filter } from 'rxjs/operators/filter';
 import { map } from 'rxjs/operators/map';
@@ -724,6 +724,7 @@ class ListKeyManager {
         this._wrap = false;
         this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
+        this._vertical = true;
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
@@ -742,6 +743,25 @@ class ListKeyManager {
      */
     withWrap() {
         this._wrap = true;
+        return this;
+    }
+    /**
+     * Configures whether the key manager should be able to move the selection vertically.
+     * @param {?=} enabled Whether vertical selection should be enabled.
+     * @return {?}
+     */
+    withVerticalOrientation(enabled = true) {
+        this._vertical = enabled;
+        return this;
+    }
+    /**
+     * Configures the key manager to move the selection horizontally.
+     * Passing in `null` will disable horizontal movement.
+     * @param {?} direction Direction in which the selection can be moved.
+     * @return {?}
+     */
+    withHorizontalOrientation(direction) {
+        this._horizontal = direction;
         return this;
     }
     /**
@@ -792,18 +812,40 @@ class ListKeyManager {
      * @return {?}
      */
     onKeydown(event) {
-        switch (event.keyCode) {
-            case DOWN_ARROW:
-                this.setNextItemActive();
-                break;
-            case UP_ARROW:
-                this.setPreviousItemActive();
-                break;
+        const /** @type {?} */ keyCode = event.keyCode;
+        switch (keyCode) {
             case TAB:
                 this.tabOut.next();
                 return;
+            case DOWN_ARROW:
+                if (this._vertical) {
+                    this.setNextItemActive();
+                    break;
+                }
+            case UP_ARROW:
+                if (this._vertical) {
+                    this.setPreviousItemActive();
+                    break;
+                }
+            case RIGHT_ARROW:
+                if (this._horizontal === 'ltr') {
+                    this.setNextItemActive();
+                    break;
+                }
+                else if (this._horizontal === 'rtl') {
+                    this.setPreviousItemActive();
+                    break;
+                }
+            case LEFT_ARROW:
+                if (this._horizontal === 'ltr') {
+                    this.setPreviousItemActive();
+                    break;
+                }
+                else if (this._horizontal === 'rtl') {
+                    this.setNextItemActive();
+                    break;
+                }
             default:
-                const /** @type {?} */ keyCode = event.keyCode;
                 // Attempt to use the `event.key` which also maps it to the user's keyboard language,
                 // otherwise fall back to resolving alphanumeric characters via the keyCode.
                 if (event.key && event.key.length === 1) {

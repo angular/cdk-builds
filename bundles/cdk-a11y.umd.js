@@ -922,6 +922,7 @@ var ListKeyManager = /** @class */ (function () {
         this._wrap = false;
         this._letterKeyStream = new rxjs_Subject.Subject();
         this._typeaheadSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._vertical = true;
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
@@ -949,6 +950,46 @@ var ListKeyManager = /** @class */ (function () {
      */
     function () {
         this._wrap = true;
+        return this;
+    };
+    /**
+     * Configures whether the key manager should be able to move the selection vertically.
+     * @param enabled Whether vertical selection should be enabled.
+     */
+    /**
+     * Configures whether the key manager should be able to move the selection vertically.
+     * @param {?=} enabled Whether vertical selection should be enabled.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withVerticalOrientation = /**
+     * Configures whether the key manager should be able to move the selection vertically.
+     * @param {?=} enabled Whether vertical selection should be enabled.
+     * @return {?}
+     */
+    function (enabled) {
+        if (enabled === void 0) { enabled = true; }
+        this._vertical = enabled;
+        return this;
+    };
+    /**
+     * Configures the key manager to move the selection horizontally.
+     * Passing in `null` will disable horizontal movement.
+     * @param direction Direction in which the selection can be moved.
+     */
+    /**
+     * Configures the key manager to move the selection horizontally.
+     * Passing in `null` will disable horizontal movement.
+     * @param {?} direction Direction in which the selection can be moved.
+     * @return {?}
+     */
+    ListKeyManager.prototype.withHorizontalOrientation = /**
+     * Configures the key manager to move the selection horizontally.
+     * Passing in `null` will disable horizontal movement.
+     * @param {?} direction Direction in which the selection can be moved.
+     * @return {?}
+     */
+    function (direction) {
+        this._horizontal = direction;
         return this;
     };
     /**
@@ -1028,18 +1069,40 @@ var ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        switch (event.keyCode) {
-            case _angular_cdk_keycodes.DOWN_ARROW:
-                this.setNextItemActive();
-                break;
-            case _angular_cdk_keycodes.UP_ARROW:
-                this.setPreviousItemActive();
-                break;
+        var /** @type {?} */ keyCode = event.keyCode;
+        switch (keyCode) {
             case _angular_cdk_keycodes.TAB:
                 this.tabOut.next();
                 return;
+            case _angular_cdk_keycodes.DOWN_ARROW:
+                if (this._vertical) {
+                    this.setNextItemActive();
+                    break;
+                }
+            case _angular_cdk_keycodes.UP_ARROW:
+                if (this._vertical) {
+                    this.setPreviousItemActive();
+                    break;
+                }
+            case _angular_cdk_keycodes.RIGHT_ARROW:
+                if (this._horizontal === 'ltr') {
+                    this.setNextItemActive();
+                    break;
+                }
+                else if (this._horizontal === 'rtl') {
+                    this.setPreviousItemActive();
+                    break;
+                }
+            case _angular_cdk_keycodes.LEFT_ARROW:
+                if (this._horizontal === 'ltr') {
+                    this.setPreviousItemActive();
+                    break;
+                }
+                else if (this._horizontal === 'rtl') {
+                    this.setNextItemActive();
+                    break;
+                }
             default:
-                var /** @type {?} */ keyCode = event.keyCode;
                 // Attempt to use the `event.key` which also maps it to the user's keyboard language,
                 // otherwise fall back to resolving alphanumeric characters via the keyCode.
                 if (event.key && event.key.length === 1) {

@@ -25,6 +25,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _wrap;
     private _letterKeyStream;
     private _typeaheadSubscription;
+    private _vertical;
+    private _horizontal;
     private _pressedLetters;
     constructor(_items: QueryList<T>);
     /**
@@ -39,6 +41,17 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * the other end of list when there are no more items in the given direction.
      */
     withWrap(): this;
+    /**
+     * Configures whether the key manager should be able to move the selection vertically.
+     * @param enabled Whether vertical selection should be enabled.
+     */
+    withVerticalOrientation(enabled?: boolean): this;
+    /**
+     * Configures the key manager to move the selection horizontally.
+     * Passing in `null` will disable horizontal movement.
+     * @param direction Direction in which the selection can be moved.
+     */
+    withHorizontalOrientation(direction: 'ltr' | 'rtl' | null): this;
     /**
      * Turns on typeahead mode which allows users to set the active item by typing.
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
