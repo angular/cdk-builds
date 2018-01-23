@@ -134,6 +134,22 @@ var CdkStep = /** @class */ (function () {
     function () {
         this._stepper.selected = this;
     };
+    /** Resets the step to its initial state. Note that this includes resetting form data. */
+    /**
+     * Resets the step to its initial state. Note that this includes resetting form data.
+     * @return {?}
+     */
+    CdkStep.prototype.reset = /**
+     * Resets the step to its initial state. Note that this includes resetting form data.
+     * @return {?}
+     */
+    function () {
+        this.interacted = false;
+        this.completed = false;
+        if (this.stepControl) {
+            this.stepControl.reset();
+        }
+    };
     /**
      * @return {?}
      */
@@ -282,6 +298,20 @@ var CdkStepper = /** @class */ (function () {
      */
     function () {
         this.selectedIndex = Math.max(this._selectedIndex - 1, 0);
+    };
+    /** Resets the stepper to its initial state. Note that this includes clearing form data. */
+    /**
+     * Resets the stepper to its initial state. Note that this includes clearing form data.
+     * @return {?}
+     */
+    CdkStepper.prototype.reset = /**
+     * Resets the stepper to its initial state. Note that this includes clearing form data.
+     * @return {?}
+     */
+    function () {
+        this.selectedIndex = 0;
+        this._steps.forEach(function (step) { return step.reset(); });
+        this._stateChanged();
     };
     /** Returns a unique id for each step label element. */
     /**

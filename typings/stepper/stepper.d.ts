@@ -53,6 +53,8 @@ export declare class CdkStep implements OnChanges {
     constructor(_stepper: CdkStepper);
     /** Selects this step component. */
     select(): void;
+    /** Resets the step to its initial state. Note that this includes resetting form data. */
+    reset(): void;
     ngOnChanges(): void;
 }
 export declare class CdkStepper implements OnDestroy {
@@ -85,6 +87,8 @@ export declare class CdkStepper implements OnDestroy {
     next(): void;
     /** Selects and focuses the previous step in list. */
     previous(): void;
+    /** Resets the stepper to its initial state. Note that this includes clearing form data. */
+    reset(): void;
     /** Returns a unique id for each step label element. */
     _getStepLabelId(i: number): string;
     /** Returns unique id for each step content element. */

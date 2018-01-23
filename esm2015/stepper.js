@@ -116,6 +116,17 @@ class CdkStep {
         this._stepper.selected = this;
     }
     /**
+     * Resets the step to its initial state. Note that this includes resetting form data.
+     * @return {?}
+     */
+    reset() {
+        this.interacted = false;
+        this.completed = false;
+        if (this.stepControl) {
+            this.stepControl.reset();
+        }
+    }
+    /**
      * @return {?}
      */
     ngOnChanges() {
@@ -238,6 +249,15 @@ class CdkStepper {
      */
     previous() {
         this.selectedIndex = Math.max(this._selectedIndex - 1, 0);
+    }
+    /**
+     * Resets the stepper to its initial state. Note that this includes clearing form data.
+     * @return {?}
+     */
+    reset() {
+        this.selectedIndex = 0;
+        this._steps.forEach(step => step.reset());
+        this._stateChanged();
     }
     /**
      * Returns a unique id for each step label element.
