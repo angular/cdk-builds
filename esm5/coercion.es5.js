@@ -31,10 +31,19 @@ function coerceBooleanProperty(value) {
  */
 function coerceNumberProperty(value, fallbackValue) {
     if (fallbackValue === void 0) { fallbackValue = 0; }
+    return _isNumberValue(value) ? Number(value) : fallbackValue;
+}
+/**
+ * Whether the provided value is considered a number.
+ * \@docs-private
+ * @param {?} value
+ * @return {?}
+ */
+function _isNumberValue(value) {
     // parseFloat(value) handles most of the cases we're interested in (it treats null, empty string,
     // and other non-number values as NaN, where Number just uses 0) but it considers the string
     // '123hello' to be a valid number. Therefore we also check if Number(value) is NaN.
-    return isNaN(parseFloat(/** @type {?} */ (value))) || isNaN(Number(value)) ? fallbackValue : Number(value);
+    return !isNaN(parseFloat(/** @type {?} */ (value))) && !isNaN(Number(value));
 }
 
 /**
@@ -65,5 +74,5 @@ function coerceArray(value) {
  * Generated bundle index. Do not edit.
  */
 
-export { coerceBooleanProperty, coerceNumberProperty, coerceArray };
+export { coerceBooleanProperty, coerceNumberProperty, _isNumberValue, coerceArray };
 //# sourceMappingURL=coercion.es5.js.map

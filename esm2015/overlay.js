@@ -78,7 +78,9 @@ class OverlayConfig {
          */
         this.direction = 'ltr';
         if (config) {
-            Object.keys(config).forEach(key => this[key] = config[key]);
+            Object.keys(config)
+                .filter(key => typeof config[key] !== 'undefined')
+                .forEach(key => this[key] = config[key]);
         }
     }
 }
@@ -1697,10 +1699,6 @@ const OVERLAY_CONTAINER_PROVIDER = {
  */
 let nextUniqueId = 0;
 /**
- * The default config for newly created overlays.
- */
-let defaultConfig = new OverlayConfig();
-/**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
@@ -1736,10 +1734,10 @@ class Overlay {
      * @param {?=} config Configuration applied to the overlay.
      * @return {?} Reference to the created overlay.
      */
-    create(config = defaultConfig) {
+    create(config) {
         const /** @type {?} */ pane = this._createPaneElement();
         const /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        return new OverlayRef(portalOutlet, pane, config, this._ngZone, this._keyboardDispatcher);
+        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher);
     }
     /**
      * Gets a position builder that can be used, via fluent API,

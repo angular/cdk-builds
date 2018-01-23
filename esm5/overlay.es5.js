@@ -96,7 +96,9 @@ var OverlayConfig = /** @class */ (function () {
          */
         this.direction = 'ltr';
         if (config) {
-            Object.keys(config).forEach(function (key) { return _this[key] = config[key]; });
+            Object.keys(config)
+                .filter(function (key) { return typeof config[key] !== 'undefined'; })
+                .forEach(function (key) { return _this[key] = config[key]; });
         }
     }
     return OverlayConfig;
@@ -2216,10 +2218,6 @@ var OVERLAY_CONTAINER_PROVIDER = {
  */
 var nextUniqueId = 0;
 /**
- * The default config for newly created overlays.
- */
-var defaultConfig = new OverlayConfig();
-/**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
@@ -2255,10 +2253,9 @@ var Overlay = /** @class */ (function () {
      * @return {?} Reference to the created overlay.
      */
     function (config) {
-        if (config === void 0) { config = defaultConfig; }
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        return new OverlayRef(portalOutlet, pane, config, this._ngZone, this._keyboardDispatcher);
+        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher);
     };
     /**
      * Gets a position builder that can be used, via fluent API,
