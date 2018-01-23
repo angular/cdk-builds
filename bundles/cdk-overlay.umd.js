@@ -3036,6 +3036,7 @@ exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
 exports.OverlayRef = OverlayRef;
 exports.ViewportRuler = _angular_cdk_scrolling.ViewportRuler;
 exports.OverlayKeyboardDispatcher = OverlayKeyboardDispatcher;
+exports.OverlayPositionBuilder = OverlayPositionBuilder;
 exports.GlobalPositionStrategy = GlobalPositionStrategy;
 exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
 exports.VIEWPORT_RULER_PROVIDER = _angular_cdk_scrolling.VIEWPORT_RULER_PROVIDER;
@@ -3061,7 +3062,6 @@ exports.ɵa = OVERLAY_CONTAINER_PROVIDER_FACTORY;
 exports.ɵc = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
 exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
 exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
-exports.ɵh = OverlayPositionBuilder;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
