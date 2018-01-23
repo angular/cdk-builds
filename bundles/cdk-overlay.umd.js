@@ -1402,6 +1402,24 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         return this;
     };
     /**
+     * Sets the origin element, relative to which to position the overlay.
+     * @param origin Reference to the new origin element.
+     */
+    /**
+     * Sets the origin element, relative to which to position the overlay.
+     * @param {?} origin Reference to the new origin element.
+     * @return {?}
+     */
+    ConnectedPositionStrategy.prototype.setOrigin = /**
+     * Sets the origin element, relative to which to position the overlay.
+     * @param {?} origin Reference to the new origin element.
+     * @return {?}
+     */
+    function (origin) {
+        this._origin = origin.nativeElement;
+        return this;
+    };
+    /**
      * Gets the horizontal (x) "start" dimension based on whether the overlay is in an RTL context.
      * @param {?} rect
      * @return {?}
@@ -2689,6 +2707,12 @@ var CdkConnectedOverlay = /** @class */ (function () {
      * @return {?}
      */
     function (changes) {
+        if ((changes['origin'] || changes['_deprecatedOrigin']) && this._position) {
+            this._position.setOrigin(this.origin.elementRef);
+            if (this.open) {
+                this._position.apply();
+            }
+        }
         if (changes['open'] || changes['_deprecatedOpen']) {
             this.open ? this._attachOverlay() : this._detachOverlay();
         }
