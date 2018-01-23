@@ -147,7 +147,7 @@ var Dir = /** @class */ (function () {
     Dir.ctorParameters = function () { return []; };
     Dir.propDecorators = {
         "change": [{ type: _angular_core.Output, args: ['dirChange',] },],
-        "dir": [{ type: _angular_core.Input, args: ['dir',] },],
+        "dir": [{ type: _angular_core.Input },],
     };
     return Dir;
 }());

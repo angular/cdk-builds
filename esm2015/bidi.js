@@ -130,7 +130,7 @@ Dir.decorators = [
 Dir.ctorParameters = () => [];
 Dir.propDecorators = {
     "change": [{ type: Output, args: ['dirChange',] },],
-    "dir": [{ type: Input, args: ['dir',] },],
+    "dir": [{ type: Input },],
 };
 
 /**

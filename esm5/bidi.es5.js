@@ -144,7 +144,7 @@ var Dir = /** @class */ (function () {
     Dir.ctorParameters = function () { return []; };
     Dir.propDecorators = {
         "change": [{ type: Output, args: ['dirChange',] },],
-        "dir": [{ type: Input, args: ['dir',] },],
+        "dir": [{ type: Input },],
     };
     return Dir;
 }());

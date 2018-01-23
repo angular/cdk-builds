@@ -26,7 +26,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _justifyContent;
     private _width;
     private _height;
-    /** A lazily-created wrapper for the overlay element that is used as a flex container.  */
+    /** A lazily-created wrapper for the overlay element that is used as a flex container. */
     private _wrapper;
     constructor(_document: any);
     attach(overlayRef: OverlayRef): void;
