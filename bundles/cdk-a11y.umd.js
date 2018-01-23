@@ -345,12 +345,6 @@ function getWindow(node) {
  */
 
 /**
- * Node type of element nodes. Used instead of Node.ELEMENT_NODE
- * which is unsupported in Universal.
- * \@docs-private
- */
-var ELEMENT_NODE_TYPE = 1;
-/**
  * Class that allows for trapping focus within a DOM element.
  *
  * This class currently uses a relatively simple approach to focus trapping.
@@ -627,7 +621,7 @@ var FocusTrap = /** @class */ (function () {
         // back to `childNodes` which includes text nodes, comments etc.
         var /** @type {?} */ children = root.children || root.childNodes;
         for (var /** @type {?} */ i = 0; i < children.length; i++) {
-            var /** @type {?} */ tabbableChild = children[i].nodeType === ELEMENT_NODE_TYPE ?
+            var /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -653,7 +647,7 @@ var FocusTrap = /** @class */ (function () {
         // Iterate in reverse DOM order.
         var /** @type {?} */ children = root.children || root.childNodes;
         for (var /** @type {?} */ i = children.length - 1; i >= 0; i--) {
-            var /** @type {?} */ tabbableChild = children[i].nodeType === ELEMENT_NODE_TYPE ?
+            var /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getLastTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -1403,7 +1397,7 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (!message.trim()) {
+        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
             return;
         }
         if (!messageRegistry.has(message)) {
@@ -1427,7 +1421,7 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (!message.trim()) {
+        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
             return;
         }
         if (this._isElementDescribedByMessage(hostElement, message)) {
