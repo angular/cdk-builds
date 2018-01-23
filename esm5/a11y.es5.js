@@ -1648,8 +1648,28 @@ function isFakeMousedownFromScreenReader(event) {
 var FocusKeyManager = /** @class */ (function (_super) {
     __extends(FocusKeyManager, _super);
     function FocusKeyManager() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this._origin = 'program';
+        return _this;
     }
+    /**
+     * Sets the focus origin that will be passed in to the items for any subsequent `focus` calls.
+     * @param origin Focus origin to be used when focusing items.
+     */
+    /**
+     * Sets the focus origin that will be passed in to the items for any subsequent `focus` calls.
+     * @param {?} origin Focus origin to be used when focusing items.
+     * @return {?}
+     */
+    FocusKeyManager.prototype.setFocusOrigin = /**
+     * Sets the focus origin that will be passed in to the items for any subsequent `focus` calls.
+     * @param {?} origin Focus origin to be used when focusing items.
+     * @return {?}
+     */
+    function (origin) {
+        this._origin = origin;
+        return this;
+    };
     /**
      * This method sets the active item to the item at the specified index.
      * It also adds focuses the newly active item.
@@ -1669,7 +1689,7 @@ var FocusKeyManager = /** @class */ (function (_super) {
     function (index) {
         _super.prototype.setActiveItem.call(this, index);
         if (this.activeItem) {
-            this.activeItem.focus();
+            this.activeItem.focus(this._origin);
         }
     };
     return FocusKeyManager;
