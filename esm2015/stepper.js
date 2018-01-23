@@ -382,8 +382,7 @@ class CdkStepper {
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(step => {
                 const /** @type {?} */ control = step.stepControl;
-                const /** @type {?} */ isIncomplete = control ? (control.invalid || control.pending) : !step.completed;
-                return isIncomplete && !step.optional;
+                return control ? (control.invalid || control.pending) : !step.completed;
             });
         }
         return false;
