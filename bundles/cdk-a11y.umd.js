@@ -128,7 +128,7 @@ var InteractivityChecker = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return false;
         }
-        var /** @type {?} */ frameElement = /** @type {?} */ (getWindow(element).frameElement);
+        var /** @type {?} */ frameElement = getFrameElement(getWindow(element));
         if (frameElement) {
             var /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
             // Frame elements inherit their tabindex onto all child elements.
@@ -216,6 +216,21 @@ var InteractivityChecker = /** @class */ (function () {
     ]; };
     return InteractivityChecker;
 }());
+/**
+ * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
+ * the frameElement property is being accessed from a different host address, this property
+ * should be accessed carefully.
+ * @param {?} window
+ * @return {?}
+ */
+function getFrameElement(window) {
+    try {
+        return /** @type {?} */ (window.frameElement);
+    }
+    catch (/** @type {?} */ e) {
+        return null;
+    }
+}
 /**
  * Checks whether the specified element has any geometry / rectangles.
  * @param {?} element

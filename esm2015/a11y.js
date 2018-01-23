@@ -70,9 +70,9 @@ class InteractivityChecker {
         if (!this._platform.isBrowser) {
             return false;
         }
-        let /** @type {?} */ frameElement = /** @type {?} */ (getWindow(element).frameElement);
+        const /** @type {?} */ frameElement = getFrameElement(getWindow(element));
         if (frameElement) {
-            let /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
+            const /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
             // Frame elements inherit their tabindex onto all child elements.
             if (getTabIndexValue(frameElement) === -1) {
                 return false;
@@ -145,6 +145,21 @@ InteractivityChecker.decorators = [
 InteractivityChecker.ctorParameters = () => [
     { type: Platform, },
 ];
+/**
+ * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
+ * the frameElement property is being accessed from a different host address, this property
+ * should be accessed carefully.
+ * @param {?} window
+ * @return {?}
+ */
+function getFrameElement(window) {
+    try {
+        return /** @type {?} */ (window.frameElement);
+    }
+    catch (/** @type {?} */ e) {
+        return null;
+    }
+}
 /**
  * Checks whether the specified element has any geometry / rectangles.
  * @param {?} element
