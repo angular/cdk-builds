@@ -11,7 +11,7 @@ import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './por
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
-export declare class CdkPortal extends TemplatePortal<any> {
+export declare class CdkPortal extends TemplatePortal {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
 /**

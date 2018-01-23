@@ -153,9 +153,7 @@ class TemplatePortal extends Portal {
         super();
         this.templateRef = template;
         this.viewContainerRef = viewContainerRef;
-        if (context) {
-            this.context = context;
-        }
+        this.context = context;
     }
     /**
      * @return {?}
