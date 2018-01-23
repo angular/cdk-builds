@@ -1424,9 +1424,9 @@ class FocusMonitor {
          */
         this._windowFocused = false;
         /**
-         * Weak map of elements being monitored to their info.
+         * Map of elements being monitored to their info.
          */
-        this._elementInfo = new WeakMap();
+        this._elementInfo = new Map();
         /**
          * A map of global objects to lists of current listeners.
          */
@@ -1486,7 +1486,7 @@ class FocusMonitor {
      * @return {?}
      */
     stopMonitoring(element) {
-        let /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        const /** @type {?} */ elementInfo = this._elementInfo.get(element);
         if (elementInfo) {
             elementInfo.unlisten();
             elementInfo.subject.complete();
@@ -1504,6 +1504,12 @@ class FocusMonitor {
     focusVia(element, origin) {
         this._setOriginForCurrentEventQueue(origin);
         element.focus();
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._elementInfo.forEach((_info, element) => this.stopMonitoring(element));
     }
     /**
      * Register necessary event listeners on the document and window.

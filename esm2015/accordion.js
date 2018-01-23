@@ -88,6 +88,12 @@ class CdkAccordionItem {
          */
         this.destroyed = new EventEmitter();
         /**
+         * Emits whenever the expanded state of the accordion changes.
+         * Primarily used to facilitate two-way binding.
+         * \@docs-private
+         */
+        this.expandedChange = new EventEmitter();
+        /**
          * The unique AccordionItem id.
          */
         this.id = `cdk-accordion-child-${nextId++}`;
@@ -118,6 +124,7 @@ class CdkAccordionItem {
         // Only emit events and update the internal value if the value changes.
         if (this._expanded !== expanded) {
             this._expanded = expanded;
+            this.expandedChange.emit(expanded);
             if (expanded) {
                 this.opened.emit();
                 /**
@@ -181,6 +188,7 @@ CdkAccordionItem.propDecorators = {
     "closed": [{ type: Output },],
     "opened": [{ type: Output },],
     "destroyed": [{ type: Output },],
+    "expandedChange": [{ type: Output },],
     "expanded": [{ type: Input },],
 };
 

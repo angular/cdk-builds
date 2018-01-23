@@ -22,6 +22,12 @@ export declare class CdkAccordionItem implements OnDestroy {
     opened: EventEmitter<void>;
     /** Event emitted when the AccordionItem is destroyed. */
     destroyed: EventEmitter<void>;
+    /**
+     * Emits whenever the expanded state of the accordion changes.
+     * Primarily used to facilitate two-way binding.
+     * @docs-private
+     */
+    expandedChange: EventEmitter<boolean>;
     /** The unique AccordionItem id. */
     readonly id: string;
     /** Whether the AccordionItem is expanded. */

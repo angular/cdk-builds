@@ -91,6 +91,12 @@ var CdkAccordionItem = /** @class */ (function () {
          */
         this.destroyed = new _angular_core.EventEmitter();
         /**
+         * Emits whenever the expanded state of the accordion changes.
+         * Primarily used to facilitate two-way binding.
+         * \@docs-private
+         */
+        this.expandedChange = new _angular_core.EventEmitter();
+        /**
          * The unique AccordionItem id.
          */
         this.id = "cdk-accordion-child-" + nextId++;
@@ -122,6 +128,7 @@ var CdkAccordionItem = /** @class */ (function () {
             // Only emit events and update the internal value if the value changes.
             if (this._expanded !== expanded) {
                 this._expanded = expanded;
+                this.expandedChange.emit(expanded);
                 if (expanded) {
                     this.opened.emit();
                     /**
@@ -207,6 +214,7 @@ var CdkAccordionItem = /** @class */ (function () {
         "closed": [{ type: _angular_core.Output },],
         "opened": [{ type: _angular_core.Output },],
         "destroyed": [{ type: _angular_core.Output },],
+        "expandedChange": [{ type: _angular_core.Output },],
         "expanded": [{ type: _angular_core.Input },],
     };
     return CdkAccordionItem;

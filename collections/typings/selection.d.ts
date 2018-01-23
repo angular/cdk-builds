@@ -72,13 +72,23 @@ export declare class SelectionModel<T> {
     private _verifyValueAssignment(values);
 }
 /**
- * Describes an event emitted when the value of a MatSelectionModel has changed.
+ * Event emitted when the value of a MatSelectionModel has changed.
  * @docs-private
  */
 export declare class SelectionChange<T> {
+    /** Model that dispatched the event. */
+    source: SelectionModel<T>;
+    /** Options that were added to the model. */
     added: T[] | undefined;
+    /** Options that were removed from the model. */
     removed: T[] | undefined;
-    constructor(added?: T[] | undefined, removed?: T[] | undefined);
+    constructor(
+        /** Model that dispatched the event. */
+        source: SelectionModel<T>, 
+        /** Options that were added to the model. */
+        added?: T[] | undefined, 
+        /** Options that were removed from the model. */
+        removed?: T[] | undefined);
 }
 /**
  * Returns an error that reports that multiple values are passed into a selection model

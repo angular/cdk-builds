@@ -149,7 +149,7 @@ class SelectionModel {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            const /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
+            const /** @type {?} */ eventData = new SelectionChange(this, this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
                 this.onChange.next(eventData);
             }
@@ -208,15 +208,17 @@ class SelectionModel {
     }
 }
 /**
- * Describes an event emitted when the value of a MatSelectionModel has changed.
+ * Event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
  */
 class SelectionChange {
     /**
+     * @param {?} source
      * @param {?=} added
      * @param {?=} removed
      */
-    constructor(added, removed) {
+    constructor(source, added, removed) {
+        this.source = source;
         this.added = added;
         this.removed = removed;
     }

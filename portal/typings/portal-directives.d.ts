@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy, OnInit } from '@angular/core';
+import { ComponentRef, EmbeddedViewRef, TemplateRef, ComponentFactoryResolver, ViewContainerRef, OnDestroy, OnInit, EventEmitter } from '@angular/core';
 import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './portal';
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -14,6 +14,10 @@ import { Portal, TemplatePortal, ComponentPortal, BasePortalOutlet } from './por
 export declare class CdkPortal extends TemplatePortal<any> {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
+/**
+ * Possible attached references to the CdkPortalOutlet.
+ */
+export declare type CdkPortalOutletAttachedRef = ComponentRef<any> | EmbeddedViewRef<any> | null;
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
@@ -26,6 +30,8 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     private _viewContainerRef;
     /** Whether the portal component is initialized. */
     private _isInitialized;
+    /** Reference to the currently-attached component/view ref. */
+    private _attachedRef;
     constructor(_componentFactoryResolver: ComponentFactoryResolver, _viewContainerRef: ViewContainerRef);
     /** @deprecated */
     _deprecatedPortal: Portal<any> | null;
@@ -33,6 +39,9 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     _deprecatedPortalHost: Portal<any> | null;
     /** Portal associated with the Portal outlet. */
     portal: Portal<any> | null;
+    attached: EventEmitter<CdkPortalOutletAttachedRef>;
+    /** Component or view reference that is attached to the portal. */
+    readonly attachedRef: CdkPortalOutletAttachedRef;
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, Directive, Input, NgModule, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ComponentFactoryResolver, Directive, EventEmitter, Input, NgModule, Output, TemplateRef, ViewContainerRef } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -419,6 +419,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
          * Whether the portal component is initialized.
          */
         this._isInitialized = false;
+        this.attached = new EventEmitter();
     }
     /**
      * @deprecated
@@ -468,6 +469,13 @@ class CdkPortalOutlet extends BasePortalOutlet {
         this._attachedPortal = portal;
     }
     /**
+     * Component or view reference that is attached to the portal.
+     * @return {?}
+     */
+    get attachedRef() {
+        return this._attachedRef;
+    }
+    /**
      * @return {?}
      */
     ngOnInit() {
@@ -479,6 +487,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
     ngOnDestroy() {
         super.dispose();
         this._attachedPortal = null;
+        this._attachedRef = null;
     }
     /**
      * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
@@ -498,6 +507,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
         const /** @type {?} */ ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.parentInjector);
         super.setDisposeFn(() => ref.destroy());
         this._attachedPortal = portal;
+        this._attachedRef = ref;
+        this.attached.emit(ref);
         return ref;
     }
     /**
@@ -511,6 +522,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
         const /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
         super.setDisposeFn(() => this._viewContainerRef.clear());
         this._attachedPortal = portal;
+        this._attachedRef = viewRef;
+        this.attached.emit(viewRef);
         return viewRef;
     }
 }
@@ -529,6 +542,7 @@ CdkPortalOutlet.ctorParameters = () => [
 CdkPortalOutlet.propDecorators = {
     "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
     "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
+    "attached": [{ type: Output, args: ['attached',] },],
 };
 class PortalModule {
 }

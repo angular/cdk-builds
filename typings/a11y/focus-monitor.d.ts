@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Observable';
 export declare const TOUCH_BUFFER_MS = 650;
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
-export declare class FocusMonitor {
+export declare class FocusMonitor implements OnDestroy {
     private _ngZone;
     private _platform;
     /** The focus origin that the next focus event is a result of. */
@@ -24,7 +24,7 @@ export declare class FocusMonitor {
     private _lastTouchTarget;
     /** The timeout id of the touch timeout, used to cancel timeout later. */
     private _touchTimeout;
-    /** Weak map of elements being monitored to their info. */
+    /** Map of elements being monitored to their info. */
     private _elementInfo;
     /** A map of global objects to lists of current listeners. */
     private _unregisterGlobalListeners;
@@ -55,6 +55,7 @@ export declare class FocusMonitor {
      * @param origin The focus origin.
      */
     focusVia(element: HTMLElement, origin: FocusOrigin): void;
+    ngOnDestroy(): void;
     /** Register necessary event listeners on the document and window. */
     private _registerGlobalListeners();
     private _toggleClass(element, className, shouldSet);

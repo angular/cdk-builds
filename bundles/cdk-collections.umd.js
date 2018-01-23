@@ -233,7 +233,7 @@ var SelectionModel = /** @class */ (function () {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            var /** @type {?} */ eventData = new SelectionChange(this._selectedToEmit, this._deselectedToEmit);
+            var /** @type {?} */ eventData = new SelectionChange(this, this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
                 this.onChange.next(eventData);
             }
@@ -314,11 +314,12 @@ var SelectionModel = /** @class */ (function () {
     return SelectionModel;
 }());
 /**
- * Describes an event emitted when the value of a MatSelectionModel has changed.
+ * Event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
  */
 var SelectionChange = /** @class */ (function () {
-    function SelectionChange(added, removed) {
+    function SelectionChange(source, added, removed) {
+        this.source = source;
         this.added = added;
         this.removed = removed;
     }

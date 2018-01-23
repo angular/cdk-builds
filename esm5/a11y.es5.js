@@ -1837,9 +1837,9 @@ var FocusMonitor = /** @class */ (function () {
          */
         this._windowFocused = false;
         /**
-         * Weak map of elements being monitored to their info.
+         * Map of elements being monitored to their info.
          */
-        this._elementInfo = new WeakMap();
+        this._elementInfo = new Map();
         /**
          * A map of global objects to lists of current listeners.
          */
@@ -1944,6 +1944,16 @@ var FocusMonitor = /** @class */ (function () {
     function (element, origin) {
         this._setOriginForCurrentEventQueue(origin);
         element.focus();
+    };
+    /**
+     * @return {?}
+     */
+    FocusMonitor.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._elementInfo.forEach(function (_info, element) { return _this.stopMonitoring(element); });
     };
     /**
      * Register necessary event listeners on the document and window.
