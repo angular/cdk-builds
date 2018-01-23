@@ -1410,7 +1410,7 @@ class FocusMonitor {
     }
     /**
      * @param {?} element
-     * @param {?} renderer
+     * @param {?=} renderer
      * @param {?=} checkChildren
      * @return {?}
      */

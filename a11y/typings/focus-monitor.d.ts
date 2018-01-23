@@ -43,7 +43,7 @@ export declare class FocusMonitor {
      * @returns An observable that emits when the focus state of the element changes.
      *     When the element is blurred, null will be emitted.
      */
-    monitor(element: HTMLElement, checkChildren: boolean): Observable<FocusOrigin>;
+    monitor(element: HTMLElement, checkChildren?: boolean): Observable<FocusOrigin>;
     /**
      * Stops monitoring an element and removes all focus classes.
      * @param element The element to stop monitoring.

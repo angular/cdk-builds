@@ -1832,13 +1832,13 @@ var FocusMonitor = /** @class */ (function () {
     }
     /**
      * @param {?} element
-     * @param {?} renderer
+     * @param {?=} renderer
      * @param {?=} checkChildren
      * @return {?}
      */
     FocusMonitor.prototype.monitor = /**
      * @param {?} element
-     * @param {?} renderer
+     * @param {?=} renderer
      * @param {?=} checkChildren
      * @return {?}
      */
