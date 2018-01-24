@@ -584,12 +584,13 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * Used to manipulate or dispose of said overlay.
  */
 var OverlayRef = /** @class */ (function () {
-    function OverlayRef(_portalOutlet, _pane, _config, _ngZone, _keyboardDispatcher) {
+    function OverlayRef(_portalOutlet, _pane, _config, _ngZone, _keyboardDispatcher, _document) {
         this._portalOutlet = _portalOutlet;
         this._pane = _pane;
         this._config = _config;
         this._ngZone = _ngZone;
         this._keyboardDispatcher = _keyboardDispatcher;
+        this._document = _document;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
@@ -914,7 +915,8 @@ var OverlayRef = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._backdropElement = document.createElement('div');
+        var /** @type {?} */ showingClass = 'cdk-overlay-backdrop-showing';
+        this._backdropElement = this._document.createElement('div');
         this._backdropElement.classList.add('cdk-overlay-backdrop');
         if (this._config.backdropClass) {
             this._backdropElement.classList.add(this._config.backdropClass);
@@ -927,13 +929,18 @@ var OverlayRef = /** @class */ (function () {
         // action desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
         // Add class to fade-in the backdrop after one frame.
-        this._ngZone.runOutsideAngular(function () {
-            requestAnimationFrame(function () {
-                if (_this._backdropElement) {
-                    _this._backdropElement.classList.add('cdk-overlay-backdrop-showing');
-                }
+        if (typeof requestAnimationFrame !== 'undefined') {
+            this._ngZone.runOutsideAngular(function () {
+                requestAnimationFrame(function () {
+                    if (_this._backdropElement) {
+                        _this._backdropElement.classList.add(showingClass);
+                    }
+                });
             });
-        });
+        }
+        else {
+            this._backdropElement.classList.add(showingClass);
+        }
     };
     /**
      * Updates the stacking order of the element, moving it to the top if necessary.
@@ -2255,7 +2262,7 @@ var Overlay = /** @class */ (function () {
     function (config) {
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher);
+        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher, this._document);
     };
     /**
      * Gets a position builder that can be used, via fluent API,

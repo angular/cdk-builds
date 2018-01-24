@@ -26,13 +26,14 @@ export declare class OverlayRef implements PortalOutlet {
     private _config;
     private _ngZone;
     private _keyboardDispatcher;
+    private _document;
     private _backdropElement;
     private _backdropClick;
     private _attachments;
     private _detachments;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;
-    constructor(_portalOutlet: PortalOutlet, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher);
+    constructor(_portalOutlet: PortalOutlet, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
     attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
