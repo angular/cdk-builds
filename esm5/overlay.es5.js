@@ -2477,6 +2477,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedOrigin", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.origin; },
@@ -2491,6 +2492,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedPositions", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.positions; },
@@ -2505,6 +2507,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedOffsetX", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.offsetX; },
@@ -2519,6 +2522,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedOffsetY", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.offsetY; },
@@ -2533,6 +2537,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedWidth", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.width; },
@@ -2547,6 +2552,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedHeight", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.height; },
@@ -2561,6 +2567,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedMinWidth", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.minWidth; },
@@ -2575,6 +2582,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedMinHeight", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.minHeight; },
@@ -2589,6 +2597,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedBackdropClass", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.backdropClass; },
@@ -2603,6 +2612,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedScrollStrategy", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.scrollStrategy; },
@@ -2619,6 +2629,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedOpen", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.open; },
@@ -2633,6 +2644,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     Object.defineProperty(CdkConnectedOverlay.prototype, "_deprecatedHasBackdrop", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.hasBackdrop; },

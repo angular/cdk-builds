@@ -34,6 +34,7 @@ export declare class FocusMonitor implements OnDestroy {
     /**
      * @docs-private
      * @deprecated renderer param no longer needed.
+     * @deletion-target 6.0.0
      */
     monitor(element: HTMLElement, renderer: Renderer2, checkChildren: boolean): Observable<FocusOrigin>;
     /**

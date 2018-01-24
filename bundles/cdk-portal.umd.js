@@ -558,6 +558,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.portal; },
@@ -572,6 +573,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortalHost", {
         get: /**
          * @deprecated
+         * \@deletion-target 6.0.0
          * @return {?}
          */
         function () { return this.portal; },

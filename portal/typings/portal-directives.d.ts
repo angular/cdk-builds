@@ -33,9 +33,15 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     /** Reference to the currently-attached component/view ref. */
     private _attachedRef;
     constructor(_componentFactoryResolver: ComponentFactoryResolver, _viewContainerRef: ViewContainerRef);
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedPortal: Portal<any> | null;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedPortalHost: Portal<any> | null;
     /** Portal associated with the Portal outlet. */
     portal: Portal<any> | null;

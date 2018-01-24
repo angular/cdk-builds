@@ -421,6 +421,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
     }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedPortal() { return this.portal; }
@@ -431,6 +432,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
     set _deprecatedPortal(v) { this.portal = v; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedPortalHost() { return this.portal; }

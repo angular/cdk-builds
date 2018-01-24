@@ -1935,6 +1935,7 @@ class CdkConnectedOverlay {
     set hasBackdrop(value) { this._hasBackdrop = coerceBooleanProperty(value); }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedOrigin() { return this.origin; }
@@ -1945,6 +1946,7 @@ class CdkConnectedOverlay {
     set _deprecatedOrigin(_origin) { this.origin = _origin; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedPositions() { return this.positions; }
@@ -1955,6 +1957,7 @@ class CdkConnectedOverlay {
     set _deprecatedPositions(_positions) { this.positions = _positions; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedOffsetX() { return this.offsetX; }
@@ -1965,6 +1968,7 @@ class CdkConnectedOverlay {
     set _deprecatedOffsetX(_offsetX) { this.offsetX = _offsetX; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedOffsetY() { return this.offsetY; }
@@ -1975,6 +1979,7 @@ class CdkConnectedOverlay {
     set _deprecatedOffsetY(_offsetY) { this.offsetY = _offsetY; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedWidth() { return this.width; }
@@ -1985,6 +1990,7 @@ class CdkConnectedOverlay {
     set _deprecatedWidth(_width) { this.width = _width; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedHeight() { return this.height; }
@@ -1995,6 +2001,7 @@ class CdkConnectedOverlay {
     set _deprecatedHeight(_height) { this.height = _height; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedMinWidth() { return this.minWidth; }
@@ -2005,6 +2012,7 @@ class CdkConnectedOverlay {
     set _deprecatedMinWidth(_minWidth) { this.minWidth = _minWidth; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedMinHeight() { return this.minHeight; }
@@ -2015,6 +2023,7 @@ class CdkConnectedOverlay {
     set _deprecatedMinHeight(_minHeight) { this.minHeight = _minHeight; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedBackdropClass() { return this.backdropClass; }
@@ -2025,6 +2034,7 @@ class CdkConnectedOverlay {
     set _deprecatedBackdropClass(_backdropClass) { this.backdropClass = _backdropClass; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedScrollStrategy() { return this.scrollStrategy; }
@@ -2037,6 +2047,7 @@ class CdkConnectedOverlay {
     }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedOpen() { return this.open; }
@@ -2047,6 +2058,7 @@ class CdkConnectedOverlay {
     set _deprecatedOpen(_open) { this.open = _open; }
     /**
      * @deprecated
+     * \@deletion-target 6.0.0
      * @return {?}
      */
     get _deprecatedHasBackdrop() { return this.hasBackdrop; }

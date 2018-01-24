@@ -71,29 +71,65 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     open: boolean;
     /** Whether or not the overlay should attach a backdrop. */
     hasBackdrop: any;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedOrigin: CdkOverlayOrigin;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedPositions: ConnectionPositionPair[];
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedOffsetX: number;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedOffsetY: number;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedWidth: number | string;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedHeight: number | string;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedMinWidth: number | string;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedMinHeight: number | string;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedBackdropClass: string;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedScrollStrategy: ScrollStrategy;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedOpen: boolean;
-    /** @deprecated */
+    /**
+     * @deprecated
+     * @deletion-target 6.0.0
+     */
     _deprecatedHasBackdrop: any;
     /** Event emitted when the backdrop is clicked. */
     backdropClick: EventEmitter<void>;

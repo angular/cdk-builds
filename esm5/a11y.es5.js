@@ -739,6 +739,7 @@ var FocusTrapFactory = /** @class */ (function () {
  * Directive for trapping focus within a region.
  * \@docs-private
  * @deprecated
+ * \@deletion-target 6.0.0
  */
 var FocusTrapDeprecatedDirective = /** @class */ (function () {
     function FocusTrapDeprecatedDirective(_elementRef, _focusTrapFactory) {

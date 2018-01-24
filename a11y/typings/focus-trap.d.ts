@@ -102,6 +102,7 @@ export declare class FocusTrapFactory {
  * Directive for trapping focus within a region.
  * @docs-private
  * @deprecated
+ * @deletion-target 6.0.0
  */
 export declare class FocusTrapDeprecatedDirective implements OnDestroy, AfterContentInit {
     private _elementRef;
