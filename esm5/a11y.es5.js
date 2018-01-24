@@ -901,6 +901,7 @@ var CdkTrapFocus = /** @class */ (function () {
  */
 var ListKeyManager = /** @class */ (function () {
     function ListKeyManager(_items) {
+        var _this = this;
         this._items = _items;
         this._activeItemIndex = -1;
         this._wrap = false;
@@ -917,6 +918,15 @@ var ListKeyManager = /** @class */ (function () {
          * Stream that emits whenever the active item of the list manager changes.
          */
         this.change = new Subject();
+        _items.changes.subscribe(function (newItems) {
+            if (_this._activeItem) {
+                var /** @type {?} */ itemArray = newItems.toArray();
+                var /** @type {?} */ newIndex = itemArray.indexOf(_this._activeItem);
+                if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
+                    _this._activeItemIndex = newIndex;
+                }
+            }
+        });
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to

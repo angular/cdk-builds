@@ -735,6 +735,15 @@ class ListKeyManager {
          * Stream that emits whenever the active item of the list manager changes.
          */
         this.change = new Subject();
+        _items.changes.subscribe((newItems) => {
+            if (this._activeItem) {
+                const /** @type {?} */ itemArray = newItems.toArray();
+                const /** @type {?} */ newIndex = itemArray.indexOf(this._activeItem);
+                if (newIndex > -1 && newIndex !== this._activeItemIndex) {
+                    this._activeItemIndex = newIndex;
+                }
+            }
+        });
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
