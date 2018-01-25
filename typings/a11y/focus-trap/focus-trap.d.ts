@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, NgZone, OnDestroy, AfterContentInit } from '@angular/core';
-import { InteractivityChecker } from './interactivity-checker';
+import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.
  *

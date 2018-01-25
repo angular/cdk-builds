@@ -908,6 +908,357 @@ var CdkTrapFocus = /** @class */ (function () {
  */
 
 /**
+ * IDs are deliminated by an empty space, as per the spec.
+ */
+var ID_DELIMINATOR = ' ';
+/**
+ * Adds the given ID to the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
+ * @return {?}
+ */
+function addAriaReferencedId(el, attr, id) {
+    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
+        return;
+    }
+    ids.push(id.trim());
+    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
+}
+/**
+ * Removes the given ID from the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @param {?} id
+ * @return {?}
+ */
+function removeAriaReferencedId(el, attr, id) {
+    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    var /** @type {?} */ filteredIds = ids.filter(function (val) { return val != id.trim(); });
+    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+}
+/**
+ * Gets the list of IDs referenced by the given ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ * @param {?} el
+ * @param {?} attr
+ * @return {?}
+ */
+function getAriaReferenceIds(el, attr) {
+    // Get string array of all individual ids (whitespace deliminated) in the attribute value
+    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * Interface used to register message elements and keep a count of how many registrations have
+ * the same message and the reference to the message element used for the `aria-describedby`.
+ * @record
+ */
+
+/**
+ * ID used for the body container where all messages are appended.
+ */
+var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+/**
+ * ID prefix used for each created message element.
+ */
+var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+/**
+ * Attribute given to each host element that is described by a message element.
+ */
+var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+/**
+ * Global incremental identifier for each registered message element.
+ */
+var nextId = 0;
+/**
+ * Global map of all registered message elements that have been placed into the document.
+ */
+var messageRegistry = new Map();
+/**
+ * Container for all registered messages.
+ */
+var messagesContainer = null;
+/**
+ * Utility that creates visually hidden elements with a message content. Useful for elements that
+ * want to use aria-describedby to further describe themselves without adding additional visual
+ * content.
+ * \@docs-private
+ */
+var AriaDescriber = /** @class */ (function () {
+    function AriaDescriber(_document) {
+        this._document = _document;
+    }
+    /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     */
+    /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype.describe = /**
+     * Adds to the host element an aria-describedby reference to a hidden element that contains
+     * the message. If the same message has already been registered, then it will reuse the created
+     * message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    function (hostElement, message) {
+        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+            return;
+        }
+        if (!messageRegistry.has(message)) {
+            this._createMessageElement(message);
+        }
+        if (!this._isElementDescribedByMessage(hostElement, message)) {
+            this._addMessageReference(hostElement, message);
+        }
+    };
+    /** Removes the host element's aria-describedby reference to the message element. */
+    /**
+     * Removes the host element's aria-describedby reference to the message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype.removeDescription = /**
+     * Removes the host element's aria-describedby reference to the message element.
+     * @param {?} hostElement
+     * @param {?} message
+     * @return {?}
+     */
+    function (hostElement, message) {
+        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+            return;
+        }
+        if (this._isElementDescribedByMessage(hostElement, message)) {
+            this._removeMessageReference(hostElement, message);
+        }
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        if (registeredMessage && registeredMessage.referenceCount === 0) {
+            this._deleteMessageElement(message);
+        }
+        if (messagesContainer && messagesContainer.childNodes.length === 0) {
+            this._deleteMessagesContainer();
+        }
+    };
+    /** Unregisters all created message elements and removes the message container. */
+    /**
+     * Unregisters all created message elements and removes the message container.
+     * @return {?}
+     */
+    AriaDescriber.prototype.ngOnDestroy = /**
+     * Unregisters all created message elements and removes the message container.
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ describedElements = this._document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
+        for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
+            this._removeCdkDescribedByReferenceIds(describedElements[i]);
+            describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+        }
+        if (messagesContainer) {
+            this._deleteMessagesContainer();
+        }
+        messageRegistry.clear();
+    };
+    /**
+     * Creates a new element in the visually hidden message container element with the message
+     * as its content and adds it to the message registry.
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._createMessageElement = /**
+     * Creates a new element in the visually hidden message container element with the message
+     * as its content and adds it to the message registry.
+     * @param {?} message
+     * @return {?}
+     */
+    function (message) {
+        var /** @type {?} */ messageElement = this._document.createElement('div');
+        messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
+        messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
+        if (!messagesContainer) {
+            this._createMessagesContainer();
+        } /** @type {?} */
+        ((messagesContainer)).appendChild(messageElement);
+        messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
+    };
+    /**
+     * Deletes the message element from the global messages container.
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._deleteMessageElement = /**
+     * Deletes the message element from the global messages container.
+     * @param {?} message
+     * @return {?}
+     */
+    function (message) {
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+        if (messagesContainer && messageElement) {
+            messagesContainer.removeChild(messageElement);
+        }
+        messageRegistry.delete(message);
+    };
+    /**
+     * Creates the global container for all aria-describedby messages.
+     * @return {?}
+     */
+    AriaDescriber.prototype._createMessagesContainer = /**
+     * Creates the global container for all aria-describedby messages.
+     * @return {?}
+     */
+    function () {
+        messagesContainer = this._document.createElement('div');
+        messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
+        messagesContainer.setAttribute('aria-hidden', 'true');
+        messagesContainer.style.display = 'none';
+        this._document.body.appendChild(messagesContainer);
+    };
+    /**
+     * Deletes the global messages container.
+     * @return {?}
+     */
+    AriaDescriber.prototype._deleteMessagesContainer = /**
+     * Deletes the global messages container.
+     * @return {?}
+     */
+    function () {
+        if (messagesContainer && messagesContainer.parentNode) {
+            messagesContainer.parentNode.removeChild(messagesContainer);
+            messagesContainer = null;
+        }
+    };
+    /**
+     * Removes all cdk-describedby messages that are hosted through the element.
+     * @param {?} element
+     * @return {?}
+     */
+    AriaDescriber.prototype._removeCdkDescribedByReferenceIds = /**
+     * Removes all cdk-describedby messages that are hosted through the element.
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
+        var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+            .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
+        element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
+    };
+    /**
+     * Adds a message reference to the element using aria-describedby and increments the registered
+     * message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._addMessageReference = /**
+     * Adds a message reference to the element using aria-describedby and increments the registered
+     * message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        // Add the aria-describedby reference and set the
+        // describedby_host attribute to mark the element.
+        addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+        element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
+        registeredMessage.referenceCount++;
+    };
+    /**
+     * Removes a message reference from the element using aria-describedby
+     * and decrements the registered message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._removeMessageReference = /**
+     * Removes a message reference from the element using aria-describedby
+     * and decrements the registered message's reference count.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        registeredMessage.referenceCount--;
+        removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
+        element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
+    };
+    /**
+     * Returns true if the element has been described by the provided message ID.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._isElementDescribedByMessage = /**
+     * Returns true if the element has been described by the provided message ID.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+        return !!messageId && referenceIds.indexOf(messageId) != -1;
+    };
+    AriaDescriber.decorators = [
+        { type: _angular_core.Injectable },
+    ];
+    /** @nocollapse */
+    AriaDescriber.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+    ]; };
+    return AriaDescriber;
+}());
+/**
+ * \@docs-private
+ * @param {?} parentDispatcher
+ * @param {?} _document
+ * @return {?}
+ */
+function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
+    return parentDispatcher || new AriaDescriber(_document);
+}
+/**
+ * \@docs-private
+ */
+var ARIA_DESCRIBER_PROVIDER = {
+    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
+    provide: AriaDescriber,
+    deps: [
+        [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
+        /** @type {?} */ (_angular_common.DOCUMENT)
+    ],
+    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
  * This interface is for items that can be passed to a ListKeyManager.
  * @record
  */
@@ -1368,375 +1719,6 @@ var ActiveDescendantKeyManager = /** @class */ (function (_super) {
     };
     return ActiveDescendantKeyManager;
 }(ListKeyManager));
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * IDs are deliminated by an empty space, as per the spec.
- */
-var ID_DELIMINATOR = ' ';
-/**
- * Adds the given ID to the specified ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @param {?} id
- * @return {?}
- */
-function addAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
-        return;
-    }
-    ids.push(id.trim());
-    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
-}
-/**
- * Removes the given ID from the specified ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @param {?} id
- * @return {?}
- */
-function removeAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    var /** @type {?} */ filteredIds = ids.filter(function (val) { return val != id.trim(); });
-    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
-}
-/**
- * Gets the list of IDs referenced by the given ARIA attribute on an element.
- * Used for attributes such as aria-labelledby, aria-owns, etc.
- * @param {?} el
- * @param {?} attr
- * @return {?}
- */
-function getAriaReferenceIds(el, attr) {
-    // Get string array of all individual ids (whitespace deliminated) in the attribute value
-    return (el.getAttribute(attr) || '').match(/\S+/g) || [];
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * Interface used to register message elements and keep a count of how many registrations have
- * the same message and the reference to the message element used for the `aria-describedby`.
- * @record
- */
-
-/**
- * ID used for the body container where all messages are appended.
- */
-var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
-/**
- * ID prefix used for each created message element.
- */
-var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
-/**
- * Attribute given to each host element that is described by a message element.
- */
-var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
-/**
- * Global incremental identifier for each registered message element.
- */
-var nextId = 0;
-/**
- * Global map of all registered message elements that have been placed into the document.
- */
-var messageRegistry = new Map();
-/**
- * Container for all registered messages.
- */
-var messagesContainer = null;
-/**
- * Utility that creates visually hidden elements with a message content. Useful for elements that
- * want to use aria-describedby to further describe themselves without adding additional visual
- * content.
- * \@docs-private
- */
-var AriaDescriber = /** @class */ (function () {
-    function AriaDescriber(_document) {
-        this._document = _document;
-    }
-    /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     */
-    /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype.describe = /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    function (hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
-            return;
-        }
-        if (!messageRegistry.has(message)) {
-            this._createMessageElement(message);
-        }
-        if (!this._isElementDescribedByMessage(hostElement, message)) {
-            this._addMessageReference(hostElement, message);
-        }
-    };
-    /** Removes the host element's aria-describedby reference to the message element. */
-    /**
-     * Removes the host element's aria-describedby reference to the message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype.removeDescription = /**
-     * Removes the host element's aria-describedby reference to the message element.
-     * @param {?} hostElement
-     * @param {?} message
-     * @return {?}
-     */
-    function (hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
-            return;
-        }
-        if (this._isElementDescribedByMessage(hostElement, message)) {
-            this._removeMessageReference(hostElement, message);
-        }
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        if (registeredMessage && registeredMessage.referenceCount === 0) {
-            this._deleteMessageElement(message);
-        }
-        if (messagesContainer && messagesContainer.childNodes.length === 0) {
-            this._deleteMessagesContainer();
-        }
-    };
-    /** Unregisters all created message elements and removes the message container. */
-    /**
-     * Unregisters all created message elements and removes the message container.
-     * @return {?}
-     */
-    AriaDescriber.prototype.ngOnDestroy = /**
-     * Unregisters all created message elements and removes the message container.
-     * @return {?}
-     */
-    function () {
-        var /** @type {?} */ describedElements = this._document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
-        for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
-            this._removeCdkDescribedByReferenceIds(describedElements[i]);
-            describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
-        }
-        if (messagesContainer) {
-            this._deleteMessagesContainer();
-        }
-        messageRegistry.clear();
-    };
-    /**
-     * Creates a new element in the visually hidden message container element with the message
-     * as its content and adds it to the message registry.
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype._createMessageElement = /**
-     * Creates a new element in the visually hidden message container element with the message
-     * as its content and adds it to the message registry.
-     * @param {?} message
-     * @return {?}
-     */
-    function (message) {
-        var /** @type {?} */ messageElement = this._document.createElement('div');
-        messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
-        messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
-        if (!messagesContainer) {
-            this._createMessagesContainer();
-        } /** @type {?} */
-        ((messagesContainer)).appendChild(messageElement);
-        messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
-    };
-    /**
-     * Deletes the message element from the global messages container.
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype._deleteMessageElement = /**
-     * Deletes the message element from the global messages container.
-     * @param {?} message
-     * @return {?}
-     */
-    function (message) {
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
-        if (messagesContainer && messageElement) {
-            messagesContainer.removeChild(messageElement);
-        }
-        messageRegistry.delete(message);
-    };
-    /**
-     * Creates the global container for all aria-describedby messages.
-     * @return {?}
-     */
-    AriaDescriber.prototype._createMessagesContainer = /**
-     * Creates the global container for all aria-describedby messages.
-     * @return {?}
-     */
-    function () {
-        messagesContainer = this._document.createElement('div');
-        messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
-        messagesContainer.setAttribute('aria-hidden', 'true');
-        messagesContainer.style.display = 'none';
-        this._document.body.appendChild(messagesContainer);
-    };
-    /**
-     * Deletes the global messages container.
-     * @return {?}
-     */
-    AriaDescriber.prototype._deleteMessagesContainer = /**
-     * Deletes the global messages container.
-     * @return {?}
-     */
-    function () {
-        if (messagesContainer && messagesContainer.parentNode) {
-            messagesContainer.parentNode.removeChild(messagesContainer);
-            messagesContainer = null;
-        }
-    };
-    /**
-     * Removes all cdk-describedby messages that are hosted through the element.
-     * @param {?} element
-     * @return {?}
-     */
-    AriaDescriber.prototype._removeCdkDescribedByReferenceIds = /**
-     * Removes all cdk-describedby messages that are hosted through the element.
-     * @param {?} element
-     * @return {?}
-     */
-    function (element) {
-        // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-        var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-            .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
-        element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
-    };
-    /**
-     * Adds a message reference to the element using aria-describedby and increments the registered
-     * message's reference count.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype._addMessageReference = /**
-     * Adds a message reference to the element using aria-describedby and increments the registered
-     * message's reference count.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    function (element, message) {
-        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-        // Add the aria-describedby reference and set the
-        // describedby_host attribute to mark the element.
-        addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-        element.setAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE, '');
-        registeredMessage.referenceCount++;
-    };
-    /**
-     * Removes a message reference from the element using aria-describedby
-     * and decrements the registered message's reference count.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype._removeMessageReference = /**
-     * Removes a message reference from the element using aria-describedby
-     * and decrements the registered message's reference count.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    function (element, message) {
-        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
-        registeredMessage.referenceCount--;
-        removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
-        element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
-    };
-    /**
-     * Returns true if the element has been described by the provided message ID.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    AriaDescriber.prototype._isElementDescribedByMessage = /**
-     * Returns true if the element has been described by the provided message ID.
-     * @param {?} element
-     * @param {?} message
-     * @return {?}
-     */
-    function (element, message) {
-        var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
-        return !!messageId && referenceIds.indexOf(messageId) != -1;
-    };
-    AriaDescriber.decorators = [
-        { type: _angular_core.Injectable },
-    ];
-    /** @nocollapse */
-    AriaDescriber.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
-    ]; };
-    return AriaDescriber;
-}());
-/**
- * \@docs-private
- * @param {?} parentDispatcher
- * @param {?} _document
- * @return {?}
- */
-function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
-    return parentDispatcher || new AriaDescriber(_document);
-}
-/**
- * \@docs-private
- */
-var ARIA_DESCRIBER_PROVIDER = {
-    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
-    provide: AriaDescriber,
-    deps: [
-        [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
-        /** @type {?} */ (_angular_common.DOCUMENT)
-    ],
-    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
-};
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * Screenreaders will often fire fake mousedown events when a focusable element
- * is activated using the keyboard. We can typically distinguish between these faked
- * mousedown events and real mousedown events using the "buttons" property. While
- * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
- * the left mouse button), faked mousedowns will usually set the property value to 0.
- * @param {?} event
- * @return {?}
- */
-function isFakeMousedownFromScreenReader(event) {
-    return event.buttons === 0;
-}
 
 /**
  * @fileoverview added by tsickle
@@ -2367,6 +2349,24 @@ var FOCUS_MONITOR_PROVIDER = {
  * @suppress {checkTypes} checked by tsc
  */
 
+/**
+ * Screenreaders will often fire fake mousedown events when a focusable element
+ * is activated using the keyboard. We can typically distinguish between these faked
+ * mousedown events and real mousedown events using the "buttons" property. While
+ * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
+ * the left mouse button), faked mousedowns will usually set the property value to 0.
+ * @param {?} event
+ * @return {?}
+ */
+function isFakeMousedownFromScreenReader(event) {
+    return event.buttons === 0;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
 var A11yModule = /** @class */ (function () {
     function A11yModule() {
     }
@@ -2391,21 +2391,20 @@ var A11yModule = /** @class */ (function () {
 }());
 
 exports.FocusTrapDirective = CdkTrapFocus;
-exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
 exports.MESSAGES_CONTAINER_ID = MESSAGES_CONTAINER_ID;
 exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
 exports.CDK_DESCRIBEDBY_HOST_ATTRIBUTE = CDK_DESCRIBEDBY_HOST_ATTRIBUTE;
 exports.AriaDescriber = AriaDescriber;
 exports.ARIA_DESCRIBER_PROVIDER_FACTORY = ARIA_DESCRIBER_PROVIDER_FACTORY;
 exports.ARIA_DESCRIBER_PROVIDER = ARIA_DESCRIBER_PROVIDER;
-exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
+exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
 exports.FocusKeyManager = FocusKeyManager;
+exports.ListKeyManager = ListKeyManager;
 exports.FocusTrap = FocusTrap;
 exports.FocusTrapFactory = FocusTrapFactory;
 exports.FocusTrapDeprecatedDirective = FocusTrapDeprecatedDirective;
 exports.CdkTrapFocus = CdkTrapFocus;
 exports.InteractivityChecker = InteractivityChecker;
-exports.ListKeyManager = ListKeyManager;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
 exports.LiveAnnouncer = LiveAnnouncer;
 exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
@@ -2415,6 +2414,7 @@ exports.FocusMonitor = FocusMonitor;
 exports.CdkMonitorFocus = CdkMonitorFocus;
 exports.FOCUS_MONITOR_PROVIDER_FACTORY = FOCUS_MONITOR_PROVIDER_FACTORY;
 exports.FOCUS_MONITOR_PROVIDER = FOCUS_MONITOR_PROVIDER;
+exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
 exports.A11yModule = A11yModule;
 
 Object.defineProperty(exports, '__esModule', { value: true });
