@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Subject'), require('rxjs/operators/debounceTime')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', 'rxjs/Subject', 'rxjs/operators/debounceTime'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = global.ng.cdk.observers || {}),global.ng.core,global.Rx,global.Rx.operators));
-}(this, (function (exports,_angular_core,rxjs_Subject,rxjs_operators_debounceTime) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/Subject'), require('rxjs/operators/debounceTime')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/Subject', 'rxjs/operators/debounceTime'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = global.ng.cdk.observers || {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.Rx.operators));
+}(this, (function (exports,_angular_core,_angular_cdk_coercion,rxjs_Subject,rxjs_operators_debounceTime) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -50,6 +50,7 @@ var CdkObserveContent = /** @class */ (function () {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
+        this._disabled = false;
         /**
          * Event emitted for each change in the element's content.
          */
@@ -59,6 +60,23 @@ var CdkObserveContent = /** @class */ (function () {
          */
         this._debouncer = new rxjs_Subject.Subject();
     }
+    Object.defineProperty(CdkObserveContent.prototype, "disabled", {
+        get: /**
+         * Whether observing content is disabled. This option can be used
+         * to disconnect the underlying MutationObserver until it is needed.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = _angular_cdk_coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -81,12 +99,21 @@ var CdkObserveContent = /** @class */ (function () {
                 _this._debouncer.next(mutations);
             });
         });
-        if (this._observer) {
-            this._observer.observe(this._elementRef.nativeElement, {
-                'characterData': true,
-                'childList': true,
-                'subtree': true
-            });
+        if (!this.disabled) {
+            this._enable();
+        }
+    };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    CdkObserveContent.prototype.ngOnChanges = /**
+     * @param {?} changes
+     * @return {?}
+     */
+    function (changes) {
+        if (changes['disabled']) {
+            changes['disabled'].currentValue ? this._disable() : this._enable();
         }
     };
     /**
@@ -96,10 +123,34 @@ var CdkObserveContent = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        this._disable();
+        this._debouncer.complete();
+    };
+    /**
+     * @return {?}
+     */
+    CdkObserveContent.prototype._disable = /**
+     * @return {?}
+     */
+    function () {
         if (this._observer) {
             this._observer.disconnect();
         }
-        this._debouncer.complete();
+    };
+    /**
+     * @return {?}
+     */
+    CdkObserveContent.prototype._enable = /**
+     * @return {?}
+     */
+    function () {
+        if (this._observer) {
+            this._observer.observe(this._elementRef.nativeElement, {
+                characterData: true,
+                childList: true,
+                subtree: true
+            });
+        }
     };
     CdkObserveContent.decorators = [
         { type: _angular_core.Directive, args: [{
@@ -115,6 +166,7 @@ var CdkObserveContent = /** @class */ (function () {
     ]; };
     CdkObserveContent.propDecorators = {
         "event": [{ type: _angular_core.Output, args: ['cdkObserveContent',] },],
+        "disabled": [{ type: _angular_core.Input, args: ['cdkObserveContentDisabled',] },],
         "debounce": [{ type: _angular_core.Input },],
     };
     return CdkObserveContent;

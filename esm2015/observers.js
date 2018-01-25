@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs/Subject';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
@@ -46,6 +47,7 @@ class CdkObserveContent {
         this._mutationObserverFactory = _mutationObserverFactory;
         this._elementRef = _elementRef;
         this._ngZone = _ngZone;
+        this._disabled = false;
         /**
          * Event emitted for each change in the element's content.
          */
@@ -54,6 +56,19 @@ class CdkObserveContent {
          * Used for debouncing the emitted values to the observeContent event.
          */
         this._debouncer = new Subject();
+    }
+    /**
+     * Whether observing content is disabled. This option can be used
+     * to disconnect the underlying MutationObserver until it is needed.
+     * @return {?}
+     */
+    get disabled() { return this._disabled; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set disabled(value) {
+        this._disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
@@ -73,22 +88,45 @@ class CdkObserveContent {
                 this._debouncer.next(mutations);
             });
         });
-        if (this._observer) {
-            this._observer.observe(this._elementRef.nativeElement, {
-                'characterData': true,
-                'childList': true,
-                'subtree': true
-            });
+        if (!this.disabled) {
+            this._enable();
+        }
+    }
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    ngOnChanges(changes) {
+        if (changes['disabled']) {
+            changes['disabled'].currentValue ? this._disable() : this._enable();
         }
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
+        this._disable();
+        this._debouncer.complete();
+    }
+    /**
+     * @return {?}
+     */
+    _disable() {
         if (this._observer) {
             this._observer.disconnect();
         }
-        this._debouncer.complete();
+    }
+    /**
+     * @return {?}
+     */
+    _enable() {
+        if (this._observer) {
+            this._observer.observe(this._elementRef.nativeElement, {
+                characterData: true,
+                childList: true,
+                subtree: true
+            });
+        }
     }
 }
 CdkObserveContent.decorators = [
@@ -105,6 +143,7 @@ CdkObserveContent.ctorParameters = () => [
 ];
 CdkObserveContent.propDecorators = {
     "event": [{ type: Output, args: ['cdkObserveContent',] },],
+    "disabled": [{ type: Input, args: ['cdkObserveContentDisabled',] },],
     "debounce": [{ type: Input },],
 };
 class ObserversModule {
