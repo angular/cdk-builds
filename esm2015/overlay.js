@@ -585,7 +585,10 @@ class OverlayRef {
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
         this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
-            this.updatePosition();
+            // The overlay could've been detached before the zone has stabilized.
+            if (this.hasAttached()) {
+                this.updatePosition();
+            }
         });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
@@ -2092,10 +2095,15 @@ class CdkConnectedOverlay {
      * @return {?}
      */
     ngOnChanges(changes) {
-        if ((changes['origin'] || changes['_deprecatedOrigin']) && this._position) {
-            this._position.setOrigin(this.origin.elementRef);
-            if (this.open) {
-                this._position.apply();
+        if (this._position) {
+            if (changes['positions'] || changes['_deprecatedPositions']) {
+                this._position.withPositions(this.positions);
+            }
+            if (changes['origin'] || changes['_deprecatedOrigin']) {
+                this._position.setOrigin(this.origin.elementRef);
+                if (this.open) {
+                    this._position.apply();
+                }
             }
         }
         if (changes['open'] || changes['_deprecatedOpen']) {
@@ -2145,26 +2153,19 @@ class CdkConnectedOverlay {
      * @return {?}
      */
     _createPositionStrategy() {
-        const /** @type {?} */ pos = this.positions[0];
-        const /** @type {?} */ originPoint = { originX: pos.originX, originY: pos.originY };
-        const /** @type {?} */ overlayPoint = { overlayX: pos.overlayX, overlayY: pos.overlayY };
+        const /** @type {?} */ primaryPosition = this.positions[0];
+        const /** @type {?} */ originPoint = { originX: primaryPosition.originX, originY: primaryPosition.originY };
+        const /** @type {?} */ overlayPoint = { overlayX: primaryPosition.overlayX, overlayY: primaryPosition.overlayY };
         const /** @type {?} */ strategy = this._overlay.position()
             .connectedTo(this.origin.elementRef, originPoint, overlayPoint)
             .withOffsetX(this.offsetX)
             .withOffsetY(this.offsetY);
-        this._handlePositionChanges(strategy);
-        return strategy;
-    }
-    /**
-     * @param {?} strategy
-     * @return {?}
-     */
-    _handlePositionChanges(strategy) {
         for (let /** @type {?} */ i = 1; i < this.positions.length; i++) {
             strategy.withFallbackPosition({ originX: this.positions[i].originX, originY: this.positions[i].originY }, { overlayX: this.positions[i].overlayX, overlayY: this.positions[i].overlayY });
         }
-        this._positionSubscription =
-            strategy.onPositionChange.subscribe(pos => this.positionChange.emit(pos));
+        this._positionSubscription = strategy.onPositionChange
+            .subscribe(pos => this.positionChange.emit(pos));
+        return strategy;
     }
     /**
      * Attaches the overlay and subscribes to backdrop clicks if backdrop exists

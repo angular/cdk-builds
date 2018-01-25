@@ -22,5 +22,5 @@ export declare const DELETE = 46;
 export declare const A = 65;
 export declare const Z = 90;
 export declare const ZERO = 48;
-export declare const NINE = 91;
+export declare const NINE = 57;
 export declare const COMMA = 188;

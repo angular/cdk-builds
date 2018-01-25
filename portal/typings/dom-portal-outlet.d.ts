@@ -12,11 +12,14 @@ import { BasePortalOutlet, ComponentPortal, TemplatePortal } from './portal';
  * application context.
  */
 export declare class DomPortalOutlet extends BasePortalOutlet {
-    private _hostDomElement;
+    /** Element into which the content is projected. */
+    outletElement: Element;
     private _componentFactoryResolver;
     private _appRef;
     private _defaultInjector;
-    constructor(_hostDomElement: Element, _componentFactoryResolver: ComponentFactoryResolver, _appRef: ApplicationRef, _defaultInjector: Injector);
+    constructor(
+        /** Element into which the content is projected. */
+        outletElement: Element, _componentFactoryResolver: ComponentFactoryResolver, _appRef: ApplicationRef, _defaultInjector: Injector);
     /**
      * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
      * @param portal Portal to be attached

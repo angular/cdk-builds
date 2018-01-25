@@ -389,9 +389,9 @@ var BasePortalOutlet = /** @class */ (function () {
  */
 var DomPortalOutlet = /** @class */ (function (_super) {
     __extends(DomPortalOutlet, _super);
-    function DomPortalOutlet(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
+    function DomPortalOutlet(outletElement, _componentFactoryResolver, _appRef, _defaultInjector) {
         var _this = _super.call(this) || this;
-        _this._hostDomElement = _hostDomElement;
+        _this.outletElement = outletElement;
         _this._componentFactoryResolver = _componentFactoryResolver;
         _this._appRef = _appRef;
         _this._defaultInjector = _defaultInjector;
@@ -436,7 +436,7 @@ var DomPortalOutlet = /** @class */ (function (_super) {
         }
         // At this point the component has been instantiated, so we move it to the location in the DOM
         // where we want it to be rendered.
-        this._hostDomElement.appendChild(this._getComponentRootNode(componentRef));
+        this.outletElement.appendChild(this._getComponentRootNode(componentRef));
         return componentRef;
     };
     /**
@@ -465,7 +465,7 @@ var DomPortalOutlet = /** @class */ (function (_super) {
         // But for the DomPortalOutlet the view can be added everywhere in the DOM
         // (e.g Overlay Container) To move the view to the specified host element. We just
         // re-append the existing root nodes.
-        viewRef.rootNodes.forEach(function (rootNode) { return _this._hostDomElement.appendChild(rootNode); });
+        viewRef.rootNodes.forEach(function (rootNode) { return _this.outletElement.appendChild(rootNode); });
         this.setDisposeFn((function () {
             var /** @type {?} */ index = viewContainer.indexOf(viewRef);
             if (index !== -1) {
@@ -488,8 +488,8 @@ var DomPortalOutlet = /** @class */ (function (_super) {
      */
     function () {
         _super.prototype.dispose.call(this);
-        if (this._hostDomElement.parentNode != null) {
-            this._hostDomElement.parentNode.removeChild(this._hostDomElement);
+        if (this.outletElement.parentNode != null) {
+            this.outletElement.parentNode.removeChild(this.outletElement);
         }
     };
     /**

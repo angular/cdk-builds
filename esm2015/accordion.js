@@ -30,7 +30,7 @@ class CdkAccordion {
         this._multi = false;
     }
     /**
-     * Whether the accordion should allow multiple expanded accordion items simulateously.
+     * Whether the accordion should allow multiple expanded accordion items simultaneously.
      * @return {?}
      */
     get multi() { return this._multi; }
@@ -98,6 +98,7 @@ class CdkAccordionItem {
          */
         this.id = `cdk-accordion-child-${nextId++}`;
         this._expanded = false;
+        this._disabled = false;
         /**
          * Unregister function for _expansionDispatcher.
          */
@@ -143,6 +144,16 @@ class CdkAccordionItem {
         }
     }
     /**
+     * Whether the AccordionItem is disabled.
+     * @return {?}
+     */
+    get disabled() { return this._disabled; }
+    /**
+     * @param {?} disabled
+     * @return {?}
+     */
+    set disabled(disabled) { this._disabled = coerceBooleanProperty(disabled); }
+    /**
      * Emits an event for the accordion item being destroyed.
      * @return {?}
      */
@@ -155,21 +166,27 @@ class CdkAccordionItem {
      * @return {?}
      */
     toggle() {
-        this.expanded = !this.expanded;
+        if (!this.disabled) {
+            this.expanded = !this.expanded;
+        }
     }
     /**
      * Sets the expanded state of the accordion item to false.
      * @return {?}
      */
     close() {
-        this.expanded = false;
+        if (!this.disabled) {
+            this.expanded = false;
+        }
     }
     /**
      * Sets the expanded state of the accordion item to true.
      * @return {?}
      */
     open() {
-        this.expanded = true;
+        if (!this.disabled) {
+            this.expanded = true;
+        }
     }
 }
 CdkAccordionItem.decorators = [
@@ -190,6 +207,7 @@ CdkAccordionItem.propDecorators = {
     "destroyed": [{ type: Output },],
     "expandedChange": [{ type: Output },],
     "expanded": [{ type: Input },],
+    "disabled": [{ type: Input },],
 };
 
 /**

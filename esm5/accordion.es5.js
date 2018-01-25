@@ -31,7 +31,7 @@ var CdkAccordion = /** @class */ (function () {
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
         get: /**
-         * Whether the accordion should allow multiple expanded accordion items simulateously.
+         * Whether the accordion should allow multiple expanded accordion items simultaneously.
          * @return {?}
          */
         function () { return this._multi; },
@@ -99,6 +99,7 @@ var CdkAccordionItem = /** @class */ (function () {
          */
         this.id = "cdk-accordion-child-" + nextId++;
         this._expanded = false;
+        this._disabled = false;
         /**
          * Unregister function for _expansionDispatcher.
          */
@@ -147,6 +148,20 @@ var CdkAccordionItem = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(CdkAccordionItem.prototype, "disabled", {
+        get: /**
+         * Whether the AccordionItem is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} disabled
+         * @return {?}
+         */
+        function (disabled) { this._disabled = coerceBooleanProperty(disabled); },
+        enumerable: true,
+        configurable: true
+    });
     /** Emits an event for the accordion item being destroyed. */
     /**
      * Emits an event for the accordion item being destroyed.
@@ -170,7 +185,9 @@ var CdkAccordionItem = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.expanded = !this.expanded;
+        if (!this.disabled) {
+            this.expanded = !this.expanded;
+        }
     };
     /** Sets the expanded state of the accordion item to false. */
     /**
@@ -182,7 +199,9 @@ var CdkAccordionItem = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.expanded = false;
+        if (!this.disabled) {
+            this.expanded = false;
+        }
     };
     /** Sets the expanded state of the accordion item to true. */
     /**
@@ -194,7 +213,9 @@ var CdkAccordionItem = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.expanded = true;
+        if (!this.disabled) {
+            this.expanded = true;
+        }
     };
     CdkAccordionItem.decorators = [
         { type: Directive, args: [{
@@ -214,6 +235,7 @@ var CdkAccordionItem = /** @class */ (function () {
         "destroyed": [{ type: Output },],
         "expandedChange": [{ type: Output },],
         "expanded": [{ type: Input },],
+        "disabled": [{ type: Input },],
     };
     return CdkAccordionItem;
 }());

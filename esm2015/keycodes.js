@@ -27,7 +27,7 @@ const DELETE = 46;
 const A = 65;
 const Z = 90;
 const ZERO = 48;
-const NINE = 91;
+const NINE = 57;
 const COMMA = 188;
 
 /**

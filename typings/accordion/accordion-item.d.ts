@@ -33,6 +33,9 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** Whether the AccordionItem is expanded. */
     expanded: any;
     private _expanded;
+    /** Whether the AccordionItem is disabled. */
+    disabled: any;
+    private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
     constructor(accordion: CdkAccordion, _changeDetectorRef: ChangeDetectorRef, _expansionDispatcher: UniqueSelectionDispatcher);

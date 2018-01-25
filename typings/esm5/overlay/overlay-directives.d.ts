@@ -152,7 +152,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _buildConfig();
     /** Returns the position strategy of the overlay to be set on the overlay config */
     private _createPositionStrategy();
-    private _handlePositionChanges(strategy);
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     private _attachOverlay();
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */

@@ -282,14 +282,14 @@ class BasePortalOutlet {
  */
 class DomPortalOutlet extends BasePortalOutlet {
     /**
-     * @param {?} _hostDomElement
+     * @param {?} outletElement
      * @param {?} _componentFactoryResolver
      * @param {?} _appRef
      * @param {?} _defaultInjector
      */
-    constructor(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
+    constructor(outletElement, _componentFactoryResolver, _appRef, _defaultInjector) {
         super();
-        this._hostDomElement = _hostDomElement;
+        this.outletElement = outletElement;
         this._componentFactoryResolver = _componentFactoryResolver;
         this._appRef = _appRef;
         this._defaultInjector = _defaultInjector;
@@ -321,7 +321,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         }
         // At this point the component has been instantiated, so we move it to the location in the DOM
         // where we want it to be rendered.
-        this._hostDomElement.appendChild(this._getComponentRootNode(componentRef));
+        this.outletElement.appendChild(this._getComponentRootNode(componentRef));
         return componentRef;
     }
     /**
@@ -338,7 +338,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         // But for the DomPortalOutlet the view can be added everywhere in the DOM
         // (e.g Overlay Container) To move the view to the specified host element. We just
         // re-append the existing root nodes.
-        viewRef.rootNodes.forEach(rootNode => this._hostDomElement.appendChild(rootNode));
+        viewRef.rootNodes.forEach(rootNode => this.outletElement.appendChild(rootNode));
         this.setDisposeFn((() => {
             let /** @type {?} */ index = viewContainer.indexOf(viewRef);
             if (index !== -1) {
@@ -354,8 +354,8 @@ class DomPortalOutlet extends BasePortalOutlet {
      */
     dispose() {
         super.dispose();
-        if (this._hostDomElement.parentNode != null) {
-            this._hostDomElement.parentNode.removeChild(this._hostDomElement);
+        if (this.outletElement.parentNode != null) {
+            this.outletElement.parentNode.removeChild(this.outletElement);
         }
     }
     /**

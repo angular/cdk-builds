@@ -653,7 +653,10 @@ var OverlayRef = /** @class */ (function () {
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
         this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(function () {
-            _this.updatePosition();
+            // The overlay could've been detached before the zone has stabilized.
+            if (_this.hasAttached()) {
+                _this.updatePosition();
+            }
         });
         // Enable pointer events for the overlay pane element.
         this._togglePointerEvents(true);
@@ -2698,10 +2701,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
      * @return {?}
      */
     function (changes) {
-        if ((changes['origin'] || changes['_deprecatedOrigin']) && this._position) {
-            this._position.setOrigin(this.origin.elementRef);
-            if (this.open) {
-                this._position.apply();
+        if (this._position) {
+            if (changes['positions'] || changes['_deprecatedPositions']) {
+                this._position.withPositions(this.positions);
+            }
+            if (changes['origin'] || changes['_deprecatedOrigin']) {
+                this._position.setOrigin(this.origin.elementRef);
+                if (this.open) {
+                    this._position.apply();
+                }
             }
         }
         if (changes['open'] || changes['_deprecatedOpen']) {
@@ -2763,31 +2771,20 @@ var CdkConnectedOverlay = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ pos = this.positions[0];
-        var /** @type {?} */ originPoint = { originX: pos.originX, originY: pos.originY };
-        var /** @type {?} */ overlayPoint = { overlayX: pos.overlayX, overlayY: pos.overlayY };
+        var _this = this;
+        var /** @type {?} */ primaryPosition = this.positions[0];
+        var /** @type {?} */ originPoint = { originX: primaryPosition.originX, originY: primaryPosition.originY };
+        var /** @type {?} */ overlayPoint = { overlayX: primaryPosition.overlayX, overlayY: primaryPosition.overlayY };
         var /** @type {?} */ strategy = this._overlay.position()
             .connectedTo(this.origin.elementRef, originPoint, overlayPoint)
             .withOffsetX(this.offsetX)
             .withOffsetY(this.offsetY);
-        this._handlePositionChanges(strategy);
-        return strategy;
-    };
-    /**
-     * @param {?} strategy
-     * @return {?}
-     */
-    CdkConnectedOverlay.prototype._handlePositionChanges = /**
-     * @param {?} strategy
-     * @return {?}
-     */
-    function (strategy) {
-        var _this = this;
         for (var /** @type {?} */ i = 1; i < this.positions.length; i++) {
             strategy.withFallbackPosition({ originX: this.positions[i].originX, originY: this.positions[i].originY }, { overlayX: this.positions[i].overlayX, overlayY: this.positions[i].overlayY });
         }
-        this._positionSubscription =
-            strategy.onPositionChange.subscribe(function (pos) { return _this.positionChange.emit(pos); });
+        this._positionSubscription = strategy.onPositionChange
+            .subscribe(function (pos) { return _this.positionChange.emit(pos); });
+        return strategy;
     };
     /**
      * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
