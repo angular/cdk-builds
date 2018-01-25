@@ -101,7 +101,7 @@ function supportsPassiveEventListeners() {
  */
 var supportedInputTypes;
 /**
- * Types of <input> that *might* be supported.
+ * Types of `<input>` that *might* be supported.
  */
 var candidateInputTypes = [
     'color',

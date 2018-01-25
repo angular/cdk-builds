@@ -23,7 +23,7 @@ export declare type CdkPortalOutletAttachedRef = ComponentRef<any> | EmbeddedVie
  * directly attached to it, enabling declarative use.
  *
  * Usage:
- * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
+ * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit, OnDestroy {
     private _componentFactoryResolver;

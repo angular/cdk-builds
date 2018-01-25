@@ -402,7 +402,7 @@ CdkPortal.ctorParameters = () => [
  * directly attached to it, enabling declarative use.
  *
  * Usage:
- * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
+ * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 class CdkPortalOutlet extends BasePortalOutlet {
     /**

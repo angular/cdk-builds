@@ -512,7 +512,7 @@ var CdkPortal = /** @class */ (function (_super) {
  * directly attached to it, enabling declarative use.
  *
  * Usage:
- * <ng-template [cdkPortalOutlet]="greeting"></ng-template>
+ * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 var CdkPortalOutlet = /** @class */ (function (_super) {
     __extends(CdkPortalOutlet, _super);

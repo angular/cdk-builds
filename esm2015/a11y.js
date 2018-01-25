@@ -184,7 +184,7 @@ function isNativeFormElement(element) {
         nodeName === 'textarea';
 }
 /**
- * Gets whether an element is an <input type="hidden">.
+ * Gets whether an element is an `<input type="hidden">`.
  * @param {?} element
  * @return {?}
  */
@@ -293,7 +293,7 @@ function getWindow(node) {
  *
  * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
- * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
+ * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
  */
 class FocusTrap {
     /**
