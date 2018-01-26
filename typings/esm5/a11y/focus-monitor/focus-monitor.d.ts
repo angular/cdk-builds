@@ -23,7 +23,11 @@ export declare class FocusMonitor implements OnDestroy {
     /** The target of the last touch event. */
     private _lastTouchTarget;
     /** The timeout id of the touch timeout, used to cancel timeout later. */
-    private _touchTimeout;
+    private _touchTimeoutId;
+    /** The timeout id of the window focus timeout. */
+    private _windowFocusTimeoutId;
+    /** The timeout id of the origin clearing timeout. */
+    private _originTimeoutId;
     /** Map of elements being monitored to their info. */
     private _elementInfo;
     /** A map of global objects to lists of current listeners. */

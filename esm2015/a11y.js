@@ -1570,17 +1570,17 @@ class FocusMonitor {
         // we can't rely on the trick used above (setting timeout of 0ms). Instead we wait 650ms to
         // see if a focus happens.
         let /** @type {?} */ documentTouchstartListener = (event) => {
-            if (this._touchTimeout != null) {
-                clearTimeout(this._touchTimeout);
+            if (this._touchTimeoutId != null) {
+                clearTimeout(this._touchTimeoutId);
             }
             this._lastTouchTarget = event.target;
-            this._touchTimeout = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
+            this._touchTimeoutId = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
         };
         // Make a note of when the window regains focus, so we can restore the origin info for the
         // focused element.
         let /** @type {?} */ windowFocusListener = () => {
             this._windowFocused = true;
-            setTimeout(() => this._windowFocused = false, 0);
+            this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false, 0);
         };
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
@@ -1595,6 +1595,10 @@ class FocusMonitor {
             document.removeEventListener('mousedown', documentMousedownListener, true);
             document.removeEventListener('touchstart', documentTouchstartListener, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
             window.removeEventListener('focus', windowFocusListener);
+            // Clear timeouts for all potentially pending timeouts to prevent the leaks.
+            clearTimeout(this._windowFocusTimeoutId);
+            clearTimeout(this._touchTimeoutId);
+            clearTimeout(this._originTimeoutId);
         };
     }
     /**
@@ -1634,7 +1638,7 @@ class FocusMonitor {
      */
     _setOriginForCurrentEventQueue(origin) {
         this._origin = origin;
-        setTimeout(() => this._origin = null, 0);
+        this._originTimeoutId = setTimeout(() => this._origin = null, 0);
     }
     /**
      * Checks whether the given focus event was caused by a touchstart event.

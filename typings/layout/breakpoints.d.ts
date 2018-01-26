@@ -6,6 +6,11 @@
  * found in the LICENSE file at https://angular.io/license
  */
 export declare const Breakpoints: {
+    XSmall: string;
+    Small: string;
+    Medium: string;
+    Large: string;
+    XLarge: string;
     Handset: string;
     Tablet: string;
     Web: string;

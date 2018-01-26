@@ -2057,17 +2057,17 @@ var FocusMonitor = /** @class */ (function () {
         // we can't rely on the trick used above (setting timeout of 0ms). Instead we wait 650ms to
         // see if a focus happens.
         var /** @type {?} */ documentTouchstartListener = function (event) {
-            if (_this._touchTimeout != null) {
-                clearTimeout(_this._touchTimeout);
+            if (_this._touchTimeoutId != null) {
+                clearTimeout(_this._touchTimeoutId);
             }
             _this._lastTouchTarget = event.target;
-            _this._touchTimeout = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
+            _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
         };
         // Make a note of when the window regains focus, so we can restore the origin info for the
         // focused element.
         var /** @type {?} */ windowFocusListener = function () {
             _this._windowFocused = true;
-            setTimeout(function () { return _this._windowFocused = false; }, 0);
+            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; }, 0);
         };
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
@@ -2082,6 +2082,10 @@ var FocusMonitor = /** @class */ (function () {
             document.removeEventListener('mousedown', documentMousedownListener, true);
             document.removeEventListener('touchstart', documentTouchstartListener, _angular_cdk_platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
             window.removeEventListener('focus', windowFocusListener);
+            // Clear timeouts for all potentially pending timeouts to prevent the leaks.
+            clearTimeout(_this._windowFocusTimeoutId);
+            clearTimeout(_this._touchTimeoutId);
+            clearTimeout(_this._originTimeoutId);
         };
     };
     /**
@@ -2139,7 +2143,7 @@ var FocusMonitor = /** @class */ (function () {
     function (origin) {
         var _this = this;
         this._origin = origin;
-        setTimeout(function () { return _this._origin = null; }, 0);
+        this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 0);
     };
     /**
      * Checks whether the given focus event was caused by a touchstart event.
