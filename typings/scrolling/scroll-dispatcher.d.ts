@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, NgZone, Optional } from '@angular/core';
+import { ElementRef, NgZone, Optional, OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -16,7 +16,7 @@ export declare const DEFAULT_SCROLL_TIME = 20;
  * Service contained all registered Scrollable references and emits an event when any one of the
  * Scrollable references emit a scrolled event.
  */
-export declare class ScrollDispatcher {
+export declare class ScrollDispatcher implements OnDestroy {
     private _ngZone;
     private _platform;
     constructor(_ngZone: NgZone, _platform: Platform);
@@ -53,6 +53,7 @@ export declare class ScrollDispatcher {
      * to run the callback using `NgZone.run`.
      */
     scrolled(auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    ngOnDestroy(): void;
     /**
      * Returns an observable that emits whenever any of the
      * scrollable ancestors of an element are scrolled.
@@ -64,8 +65,10 @@ export declare class ScrollDispatcher {
     getAncestorScrollContainers(elementRef: ElementRef): CdkScrollable[];
     /** Returns true if the element is contained within the provided Scrollable. */
     private _scrollableContainsElement(scrollable, elementRef);
-    /** Sets up the global scroll and resize listeners. */
+    /** Sets up the global scroll listeners. */
     private _addGlobalListener();
+    /** Cleans up the global scroll listener. */
+    private _removeGlobalListener();
 }
 /** @docs-private */
 export declare function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher: ScrollDispatcher, ngZone: NgZone, platform: Platform): ScrollDispatcher;

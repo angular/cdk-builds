@@ -103,12 +103,18 @@ class ScrollDispatcher {
             return () => {
                 subscription.unsubscribe();
                 this._scrolledCount--;
-                if (this._globalSubscription && !this._scrolledCount) {
-                    this._globalSubscription.unsubscribe();
-                    this._globalSubscription = null;
+                if (!this._scrolledCount) {
+                    this._removeGlobalListener();
                 }
             };
         }) : of();
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._removeGlobalListener();
+        this.scrollContainers.forEach((_, container) => this.deregister(container));
     }
     /**
      * Returns an observable that emits whenever any of the
@@ -156,13 +162,23 @@ class ScrollDispatcher {
         return false;
     }
     /**
-     * Sets up the global scroll and resize listeners.
+     * Sets up the global scroll listeners.
      * @return {?}
      */
     _addGlobalListener() {
         this._globalSubscription = this._ngZone.runOutsideAngular(() => {
             return fromEvent(window.document, 'scroll').subscribe(() => this._scrolled.next());
         });
+    }
+    /**
+     * Cleans up the global scroll listener.
+     * @return {?}
+     */
+    _removeGlobalListener() {
+        if (this._globalSubscription) {
+            this._globalSubscription.unsubscribe();
+            this._globalSubscription = null;
+        }
     }
 }
 ScrollDispatcher.decorators = [

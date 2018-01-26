@@ -140,12 +140,22 @@ var ScrollDispatcher = /** @class */ (function () {
             return function () {
                 subscription.unsubscribe();
                 _this._scrolledCount--;
-                if (_this._globalSubscription && !_this._scrolledCount) {
-                    _this._globalSubscription.unsubscribe();
-                    _this._globalSubscription = null;
+                if (!_this._scrolledCount) {
+                    _this._removeGlobalListener();
                 }
             };
         }) : rxjs_observable_of.of();
+    };
+    /**
+     * @return {?}
+     */
+    ScrollDispatcher.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._removeGlobalListener();
+        this.scrollContainers.forEach(function (_, container) { return _this.deregister(container); });
     };
     /**
      * Returns an observable that emits whenever any of the
@@ -219,11 +229,11 @@ var ScrollDispatcher = /** @class */ (function () {
         return false;
     };
     /**
-     * Sets up the global scroll and resize listeners.
+     * Sets up the global scroll listeners.
      * @return {?}
      */
     ScrollDispatcher.prototype._addGlobalListener = /**
-     * Sets up the global scroll and resize listeners.
+     * Sets up the global scroll listeners.
      * @return {?}
      */
     function () {
@@ -231,6 +241,20 @@ var ScrollDispatcher = /** @class */ (function () {
         this._globalSubscription = this._ngZone.runOutsideAngular(function () {
             return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
+    };
+    /**
+     * Cleans up the global scroll listener.
+     * @return {?}
+     */
+    ScrollDispatcher.prototype._removeGlobalListener = /**
+     * Cleans up the global scroll listener.
+     * @return {?}
+     */
+    function () {
+        if (this._globalSubscription) {
+            this._globalSubscription.unsubscribe();
+            this._globalSubscription = null;
+        }
     };
     ScrollDispatcher.decorators = [
         { type: _angular_core.Injectable },
