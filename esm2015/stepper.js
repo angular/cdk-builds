@@ -203,6 +203,10 @@ class CdkStepper {
      */
     set selectedIndex(index) {
         if (this._steps) {
+            // Ensure that the index can't be out of bounds.
+            if (index < 0 || index > this._steps.length - 1) {
+                throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
+            }
             if (this._anyControlsInvalidOrPending(index) || index < this._selectedIndex &&
                 !this._steps.toArray()[index].editable) {
                 // remove focus from clicked step header if the step is not able to be selected
