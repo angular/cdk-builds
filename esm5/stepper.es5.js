@@ -145,7 +145,9 @@ var CdkStep = /** @class */ (function () {
      */
     function () {
         this.interacted = false;
-        this.completed = false;
+        if (this._customCompleted != null) {
+            this._customCompleted = false;
+        }
         if (this.stepControl) {
             this.stepControl.reset();
         }
