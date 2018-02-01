@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('rxjs/operators/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/collections', 'rxjs/operators/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Subject', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = global.ng.cdk.table || {}),global.ng.core,global.ng.cdk.collections,global.Rx.operators,global.Rx,global.Rx,global.ng.common));
-}(this, (function (exports,_angular_core,_angular_cdk_collections,rxjs_operators_takeUntil,rxjs_BehaviorSubject,rxjs_Subject,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('rxjs/operators/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/collections', 'rxjs/operators/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = global.ng.cdk.table || {}),global.ng.core,global.ng.cdk.collections,global.Rx.operators,global.Rx,global.Rx,global.Rx,global.Rx.Observable,global.ng.common));
+}(this, (function (exports,_angular_core,_angular_cdk_collections,rxjs_operators_takeUntil,rxjs_BehaviorSubject,rxjs_Subject,rxjs_Observable,rxjs_observable_of,_angular_common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -391,6 +391,14 @@ function getTableMissingRowDefsError() {
     return Error('Missing definitions for header and row, ' +
         'cannot determine which columns should be rendered.');
 }
+/**
+ * Returns an error to be thrown when the data source does not match the compatible types.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableUnknownDataSourceError() {
+    return Error("Provided data source did not match an array, Observable, or DataSource");
+}
 
 /**
  * @fileoverview added by tsickle
@@ -449,8 +457,10 @@ var RowViewRef = /** @class */ (function (_super) {
     return RowViewRef;
 }(_angular_core.EmbeddedViewRef));
 /**
- * A data table that connects with a data source to retrieve data of type `T` and renders
- * a header row and data rows. Updates the rows when new data is provided by the data source.
+ * A data table that renders a header row and data rows. Uses the dataSource input to determine
+ * the data to be rendered. The data can be provided either as a data array, an Observable stream
+ * that emits the data array to render, or a DataSource with a connect function that will
+ * return an Observable stream that emits the data array to render.
  */
 var CdkTable = /** @class */ (function () {
     function CdkTable(_differs, _changeDetectorRef, elementRef, role) {
@@ -460,10 +470,6 @@ var CdkTable = /** @class */ (function () {
          * Subject that emits when the component has been destroyed.
          */
         this._onDestroy = new rxjs_Subject.Subject();
-        /**
-         * Latest data provided by the data source through the connect interface.
-         */
-        this._data = [];
         /**
          * Map of all the user's defined columns (header and data cell template) identified by name.
          * Collection populated by the column definitions gathered by `ContentChildren` as well as any
@@ -517,8 +523,24 @@ var CdkTable = /** @class */ (function () {
     });
     Object.defineProperty(CdkTable.prototype, "dataSource", {
         get: /**
-         * Provides a stream containing the latest data array to render. Influenced by the table's
-         * stream of view window (what rows are currently on screen).
+         * The table's source of data, which can be provided in three ways (in order of complexity):
+         *   - Simple data array (each object represents one table row)
+         *   - Stream that emits a data array each time the array changes
+         *   - `DataSource` object that implements the connect/disconnect interface.
+         *
+         * If a data array is provided, the table must be notified when the array's objects are
+         * added, removed, or moved. This can be done by calling the `renderRows()` function which will
+         * render the diff since the last table render. If the data array reference is changed, the table
+         * will automatically trigger an update to the rows.
+         *
+         * When providing an Observable stream, the table will trigger an update automatically when the
+         * stream emits a new array of data.
+         *
+         * Finally, when providing a `DataSource` object, the table will use the Observable stream
+         * provided by the connect function and trigger updates when that stream emits new data array
+         * values. During the table's ngOnDestroy or when the data source is removed from the table, the
+         * table will call the DataSource's `disconnect` function (may be useful for cleaning up any
+         * subscriptions registered during the connect process).
          * @return {?}
          */
         function () { return this._dataSource; },
@@ -587,9 +609,69 @@ var CdkTable = /** @class */ (function () {
         this._headerRowPlaceholder.viewContainer.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
-        if (this.dataSource) {
+        if (this.dataSource instanceof _angular_cdk_collections.DataSource) {
             this.dataSource.disconnect(this);
         }
+    };
+    /**
+     * Renders rows based on the table's latest set of data, which was either provided directly as an
+     * input or retrieved through an Observable stream (directly or from a DataSource).
+     * Checks for differences in the data since the last diff to perform only the necessary
+     * changes (add/remove/move rows).
+     *
+     * If the table's data source is a DataSource or Observable, this will be invoked automatically
+     * each time the provided Observable stream emits a new data array. Otherwise if your data is
+     * an array, this function will need to be called to render any changes.
+     */
+    /**
+     * Renders rows based on the table's latest set of data, which was either provided directly as an
+     * input or retrieved through an Observable stream (directly or from a DataSource).
+     * Checks for differences in the data since the last diff to perform only the necessary
+     * changes (add/remove/move rows).
+     *
+     * If the table's data source is a DataSource or Observable, this will be invoked automatically
+     * each time the provided Observable stream emits a new data array. Otherwise if your data is
+     * an array, this function will need to be called to render any changes.
+     * @return {?}
+     */
+    CdkTable.prototype.renderRows = /**
+     * Renders rows based on the table's latest set of data, which was either provided directly as an
+     * input or retrieved through an Observable stream (directly or from a DataSource).
+     * Checks for differences in the data since the last diff to perform only the necessary
+     * changes (add/remove/move rows).
+     *
+     * If the table's data source is a DataSource or Observable, this will be invoked automatically
+     * each time the provided Observable stream emits a new data array. Otherwise if your data is
+     * an array, this function will need to be called to render any changes.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        var /** @type {?} */ changes = this._dataDiffer.diff(this._data);
+        if (!changes) {
+            return;
+        }
+        var /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
+        changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
+            if (record.previousIndex == null) {
+                _this._insertRow(record.item, currentIndex);
+            }
+            else if (currentIndex == null) {
+                viewContainer.remove(adjustedPreviousIndex);
+            }
+            else {
+                var /** @type {?} */ view = /** @type {?} */ (viewContainer.get(adjustedPreviousIndex));
+                viewContainer.move(/** @type {?} */ ((view)), currentIndex);
+            }
+        });
+        // Update the meta context of a row's context data (index, count, first, last, ...)
+        this._updateRowIndexContext();
+        // Update rows that did not get added/removed/moved but may have had their identity changed,
+        // e.g. if trackBy matched data on some property but the actual data reference changed.
+        changes.forEachIdentityChange(function (record) {
+            var /** @type {?} */ rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
+            rowView.context.$implicit = record.item;
+        });
     };
     /**
      * Sets the header row definition to be used. Overrides the header row definition gathered by
@@ -727,7 +809,7 @@ var CdkTable = /** @class */ (function () {
                 // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 _this._dataDiffer.diff([]);
                 _this._rowPlaceholder.viewContainer.clear();
-                _this._renderRowChanges();
+                _this.renderRows();
             }
         });
         // Re-render the header row if there is a difference in its columns.
@@ -751,7 +833,7 @@ var CdkTable = /** @class */ (function () {
      */
     function (dataSource) {
         this._data = [];
-        if (this.dataSource) {
+        if (this.dataSource instanceof _angular_cdk_collections.DataSource) {
             this.dataSource.disconnect(this);
         }
         // Stop listening for data from the previous data source.
@@ -759,8 +841,10 @@ var CdkTable = /** @class */ (function () {
             this._renderChangeSubscription.unsubscribe();
             this._renderChangeSubscription = null;
         }
-        // Remove the table's rows if there is now no data source
         if (!dataSource) {
+            if (this._dataDiffer) {
+                this._dataDiffer.diff([]);
+            }
             this._rowPlaceholder.viewContainer.clear();
         }
         this._dataSource = dataSource;
@@ -775,10 +859,32 @@ var CdkTable = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._renderChangeSubscription = this.dataSource.connect(this).pipe(rxjs_operators_takeUntil.takeUntil(this._onDestroy))
+        // If no data source has been set, there is nothing to observe for changes.
+        if (!this.dataSource) {
+            return;
+        }
+        var /** @type {?} */ dataStream;
+        // Check if the datasource is a DataSource object by observing if it has a connect function.
+        // Cannot check this.dataSource['connect'] due to potential property renaming, nor can it
+        // checked as an instanceof DataSource<T> since the table should allow for data sources
+        // that did not explicitly extend DataSource<T>.
+        if ((/** @type {?} */ (this.dataSource)).connect instanceof Function) {
+            dataStream = (/** @type {?} */ (this.dataSource)).connect(this);
+        }
+        else if (this.dataSource instanceof rxjs_Observable.Observable) {
+            dataStream = this.dataSource;
+        }
+        else if (Array.isArray(this.dataSource)) {
+            dataStream = rxjs_observable_of.of(this.dataSource);
+        }
+        if (dataStream === undefined) {
+            throw getTableUnknownDataSourceError();
+        }
+        this._renderChangeSubscription = dataStream
+            .pipe(rxjs_operators_takeUntil.takeUntil(this._onDestroy))
             .subscribe(function (data) {
             _this._data = data;
-            _this._renderRowChanges();
+            _this.renderRows();
         });
     };
     /**
@@ -811,44 +917,6 @@ var CdkTable = /** @class */ (function () {
             }
         });
         this._changeDetectorRef.markForCheck();
-    };
-    /**
-     * Check for changes made in the data and render each change (row added/removed/moved) and update
-     * row contexts.
-     * @return {?}
-     */
-    CdkTable.prototype._renderRowChanges = /**
-     * Check for changes made in the data and render each change (row added/removed/moved) and update
-     * row contexts.
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        var /** @type {?} */ changes = this._dataDiffer.diff(this._data);
-        if (!changes) {
-            return;
-        }
-        var /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
-        changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
-            if (record.previousIndex == null) {
-                _this._insertRow(record.item, currentIndex);
-            }
-            else if (currentIndex == null) {
-                viewContainer.remove(adjustedPreviousIndex);
-            }
-            else {
-                var /** @type {?} */ view = /** @type {?} */ (viewContainer.get(adjustedPreviousIndex));
-                viewContainer.move(/** @type {?} */ ((view)), currentIndex);
-            }
-        });
-        // Update the meta context of a row's context data (index, count, first, last, ...)
-        this._updateRowIndexContext();
-        // Update rows that did not get added/removed/moved but may have had their identity changed,
-        // e.g. if trackBy matched data on some property but the actual data reference changed.
-        changes.forEachIdentityChange(function (record) {
-            var /** @type {?} */ rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
-            rowView.context.$implicit = record.item;
-        });
     };
     /**
      * Finds the matching row definition that should be used for this row data. If there is only

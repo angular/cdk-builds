@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional } from '@angular/core';
+import { Optional, OnDestroy } from '@angular/core';
 export declare type UniqueSelectionDispatcherListener = (id: string, name: string) => void;
 /**
  * Class to coordinate unique selection based on name.
@@ -16,7 +16,7 @@ export declare type UniqueSelectionDispatcherListener = (id: string, name: strin
  * This service does not *store* any IDs and names because they may change at any time, so it is
  * less error-prone if they are simply passed through when the events occur.
  */
-export declare class UniqueSelectionDispatcher {
+export declare class UniqueSelectionDispatcher implements OnDestroy {
     private _listeners;
     /**
      * Notify other items that selection for the given name has been set.
@@ -29,6 +29,7 @@ export declare class UniqueSelectionDispatcher {
      * @return Function used to deregister listener
      */
     listen(listener: UniqueSelectionDispatcherListener): () => void;
+    ngOnDestroy(): void;
 }
 /** @docs-private */
 export declare function UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY(parentDispatcher: UniqueSelectionDispatcher): UniqueSelectionDispatcher;

@@ -274,6 +274,12 @@ class UniqueSelectionDispatcher {
             });
         };
     }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._listeners = [];
+    }
 }
 UniqueSelectionDispatcher.decorators = [
     { type: Injectable },

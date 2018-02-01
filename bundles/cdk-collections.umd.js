@@ -398,6 +398,15 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
             });
         };
     };
+    /**
+     * @return {?}
+     */
+    UniqueSelectionDispatcher.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._listeners = [];
+    };
     UniqueSelectionDispatcher.decorators = [
         { type: _angular_core.Injectable },
     ];

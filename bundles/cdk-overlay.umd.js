@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/common'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', '@angular/common', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx.operators,global.Rx,global.Rx,global.ng.common,global.Rx.operators,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_cdk_bidi,_angular_cdk_portal,rxjs_operators_take,rxjs_Subject,rxjs_Subscription,_angular_common,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/common', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = global.ng.cdk.overlay || {}),global.ng.core,global.ng.cdk.scrolling,global.ng.common,global.ng.cdk.bidi,global.ng.cdk.portal,global.Rx.operators,global.Rx,global.Rx,global.Rx.operators,global.Rx.Observable,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,_angular_core,_angular_cdk_scrolling,_angular_common,_angular_cdk_bidi,_angular_cdk_portal,rxjs_operators_take,rxjs_Subject,rxjs_Subscription,rxjs_operators_filter,rxjs_observable_fromEvent,_angular_cdk_coercion,_angular_cdk_keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -329,10 +329,11 @@ var CloseScrollStrategy = /** @class */ (function () {
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
 var BlockScrollStrategy = /** @class */ (function () {
-    function BlockScrollStrategy(_viewportRuler) {
+    function BlockScrollStrategy(_viewportRuler, document) {
         this._viewportRuler = _viewportRuler;
         this._previousHTMLStyles = { top: '', left: '' };
         this._isEnabled = false;
+        this._document = document;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -355,7 +356,7 @@ var BlockScrollStrategy = /** @class */ (function () {
      */
     function () {
         if (this._canBeEnabled()) {
-            var /** @type {?} */ root = document.documentElement;
+            var /** @type {?} */ root = this._document.documentElement;
             this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
             // Cache the previous inline styles in case the user had set them.
             this._previousHTMLStyles.left = root.style.left || '';
@@ -379,8 +380,8 @@ var BlockScrollStrategy = /** @class */ (function () {
      */
     function () {
         if (this._isEnabled) {
-            var /** @type {?} */ html = document.documentElement;
-            var /** @type {?} */ body = document.body;
+            var /** @type {?} */ html = this._document.documentElement;
+            var /** @type {?} */ body = this._document.body;
             var /** @type {?} */ previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
             var /** @type {?} */ previousBodyScrollBehavior = body.style['scrollBehavior'] || '';
             this._isEnabled = false;
@@ -405,10 +406,11 @@ var BlockScrollStrategy = /** @class */ (function () {
         // Since the scroll strategies can't be singletons, we have to use a global CSS class
         // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
         // scrolling multiple times.
-        if (document.documentElement.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
+        var /** @type {?} */ html = this._document.documentElement;
+        if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
-        var /** @type {?} */ body = document.body;
+        var /** @type {?} */ body = this._document.body;
         var /** @type {?} */ viewport = this._viewportRuler.getViewportSize();
         return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
     };
@@ -553,7 +555,7 @@ var RepositionScrollStrategy = /** @class */ (function () {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 var ScrollStrategyOptions = /** @class */ (function () {
-    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone) {
+    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone, document) {
         var _this = this;
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
@@ -572,7 +574,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         /**
          * Block scrolling.
          */
-        this.block = function () { return new BlockScrollStrategy(_this._viewportRuler); };
+        this.block = function () { return new BlockScrollStrategy(_this._viewportRuler, _this._document); };
         /**
          * Update the overlay's position on scroll.
          * @param config Configuration to be used inside the scroll strategy.
@@ -581,6 +583,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         this.reposition = function (config) {
             return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config);
         };
+        this._document = document;
     }
     ScrollStrategyOptions.decorators = [
         { type: _angular_core.Injectable },
@@ -590,6 +593,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: _angular_cdk_scrolling.ScrollDispatcher, },
         { type: _angular_cdk_scrolling.ViewportRuler, },
         { type: _angular_core.NgZone, },
+        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
     ]; };
     return ScrollStrategyOptions;
 }());
@@ -636,6 +640,18 @@ var OverlayRef = /** @class */ (function () {
          */
         function () {
             return this._pane;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(OverlayRef.prototype, "backdropElement", {
+        /** The overlay's backdrop HTML element. */
+        get: /**
+         * The overlay's backdrop HTML element.
+         * @return {?}
+         */
+        function () {
+            return this._backdropElement;
         },
         enumerable: true,
         configurable: true

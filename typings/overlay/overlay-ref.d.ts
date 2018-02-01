@@ -36,6 +36,8 @@ export declare class OverlayRef implements PortalOutlet {
     constructor(_portalOutlet: PortalOutlet, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
+    /** The overlay's backdrop HTML element. */
+    readonly backdropElement: HTMLElement | null;
     attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
     attach(portal: any): any;

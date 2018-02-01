@@ -15,7 +15,8 @@ export declare class BlockScrollStrategy implements ScrollStrategy {
     private _previousHTMLStyles;
     private _previousScrollPosition;
     private _isEnabled;
-    constructor(_viewportRuler: ViewportRuler);
+    private _document;
+    constructor(_viewportRuler: ViewportRuler, document: any);
     /** Attaches this scroll strategy to an overlay. */
     attach(): void;
     /** Blocks page-level scroll while the attached overlay is open. */

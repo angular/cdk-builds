@@ -10,6 +10,7 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CdkColumnDef } from './cell';
+import { Observable } from 'rxjs/Observable';
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
@@ -32,15 +33,17 @@ export declare class HeaderRowPlaceholder {
  */
 export declare const CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";
 /**
- * A data table that connects with a data source to retrieve data of type `T` and renders
- * a header row and data rows. Updates the rows when new data is provided by the data source.
+ * A data table that renders a header row and data rows. Uses the dataSource input to determine
+ * the data to be rendered. The data can be provided either as a data array, an Observable stream
+ * that emits the data array to render, or a DataSource with a connect function that will
+ * return an Observable stream that emits the data array to render.
  */
 export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterContentChecked {
     private readonly _differs;
     private readonly _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
-    /** Latest data provided by the data source through the connect interface. */
+    /** Latest data provided by the data source. */
     private _data;
     /** Subscription that listens for the data provided by the data source. */
     private _renderChangeSubscription;
@@ -77,10 +80,26 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     trackBy: TrackByFunction<T>;
     private _trackByFn;
     /**
-     * Provides a stream containing the latest data array to render. Influenced by the table's
-     * stream of view window (what rows are currently on screen).
+     * The table's source of data, which can be provided in three ways (in order of complexity):
+     *   - Simple data array (each object represents one table row)
+     *   - Stream that emits a data array each time the array changes
+     *   - `DataSource` object that implements the connect/disconnect interface.
+     *
+     * If a data array is provided, the table must be notified when the array's objects are
+     * added, removed, or moved. This can be done by calling the `renderRows()` function which will
+     * render the diff since the last table render. If the data array reference is changed, the table
+     * will automatically trigger an update to the rows.
+     *
+     * When providing an Observable stream, the table will trigger an update automatically when the
+     * stream emits a new array of data.
+     *
+     * Finally, when providing a `DataSource` object, the table will use the Observable stream
+     * provided by the connect function and trigger updates when that stream emits new data array
+     * values. During the table's ngOnDestroy or when the data source is removed from the table, the
+     * table will call the DataSource's `disconnect` function (may be useful for cleaning up any
+     * subscriptions registered during the connect process).
      */
-    dataSource: DataSource<T>;
+    dataSource: DataSource<T> | Observable<T[]> | T[];
     private _dataSource;
     /**
      * Stream containing the latest information on what rows are being displayed on screen.
@@ -110,6 +129,17 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
+    /**
+     * Renders rows based on the table's latest set of data, which was either provided directly as an
+     * input or retrieved through an Observable stream (directly or from a DataSource).
+     * Checks for differences in the data since the last diff to perform only the necessary
+     * changes (add/remove/move rows).
+     *
+     * If the table's data source is a DataSource or Observable, this will be invoked automatically
+     * each time the provided Observable stream emits a new data array. Otherwise if your data is
+     * an array, this function will need to be called to render any changes.
+     */
+    renderRows(): void;
     /**
      * Sets the header row definition to be used. Overrides the header row definition gathered by
      * using `ContentChild`, if one exists. Sets a flag that will re-render the header row after the
@@ -146,11 +176,6 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      * in the placeholder using the header row definition.
      */
     private _renderHeaderRow();
-    /**
-     * Check for changes made in the data and render each change (row added/removed/moved) and update
-     * row contexts.
-     */
-    private _renderRowChanges();
     /**
      * Finds the matching row definition that should be used for this row data. If there is only
      * one row definition, it is returned. Otherwise, find the row definition that has a when

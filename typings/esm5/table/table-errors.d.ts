@@ -31,3 +31,8 @@ export declare function getTableMissingMatchingRowDefError(): Error;
  * @docs-private
  */
 export declare function getTableMissingRowDefsError(): Error;
+/**
+ * Returns an error to be thrown when the data source does not match the compatible types.
+ * @docs-private
+ */
+export declare function getTableUnknownDataSourceError(): Error;
