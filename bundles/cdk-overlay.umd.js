@@ -1165,6 +1165,7 @@ var ConnectedPositionStrategy = /** @class */ (function () {
     function () {
         this._applied = false;
         this._resizeSubscription.unsubscribe();
+        this._onPositionChange.complete();
     };
     /** @docs-private */
     /**
@@ -2421,7 +2422,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         this._dir = _dir;
         this._hasBackdrop = false;
         this._backdropSubscription = rxjs_Subscription.Subscription.EMPTY;
-        this._positionSubscription = rxjs_Subscription.Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
         /**
@@ -2807,8 +2807,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         for (var /** @type {?} */ i = 1; i < this.positions.length; i++) {
             strategy.withFallbackPosition({ originX: this.positions[i].originX, originY: this.positions[i].originY }, { overlayX: this.positions[i].overlayX, overlayY: this.positions[i].overlayY });
         }
-        this._positionSubscription = strategy.onPositionChange
-            .subscribe(function (pos) { return _this.positionChange.emit(pos); });
+        strategy.onPositionChange.subscribe(function (pos) { return _this.positionChange.emit(pos); });
         return strategy;
     };
     /**
@@ -2869,7 +2868,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
             this._overlayRef.dispose();
         }
         this._backdropSubscription.unsubscribe();
-        this._positionSubscription.unsubscribe();
     };
     CdkConnectedOverlay.decorators = [
         { type: _angular_core.Directive, args: [{
