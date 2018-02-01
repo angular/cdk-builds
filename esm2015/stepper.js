@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { DOWN_ARROW, ENTER, LEFT_ARROW, RIGHT_ARROW, SPACE, UP_ARROW } from '@angular/cdk/keycodes';
+import { DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, RIGHT_ARROW, SPACE, UP_ARROW } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
 import { BidiModule, Directionality } from '@angular/cdk/bidi';
@@ -355,6 +355,14 @@ class CdkStepper {
         }
         if (keyCode === SPACE || keyCode === ENTER) {
             this.selectedIndex = this._focusIndex;
+            event.preventDefault();
+        }
+        if (keyCode === HOME) {
+            this._focusStep(0);
+            event.preventDefault();
+        }
+        if (keyCode === END) {
+            this._focusStep(this._steps.length - 1);
             event.preventDefault();
         }
     }

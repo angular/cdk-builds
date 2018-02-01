@@ -446,6 +446,14 @@ var CdkStepper = /** @class */ (function () {
             this.selectedIndex = this._focusIndex;
             event.preventDefault();
         }
+        if (keyCode === _angular_cdk_keycodes.HOME) {
+            this._focusStep(0);
+            event.preventDefault();
+        }
+        if (keyCode === _angular_cdk_keycodes.END) {
+            this._focusStep(this._steps.length - 1);
+            event.preventDefault();
+        }
     };
     /**
      * @return {?}
