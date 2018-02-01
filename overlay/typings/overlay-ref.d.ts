@@ -49,7 +49,7 @@ export declare class OverlayRef implements PortalOutlet {
     /** Whether the overlay has attached content. */
     hasAttached(): boolean;
     /** Gets an observable that emits when the backdrop has been clicked. */
-    backdropClick(): Observable<void>;
+    backdropClick(): Observable<MouseEvent>;
     /** Gets an observable that emits when the overlay has been attached. */
     attachments(): Observable<void>;
     /** Gets an observable that emits when the overlay has been detached. */

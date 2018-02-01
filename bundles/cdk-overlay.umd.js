@@ -955,7 +955,7 @@ var OverlayRef = /** @class */ (function () {
         this._pane.parentElement)).insertBefore(this._backdropElement, this._pane);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
         // action desired when such a click occurs (usually closing the overlay).
-        this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
+        this._backdropElement.addEventListener('click', function (event) { return _this._backdropClick.next(event); });
         // Add class to fade-in the backdrop after one frame.
         if (typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular(function () {
