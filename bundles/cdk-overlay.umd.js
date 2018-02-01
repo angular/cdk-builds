@@ -2086,10 +2086,10 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ bodyKeydownEvents = rxjs_observable_fromEvent.fromEvent(this._document.body, 'keydown');
+        var /** @type {?} */ bodyKeydownEvents = rxjs_observable_fromEvent.fromEvent(this._document.body, 'keydown', true);
         this._keydownEventSubscription = bodyKeydownEvents.pipe(rxjs_operators_filter.filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
-            // Dispatch keydown event to correct overlay reference
-            // Dispatch keydown event to correct overlay reference
+            // Dispatch keydown event to the correct overlay.
+            // Dispatch keydown event to the correct overlay.
             _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });
     };
@@ -2123,7 +2123,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
             return overlay.overlayElement === event.target ||
                 overlay.overlayElement.contains(/** @type {?} */ (event.target));
         });
-        // Use that overlay if it exists, otherwise choose the most recently attached one
+        // Use the overlay if it exists, otherwise choose the most recently attached one
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     };
     OverlayKeyboardDispatcher.decorators = [

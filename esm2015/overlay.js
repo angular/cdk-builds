@@ -1573,9 +1573,9 @@ class OverlayKeyboardDispatcher {
      * @return {?}
      */
     _subscribeToKeydownEvents() {
-        const /** @type {?} */ bodyKeydownEvents = fromEvent(this._document.body, 'keydown');
+        const /** @type {?} */ bodyKeydownEvents = fromEvent(this._document.body, 'keydown', true);
         this._keydownEventSubscription = bodyKeydownEvents.pipe(filter(() => !!this._attachedOverlays.length)).subscribe(event => {
-            // Dispatch keydown event to correct overlay reference
+            // Dispatch keydown event to the correct overlay.
             this._selectOverlayFromEvent(event)._keydownEvents.next(event);
         });
     }
@@ -1600,7 +1600,7 @@ class OverlayKeyboardDispatcher {
             return overlay.overlayElement === event.target ||
                 overlay.overlayElement.contains(/** @type {?} */ (event.target));
         });
-        // Use that overlay if it exists, otherwise choose the most recently attached one
+        // Use the overlay if it exists, otherwise choose the most recently attached one
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     }
 }
