@@ -85,7 +85,7 @@ function throwNullPortalOutletError() {
 }
 /**
  * Throws an exception when attempting to detach a portal that is not attached.
- * \@docs-privatew
+ * \@docs-private
  * @return {?}
  */
 function throwNoPortalAttachedError() {

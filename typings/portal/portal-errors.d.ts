@@ -32,6 +32,6 @@ export declare function throwUnknownPortalTypeError(): void;
 export declare function throwNullPortalOutletError(): void;
 /**
  * Throws an exception when attempting to detach a portal that is not attached.
- * @docs-privatew
+ * @docs-private
  */
 export declare function throwNoPortalAttachedError(): void;
