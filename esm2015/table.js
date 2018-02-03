@@ -630,7 +630,7 @@ class CdkTable {
         this._customColumnDefs.delete(columnDef);
     }
     /**
-     * Adds a row definition that was not included as part of the direct content children.
+     * Adds a column definition that was not included as part of the direct content children.
      * @param {?} rowDef
      * @return {?}
      */
@@ -638,7 +638,7 @@ class CdkTable {
         this._customRowDefs.add(rowDef);
     }
     /**
-     * Removes a row definition that was not included as part of the direct content children.
+     * Removes a column definition that was not included as part of the direct content children.
      * @param {?} rowDef
      * @return {?}
      */
