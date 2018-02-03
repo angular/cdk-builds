@@ -150,9 +150,9 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     addColumnDef(columnDef: CdkColumnDef): void;
     /** Removes a column definition that was not included as part of the direct content children. */
     removeColumnDef(columnDef: CdkColumnDef): void;
-    /** Adds a column definition that was not included as part of the direct content children. */
+    /** Adds a row definition that was not included as part of the direct content children. */
     addRowDef(rowDef: CdkRowDef<T>): void;
-    /** Removes a column definition that was not included as part of the direct content children. */
+    /** Removes a row definition that was not included as part of the direct content children. */
     removeRowDef(rowDef: CdkRowDef<T>): void;
     /** Update the map containing the content's column definitions. */
     private _cacheColumnDefs();
