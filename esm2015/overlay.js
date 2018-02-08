@@ -1327,7 +1327,14 @@ class GlobalPositionStrategy {
      * @return {?}
      */
     attach(overlayRef) {
+        const /** @type {?} */ config = overlayRef.getConfig();
         this._overlayRef = overlayRef;
+        if (this._width && !config.width) {
+            overlayRef.updateSize({ width: this._width });
+        }
+        if (this._height && !config.height) {
+            overlayRef.updateSize({ height: this._height });
+        }
     }
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
@@ -1375,29 +1382,33 @@ class GlobalPositionStrategy {
     }
     /**
      * Sets the overlay width and clears any previously set width.
+     * @deprecated Pass the `width` through the `OverlayConfig`.
+     * \@deletion-target 7.0.0
      * @param {?=} value New width for the overlay
      * @return {?}
      */
     width(value = '') {
-        this._width = value;
-        // When the width is 100%, we should reset the `left` and the offset,
-        // in order to ensure that the element is flush against the viewport edge.
-        if (value === '100%') {
-            this.left('0px');
+        if (this._overlayRef) {
+            this._overlayRef.updateSize({ width: value });
+        }
+        else {
+            this._width = value;
         }
         return this;
     }
     /**
      * Sets the overlay height and clears any previously set height.
+     * @deprecated Pass the `height` through the `OverlayConfig`.
+     * \@deletion-target 7.0.0
      * @param {?=} value New height for the overlay
      * @return {?}
      */
     height(value = '') {
-        this._height = value;
-        // When the height is 100%, we should reset the `top` and the offset,
-        // in order to ensure that the element is flush against the viewport edge.
-        if (value === '100%') {
-            this.top('0px');
+        if (this._overlayRef) {
+            this._overlayRef.updateSize({ height: value });
+        }
+        else {
+            this._height = value;
         }
         return this;
     }
@@ -1445,17 +1456,16 @@ class GlobalPositionStrategy {
             element.parentNode.insertBefore(/** @type {?} */ ((this._wrapper)), element); /** @type {?} */
             ((this._wrapper)).appendChild(element);
         }
-        let /** @type {?} */ styles = element.style;
-        let /** @type {?} */ parentStyles = (/** @type {?} */ (element.parentNode)).style;
+        const /** @type {?} */ styles = element.style;
+        const /** @type {?} */ parentStyles = (/** @type {?} */ (element.parentNode)).style;
+        const /** @type {?} */ config = this._overlayRef.getConfig();
         styles.position = this._cssPosition;
-        styles.marginTop = this._topOffset;
-        styles.marginLeft = this._leftOffset;
+        styles.marginLeft = config.width === '100%' ? '0' : this._leftOffset;
+        styles.marginTop = config.height === '100%' ? '0' : this._topOffset;
         styles.marginBottom = this._bottomOffset;
         styles.marginRight = this._rightOffset;
-        styles.width = this._width;
-        styles.height = this._height;
-        parentStyles.justifyContent = this._justifyContent;
-        parentStyles.alignItems = this._alignItems;
+        parentStyles.justifyContent = config.width === '100%' ? 'flex-start' : this._justifyContent;
+        parentStyles.alignItems = config.height === '100%' ? 'flex-start' : this._alignItems;
     }
     /**
      * Removes the wrapper element from the DOM.
@@ -2190,6 +2200,15 @@ class CdkConnectedOverlay {
                 if (event.keyCode === ESCAPE) {
                     this._detachOverlay();
                 }
+            });
+        }
+        else {
+            // Update the overlay size, in case the directive's inputs have changed
+            this._overlayRef.updateSize({
+                width: this.width,
+                minWidth: this.minWidth,
+                height: this.height,
+                minHeight: this.minHeight,
             });
         }
         this._position.withDirection(this.dir);

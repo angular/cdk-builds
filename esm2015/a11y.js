@@ -1365,7 +1365,7 @@ class LiveAnnouncer {
      * Announces a message to screenreaders.
      * @param {?} message Message to be announced to the screenreader
      * @param {?=} politeness The politeness of the announcer element
-     * @return {?}
+     * @return {?} Promise that will be resolved when the message is added to the DOM.
      */
     announce(message, politeness = 'polite') {
         this._liveElement.textContent = '';
@@ -1376,7 +1376,12 @@ class LiveAnnouncer {
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
-        setTimeout(() => this._liveElement.textContent = message, 100);
+        return new Promise(resolve => {
+            setTimeout(() => {
+                this._liveElement.textContent = message;
+                resolve();
+            }, 100);
+        });
     }
     /**
      * @return {?}

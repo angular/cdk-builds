@@ -17,8 +17,9 @@ export declare class LiveAnnouncer implements OnDestroy {
      * Announces a message to screenreaders.
      * @param message Message to be announced to the screenreader
      * @param politeness The politeness of the announcer element
+     * @returns Promise that will be resolved when the message is added to the DOM.
      */
-    announce(message: string, politeness?: AriaLivePoliteness): void;
+    announce(message: string, politeness?: AriaLivePoliteness): Promise<void>;
     ngOnDestroy(): void;
     private _createLiveElement();
 }
