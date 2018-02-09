@@ -1439,7 +1439,6 @@ const LIVE_ANNOUNCER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
 const TOUCH_BUFFER_MS = 650;

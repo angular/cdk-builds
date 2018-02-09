@@ -19,7 +19,6 @@ import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Global registry for all dynamically-created, injected style tags.
  */
@@ -115,7 +114,6 @@ function noopMatchMedia(query) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * The current state of a layout breakpoint.
  * @record
@@ -277,7 +275,6 @@ var Breakpoints = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var LayoutModule = /** @class */ (function () {
     function LayoutModule() {
     }

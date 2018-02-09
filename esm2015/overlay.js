@@ -90,7 +90,6 @@ class OverlayConfig {
  * @suppress {checkTypes} checked by tsc
  */
 
-/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
 /**
  * A connection point on the origin element.
  * @record
@@ -494,7 +493,6 @@ class RepositionScrollStrategy {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Options for how an overlay will handle scrolling.
  *
