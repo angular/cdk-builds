@@ -68,17 +68,3 @@ export declare class ConnectedOverlayPositionChange {
         /** @docs-private */
         scrollableViewProperties: ScrollingVisibility);
 }
-/**
- * Validates whether a vertical position property matches the expected values.
- * @param property Name of the property being validated.
- * @param value Value of the property being validated.
- * @docs-private
- */
-export declare function validateVerticalPosition(property: string, value: VerticalConnectionPos): void;
-/**
- * Validates whether a horizontal position property matches the expected values.
- * @param property Name of the property being validated.
- * @param value Value of the property being validated.
- * @docs-private
- */
-export declare function validateHorizontalPosition(property: string, value: HorizontalConnectionPos): void;
