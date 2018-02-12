@@ -8,6 +8,8 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, NgModule, Optional, Output } from '@angular/core';
 import { UNIQUE_SELECTION_DISPATCHER_PROVIDER, UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 /**
  * @fileoverview added by tsickle
@@ -23,6 +25,10 @@ var nextId$1 = 0;
  */
 var CdkAccordion = /** @class */ (function () {
     function CdkAccordion() {
+        /**
+         * Stream that emits true/false when openAll/closeAll is triggered.
+         */
+        this._openCloseAllActions = new Subject();
         /**
          * A readonly id value to use for unique selection coordination.
          */
@@ -43,6 +49,43 @@ var CdkAccordion = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /** Opens all enabled accordion items in an accordion where multi is enabled. */
+    /**
+     * Opens all enabled accordion items in an accordion where multi is enabled.
+     * @return {?}
+     */
+    CdkAccordion.prototype.openAll = /**
+     * Opens all enabled accordion items in an accordion where multi is enabled.
+     * @return {?}
+     */
+    function () {
+        this._openCloseAll(true);
+    };
+    /** Closes all enabled accordion items in an accordion where multi is enabled. */
+    /**
+     * Closes all enabled accordion items in an accordion where multi is enabled.
+     * @return {?}
+     */
+    CdkAccordion.prototype.closeAll = /**
+     * Closes all enabled accordion items in an accordion where multi is enabled.
+     * @return {?}
+     */
+    function () {
+        this._openCloseAll(false);
+    };
+    /**
+     * @param {?} expanded
+     * @return {?}
+     */
+    CdkAccordion.prototype._openCloseAll = /**
+     * @param {?} expanded
+     * @return {?}
+     */
+    function (expanded) {
+        if (this.multi) {
+            this._openCloseAllActions.next(expanded);
+        }
+    };
     CdkAccordion.decorators = [
         { type: Directive, args: [{
                     selector: 'cdk-accordion, [cdkAccordion]',
@@ -76,6 +119,10 @@ var CdkAccordionItem = /** @class */ (function () {
         this.accordion = accordion;
         this._changeDetectorRef = _changeDetectorRef;
         this._expansionDispatcher = _expansionDispatcher;
+        /**
+         * Subscription to openAll/closeAll events.
+         */
+        this._openCloseAllSubscription = Subscription.EMPTY;
         /**
          * Event emitted every time the AccordionItem is closed.
          */
@@ -111,6 +158,10 @@ var CdkAccordionItem = /** @class */ (function () {
                     _this.expanded = false;
                 }
             });
+        // When an accordion item is hosted in an accordion, subscribe to open/close events.
+        if (this.accordion) {
+            this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
+        }
     }
     Object.defineProperty(CdkAccordionItem.prototype, "expanded", {
         get: /**
@@ -174,6 +225,7 @@ var CdkAccordionItem = /** @class */ (function () {
     function () {
         this.destroyed.emit();
         this._removeUniqueSelectionListener();
+        this._openCloseAllSubscription.unsubscribe();
     };
     /** Toggles the expanded state of the accordion item. */
     /**
@@ -216,6 +268,21 @@ var CdkAccordionItem = /** @class */ (function () {
         if (!this.disabled) {
             this.expanded = true;
         }
+    };
+    /**
+     * @return {?}
+     */
+    CdkAccordionItem.prototype._subscribeToOpenCloseAllActions = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        return this.accordion._openCloseAllActions.subscribe(function (expanded) {
+            // Only change expanded state if item is enabled
+            if (!_this.disabled) {
+                _this.expanded = expanded;
+            }
+        });
     };
     CdkAccordionItem.decorators = [
         { type: Directive, args: [{
