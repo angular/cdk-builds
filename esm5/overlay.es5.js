@@ -179,32 +179,6 @@ var ConnectedOverlayPositionChange = /** @class */ (function () {
     ]; };
     return ConnectedOverlayPositionChange;
 }());
-/**
- * Validates whether a vertical position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateVerticalPosition(property, value) {
-    if (value !== 'top' && value !== 'bottom' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"top\", \"bottom\" or \"center\".");
-    }
-}
-/**
- * Validates whether a horizontal position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateHorizontalPosition(property, value) {
-    if (value !== 'start' && value !== 'end' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"start\", \"end\" or \"center\".");
-    }
-}
 
 /**
  * @fileoverview added by tsickle
@@ -1220,7 +1194,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
             this.recalculateLastPosition();
             return;
         }
-        this._validatePositions();
         this._applied = true;
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
@@ -1278,7 +1251,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         if (!this._lastConnectedPosition) {
             return;
         }
-        this._validatePositions();
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
         var /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
@@ -1308,7 +1280,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
      */
     function (scrollables) {
         this.scrollables = scrollables;
-        return this;
     };
     /**
      * Adds a new preferred fallback position.
@@ -1660,27 +1631,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         return overflows.reduce(function (currentValue, currentOverflow) {
             return currentValue - Math.max(currentOverflow, 0);
         }, length);
-    };
-    /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype._validatePositions = /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    function () {
-        if (!this._preferredPositions.length) {
-            throw Error('ConnectedPositionStrategy: At least one position is required.');
-        }
-        // TODO(crisbeto): remove these once Angular's template type
-        // checking is advanced enough to catch these cases.
-        this._preferredPositions.forEach(function (pair) {
-            validateHorizontalPosition('originX', pair.originX);
-            validateVerticalPosition('originY', pair.originY);
-            validateHorizontalPosition('overlayX', pair.overlayX);
-            validateVerticalPosition('overlayY', pair.overlayY);
-        });
     };
     return ConnectedPositionStrategy;
 }());
@@ -3118,5 +3068,5 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
  * Generated bundle index. Do not edit.
  */
 
-export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, ViewportRuler, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, CdkConnectedOverlay as ConnectedOverlayDirective, CdkOverlayOrigin as OverlayOrigin, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
+export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, ViewportRuler, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, VIEWPORT_RULER_PROVIDER, CdkConnectedOverlay as ConnectedOverlayDirective, CdkOverlayOrigin as OverlayOrigin, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, CdkScrollable, ScrollDispatcher, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
 //# sourceMappingURL=overlay.es5.js.map
