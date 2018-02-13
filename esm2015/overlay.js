@@ -2262,8 +2262,8 @@ class CdkConnectedOverlay {
             this.attach.emit();
         }
         if (this.hasBackdrop) {
-            this._backdropSubscription = this._overlayRef.backdropClick().subscribe(() => {
-                this.backdropClick.emit();
+            this._backdropSubscription = this._overlayRef.backdropClick().subscribe(event => {
+                this.backdropClick.emit(event);
             });
         }
     }

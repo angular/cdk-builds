@@ -15,13 +15,14 @@ export declare const DEFAULT_RESIZE_TIME = 20;
  * @docs-private
  */
 export declare class ViewportRuler implements OnDestroy {
+    private _platform;
     /** Cached viewport dimensions. */
     private _viewportSize;
     /** Stream of viewport change events. */
     private _change;
     /** Subscription to streams that invalidate the cached viewport dimensions. */
     private _invalidateCache;
-    constructor(platform: Platform, ngZone: NgZone);
+    constructor(_platform: Platform, ngZone: NgZone);
     ngOnDestroy(): void;
     /** Returns the viewport's width and height. */
     getViewportSize(): Readonly<{

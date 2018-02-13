@@ -291,11 +291,12 @@ const DEFAULT_RESIZE_TIME = 20;
  */
 class ViewportRuler {
     /**
-     * @param {?} platform
+     * @param {?} _platform
      * @param {?} ngZone
      */
-    constructor(platform, ngZone) {
-        this._change = platform.isBrowser ? ngZone.runOutsideAngular(() => {
+    constructor(_platform, ngZone) {
+        this._platform = _platform;
+        this._change = _platform.isBrowser ? ngZone.runOutsideAngular(() => {
             return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
         }) : of();
         this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
@@ -314,7 +315,12 @@ class ViewportRuler {
         if (!this._viewportSize) {
             this._updateViewportSize();
         }
-        return { width: this._viewportSize.width, height: this._viewportSize.height };
+        const /** @type {?} */ output = { width: this._viewportSize.width, height: this._viewportSize.height };
+        // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
+        if (!this._platform.isBrowser) {
+            this._viewportSize = /** @type {?} */ ((null));
+        }
+        return output;
     }
     /**
      * Gets a ClientRect for the viewport's bounds.
@@ -346,6 +352,11 @@ class ViewportRuler {
      * @return {?}
      */
     getViewportScrollPosition() {
+        // While we can get a reference to the fake document
+        // during SSR, it doesn't have getBoundingClientRect.
+        if (!this._platform.isBrowser) {
+            return { top: 0, left: 0 };
+        }
         // The top-left-corner of the viewport is determined by the scroll position of the document
         // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
         // whether `document.body` or `document.documentElement` is the scrolled element, so reading
@@ -372,7 +383,9 @@ class ViewportRuler {
      * @return {?}
      */
     _updateViewportSize() {
-        this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
+        this._viewportSize = this._platform.isBrowser ?
+            { width: window.innerWidth, height: window.innerHeight } :
+            { width: 0, height: 0 };
     }
 }
 ViewportRuler.decorators = [

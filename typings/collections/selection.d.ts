@@ -75,20 +75,13 @@ export declare class SelectionModel<T> {
  * Event emitted when the value of a MatSelectionModel has changed.
  * @docs-private
  */
-export declare class SelectionChange<T> {
+export interface SelectionChange<T> {
     /** Model that dispatched the event. */
     source: SelectionModel<T>;
     /** Options that were added to the model. */
-    added: T[] | undefined;
+    added: T[];
     /** Options that were removed from the model. */
-    removed: T[] | undefined;
-    constructor(
-        /** Model that dispatched the event. */
-        source: SelectionModel<T>, 
-        /** Options that were added to the model. */
-        added?: T[] | undefined, 
-        /** Options that were removed from the model. */
-        removed?: T[] | undefined);
+    removed: T[];
 }
 /**
  * Returns an error that reports that multiple values are passed into a selection model

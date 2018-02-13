@@ -131,7 +131,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
      */
     _deprecatedHasBackdrop: any;
     /** Event emitted when the backdrop is clicked. */
-    backdropClick: EventEmitter<void>;
+    backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
     positionChange: EventEmitter<ConnectedOverlayPositionChange>;
     /** Event emitted when the overlay has been attached. */

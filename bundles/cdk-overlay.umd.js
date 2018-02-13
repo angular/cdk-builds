@@ -2926,8 +2926,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
             this.attach.emit();
         }
         if (this.hasBackdrop) {
-            this._backdropSubscription = this._overlayRef.backdropClick().subscribe(function () {
-                _this.backdropClick.emit();
+            this._backdropSubscription = this._overlayRef.backdropClick().subscribe(function (event) {
+                _this.backdropClick.emit(event);
             });
         }
     };

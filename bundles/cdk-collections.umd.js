@@ -233,9 +233,12 @@ var SelectionModel = /** @class */ (function () {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            var /** @type {?} */ eventData = new SelectionChange(this, this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
-                this.onChange.next(eventData);
+                this.onChange.next({
+                    source: this,
+                    added: this._selectedToEmit,
+                    removed: this._deselectedToEmit
+                });
             }
             this._deselectedToEmit = [];
             this._selectedToEmit = [];
@@ -316,15 +319,9 @@ var SelectionModel = /** @class */ (function () {
 /**
  * Event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
+ * @record
  */
-var SelectionChange = /** @class */ (function () {
-    function SelectionChange(source, added, removed) {
-        this.source = source;
-        this.added = added;
-        this.removed = removed;
-    }
-    return SelectionChange;
-}());
+
 /**
  * Returns an error that reports that multiple values are passed into a selection model
  * with a single value.
@@ -436,7 +433,6 @@ exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
 exports.UNIQUE_SELECTION_DISPATCHER_PROVIDER = UNIQUE_SELECTION_DISPATCHER_PROVIDER;
 exports.DataSource = DataSource;
 exports.SelectionModel = SelectionModel;
-exports.SelectionChange = SelectionChange;
 exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
 exports.ɵa = UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY;
 

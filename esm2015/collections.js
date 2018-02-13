@@ -149,9 +149,12 @@ class SelectionModel {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            const /** @type {?} */ eventData = new SelectionChange(this, this._selectedToEmit, this._deselectedToEmit);
             if (this.onChange) {
-                this.onChange.next(eventData);
+                this.onChange.next({
+                    source: this,
+                    added: this._selectedToEmit,
+                    removed: this._deselectedToEmit
+                });
             }
             this._deselectedToEmit = [];
             this._selectedToEmit = [];
@@ -210,19 +213,9 @@ class SelectionModel {
 /**
  * Event emitted when the value of a MatSelectionModel has changed.
  * \@docs-private
+ * @record
  */
-class SelectionChange {
-    /**
-     * @param {?} source
-     * @param {?=} added
-     * @param {?=} removed
-     */
-    constructor(source, added, removed) {
-        this.source = source;
-        this.added = added;
-        this.removed = removed;
-    }
-}
+
 /**
  * Returns an error that reports that multiple values are passed into a selection model
  * with a single value.
@@ -317,5 +310,5 @@ const UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
  * Generated bundle index. Do not edit.
  */
 
-export { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER, DataSource, SelectionModel, SelectionChange, getMultipleValuesInSingleSelectionError, UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY as ɵa };
+export { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError, UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY as ɵa };
 //# sourceMappingURL=collections.js.map

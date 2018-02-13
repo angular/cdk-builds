@@ -381,9 +381,10 @@ var DEFAULT_RESIZE_TIME = 20;
  * \@docs-private
  */
 var ViewportRuler = /** @class */ (function () {
-    function ViewportRuler(platform, ngZone) {
+    function ViewportRuler(_platform, ngZone) {
         var _this = this;
-        this._change = platform.isBrowser ? ngZone.runOutsideAngular(function () {
+        this._platform = _platform;
+        this._change = _platform.isBrowser ? ngZone.runOutsideAngular(function () {
             return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
         }) : rxjs_observable_of.of();
         this._invalidateCache = this.change().subscribe(function () { return _this._updateViewportSize(); });
@@ -410,7 +411,12 @@ var ViewportRuler = /** @class */ (function () {
         if (!this._viewportSize) {
             this._updateViewportSize();
         }
-        return { width: this._viewportSize.width, height: this._viewportSize.height };
+        var /** @type {?} */ output = { width: this._viewportSize.width, height: this._viewportSize.height };
+        // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
+        if (!this._platform.isBrowser) {
+            this._viewportSize = /** @type {?} */ ((null));
+        }
+        return output;
     };
     /** Gets a ClientRect for the viewport's bounds. */
     /**
@@ -452,6 +458,11 @@ var ViewportRuler = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        // While we can get a reference to the fake document
+        // during SSR, it doesn't have getBoundingClientRect.
+        if (!this._platform.isBrowser) {
+            return { top: 0, left: 0 };
+        }
         // The top-left-corner of the viewport is determined by the scroll position of the document
         // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
         // whether `document.body` or `document.documentElement` is the scrolled element, so reading
@@ -492,7 +503,9 @@ var ViewportRuler = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._viewportSize = { width: window.innerWidth, height: window.innerHeight };
+        this._viewportSize = this._platform.isBrowser ?
+            { width: window.innerWidth, height: window.innerHeight } :
+            { width: 0, height: 0 };
     };
     ViewportRuler.decorators = [
         { type: _angular_core.Injectable },
