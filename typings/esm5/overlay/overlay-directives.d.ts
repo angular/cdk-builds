@@ -42,6 +42,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _overlayRef;
     private _templatePortal;
     private _hasBackdrop;
+    private _lockPosition;
     private _backdropSubscription;
     private _offsetX;
     private _offsetY;
@@ -70,6 +71,8 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     open: boolean;
     /** Whether or not the overlay should attach a backdrop. */
     hasBackdrop: any;
+    /** Whether or not the overlay should be locked when scrolling. */
+    lockPosition: any;
     /**
      * @deprecated
      * @deletion-target 6.0.0

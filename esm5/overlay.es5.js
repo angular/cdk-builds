@@ -2312,7 +2312,7 @@ var OVERLAY_CONTAINER_PROVIDER = {
 var nextUniqueId = 0;
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
- * used as a low-level building building block for other components. Dialogs, tooltips, menus,
+ * used as a low-level building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
  * of re-usable components rather than developers building end-user applications.
  *
@@ -2478,6 +2478,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._hasBackdrop = false;
+        this._lockPosition = false;
         this._backdropSubscription = Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
@@ -2556,6 +2557,20 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * @return {?}
          */
         function (value) { this._hasBackdrop = coerceBooleanProperty(value); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CdkConnectedOverlay.prototype, "lockPosition", {
+        get: /**
+         * Whether or not the overlay should be locked when scrolling.
+         * @return {?}
+         */
+        function () { return this._lockPosition; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) { this._lockPosition = coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -2787,6 +2802,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
             if (changes['positions'] || changes['_deprecatedPositions']) {
                 this._position.withPositions(this.positions);
             }
+            if (changes['lockPosition']) {
+                this._position.withLockedPosition(this.lockPosition);
+            }
             if (changes['origin'] || changes['_deprecatedOrigin']) {
                 this._position.setOrigin(this.origin.elementRef);
                 if (this.open) {
@@ -2860,7 +2878,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
         var /** @type {?} */ strategy = this._overlay.position()
             .connectedTo(this.origin.elementRef, originPoint, overlayPoint)
             .withOffsetX(this.offsetX)
-            .withOffsetY(this.offsetY);
+            .withOffsetY(this.offsetY)
+            .withLockedPosition(this.lockPosition);
         for (var /** @type {?} */ i = 1; i < this.positions.length; i++) {
             strategy.withFallbackPosition({ originX: this.positions[i].originX, originY: this.positions[i].originY }, { overlayX: this.positions[i].overlayX, overlayY: this.positions[i].overlayY });
         }
@@ -2962,6 +2981,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         "scrollStrategy": [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
         "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
         "hasBackdrop": [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
+        "lockPosition": [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] },],
         "_deprecatedOrigin": [{ type: Input, args: ['origin',] },],
         "_deprecatedPositions": [{ type: Input, args: ['positions',] },],
         "_deprecatedOffsetX": [{ type: Input, args: ['offsetX',] },],
