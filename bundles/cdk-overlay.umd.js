@@ -2337,7 +2337,7 @@ var OVERLAY_CONTAINER_PROVIDER = {
 var nextUniqueId = 0;
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
- * used as a low-level building block for other components. Dialogs, tooltips, menus,
+ * used as a low-level building building block for other components. Dialogs, tooltips, menus,
  * selects, etc. can all be built using overlays. The service should primarily be used by authors
  * of re-usable components rather than developers building end-user applications.
  *
