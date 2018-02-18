@@ -1608,15 +1608,13 @@ var ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (delta, items) {
-        // when active item would leave menu, wrap to beginning or end
-        this._activeItemIndex =
-            (this._activeItemIndex + delta + items.length) % items.length;
-        // skip all disabled menu items recursively until an enabled one is reached
-        if (items[this._activeItemIndex].disabled) {
-            this._setActiveInWrapMode(delta, items);
-        }
-        else {
-            this.setActiveItem(this._activeItemIndex);
+        for (var /** @type {?} */ i = 1; i <= items.length; i++) {
+            var /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
+            var /** @type {?} */ item = items[index];
+            if (!item.disabled) {
+                this.setActiveItem(index);
+                return;
+            }
         }
     };
     /**
