@@ -73,10 +73,6 @@ class OverlayConfig {
          * Custom class to add to the backdrop
          */
         this.backdropClass = 'cdk-overlay-dark-backdrop';
-        /**
-         * The direction of the text in the overlay panel.
-         */
-        this.direction = 'ltr';
         if (config) {
             Object.keys(config)
                 .filter(key => typeof config[key] !== 'undefined')
@@ -1796,8 +1792,9 @@ class Overlay {
      * @param {?} _injector
      * @param {?} _ngZone
      * @param {?} _document
+     * @param {?} _directionality
      */
-    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document) {
+    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document, _directionality) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -1807,6 +1804,7 @@ class Overlay {
         this._injector = _injector;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._directionality = _directionality;
     }
     /**
      * Creates an overlay.
@@ -1816,7 +1814,9 @@ class Overlay {
     create(config) {
         const /** @type {?} */ pane = this._createPaneElement();
         const /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher, this._document);
+        const /** @type {?} */ overlayConfig = new OverlayConfig(config);
+        overlayConfig.direction = overlayConfig.direction || this._directionality.value;
+        return new OverlayRef(portalOutlet, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -1860,6 +1860,7 @@ Overlay.ctorParameters = () => [
     { type: Injector, },
     { type: NgZone, },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Directionality, },
 ];
 
 /**

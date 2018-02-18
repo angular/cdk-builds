@@ -116,10 +116,6 @@ var OverlayConfig = /** @class */ (function () {
          * Custom class to add to the backdrop
          */
         this.backdropClass = 'cdk-overlay-dark-backdrop';
-        /**
-         * The direction of the text in the overlay panel.
-         */
-        this.direction = 'ltr';
         if (config) {
             Object.keys(config)
                 .filter(function (key) { return typeof config[key] !== 'undefined'; })
@@ -2344,7 +2340,7 @@ var nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = /** @class */ (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document, _directionality) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -2354,6 +2350,7 @@ var Overlay = /** @class */ (function () {
         this._injector = _injector;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._directionality = _directionality;
     }
     /**
      * Creates an overlay.
@@ -2373,7 +2370,9 @@ var Overlay = /** @class */ (function () {
     function (config) {
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher, this._document);
+        var /** @type {?} */ overlayConfig = new OverlayConfig(config);
+        overlayConfig.direction = overlayConfig.direction || this._directionality.value;
+        return new OverlayRef(portalOutlet, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document);
     };
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -2435,6 +2434,7 @@ var Overlay = /** @class */ (function () {
         { type: _angular_core.Injector, },
         { type: _angular_core.NgZone, },
         { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+        { type: _angular_cdk_bidi.Directionality, },
     ]; };
     return Overlay;
 }());
