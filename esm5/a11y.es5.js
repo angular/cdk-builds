@@ -1003,7 +1003,7 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+        if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
         if (!messageRegistry.has(message)) {
@@ -1027,7 +1027,7 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+        if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
         if (this._isElementDescribedByMessage(hostElement, message)) {
@@ -1205,6 +1205,22 @@ var AriaDescriber = /** @class */ (function () {
         var /** @type {?} */ registeredMessage = messageRegistry.get(message);
         var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
+    };
+    /**
+     * Determines whether a message can be described on a particular element.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    AriaDescriber.prototype._canBeDescribed = /**
+     * Determines whether a message can be described on a particular element.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    function (element, message) {
+        return element.nodeType === this._document.ELEMENT_NODE && message != null &&
+            !!("" + message).trim();
     };
     AriaDescriber.decorators = [
         { type: Injectable },

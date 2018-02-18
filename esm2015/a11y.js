@@ -808,7 +808,7 @@ class AriaDescriber {
      * @return {?}
      */
     describe(hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+        if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
         if (!messageRegistry.has(message)) {
@@ -825,7 +825,7 @@ class AriaDescriber {
      * @return {?}
      */
     removeDescription(hostElement, message) {
-        if (hostElement.nodeType !== this._document.ELEMENT_NODE || !message.trim()) {
+        if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
         if (this._isElementDescribedByMessage(hostElement, message)) {
@@ -954,6 +954,16 @@ class AriaDescriber {
         const /** @type {?} */ registeredMessage = messageRegistry.get(message);
         const /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
+    }
+    /**
+     * Determines whether a message can be described on a particular element.
+     * @param {?} element
+     * @param {?} message
+     * @return {?}
+     */
+    _canBeDescribed(element, message) {
+        return element.nodeType === this._document.ELEMENT_NODE && message != null &&
+            !!`${message}`.trim();
     }
 }
 AriaDescriber.decorators = [

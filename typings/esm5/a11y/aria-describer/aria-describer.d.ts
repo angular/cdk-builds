@@ -66,6 +66,8 @@ export declare class AriaDescriber {
     private _removeMessageReference(element, message);
     /** Returns true if the element has been described by the provided message ID. */
     private _isElementDescribedByMessage(element, message);
+    /** Determines whether a message can be described on a particular element. */
+    private _canBeDescribed(element, message);
 }
 /** @docs-private */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
