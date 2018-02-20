@@ -78,7 +78,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
      */
-    withScrollableContainers(scrollables: CdkScrollable[]): this;
+    withScrollableContainers(scrollables: CdkScrollable[]): void;
     /**
      * Adds a new preferred fallback position.
      * @param originPos
@@ -146,8 +146,8 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     private _getScrollVisibility(overlay);
     /** Physically positions the overlay element to the given coordinate. */
     private _setElementPosition(element, overlayRect, overlayPoint, pos);
-    /** Subtracts the amount that an element is overflowing on an axis from it's length. */
+    /**
+     * Subtracts the amount that an element is overflowing on an axis from it's length.
+     */
     private _subtractOverflows(length, ...overflows);
-    /** Validates that the current position match the expected values. */
-    private _validatePositions();
 }

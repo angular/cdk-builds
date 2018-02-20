@@ -8,8 +8,6 @@
 import { ChangeDetectorRef, Directive, EventEmitter, Input, NgModule, Optional, Output } from '@angular/core';
 import { UNIQUE_SELECTION_DISPATCHER_PROVIDER, UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Subject } from 'rxjs/Subject';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * @fileoverview added by tsickle
@@ -26,10 +24,6 @@ let nextId$1 = 0;
 class CdkAccordion {
     constructor() {
         /**
-         * Stream that emits true/false when openAll/closeAll is triggered.
-         */
-        this._openCloseAllActions = new Subject();
-        /**
          * A readonly id value to use for unique selection coordination.
          */
         this.id = `cdk-accordion-${nextId$1++}`;
@@ -45,29 +39,6 @@ class CdkAccordion {
      * @return {?}
      */
     set multi(multi) { this._multi = coerceBooleanProperty(multi); }
-    /**
-     * Opens all enabled accordion items in an accordion where multi is enabled.
-     * @return {?}
-     */
-    openAll() {
-        this._openCloseAll(true);
-    }
-    /**
-     * Closes all enabled accordion items in an accordion where multi is enabled.
-     * @return {?}
-     */
-    closeAll() {
-        this._openCloseAll(false);
-    }
-    /**
-     * @param {?} expanded
-     * @return {?}
-     */
-    _openCloseAll(expanded) {
-        if (this.multi) {
-            this._openCloseAllActions.next(expanded);
-        }
-    }
 }
 CdkAccordion.decorators = [
     { type: Directive, args: [{
@@ -105,10 +76,6 @@ class CdkAccordionItem {
         this._changeDetectorRef = _changeDetectorRef;
         this._expansionDispatcher = _expansionDispatcher;
         /**
-         * Subscription to openAll/closeAll events.
-         */
-        this._openCloseAllSubscription = Subscription.EMPTY;
-        /**
          * Event emitted every time the AccordionItem is closed.
          */
         this.closed = new EventEmitter();
@@ -143,10 +110,6 @@ class CdkAccordionItem {
                     this.expanded = false;
                 }
             });
-        // When an accordion item is hosted in an accordion, subscribe to open/close events.
-        if (this.accordion) {
-            this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
-        }
     }
     /**
      * Whether the AccordionItem is expanded.
@@ -197,7 +160,6 @@ class CdkAccordionItem {
     ngOnDestroy() {
         this.destroyed.emit();
         this._removeUniqueSelectionListener();
-        this._openCloseAllSubscription.unsubscribe();
     }
     /**
      * Toggles the expanded state of the accordion item.
@@ -225,17 +187,6 @@ class CdkAccordionItem {
         if (!this.disabled) {
             this.expanded = true;
         }
-    }
-    /**
-     * @return {?}
-     */
-    _subscribeToOpenCloseAllActions() {
-        return this.accordion._openCloseAllActions.subscribe(expanded => {
-            // Only change expanded state if item is enabled
-            if (!this.disabled) {
-                this.expanded = expanded;
-            }
-        });
     }
 }
 CdkAccordionItem.decorators = [

@@ -116,6 +116,10 @@ var OverlayConfig = /** @class */ (function () {
          * Custom class to add to the backdrop
          */
         this.backdropClass = 'cdk-overlay-dark-backdrop';
+        /**
+         * The direction of the text in the overlay panel.
+         */
+        this.direction = 'ltr';
         if (config) {
             Object.keys(config)
                 .filter(function (key) { return typeof config[key] !== 'undefined'; })
@@ -200,32 +204,6 @@ var ConnectedOverlayPositionChange = /** @class */ (function () {
     ]; };
     return ConnectedOverlayPositionChange;
 }());
-/**
- * Validates whether a vertical position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateVerticalPosition(property, value) {
-    if (value !== 'top' && value !== 'bottom' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"top\", \"bottom\" or \"center\".");
-    }
-}
-/**
- * Validates whether a horizontal position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateHorizontalPosition(property, value) {
-    if (value !== 'start' && value !== 'end' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"start\", \"end\" or \"center\".");
-    }
-}
 
 /**
  * @fileoverview added by tsickle
@@ -1241,7 +1219,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
             this.recalculateLastPosition();
             return;
         }
-        this._validatePositions();
         this._applied = true;
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
@@ -1299,7 +1276,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         if (!this._lastConnectedPosition) {
             return;
         }
-        this._validatePositions();
         var /** @type {?} */ originRect = this._origin.getBoundingClientRect();
         var /** @type {?} */ overlayRect = this._pane.getBoundingClientRect();
         var /** @type {?} */ viewportSize = this._viewportRuler.getViewportSize();
@@ -1329,7 +1305,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
      */
     function (scrollables) {
         this.scrollables = scrollables;
-        return this;
     };
     /**
      * Adds a new preferred fallback position.
@@ -1681,27 +1656,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
         return overflows.reduce(function (currentValue, currentOverflow) {
             return currentValue - Math.max(currentOverflow, 0);
         }, length);
-    };
-    /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype._validatePositions = /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    function () {
-        if (!this._preferredPositions.length) {
-            throw Error('ConnectedPositionStrategy: At least one position is required.');
-        }
-        // TODO(crisbeto): remove these once Angular's template type
-        // checking is advanced enough to catch these cases.
-        this._preferredPositions.forEach(function (pair) {
-            validateHorizontalPosition('originX', pair.originX);
-            validateVerticalPosition('originY', pair.originY);
-            validateHorizontalPosition('overlayX', pair.overlayX);
-            validateVerticalPosition('overlayY', pair.overlayY);
-        });
     };
     return ConnectedPositionStrategy;
 }());
@@ -2340,7 +2294,7 @@ var nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = /** @class */ (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document, _directionality) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -2350,7 +2304,6 @@ var Overlay = /** @class */ (function () {
         this._injector = _injector;
         this._ngZone = _ngZone;
         this._document = _document;
-        this._directionality = _directionality;
     }
     /**
      * Creates an overlay.
@@ -2370,9 +2323,7 @@ var Overlay = /** @class */ (function () {
     function (config) {
         var /** @type {?} */ pane = this._createPaneElement();
         var /** @type {?} */ portalOutlet = this._createPortalOutlet(pane);
-        var /** @type {?} */ overlayConfig = new OverlayConfig(config);
-        overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document);
+        return new OverlayRef(portalOutlet, pane, new OverlayConfig(config), this._ngZone, this._keyboardDispatcher, this._document);
     };
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -2434,7 +2385,6 @@ var Overlay = /** @class */ (function () {
         { type: _angular_core.Injector, },
         { type: _angular_core.NgZone, },
         { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
-        { type: _angular_cdk_bidi.Directionality, },
     ]; };
     return Overlay;
 }());
@@ -3168,8 +3118,6 @@ exports.OverlayConfig = OverlayConfig;
 exports.ConnectionPositionPair = ConnectionPositionPair;
 exports.ScrollingVisibility = ScrollingVisibility;
 exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
-exports.validateVerticalPosition = validateVerticalPosition;
-exports.validateHorizontalPosition = validateHorizontalPosition;
 exports.CdkScrollable = _angular_cdk_scrolling.CdkScrollable;
 exports.ScrollDispatcher = _angular_cdk_scrolling.ScrollDispatcher;
 exports.ScrollStrategyOptions = ScrollStrategyOptions;
