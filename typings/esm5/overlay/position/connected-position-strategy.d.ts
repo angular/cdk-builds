@@ -23,8 +23,6 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     private _connectedTo;
     private _viewportRuler;
     private _document;
-    /** The overlay to which this strategy is attached. */
-    private _overlayRef;
     /** Layout direction of the position strategy. */
     private _dir;
     /** The offset in pixels for the overlay connection point on the x-axis */

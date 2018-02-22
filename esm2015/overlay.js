@@ -980,7 +980,6 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     attach(overlayRef) {
-        this._overlayRef = overlayRef;
         this._pane = overlayRef.overlayElement;
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = this._viewportRuler.change().subscribe(() => this.apply());

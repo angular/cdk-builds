@@ -52,8 +52,6 @@ export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
     private _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
-    /** Latest data provided by the data source through the connect interface. */
-    private _data;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
     /** Stores the node definition that does not have a when predicate. */

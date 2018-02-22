@@ -588,10 +588,6 @@ var CdkTree = /** @class */ (function () {
          */
         this._onDestroy = new rxjs_Subject.Subject();
         /**
-         * Latest data provided by the data source through the connect interface.
-         */
-        this._data = new Array();
-        /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
@@ -678,7 +674,6 @@ var CdkTree = /** @class */ (function () {
      * @return {?}
      */
     function (dataSource) {
-        this._data = new Array();
         if (this._dataSource && typeof (/** @type {?} */ (this._dataSource)).disconnect === 'function') {
             (/** @type {?} */ (this.dataSource)).disconnect(this);
         }
@@ -719,10 +714,7 @@ var CdkTree = /** @class */ (function () {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(rxjs_operators_takeUntil.takeUntil(this._onDestroy))
-                .subscribe(function (data) {
-                _this._data = data;
-                _this._renderNodeChanges(data);
-            });
+                .subscribe(function (data) { return _this._renderNodeChanges(data); });
         }
         else {
             throw getTreeNoValidDataSourceError();

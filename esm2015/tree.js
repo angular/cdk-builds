@@ -451,10 +451,6 @@ class CdkTree {
          */
         this._onDestroy = new Subject();
         /**
-         * Latest data provided by the data source through the connect interface.
-         */
-        this._data = new Array();
-        /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
@@ -521,7 +517,6 @@ class CdkTree {
      * @return {?}
      */
     _switchDataSource(dataSource) {
-        this._data = new Array();
         if (this._dataSource && typeof (/** @type {?} */ (this._dataSource)).disconnect === 'function') {
             (/** @type {?} */ (this.dataSource)).disconnect(this);
         }
@@ -557,10 +552,7 @@ class CdkTree {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
-                .subscribe(data => {
-                this._data = data;
-                this._renderNodeChanges(data);
-            });
+                .subscribe(data => this._renderNodeChanges(data));
         }
         else {
             throw getTreeNoValidDataSourceError();

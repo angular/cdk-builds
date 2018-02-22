@@ -1159,7 +1159,6 @@ var ConnectedPositionStrategy = /** @class */ (function () {
      */
     function (overlayRef) {
         var _this = this;
-        this._overlayRef = overlayRef;
         this._pane = overlayRef.overlayElement;
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = this._viewportRuler.change().subscribe(function () { return _this.apply(); });
