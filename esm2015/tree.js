@@ -350,7 +350,7 @@ class CdkTreeNode {
          * and 'treeitem' if it's a leaf node.
          */
         this.role = 'treeitem';
-        CdkTreeNode.mostRecentTreeNode = this;
+        CdkTreeNode.mostRecentTreeNode = /** @type {?} */ (this);
     }
     /**
      * The tree node's data.
@@ -600,7 +600,7 @@ class CdkTree {
      * @return {?}
      */
     _getNodeDef(data, i) {
-        if (this._nodeDefs.length == 1) {
+        if (this._nodeDefs.length === 1) {
             return this._nodeDefs.first;
         }
         const /** @type {?} */ nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
@@ -697,6 +697,9 @@ class CdkNestedTreeNode extends CdkTreeNode {
      * @return {?}
      */
     ngAfterContentInit() {
+        if (!this._tree.treeControl.getChildren) {
+            throw getTreeControlFunctionsMissingError();
+        }
         this._tree.treeControl.getChildren(this.data).pipe(takeUntil(this._destroyed))
             .subscribe(result => {
             if (result && result.length) {

@@ -24,7 +24,7 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
      * in `CdkTree` and set the data to it.
      */
-    static mostRecentTreeNode: CdkTreeNode<any> | null;
+    static mostRecentTreeNode: CdkTreeNode<{}> | null;
     /** Subject that emits when the component has been destroyed. */
     protected _destroyed: Subject<void>;
     /** The tree node's data. */

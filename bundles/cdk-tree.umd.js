@@ -465,7 +465,7 @@ var CdkTreeNode = /** @class */ (function () {
          * and 'treeitem' if it's a leaf node.
          */
         this.role = 'treeitem';
-        CdkTreeNode.mostRecentTreeNode = this;
+        CdkTreeNode.mostRecentTreeNode = /** @type {?} */ (this);
     }
     Object.defineProperty(CdkTreeNode.prototype, "data", {
         /** The tree node's data. */
@@ -783,7 +783,7 @@ var CdkTree = /** @class */ (function () {
      * @return {?}
      */
     function (data, i) {
-        if (this._nodeDefs.length == 1) {
+        if (this._nodeDefs.length === 1) {
             return this._nodeDefs.first;
         }
         var /** @type {?} */ nodeDef = this._nodeDefs.find(function (def) { return def.when && def.when(i, data); }) || this._defaultNodeDef;
@@ -895,6 +895,9 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      */
     function () {
         var _this = this;
+        if (!this._tree.treeControl.getChildren) {
+            throw getTreeControlFunctionsMissingError();
+        }
         this._tree.treeControl.getChildren(this.data).pipe(rxjs_operators_takeUntil.takeUntil(this._destroyed))
             .subscribe(function (result) {
             if (result && result.length) {
