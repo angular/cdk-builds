@@ -1441,10 +1441,16 @@ var ListKeyManager = /** @class */ (function () {
                     this.setNextItemActive();
                     break;
                 }
+                else {
+                    return;
+                }
             case UP_ARROW:
                 if (this._vertical) {
                     this.setPreviousItemActive();
                     break;
+                }
+                else {
+                    return;
                 }
             case RIGHT_ARROW:
                 if (this._horizontal === 'ltr') {
@@ -1455,6 +1461,9 @@ var ListKeyManager = /** @class */ (function () {
                     this.setPreviousItemActive();
                     break;
                 }
+                else {
+                    return;
+                }
             case LEFT_ARROW:
                 if (this._horizontal === 'ltr') {
                     this.setPreviousItemActive();
@@ -1463,6 +1472,9 @@ var ListKeyManager = /** @class */ (function () {
                 else if (this._horizontal === 'rtl') {
                     this.setNextItemActive();
                     break;
+                }
+                else {
+                    return;
                 }
             default:
                 // Attempt to use the `event.key` which also maps it to the user's keyboard language,
