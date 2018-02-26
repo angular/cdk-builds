@@ -499,7 +499,9 @@ var CdkStepper = /** @class */ (function () {
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(function (step) {
                 var /** @type {?} */ control = step.stepControl;
-                var /** @type {?} */ isIncomplete = control ? (control.invalid || control.pending) : !step.completed;
+                var /** @type {?} */ isIncomplete = control ?
+                    (control.invalid || control.pending || !step.interacted) :
+                    !step.completed;
                 return isIncomplete && !step.optional;
             });
         }
