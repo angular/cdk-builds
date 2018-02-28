@@ -1005,6 +1005,11 @@ class ListKeyManager {
         this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
+        /**
+         * Predicate function that can be used to check whether an item should be skipped
+         * by the key manager. By default, disabled items are skipped.
+         */
+        this._skipPredicateFn = (item) => item.disabled;
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
@@ -1024,6 +1029,16 @@ class ListKeyManager {
                 }
             }
         });
+    }
+    /**
+     * Sets the predicate function that determines which items should be skipped by the
+     * list key manager.
+     * @param {?} predicate Function that determines whether the given item should be skipped.
+     * @return {?}
+     */
+    skipPredicate(predicate) {
+        this._skipPredicateFn = predicate;
+        return this;
     }
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
@@ -1073,7 +1088,7 @@ class ListKeyManager {
             for (let /** @type {?} */ i = 1; i < items.length + 1; i++) {
                 const /** @type {?} */ index = (this._activeItemIndex + i) % items.length;
                 const /** @type {?} */ item = items[index];
-                if (!item.disabled && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                if (!this._skipPredicateFn(item) && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     this.setActiveItem(index);
                     break;
                 }
@@ -1237,7 +1252,7 @@ class ListKeyManager {
         for (let /** @type {?} */ i = 1; i <= items.length; i++) {
             const /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
             const /** @type {?} */ item = items[index];
-            if (!item.disabled) {
+            if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
                 return;
             }
@@ -1267,7 +1282,7 @@ class ListKeyManager {
         if (!items[index]) {
             return;
         }
-        while (items[index].disabled) {
+        while (this._skipPredicateFn(items[index])) {
             index += fallbackDelta;
             if (!items[index]) {
                 return;

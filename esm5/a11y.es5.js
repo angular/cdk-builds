@@ -1271,6 +1271,11 @@ ListKeyManager = /** @class */ (function () {
         this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
+        /**
+         * Predicate function that can be used to check whether an item should be skipped
+         * by the key manager. By default, disabled items are skipped.
+         */
+        this._skipPredicateFn = function (item) { return item.disabled; };
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
@@ -1291,6 +1296,27 @@ ListKeyManager = /** @class */ (function () {
             }
         });
     }
+    /**
+     * Sets the predicate function that determines which items should be skipped by the
+     * list key manager.
+     * @param predicate Function that determines whether the given item should be skipped.
+     */
+    /**
+     * Sets the predicate function that determines which items should be skipped by the
+     * list key manager.
+     * @param {?} predicate Function that determines whether the given item should be skipped.
+     * @return {?}
+     */
+    ListKeyManager.prototype.skipPredicate = /**
+     * Sets the predicate function that determines which items should be skipped by the
+     * list key manager.
+     * @param {?} predicate Function that determines whether the given item should be skipped.
+     * @return {?}
+     */
+    function (predicate) {
+        this._skipPredicateFn = predicate;
+        return this;
+    };
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
@@ -1380,7 +1406,7 @@ ListKeyManager = /** @class */ (function () {
             for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
                 var /** @type {?} */ index = (_this._activeItemIndex + i) % items.length;
                 var /** @type {?} */ item = items[index];
-                if (!item.disabled && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
+                if (!_this._skipPredicateFn(item) && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     _this.setActiveItem(index);
                     break;
                 }
@@ -1618,7 +1644,7 @@ ListKeyManager = /** @class */ (function () {
         for (var /** @type {?} */ i = 1; i <= items.length; i++) {
             var /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
             var /** @type {?} */ item = items[index];
-            if (!item.disabled) {
+            if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
                 return;
             }
@@ -1666,7 +1692,7 @@ ListKeyManager = /** @class */ (function () {
         if (!items[index]) {
             return;
         }
-        while (items[index].disabled) {
+        while (this._skipPredicateFn(items[index])) {
             index += fallbackDelta;
             if (!items[index]) {
                 return;

@@ -27,6 +27,11 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _typeaheadSubscription;
     private _vertical;
     private _horizontal;
+    /**
+     * Predicate function that can be used to check whether an item should be skipped
+     * by the key manager. By default, disabled items are skipped.
+     */
+    private _skipPredicateFn;
     private _pressedLetters;
     constructor(_items: QueryList<T>);
     /**
@@ -36,6 +41,12 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     tabOut: Subject<void>;
     /** Stream that emits whenever the active item of the list manager changes. */
     change: Subject<number>;
+    /**
+     * Sets the predicate function that determines which items should be skipped by the
+     * list key manager.
+     * @param predicate Function that determines whether the given item should be skipped.
+     */
+    skipPredicate(predicate: (item: T) => boolean): this;
     /**
      * Turns on wrapping mode, which ensures that the active item will wrap to
      * the other end of list when there are no more items in the given direction.
