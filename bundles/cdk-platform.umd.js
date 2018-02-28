@@ -7,18 +7,17 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = global.ng.cdk.platform || {}),global.ng.core));
-}(this, (function (exports,_angular_core) { 'use strict';
+	typeof define === 'function' && define.amd ? define('@angular/cdk/platform', ['exports', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}),global.ng.core));
+}(this, (function (exports,core) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
-var hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
+var /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
@@ -66,7 +65,7 @@ var Platform = /** @class */ (function () {
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
     Platform.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     Platform.ctorParameters = function () { return []; };
@@ -81,7 +80,7 @@ var Platform = /** @class */ (function () {
 /**
  * Cached result of whether the user's browser supports passive event listeners.
  */
-var supportsPassiveEvents;
+var /** @type {?} */ supportsPassiveEvents;
 /**
  * Checks whether the user's browser supports passive event listeners.
  * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
@@ -103,11 +102,11 @@ function supportsPassiveEventListeners() {
 /**
  * Cached result Set of input types support by the current browser.
  */
-var supportedInputTypes;
+var /** @type {?} */ supportedInputTypes;
 /**
  * Types of `<input>` that *might* be supported.
  */
-var candidateInputTypes = [
+var /** @type {?} */ candidateInputTypes = [
     'color',
     'button',
     'checkbox',
@@ -158,12 +157,11 @@ function getSupportedInputTypes() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var PlatformModule = /** @class */ (function () {
     function PlatformModule() {
     }
     PlatformModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
+        { type: core.NgModule, args: [{
                     providers: [Platform]
                 },] },
     ];

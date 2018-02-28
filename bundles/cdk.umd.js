@@ -7,19 +7,18 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}),global.ng.core));
-}(this, (function (exports,_angular_core) { 'use strict';
+	typeof define === 'function' && define.amd ? define('@angular/cdk', ['exports', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = {}),global.ng.core));
+}(this, (function (exports,core) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Current version of the Angular Component Development Kit.
  */
-var VERSION = new _angular_core.Version('6.0.0-beta.3-e51fc4e');
+var /** @type {?} */ VERSION = new core.Version('6.0.0-beta.3-b53002c');
 
 exports.VERSION = VERSION;
 

@@ -5,21 +5,20 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectorRef, Directive, EventEmitter, Input, NgModule, Optional, Output } from '@angular/core';
-import { UNIQUE_SELECTION_DISPATCHER_PROVIDER, UniqueSelectionDispatcher } from '@angular/cdk/collections';
+import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, NgModule } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs/Subject';
+import { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Used to generate unique ID for each accordion.
  */
-var nextId$1 = 0;
+var /** @type {?} */ nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
@@ -32,7 +31,7 @@ var CdkAccordion = /** @class */ (function () {
         /**
          * A readonly id value to use for unique selection coordination.
          */
-        this.id = "cdk-accordion-" + nextId$1++;
+        this.id = "cdk-accordion-" + nextId++;
         this._multi = false;
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
@@ -104,11 +103,10 @@ var CdkAccordion = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Used to generate unique ID for each accordion item.
  */
-var nextId = 0;
+var /** @type {?} */ nextId$1 = 0;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -144,7 +142,7 @@ var CdkAccordionItem = /** @class */ (function () {
         /**
          * The unique AccordionItem id.
          */
-        this.id = "cdk-accordion-child-" + nextId++;
+        this.id = "cdk-accordion-child-" + nextId$1++;
         this._expanded = false;
         this._disabled = false;
         /**
@@ -311,7 +309,6 @@ var CdkAccordionItem = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var CdkAccordionModule = /** @class */ (function () {
     function CdkAccordionModule() {
     }
@@ -335,9 +332,6 @@ var CdkAccordionModule = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { CdkAccordionItem, CdkAccordion, CdkAccordionModule };

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, Injectable, NgModule, NgZone, Optional, SkipSelf } from '@angular/core';
+import { Injectable, NgZone, Optional, SkipSelf, Directive, ElementRef, NgModule } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
@@ -19,11 +19,10 @@ import { merge } from 'rxjs/observable/merge';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Time in ms to throttle the scrolling events by default.
  */
-const DEFAULT_SCROLL_TIME = 20;
+const /** @type {?} */ DEFAULT_SCROLL_TIME = 20;
 /**
  * Service contained all registered Scrollable references and emits an event when any one of the
  * Scrollable references emit a scrolled event.
@@ -202,7 +201,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) 
 /**
  * \@docs-private
  */
-const SCROLL_DISPATCHER_PROVIDER = {
+const /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
     provide: ScrollDispatcher,
     deps: [[new Optional(), new SkipSelf(), ScrollDispatcher], NgZone, Platform],
@@ -213,7 +212,6 @@ const SCROLL_DISPATCHER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
@@ -280,11 +278,10 @@ CdkScrollable.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Time in ms to throttle the resize events by default.
  */
-const DEFAULT_RESIZE_TIME = 20;
+const /** @type {?} */ DEFAULT_RESIZE_TIME = 20;
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
@@ -409,7 +406,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
 /**
  * \@docs-private
  */
-const VIEWPORT_RULER_PROVIDER = {
+const /** @type {?} */ VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
     deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone],
@@ -420,7 +417,6 @@ const VIEWPORT_RULER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 class ScrollDispatchModule {
 }
 ScrollDispatchModule.decorators = [
@@ -442,9 +438,6 @@ ScrollDispatchModule.ctorParameters = () => [];
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, CdkScrollable, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER, ScrollDispatchModule };

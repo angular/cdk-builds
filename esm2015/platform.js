@@ -11,10 +11,9 @@ import { Injectable, NgModule } from '@angular/core';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
-const hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
+const /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
@@ -76,7 +75,7 @@ Platform.ctorParameters = () => [];
 /**
  * Cached result of whether the user's browser supports passive event listeners.
  */
-let supportsPassiveEvents;
+let /** @type {?} */ supportsPassiveEvents;
 /**
  * Checks whether the user's browser supports passive event listeners.
  * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
@@ -98,11 +97,11 @@ function supportsPassiveEventListeners() {
 /**
  * Cached result Set of input types support by the current browser.
  */
-let supportedInputTypes;
+let /** @type {?} */ supportedInputTypes;
 /**
  * Types of `<input>` that *might* be supported.
  */
-const candidateInputTypes = [
+const /** @type {?} */ candidateInputTypes = [
     'color',
     'button',
     'checkbox',
@@ -153,7 +152,6 @@ function getSupportedInputTypes() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 class PlatformModule {
 }
 PlatformModule.decorators = [
@@ -172,9 +170,6 @@ PlatformModule.ctorParameters = () => [];
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { Platform, supportsPassiveEventListeners, getSupportedInputTypes, PlatformModule };

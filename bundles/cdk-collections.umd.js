@@ -7,9 +7,9 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define(['exports', 'rxjs/Subject', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.collections = global.ng.cdk.collections || {}),global.Rx,global.ng.core));
-}(this, (function (exports,rxjs_Subject,_angular_core) { 'use strict';
+	typeof define === 'function' && define.amd ? define('@angular/cdk/collections', ['exports', 'rxjs/Subject', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.collections = {}),global.Rx,global.ng.core));
+}(this, (function (exports,Subject,core) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -19,7 +19,10 @@
 /**
  * @abstract
  */
-var DataSource = /** @class */ (function () {
+var   /**
+ * @abstract
+ */
+DataSource = /** @class */ (function () {
     function DataSource() {
     }
     return DataSource;
@@ -29,11 +32,13 @@ var DataSource = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class to be used to power selecting one or more options from a list.
  */
-var SelectionModel = /** @class */ (function () {
+var   /**
+ * Class to be used to power selecting one or more options from a list.
+ */
+SelectionModel = /** @class */ (function () {
     function SelectionModel(_multiple, initiallySelectedValues, _emitChanges) {
         if (_multiple === void 0) { _multiple = false; }
         if (_emitChanges === void 0) { _emitChanges = true; }
@@ -55,7 +60,7 @@ var SelectionModel = /** @class */ (function () {
         /**
          * Event emitted when the value has changed.
          */
-        this.onChange = this._emitChanges ? new rxjs_Subject.Subject() : null;
+        this.onChange = this._emitChanges ? new Subject.Subject() : null;
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
                 initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });
@@ -317,12 +322,6 @@ var SelectionModel = /** @class */ (function () {
     return SelectionModel;
 }());
 /**
- * Event emitted when the value of a MatSelectionModel has changed.
- * \@docs-private
- * @record
- */
-
-/**
  * Returns an error that reports that multiple values are passed into a selection model
  * with a single value.
  * @return {?}
@@ -335,7 +334,6 @@ function getMultipleValuesInSingleSelectionError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
@@ -405,7 +403,7 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
         this._listeners = [];
     };
     UniqueSelectionDispatcher.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     UniqueSelectionDispatcher.ctorParameters = function () { return []; };
@@ -422,10 +420,10 @@ function UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY(parentDispatcher) {
 /**
  * \@docs-private
  */
-var UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
+var /** @type {?} */ UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
     // If there is already a dispatcher available, use that. Otherwise, provide a new one.
     provide: UniqueSelectionDispatcher,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), UniqueSelectionDispatcher]],
+    deps: [[new core.Optional(), new core.SkipSelf(), UniqueSelectionDispatcher]],
     useFactory: UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY
 };
 

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('@angular/cdk/platform'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/operators/take', '@angular/cdk/platform', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = global.ng.cdk.a11y || {}),global.ng.core,global.ng.cdk.coercion,global.Rx.operators,global.ng.cdk.platform,global.ng.common,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_coercion,rxjs_operators_take,_angular_cdk_platform,_angular_common,rxjs_Subject,rxjs_Subscription,_angular_cdk_keycodes,rxjs_operators_debounceTime,rxjs_operators_filter,rxjs_operators_map,rxjs_operators_tap,rxjs_observable_of) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('rxjs/observable/of')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/core', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/take', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', 'rxjs/observable/of'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.core,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.operators,global.ng.common,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.Observable));
+}(this, (function (exports,core,platform,coercion,take,common,Subject,Subscription,keycodes,debounceTime,filter,map,tap,of) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -41,7 +41,6 @@ function __extends(d, b) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
  * tabbable.
@@ -208,11 +207,11 @@ var InteractivityChecker = /** @class */ (function () {
         return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
     };
     InteractivityChecker.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     InteractivityChecker.ctorParameters = function () { return [
-        { type: _angular_cdk_platform.Platform, },
+        { type: platform.Platform, },
     ]; };
     return InteractivityChecker;
 }());
@@ -358,7 +357,6 @@ function getWindow(node) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class that allows for trapping focus within a DOM element.
  *
@@ -366,7 +364,14 @@ function getWindow(node) {
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
  */
-var FocusTrap = /** @class */ (function () {
+var   /**
+ * Class that allows for trapping focus within a DOM element.
+ *
+ * This class currently uses a relatively simple approach to focus trapping.
+ * It assumes that the tab order is the same as DOM order, which is not necessarily true.
+ * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
+ */
+FocusTrap = /** @class */ (function () {
     function FocusTrap(_element, _checker, _ngZone, _document, deferAnchors) {
         if (deferAnchors === void 0) { deferAnchors = false; }
         this._element = _element;
@@ -701,7 +706,7 @@ var FocusTrap = /** @class */ (function () {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(rxjs_operators_take.take(1)).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(take.take(1)).subscribe(fn);
         }
     };
     return FocusTrap;
@@ -741,13 +746,13 @@ var FocusTrapFactory = /** @class */ (function () {
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     };
     FocusTrapFactory.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     FocusTrapFactory.ctorParameters = function () { return [
         { type: InteractivityChecker, },
-        { type: _angular_core.NgZone, },
-        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+        { type: core.NgZone, },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     return FocusTrapFactory;
 }());
@@ -774,7 +779,7 @@ var FocusTrapDeprecatedDirective = /** @class */ (function () {
          * @return {?}
          */
         function (val) {
-            this.focusTrap.enabled = !_angular_cdk_coercion.coerceBooleanProperty(val);
+            this.focusTrap.enabled = !coercion.coerceBooleanProperty(val);
         },
         enumerable: true,
         configurable: true
@@ -798,17 +803,17 @@ var FocusTrapDeprecatedDirective = /** @class */ (function () {
         this.focusTrap.attachAnchors();
     };
     FocusTrapDeprecatedDirective.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: 'cdk-focus-trap',
                 },] },
     ];
     /** @nocollapse */
     FocusTrapDeprecatedDirective.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: FocusTrapFactory, },
     ]; };
     FocusTrapDeprecatedDirective.propDecorators = {
-        "disabled": [{ type: _angular_core.Input },],
+        "disabled": [{ type: core.Input },],
     };
     return FocusTrapDeprecatedDirective;
 }());
@@ -836,7 +841,7 @@ var CdkTrapFocus = /** @class */ (function () {
          * @param {?} value
          * @return {?}
          */
-        function (value) { this.focusTrap.enabled = _angular_cdk_coercion.coerceBooleanProperty(value); },
+        function (value) { this.focusTrap.enabled = coercion.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -851,7 +856,7 @@ var CdkTrapFocus = /** @class */ (function () {
          * @param {?} value
          * @return {?}
          */
-        function (value) { this._autoCapture = _angular_cdk_coercion.coerceBooleanProperty(value); },
+        function (value) { this._autoCapture = coercion.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -884,20 +889,20 @@ var CdkTrapFocus = /** @class */ (function () {
         }
     };
     CdkTrapFocus.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkTrapFocus]',
                     exportAs: 'cdkTrapFocus',
                 },] },
     ];
     /** @nocollapse */
     CdkTrapFocus.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: FocusTrapFactory, },
-        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     CdkTrapFocus.propDecorators = {
-        "enabled": [{ type: _angular_core.Input, args: ['cdkTrapFocus',] },],
-        "autoCapture": [{ type: _angular_core.Input, args: ['cdkTrapFocusAutoCapture',] },],
+        "enabled": [{ type: core.Input, args: ['cdkTrapFocus',] },],
+        "autoCapture": [{ type: core.Input, args: ['cdkTrapFocusAutoCapture',] },],
     };
     return CdkTrapFocus;
 }());
@@ -910,7 +915,7 @@ var CdkTrapFocus = /** @class */ (function () {
 /**
  * IDs are deliminated by an empty space, as per the spec.
  */
-var ID_DELIMINATOR = ' ';
+var /** @type {?} */ ID_DELIMINATOR = ' ';
 /**
  * Adds the given ID to the specified ARIA attribute on an element.
  * Used for attributes such as aria-labelledby, aria-owns, etc.
@@ -956,37 +961,30 @@ function getAriaReferenceIds(el, attr) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * Interface used to register message elements and keep a count of how many registrations have
- * the same message and the reference to the message element used for the `aria-describedby`.
- * @record
- */
-
 /**
  * ID used for the body container where all messages are appended.
  */
-var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+var /** @type {?} */ MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
 /**
  * ID prefix used for each created message element.
  */
-var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+var /** @type {?} */ CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
 /**
  * Attribute given to each host element that is described by a message element.
  */
-var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+var /** @type {?} */ CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
 /**
  * Global incremental identifier for each registered message element.
  */
-var nextId = 0;
+var /** @type {?} */ nextId = 0;
 /**
  * Global map of all registered message elements that have been placed into the document.
  */
-var messageRegistry = new Map();
+var /** @type {?} */ messageRegistry = new Map();
 /**
  * Container for all registered messages.
  */
-var messagesContainer = null;
+var /** @type {?} */ messagesContainer = null;
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
@@ -1239,11 +1237,11 @@ var AriaDescriber = /** @class */ (function () {
             !!("" + message).trim();
     };
     AriaDescriber.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     AriaDescriber.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     return AriaDescriber;
 }());
@@ -1259,12 +1257,12 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
 /**
  * \@docs-private
  */
-var ARIA_DESCRIBER_PROVIDER = {
+var /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
     provide: AriaDescriber,
     deps: [
-        [new _angular_core.Optional(), new _angular_core.SkipSelf(), AriaDescriber],
-        /** @type {?} */ (_angular_common.DOCUMENT)
+        [new core.Optional(), new core.SkipSelf(), AriaDescriber],
+        /** @type {?} */ (common.DOCUMENT)
     ],
     useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
 };
@@ -1273,35 +1271,33 @@ var ARIA_DESCRIBER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This interface is for items that can be passed to a ListKeyManager.
- * @record
- */
-
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
  */
-var ListKeyManager = /** @class */ (function () {
+var   /**
+ * This class manages keyboard events for selectable lists. If you pass it a query list
+ * of items, it will set the active item correctly when arrow events occur.
+ */
+ListKeyManager = /** @class */ (function () {
     function ListKeyManager(_items) {
         var _this = this;
         this._items = _items;
         this._activeItemIndex = -1;
         this._wrap = false;
-        this._letterKeyStream = new rxjs_Subject.Subject();
-        this._typeaheadSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._letterKeyStream = new Subject.Subject();
+        this._typeaheadSubscription = Subscription.Subscription.EMPTY;
         this._vertical = true;
         this._pressedLetters = [];
         /**
          * Stream that emits any time the TAB key is pressed, so components can react
          * when focus is shifted off of the list.
          */
-        this.tabOut = new rxjs_Subject.Subject();
+        this.tabOut = new Subject.Subject();
         /**
          * Stream that emits whenever the active item of the list manager changes.
          */
-        this.change = new rxjs_Subject.Subject();
+        this.change = new Subject.Subject();
         _items.changes.subscribe(function (newItems) {
             if (_this._activeItem) {
                 var /** @type {?} */ itemArray = newItems.toArray();
@@ -1394,7 +1390,7 @@ var ListKeyManager = /** @class */ (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(rxjs_operators_tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), rxjs_operators_debounceTime.debounceTime(debounceInterval), rxjs_operators_filter.filter(function () { return _this._pressedLetters.length > 0; }), rxjs_operators_map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), debounceTime.debounceTime(debounceInterval), filter.filter(function () { return _this._pressedLetters.length > 0; }), map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -1449,10 +1445,10 @@ var ListKeyManager = /** @class */ (function () {
     function (event) {
         var /** @type {?} */ keyCode = event.keyCode;
         switch (keyCode) {
-            case _angular_cdk_keycodes.TAB:
+            case keycodes.TAB:
                 this.tabOut.next();
                 return;
-            case _angular_cdk_keycodes.DOWN_ARROW:
+            case keycodes.DOWN_ARROW:
                 if (this._vertical) {
                     this.setNextItemActive();
                     break;
@@ -1460,7 +1456,7 @@ var ListKeyManager = /** @class */ (function () {
                 else {
                     return;
                 }
-            case _angular_cdk_keycodes.UP_ARROW:
+            case keycodes.UP_ARROW:
                 if (this._vertical) {
                     this.setPreviousItemActive();
                     break;
@@ -1468,7 +1464,7 @@ var ListKeyManager = /** @class */ (function () {
                 else {
                     return;
                 }
-            case _angular_cdk_keycodes.RIGHT_ARROW:
+            case keycodes.RIGHT_ARROW:
                 if (this._horizontal === 'ltr') {
                     this.setNextItemActive();
                     break;
@@ -1480,7 +1476,7 @@ var ListKeyManager = /** @class */ (function () {
                 else {
                     return;
                 }
-            case _angular_cdk_keycodes.LEFT_ARROW:
+            case keycodes.LEFT_ARROW:
                 if (this._horizontal === 'ltr') {
                     this.setPreviousItemActive();
                     break;
@@ -1498,7 +1494,7 @@ var ListKeyManager = /** @class */ (function () {
                 if (event.key && event.key.length === 1) {
                     this._letterKeyStream.next(event.key.toLocaleUpperCase());
                 }
-                else if ((keyCode >= _angular_cdk_keycodes.A && keyCode <= _angular_cdk_keycodes.Z) || (keyCode >= _angular_cdk_keycodes.ZERO && keyCode <= _angular_cdk_keycodes.NINE)) {
+                else if ((keyCode >= keycodes.A && keyCode <= keycodes.Z) || (keyCode >= keycodes.ZERO && keyCode <= keycodes.NINE)) {
                     this._letterKeyStream.next(String.fromCharCode(keyCode));
                 }
                 // Note that we return here, in order to avoid preventing
@@ -1702,14 +1698,6 @@ var ListKeyManager = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
- * Each item must know how to style itself as active or inactive and whether or not it is
- * currently disabled.
- * @record
- */
-
 var ActiveDescendantKeyManager = /** @class */ (function (_super) {
     __extends(ActiveDescendantKeyManager, _super);
     function ActiveDescendantKeyManager() {
@@ -1750,14 +1738,6 @@ var ActiveDescendantKeyManager = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This is the interface for focusable items (used by the FocusKeyManager).
- * Each item must know how to focus itself, whether or not it is currently disabled
- * and be able to supply it's label.
- * @record
- */
-
 var FocusKeyManager = /** @class */ (function (_super) {
     __extends(FocusKeyManager, _super);
     function FocusKeyManager() {
@@ -1812,8 +1792,7 @@ var FocusKeyManager = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-var LIVE_ANNOUNCER_ELEMENT_TOKEN = new _angular_core.InjectionToken('liveAnnouncerElement');
+var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement');
 var LiveAnnouncer = /** @class */ (function () {
     function LiveAnnouncer(elementToken, _document) {
         this._document = _document;
@@ -1884,12 +1863,12 @@ var LiveAnnouncer = /** @class */ (function () {
         return liveEl;
     };
     LiveAnnouncer.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-        { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     return LiveAnnouncer;
 }());
@@ -1906,13 +1885,13 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _documen
 /**
  * \@docs-private
  */
-var LIVE_ANNOUNCER_PROVIDER = {
+var /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
     provide: LiveAnnouncer,
     deps: [
-        [new _angular_core.Optional(), new _angular_core.SkipSelf(), LiveAnnouncer],
-        [new _angular_core.Optional(), new _angular_core.Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
-        _angular_common.DOCUMENT,
+        [new core.Optional(), new core.SkipSelf(), LiveAnnouncer],
+        [new core.Optional(), new core.Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
+        common.DOCUMENT,
     ],
     useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
 };
@@ -1923,7 +1902,7 @@ var LIVE_ANNOUNCER_PROVIDER = {
  */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
-var TOUCH_BUFFER_MS = 650;
+var /** @type {?} */ TOUCH_BUFFER_MS = 650;
 /**
  * Monitors mouse and keyboard events to determine the cause of focus events.
  */
@@ -1967,13 +1946,13 @@ var FocusMonitor = /** @class */ (function () {
     function (element, renderer, checkChildren) {
         var _this = this;
         // TODO(mmalerba): clean up after deprecated signature is removed.
-        if (!(renderer instanceof _angular_core.Renderer2)) {
+        if (!(renderer instanceof core.Renderer2)) {
             checkChildren = renderer;
         }
         checkChildren = !!checkChildren;
         // Do nothing if we're not on the browser platform.
         if (!this._platform.isBrowser) {
-            return rxjs_observable_of.of(null);
+            return of.of(null);
         }
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(element)) {
@@ -1985,7 +1964,7 @@ var FocusMonitor = /** @class */ (function () {
         var /** @type {?} */ info = {
             unlisten: function () { },
             checkChildren: checkChildren,
-            subject: new rxjs_Subject.Subject()
+            subject: new Subject.Subject()
         };
         this._elementInfo.set(element, info);
         this._incrementMonitoredElementCount();
@@ -2105,13 +2084,13 @@ var FocusMonitor = /** @class */ (function () {
         this._ngZone.runOutsideAngular(function () {
             document.addEventListener('keydown', documentKeydownListener, true);
             document.addEventListener('mousedown', documentMousedownListener, true);
-            document.addEventListener('touchstart', documentTouchstartListener, _angular_cdk_platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            document.addEventListener('touchstart', documentTouchstartListener, platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
             window.addEventListener('focus', windowFocusListener);
         });
         this._unregisterGlobalListeners = function () {
             document.removeEventListener('keydown', documentKeydownListener, true);
             document.removeEventListener('mousedown', documentMousedownListener, true);
-            document.removeEventListener('touchstart', documentTouchstartListener, _angular_cdk_platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            document.removeEventListener('touchstart', documentTouchstartListener, platform.supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
             window.removeEventListener('focus', windowFocusListener);
             // Clear timeouts for all potentially pending timeouts to prevent the leaks.
             clearTimeout(_this._windowFocusTimeoutId);
@@ -2307,12 +2286,12 @@ var FocusMonitor = /** @class */ (function () {
         }
     };
     FocusMonitor.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     FocusMonitor.ctorParameters = function () { return [
-        { type: _angular_core.NgZone, },
-        { type: _angular_cdk_platform.Platform, },
+        { type: core.NgZone, },
+        { type: platform.Platform, },
     ]; };
     return FocusMonitor;
 }());
@@ -2330,7 +2309,7 @@ var CdkMonitorFocus = /** @class */ (function () {
         var _this = this;
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
-        this.cdkFocusChange = new _angular_core.EventEmitter();
+        this.cdkFocusChange = new core.EventEmitter();
         this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
     }
@@ -2345,17 +2324,17 @@ var CdkMonitorFocus = /** @class */ (function () {
         this._monitorSubscription.unsubscribe();
     };
     CdkMonitorFocus.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
                 },] },
     ];
     /** @nocollapse */
     CdkMonitorFocus.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: FocusMonitor, },
     ]; };
     CdkMonitorFocus.propDecorators = {
-        "cdkFocusChange": [{ type: _angular_core.Output },],
+        "cdkFocusChange": [{ type: core.Output },],
     };
     return CdkMonitorFocus;
 }());
@@ -2366,16 +2345,16 @@ var CdkMonitorFocus = /** @class */ (function () {
  * @param {?} platform
  * @return {?}
  */
-function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-    return parentDispatcher || new FocusMonitor(ngZone, platform);
+function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
+    return parentDispatcher || new FocusMonitor(ngZone, platform$$1);
 }
 /**
  * \@docs-private
  */
-var FOCUS_MONITOR_PROVIDER = {
+var /** @type {?} */ FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
     provide: FocusMonitor,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), FocusMonitor], _angular_core.NgZone, _angular_cdk_platform.Platform],
+    deps: [[new core.Optional(), new core.SkipSelf(), FocusMonitor], core.NgZone, platform.Platform],
     useFactory: FOCUS_MONITOR_PROVIDER_FACTORY
 };
 
@@ -2401,13 +2380,12 @@ function isFakeMousedownFromScreenReader(event) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var A11yModule = /** @class */ (function () {
     function A11yModule() {
     }
     A11yModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    imports: [_angular_common.CommonModule, _angular_cdk_platform.PlatformModule],
+        { type: core.NgModule, args: [{
+                    imports: [common.CommonModule, platform.PlatformModule],
                     declarations: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
                     exports: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
                     providers: [

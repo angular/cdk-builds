@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, EventEmitter, Inject, Input, NgModule, Optional, Output, TemplateRef, ViewChild, ViewEncapsulation, forwardRef } from '@angular/core';
-import { DOWN_ARROW, END, ENTER, HOME, LEFT_ARROW, RIGHT_ARROW, SPACE, UP_ARROW } from '@angular/cdk/keycodes';
+import { Directive, TemplateRef, ContentChildren, EventEmitter, Input, Output, Component, ContentChild, ViewChild, ViewEncapsulation, Optional, Inject, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, NgModule } from '@angular/core';
+import { LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW, UP_ARROW, ENTER, SPACE, HOME, END } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
-import { BidiModule, Directionality } from '@angular/cdk/bidi';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
 
@@ -17,7 +17,6 @@ import { CommonModule } from '@angular/common';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var CdkStepLabel = /** @class */ (function () {
     function CdkStepLabel(template) {
         this.template = template;
@@ -38,15 +37,17 @@ var CdkStepLabel = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Used to generate unique ID for each stepper component.
  */
-var nextId = 0;
+var /** @type {?} */ nextId = 0;
 /**
  * Change event emitted on selection changes.
  */
-var StepperSelectionEvent = /** @class */ (function () {
+var  /**
+ * Change event emitted on selection changes.
+ */
+StepperSelectionEvent = /** @class */ (function () {
     function StepperSelectionEvent() {
     }
     return StepperSelectionEvent;
@@ -543,7 +544,6 @@ var CdkStepper = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Button that moves to the next step in a stepper workflow.
  */
@@ -607,7 +607,6 @@ var CdkStepperPrevious = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var CdkStepperModule = /** @class */ (function () {
     function CdkStepperModule() {
     }
@@ -631,9 +630,6 @@ var CdkStepperModule = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };

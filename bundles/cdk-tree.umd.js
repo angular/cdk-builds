@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators/take'), require('@angular/core'), require('rxjs/operators/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/Subject'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/cdk/collections', 'rxjs/operators/take', '@angular/core', 'rxjs/operators/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/Subject', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = global.ng.cdk.tree || {}),global.ng.cdk.collections,global.Rx.operators,global.ng.core,global.Rx.operators,global.Rx,global.Rx,global.Rx.Observable,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
-}(this, (function (exports,_angular_cdk_collections,rxjs_operators_take,_angular_core,rxjs_operators_takeUntil,rxjs_BehaviorSubject,rxjs_Observable,rxjs_observable_of,rxjs_Subject,_angular_cdk_bidi,_angular_cdk_coercion,_angular_cdk_a11y,_angular_common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators/take'), require('@angular/core'), require('rxjs/BehaviorSubject'), require('rxjs/operators/takeUntil'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/Subject'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs/operators/take', '@angular/core', 'rxjs/BehaviorSubject', 'rxjs/operators/takeUntil', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/Subject', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.Rx.operators,global.ng.core,global.Rx,global.Rx.operators,global.Rx,global.Rx.Observable,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
+}(this, (function (exports,collections,take,core,BehaviorSubject,takeUntil,Observable,of,Subject,bidi,coercion,a11y,common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -45,12 +45,16 @@ function __extends(d, b) {
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
  */
-var BaseTreeControl = /** @class */ (function () {
+var   /**
+ * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
+ * @abstract
+ */
+BaseTreeControl = /** @class */ (function () {
     function BaseTreeControl() {
         /**
          * A selection model with multi-selection to track expansion status.
          */
-        this.expansionModel = new _angular_cdk_collections.SelectionModel(true);
+        this.expansionModel = new collections.SelectionModel(true);
     }
     /** Toggles one single data node's expanded/collapsed state. */
     /**
@@ -177,11 +181,13 @@ var BaseTreeControl = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
  */
-var FlatTreeControl = /** @class */ (function (_super) {
+var   /**
+ * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ */
+FlatTreeControl = /** @class */ (function (_super) {
     __extends(FlatTreeControl, _super);
     /** Construct with flat tree data node functions getLevel and isExpandable. */
     function FlatTreeControl(getLevel, isExpandable) {
@@ -260,7 +266,10 @@ var FlatTreeControl = /** @class */ (function (_super) {
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
  */
-var NestedTreeControl = /** @class */ (function (_super) {
+var   /**
+ * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ */
+NestedTreeControl = /** @class */ (function (_super) {
     __extends(NestedTreeControl, _super);
     /** Construct with nested tree function getChildren. */
     function NestedTreeControl(getChildren) {
@@ -328,7 +337,7 @@ var NestedTreeControl = /** @class */ (function (_super) {
     function (descendants, dataNode) {
         var _this = this;
         descendants.push(dataNode);
-        this.getChildren(dataNode).pipe(rxjs_operators_take.take(1)).subscribe(function (children) {
+        this.getChildren(dataNode).pipe(take.take(1)).subscribe(function (children) {
             if (children && children.length > 0) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
             }
@@ -341,11 +350,13 @@ var NestedTreeControl = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Context provided to the tree node component.
  */
-var CdkTreeNodeOutletContext = /** @class */ (function () {
+var   /**
+ * Context provided to the tree node component.
+ */
+CdkTreeNodeOutletContext = /** @class */ (function () {
     function CdkTreeNodeOutletContext(data) {
         this.$implicit = data;
     }
@@ -361,7 +372,7 @@ var CdkTreeNodeDef = /** @class */ (function () {
         this.template = template;
     }
     CdkTreeNodeDef.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkTreeNodeDef]',
                     inputs: [
                         'when: cdkTreeNodeDefWhen'
@@ -370,7 +381,7 @@ var CdkTreeNodeDef = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkTreeNodeDef.ctorParameters = function () { return [
-        { type: _angular_core.TemplateRef, },
+        { type: core.TemplateRef, },
     ]; };
     return CdkTreeNodeDef;
 }());
@@ -388,13 +399,13 @@ var CdkTreeNodeOutlet = /** @class */ (function () {
         this.viewContainer = viewContainer;
     }
     CdkTreeNodeOutlet.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkTreeNodeOutlet]'
                 },] },
     ];
     /** @nocollapse */
     CdkTreeNodeOutlet.ctorParameters = function () { return [
-        { type: _angular_core.ViewContainerRef, },
+        { type: core.ViewContainerRef, },
     ]; };
     return CdkTreeNodeOutlet;
 }());
@@ -459,7 +470,7 @@ var CdkTreeNode = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._destroyed = new rxjs_Subject.Subject();
+        this._destroyed = new Subject.Subject();
         /**
          * The role of the node should be 'group' if it's an internal node,
          * and 'treeitem' if it's a leaf node.
@@ -542,7 +553,7 @@ var CdkTreeNode = /** @class */ (function () {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            this._tree.treeControl.getChildren(this._data).pipe(rxjs_operators_takeUntil.takeUntil(this._destroyed))
+            this._tree.treeControl.getChildren(this._data).pipe(takeUntil.takeUntil(this._destroyed))
                 .subscribe(function (children) {
                 _this.role = children && children.length ? 'group' : 'treeitem';
             });
@@ -554,7 +565,7 @@ var CdkTreeNode = /** @class */ (function () {
      */
     CdkTreeNode.mostRecentTreeNode = null;
     CdkTreeNode.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: 'cdk-tree-node',
                     exportAs: 'cdkTreeNode',
                     host: {
@@ -567,11 +578,11 @@ var CdkTreeNode = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkTreeNode.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: CdkTree, },
     ]; };
     CdkTreeNode.propDecorators = {
-        "role": [{ type: _angular_core.Input },],
+        "role": [{ type: core.Input },],
     };
     return CdkTreeNode;
 }());
@@ -586,12 +597,12 @@ var CdkTree = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._onDestroy = new rxjs_Subject.Subject();
+        this._onDestroy = new Subject.Subject();
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
-        this.viewChange = new rxjs_BehaviorSubject.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
+        this.viewChange = new BehaviorSubject.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
     }
     Object.defineProperty(CdkTree.prototype, "dataSource", {
         get: /**
@@ -706,14 +717,14 @@ var CdkTree = /** @class */ (function () {
         if (typeof (/** @type {?} */ (this._dataSource)).connect === 'function') {
             dataStream = (/** @type {?} */ (this._dataSource)).connect(this);
         }
-        else if (this._dataSource instanceof rxjs_Observable.Observable) {
+        else if (this._dataSource instanceof Observable.Observable) {
             dataStream = this._dataSource;
         }
         else if (Array.isArray(this._dataSource)) {
-            dataStream = rxjs_observable_of.of(this._dataSource);
+            dataStream = of.of(this._dataSource);
         }
         if (dataStream) {
-            this._dataSubscription = dataStream.pipe(rxjs_operators_takeUntil.takeUntil(this._onDestroy))
+            this._dataSubscription = dataStream.pipe(takeUntil.takeUntil(this._onDestroy))
                 .subscribe(function (data) { return _this._renderNodeChanges(data); });
         }
         else {
@@ -820,28 +831,28 @@ var CdkTree = /** @class */ (function () {
         this._changeDetectorRef.detectChanges();
     };
     CdkTree.decorators = [
-        { type: _angular_core.Component, args: [{selector: 'cdk-tree',
+        { type: core.Component, args: [{selector: 'cdk-tree',
                     exportAs: 'cdkTree',
                     template: "<ng-container cdkTreeNodeOutlet></ng-container>",
                     host: {
                         'class': 'cdk-tree',
                         'role': 'tree',
                     },
-                    encapsulation: _angular_core.ViewEncapsulation.None,
+                    encapsulation: core.ViewEncapsulation.None,
                     preserveWhitespaces: false,
-                    changeDetection: _angular_core.ChangeDetectionStrategy.OnPush
+                    changeDetection: core.ChangeDetectionStrategy.OnPush
                 },] },
     ];
     /** @nocollapse */
     CdkTree.ctorParameters = function () { return [
-        { type: _angular_core.IterableDiffers, },
-        { type: _angular_core.ChangeDetectorRef, },
+        { type: core.IterableDiffers, },
+        { type: core.ChangeDetectorRef, },
     ]; };
     CdkTree.propDecorators = {
-        "dataSource": [{ type: _angular_core.Input },],
-        "treeControl": [{ type: _angular_core.Input },],
-        "_nodeOutlet": [{ type: _angular_core.ViewChild, args: [CdkTreeNodeOutlet,] },],
-        "_nodeDefs": [{ type: _angular_core.ContentChildren, args: [CdkTreeNodeDef,] },],
+        "dataSource": [{ type: core.Input },],
+        "treeControl": [{ type: core.Input },],
+        "_nodeOutlet": [{ type: core.ViewChild, args: [CdkTreeNodeOutlet,] },],
+        "_nodeDefs": [{ type: core.ContentChildren, args: [CdkTreeNodeDef,] },],
     };
     return CdkTree;
 }());
@@ -890,7 +901,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        this._tree.treeControl.getChildren(this.data).pipe(rxjs_operators_takeUntil.takeUntil(this._destroyed))
+        this._tree.treeControl.getChildren(this.data).pipe(takeUntil.takeUntil(this._destroyed))
             .subscribe(function (result) {
             if (result && result.length) {
                 // In case when nodeOutlet is not in the DOM when children changes, save it in the node
@@ -901,7 +912,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
                 _this._addChildrenNodes();
             }
         });
-        this.nodeOutlet.changes.pipe(rxjs_operators_takeUntil.takeUntil(this._destroyed))
+        this.nodeOutlet.changes.pipe(takeUntil.takeUntil(this._destroyed))
             .subscribe(function (_) { return _this._addChildrenNodes(); });
     };
     /**
@@ -948,7 +959,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         }
     };
     CdkNestedTreeNode.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: 'cdk-nested-tree-node',
                     exportAs: 'cdkNestedTreeNode',
                     host: {
@@ -961,11 +972,11 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
     ];
     /** @nocollapse */
     CdkNestedTreeNode.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: CdkTree, },
     ]; };
     CdkNestedTreeNode.propDecorators = {
-        "nodeOutlet": [{ type: _angular_core.ContentChildren, args: [CdkTreeNodeOutlet,] },],
+        "nodeOutlet": [{ type: core.ContentChildren, args: [CdkTreeNodeOutlet,] },],
     };
     return CdkNestedTreeNode;
 }(CdkTreeNode));
@@ -974,7 +985,6 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
@@ -990,11 +1000,11 @@ var CdkTreeNodePadding = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._destroyed = new rxjs_Subject.Subject();
+        this._destroyed = new Subject.Subject();
         this._indent = 40;
         this._setPadding();
         if (this._dir) {
-            this._dir.change.pipe(rxjs_operators_takeUntil.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
+            this._dir.change.pipe(takeUntil.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
         }
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {
@@ -1008,7 +1018,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
          * @return {?}
          */
         function (value) {
-            this._level = _angular_cdk_coercion.coerceNumberProperty(value);
+            this._level = coercion.coerceNumberProperty(value);
             this._setPadding();
         },
         enumerable: true,
@@ -1025,7 +1035,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
          * @return {?}
          */
         function (value) {
-            this._indent = _angular_cdk_coercion.coerceNumberProperty(value);
+            this._indent = coercion.coerceNumberProperty(value);
             this._setPadding();
         },
         enumerable: true,
@@ -1069,7 +1079,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
         this._renderer.setStyle(this._element.nativeElement, paddingProp, padding);
     };
     CdkTreeNodePadding.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkTreeNodePadding]',
                 },] },
     ];
@@ -1077,13 +1087,13 @@ var CdkTreeNodePadding = /** @class */ (function () {
     CdkTreeNodePadding.ctorParameters = function () { return [
         { type: CdkTreeNode, },
         { type: CdkTree, },
-        { type: _angular_core.Renderer2, },
-        { type: _angular_core.ElementRef, },
-        { type: _angular_cdk_bidi.Directionality, decorators: [{ type: _angular_core.Optional },] },
+        { type: core.Renderer2, },
+        { type: core.ElementRef, },
+        { type: bidi.Directionality, decorators: [{ type: core.Optional },] },
     ]; };
     CdkTreeNodePadding.propDecorators = {
-        "level": [{ type: _angular_core.Input, args: ['cdkTreeNodePadding',] },],
-        "indent": [{ type: _angular_core.Input, args: ['cdkTreeNodePaddingIndent',] },],
+        "level": [{ type: core.Input, args: ['cdkTreeNodePadding',] },],
+        "indent": [{ type: core.Input, args: ['cdkTreeNodePaddingIndent',] },],
     };
     return CdkTreeNodePadding;
 }());
@@ -1092,7 +1102,6 @@ var CdkTreeNodePadding = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Node toggle to expand/collapse the node.
  */
@@ -1112,7 +1121,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
          * @param {?} value
          * @return {?}
          */
-        function (value) { this._recursive = _angular_cdk_coercion.coerceBooleanProperty(value); },
+        function (value) { this._recursive = coercion.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -1131,7 +1140,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
         event.stopPropagation();
     };
     CdkTreeNodeToggle.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdkTreeNodeToggle]',
                     host: {
                         '(click)': '_toggle($event)',
@@ -1144,7 +1153,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
         { type: CdkTreeNode, },
     ]; };
     CdkTreeNodeToggle.propDecorators = {
-        "recursive": [{ type: _angular_core.Input, args: ['cdkTreeNodeToggleRecursive',] },],
+        "recursive": [{ type: core.Input, args: ['cdkTreeNodeToggleRecursive',] },],
     };
     return CdkTreeNodeToggle;
 }());
@@ -1153,8 +1162,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-var EXPORTED_DECLARATIONS = [
+var /** @type {?} */ EXPORTED_DECLARATIONS = [
     CdkNestedTreeNode,
     CdkTreeNodeDef,
     CdkTreeNodePadding,
@@ -1167,11 +1175,11 @@ var CdkTreeModule = /** @class */ (function () {
     function CdkTreeModule() {
     }
     CdkTreeModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    imports: [_angular_common.CommonModule],
+        { type: core.NgModule, args: [{
+                    imports: [common.CommonModule],
                     exports: EXPORTED_DECLARATIONS,
                     declarations: EXPORTED_DECLARATIONS,
-                    providers: [_angular_cdk_a11y.FocusMonitor, CdkTreeNodeDef]
+                    providers: [a11y.FocusMonitor, CdkTreeNodeDef]
                 },] },
     ];
     /** @nocollapse */

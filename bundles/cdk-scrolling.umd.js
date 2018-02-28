@@ -7,19 +7,18 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/observable/fromEvent'), require('rxjs/operators/auditTime'), require('rxjs/operators/filter'), require('rxjs/observable/merge')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/observable/fromEvent', 'rxjs/operators/auditTime', 'rxjs/operators/filter', 'rxjs/observable/merge'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = global.ng.cdk.scrolling || {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.operators,global.Rx.operators,global.Rx.Observable));
-}(this, (function (exports,_angular_core,_angular_cdk_platform,rxjs_Subject,rxjs_Observable,rxjs_observable_of,rxjs_observable_fromEvent,rxjs_operators_auditTime,rxjs_operators_filter,rxjs_observable_merge) { 'use strict';
+	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/observable/fromEvent', 'rxjs/operators/auditTime', 'rxjs/operators/filter', 'rxjs/observable/merge'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.operators,global.Rx.operators,global.Rx.Observable));
+}(this, (function (exports,core,platform,Subject,Observable,of,fromEvent,auditTime,filter,merge) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Time in ms to throttle the scrolling events by default.
  */
-var DEFAULT_SCROLL_TIME = 20;
+var /** @type {?} */ DEFAULT_SCROLL_TIME = 20;
 /**
  * Service contained all registered Scrollable references and emits an event when any one of the
  * Scrollable references emit a scrolled event.
@@ -31,7 +30,7 @@ var ScrollDispatcher = /** @class */ (function () {
         /**
          * Subject for notifying that a registered scrollable reference element has been scrolled.
          */
-        this._scrolled = new rxjs_Subject.Subject();
+        this._scrolled = new Subject.Subject();
         /**
          * Keeps track of the global `scroll` and `resize` subscriptions.
          */
@@ -127,14 +126,14 @@ var ScrollDispatcher = /** @class */ (function () {
     function (auditTimeInMs) {
         var _this = this;
         if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
-        return this._platform.isBrowser ? rxjs_Observable.Observable.create(function (observer) {
+        return this._platform.isBrowser ? Observable.Observable.create(function (observer) {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
             var /** @type {?} */ subscription = auditTimeInMs > 0 ?
-                _this._scrolled.pipe(rxjs_operators_auditTime.auditTime(auditTimeInMs)).subscribe(observer) :
+                _this._scrolled.pipe(auditTime.auditTime(auditTimeInMs)).subscribe(observer) :
                 _this._scrolled.subscribe(observer);
             _this._scrolledCount++;
             return function () {
@@ -144,7 +143,7 @@ var ScrollDispatcher = /** @class */ (function () {
                     _this._removeGlobalListener();
                 }
             };
-        }) : rxjs_observable_of.of();
+        }) : of.of();
     };
     /**
      * @return {?}
@@ -179,7 +178,7 @@ var ScrollDispatcher = /** @class */ (function () {
      */
     function (elementRef, auditTimeInMs) {
         var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
-        return this.scrolled(auditTimeInMs).pipe(rxjs_operators_filter.filter(function (target) {
+        return this.scrolled(auditTimeInMs).pipe(filter.filter(function (target) {
             return !target || ancestors.indexOf(target) > -1;
         }));
     };
@@ -239,7 +238,7 @@ var ScrollDispatcher = /** @class */ (function () {
     function () {
         var _this = this;
         this._globalSubscription = this._ngZone.runOutsideAngular(function () {
-            return rxjs_observable_fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
+            return fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
     /**
@@ -257,12 +256,12 @@ var ScrollDispatcher = /** @class */ (function () {
         }
     };
     ScrollDispatcher.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     ScrollDispatcher.ctorParameters = function () { return [
-        { type: _angular_core.NgZone, },
-        { type: _angular_cdk_platform.Platform, },
+        { type: core.NgZone, },
+        { type: platform.Platform, },
     ]; };
     return ScrollDispatcher;
 }());
@@ -273,16 +272,16 @@ var ScrollDispatcher = /** @class */ (function () {
  * @param {?} platform
  * @return {?}
  */
-function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-    return parentDispatcher || new ScrollDispatcher(ngZone, platform);
+function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
+    return parentDispatcher || new ScrollDispatcher(ngZone, platform$$1);
 }
 /**
  * \@docs-private
  */
-var SCROLL_DISPATCHER_PROVIDER = {
+var /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
     provide: ScrollDispatcher,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ScrollDispatcher], _angular_core.NgZone, _angular_cdk_platform.Platform],
+    deps: [[new core.Optional(), new core.SkipSelf(), ScrollDispatcher], core.NgZone, platform.Platform],
     useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
 };
 
@@ -290,7 +289,6 @@ var SCROLL_DISPATCHER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
  * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
@@ -302,7 +300,7 @@ var CdkScrollable = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._elementScrolled = new rxjs_Subject.Subject();
+        this._elementScrolled = new Subject.Subject();
         this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
@@ -354,15 +352,15 @@ var CdkScrollable = /** @class */ (function () {
         return this._elementRef;
     };
     CdkScrollable.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: '[cdk-scrollable], [cdkScrollable]'
                 },] },
     ];
     /** @nocollapse */
     CdkScrollable.ctorParameters = function () { return [
-        { type: _angular_core.ElementRef, },
+        { type: core.ElementRef, },
         { type: ScrollDispatcher, },
-        { type: _angular_core.NgZone, },
+        { type: core.NgZone, },
     ]; };
     return CdkScrollable;
 }());
@@ -371,11 +369,10 @@ var CdkScrollable = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Time in ms to throttle the resize events by default.
  */
-var DEFAULT_RESIZE_TIME = 20;
+var /** @type {?} */ DEFAULT_RESIZE_TIME = 20;
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * \@docs-private
@@ -385,8 +382,8 @@ var ViewportRuler = /** @class */ (function () {
         var _this = this;
         this._platform = _platform;
         this._change = _platform.isBrowser ? ngZone.runOutsideAngular(function () {
-            return rxjs_observable_merge.merge(rxjs_observable_fromEvent.fromEvent(window, 'resize'), rxjs_observable_fromEvent.fromEvent(window, 'orientationchange'));
-        }) : rxjs_observable_of.of();
+            return merge.merge(fromEvent.fromEvent(window, 'resize'), fromEvent.fromEvent(window, 'orientationchange'));
+        }) : of.of();
         this._invalidateCache = this.change().subscribe(function () { return _this._updateViewportSize(); });
     }
     /**
@@ -492,7 +489,7 @@ var ViewportRuler = /** @class */ (function () {
      */
     function (throttleTime) {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
-        return throttleTime > 0 ? this._change.pipe(rxjs_operators_auditTime.auditTime(throttleTime)) : this._change;
+        return throttleTime > 0 ? this._change.pipe(auditTime.auditTime(throttleTime)) : this._change;
     };
     /**
      * Updates the cached viewport size.
@@ -508,12 +505,12 @@ var ViewportRuler = /** @class */ (function () {
             { width: 0, height: 0 };
     };
     ViewportRuler.decorators = [
-        { type: _angular_core.Injectable },
+        { type: core.Injectable },
     ];
     /** @nocollapse */
     ViewportRuler.ctorParameters = function () { return [
-        { type: _angular_cdk_platform.Platform, },
-        { type: _angular_core.NgZone, },
+        { type: platform.Platform, },
+        { type: core.NgZone, },
     ]; };
     return ViewportRuler;
 }());
@@ -524,16 +521,16 @@ var ViewportRuler = /** @class */ (function () {
  * @param {?} ngZone
  * @return {?}
  */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
-    return parentRuler || new ViewportRuler(platform, ngZone);
+function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform$$1, ngZone) {
+    return parentRuler || new ViewportRuler(platform$$1, ngZone);
 }
 /**
  * \@docs-private
  */
-var VIEWPORT_RULER_PROVIDER = {
+var /** @type {?} */ VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,
-    deps: [[new _angular_core.Optional(), new _angular_core.SkipSelf(), ViewportRuler], _angular_cdk_platform.Platform, _angular_core.NgZone],
+    deps: [[new core.Optional(), new core.SkipSelf(), ViewportRuler], platform.Platform, core.NgZone],
     useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
 };
 
@@ -541,13 +538,12 @@ var VIEWPORT_RULER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var ScrollDispatchModule = /** @class */ (function () {
     function ScrollDispatchModule() {
     }
     ScrollDispatchModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
-                    imports: [_angular_cdk_platform.PlatformModule],
+        { type: core.NgModule, args: [{
+                    imports: [platform.PlatformModule],
                     exports: [CdkScrollable],
                     declarations: [CdkScrollable],
                     providers: [SCROLL_DISPATCHER_PROVIDER],

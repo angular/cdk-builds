@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { __extends } from 'tslib';
-import * as tslib_1 from 'tslib';
-import { Attribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, Directive, ElementRef, EmbeddedViewRef, Input, IterableDiffers, NgModule, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation, isDevMode } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, IterableDiffers, TemplateRef, ViewContainerRef, ViewEncapsulation, ContentChild, ElementRef, Input, Attribute, ChangeDetectorRef, ContentChildren, EmbeddedViewRef, isDevMode, ViewChild, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
+export { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
@@ -20,18 +20,22 @@ import { CommonModule } from '@angular/common';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
-var CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
+var /** @type {?} */ CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-container>";
 /**
  * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
  * for changes and notifying the table.
  * @abstract
  */
-var BaseRowDef = /** @class */ (function () {
+var  /**
+ * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
+ * for changes and notifying the table.
+ * @abstract
+ */
+BaseRowDef = /** @class */ (function () {
     function BaseRowDef(template, _differs) {
         this.template = template;
         this._differs = _differs;
@@ -120,11 +124,6 @@ var CdkRowDef = /** @class */ (function (_super) {
     return CdkRowDef;
 }(BaseRowDef));
 /**
- * Context provided to the row cells
- * @record
- */
-
-/**
  * Outlet for rendering cells inside of a row or header row.
  * \@docs-private
  */
@@ -199,7 +198,6 @@ var CdkRow = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Cell definition for a CDK table.
  * Captures the template of a column's data row cell as well as cell-specific properties.
@@ -383,7 +381,6 @@ function getTableUnknownDataSourceError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
@@ -422,13 +419,18 @@ var HeaderRowPlaceholder = /** @class */ (function () {
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  */
-var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";
+var /** @type {?} */ CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholder></ng-container>\n  <ng-container rowPlaceholder></ng-container>";
 /**
  * Class used to conveniently type the embedded view ref for rows with a context.
  * \@docs-private
  * @abstract
  */
-var RowViewRef = /** @class */ (function (_super) {
+var /**
+ * Class used to conveniently type the embedded view ref for rows with a context.
+ * \@docs-private
+ * @abstract
+ */
+RowViewRef = /** @class */ (function (_super) {
     __extends(RowViewRef, _super);
     function RowViewRef() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -1067,8 +1069,7 @@ var CdkTable = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-var EXPORTED_DECLARATIONS = [
+var /** @type {?} */ EXPORTED_DECLARATIONS = [
     CdkTable,
     CdkRowDef,
     CdkCellDef,
@@ -1107,9 +1108,6 @@ var CdkTableModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * Generated bundle index. Do not edit.
- */
 
-export { DataSource, RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow, CdkTableModule };
+export { RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow, CdkTableModule };
 //# sourceMappingURL=table.es5.js.map

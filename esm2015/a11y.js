@@ -5,14 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, NgZone, Optional, Output, Renderer2, SkipSelf } from '@angular/core';
+import { Injectable, Directive, ElementRef, Input, NgZone, Inject, Optional, SkipSelf, InjectionToken, EventEmitter, Output, Renderer2, NgModule } from '@angular/core';
+import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { take } from 'rxjs/operators/take';
-import { Platform, PlatformModule, supportsPassiveEventListeners } from '@angular/cdk/platform';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT, CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { A, DOWN_ARROW, LEFT_ARROW, NINE, RIGHT_ARROW, TAB, UP_ARROW, Z, ZERO } from '@angular/cdk/keycodes';
+import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { filter } from 'rxjs/operators/filter';
 import { map } from 'rxjs/operators/map';
@@ -23,7 +23,6 @@ import { of } from 'rxjs/observable/of';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
  * tabbable.
@@ -287,7 +286,6 @@ function getWindow(node) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class that allows for trapping focus within a DOM element.
  *
@@ -709,7 +707,7 @@ CdkTrapFocus.propDecorators = {
 /**
  * IDs are deliminated by an empty space, as per the spec.
  */
-const ID_DELIMINATOR = ' ';
+const /** @type {?} */ ID_DELIMINATOR = ' ';
 /**
  * Adds the given ID to the specified ARIA attribute on an element.
  * Used for attributes such as aria-labelledby, aria-owns, etc.
@@ -755,37 +753,30 @@ function getAriaReferenceIds(el, attr) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * Interface used to register message elements and keep a count of how many registrations have
- * the same message and the reference to the message element used for the `aria-describedby`.
- * @record
- */
-
 /**
  * ID used for the body container where all messages are appended.
  */
-const MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+const /** @type {?} */ MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
 /**
  * ID prefix used for each created message element.
  */
-const CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+const /** @type {?} */ CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
 /**
  * Attribute given to each host element that is described by a message element.
  */
-const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+const /** @type {?} */ CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
 /**
  * Global incremental identifier for each registered message element.
  */
-let nextId = 0;
+let /** @type {?} */ nextId = 0;
 /**
  * Global map of all registered message elements that have been placed into the document.
  */
-const messageRegistry = new Map();
+const /** @type {?} */ messageRegistry = new Map();
 /**
  * Container for all registered messages.
  */
-let messagesContainer = null;
+let /** @type {?} */ messagesContainer = null;
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
@@ -985,7 +976,7 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
 /**
  * \@docs-private
  */
-const ARIA_DESCRIBER_PROVIDER = {
+const /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
     provide: AriaDescriber,
     deps: [
@@ -999,12 +990,6 @@ const ARIA_DESCRIBER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This interface is for items that can be passed to a ListKeyManager.
- * @record
- */
-
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
@@ -1296,14 +1281,6 @@ class ListKeyManager {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This is the interface for highlightable items (used by the ActiveDescendantKeyManager).
- * Each item must know how to style itself as active or inactive and whether or not it is
- * currently disabled.
- * @record
- */
-
 class ActiveDescendantKeyManager extends ListKeyManager {
     /**
      * This method sets the active item to the item at the specified index.
@@ -1327,14 +1304,6 @@ class ActiveDescendantKeyManager extends ListKeyManager {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-/**
- * This is the interface for focusable items (used by the FocusKeyManager).
- * Each item must know how to focus itself, whether or not it is currently disabled
- * and be able to supply it's label.
- * @record
- */
-
 class FocusKeyManager extends ListKeyManager {
     constructor() {
         super(...arguments);
@@ -1367,8 +1336,7 @@ class FocusKeyManager extends ListKeyManager {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement');
+const /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement');
 class LiveAnnouncer {
     /**
      * @param {?} elementToken
@@ -1444,7 +1412,7 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _documen
 /**
  * \@docs-private
  */
-const LIVE_ANNOUNCER_PROVIDER = {
+const /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
     provide: LiveAnnouncer,
     deps: [
@@ -1461,7 +1429,7 @@ const LIVE_ANNOUNCER_PROVIDER = {
  */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
-const TOUCH_BUFFER_MS = 650;
+const /** @type {?} */ TOUCH_BUFFER_MS = 650;
 /**
  * Monitors mouse and keyboard events to determine the cause of focus events.
  */
@@ -1830,7 +1798,7 @@ function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
 /**
  * \@docs-private
  */
-const FOCUS_MONITOR_PROVIDER = {
+const /** @type {?} */ FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
     provide: FocusMonitor,
     deps: [[new Optional(), new SkipSelf(), FocusMonitor], NgZone, Platform],
@@ -1859,7 +1827,6 @@ function isFakeMousedownFromScreenReader(event) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 class A11yModule {
 }
 A11yModule.decorators = [
@@ -1888,9 +1855,6 @@ A11yModule.ctorParameters = () => [];
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { CdkTrapFocus as FocusTrapDirective, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };

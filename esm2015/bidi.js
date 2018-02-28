@@ -5,14 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, EventEmitter, Inject, Injectable, InjectionToken, Input, NgModule, Optional, Output } from '@angular/core';
+import { EventEmitter, Injectable, Optional, Inject, InjectionToken, Directive, Output, Input, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
@@ -23,7 +22,7 @@ import { DOCUMENT } from '@angular/common';
  * We also can't re-provide the DOCUMENT token from platform-brower because the unit tests
  * themselves use things like `querySelector` in test code.
  */
-const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc');
+const /** @type {?} */ DIR_DOCUMENT = new InjectionToken('cdk-dir-doc');
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
@@ -64,7 +63,6 @@ Directionality.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Directive to listen for changes of direction of part of the DOM.
  *
@@ -137,7 +135,6 @@ Dir.propDecorators = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 class BidiModule {
 }
 BidiModule.decorators = [
@@ -161,9 +158,6 @@ BidiModule.ctorParameters = () => [];
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { Directionality, DIR_DOCUMENT, Dir, BidiModule };

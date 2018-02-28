@@ -11,11 +11,10 @@ import { Version } from '@angular/core';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Current version of the Angular Component Development Kit.
  */
-const VERSION = new Version('6.0.0-beta.3-e51fc4e');
+const /** @type {?} */ VERSION = new Version('6.0.0-beta.3-b53002c');
 
 /**
  * @fileoverview added by tsickle
@@ -25,9 +24,6 @@ const VERSION = new Version('6.0.0-beta.3-e51fc4e');
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { VERSION };

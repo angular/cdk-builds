@@ -7,8 +7,8 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.keycodes = global.ng.cdk.keycodes || {})));
+	typeof define === 'function' && define.amd ? define('@angular/cdk/keycodes', ['exports'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.keycodes = {})));
 }(this, (function (exports) { 'use strict';
 
 /**
@@ -16,25 +16,25 @@
  * @suppress {checkTypes} checked by tsc
  */
 
-var UP_ARROW = 38;
-var DOWN_ARROW = 40;
-var RIGHT_ARROW = 39;
-var LEFT_ARROW = 37;
-var PAGE_UP = 33;
-var PAGE_DOWN = 34;
-var HOME = 36;
-var END = 35;
-var ENTER = 13;
-var SPACE = 32;
-var TAB = 9;
-var ESCAPE = 27;
-var BACKSPACE = 8;
-var DELETE = 46;
-var A = 65;
-var Z = 90;
-var ZERO = 48;
-var NINE = 57;
-var COMMA = 188;
+var /** @type {?} */ UP_ARROW = 38;
+var /** @type {?} */ DOWN_ARROW = 40;
+var /** @type {?} */ RIGHT_ARROW = 39;
+var /** @type {?} */ LEFT_ARROW = 37;
+var /** @type {?} */ PAGE_UP = 33;
+var /** @type {?} */ PAGE_DOWN = 34;
+var /** @type {?} */ HOME = 36;
+var /** @type {?} */ END = 35;
+var /** @type {?} */ ENTER = 13;
+var /** @type {?} */ SPACE = 32;
+var /** @type {?} */ TAB = 9;
+var /** @type {?} */ ESCAPE = 27;
+var /** @type {?} */ BACKSPACE = 8;
+var /** @type {?} */ DELETE = 46;
+var /** @type {?} */ A = 65;
+var /** @type {?} */ Z = 90;
+var /** @type {?} */ ZERO = 48;
+var /** @type {?} */ NINE = 57;
+var /** @type {?} */ COMMA = 188;
 
 exports.UP_ARROW = UP_ARROW;
 exports.DOWN_ARROW = DOWN_ARROW;

@@ -7,16 +7,15 @@
  */
 import { SelectionModel } from '@angular/cdk/collections';
 import { __extends } from 'tslib';
-import * as tslib_1 from 'tslib';
 import { take } from 'rxjs/operators/take';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, Directive, ElementRef, Input, IterableDiffers, NgModule, Optional, Renderer2, TemplateRef, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
-import { takeUntil } from 'rxjs/operators/takeUntil';
+import { Directive, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, IterableDiffers, ViewChild, ViewEncapsulation, Optional, Renderer2, NgModule } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { takeUntil } from 'rxjs/operators/takeUntil';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { Subject } from 'rxjs/Subject';
 import { Directionality } from '@angular/cdk/bidi';
-import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
+import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 
@@ -28,7 +27,11 @@ import { CommonModule } from '@angular/common';
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
  */
-var BaseTreeControl = /** @class */ (function () {
+var  /**
+ * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
+ * @abstract
+ */
+BaseTreeControl = /** @class */ (function () {
     function BaseTreeControl() {
         /**
          * A selection model with multi-selection to track expansion status.
@@ -160,11 +163,13 @@ var BaseTreeControl = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
  */
-var FlatTreeControl = /** @class */ (function (_super) {
+var  /**
+ * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ */
+FlatTreeControl = /** @class */ (function (_super) {
     __extends(FlatTreeControl, _super);
     /** Construct with flat tree data node functions getLevel and isExpandable. */
     function FlatTreeControl(getLevel, isExpandable) {
@@ -243,7 +248,10 @@ var FlatTreeControl = /** @class */ (function (_super) {
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
  */
-var NestedTreeControl = /** @class */ (function (_super) {
+var  /**
+ * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ */
+NestedTreeControl = /** @class */ (function (_super) {
     __extends(NestedTreeControl, _super);
     /** Construct with nested tree function getChildren. */
     function NestedTreeControl(getChildren) {
@@ -324,11 +332,13 @@ var NestedTreeControl = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Context provided to the tree node component.
  */
-var CdkTreeNodeOutletContext = /** @class */ (function () {
+var  /**
+ * Context provided to the tree node component.
+ */
+CdkTreeNodeOutletContext = /** @class */ (function () {
     function CdkTreeNodeOutletContext(data) {
         this.$implicit = data;
     }
@@ -957,7 +967,6 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
@@ -1075,7 +1084,6 @@ var CdkTreeNodePadding = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Node toggle to expand/collapse the node.
  */
@@ -1136,8 +1144,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-var EXPORTED_DECLARATIONS = [
+var /** @type {?} */ EXPORTED_DECLARATIONS = [
     CdkNestedTreeNode,
     CdkTreeNodeDef,
     CdkTreeNodePadding,
@@ -1170,9 +1177,6 @@ var CdkTreeModule = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { BaseTreeControl, FlatTreeControl, NestedTreeControl, CdkNestedTreeNode, CdkTreeNodeOutletContext, CdkTreeNodeDef, CdkTreeNodePadding, CdkTreeNodeOutlet, CdkTreeNode, CdkTree, getTreeNoValidDataSourceError, getTreeMultipleDefaultNodeDefsError, getTreeMissingMatchingNodeDefError, getTreeControlMissingError, getTreeControlFunctionsMissingError, CdkTreeModule, CdkTreeNodeToggle };

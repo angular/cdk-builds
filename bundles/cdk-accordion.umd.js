@@ -6,20 +6,19 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('@angular/cdk/coercion'), require('rxjs/Subject'), require('rxjs/Subscription')) :
-	typeof define === 'function' && define.amd ? define(['exports', '@angular/core', '@angular/cdk/collections', '@angular/cdk/coercion', 'rxjs/Subject', 'rxjs/Subscription'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = global.ng.cdk.accordion || {}),global.ng.core,global.ng.cdk.collections,global.ng.cdk.coercion,global.Rx,global.Rx));
-}(this, (function (exports,_angular_core,_angular_cdk_collections,_angular_cdk_coercion,rxjs_Subject,rxjs_Subscription) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/Subject'), require('@angular/cdk/collections'), require('rxjs/Subscription')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/Subject', '@angular/cdk/collections', 'rxjs/Subscription'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.ng.cdk.collections,global.Rx));
+}(this, (function (exports,core,coercion,Subject,collections,Subscription) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Used to generate unique ID for each accordion.
  */
-var nextId$1 = 0;
+var /** @type {?} */ nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
@@ -28,11 +27,11 @@ var CdkAccordion = /** @class */ (function () {
         /**
          * Stream that emits true/false when openAll/closeAll is triggered.
          */
-        this._openCloseAllActions = new rxjs_Subject.Subject();
+        this._openCloseAllActions = new Subject.Subject();
         /**
          * A readonly id value to use for unique selection coordination.
          */
-        this.id = "cdk-accordion-" + nextId$1++;
+        this.id = "cdk-accordion-" + nextId++;
         this._multi = false;
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
@@ -45,7 +44,7 @@ var CdkAccordion = /** @class */ (function () {
          * @param {?} multi
          * @return {?}
          */
-        function (multi) { this._multi = _angular_cdk_coercion.coerceBooleanProperty(multi); },
+        function (multi) { this._multi = coercion.coerceBooleanProperty(multi); },
         enumerable: true,
         configurable: true
     });
@@ -87,7 +86,7 @@ var CdkAccordion = /** @class */ (function () {
         }
     };
     CdkAccordion.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: 'cdk-accordion, [cdkAccordion]',
                     exportAs: 'cdkAccordion',
                 },] },
@@ -95,7 +94,7 @@ var CdkAccordion = /** @class */ (function () {
     /** @nocollapse */
     CdkAccordion.ctorParameters = function () { return []; };
     CdkAccordion.propDecorators = {
-        "multi": [{ type: _angular_core.Input },],
+        "multi": [{ type: core.Input },],
     };
     return CdkAccordion;
 }());
@@ -104,11 +103,10 @@ var CdkAccordion = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Used to generate unique ID for each accordion item.
  */
-var nextId = 0;
+var /** @type {?} */ nextId$1 = 0;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -122,29 +120,29 @@ var CdkAccordionItem = /** @class */ (function () {
         /**
          * Subscription to openAll/closeAll events.
          */
-        this._openCloseAllSubscription = rxjs_Subscription.Subscription.EMPTY;
+        this._openCloseAllSubscription = Subscription.Subscription.EMPTY;
         /**
          * Event emitted every time the AccordionItem is closed.
          */
-        this.closed = new _angular_core.EventEmitter();
+        this.closed = new core.EventEmitter();
         /**
          * Event emitted every time the AccordionItem is opened.
          */
-        this.opened = new _angular_core.EventEmitter();
+        this.opened = new core.EventEmitter();
         /**
          * Event emitted when the AccordionItem is destroyed.
          */
-        this.destroyed = new _angular_core.EventEmitter();
+        this.destroyed = new core.EventEmitter();
         /**
          * Emits whenever the expanded state of the accordion changes.
          * Primarily used to facilitate two-way binding.
          * \@docs-private
          */
-        this.expandedChange = new _angular_core.EventEmitter();
+        this.expandedChange = new core.EventEmitter();
         /**
          * The unique AccordionItem id.
          */
-        this.id = "cdk-accordion-child-" + nextId++;
+        this.id = "cdk-accordion-child-" + nextId$1++;
         this._expanded = false;
         this._disabled = false;
         /**
@@ -174,7 +172,7 @@ var CdkAccordionItem = /** @class */ (function () {
          * @return {?}
          */
         function (expanded) {
-            expanded = _angular_cdk_coercion.coerceBooleanProperty(expanded);
+            expanded = coercion.coerceBooleanProperty(expanded);
             // Only emit events and update the internal value if the value changes.
             if (this._expanded !== expanded) {
                 this._expanded = expanded;
@@ -209,7 +207,7 @@ var CdkAccordionItem = /** @class */ (function () {
          * @param {?} disabled
          * @return {?}
          */
-        function (disabled) { this._disabled = _angular_cdk_coercion.coerceBooleanProperty(disabled); },
+        function (disabled) { this._disabled = coercion.coerceBooleanProperty(disabled); },
         enumerable: true,
         configurable: true
     });
@@ -285,24 +283,24 @@ var CdkAccordionItem = /** @class */ (function () {
         });
     };
     CdkAccordionItem.decorators = [
-        { type: _angular_core.Directive, args: [{
+        { type: core.Directive, args: [{
                     selector: 'cdk-accordion-item',
                     exportAs: 'cdkAccordionItem',
                 },] },
     ];
     /** @nocollapse */
     CdkAccordionItem.ctorParameters = function () { return [
-        { type: CdkAccordion, decorators: [{ type: _angular_core.Optional },] },
-        { type: _angular_core.ChangeDetectorRef, },
-        { type: _angular_cdk_collections.UniqueSelectionDispatcher, },
+        { type: CdkAccordion, decorators: [{ type: core.Optional },] },
+        { type: core.ChangeDetectorRef, },
+        { type: collections.UniqueSelectionDispatcher, },
     ]; };
     CdkAccordionItem.propDecorators = {
-        "closed": [{ type: _angular_core.Output },],
-        "opened": [{ type: _angular_core.Output },],
-        "destroyed": [{ type: _angular_core.Output },],
-        "expandedChange": [{ type: _angular_core.Output },],
-        "expanded": [{ type: _angular_core.Input },],
-        "disabled": [{ type: _angular_core.Input },],
+        "closed": [{ type: core.Output },],
+        "opened": [{ type: core.Output },],
+        "destroyed": [{ type: core.Output },],
+        "expandedChange": [{ type: core.Output },],
+        "expanded": [{ type: core.Input },],
+        "disabled": [{ type: core.Input },],
     };
     return CdkAccordionItem;
 }());
@@ -311,15 +309,14 @@ var CdkAccordionItem = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 var CdkAccordionModule = /** @class */ (function () {
     function CdkAccordionModule() {
     }
     CdkAccordionModule.decorators = [
-        { type: _angular_core.NgModule, args: [{
+        { type: core.NgModule, args: [{
                     exports: [CdkAccordion, CdkAccordionItem],
                     declarations: [CdkAccordion, CdkAccordionItem],
-                    providers: [_angular_cdk_collections.UNIQUE_SELECTION_DISPATCHER_PROVIDER],
+                    providers: [collections.UNIQUE_SELECTION_DISPATCHER_PROVIDER],
                 },] },
     ];
     /** @nocollapse */

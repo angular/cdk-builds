@@ -23,7 +23,6 @@ class DataSource {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class to be used to power selecting one or more options from a list.
  */
@@ -211,12 +210,6 @@ class SelectionModel {
     }
 }
 /**
- * Event emitted when the value of a MatSelectionModel has changed.
- * \@docs-private
- * @record
- */
-
-/**
  * Returns an error that reports that multiple values are passed into a selection model
  * with a single value.
  * @return {?}
@@ -229,7 +222,6 @@ function getMultipleValuesInSingleSelectionError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
@@ -290,7 +282,7 @@ function UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY(parentDispatcher) {
 /**
  * \@docs-private
  */
-const UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
+const /** @type {?} */ UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
     // If there is already a dispatcher available, use that. Otherwise, provide a new one.
     provide: UniqueSelectionDispatcher,
     deps: [[new Optional(), new SkipSelf(), UniqueSelectionDispatcher]],
@@ -305,9 +297,6 @@ const UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError, UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY as ɵa };

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgModule, NgZone } from '@angular/core';
+import { Injectable, NgZone, NgModule } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { map } from 'rxjs/operators/map';
@@ -22,7 +22,7 @@ import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
 /**
  * Global registry for all dynamically-created, injected style tags.
  */
-var styleElementForWebkitCompatibility = new Map();
+var /** @type {?} */ styleElementForWebkitCompatibility = new Map();
 /**
  * A utility for calling matchMedia queries.
  */
@@ -114,11 +114,6 @@ function noopMatchMedia(query) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
- * The current state of a layout breakpoint.
- * @record
- */
-
 /**
  * Utility for checking the matching state of \@media queries.
  */
@@ -251,7 +246,7 @@ var BreakpointObserver = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-var Breakpoints = {
+var /** @type {?} */ Breakpoints = {
     XSmall: '(max-width: 599px)',
     Small: '(min-width: 600px) and (max-width: 959px)',
     Medium: '(min-width: 960px) and (max-width: 1279px)',
@@ -292,9 +287,6 @@ var LayoutModule = /** @class */ (function () {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
- */
-/**
- * Generated bundle index. Do not edit.
  */
 
 export { LayoutModule, BreakpointObserver, Breakpoints, MediaMatcher };
