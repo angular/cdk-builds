@@ -74,6 +74,11 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      */
     setActiveItem(index: number): void;
     /**
+     * Sets the active item to the specified item.
+     * @param item The item to be set as active.
+     */
+    setActiveItem(item: T): void;
+    /**
      * Sets the active item depending on the key event passed in.
      * @param event Keyboard event to be used for determining which element should be active.
      */
@@ -91,8 +96,20 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     /** Sets the active item to a previous enabled item in the list. */
     setPreviousItemActive(): void;
     /**
+     * Allows setting the active without any other effects.
+     * @param index Index of the item to be set as active.
+     */
+    updateActiveItem(index: number): void;
+    /**
+     * Allows setting the active item without any other effects.
+     * @param item Item to be set as active.
+     */
+    updateActiveItem(item: T): void;
+    /**
      * Allows setting of the activeItemIndex without any other effects.
      * @param index The new activeItemIndex.
+     * @deprecated Use `updateActiveItem` instead.
+     * @deletion-target 7.0.0
      */
     updateActiveItemIndex(index: number): void;
     /**

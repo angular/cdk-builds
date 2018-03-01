@@ -1416,25 +1416,18 @@ ListKeyManager = /** @class */ (function () {
         return this;
     };
     /**
-     * Sets the active item to the item at the index specified.
-     * @param index The index of the item to be set as active.
-     */
-    /**
-     * Sets the active item to the item at the index specified.
-     * @param {?} index The index of the item to be set as active.
+     * @param {?} item
      * @return {?}
      */
     ListKeyManager.prototype.setActiveItem = /**
-     * Sets the active item to the item at the index specified.
-     * @param {?} index The index of the item to be set as active.
+     * @param {?} item
      * @return {?}
      */
-    function (index) {
+    function (item) {
         var /** @type {?} */ previousIndex = this._activeItemIndex;
-        this._activeItemIndex = index;
-        this._activeItem = this._items.toArray()[index];
+        this.updateActiveItem(item);
         if (this._activeItemIndex !== previousIndex) {
-            this.change.next(index);
+            this.change.next(this._activeItemIndex);
         }
     };
     /**
@@ -1587,21 +1580,41 @@ ListKeyManager = /** @class */ (function () {
             : this._setActiveItemByDelta(-1);
     };
     /**
+     * @param {?} item
+     * @return {?}
+     */
+    ListKeyManager.prototype.updateActiveItem = /**
+     * @param {?} item
+     * @return {?}
+     */
+    function (item) {
+        var /** @type {?} */ itemArray = this._items.toArray();
+        var /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        this._activeItemIndex = index;
+        this._activeItem = itemArray[index];
+    };
+    /**
      * Allows setting of the activeItemIndex without any other effects.
      * @param index The new activeItemIndex.
+     * @deprecated Use `updateActiveItem` instead.
+     * @deletion-target 7.0.0
      */
     /**
      * Allows setting of the activeItemIndex without any other effects.
+     * @deprecated Use `updateActiveItem` instead.
+     * \@deletion-target 7.0.0
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
     ListKeyManager.prototype.updateActiveItemIndex = /**
      * Allows setting of the activeItemIndex without any other effects.
+     * @deprecated Use `updateActiveItem` instead.
+     * \@deletion-target 7.0.0
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
     function (index) {
-        this._activeItemIndex = index;
+        this.updateActiveItem(index);
     };
     /**
      * This method sets the active item, given a list of items and the delta between the
@@ -1713,21 +1726,10 @@ var ActiveDescendantKeyManager = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
-     */
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
      * @param {?} index
      * @return {?}
      */
     ActiveDescendantKeyManager.prototype.setActiveItem = /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
      * @param {?} index
      * @return {?}
      */
@@ -1773,23 +1775,15 @@ var FocusKeyManager = /** @class */ (function (_super) {
         return this;
     };
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     */
-    /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     * @param {?} index
+     * @param {?} item
      * @return {?}
      */
     FocusKeyManager.prototype.setActiveItem = /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     * @param {?} index
+     * @param {?} item
      * @return {?}
      */
-    function (index) {
-        _super.prototype.setActiveItem.call(this, index);
+    function (item) {
+        _super.prototype.setActiveItem.call(this, item);
         if (this.activeItem) {
             this.activeItem.focus(this._origin);
         }

@@ -1098,16 +1098,14 @@ class ListKeyManager {
         return this;
     }
     /**
-     * Sets the active item to the item at the index specified.
-     * @param {?} index The index of the item to be set as active.
+     * @param {?} item
      * @return {?}
      */
-    setActiveItem(index) {
+    setActiveItem(item) {
         const /** @type {?} */ previousIndex = this._activeItemIndex;
-        this._activeItemIndex = index;
-        this._activeItem = this._items.toArray()[index];
+        this.updateActiveItem(item);
         if (this._activeItemIndex !== previousIndex) {
-            this.change.next(index);
+            this.change.next(this._activeItemIndex);
         }
     }
     /**
@@ -1221,12 +1219,24 @@ class ListKeyManager {
             : this._setActiveItemByDelta(-1);
     }
     /**
+     * @param {?} item
+     * @return {?}
+     */
+    updateActiveItem(item) {
+        const /** @type {?} */ itemArray = this._items.toArray();
+        const /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        this._activeItemIndex = index;
+        this._activeItem = itemArray[index];
+    }
+    /**
      * Allows setting of the activeItemIndex without any other effects.
+     * @deprecated Use `updateActiveItem` instead.
+     * \@deletion-target 7.0.0
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
     updateActiveItemIndex(index) {
-        this._activeItemIndex = index;
+        this.updateActiveItem(index);
     }
     /**
      * This method sets the active item, given a list of items and the delta between the
@@ -1298,9 +1308,6 @@ class ListKeyManager {
  */
 class ActiveDescendantKeyManager extends ListKeyManager {
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds active styles to the newly active item and removes active
-     * styles from the previously active item.
      * @param {?} index
      * @return {?}
      */
@@ -1334,13 +1341,11 @@ class FocusKeyManager extends ListKeyManager {
         return this;
     }
     /**
-     * This method sets the active item to the item at the specified index.
-     * It also adds focuses the newly active item.
-     * @param {?} index
+     * @param {?} item
      * @return {?}
      */
-    setActiveItem(index) {
-        super.setActiveItem(index);
+    setActiveItem(item) {
+        super.setActiveItem(item);
         if (this.activeItem) {
             this.activeItem.focus(this._origin);
         }
