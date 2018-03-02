@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/keycodes'), require('@angular/cdk/coercion'), require('@angular/forms'), require('@angular/cdk/bidi'), require('rxjs/Subject'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/keycodes', '@angular/cdk/coercion', '@angular/forms', '@angular/cdk/bidi', 'rxjs/Subject', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion,global.ng.forms,global.ng.cdk.bidi,global.Rx,global.ng.common));
-}(this, (function (exports,core,keycodes,coercion,forms,bidi,Subject,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/keycodes'), require('@angular/cdk/coercion'), require('@angular/forms'), require('@angular/cdk/bidi'), require('rxjs/Subject'), require('@angular/cdk/a11y'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/keycodes', '@angular/cdk/coercion', '@angular/forms', '@angular/cdk/bidi', 'rxjs/Subject', '@angular/cdk/a11y', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.keycodes,global.ng.cdk.coercion,global.ng.forms,global.ng.cdk.bidi,global.Rx,global.ng.cdk.a11y,global.ng.common));
+}(this, (function (exports,core,keycodes,coercion,forms,bidi,Subject,a11y,common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -200,10 +200,6 @@ var CdkStepper = /** @class */ (function () {
          * Event emitted when the selected step has changed.
          */
         this.selectionChange = new core.EventEmitter();
-        /**
-         * The index of the step that the focus can be set.
-         */
-        this._focusIndex = 0;
         this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
@@ -237,18 +233,15 @@ var CdkStepper = /** @class */ (function () {
                 if (index < 0 || index > this._steps.length - 1) {
                     throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                 }
-                if (this._anyControlsInvalidOrPending(index) || index < this._selectedIndex &&
-                    !this._steps.toArray()[index].editable) {
-                    // remove focus from clicked step header if the step is not able to be selected
-                    this._stepHeader.toArray()[index].nativeElement.blur();
-                }
-                else if (this._selectedIndex != index) {
+                if (this._selectedIndex != index &&
+                    !this._anyControlsInvalidOrPending(index) &&
+                    (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
                     this._emitStepperSelectionEvent(index);
-                    this._focusIndex = this._selectedIndex;
+                    this._keyManager.updateActiveItemIndex(this._selectedIndex);
                 }
             }
             else {
-                this._selectedIndex = this._focusIndex = index;
+                this._selectedIndex = index;
             }
         },
         enumerable: true,
@@ -270,6 +263,19 @@ var CdkStepper = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype.ngAfterViewInit = /**
+     * @return {?}
+     */
+    function () {
+        this._keyManager = new a11y.FocusKeyManager(this._stepHeader)
+            .withWrap()
+            .withHorizontalOrientation(this._layoutDirection())
+            .withVerticalOrientation(this._orientation === 'vertical');
+        this._keyManager.updateActiveItemIndex(this._selectedIndex);
+    };
     /**
      * @return {?}
      */
@@ -399,6 +405,18 @@ var CdkStepper = /** @class */ (function () {
             return step.editable ? 'edit' : 'done';
         }
     };
+    /** Returns the index of the currently-focused step header. */
+    /**
+     * Returns the index of the currently-focused step header.
+     * @return {?}
+     */
+    CdkStepper.prototype._getFocusIndex = /**
+     * Returns the index of the currently-focused step header.
+     * @return {?}
+     */
+    function () {
+        return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
+    };
     /**
      * @param {?} newIndex
      * @return {?}
@@ -428,63 +446,21 @@ var CdkStepper = /** @class */ (function () {
      */
     function (event) {
         var /** @type {?} */ keyCode = event.keyCode;
-        // Note that the left/right arrows work both in vertical and horizontal mode.
-        if (keyCode === keycodes.RIGHT_ARROW) {
-            this._layoutDirection() === 'rtl' ? this._focusPreviousStep() : this._focusNextStep();
+        if (this._keyManager.activeItemIndex != null && (keyCode === keycodes.SPACE || keyCode === keycodes.ENTER)) {
+            this.selectedIndex = this._keyManager.activeItemIndex;
             event.preventDefault();
         }
-        if (keyCode === keycodes.LEFT_ARROW) {
-            this._layoutDirection() === 'rtl' ? this._focusNextStep() : this._focusPreviousStep();
+        else if (keyCode === keycodes.HOME) {
+            this._keyManager.setFirstItemActive();
             event.preventDefault();
         }
-        // Note that the up/down arrows only work in vertical mode.
-        // See: https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel
-        if (this._orientation === 'vertical' && (keyCode === keycodes.UP_ARROW || keyCode === keycodes.DOWN_ARROW)) {
-            keyCode === keycodes.UP_ARROW ? this._focusPreviousStep() : this._focusNextStep();
+        else if (keyCode === keycodes.END) {
+            this._keyManager.setLastItemActive();
             event.preventDefault();
         }
-        if (keyCode === keycodes.SPACE || keyCode === keycodes.ENTER) {
-            this.selectedIndex = this._focusIndex;
-            event.preventDefault();
+        else {
+            this._keyManager.onKeydown(event);
         }
-        if (keyCode === keycodes.HOME) {
-            this._focusStep(0);
-            event.preventDefault();
-        }
-        if (keyCode === keycodes.END) {
-            this._focusStep(this._steps.length - 1);
-            event.preventDefault();
-        }
-    };
-    /**
-     * @return {?}
-     */
-    CdkStepper.prototype._focusNextStep = /**
-     * @return {?}
-     */
-    function () {
-        this._focusStep((this._focusIndex + 1) % this._steps.length);
-    };
-    /**
-     * @return {?}
-     */
-    CdkStepper.prototype._focusPreviousStep = /**
-     * @return {?}
-     */
-    function () {
-        this._focusStep((this._focusIndex + this._steps.length - 1) % this._steps.length);
-    };
-    /**
-     * @param {?} index
-     * @return {?}
-     */
-    CdkStepper.prototype._focusStep = /**
-     * @param {?} index
-     * @return {?}
-     */
-    function (index) {
-        this._focusIndex = index;
-        this._stepHeader.toArray()[this._focusIndex].nativeElement.focus();
     };
     /**
      * @param {?} index

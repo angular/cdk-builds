@@ -5,11 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter, QueryList, ElementRef, TemplateRef, ChangeDetectorRef, OnChanges, OnDestroy } from '@angular/core';
+import { AfterViewInit, EventEmitter, QueryList, TemplateRef, ChangeDetectorRef, OnChanges, OnDestroy } from '@angular/core';
 import { CdkStepLabel } from './step-label';
 import { AbstractControl } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
 import { Subject } from 'rxjs/Subject';
+import { FocusableOption } from '@angular/cdk/a11y';
 /**
  * Position state of the content of each step in stepper that is used for transitioning
  * the content into correct position upon step selection change.
@@ -57,15 +58,17 @@ export declare class CdkStep implements OnChanges {
     reset(): void;
     ngOnChanges(): void;
 }
-export declare class CdkStepper implements OnDestroy {
+export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
     /** Emits when the component is destroyed. */
     protected _destroyed: Subject<void>;
+    /** Used for managing keyboard focus. */
+    private _keyManager;
     /** The list of step components that the stepper is holding. */
     _steps: QueryList<CdkStep>;
     /** The list of step headers of the steps in the stepper. */
-    _stepHeader: QueryList<ElementRef>;
+    _stepHeader: QueryList<FocusableOption>;
     /** Whether the validity of previous steps should be checked or not. */
     linear: boolean;
     private _linear;
@@ -76,12 +79,11 @@ export declare class CdkStepper implements OnDestroy {
     selected: CdkStep;
     /** Event emitted when the selected step has changed. */
     selectionChange: EventEmitter<StepperSelectionEvent>;
-    /** The index of the step that the focus can be set. */
-    _focusIndex: number;
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
     protected _orientation: StepperOrientation;
     constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef);
+    ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Selects and focuses the next step in list. */
     next(): void;
@@ -99,11 +101,10 @@ export declare class CdkStepper implements OnDestroy {
     _getAnimationDirection(index: number): StepContentPositionState;
     /** Returns the type of icon to be displayed. */
     _getIndicatorType(index: number): 'number' | 'edit' | 'done';
+    /** Returns the index of the currently-focused step header. */
+    _getFocusIndex(): number | null;
     private _emitStepperSelectionEvent(newIndex);
     _onKeydown(event: KeyboardEvent): void;
-    private _focusNextStep();
-    private _focusPreviousStep();
-    private _focusStep(index);
     private _anyControlsInvalidOrPending(index);
     private _layoutDirection();
 }

@@ -6,11 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directive, TemplateRef, ContentChildren, EventEmitter, Input, Output, Component, ContentChild, ViewChild, ViewEncapsulation, Optional, Inject, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, NgModule } from '@angular/core';
-import { LEFT_ARROW, RIGHT_ARROW, DOWN_ARROW, UP_ARROW, ENTER, SPACE, HOME, END } from '@angular/cdk/keycodes';
+import { ENTER, SPACE, HOME, END } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import '@angular/forms';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { Subject } from 'rxjs/Subject';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -202,10 +203,6 @@ var CdkStepper = /** @class */ (function () {
          * Event emitted when the selected step has changed.
          */
         this.selectionChange = new EventEmitter();
-        /**
-         * The index of the step that the focus can be set.
-         */
-        this._focusIndex = 0;
         this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
@@ -239,18 +236,15 @@ var CdkStepper = /** @class */ (function () {
                 if (index < 0 || index > this._steps.length - 1) {
                     throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                 }
-                if (this._anyControlsInvalidOrPending(index) || index < this._selectedIndex &&
-                    !this._steps.toArray()[index].editable) {
-                    // remove focus from clicked step header if the step is not able to be selected
-                    this._stepHeader.toArray()[index].nativeElement.blur();
-                }
-                else if (this._selectedIndex != index) {
+                if (this._selectedIndex != index &&
+                    !this._anyControlsInvalidOrPending(index) &&
+                    (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
                     this._emitStepperSelectionEvent(index);
-                    this._focusIndex = this._selectedIndex;
+                    this._keyManager.updateActiveItemIndex(this._selectedIndex);
                 }
             }
             else {
-                this._selectedIndex = this._focusIndex = index;
+                this._selectedIndex = index;
             }
         },
         enumerable: true,
@@ -272,6 +266,19 @@ var CdkStepper = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * @return {?}
+     */
+    CdkStepper.prototype.ngAfterViewInit = /**
+     * @return {?}
+     */
+    function () {
+        this._keyManager = new FocusKeyManager(this._stepHeader)
+            .withWrap()
+            .withHorizontalOrientation(this._layoutDirection())
+            .withVerticalOrientation(this._orientation === 'vertical');
+        this._keyManager.updateActiveItemIndex(this._selectedIndex);
+    };
     /**
      * @return {?}
      */
@@ -401,6 +408,18 @@ var CdkStepper = /** @class */ (function () {
             return step.editable ? 'edit' : 'done';
         }
     };
+    /** Returns the index of the currently-focused step header. */
+    /**
+     * Returns the index of the currently-focused step header.
+     * @return {?}
+     */
+    CdkStepper.prototype._getFocusIndex = /**
+     * Returns the index of the currently-focused step header.
+     * @return {?}
+     */
+    function () {
+        return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
+    };
     /**
      * @param {?} newIndex
      * @return {?}
@@ -430,63 +449,21 @@ var CdkStepper = /** @class */ (function () {
      */
     function (event) {
         var /** @type {?} */ keyCode = event.keyCode;
-        // Note that the left/right arrows work both in vertical and horizontal mode.
-        if (keyCode === RIGHT_ARROW) {
-            this._layoutDirection() === 'rtl' ? this._focusPreviousStep() : this._focusNextStep();
+        if (this._keyManager.activeItemIndex != null && (keyCode === SPACE || keyCode === ENTER)) {
+            this.selectedIndex = this._keyManager.activeItemIndex;
             event.preventDefault();
         }
-        if (keyCode === LEFT_ARROW) {
-            this._layoutDirection() === 'rtl' ? this._focusNextStep() : this._focusPreviousStep();
+        else if (keyCode === HOME) {
+            this._keyManager.setFirstItemActive();
             event.preventDefault();
         }
-        // Note that the up/down arrows only work in vertical mode.
-        // See: https://www.w3.org/TR/wai-aria-practices-1.1/#tabpanel
-        if (this._orientation === 'vertical' && (keyCode === UP_ARROW || keyCode === DOWN_ARROW)) {
-            keyCode === UP_ARROW ? this._focusPreviousStep() : this._focusNextStep();
+        else if (keyCode === END) {
+            this._keyManager.setLastItemActive();
             event.preventDefault();
         }
-        if (keyCode === SPACE || keyCode === ENTER) {
-            this.selectedIndex = this._focusIndex;
-            event.preventDefault();
+        else {
+            this._keyManager.onKeydown(event);
         }
-        if (keyCode === HOME) {
-            this._focusStep(0);
-            event.preventDefault();
-        }
-        if (keyCode === END) {
-            this._focusStep(this._steps.length - 1);
-            event.preventDefault();
-        }
-    };
-    /**
-     * @return {?}
-     */
-    CdkStepper.prototype._focusNextStep = /**
-     * @return {?}
-     */
-    function () {
-        this._focusStep((this._focusIndex + 1) % this._steps.length);
-    };
-    /**
-     * @return {?}
-     */
-    CdkStepper.prototype._focusPreviousStep = /**
-     * @return {?}
-     */
-    function () {
-        this._focusStep((this._focusIndex + this._steps.length - 1) % this._steps.length);
-    };
-    /**
-     * @param {?} index
-     * @return {?}
-     */
-    CdkStepper.prototype._focusStep = /**
-     * @param {?} index
-     * @return {?}
-     */
-    function (index) {
-        this._focusIndex = index;
-        this._stepHeader.toArray()[this._focusIndex].nativeElement.focus();
     };
     /**
      * @param {?} index
