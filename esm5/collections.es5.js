@@ -15,9 +15,11 @@ import { Injectable, Optional, SkipSelf } from '@angular/core';
 
 /**
  * @abstract
+ * @template T
  */
 var  /**
  * @abstract
+ * @template T
  */
 DataSource = /** @class */ (function () {
     function DataSource() {
@@ -31,9 +33,11 @@ DataSource = /** @class */ (function () {
  */
 /**
  * Class to be used to power selecting one or more options from a list.
+ * @template T
  */
 var  /**
  * Class to be used to power selecting one or more options from a list.
+ * @template T
  */
 SelectionModel = /** @class */ (function () {
     function SelectionModel(_multiple, initiallySelectedValues, _emitChanges) {

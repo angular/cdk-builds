@@ -1271,13 +1271,18 @@ var /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+// unsupported: template constraints.
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
+ * @template T
  */
-var   /**
+var   
+// unsupported: template constraints.
+/**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
+ * @template T
  */
 ListKeyManager = /** @class */ (function () {
     function ListKeyManager(_items) {
@@ -1737,7 +1742,13 @@ ListKeyManager = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var ActiveDescendantKeyManager = /** @class */ (function (_super) {
+/**
+ * @template T
+ */
+var   /**
+ * @template T
+ */
+ActiveDescendantKeyManager = /** @class */ (function (_super) {
     __extends(ActiveDescendantKeyManager, _super);
     function ActiveDescendantKeyManager() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -1766,7 +1777,13 @@ var ActiveDescendantKeyManager = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var FocusKeyManager = /** @class */ (function (_super) {
+/**
+ * @template T
+ */
+var   /**
+ * @template T
+ */
+FocusKeyManager = /** @class */ (function (_super) {
     __extends(FocusKeyManager, _super);
     function FocusKeyManager() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

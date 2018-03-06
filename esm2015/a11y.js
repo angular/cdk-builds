@@ -990,9 +990,11 @@ const /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+// unsupported: template constraints.
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
+ * @template T
  */
 class ListKeyManager {
     /**
@@ -1306,6 +1308,9 @@ class ListKeyManager {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * @template T
+ */
 class ActiveDescendantKeyManager extends ListKeyManager {
     /**
      * @param {?} index
@@ -1325,6 +1330,9 @@ class ActiveDescendantKeyManager extends ListKeyManager {
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * @template T
  */
 class FocusKeyManager extends ListKeyManager {
     constructor() {

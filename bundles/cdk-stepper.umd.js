@@ -167,7 +167,6 @@ var CdkStep = /** @class */ (function () {
                     exportAs: 'cdkStep',
                     template: "<ng-template><ng-content></ng-content></ng-template>",
                     encapsulation: core.ViewEncapsulation.None,
-                    preserveWhitespaces: false,
                     changeDetection: core.ChangeDetectionStrategy.OnPush,
                 },] },
     ];

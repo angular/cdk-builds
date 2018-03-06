@@ -25,6 +25,7 @@ import { CommonModule } from '@angular/common';
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
+ * @template T
  */
 class BaseTreeControl {
     constructor() {
@@ -110,6 +111,7 @@ class BaseTreeControl {
  */
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ * @template T
  */
 class FlatTreeControl extends BaseTreeControl {
     /**
@@ -162,6 +164,7 @@ class FlatTreeControl extends BaseTreeControl {
  */
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ * @template T
  */
 class NestedTreeControl extends BaseTreeControl {
     /**
@@ -217,6 +220,7 @@ class NestedTreeControl extends BaseTreeControl {
  */
 /**
  * Context provided to the tree node component.
+ * @template T
  */
 class CdkTreeNodeOutletContext {
     /**
@@ -229,6 +233,7 @@ class CdkTreeNodeOutletContext {
 /**
  * Data node definition for the CdkTree.
  * Captures the node's template and a when predicate that describes when this node should be used.
+ * @template T
  */
 class CdkTreeNodeDef {
     /**
@@ -330,6 +335,7 @@ function getTreeControlFunctionsMissingError() {
  */
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
+ * @template T
  */
 class CdkTreeNode {
     /**
@@ -435,6 +441,7 @@ CdkTreeNode.propDecorators = {
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
+ * @template T
  */
 class CdkTree {
     /**
@@ -632,7 +639,6 @@ CdkTree.decorators = [
                     'role': 'tree',
                 },
                 encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
                 changeDetection: ChangeDetectionStrategy.OnPush
             },] },
 ];
@@ -672,6 +678,7 @@ CdkTree.propDecorators = {
  *      <cdk-nested-tree-node>{{child2.name}}</cdk-tree-node>
  *   </cdk-tree-node>
  *   ```
+ * @template T
  */
 class CdkNestedTreeNode extends CdkTreeNode {
     /**
@@ -760,6 +767,7 @@ CdkNestedTreeNode.propDecorators = {
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
+ * @template T
  */
 class CdkTreeNodePadding {
     /**
@@ -862,6 +870,7 @@ CdkTreeNodePadding.propDecorators = {
  */
 /**
  * Node toggle to expand/collapse the node.
+ * @template T
  */
 class CdkTreeNodeToggle {
     /**

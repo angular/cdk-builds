@@ -71,11 +71,13 @@ function throwNoPortalAttachedError() {
  * A `Portal` is something that you want to render somewhere else.
  * It can be attach to / detached from a `PortalOutlet`.
  * @abstract
+ * @template T
  */
 var  /**
  * A `Portal` is something that you want to render somewhere else.
  * It can be attach to / detached from a `PortalOutlet`.
  * @abstract
+ * @template T
  */
 Portal = /** @class */ (function () {
     function Portal() {
@@ -155,9 +157,11 @@ Portal = /** @class */ (function () {
 }());
 /**
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
+ * @template T
  */
 var  /**
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
+ * @template T
  */
 ComponentPortal = /** @class */ (function (_super) {
     __extends(ComponentPortal, _super);
@@ -172,9 +176,11 @@ ComponentPortal = /** @class */ (function (_super) {
 }(Portal));
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
+ * @template C
  */
 var  /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
+ * @template C
  */
 TemplatePortal = /** @class */ (function (_super) {
     __extends(TemplatePortal, _super);

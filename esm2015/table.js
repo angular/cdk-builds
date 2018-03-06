@@ -88,6 +88,7 @@ CdkHeaderRowDef.ctorParameters = () => [
  * Data row definition for the CDK table.
  * Captures the header row's template and other row properties such as the columns to display and
  * a when predicate that describes when this row should be used.
+ * @template T
  */
 class CdkRowDef extends BaseRowDef {
     /**
@@ -151,7 +152,6 @@ CdkHeaderRow.decorators = [
                 },
                 changeDetection: ChangeDetectionStrategy.OnPush,
                 encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
             },] },
 ];
 /** @nocollapse */
@@ -170,7 +170,6 @@ CdkRow.decorators = [
                 },
                 changeDetection: ChangeDetectionStrategy.OnPush,
                 encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
             },] },
 ];
 /** @nocollapse */
@@ -416,6 +415,7 @@ const /** @type {?} */ CDK_TABLE_TEMPLATE = `
  * the data to be rendered. The data can be provided either as a data array, an Observable stream
  * that emits the data array to render, or a DataSource with a connect function that will
  * return an Observable stream that emits the data array to render.
+ * @template T
  */
 class CdkTable {
     /**
@@ -873,7 +873,6 @@ CdkTable.decorators = [
                     'class': 'cdk-table',
                 },
                 encapsulation: ViewEncapsulation.None,
-                preserveWhitespaces: false,
                 changeDetection: ChangeDetectionStrategy.OnPush,
             },] },
 ];

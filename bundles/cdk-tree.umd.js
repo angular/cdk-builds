@@ -44,10 +44,12 @@ function __extends(d, b) {
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
+ * @template T
  */
 var   /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
+ * @template T
  */
 BaseTreeControl = /** @class */ (function () {
     function BaseTreeControl() {
@@ -183,9 +185,11 @@ BaseTreeControl = /** @class */ (function () {
  */
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ * @template T
  */
 var   /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
+ * @template T
  */
 FlatTreeControl = /** @class */ (function (_super) {
     __extends(FlatTreeControl, _super);
@@ -265,9 +269,11 @@ FlatTreeControl = /** @class */ (function (_super) {
  */
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ * @template T
  */
 var   /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
+ * @template T
  */
 NestedTreeControl = /** @class */ (function (_super) {
     __extends(NestedTreeControl, _super);
@@ -352,9 +358,11 @@ NestedTreeControl = /** @class */ (function (_super) {
  */
 /**
  * Context provided to the tree node component.
+ * @template T
  */
 var   /**
  * Context provided to the tree node component.
+ * @template T
  */
 CdkTreeNodeOutletContext = /** @class */ (function () {
     function CdkTreeNodeOutletContext(data) {
@@ -365,6 +373,7 @@ CdkTreeNodeOutletContext = /** @class */ (function () {
 /**
  * Data node definition for the CdkTree.
  * Captures the node's template and a when predicate that describes when this node should be used.
+ * @template T
  */
 var CdkTreeNodeDef = /** @class */ (function () {
     /** @docs-private */
@@ -462,6 +471,7 @@ function getTreeControlFunctionsMissingError() {
  */
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
+ * @template T
  */
 var CdkTreeNode = /** @class */ (function () {
     function CdkTreeNode(_elementRef, _tree) {
@@ -589,6 +599,7 @@ var CdkTreeNode = /** @class */ (function () {
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
+ * @template T
  */
 var CdkTree = /** @class */ (function () {
     function CdkTree(_differs, _changeDetectorRef) {
@@ -839,7 +850,6 @@ var CdkTree = /** @class */ (function () {
                         'role': 'tree',
                     },
                     encapsulation: core.ViewEncapsulation.None,
-                    preserveWhitespaces: false,
                     changeDetection: core.ChangeDetectionStrategy.OnPush
                 },] },
     ];
@@ -881,6 +891,7 @@ var CdkTree = /** @class */ (function () {
  *      <cdk-nested-tree-node>{{child2.name}}</cdk-tree-node>
  *   </cdk-tree-node>
  *   ```
+ * @template T
  */
 var CdkNestedTreeNode = /** @class */ (function (_super) {
     __extends(CdkNestedTreeNode, _super);
@@ -988,6 +999,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
+ * @template T
  */
 var CdkTreeNodePadding = /** @class */ (function () {
     function CdkTreeNodePadding(_treeNode, _tree, _renderer, _element, _dir) {
@@ -1104,6 +1116,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
  */
 /**
  * Node toggle to expand/collapse the node.
+ * @template T
  */
 var CdkTreeNodeToggle = /** @class */ (function () {
     function CdkTreeNodeToggle(_tree, _treeNode) {

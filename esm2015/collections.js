@@ -15,6 +15,7 @@ import { Injectable, Optional, SkipSelf } from '@angular/core';
 
 /**
  * @abstract
+ * @template T
  */
 class DataSource {
 }
@@ -25,6 +26,7 @@ class DataSource {
  */
 /**
  * Class to be used to power selecting one or more options from a list.
+ * @template T
  */
 class SelectionModel {
     /**
