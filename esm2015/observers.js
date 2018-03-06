@@ -167,5 +167,5 @@ ObserversModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { CdkObserveContent as ObserveContent, MutationObserverFactory, CdkObserveContent, ObserversModule };
+export { MutationObserverFactory, CdkObserveContent, ObserversModule };
 //# sourceMappingURL=observers.js.map

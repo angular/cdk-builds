@@ -185,7 +185,6 @@ var ObserversModule = /** @class */ (function () {
     return ObserversModule;
 }());
 
-exports.ObserveContent = CdkObserveContent;
 exports.MutationObserverFactory = MutationObserverFactory;
 exports.CdkObserveContent = CdkObserveContent;
 exports.ObserversModule = ObserversModule;
