@@ -13,25 +13,22 @@ import { OverlayRef } from '../overlay-ref';
  * on event target and order of overlay opens.
  */
 export declare class OverlayKeyboardDispatcher implements OnDestroy {
-    private _document;
     /** Currently attached overlays in the order they were attached. */
     _attachedOverlays: OverlayRef[];
-    private _keydownEventSubscription;
-    constructor(_document: any);
+    private _document;
+    private _isAttached;
+    constructor(document: any);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
     /** Remove an overlay from the list of attached overlay refs. */
     remove(overlayRef: OverlayRef): void;
-    /**
-     * Subscribe to keydown events that land on the body and dispatch those
-     * events to the appropriate overlay.
-     */
-    private _subscribeToKeydownEvents();
-    /** Removes the global keydown subscription. */
-    private _unsubscribeFromKeydownEvents();
     /** Select the appropriate overlay from a keydown event. */
     private _selectOverlayFromEvent(event);
+    /** Detaches the global keyboard event listener. */
+    private _detach();
+    /** Keyboard event listener that will be attached to the body. */
+    private _keydownListener;
 }
 /** @docs-private */
 export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;

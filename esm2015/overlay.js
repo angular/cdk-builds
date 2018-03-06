@@ -12,8 +12,6 @@ import { DOCUMENT } from '@angular/common';
 import { take } from 'rxjs/operators/take';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { filter } from 'rxjs/operators/filter';
-import { fromEvent } from 'rxjs/observable/fromEvent';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -1538,20 +1536,29 @@ OverlayPositionBuilder.ctorParameters = () => [
  */
 class OverlayKeyboardDispatcher {
     /**
-     * @param {?} _document
+     * @param {?} document
      */
-    constructor(_document) {
-        this._document = _document;
+    constructor(document) {
         /**
          * Currently attached overlays in the order they were attached.
          */
         this._attachedOverlays = [];
+        /**
+         * Keyboard event listener that will be attached to the body.
+         */
+        this._keydownListener = (event) => {
+            if (this._attachedOverlays.length) {
+                // Dispatch keydown event to the correct overlay.
+                this._selectOverlayFromEvent(event)._keydownEvents.next(event);
+            }
+        };
+        this._document = document;
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
-        this._unsubscribeFromKeydownEvents();
+        this._detach();
     }
     /**
      * Add a new overlay to the list of attached overlay refs.
@@ -1560,8 +1567,9 @@ class OverlayKeyboardDispatcher {
      */
     add(overlayRef) {
         // Lazily start dispatcher once first overlay is added
-        if (!this._keydownEventSubscription) {
-            this._subscribeToKeydownEvents();
+        if (!this._isAttached) {
+            this._document.body.addEventListener('keydown', this._keydownListener, true);
+            this._isAttached = true;
         }
         this._attachedOverlays.push(overlayRef);
     }
@@ -1577,29 +1585,7 @@ class OverlayKeyboardDispatcher {
         }
         // Remove the global listener once there are no more overlays.
         if (this._attachedOverlays.length === 0) {
-            this._unsubscribeFromKeydownEvents();
-        }
-    }
-    /**
-     * Subscribe to keydown events that land on the body and dispatch those
-     * events to the appropriate overlay.
-     * @return {?}
-     */
-    _subscribeToKeydownEvents() {
-        const /** @type {?} */ bodyKeydownEvents = fromEvent(this._document.body, 'keydown', true);
-        this._keydownEventSubscription = bodyKeydownEvents.pipe(filter(() => !!this._attachedOverlays.length)).subscribe(event => {
-            // Dispatch keydown event to the correct overlay.
-            this._selectOverlayFromEvent(event)._keydownEvents.next(event);
-        });
-    }
-    /**
-     * Removes the global keydown subscription.
-     * @return {?}
-     */
-    _unsubscribeFromKeydownEvents() {
-        if (this._keydownEventSubscription) {
-            this._keydownEventSubscription.unsubscribe();
-            this._keydownEventSubscription = null;
+            this._detach();
         }
     }
     /**
@@ -1615,6 +1601,16 @@ class OverlayKeyboardDispatcher {
         });
         // Use the overlay if it exists, otherwise choose the most recently attached one
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
+    }
+    /**
+     * Detaches the global keyboard event listener.
+     * @return {?}
+     */
+    _detach() {
+        if (this._isAttached) {
+            this._document.body.removeEventListener('keydown', this._keydownListener, true);
+            this._isAttached = false;
+        }
     }
 }
 OverlayKeyboardDispatcher.decorators = [

@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('rxjs/operators/filter'), require('rxjs/observable/fromEvent'), require('@angular/cdk/portal'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/common', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', 'rxjs/operators/filter', 'rxjs/observable/fromEvent', '@angular/cdk/portal', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.scrolling,global.ng.common,global.Rx.operators,global.Rx,global.Rx,global.Rx.operators,global.Rx.Observable,global.ng.cdk.portal,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,core,scrolling,common,take,Subject,Subscription,filter,fromEvent,portal,bidi,coercion,keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/portal'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/common', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/portal', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.scrolling,global.ng.common,global.Rx.operators,global.Rx,global.Rx,global.ng.cdk.portal,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,core,scrolling,common,take,Subject,Subscription,portal,bidi,coercion,keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -2103,12 +2103,23 @@ var OverlayPositionBuilder = /** @class */ (function () {
  * on event target and order of overlay opens.
  */
 var OverlayKeyboardDispatcher = /** @class */ (function () {
-    function OverlayKeyboardDispatcher(_document) {
-        this._document = _document;
+    function OverlayKeyboardDispatcher(document) {
+        var _this = this;
         /**
          * Currently attached overlays in the order they were attached.
          */
         this._attachedOverlays = [];
+        /**
+         * Keyboard event listener that will be attached to the body.
+         */
+        this._keydownListener = function (event) {
+            if (_this._attachedOverlays.length) {
+                // Dispatch keydown event to the correct overlay.
+                // Dispatch keydown event to the correct overlay.
+                _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
+            }
+        };
+        this._document = document;
     }
     /**
      * @return {?}
@@ -2117,7 +2128,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._unsubscribeFromKeydownEvents();
+        this._detach();
     };
     /** Add a new overlay to the list of attached overlay refs. */
     /**
@@ -2132,8 +2143,9 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
      */
     function (overlayRef) {
         // Lazily start dispatcher once first overlay is added
-        if (!this._keydownEventSubscription) {
-            this._subscribeToKeydownEvents();
+        if (!this._isAttached) {
+            this._document.body.addEventListener('keydown', this._keydownListener, true);
+            this._isAttached = true;
         }
         this._attachedOverlays.push(overlayRef);
     };
@@ -2155,40 +2167,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
         }
         // Remove the global listener once there are no more overlays.
         if (this._attachedOverlays.length === 0) {
-            this._unsubscribeFromKeydownEvents();
-        }
-    };
-    /**
-     * Subscribe to keydown events that land on the body and dispatch those
-     * events to the appropriate overlay.
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._subscribeToKeydownEvents = /**
-     * Subscribe to keydown events that land on the body and dispatch those
-     * events to the appropriate overlay.
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        var /** @type {?} */ bodyKeydownEvents = fromEvent.fromEvent(this._document.body, 'keydown', true);
-        this._keydownEventSubscription = bodyKeydownEvents.pipe(filter.filter(function () { return !!_this._attachedOverlays.length; })).subscribe(function (event) {
-            // Dispatch keydown event to the correct overlay.
-            // Dispatch keydown event to the correct overlay.
-            _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
-        });
-    };
-    /**
-     * Removes the global keydown subscription.
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._unsubscribeFromKeydownEvents = /**
-     * Removes the global keydown subscription.
-     * @return {?}
-     */
-    function () {
-        if (this._keydownEventSubscription) {
-            this._keydownEventSubscription.unsubscribe();
-            this._keydownEventSubscription = null;
+            this._detach();
         }
     };
     /**
@@ -2209,6 +2188,20 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
         });
         // Use the overlay if it exists, otherwise choose the most recently attached one
         return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
+    };
+    /**
+     * Detaches the global keyboard event listener.
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype._detach = /**
+     * Detaches the global keyboard event listener.
+     * @return {?}
+     */
+    function () {
+        if (this._isAttached) {
+            this._document.body.removeEventListener('keydown', this._keydownListener, true);
+            this._isAttached = false;
+        }
     };
     OverlayKeyboardDispatcher.decorators = [
         { type: core.Injectable },
