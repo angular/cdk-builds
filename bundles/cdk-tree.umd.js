@@ -1087,7 +1087,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
      */
     function () {
         var /** @type {?} */ padding = this._paddingIndent();
-        var /** @type {?} */ paddingProp = this._dir && this._dir.value === 'rtl' ? 'padding-right' : 'padding-left';
+        var /** @type {?} */ paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
         this._renderer.setStyle(this._element.nativeElement, paddingProp, padding);
     };
     CdkTreeNodePadding.decorators = [
