@@ -5,10 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, Directive, ElementRef, Input, NgZone, Inject, Optional, SkipSelf, InjectionToken, EventEmitter, Output, Renderer2, NgModule } from '@angular/core';
-import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { take } from 'rxjs/operators/take';
+import { Injectable, Inject, Optional, SkipSelf, Directive, ElementRef, Input, NgZone, InjectionToken, EventEmitter, Output, NgModule } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -17,687 +14,10 @@ import { debounceTime } from 'rxjs/operators/debounceTime';
 import { filter } from 'rxjs/operators/filter';
 import { map } from 'rxjs/operators/map';
 import { tap } from 'rxjs/operators/tap';
+import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { take } from 'rxjs/operators/take';
 import { of } from 'rxjs/observable/of';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Utility for checking the interactivity of an element, such as whether is is focusable or
- * tabbable.
- */
-class InteractivityChecker {
-    /**
-     * @param {?} _platform
-     */
-    constructor(_platform) {
-        this._platform = _platform;
-    }
-    /**
-     * Gets whether an element is disabled.
-     *
-     * @param {?} element Element to be checked.
-     * @return {?} Whether the element is disabled.
-     */
-    isDisabled(element) {
-        // This does not capture some cases, such as a non-form control with a disabled attribute or
-        // a form control inside of a disabled form, but should capture the most common cases.
-        return element.hasAttribute('disabled');
-    }
-    /**
-     * Gets whether an element is visible for the purposes of interactivity.
-     *
-     * This will capture states like `display: none` and `visibility: hidden`, but not things like
-     * being clipped by an `overflow: hidden` parent or being outside the viewport.
-     *
-     * @param {?} element
-     * @return {?} Whether the element is visible.
-     */
-    isVisible(element) {
-        return hasGeometry(element) && getComputedStyle(element).visibility === 'visible';
-    }
-    /**
-     * Gets whether an element can be reached via Tab key.
-     * Assumes that the element has already been checked with isFocusable.
-     *
-     * @param {?} element Element to be checked.
-     * @return {?} Whether the element is tabbable.
-     */
-    isTabbable(element) {
-        // Nothing is tabbable on the the server 😎
-        if (!this._platform.isBrowser) {
-            return false;
-        }
-        const /** @type {?} */ frameElement = getFrameElement(getWindow(element));
-        if (frameElement) {
-            const /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
-            // Frame elements inherit their tabindex onto all child elements.
-            if (getTabIndexValue(frameElement) === -1) {
-                return false;
-            }
-            // Webkit and Blink consider anything inside of an <object> element as non-tabbable.
-            if ((this._platform.BLINK || this._platform.WEBKIT) && frameType === 'object') {
-                return false;
-            }
-            // Webkit and Blink disable tabbing to an element inside of an invisible frame.
-            if ((this._platform.BLINK || this._platform.WEBKIT) && !this.isVisible(frameElement)) {
-                return false;
-            }
-        }
-        let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-        let /** @type {?} */ tabIndexValue = getTabIndexValue(element);
-        if (element.hasAttribute('contenteditable')) {
-            return tabIndexValue !== -1;
-        }
-        if (nodeName === 'iframe') {
-            // The frames may be tabbable depending on content, but it's not possibly to reliably
-            // investigate the content of the frames.
-            return false;
-        }
-        if (nodeName === 'audio') {
-            if (!element.hasAttribute('controls')) {
-                // By default an <audio> element without the controls enabled is not tabbable.
-                return false;
-            }
-            else if (this._platform.BLINK) {
-                // In Blink <audio controls> elements are always tabbable.
-                return true;
-            }
-        }
-        if (nodeName === 'video') {
-            if (!element.hasAttribute('controls') && this._platform.TRIDENT) {
-                // In Trident a <video> element without the controls enabled is not tabbable.
-                return false;
-            }
-            else if (this._platform.BLINK || this._platform.FIREFOX) {
-                // In Chrome and Firefox <video controls> elements are always tabbable.
-                return true;
-            }
-        }
-        if (nodeName === 'object' && (this._platform.BLINK || this._platform.WEBKIT)) {
-            // In all Blink and WebKit based browsers <object> elements are never tabbable.
-            return false;
-        }
-        // In iOS the browser only considers some specific elements as tabbable.
-        if (this._platform.WEBKIT && this._platform.IOS && !isPotentiallyTabbableIOS(element)) {
-            return false;
-        }
-        return element.tabIndex >= 0;
-    }
-    /**
-     * Gets whether an element can be focused by the user.
-     *
-     * @param {?} element Element to be checked.
-     * @return {?} Whether the element is focusable.
-     */
-    isFocusable(element) {
-        // Perform checks in order of left to most expensive.
-        // Again, naive approach that does not capture many edge cases and browser quirks.
-        return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
-    }
-}
-InteractivityChecker.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-InteractivityChecker.ctorParameters = () => [
-    { type: Platform, },
-];
-/**
- * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
- * the frameElement property is being accessed from a different host address, this property
- * should be accessed carefully.
- * @param {?} window
- * @return {?}
- */
-function getFrameElement(window) {
-    try {
-        return /** @type {?} */ (window.frameElement);
-    }
-    catch (/** @type {?} */ e) {
-        return null;
-    }
-}
-/**
- * Checks whether the specified element has any geometry / rectangles.
- * @param {?} element
- * @return {?}
- */
-function hasGeometry(element) {
-    // Use logic from jQuery to check for an invisible element.
-    // See https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js#L12
-    return !!(element.offsetWidth || element.offsetHeight ||
-        (typeof element.getClientRects === 'function' && element.getClientRects().length));
-}
-/**
- * Gets whether an element's
- * @param {?} element
- * @return {?}
- */
-function isNativeFormElement(element) {
-    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-    return nodeName === 'input' ||
-        nodeName === 'select' ||
-        nodeName === 'button' ||
-        nodeName === 'textarea';
-}
-/**
- * Gets whether an element is an `<input type="hidden">`.
- * @param {?} element
- * @return {?}
- */
-function isHiddenInput(element) {
-    return isInputElement(element) && element.type == 'hidden';
-}
-/**
- * Gets whether an element is an anchor that has an href attribute.
- * @param {?} element
- * @return {?}
- */
-function isAnchorWithHref(element) {
-    return isAnchorElement(element) && element.hasAttribute('href');
-}
-/**
- * Gets whether an element is an input element.
- * @param {?} element
- * @return {?}
- */
-function isInputElement(element) {
-    return element.nodeName.toLowerCase() == 'input';
-}
-/**
- * Gets whether an element is an anchor element.
- * @param {?} element
- * @return {?}
- */
-function isAnchorElement(element) {
-    return element.nodeName.toLowerCase() == 'a';
-}
-/**
- * Gets whether an element has a valid tabindex.
- * @param {?} element
- * @return {?}
- */
-function hasValidTabIndex(element) {
-    if (!element.hasAttribute('tabindex') || element.tabIndex === undefined) {
-        return false;
-    }
-    let /** @type {?} */ tabIndex = element.getAttribute('tabindex');
-    // IE11 parses tabindex="" as the value "-32768"
-    if (tabIndex == '-32768') {
-        return false;
-    }
-    return !!(tabIndex && !isNaN(parseInt(tabIndex, 10)));
-}
-/**
- * Returns the parsed tabindex from the element attributes instead of returning the
- * evaluated tabindex from the browsers defaults.
- * @param {?} element
- * @return {?}
- */
-function getTabIndexValue(element) {
-    if (!hasValidTabIndex(element)) {
-        return null;
-    }
-    // See browser issue in Gecko https://bugzilla.mozilla.org/show_bug.cgi?id=1128054
-    const /** @type {?} */ tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
-    return isNaN(tabIndex) ? -1 : tabIndex;
-}
-/**
- * Checks whether the specified element is potentially tabbable on iOS
- * @param {?} element
- * @return {?}
- */
-function isPotentiallyTabbableIOS(element) {
-    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-    let /** @type {?} */ inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
-    return inputType === 'text'
-        || inputType === 'password'
-        || nodeName === 'select'
-        || nodeName === 'textarea';
-}
-/**
- * Gets whether an element is potentially focusable without taking current visible/disabled state
- * into account.
- * @param {?} element
- * @return {?}
- */
-function isPotentiallyFocusable(element) {
-    // Inputs are potentially focusable *unless* they're type="hidden".
-    if (isHiddenInput(element)) {
-        return false;
-    }
-    return isNativeFormElement(element) ||
-        isAnchorWithHref(element) ||
-        element.hasAttribute('contenteditable') ||
-        hasValidTabIndex(element);
-}
-/**
- * Gets the parent window of a DOM node with regards of being inside of an iframe.
- * @param {?} node
- * @return {?}
- */
-function getWindow(node) {
-    return node.ownerDocument.defaultView || window;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Class that allows for trapping focus within a DOM element.
- *
- * This class currently uses a relatively simple approach to focus trapping.
- * It assumes that the tab order is the same as DOM order, which is not necessarily true.
- * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
- */
-class FocusTrap {
-    /**
-     * @param {?} _element
-     * @param {?} _checker
-     * @param {?} _ngZone
-     * @param {?} _document
-     * @param {?=} deferAnchors
-     */
-    constructor(_element, _checker, _ngZone, _document, deferAnchors = false) {
-        this._element = _element;
-        this._checker = _checker;
-        this._ngZone = _ngZone;
-        this._document = _document;
-        this._enabled = true;
-        if (!deferAnchors) {
-            this.attachAnchors();
-        }
-    }
-    /**
-     * Whether the focus trap is active.
-     * @return {?}
-     */
-    get enabled() { return this._enabled; }
-    /**
-     * @param {?} val
-     * @return {?}
-     */
-    set enabled(val) {
-        this._enabled = val;
-        if (this._startAnchor && this._endAnchor) {
-            this._startAnchor.tabIndex = this._endAnchor.tabIndex = this._enabled ? 0 : -1;
-        }
-    }
-    /**
-     * Destroys the focus trap by cleaning up the anchors.
-     * @return {?}
-     */
-    destroy() {
-        if (this._startAnchor && this._startAnchor.parentNode) {
-            this._startAnchor.parentNode.removeChild(this._startAnchor);
-        }
-        if (this._endAnchor && this._endAnchor.parentNode) {
-            this._endAnchor.parentNode.removeChild(this._endAnchor);
-        }
-        this._startAnchor = this._endAnchor = null;
-    }
-    /**
-     * Inserts the anchors into the DOM. This is usually done automatically
-     * in the constructor, but can be deferred for cases like directives with `*ngIf`.
-     * @return {?}
-     */
-    attachAnchors() {
-        if (!this._startAnchor) {
-            this._startAnchor = this._createAnchor();
-        }
-        if (!this._endAnchor) {
-            this._endAnchor = this._createAnchor();
-        }
-        this._ngZone.runOutsideAngular(() => {
-            /** @type {?} */ ((this._startAnchor)).addEventListener('focus', () => {
-                this.focusLastTabbableElement();
-            }); /** @type {?} */
-            ((this._endAnchor)).addEventListener('focus', () => {
-                this.focusFirstTabbableElement();
-            });
-            if (this._element.parentNode) {
-                this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
-                this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
-            }
-        });
-    }
-    /**
-     * Waits for the zone to stabilize, then either focuses the first element that the
-     * user specified, or the first tabbable element.
-     * @return {?} Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
-     */
-    focusInitialElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusInitialElement()));
-        });
-    }
-    /**
-     * Waits for the zone to stabilize, then focuses
-     * the first tabbable element within the focus trap region.
-     * @return {?} Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
-     */
-    focusFirstTabbableElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusFirstTabbableElement()));
-        });
-    }
-    /**
-     * Waits for the zone to stabilize, then focuses
-     * the last tabbable element within the focus trap region.
-     * @return {?} Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
-     */
-    focusLastTabbableElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusLastTabbableElement()));
-        });
-    }
-    /**
-     * Get the specified boundary element of the trapped region.
-     * @param {?} bound The boundary to get (start or end of trapped region).
-     * @return {?} The boundary element.
-     */
-    _getRegionBoundary(bound) {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        let /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
-            `[cdkFocusRegion${bound}], ` +
-            `[cdk-focus-${bound}]`));
-        for (let /** @type {?} */ i = 0; i < markers.length; i++) {
-            if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
-                console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}',` +
-                    ` use 'cdkFocusRegion${bound}' instead.`, markers[i]);
-            }
-            else if (markers[i].hasAttribute(`cdk-focus-region-${bound}`)) {
-                console.warn(`Found use of deprecated attribute 'cdk-focus-region-${bound}',` +
-                    ` use 'cdkFocusRegion${bound}' instead.`, markers[i]);
-            }
-        }
-        if (bound == 'start') {
-            return markers.length ? markers[0] : this._getFirstTabbableElement(this._element);
-        }
-        return markers.length ?
-            markers[markers.length - 1] : this._getLastTabbableElement(this._element);
-    }
-    /**
-     * Focuses the element that should be focused when the focus trap is initialized.
-     * @return {?} Whether focus was moved successfuly.
-     */
-    focusInitialElement() {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        const /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
-            `[cdkFocusInitial]`));
-        if (this._element.hasAttribute(`cdk-focus-initial`)) {
-            console.warn(`Found use of deprecated attribute 'cdk-focus-initial',` +
-                ` use 'cdkFocusInitial' instead.`, this._element);
-        }
-        if (redirectToElement) {
-            redirectToElement.focus();
-            return true;
-        }
-        return this.focusFirstTabbableElement();
-    }
-    /**
-     * Focuses the first tabbable element within the focus trap region.
-     * @return {?} Whether focus was moved successfuly.
-     */
-    focusFirstTabbableElement() {
-        const /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
-        if (redirectToElement) {
-            redirectToElement.focus();
-        }
-        return !!redirectToElement;
-    }
-    /**
-     * Focuses the last tabbable element within the focus trap region.
-     * @return {?} Whether focus was moved successfuly.
-     */
-    focusLastTabbableElement() {
-        const /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
-        if (redirectToElement) {
-            redirectToElement.focus();
-        }
-        return !!redirectToElement;
-    }
-    /**
-     * Get the first tabbable element from a DOM subtree (inclusive).
-     * @param {?} root
-     * @return {?}
-     */
-    _getFirstTabbableElement(root) {
-        if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
-            return root;
-        }
-        // Iterate in DOM order. Note that IE doesn't have `children` for SVG so we fall
-        // back to `childNodes` which includes text nodes, comments etc.
-        let /** @type {?} */ children = root.children || root.childNodes;
-        for (let /** @type {?} */ i = 0; i < children.length; i++) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
-                this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
-                null;
-            if (tabbableChild) {
-                return tabbableChild;
-            }
-        }
-        return null;
-    }
-    /**
-     * Get the last tabbable element from a DOM subtree (inclusive).
-     * @param {?} root
-     * @return {?}
-     */
-    _getLastTabbableElement(root) {
-        if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
-            return root;
-        }
-        // Iterate in reverse DOM order.
-        let /** @type {?} */ children = root.children || root.childNodes;
-        for (let /** @type {?} */ i = children.length - 1; i >= 0; i--) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
-                this._getLastTabbableElement(/** @type {?} */ (children[i])) :
-                null;
-            if (tabbableChild) {
-                return tabbableChild;
-            }
-        }
-        return null;
-    }
-    /**
-     * Creates an anchor element.
-     * @return {?}
-     */
-    _createAnchor() {
-        const /** @type {?} */ anchor = this._document.createElement('div');
-        anchor.tabIndex = this._enabled ? 0 : -1;
-        anchor.classList.add('cdk-visually-hidden');
-        anchor.classList.add('cdk-focus-trap-anchor');
-        return anchor;
-    }
-    /**
-     * Executes a function when the zone is stable.
-     * @param {?} fn
-     * @return {?}
-     */
-    _executeOnStable(fn) {
-        if (this._ngZone.isStable) {
-            fn();
-        }
-        else {
-            this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(fn);
-        }
-    }
-}
-/**
- * Factory that allows easy instantiation of focus traps.
- */
-class FocusTrapFactory {
-    /**
-     * @param {?} _checker
-     * @param {?} _ngZone
-     * @param {?} _document
-     */
-    constructor(_checker, _ngZone, _document) {
-        this._checker = _checker;
-        this._ngZone = _ngZone;
-        this._document = _document;
-    }
-    /**
-     * Creates a focus-trapped region around the given element.
-     * @param {?} element The element around which focus will be trapped.
-     * @param {?=} deferCaptureElements Defers the creation of focus-capturing elements to be done
-     *     manually by the user.
-     * @return {?} The created focus trap instance.
-     */
-    create(element, deferCaptureElements = false) {
-        return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
-    }
-}
-FocusTrapFactory.decorators = [
-    { type: Injectable },
-];
-/** @nocollapse */
-FocusTrapFactory.ctorParameters = () => [
-    { type: InteractivityChecker, },
-    { type: NgZone, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
-/**
- * Directive for trapping focus within a region.
- * \@docs-private
- * @deprecated
- * \@deletion-target 6.0.0
- */
-class FocusTrapDeprecatedDirective {
-    /**
-     * @param {?} _elementRef
-     * @param {?} _focusTrapFactory
-     */
-    constructor(_elementRef, _focusTrapFactory) {
-        this._elementRef = _elementRef;
-        this._focusTrapFactory = _focusTrapFactory;
-        this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
-    }
-    /**
-     * Whether the focus trap is active.
-     * @return {?}
-     */
-    get disabled() { return !this.focusTrap.enabled; }
-    /**
-     * @param {?} val
-     * @return {?}
-     */
-    set disabled(val) {
-        this.focusTrap.enabled = !coerceBooleanProperty(val);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this.focusTrap.destroy();
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        this.focusTrap.attachAnchors();
-    }
-}
-FocusTrapDeprecatedDirective.decorators = [
-    { type: Directive, args: [{
-                selector: 'cdk-focus-trap',
-            },] },
-];
-/** @nocollapse */
-FocusTrapDeprecatedDirective.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusTrapFactory, },
-];
-FocusTrapDeprecatedDirective.propDecorators = {
-    "disabled": [{ type: Input },],
-};
-/**
- * Directive for trapping focus within a region.
- */
-class CdkTrapFocus {
-    /**
-     * @param {?} _elementRef
-     * @param {?} _focusTrapFactory
-     * @param {?} _document
-     */
-    constructor(_elementRef, _focusTrapFactory, _document) {
-        this._elementRef = _elementRef;
-        this._focusTrapFactory = _focusTrapFactory;
-        /**
-         * Previously focused element to restore focus to upon destroy when using autoCapture.
-         */
-        this._previouslyFocusedElement = null;
-        this._document = _document;
-        this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
-    }
-    /**
-     * Whether the focus trap is active.
-     * @return {?}
-     */
-    get enabled() { return this.focusTrap.enabled; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set enabled(value) { this.focusTrap.enabled = coerceBooleanProperty(value); }
-    /**
-     * Whether the directive should automatially move focus into the trapped region upon
-     * initialization and return focus to the previous activeElement upon destruction.
-     * @return {?}
-     */
-    get autoCapture() { return this._autoCapture; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set autoCapture(value) { this._autoCapture = coerceBooleanProperty(value); }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this.focusTrap.destroy();
-        // If we stored a previously focused element when using autoCapture, return focus to that
-        // element now that the trapped region is being destroyed.
-        if (this._previouslyFocusedElement) {
-            this._previouslyFocusedElement.focus();
-            this._previouslyFocusedElement = null;
-        }
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        this.focusTrap.attachAnchors();
-        if (this.autoCapture) {
-            this._previouslyFocusedElement = /** @type {?} */ (this._document.activeElement);
-            this.focusTrap.focusInitialElementWhenReady();
-        }
-    }
-}
-CdkTrapFocus.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkTrapFocus]',
-                exportAs: 'cdkTrapFocus',
-            },] },
-];
-/** @nocollapse */
-CdkTrapFocus.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusTrapFactory, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-];
-CdkTrapFocus.propDecorators = {
-    "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
-    "autoCapture": [{ type: Input, args: ['cdkTrapFocusAutoCapture',] },],
-};
 
 /**
  * @fileoverview added by tsickle
@@ -1364,6 +684,632 @@ class FocusKeyManager extends ListKeyManager {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+/**
+ * Utility for checking the interactivity of an element, such as whether is is focusable or
+ * tabbable.
+ */
+class InteractivityChecker {
+    /**
+     * @param {?} _platform
+     */
+    constructor(_platform) {
+        this._platform = _platform;
+    }
+    /**
+     * Gets whether an element is disabled.
+     *
+     * @param {?} element Element to be checked.
+     * @return {?} Whether the element is disabled.
+     */
+    isDisabled(element) {
+        // This does not capture some cases, such as a non-form control with a disabled attribute or
+        // a form control inside of a disabled form, but should capture the most common cases.
+        return element.hasAttribute('disabled');
+    }
+    /**
+     * Gets whether an element is visible for the purposes of interactivity.
+     *
+     * This will capture states like `display: none` and `visibility: hidden`, but not things like
+     * being clipped by an `overflow: hidden` parent or being outside the viewport.
+     *
+     * @param {?} element
+     * @return {?} Whether the element is visible.
+     */
+    isVisible(element) {
+        return hasGeometry(element) && getComputedStyle(element).visibility === 'visible';
+    }
+    /**
+     * Gets whether an element can be reached via Tab key.
+     * Assumes that the element has already been checked with isFocusable.
+     *
+     * @param {?} element Element to be checked.
+     * @return {?} Whether the element is tabbable.
+     */
+    isTabbable(element) {
+        // Nothing is tabbable on the the server 😎
+        if (!this._platform.isBrowser) {
+            return false;
+        }
+        const /** @type {?} */ frameElement = getFrameElement(getWindow(element));
+        if (frameElement) {
+            const /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
+            // Frame elements inherit their tabindex onto all child elements.
+            if (getTabIndexValue(frameElement) === -1) {
+                return false;
+            }
+            // Webkit and Blink consider anything inside of an <object> element as non-tabbable.
+            if ((this._platform.BLINK || this._platform.WEBKIT) && frameType === 'object') {
+                return false;
+            }
+            // Webkit and Blink disable tabbing to an element inside of an invisible frame.
+            if ((this._platform.BLINK || this._platform.WEBKIT) && !this.isVisible(frameElement)) {
+                return false;
+            }
+        }
+        let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
+        let /** @type {?} */ tabIndexValue = getTabIndexValue(element);
+        if (element.hasAttribute('contenteditable')) {
+            return tabIndexValue !== -1;
+        }
+        if (nodeName === 'iframe') {
+            // The frames may be tabbable depending on content, but it's not possibly to reliably
+            // investigate the content of the frames.
+            return false;
+        }
+        if (nodeName === 'audio') {
+            if (!element.hasAttribute('controls')) {
+                // By default an <audio> element without the controls enabled is not tabbable.
+                return false;
+            }
+            else if (this._platform.BLINK) {
+                // In Blink <audio controls> elements are always tabbable.
+                return true;
+            }
+        }
+        if (nodeName === 'video') {
+            if (!element.hasAttribute('controls') && this._platform.TRIDENT) {
+                // In Trident a <video> element without the controls enabled is not tabbable.
+                return false;
+            }
+            else if (this._platform.BLINK || this._platform.FIREFOX) {
+                // In Chrome and Firefox <video controls> elements are always tabbable.
+                return true;
+            }
+        }
+        if (nodeName === 'object' && (this._platform.BLINK || this._platform.WEBKIT)) {
+            // In all Blink and WebKit based browsers <object> elements are never tabbable.
+            return false;
+        }
+        // In iOS the browser only considers some specific elements as tabbable.
+        if (this._platform.WEBKIT && this._platform.IOS && !isPotentiallyTabbableIOS(element)) {
+            return false;
+        }
+        return element.tabIndex >= 0;
+    }
+    /**
+     * Gets whether an element can be focused by the user.
+     *
+     * @param {?} element Element to be checked.
+     * @return {?} Whether the element is focusable.
+     */
+    isFocusable(element) {
+        // Perform checks in order of left to most expensive.
+        // Again, naive approach that does not capture many edge cases and browser quirks.
+        return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
+    }
+}
+InteractivityChecker.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+InteractivityChecker.ctorParameters = () => [
+    { type: Platform, },
+];
+/**
+ * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
+ * the frameElement property is being accessed from a different host address, this property
+ * should be accessed carefully.
+ * @param {?} window
+ * @return {?}
+ */
+function getFrameElement(window) {
+    try {
+        return /** @type {?} */ (window.frameElement);
+    }
+    catch (/** @type {?} */ e) {
+        return null;
+    }
+}
+/**
+ * Checks whether the specified element has any geometry / rectangles.
+ * @param {?} element
+ * @return {?}
+ */
+function hasGeometry(element) {
+    // Use logic from jQuery to check for an invisible element.
+    // See https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js#L12
+    return !!(element.offsetWidth || element.offsetHeight ||
+        (typeof element.getClientRects === 'function' && element.getClientRects().length));
+}
+/**
+ * Gets whether an element's
+ * @param {?} element
+ * @return {?}
+ */
+function isNativeFormElement(element) {
+    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
+    return nodeName === 'input' ||
+        nodeName === 'select' ||
+        nodeName === 'button' ||
+        nodeName === 'textarea';
+}
+/**
+ * Gets whether an element is an `<input type="hidden">`.
+ * @param {?} element
+ * @return {?}
+ */
+function isHiddenInput(element) {
+    return isInputElement(element) && element.type == 'hidden';
+}
+/**
+ * Gets whether an element is an anchor that has an href attribute.
+ * @param {?} element
+ * @return {?}
+ */
+function isAnchorWithHref(element) {
+    return isAnchorElement(element) && element.hasAttribute('href');
+}
+/**
+ * Gets whether an element is an input element.
+ * @param {?} element
+ * @return {?}
+ */
+function isInputElement(element) {
+    return element.nodeName.toLowerCase() == 'input';
+}
+/**
+ * Gets whether an element is an anchor element.
+ * @param {?} element
+ * @return {?}
+ */
+function isAnchorElement(element) {
+    return element.nodeName.toLowerCase() == 'a';
+}
+/**
+ * Gets whether an element has a valid tabindex.
+ * @param {?} element
+ * @return {?}
+ */
+function hasValidTabIndex(element) {
+    if (!element.hasAttribute('tabindex') || element.tabIndex === undefined) {
+        return false;
+    }
+    let /** @type {?} */ tabIndex = element.getAttribute('tabindex');
+    // IE11 parses tabindex="" as the value "-32768"
+    if (tabIndex == '-32768') {
+        return false;
+    }
+    return !!(tabIndex && !isNaN(parseInt(tabIndex, 10)));
+}
+/**
+ * Returns the parsed tabindex from the element attributes instead of returning the
+ * evaluated tabindex from the browsers defaults.
+ * @param {?} element
+ * @return {?}
+ */
+function getTabIndexValue(element) {
+    if (!hasValidTabIndex(element)) {
+        return null;
+    }
+    // See browser issue in Gecko https://bugzilla.mozilla.org/show_bug.cgi?id=1128054
+    const /** @type {?} */ tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
+    return isNaN(tabIndex) ? -1 : tabIndex;
+}
+/**
+ * Checks whether the specified element is potentially tabbable on iOS
+ * @param {?} element
+ * @return {?}
+ */
+function isPotentiallyTabbableIOS(element) {
+    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
+    let /** @type {?} */ inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
+    return inputType === 'text'
+        || inputType === 'password'
+        || nodeName === 'select'
+        || nodeName === 'textarea';
+}
+/**
+ * Gets whether an element is potentially focusable without taking current visible/disabled state
+ * into account.
+ * @param {?} element
+ * @return {?}
+ */
+function isPotentiallyFocusable(element) {
+    // Inputs are potentially focusable *unless* they're type="hidden".
+    if (isHiddenInput(element)) {
+        return false;
+    }
+    return isNativeFormElement(element) ||
+        isAnchorWithHref(element) ||
+        element.hasAttribute('contenteditable') ||
+        hasValidTabIndex(element);
+}
+/**
+ * Gets the parent window of a DOM node with regards of being inside of an iframe.
+ * @param {?} node
+ * @return {?}
+ */
+function getWindow(node) {
+    return node.ownerDocument.defaultView || window;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Class that allows for trapping focus within a DOM element.
+ *
+ * This class currently uses a relatively simple approach to focus trapping.
+ * It assumes that the tab order is the same as DOM order, which is not necessarily true.
+ * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
+ */
+class FocusTrap {
+    /**
+     * @param {?} _element
+     * @param {?} _checker
+     * @param {?} _ngZone
+     * @param {?} _document
+     * @param {?=} deferAnchors
+     */
+    constructor(_element, _checker, _ngZone, _document, deferAnchors = false) {
+        this._element = _element;
+        this._checker = _checker;
+        this._ngZone = _ngZone;
+        this._document = _document;
+        this._enabled = true;
+        if (!deferAnchors) {
+            this.attachAnchors();
+        }
+    }
+    /**
+     * Whether the focus trap is active.
+     * @return {?}
+     */
+    get enabled() { return this._enabled; }
+    /**
+     * @param {?} val
+     * @return {?}
+     */
+    set enabled(val) {
+        this._enabled = val;
+        if (this._startAnchor && this._endAnchor) {
+            this._startAnchor.tabIndex = this._endAnchor.tabIndex = this._enabled ? 0 : -1;
+        }
+    }
+    /**
+     * Destroys the focus trap by cleaning up the anchors.
+     * @return {?}
+     */
+    destroy() {
+        if (this._startAnchor && this._startAnchor.parentNode) {
+            this._startAnchor.parentNode.removeChild(this._startAnchor);
+        }
+        if (this._endAnchor && this._endAnchor.parentNode) {
+            this._endAnchor.parentNode.removeChild(this._endAnchor);
+        }
+        this._startAnchor = this._endAnchor = null;
+    }
+    /**
+     * Inserts the anchors into the DOM. This is usually done automatically
+     * in the constructor, but can be deferred for cases like directives with `*ngIf`.
+     * @return {?}
+     */
+    attachAnchors() {
+        if (!this._startAnchor) {
+            this._startAnchor = this._createAnchor();
+        }
+        if (!this._endAnchor) {
+            this._endAnchor = this._createAnchor();
+        }
+        this._ngZone.runOutsideAngular(() => {
+            /** @type {?} */ ((this._startAnchor)).addEventListener('focus', () => {
+                this.focusLastTabbableElement();
+            }); /** @type {?} */
+            ((this._endAnchor)).addEventListener('focus', () => {
+                this.focusFirstTabbableElement();
+            });
+            if (this._element.parentNode) {
+                this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
+                this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
+            }
+        });
+    }
+    /**
+     * Waits for the zone to stabilize, then either focuses the first element that the
+     * user specified, or the first tabbable element.
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
+     */
+    focusInitialElementWhenReady() {
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusInitialElement()));
+        });
+    }
+    /**
+     * Waits for the zone to stabilize, then focuses
+     * the first tabbable element within the focus trap region.
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
+     */
+    focusFirstTabbableElementWhenReady() {
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusFirstTabbableElement()));
+        });
+    }
+    /**
+     * Waits for the zone to stabilize, then focuses
+     * the last tabbable element within the focus trap region.
+     * @return {?} Returns a promise that resolves with a boolean, depending
+     * on whether focus was moved successfuly.
+     */
+    focusLastTabbableElementWhenReady() {
+        return new Promise(resolve => {
+            this._executeOnStable(() => resolve(this.focusLastTabbableElement()));
+        });
+    }
+    /**
+     * Get the specified boundary element of the trapped region.
+     * @param {?} bound The boundary to get (start or end of trapped region).
+     * @return {?} The boundary element.
+     */
+    _getRegionBoundary(bound) {
+        // Contains the deprecated version of selector, for temporary backwards comparability.
+        let /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
+            `[cdkFocusRegion${bound}], ` +
+            `[cdk-focus-${bound}]`));
+        for (let /** @type {?} */ i = 0; i < markers.length; i++) {
+            if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
+                console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}',` +
+                    ` use 'cdkFocusRegion${bound}' instead.`, markers[i]);
+            }
+            else if (markers[i].hasAttribute(`cdk-focus-region-${bound}`)) {
+                console.warn(`Found use of deprecated attribute 'cdk-focus-region-${bound}',` +
+                    ` use 'cdkFocusRegion${bound}' instead.`, markers[i]);
+            }
+        }
+        if (bound == 'start') {
+            return markers.length ? markers[0] : this._getFirstTabbableElement(this._element);
+        }
+        return markers.length ?
+            markers[markers.length - 1] : this._getLastTabbableElement(this._element);
+    }
+    /**
+     * Focuses the element that should be focused when the focus trap is initialized.
+     * @return {?} Whether focus was moved successfuly.
+     */
+    focusInitialElement() {
+        // Contains the deprecated version of selector, for temporary backwards comparability.
+        const /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
+            `[cdkFocusInitial]`));
+        if (this._element.hasAttribute(`cdk-focus-initial`)) {
+            console.warn(`Found use of deprecated attribute 'cdk-focus-initial',` +
+                ` use 'cdkFocusInitial' instead.`, this._element);
+        }
+        if (redirectToElement) {
+            redirectToElement.focus();
+            return true;
+        }
+        return this.focusFirstTabbableElement();
+    }
+    /**
+     * Focuses the first tabbable element within the focus trap region.
+     * @return {?} Whether focus was moved successfuly.
+     */
+    focusFirstTabbableElement() {
+        const /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
+        if (redirectToElement) {
+            redirectToElement.focus();
+        }
+        return !!redirectToElement;
+    }
+    /**
+     * Focuses the last tabbable element within the focus trap region.
+     * @return {?} Whether focus was moved successfuly.
+     */
+    focusLastTabbableElement() {
+        const /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
+        if (redirectToElement) {
+            redirectToElement.focus();
+        }
+        return !!redirectToElement;
+    }
+    /**
+     * Get the first tabbable element from a DOM subtree (inclusive).
+     * @param {?} root
+     * @return {?}
+     */
+    _getFirstTabbableElement(root) {
+        if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
+            return root;
+        }
+        // Iterate in DOM order. Note that IE doesn't have `children` for SVG so we fall
+        // back to `childNodes` which includes text nodes, comments etc.
+        let /** @type {?} */ children = root.children || root.childNodes;
+        for (let /** @type {?} */ i = 0; i < children.length; i++) {
+            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+                this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
+                null;
+            if (tabbableChild) {
+                return tabbableChild;
+            }
+        }
+        return null;
+    }
+    /**
+     * Get the last tabbable element from a DOM subtree (inclusive).
+     * @param {?} root
+     * @return {?}
+     */
+    _getLastTabbableElement(root) {
+        if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
+            return root;
+        }
+        // Iterate in reverse DOM order.
+        let /** @type {?} */ children = root.children || root.childNodes;
+        for (let /** @type {?} */ i = children.length - 1; i >= 0; i--) {
+            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+                this._getLastTabbableElement(/** @type {?} */ (children[i])) :
+                null;
+            if (tabbableChild) {
+                return tabbableChild;
+            }
+        }
+        return null;
+    }
+    /**
+     * Creates an anchor element.
+     * @return {?}
+     */
+    _createAnchor() {
+        const /** @type {?} */ anchor = this._document.createElement('div');
+        anchor.tabIndex = this._enabled ? 0 : -1;
+        anchor.classList.add('cdk-visually-hidden');
+        anchor.classList.add('cdk-focus-trap-anchor');
+        return anchor;
+    }
+    /**
+     * Executes a function when the zone is stable.
+     * @param {?} fn
+     * @return {?}
+     */
+    _executeOnStable(fn) {
+        if (this._ngZone.isStable) {
+            fn();
+        }
+        else {
+            this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(fn);
+        }
+    }
+}
+/**
+ * Factory that allows easy instantiation of focus traps.
+ */
+class FocusTrapFactory {
+    /**
+     * @param {?} _checker
+     * @param {?} _ngZone
+     * @param {?} _document
+     */
+    constructor(_checker, _ngZone, _document) {
+        this._checker = _checker;
+        this._ngZone = _ngZone;
+        this._document = _document;
+    }
+    /**
+     * Creates a focus-trapped region around the given element.
+     * @param {?} element The element around which focus will be trapped.
+     * @param {?=} deferCaptureElements Defers the creation of focus-capturing elements to be done
+     *     manually by the user.
+     * @return {?} The created focus trap instance.
+     */
+    create(element, deferCaptureElements = false) {
+        return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
+    }
+}
+FocusTrapFactory.decorators = [
+    { type: Injectable },
+];
+/** @nocollapse */
+FocusTrapFactory.ctorParameters = () => [
+    { type: InteractivityChecker, },
+    { type: NgZone, },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+];
+/**
+ * Directive for trapping focus within a region.
+ */
+class CdkTrapFocus {
+    /**
+     * @param {?} _elementRef
+     * @param {?} _focusTrapFactory
+     * @param {?} _document
+     */
+    constructor(_elementRef, _focusTrapFactory, _document) {
+        this._elementRef = _elementRef;
+        this._focusTrapFactory = _focusTrapFactory;
+        /**
+         * Previously focused element to restore focus to upon destroy when using autoCapture.
+         */
+        this._previouslyFocusedElement = null;
+        this._document = _document;
+        this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
+    }
+    /**
+     * Whether the focus trap is active.
+     * @return {?}
+     */
+    get enabled() { return this.focusTrap.enabled; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set enabled(value) { this.focusTrap.enabled = coerceBooleanProperty(value); }
+    /**
+     * Whether the directive should automatially move focus into the trapped region upon
+     * initialization and return focus to the previous activeElement upon destruction.
+     * @return {?}
+     */
+    get autoCapture() { return this._autoCapture; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set autoCapture(value) { this._autoCapture = coerceBooleanProperty(value); }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.focusTrap.destroy();
+        // If we stored a previously focused element when using autoCapture, return focus to that
+        // element now that the trapped region is being destroyed.
+        if (this._previouslyFocusedElement) {
+            this._previouslyFocusedElement.focus();
+            this._previouslyFocusedElement = null;
+        }
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterContentInit() {
+        this.focusTrap.attachAnchors();
+        if (this.autoCapture) {
+            this._previouslyFocusedElement = /** @type {?} */ (this._document.activeElement);
+            this.focusTrap.focusInitialElementWhenReady();
+        }
+    }
+}
+CdkTrapFocus.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkTrapFocus]',
+                exportAs: 'cdkTrapFocus',
+            },] },
+];
+/** @nocollapse */
+CdkTrapFocus.ctorParameters = () => [
+    { type: ElementRef, },
+    { type: FocusTrapFactory, },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+];
+CdkTrapFocus.propDecorators = {
+    "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
+    "autoCapture": [{ type: Input, args: ['cdkTrapFocusAutoCapture',] },],
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 const /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement');
 class LiveAnnouncer {
     /**
@@ -1491,17 +1437,13 @@ class FocusMonitor {
         this._monitoredElementCount = 0;
     }
     /**
-     * @param {?} element
-     * @param {?=} renderer
-     * @param {?=} checkChildren
-     * @return {?}
+     * Monitors focus on an element and applies appropriate CSS classes.
+     * @param {?} element The element to monitor
+     * @param {?=} checkChildren Whether to count the element as focused when its children are focused.
+     * @return {?} An observable that emits when the focus state of the element changes.
+     *     When the element is blurred, null will be emitted.
      */
-    monitor(element, renderer, checkChildren) {
-        // TODO(mmalerba): clean up after deprecated signature is removed.
-        if (!(renderer instanceof Renderer2)) {
-            checkChildren = renderer;
-        }
-        checkChildren = !!checkChildren;
+    monitor(element, checkChildren = false) {
         // Do nothing if we're not on the browser platform.
         if (!this._platform.isBrowser) {
             return of(null);
@@ -1860,8 +1802,8 @@ class A11yModule {
 A11yModule.decorators = [
     { type: NgModule, args: [{
                 imports: [CommonModule, PlatformModule],
-                declarations: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
-                exports: [CdkTrapFocus, FocusTrapDeprecatedDirective, CdkMonitorFocus],
+                declarations: [CdkTrapFocus, CdkMonitorFocus],
+                exports: [CdkTrapFocus, CdkMonitorFocus],
                 providers: [
                     InteractivityChecker,
                     FocusTrapFactory,
@@ -1885,5 +1827,5 @@ A11yModule.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { CdkTrapFocus as FocusTrapDirective, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, FocusTrapDeprecatedDirective, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_ELEMENT_TOKEN, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.js.map

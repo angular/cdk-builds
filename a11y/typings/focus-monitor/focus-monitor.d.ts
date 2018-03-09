@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { ElementRef, EventEmitter, NgZone, OnDestroy, Optional, Renderer2 } from '@angular/core';
+import { ElementRef, EventEmitter, NgZone, OnDestroy, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 export declare const TOUCH_BUFFER_MS = 650;
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
@@ -35,12 +35,6 @@ export declare class FocusMonitor implements OnDestroy {
     /** The number of elements currently being monitored. */
     private _monitoredElementCount;
     constructor(_ngZone: NgZone, _platform: Platform);
-    /**
-     * @docs-private
-     * @deprecated renderer param no longer needed.
-     * @deletion-target 6.0.0
-     */
-    monitor(element: HTMLElement, renderer: Renderer2, checkChildren: boolean): Observable<FocusOrigin>;
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
