@@ -73,66 +73,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     hasBackdrop: any;
     /** Whether or not the overlay should be locked when scrolling. */
     lockPosition: any;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedOrigin: CdkOverlayOrigin;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedPositions: ConnectionPositionPair[];
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedOffsetX: number;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedOffsetY: number;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedWidth: number | string;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedHeight: number | string;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedMinWidth: number | string;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedMinHeight: number | string;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedBackdropClass: string;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedScrollStrategy: ScrollStrategy;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedOpen: boolean;
-    /**
-     * @deprecated
-     * @deletion-target 6.0.0
-     */
-    _deprecatedHasBackdrop: any;
     /** Event emitted when the backdrop is clicked. */
     backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */

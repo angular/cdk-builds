@@ -1972,140 +1972,6 @@ class CdkConnectedOverlay {
      */
     set lockPosition(value) { this._lockPosition = coerceBooleanProperty(value); }
     /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedOrigin() { return this.origin; }
-    /**
-     * @param {?} _origin
-     * @return {?}
-     */
-    set _deprecatedOrigin(_origin) { this.origin = _origin; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedPositions() { return this.positions; }
-    /**
-     * @param {?} _positions
-     * @return {?}
-     */
-    set _deprecatedPositions(_positions) { this.positions = _positions; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedOffsetX() { return this.offsetX; }
-    /**
-     * @param {?} _offsetX
-     * @return {?}
-     */
-    set _deprecatedOffsetX(_offsetX) { this.offsetX = _offsetX; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedOffsetY() { return this.offsetY; }
-    /**
-     * @param {?} _offsetY
-     * @return {?}
-     */
-    set _deprecatedOffsetY(_offsetY) { this.offsetY = _offsetY; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedWidth() { return this.width; }
-    /**
-     * @param {?} _width
-     * @return {?}
-     */
-    set _deprecatedWidth(_width) { this.width = _width; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedHeight() { return this.height; }
-    /**
-     * @param {?} _height
-     * @return {?}
-     */
-    set _deprecatedHeight(_height) { this.height = _height; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedMinWidth() { return this.minWidth; }
-    /**
-     * @param {?} _minWidth
-     * @return {?}
-     */
-    set _deprecatedMinWidth(_minWidth) { this.minWidth = _minWidth; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedMinHeight() { return this.minHeight; }
-    /**
-     * @param {?} _minHeight
-     * @return {?}
-     */
-    set _deprecatedMinHeight(_minHeight) { this.minHeight = _minHeight; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedBackdropClass() { return this.backdropClass; }
-    /**
-     * @param {?} _backdropClass
-     * @return {?}
-     */
-    set _deprecatedBackdropClass(_backdropClass) { this.backdropClass = _backdropClass; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedScrollStrategy() { return this.scrollStrategy; }
-    /**
-     * @param {?} _scrollStrategy
-     * @return {?}
-     */
-    set _deprecatedScrollStrategy(_scrollStrategy) {
-        this.scrollStrategy = _scrollStrategy;
-    }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedOpen() { return this.open; }
-    /**
-     * @param {?} _open
-     * @return {?}
-     */
-    set _deprecatedOpen(_open) { this.open = _open; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedHasBackdrop() { return this.hasBackdrop; }
-    /**
-     * @param {?} _hasBackdrop
-     * @return {?}
-     */
-    set _deprecatedHasBackdrop(_hasBackdrop) { this.hasBackdrop = _hasBackdrop; }
-    /**
      * The associated overlay reference.
      * @return {?}
      */
@@ -2289,18 +2155,6 @@ CdkConnectedOverlay.propDecorators = {
     "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
     "hasBackdrop": [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
     "lockPosition": [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] },],
-    "_deprecatedOrigin": [{ type: Input, args: ['origin',] },],
-    "_deprecatedPositions": [{ type: Input, args: ['positions',] },],
-    "_deprecatedOffsetX": [{ type: Input, args: ['offsetX',] },],
-    "_deprecatedOffsetY": [{ type: Input, args: ['offsetY',] },],
-    "_deprecatedWidth": [{ type: Input, args: ['width',] },],
-    "_deprecatedHeight": [{ type: Input, args: ['height',] },],
-    "_deprecatedMinWidth": [{ type: Input, args: ['minWidth',] },],
-    "_deprecatedMinHeight": [{ type: Input, args: ['minHeight',] },],
-    "_deprecatedBackdropClass": [{ type: Input, args: ['backdropClass',] },],
-    "_deprecatedScrollStrategy": [{ type: Input, args: ['scrollStrategy',] },],
-    "_deprecatedOpen": [{ type: Input, args: ['open',] },],
-    "_deprecatedHasBackdrop": [{ type: Input, args: ['hasBackdrop',] },],
     "backdropClick": [{ type: Output },],
     "positionChange": [{ type: Output },],
     "attach": [{ type: Output },],
@@ -2410,5 +2264,5 @@ FullscreenOverlayContainer.ctorParameters = () => [];
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, CdkConnectedOverlay as ConnectedOverlayDirective, CdkOverlayOrigin as OverlayOrigin, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
+export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
 //# sourceMappingURL=overlay.js.map
