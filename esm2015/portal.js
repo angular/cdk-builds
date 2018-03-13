@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, Input, EventEmitter, Output } from '@angular/core';
+import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, EventEmitter, Output } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -410,28 +410,6 @@ class CdkPortalOutlet extends BasePortalOutlet {
         this.attached = new EventEmitter();
     }
     /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedPortal() { return this.portal; }
-    /**
-     * @param {?} v
-     * @return {?}
-     */
-    set _deprecatedPortal(v) { this.portal = v; }
-    /**
-     * @deprecated
-     * \@deletion-target 6.0.0
-     * @return {?}
-     */
-    get _deprecatedPortalHost() { return this.portal; }
-    /**
-     * @param {?} v
-     * @return {?}
-     */
-    set _deprecatedPortalHost(v) { this.portal = v; }
-    /**
      * Portal associated with the Portal outlet.
      * @return {?}
      */
@@ -530,8 +508,6 @@ CdkPortalOutlet.ctorParameters = () => [
     { type: ViewContainerRef, },
 ];
 CdkPortalOutlet.propDecorators = {
-    "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
-    "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
     "attached": [{ type: Output, args: ['attached',] },],
 };
 class PortalModule {

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { __extends } from 'tslib';
-import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, Input, EventEmitter, Output } from '@angular/core';
+import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, EventEmitter, Output } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -539,36 +539,6 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         _this.attached = new EventEmitter();
         return _this;
     }
-    Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortal", {
-        get: /**
-         * @deprecated
-         * \@deletion-target 6.0.0
-         * @return {?}
-         */
-        function () { return this.portal; },
-        set: /**
-         * @param {?} v
-         * @return {?}
-         */
-        function (v) { this.portal = v; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(CdkPortalOutlet.prototype, "_deprecatedPortalHost", {
-        get: /**
-         * @deprecated
-         * \@deletion-target 6.0.0
-         * @return {?}
-         */
-        function () { return this.portal; },
-        set: /**
-         * @param {?} v
-         * @return {?}
-         */
-        function (v) { this.portal = v; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(CdkPortalOutlet.prototype, "portal", {
         /** Portal associated with the Portal outlet. */
         get: /**
@@ -708,8 +678,6 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         { type: ViewContainerRef, },
     ]; };
     CdkPortalOutlet.propDecorators = {
-        "_deprecatedPortal": [{ type: Input, args: ['portalHost',] },],
-        "_deprecatedPortalHost": [{ type: Input, args: ['cdkPortalHost',] },],
         "attached": [{ type: Output, args: ['attached',] },],
     };
     return CdkPortalOutlet;
