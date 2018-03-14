@@ -9,7 +9,8 @@ import { Direction, Directionality } from '@angular/cdk/bidi';
 import { ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Overlay } from './overlay';
 import { OverlayRef } from './overlay-ref';
-import { ConnectedOverlayPositionChange, ConnectionPositionPair } from './position/connected-position';
+import { ConnectedPosition } from './position/flexible-connected-position-strategy';
+import { ConnectedOverlayPositionChange } from './position/connected-position';
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
 export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
@@ -50,7 +51,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Origin for the connected overlay. */
     origin: CdkOverlayOrigin;
     /** Registered connected position pairs. */
-    positions: ConnectionPositionPair[];
+    positions: ConnectedPosition[];
     /** The offset in pixels for the overlay connection point on the x-axis */
     offsetX: number;
     /** The offset in pixels for the overlay connection point on the y-axis */
@@ -94,6 +95,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _buildConfig();
     /** Returns the position strategy of the overlay to be set on the overlay config */
     private _createPositionStrategy();
+    /**
+     * Sets the primary and fallback positions of a positions strategy,
+     * based on the current directive inputs.
+     */
+    private _setPositions(positionStrategy);
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     private _attachOverlay();
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */

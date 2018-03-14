@@ -22,6 +22,7 @@ export declare type ImmutableObject<T> = {
  */
 export declare class OverlayRef implements PortalOutlet {
     private _portalOutlet;
+    private _host;
     private _pane;
     private _config;
     private _ngZone;
@@ -33,11 +34,17 @@ export declare class OverlayRef implements PortalOutlet {
     private _detachments;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;
-    constructor(_portalOutlet: PortalOutlet, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document);
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
     /** The overlay's backdrop HTML element. */
     readonly backdropElement: HTMLElement | null;
+    /**
+     * Wrapper around the panel element. Can be used for advanced
+     * positioning where a wrapper with specific styling is
+     * required around the overlay pane.
+     */
+    readonly hostElement: HTMLElement;
     attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
     attach(portal: any): any;

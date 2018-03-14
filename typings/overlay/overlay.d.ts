@@ -52,7 +52,13 @@ export declare class Overlay {
      * Creates the DOM element for an overlay and appends it to the overlay container.
      * @returns Newly-created pane element
      */
-    private _createPaneElement();
+    private _createPaneElement(host);
+    /**
+     * Creates the host element that wraps around an overlay
+     * and can be used for advanced positioning.
+     * @returns Newly-create host element.
+     */
+    private _createHostElement();
     /**
      * Create a DomPortalOutlet into which the overlay content can be loaded.
      * @param pane The DOM element to turn into a portal outlet.

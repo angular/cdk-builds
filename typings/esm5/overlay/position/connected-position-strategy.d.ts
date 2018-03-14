@@ -12,45 +12,32 @@ import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosi
 import { Observable } from 'rxjs/Observable';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { OverlayRef } from '../overlay-ref';
+import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative to some origin element. The relative position is defined in terms of
  * a point on the origin element that is connected to a point on the overlay element. For example,
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
+ * @deprecated
+ * @deletion-target 7.0.0
  */
 export declare class ConnectedPositionStrategy implements PositionStrategy {
-    private _connectedTo;
-    private _viewportRuler;
-    private _document;
-    /** Layout direction of the position strategy. */
-    private _dir;
-    /** The offset in pixels for the overlay connection point on the x-axis */
-    private _offsetX;
-    /** The offset in pixels for the overlay connection point on the y-axis */
-    private _offsetY;
-    /** The Scrollable containers used to check scrollable view properties on position change. */
-    private scrollables;
-    /** Subscription to viewport resize events. */
-    private _resizeSubscription;
+    /**
+     * Reference to the underlying position strategy to which all the API calls are proxied.
+     * @docs-private
+     */
+    _positionStrategy: FlexibleConnectedPositionStrategy;
+    /** The overlay to which this strategy is attached. */
+    private _overlayRef;
+    private _direction;
     /** Whether the we're dealing with an RTL context */
     readonly _isRtl: boolean;
     /** Ordered list of preferred positions, from most to least desirable. */
     _preferredPositions: ConnectionPositionPair[];
-    /** The origin element against which the overlay will be positioned. */
-    private _origin;
-    /** The overlay pane element. */
-    private _pane;
-    /** The last position to have been calculated as the best fit position. */
-    private _lastConnectedPosition;
-    /** Whether the position strategy is applied currently. */
-    private _applied;
-    /** Whether the overlay position is locked. */
-    private _positionLocked;
-    private _onPositionChange;
     /** Emits an event when the connection point changes. */
     readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
-    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, _connectedTo: ElementRef, _viewportRuler: ViewportRuler, _document: any);
+    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef, viewportRuler: ViewportRuler, document: Document);
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
     /** Attach this position strategy to an overlay. */
@@ -76,7 +63,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
      */
-    withScrollableContainers(scrollables: CdkScrollable[]): this;
+    withScrollableContainers(scrollables: CdkScrollable[]): void;
     /**
      * Adds a new preferred fallback position.
      * @param originPos
@@ -115,37 +102,6 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * @param origin Reference to the new origin element.
      */
     setOrigin(origin: ElementRef): this;
-    /**
-     * Gets the horizontal (x) "start" dimension based on whether the overlay is in an RTL context.
-     * @param rect
-     */
-    private _getStartX(rect);
-    /**
-     * Gets the horizontal (x) "end" dimension based on whether the overlay is in an RTL context.
-     * @param rect
-     */
-    private _getEndX(rect);
-    /**
-     * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
-     * @param originRect
-     * @param pos
-     */
-    private _getOriginConnectionPoint(originRect, pos);
-    /**
-     * Gets the (x, y) coordinate of the top-left corner of the overlay given a given position and
-     * origin point to which the overlay should be connected, as well as how much of the element
-     * would be inside the viewport at that position.
-     */
-    private _getOverlayPoint(originPoint, overlayRect, viewportSize, pos);
-    /**
-     * Gets the view properties of the trigger and overlay, including whether they are clipped
-     * or completely outside the view of any of the strategy's scrollables.
-     */
-    private _getScrollVisibility(overlay);
-    /** Physically positions the overlay element to the given coordinate. */
-    private _setElementPosition(element, overlayRect, overlayPoint, pos);
-    /** Subtracts the amount that an element is overflowing on an axis from it's length. */
-    private _subtractOverflows(length, ...overflows);
     /** Validates that the current position match the expected values. */
     private _validatePositions();
 }
