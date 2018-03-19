@@ -25,8 +25,9 @@ var /** @type {?} */ listenerOptions = platform.supportsPassiveEventListeners() 
  * https://medium.com/\@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
  */
 var AutofillMonitor = /** @class */ (function () {
-    function AutofillMonitor(_platform) {
+    function AutofillMonitor(_platform, _ngZone) {
         this._platform = _platform;
+        this._ngZone = _ngZone;
         this._monitoredElements = new Map();
     }
     /**
@@ -63,8 +64,10 @@ var AutofillMonitor = /** @class */ (function () {
                 result.next({ target: /** @type {?} */ (event.target), isAutofilled: false });
             }
         };
-        element.addEventListener('animationstart', listener, listenerOptions);
-        element.classList.add('cdk-text-field-autofill-monitored');
+        this._ngZone.runOutsideAngular(function () {
+            element.addEventListener('animationstart', listener, listenerOptions);
+            element.classList.add('cdk-text-field-autofill-monitored');
+        });
         this._monitoredElements.set(element, {
             subject: result,
             unlisten: function () {
@@ -113,6 +116,7 @@ var AutofillMonitor = /** @class */ (function () {
     /** @nocollapse */
     AutofillMonitor.ctorParameters = function () { return [
         { type: platform.Platform, },
+        { type: core.NgZone, },
     ]; };
     return AutofillMonitor;
 }());
@@ -123,6 +127,9 @@ var CdkAutofill = /** @class */ (function () {
     function CdkAutofill(_elementRef, _autofillMonitor) {
         this._elementRef = _elementRef;
         this._autofillMonitor = _autofillMonitor;
+        /**
+         * Emits when the autofill state of the element changes.
+         */
         this.cdkAutofill = new core.EventEmitter();
     }
     /**

@@ -197,6 +197,21 @@ BreakpointObserver.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+class LayoutModule {
+}
+LayoutModule.decorators = [
+    { type: NgModule, args: [{
+                providers: [BreakpointObserver, MediaMatcher],
+                imports: [PlatformModule],
+            },] },
+];
+/** @nocollapse */
+LayoutModule.ctorParameters = () => [];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 const /** @type {?} */ Breakpoints = {
     XSmall: '(max-width: 599px)',
@@ -222,16 +237,6 @@ const /** @type {?} */ Breakpoints = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-class LayoutModule {
-}
-LayoutModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [BreakpointObserver, MediaMatcher],
-                imports: [PlatformModule],
-            },] },
-];
-/** @nocollapse */
-LayoutModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

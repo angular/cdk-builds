@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, OnInit, NgZone } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 /** An event that is emitted when the autofill state of an input changes. */
 export declare type AutofillEvent = {
@@ -22,8 +22,9 @@ export declare type AutofillEvent = {
  */
 export declare class AutofillMonitor implements OnDestroy {
     private _platform;
+    private _ngZone;
     private _monitoredElements;
-    constructor(_platform: Platform);
+    constructor(_platform: Platform, _ngZone: NgZone);
     /**
      * Monitor for changes in the autofill state of the given input element.
      * @param element The element to monitor.
@@ -41,6 +42,7 @@ export declare class AutofillMonitor implements OnDestroy {
 export declare class CdkAutofill implements OnDestroy, OnInit {
     private _elementRef;
     private _autofillMonitor;
+    /** Emits when the autofill state of the element changes. */
     cdkAutofill: EventEmitter<AutofillEvent>;
     constructor(_elementRef: ElementRef, _autofillMonitor: AutofillMonitor);
     ngOnInit(): void;

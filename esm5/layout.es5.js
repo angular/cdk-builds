@@ -245,6 +245,24 @@ var BreakpointObserver = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var LayoutModule = /** @class */ (function () {
+    function LayoutModule() {
+    }
+    LayoutModule.decorators = [
+        { type: NgModule, args: [{
+                    providers: [BreakpointObserver, MediaMatcher],
+                    imports: [PlatformModule],
+                },] },
+    ];
+    /** @nocollapse */
+    LayoutModule.ctorParameters = function () { return []; };
+    return LayoutModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 var /** @type {?} */ Breakpoints = {
     XSmall: '(max-width: 599px)',
@@ -270,19 +288,6 @@ var /** @type {?} */ Breakpoints = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var LayoutModule = /** @class */ (function () {
-    function LayoutModule() {
-    }
-    LayoutModule.decorators = [
-        { type: NgModule, args: [{
-                    providers: [BreakpointObserver, MediaMatcher],
-                    imports: [PlatformModule],
-                },] },
-    ];
-    /** @nocollapse */
-    LayoutModule.ctorParameters = function () { return []; };
-    return LayoutModule;
-}());
 
 /**
  * @fileoverview added by tsickle

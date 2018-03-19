@@ -241,6 +241,24 @@ var BreakpointObserver = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var LayoutModule = /** @class */ (function () {
+    function LayoutModule() {
+    }
+    LayoutModule.decorators = [
+        { type: core.NgModule, args: [{
+                    providers: [BreakpointObserver, MediaMatcher],
+                    imports: [platform.PlatformModule],
+                },] },
+    ];
+    /** @nocollapse */
+    LayoutModule.ctorParameters = function () { return []; };
+    return LayoutModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 
 var /** @type {?} */ Breakpoints = {
     XSmall: '(max-width: 599px)',
@@ -261,24 +279,6 @@ var /** @type {?} */ Breakpoints = {
     TabletLandscape: '(min-width: 960px) and (max-width: 1279px) and (orientation: landscape)',
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-var LayoutModule = /** @class */ (function () {
-    function LayoutModule() {
-    }
-    LayoutModule.decorators = [
-        { type: core.NgModule, args: [{
-                    providers: [BreakpointObserver, MediaMatcher],
-                    imports: [platform.PlatformModule],
-                },] },
-    ];
-    /** @nocollapse */
-    LayoutModule.ctorParameters = function () { return []; };
-    return LayoutModule;
-}());
 
 exports.LayoutModule = LayoutModule;
 exports.BreakpointObserver = BreakpointObserver;

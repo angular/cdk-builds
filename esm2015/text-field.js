@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
-import { Directive, ElementRef, EventEmitter, Injectable, Output, Input, NgZone, NgModule } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, Output, NgZone, Input, NgModule } from '@angular/core';
 import { empty } from 'rxjs/observable/empty';
 import { Subject } from 'rxjs/Subject';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -29,9 +29,11 @@ const /** @type {?} */ listenerOptions = supportsPassiveEventListeners() ? { pas
 class AutofillMonitor {
     /**
      * @param {?} _platform
+     * @param {?} _ngZone
      */
-    constructor(_platform) {
+    constructor(_platform, _ngZone) {
         this._platform = _platform;
+        this._ngZone = _ngZone;
         this._monitoredElements = new Map();
     }
     /**
@@ -58,8 +60,10 @@ class AutofillMonitor {
                 result.next({ target: /** @type {?} */ (event.target), isAutofilled: false });
             }
         };
-        element.addEventListener('animationstart', listener, listenerOptions);
-        element.classList.add('cdk-text-field-autofill-monitored');
+        this._ngZone.runOutsideAngular(() => {
+            element.addEventListener('animationstart', listener, listenerOptions);
+            element.classList.add('cdk-text-field-autofill-monitored');
+        });
         this._monitoredElements.set(element, {
             subject: result,
             unlisten: () => {
@@ -96,6 +100,7 @@ AutofillMonitor.decorators = [
 /** @nocollapse */
 AutofillMonitor.ctorParameters = () => [
     { type: Platform, },
+    { type: NgZone, },
 ];
 /**
  * A directive that can be used to monitor the autofill state of an input.
@@ -108,6 +113,9 @@ class CdkAutofill {
     constructor(_elementRef, _autofillMonitor) {
         this._elementRef = _elementRef;
         this._autofillMonitor = _autofillMonitor;
+        /**
+         * Emits when the autofill state of the element changes.
+         */
         this.cdkAutofill = new EventEmitter();
     }
     /**
