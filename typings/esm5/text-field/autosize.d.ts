@@ -23,7 +23,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     maxRows: number;
     /** Cached height of a textarea with a single row. */
     private _cachedLineHeight;
-    constructor(_elementRef: ElementRef, _platform: Platform, _ngZone: NgZone);
+    constructor(_elementRef: ElementRef, _platform: Platform, _ngZone?: NgZone | undefined);
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight(): void;
     /** Sets the maximum height of the textarea as determined by maxRows. */

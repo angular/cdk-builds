@@ -150,7 +150,7 @@ class CdkTextareaAutosize {
     /**
      * @param {?} _elementRef
      * @param {?} _platform
-     * @param {?} _ngZone
+     * @param {?=} _ngZone
      */
     constructor(_elementRef, _platform, _ngZone) {
         this._elementRef = _elementRef;
@@ -212,11 +212,13 @@ class CdkTextareaAutosize {
     ngAfterViewInit() {
         if (this._platform.isBrowser) {
             this.resizeToFitContent();
-            this._ngZone.runOutsideAngular(() => {
-                fromEvent(window, 'resize')
-                    .pipe(auditTime(16), takeUntil(this._destroyed))
-                    .subscribe(() => this.resizeToFitContent(true));
-            });
+            if (this._ngZone) {
+                this._ngZone.runOutsideAngular(() => {
+                    fromEvent(window, 'resize')
+                        .pipe(auditTime(16), takeUntil(this._destroyed))
+                        .subscribe(() => this.resizeToFitContent(true));
+                });
+            }
         }
     }
     /**
