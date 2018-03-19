@@ -210,7 +210,6 @@ var CdkTextareaAutosize = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    // TODO(crisbeto): make the `_ngZone` a required param in the next major version.
     /** Sets the minimum height of the textarea as determined by minRows. */
     /**
      * Sets the minimum height of the textarea as determined by minRows.
@@ -253,13 +252,11 @@ var CdkTextareaAutosize = /** @class */ (function () {
         var _this = this;
         if (this._platform.isBrowser) {
             this.resizeToFitContent();
-            if (this._ngZone) {
-                this._ngZone.runOutsideAngular(function () {
-                    fromEvent.fromEvent(window, 'resize')
-                        .pipe(auditTime.auditTime(16), takeUntil.takeUntil(_this._destroyed))
-                        .subscribe(function () { return _this.resizeToFitContent(true); });
-                });
-            }
+            this._ngZone.runOutsideAngular(function () {
+                fromEvent.fromEvent(window, 'resize')
+                    .pipe(auditTime.auditTime(16), takeUntil.takeUntil(_this._destroyed))
+                    .subscribe(function () { return _this.resizeToFitContent(true); });
+            });
         }
     };
     /**
