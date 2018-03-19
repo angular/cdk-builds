@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ContentChildren, EventEmitter, Input, Output, Component, ContentChild, ViewChild, ViewEncapsulation, Optional, Inject, forwardRef, ChangeDetectionStrategy, ChangeDetectorRef, NgModule } from '@angular/core';
-import { ENTER, SPACE, HOME, END } from '@angular/cdk/keycodes';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import '@angular/forms';
-import { Directionality, BidiModule } from '@angular/cdk/bidi';
-import { Subject } from 'rxjs/Subject';
+import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { END, ENTER, HOME, SPACE } from '@angular/cdk/keycodes';
+import '@angular/forms';
+import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
 
 /**

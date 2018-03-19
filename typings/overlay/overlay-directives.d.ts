@@ -9,19 +9,11 @@ import { Direction, Directionality } from '@angular/cdk/bidi';
 import { ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Overlay } from './overlay';
 import { OverlayRef } from './overlay-ref';
-import { ConnectedPosition } from './position/flexible-connected-position-strategy';
 import { ConnectedOverlayPositionChange } from './position/connected-position';
+import { ConnectedPosition } from './position/flexible-connected-position-strategy';
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
 export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
-/** @docs-private */
-export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;
-/** @docs-private */
-export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
-    provide: InjectionToken<() => ScrollStrategy>;
-    deps: (typeof Overlay)[];
-    useFactory: (overlay: Overlay) => () => RepositionScrollStrategy;
-};
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
@@ -107,3 +99,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Destroys the overlay created by this directive. */
     private _destroyOverlay();
 }
+/** @docs-private @deprecated @deletion-target 7.0.0 */
+export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;
+/** @docs-private @deprecated @deletion-target 7.0.0 */
+export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER: {
+    provide: InjectionToken<() => ScrollStrategy>;
+    deps: (typeof Overlay)[];
+    useFactory: typeof CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+};

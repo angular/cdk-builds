@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, NgZone, OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
+import { NgZone, OnDestroy, Optional } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
@@ -38,17 +38,17 @@ export declare class ViewportRuler implements OnDestroy {
     };
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param throttle Time in milliseconds to throttle the stream.
+     * @param throttleTime Time in milliseconds to throttle the stream.
      */
     change(throttleTime?: number): Observable<Event>;
     /** Updates the cached viewport size. */
     private _updateViewportSize();
 }
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone): ViewportRuler;
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const VIEWPORT_RULER_PROVIDER: {
     provide: typeof ViewportRuler;
     deps: (Optional[] | typeof NgZone | typeof Platform)[];
-    useFactory: (parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone) => ViewportRuler;
+    useFactory: typeof VIEWPORT_RULER_PROVIDER_FACTORY;
 };

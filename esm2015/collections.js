@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Subject } from 'rxjs/Subject';
-import { Injectable, Optional, SkipSelf } from '@angular/core';
+import { Injectable, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -269,27 +269,11 @@ class UniqueSelectionDispatcher {
     }
 }
 UniqueSelectionDispatcher.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 UniqueSelectionDispatcher.ctorParameters = () => [];
-/**
- * \@docs-private
- * @param {?} parentDispatcher
- * @return {?}
- */
-function UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY(parentDispatcher) {
-    return parentDispatcher || new UniqueSelectionDispatcher();
-}
-/**
- * \@docs-private
- */
-const /** @type {?} */ UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
-    // If there is already a dispatcher available, use that. Otherwise, provide a new one.
-    provide: UniqueSelectionDispatcher,
-    deps: [[new Optional(), new SkipSelf(), UniqueSelectionDispatcher]],
-    useFactory: UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY
-};
+/** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = defineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
@@ -301,5 +285,5 @@ const /** @type {?} */ UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError, UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY as ɵa };
+export { UniqueSelectionDispatcher, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
 //# sourceMappingURL=collections.js.map

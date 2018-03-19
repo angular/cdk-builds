@@ -1,11 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-import { InjectionToken, Optional, OnDestroy } from '@angular/core';
+import { InjectionToken, OnDestroy, Optional } from '@angular/core';
 import { OverlayRef } from '../overlay-ref';
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
@@ -30,11 +23,11 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
     /** Keyboard event listener that will be attached to the body. */
     private _keydownListener;
 }
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER: {
     provide: typeof OverlayKeyboardDispatcher;
     deps: (Optional[] | InjectionToken<any>)[];
-    useFactory: (dispatcher: OverlayKeyboardDispatcher, _document: any) => OverlayKeyboardDispatcher;
+    useFactory: typeof OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
 };

@@ -5,12 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
+import { ElementRef } from '@angular/core';
+import { OriginConnectionPosition, OverlayConnectionPosition } from './connected-position';
 import { ConnectedPositionStrategy } from './connected-position-strategy';
-import { GlobalPositionStrategy } from './global-position-strategy';
-import { OverlayConnectionPosition, OriginConnectionPosition } from './connected-position';
 import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';
+import { GlobalPositionStrategy } from './global-position-strategy';
 /** Builder for overlay position strategy. */
 export declare class OverlayPositionBuilder {
     private _viewportRuler;

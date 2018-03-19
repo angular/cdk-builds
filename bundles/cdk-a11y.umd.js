@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('rxjs/observable/of')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/core', '@angular/common', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/take', 'rxjs/observable/of'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.core,global.ng.common,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.operators,global.Rx.Observable));
-}(this, (function (exports,core,common,Subject,Subscription,keycodes,debounceTime,filter,map,tap,platform,coercion,take,of) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('rxjs/observable/of')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/take', 'rxjs/observable/of'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.operators,global.Rx.Observable));
+}(this, (function (exports,common,core,Subject,Subscription,keycodes,debounceTime,filter,map,tap,platform,coercion,take,of) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -367,16 +367,17 @@ var AriaDescriber = /** @class */ (function () {
             !!("" + message).trim();
     };
     AriaDescriber.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     AriaDescriber.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ AriaDescriber.ngInjectableDef = core.defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.inject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} _document
  * @return {?}
@@ -385,7 +386,7 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
@@ -1125,12 +1126,13 @@ var InteractivityChecker = /** @class */ (function () {
         return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
     };
     InteractivityChecker.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     InteractivityChecker.ctorParameters = function () { return [
         { type: platform.Platform, },
     ]; };
+    /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.defineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.inject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
 }());
 /**
@@ -1664,7 +1666,7 @@ var FocusTrapFactory = /** @class */ (function () {
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     };
     FocusTrapFactory.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     FocusTrapFactory.ctorParameters = function () { return [
@@ -1672,6 +1674,7 @@ var FocusTrapFactory = /** @class */ (function () {
         { type: core.NgZone, },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.inject(InteractivityChecker), core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
 }());
 /**
@@ -1768,7 +1771,17 @@ var CdkTrapFocus = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement');
+// The token for the live announcer element is defined in a separate file from LiveAnnouncer
+// as a workaround for https://github.com/angular/angular/issues/22559
+var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement', {
+    providedIn: 'root',
+    factory: function () { return null; },
+});
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 var LiveAnnouncer = /** @class */ (function () {
     function LiveAnnouncer(elementToken, _document) {
         this._document = _document;
@@ -1839,17 +1852,18 @@ var LiveAnnouncer = /** @class */ (function () {
         return liveEl;
     };
     LiveAnnouncer.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, null, 0), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} liveElement
  * @param {?} _document
@@ -1859,7 +1873,7 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _documen
     return parentDispatcher || new LiveAnnouncer(liveElement, _document);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
@@ -2267,13 +2281,14 @@ var FocusMonitor = /** @class */ (function () {
         }
     };
     FocusMonitor.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     FocusMonitor.ctorParameters = function () { return [
         { type: core.NgZone, },
         { type: platform.Platform, },
     ]; };
+    /** @nocollapse */ FocusMonitor.ngInjectableDef = core.defineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.inject(core.NgZone), core.inject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 /**
@@ -2320,7 +2335,7 @@ var CdkMonitorFocus = /** @class */ (function () {
     return CdkMonitorFocus;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -2330,7 +2345,7 @@ function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
     return parentDispatcher || new FocusMonitor(ngZone, platform$$1);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
@@ -2369,14 +2384,6 @@ var A11yModule = /** @class */ (function () {
                     imports: [common.CommonModule, platform.PlatformModule],
                     declarations: [CdkTrapFocus, CdkMonitorFocus],
                     exports: [CdkTrapFocus, CdkMonitorFocus],
-                    providers: [
-                        InteractivityChecker,
-                        FocusTrapFactory,
-                        AriaDescriber,
-                        LIVE_ANNOUNCER_PROVIDER,
-                        ARIA_DESCRIBER_PROVIDER,
-                        FOCUS_MONITOR_PROVIDER,
-                    ]
                 },] },
     ];
     /** @nocollapse */
@@ -2397,10 +2404,10 @@ exports.FocusTrap = FocusTrap;
 exports.FocusTrapFactory = FocusTrapFactory;
 exports.CdkTrapFocus = CdkTrapFocus;
 exports.InteractivityChecker = InteractivityChecker;
-exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
 exports.LiveAnnouncer = LiveAnnouncer;
 exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
 exports.LIVE_ANNOUNCER_PROVIDER = LIVE_ANNOUNCER_PROVIDER;
+exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
 exports.TOUCH_BUFFER_MS = TOUCH_BUFFER_MS;
 exports.FocusMonitor = FocusMonitor;
 exports.CdkMonitorFocus = CdkMonitorFocus;

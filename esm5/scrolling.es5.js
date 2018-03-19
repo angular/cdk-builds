@@ -5,14 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, Optional, SkipSelf, Directive, ElementRef, NgModule } from '@angular/core';
 import { Platform, PlatformModule } from '@angular/cdk/platform';
-import { Subject } from 'rxjs/Subject';
+import { Injectable, NgZone, Optional, SkipSelf, Directive, ElementRef, NgModule, defineInjectable, inject } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
 import { fromEvent } from 'rxjs/observable/fromEvent';
+import { of } from 'rxjs/observable/of';
 import { auditTime } from 'rxjs/operators/auditTime';
 import { filter } from 'rxjs/operators/filter';
+import { Subject } from 'rxjs/Subject';
 import { merge } from 'rxjs/observable/merge';
 
 /**
@@ -260,17 +260,18 @@ var ScrollDispatcher = /** @class */ (function () {
         }
     };
     ScrollDispatcher.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     ScrollDispatcher.ctorParameters = function () { return [
         { type: NgZone, },
         { type: Platform, },
     ]; };
+    /** @nocollapse */ ScrollDispatcher.ngInjectableDef = defineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(inject(NgZone), inject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
     return ScrollDispatcher;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -280,7 +281,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) 
     return parentDispatcher || new ScrollDispatcher(ngZone, platform);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
@@ -479,16 +480,16 @@ var ViewportRuler = /** @class */ (function () {
     };
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param throttle Time in milliseconds to throttle the stream.
+     * @param throttleTime Time in milliseconds to throttle the stream.
      */
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime
+     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
      * @return {?}
      */
     ViewportRuler.prototype.change = /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime
+     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
      * @return {?}
      */
     function (throttleTime) {
@@ -509,17 +510,18 @@ var ViewportRuler = /** @class */ (function () {
             { width: 0, height: 0 };
     };
     ViewportRuler.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     ViewportRuler.ctorParameters = function () { return [
         { type: Platform, },
         { type: NgZone, },
     ]; };
+    /** @nocollapse */ ViewportRuler.ngInjectableDef = defineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(inject(Platform), inject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -529,7 +531,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
     return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
@@ -550,7 +552,6 @@ var ScrollDispatchModule = /** @class */ (function () {
                     imports: [PlatformModule],
                     exports: [CdkScrollable],
                     declarations: [CdkScrollable],
-                    providers: [SCROLL_DISPATCHER_PROVIDER],
                 },] },
     ];
     /** @nocollapse */

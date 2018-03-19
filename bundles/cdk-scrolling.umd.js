@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/observable/fromEvent'), require('rxjs/operators/auditTime'), require('rxjs/operators/filter'), require('rxjs/observable/merge')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/observable/fromEvent', 'rxjs/operators/auditTime', 'rxjs/operators/filter', 'rxjs/observable/merge'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.operators,global.Rx.operators,global.Rx.Observable));
-}(this, (function (exports,core,platform,Subject,Observable,of,fromEvent,auditTime,filter,merge) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operators/auditTime'), require('rxjs/operators/filter'), require('rxjs/Subject'), require('rxjs/observable/merge')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operators/auditTime', 'rxjs/operators/filter', 'rxjs/Subject', 'rxjs/observable/merge'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.cdk.platform,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.operators,global.Rx.operators,global.Rx,global.Rx.Observable));
+}(this, (function (exports,platform,core,Observable,fromEvent,of,auditTime,filter,Subject,merge) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -256,17 +256,18 @@ var ScrollDispatcher = /** @class */ (function () {
         }
     };
     ScrollDispatcher.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     ScrollDispatcher.ctorParameters = function () { return [
         { type: core.NgZone, },
         { type: platform.Platform, },
     ]; };
+    /** @nocollapse */ ScrollDispatcher.ngInjectableDef = core.defineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(core.inject(core.NgZone), core.inject(platform.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
     return ScrollDispatcher;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -276,7 +277,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$
     return parentDispatcher || new ScrollDispatcher(ngZone, platform$$1);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
@@ -475,16 +476,16 @@ var ViewportRuler = /** @class */ (function () {
     };
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param throttle Time in milliseconds to throttle the stream.
+     * @param throttleTime Time in milliseconds to throttle the stream.
      */
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime
+     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
      * @return {?}
      */
     ViewportRuler.prototype.change = /**
      * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime
+     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
      * @return {?}
      */
     function (throttleTime) {
@@ -505,17 +506,18 @@ var ViewportRuler = /** @class */ (function () {
             { width: 0, height: 0 };
     };
     ViewportRuler.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     ViewportRuler.ctorParameters = function () { return [
         { type: platform.Platform, },
         { type: core.NgZone, },
     ]; };
+    /** @nocollapse */ ViewportRuler.ngInjectableDef = core.defineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(core.inject(platform.Platform), core.inject(core.NgZone)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -525,7 +527,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform$$1, ngZone) {
     return parentRuler || new ViewportRuler(platform$$1, ngZone);
 }
 /**
- * \@docs-private
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
  */
 var /** @type {?} */ VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
@@ -546,7 +548,6 @@ var ScrollDispatchModule = /** @class */ (function () {
                     imports: [platform.PlatformModule],
                     exports: [CdkScrollable],
                     declarations: [CdkScrollable],
-                    providers: [SCROLL_DISPATCHER_PROVIDER],
                 },] },
     ];
     /** @nocollapse */

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -62,10 +62,11 @@ class Platform {
     }
 }
 Platform.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 Platform.ctorParameters = () => [];
+/** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(); }, token: Platform, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
@@ -155,9 +156,7 @@ function getSupportedInputTypes() {
 class PlatformModule {
 }
 PlatformModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [Platform]
-            },] },
+    { type: NgModule },
 ];
 /** @nocollapse */
 PlatformModule.ctorParameters = () => [];

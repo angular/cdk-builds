@@ -407,36 +407,18 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
         this._listeners = [];
     };
     UniqueSelectionDispatcher.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     UniqueSelectionDispatcher.ctorParameters = function () { return []; };
+    /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = core.defineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
     return UniqueSelectionDispatcher;
 }());
-/**
- * \@docs-private
- * @param {?} parentDispatcher
- * @return {?}
- */
-function UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY(parentDispatcher) {
-    return parentDispatcher || new UniqueSelectionDispatcher();
-}
-/**
- * \@docs-private
- */
-var /** @type {?} */ UNIQUE_SELECTION_DISPATCHER_PROVIDER = {
-    // If there is already a dispatcher available, use that. Otherwise, provide a new one.
-    provide: UniqueSelectionDispatcher,
-    deps: [[new core.Optional(), new core.SkipSelf(), UniqueSelectionDispatcher]],
-    useFactory: UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY
-};
 
 exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
-exports.UNIQUE_SELECTION_DISPATCHER_PROVIDER = UNIQUE_SELECTION_DISPATCHER_PROVIDER;
 exports.DataSource = DataSource;
 exports.SelectionModel = SelectionModel;
 exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
-exports.ɵa = UNIQUE_SELECTION_DISPATCHER_PROVIDER_FACTORY;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

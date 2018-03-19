@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/bidi', ['exports', '@angular/core', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = {}),global.ng.core,global.ng.common));
-}(this, (function (exports,core,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/bidi', ['exports', '@angular/common', '@angular/core'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = {}),global.ng.common,global.ng.core));
+}(this, (function (exports,common,core) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -24,8 +24,21 @@
  *
  * We also can't re-provide the DOCUMENT token from platform-brower because the unit tests
  * themselves use things like `querySelector` in test code.
+ *
+ * This token is defined in a separate file from Directionality as a workaround for
+ * https://github.com/angular/angular/issues/22559
+ *
+ * \@docs-private
  */
-var /** @type {?} */ DIR_DOCUMENT = new core.InjectionToken('cdk-dir-doc');
+var /** @type {?} */ DIR_DOCUMENT = new core.InjectionToken('cdk-dir-doc', {
+    providedIn: 'root',
+    factory: function () { return core.inject(common.DOCUMENT); },
+});
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
@@ -51,12 +64,13 @@ var Directionality = /** @class */ (function () {
         }
     }
     Directionality.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     Directionality.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [DIR_DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ Directionality.ngInjectableDef = core.defineInjectable({ factory: function Directionality_Factory() { return new Directionality(core.inject(DIR_DOCUMENT, null, 0)); }, token: Directionality, providedIn: "root" });
     return Directionality;
 }());
 
@@ -161,10 +175,6 @@ var BidiModule = /** @class */ (function () {
         { type: core.NgModule, args: [{
                     exports: [Dir],
                     declarations: [Dir],
-                    providers: [
-                        { provide: DIR_DOCUMENT, useExisting: common.DOCUMENT },
-                        Directionality,
-                    ]
                 },] },
     ];
     /** @nocollapse */

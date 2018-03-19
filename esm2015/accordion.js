@@ -8,7 +8,7 @@
 import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, NgModule } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs/Subject';
-import { UniqueSelectionDispatcher, UNIQUE_SELECTION_DISPATCHER_PROVIDER } from '@angular/cdk/collections';
+import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs/Subscription';
 
 /**
@@ -267,7 +267,6 @@ CdkAccordionModule.decorators = [
     { type: NgModule, args: [{
                 exports: [CdkAccordion, CdkAccordionItem],
                 declarations: [CdkAccordion, CdkAccordionItem],
-                providers: [UNIQUE_SELECTION_DISPATCHER_PROVIDER],
             },] },
 ];
 /** @nocollapse */

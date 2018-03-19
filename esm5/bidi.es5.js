@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter, Injectable, Optional, Inject, InjectionToken, Directive, Output, Input, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Directive, Output, Input, NgModule, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -21,8 +21,21 @@ import { DOCUMENT } from '@angular/common';
  *
  * We also can't re-provide the DOCUMENT token from platform-brower because the unit tests
  * themselves use things like `querySelector` in test code.
+ *
+ * This token is defined in a separate file from Directionality as a workaround for
+ * https://github.com/angular/angular/issues/22559
+ *
+ * \@docs-private
  */
-var /** @type {?} */ DIR_DOCUMENT = new InjectionToken('cdk-dir-doc');
+var /** @type {?} */ DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
+    providedIn: 'root',
+    factory: function () { return inject(DOCUMENT); },
+});
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
@@ -48,12 +61,13 @@ var Directionality = /** @class */ (function () {
         }
     }
     Directionality.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     Directionality.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ Directionality.ngInjectableDef = defineInjectable({ factory: function Directionality_Factory() { return new Directionality(inject(DIR_DOCUMENT, null, 0)); }, token: Directionality, providedIn: "root" });
     return Directionality;
 }());
 
@@ -158,10 +172,6 @@ var BidiModule = /** @class */ (function () {
         { type: NgModule, args: [{
                     exports: [Dir],
                     declarations: [Dir],
-                    providers: [
-                        { provide: DIR_DOCUMENT, useExisting: DOCUMENT },
-                        Directionality,
-                    ]
                 },] },
     ];
     /** @nocollapse */

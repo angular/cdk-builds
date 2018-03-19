@@ -1,11 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-import { ElementRef, NgZone, OnDestroy, AfterContentInit } from '@angular/core';
+import { AfterContentInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.

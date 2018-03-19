@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/Subject'), require('rxjs/operators/debounceTime')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/observers', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/Subject', 'rxjs/operators/debounceTime'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.Rx.operators));
-}(this, (function (exports,core,coercion,Subject,debounceTime) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs/operators/debounceTime'), require('rxjs/Subject')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/observers', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs/operators/debounceTime', 'rxjs/Subject'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = {}),global.ng.cdk.coercion,global.ng.core,global.Rx.operators,global.Rx));
+}(this, (function (exports,coercion,core,debounceTime,Subject) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -34,10 +34,11 @@ var MutationObserverFactory = /** @class */ (function () {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     };
     MutationObserverFactory.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     MutationObserverFactory.ctorParameters = function () { return []; };
+    /** @nocollapse */ MutationObserverFactory.ngInjectableDef = core.defineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 }());
 /**

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, Injectable, NgZone, Inject, SkipSelf, ComponentFactoryResolver, ApplicationRef, Injector, Directive, ElementRef, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, NgModule } from '@angular/core';
+import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, Directive, ElementRef, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
@@ -13,8 +13,8 @@ import { __assign, __extends } from 'tslib';
 import { take } from 'rxjs/operators/take';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
+import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
@@ -184,7 +184,7 @@ ScrollingVisibility = /** @class */ (function () {
  */
 var ConnectedOverlayPositionChange = /** @class */ (function () {
     function ConnectedOverlayPositionChange(connectionPair, /** @docs-private */
-        scrollableViewProperties) {
+    scrollableViewProperties) {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
@@ -221,6 +221,106 @@ function validateHorizontalPosition(property, value) {
             "Expected \"start\", \"end\" or \"center\".");
     }
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * Strategy that will prevent the user from scrolling while the overlay is visible.
+ */
+var  /**
+ * Strategy that will prevent the user from scrolling while the overlay is visible.
+ */
+BlockScrollStrategy = /** @class */ (function () {
+    function BlockScrollStrategy(_viewportRuler, document) {
+        this._viewportRuler = _viewportRuler;
+        this._previousHTMLStyles = { top: '', left: '' };
+        this._isEnabled = false;
+        this._document = document;
+    }
+    /** Attaches this scroll strategy to an overlay. */
+    /**
+     * Attaches this scroll strategy to an overlay.
+     * @return {?}
+     */
+    BlockScrollStrategy.prototype.attach = /**
+     * Attaches this scroll strategy to an overlay.
+     * @return {?}
+     */
+    function () { };
+    /** Blocks page-level scroll while the attached overlay is open. */
+    /**
+     * Blocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    BlockScrollStrategy.prototype.enable = /**
+     * Blocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    function () {
+        if (this._canBeEnabled()) {
+            var /** @type {?} */ root = this._document.documentElement;
+            this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
+            // Cache the previous inline styles in case the user had set them.
+            this._previousHTMLStyles.left = root.style.left || '';
+            this._previousHTMLStyles.top = root.style.top || '';
+            // Note: we're using the `html` node, instead of the `body`, because the `body` may
+            // have the user agent margin, whereas the `html` is guaranteed not to have one.
+            root.style.left = -this._previousScrollPosition.left + "px";
+            root.style.top = -this._previousScrollPosition.top + "px";
+            root.classList.add('cdk-global-scrollblock');
+            this._isEnabled = true;
+        }
+    };
+    /** Unblocks page-level scroll while the attached overlay is open. */
+    /**
+     * Unblocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    BlockScrollStrategy.prototype.disable = /**
+     * Unblocks page-level scroll while the attached overlay is open.
+     * @return {?}
+     */
+    function () {
+        if (this._isEnabled) {
+            var /** @type {?} */ html = this._document.documentElement;
+            var /** @type {?} */ body = this._document.body;
+            var /** @type {?} */ previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
+            var /** @type {?} */ previousBodyScrollBehavior = body.style['scrollBehavior'] || '';
+            this._isEnabled = false;
+            html.style.left = this._previousHTMLStyles.left;
+            html.style.top = this._previousHTMLStyles.top;
+            html.classList.remove('cdk-global-scrollblock');
+            // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
+            // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
+            html.style['scrollBehavior'] = body.style['scrollBehavior'] = 'auto';
+            window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
+            html.style['scrollBehavior'] = previousHtmlScrollBehavior;
+            body.style['scrollBehavior'] = previousBodyScrollBehavior;
+        }
+    };
+    /**
+     * @return {?}
+     */
+    BlockScrollStrategy.prototype._canBeEnabled = /**
+     * @return {?}
+     */
+    function () {
+        // Since the scroll strategies can't be singletons, we have to use a global CSS class
+        // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
+        // scrolling multiple times.
+        var /** @type {?} */ html = this._document.documentElement;
+        if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
+            return false;
+        }
+        var /** @type {?} */ body = this._document.body;
+        var /** @type {?} */ viewport = this._viewportRuler.getViewportSize();
+        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
+    };
+    return BlockScrollStrategy;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -326,106 +426,6 @@ CloseScrollStrategy = /** @class */ (function () {
         }
     };
     return CloseScrollStrategy;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-
-/**
- * Strategy that will prevent the user from scrolling while the overlay is visible.
- */
-var  /**
- * Strategy that will prevent the user from scrolling while the overlay is visible.
- */
-BlockScrollStrategy = /** @class */ (function () {
-    function BlockScrollStrategy(_viewportRuler, document) {
-        this._viewportRuler = _viewportRuler;
-        this._previousHTMLStyles = { top: '', left: '' };
-        this._isEnabled = false;
-        this._document = document;
-    }
-    /** Attaches this scroll strategy to an overlay. */
-    /**
-     * Attaches this scroll strategy to an overlay.
-     * @return {?}
-     */
-    BlockScrollStrategy.prototype.attach = /**
-     * Attaches this scroll strategy to an overlay.
-     * @return {?}
-     */
-    function () { };
-    /** Blocks page-level scroll while the attached overlay is open. */
-    /**
-     * Blocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    BlockScrollStrategy.prototype.enable = /**
-     * Blocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    function () {
-        if (this._canBeEnabled()) {
-            var /** @type {?} */ root = this._document.documentElement;
-            this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
-            // Cache the previous inline styles in case the user had set them.
-            this._previousHTMLStyles.left = root.style.left || '';
-            this._previousHTMLStyles.top = root.style.top || '';
-            // Note: we're using the `html` node, instead of the `body`, because the `body` may
-            // have the user agent margin, whereas the `html` is guaranteed not to have one.
-            root.style.left = -this._previousScrollPosition.left + "px";
-            root.style.top = -this._previousScrollPosition.top + "px";
-            root.classList.add('cdk-global-scrollblock');
-            this._isEnabled = true;
-        }
-    };
-    /** Unblocks page-level scroll while the attached overlay is open. */
-    /**
-     * Unblocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    BlockScrollStrategy.prototype.disable = /**
-     * Unblocks page-level scroll while the attached overlay is open.
-     * @return {?}
-     */
-    function () {
-        if (this._isEnabled) {
-            var /** @type {?} */ html = this._document.documentElement;
-            var /** @type {?} */ body = this._document.body;
-            var /** @type {?} */ previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
-            var /** @type {?} */ previousBodyScrollBehavior = body.style['scrollBehavior'] || '';
-            this._isEnabled = false;
-            html.style.left = this._previousHTMLStyles.left;
-            html.style.top = this._previousHTMLStyles.top;
-            html.classList.remove('cdk-global-scrollblock');
-            // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
-            // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
-            html.style['scrollBehavior'] = body.style['scrollBehavior'] = 'auto';
-            window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
-            html.style['scrollBehavior'] = previousHtmlScrollBehavior;
-            body.style['scrollBehavior'] = previousBodyScrollBehavior;
-        }
-    };
-    /**
-     * @return {?}
-     */
-    BlockScrollStrategy.prototype._canBeEnabled = /**
-     * @return {?}
-     */
-    function () {
-        // Since the scroll strategies can't be singletons, we have to use a global CSS class
-        // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
-        // scrolling multiple times.
-        var /** @type {?} */ html = this._document.documentElement;
-        if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
-            return false;
-        }
-        var /** @type {?} */ body = this._document.body;
-        var /** @type {?} */ viewport = this._viewportRuler.getViewportSize();
-        return body.scrollHeight > viewport.height || body.scrollWidth > viewport.width;
-    };
-    return BlockScrollStrategy;
 }());
 
 /**
@@ -593,7 +593,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         this._document = document;
     }
     ScrollStrategyOptions.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     ScrollStrategyOptions.ctorParameters = function () { return [
@@ -602,6 +602,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: NgZone, },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = defineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(inject(ScrollDispatcher), inject(ViewportRuler), inject(NgZone), inject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
 }());
 
@@ -609,6 +610,251 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
+ * if any. It maintains a list of attached overlays to determine best suited overlay based
+ * on event target and order of overlay opens.
+ */
+var OverlayKeyboardDispatcher = /** @class */ (function () {
+    function OverlayKeyboardDispatcher(document) {
+        var _this = this;
+        /**
+         * Currently attached overlays in the order they were attached.
+         */
+        this._attachedOverlays = [];
+        /**
+         * Keyboard event listener that will be attached to the body.
+         */
+        this._keydownListener = function (event) {
+            if (_this._attachedOverlays.length) {
+                // Dispatch keydown event to the correct overlay.
+                // Dispatch keydown event to the correct overlay.
+                _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
+            }
+        };
+        this._document = document;
+    }
+    /**
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._detach();
+    };
+    /** Add a new overlay to the list of attached overlay refs. */
+    /**
+     * Add a new overlay to the list of attached overlay refs.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype.add = /**
+     * Add a new overlay to the list of attached overlay refs.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    function (overlayRef) {
+        // Lazily start dispatcher once first overlay is added
+        if (!this._isAttached) {
+            this._document.body.addEventListener('keydown', this._keydownListener, true);
+            this._isAttached = true;
+        }
+        this._attachedOverlays.push(overlayRef);
+    };
+    /** Remove an overlay from the list of attached overlay refs. */
+    /**
+     * Remove an overlay from the list of attached overlay refs.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype.remove = /**
+     * Remove an overlay from the list of attached overlay refs.
+     * @param {?} overlayRef
+     * @return {?}
+     */
+    function (overlayRef) {
+        var /** @type {?} */ index = this._attachedOverlays.indexOf(overlayRef);
+        if (index > -1) {
+            this._attachedOverlays.splice(index, 1);
+        }
+        // Remove the global listener once there are no more overlays.
+        if (this._attachedOverlays.length === 0) {
+            this._detach();
+        }
+    };
+    /**
+     * Select the appropriate overlay from a keydown event.
+     * @param {?} event
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype._selectOverlayFromEvent = /**
+     * Select the appropriate overlay from a keydown event.
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        // Check if any overlays contain the event
+        var /** @type {?} */ targetedOverlay = this._attachedOverlays.find(function (overlay) {
+            return overlay.overlayElement === event.target ||
+                overlay.overlayElement.contains(/** @type {?} */ (event.target));
+        });
+        // Use the overlay if it exists, otherwise choose the most recently attached one
+        return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
+    };
+    /**
+     * Detaches the global keyboard event listener.
+     * @return {?}
+     */
+    OverlayKeyboardDispatcher.prototype._detach = /**
+     * Detaches the global keyboard event listener.
+     * @return {?}
+     */
+    function () {
+        if (this._isAttached) {
+            this._document.body.removeEventListener('keydown', this._keydownListener, true);
+            this._isAttached = false;
+        }
+    };
+    OverlayKeyboardDispatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] },
+    ];
+    /** @nocollapse */
+    OverlayKeyboardDispatcher.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    ]; };
+    /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = defineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(inject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    return OverlayKeyboardDispatcher;
+}());
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * @param {?} dispatcher
+ * @param {?} _document
+ * @return {?}
+ */
+function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
+    return dispatcher || new OverlayKeyboardDispatcher(_document);
+}
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ */
+var /** @type {?} */ OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
+    // If there is already an OverlayKeyboardDispatcher available, use that.
+    // Otherwise, provide a new one.
+    provide: OverlayKeyboardDispatcher,
+    deps: [
+        [new Optional(), new SkipSelf(), OverlayKeyboardDispatcher],
+        /** @type {?} */ (
+        // Coerce to `InjectionToken` so that the `deps` match the "shape"
+        // of the type expected by Angular
+        DOCUMENT)
+    ],
+    useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Container inside which all overlays will render.
+ */
+var OverlayContainer = /** @class */ (function () {
+    function OverlayContainer(_document) {
+        this._document = _document;
+    }
+    /**
+     * @return {?}
+     */
+    OverlayContainer.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        if (this._containerElement && this._containerElement.parentNode) {
+            this._containerElement.parentNode.removeChild(this._containerElement);
+        }
+    };
+    /**
+     * This method returns the overlay container element. It will lazily
+     * create the element the first time  it is called to facilitate using
+     * the container in non-browser environments.
+     * @returns the container element
+     */
+    /**
+     * This method returns the overlay container element. It will lazily
+     * create the element the first time  it is called to facilitate using
+     * the container in non-browser environments.
+     * @return {?} the container element
+     */
+    OverlayContainer.prototype.getContainerElement = /**
+     * This method returns the overlay container element. It will lazily
+     * create the element the first time  it is called to facilitate using
+     * the container in non-browser environments.
+     * @return {?} the container element
+     */
+    function () {
+        if (!this._containerElement) {
+            this._createContainer();
+        }
+        return this._containerElement;
+    };
+    /**
+     * Create the overlay container element, which is simply a div
+     * with the 'cdk-overlay-container' class on the document body.
+     */
+    /**
+     * Create the overlay container element, which is simply a div
+     * with the 'cdk-overlay-container' class on the document body.
+     * @return {?}
+     */
+    OverlayContainer.prototype._createContainer = /**
+     * Create the overlay container element, which is simply a div
+     * with the 'cdk-overlay-container' class on the document body.
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ container = this._document.createElement('div');
+        container.classList.add('cdk-overlay-container');
+        this._document.body.appendChild(container);
+        this._containerElement = container;
+    };
+    OverlayContainer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] },
+    ];
+    /** @nocollapse */
+    OverlayContainer.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    ]; };
+    /** @nocollapse */ OverlayContainer.ngInjectableDef = defineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(inject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+    return OverlayContainer;
+}());
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * @param {?} parentContainer
+ * @param {?} _document
+ * @return {?}
+ */
+function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
+    return parentContainer || new OverlayContainer(_document);
+}
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ */
+var /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
+    // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
+    provide: OverlayContainer,
+    deps: [
+        [new Optional(), new SkipSelf(), OverlayContainer],
+        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+        ) // We need to use the InjectionToken somewhere to keep TS happy
+    ],
+    useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
+};
 
 /**
  * @fileoverview added by tsickle
@@ -2908,258 +3154,16 @@ var OverlayPositionBuilder = /** @class */ (function () {
         return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document);
     };
     OverlayPositionBuilder.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     OverlayPositionBuilder.ctorParameters = function () { return [
         { type: ViewportRuler, },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
+    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(inject(ViewportRuler), inject(DOCUMENT)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
- * if any. It maintains a list of attached overlays to determine best suited overlay based
- * on event target and order of overlay opens.
- */
-var OverlayKeyboardDispatcher = /** @class */ (function () {
-    function OverlayKeyboardDispatcher(document) {
-        var _this = this;
-        /**
-         * Currently attached overlays in the order they were attached.
-         */
-        this._attachedOverlays = [];
-        /**
-         * Keyboard event listener that will be attached to the body.
-         */
-        this._keydownListener = function (event) {
-            if (_this._attachedOverlays.length) {
-                // Dispatch keydown event to the correct overlay.
-                // Dispatch keydown event to the correct overlay.
-                _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
-            }
-        };
-        this._document = document;
-    }
-    /**
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this._detach();
-    };
-    /** Add a new overlay to the list of attached overlay refs. */
-    /**
-     * Add a new overlay to the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.add = /**
-     * Add a new overlay to the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    function (overlayRef) {
-        // Lazily start dispatcher once first overlay is added
-        if (!this._isAttached) {
-            this._document.body.addEventListener('keydown', this._keydownListener, true);
-            this._isAttached = true;
-        }
-        this._attachedOverlays.push(overlayRef);
-    };
-    /** Remove an overlay from the list of attached overlay refs. */
-    /**
-     * Remove an overlay from the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype.remove = /**
-     * Remove an overlay from the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    function (overlayRef) {
-        var /** @type {?} */ index = this._attachedOverlays.indexOf(overlayRef);
-        if (index > -1) {
-            this._attachedOverlays.splice(index, 1);
-        }
-        // Remove the global listener once there are no more overlays.
-        if (this._attachedOverlays.length === 0) {
-            this._detach();
-        }
-    };
-    /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._selectOverlayFromEvent = /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    function (event) {
-        // Check if any overlays contain the event
-        var /** @type {?} */ targetedOverlay = this._attachedOverlays.find(function (overlay) {
-            return overlay.overlayElement === event.target ||
-                overlay.overlayElement.contains(/** @type {?} */ (event.target));
-        });
-        // Use the overlay if it exists, otherwise choose the most recently attached one
-        return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
-    };
-    /**
-     * Detaches the global keyboard event listener.
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._detach = /**
-     * Detaches the global keyboard event listener.
-     * @return {?}
-     */
-    function () {
-        if (this._isAttached) {
-            this._document.body.removeEventListener('keydown', this._keydownListener, true);
-            this._isAttached = false;
-        }
-    };
-    OverlayKeyboardDispatcher.decorators = [
-        { type: Injectable },
-    ];
-    /** @nocollapse */
-    OverlayKeyboardDispatcher.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-    ]; };
-    return OverlayKeyboardDispatcher;
-}());
-/**
- * \@docs-private
- * @param {?} dispatcher
- * @param {?} _document
- * @return {?}
- */
-function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
-    return dispatcher || new OverlayKeyboardDispatcher(_document);
-}
-/**
- * \@docs-private
- */
-var /** @type {?} */ OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
-    // If there is already an OverlayKeyboardDispatcher available, use that.
-    // Otherwise, provide a new one.
-    provide: OverlayKeyboardDispatcher,
-    deps: [
-        [new Optional(), new SkipSelf(), OverlayKeyboardDispatcher],
-        /** @type {?} */ (
-        // Coerce to `InjectionToken` so that the `deps` match the "shape"
-        // of the type expected by Angular
-        DOCUMENT)
-    ],
-    useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
-};
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Container inside which all overlays will render.
- */
-var OverlayContainer = /** @class */ (function () {
-    function OverlayContainer(_document) {
-        this._document = _document;
-    }
-    /**
-     * @return {?}
-     */
-    OverlayContainer.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        if (this._containerElement && this._containerElement.parentNode) {
-            this._containerElement.parentNode.removeChild(this._containerElement);
-        }
-    };
-    /**
-     * This method returns the overlay container element. It will lazily
-     * create the element the first time  it is called to facilitate using
-     * the container in non-browser environments.
-     * @returns the container element
-     */
-    /**
-     * This method returns the overlay container element. It will lazily
-     * create the element the first time  it is called to facilitate using
-     * the container in non-browser environments.
-     * @return {?} the container element
-     */
-    OverlayContainer.prototype.getContainerElement = /**
-     * This method returns the overlay container element. It will lazily
-     * create the element the first time  it is called to facilitate using
-     * the container in non-browser environments.
-     * @return {?} the container element
-     */
-    function () {
-        if (!this._containerElement) {
-            this._createContainer();
-        }
-        return this._containerElement;
-    };
-    /**
-     * Create the overlay container element, which is simply a div
-     * with the 'cdk-overlay-container' class on the document body.
-     */
-    /**
-     * Create the overlay container element, which is simply a div
-     * with the 'cdk-overlay-container' class on the document body.
-     * @return {?}
-     */
-    OverlayContainer.prototype._createContainer = /**
-     * Create the overlay container element, which is simply a div
-     * with the 'cdk-overlay-container' class on the document body.
-     * @return {?}
-     */
-    function () {
-        var /** @type {?} */ container = this._document.createElement('div');
-        container.classList.add('cdk-overlay-container');
-        this._document.body.appendChild(container);
-        this._containerElement = container;
-    };
-    OverlayContainer.decorators = [
-        { type: Injectable },
-    ];
-    /** @nocollapse */
-    OverlayContainer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
-    ]; };
-    return OverlayContainer;
-}());
-/**
- * \@docs-private
- * @param {?} parentContainer
- * @param {?} _document
- * @return {?}
- */
-function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
-    return parentContainer || new OverlayContainer(_document);
-}
-/**
- * \@docs-private
- */
-var /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
-    // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
-    provide: OverlayContainer,
-    deps: [
-        [new Optional(), new SkipSelf(), OverlayContainer],
-        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
-        ) // We need to use the InjectionToken somewhere to keep TS happy
-    ],
-    useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -3331,23 +3335,19 @@ var /** @type {?} */ defaultPositionList = [
 /**
  * Injection token that determines the scroll handling while the connected overlay is open.
  */
-var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy');
-/**
- * \@docs-private
- * @param {?} overlay
- * @return {?}
- */
-function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
-    return function () { return overlay.scrollStrategies.reposition(); };
-}
-/**
- * \@docs-private
- */
-var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
-    provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
-    deps: [Overlay],
-    useFactory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
-};
+var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy', {
+    providedIn: 'root',
+    factory: function () {
+        // Store the injected deps here because we can't use the `inject` function outside
+        // this function's context (including the inner function).
+        var /** @type {?} */ scrollDispatcher = inject(ScrollDispatcher);
+        var /** @type {?} */ viewportRuler = inject(ViewportRuler);
+        var /** @type {?} */ ngZone = inject(NgZone);
+        return function (config) {
+            return new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
+        };
+    },
+});
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
@@ -3729,10 +3729,45 @@ var CdkConnectedOverlay = /** @class */ (function () {
     };
     return CdkConnectedOverlay;
 }());
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * @param {?} overlay
+ * @return {?}
+ */
+function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
+    return function () { return overlay.scrollStrategies.reposition(); };
+}
+/**
+ * \@docs-private \@deprecated \@deletion-target 7.0.0
+ */
+var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
+    provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
+    deps: [Overlay],
+    useFactory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
+};
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
+ */
+var OverlayModule = /** @class */ (function () {
+    function OverlayModule() {
+    }
+    OverlayModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule, PortalModule, ScrollDispatchModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollDispatchModule],
+                    declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
+                    providers: [Overlay],
+                },] },
+    ];
+    /** @nocollapse */
+    OverlayModule.ctorParameters = function () { return []; };
+    return OverlayModule;
+}());
+/**
+ * @deprecated Use `OverlayModule` instead.
+ * \@deletion-target 7.0.0
  */
 var /** @type {?} */ OVERLAY_PROVIDERS = [
     Overlay,
@@ -3742,21 +3777,6 @@ var /** @type {?} */ OVERLAY_PROVIDERS = [
     OVERLAY_CONTAINER_PROVIDER,
     CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];
-var OverlayModule = /** @class */ (function () {
-    function OverlayModule() {
-    }
-    OverlayModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [BidiModule, PortalModule, ScrollDispatchModule],
-                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollDispatchModule],
-                    declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
-                    providers: [OVERLAY_PROVIDERS, ScrollStrategyOptions],
-                },] },
-    ];
-    /** @nocollapse */
-    OverlayModule.ctorParameters = function () { return []; };
-    return OverlayModule;
-}());
 
 /**
  * @fileoverview added by tsickle
@@ -3861,5 +3881,5 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, FlexibleConnectedPositionStrategy, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OVERLAY_PROVIDERS, OverlayModule, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
+export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, FlexibleConnectedPositionStrategy, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OverlayModule, OVERLAY_PROVIDERS, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
 //# sourceMappingURL=overlay.es5.js.map

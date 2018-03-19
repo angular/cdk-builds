@@ -1,11 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-import { ElementRef, EventEmitter, OnDestroy, AfterContentInit, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterContentInit, ElementRef, EventEmitter, NgZone, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private

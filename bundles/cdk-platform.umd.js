@@ -65,10 +65,11 @@ var Platform = /** @class */ (function () {
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
     Platform.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     Platform.ctorParameters = function () { return []; };
+    /** @nocollapse */ Platform.ngInjectableDef = core.defineInjectable({ factory: function Platform_Factory() { return new Platform(); }, token: Platform, providedIn: "root" });
     return Platform;
 }());
 
@@ -161,9 +162,7 @@ var PlatformModule = /** @class */ (function () {
     function PlatformModule() {
     }
     PlatformModule.decorators = [
-        { type: core.NgModule, args: [{
-                    providers: [Platform]
-                },] },
+        { type: core.NgModule },
     ];
     /** @nocollapse */
     PlatformModule.ctorParameters = function () { return []; };

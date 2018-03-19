@@ -1,10 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { InjectionToken, Optional } from '@angular/core';
 /**
  * Interface used to register message elements and keep a count of how many registrations have
@@ -69,11 +62,11 @@ export declare class AriaDescriber {
     /** Determines whether a message can be described on a particular element. */
     private _canBeDescribed(element, message);
 }
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
     deps: (Optional[] | InjectionToken<any>)[];
-    useFactory: (parentDispatcher: AriaDescriber, _document: any) => AriaDescriber;
+    useFactory: typeof ARIA_DESCRIBER_PROVIDER_FACTORY;
 };

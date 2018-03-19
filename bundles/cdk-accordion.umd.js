@@ -316,7 +316,6 @@ var CdkAccordionModule = /** @class */ (function () {
         { type: core.NgModule, args: [{
                     exports: [CdkAccordion, CdkAccordionItem],
                     declarations: [CdkAccordion, CdkAccordionItem],
-                    providers: [collections.UNIQUE_SELECTION_DISPATCHER_PROVIDER],
                 },] },
     ];
     /** @nocollapse */

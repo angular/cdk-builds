@@ -1,11 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-import { InjectionToken, Optional, OnDestroy } from '@angular/core';
+import { InjectionToken, OnDestroy, Optional } from '@angular/core';
 /** Container inside which all overlays will render. */
 export declare class OverlayContainer implements OnDestroy {
     private _document;
@@ -25,11 +18,11 @@ export declare class OverlayContainer implements OnDestroy {
      */
     protected _createContainer(): void;
 }
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer, _document: any): OverlayContainer;
-/** @docs-private */
+/** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const OVERLAY_CONTAINER_PROVIDER: {
     provide: typeof OverlayContainer;
     deps: (Optional[] | InjectionToken<any>)[];
-    useFactory: (parentContainer: OverlayContainer, _document: any) => OverlayContainer;
+    useFactory: typeof OVERLAY_CONTAINER_PROVIDER_FACTORY;
 };

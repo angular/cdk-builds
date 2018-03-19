@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgModule } from '@angular/core';
+import { Injectable, NgModule, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -61,10 +61,11 @@ var Platform = /** @class */ (function () {
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
     Platform.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     Platform.ctorParameters = function () { return []; };
+    /** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(); }, token: Platform, providedIn: "root" });
     return Platform;
 }());
 
@@ -157,9 +158,7 @@ var PlatformModule = /** @class */ (function () {
     function PlatformModule() {
     }
     PlatformModule.decorators = [
-        { type: NgModule, args: [{
-                    providers: [Platform]
-                },] },
+        { type: NgModule },
     ];
     /** @nocollapse */
     PlatformModule.ctorParameters = function () { return []; };

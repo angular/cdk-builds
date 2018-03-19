@@ -5,14 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ApplicationRef, Injector, NgZone } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
+import { ApplicationRef, ComponentFactoryResolver, Injector, NgZone } from '@angular/core';
+import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayConfig } from './overlay-config';
+import { OverlayContainer } from './overlay-container';
 import { OverlayRef } from './overlay-ref';
 import { OverlayPositionBuilder } from './position/overlay-position-builder';
-import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
-import { OverlayContainer } from './overlay-container';
 import { ScrollStrategyOptions } from './scroll/index';
-import { Directionality } from '@angular/cdk/bidi';
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
