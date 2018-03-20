@@ -1333,6 +1333,11 @@ class FlexibleConnectedPositionStrategy {
      */
     withPositions(positions) {
         this._preferredPositions = positions;
+        // If the last calculated position object isn't part of the positions anymore, clear
+        // it in order to avoid it being picked up if the consumer tries to re-apply.
+        if (positions.indexOf(/** @type {?} */ ((this._lastPosition))) === -1) {
+            this._lastPosition = null;
+        }
         return this;
     }
     /**
@@ -1591,8 +1596,8 @@ class FlexibleConnectedPositionStrategy {
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge.
-            bottom = viewport.bottom - origin.y + this._viewportMargin;
-            height = origin.y - viewport.top;
+            bottom = viewport.height - origin.y + this._viewportMargin;
+            height = viewport.height - bottom;
         }
         else {
             // If neither top nor bottom, it means that the overlay
@@ -1657,8 +1662,8 @@ class FlexibleConnectedPositionStrategy {
         }
         else {
             styles.height = `${boundingBoxRect.height}px`;
-            styles.top = boundingBoxRect.top ? `${boundingBoxRect.top}px` : '';
-            styles.bottom = boundingBoxRect.bottom ? `${boundingBoxRect.bottom}px` : '';
+            styles.top = boundingBoxRect.top != null ? `${boundingBoxRect.top}px` : '';
+            styles.bottom = boundingBoxRect.bottom != null ? `${boundingBoxRect.bottom}px` : '';
         }
         if (!this._hasFlexibleWidth || this._isPushed) {
             styles.left = '0';
@@ -1667,8 +1672,8 @@ class FlexibleConnectedPositionStrategy {
         }
         else {
             styles.width = `${boundingBoxRect.width}px`;
-            styles.left = boundingBoxRect.left ? `${boundingBoxRect.left}px` : '';
-            styles.right = boundingBoxRect.right ? `${boundingBoxRect.right}px` : '';
+            styles.left = boundingBoxRect.left != null ? `${boundingBoxRect.left}px` : '';
+            styles.right = boundingBoxRect.right != null ? `${boundingBoxRect.right}px` : '';
         }
         const /** @type {?} */ maxHeight = this._overlayRef.getConfig().maxHeight;
         if (maxHeight && this._hasFlexibleHeight) {
@@ -1919,7 +1924,7 @@ function extendStyles(dest, source) {
  * a point on the origin element that is connected to a point on the overlay element. For example,
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
- * @deprecated
+ * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
  * \@deletion-target 7.0.0
  */
 class ConnectedPositionStrategy {
@@ -2326,6 +2331,8 @@ class OverlayPositionBuilder {
     }
     /**
      * Creates a relative position strategy.
+     * @deprecated Use `flexibleConnectedTo` instead.
+     * \@deletion-target 7.0.0
      * @param {?} elementRef
      * @param {?} originPos
      * @param {?} overlayPos
