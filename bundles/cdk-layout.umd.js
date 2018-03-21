@@ -15,6 +15,21 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var LayoutModule = /** @class */ (function () {
+    function LayoutModule() {
+    }
+    LayoutModule.decorators = [
+        { type: core.NgModule },
+    ];
+    /** @nocollapse */
+    LayoutModule.ctorParameters = function () { return []; };
+    return LayoutModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Global registry for all dynamically-created, injected style tags.
  */
@@ -60,12 +75,13 @@ var MediaMatcher = /** @class */ (function () {
         return this._matchMedia(query);
     };
     MediaMatcher.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     MediaMatcher.ctorParameters = function () { return [
         { type: platform.Platform, },
     ]; };
+    /** @nocollapse */ MediaMatcher.ngInjectableDef = core.defineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(core.inject(platform.Platform)); }, token: MediaMatcher, providedIn: "root" });
     return MediaMatcher;
 }());
 /**
@@ -227,32 +243,15 @@ var BreakpointObserver = /** @class */ (function () {
         return output;
     };
     BreakpointObserver.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     BreakpointObserver.ctorParameters = function () { return [
         { type: MediaMatcher, },
         { type: core.NgZone, },
     ]; };
+    /** @nocollapse */ BreakpointObserver.ngInjectableDef = core.defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(core.inject(MediaMatcher), core.inject(core.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-var LayoutModule = /** @class */ (function () {
-    function LayoutModule() {
-    }
-    LayoutModule.decorators = [
-        { type: core.NgModule, args: [{
-                    providers: [BreakpointObserver, MediaMatcher],
-                    imports: [platform.PlatformModule],
-                },] },
-    ];
-    /** @nocollapse */
-    LayoutModule.ctorParameters = function () { return []; };
-    return LayoutModule;
 }());
 
 /**

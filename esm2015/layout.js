@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, NgModule } from '@angular/core';
-import { Platform, PlatformModule } from '@angular/cdk/platform';
+import { NgModule, Injectable, NgZone, defineInjectable, inject } from '@angular/core';
+import { Platform } from '@angular/cdk/platform';
 import { Subject } from 'rxjs/Subject';
 import { map } from 'rxjs/operators/map';
 import { startWith } from 'rxjs/operators/startWith';
@@ -14,6 +14,18 @@ import { takeUntil } from 'rxjs/operators/takeUntil';
 import { coerceArray } from '@angular/cdk/coercion';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { fromEventPattern } from 'rxjs/observable/fromEventPattern';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+class LayoutModule {
+}
+LayoutModule.decorators = [
+    { type: NgModule },
+];
+/** @nocollapse */
+LayoutModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -54,12 +66,13 @@ class MediaMatcher {
     }
 }
 MediaMatcher.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 MediaMatcher.ctorParameters = () => [
     { type: Platform, },
 ];
+/** @nocollapse */ MediaMatcher.ngInjectableDef = defineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(inject(Platform)); }, token: MediaMatcher, providedIn: "root" });
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when there is at least one CSS
  * selector for the respective media query.
@@ -185,28 +198,14 @@ class BreakpointObserver {
     }
 }
 BreakpointObserver.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 BreakpointObserver.ctorParameters = () => [
     { type: MediaMatcher, },
     { type: NgZone, },
 ];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-class LayoutModule {
-}
-LayoutModule.decorators = [
-    { type: NgModule, args: [{
-                providers: [BreakpointObserver, MediaMatcher],
-                imports: [PlatformModule],
-            },] },
-];
-/** @nocollapse */
-LayoutModule.ctorParameters = () => [];
+/** @nocollapse */ BreakpointObserver.ngInjectableDef = defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(inject(MediaMatcher), inject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
