@@ -168,7 +168,7 @@ var CdkStep = /** @class */ (function () {
     CdkStep.decorators = [
         { type: Component, args: [{selector: 'cdk-step',
                     exportAs: 'cdkStep',
-                    template: "<ng-template><ng-content></ng-content></ng-template>",
+                    template: '<ng-template><ng-content></ng-content></ng-template>',
                     encapsulation: ViewEncapsulation.None,
                     changeDetection: ChangeDetectionStrategy.OnPush,
                 },] },
