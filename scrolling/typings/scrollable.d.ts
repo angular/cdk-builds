@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, OnInit, OnDestroy, NgZone } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ScrollDispatcher } from './scroll-dispatcher';
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the

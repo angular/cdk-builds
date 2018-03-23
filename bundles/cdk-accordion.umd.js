@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs/Subject'), require('@angular/cdk/collections'), require('rxjs/Subscription')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs/Subject', '@angular/cdk/collections', 'rxjs/Subscription'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.ng.cdk.collections,global.Rx));
-}(this, (function (exports,core,coercion,Subject,collections,Subscription) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('@angular/cdk/collections')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs', '@angular/cdk/collections'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.ng.cdk.collections));
+}(this, (function (exports,core,coercion,rxjs,collections) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -27,7 +27,7 @@ var CdkAccordion = /** @class */ (function () {
         /**
          * Stream that emits true/false when openAll/closeAll is triggered.
          */
-        this._openCloseAllActions = new Subject.Subject();
+        this._openCloseAllActions = new rxjs.Subject();
         /**
          * A readonly id value to use for unique selection coordination.
          */
@@ -120,7 +120,7 @@ var CdkAccordionItem = /** @class */ (function () {
         /**
          * Subscription to openAll/closeAll events.
          */
-        this._openCloseAllSubscription = Subscription.Subscription.EMPTY;
+        this._openCloseAllSubscription = rxjs.Subscription.EMPTY;
         /**
          * Event emitted every time the AccordionItem is closed.
          */

@@ -7,8 +7,8 @@
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output, defineInjectable } from '@angular/core';
-import { debounceTime } from 'rxjs/operators/debounceTime';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle

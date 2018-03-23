@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/forms'), require('rxjs/Subject'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/forms', 'rxjs/Subject', '@angular/common'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/forms'), require('rxjs'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/forms', 'rxjs', '@angular/common'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.a11y,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.ng.forms,global.Rx,global.ng.common));
-}(this, (function (exports,core,a11y,bidi,coercion,keycodes,forms,Subject,common) { 'use strict';
+}(this, (function (exports,core,a11y,bidi,coercion,keycodes,forms,rxjs,common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -192,7 +192,7 @@ var CdkStepper = /** @class */ (function () {
         /**
          * Emits when the component is destroyed.
          */
-        this._destroyed = new Subject.Subject();
+        this._destroyed = new rxjs.Subject();
         this._linear = false;
         this._selectedIndex = 0;
         /**

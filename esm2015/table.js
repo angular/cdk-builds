@@ -8,11 +8,8 @@
 import { ChangeDetectionStrategy, Component, Directive, IterableDiffers, TemplateRef, ViewContainerRef, ViewEncapsulation, ContentChild, ElementRef, Input, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, ViewChild, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { takeUntil } from 'rxjs/operators';
+import { of, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 /**

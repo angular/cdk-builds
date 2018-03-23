@@ -8,9 +8,8 @@
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { CdkHeaderRowDef, CdkRowDef } from './row';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
-import { Observable } from 'rxjs/Observable';
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private

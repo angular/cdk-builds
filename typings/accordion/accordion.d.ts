@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */

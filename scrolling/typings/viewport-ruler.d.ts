@@ -7,7 +7,7 @@
  */
 import { Platform } from '@angular/cdk/platform';
 import { NgZone, OnDestroy, Optional } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
 /**

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { QueryList } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 /** This interface is for items that can be passed to a ListKeyManager. */
 export interface ListKeyManagerOption {
     /** Whether the option is disabled. */

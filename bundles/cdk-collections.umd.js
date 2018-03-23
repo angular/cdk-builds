@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/collections', ['exports', 'rxjs/Subject', '@angular/core'], factory) :
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs'), require('@angular/core')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/collections', ['exports', 'rxjs', '@angular/core'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.collections = {}),global.Rx,global.ng.core));
-}(this, (function (exports,Subject,core) { 'use strict';
+}(this, (function (exports,rxjs,core) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -64,7 +64,7 @@ SelectionModel = /** @class */ (function () {
         /**
          * Event emitted when the value has changed.
          */
-        this.onChange = this._emitChanges ? new Subject.Subject() : null;
+        this.onChange = this._emitChanges ? new rxjs.Subject() : null;
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
                 initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });

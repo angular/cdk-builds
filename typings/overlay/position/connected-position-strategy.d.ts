@@ -9,7 +9,7 @@ import { PositionStrategy } from './position-strategy';
 import { ElementRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition, ConnectedOverlayPositionChange } from './connected-position';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { OverlayRef } from '../overlay-ref';
 import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';

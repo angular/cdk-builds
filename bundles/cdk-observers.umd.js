@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs/operators/debounceTime'), require('rxjs/Subject')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/observers', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs/operators/debounceTime', 'rxjs/Subject'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = {}),global.ng.cdk.coercion,global.ng.core,global.Rx.operators,global.Rx));
-}(this, (function (exports,coercion,core,debounceTime,Subject) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/observers', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = {}),global.ng.cdk.coercion,global.ng.core,global.Rx,global.Rx.operators));
+}(this, (function (exports,coercion,core,rxjs,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -58,7 +58,7 @@ var CdkObserveContent = /** @class */ (function () {
         /**
          * Used for debouncing the emitted values to the observeContent event.
          */
-        this._debouncer = new Subject.Subject();
+        this._debouncer = new rxjs.Subject();
     }
     Object.defineProperty(CdkObserveContent.prototype, "disabled", {
         get: /**
@@ -87,7 +87,7 @@ var CdkObserveContent = /** @class */ (function () {
         var _this = this;
         if (this.debounce > 0) {
             this._ngZone.runOutsideAngular(function () {
-                _this._debouncer.pipe(debounceTime.debounceTime(_this.debounce))
+                _this._debouncer.pipe(operators.debounceTime(_this.debounce))
                     .subscribe(function (mutations) { return _this.event.emit(mutations); });
             });
         }

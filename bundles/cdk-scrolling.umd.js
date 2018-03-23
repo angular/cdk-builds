@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs/Observable'), require('rxjs/observable/fromEvent'), require('rxjs/observable/of'), require('rxjs/operators/auditTime'), require('rxjs/operators/filter'), require('rxjs/Subject'), require('rxjs/observable/merge')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs/Observable', 'rxjs/observable/fromEvent', 'rxjs/observable/of', 'rxjs/operators/auditTime', 'rxjs/operators/filter', 'rxjs/Subject', 'rxjs/observable/merge'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.cdk.platform,global.ng.core,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.operators,global.Rx.operators,global.Rx,global.Rx.Observable));
-}(this, (function (exports,platform,core,Observable,fromEvent,of,auditTime,filter,Subject,merge) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.cdk.platform,global.ng.core,global.Rx,global.Rx.operators));
+}(this, (function (exports,platform,core,rxjs,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -30,7 +30,7 @@ var ScrollDispatcher = /** @class */ (function () {
         /**
          * Subject for notifying that a registered scrollable reference element has been scrolled.
          */
-        this._scrolled = new Subject.Subject();
+        this._scrolled = new rxjs.Subject();
         /**
          * Keeps track of the global `scroll` and `resize` subscriptions.
          */
@@ -126,14 +126,14 @@ var ScrollDispatcher = /** @class */ (function () {
     function (auditTimeInMs) {
         var _this = this;
         if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
-        return this._platform.isBrowser ? Observable.Observable.create(function (observer) {
+        return this._platform.isBrowser ? rxjs.Observable.create(function (observer) {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
             // In the case of a 0ms delay, use an observable without auditTime
             // since it does add a perceptible delay in processing overhead.
             var /** @type {?} */ subscription = auditTimeInMs > 0 ?
-                _this._scrolled.pipe(auditTime.auditTime(auditTimeInMs)).subscribe(observer) :
+                _this._scrolled.pipe(operators.auditTime(auditTimeInMs)).subscribe(observer) :
                 _this._scrolled.subscribe(observer);
             _this._scrolledCount++;
             return function () {
@@ -143,7 +143,7 @@ var ScrollDispatcher = /** @class */ (function () {
                     _this._removeGlobalListener();
                 }
             };
-        }) : of.of();
+        }) : rxjs.of();
     };
     /**
      * @return {?}
@@ -178,7 +178,7 @@ var ScrollDispatcher = /** @class */ (function () {
      */
     function (elementRef, auditTimeInMs) {
         var /** @type {?} */ ancestors = this.getAncestorScrollContainers(elementRef);
-        return this.scrolled(auditTimeInMs).pipe(filter.filter(function (target) {
+        return this.scrolled(auditTimeInMs).pipe(operators.filter(function (target) {
             return !target || ancestors.indexOf(target) > -1;
         }));
     };
@@ -238,7 +238,7 @@ var ScrollDispatcher = /** @class */ (function () {
     function () {
         var _this = this;
         this._globalSubscription = this._ngZone.runOutsideAngular(function () {
-            return fromEvent.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
+            return rxjs.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
     /**
@@ -301,7 +301,7 @@ var CdkScrollable = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._elementScrolled = new Subject.Subject();
+        this._elementScrolled = new rxjs.Subject();
         this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
     }
     /**
@@ -383,8 +383,8 @@ var ViewportRuler = /** @class */ (function () {
         var _this = this;
         this._platform = _platform;
         this._change = _platform.isBrowser ? ngZone.runOutsideAngular(function () {
-            return merge.merge(fromEvent.fromEvent(window, 'resize'), fromEvent.fromEvent(window, 'orientationchange'));
-        }) : of.of();
+            return rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange'));
+        }) : rxjs.of();
         this._invalidateCache = this.change().subscribe(function () { return _this._updateViewportSize(); });
     }
     /**
@@ -490,7 +490,7 @@ var ViewportRuler = /** @class */ (function () {
      */
     function (throttleTime) {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
-        return throttleTime > 0 ? this._change.pipe(auditTime.auditTime(throttleTime)) : this._change;
+        return throttleTime > 0 ? this._change.pipe(operators.auditTime(throttleTime)) : this._change;
     };
     /**
      * Updates the cached viewport size.

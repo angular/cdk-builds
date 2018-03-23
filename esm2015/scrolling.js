@@ -7,13 +7,8 @@
  */
 import { Platform, PlatformModule } from '@angular/cdk/platform';
 import { Injectable, NgZone, Optional, SkipSelf, Directive, ElementRef, NgModule, defineInjectable, inject } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { of } from 'rxjs/observable/of';
-import { auditTime } from 'rxjs/operators/auditTime';
-import { filter } from 'rxjs/operators/filter';
-import { Subject } from 'rxjs/Subject';
-import { merge } from 'rxjs/observable/merge';
+import { fromEvent, of, Subject, Observable, merge } from 'rxjs';
+import { auditTime, filter } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle

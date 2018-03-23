@@ -7,7 +7,7 @@
  */
 import { Platform } from '@angular/cdk/platform';
 import { ElementRef, EventEmitter, OnDestroy, OnInit, NgZone } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 /** An event that is emitted when the autofill state of an input changes. */
 export declare type AutofillEvent = {
     /** The element whose autofill state changes. */

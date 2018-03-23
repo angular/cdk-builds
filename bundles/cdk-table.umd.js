@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('rxjs/operators/takeUntil'), require('rxjs/BehaviorSubject'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/of'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/core', '@angular/cdk/collections', 'rxjs/operators/takeUntil', 'rxjs/BehaviorSubject', 'rxjs/Subject', 'rxjs/Observable', 'rxjs/observable/of', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}),global.ng.core,global.ng.cdk.collections,global.Rx.operators,global.Rx,global.Rx,global.Rx,global.Rx.Observable,global.ng.common));
-}(this, (function (exports,core,collections,takeUntil,BehaviorSubject,Subject,Observable,of,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('rxjs/operators'), require('rxjs'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/core', '@angular/cdk/collections', 'rxjs/operators', 'rxjs', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}),global.ng.core,global.ng.cdk.collections,global.Rx.operators,global.Rx,global.ng.common));
+}(this, (function (exports,core,collections,operators,rxjs,common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -473,7 +473,7 @@ var CdkTable = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._onDestroy = new Subject.Subject();
+        this._onDestroy = new rxjs.Subject();
         /**
          * Map of all the user's defined columns (header and data cell template) identified by name.
          * Collection populated by the column definitions gathered by `ContentChildren` as well as any
@@ -497,7 +497,7 @@ var CdkTable = /** @class */ (function () {
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
-        this.viewChange = new BehaviorSubject.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
+        this.viewChange = new rxjs.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
             elementRef.nativeElement.setAttribute('role', 'grid');
         }
@@ -875,17 +875,17 @@ var CdkTable = /** @class */ (function () {
         if ((/** @type {?} */ (this.dataSource)).connect instanceof Function) {
             dataStream = (/** @type {?} */ (this.dataSource)).connect(this);
         }
-        else if (this.dataSource instanceof Observable.Observable) {
+        else if (this.dataSource instanceof rxjs.Observable) {
             dataStream = this.dataSource;
         }
         else if (Array.isArray(this.dataSource)) {
-            dataStream = of.of(this.dataSource);
+            dataStream = rxjs.of(this.dataSource);
         }
         if (dataStream === undefined) {
             throw getTableUnknownDataSourceError();
         }
         this._renderChangeSubscription = dataStream
-            .pipe(takeUntil.takeUntil(this._onDestroy))
+            .pipe(operators.takeUntil(this._onDestroy))
             .subscribe(function (data) {
             _this._data = data;
             _this.renderRows();

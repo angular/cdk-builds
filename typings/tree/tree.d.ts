@@ -8,9 +8,7 @@
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, ViewContainerRef } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CdkTreeNodeDef } from './node';
 import { CdkTreeNodeOutlet } from './outlet';
 import { TreeControl } from './control/tree-control';

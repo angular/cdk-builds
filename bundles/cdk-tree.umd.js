@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators/take'), require('@angular/core'), require('rxjs/BehaviorSubject'), require('rxjs/operators/takeUntil'), require('rxjs/Observable'), require('rxjs/observable/of'), require('rxjs/Subject'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs/operators/take', '@angular/core', 'rxjs/BehaviorSubject', 'rxjs/operators/takeUntil', 'rxjs/Observable', 'rxjs/observable/of', 'rxjs/Subject', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.Rx.operators,global.ng.core,global.Rx,global.Rx.operators,global.Rx,global.Rx.Observable,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
-}(this, (function (exports,collections,take,core,BehaviorSubject,takeUntil,Observable,of,Subject,bidi,coercion,a11y,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators'), require('@angular/core'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs/operators', '@angular/core', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.Rx.operators,global.ng.core,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
+}(this, (function (exports,collections,operators,core,rxjs,bidi,coercion,a11y,common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -343,7 +343,7 @@ NestedTreeControl = /** @class */ (function (_super) {
     function (descendants, dataNode) {
         var _this = this;
         descendants.push(dataNode);
-        this.getChildren(dataNode).pipe(take.take(1)).subscribe(function (children) {
+        this.getChildren(dataNode).pipe(operators.take(1)).subscribe(function (children) {
             if (children && children.length > 0) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
             }
@@ -480,7 +480,7 @@ var CdkTreeNode = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._destroyed = new Subject.Subject();
+        this._destroyed = new rxjs.Subject();
         /**
          * The role of the node should be 'group' if it's an internal node,
          * and 'treeitem' if it's a leaf node.
@@ -563,7 +563,7 @@ var CdkTreeNode = /** @class */ (function () {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            this._tree.treeControl.getChildren(this._data).pipe(takeUntil.takeUntil(this._destroyed))
+            this._tree.treeControl.getChildren(this._data).pipe(operators.takeUntil(this._destroyed))
                 .subscribe(function (children) {
                 _this.role = children && children.length ? 'group' : 'treeitem';
             });
@@ -608,12 +608,12 @@ var CdkTree = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._onDestroy = new Subject.Subject();
+        this._onDestroy = new rxjs.Subject();
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
-        this.viewChange = new BehaviorSubject.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
+        this.viewChange = new rxjs.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
     }
     Object.defineProperty(CdkTree.prototype, "dataSource", {
         get: /**
@@ -728,14 +728,14 @@ var CdkTree = /** @class */ (function () {
         if (typeof (/** @type {?} */ (this._dataSource)).connect === 'function') {
             dataStream = (/** @type {?} */ (this._dataSource)).connect(this);
         }
-        else if (this._dataSource instanceof Observable.Observable) {
+        else if (this._dataSource instanceof rxjs.Observable) {
             dataStream = this._dataSource;
         }
         else if (Array.isArray(this._dataSource)) {
-            dataStream = of.of(this._dataSource);
+            dataStream = rxjs.of(this._dataSource);
         }
         if (dataStream) {
-            this._dataSubscription = dataStream.pipe(takeUntil.takeUntil(this._onDestroy))
+            this._dataSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy))
                 .subscribe(function (data) { return _this._renderNodeChanges(data); });
         }
         else {
@@ -912,7 +912,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        this._tree.treeControl.getChildren(this.data).pipe(takeUntil.takeUntil(this._destroyed))
+        this._tree.treeControl.getChildren(this.data).pipe(operators.takeUntil(this._destroyed))
             .subscribe(function (result) {
             if (result && result.length) {
                 // In case when nodeOutlet is not in the DOM when children changes, save it in the node
@@ -923,7 +923,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
                 _this._addChildrenNodes();
             }
         });
-        this.nodeOutlet.changes.pipe(takeUntil.takeUntil(this._destroyed))
+        this.nodeOutlet.changes.pipe(operators.takeUntil(this._destroyed))
             .subscribe(function (_) { return _this._addChildrenNodes(); });
     };
     /**
@@ -1012,11 +1012,11 @@ var CdkTreeNodePadding = /** @class */ (function () {
         /**
          * Subject that emits when the component has been destroyed.
          */
-        this._destroyed = new Subject.Subject();
+        this._destroyed = new rxjs.Subject();
         this._indent = 40;
         this._setPadding();
         if (this._dir) {
-            this._dir.change.pipe(takeUntil.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
+            this._dir.change.pipe(operators.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
         }
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {

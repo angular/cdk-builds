@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs/operators/take'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/common', 'rxjs/operators/take', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.scrolling,global.ng.common,global.Rx.operators,global.Rx,global.Rx,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.coercion,global.ng.cdk.keycodes));
-}(this, (function (exports,core,scrolling,common,take,Subject,Subscription,bidi,portal,coercion,keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/scrolling', '@angular/common', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/coercion', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.scrolling,global.ng.common,global.Rx,global.Rx.operators,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.coercion,global.ng.cdk.keycodes));
+}(this, (function (exports,core,scrolling,common,rxjs,operators,bidi,portal,coercion,keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -905,13 +905,13 @@ OverlayRef = /** @class */ (function () {
         this._keyboardDispatcher = _keyboardDispatcher;
         this._document = _document;
         this._backdropElement = null;
-        this._backdropClick = new Subject.Subject();
-        this._attachments = new Subject.Subject();
-        this._detachments = new Subject.Subject();
+        this._backdropClick = new rxjs.Subject();
+        this._attachments = new rxjs.Subject();
+        this._detachments = new rxjs.Subject();
         /**
          * Stream of keydown events dispatched to this overlay.
          */
-        this._keydownEvents = new Subject.Subject();
+        this._keydownEvents = new rxjs.Subject();
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -997,7 +997,7 @@ OverlayRef = /** @class */ (function () {
         // content.
         this._ngZone.onStable
             .asObservable()
-            .pipe(take.take(1))
+            .pipe(operators.take(1))
             .subscribe(function () {
             // The overlay could've been detached before the zone has stabilized.
             if (_this.hasAttached()) {
@@ -1435,11 +1435,11 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         /**
          * Subject that emits whenever the position changes.
          */
-        this._positionChanges = new Subject.Subject();
+        this._positionChanges = new rxjs.Subject();
         /**
          * Subscription to viewport size changes.
          */
-        this._resizeSubscription = Subscription.Subscription.EMPTY;
+        this._resizeSubscription = rxjs.Subscription.EMPTY;
         /**
          * Observable sequence of position changes.
          */
@@ -3417,7 +3417,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         this._dir = _dir;
         this._hasBackdrop = false;
         this._lockPosition = false;
-        this._backdropSubscription = Subscription.Subscription.EMPTY;
+        this._backdropSubscription = rxjs.Subscription.EMPTY;
         this._offsetX = 0;
         this._offsetY = 0;
         /**

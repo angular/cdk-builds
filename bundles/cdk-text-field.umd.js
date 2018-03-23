@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs/observable/empty'), require('rxjs/Subject'), require('rxjs/observable/fromEvent'), require('rxjs/operators/auditTime'), require('rxjs/operators/takeUntil')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/textField', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs/observable/empty', 'rxjs/Subject', 'rxjs/observable/fromEvent', 'rxjs/operators/auditTime', 'rxjs/operators/takeUntil'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}),global.ng.cdk.platform,global.ng.core,global.Rx.Observable,global.Rx,global.Rx.Observable,global.Rx.operators,global.Rx.operators));
-}(this, (function (exports,platform,core,empty,Subject,fromEvent,auditTime,takeUntil) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/textField', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}),global.ng.cdk.platform,global.ng.core,global.Rx,global.Rx.operators));
+}(this, (function (exports,platform,core,rxjs,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -47,13 +47,13 @@ var AutofillMonitor = /** @class */ (function () {
      */
     function (element) {
         if (!this._platform.isBrowser) {
-            return empty.empty();
+            return rxjs.empty();
         }
         var /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
             return info.subject.asObservable();
         }
-        var /** @type {?} */ result = new Subject.Subject();
+        var /** @type {?} */ result = new rxjs.Subject();
         var /** @type {?} */ listener = function (event) {
             if (event.animationName === 'cdk-text-field-autofill-start') {
                 element.classList.add('cdk-text-field-autofilled');
@@ -181,7 +181,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._platform = _platform;
         this._ngZone = _ngZone;
-        this._destroyed = new Subject.Subject();
+        this._destroyed = new rxjs.Subject();
     }
     Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
         get: /**
@@ -260,8 +260,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
         if (this._platform.isBrowser) {
             this.resizeToFitContent();
             this._ngZone.runOutsideAngular(function () {
-                fromEvent.fromEvent(window, 'resize')
-                    .pipe(auditTime.auditTime(16), takeUntil.takeUntil(_this._destroyed))
+                rxjs.fromEvent(window, 'resize')
+                    .pipe(operators.auditTime(16), operators.takeUntil(_this._destroyed))
                     .subscribe(function () { return _this.resizeToFitContent(true); });
             });
         }

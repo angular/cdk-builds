@@ -9,8 +9,8 @@ import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { AfterViewInit, ChangeDetectorRef, EventEmitter, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
 import { CdkStepLabel } from './step-label';
+import { Subject } from 'rxjs';
 /**
  * Position state of the content of each step in stepper that is used for transitioning
  * the content into correct position upon step selection change.

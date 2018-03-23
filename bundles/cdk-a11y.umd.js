@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/Subscription'), require('@angular/cdk/keycodes'), require('rxjs/operators/debounceTime'), require('rxjs/operators/filter'), require('rxjs/operators/map'), require('rxjs/operators/tap'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs/operators/take'), require('rxjs/observable/of')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs/Subject', 'rxjs/Subscription', '@angular/cdk/keycodes', 'rxjs/operators/debounceTime', 'rxjs/operators/filter', 'rxjs/operators/map', 'rxjs/operators/tap', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs/operators/take', 'rxjs/observable/of'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.coercion,global.Rx.operators,global.Rx.Observable));
-}(this, (function (exports,common,core,Subject,Subscription,keycodes,debounceTime,filter,map,tap,platform,coercion,take,of) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/coercion')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/coercion'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.common,global.ng.core,global.Rx,global.ng.cdk.keycodes,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.coercion));
+}(this, (function (exports,common,core,rxjs,keycodes,operators,platform,coercion) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -421,8 +421,8 @@ ListKeyManager = /** @class */ (function () {
         this._items = _items;
         this._activeItemIndex = -1;
         this._wrap = false;
-        this._letterKeyStream = new Subject.Subject();
-        this._typeaheadSubscription = Subscription.Subscription.EMPTY;
+        this._letterKeyStream = new rxjs.Subject();
+        this._typeaheadSubscription = rxjs.Subscription.EMPTY;
         this._vertical = true;
         /**
          * Predicate function that can be used to check whether an item should be skipped
@@ -434,11 +434,11 @@ ListKeyManager = /** @class */ (function () {
          * Stream that emits any time the TAB key is pressed, so components can react
          * when focus is shifted off of the list.
          */
-        this.tabOut = new Subject.Subject();
+        this.tabOut = new rxjs.Subject();
         /**
          * Stream that emits whenever the active item of the list manager changes.
          */
-        this.change = new Subject.Subject();
+        this.change = new rxjs.Subject();
         _items.changes.subscribe(function (newItems) {
             if (_this._activeItem) {
                 var /** @type {?} */ itemArray = newItems.toArray();
@@ -552,7 +552,7 @@ ListKeyManager = /** @class */ (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(tap.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), debounceTime.debounceTime(debounceInterval), filter.filter(function () { return _this._pressedLetters.length > 0; }), map.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(operators.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), operators.debounceTime(debounceInterval), operators.filter(function () { return _this._pressedLetters.length > 0; }), operators.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
             var /** @type {?} */ items = _this._items.toArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -1626,7 +1626,7 @@ FocusTrap = /** @class */ (function () {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(take.take(1)).subscribe(fn);
+            this._ngZone.onStable.asObservable().pipe(operators.take(1)).subscribe(fn);
         }
     };
     return FocusTrap;
@@ -1947,7 +1947,7 @@ var FocusMonitor = /** @class */ (function () {
         if (checkChildren === void 0) { checkChildren = false; }
         // Do nothing if we're not on the browser platform.
         if (!this._platform.isBrowser) {
-            return of.of(null);
+            return rxjs.of(null);
         }
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(element)) {
@@ -1959,7 +1959,7 @@ var FocusMonitor = /** @class */ (function () {
         var /** @type {?} */ info = {
             unlisten: function () { },
             checkChildren: checkChildren,
-            subject: new Subject.Subject()
+            subject: new rxjs.Subject()
         };
         this._elementInfo.set(element, info);
         this._incrementMonitoredElementCount();

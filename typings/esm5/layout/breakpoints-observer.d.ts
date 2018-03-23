@@ -7,7 +7,7 @@
  */
 import { NgZone, OnDestroy } from '@angular/core';
 import { MediaMatcher } from './media-matcher';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 /** The current state of a layout breakpoint. */
 export interface BreakpointState {
     /** Whether the breakpoint is currently matching. */

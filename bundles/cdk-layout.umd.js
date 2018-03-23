@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs/Subject'), require('rxjs/operators/map'), require('rxjs/operators/startWith'), require('rxjs/operators/takeUntil'), require('@angular/cdk/coercion'), require('rxjs/observable/combineLatest'), require('rxjs/observable/fromEventPattern')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs/Subject', 'rxjs/operators/map', 'rxjs/operators/startWith', 'rxjs/operators/takeUntil', '@angular/cdk/coercion', 'rxjs/observable/combineLatest', 'rxjs/observable/fromEventPattern'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx.operators,global.Rx.operators,global.Rx.operators,global.ng.cdk.coercion,global.Rx.Observable,global.Rx.Observable));
-}(this, (function (exports,core,platform,Subject,map,startWith,takeUntil,coercion,combineLatest,fromEventPattern) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}),global.ng.core,global.ng.cdk.platform,global.Rx,global.Rx.operators,global.ng.cdk.coercion));
+}(this, (function (exports,core,platform,rxjs,operators,coercion) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -140,7 +140,7 @@ var BreakpointObserver = /** @class */ (function () {
         /**
          * A subject for all other observables to takeUntil based on.
          */
-        this._destroySubject = new Subject.Subject();
+        this._destroySubject = new rxjs.Subject();
     }
     /** Completes the active subject, signalling to all other observables to complete. */
     /**
@@ -196,7 +196,7 @@ var BreakpointObserver = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ queries = coercion.coerceArray(value);
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
-        return combineLatest.combineLatest(observables, function (a, b) {
+        return rxjs.combineLatest(observables, function (a, b) {
             return {
                 matches: !!((a && a.matches) || (b && b.matches)),
             };
@@ -220,7 +220,7 @@ var BreakpointObserver = /** @class */ (function () {
         }
         var /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
-        var /** @type {?} */ queryObservable = fromEventPattern.fromEventPattern(
+        var /** @type {?} */ queryObservable = rxjs.fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -236,7 +236,7 @@ var BreakpointObserver = /** @class */ (function () {
         }, function (listener) {
             mql.removeListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
         })
-            .pipe(takeUntil.takeUntil(this._destroySubject), startWith.startWith(mql), map.map(function (nextMql) { return ({ matches: nextMql.matches }); }));
+            .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ matches: nextMql.matches }); }));
         // Add the MediaQueryList to the set of queries.
         var /** @type {?} */ output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);

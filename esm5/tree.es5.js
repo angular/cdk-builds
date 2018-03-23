@@ -7,13 +7,9 @@
  */
 import { SelectionModel } from '@angular/cdk/collections';
 import { __extends } from 'tslib';
-import { take } from 'rxjs/operators/take';
+import { take, takeUntil } from 'rxjs/operators';
 import { Directive, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, IterableDiffers, ViewChild, ViewEncapsulation, Optional, Renderer2, NgModule } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { Subject } from 'rxjs/Subject';
+import { of, BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';

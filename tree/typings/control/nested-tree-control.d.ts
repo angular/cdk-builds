@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { BaseTreeControl } from './base-tree-control';
 /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
 export declare class NestedTreeControl<T> extends BaseTreeControl<T> {

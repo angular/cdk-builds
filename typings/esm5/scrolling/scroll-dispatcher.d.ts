@@ -7,8 +7,7 @@
  */
 import { Platform } from '@angular/cdk/platform';
 import { ElementRef, NgZone, OnDestroy, Optional } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, Observable } from 'rxjs';
 import { CdkScrollable } from './scrollable';
 /** Time in ms to throttle the scrolling events by default. */
 export declare const DEFAULT_SCROLL_TIME = 20;

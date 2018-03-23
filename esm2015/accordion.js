@@ -7,9 +7,8 @@
  */
 import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, NgModule } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { Subject } from 'rxjs/Subject';
+import { Subject, Subscription } from 'rxjs';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
-import { Subscription } from 'rxjs/Subscription';
 
 /**
  * @fileoverview added by tsickle
