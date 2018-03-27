@@ -111,13 +111,14 @@ var AutofillMonitor = /** @class */ (function () {
         this._monitoredElements.forEach(function (_info, element) { return _this.stopMonitoring(element); });
     };
     AutofillMonitor.decorators = [
-        { type: core.Injectable },
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     AutofillMonitor.ctorParameters = function () { return [
         { type: platform.Platform, },
         { type: core.NgZone, },
     ]; };
+    /** @nocollapse */ AutofillMonitor.ngInjectableDef = core.defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(core.inject(platform.Platform), core.inject(core.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     return AutofillMonitor;
 }());
 /**
@@ -443,7 +444,6 @@ var TextFieldModule = /** @class */ (function () {
                     declarations: [CdkAutofill, CdkTextareaAutosize],
                     imports: [platform.PlatformModule],
                     exports: [CdkAutofill, CdkTextareaAutosize],
-                    providers: [AutofillMonitor],
                 },] },
     ];
     /** @nocollapse */

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { ElementRef, EventEmitter, OnDestroy, OnInit, NgZone } from '@angular/core';
+import { ElementRef, EventEmitter, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 /** An event that is emitted when the autofill state of an input changes. */
 export declare type AutofillEvent = {

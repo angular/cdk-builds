@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
-import { Directive, ElementRef, EventEmitter, Injectable, Output, NgZone, Input, NgModule } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
 import { Subject, empty, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
@@ -92,13 +92,14 @@ class AutofillMonitor {
     }
 }
 AutofillMonitor.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 AutofillMonitor.ctorParameters = () => [
     { type: Platform, },
     { type: NgZone, },
 ];
+/** @nocollapse */ AutofillMonitor.ngInjectableDef = defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(inject(Platform), inject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
 /**
  * A directive that can be used to monitor the autofill state of an input.
  */
@@ -364,7 +365,6 @@ TextFieldModule.decorators = [
                 declarations: [CdkAutofill, CdkTextareaAutosize],
                 imports: [PlatformModule],
                 exports: [CdkAutofill, CdkTextareaAutosize],
-                providers: [AutofillMonitor],
             },] },
 ];
 /** @nocollapse */
