@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, IterableDiffers, IterableDiffer, OnDestroy, OnInit, QueryList, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { CdkTreeNodeDef } from './node';
 import { CdkTreeNodeOutlet } from './outlet';
@@ -89,7 +89,7 @@ export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges();
     /** Check for changes made in the data and render each change (node added/removed/moved). */
-    private _renderNodeChanges(dataNodes);
+    renderNodeChanges(data: T[], dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef): void;
     /**
      * Finds the matching node definition that should be used for this node data. If there is only
      * one node definition, it is returned. Otherwise, find the node definition that has a when

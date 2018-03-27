@@ -284,9 +284,10 @@ NestedTreeControl = /** @class */ (function (_super) {
     function () {
         var _this = this;
         this.expansionModel.clear();
-        var /** @type {?} */ toBeExpanded = /** @type {?} */ ([]);
-        this.dataNodes.forEach(function (dataNode) { return toBeExpanded.push.apply(toBeExpanded, _this.getDescendants(dataNode)); });
-        (_a = this.expansionModel).select.apply(_a, toBeExpanded);
+        var /** @type {?} */ allNodes = this.dataNodes.reduce(function (accumulator, dataNode) {
+            return accumulator.concat(_this.getDescendants(dataNode), [dataNode]);
+        }, []);
+        (_a = this.expansionModel).select.apply(_a, allNodes);
         var _a;
     };
     /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
@@ -303,7 +304,8 @@ NestedTreeControl = /** @class */ (function (_super) {
     function (dataNode) {
         var /** @type {?} */ descendants = [];
         this._getDescendants(descendants, dataNode);
-        return descendants;
+        // Remove the node itself
+        return descendants.splice(1);
     };
     /** A helper function to get descendants recursively. */
     /**
@@ -714,32 +716,38 @@ var CdkTree = /** @class */ (function () {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
-                .subscribe(function (data) { return _this._renderNodeChanges(data); });
+                .subscribe(function (data) { return _this.renderNodeChanges(data); });
         }
         else {
             throw getTreeNoValidDataSourceError();
         }
     };
+    /** Check for changes made in the data and render each change (node added/removed/moved). */
     /**
      * Check for changes made in the data and render each change (node added/removed/moved).
-     * @param {?} dataNodes
+     * @param {?} data
+     * @param {?=} dataDiffer
+     * @param {?=} viewContainer
      * @return {?}
      */
-    CdkTree.prototype._renderNodeChanges = /**
+    CdkTree.prototype.renderNodeChanges = /**
      * Check for changes made in the data and render each change (node added/removed/moved).
-     * @param {?} dataNodes
+     * @param {?} data
+     * @param {?=} dataDiffer
+     * @param {?=} viewContainer
      * @return {?}
      */
-    function (dataNodes) {
+    function (data, dataDiffer, viewContainer) {
         var _this = this;
-        var /** @type {?} */ changes = this._dataDiffer.diff(dataNodes);
+        if (dataDiffer === void 0) { dataDiffer = this._dataDiffer; }
+        if (viewContainer === void 0) { viewContainer = this._nodeOutlet.viewContainer; }
+        var /** @type {?} */ changes = dataDiffer.diff(data);
         if (!changes) {
             return;
         }
-        var /** @type {?} */ viewContainer = this._nodeOutlet.viewContainer;
         changes.forEachOperation(function (item, adjustedPreviousIndex, currentIndex) {
             if (item.previousIndex == null) {
-                _this.insertNode(dataNodes[currentIndex], currentIndex);
+                _this.insertNode(data[currentIndex], currentIndex, viewContainer);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
@@ -873,10 +881,11 @@ var CdkTree = /** @class */ (function () {
  */
 var CdkNestedTreeNode = /** @class */ (function (_super) {
     __extends(CdkNestedTreeNode, _super);
-    function CdkNestedTreeNode(_elementRef, _tree) {
+    function CdkNestedTreeNode(_elementRef, _tree, _differs) {
         var _this = _super.call(this, _elementRef, _tree) || this;
         _this._elementRef = _elementRef;
         _this._tree = _tree;
+        _this._differs = _differs;
         return _this;
     }
     /**
@@ -887,22 +896,17 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      */
     function () {
         var _this = this;
+        this._dataDiffer = this._differs.find([]).create();
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
         this._tree.treeControl.getChildren(this.data).pipe(takeUntil(this._destroyed))
             .subscribe(function (result) {
-            if (result && result.length) {
-                // In case when nodeOutlet is not in the DOM when children changes, save it in the node
-                // and add to nodeOutlet when it's available.
-                // In case when nodeOutlet is not in the DOM when children changes, save it in the node
-                // and add to nodeOutlet when it's available.
-                _this._children = /** @type {?} */ (result);
-                _this._addChildrenNodes();
-            }
+            _this._children = result;
+            _this.updateChildrenNodes();
         });
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
-            .subscribe(function (_) { return _this._addChildrenNodes(); });
+            .subscribe(function (_) { return _this.updateChildrenNodes(); });
     };
     /**
      * @return {?}
@@ -920,17 +924,14 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      * Add children dataNodes to the NodeOutlet
      * @return {?}
      */
-    CdkNestedTreeNode.prototype._addChildrenNodes = /**
+    CdkNestedTreeNode.prototype.updateChildrenNodes = /**
      * Add children dataNodes to the NodeOutlet
      * @return {?}
      */
     function () {
-        var _this = this;
-        this._clear();
-        if (this.nodeOutlet.length && this._children && this._children.length) {
-            this._children.forEach(function (child, index) {
-                _this._tree.insertNode(child, index, _this.nodeOutlet.first.viewContainer);
-            });
+        if (this.nodeOutlet.length && this._children) {
+            var /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
+            this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer);
         }
     };
     /** Clear the children dataNodes. */
@@ -963,6 +964,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
     CdkNestedTreeNode.ctorParameters = function () { return [
         { type: ElementRef, },
         { type: CdkTree, },
+        { type: IterableDiffers, },
     ]; };
     CdkNestedTreeNode.propDecorators = {
         "nodeOutlet": [{ type: ContentChildren, args: [CdkTreeNodeOutlet,] },],

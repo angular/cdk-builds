@@ -180,9 +180,8 @@ class NestedTreeControl extends BaseTreeControl {
      */
     expandAll() {
         this.expansionModel.clear();
-        let /** @type {?} */ toBeExpanded = /** @type {?} */ ([]);
-        this.dataNodes.forEach(dataNode => toBeExpanded.push(...this.getDescendants(dataNode)));
-        this.expansionModel.select(...toBeExpanded);
+        const /** @type {?} */ allNodes = this.dataNodes.reduce((accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode], []);
+        this.expansionModel.select(...allNodes);
     }
     /**
      * Gets a list of descendant dataNodes of a subtree rooted at given data node recursively.
@@ -192,7 +191,8 @@ class NestedTreeControl extends BaseTreeControl {
     getDescendants(dataNode) {
         const /** @type {?} */ descendants = [];
         this._getDescendants(descendants, dataNode);
-        return descendants;
+        // Remove the node itself
+        return descendants.splice(1);
     }
     /**
      * A helper function to get descendants recursively.
@@ -553,7 +553,7 @@ class CdkTree {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
-                .subscribe(data => this._renderNodeChanges(data));
+                .subscribe(data => this.renderNodeChanges(data));
         }
         else {
             throw getTreeNoValidDataSourceError();
@@ -561,18 +561,19 @@ class CdkTree {
     }
     /**
      * Check for changes made in the data and render each change (node added/removed/moved).
-     * @param {?} dataNodes
+     * @param {?} data
+     * @param {?=} dataDiffer
+     * @param {?=} viewContainer
      * @return {?}
      */
-    _renderNodeChanges(dataNodes) {
-        const /** @type {?} */ changes = this._dataDiffer.diff(dataNodes);
+    renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer) {
+        const /** @type {?} */ changes = dataDiffer.diff(data);
         if (!changes) {
             return;
         }
-        const /** @type {?} */ viewContainer = this._nodeOutlet.viewContainer;
         changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
             if (item.previousIndex == null) {
-                this.insertNode(dataNodes[currentIndex], currentIndex);
+                this.insertNode(data[currentIndex], currentIndex, viewContainer);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
@@ -680,30 +681,29 @@ class CdkNestedTreeNode extends CdkTreeNode {
     /**
      * @param {?} _elementRef
      * @param {?} _tree
+     * @param {?} _differs
      */
-    constructor(_elementRef, _tree) {
+    constructor(_elementRef, _tree, _differs) {
         super(_elementRef, _tree);
         this._elementRef = _elementRef;
         this._tree = _tree;
+        this._differs = _differs;
     }
     /**
      * @return {?}
      */
     ngAfterContentInit() {
+        this._dataDiffer = this._differs.find([]).create();
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
         this._tree.treeControl.getChildren(this.data).pipe(takeUntil(this._destroyed))
             .subscribe(result => {
-            if (result && result.length) {
-                // In case when nodeOutlet is not in the DOM when children changes, save it in the node
-                // and add to nodeOutlet when it's available.
-                this._children = /** @type {?} */ (result);
-                this._addChildrenNodes();
-            }
+            this._children = result;
+            this.updateChildrenNodes();
         });
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
-            .subscribe((_) => this._addChildrenNodes());
+            .subscribe((_) => this.updateChildrenNodes());
     }
     /**
      * @return {?}
@@ -717,12 +717,10 @@ class CdkNestedTreeNode extends CdkTreeNode {
      * Add children dataNodes to the NodeOutlet
      * @return {?}
      */
-    _addChildrenNodes() {
-        this._clear();
-        if (this.nodeOutlet.length && this._children && this._children.length) {
-            this._children.forEach((child, index) => {
-                this._tree.insertNode(child, index, this.nodeOutlet.first.viewContainer);
-            });
+    updateChildrenNodes() {
+        if (this.nodeOutlet.length && this._children) {
+            const /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
+            this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer);
         }
     }
     /**
@@ -751,6 +749,7 @@ CdkNestedTreeNode.decorators = [
 CdkNestedTreeNode.ctorParameters = () => [
     { type: ElementRef, },
     { type: CdkTree, },
+    { type: IterableDiffers, },
 ];
 CdkNestedTreeNode.propDecorators = {
     "nodeOutlet": [{ type: ContentChildren, args: [CdkTreeNodeOutlet,] },],
