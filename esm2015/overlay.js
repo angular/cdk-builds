@@ -2556,8 +2556,6 @@ class CdkConnectedOverlay {
         this._hasBackdrop = false;
         this._lockPosition = false;
         this._backdropSubscription = Subscription.EMPTY;
-        this._offsetX = 0;
-        this._offsetY = 0;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -2743,8 +2741,8 @@ class CdkConnectedOverlay {
             originY: pos.originY,
             overlayX: pos.overlayX,
             overlayY: pos.overlayY,
-            offsetX: this.offsetX,
-            offsetY: this.offsetY
+            offsetX: pos.offsetX || this.offsetX,
+            offsetY: pos.offsetY || this.offsetY
         }));
         positionStrategy.withPositions(positions);
     }

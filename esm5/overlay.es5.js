@@ -3390,8 +3390,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         this._hasBackdrop = false;
         this._lockPosition = false;
         this._backdropSubscription = Subscription.EMPTY;
-        this._offsetX = 0;
-        this._offsetY = 0;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -3631,8 +3629,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
                 originY: pos.originY,
                 overlayX: pos.overlayX,
                 overlayY: pos.overlayY,
-                offsetX: _this.offsetX,
-                offsetY: _this.offsetY
+                offsetX: pos.offsetX || _this.offsetX,
+                offsetY: pos.offsetY || _this.offsetY
             });
         });
         positionStrategy.withPositions(positions);
