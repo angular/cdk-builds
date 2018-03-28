@@ -23,4 +23,6 @@ export declare const A = 65;
 export declare const Z = 90;
 export declare const ZERO = 48;
 export declare const NINE = 57;
+export declare const NUMPAD_ZERO = 96;
+export declare const NUMPAD_NINE = 105;
 export declare const COMMA = 188;

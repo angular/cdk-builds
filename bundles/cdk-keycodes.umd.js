@@ -34,6 +34,8 @@ var /** @type {?} */ A = 65;
 var /** @type {?} */ Z = 90;
 var /** @type {?} */ ZERO = 48;
 var /** @type {?} */ NINE = 57;
+var /** @type {?} */ NUMPAD_ZERO = 96;
+var /** @type {?} */ NUMPAD_NINE = 105;
 var /** @type {?} */ COMMA = 188;
 
 exports.UP_ARROW = UP_ARROW;
@@ -54,6 +56,8 @@ exports.A = A;
 exports.Z = Z;
 exports.ZERO = ZERO;
 exports.NINE = NINE;
+exports.NUMPAD_ZERO = NUMPAD_ZERO;
+exports.NUMPAD_NINE = NUMPAD_NINE;
 exports.COMMA = COMMA;
 
 Object.defineProperty(exports, '__esModule', { value: true });

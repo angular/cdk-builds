@@ -28,6 +28,8 @@ var /** @type {?} */ A = 65;
 var /** @type {?} */ Z = 90;
 var /** @type {?} */ ZERO = 48;
 var /** @type {?} */ NINE = 57;
+var /** @type {?} */ NUMPAD_ZERO = 96;
+var /** @type {?} */ NUMPAD_NINE = 105;
 var /** @type {?} */ COMMA = 188;
 
 /**
@@ -40,5 +42,5 @@ var /** @type {?} */ COMMA = 188;
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z, ZERO, NINE, COMMA };
+export { UP_ARROW, DOWN_ARROW, RIGHT_ARROW, LEFT_ARROW, PAGE_UP, PAGE_DOWN, HOME, END, ENTER, SPACE, TAB, ESCAPE, BACKSPACE, DELETE, A, Z, ZERO, NINE, NUMPAD_ZERO, NUMPAD_NINE, COMMA };
 //# sourceMappingURL=keycodes.es5.js.map
