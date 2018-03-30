@@ -1147,6 +1147,14 @@ class FlexibleConnectedPositionStrategy {
          */
         this._resizeSubscription = Subscription.EMPTY;
         /**
+         * Default offset for the overlay along the x axis.
+         */
+        this._offsetX = 0;
+        /**
+         * Default offset for the overlay along the y axis.
+         */
+        this._offsetY = 0;
+        /**
          * Observable sequence of position changes.
          */
         this.positionChanges = this._positionChanges.asObservable();
@@ -1405,6 +1413,24 @@ class FlexibleConnectedPositionStrategy {
         return this;
     }
     /**
+     * Sets the default offset for the overlay's connection point on the x-axis.
+     * @param {?} offset New offset in the X axis.
+     * @return {?}
+     */
+    withDefaultOffsetX(offset) {
+        this._offsetX = offset;
+        return this;
+    }
+    /**
+     * Sets the default offset for the overlay's connection point on the y-axis.
+     * @param {?} offset New offset in the Y axis.
+     * @return {?}
+     */
+    withDefaultOffsetY(offset) {
+        this._offsetY = offset;
+        return this;
+    }
+    /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      * @param {?} originRect
      * @param {?} pos
@@ -1475,12 +1501,14 @@ class FlexibleConnectedPositionStrategy {
      */
     _getOverlayFit(point, overlay, viewport, position) {
         let { x, y } = point;
+        let /** @type {?} */ offsetX = this._getOffset(position, 'x');
+        let /** @type {?} */ offsetY = this._getOffset(position, 'y');
         // Account for the offsets since they could push the overlay out of the viewport.
-        if (position.offsetX) {
-            x += position.offsetX;
+        if (offsetX) {
+            x += offsetX;
         }
-        if (position.offsetY) {
-            y += position.offsetY;
+        if (offsetY) {
+            y += offsetY;
         }
         // How much the overlay would overflow at this position, on each side.
         let /** @type {?} */ leftOverflow = 0 - x;
@@ -1740,11 +1768,13 @@ class FlexibleConnectedPositionStrategy {
         // cases where the element doesn't have anything to "push off of". Finally, this works
         // better both with flexible and non-flexible positioning.
         let /** @type {?} */ transformString = ' ';
-        if (position.offsetX) {
-            transformString += `translateX(${position.offsetX}px)`;
+        let /** @type {?} */ offsetX = this._getOffset(position, 'x');
+        let /** @type {?} */ offsetY = this._getOffset(position, 'y');
+        if (offsetX) {
+            transformString += `translateX(${offsetX}px)`;
         }
-        if (position.offsetY) {
-            transformString += `translateY(${position.offsetY}px)`;
+        if (offsetY) {
+            transformString += `translateY(${offsetY}px)`;
         }
         styles.transform = transformString.trim();
         // If a maxWidth or maxHeight is specified on the overlay, we remove them. We do this because
@@ -1889,6 +1919,20 @@ class FlexibleConnectedPositionStrategy {
      */
     _isRtl() {
         return this._overlayRef.getConfig().direction === 'rtl';
+    }
+    /**
+     * Retrieves the offset of a position along the x or y axis.
+     * @param {?} position
+     * @param {?} axis
+     * @return {?}
+     */
+    _getOffset(position, axis) {
+        if (axis === 'x') {
+            // We don't do something like `position['offset' + axis]` in
+            // order to avoid breking minifiers that rename properties.
+            return position.offsetX == null ? this._offsetX : position.offsetX;
+        }
+        return position.offsetY == null ? this._offsetY : position.offsetY;
     }
 }
 /**
@@ -2066,11 +2110,7 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     withOffsetX(offset) {
-        this._preferredPositions.forEach(position => {
-            if (position.offsetX == null) {
-                position.offsetX = offset;
-            }
-        });
+        this._positionStrategy.withDefaultOffsetX(offset);
         return this;
     }
     /**
@@ -2079,11 +2119,7 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     withOffsetY(offset) {
-        this._preferredPositions.forEach(position => {
-            if (position.offsetY == null) {
-                position.offsetY = offset;
-            }
-        });
+        this._positionStrategy.withDefaultOffsetY(offset);
         return this;
     }
     /**

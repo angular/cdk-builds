@@ -69,6 +69,10 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _positionChanges;
     /** Subscription to viewport size changes. */
     private _resizeSubscription;
+    /** Default offset for the overlay along the x axis. */
+    private _offsetX;
+    /** Default offset for the overlay along the y axis. */
+    private _offsetY;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -136,6 +140,16 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * @param origin Reference to the new origin element.
      */
     setOrigin(origin: ElementRef): this;
+    /**
+     * Sets the default offset for the overlay's connection point on the x-axis.
+     * @param offset New offset in the X axis.
+     */
+    withDefaultOffsetX(offset: number): this;
+    /**
+     * Sets the default offset for the overlay's connection point on the y-axis.
+     * @param offset New offset in the Y axis.
+     */
+    withDefaultOffsetY(offset: number): this;
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
@@ -206,6 +220,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _getNarrowedViewportRect();
     /** Whether the we're dealing with an RTL context */
     private _isRtl();
+    /** Retrieves the offset of a position along the x or y axis. */
+    private _getOffset(position, axis);
 }
 /** A connected position as specified by the user. */
 export interface ConnectedPosition {

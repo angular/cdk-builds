@@ -1441,6 +1441,14 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          */
         this._resizeSubscription = rxjs.Subscription.EMPTY;
         /**
+         * Default offset for the overlay along the x axis.
+         */
+        this._offsetX = 0;
+        /**
+         * Default offset for the overlay along the y axis.
+         */
+        this._offsetY = 0;
+        /**
          * Observable sequence of position changes.
          */
         this.positionChanges = this._positionChanges.asObservable();
@@ -1842,6 +1850,42 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         return this;
     };
     /**
+     * Sets the default offset for the overlay's connection point on the x-axis.
+     * @param offset New offset in the X axis.
+     */
+    /**
+     * Sets the default offset for the overlay's connection point on the x-axis.
+     * @param {?} offset New offset in the X axis.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype.withDefaultOffsetX = /**
+     * Sets the default offset for the overlay's connection point on the x-axis.
+     * @param {?} offset New offset in the X axis.
+     * @return {?}
+     */
+    function (offset) {
+        this._offsetX = offset;
+        return this;
+    };
+    /**
+     * Sets the default offset for the overlay's connection point on the y-axis.
+     * @param offset New offset in the Y axis.
+     */
+    /**
+     * Sets the default offset for the overlay's connection point on the y-axis.
+     * @param {?} offset New offset in the Y axis.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype.withDefaultOffsetY = /**
+     * Sets the default offset for the overlay's connection point on the y-axis.
+     * @param {?} offset New offset in the Y axis.
+     * @return {?}
+     */
+    function (offset) {
+        this._offsetY = offset;
+        return this;
+    };
+    /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      * @param {?} originRect
      * @param {?} pos
@@ -1934,12 +1978,14 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function (point, overlay, viewport, position) {
         var x = point.x, y = point.y;
+        var /** @type {?} */ offsetX = this._getOffset(position, 'x');
+        var /** @type {?} */ offsetY = this._getOffset(position, 'y');
         // Account for the offsets since they could push the overlay out of the viewport.
-        if (position.offsetX) {
-            x += position.offsetX;
+        if (offsetX) {
+            x += offsetX;
         }
-        if (position.offsetY) {
-            y += position.offsetY;
+        if (offsetY) {
+            y += offsetY;
         }
         // How much the overlay would overflow at this position, on each side.
         var /** @type {?} */ leftOverflow = 0 - x;
@@ -2250,11 +2296,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // cases where the element doesn't have anything to "push off of". Finally, this works
         // better both with flexible and non-flexible positioning.
         var /** @type {?} */ transformString = ' ';
-        if (position.offsetX) {
-            transformString += "translateX(" + position.offsetX + "px)";
+        var /** @type {?} */ offsetX = this._getOffset(position, 'x');
+        var /** @type {?} */ offsetY = this._getOffset(position, 'y');
+        if (offsetX) {
+            transformString += "translateX(" + offsetX + "px)";
         }
-        if (position.offsetY) {
-            transformString += "translateY(" + position.offsetY + "px)";
+        if (offsetY) {
+            transformString += "translateY(" + offsetY + "px)";
         }
         styles.transform = transformString.trim();
         // If a maxWidth or maxHeight is specified on the overlay, we remove them. We do this because
@@ -2434,6 +2482,26 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function () {
         return this._overlayRef.getConfig().direction === 'rtl';
+    };
+    /**
+     * Retrieves the offset of a position along the x or y axis.
+     * @param {?} position
+     * @param {?} axis
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._getOffset = /**
+     * Retrieves the offset of a position along the x or y axis.
+     * @param {?} position
+     * @param {?} axis
+     * @return {?}
+     */
+    function (position, axis) {
+        if (axis === 'x') {
+            // We don't do something like `position['offset' + axis]` in
+            // order to avoid breking minifiers that rename properties.
+            return position.offsetX == null ? this._offsetX : position.offsetX;
+        }
+        return position.offsetY == null ? this._offsetY : position.offsetY;
     };
     return FlexibleConnectedPositionStrategy;
 }());
@@ -2710,11 +2778,7 @@ ConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (offset) {
-        this._preferredPositions.forEach(function (position) {
-            if (position.offsetX == null) {
-                position.offsetX = offset;
-            }
-        });
+        this._positionStrategy.withDefaultOffsetX(offset);
         return this;
     };
     /**
@@ -2732,11 +2796,7 @@ ConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (offset) {
-        this._preferredPositions.forEach(function (position) {
-            if (position.offsetY == null) {
-                position.offsetY = offset;
-            }
-        });
+        this._positionStrategy.withDefaultOffsetY(offset);
         return this;
     };
     /**
