@@ -154,7 +154,7 @@ var CdkHeaderRow = /** @class */ (function () {
     function CdkHeaderRow() {
     }
     CdkHeaderRow.decorators = [
-        { type: Component, args: [{selector: 'cdk-header-row',
+        { type: Component, args: [{selector: 'cdk-header-row, tr[cdk-header-row]',
                     template: CDK_ROW_TEMPLATE,
                     host: {
                         'class': 'cdk-header-row',
@@ -175,7 +175,7 @@ var CdkRow = /** @class */ (function () {
     function CdkRow() {
     }
     CdkRow.decorators = [
-        { type: Component, args: [{selector: 'cdk-row',
+        { type: Component, args: [{selector: 'cdk-row, tr[cdk-row]',
                     template: CDK_ROW_TEMPLATE,
                     host: {
                         'class': 'cdk-row',
@@ -278,7 +278,7 @@ var CdkHeaderCell = /** @class */ (function () {
     }
     CdkHeaderCell.decorators = [
         { type: Directive, args: [{
-                    selector: 'cdk-header-cell',
+                    selector: 'cdk-header-cell, th[cdk-header-cell]',
                     host: {
                         'class': 'cdk-header-cell',
                         'role': 'columnheader',
@@ -301,7 +301,7 @@ var CdkCell = /** @class */ (function () {
     }
     CdkCell.decorators = [
         { type: Directive, args: [{
-                    selector: 'cdk-cell',
+                    selector: 'cdk-cell, td[cdk-cell]',
                     host: {
                         'class': 'cdk-cell',
                         'role': 'gridcell',
@@ -382,8 +382,9 @@ function getTableUnknownDataSourceError() {
  * \@docs-private
  */
 var RowPlaceholder = /** @class */ (function () {
-    function RowPlaceholder(viewContainer) {
+    function RowPlaceholder(viewContainer, elementRef) {
         this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
     }
     RowPlaceholder.decorators = [
         { type: Directive, args: [{ selector: '[rowPlaceholder]' },] },
@@ -391,6 +392,7 @@ var RowPlaceholder = /** @class */ (function () {
     /** @nocollapse */
     RowPlaceholder.ctorParameters = function () { return [
         { type: ViewContainerRef, },
+        { type: ElementRef, },
     ]; };
     return RowPlaceholder;
 }());
@@ -399,8 +401,9 @@ var RowPlaceholder = /** @class */ (function () {
  * \@docs-private
  */
 var HeaderRowPlaceholder = /** @class */ (function () {
-    function HeaderRowPlaceholder(viewContainer) {
+    function HeaderRowPlaceholder(viewContainer, elementRef) {
         this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
     }
     HeaderRowPlaceholder.decorators = [
         { type: Directive, args: [{ selector: '[headerRowPlaceholder]' },] },
@@ -408,6 +411,7 @@ var HeaderRowPlaceholder = /** @class */ (function () {
     /** @nocollapse */
     HeaderRowPlaceholder.ctorParameters = function () { return [
         { type: ViewContainerRef, },
+        { type: ElementRef, },
     ]; };
     return HeaderRowPlaceholder;
 }());
@@ -443,9 +447,10 @@ RowViewRef = /** @class */ (function (_super) {
  * @template T
  */
 var CdkTable = /** @class */ (function () {
-    function CdkTable(_differs, _changeDetectorRef, elementRef, role) {
+    function CdkTable(_differs, _changeDetectorRef, _elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
+        this._elementRef = _elementRef;
         /**
          * Subject that emits when the component has been destroyed.
          */
@@ -475,7 +480,7 @@ var CdkTable = /** @class */ (function () {
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            elementRef.nativeElement.setAttribute('role', 'grid');
+            this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
@@ -543,6 +548,9 @@ var CdkTable = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        if (this._elementRef.nativeElement.nodeName === 'TABLE') {
+            this._applyNativeTableSections();
+        }
         // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
         this._dataDiffer = this._differs.find([]).create(this._trackByFn);
         // If the table has a header row definition defined as part of its content, flag this as a
@@ -1033,8 +1041,24 @@ var CdkTable = /** @class */ (function () {
             return column.cell;
         });
     };
+    /**
+     * Adds native table sections (e.g. tbody) and moves the row placeholders into them.
+     * @return {?}
+     */
+    CdkTable.prototype._applyNativeTableSections = /**
+     * Adds native table sections (e.g. tbody) and moves the row placeholders into them.
+     * @return {?}
+     */
+    function () {
+        var /** @type {?} */ thead = document.createElement('thead');
+        var /** @type {?} */ tbody = document.createElement('tbody');
+        this._elementRef.nativeElement.appendChild(thead);
+        this._elementRef.nativeElement.appendChild(tbody);
+        thead.appendChild(this._headerRowPlaceholder.elementRef.nativeElement);
+        tbody.appendChild(this._rowPlaceholder.elementRef.nativeElement);
+    };
     CdkTable.decorators = [
-        { type: Component, args: [{selector: 'cdk-table',
+        { type: Component, args: [{selector: 'cdk-table, table[cdk-table]',
                     exportAs: 'cdkTable',
                     template: CDK_TABLE_TEMPLATE,
                     host: {
@@ -1088,8 +1112,8 @@ var CdkTableModule = /** @class */ (function () {
     CdkTableModule.decorators = [
         { type: NgModule, args: [{
                     imports: [CommonModule],
-                    exports: [EXPORTED_DECLARATIONS],
-                    declarations: [EXPORTED_DECLARATIONS]
+                    exports: EXPORTED_DECLARATIONS,
+                    declarations: EXPORTED_DECLARATIONS
                 },] },
     ];
     /** @nocollapse */

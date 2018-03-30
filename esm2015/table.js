@@ -141,7 +141,7 @@ CdkCellOutlet.ctorParameters = () => [
 class CdkHeaderRow {
 }
 CdkHeaderRow.decorators = [
-    { type: Component, args: [{selector: 'cdk-header-row',
+    { type: Component, args: [{selector: 'cdk-header-row, tr[cdk-header-row]',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-header-row',
@@ -159,7 +159,7 @@ CdkHeaderRow.ctorParameters = () => [];
 class CdkRow {
 }
 CdkRow.decorators = [
-    { type: Component, args: [{selector: 'cdk-row',
+    { type: Component, args: [{selector: 'cdk-row, tr[cdk-row]',
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-row',
@@ -262,7 +262,7 @@ class CdkHeaderCell {
 }
 CdkHeaderCell.decorators = [
     { type: Directive, args: [{
-                selector: 'cdk-header-cell',
+                selector: 'cdk-header-cell, th[cdk-header-cell]',
                 host: {
                     'class': 'cdk-header-cell',
                     'role': 'columnheader',
@@ -288,7 +288,7 @@ class CdkCell {
 }
 CdkCell.decorators = [
     { type: Directive, args: [{
-                selector: 'cdk-cell',
+                selector: 'cdk-cell, td[cdk-cell]',
                 host: {
                     'class': 'cdk-cell',
                     'role': 'gridcell',
@@ -369,9 +369,11 @@ function getTableUnknownDataSourceError() {
 class RowPlaceholder {
     /**
      * @param {?} viewContainer
+     * @param {?} elementRef
      */
-    constructor(viewContainer) {
+    constructor(viewContainer, elementRef) {
         this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
     }
 }
 RowPlaceholder.decorators = [
@@ -380,6 +382,7 @@ RowPlaceholder.decorators = [
 /** @nocollapse */
 RowPlaceholder.ctorParameters = () => [
     { type: ViewContainerRef, },
+    { type: ElementRef, },
 ];
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
@@ -388,9 +391,11 @@ RowPlaceholder.ctorParameters = () => [
 class HeaderRowPlaceholder {
     /**
      * @param {?} viewContainer
+     * @param {?} elementRef
      */
-    constructor(viewContainer) {
+    constructor(viewContainer, elementRef) {
         this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
     }
 }
 HeaderRowPlaceholder.decorators = [
@@ -399,6 +404,7 @@ HeaderRowPlaceholder.decorators = [
 /** @nocollapse */
 HeaderRowPlaceholder.ctorParameters = () => [
     { type: ViewContainerRef, },
+    { type: ElementRef, },
 ];
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
@@ -418,12 +424,13 @@ class CdkTable {
     /**
      * @param {?} _differs
      * @param {?} _changeDetectorRef
-     * @param {?} elementRef
+     * @param {?} _elementRef
      * @param {?} role
      */
-    constructor(_differs, _changeDetectorRef, elementRef, role) {
+    constructor(_differs, _changeDetectorRef, _elementRef, role) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
+        this._elementRef = _elementRef;
         /**
          * Subject that emits when the component has been destroyed.
          */
@@ -453,7 +460,7 @@ class CdkTable {
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            elementRef.nativeElement.setAttribute('role', 'grid');
+            this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
     }
     /**
@@ -510,6 +517,9 @@ class CdkTable {
      * @return {?}
      */
     ngOnInit() {
+        if (this._elementRef.nativeElement.nodeName === 'TABLE') {
+            this._applyNativeTableSections();
+        }
         // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
         this._dataDiffer = this._differs.find([]).create(this._trackByFn);
         // If the table has a header row definition defined as part of its content, flag this as a
@@ -861,9 +871,21 @@ class CdkTable {
             return column.cell;
         });
     }
+    /**
+     * Adds native table sections (e.g. tbody) and moves the row placeholders into them.
+     * @return {?}
+     */
+    _applyNativeTableSections() {
+        const /** @type {?} */ thead = document.createElement('thead');
+        const /** @type {?} */ tbody = document.createElement('tbody');
+        this._elementRef.nativeElement.appendChild(thead);
+        this._elementRef.nativeElement.appendChild(tbody);
+        thead.appendChild(this._headerRowPlaceholder.elementRef.nativeElement);
+        tbody.appendChild(this._rowPlaceholder.elementRef.nativeElement);
+    }
 }
 CdkTable.decorators = [
-    { type: Component, args: [{selector: 'cdk-table',
+    { type: Component, args: [{selector: 'cdk-table, table[cdk-table]',
                 exportAs: 'cdkTable',
                 template: CDK_TABLE_TEMPLATE,
                 host: {
@@ -914,8 +936,8 @@ class CdkTableModule {
 CdkTableModule.decorators = [
     { type: NgModule, args: [{
                 imports: [CommonModule],
-                exports: [EXPORTED_DECLARATIONS],
-                declarations: [EXPORTED_DECLARATIONS]
+                exports: EXPORTED_DECLARATIONS,
+                declarations: EXPORTED_DECLARATIONS
             },] },
 ];
 /** @nocollapse */

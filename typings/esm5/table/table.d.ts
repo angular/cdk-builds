@@ -16,7 +16,8 @@ import { CdkColumnDef } from './cell';
  */
 export declare class RowPlaceholder {
     viewContainer: ViewContainerRef;
-    constructor(viewContainer: ViewContainerRef);
+    elementRef: ElementRef;
+    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
 }
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
@@ -24,7 +25,8 @@ export declare class RowPlaceholder {
  */
 export declare class HeaderRowPlaceholder {
     viewContainer: ViewContainerRef;
-    constructor(viewContainer: ViewContainerRef);
+    elementRef: ElementRef;
+    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
 }
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
@@ -40,6 +42,7 @@ export declare const CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowPlaceholde
 export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterContentChecked {
     private readonly _differs;
     private readonly _changeDetectorRef;
+    private readonly _elementRef;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
     /** Latest data provided by the data source. */
@@ -124,7 +127,7 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      * content.
      */
     _headerRowDef: CdkHeaderRowDef;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, role: string);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -202,4 +205,6 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      * as defined by its list of columns to display.
      */
     private _getCellTemplatesForRow(rowDef);
+    /** Adds native table sections (e.g. tbody) and moves the row placeholders into them. */
+    private _applyNativeTableSections();
 }
