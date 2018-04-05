@@ -7,7 +7,7 @@
  */
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
 import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
-import { Subject, empty, fromEvent } from 'rxjs';
+import { empty, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
