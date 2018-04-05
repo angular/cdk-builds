@@ -1612,8 +1612,10 @@ class FocusMonitor {
      * @return {?}
      */
     _setOriginForCurrentEventQueue(origin) {
-        this._origin = origin;
-        this._originTimeoutId = setTimeout(() => this._origin = null, 0);
+        this._ngZone.runOutsideAngular(() => {
+            this._origin = origin;
+            this._originTimeoutId = setTimeout(() => this._origin = null, 0);
+        });
     }
     /**
      * Checks whether the given focus event was caused by a touchstart event.

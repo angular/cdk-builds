@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, Directive, ElementRef, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
+import { coerceCssPixelValue, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
@@ -13,7 +14,6 @@ import { Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ESCAPE } from '@angular/cdk/keycodes';
 
 /**
@@ -178,7 +178,6 @@ function validateHorizontalPosition(property, value) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -211,8 +210,8 @@ class BlockScrollStrategy {
             this._previousHTMLStyles.top = root.style.top || '';
             // Note: we're using the `html` node, instead of the `body`, because the `body` may
             // have the user agent margin, whereas the `html` is guaranteed not to have one.
-            root.style.left = `${-this._previousScrollPosition.left}px`;
-            root.style.top = `${-this._previousScrollPosition.top}px`;
+            root.style.left = coerceCssPixelValue(-this._previousScrollPosition.left);
+            root.style.top = coerceCssPixelValue(-this._previousScrollPosition.top);
             root.classList.add('cdk-global-scrollblock');
             this._isEnabled = true;
         }
@@ -960,22 +959,22 @@ class OverlayRef {
      */
     _updateElementSize() {
         if (this._config.width || this._config.width === 0) {
-            this._pane.style.width = formatCssUnit(this._config.width);
+            this._pane.style.width = coerceCssPixelValue(this._config.width);
         }
         if (this._config.height || this._config.height === 0) {
-            this._pane.style.height = formatCssUnit(this._config.height);
+            this._pane.style.height = coerceCssPixelValue(this._config.height);
         }
         if (this._config.minWidth || this._config.minWidth === 0) {
-            this._pane.style.minWidth = formatCssUnit(this._config.minWidth);
+            this._pane.style.minWidth = coerceCssPixelValue(this._config.minWidth);
         }
         if (this._config.minHeight || this._config.minHeight === 0) {
-            this._pane.style.minHeight = formatCssUnit(this._config.minHeight);
+            this._pane.style.minHeight = coerceCssPixelValue(this._config.minHeight);
         }
         if (this._config.maxWidth || this._config.maxWidth === 0) {
-            this._pane.style.maxWidth = formatCssUnit(this._config.maxWidth);
+            this._pane.style.maxWidth = coerceCssPixelValue(this._config.maxWidth);
         }
         if (this._config.maxHeight || this._config.maxHeight === 0) {
-            this._pane.style.maxHeight = formatCssUnit(this._config.maxHeight);
+            this._pane.style.maxHeight = coerceCssPixelValue(this._config.maxHeight);
         }
     }
     /**
@@ -1064,13 +1063,6 @@ class OverlayRef {
             this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
         }
     }
-}
-/**
- * @param {?} value
- * @return {?}
- */
-function formatCssUnit(value) {
-    return typeof value === 'string' ? /** @type {?} */ (value) : `${value}px`;
 }
 
 /**
@@ -1615,6 +1607,7 @@ class FlexibleConnectedPositionStrategy {
      */
     _calculateBoundingBoxRect(origin, position) {
         const /** @type {?} */ viewport = this._viewportRect;
+        const /** @type {?} */ isRtl = this._isRtl();
         let /** @type {?} */ height, /** @type {?} */ top, /** @type {?} */ bottom;
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
@@ -1622,9 +1615,11 @@ class FlexibleConnectedPositionStrategy {
             height = viewport.bottom - origin.y;
         }
         else if (position.overlayY === 'bottom') {
-            // Overlay is opening "upward" and thus is bound by the top viewport edge.
-            bottom = viewport.height - origin.y + this._viewportMargin;
-            height = viewport.height - bottom;
+            // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
+            // the viewport margin back in, because the viewport rect is narrowed down to remove the
+            // margin, whereas the `origin` position is calculated based on its `ClientRect`.
+            bottom = viewport.height - origin.y + this._viewportMargin * 2;
+            height = viewport.height - bottom + this._viewportMargin;
         }
         else {
             // If neither top nor bottom, it means that the overlay
@@ -1638,11 +1633,11 @@ class FlexibleConnectedPositionStrategy {
             }
         }
         // The overlay is opening 'right-ward' (the content flows to the right).
-        const /** @type {?} */ isBoundedByRightViewportEdge = (position.overlayX === 'start' && !this._isRtl()) ||
-            (position.overlayX === 'end' && this._isRtl());
+        const /** @type {?} */ isBoundedByRightViewportEdge = (position.overlayX === 'start' && !isRtl) ||
+            (position.overlayX === 'end' && isRtl);
         // The overlay is opening 'left-ward' (the content flows to the left).
-        const /** @type {?} */ isBoundedByLeftViewportEdge = (position.overlayX === 'end' && !this._isRtl()) ||
-            (position.overlayX === 'start' && this._isRtl());
+        const /** @type {?} */ isBoundedByLeftViewportEdge = (position.overlayX === 'end' && !isRtl) ||
+            (position.overlayX === 'start' && isRtl);
         let /** @type {?} */ width, /** @type {?} */ left, /** @type {?} */ right;
         if (isBoundedByLeftViewportEdge) {
             right = viewport.right - origin.x + this._viewportMargin;
@@ -1688,9 +1683,9 @@ class FlexibleConnectedPositionStrategy {
             styles.height = '100%';
         }
         else {
-            styles.height = `${boundingBoxRect.height}px`;
-            styles.top = boundingBoxRect.top != null ? `${boundingBoxRect.top}px` : '';
-            styles.bottom = boundingBoxRect.bottom != null ? `${boundingBoxRect.bottom}px` : '';
+            styles.top = coerceCssPixelValue(boundingBoxRect.top);
+            styles.bottom = coerceCssPixelValue(boundingBoxRect.bottom);
+            styles.height = coerceCssPixelValue(boundingBoxRect.height);
         }
         if (!this._hasFlexibleWidth || this._isPushed) {
             styles.left = '0';
@@ -1698,17 +1693,17 @@ class FlexibleConnectedPositionStrategy {
             styles.width = '100%';
         }
         else {
-            styles.width = `${boundingBoxRect.width}px`;
-            styles.left = boundingBoxRect.left != null ? `${boundingBoxRect.left}px` : '';
-            styles.right = boundingBoxRect.right != null ? `${boundingBoxRect.right}px` : '';
+            styles.left = coerceCssPixelValue(boundingBoxRect.left);
+            styles.right = coerceCssPixelValue(boundingBoxRect.right);
+            styles.width = coerceCssPixelValue(boundingBoxRect.width);
         }
         const /** @type {?} */ maxHeight = this._overlayRef.getConfig().maxHeight;
         if (maxHeight && this._hasFlexibleHeight) {
-            styles.maxHeight = formatCssUnit$1(maxHeight);
+            styles.maxHeight = coerceCssPixelValue(maxHeight);
         }
         const /** @type {?} */ maxWidth = this._overlayRef.getConfig().maxWidth;
         if (maxWidth && this._hasFlexibleWidth) {
-            styles.maxWidth = formatCssUnit$1(maxWidth);
+            styles.maxWidth = coerceCssPixelValue(maxWidth);
         }
         this._lastBoundingBoxSize = boundingBoxRect;
         extendStyles(/** @type {?} */ ((this._boundingBox)).style, styles);
@@ -1818,7 +1813,7 @@ class FlexibleConnectedPositionStrategy {
             styles.bottom = `${documentHeight - (overlayPoint.y + this._overlayRect.height)}px`;
         }
         else {
-            styles.top = `${overlayPoint.y}px`;
+            styles.top = coerceCssPixelValue(overlayPoint.y);
         }
         return styles;
     }
@@ -1854,7 +1849,7 @@ class FlexibleConnectedPositionStrategy {
             styles.right = `${documentWidth - (overlayPoint.x + this._overlayRect.width)}px`;
         }
         else {
-            styles.left = `${overlayPoint.x}px`;
+            styles.left = coerceCssPixelValue(overlayPoint.x);
         }
         return styles;
     }
@@ -1934,13 +1929,6 @@ class FlexibleConnectedPositionStrategy {
         }
         return position.offsetY == null ? this._offsetY : position.offsetY;
     }
-}
-/**
- * @param {?} value
- * @return {?}
- */
-function formatCssUnit$1(value) {
-    return typeof value === 'string' ? /** @type {?} */ (value) : `${value}px`;
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.

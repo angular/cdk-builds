@@ -67,10 +67,28 @@ function coerceArray(value) {
     return Array.isArray(value) ? value : [value];
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+
+/**
+ * Coerces a value to a CSS pixel value.
+ * @param {?} value
+ * @return {?}
+ */
+function coerceCssPixelValue(value) {
+    if (value == null) {
+        return '';
+    }
+    return typeof value === 'string' ? value : value + "px";
+}
+
 exports.coerceBooleanProperty = coerceBooleanProperty;
 exports.coerceNumberProperty = coerceNumberProperty;
 exports._isNumberValue = _isNumberValue;
 exports.coerceArray = coerceArray;
+exports.coerceCssPixelValue = coerceCssPixelValue;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

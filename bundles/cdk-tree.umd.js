@@ -955,6 +955,10 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
             var /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer);
         }
+        else {
+            // Reset the data differ if there's no children nodes displayed
+            this._dataDiffer.diff([]);
+        }
     };
     /** Clear the children dataNodes. */
     /**
@@ -968,6 +972,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
     function () {
         if (this.nodeOutlet && this.nodeOutlet.first) {
             this.nodeOutlet.first.viewContainer.clear();
+            this._dataDiffer.diff([]);
         }
     };
     CdkNestedTreeNode.decorators = [

@@ -2152,8 +2152,10 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (origin) {
         var _this = this;
-        this._origin = origin;
-        this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 0);
+        this._ngZone.runOutsideAngular(function () {
+            _this._origin = origin;
+            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 0);
+        });
     };
     /**
      * Checks whether the given focus event was caused by a touchstart event.

@@ -722,6 +722,10 @@ class CdkNestedTreeNode extends CdkTreeNode {
             const /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer);
         }
+        else {
+            // Reset the data differ if there's no children nodes displayed
+            this._dataDiffer.diff([]);
+        }
     }
     /**
      * Clear the children dataNodes.
@@ -730,6 +734,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     _clear() {
         if (this.nodeOutlet && this.nodeOutlet.first) {
             this.nodeOutlet.first.viewContainer.clear();
+            this._dataDiffer.diff([]);
         }
     }
 }
