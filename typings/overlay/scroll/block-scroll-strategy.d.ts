@@ -12,11 +12,11 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
  */
 export declare class BlockScrollStrategy implements ScrollStrategy {
     private _viewportRuler;
+    private _document;
     private _previousHTMLStyles;
     private _previousScrollPosition;
     private _isEnabled;
-    private _document;
-    constructor(_viewportRuler: ViewportRuler, document: any);
+    constructor(_viewportRuler: ViewportRuler, _document: Document);
     /** Attaches this scroll strategy to an overlay. */
     attach(): void;
     /** Blocks page-level scroll while the attached overlay is open. */

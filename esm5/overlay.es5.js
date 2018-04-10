@@ -232,11 +232,11 @@ var  /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
 BlockScrollStrategy = /** @class */ (function () {
-    function BlockScrollStrategy(_viewportRuler, document) {
+    function BlockScrollStrategy(_viewportRuler, _document) {
         this._viewportRuler = _viewportRuler;
+        this._document = _document;
         this._previousHTMLStyles = { top: '', left: '' };
         this._isEnabled = false;
-        this._document = document;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -560,11 +560,12 @@ RepositionScrollStrategy = /** @class */ (function () {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 var ScrollStrategyOptions = /** @class */ (function () {
-    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone, document) {
+    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone, _document) {
         var _this = this;
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
+        this._document = _document;
         /**
          * Do nothing on scroll.
          */
@@ -588,7 +589,6 @@ var ScrollStrategyOptions = /** @class */ (function () {
         this.reposition = function (config) {
             return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config);
         };
-        this._document = document;
     }
     ScrollStrategyOptions.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] },
@@ -598,7 +598,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: ScrollDispatcher, },
         { type: ViewportRuler, },
         { type: NgZone, },
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = defineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(inject(ScrollDispatcher), inject(ViewportRuler), inject(NgZone), inject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
@@ -619,8 +619,9 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * on event target and order of overlay opens.
  */
 var OverlayKeyboardDispatcher = /** @class */ (function () {
-    function OverlayKeyboardDispatcher(document) {
+    function OverlayKeyboardDispatcher(_document) {
         var _this = this;
+        this._document = _document;
         /**
          * Currently attached overlays in the order they were attached.
          */
@@ -635,7 +636,6 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
                 _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
             }
         };
-        this._document = document;
     }
     /**
      * @return {?}
@@ -724,7 +724,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     ];
     /** @nocollapse */
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = defineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(inject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
@@ -826,7 +826,7 @@ var OverlayContainer = /** @class */ (function () {
     ];
     /** @nocollapse */
     OverlayContainer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayContainer.ngInjectableDef = defineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(inject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
@@ -848,8 +848,9 @@ var /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
     provide: OverlayContainer,
     deps: [
         [new Optional(), new SkipSelf(), OverlayContainer],
-        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
-        ) // We need to use the InjectionToken somewhere to keep TS happy
+        /** @type {?} */ (
+        // We need to use the InjectionToken somewhere to keep TS happy
+        DOCUMENT)
     ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
@@ -1373,13 +1374,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          */
         this._growAfterOpen = false;
         /**
-         * Whether the overlay's height can be constrained to fit within the viewport.
+         * Whether the overlay's width and height can be constrained to fit within the viewport.
          */
-        this._hasFlexibleHeight = true;
-        /**
-         * Whether the overlay's width can be constrained to fit within the viewport.
-         */
-        this._hasFlexibleWidth = true;
+        this._hasFlexibleDimensions = true;
         /**
          * Whether the overlay position is locked.
          */
@@ -1509,6 +1506,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             this.reapplyLastPosition();
             return;
         }
+        this._resetOverlayElementStyles();
         this._resetBoundingBoxStyles();
         // We need the bounding rects for the origin and the overlay to determine how to position
         // the overlay relative to the origin.
@@ -1706,36 +1704,20 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this._viewportMargin = margin;
         return this;
     };
-    /** Sets whether the overlay's height can be constrained to fit within the viewport. */
+    /** Sets whether the overlay's width and height can be constrained to fit within the viewport. */
     /**
-     * Sets whether the overlay's height can be constrained to fit within the viewport.
-     * @param {?=} flexibleHeight
+     * Sets whether the overlay's width and height can be constrained to fit within the viewport.
+     * @param {?=} flexibleDimensions
      * @return {?}
      */
-    FlexibleConnectedPositionStrategy.prototype.withFlexibleHeight = /**
-     * Sets whether the overlay's height can be constrained to fit within the viewport.
-     * @param {?=} flexibleHeight
+    FlexibleConnectedPositionStrategy.prototype.withFlexibleDimensions = /**
+     * Sets whether the overlay's width and height can be constrained to fit within the viewport.
+     * @param {?=} flexibleDimensions
      * @return {?}
      */
-    function (flexibleHeight) {
-        if (flexibleHeight === void 0) { flexibleHeight = true; }
-        this._hasFlexibleHeight = flexibleHeight;
-        return this;
-    };
-    /** Sets whether the overlay's width can be constrained to fit within the viewport. */
-    /**
-     * Sets whether the overlay's width can be constrained to fit within the viewport.
-     * @param {?=} flexibleWidth
-     * @return {?}
-     */
-    FlexibleConnectedPositionStrategy.prototype.withFlexibleWidth = /**
-     * Sets whether the overlay's width can be constrained to fit within the viewport.
-     * @param {?=} flexibleWidth
-     * @return {?}
-     */
-    function (flexibleWidth) {
-        if (flexibleWidth === void 0) { flexibleWidth = true; }
-        this._hasFlexibleWidth = flexibleWidth;
+    function (flexibleDimensions) {
+        if (flexibleDimensions === void 0) { flexibleDimensions = true; }
+        this._hasFlexibleDimensions = flexibleDimensions;
         return this;
     };
     /** Sets whether the overlay can grow after the initial open via flexible width/height. */
@@ -1982,15 +1964,15 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (fit, point, viewport) {
-        if (this._hasFlexibleWidth || this._hasFlexibleWidth) {
+        if (this._hasFlexibleDimensions) {
             var /** @type {?} */ availableHeight = viewport.bottom - point.y;
             var /** @type {?} */ availableWidth = viewport.right - point.x;
-            var /** @type {?} */ minHeight = this._overlayRef.getConfig().minHeight || 0;
-            var /** @type {?} */ minWidth = this._overlayRef.getConfig().minWidth || 0;
+            var /** @type {?} */ minHeight = this._overlayRef.getConfig().minHeight;
+            var /** @type {?} */ minWidth = this._overlayRef.getConfig().minWidth;
             var /** @type {?} */ verticalFit = fit.fitsInViewportVertically ||
-                (this._hasFlexibleHeight && minHeight <= availableHeight);
+                (minHeight != null && minHeight <= availableHeight);
             var /** @type {?} */ horizontalFit = fit.fitsInViewportHorizontally ||
-                (this._hasFlexibleWidth && minWidth <= availableWidth);
+                (minWidth != null && minWidth <= availableWidth);
             return verticalFit && horizontalFit;
         }
     };
@@ -2167,33 +2149,42 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             boundingBoxRect.width = Math.min(boundingBoxRect.width, this._lastBoundingBoxSize.width);
         }
         var /** @type {?} */ styles = /** @type {?} */ ({});
-        if (!this._hasFlexibleHeight || this._isPushed) {
-            styles.top = '0';
-            styles.bottom = '';
-            styles.height = '100%';
+        if (this._hasExactPosition()) {
+            styles.top = styles.left = '0';
+            styles.bottom = styles.right = '';
+            styles.width = styles.height = '100%';
         }
         else {
+            var /** @type {?} */ maxHeight = this._overlayRef.getConfig().maxHeight;
+            var /** @type {?} */ maxWidth = this._overlayRef.getConfig().maxWidth;
+            styles.height = coerceCssPixelValue(boundingBoxRect.height);
             styles.top = coerceCssPixelValue(boundingBoxRect.top);
             styles.bottom = coerceCssPixelValue(boundingBoxRect.bottom);
-            styles.height = coerceCssPixelValue(boundingBoxRect.height);
-        }
-        if (!this._hasFlexibleWidth || this._isPushed) {
-            styles.left = '0';
-            styles.right = '';
-            styles.width = '100%';
-        }
-        else {
+            styles.width = coerceCssPixelValue(boundingBoxRect.width);
             styles.left = coerceCssPixelValue(boundingBoxRect.left);
             styles.right = coerceCssPixelValue(boundingBoxRect.right);
-            styles.width = coerceCssPixelValue(boundingBoxRect.width);
-        }
-        var /** @type {?} */ maxHeight = this._overlayRef.getConfig().maxHeight;
-        if (maxHeight && this._hasFlexibleHeight) {
-            styles.maxHeight = coerceCssPixelValue(maxHeight);
-        }
-        var /** @type {?} */ maxWidth = this._overlayRef.getConfig().maxWidth;
-        if (maxWidth && this._hasFlexibleWidth) {
-            styles.maxWidth = coerceCssPixelValue(maxWidth);
+            // Push the pane content towards the proper direction.
+            if (position.overlayX === 'center') {
+                styles.alignItems = 'center';
+            }
+            else if (this._isRtl()) {
+                styles.alignItems = position.overlayX === 'end' ? 'flex-start' : 'flex-end';
+            }
+            else {
+                styles.alignItems = position.overlayX === 'end' ? 'flex-end' : 'flex-start';
+            }
+            if (position.overlayY === 'center') {
+                styles.justifyContent = 'center';
+            }
+            else {
+                styles.justifyContent = position.overlayY === 'bottom' ? 'flex-end' : 'flex-start';
+            }
+            if (maxHeight) {
+                styles.maxHeight = coerceCssPixelValue(maxHeight);
+            }
+            if (maxWidth) {
+                styles.maxWidth = coerceCssPixelValue(maxWidth);
+            }
         }
         this._lastBoundingBoxSize = boundingBoxRect;
         extendStyles(/** @type {?} */ ((this._boundingBox)).style, styles);
@@ -2219,6 +2210,23 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }));
     };
     /**
+     * Resets the styles for the overlay pane so that a new positioning can be computed.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._resetOverlayElementStyles = /**
+     * Resets the styles for the overlay pane so that a new positioning can be computed.
+     * @return {?}
+     */
+    function () {
+        extendStyles(this._pane.style, /** @type {?} */ ({
+            top: '',
+            left: '',
+            bottom: '',
+            right: '',
+            position: '',
+        }));
+    };
+    /**
      * Sets positioning styles to the overlay element.
      * @param {?} originPoint
      * @param {?} position
@@ -2231,42 +2239,24 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (originPoint, position) {
-        // Reset styles from any previous positioning.
-        var /** @type {?} */ styles = /** @type {?} */ ({
-            top: '',
-            left: '',
-            bottom: '',
-            right: '',
-        });
-        // Align the overlay panel to the appropriate edge of the
-        // size-constraining container unless using a 'center' position.
-        if (this._hasFlexibleWidth && position.overlayX !== 'center' && !this._isPushed) {
-            if (this._isRtl()) {
-                styles[position.overlayX === 'end' ? 'left' : 'right'] = '0';
-            }
-            else {
-                styles[position.overlayX === 'end' ? 'right' : 'left'] = '0';
-            }
-        }
-        if (this._hasFlexibleHeight && position.overlayY !== 'center' && !this._isPushed) {
-            styles[position.overlayY === 'bottom' ? 'bottom' : 'top'] = '0';
-        }
-        if (!this._hasFlexibleHeight || this._isPushed) {
+        var /** @type {?} */ styles = /** @type {?} */ ({});
+        if (this._hasExactPosition()) {
             extendStyles(styles, this._getExactOverlayY(position, originPoint));
-        }
-        if (!this._hasFlexibleWidth || this._isPushed) {
             extendStyles(styles, this._getExactOverlayX(position, originPoint));
+        }
+        else {
+            styles.position = 'static';
         }
         // Use a transform to apply the offsets. We do this because the `center` positions rely on
         // being in the normal flex flow and setting a `top` / `left` at all will completely throw
         // off the position. We also can't use margins, because they won't have an effect in some
         // cases where the element doesn't have anything to "push off of". Finally, this works
         // better both with flexible and non-flexible positioning.
-        var /** @type {?} */ transformString = ' ';
+        var /** @type {?} */ transformString = '';
         var /** @type {?} */ offsetX = this._getOffset(position, 'x');
         var /** @type {?} */ offsetY = this._getOffset(position, 'y');
         if (offsetX) {
-            transformString += "translateX(" + offsetX + "px)";
+            transformString += "translateX(" + offsetX + "px) ";
         }
         if (offsetY) {
             transformString += "translateY(" + offsetY + "px)";
@@ -2275,18 +2265,11 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // If a maxWidth or maxHeight is specified on the overlay, we remove them. We do this because
         // we need these values to both be set to "100%" for the automatic flexible sizing to work.
         // The maxHeight and maxWidth are set on the boundingBox in order to enforce the constraint.
-        if (this._hasFlexibleHeight && this._overlayRef.getConfig().maxHeight) {
+        if (this._hasFlexibleDimensions && this._overlayRef.getConfig().maxHeight) {
             styles.maxHeight = '';
         }
-        if (this._hasFlexibleWidth && this._overlayRef.getConfig().maxWidth) {
+        if (this._hasFlexibleDimensions && this._overlayRef.getConfig().maxWidth) {
             styles.maxWidth = '';
-        }
-        // Push the pane content towards the proper direction.
-        if (position.overlayX === 'center') {
-            styles.justifyContent = 'center';
-        }
-        else {
-            styles.justifyContent = position.overlayX === 'end' ? 'flex-end' : 'flex-start';
         }
         extendStyles(this._pane.style, styles);
     };
@@ -2451,6 +2434,17 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         return this._overlayRef.getConfig().direction === 'rtl';
     };
     /**
+     * Determines whether the overlay uses exact or flexible positioning.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._hasExactPosition = /**
+     * Determines whether the overlay uses exact or flexible positioning.
+     * @return {?}
+     */
+    function () {
+        return !this._hasFlexibleDimensions || this._isPushed;
+    };
+    /**
      * Retrieves the offset of a position along the x or y axis.
      * @param {?} position
      * @param {?} axis
@@ -2521,8 +2515,7 @@ ConnectedPositionStrategy = /** @class */ (function () {
         // proxy all of the API calls.
         this._positionStrategy =
             new FlexibleConnectedPositionStrategy(connectedTo, viewportRuler, document)
-                .withFlexibleHeight(false)
-                .withFlexibleWidth(false)
+                .withFlexibleDimensions(false)
                 .withPush(false)
                 .withViewportMargin(0);
         this.withFallbackPosition(originPos, overlayPos);
@@ -3217,7 +3210,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
     /** @nocollapse */
     OverlayPositionBuilder.ctorParameters = function () { return [
         { type: ViewportRuler, },
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(inject(ViewportRuler), inject(DOCUMENT)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
@@ -3351,7 +3344,7 @@ var Overlay = /** @class */ (function () {
         { type: ApplicationRef, },
         { type: Injector, },
         { type: NgZone, },
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
         { type: Directionality, },
     ]; };
     return Overlay;
@@ -3648,8 +3641,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ strategy = this._overlay.position()
             .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleHeight(false)
-            .withFlexibleWidth(false)
+            .withFlexibleDimensions(false)
             .withPush(false)
             .withGrowAfterOpen(false)
             .withLockedPosition(this.lockPosition);

@@ -3,7 +3,7 @@ import { InjectionToken, OnDestroy, Optional } from '@angular/core';
 export declare class OverlayContainer implements OnDestroy {
     private _document;
     protected _containerElement: HTMLElement;
-    constructor(_document: any);
+    constructor(_document: Document);
     ngOnDestroy(): void;
     /**
      * This method returns the overlay container element. It will lazily
@@ -19,10 +19,10 @@ export declare class OverlayContainer implements OnDestroy {
     protected _createContainer(): void;
 }
 /** @docs-private @deprecated @deletion-target 7.0.0 */
-export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer, _document: any): OverlayContainer;
+export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer, _document: Document): OverlayContainer;
 /** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const OVERLAY_CONTAINER_PROVIDER: {
     provide: typeof OverlayContainer;
-    deps: (Optional[] | InjectionToken<any>)[];
+    deps: (InjectionToken<Document> | Optional[])[];
     useFactory: typeof OVERLAY_CONTAINER_PROVIDER_FACTORY;
 };

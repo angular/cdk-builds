@@ -276,7 +276,7 @@ AriaDescriber.decorators = [
 ];
 /** @nocollapse */
 AriaDescriber.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ AriaDescriber.ngInjectableDef = defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(inject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 /**
@@ -1225,7 +1225,7 @@ FocusTrapFactory.decorators = [
 FocusTrapFactory.ctorParameters = () => [
     { type: InteractivityChecker, },
     { type: NgZone, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ FocusTrapFactory.ngInjectableDef = defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(inject(InteractivityChecker), inject(NgZone), inject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
 /**
@@ -1240,6 +1240,7 @@ class CdkTrapFocus {
     constructor(_elementRef, _focusTrapFactory, _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
+        this._document = _document;
         /**
          * Previously focused element to restore focus to upon destroy when using autoCapture.
          */
@@ -1301,7 +1302,7 @@ CdkTrapFocus.decorators = [
 CdkTrapFocus.ctorParameters = () => [
     { type: ElementRef, },
     { type: FocusTrapFactory, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 CdkTrapFocus.propDecorators = {
     "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
@@ -1383,7 +1384,7 @@ LiveAnnouncer.decorators = [
 /** @nocollapse */
 LiveAnnouncer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, null, 0), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
 /**

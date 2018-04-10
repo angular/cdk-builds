@@ -34,10 +34,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _canPush;
     /** Whether the overlay can grow via flexible width/height after the initial open. */
     private _growAfterOpen;
-    /** Whether the overlay's height can be constrained to fit within the viewport. */
-    private _hasFlexibleHeight;
-    /** Whether the overlay's width can be constrained to fit within the viewport. */
-    private _hasFlexibleWidth;
+    /** Whether the overlay's width and height can be constrained to fit within the viewport. */
+    private _hasFlexibleDimensions;
     /** Whether the overlay position is locked. */
     private _positionLocked;
     /** Cached origin dimensions */
@@ -120,10 +118,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * @param margin Required margin between the overlay and the viewport edge in pixels.
      */
     withViewportMargin(margin: number): this;
-    /** Sets whether the overlay's height can be constrained to fit within the viewport. */
-    withFlexibleHeight(flexibleHeight?: boolean): this;
-    /** Sets whether the overlay's width can be constrained to fit within the viewport. */
-    withFlexibleWidth(flexibleWidth?: boolean): this;
+    /** Sets whether the overlay's width and height can be constrained to fit within the viewport. */
+    withFlexibleDimensions(flexibleDimensions?: boolean): this;
     /** Sets whether the overlay can grow after the initial open via flexible width/height. */
     withGrowAfterOpen(growAfterOpen?: boolean): this;
     /** Sets whether the overlay can be pushed on-screen if none of the provided positions fit. */
@@ -203,6 +199,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _setBoundingBoxStyles(origin, position);
     /** Resets the styles for the bounding box so that a new positioning can be computed. */
     private _resetBoundingBoxStyles();
+    /** Resets the styles for the overlay pane so that a new positioning can be computed. */
+    private _resetOverlayElementStyles();
     /** Sets positioning styles to the overlay element. */
     private _setOverlayElementStyles(originPoint, position);
     /** Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing. */
@@ -220,6 +218,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _getNarrowedViewportRect();
     /** Whether the we're dealing with an RTL context */
     private _isRtl();
+    /** Determines whether the overlay uses exact or flexible positioning. */
+    private _hasExactPosition();
     /** Retrieves the offset of a position along the x or y axis. */
     private _getOffset(position, axis);
 }
