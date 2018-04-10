@@ -18,7 +18,7 @@
 /**
  * Current version of the Angular Component Development Kit.
  */
-var /** @type {?} */ VERSION = new core.Version('6.0.0-rc.1-e60f5fc');
+var /** @type {?} */ VERSION = new core.Version('6.0.0-rc.1-c147f32');
 
 exports.VERSION = VERSION;
 
