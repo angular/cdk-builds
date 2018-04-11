@@ -2880,8 +2880,6 @@ OverlayModule.decorators = [
                 providers: [Overlay],
             },] },
 ];
-/** @nocollapse */
-OverlayModule.ctorParameters = () => [];
 /**
  * @deprecated Use `OverlayModule` instead.
  * \@deletion-target 7.0.0
@@ -2960,8 +2958,6 @@ class FullscreenOverlayContainer extends OverlayContainer {
 FullscreenOverlayContainer.decorators = [
     { type: Injectable },
 ];
-/** @nocollapse */
-FullscreenOverlayContainer.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

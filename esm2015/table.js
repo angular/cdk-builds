@@ -151,8 +151,6 @@ CdkHeaderRow.decorators = [
                 encapsulation: ViewEncapsulation.None,
             },] },
 ];
-/** @nocollapse */
-CdkHeaderRow.ctorParameters = () => [];
 /**
  * Data row template container that contains the cell outlet. Adds the right class and role.
  */
@@ -169,8 +167,6 @@ CdkRow.decorators = [
                 encapsulation: ViewEncapsulation.None,
             },] },
 ];
-/** @nocollapse */
-CdkRow.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
@@ -242,7 +238,6 @@ CdkColumnDef.decorators = [
     { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
 ];
 /** @nocollapse */
-CdkColumnDef.ctorParameters = () => [];
 CdkColumnDef.propDecorators = {
     "name": [{ type: Input, args: ['cdkColumnDef',] },],
     "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
@@ -940,8 +935,6 @@ CdkTableModule.decorators = [
                 declarations: EXPORTED_DECLARATIONS
             },] },
 ];
-/** @nocollapse */
-CdkTableModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

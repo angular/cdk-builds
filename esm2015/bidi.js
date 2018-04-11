@@ -139,7 +139,6 @@ Dir.decorators = [
             },] },
 ];
 /** @nocollapse */
-Dir.ctorParameters = () => [];
 Dir.propDecorators = {
     "change": [{ type: Output, args: ['dirChange',] },],
     "dir": [{ type: Input },],
@@ -157,8 +156,6 @@ BidiModule.decorators = [
                 declarations: [Dir],
             },] },
 ];
-/** @nocollapse */
-BidiModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

@@ -153,7 +153,6 @@ var Dir = /** @class */ (function () {
                 },] },
     ];
     /** @nocollapse */
-    Dir.ctorParameters = function () { return []; };
     Dir.propDecorators = {
         "change": [{ type: Output, args: ['dirChange',] },],
         "dir": [{ type: Input },],
@@ -174,8 +173,6 @@ var BidiModule = /** @class */ (function () {
                     declarations: [Dir],
                 },] },
     ];
-    /** @nocollapse */
-    BidiModule.ctorParameters = function () { return []; };
     return BidiModule;
 }());
 

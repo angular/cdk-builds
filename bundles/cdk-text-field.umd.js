@@ -446,8 +446,6 @@ var TextFieldModule = /** @class */ (function () {
                     exports: [CdkAutofill, CdkTextareaAutosize],
                 },] },
     ];
-    /** @nocollapse */
-    TextFieldModule.ctorParameters = function () { return []; };
     return TextFieldModule;
 }());
 

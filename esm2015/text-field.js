@@ -367,8 +367,6 @@ TextFieldModule.decorators = [
                 exports: [CdkAutofill, CdkTextareaAutosize],
             },] },
 ];
-/** @nocollapse */
-TextFieldModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

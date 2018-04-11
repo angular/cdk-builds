@@ -170,8 +170,6 @@ class PlatformModule {
 PlatformModule.decorators = [
     { type: NgModule },
 ];
-/** @nocollapse */
-PlatformModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

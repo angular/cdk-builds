@@ -20,8 +20,6 @@ class LayoutModule {
 LayoutModule.decorators = [
     { type: NgModule },
 ];
-/** @nocollapse */
-LayoutModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

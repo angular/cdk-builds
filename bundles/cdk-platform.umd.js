@@ -174,8 +174,6 @@ var PlatformModule = /** @class */ (function () {
     PlatformModule.decorators = [
         { type: core.NgModule },
     ];
-    /** @nocollapse */
-    PlatformModule.ctorParameters = function () { return []; };
     return PlatformModule;
 }());
 

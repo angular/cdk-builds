@@ -518,8 +518,6 @@ PortalModule.decorators = [
                 declarations: [CdkPortal, CdkPortalOutlet],
             },] },
 ];
-/** @nocollapse */
-PortalModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

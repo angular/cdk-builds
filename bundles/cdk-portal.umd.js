@@ -720,8 +720,6 @@ var PortalModule = /** @class */ (function () {
                     declarations: [CdkPortal, CdkPortalOutlet],
                 },] },
     ];
-    /** @nocollapse */
-    PortalModule.ctorParameters = function () { return []; };
     return PortalModule;
 }());
 

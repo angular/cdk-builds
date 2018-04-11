@@ -30,8 +30,6 @@ class MutationObserverFactory {
 MutationObserverFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */
-MutationObserverFactory.ctorParameters = () => [];
 /** @nocollapse */ MutationObserverFactory.ngInjectableDef = defineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
 /**
  * Directive that triggers a callback whenever the content of
@@ -155,8 +153,6 @@ ObserversModule.decorators = [
                 providers: [MutationObserverFactory]
             },] },
 ];
-/** @nocollapse */
-ObserversModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

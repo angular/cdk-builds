@@ -92,7 +92,6 @@ var CdkAccordion = /** @class */ (function () {
                 },] },
     ];
     /** @nocollapse */
-    CdkAccordion.ctorParameters = function () { return []; };
     CdkAccordion.propDecorators = {
         "multi": [{ type: core.Input },],
     };
@@ -318,8 +317,6 @@ var CdkAccordionModule = /** @class */ (function () {
                     declarations: [CdkAccordion, CdkAccordionItem],
                 },] },
     ];
-    /** @nocollapse */
-    CdkAccordionModule.ctorParameters = function () { return []; };
     return CdkAccordionModule;
 }());
 

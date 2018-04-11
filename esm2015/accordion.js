@@ -74,7 +74,6 @@ CdkAccordion.decorators = [
             },] },
 ];
 /** @nocollapse */
-CdkAccordion.ctorParameters = () => [];
 CdkAccordion.propDecorators = {
     "multi": [{ type: Input },],
 };
@@ -268,8 +267,6 @@ CdkAccordionModule.decorators = [
                 declarations: [CdkAccordion, CdkAccordionItem],
             },] },
 ];
-/** @nocollapse */
-CdkAccordionModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

@@ -21,8 +21,6 @@ var LayoutModule = /** @class */ (function () {
     LayoutModule.decorators = [
         { type: core.NgModule },
     ];
-    /** @nocollapse */
-    LayoutModule.ctorParameters = function () { return []; };
     return LayoutModule;
 }());
 

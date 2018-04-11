@@ -942,8 +942,6 @@ CdkTreeModule.decorators = [
                 providers: [FocusMonitor, CdkTreeNodeDef]
             },] },
 ];
-/** @nocollapse */
-CdkTreeModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

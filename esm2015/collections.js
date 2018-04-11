@@ -271,8 +271,6 @@ class UniqueSelectionDispatcher {
 UniqueSelectionDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */
-UniqueSelectionDispatcher.ctorParameters = () => [];
 /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = defineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
 
 /**

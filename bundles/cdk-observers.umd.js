@@ -36,8 +36,6 @@ var MutationObserverFactory = /** @class */ (function () {
     MutationObserverFactory.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
-    /** @nocollapse */
-    MutationObserverFactory.ctorParameters = function () { return []; };
     /** @nocollapse */ MutationObserverFactory.ngInjectableDef = core.defineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 }());
@@ -181,8 +179,6 @@ var ObserversModule = /** @class */ (function () {
                     providers: [MutationObserverFactory]
                 },] },
     ];
-    /** @nocollapse */
-    ObserversModule.ctorParameters = function () { return []; };
     return ObserversModule;
 }());
 

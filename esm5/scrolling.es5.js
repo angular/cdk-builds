@@ -549,8 +549,6 @@ var ScrollDispatchModule = /** @class */ (function () {
                     declarations: [CdkScrollable],
                 },] },
     ];
-    /** @nocollapse */
-    ScrollDispatchModule.ctorParameters = function () { return []; };
     return ScrollDispatchModule;
 }());
 

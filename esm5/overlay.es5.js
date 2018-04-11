@@ -3809,8 +3809,6 @@ var OverlayModule = /** @class */ (function () {
                     providers: [Overlay],
                 },] },
     ];
-    /** @nocollapse */
-    OverlayModule.ctorParameters = function () { return []; };
     return OverlayModule;
 }());
 /**
@@ -3914,8 +3912,6 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     FullscreenOverlayContainer.decorators = [
         { type: Injectable },
     ];
-    /** @nocollapse */
-    FullscreenOverlayContainer.ctorParameters = function () { return []; };
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

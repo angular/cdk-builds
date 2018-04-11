@@ -593,8 +593,6 @@ var CdkStepperModule = /** @class */ (function () {
                     declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
                 },] },
     ];
-    /** @nocollapse */
-    CdkStepperModule.ctorParameters = function () { return []; };
     return CdkStepperModule;
 }());
 

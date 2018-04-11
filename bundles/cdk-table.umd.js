@@ -188,8 +188,6 @@ var CdkHeaderRow = /** @class */ (function () {
                     encapsulation: core.ViewEncapsulation.None,
                 },] },
     ];
-    /** @nocollapse */
-    CdkHeaderRow.ctorParameters = function () { return []; };
     return CdkHeaderRow;
 }());
 /**
@@ -209,8 +207,6 @@ var CdkRow = /** @class */ (function () {
                     encapsulation: core.ViewEncapsulation.None,
                 },] },
     ];
-    /** @nocollapse */
-    CdkRow.ctorParameters = function () { return []; };
     return CdkRow;
 }());
 
@@ -285,7 +281,6 @@ var CdkColumnDef = /** @class */ (function () {
         { type: core.Directive, args: [{ selector: '[cdkColumnDef]' },] },
     ];
     /** @nocollapse */
-    CdkColumnDef.ctorParameters = function () { return []; };
     CdkColumnDef.propDecorators = {
         "name": [{ type: core.Input, args: ['cdkColumnDef',] },],
         "cell": [{ type: core.ContentChild, args: [CdkCellDef,] },],
@@ -1140,8 +1135,6 @@ var CdkTableModule = /** @class */ (function () {
                     declarations: EXPORTED_DECLARATIONS
                 },] },
     ];
-    /** @nocollapse */
-    CdkTableModule.ctorParameters = function () { return []; };
     return CdkTableModule;
 }());
 

@@ -1179,8 +1179,6 @@ var CdkTreeModule = /** @class */ (function () {
                     providers: [FocusMonitor, CdkTreeNodeDef]
                 },] },
     ];
-    /** @nocollapse */
-    CdkTreeModule.ctorParameters = function () { return []; };
     return CdkTreeModule;
 }());
 

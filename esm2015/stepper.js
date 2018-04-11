@@ -486,8 +486,6 @@ CdkStepperModule.decorators = [
                 declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
             },] },
 ];
-/** @nocollapse */
-CdkStepperModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

@@ -423,8 +423,6 @@ ScrollDispatchModule.decorators = [
                 declarations: [CdkScrollable],
             },] },
 ];
-/** @nocollapse */
-ScrollDispatchModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

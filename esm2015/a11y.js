@@ -1823,8 +1823,6 @@ A11yModule.decorators = [
                 exports: [CdkTrapFocus, CdkMonitorFocus],
             },] },
 ];
-/** @nocollapse */
-A11yModule.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle

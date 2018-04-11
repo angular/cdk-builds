@@ -2371,8 +2371,6 @@ var A11yModule = /** @class */ (function () {
                     exports: [CdkTrapFocus, CdkMonitorFocus],
                 },] },
     ];
-    /** @nocollapse */
-    A11yModule.ctorParameters = function () { return []; };
     return A11yModule;
 }());
 
