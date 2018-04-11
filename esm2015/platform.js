@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgModule, defineInjectable } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID, NgModule, defineInjectable, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -19,11 +20,20 @@ const /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/**
  * checking browser-specific global properties.
  */
 class Platform {
-    constructor() {
+    /**
+     * \@deletion-target v7.0.0 remove optional decorator
+     * @param {?=} _platformId
+     */
+    constructor(_platformId) {
+        this._platformId = _platformId;
         /**
          * Whether the Angular application is being rendered in the browser.
+         * We want to use the Angular platform check because if the Document is shimmed
+         * without the navigator, the following checks will fail. This is preferred because
+         * sometimes the Document may be shimmed without the user's knowledge or intention
          */
-        this.isBrowser = typeof document === 'object' && !!document;
+        this.isBrowser = this._platformId ?
+            isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
         /**
          * Whether the current browser is Microsoft Edge.
          */
@@ -65,8 +75,10 @@ Platform.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
-Platform.ctorParameters = () => [];
-/** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(); }, token: Platform, providedIn: "root" });
+Platform.ctorParameters = () => [
+    { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] },] },
+];
+/** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(inject(PLATFORM_ID, null, 0)); }, token: Platform, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

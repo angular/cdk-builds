@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/platform', ['exports', '@angular/core'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}),global.ng.core));
-}(this, (function (exports,core) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/platform', ['exports', '@angular/core', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}),global.ng.core,global.ng.common));
+}(this, (function (exports,core,common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -23,11 +23,19 @@ var /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @
  * checking browser-specific global properties.
  */
 var Platform = /** @class */ (function () {
-    function Platform() {
+    /**
+     * @deletion-target v7.0.0 remove optional decorator
+     */
+    function Platform(_platformId) {
+        this._platformId = _platformId;
         /**
          * Whether the Angular application is being rendered in the browser.
+         * We want to use the Angular platform check because if the Document is shimmed
+         * without the navigator, the following checks will fail. This is preferred because
+         * sometimes the Document may be shimmed without the user's knowledge or intention
          */
-        this.isBrowser = typeof document === 'object' && !!document;
+        this.isBrowser = this._platformId ?
+            common.isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
         /**
          * Whether the current browser is Microsoft Edge.
          */
@@ -68,8 +76,10 @@ var Platform = /** @class */ (function () {
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
-    Platform.ctorParameters = function () { return []; };
-    /** @nocollapse */ Platform.ngInjectableDef = core.defineInjectable({ factory: function Platform_Factory() { return new Platform(); }, token: Platform, providedIn: "root" });
+    Platform.ctorParameters = function () { return [
+        { type: Object, decorators: [{ type: core.Optional }, { type: core.Inject, args: [core.PLATFORM_ID,] },] },
+    ]; };
+    /** @nocollapse */ Platform.ngInjectableDef = core.defineInjectable({ factory: function Platform_Factory() { return new Platform(core.inject(core.PLATFORM_ID, null, 0)); }, token: Platform, providedIn: "root" });
     return Platform;
 }());
 
