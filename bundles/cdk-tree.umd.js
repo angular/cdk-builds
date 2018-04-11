@@ -928,7 +928,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
             _this.updateChildrenNodes();
         });
         this.nodeOutlet.changes.pipe(operators.takeUntil(this._destroyed))
-            .subscribe(function (_) { return _this.updateChildrenNodes(); });
+            .subscribe(function () { return _this.updateChildrenNodes(); });
     };
     /**
      * @return {?}
@@ -938,8 +938,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      */
     function () {
         this._clear();
-        this._destroyed.next();
-        this._destroyed.complete();
+        _super.prototype.ngOnDestroy.call(this);
     };
     /** Add children dataNodes to the NodeOutlet */
     /**

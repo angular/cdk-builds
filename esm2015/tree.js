@@ -703,15 +703,14 @@ class CdkNestedTreeNode extends CdkTreeNode {
             this.updateChildrenNodes();
         });
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
-            .subscribe((_) => this.updateChildrenNodes());
+            .subscribe(() => this.updateChildrenNodes());
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
         this._clear();
-        this._destroyed.next();
-        this._destroyed.complete();
+        super.ngOnDestroy();
     }
     /**
      * Add children dataNodes to the NodeOutlet
