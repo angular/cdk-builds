@@ -794,6 +794,10 @@ class CdkTreeNodePadding {
     }
     /**
      * The level of depth of the tree node. The padding will be `level * indent` pixels.
+     * @return {?}
+     */
+    get level() { return this._level; }
+    /**
      * @param {?} value
      * @return {?}
      */
@@ -802,11 +806,11 @@ class CdkTreeNodePadding {
         this._setPadding();
     }
     /**
+     * The indent for each level. Default number 40px from material design menu sub-menu spec.
      * @return {?}
      */
-    get level() { return this._level; }
+    get indent() { return this._indent; }
     /**
-     * The indent for each level. Default number 40px from material design menu sub-menu spec.
      * @param {?} value
      * @return {?}
      */
@@ -814,10 +818,6 @@ class CdkTreeNodePadding {
         this._indent = coerceNumberProperty(value);
         this._setPadding();
     }
-    /**
-     * @return {?}
-     */
-    get indent() { return this._indent; }
     /**
      * @return {?}
      */

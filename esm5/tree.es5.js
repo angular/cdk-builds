@@ -1005,11 +1005,11 @@ var CdkTreeNodePadding = /** @class */ (function () {
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {
         get: /**
+         * The level of depth of the tree node. The padding will be `level * indent` pixels.
          * @return {?}
          */
         function () { return this._level; },
         set: /**
-         * The level of depth of the tree node. The padding will be `level * indent` pixels.
          * @param {?} value
          * @return {?}
          */
@@ -1022,11 +1022,11 @@ var CdkTreeNodePadding = /** @class */ (function () {
     });
     Object.defineProperty(CdkTreeNodePadding.prototype, "indent", {
         get: /**
+         * The indent for each level. Default number 40px from material design menu sub-menu spec.
          * @return {?}
          */
         function () { return this._indent; },
         set: /**
-         * The indent for each level. Default number 40px from material design menu sub-menu spec.
          * @param {?} value
          * @return {?}
          */
