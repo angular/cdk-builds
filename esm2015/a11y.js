@@ -1512,7 +1512,10 @@ class FocusMonitor {
      */
     focusVia(element, origin) {
         this._setOriginForCurrentEventQueue(origin);
-        element.focus();
+        // `focus` isn't available on the server
+        if (typeof element.focus === 'function') {
+            element.focus();
+        }
     }
     /**
      * @return {?}
