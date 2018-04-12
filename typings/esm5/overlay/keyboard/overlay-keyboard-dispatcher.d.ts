@@ -6,11 +6,11 @@ import { OverlayRef } from '../overlay-ref';
  * on event target and order of overlay opens.
  */
 export declare class OverlayKeyboardDispatcher implements OnDestroy {
-    private _document;
     /** Currently attached overlays in the order they were attached. */
     _attachedOverlays: OverlayRef[];
+    private _document;
     private _isAttached;
-    constructor(_document: Document);
+    constructor(document: any);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayRef): void;
@@ -24,10 +24,10 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
     private _keydownListener;
 }
 /** @docs-private @deprecated @deletion-target 7.0.0 */
-export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: Document): OverlayKeyboardDispatcher;
+export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;
 /** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER: {
     provide: typeof OverlayKeyboardDispatcher;
-    deps: (InjectionToken<Document> | Optional[])[];
+    deps: (Optional[] | InjectionToken<any>)[];
     useFactory: typeof OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
 };

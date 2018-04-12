@@ -184,13 +184,13 @@ function validateHorizontalPosition(property, value) {
 class BlockScrollStrategy {
     /**
      * @param {?} _viewportRuler
-     * @param {?} _document
+     * @param {?} document
      */
-    constructor(_viewportRuler, _document) {
+    constructor(_viewportRuler, document) {
         this._viewportRuler = _viewportRuler;
-        this._document = _document;
         this._previousHTMLStyles = { top: '', left: '' };
         this._isEnabled = false;
+        this._document = document;
     }
     /**
      * Attaches this scroll strategy to an overlay.
@@ -468,13 +468,12 @@ class ScrollStrategyOptions {
      * @param {?} _scrollDispatcher
      * @param {?} _viewportRuler
      * @param {?} _ngZone
-     * @param {?} _document
+     * @param {?} document
      */
-    constructor(_scrollDispatcher, _viewportRuler, _ngZone, _document) {
+    constructor(_scrollDispatcher, _viewportRuler, _ngZone, document) {
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
-        this._document = _document;
         /**
          * Do nothing on scroll.
          */
@@ -494,6 +493,7 @@ class ScrollStrategyOptions {
          * Allows debouncing the reposition calls.
          */
         this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config);
+        this._document = document;
     }
 }
 ScrollStrategyOptions.decorators = [
@@ -504,7 +504,7 @@ ScrollStrategyOptions.ctorParameters = () => [
     { type: ScrollDispatcher, },
     { type: ViewportRuler, },
     { type: NgZone, },
-    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = defineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(inject(ScrollDispatcher), inject(ViewportRuler), inject(NgZone), inject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
 
@@ -524,10 +524,9 @@ ScrollStrategyOptions.ctorParameters = () => [
  */
 class OverlayKeyboardDispatcher {
     /**
-     * @param {?} _document
+     * @param {?} document
      */
-    constructor(_document) {
-        this._document = _document;
+    constructor(document) {
         /**
          * Currently attached overlays in the order they were attached.
          */
@@ -541,6 +540,7 @@ class OverlayKeyboardDispatcher {
                 this._selectOverlayFromEvent(event)._keydownEvents.next(event);
             }
         };
+        this._document = document;
     }
     /**
      * @return {?}
@@ -606,7 +606,7 @@ OverlayKeyboardDispatcher.decorators = [
 ];
 /** @nocollapse */
 OverlayKeyboardDispatcher.ctorParameters = () => [
-    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = defineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(inject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
 /**
@@ -686,7 +686,7 @@ OverlayContainer.decorators = [
 ];
 /** @nocollapse */
 OverlayContainer.ctorParameters = () => [
-    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ OverlayContainer.ngInjectableDef = defineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(inject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
 /**
@@ -706,9 +706,8 @@ const /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
     provide: OverlayContainer,
     deps: [
         [new Optional(), new SkipSelf(), OverlayContainer],
-        /** @type {?} */ (
-        // We need to use the InjectionToken somewhere to keep TS happy
-        DOCUMENT)
+        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+        ) // We need to use the InjectionToken somewhere to keep TS happy
     ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
@@ -2371,7 +2370,7 @@ OverlayPositionBuilder.decorators = [
 /** @nocollapse */
 OverlayPositionBuilder.ctorParameters = () => [
     { type: ViewportRuler, },
-    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(inject(ViewportRuler), inject(DOCUMENT)); }, token: OverlayPositionBuilder, providedIn: "root" });
 
@@ -2481,7 +2480,7 @@ Overlay.ctorParameters = () => [
     { type: ApplicationRef, },
     { type: Injector, },
     { type: NgZone, },
-    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     { type: Directionality, },
 ];
 

@@ -81,7 +81,7 @@ export declare class FocusTrapFactory {
     private _checker;
     private _ngZone;
     private _document;
-    constructor(_checker: InteractivityChecker, _ngZone: NgZone, _document: Document);
+    constructor(_checker: InteractivityChecker, _ngZone: NgZone, _document: any);
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
@@ -108,7 +108,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
      */
     autoCapture: boolean;
     private _autoCapture;
-    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: Document);
+    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
 }

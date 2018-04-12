@@ -22,7 +22,7 @@ export declare class ScrollStrategyOptions {
     private _viewportRuler;
     private _ngZone;
     private _document;
-    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _document: Document);
+    constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, document: any);
     /** Do nothing on scroll. */
     noop: () => NoopScrollStrategy;
     /**

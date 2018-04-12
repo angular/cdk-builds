@@ -23,7 +23,7 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  */
 export declare class AriaDescriber {
     private _document;
-    constructor(_document: Document);
+    constructor(_document: any);
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
@@ -63,10 +63,10 @@ export declare class AriaDescriber {
     private _canBeDescribed(element, message);
 }
 /** @docs-private @deprecated @deletion-target 7.0.0 */
-export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: Document): AriaDescriber;
+export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
 /** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
-    deps: (InjectionToken<Document> | Optional[])[];
+    deps: (Optional[] | InjectionToken<any>)[];
     useFactory: typeof ARIA_DESCRIBER_PROVIDER_FACTORY;
 };

@@ -4,7 +4,7 @@ export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
 export declare class LiveAnnouncer implements OnDestroy {
     private _document;
     private readonly _liveElement;
-    constructor(elementToken: any, _document: Document);
+    constructor(elementToken: any, _document: any);
     /**
      * Announces a message to screenreaders.
      * @param message Message to be announced to the screenreader
@@ -16,6 +16,6 @@ export declare class LiveAnnouncer implements OnDestroy {
     private _createLiveElement();
 }
 /** @docs-private @deprecated @deletion-target 7.0.0 */
-export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, _document: Document): LiveAnnouncer;
+export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, _document: any): LiveAnnouncer;
 /** @docs-private @deprecated @deletion-target 7.0.0 */
 export declare const LIVE_ANNOUNCER_PROVIDER: Provider;

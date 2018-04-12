@@ -348,7 +348,7 @@ var AriaDescriber = /** @class */ (function () {
     ];
     /** @nocollapse */
     AriaDescriber.ctorParameters = function () { return [
-        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ AriaDescriber.ngInjectableDef = defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(inject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
@@ -1654,7 +1654,7 @@ var FocusTrapFactory = /** @class */ (function () {
     FocusTrapFactory.ctorParameters = function () { return [
         { type: InteractivityChecker, },
         { type: NgZone, },
-        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ FocusTrapFactory.ngInjectableDef = defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(inject(InteractivityChecker), inject(NgZone), inject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
@@ -1666,7 +1666,6 @@ var CdkTrapFocus = /** @class */ (function () {
     function CdkTrapFocus(_elementRef, _focusTrapFactory, _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
-        this._document = _document;
         /**
          * Previously focused element to restore focus to upon destroy when using autoCapture.
          */
@@ -1741,7 +1740,7 @@ var CdkTrapFocus = /** @class */ (function () {
     CdkTrapFocus.ctorParameters = function () { return [
         { type: ElementRef, },
         { type: FocusTrapFactory, },
-        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     CdkTrapFocus.propDecorators = {
         "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
@@ -1840,7 +1839,7 @@ var LiveAnnouncer = /** @class */ (function () {
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-        { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, null, 0), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;

@@ -260,11 +260,11 @@ var   /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
 BlockScrollStrategy = /** @class */ (function () {
-    function BlockScrollStrategy(_viewportRuler, _document) {
+    function BlockScrollStrategy(_viewportRuler, document) {
         this._viewportRuler = _viewportRuler;
-        this._document = _document;
         this._previousHTMLStyles = { top: '', left: '' };
         this._isEnabled = false;
+        this._document = document;
     }
     /** Attaches this scroll strategy to an overlay. */
     /**
@@ -588,12 +588,11 @@ RepositionScrollStrategy = /** @class */ (function () {
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 var ScrollStrategyOptions = /** @class */ (function () {
-    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone, _document) {
+    function ScrollStrategyOptions(_scrollDispatcher, _viewportRuler, _ngZone, document) {
         var _this = this;
         this._scrollDispatcher = _scrollDispatcher;
         this._viewportRuler = _viewportRuler;
         this._ngZone = _ngZone;
-        this._document = _document;
         /**
          * Do nothing on scroll.
          */
@@ -617,6 +616,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         this.reposition = function (config) {
             return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config);
         };
+        this._document = document;
     }
     ScrollStrategyOptions.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
@@ -626,7 +626,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: scrolling.ScrollDispatcher, },
         { type: scrolling.ViewportRuler, },
         { type: core.NgZone, },
-        { type: Document, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = core.defineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(core.inject(scrolling.ScrollDispatcher), core.inject(scrolling.ViewportRuler), core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
@@ -647,9 +647,8 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * on event target and order of overlay opens.
  */
 var OverlayKeyboardDispatcher = /** @class */ (function () {
-    function OverlayKeyboardDispatcher(_document) {
+    function OverlayKeyboardDispatcher(document) {
         var _this = this;
-        this._document = _document;
         /**
          * Currently attached overlays in the order they were attached.
          */
@@ -664,6 +663,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
                 _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
             }
         };
+        this._document = document;
     }
     /**
      * @return {?}
@@ -752,7 +752,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     ];
     /** @nocollapse */
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
-        { type: Document, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = core.defineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(core.inject(common.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
@@ -854,7 +854,7 @@ var OverlayContainer = /** @class */ (function () {
     ];
     /** @nocollapse */
     OverlayContainer.ctorParameters = function () { return [
-        { type: Document, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayContainer.ngInjectableDef = core.defineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(core.inject(common.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
@@ -876,9 +876,8 @@ var /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
     provide: OverlayContainer,
     deps: [
         [new core.Optional(), new core.SkipSelf(), OverlayContainer],
-        /** @type {?} */ (
-        // We need to use the InjectionToken somewhere to keep TS happy
-        common.DOCUMENT)
+        /** @type {?} */ (common.DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+        ) // We need to use the InjectionToken somewhere to keep TS happy
     ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
@@ -3238,7 +3237,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
     /** @nocollapse */
     OverlayPositionBuilder.ctorParameters = function () { return [
         { type: scrolling.ViewportRuler, },
-        { type: Document, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.inject(scrolling.ViewportRuler), core.inject(common.DOCUMENT)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
@@ -3372,7 +3371,7 @@ var Overlay = /** @class */ (function () {
         { type: core.ApplicationRef, },
         { type: core.Injector, },
         { type: core.NgZone, },
-        { type: Document, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
         { type: bidi.Directionality, },
     ]; };
     return Overlay;

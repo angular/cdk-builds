@@ -15,7 +15,7 @@ import { GlobalPositionStrategy } from './global-position-strategy';
 export declare class OverlayPositionBuilder {
     private _viewportRuler;
     private _document;
-    constructor(_viewportRuler: ViewportRuler, _document: Document);
+    constructor(_viewportRuler: ViewportRuler, _document: any);
     /**
      * Creates a global position strategy.
      */
