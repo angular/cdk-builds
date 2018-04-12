@@ -3,5 +3,6 @@
   "typings": "../text-field.d.ts",
   "main": "../bundles/cdk-text-field.umd.js",
   "module": "../esm5/text-field.es5.js",
-  "es2015": "../esm2015/text-field.js"
+  "es2015": "../esm2015/text-field.js",
+  "sideEffects": false
 }
