@@ -143,18 +143,18 @@ class BreakpointObserver {
      * @return {?} Whether any of the media queries match.
      */
     isMatched(value) {
-        let /** @type {?} */ queries = coerceArray(value);
+        const /** @type {?} */ queries = splitQueries(coerceArray(value));
         return queries.some(mediaQuery => this._registerQuery(mediaQuery).mql.matches);
     }
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
-     * @param {?} value
+     * @param {?} value One or more media queries to check.
      * @return {?} A stream of matches for the given queries.
      */
     observe(value) {
-        let /** @type {?} */ queries = coerceArray(value);
-        let /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
+        const /** @type {?} */ queries = splitQueries(coerceArray(value));
+        const /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
         return combineLatest(observables, (a, b) => {
             return {
                 matches: !!((a && a.matches) || (b && b.matches)),
@@ -171,9 +171,9 @@ class BreakpointObserver {
         if (this._queries.has(query)) {
             return /** @type {?} */ ((this._queries.get(query)));
         }
-        let /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
+        const /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
-        let /** @type {?} */ queryObservable = fromEventPattern(
+        const /** @type {?} */ queryObservable = fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -186,7 +186,7 @@ class BreakpointObserver {
         })
             .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ matches: nextMql.matches })));
         // Add the MediaQueryList to the set of queries.
-        let /** @type {?} */ output = { observable: queryObservable, mql: mql };
+        const /** @type {?} */ output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);
         return output;
     }
@@ -200,6 +200,17 @@ BreakpointObserver.ctorParameters = () => [
     { type: NgZone, },
 ];
 /** @nocollapse */ BreakpointObserver.ngInjectableDef = defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(inject(MediaMatcher), inject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+/**
+ * Split each query string into separate query strings if two queries are provided as comma
+ * separated.
+ * @param {?} queries
+ * @return {?}
+ */
+function splitQueries(queries) {
+    return queries.map((query) => query.split(','))
+        .reduce((a1, a2) => a1.concat(a2))
+        .map(query => query.trim());
+}
 
 /**
  * @fileoverview added by tsickle

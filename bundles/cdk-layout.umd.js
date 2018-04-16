@@ -170,29 +170,30 @@ var BreakpointObserver = /** @class */ (function () {
      */
     function (value) {
         var _this = this;
-        var /** @type {?} */ queries = coercion.coerceArray(value);
+        var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
         return queries.some(function (mediaQuery) { return _this._registerQuery(mediaQuery).mql.matches; });
     };
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
+     * @param value One or more media queries to check.
      * @returns A stream of matches for the given queries.
      */
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
-     * @param {?} value
+     * @param {?} value One or more media queries to check.
      * @return {?} A stream of matches for the given queries.
      */
     BreakpointObserver.prototype.observe = /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
-     * @param {?} value
+     * @param {?} value One or more media queries to check.
      * @return {?} A stream of matches for the given queries.
      */
     function (value) {
         var _this = this;
-        var /** @type {?} */ queries = coercion.coerceArray(value);
+        var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
         return rxjs.combineLatest(observables, function (a, b) {
             return {
@@ -251,6 +252,17 @@ var BreakpointObserver = /** @class */ (function () {
     /** @nocollapse */ BreakpointObserver.ngInjectableDef = core.defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(core.inject(MediaMatcher), core.inject(core.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
 }());
+/**
+ * Split each query string into separate query strings if two queries are provided as comma
+ * separated.
+ * @param {?} queries
+ * @return {?}
+ */
+function splitQueries(queries) {
+    return queries.map(function (query) { return query.split(','); })
+        .reduce(function (a1, a2) { return a1.concat(a2); })
+        .map(function (query) { return query.trim(); });
+}
 
 /**
  * @fileoverview added by tsickle
