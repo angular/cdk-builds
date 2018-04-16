@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "6.0.0-rc.5-189a0da",
+  "version": "6.0.0-rc.11-c9f5be6",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -28,6 +28,13 @@
   },
   "dependencies": {
     "tslib": "^1.7.1"
+  },
+  "ng-update": {
+    "packageGroup": [
+      "@angular/material",
+      "@angular/cdk",
+      "@angular/material-moment-adapter"
+    ]
   },
   "sideEffects": false
 }
