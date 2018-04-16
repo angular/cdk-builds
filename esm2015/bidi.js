@@ -63,6 +63,12 @@ class Directionality {
             this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.change.complete();
+    }
 }
 Directionality.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },

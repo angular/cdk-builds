@@ -60,6 +60,15 @@ var Directionality = /** @class */ (function () {
             this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
         }
     }
+    /**
+     * @return {?}
+     */
+    Directionality.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this.change.complete();
+    };
     Directionality.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
