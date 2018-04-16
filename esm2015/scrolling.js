@@ -109,6 +109,7 @@ class ScrollDispatcher {
     ngOnDestroy() {
         this._removeGlobalListener();
         this.scrollContainers.forEach((_, container) => this.deregister(container));
+        this._scrolled.complete();
     }
     /**
      * Returns an observable that emits whenever any of the

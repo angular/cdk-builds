@@ -155,6 +155,7 @@ var ScrollDispatcher = /** @class */ (function () {
         var _this = this;
         this._removeGlobalListener();
         this.scrollContainers.forEach(function (_, container) { return _this.deregister(container); });
+        this._scrolled.complete();
     };
     /**
      * Returns an observable that emits whenever any of the
