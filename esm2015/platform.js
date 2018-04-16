@@ -78,7 +78,7 @@ Platform.decorators = [
 Platform.ctorParameters = () => [
     { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] },] },
 ];
-/** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(inject(PLATFORM_ID, null, 0)); }, token: Platform, providedIn: "root" });
+/** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(inject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

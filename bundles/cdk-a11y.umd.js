@@ -1864,7 +1864,7 @@ var LiveAnnouncer = /** @class */ (function () {
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, null, 0), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**

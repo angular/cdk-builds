@@ -79,7 +79,7 @@ var Platform = /** @class */ (function () {
     Platform.ctorParameters = function () { return [
         { type: Object, decorators: [{ type: core.Optional }, { type: core.Inject, args: [core.PLATFORM_ID,] },] },
     ]; };
-    /** @nocollapse */ Platform.ngInjectableDef = core.defineInjectable({ factory: function Platform_Factory() { return new Platform(core.inject(core.PLATFORM_ID, null, 0)); }, token: Platform, providedIn: "root" });
+    /** @nocollapse */ Platform.ngInjectableDef = core.defineInjectable({ factory: function Platform_Factory() { return new Platform(core.inject(core.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
     return Platform;
 }());
 
