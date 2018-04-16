@@ -238,8 +238,7 @@ var CdkStepper = /** @class */ (function () {
                 if (this._selectedIndex != index &&
                     !this._anyControlsInvalidOrPending(index) &&
                     (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
-                    this._emitStepperSelectionEvent(index);
-                    this._keyManager.updateActiveItemIndex(this._selectedIndex);
+                    this._updateSelectedItemIndex(index);
                 }
             }
             else {
@@ -322,7 +321,7 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.selectedIndex = 0;
+        this._updateSelectedItemIndex(0);
         this._steps.forEach(function (step) { return step.reset(); });
         this._stateChanged();
     };
@@ -423,7 +422,7 @@ var CdkStepper = /** @class */ (function () {
      * @param {?} newIndex
      * @return {?}
      */
-    CdkStepper.prototype._emitStepperSelectionEvent = /**
+    CdkStepper.prototype._updateSelectedItemIndex = /**
      * @param {?} newIndex
      * @return {?}
      */
@@ -435,6 +434,7 @@ var CdkStepper = /** @class */ (function () {
             selectedStep: stepsArray[newIndex],
             previouslySelectedStep: stepsArray[this._selectedIndex],
         });
+        this._keyManager.updateActiveItemIndex(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     };

@@ -206,8 +206,7 @@ class CdkStepper {
             if (this._selectedIndex != index &&
                 !this._anyControlsInvalidOrPending(index) &&
                 (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
-                this._emitStepperSelectionEvent(index);
-                this._keyManager.updateActiveItemIndex(this._selectedIndex);
+                this._updateSelectedItemIndex(index);
             }
         }
         else {
@@ -262,7 +261,7 @@ class CdkStepper {
      * @return {?}
      */
     reset() {
-        this.selectedIndex = 0;
+        this._updateSelectedItemIndex(0);
         this._steps.forEach(step => step.reset());
         this._stateChanged();
     }
@@ -329,7 +328,7 @@ class CdkStepper {
      * @param {?} newIndex
      * @return {?}
      */
-    _emitStepperSelectionEvent(newIndex) {
+    _updateSelectedItemIndex(newIndex) {
         const /** @type {?} */ stepsArray = this._steps.toArray();
         this.selectionChange.emit({
             selectedIndex: newIndex,
@@ -337,6 +336,7 @@ class CdkStepper {
             selectedStep: stepsArray[newIndex],
             previouslySelectedStep: stepsArray[this._selectedIndex],
         });
+        this._keyManager.updateActiveItemIndex(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     }

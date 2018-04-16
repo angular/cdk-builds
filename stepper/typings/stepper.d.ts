@@ -103,7 +103,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     _getIndicatorType(index: number): 'number' | 'edit' | 'done';
     /** Returns the index of the currently-focused step header. */
     _getFocusIndex(): number | null;
-    private _emitStepperSelectionEvent(newIndex);
+    private _updateSelectedItemIndex(newIndex);
     _onKeydown(event: KeyboardEvent): void;
     private _anyControlsInvalidOrPending(index);
     private _layoutDirection();
