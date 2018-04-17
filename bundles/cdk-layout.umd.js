@@ -195,11 +195,11 @@ var BreakpointObserver = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
-        return rxjs.combineLatest(observables, function (a, b) {
+        return rxjs.combineLatest(observables).pipe(operators.map(function (breakpointStates) {
             return {
-                matches: !!((a && a.matches) || (b && b.matches)),
+                matches: breakpointStates.some(function (state) { return state && state.matches; })
             };
-        });
+        }));
     };
     /**
      * Registers a specific query to be listened for.

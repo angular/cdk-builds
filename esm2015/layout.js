@@ -155,11 +155,11 @@ class BreakpointObserver {
     observe(value) {
         const /** @type {?} */ queries = splitQueries(coerceArray(value));
         const /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
-        return combineLatest(observables, (a, b) => {
+        return combineLatest(observables).pipe(map((breakpointStates) => {
             return {
-                matches: !!((a && a.matches) || (b && b.matches)),
+                matches: breakpointStates.some(state => state && state.matches)
             };
-        });
+        }));
     }
     /**
      * Registers a specific query to be listened for.

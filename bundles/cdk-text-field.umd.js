@@ -47,7 +47,7 @@ var AutofillMonitor = /** @class */ (function () {
      */
     function (element) {
         if (!this._platform.isBrowser) {
-            return rxjs.empty();
+            return rxjs.EMPTY;
         }
         var /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {

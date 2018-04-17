@@ -7,7 +7,7 @@
  */
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
 import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
-import { empty, Subject, fromEvent } from 'rxjs';
+import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
@@ -40,7 +40,7 @@ class AutofillMonitor {
      */
     monitor(element) {
         if (!this._platform.isBrowser) {
-            return empty();
+            return EMPTY;
         }
         const /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
