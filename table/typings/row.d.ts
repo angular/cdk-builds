@@ -20,7 +20,7 @@ export declare abstract class BaseRowDef {
     /** @docs-private */ template: TemplateRef<any>;
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */
-    columns: string[];
+    columns: Iterable<string>;
     /** Differ used to check if any changes were made to the columns. */
     protected _columnsDiffer: IterableDiffer<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>, _differs: IterableDiffers);

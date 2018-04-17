@@ -1027,7 +1027,7 @@ var CdkTable = /** @class */ (function () {
         if (!headerDef || !headerDef.columns) {
             return [];
         }
-        return headerDef.columns.map(function (columnId) {
+        return Array.from(headerDef.columns, function (columnId) {
             var /** @type {?} */ column = _this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
@@ -1052,7 +1052,7 @@ var CdkTable = /** @class */ (function () {
         if (!rowDef.columns) {
             return [];
         }
-        return rowDef.columns.map(function (columnId) {
+        return Array.from(rowDef.columns, function (columnId) {
             var /** @type {?} */ column = _this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);

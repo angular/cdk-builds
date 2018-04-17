@@ -840,7 +840,7 @@ class CdkTable {
         if (!headerDef || !headerDef.columns) {
             return [];
         }
-        return headerDef.columns.map(columnId => {
+        return Array.from(headerDef.columns, columnId => {
             const /** @type {?} */ column = this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
@@ -858,7 +858,7 @@ class CdkTable {
         if (!rowDef.columns) {
             return [];
         }
-        return rowDef.columns.map(columnId => {
+        return Array.from(rowDef.columns, columnId => {
             const /** @type {?} */ column = this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
