@@ -1106,7 +1106,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
     function CdkTreeNodeToggle(_tree, _treeNode) {
         this._tree = _tree;
         this._treeNode = _treeNode;
-        this._recursive = true;
+        this._recursive = false;
     }
     Object.defineProperty(CdkTreeNodeToggle.prototype, "recursive", {
         get: /**

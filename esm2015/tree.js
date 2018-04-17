@@ -879,7 +879,7 @@ class CdkTreeNodeToggle {
     constructor(_tree, _treeNode) {
         this._tree = _tree;
         this._treeNode = _treeNode;
-        this._recursive = true;
+        this._recursive = false;
     }
     /**
      * Whether expand/collapse the node recursively.
