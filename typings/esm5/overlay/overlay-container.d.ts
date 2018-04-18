@@ -1,7 +1,7 @@
 import { InjectionToken, OnDestroy, Optional } from '@angular/core';
 /** Container inside which all overlays will render. */
 export declare class OverlayContainer implements OnDestroy {
-    private _document;
+    protected _document: any;
     protected _containerElement: HTMLElement;
     constructor(_document: any);
     ngOnDestroy(): void;

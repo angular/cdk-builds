@@ -3864,9 +3864,21 @@ var /** @type {?} */ OVERLAY_PROVIDERS = [
  */
 var FullscreenOverlayContainer = /** @class */ (function (_super) {
     __extends(FullscreenOverlayContainer, _super);
-    function FullscreenOverlayContainer() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function FullscreenOverlayContainer(_document) {
+        return _super.call(this, _document) || this;
     }
+    /**
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        _super.prototype.ngOnDestroy.call(this);
+        if (this._fullScreenEventName && this._fullScreenListener) {
+            this._document.removeEventListener(this._fullScreenEventName, this._fullScreenListener);
+        }
+    };
     /**
      * @return {?}
      */
@@ -3890,7 +3902,7 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
             return;
         }
         var /** @type {?} */ fullscreenElement = this.getFullscreenElement();
-        var /** @type {?} */ parent = fullscreenElement || document.body;
+        var /** @type {?} */ parent = fullscreenElement || this._document.body;
         parent.appendChild(this._containerElement);
     };
     /**
@@ -3902,18 +3914,37 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
      * @return {?}
      */
     function (fn) {
-        if (document.fullscreenEnabled) {
-            document.addEventListener('fullscreenchange', fn);
+        var /** @type {?} */ eventName = this._getEventName();
+        if (eventName) {
+            if (this._fullScreenListener) {
+                this._document.removeEventListener(eventName, this._fullScreenListener);
+            }
+            this._document.addEventListener(eventName, fn);
+            this._fullScreenListener = fn;
         }
-        else if (document.webkitFullscreenEnabled) {
-            document.addEventListener('webkitfullscreenchange', fn);
+    };
+    /**
+     * @return {?}
+     */
+    FullscreenOverlayContainer.prototype._getEventName = /**
+     * @return {?}
+     */
+    function () {
+        if (!this._fullScreenEventName) {
+            if (this._document.fullscreenEnabled) {
+                this._fullScreenEventName = 'fullscreenchange';
+            }
+            else if (this._document.webkitFullscreenEnabled) {
+                this._fullScreenEventName = 'webkitfullscreenchange';
+            }
+            else if ((/** @type {?} */ (this._document)).mozFullScreenEnabled) {
+                this._fullScreenEventName = 'mozfullscreenchange';
+            }
+            else if ((/** @type {?} */ (this._document)).msFullscreenEnabled) {
+                this._fullScreenEventName = 'MSFullscreenChange';
+            }
         }
-        else if ((/** @type {?} */ (document)).mozFullScreenEnabled) {
-            document.addEventListener('mozfullscreenchange', fn);
-        }
-        else if ((/** @type {?} */ (document)).msFullscreenEnabled) {
-            document.addEventListener('MSFullscreenChange', fn);
-        }
+        return this._fullScreenEventName;
     };
     /**
      * When the page is put into fullscreen mode, a specific element is specified.
@@ -3930,15 +3961,19 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
      * @return {?}
      */
     function () {
-        return document.fullscreenElement ||
-            document.webkitFullscreenElement ||
-            (/** @type {?} */ (document)).mozFullScreenElement ||
-            (/** @type {?} */ (document)).msFullscreenElement ||
+        return this._document.fullscreenElement ||
+            this._document.webkitFullscreenElement ||
+            (/** @type {?} */ (this._document)).mozFullScreenElement ||
+            (/** @type {?} */ (this._document)).msFullscreenElement ||
             null;
     };
     FullscreenOverlayContainer.decorators = [
         { type: core.Injectable },
     ];
+    /** @nocollapse */
+    FullscreenOverlayContainer.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+    ]; };
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 
