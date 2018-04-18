@@ -191,7 +191,10 @@ class CdkAccordionItem {
      * @return {?}
      */
     ngOnDestroy() {
+        this.opened.complete();
+        this.closed.complete();
         this.destroyed.emit();
+        this.destroyed.complete();
         this._removeUniqueSelectionListener();
         this._openCloseAllSubscription.unsubscribe();
     }
