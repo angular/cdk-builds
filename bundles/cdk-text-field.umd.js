@@ -391,10 +391,21 @@ var CdkTextareaAutosize = /** @class */ (function () {
         textarea.style.height = 'auto';
         textarea.style.overflow = 'hidden';
         textarea.placeholder = '';
+        var /** @type {?} */ height = textarea.scrollHeight;
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
-        textarea.style.height = textarea.scrollHeight + "px";
+        textarea.style.height = height + "px";
         textarea.style.overflow = '';
         textarea.placeholder = placeholderText;
+        // On Firefox resizing the textarea will prevent it from scrolling to the caret position.
+        // We need to re-set the selection in order for it to scroll to the proper position.
+        if (typeof requestAnimationFrame !== 'undefined') {
+            this._ngZone.runOutsideAngular(function () {
+                return requestAnimationFrame(function () {
+                    var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
+                    textarea.setSelectionRange(selectionStart, selectionEnd);
+                });
+            });
+        }
         this._previousValue = value;
     };
     /**
