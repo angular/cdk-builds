@@ -1009,13 +1009,7 @@ OverlayRef = /** @class */ (function () {
             this._attachBackdrop();
         }
         if (this._config.panelClass) {
-            // We can't do a spread here, because IE doesn't support setting multiple classes.
-            if (Array.isArray(this._config.panelClass)) {
-                this._config.panelClass.forEach(function (cssClass) { return _this._pane.classList.add(cssClass); });
-            }
-            else {
-                this._pane.classList.add(this._config.panelClass);
-            }
+            this._toggleClasses(this._pane, this._config.panelClass, true);
         }
         // Only emit the `attachments` event once all other setup is done.
         this._attachments.next();
@@ -1271,7 +1265,7 @@ OverlayRef = /** @class */ (function () {
         this._backdropElement = this._document.createElement('div');
         this._backdropElement.classList.add('cdk-overlay-backdrop');
         if (this._config.backdropClass) {
-            this._backdropElement.classList.add(this._config.backdropClass);
+            this._toggleClasses(this._backdropElement, this._config.backdropClass, true);
         } /** @type {?} */
         ((
         // Insert the backdrop before the pane in the DOM order,
@@ -1342,7 +1336,7 @@ OverlayRef = /** @class */ (function () {
             };
             backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
             if (this._config.backdropClass) {
-                backdropToDetach.classList.remove(this._config.backdropClass);
+                this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
             }
             backdropToDetach.addEventListener('transitionend', finishDetach_1);
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
@@ -1353,6 +1347,27 @@ OverlayRef = /** @class */ (function () {
             // either async or fakeAsync.
             this._ngZone.runOutsideAngular(function () { return setTimeout(finishDetach_1, 500); });
         }
+    };
+    /**
+     * Toggles a single CSS class or an array of classes on an element.
+     * @param {?} element
+     * @param {?} cssClasses
+     * @param {?} isAdd
+     * @return {?}
+     */
+    OverlayRef.prototype._toggleClasses = /**
+     * Toggles a single CSS class or an array of classes on an element.
+     * @param {?} element
+     * @param {?} cssClasses
+     * @param {?} isAdd
+     * @return {?}
+     */
+    function (element, cssClasses, isAdd) {
+        var /** @type {?} */ classList = element.classList;
+        coercion.coerceArray(cssClasses).forEach(function (cssClass) {
+            // We can't do a spread here, because IE doesn't support setting multiple classes.
+            isAdd ? classList.add(cssClass) : classList.remove(cssClass);
+        });
     };
     return OverlayRef;
 }());

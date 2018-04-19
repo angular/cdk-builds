@@ -90,6 +90,8 @@ export declare class OverlayRef implements PortalOutlet {
     private _updateStackingOrder();
     /** Detaches the backdrop (if any) associated with the overlay. */
     detachBackdrop(): void;
+    /** Toggles a single CSS class or an array of classes on an element. */
+    private _toggleClasses(element, cssClasses, isAdd);
 }
 /** Size properties for an overlay. */
 export interface OverlaySizeConfig {
