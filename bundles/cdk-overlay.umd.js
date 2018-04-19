@@ -1078,6 +1078,7 @@ OverlayRef = /** @class */ (function () {
             this._host.parentNode.removeChild(this._host);
             this._host = /** @type {?} */ ((null));
         }
+        this._pane = /** @type {?} */ ((null));
         if (isAttached) {
             this._detachments.next();
         }
