@@ -69,6 +69,14 @@ class CdkHeaderRowDef extends BaseRowDef {
     constructor(template, _differs) {
         super(template, _differs);
     }
+    /**
+     * Gets this row def's relevant cell template from the provided column def.
+     * @param {?} column
+     * @return {?}
+     */
+    extractCellTemplate(column) {
+        return column.headerCell.template;
+    }
 }
 CdkHeaderRowDef.decorators = [
     { type: Directive, args: [{
@@ -78,6 +86,38 @@ CdkHeaderRowDef.decorators = [
 ];
 /** @nocollapse */
 CdkHeaderRowDef.ctorParameters = () => [
+    { type: TemplateRef, },
+    { type: IterableDiffers, },
+];
+/**
+ * Footer row definition for the CDK table.
+ * Captures the footer row's template and other footer properties such as the columns to display.
+ */
+class CdkFooterRowDef extends BaseRowDef {
+    /**
+     * @param {?} template
+     * @param {?} _differs
+     */
+    constructor(template, _differs) {
+        super(template, _differs);
+    }
+    /**
+     * Gets this row def's relevant cell template from the provided column def.
+     * @param {?} column
+     * @return {?}
+     */
+    extractCellTemplate(column) {
+        return column.footerCell.template;
+    }
+}
+CdkFooterRowDef.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkFooterRowDef]',
+                inputs: ['columns: cdkFooterRowDef'],
+            },] },
+];
+/** @nocollapse */
+CdkFooterRowDef.ctorParameters = () => [
     { type: TemplateRef, },
     { type: IterableDiffers, },
 ];
@@ -94,6 +134,14 @@ class CdkRowDef extends BaseRowDef {
      */
     constructor(template, _differs) {
         super(template, _differs);
+    }
+    /**
+     * Gets this row def's relevant cell template from the provided column def.
+     * @param {?} column
+     * @return {?}
+     */
+    extractCellTemplate(column) {
+        return column.cell.template;
     }
 }
 CdkRowDef.decorators = [
@@ -145,6 +193,22 @@ CdkHeaderRow.decorators = [
                 template: CDK_ROW_TEMPLATE,
                 host: {
                     'class': 'cdk-header-row',
+                    'role': 'row',
+                },
+                changeDetection: ChangeDetectionStrategy.OnPush,
+                encapsulation: ViewEncapsulation.None,
+            },] },
+];
+/**
+ * Footer template container that contains the cell outlet. Adds the right class and role.
+ */
+class CdkFooterRow {
+}
+CdkFooterRow.decorators = [
+    { type: Component, args: [{selector: 'cdk-footer-row, tr[cdk-footer-row]',
+                template: CDK_ROW_TEMPLATE,
+                host: {
+                    'class': 'cdk-footer-row',
                     'role': 'row',
                 },
                 changeDetection: ChangeDetectionStrategy.OnPush,
@@ -211,6 +275,25 @@ CdkHeaderCellDef.ctorParameters = () => [
     { type: TemplateRef, },
 ];
 /**
+ * Footer cell definition for a CDK table.
+ * Captures the template of a column's footer cell and as well as cell-specific properties.
+ */
+class CdkFooterCellDef {
+    /**
+     * @param {?} template
+     */
+    constructor(template) {
+        this.template = template;
+    }
+}
+CdkFooterCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkFooterCellDef]' },] },
+];
+/** @nocollapse */
+CdkFooterCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
+/**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
@@ -242,17 +325,31 @@ CdkColumnDef.propDecorators = {
     "name": [{ type: Input, args: ['cdkColumnDef',] },],
     "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
     "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
+    "footerCell": [{ type: ContentChild, args: [CdkFooterCellDef,] },],
 };
 /**
- * Header cell template container that adds the right classes and role.
+ * Base class for the cells. Adds a CSS classname that identifies the column it renders in.
  */
-class CdkHeaderCell {
+class BaseCdkCell {
     /**
      * @param {?} columnDef
      * @param {?} elementRef
      */
     constructor(columnDef, elementRef) {
-        elementRef.nativeElement.classList.add(`cdk-column-${columnDef.cssClassFriendlyName}`);
+        const /** @type {?} */ columnClassName = `cdk-column-${columnDef.cssClassFriendlyName}`;
+        elementRef.nativeElement.classList.add(columnClassName);
+    }
+}
+/**
+ * Header cell template container that adds the right classes and role.
+ */
+class CdkHeaderCell extends BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        super(columnDef, elementRef);
     }
 }
 CdkHeaderCell.decorators = [
@@ -270,15 +367,41 @@ CdkHeaderCell.ctorParameters = () => [
     { type: ElementRef, },
 ];
 /**
- * Cell template container that adds the right classes and role.
+ * Footer cell template container that adds the right classes and role.
  */
-class CdkCell {
+class CdkFooterCell extends BaseCdkCell {
     /**
      * @param {?} columnDef
      * @param {?} elementRef
      */
     constructor(columnDef, elementRef) {
-        elementRef.nativeElement.classList.add(`cdk-column-${columnDef.cssClassFriendlyName}`);
+        super(columnDef, elementRef);
+    }
+}
+CdkFooterCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-footer-cell, td[cdk-footer-cell]',
+                host: {
+                    'class': 'cdk-footer-cell',
+                    'role': 'gridcell',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkFooterCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+];
+/**
+ * Cell template container that adds the right classes and role.
+ */
+class CdkCell extends BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        super(columnDef, elementRef);
     }
 }
 CdkCell.decorators = [
@@ -361,7 +484,7 @@ function getTableUnknownDataSourceError() {
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
  */
-class RowPlaceholder {
+class DataRowOutlet {
     /**
      * @param {?} viewContainer
      * @param {?} elementRef
@@ -371,11 +494,11 @@ class RowPlaceholder {
         this.elementRef = elementRef;
     }
 }
-RowPlaceholder.decorators = [
-    { type: Directive, args: [{ selector: '[rowPlaceholder]' },] },
+DataRowOutlet.decorators = [
+    { type: Directive, args: [{ selector: '[rowOutlet]' },] },
 ];
 /** @nocollapse */
-RowPlaceholder.ctorParameters = () => [
+DataRowOutlet.ctorParameters = () => [
     { type: ViewContainerRef, },
     { type: ElementRef, },
 ];
@@ -383,7 +506,7 @@ RowPlaceholder.ctorParameters = () => [
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
  * \@docs-private
  */
-class HeaderRowPlaceholder {
+class HeaderRowOutlet {
     /**
      * @param {?} viewContainer
      * @param {?} elementRef
@@ -393,26 +516,50 @@ class HeaderRowPlaceholder {
         this.elementRef = elementRef;
     }
 }
-HeaderRowPlaceholder.decorators = [
-    { type: Directive, args: [{ selector: '[headerRowPlaceholder]' },] },
+HeaderRowOutlet.decorators = [
+    { type: Directive, args: [{ selector: '[headerRowOutlet]' },] },
 ];
 /** @nocollapse */
-HeaderRowPlaceholder.ctorParameters = () => [
+HeaderRowOutlet.ctorParameters = () => [
+    { type: ViewContainerRef, },
+    { type: ElementRef, },
+];
+/**
+ * Provides a handle for the table to grab the view container's ng-container to insert the footer.
+ * \@docs-private
+ */
+class FooterRowOutlet {
+    /**
+     * @param {?} viewContainer
+     * @param {?} elementRef
+     */
+    constructor(viewContainer, elementRef) {
+        this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
+    }
+}
+FooterRowOutlet.decorators = [
+    { type: Directive, args: [{ selector: '[footerRowOutlet]' },] },
+];
+/** @nocollapse */
+FooterRowOutlet.ctorParameters = () => [
     { type: ViewContainerRef, },
     { type: ElementRef, },
 ];
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
+ * \@docs-private
  */
 const /** @type {?} */ CDK_TABLE_TEMPLATE = `
-  <ng-container headerRowPlaceholder></ng-container>
-  <ng-container rowPlaceholder></ng-container>`;
+  <ng-container headerRowOutlet></ng-container>
+  <ng-container rowOutlet></ng-container>
+  <ng-container footerRowOutlet></ng-container>`;
 /**
- * A data table that renders a header row and data rows. Uses the dataSource input to determine
- * the data to be rendered. The data can be provided either as a data array, an Observable stream
- * that emits the data array to render, or a DataSource with a connect function that will
- * return an Observable stream that emits the data array to render.
+ * A data table that can render a header row, data rows, and a footer row.
+ * Uses the dataSource input to determine the data to be rendered. The data can be provided either
+ * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
+ * connect function that will return an Observable stream that emits the data array to render.
  * @template T
  */
 class CdkTable {
@@ -431,9 +578,9 @@ class CdkTable {
          */
         this._onDestroy = new Subject();
         /**
-         * Map of all the user's defined columns (header and data cell template) identified by name.
-         * Collection populated by the column definitions gathered by `ContentChildren` as well as any
-         * custom column definitions added to `_customColumnDefs`.
+         * Map of all the user's defined columns (header, data, and footer cell template) identified by
+         * name. Collection populated by the column definitions gathered by `ContentChildren` as well as
+         * any custom column definitions added to `_customColumnDefs`.
          */
         this._columnDefsByName = new Map();
         /**
@@ -449,6 +596,11 @@ class CdkTable {
          * content is checked.
          */
         this._headerRowDefChanged = false;
+        /**
+         * Whether the footer row definition has been changed. Triggers an update to the footer row after
+         * content is checked.
+         */
+        this._footerRowDefChanged = false;
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
@@ -517,11 +669,10 @@ class CdkTable {
         }
         // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
         this._dataDiffer = this._differs.find([]).create(this._trackByFn);
-        // If the table has a header row definition defined as part of its content, flag this as a
-        // header row def change so that the content check will render the header row.
-        if (this._headerRowDef) {
-            this._headerRowDefChanged = true;
-        }
+        // If the table has header or footer row definitions defined as part of its content, mark that
+        // there is a change so that the content check will render the row.
+        this._headerRowDefChanged = !!this._headerRowDef;
+        this._footerRowDefChanged = !!this._footerRowDef;
     }
     /**
      * @return {?}
@@ -530,16 +681,21 @@ class CdkTable {
         // Cache the row and column definitions gathered by ContentChildren and programmatic injection.
         this._cacheRowDefs();
         this._cacheColumnDefs();
-        // Make sure that the user has at least added a header row or row def.
-        if (!this._headerRowDef && !this._rowDefs.length) {
+        // Make sure that the user has at least added header, footer, or data row def.
+        if (!this._headerRowDef && !this._footerRowDef && !this._rowDefs.length) {
             throw getTableMissingRowDefsError();
         }
-        // Render updates if the list of columns have been changed for the header or row definitions.
+        // Render updates if the list of columns have been changed for the header, row, or footer defs.
         this._renderUpdatedColumns();
         // If the header row definition has been changed, trigger a render to the header row.
         if (this._headerRowDefChanged) {
             this._renderHeaderRow();
             this._headerRowDefChanged = false;
+        }
+        // If the footer row definition has been changed, trigger a render to the footer row.
+        if (this._footerRowDefChanged) {
+            this._renderFooterRow();
+            this._footerRowDefChanged = false;
         }
         // If there is a data source and row definitions, connect to the data source unless a
         // connection has already been made.
@@ -551,8 +707,9 @@ class CdkTable {
      * @return {?}
      */
     ngOnDestroy() {
-        this._rowPlaceholder.viewContainer.clear();
-        this._headerRowPlaceholder.viewContainer.clear();
+        this._rowOutlet.viewContainer.clear();
+        this._headerRowOutlet.viewContainer.clear();
+        this._footerRowOutlet.viewContainer.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
         if (this.dataSource instanceof DataSource) {
@@ -575,7 +732,7 @@ class CdkTable {
         if (!changes) {
             return;
         }
-        const /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
+        const /** @type {?} */ viewContainer = this._rowOutlet.viewContainer;
         changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
             if (record.previousIndex == null) {
                 this._insertRow(record.item, currentIndex);
@@ -607,6 +764,17 @@ class CdkTable {
     setHeaderRowDef(headerRowDef) {
         this._headerRowDef = headerRowDef;
         this._headerRowDefChanged = true;
+    }
+    /**
+     * Sets the footer row definition to be used. Overrides the footer row definition gathered by
+     * using `ContentChild`, if one exists. Sets a flag that will re-render the footer row after the
+     * table's content is checked.
+     * @param {?} footerRowDef
+     * @return {?}
+     */
+    setFooterRowDef(footerRowDef) {
+        this._footerRowDef = footerRowDef;
+        this._footerRowDefChanged = true;
     }
     /**
      * Adds a column definition that was not included as part of the direct content children.
@@ -669,8 +837,8 @@ class CdkTable {
         this._defaultRowDef = defaultRowDefs[0];
     }
     /**
-     * Check if the header or rows have changed what columns they want to display. If there is a diff,
-     * then re-render that section.
+     * Check if the header, data, or footer rows have changed what columns they want to display.
+     * If there is a diff, then re-render that section.
      * @return {?}
      */
     _renderUpdatedColumns() {
@@ -679,7 +847,7 @@ class CdkTable {
             if (!!def.getColumnsDiff()) {
                 // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
                 this._dataDiffer.diff([]);
-                this._rowPlaceholder.viewContainer.clear();
+                this._rowOutlet.viewContainer.clear();
                 this.renderRows();
             }
         });
@@ -687,11 +855,15 @@ class CdkTable {
         if (this._headerRowDef && this._headerRowDef.getColumnsDiff()) {
             this._renderHeaderRow();
         }
+        // Re-render the footer row if there is a difference in its columns.
+        if (this._footerRowDef && this._footerRowDef.getColumnsDiff()) {
+            this._renderFooterRow();
+        }
     }
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
-     * clearing the row placeholder. Otherwise start listening for new data.
+     * clearing the row outlet. Otherwise start listening for new data.
      * @param {?} dataSource
      * @return {?}
      */
@@ -709,7 +881,7 @@ class CdkTable {
             if (this._dataDiffer) {
                 this._dataDiffer.diff([]);
             }
-            this._rowPlaceholder.viewContainer.clear();
+            this._rowOutlet.viewContainer.clear();
         }
         this._dataSource = dataSource;
     }
@@ -747,30 +919,28 @@ class CdkTable {
         });
     }
     /**
-     * Clears any existing content in the header row placeholder and creates a new embedded view
-     * in the placeholder using the header row definition.
+     * Clears any existing content in the header row outlet and creates a new embedded view
+     * in the outlet using the header row definition.
      * @return {?}
      */
     _renderHeaderRow() {
-        // Clear the header row placeholder if any content exists.
-        if (this._headerRowPlaceholder.viewContainer.length > 0) {
-            this._headerRowPlaceholder.viewContainer.clear();
+        // Clear the footer row outlet if any content exists.
+        if (this._headerRowOutlet.viewContainer.length > 0) {
+            this._headerRowOutlet.viewContainer.clear();
         }
-        const /** @type {?} */ cells = this._getHeaderCellTemplatesForRow(this._headerRowDef);
-        if (!cells.length) {
-            return;
+        this._renderRow(this._headerRowOutlet, this._headerRowDef);
+    }
+    /**
+     * Clears any existing content in the footer row outlet and creates a new embedded view
+     * in the outlet using the footer row definition.
+     * @return {?}
+     */
+    _renderFooterRow() {
+        // Clear the footer row outlet if any content exists.
+        if (this._footerRowOutlet.viewContainer.length > 0) {
+            this._footerRowOutlet.viewContainer.clear();
         }
-        // TODO(andrewseguin): add some code to enforce that exactly
-        //   one CdkCellOutlet was instantiated as a result
-        //   of `createEmbeddedView`.
-        this._headerRowPlaceholder.viewContainer
-            .createEmbeddedView(this._headerRowDef.template, { cells });
-        cells.forEach(cell => {
-            if (CdkCellOutlet.mostRecentCellOutlet) {
-                CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cell.template, {});
-            }
-        });
-        this._changeDetectorRef.markForCheck();
+        this._renderRow(this._footerRowOutlet, this._footerRowDef);
     }
     /**
      * Finds the matching row definition that should be used for this row data. If there is only
@@ -799,18 +969,28 @@ class CdkTable {
      * @return {?}
      */
     _insertRow(rowData, index) {
-        const /** @type {?} */ row = this._getRowDef(rowData, index);
-        // Row context that will be provided to both the created embedded row view and its cells.
+        const /** @type {?} */ rowDef = this._getRowDef(rowData, index);
         const /** @type {?} */ context = { $implicit: rowData };
-        // TODO(andrewseguin): add some code to enforce that exactly one
-        //   CdkCellOutlet was instantiated as a result  of `createEmbeddedView`.
-        this._rowPlaceholder.viewContainer.createEmbeddedView(row.template, context, index);
-        this._getCellTemplatesForRow(row).forEach(cell => {
+        this._renderRow(this._rowOutlet, rowDef, context, index);
+    }
+    /**
+     * Creates a new row template in the outlet and fills it with the set of cell templates.
+     * Optionally takes a context to provide to the row and cells, as well as an optional index
+     * of where to place the new row template in the outlet.
+     * @param {?} outlet
+     * @param {?} rowDef
+     * @param {?=} context
+     * @param {?=} index
+     * @return {?}
+     */
+    _renderRow(outlet, rowDef, context = {}, index = 0) {
+        // TODO(andrewseguin): enforce that one outlet was instantiated from createEmbeddedView
+        outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
+        for (let /** @type {?} */ cellTemplate of this._getCellTemplates(rowDef)) {
             if (CdkCellOutlet.mostRecentCellOutlet) {
-                CdkCellOutlet.mostRecentCellOutlet._viewContainer
-                    .createEmbeddedView(cell.template, context);
+                CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cellTemplate, context);
             }
-        });
+        }
         this._changeDetectorRef.markForCheck();
     }
     /**
@@ -819,7 +999,7 @@ class CdkTable {
      * @return {?}
      */
     _updateRowIndexContext() {
-        const /** @type {?} */ viewContainer = this._rowPlaceholder.viewContainer;
+        const /** @type {?} */ viewContainer = this._rowOutlet.viewContainer;
         for (let /** @type {?} */ index = 0, /** @type {?} */ count = viewContainer.length; index < count; index++) {
             const /** @type {?} */ viewRef = /** @type {?} */ (viewContainer.get(index));
             viewRef.context.index = index;
@@ -831,31 +1011,12 @@ class CdkTable {
         }
     }
     /**
-     * Returns the cell template definitions to insert into the header
-     * as defined by its list of columns to display.
-     * @param {?} headerDef
-     * @return {?}
-     */
-    _getHeaderCellTemplatesForRow(headerDef) {
-        if (!headerDef || !headerDef.columns) {
-            return [];
-        }
-        return Array.from(headerDef.columns, columnId => {
-            const /** @type {?} */ column = this._columnDefsByName.get(columnId);
-            if (!column) {
-                throw getTableUnknownColumnError(columnId);
-            }
-            return column.headerCell;
-        });
-    }
-    /**
-     * Returns the cell template definitions to insert in the provided row
-     * as defined by its list of columns to display.
+     * Gets the column definitions for the provided row def.
      * @param {?} rowDef
      * @return {?}
      */
-    _getCellTemplatesForRow(rowDef) {
-        if (!rowDef.columns) {
+    _getCellTemplates(rowDef) {
+        if (!rowDef || !rowDef.columns) {
             return [];
         }
         return Array.from(rowDef.columns, columnId => {
@@ -863,20 +1024,24 @@ class CdkTable {
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
-            return column.cell;
+            return rowDef.extractCellTemplate(column);
         });
     }
     /**
-     * Adds native table sections (e.g. tbody) and moves the row placeholders into them.
+     * Adds native table sections (e.g. tbody) and moves the row outlets into them.
      * @return {?}
      */
     _applyNativeTableSections() {
-        const /** @type {?} */ thead = document.createElement('thead');
-        const /** @type {?} */ tbody = document.createElement('tbody');
-        this._elementRef.nativeElement.appendChild(thead);
-        this._elementRef.nativeElement.appendChild(tbody);
-        thead.appendChild(this._headerRowPlaceholder.elementRef.nativeElement);
-        tbody.appendChild(this._rowPlaceholder.elementRef.nativeElement);
+        const /** @type {?} */ sections = [
+            { tag: 'thead', outlet: this._headerRowOutlet },
+            { tag: 'tbody', outlet: this._rowOutlet },
+            { tag: 'tfoot', outlet: this._footerRowOutlet },
+        ];
+        for (const /** @type {?} */ section of sections) {
+            const /** @type {?} */ element = document.createElement(section.tag);
+            element.appendChild(section.outlet.elementRef.nativeElement);
+            this._elementRef.nativeElement.appendChild(element);
+        }
     }
 }
 CdkTable.decorators = [
@@ -900,11 +1065,13 @@ CdkTable.ctorParameters = () => [
 CdkTable.propDecorators = {
     "trackBy": [{ type: Input },],
     "dataSource": [{ type: Input },],
-    "_rowPlaceholder": [{ type: ViewChild, args: [RowPlaceholder,] },],
-    "_headerRowPlaceholder": [{ type: ViewChild, args: [HeaderRowPlaceholder,] },],
+    "_rowOutlet": [{ type: ViewChild, args: [DataRowOutlet,] },],
+    "_headerRowOutlet": [{ type: ViewChild, args: [HeaderRowOutlet,] },],
+    "_footerRowOutlet": [{ type: ViewChild, args: [FooterRowOutlet,] },],
     "_contentColumnDefs": [{ type: ContentChildren, args: [CdkColumnDef,] },],
     "_contentRowDefs": [{ type: ContentChildren, args: [CdkRowDef,] },],
     "_headerRowDef": [{ type: ContentChild, args: [CdkHeaderRowDef,] },],
+    "_footerRowDef": [{ type: ContentChild, args: [CdkFooterRowDef,] },],
 };
 
 /**
@@ -917,14 +1084,19 @@ const /** @type {?} */ EXPORTED_DECLARATIONS = [
     CdkCellDef,
     CdkCellOutlet,
     CdkHeaderCellDef,
+    CdkFooterCellDef,
     CdkColumnDef,
     CdkCell,
     CdkRow,
     CdkHeaderCell,
+    CdkFooterCell,
     CdkHeaderRow,
     CdkHeaderRowDef,
-    RowPlaceholder,
-    HeaderRowPlaceholder,
+    CdkFooterRow,
+    CdkFooterRowDef,
+    DataRowOutlet,
+    HeaderRowOutlet,
+    FooterRowOutlet,
 ];
 class CdkTableModule {
 }
@@ -946,5 +1118,5 @@ CdkTableModule.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { RowPlaceholder, HeaderRowPlaceholder, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkColumnDef, CdkHeaderCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkRow, CdkTableModule };
+export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule };
 //# sourceMappingURL=table.js.map
