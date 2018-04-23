@@ -1173,6 +1173,7 @@ class FlexibleConnectedPositionStrategy {
         if (this._overlayRef && overlayRef !== this._overlayRef) {
             throw Error('This position strategy is already attached to an overlay');
         }
+        this._validatePositions();
         overlayRef.hostElement.classList.add('cdk-overlay-connected-position-bounding-box');
         this._overlayRef = overlayRef;
         this._boundingBox = /** @type {?} */ ((overlayRef.hostElement));
@@ -1343,6 +1344,7 @@ class FlexibleConnectedPositionStrategy {
         if (positions.indexOf(/** @type {?} */ ((this._lastPosition))) === -1) {
             this._lastPosition = null;
         }
+        this._validatePositions();
         return this;
     }
     /**
@@ -1930,6 +1932,23 @@ class FlexibleConnectedPositionStrategy {
         }
         return position.offsetY == null ? this._offsetY : position.offsetY;
     }
+    /**
+     * Validates that the current position match the expected values.
+     * @return {?}
+     */
+    _validatePositions() {
+        if (!this._preferredPositions.length) {
+            throw Error('FlexibleConnectedPositionStrategy: At least one position is required.');
+        }
+        // TODO(crisbeto): remove these once Angular's template type
+        // checking is advanced enough to catch these cases.
+        this._preferredPositions.forEach(pair => {
+            validateHorizontalPosition('originX', pair.originX);
+            validateVerticalPosition('originY', pair.originY);
+            validateHorizontalPosition('overlayX', pair.overlayX);
+            validateVerticalPosition('overlayY', pair.overlayY);
+        });
+    }
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.
@@ -2038,7 +2057,6 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     apply() {
-        this._validatePositions();
         this._positionStrategy.apply();
     }
     /**
@@ -2048,7 +2066,6 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     recalculateLastPosition() {
-        this._validatePositions();
         this._positionStrategy.reapplyLastPosition();
     }
     /**
@@ -2139,24 +2156,6 @@ class ConnectedPositionStrategy {
     setOrigin(origin) {
         this._positionStrategy.setOrigin(origin);
         return this;
-    }
-    /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    _validatePositions() {
-        if (!this._preferredPositions.length) {
-            throw Error('ConnectedPositionStrategy: At least one position is required.');
-        }
-        // TODO(crisbeto): remove these once Angular's template type
-        // checking is advanced enough to catch these cases.
-        // TODO(crisbeto): port these checks into the flexible positioning.
-        this._preferredPositions.forEach(pair => {
-            validateHorizontalPosition('originX', pair.originX);
-            validateVerticalPosition('originY', pair.originY);
-            validateHorizontalPosition('overlayX', pair.overlayX);
-            validateVerticalPosition('overlayY', pair.overlayY);
-        });
     }
 }
 

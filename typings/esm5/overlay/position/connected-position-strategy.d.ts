@@ -94,6 +94,4 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
      * @param origin Reference to the new origin element.
      */
     setOrigin(origin: ElementRef): this;
-    /** Validates that the current position match the expected values. */
-    private _validatePositions();
 }

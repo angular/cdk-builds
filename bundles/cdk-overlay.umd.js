@@ -1486,6 +1486,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (this._overlayRef && overlayRef !== this._overlayRef) {
             throw Error('This position strategy is already attached to an overlay');
         }
+        this._validatePositions();
         overlayRef.hostElement.classList.add('cdk-overlay-connected-position-bounding-box');
         this._overlayRef = overlayRef;
         this._boundingBox = /** @type {?} */ ((overlayRef.hostElement));
@@ -1727,6 +1728,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (positions.indexOf(/** @type {?} */ ((this._lastPosition))) === -1) {
             this._lastPosition = null;
         }
+        this._validatePositions();
         return this;
     };
     /**
@@ -2507,6 +2509,27 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         return position.offsetY == null ? this._offsetY : position.offsetY;
     };
+    /**
+     * Validates that the current position match the expected values.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._validatePositions = /**
+     * Validates that the current position match the expected values.
+     * @return {?}
+     */
+    function () {
+        if (!this._preferredPositions.length) {
+            throw Error('FlexibleConnectedPositionStrategy: At least one position is required.');
+        }
+        // TODO(crisbeto): remove these once Angular's template type
+        // checking is advanced enough to catch these cases.
+        this._preferredPositions.forEach(function (pair) {
+            validateHorizontalPosition('originX', pair.originX);
+            validateVerticalPosition('originY', pair.originY);
+            validateHorizontalPosition('overlayX', pair.overlayX);
+            validateVerticalPosition('overlayY', pair.overlayY);
+        });
+    };
     return FlexibleConnectedPositionStrategy;
 }());
 /**
@@ -2660,7 +2683,6 @@ ConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._validatePositions();
         this._positionStrategy.apply();
     };
     /**
@@ -2681,7 +2703,6 @@ ConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._validatePositions();
         this._positionStrategy.reapplyLastPosition();
     };
     /**
@@ -2855,28 +2876,6 @@ ConnectedPositionStrategy = /** @class */ (function () {
     function (origin) {
         this._positionStrategy.setOrigin(origin);
         return this;
-    };
-    /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    ConnectedPositionStrategy.prototype._validatePositions = /**
-     * Validates that the current position match the expected values.
-     * @return {?}
-     */
-    function () {
-        if (!this._preferredPositions.length) {
-            throw Error('ConnectedPositionStrategy: At least one position is required.');
-        }
-        // TODO(crisbeto): remove these once Angular's template type
-        // checking is advanced enough to catch these cases.
-        // TODO(crisbeto): port these checks into the flexible positioning.
-        this._preferredPositions.forEach(function (pair) {
-            validateHorizontalPosition('originX', pair.originX);
-            validateVerticalPosition('originY', pair.originY);
-            validateHorizontalPosition('overlayX', pair.overlayX);
-            validateVerticalPosition('overlayY', pair.overlayY);
-        });
     };
     return ConnectedPositionStrategy;
 }());

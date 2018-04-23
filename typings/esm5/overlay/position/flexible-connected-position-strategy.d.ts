@@ -222,6 +222,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _hasExactPosition();
     /** Retrieves the offset of a position along the x or y axis. */
     private _getOffset(position, axis);
+    /** Validates that the current position match the expected values. */
+    private _validatePositions();
 }
 /** A connected position as specified by the user. */
 export interface ConnectedPosition {
