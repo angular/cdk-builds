@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, Directive, IterableDiffers, Templat
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators';
-import { of, BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 /**

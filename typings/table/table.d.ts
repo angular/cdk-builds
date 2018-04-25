@@ -54,9 +54,9 @@ export declare const CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowOutlet></n
  * connect function that will return an Observable stream that emits the data array to render.
  */
 export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterContentChecked {
-    private readonly _differs;
-    private readonly _changeDetectorRef;
-    private readonly _elementRef;
+    protected readonly _differs: IterableDiffers;
+    protected readonly _changeDetectorRef: ChangeDetectorRef;
+    protected readonly _elementRef: ElementRef;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
     /** Latest data provided by the data source. */
