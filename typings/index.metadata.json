@@ -1,1 +1,1 @@
-{"__symbolic":"module","version":4,"metadata":{"VERSION":{"__symbolic":"new","expression":{"__symbolic":"reference","module":"@angular/core","name":"Version","line":11,"character":27},"arguments":["6.0.0-rc.12-85252b3"]}},"origins":{"VERSION":"./version"},"importAs":"@angular/cdk"}
+{"__symbolic":"module","version":4,"metadata":{"VERSION":{"__symbolic":"new","expression":{"__symbolic":"reference","module":"@angular/core","name":"Version","line":11,"character":27},"arguments":["6.0.0-rc.12-a292d31"]}},"origins":{"VERSION":"./version"},"importAs":"@angular/cdk"}
