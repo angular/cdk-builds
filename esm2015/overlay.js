@@ -2405,19 +2405,17 @@ class Overlay {
      * @param {?} _componentFactoryResolver
      * @param {?} _positionBuilder
      * @param {?} _keyboardDispatcher
-     * @param {?} _appRef
      * @param {?} _injector
      * @param {?} _ngZone
      * @param {?} _document
      * @param {?} _directionality
      */
-    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document, _directionality) {
+    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
         this._positionBuilder = _positionBuilder;
         this._keyboardDispatcher = _keyboardDispatcher;
-        this._appRef = _appRef;
         this._injector = _injector;
         this._ngZone = _ngZone;
         this._document = _document;
@@ -2472,6 +2470,11 @@ class Overlay {
      * @return {?} A portal outlet for the given DOM element.
      */
     _createPortalOutlet(pane) {
+        // We have to resolve the ApplicationRef later in order to allow people
+        // to use overlay-based providers during app initialization.
+        if (!this._appRef) {
+            this._appRef = this._injector.get(ApplicationRef);
+        }
         return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     }
 }
@@ -2485,7 +2488,6 @@ Overlay.ctorParameters = () => [
     { type: ComponentFactoryResolver, },
     { type: OverlayPositionBuilder, },
     { type: OverlayKeyboardDispatcher, },
-    { type: ApplicationRef, },
     { type: Injector, },
     { type: NgZone, },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },

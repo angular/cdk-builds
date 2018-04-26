@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directionality } from '@angular/cdk/bidi';
-import { ApplicationRef, ComponentFactoryResolver, Injector, NgZone } from '@angular/core';
+import { ComponentFactoryResolver, Injector, NgZone } from '@angular/core';
 import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayConfig } from './overlay-config';
 import { OverlayContainer } from './overlay-container';
@@ -28,14 +28,14 @@ export declare class Overlay {
     private _componentFactoryResolver;
     private _positionBuilder;
     private _keyboardDispatcher;
-    private _appRef;
     private _injector;
     private _ngZone;
     private _document;
     private _directionality;
+    private _appRef;
     constructor(
         /** Scrolling strategies that can be used when creating an overlay. */
-        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _appRef: ApplicationRef, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality);
+        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.

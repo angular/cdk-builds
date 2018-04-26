@@ -3275,13 +3275,12 @@ var /** @type {?} */ nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = /** @class */ (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _appRef, _injector, _ngZone, _document, _directionality) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
         this._positionBuilder = _positionBuilder;
         this._keyboardDispatcher = _keyboardDispatcher;
-        this._appRef = _appRef;
         this._injector = _injector;
         this._ngZone = _ngZone;
         this._document = _document;
@@ -3371,6 +3370,11 @@ var Overlay = /** @class */ (function () {
      * @return {?} A portal outlet for the given DOM element.
      */
     function (pane) {
+        // We have to resolve the ApplicationRef later in order to allow people
+        // to use overlay-based providers during app initialization.
+        if (!this._appRef) {
+            this._appRef = this._injector.get(core.ApplicationRef);
+        }
         return new portal.DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
     };
     Overlay.decorators = [
@@ -3383,7 +3387,6 @@ var Overlay = /** @class */ (function () {
         { type: core.ComponentFactoryResolver, },
         { type: OverlayPositionBuilder, },
         { type: OverlayKeyboardDispatcher, },
-        { type: core.ApplicationRef, },
         { type: core.Injector, },
         { type: core.NgZone, },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
