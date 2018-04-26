@@ -452,6 +452,10 @@ class CdkTree {
          */
         this._onDestroy = new Subject();
         /**
+         * Level of nodes
+         */
+        this._levels = new Map();
+        /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
@@ -564,19 +568,21 @@ class CdkTree {
      * @param {?} data
      * @param {?=} dataDiffer
      * @param {?=} viewContainer
+     * @param {?=} parentData
      * @return {?}
      */
-    renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer) {
+    renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer, parentData) {
         const /** @type {?} */ changes = dataDiffer.diff(data);
         if (!changes) {
             return;
         }
         changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
             if (item.previousIndex == null) {
-                this.insertNode(data[currentIndex], currentIndex, viewContainer);
+                this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
             }
             else if (currentIndex == null) {
                 viewContainer.remove(adjustedPreviousIndex);
+                this._levels.delete(item.item);
             }
             else {
                 const /** @type {?} */ view = viewContainer.get(adjustedPreviousIndex);
@@ -609,12 +615,25 @@ class CdkTree {
      * @param {?} nodeData
      * @param {?} index
      * @param {?=} viewContainer
+     * @param {?=} parentData
      * @return {?}
      */
-    insertNode(nodeData, index, viewContainer) {
+    insertNode(nodeData, index, viewContainer, parentData) {
         const /** @type {?} */ node = this._getNodeDef(nodeData, index);
         // Node context that will be provided to created embedded view
         const /** @type {?} */ context = new CdkTreeNodeOutletContext(nodeData);
+        // If the tree is flat tree, then use the `getLevel` function in flat tree control
+        // Otherwise, use the level of parent node.
+        if (this.treeControl.getLevel) {
+            context.level = this.treeControl.getLevel(nodeData);
+        }
+        else if (typeof parentData !== 'undefined' && this._levels.has(parentData)) {
+            context.level = /** @type {?} */ ((this._levels.get(parentData))) + 1;
+        }
+        else {
+            context.level = 0;
+        }
+        this._levels.set(nodeData, context.level);
         // Use default tree nodeOutlet, or nested node's nodeOutlet
         const /** @type {?} */ container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
         container.createEmbeddedView(node.template, context, index);
@@ -719,7 +738,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     updateChildrenNodes() {
         if (this.nodeOutlet.length && this._children) {
             const /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
-            this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer);
+            this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);
         }
         else {
             // Reset the data differ if there's no children nodes displayed

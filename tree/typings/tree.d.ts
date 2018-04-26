@@ -56,6 +56,8 @@ export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
     private _defaultNodeDef;
     /** Data subscription */
     private _dataSubscription;
+    /** Level of nodes */
+    private _levels;
     /**
      * Provides a stream containing the latest data array to render. Influenced by the tree's
      * stream of view window (what dataNodes are currently on screen).
@@ -89,7 +91,7 @@ export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges();
     /** Check for changes made in the data and render each change (node added/removed/moved). */
-    renderNodeChanges(data: T[], dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef): void;
+    renderNodeChanges(data: T[], dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef, parentData?: T): void;
     /**
      * Finds the matching node definition that should be used for this node data. If there is only
      * one node definition, it is returned. Otherwise, find the node definition that has a when
@@ -101,5 +103,5 @@ export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
      * Create the embedded view for the data node template and place it in the correct index location
      * within the data node view container.
      */
-    insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef): void;
+    insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
 }
