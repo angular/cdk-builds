@@ -16,8 +16,6 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
     add(overlayRef: OverlayRef): void;
     /** Remove an overlay from the list of attached overlay refs. */
     remove(overlayRef: OverlayRef): void;
-    /** Select the appropriate overlay from a keydown event. */
-    private _selectOverlayFromEvent(event);
     /** Detaches the global keyboard event listener. */
     private _detach();
     /** Keyboard event listener that will be attached to the body. */

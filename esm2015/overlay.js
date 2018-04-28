@@ -536,8 +536,10 @@ class OverlayKeyboardDispatcher {
          */
         this._keydownListener = (event) => {
             if (this._attachedOverlays.length) {
-                // Dispatch keydown event to the correct overlay.
-                this._selectOverlayFromEvent(event)._keydownEvents.next(event);
+                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
+                // rather than trying to match where the event came from, because some components might open
+                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
+                this._attachedOverlays[this._attachedOverlays.length - 1]._keydownEvents.next(event);
             }
         };
         this._document = document;
@@ -575,20 +577,6 @@ class OverlayKeyboardDispatcher {
         if (this._attachedOverlays.length === 0) {
             this._detach();
         }
-    }
-    /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    _selectOverlayFromEvent(event) {
-        // Check if any overlays contain the event
-        const /** @type {?} */ targetedOverlay = this._attachedOverlays.find(overlay => {
-            return overlay.overlayElement === event.target ||
-                overlay.overlayElement.contains(/** @type {?} */ (event.target));
-        });
-        // Use the overlay if it exists, otherwise choose the most recently attached one
-        return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     }
     /**
      * Detaches the global keyboard event listener.

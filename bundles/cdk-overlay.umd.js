@@ -658,9 +658,13 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
          */
         this._keydownListener = function (event) {
             if (_this._attachedOverlays.length) {
-                // Dispatch keydown event to the correct overlay.
-                // Dispatch keydown event to the correct overlay.
-                _this._selectOverlayFromEvent(event)._keydownEvents.next(event);
+                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
+                // rather than trying to match where the event came from, because some components might open
+                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
+                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
+                // rather than trying to match where the event came from, because some components might open
+                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
+                _this._attachedOverlays[_this._attachedOverlays.length - 1]._keydownEvents.next(event);
             }
         };
         this._document = document;
@@ -713,25 +717,6 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
         if (this._attachedOverlays.length === 0) {
             this._detach();
         }
-    };
-    /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    OverlayKeyboardDispatcher.prototype._selectOverlayFromEvent = /**
-     * Select the appropriate overlay from a keydown event.
-     * @param {?} event
-     * @return {?}
-     */
-    function (event) {
-        // Check if any overlays contain the event
-        var /** @type {?} */ targetedOverlay = this._attachedOverlays.find(function (overlay) {
-            return overlay.overlayElement === event.target ||
-                overlay.overlayElement.contains(/** @type {?} */ (event.target));
-        });
-        // Use the overlay if it exists, otherwise choose the most recently attached one
-        return targetedOverlay || this._attachedOverlays[this._attachedOverlays.length - 1];
     };
     /**
      * Detaches the global keyboard event listener.
