@@ -5,6 +5,7 @@ import { OverlayRef } from '../overlay-ref';
 import { ConnectedOverlayPositionChange, ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition } from './connected-position';
 import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';
 import { PositionStrategy } from './position-strategy';
+import { Platform } from '@angular/cdk/platform';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative to some origin element. The relative position is defined in terms of
@@ -29,7 +30,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     _preferredPositions: ConnectionPositionPair[];
     /** Emits an event when the connection point changes. */
     readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
-    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef, viewportRuler: ViewportRuler, document: Document);
+    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef, viewportRuler: ViewportRuler, document: Document, platform?: Platform);
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
     /** Attach this position strategy to an overlay. */

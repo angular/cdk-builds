@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/keycodes')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/scrolling', '@angular/common', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.scrolling,global.ng.common,global.Rx,global.Rx.operators,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.keycodes));
-}(this, (function (exports,core,coercion,scrolling,common,rxjs,operators,bidi,portal,keycodes) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/keycodes')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/scrolling', '@angular/common', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/keycodes'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.scrolling,global.ng.common,global.Rx,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.keycodes));
+}(this, (function (exports,core,coercion,scrolling,common,rxjs,operators,platform,bidi,portal,keycodes) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1377,10 +1377,11 @@ var   /**
  * of the overlay.
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
-    function FlexibleConnectedPositionStrategy(_connectedTo, _viewportRuler, _document) {
+    function FlexibleConnectedPositionStrategy(_connectedTo, _viewportRuler, _document, _platform) {
         this._connectedTo = _connectedTo;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
+        this._platform = _platform;
         /**
          * Whether we're performing the very first positioning of the overlay.
          */
@@ -1524,8 +1525,8 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        // We shouldn't do anything if the strategy was disposed.
-        if (this._isDisposed) {
+        // We shouldn't do anything if the strategy was disposed or we're on the server.
+        if (this._isDisposed || (this._platform && !this._platform.isBrowser)) {
             return;
         }
         // If the position has been applied already (e.g. when the overlay was opened) and the
@@ -1661,7 +1662,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (!this._isDisposed) {
+        if (!this._isDisposed && (!this._platform || this._platform.isBrowser)) {
             this._originRect = this._origin.getBoundingClientRect();
             this._overlayRect = this._pane.getBoundingClientRect();
             this._viewportRect = this._getNarrowedViewportRect();
@@ -2555,7 +2556,10 @@ var   /**
  * \@deletion-target 7.0.0
  */
 ConnectedPositionStrategy = /** @class */ (function () {
-    function ConnectedPositionStrategy(originPos, overlayPos, connectedTo, viewportRuler, document) {
+    function ConnectedPositionStrategy(originPos, overlayPos, connectedTo, viewportRuler, document, 
+    // @deletion-target 7.0.0 `platform` parameter to be made required.
+    // @deletion-target 7.0.0 `platform` parameter to be made required.
+    platform$$1) {
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -2565,7 +2569,7 @@ ConnectedPositionStrategy = /** @class */ (function () {
         // defaults that make it behave as the old position strategy and to which we'll
         // proxy all of the API calls.
         this._positionStrategy =
-            new FlexibleConnectedPositionStrategy(connectedTo, viewportRuler, document)
+            new FlexibleConnectedPositionStrategy(connectedTo, viewportRuler, document, platform$$1)
                 .withFlexibleDimensions(false)
                 .withPush(false)
                 .withViewportMargin(0);
@@ -3167,9 +3171,12 @@ GlobalPositionStrategy = /** @class */ (function () {
  * Builder for overlay position strategy.
  */
 var OverlayPositionBuilder = /** @class */ (function () {
-    function OverlayPositionBuilder(_viewportRuler, _document) {
+    function OverlayPositionBuilder(_viewportRuler, _document, 
+    // @deletion-target 7.0.0 `_platform` parameter to be made required.
+    _platform) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
+        this._platform = _platform;
     }
     /**
      * Creates a global position strategy.
@@ -3229,7 +3236,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
      * @return {?}
      */
     function (elementRef) {
-        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document);
+        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document, this._platform);
     };
     OverlayPositionBuilder.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
@@ -3238,8 +3245,9 @@ var OverlayPositionBuilder = /** @class */ (function () {
     OverlayPositionBuilder.ctorParameters = function () { return [
         { type: scrolling.ViewportRuler, },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: platform.Platform, decorators: [{ type: core.Optional },] },
     ]; };
-    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.inject(scrolling.ViewportRuler), core.inject(common.DOCUMENT)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.inject(scrolling.ViewportRuler), core.inject(common.DOCUMENT), core.inject(platform.Platform, 8)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
 
