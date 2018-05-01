@@ -29,9 +29,13 @@ var LayoutModule = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
- * Global registry for all dynamically-created, injected style tags.
+ * Global registry for all dynamically-created, injected media queries.
  */
-var /** @type {?} */ styleElementForWebkitCompatibility = new Map();
+var /** @type {?} */ mediaQueriesForWebkitCompatibility = new Set();
+/**
+ * Style tag that holds all of the dynamically-created media queries.
+ */
+var /** @type {?} */ mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
  */
@@ -83,27 +87,29 @@ var MediaMatcher = /** @class */ (function () {
     return MediaMatcher;
 }());
 /**
- * For Webkit engines that only trigger the MediaQueryListListener when there is at least one CSS
- * selector for the respective media query.
+ * For Webkit engines that only trigger the MediaQueryListListener when
+ * there is at least one CSS selector for the respective media query.
  * @param {?} query
  * @return {?}
  */
 function createEmptyStyleRule(query) {
-    if (!styleElementForWebkitCompatibility.has(query)) {
-        try {
-            var /** @type {?} */ style = document.createElement('style');
-            style.setAttribute('type', 'text/css');
-            if (!style.sheet) {
-                var /** @type {?} */ cssText = "@media " + query + " {.fx-query-test{ }}";
-                style.appendChild(document.createTextNode(cssText));
-            }
-            document.getElementsByTagName('head')[0].appendChild(style);
-            // Store in private global registry
-            styleElementForWebkitCompatibility.set(query, style);
+    if (mediaQueriesForWebkitCompatibility.has(query)) {
+        return;
+    }
+    try {
+        if (!mediaQueryStyleNode) {
+            mediaQueryStyleNode = document.createElement('style');
+            mediaQueryStyleNode.setAttribute('type', 'text/css');
+            document.head.appendChild(mediaQueryStyleNode);
         }
-        catch (/** @type {?} */ e) {
-            console.error(e);
+        if (mediaQueryStyleNode.sheet) {
+            (/** @type {?} */ (mediaQueryStyleNode.sheet))
+                .insertRule("@media " + query + " {.fx-query-test{ }}", 0);
+            mediaQueriesForWebkitCompatibility.add(query);
         }
+    }
+    catch (/** @type {?} */ e) {
+        console.error(e);
     }
 }
 /**
