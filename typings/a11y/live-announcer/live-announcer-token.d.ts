@@ -7,3 +7,5 @@
  */
 import { InjectionToken } from '@angular/core';
 export declare const LIVE_ANNOUNCER_ELEMENT_TOKEN: InjectionToken<HTMLElement | null>;
+/** @docs-private */
+export declare function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY(): null;

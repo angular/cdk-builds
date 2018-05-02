@@ -32,8 +32,15 @@
  */
 var /** @type {?} */ DIR_DOCUMENT = new core.InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
-    factory: function () { return core.inject(common.DOCUMENT); },
+    factory: DIR_DOCUMENT_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function DIR_DOCUMENT_FACTORY() {
+    return core.inject(common.DOCUMENT);
+}
 
 /**
  * @fileoverview added by tsickle
@@ -192,6 +199,7 @@ exports.Directionality = Directionality;
 exports.DIR_DOCUMENT = DIR_DOCUMENT;
 exports.Dir = Dir;
 exports.BidiModule = BidiModule;
+exports.ɵa = DIR_DOCUMENT_FACTORY;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -1764,8 +1764,15 @@ var CdkTrapFocus = /** @class */ (function () {
 // as a workaround for https://github.com/angular/angular/issues/22559
 var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
-    factory: function () { return null; },
+    factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
+    return null;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2393,5 +2400,5 @@ var A11yModule = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.es5.js.map

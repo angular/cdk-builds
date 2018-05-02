@@ -15,3 +15,5 @@ import { InjectionToken } from '@angular/core';
  * @docs-private
  */
 export declare const DIR_DOCUMENT: InjectionToken<Document>;
+/** @docs-private */
+export declare function DIR_DOCUMENT_FACTORY(): Document;

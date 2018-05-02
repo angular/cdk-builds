@@ -1787,8 +1787,15 @@ var CdkTrapFocus = /** @class */ (function () {
 // as a workaround for https://github.com/angular/angular/issues/22559
 var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
-    factory: function () { return null; },
+    factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
+    return null;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2423,6 +2430,7 @@ exports.LiveAnnouncer = LiveAnnouncer;
 exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
 exports.LIVE_ANNOUNCER_PROVIDER = LIVE_ANNOUNCER_PROVIDER;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
+exports.LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY = LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY;
 exports.TOUCH_BUFFER_MS = TOUCH_BUFFER_MS;
 exports.FocusMonitor = FocusMonitor;
 exports.CdkMonitorFocus = CdkMonitorFocus;

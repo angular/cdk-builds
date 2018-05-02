@@ -29,8 +29,15 @@ import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Dir
  */
 const /** @type {?} */ DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
-    factory: () => inject(DOCUMENT),
+    factory: DIR_DOCUMENT_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function DIR_DOCUMENT_FACTORY() {
+    return inject(DOCUMENT);
+}
 
 /**
  * @fileoverview added by tsickle
@@ -173,5 +180,5 @@ BidiModule.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Directionality, DIR_DOCUMENT, Dir, BidiModule };
+export { Directionality, DIR_DOCUMENT, Dir, BidiModule, DIR_DOCUMENT_FACTORY as ɵa };
 //# sourceMappingURL=bidi.js.map

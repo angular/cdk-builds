@@ -2532,15 +2532,20 @@ const /** @type {?} */ defaultPositionList = [
  */
 const /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy', {
     providedIn: 'root',
-    factory: () => {
-        // Store the injected deps here because we can't use the `inject` function outside
-        // this function's context (including the inner function).
-        const /** @type {?} */ scrollDispatcher = inject(ScrollDispatcher);
-        const /** @type {?} */ viewportRuler = inject(ViewportRuler);
-        const /** @type {?} */ ngZone = inject(NgZone);
-        return (config) => new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
-    },
+    factory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY() {
+    // Store the injected deps here because we can't use the `inject` function outside
+    // this function's context (including the inner function).
+    const /** @type {?} */ scrollDispatcher = inject(ScrollDispatcher);
+    const /** @type {?} */ viewportRuler = inject(ViewportRuler);
+    const /** @type {?} */ ngZone = inject(NgZone);
+    return (config) => new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
+}
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
@@ -3013,5 +3018,5 @@ FullscreenOverlayContainer.ctorParameters = () => [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, FlexibleConnectedPositionStrategy, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OverlayModule, OVERLAY_PROVIDERS, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };
+export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, FlexibleConnectedPositionStrategy, OverlayConfig, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, validateVerticalPosition, validateHorizontalPosition, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OverlayModule, OVERLAY_PROVIDERS, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵh, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵg, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY as ɵd, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵf, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵe };
 //# sourceMappingURL=overlay.js.map

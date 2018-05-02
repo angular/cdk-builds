@@ -3426,17 +3426,22 @@ var /** @type {?} */ defaultPositionList = [
  */
 var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new core.InjectionToken('cdk-connected-overlay-scroll-strategy', {
     providedIn: 'root',
-    factory: function () {
-        // Store the injected deps here because we can't use the `inject` function outside
-        // this function's context (including the inner function).
-        var /** @type {?} */ scrollDispatcher = core.inject(scrolling.ScrollDispatcher);
-        var /** @type {?} */ viewportRuler = core.inject(scrolling.ViewportRuler);
-        var /** @type {?} */ ngZone = core.inject(core.NgZone);
-        return function (config) {
-            return new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
-        };
-    },
+    factory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY,
 });
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY() {
+    // Store the injected deps here because we can't use the `inject` function outside
+    // this function's context (including the inner function).
+    var /** @type {?} */ scrollDispatcher = core.inject(scrolling.ScrollDispatcher);
+    var /** @type {?} */ viewportRuler = core.inject(scrolling.ViewportRuler);
+    var /** @type {?} */ ngZone = core.inject(core.NgZone);
+    return function (config) {
+        return new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
+    };
+}
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
@@ -4016,13 +4021,14 @@ exports.NoopScrollStrategy = NoopScrollStrategy;
 exports.BlockScrollStrategy = BlockScrollStrategy;
 exports.OverlayModule = OverlayModule;
 exports.OVERLAY_PROVIDERS = OVERLAY_PROVIDERS;
-exports.ɵg = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
-exports.ɵf = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
+exports.ɵh = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
+exports.ɵg = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
 exports.ɵb = OVERLAY_CONTAINER_PROVIDER;
 exports.ɵa = OVERLAY_CONTAINER_PROVIDER_FACTORY;
 exports.ɵc = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
-exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
-exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY;
+exports.ɵf = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
+exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
