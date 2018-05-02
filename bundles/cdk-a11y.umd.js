@@ -439,15 +439,20 @@ ListKeyManager = /** @class */ (function () {
          * Stream that emits whenever the active item of the list manager changes.
          */
         this.change = new rxjs.Subject();
-        _items.changes.subscribe(function (newItems) {
-            if (_this._activeItem) {
-                var /** @type {?} */ itemArray = newItems.toArray();
-                var /** @type {?} */ newIndex = itemArray.indexOf(_this._activeItem);
-                if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
-                    _this._activeItemIndex = newIndex;
+        // We allow for the items to be an array because, in some cases, the consumer may
+        // not have access to a QueryList of the items they want to manage (e.g. when the
+        // items aren't being collected via `ViewChildren` or `ContentChildren`).
+        if (_items instanceof core.QueryList) {
+            _items.changes.subscribe(function (newItems) {
+                if (_this._activeItem) {
+                    var /** @type {?} */ itemArray = newItems.toArray();
+                    var /** @type {?} */ newIndex = itemArray.indexOf(_this._activeItem);
+                    if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
+                        _this._activeItemIndex = newIndex;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     /**
      * Sets the predicate function that determines which items should be skipped by the
@@ -553,7 +558,7 @@ ListKeyManager = /** @class */ (function () {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         this._typeaheadSubscription = this._letterKeyStream.pipe(operators.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), operators.debounceTime(debounceInterval), operators.filter(function () { return _this._pressedLetters.length > 0; }), operators.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
-            var /** @type {?} */ items = _this._items.toArray();
+            var /** @type {?} */ items = _this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
             for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
@@ -741,7 +746,7 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (item) {
-        var /** @type {?} */ itemArray = this._items.toArray();
+        var /** @type {?} */ itemArray = this._getItemsArray();
         var /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
         this._activeItemIndex = index;
         this._activeItem = itemArray[index];
@@ -774,7 +779,6 @@ ListKeyManager = /** @class */ (function () {
      * currently active item and the new active item. It will calculate differently
      * depending on whether wrap mode is turned on.
      * @param {?} delta
-     * @param {?=} items
      * @return {?}
      */
     ListKeyManager.prototype._setActiveItemByDelta = /**
@@ -782,20 +786,16 @@ ListKeyManager = /** @class */ (function () {
      * currently active item and the new active item. It will calculate differently
      * depending on whether wrap mode is turned on.
      * @param {?} delta
-     * @param {?=} items
      * @return {?}
      */
-    function (delta, items) {
-        if (items === void 0) { items = this._items.toArray(); }
-        this._wrap ? this._setActiveInWrapMode(delta, items)
-            : this._setActiveInDefaultMode(delta, items);
+    function (delta) {
+        this._wrap ? this._setActiveInWrapMode(delta) : this._setActiveInDefaultMode(delta);
     };
     /**
      * Sets the active item properly given "wrap" mode. In other words, it will continue to move
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
     ListKeyManager.prototype._setActiveInWrapMode = /**
@@ -803,10 +803,10 @@ ListKeyManager = /** @class */ (function () {
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
-    function (delta, items) {
+    function (delta) {
+        var /** @type {?} */ items = this._getItemsArray();
         for (var /** @type {?} */ i = 1; i <= items.length; i++) {
             var /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
             var /** @type {?} */ item = items[index];
@@ -821,7 +821,6 @@ ListKeyManager = /** @class */ (function () {
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
     ListKeyManager.prototype._setActiveInDefaultMode = /**
@@ -829,11 +828,10 @@ ListKeyManager = /** @class */ (function () {
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
-    function (delta, items) {
-        this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
+    function (delta) {
+        this._setActiveItemByIndex(this._activeItemIndex + delta, delta);
     };
     /**
      * Sets the active item to the first enabled item starting at the index specified. If the
@@ -841,7 +839,6 @@ ListKeyManager = /** @class */ (function () {
      * finds an enabled item or encounters the end of the list.
      * @param {?} index
      * @param {?} fallbackDelta
-     * @param {?=} items
      * @return {?}
      */
     ListKeyManager.prototype._setActiveItemByIndex = /**
@@ -850,11 +847,10 @@ ListKeyManager = /** @class */ (function () {
      * finds an enabled item or encounters the end of the list.
      * @param {?} index
      * @param {?} fallbackDelta
-     * @param {?=} items
      * @return {?}
      */
-    function (index, fallbackDelta, items) {
-        if (items === void 0) { items = this._items.toArray(); }
+    function (index, fallbackDelta) {
+        var /** @type {?} */ items = this._getItemsArray();
         if (!items[index]) {
             return;
         }
@@ -865,6 +861,17 @@ ListKeyManager = /** @class */ (function () {
             }
         }
         this.setActiveItem(index);
+    };
+    /**
+     * Returns the items as an array.
+     * @return {?}
+     */
+    ListKeyManager.prototype._getItemsArray = /**
+     * Returns the items as an array.
+     * @return {?}
+     */
+    function () {
+        return this._items instanceof core.QueryList ? this._items.toArray() : this._items;
     };
     return ListKeyManager;
 }());

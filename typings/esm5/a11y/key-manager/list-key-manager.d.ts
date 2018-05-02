@@ -33,7 +33,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      */
     private _skipPredicateFn;
     private _pressedLetters;
-    constructor(_items: QueryList<T>);
+    constructor(_items: QueryList<T> | T[]);
     /**
      * Stream that emits any time the TAB key is pressed, so components can react
      * when focus is shifted off of the list.
@@ -117,23 +117,25 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * currently active item and the new active item. It will calculate differently
      * depending on whether wrap mode is turned on.
      */
-    private _setActiveItemByDelta(delta, items?);
+    private _setActiveItemByDelta(delta);
     /**
      * Sets the active item properly given "wrap" mode. In other words, it will continue to move
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      */
-    private _setActiveInWrapMode(delta, items);
+    private _setActiveInWrapMode(delta);
     /**
      * Sets the active item properly given the default mode. In other words, it will
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      */
-    private _setActiveInDefaultMode(delta, items);
+    private _setActiveInDefaultMode(delta);
     /**
      * Sets the active item to the first enabled item starting at the index specified. If the
      * item is disabled, it will move in the fallbackDelta direction until it either
      * finds an enabled item or encounters the end of the list.
      */
-    private _setActiveItemByIndex(index, fallbackDelta, items?);
+    private _setActiveItemByIndex(index, fallbackDelta);
+    /** Returns the items as an array. */
+    private _getItemsArray();
 }

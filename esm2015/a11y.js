@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, Directive, ElementRef, Input, NgZone, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -337,15 +337,20 @@ class ListKeyManager {
          * Stream that emits whenever the active item of the list manager changes.
          */
         this.change = new Subject();
-        _items.changes.subscribe((newItems) => {
-            if (this._activeItem) {
-                const /** @type {?} */ itemArray = newItems.toArray();
-                const /** @type {?} */ newIndex = itemArray.indexOf(this._activeItem);
-                if (newIndex > -1 && newIndex !== this._activeItemIndex) {
-                    this._activeItemIndex = newIndex;
+        // We allow for the items to be an array because, in some cases, the consumer may
+        // not have access to a QueryList of the items they want to manage (e.g. when the
+        // items aren't being collected via `ViewChildren` or `ContentChildren`).
+        if (_items instanceof QueryList) {
+            _items.changes.subscribe((newItems) => {
+                if (this._activeItem) {
+                    const /** @type {?} */ itemArray = newItems.toArray();
+                    const /** @type {?} */ newIndex = itemArray.indexOf(this._activeItem);
+                    if (newIndex > -1 && newIndex !== this._activeItemIndex) {
+                        this._activeItemIndex = newIndex;
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     /**
      * Sets the predicate function that determines which items should be skipped by the
@@ -399,7 +404,7 @@ class ListKeyManager {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         this._typeaheadSubscription = this._letterKeyStream.pipe(tap(keyCode => this._pressedLetters.push(keyCode)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join(''))).subscribe(inputString => {
-            const /** @type {?} */ items = this._items.toArray();
+            const /** @type {?} */ items = this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
             for (let /** @type {?} */ i = 1; i < items.length + 1; i++) {
@@ -540,7 +545,7 @@ class ListKeyManager {
      * @return {?}
      */
     updateActiveItem(item) {
-        const /** @type {?} */ itemArray = this._items.toArray();
+        const /** @type {?} */ itemArray = this._getItemsArray();
         const /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
         this._activeItemIndex = index;
         this._activeItem = itemArray[index];
@@ -560,22 +565,20 @@ class ListKeyManager {
      * currently active item and the new active item. It will calculate differently
      * depending on whether wrap mode is turned on.
      * @param {?} delta
-     * @param {?=} items
      * @return {?}
      */
-    _setActiveItemByDelta(delta, items = this._items.toArray()) {
-        this._wrap ? this._setActiveInWrapMode(delta, items)
-            : this._setActiveInDefaultMode(delta, items);
+    _setActiveItemByDelta(delta) {
+        this._wrap ? this._setActiveInWrapMode(delta) : this._setActiveInDefaultMode(delta);
     }
     /**
      * Sets the active item properly given "wrap" mode. In other words, it will continue to move
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
-    _setActiveInWrapMode(delta, items) {
+    _setActiveInWrapMode(delta) {
+        const /** @type {?} */ items = this._getItemsArray();
         for (let /** @type {?} */ i = 1; i <= items.length; i++) {
             const /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
             const /** @type {?} */ item = items[index];
@@ -590,11 +593,10 @@ class ListKeyManager {
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      * @param {?} delta
-     * @param {?} items
      * @return {?}
      */
-    _setActiveInDefaultMode(delta, items) {
-        this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
+    _setActiveInDefaultMode(delta) {
+        this._setActiveItemByIndex(this._activeItemIndex + delta, delta);
     }
     /**
      * Sets the active item to the first enabled item starting at the index specified. If the
@@ -602,10 +604,10 @@ class ListKeyManager {
      * finds an enabled item or encounters the end of the list.
      * @param {?} index
      * @param {?} fallbackDelta
-     * @param {?=} items
      * @return {?}
      */
-    _setActiveItemByIndex(index, fallbackDelta, items = this._items.toArray()) {
+    _setActiveItemByIndex(index, fallbackDelta) {
+        const /** @type {?} */ items = this._getItemsArray();
         if (!items[index]) {
             return;
         }
@@ -616,6 +618,13 @@ class ListKeyManager {
             }
         }
         this.setActiveItem(index);
+    }
+    /**
+     * Returns the items as an array.
+     * @return {?}
+     */
+    _getItemsArray() {
+        return this._items instanceof QueryList ? this._items.toArray() : this._items;
     }
 }
 
