@@ -25,7 +25,7 @@ export declare function getTableMultipleDefaultRowDefsError(): Error;
  * Returns an error to be thrown when there are no matching row defs for a particular set of data.
  * @docs-private
  */
-export declare function getTableMissingMatchingRowDefError(data: any): Error;
+export declare function getTableMissingMatchingRowDefError(): Error;
 /**
  * Returns an error to be thrown when there is no row definitions present in the content.
  * @docs-private
