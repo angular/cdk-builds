@@ -7,7 +7,7 @@
  */
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
+import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 /** Interface used to provide an outlet for rows to be inserted into. */
@@ -48,6 +48,30 @@ export declare class FooterRowOutlet implements RowOutlet {
  */
 export declare const CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>";
 /**
+ * Interface used to conveniently type the possible context interfaces for the render row.
+ * @docs-private
+ */
+export interface RowContext<T> extends CdkCellOutletMultiRowContext<T>, CdkCellOutletRowContext<T> {
+}
+/**
+ * Set of properties that represents the identity of a single rendered row.
+ *
+ * When the table needs to determine the list of rows to render, it will do so by iterating through
+ * each data object and evaluating its list of row templates to display (when multiTemplateDataRows
+ * is false, there is only one template per data object). For each pair of data object and row
+ * template, a `RenderRow` is added to the list of rows to render. If the data object and row
+ * template pair has already been rendered, the previously used `RenderRow` is added; else a new
+ * `RenderRow` is * created. Once the list is complete and all data objects have been itereated
+ * through, a diff is performed to determine the changes that need to be made to the rendered rows.
+ *
+ * @docs-private
+ */
+export interface RenderRow<T> {
+    data: T;
+    dataIndex: number;
+    rowDef: CdkRowDef<T>;
+}
+/**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
  * as a data array, an Observable stream that emits the data array to render, or a DataSource with a
@@ -61,6 +85,8 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     private _onDestroy;
     /** Latest data provided by the data source. */
     private _data;
+    /** List of the rendered rows as identified by their `RenderRow` object. */
+    private _renderRows;
     /** Subscription that listens for the data provided by the data source. */
     private _renderChangeSubscription;
     /**
@@ -93,6 +119,20 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      */
     private _footerRowDefChanged;
     /**
+     * Cache of the latest rendered `RenderRow` objects as a map for easy retrieval when constructing
+     * a new list of `RenderRow` objects for rendering rows. Since the new list is constructed with
+     * the cached `RenderRow` objects when possible, the row identity is preserved when the data
+     * and row template matches, which allows the `IterableDiffer` to check rows by reference
+     * and understand which rows are added/moved/removed.
+     *
+     * Implemented as a map of maps where the first key is the `data: T` object and the second is the
+     * `CdkRowDef<T>` object. With the two keys, the cache points to a `RenderRow<T>` object that
+     * contains an array of created pairs. The array is necessary to handle cases where the data
+     * array contains multiple duplicate data objects and each instantiated `RenderRow` must be
+     * stored.
+     */
+    private _cachedRenderRowsMap;
+    /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
      * relative to the function to know if a row should be added/removed/moved.
@@ -122,6 +162,14 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      */
     dataSource: DataSource<T> | Observable<T[]> | T[];
     private _dataSource;
+    /**
+     * Whether to allow multiple rows per data object by evaluating which rows evaluate their 'when'
+     * predicate to true. If `multiTemplateDataRows` is false, which is the default value, then each
+     * dataobject will render the first row that evaluates its when predicate to true, in the order
+     * defined in the table, or otherwise the default row which does not have a when predicate.
+     */
+    multiTemplateDataRows: boolean;
+    _multiTemplateDataRows: boolean;
     /**
      * Stream containing the latest information on what rows are being displayed on screen.
      * Can be used by the data source to as a heuristic of what data should be provided.
@@ -189,6 +237,18 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     addRowDef(rowDef: CdkRowDef<T>): void;
     /** Removes a row definition that was not included as part of the direct content children. */
     removeRowDef(rowDef: CdkRowDef<T>): void;
+    /**
+     * Get the list of RenderRow objects to render according to the current list of data and defined
+     * row definitions. If the previous list already contained a particular pair, it should be reused
+     * so that the differ equates their references.
+     */
+    private _getAllRenderRows();
+    /**
+     * Gets a list of `RenderRow<T>` for the provided data object and any `CdkRowDef` objects that
+     * should be rendered for this data. Reuses the cached RenderRow objects if they match the same
+     * `(T, CdkRowDef)` pair.
+     */
+    private _getRenderRowsForData(data, dataIndex, cache?);
     /** Update the map containing the content's column definitions. */
     private _cacheColumnDefs();
     /** Update the list of all available row definitions that can be used. */
@@ -217,17 +277,17 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
      */
     private _renderFooterRow();
     /**
-     * Finds the matching row definition that should be used for this row data. If there is only
-     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * Get the matching row definitions that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definitions that has a when
      * predicate that returns true with the data. If none return true, return the default row
      * definition.
      */
-    _getRowDef(data: T, i: number): CdkRowDef<T>;
+    _getRowDefs(data: T, dataIndex: number): CdkRowDef<T>[];
     /**
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
      */
-    private _insertRow(rowData, index);
+    private _insertRow(renderRow, renderIndex);
     /**
      * Creates a new row template in the outlet and fills it with the set of cell templates.
      * Optionally takes a context to provide to the row and cells, as well as an optional index
@@ -243,4 +303,10 @@ export declare class CdkTable<T> implements CollectionViewer, OnInit, AfterConte
     private _getCellTemplates(rowDef);
     /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
     private _applyNativeTableSections();
+    /**
+     * Forces a re-render of the data rows. Should be called in cases where there has been an input
+     * change that affects the evaluation of which rows should be rendered, e.g. toggling
+     * `multiTemplateDataRows` or adding/removing row definitions.
+     */
+    private _forceRenderRows();
 }
