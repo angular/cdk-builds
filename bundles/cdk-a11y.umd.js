@@ -2094,7 +2094,7 @@ var FocusMonitor = /** @class */ (function () {
         // focused element.
         var /** @type {?} */ windowFocusListener = function () {
             _this._windowFocused = true;
-            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; }, 0);
+            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
         };
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
@@ -2171,7 +2171,7 @@ var FocusMonitor = /** @class */ (function () {
         var _this = this;
         this._ngZone.runOutsideAngular(function () {
             _this._origin = origin;
-            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 0);
+            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; });
         });
     };
     /**
@@ -2235,21 +2235,21 @@ var FocusMonitor = /** @class */ (function () {
         // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
         // 3) The element was programmatically focused, in which case we should mark the origin as
         //    'program'.
-        if (!this._origin) {
+        var /** @type {?} */ origin = this._origin;
+        if (!origin) {
             if (this._windowFocused && this._lastFocusOrigin) {
-                this._origin = this._lastFocusOrigin;
+                origin = this._lastFocusOrigin;
             }
             else if (this._wasCausedByTouch(event)) {
-                this._origin = 'touch';
+                origin = 'touch';
             }
             else {
-                this._origin = 'program';
+                origin = 'program';
             }
         }
-        this._setClasses(element, this._origin);
-        elementInfo.subject.next(this._origin);
-        this._lastFocusOrigin = this._origin;
-        this._origin = null;
+        this._setClasses(element, origin);
+        elementInfo.subject.next(origin);
+        this._lastFocusOrigin = origin;
     };
     /**
      * Handles blur events on a registered element.
