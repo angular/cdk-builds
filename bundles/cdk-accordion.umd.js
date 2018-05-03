@@ -286,7 +286,7 @@ var CdkAccordionItem = /** @class */ (function () {
     };
     CdkAccordionItem.decorators = [
         { type: core.Directive, args: [{
-                    selector: 'cdk-accordion-item',
+                    selector: 'cdk-accordion-item, [cdkAccordionItem]',
                     exportAs: 'cdkAccordionItem',
                 },] },
     ];
