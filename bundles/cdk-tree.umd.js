@@ -786,6 +786,7 @@ var CdkTree = /** @class */ (function () {
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
+        this._changeDetectorRef.detectChanges();
     };
     /**
      * Finds the matching node definition that should be used for this node data. If there is only
@@ -868,7 +869,6 @@ var CdkTree = /** @class */ (function () {
         if (CdkTreeNode.mostRecentTreeNode) {
             CdkTreeNode.mostRecentTreeNode.data = nodeData;
         }
-        this._changeDetectorRef.detectChanges();
     };
     CdkTree.decorators = [
         { type: core.Component, args: [{selector: 'cdk-tree',

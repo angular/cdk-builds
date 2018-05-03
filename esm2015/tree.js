@@ -589,6 +589,7 @@ class CdkTree {
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
+        this._changeDetectorRef.detectChanges();
     }
     /**
      * Finds the matching node definition that should be used for this node data. If there is only
@@ -643,7 +644,6 @@ class CdkTree {
         if (CdkTreeNode.mostRecentTreeNode) {
             CdkTreeNode.mostRecentTreeNode.data = nodeData;
         }
-        this._changeDetectorRef.detectChanges();
     }
 }
 CdkTree.decorators = [
