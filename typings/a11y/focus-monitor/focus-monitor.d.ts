@@ -87,6 +87,7 @@ export declare class FocusMonitor implements OnDestroy {
      * @param element The monitored element.
      */
     _onBlur(event: FocusEvent, element: HTMLElement): void;
+    private _emitOrigin(subject, origin);
     private _incrementMonitoredElementCount();
     private _decrementMonitoredElementCount();
 }

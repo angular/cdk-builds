@@ -2225,7 +2225,7 @@ var FocusMonitor = /** @class */ (function () {
             }
         }
         this._setClasses(element, origin);
-        elementInfo.subject.next(origin);
+        this._emitOrigin(elementInfo.subject, origin);
         this._lastFocusOrigin = origin;
     };
     /**
@@ -2254,7 +2254,20 @@ var FocusMonitor = /** @class */ (function () {
             return;
         }
         this._setClasses(element);
-        elementInfo.subject.next(null);
+        this._emitOrigin(elementInfo.subject, null);
+    };
+    /**
+     * @param {?} subject
+     * @param {?} origin
+     * @return {?}
+     */
+    FocusMonitor.prototype._emitOrigin = /**
+     * @param {?} subject
+     * @param {?} origin
+     * @return {?}
+     */
+    function (subject, origin) {
+        this._ngZone.run(function () { return subject.next(origin); });
     };
     /**
      * @return {?}

@@ -1699,7 +1699,7 @@ class FocusMonitor {
             }
         }
         this._setClasses(element, origin);
-        elementInfo.subject.next(origin);
+        this._emitOrigin(elementInfo.subject, origin);
         this._lastFocusOrigin = origin;
     }
     /**
@@ -1717,7 +1717,15 @@ class FocusMonitor {
             return;
         }
         this._setClasses(element);
-        elementInfo.subject.next(null);
+        this._emitOrigin(elementInfo.subject, null);
+    }
+    /**
+     * @param {?} subject
+     * @param {?} origin
+     * @return {?}
+     */
+    _emitOrigin(subject, origin) {
+        this._ngZone.run(() => subject.next(origin));
     }
     /**
      * @return {?}
