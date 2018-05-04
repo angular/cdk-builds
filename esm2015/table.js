@@ -10,6 +10,7 @@ import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -453,10 +454,12 @@ function getTableMultipleDefaultRowDefsError() {
 /**
  * Returns an error to be thrown when there are no matching row defs for a particular set of data.
  * \@docs-private
+ * @param {?} data
  * @return {?}
  */
-function getTableMissingMatchingRowDefError() {
-    return Error(`Could not find a matching row definition for the provided row data.`);
+function getTableMissingMatchingRowDefError(data) {
+    return Error(`Could not find a matching row definition for the` +
+        `provided row data: ${JSON.stringify(data)}`);
 }
 /**
  * Returns an error to be thrown when there is no row definitions present in the content.
@@ -602,6 +605,21 @@ class CdkTable {
          */
         this._footerRowDefChanged = false;
         /**
+         * Cache of the latest rendered `RenderRow` objects as a map for easy retrieval when constructing
+         * a new list of `RenderRow` objects for rendering rows. Since the new list is constructed with
+         * the cached `RenderRow` objects when possible, the row identity is preserved when the data
+         * and row template matches, which allows the `IterableDiffer` to check rows by reference
+         * and understand which rows are added/moved/removed.
+         *
+         * Implemented as a map of maps where the first key is the `data: T` object and the second is the
+         * `CdkRowDef<T>` object. With the two keys, the cache points to a `RenderRow<T>` object that
+         * contains an array of created pairs. The array is necessary to handle cases where the data
+         * array contains multiple duplicate data objects and each instantiated `RenderRow` must be
+         * stored.
+         */
+        this._cachedRenderRowsMap = new Map();
+        this._multiTemplateDataRows = false;
+        /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
@@ -661,14 +679,36 @@ class CdkTable {
         }
     }
     /**
+     * Whether to allow multiple rows per data object by evaluating which rows evaluate their 'when'
+     * predicate to true. If `multiTemplateDataRows` is false, which is the default value, then each
+     * dataobject will render the first row that evaluates its when predicate to true, in the order
+     * defined in the table, or otherwise the default row which does not have a when predicate.
+     * @return {?}
+     */
+    get multiTemplateDataRows() { return this._multiTemplateDataRows; }
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    set multiTemplateDataRows(v) {
+        this._multiTemplateDataRows = coerceBooleanProperty(v);
+        if (this._rowOutlet.viewContainer.length) {
+            this._forceRenderRows();
+        }
+    }
+    /**
      * @return {?}
      */
     ngOnInit() {
         if (this._elementRef.nativeElement.nodeName === 'TABLE') {
             this._applyNativeTableSections();
         }
-        // TODO(andrewseguin): Setup a listener for scrolling, emit the calculated view to viewChange
-        this._dataDiffer = this._differs.find([]).create(this._trackByFn);
+        // Set up the trackBy function so that it uses the `RenderRow` as its identity by default. If
+        // the user has provided a custom trackBy, return the result of that function as evaluated
+        // with the values of the `RenderRow`'s data and index.
+        this._dataDiffer = this._differs.find([]).create((_i, dataRow) => {
+            return this.trackBy ? this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
+        });
         // If the table has header or footer row definitions defined as part of its content, mark that
         // there is a change so that the content check will render the row.
         this._headerRowDefChanged = !!this._headerRowDef;
@@ -710,6 +750,7 @@ class CdkTable {
         this._rowOutlet.viewContainer.clear();
         this._headerRowOutlet.viewContainer.clear();
         this._footerRowOutlet.viewContainer.clear();
+        this._cachedRenderRowsMap.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
         if (this.dataSource instanceof DataSource) {
@@ -728,20 +769,21 @@ class CdkTable {
      * @return {?}
      */
     renderRows() {
-        const /** @type {?} */ changes = this._dataDiffer.diff(this._data);
+        this._renderRows = this._getAllRenderRows();
+        const /** @type {?} */ changes = this._dataDiffer.diff(this._renderRows);
         if (!changes) {
             return;
         }
         const /** @type {?} */ viewContainer = this._rowOutlet.viewContainer;
-        changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
+        changes.forEachOperation((record, prevIndex, currentIndex) => {
             if (record.previousIndex == null) {
                 this._insertRow(record.item, currentIndex);
             }
             else if (currentIndex == null) {
-                viewContainer.remove(adjustedPreviousIndex);
+                viewContainer.remove(prevIndex);
             }
             else {
-                const /** @type {?} */ view = /** @type {?} */ (viewContainer.get(adjustedPreviousIndex));
+                const /** @type {?} */ view = /** @type {?} */ (viewContainer.get(prevIndex));
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
@@ -751,7 +793,7 @@ class CdkTable {
         // e.g. if trackBy matched data on some property but the actual data reference changed.
         changes.forEachIdentityChange((record) => {
             const /** @type {?} */ rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
-            rowView.context.$implicit = record.item;
+            rowView.context.$implicit = record.item.data;
         });
     }
     /**
@@ -809,6 +851,63 @@ class CdkTable {
         this._customRowDefs.delete(rowDef);
     }
     /**
+     * Get the list of RenderRow objects to render according to the current list of data and defined
+     * row definitions. If the previous list already contained a particular pair, it should be reused
+     * so that the differ equates their references.
+     * @return {?}
+     */
+    _getAllRenderRows() {
+        const /** @type {?} */ renderRows = [];
+        // Store the cache and create a new one. Any re-used RenderRow objects will be moved into the
+        // new cache while unused ones can be picked up by garbage collection.
+        const /** @type {?} */ prevCachedRenderRows = this._cachedRenderRowsMap;
+        this._cachedRenderRowsMap = new Map();
+        // For each data object, get the list of rows that should be rendered, represented by the
+        // respective `RenderRow` object which is the pair of `data` and `CdkRowDef`.
+        for (let /** @type {?} */ i = 0; i < this._data.length; i++) {
+            let /** @type {?} */ data = this._data[i];
+            const /** @type {?} */ renderRowsForData = this._getRenderRowsForData(data, i, prevCachedRenderRows.get(data));
+            if (!this._cachedRenderRowsMap.has(data)) {
+                this._cachedRenderRowsMap.set(data, new WeakMap());
+            }
+            for (let /** @type {?} */ j = 0; j < renderRowsForData.length; j++) {
+                let /** @type {?} */ renderRow = renderRowsForData[j];
+                const /** @type {?} */ cache = /** @type {?} */ ((this._cachedRenderRowsMap.get(renderRow.data)));
+                if (cache.has(renderRow.rowDef)) {
+                    /** @type {?} */ ((cache.get(renderRow.rowDef))).push(renderRow);
+                }
+                else {
+                    cache.set(renderRow.rowDef, [renderRow]);
+                }
+                renderRows.push(renderRow);
+            }
+        }
+        return renderRows;
+    }
+    /**
+     * Gets a list of `RenderRow<T>` for the provided data object and any `CdkRowDef` objects that
+     * should be rendered for this data. Reuses the cached RenderRow objects if they match the same
+     * `(T, CdkRowDef)` pair.
+     * @param {?} data
+     * @param {?} dataIndex
+     * @param {?=} cache
+     * @return {?}
+     */
+    _getRenderRowsForData(data, dataIndex, cache) {
+        const /** @type {?} */ rowDefs = this._getRowDefs(data, dataIndex);
+        return rowDefs.map(rowDef => {
+            const /** @type {?} */ cachedRenderRows = (cache && cache.has(rowDef)) ? /** @type {?} */ ((cache.get(rowDef))) : [];
+            if (cachedRenderRows.length) {
+                const /** @type {?} */ dataRow = /** @type {?} */ ((cachedRenderRows.shift()));
+                dataRow.dataIndex = dataIndex;
+                return dataRow;
+            }
+            else {
+                return { data, rowDef, dataIndex };
+            }
+        });
+    }
+    /**
      * Update the map containing the content's column definitions.
      * @return {?}
      */
@@ -831,7 +930,7 @@ class CdkTable {
         this._rowDefs = this._contentRowDefs ? this._contentRowDefs.toArray() : [];
         this._customRowDefs.forEach(rowDef => this._rowDefs.push(rowDef));
         const /** @type {?} */ defaultRowDefs = this._rowDefs.filter(def => !def.when);
-        if (defaultRowDefs.length > 1) {
+        if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
             throw getTableMultipleDefaultRowDefsError();
         }
         this._defaultRowDef = defaultRowDefs[0];
@@ -844,11 +943,8 @@ class CdkTable {
     _renderUpdatedColumns() {
         // Re-render the rows when the row definition columns change.
         this._rowDefs.forEach(def => {
-            if (!!def.getColumnsDiff()) {
-                // Reset the data to an empty array so that renderRowChanges will re-render all new rows.
-                this._dataDiffer.diff([]);
-                this._rowOutlet.viewContainer.clear();
-                this.renderRows();
+            if (def.getColumnsDiff()) {
+                this._forceRenderRows();
             }
         });
         // Re-render the header row if there is a difference in its columns.
@@ -914,7 +1010,7 @@ class CdkTable {
         this._renderChangeSubscription = dataStream
             .pipe(takeUntil(this._onDestroy))
             .subscribe(data => {
-            this._data = data;
+            this._data = data || [];
             this.renderRows();
         });
     }
@@ -943,35 +1039,44 @@ class CdkTable {
         this._renderRow(this._footerRowOutlet, this._footerRowDef);
     }
     /**
-     * Finds the matching row definition that should be used for this row data. If there is only
-     * one row definition, it is returned. Otherwise, find the row definition that has a when
+     * Get the matching row definitions that should be used for this row data. If there is only
+     * one row definition, it is returned. Otherwise, find the row definitions that has a when
      * predicate that returns true with the data. If none return true, return the default row
      * definition.
      * @param {?} data
-     * @param {?} i
+     * @param {?} dataIndex
      * @return {?}
      */
-    _getRowDef(data, i) {
+    _getRowDefs(data, dataIndex) {
         if (this._rowDefs.length == 1) {
-            return this._rowDefs[0];
+            return [this._rowDefs[0]];
         }
-        let /** @type {?} */ rowDef = this._rowDefs.find(def => def.when && def.when(i, data)) || this._defaultRowDef;
-        if (!rowDef) {
-            throw getTableMissingMatchingRowDefError();
+        let /** @type {?} */ rowDefs = [];
+        if (this.multiTemplateDataRows) {
+            rowDefs = this._rowDefs.filter(def => !def.when || def.when(dataIndex, data));
         }
-        return rowDef;
+        else {
+            let /** @type {?} */ rowDef = this._rowDefs.find(def => def.when && def.when(dataIndex, data)) || this._defaultRowDef;
+            if (rowDef) {
+                rowDefs.push(rowDef);
+            }
+        }
+        if (!rowDefs.length) {
+            throw getTableMissingMatchingRowDefError(data);
+        }
+        return rowDefs;
     }
     /**
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
-     * @param {?} rowData
-     * @param {?} index
+     * @param {?} renderRow
+     * @param {?} renderIndex
      * @return {?}
      */
-    _insertRow(rowData, index) {
-        const /** @type {?} */ rowDef = this._getRowDef(rowData, index);
-        const /** @type {?} */ context = { $implicit: rowData };
-        this._renderRow(this._rowOutlet, rowDef, context, index);
+    _insertRow(renderRow, renderIndex) {
+        const /** @type {?} */ rowDef = renderRow.rowDef;
+        const /** @type {?} */ context = { $implicit: renderRow.data };
+        this._renderRow(this._rowOutlet, rowDef, context, renderIndex);
     }
     /**
      * Creates a new row template in the outlet and fills it with the set of cell templates.
@@ -1000,14 +1105,21 @@ class CdkTable {
      */
     _updateRowIndexContext() {
         const /** @type {?} */ viewContainer = this._rowOutlet.viewContainer;
-        for (let /** @type {?} */ index = 0, /** @type {?} */ count = viewContainer.length; index < count; index++) {
-            const /** @type {?} */ viewRef = /** @type {?} */ (viewContainer.get(index));
-            viewRef.context.index = index;
-            viewRef.context.count = count;
-            viewRef.context.first = index === 0;
-            viewRef.context.last = index === count - 1;
-            viewRef.context.even = index % 2 === 0;
-            viewRef.context.odd = !viewRef.context.even;
+        for (let /** @type {?} */ renderIndex = 0, /** @type {?} */ count = viewContainer.length; renderIndex < count; renderIndex++) {
+            const /** @type {?} */ viewRef = /** @type {?} */ (viewContainer.get(renderIndex));
+            const /** @type {?} */ context = /** @type {?} */ (viewRef.context);
+            context.count = count;
+            context.first = renderIndex === 0;
+            context.last = renderIndex === count - 1;
+            context.even = renderIndex % 2 === 0;
+            context.odd = !context.even;
+            if (this.multiTemplateDataRows) {
+                context.dataIndex = this._renderRows[renderIndex].dataIndex;
+                context.renderIndex = renderIndex;
+            }
+            else {
+                context.index = this._renderRows[renderIndex].dataIndex;
+            }
         }
     }
     /**
@@ -1043,6 +1155,17 @@ class CdkTable {
             this._elementRef.nativeElement.appendChild(element);
         }
     }
+    /**
+     * Forces a re-render of the data rows. Should be called in cases where there has been an input
+     * change that affects the evaluation of which rows should be rendered, e.g. toggling
+     * `multiTemplateDataRows` or adding/removing row definitions.
+     * @return {?}
+     */
+    _forceRenderRows() {
+        this._dataDiffer.diff([]);
+        this._rowOutlet.viewContainer.clear();
+        this.renderRows();
+    }
 }
 CdkTable.decorators = [
     { type: Component, args: [{selector: 'cdk-table, table[cdk-table]',
@@ -1065,6 +1188,7 @@ CdkTable.ctorParameters = () => [
 CdkTable.propDecorators = {
     "trackBy": [{ type: Input },],
     "dataSource": [{ type: Input },],
+    "multiTemplateDataRows": [{ type: Input },],
     "_rowOutlet": [{ type: ViewChild, args: [DataRowOutlet,] },],
     "_headerRowOutlet": [{ type: ViewChild, args: [HeaderRowOutlet,] },],
     "_footerRowOutlet": [{ type: ViewChild, args: [FooterRowOutlet,] },],
