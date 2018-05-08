@@ -253,16 +253,13 @@ var CdkStepper = /** @class */ (function () {
          * The step that is selected.
          * @return {?}
          */
-        function () {
-            // @deletion-target 7.0.0 Change return type to `CdkStep | undefined`.
-            return this._steps ? this._steps.toArray()[this.selectedIndex] : /** @type {?} */ ((undefined));
-        },
+        function () { return this._steps.toArray()[this.selectedIndex]; },
         set: /**
          * @param {?} step
          * @return {?}
          */
         function (step) {
-            this.selectedIndex = this._steps ? this._steps.toArray().indexOf(step) : -1;
+            this.selectedIndex = this._steps.toArray().indexOf(step);
         },
         enumerable: true,
         configurable: true

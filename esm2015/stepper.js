@@ -217,16 +217,13 @@ class CdkStepper {
      * The step that is selected.
      * @return {?}
      */
-    get selected() {
-        // @deletion-target 7.0.0 Change return type to `CdkStep | undefined`.
-        return this._steps ? this._steps.toArray()[this.selectedIndex] : /** @type {?} */ ((undefined));
-    }
+    get selected() { return this._steps.toArray()[this.selectedIndex]; }
     /**
      * @param {?} step
      * @return {?}
      */
     set selected(step) {
-        this.selectedIndex = this._steps ? this._steps.toArray().indexOf(step) : -1;
+        this.selectedIndex = this._steps.toArray().indexOf(step);
     }
     /**
      * @return {?}
