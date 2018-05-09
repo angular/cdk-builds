@@ -1667,16 +1667,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this.scrollables = scrollables;
     };
     /**
-     * Adds a new preferred fallback position.
+     * Adds new preferred positions.
      * @param positions List of positions options for this overlay.
      */
     /**
-     * Adds a new preferred fallback position.
+     * Adds new preferred positions.
      * @param {?} positions List of positions options for this overlay.
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype.withPositions = /**
-     * Adds a new preferred fallback position.
+     * Adds new preferred positions.
      * @param {?} positions List of positions options for this overlay.
      * @return {?}
      */
@@ -1691,16 +1691,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         return this;
     };
     /**
-     * Sets a minimum distance the ovelray may be positioned to the edge of the viewport.
+     * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
      * @param margin Required margin between the overlay and the viewport edge in pixels.
      */
     /**
-     * Sets a minimum distance the ovelray may be positioned to the edge of the viewport.
+     * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
      * @param {?} margin Required margin between the overlay and the viewport edge in pixels.
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype.withViewportMargin = /**
-     * Sets a minimum distance the ovelray may be positioned to the edge of the viewport.
+     * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
      * @param {?} margin Required margin between the overlay and the viewport edge in pixels.
      * @return {?}
      */
