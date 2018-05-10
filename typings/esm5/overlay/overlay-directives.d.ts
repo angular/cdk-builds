@@ -28,7 +28,8 @@ export declare class CdkOverlayOrigin {
         elementRef: ElementRef);
 }
 /**
- * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
+ * Directive to facilitate declarative creation of an
+ * Overlay using a FlexibleConnectedPositionStrategy.
  */
 export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _overlay;
@@ -38,6 +39,9 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _templatePortal;
     private _hasBackdrop;
     private _lockPosition;
+    private _growAfterOpen;
+    private _flexibleDimensions;
+    private _push;
     private _backdropSubscription;
     private _offsetX;
     private _offsetY;
@@ -60,6 +64,8 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     minHeight: number | string;
     /** The custom class to be set on the backdrop element. */
     backdropClass: string;
+    /** Margin between the overlay and the viewport edges. */
+    viewportMargin: number;
     /** Strategy to be used when handling scroll events while the overlay is open. */
     scrollStrategy: ScrollStrategy;
     /** Whether the overlay is open. */
@@ -68,6 +74,12 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     hasBackdrop: any;
     /** Whether or not the overlay should be locked when scrolling. */
     lockPosition: any;
+    /** Whether the overlay's width and height can be constrained to fit within the viewport. */
+    flexibleDiemsions: boolean;
+    /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
+    growAfterOpen: boolean;
+    /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
+    push: boolean;
     /** Event emitted when the backdrop is clicked. */
     backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */

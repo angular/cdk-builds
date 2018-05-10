@@ -1167,7 +1167,7 @@ class FlexibleConnectedPositionStrategy {
         this._validatePositions();
         overlayRef.hostElement.classList.add('cdk-overlay-connected-position-bounding-box');
         this._overlayRef = overlayRef;
-        this._boundingBox = /** @type {?} */ ((overlayRef.hostElement));
+        this._boundingBox = overlayRef.hostElement;
         this._pane = overlayRef.overlayElement;
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = this._viewportRuler.change().subscribe(() => this.apply());
@@ -2569,7 +2569,8 @@ CdkOverlayOrigin.ctorParameters = () => [
     { type: ElementRef, },
 ];
 /**
- * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
+ * Directive to facilitate declarative creation of an
+ * Overlay using a FlexibleConnectedPositionStrategy.
  */
 class CdkConnectedOverlay {
     /**
@@ -2585,7 +2586,14 @@ class CdkConnectedOverlay {
         this._dir = _dir;
         this._hasBackdrop = false;
         this._lockPosition = false;
+        this._growAfterOpen = false;
+        this._flexibleDimensions = false;
+        this._push = false;
         this._backdropSubscription = Subscription.EMPTY;
+        /**
+         * Margin between the overlay and the viewport edges.
+         */
+        this.viewportMargin = 0;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -2662,6 +2670,36 @@ class CdkConnectedOverlay {
      * @return {?}
      */
     set lockPosition(value) { this._lockPosition = coerceBooleanProperty(value); }
+    /**
+     * Whether the overlay's width and height can be constrained to fit within the viewport.
+     * @return {?}
+     */
+    get flexibleDiemsions() { return this._flexibleDimensions; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set flexibleDiemsions(value) { this._flexibleDimensions = coerceBooleanProperty(value); }
+    /**
+     * Whether the overlay can grow after the initial open when flexible positioning is turned on.
+     * @return {?}
+     */
+    get growAfterOpen() { return this._growAfterOpen; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set growAfterOpen(value) { this._growAfterOpen = coerceBooleanProperty(value); }
+    /**
+     * Whether the overlay can be pushed on-screen if none of the provided positions fit.
+     * @return {?}
+     */
+    get push() { return this._push; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set push(value) { this._push = coerceBooleanProperty(value); }
     /**
      * The associated overlay reference.
      * @return {?}
@@ -2750,9 +2788,10 @@ class CdkConnectedOverlay {
     _createPositionStrategy() {
         const /** @type {?} */ strategy = this._overlay.position()
             .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleDimensions(false)
-            .withPush(false)
-            .withGrowAfterOpen(false)
+            .withFlexibleDimensions(this.flexibleDiemsions)
+            .withPush(this.push)
+            .withGrowAfterOpen(this.growAfterOpen)
+            .withViewportMargin(this.viewportMargin)
             .withLockedPosition(this.lockPosition);
         this._setPositions(strategy);
         strategy.positionChanges.subscribe(p => this.positionChange.emit(p));
@@ -2854,10 +2893,14 @@ CdkConnectedOverlay.propDecorators = {
     "minWidth": [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
     "minHeight": [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
     "backdropClass": [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
+    "viewportMargin": [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] },],
     "scrollStrategy": [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
     "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],
     "hasBackdrop": [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] },],
     "lockPosition": [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] },],
+    "flexibleDiemsions": [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] },],
+    "growAfterOpen": [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] },],
+    "push": [{ type: Input, args: ['cdkConnectedOverlayPush',] },],
     "backdropClick": [{ type: Output },],
     "positionChange": [{ type: Output },],
     "attach": [{ type: Output },],
