@@ -11,7 +11,8 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { END, ENTER, HOME, SPACE } from '@angular/cdk/keycodes';
 import '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
+import { startWith, takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 /**
@@ -274,10 +275,13 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
-            .withHorizontalOrientation(this._layoutDirection())
             .withVerticalOrientation(this._orientation === 'vertical');
+        (this._dir ? /** @type {?} */ (this._dir.change) : of())
+            .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
+            .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
     };
     /**

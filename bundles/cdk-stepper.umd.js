@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/forms'), require('rxjs'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/forms', 'rxjs', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.a11y,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.ng.forms,global.Rx,global.ng.common));
-}(this, (function (exports,core,a11y,bidi,coercion,keycodes,forms,rxjs,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.a11y,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.ng.forms,global.Rx,global.Rx.operators,global.ng.common));
+}(this, (function (exports,core,a11y,bidi,coercion,keycodes,forms,rxjs,operators,common) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -271,10 +271,13 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         this._keyManager = new a11y.FocusKeyManager(this._stepHeader)
             .withWrap()
-            .withHorizontalOrientation(this._layoutDirection())
             .withVerticalOrientation(this._orientation === 'vertical');
+        (this._dir ? /** @type {?} */ (this._dir.change) : rxjs.of())
+            .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
+            .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
     };
     /**

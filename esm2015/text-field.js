@@ -328,7 +328,12 @@ class CdkTextareaAutosize {
         if (typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular(() => requestAnimationFrame(() => {
                 const { selectionStart, selectionEnd } = textarea;
-                textarea.setSelectionRange(selectionStart, selectionEnd);
+                // IE will throw an "Unspecified error" if we try to set the selection range after the
+                // element has been removed from the DOM. Assert that the directive hasn't been destroyed
+                // between the time we requested the animation frame and when it was executed.
+                if (!this._destroyed.isStopped) {
+                    textarea.setSelectionRange(selectionStart, selectionEnd);
+                }
             }));
         }
         this._previousValue = value;

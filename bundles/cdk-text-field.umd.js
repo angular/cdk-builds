@@ -369,6 +369,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
      * @return {?}
      */
     function (force) {
+        var _this = this;
         if (force === void 0) { force = false; }
         this._cacheTextareaLineHeight();
         // If we haven't determined the line-height yet, we know we're still hidden and there's no point
@@ -403,7 +404,12 @@ var CdkTextareaAutosize = /** @class */ (function () {
             this._ngZone.runOutsideAngular(function () {
                 return requestAnimationFrame(function () {
                     var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
-                    textarea.setSelectionRange(selectionStart, selectionEnd);
+                    // IE will throw an "Unspecified error" if we try to set the selection range after the
+                    // element has been removed from the DOM. Assert that the directive hasn't been destroyed
+                    // between the time we requested the animation frame and when it was executed.
+                    if (!_this._destroyed.isStopped) {
+                        textarea.setSelectionRange(selectionStart, selectionEnd);
+                    }
                 });
             });
         }
