@@ -1,4 +1,4 @@
-import { InjectionToken, Optional } from '@angular/core';
+import { InjectionToken, OnDestroy, Optional } from '@angular/core';
 /**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the `aria-describedby`.
@@ -21,7 +21,7 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  * content.
  * @docs-private
  */
-export declare class AriaDescriber {
+export declare class AriaDescriber implements OnDestroy {
     private _document;
     constructor(_document: any);
     /**

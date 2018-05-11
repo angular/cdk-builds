@@ -5,13 +5,200 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ChangeDetectionStrategy, Component, Directive, IterableDiffers, TemplateRef, ViewContainerRef, ViewEncapsulation, ContentChild, ElementRef, Input, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, ViewChild, NgModule } from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, ViewChild, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
-import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Cell definition for a CDK table.
+ * Captures the template of a column's data row cell as well as cell-specific properties.
+ */
+class CdkCellDef {
+    /**
+     * @param {?} template
+     */
+    constructor(template) {
+        this.template = template;
+    }
+}
+CdkCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkCellDef]' },] },
+];
+/** @nocollapse */
+CdkCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
+/**
+ * Header cell definition for a CDK table.
+ * Captures the template of a column's header cell and as well as cell-specific properties.
+ */
+class CdkHeaderCellDef {
+    /**
+     * @param {?} template
+     */
+    constructor(template) {
+        this.template = template;
+    }
+}
+CdkHeaderCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] },
+];
+/** @nocollapse */
+CdkHeaderCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
+/**
+ * Footer cell definition for a CDK table.
+ * Captures the template of a column's footer cell and as well as cell-specific properties.
+ */
+class CdkFooterCellDef {
+    /**
+     * @param {?} template
+     */
+    constructor(template) {
+        this.template = template;
+    }
+}
+CdkFooterCellDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkFooterCellDef]' },] },
+];
+/** @nocollapse */
+CdkFooterCellDef.ctorParameters = () => [
+    { type: TemplateRef, },
+];
+/**
+ * Column definition for the CDK table.
+ * Defines a set of cells available for a table column.
+ */
+class CdkColumnDef {
+    /**
+     * Unique name for this column.
+     * @return {?}
+     */
+    get name() { return this._name; }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    set name(name) {
+        // If the directive is set without a name (updated programatically), then this setter will
+        // trigger with an empty string and should not overwrite the programatically set value.
+        if (!name) {
+            return;
+        }
+        this._name = name;
+        this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+    }
+}
+CdkColumnDef.decorators = [
+    { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
+];
+/** @nocollapse */
+CdkColumnDef.propDecorators = {
+    "name": [{ type: Input, args: ['cdkColumnDef',] },],
+    "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
+    "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
+    "footerCell": [{ type: ContentChild, args: [CdkFooterCellDef,] },],
+};
+/**
+ * Base class for the cells. Adds a CSS classname that identifies the column it renders in.
+ */
+class BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        const /** @type {?} */ columnClassName = `cdk-column-${columnDef.cssClassFriendlyName}`;
+        elementRef.nativeElement.classList.add(columnClassName);
+    }
+}
+/**
+ * Header cell template container that adds the right classes and role.
+ */
+class CdkHeaderCell extends BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        super(columnDef, elementRef);
+    }
+}
+CdkHeaderCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-header-cell, th[cdk-header-cell]',
+                host: {
+                    'class': 'cdk-header-cell',
+                    'role': 'columnheader',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkHeaderCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+];
+/**
+ * Footer cell template container that adds the right classes and role.
+ */
+class CdkFooterCell extends BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        super(columnDef, elementRef);
+    }
+}
+CdkFooterCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-footer-cell, td[cdk-footer-cell]',
+                host: {
+                    'class': 'cdk-footer-cell',
+                    'role': 'gridcell',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkFooterCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+];
+/**
+ * Cell template container that adds the right classes and role.
+ */
+class CdkCell extends BaseCdkCell {
+    /**
+     * @param {?} columnDef
+     * @param {?} elementRef
+     */
+    constructor(columnDef, elementRef) {
+        super(columnDef, elementRef);
+    }
+}
+CdkCell.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-cell, td[cdk-cell]',
+                host: {
+                    'class': 'cdk-cell',
+                    'role': 'gridcell',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkCell.ctorParameters = () => [
+    { type: CdkColumnDef, },
+    { type: ElementRef, },
+];
 
 /**
  * @fileoverview added by tsickle
@@ -231,193 +418,6 @@ CdkRow.decorators = [
                 changeDetection: ChangeDetectionStrategy.OnPush,
                 encapsulation: ViewEncapsulation.None,
             },] },
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Cell definition for a CDK table.
- * Captures the template of a column's data row cell as well as cell-specific properties.
- */
-class CdkCellDef {
-    /**
-     * @param {?} template
-     */
-    constructor(template) {
-        this.template = template;
-    }
-}
-CdkCellDef.decorators = [
-    { type: Directive, args: [{ selector: '[cdkCellDef]' },] },
-];
-/** @nocollapse */
-CdkCellDef.ctorParameters = () => [
-    { type: TemplateRef, },
-];
-/**
- * Header cell definition for a CDK table.
- * Captures the template of a column's header cell and as well as cell-specific properties.
- */
-class CdkHeaderCellDef {
-    /**
-     * @param {?} template
-     */
-    constructor(template) {
-        this.template = template;
-    }
-}
-CdkHeaderCellDef.decorators = [
-    { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] },
-];
-/** @nocollapse */
-CdkHeaderCellDef.ctorParameters = () => [
-    { type: TemplateRef, },
-];
-/**
- * Footer cell definition for a CDK table.
- * Captures the template of a column's footer cell and as well as cell-specific properties.
- */
-class CdkFooterCellDef {
-    /**
-     * @param {?} template
-     */
-    constructor(template) {
-        this.template = template;
-    }
-}
-CdkFooterCellDef.decorators = [
-    { type: Directive, args: [{ selector: '[cdkFooterCellDef]' },] },
-];
-/** @nocollapse */
-CdkFooterCellDef.ctorParameters = () => [
-    { type: TemplateRef, },
-];
-/**
- * Column definition for the CDK table.
- * Defines a set of cells available for a table column.
- */
-class CdkColumnDef {
-    /**
-     * Unique name for this column.
-     * @return {?}
-     */
-    get name() { return this._name; }
-    /**
-     * @param {?} name
-     * @return {?}
-     */
-    set name(name) {
-        // If the directive is set without a name (updated programatically), then this setter will
-        // trigger with an empty string and should not overwrite the programatically set value.
-        if (!name) {
-            return;
-        }
-        this._name = name;
-        this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
-    }
-}
-CdkColumnDef.decorators = [
-    { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
-];
-/** @nocollapse */
-CdkColumnDef.propDecorators = {
-    "name": [{ type: Input, args: ['cdkColumnDef',] },],
-    "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
-    "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
-    "footerCell": [{ type: ContentChild, args: [CdkFooterCellDef,] },],
-};
-/**
- * Base class for the cells. Adds a CSS classname that identifies the column it renders in.
- */
-class BaseCdkCell {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     */
-    constructor(columnDef, elementRef) {
-        const /** @type {?} */ columnClassName = `cdk-column-${columnDef.cssClassFriendlyName}`;
-        elementRef.nativeElement.classList.add(columnClassName);
-    }
-}
-/**
- * Header cell template container that adds the right classes and role.
- */
-class CdkHeaderCell extends BaseCdkCell {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     */
-    constructor(columnDef, elementRef) {
-        super(columnDef, elementRef);
-    }
-}
-CdkHeaderCell.decorators = [
-    { type: Directive, args: [{
-                selector: 'cdk-header-cell, th[cdk-header-cell]',
-                host: {
-                    'class': 'cdk-header-cell',
-                    'role': 'columnheader',
-                },
-            },] },
-];
-/** @nocollapse */
-CdkHeaderCell.ctorParameters = () => [
-    { type: CdkColumnDef, },
-    { type: ElementRef, },
-];
-/**
- * Footer cell template container that adds the right classes and role.
- */
-class CdkFooterCell extends BaseCdkCell {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     */
-    constructor(columnDef, elementRef) {
-        super(columnDef, elementRef);
-    }
-}
-CdkFooterCell.decorators = [
-    { type: Directive, args: [{
-                selector: 'cdk-footer-cell, td[cdk-footer-cell]',
-                host: {
-                    'class': 'cdk-footer-cell',
-                    'role': 'gridcell',
-                },
-            },] },
-];
-/** @nocollapse */
-CdkFooterCell.ctorParameters = () => [
-    { type: CdkColumnDef, },
-    { type: ElementRef, },
-];
-/**
- * Cell template container that adds the right classes and role.
- */
-class CdkCell extends BaseCdkCell {
-    /**
-     * @param {?} columnDef
-     * @param {?} elementRef
-     */
-    constructor(columnDef, elementRef) {
-        super(columnDef, elementRef);
-    }
-}
-CdkCell.decorators = [
-    { type: Directive, args: [{
-                selector: 'cdk-cell, td[cdk-cell]',
-                host: {
-                    'class': 'cdk-cell',
-                    'role': 'gridcell',
-                },
-            },] },
-];
-/** @nocollapse */
-CdkCell.ctorParameters = () => [
-    { type: CdkColumnDef, },
-    { type: ElementRef, },
 ];
 
 /**

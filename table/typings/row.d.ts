@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { IterableChanges, IterableDiffer, IterableDiffers, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkCellDef, CdkColumnDef } from './cell';
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
@@ -16,7 +16,7 @@ export declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-contai
  * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
  * for changes and notifying the table.
  */
-export declare abstract class BaseRowDef {
+export declare abstract class BaseRowDef implements OnChanges {
     /** @docs-private */ template: TemplateRef<any>;
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */

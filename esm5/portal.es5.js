@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { __extends } from 'tslib';
-import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, EventEmitter, Output } from '@angular/core';
+import { ComponentFactoryResolver, Directive, EventEmitter, NgModule, Output, TemplateRef, ViewContainerRef } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -678,7 +678,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         { type: ViewContainerRef, },
     ]; };
     CdkPortalOutlet.propDecorators = {
-        "attached": [{ type: Output, args: ['attached',] },],
+        "attached": [{ type: Output },],
     };
     return CdkPortalOutlet;
 }(BasePortalOutlet));

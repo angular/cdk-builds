@@ -7,11 +7,11 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { ChangeDetectorRef, ElementRef, IterableDiffers, IterableDiffer, OnDestroy, OnInit, QueryList, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
 import { CdkTreeNodeOutlet } from './outlet';
-import { TreeControl } from './control/tree-control';
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
@@ -45,7 +45,7 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
-export declare class CdkTree<T> implements CollectionViewer, OnInit, OnDestroy {
+export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     private _differs;
     private _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */

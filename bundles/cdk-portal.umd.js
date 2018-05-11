@@ -707,7 +707,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         { type: core.ViewContainerRef, },
     ]; };
     CdkPortalOutlet.propDecorators = {
-        "attached": [{ type: core.Output, args: ['attached',] },],
+        "attached": [{ type: core.Output },],
     };
     return CdkPortalOutlet;
 }(BasePortalOutlet));

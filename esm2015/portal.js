@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModule, Directive, TemplateRef, ComponentFactoryResolver, ViewContainerRef, EventEmitter, Output } from '@angular/core';
+import { ComponentFactoryResolver, Directive, EventEmitter, NgModule, Output, TemplateRef, ViewContainerRef } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -508,7 +508,7 @@ CdkPortalOutlet.ctorParameters = () => [
     { type: ViewContainerRef, },
 ];
 CdkPortalOutlet.propDecorators = {
-    "attached": [{ type: Output, args: ['attached',] },],
+    "attached": [{ type: Output },],
 };
 class PortalModule {
 }
