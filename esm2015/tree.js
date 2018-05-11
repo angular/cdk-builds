@@ -481,7 +481,7 @@ class CdkTree {
      * @return {?}
      */
     ngOnInit() {
-        this._dataDiffer = this._differs.find([]).create();
+        this._dataDiffer = this._differs.find([]).create(this.trackBy);
         if (!this.treeControl) {
             throw getTreeControlMissingError();
         }
@@ -666,6 +666,7 @@ CdkTree.ctorParameters = () => [
 CdkTree.propDecorators = {
     "dataSource": [{ type: Input },],
     "treeControl": [{ type: Input },],
+    "trackBy": [{ type: Input },],
     "_nodeOutlet": [{ type: ViewChild, args: [CdkTreeNodeOutlet,] },],
     "_nodeDefs": [{ type: ContentChildren, args: [CdkTreeNodeDef,] },],
 };
@@ -712,7 +713,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
      * @return {?}
      */
     ngAfterContentInit() {
-        this._dataDiffer = this._differs.find([]).create();
+        this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
