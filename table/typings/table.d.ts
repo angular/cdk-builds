@@ -96,26 +96,58 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     private _columnDefsByName;
     /**
-     * Set of all row defitions that can be used by this table. Populated by the rows gathered by
+     * Set of all row definitions that can be used by this table. Populated by the rows gathered by
      * using `ContentChildren` as well as any custom row definitions added to `_customRowDefs`.
      */
     private _rowDefs;
+    /**
+     * Set of all header row definitions that can be used by this table. Populated by the rows
+     * gathered by using `ContentChildren` as well as any custom row definitions added to
+     * `_customHeaderRowDefs`.
+     */
+    private _headerRowDefs;
+    /**
+     * Set of all row definitions that can be used by this table. Populated by the rows gathered by
+     * using `ContentChildren` as well as any custom row definitions added to
+     * `_customFooterRowDefs`.
+     */
+    private _footerRowDefs;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
     /** Stores the row definition that does not have a when predicate. */
     private _defaultRowDef;
-    /** Column definitions that were defined outside of the direct content children of the table. */
+    /**
+     * Column definitions that were defined outside of the direct content children of the table.
+     * These will be defined when, e.g., creating a wrapper around the cdkTable that has
+     * column definitions as *it's* content child.
+     */
     private _customColumnDefs;
-    /** Row definitions that were defined outside of the direct content children of the table. */
+    /**
+     * Data row definitions that were defined outside of the direct content children of the table.
+     * These will be defined when, e.g., creating a wrapper around the cdkTable that has
+     * built-in data rows as *it's* content child.
+     */
     private _customRowDefs;
     /**
+     * Header row definitions that were defined outside of the direct content children of the table.
+     * These will be defined when, e.g., creating a wrapper around the cdkTable that has
+     * built-in header rows as *it's* content child.
+     */
+    private _customHeaderRowDefs;
+    /**
+     * Footer row definitions that were defined outside of the direct content children of the table.
+     * These will be defined when, e.g., creating a wrapper around the cdkTable that has a
+     * built-in footer row as *it's* content child.
+     */
+    private _customFooterRowDefs;
+    /**
      * Whether the header row definition has been changed. Triggers an update to the header row after
-     * content is checked.
+     * content is checked. Initialized as true so that the table renders the initial set of rows.
      */
     private _headerRowDefChanged;
     /**
      * Whether the footer row definition has been changed. Triggers an update to the footer row after
-     * content is checked.
+     * content is checked. Initialized as true so that the table renders the initial set of rows.
      */
     private _footerRowDefChanged;
     /**
@@ -186,22 +218,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * cells should render for each column.
      */
     _contentColumnDefs: QueryList<CdkColumnDef>;
-    /** Set of template definitions that used as the data row containers. */
+    /** Set of data row definitions that were provided to the table as content children. */
     _contentRowDefs: QueryList<CdkRowDef<T>>;
-    /**
-     * Template definition used as the header container. By default it stores the header row
-     * definition found as a direct content child. Override this value through `setHeaderRowDef` if
-     * the header row definition should be changed or was not defined as a part of the table's
-     * content.
-     */
-    _headerRowDef: CdkHeaderRowDef;
-    /**
-     * Template definition used as the footer container. By default it stores the footer row
-     * definition found as a direct content child. Override this value through `setFooterRowDef` if
-     * the footer row definition should be changed or was not defined as a part of the table's
-     * content.
-     */
-    _footerRowDef: CdkFooterRowDef;
+    /** Set of header row definitions that were provided to the table as content children. */
+    _contentHeaderRowDefs: QueryList<CdkHeaderRowDef>;
+    /** Set of footer row definitions that were provided to the table as content children. */
+    _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
@@ -221,22 +243,36 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * Sets the header row definition to be used. Overrides the header row definition gathered by
      * using `ContentChild`, if one exists. Sets a flag that will re-render the header row after the
      * table's content is checked.
+     * @docs-private
+     * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
+     * @deletion-target 8.0.0
      */
     setHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
     /**
      * Sets the footer row definition to be used. Overrides the footer row definition gathered by
      * using `ContentChild`, if one exists. Sets a flag that will re-render the footer row after the
      * table's content is checked.
+     * @docs-private
+     * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
+     * @deletion-target 8.0.0
      */
     setFooterRowDef(footerRowDef: CdkFooterRowDef): void;
-    /** Adds a column definition that was not included as part of the direct content children. */
+    /** Adds a column definition that was not included as part of the content children. */
     addColumnDef(columnDef: CdkColumnDef): void;
-    /** Removes a column definition that was not included as part of the direct content children. */
+    /** Removes a column definition that was not included as part of the content children. */
     removeColumnDef(columnDef: CdkColumnDef): void;
-    /** Adds a row definition that was not included as part of the direct content children. */
+    /** Adds a row definition that was not included as part of the content children. */
     addRowDef(rowDef: CdkRowDef<T>): void;
-    /** Removes a row definition that was not included as part of the direct content children. */
+    /** Removes a row definition that was not included as part of the content children. */
     removeRowDef(rowDef: CdkRowDef<T>): void;
+    /** Adds a header row definition that was not included as part of the content children. */
+    addHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
+    /** Removes a header row definition that was not included as part of the content children. */
+    removeHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
+    /** Adds a footer row definition that was not included as part of the content children. */
+    addFooterRowDef(footerRowDef: CdkFooterRowDef): void;
+    /** Removes a footer row definition that was not included as part of the content children. */
+    removeFooterRowDef(footerRowDef: CdkFooterRowDef): void;
     /**
      * Get the list of RenderRow objects to render according to the current list of data and defined
      * row definitions. If the previous list already contained a particular pair, it should be reused
@@ -270,12 +306,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * Clears any existing content in the header row outlet and creates a new embedded view
      * in the outlet using the header row definition.
      */
-    private _renderHeaderRow();
+    private _forceRenderHeaderRows();
     /**
      * Clears any existing content in the footer row outlet and creates a new embedded view
      * in the outlet using the footer row definition.
      */
-    private _renderFooterRow();
+    private _forceRenderFooterRows();
     /**
      * Get the matching row definitions that should be used for this row data. If there is only
      * one row definition, it is returned. Otherwise, find the row definitions that has a when
@@ -293,7 +329,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * Optionally takes a context to provide to the row and cells, as well as an optional index
      * of where to place the new row template in the outlet.
      */
-    private _renderRow(outlet, rowDef, context?, index?);
+    private _renderRow(outlet, rowDef, index, context?);
     /**
      * Updates the index-related context for each row to reflect any changes in the index of the rows,
      * e.g. first/last/even/odd.
@@ -308,5 +344,5 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * change that affects the evaluation of which rows should be rendered, e.g. toggling
      * `multiTemplateDataRows` or adding/removing row definitions.
      */
-    private _forceRenderRows();
+    private _forceRenderDataRows();
 }
