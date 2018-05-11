@@ -73,6 +73,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _offsetX;
     /** Default offset for the overlay along the y axis. */
     private _offsetY;
+    /** Selector to be used when finding the elements on which to set the transform origin. */
+    private _transformOriginSelector;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -149,6 +151,15 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      */
     withDefaultOffsetY(offset: number): this;
     /**
+     * Configures that the position strategy should set a `transform-origin` on some elements
+     * inside the overlay, depending on the current position that is being applied. This is
+     * useful for the cases where the origin of an animation can change depending on the
+     * alignment of the overlay.
+     * @param selector CSS selector that will be used to find the target
+     *    elements onto which to set the transform origin.
+     */
+    withTransformOriginOn(selector: string): this;
+    /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
     private _getOriginPoint(originRect, pos);
@@ -179,11 +190,12 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _pushOverlayOnScreen(start, overlay);
     /**
      * Applies a computed position to the overlay and emits a position change.
-     *
      * @param position The position preference
      * @param originPoint The point on the origin element where the overlay is connected.
      */
     private _applyPosition(position, originPoint);
+    /** Sets the transform origin based on the configured selector and the passed-in position.  */
+    private _setTransformOrigin(position);
     /**
      * Gets the position and size of the overlay's sizing container.
      *

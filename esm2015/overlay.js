@@ -1413,6 +1413,19 @@ class FlexibleConnectedPositionStrategy {
         return this;
     }
     /**
+     * Configures that the position strategy should set a `transform-origin` on some elements
+     * inside the overlay, depending on the current position that is being applied. This is
+     * useful for the cases where the origin of an animation can change depending on the
+     * alignment of the overlay.
+     * @param {?} selector CSS selector that will be used to find the target
+     *    elements onto which to set the transform origin.
+     * @return {?}
+     */
+    withTransformOriginOn(selector) {
+        this._transformOriginSelector = selector;
+        return this;
+    }
+    /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      * @param {?} originRect
      * @param {?} pos
@@ -1570,12 +1583,12 @@ class FlexibleConnectedPositionStrategy {
     }
     /**
      * Applies a computed position to the overlay and emits a position change.
-     *
      * @param {?} position The position preference
      * @param {?} originPoint The point on the origin element where the overlay is connected.
      * @return {?}
      */
     _applyPosition(position, originPoint) {
+        this._setTransformOrigin(position);
         this._setOverlayElementStyles(originPoint, position);
         this._setBoundingBoxStyles(originPoint, position);
         // Save the last connected position in case the position needs to be re-calculated.
@@ -1585,6 +1598,31 @@ class FlexibleConnectedPositionStrategy {
         const /** @type {?} */ changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
         this._positionChanges.next(changeEvent);
         this._isInitialRender = false;
+    }
+    /**
+     * Sets the transform origin based on the configured selector and the passed-in position.
+     * @param {?} position
+     * @return {?}
+     */
+    _setTransformOrigin(position) {
+        if (!this._transformOriginSelector) {
+            return;
+        }
+        const /** @type {?} */ elements = /** @type {?} */ ((this._boundingBox)).querySelectorAll(this._transformOriginSelector);
+        let /** @type {?} */ xOrigin;
+        let /** @type {?} */ yOrigin = position.overlayY;
+        if (position.overlayX === 'center') {
+            xOrigin = 'center';
+        }
+        else if (this._isRtl()) {
+            xOrigin = position.overlayX === 'start' ? 'right' : 'left';
+        }
+        else {
+            xOrigin = position.overlayX === 'start' ? 'left' : 'right';
+        }
+        for (let /** @type {?} */ i = 0; i < elements.length; i++) {
+            elements[i].style.transformOrigin = `${xOrigin} ${yOrigin}`;
+        }
     }
     /**
      * Gets the position and size of the overlay's sizing container.
