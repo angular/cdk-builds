@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, Directive, ElementRef, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
+import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -1350,8 +1350,7 @@ var  /**
  * of the overlay.
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
-    function FlexibleConnectedPositionStrategy(_connectedTo, _viewportRuler, _document, _platform) {
-        this._connectedTo = _connectedTo;
+    function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -1415,7 +1414,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          * Observable sequence of position changes.
          */
         this.positionChanges = this._positionChanges.asObservable();
-        this._origin = this._connectedTo.nativeElement;
+        this.setOrigin(connectedTo);
     }
     Object.defineProperty(FlexibleConnectedPositionStrategy.prototype, "positions", {
         /** Ordered list of preferred positions, from most to least desirable. */
@@ -1796,7 +1795,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (origin) {
-        this._origin = origin.nativeElement;
+        this._origin = origin instanceof ElementRef ? origin.nativeElement : origin;
         return this;
     };
     /**

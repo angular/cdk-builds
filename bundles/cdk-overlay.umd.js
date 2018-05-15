@@ -1377,8 +1377,7 @@ var   /**
  * of the overlay.
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
-    function FlexibleConnectedPositionStrategy(_connectedTo, _viewportRuler, _document, _platform) {
-        this._connectedTo = _connectedTo;
+    function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -1442,7 +1441,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          * Observable sequence of position changes.
          */
         this.positionChanges = this._positionChanges.asObservable();
-        this._origin = this._connectedTo.nativeElement;
+        this.setOrigin(connectedTo);
     }
     Object.defineProperty(FlexibleConnectedPositionStrategy.prototype, "positions", {
         /** Ordered list of preferred positions, from most to least desirable. */
@@ -1823,7 +1822,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function (origin) {
-        this._origin = origin.nativeElement;
+        this._origin = origin instanceof core.ElementRef ? origin.nativeElement : origin;
         return this;
     };
     /**

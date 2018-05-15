@@ -35,5 +35,5 @@ export declare class OverlayPositionBuilder {
      * Creates a flexible position strategy.
      * @param elementRef
      */
-    flexibleConnectedTo(elementRef: ElementRef): FlexibleConnectedPositionStrategy;
+    flexibleConnectedTo(elementRef: ElementRef | HTMLElement): FlexibleConnectedPositionStrategy;
 }

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, Directive, ElementRef, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
+import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, inject, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -1076,13 +1076,12 @@ class OverlayRef {
  */
 class FlexibleConnectedPositionStrategy {
     /**
-     * @param {?} _connectedTo
+     * @param {?} connectedTo
      * @param {?} _viewportRuler
      * @param {?} _document
      * @param {?=} _platform
      */
-    constructor(_connectedTo, _viewportRuler, _document, _platform) {
-        this._connectedTo = _connectedTo;
+    constructor(connectedTo, _viewportRuler, _document, _platform) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -1146,7 +1145,7 @@ class FlexibleConnectedPositionStrategy {
          * Observable sequence of position changes.
          */
         this.positionChanges = this._positionChanges.asObservable();
-        this._origin = this._connectedTo.nativeElement;
+        this.setOrigin(connectedTo);
     }
     /**
      * Ordered list of preferred positions, from most to least desirable.
@@ -1391,7 +1390,7 @@ class FlexibleConnectedPositionStrategy {
      * @return {?}
      */
     setOrigin(origin) {
-        this._origin = origin.nativeElement;
+        this._origin = origin instanceof ElementRef ? origin.nativeElement : origin;
         return this;
     }
     /**

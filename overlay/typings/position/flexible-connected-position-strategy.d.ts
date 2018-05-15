@@ -20,7 +20,6 @@ import { Platform } from '@angular/cdk/platform';
  * of the overlay.
  */
 export declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
-    private _connectedTo;
     private _viewportRuler;
     private _document;
     private _platform;
@@ -79,7 +78,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
-    constructor(_connectedTo: ElementRef, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined);
+    constructor(connectedTo: ElementRef | HTMLElement, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined);
     /** Attaches this position strategy to an overlay. */
     attach(overlayRef: OverlayRef): void;
     /**
@@ -139,7 +138,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * Sets the origin element, relative to which to position the overlay.
      * @param origin Reference to the new origin element.
      */
-    setOrigin(origin: ElementRef): this;
+    setOrigin(origin: ElementRef | HTMLElement): this;
     /**
      * Sets the default offset for the overlay's connection point on the x-axis.
      * @param offset New offset in the X axis.
