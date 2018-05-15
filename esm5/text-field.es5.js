@@ -8,6 +8,7 @@
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
 import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
@@ -182,6 +183,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
         this._platform = _platform;
         this._ngZone = _ngZone;
         this._destroyed = new Subject();
+        this._enabled = true;
+        this._textareaElement = /** @type {?} */ (this._elementRef.nativeElement);
     }
     Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
         get: /**
@@ -213,6 +216,27 @@ var CdkTextareaAutosize = /** @class */ (function () {
         function (value) {
             this._maxRows = value;
             this._setMaxHeight();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CdkTextareaAutosize.prototype, "enabled", {
+        get: /**
+         * Whether autosizing is enabled or not
+         * @return {?}
+         */
+        function () { return this._enabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            value = coerceBooleanProperty(value);
+            // Only act if the actual value changed. This specifically helps to not run
+            // resizeToFitContent too early (i.e. before ngAfterViewInit)
+            if (this._enabled !== value) {
+                (this._enabled = value) ? this.resizeToFitContent(true) : this.reset();
+            }
         },
         enumerable: true,
         configurable: true
@@ -258,6 +282,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
     function () {
         var _this = this;
         if (this._platform.isBrowser) {
+            // Remember the height which we started with in case autosizing is disabled
+            this._initialHeight = this._textareaElement.style.height;
             this.resizeToFitContent();
             this._ngZone.runOutsideAngular(function () {
                 fromEvent(window, 'resize')
@@ -289,8 +315,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
      * @return {?}
      */
     function (property, value) {
-        var /** @type {?} */ textarea = /** @type {?} */ (this._elementRef.nativeElement);
-        textarea.style[property] = value;
+        this._textareaElement.style[property] = value;
     };
     /**
      * Cache the height of a single-row textarea if it has not already been cached.
@@ -312,9 +337,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
         if (this._cachedLineHeight) {
             return;
         }
-        var /** @type {?} */ textarea = /** @type {?} */ (this._elementRef.nativeElement);
         // Use a clone element because we have to override some styles.
-        var /** @type {?} */ textareaClone = /** @type {?} */ (textarea.cloneNode(false));
+        var /** @type {?} */ textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
         textareaClone.rows = 1;
         // Use `position: absolute` so that this doesn't cause a browser layout and use
         // `visibility: hidden` so that nothing is rendered. Clear any other styles that
@@ -332,9 +356,9 @@ var CdkTextareaAutosize = /** @class */ (function () {
         // to hidden. This ensures that there is no invalid calculation of the line height.
         // See Firefox bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=33654
         textareaClone.style.overflow = 'hidden'; /** @type {?} */
-        ((textarea.parentNode)).appendChild(textareaClone);
+        ((this._textareaElement.parentNode)).appendChild(textareaClone);
         this._cachedLineHeight = textareaClone.clientHeight; /** @type {?} */
-        ((textarea.parentNode)).removeChild(textareaClone);
+        ((this._textareaElement.parentNode)).removeChild(textareaClone);
         // Min and max heights have to be re-calculated if the cached line height changes
         this._setMinHeight();
         this._setMaxHeight();
@@ -370,6 +394,10 @@ var CdkTextareaAutosize = /** @class */ (function () {
     function (force) {
         var _this = this;
         if (force === void 0) { force = false; }
+        // If autosizing is disabled, just skip everything else
+        if (!this._enabled) {
+            return;
+        }
         this._cacheTextareaLineHeight();
         // If we haven't determined the line-height yet, we know we're still hidden and there's no point
         // in checking the height of the textarea.
@@ -415,6 +443,25 @@ var CdkTextareaAutosize = /** @class */ (function () {
         this._previousValue = value;
     };
     /**
+     * Resets the textarea to it's original size
+     */
+    /**
+     * Resets the textarea to it's original size
+     * @return {?}
+     */
+    CdkTextareaAutosize.prototype.reset = /**
+     * Resets the textarea to it's original size
+     * @return {?}
+     */
+    function () {
+        // Do not try to change the textarea, if the initialHeight has not been determined yet
+        // This might potentially remove styles when reset() is called before ngAfterViewInit
+        if (this._initialHeight === undefined) {
+            return;
+        }
+        this._textareaElement.style.height = this._initialHeight;
+    };
+    /**
      * @return {?}
      */
     CdkTextareaAutosize.prototype._noopInputHandler = /**
@@ -445,6 +492,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
     CdkTextareaAutosize.propDecorators = {
         "minRows": [{ type: Input, args: ['cdkAutosizeMinRows',] },],
         "maxRows": [{ type: Input, args: ['cdkAutosizeMaxRows',] },],
+        "enabled": [{ type: Input, args: ['cdkTextareaAutosize',] },],
     };
     return CdkTextareaAutosize;
 }());

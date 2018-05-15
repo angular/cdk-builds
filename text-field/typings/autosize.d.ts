@@ -1,10 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { ElementRef, AfterViewInit, DoCheck, OnDestroy, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 /** Directive to automatically resize a textarea to fit its content. */
@@ -14,13 +7,18 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _ngZone;
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
     private _previousValue;
+    private _initialHeight;
     private readonly _destroyed;
     private _minRows;
     private _maxRows;
+    private _enabled;
+    private _textareaElement;
     /** Minimum amount of rows in the textarea. */
     minRows: number;
     /** Maximum amount of rows in the textarea. */
     maxRows: number;
+    /** Whether autosizing is enabled or not */
+    enabled: boolean;
     /** Cached height of a textarea with a single row. */
     private _cachedLineHeight;
     constructor(_elementRef: ElementRef, _platform: Platform, _ngZone: NgZone);
@@ -47,5 +45,9 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      *    recalculated only if the value changed since the last call.
      */
     resizeToFitContent(force?: boolean): void;
+    /**
+     * Resets the textarea to it's original size
+     */
+    reset(): void;
     _noopInputHandler(): void;
 }
