@@ -3482,24 +3482,7 @@ var /** @type {?} */ defaultPositionList = [
 /**
  * Injection token that determines the scroll handling while the connected overlay is open.
  */
-var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new core.InjectionToken('cdk-connected-overlay-scroll-strategy', {
-    providedIn: 'root',
-    factory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY,
-});
-/**
- * \@docs-private
- * @return {?}
- */
-function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY() {
-    // Store the injected deps here because we can't use the `inject` function outside
-    // this function's context (including the inner function).
-    var /** @type {?} */ scrollDispatcher = core.inject(scrolling.ScrollDispatcher);
-    var /** @type {?} */ viewportRuler = core.inject(scrolling.ViewportRuler);
-    var /** @type {?} */ ngZone = core.inject(core.NgZone);
-    return function (config) {
-        return new RepositionScrollStrategy(scrollDispatcher, viewportRuler, ngZone, config);
-    };
-}
+var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new core.InjectionToken('cdk-connected-overlay-scroll-strategy');
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
@@ -3934,7 +3917,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     return CdkConnectedOverlay;
 }());
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private
  * @param {?} overlay
  * @return {?}
  */
@@ -3942,7 +3925,7 @@ function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return function () { return overlay.scrollStrategies.reposition(); };
 }
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private
  */
 var /** @type {?} */ CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
     provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
@@ -3962,7 +3945,10 @@ var OverlayModule = /** @class */ (function () {
                     imports: [bidi.BidiModule, portal.PortalModule, scrolling.ScrollDispatchModule],
                     exports: [CdkConnectedOverlay, CdkOverlayOrigin, scrolling.ScrollDispatchModule],
                     declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
-                    providers: [Overlay],
+                    providers: [
+                        Overlay,
+                        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+                    ],
                 },] },
     ];
     return OverlayModule;
@@ -4134,14 +4120,13 @@ exports.NoopScrollStrategy = NoopScrollStrategy;
 exports.BlockScrollStrategy = BlockScrollStrategy;
 exports.OverlayModule = OverlayModule;
 exports.OVERLAY_PROVIDERS = OVERLAY_PROVIDERS;
-exports.ɵh = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
-exports.ɵg = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
+exports.ɵg = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
+exports.ɵf = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
 exports.ɵb = OVERLAY_CONTAINER_PROVIDER;
 exports.ɵa = OVERLAY_CONTAINER_PROVIDER_FACTORY;
 exports.ɵc = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
-exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY;
-exports.ɵf = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
-exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+exports.ɵe = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
+exports.ɵd = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
