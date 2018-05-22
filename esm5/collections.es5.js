@@ -5,7 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Subject } from 'rxjs';
+import { __extends } from 'tslib';
+import { Observable, of, Subject } from 'rxjs';
 import { Injectable, defineInjectable } from '@angular/core';
 
 /**
@@ -26,6 +27,44 @@ DataSource = /** @class */ (function () {
     }
     return DataSource;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * DataSource wrapper for a native array.
+ * @template T
+ */
+var  /**
+ * DataSource wrapper for a native array.
+ * @template T
+ */
+ArrayDataSource = /** @class */ (function (_super) {
+    __extends(ArrayDataSource, _super);
+    function ArrayDataSource(_data) {
+        var _this = _super.call(this) || this;
+        _this._data = _data;
+        return _this;
+    }
+    /**
+     * @return {?}
+     */
+    ArrayDataSource.prototype.connect = /**
+     * @return {?}
+     */
+    function () {
+        return this._data instanceof Observable ? this._data : of(this._data);
+    };
+    /**
+     * @return {?}
+     */
+    ArrayDataSource.prototype.disconnect = /**
+     * @return {?}
+     */
+    function () { };
+    return ArrayDataSource;
+}(DataSource));
 
 /**
  * @fileoverview added by tsickle
@@ -420,5 +459,5 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
+export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
 //# sourceMappingURL=collections.es5.js.map
