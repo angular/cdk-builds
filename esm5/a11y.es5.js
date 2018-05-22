@@ -13,6 +13,7 @@ import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { __extends } from 'tslib';
 import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
  * @fileoverview added by tsickle
@@ -1859,6 +1860,79 @@ var LiveAnnouncer = /** @class */ (function () {
     return LiveAnnouncer;
 }());
 /**
+ * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
+ * with a wider range of browsers and screen readers.
+ */
+var CdkAriaLive = /** @class */ (function () {
+    function CdkAriaLive(_elementRef, _liveAnnouncer, _contentObserver, _ngZone) {
+        this._elementRef = _elementRef;
+        this._liveAnnouncer = _liveAnnouncer;
+        this._contentObserver = _contentObserver;
+        this._ngZone = _ngZone;
+        this._politeness = 'off';
+    }
+    Object.defineProperty(CdkAriaLive.prototype, "politeness", {
+        get: /**
+         * The aria-live politeness level to use when announcing messages.
+         * @return {?}
+         */
+        function () { return this._politeness; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            var _this = this;
+            this._politeness = value === 'polite' || value === 'assertive' ? value : 'off';
+            if (this._politeness === 'off') {
+                if (this._subscription) {
+                    this._subscription.unsubscribe();
+                    this._subscription = null;
+                }
+            }
+            else {
+                if (!this._subscription) {
+                    this._subscription = this._ngZone.runOutsideAngular(function () {
+                        return _this._contentObserver.observe(_this._elementRef.nativeElement).subscribe(function () {
+                            return _this._liveAnnouncer.announce(_this._elementRef.nativeElement.innerText, _this._politeness);
+                        });
+                    });
+                }
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    CdkAriaLive.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        if (this._subscription) {
+            this._subscription.unsubscribe();
+        }
+    };
+    CdkAriaLive.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkAriaLive]',
+                    exportAs: 'cdkAriaLive',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkAriaLive.ctorParameters = function () { return [
+        { type: ElementRef, },
+        { type: LiveAnnouncer, },
+        { type: ContentObserver, },
+        { type: NgZone, },
+    ]; };
+    CdkAriaLive.propDecorators = {
+        "politeness": [{ type: Input, args: ['cdkAriaLive',] },],
+    };
+    return CdkAriaLive;
+}());
+/**
  * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} liveElement
@@ -2395,9 +2469,9 @@ var A11yModule = /** @class */ (function () {
     }
     A11yModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [CommonModule, PlatformModule],
-                    declarations: [CdkTrapFocus, CdkMonitorFocus],
-                    exports: [CdkTrapFocus, CdkMonitorFocus],
+                    imports: [CommonModule, PlatformModule, ObserversModule],
+                    declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
+                    exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 },] },
     ];
     return A11yModule;
@@ -2413,5 +2487,5 @@ var A11yModule = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.es5.js.map
