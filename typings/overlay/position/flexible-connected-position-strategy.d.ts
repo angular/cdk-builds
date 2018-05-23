@@ -74,6 +74,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _offsetY;
     /** Selector to be used when finding the elements on which to set the transform origin. */
     private _transformOriginSelector;
+    /** Amount of subscribers to the `positionChanges` stream. */
+    private _positionChangeSubscriptions;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */

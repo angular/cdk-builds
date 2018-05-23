@@ -11,7 +11,7 @@ import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_P
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { __assign, __extends } from 'tslib';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -1351,6 +1351,7 @@ var  /**
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
     function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform) {
+        var _this = this;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -1411,9 +1412,20 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          */
         this._offsetY = 0;
         /**
+         * Amount of subscribers to the `positionChanges` stream.
+         */
+        this._positionChangeSubscriptions = 0;
+        /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = this._positionChanges.asObservable();
+        this.positionChanges = Observable.create(function (observer) {
+            var /** @type {?} */ subscription = _this._positionChanges.subscribe(observer);
+            _this._positionChangeSubscriptions++;
+            return function () {
+                subscription.unsubscribe();
+                _this._positionChangeSubscriptions--;
+            };
+        });
         this.setOrigin(connectedTo);
     }
     Object.defineProperty(FlexibleConnectedPositionStrategy.prototype, "positions", {
@@ -2078,9 +2090,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // Save the last connected position in case the position needs to be re-calculated.
         this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
-        var /** @type {?} */ scrollableViewProperties = this._getScrollVisibility();
-        var /** @type {?} */ changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
-        this._positionChanges.next(changeEvent);
+        // We only emit if we've got any subscriptions, because the scroll visibility
+        // calculcations can be somewhat expensive.
+        if (this._positionChangeSubscriptions > 0) {
+            var /** @type {?} */ scrollableViewProperties = this._getScrollVisibility();
+            var /** @type {?} */ changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
+            this._positionChanges.next(changeEvent);
+        }
         this._isInitialRender = false;
     };
     /**

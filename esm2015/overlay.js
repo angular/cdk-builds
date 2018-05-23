@@ -10,7 +10,7 @@ import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angula
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -1142,9 +1142,20 @@ class FlexibleConnectedPositionStrategy {
          */
         this._offsetY = 0;
         /**
+         * Amount of subscribers to the `positionChanges` stream.
+         */
+        this._positionChangeSubscriptions = 0;
+        /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = this._positionChanges.asObservable();
+        this.positionChanges = Observable.create(observer => {
+            const /** @type {?} */ subscription = this._positionChanges.subscribe(observer);
+            this._positionChangeSubscriptions++;
+            return () => {
+                subscription.unsubscribe();
+                this._positionChangeSubscriptions--;
+            };
+        });
         this.setOrigin(connectedTo);
     }
     /**
@@ -1593,9 +1604,13 @@ class FlexibleConnectedPositionStrategy {
         // Save the last connected position in case the position needs to be re-calculated.
         this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
-        const /** @type {?} */ scrollableViewProperties = this._getScrollVisibility();
-        const /** @type {?} */ changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
-        this._positionChanges.next(changeEvent);
+        // We only emit if we've got any subscriptions, because the scroll visibility
+        // calculcations can be somewhat expensive.
+        if (this._positionChangeSubscriptions > 0) {
+            const /** @type {?} */ scrollableViewProperties = this._getScrollVisibility();
+            const /** @type {?} */ changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
+            this._positionChanges.next(changeEvent);
+        }
         this._isInitialRender = false;
     }
     /**
