@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Direction } from '@angular/cdk/bidi';
+import { Direction, Directionality } from '@angular/cdk/bidi';
 import { ComponentPortal, PortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { ComponentRef, EmbeddedViewRef, NgZone } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
@@ -71,7 +71,11 @@ export declare class OverlayRef implements PortalOutlet {
     /** Update the size properties of the overlay. */
     updateSize(sizeConfig: OverlaySizeConfig): void;
     /** Sets the LTR/RTL direction for the overlay. */
-    setDirection(dir: Direction): void;
+    setDirection(dir: Direction | Directionality): void;
+    /**
+     * Returns the layout direction of the overlay panel.
+     */
+    getDirection(): Direction;
     /** Updates the text direction of the overlay panel. */
     private _updateElementDirection();
     /** Updates the size of the overlay element based on the overlay config. */

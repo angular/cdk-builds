@@ -931,11 +931,22 @@ class OverlayRef {
         this._updateElementDirection();
     }
     /**
+     * Returns the layout direction of the overlay panel.
+     * @return {?}
+     */
+    getDirection() {
+        const /** @type {?} */ direction = this._config.direction;
+        if (!direction) {
+            return 'ltr';
+        }
+        return typeof direction === 'string' ? direction : direction.value;
+    }
+    /**
      * Updates the text direction of the overlay panel.
      * @return {?}
      */
     _updateElementDirection() {
-        this._host.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
+        this._host.setAttribute('dir', this.getDirection());
     }
     /**
      * Updates the size of the overlay element based on the overlay config.
@@ -1949,7 +1960,7 @@ class FlexibleConnectedPositionStrategy {
      * @return {?}
      */
     _isRtl() {
-        return this._overlayRef.getConfig().direction === 'rtl';
+        return this._overlayRef.getDirection() === 'rtl';
     }
     /**
      * Determines whether the overlay uses exact or flexible positioning.
@@ -2051,7 +2062,7 @@ class ConnectedPositionStrategy {
      * @return {?}
      */
     get _isRtl() {
-        return this._overlayRef.getConfig().direction === 'rtl';
+        return this._overlayRef.getDirection() === 'rtl';
     }
     /**
      * Emits an event when the connection point changes.
@@ -2794,6 +2805,7 @@ class CdkConnectedOverlay {
     _buildConfig() {
         const /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
         const /** @type {?} */ overlayConfig = new OverlayConfig({
+            direction: this._dir,
             positionStrategy,
             scrollStrategy: this.scrollStrategy,
             hasBackdrop: this.hasBackdrop
@@ -2870,7 +2882,6 @@ class CdkConnectedOverlay {
                 minHeight: this.minHeight,
             });
         }
-        this._overlayRef.setDirection(this.dir);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
