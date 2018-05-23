@@ -935,7 +935,7 @@ class OverlayRef {
      * @return {?}
      */
     _updateElementDirection() {
-        this._pane.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
+        this._host.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
     }
     /**
      * Updates the size of the overlay element based on the overlay config.
@@ -1721,9 +1721,6 @@ class FlexibleConnectedPositionStrategy {
             // Push the pane content towards the proper direction.
             if (position.overlayX === 'center') {
                 styles.alignItems = 'center';
-            }
-            else if (this._isRtl()) {
-                styles.alignItems = position.overlayX === 'end' ? 'flex-start' : 'flex-end';
             }
             else {
                 styles.alignItems = position.overlayX === 'end' ? 'flex-end' : 'flex-start';
