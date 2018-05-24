@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, SkipSelf, NgModule } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription } from 'rxjs';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
@@ -86,6 +86,7 @@ CdkAccordion.propDecorators = {
  * Used to generate unique ID for each accordion item.
  */
 let /** @type {?} */ nextId$1 = 0;
+const ɵ0 = undefined;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -241,11 +242,16 @@ CdkAccordionItem.decorators = [
     { type: Directive, args: [{
                 selector: 'cdk-accordion-item, [cdkAccordionItem]',
                 exportAs: 'cdkAccordionItem',
+                providers: [
+                    // Provide CdkAccordion as undefined to prevent nested accordion items from registering
+                    // to the same accordion.
+                    { provide: CdkAccordion, useValue: ɵ0 },
+                ],
             },] },
 ];
 /** @nocollapse */
 CdkAccordionItem.ctorParameters = () => [
-    { type: CdkAccordion, decorators: [{ type: Optional },] },
+    { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf },] },
     { type: ChangeDetectorRef, },
     { type: UniqueSelectionDispatcher, },
 ];

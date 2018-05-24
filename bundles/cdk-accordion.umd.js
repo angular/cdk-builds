@@ -106,6 +106,7 @@ var CdkAccordion = /** @class */ (function () {
  * Used to generate unique ID for each accordion item.
  */
 var /** @type {?} */ nextId$1 = 0;
+var ɵ0 = undefined;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -288,11 +289,16 @@ var CdkAccordionItem = /** @class */ (function () {
         { type: core.Directive, args: [{
                     selector: 'cdk-accordion-item, [cdkAccordionItem]',
                     exportAs: 'cdkAccordionItem',
+                    providers: [
+                        // Provide CdkAccordion as undefined to prevent nested accordion items from registering
+                        // to the same accordion.
+                        { provide: CdkAccordion, useValue: ɵ0 },
+                    ],
                 },] },
     ];
     /** @nocollapse */
     CdkAccordionItem.ctorParameters = function () { return [
-        { type: CdkAccordion, decorators: [{ type: core.Optional },] },
+        { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.SkipSelf },] },
         { type: core.ChangeDetectorRef, },
         { type: collections.UniqueSelectionDispatcher, },
     ]; };
