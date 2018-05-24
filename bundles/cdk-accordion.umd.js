@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('@angular/cdk/collections')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs', '@angular/cdk/collections'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.Rx,global.ng.cdk.collections));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.rxjs,global.ng.cdk.collections));
 }(this, (function (exports,core,coercion,rxjs,collections) { 'use strict';
 
 /**

@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators'), require('@angular/core'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs/operators', '@angular/core', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.Rx.operators,global.ng.core,global.Rx,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.rxjs.operators,global.ng.core,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
 }(this, (function (exports,collections,operators,core,rxjs,bidi,coercion,a11y,common) { 'use strict';
 
 /*! *****************************************************************************

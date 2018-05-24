@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/scrolling'), require('@angular/common'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/keycodes')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/scrolling', '@angular/common', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/keycodes'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.scrolling,global.ng.common,global.Rx,global.Rx.operators,global.ng.cdk.platform,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.keycodes));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}),global.ng.core,global.ng.cdk.coercion,global.ng.cdk.scrolling,global.ng.common,global.rxjs,global.rxjs.operators,global.ng.cdk.platform,global.ng.cdk.bidi,global.ng.cdk.portal,global.ng.cdk.keycodes));
 }(this, (function (exports,core,coercion,scrolling,common,rxjs,operators,platform,bidi,portal,keycodes) { 'use strict';
 
 /*! *****************************************************************************

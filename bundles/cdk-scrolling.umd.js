@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.cdk.platform,global.ng.core,global.Rx,global.Rx.operators));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}),global.ng.cdk.platform,global.ng.core,global.rxjs,global.rxjs.operators));
 }(this, (function (exports,platform,core,rxjs,operators) { 'use strict';
 
 /**

@@ -8,7 +8,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/common')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/core', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/cdk/coercion', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}),global.ng.core,global.ng.cdk.collections,global.Rx,global.Rx.operators,global.ng.cdk.coercion,global.ng.common));
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}),global.ng.core,global.ng.cdk.collections,global.rxjs,global.rxjs.operators,global.ng.cdk.coercion,global.ng.common));
 }(this, (function (exports,core,collections,rxjs,operators,coercion,common) { 'use strict';
 
 /*! *****************************************************************************
