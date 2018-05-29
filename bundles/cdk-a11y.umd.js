@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('@angular/cdk/observers')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/coercion', '@angular/cdk/observers'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.common,global.ng.core,global.rxjs,global.ng.cdk.keycodes,global.rxjs.operators,global.ng.cdk.platform,global.ng.cdk.coercion,global.ng.cdk.observers));
-}(this, (function (exports,common,core,rxjs,keycodes,operators,platform,coercion,observers) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/coercion')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/coercion'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}),global.ng.common,global.ng.core,global.rxjs,global.ng.cdk.keycodes,global.rxjs.operators,global.ng.cdk.platform,global.ng.cdk.coercion));
+}(this, (function (exports,common,core,rxjs,keycodes,operators,platform,coercion) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -1882,79 +1882,6 @@ var LiveAnnouncer = /** @class */ (function () {
     return LiveAnnouncer;
 }());
 /**
- * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
- * with a wider range of browsers and screen readers.
- */
-var CdkAriaLive = /** @class */ (function () {
-    function CdkAriaLive(_elementRef, _liveAnnouncer, _contentObserver, _ngZone) {
-        this._elementRef = _elementRef;
-        this._liveAnnouncer = _liveAnnouncer;
-        this._contentObserver = _contentObserver;
-        this._ngZone = _ngZone;
-        this._politeness = 'off';
-    }
-    Object.defineProperty(CdkAriaLive.prototype, "politeness", {
-        get: /**
-         * The aria-live politeness level to use when announcing messages.
-         * @return {?}
-         */
-        function () { return this._politeness; },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            var _this = this;
-            this._politeness = value === 'polite' || value === 'assertive' ? value : 'off';
-            if (this._politeness === 'off') {
-                if (this._subscription) {
-                    this._subscription.unsubscribe();
-                    this._subscription = null;
-                }
-            }
-            else {
-                if (!this._subscription) {
-                    this._subscription = this._ngZone.runOutsideAngular(function () {
-                        return _this._contentObserver.observe(_this._elementRef.nativeElement).subscribe(function () {
-                            return _this._liveAnnouncer.announce(_this._elementRef.nativeElement.innerText, _this._politeness);
-                        });
-                    });
-                }
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * @return {?}
-     */
-    CdkAriaLive.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        if (this._subscription) {
-            this._subscription.unsubscribe();
-        }
-    };
-    CdkAriaLive.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkAriaLive]',
-                    exportAs: 'cdkAriaLive',
-                },] },
-    ];
-    /** @nocollapse */
-    CdkAriaLive.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: LiveAnnouncer, },
-        { type: observers.ContentObserver, },
-        { type: core.NgZone, },
-    ]; };
-    CdkAriaLive.propDecorators = {
-        "politeness": [{ type: core.Input, args: ['cdkAriaLive',] },],
-    };
-    return CdkAriaLive;
-}());
-/**
  * \@docs-private \@deprecated \@deletion-target 7.0.0
  * @param {?} parentDispatcher
  * @param {?} liveElement
@@ -2491,9 +2418,9 @@ var A11yModule = /** @class */ (function () {
     }
     A11yModule.decorators = [
         { type: core.NgModule, args: [{
-                    imports: [common.CommonModule, platform.PlatformModule, observers.ObserversModule],
-                    declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
-                    exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
+                    imports: [common.CommonModule, platform.PlatformModule],
+                    declarations: [CdkTrapFocus, CdkMonitorFocus],
+                    exports: [CdkTrapFocus, CdkMonitorFocus],
                 },] },
     ];
     return A11yModule;
@@ -2513,7 +2440,6 @@ exports.FocusTrapFactory = FocusTrapFactory;
 exports.CdkTrapFocus = CdkTrapFocus;
 exports.InteractivityChecker = InteractivityChecker;
 exports.LiveAnnouncer = LiveAnnouncer;
-exports.CdkAriaLive = CdkAriaLive;
 exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
 exports.LIVE_ANNOUNCER_PROVIDER = LIVE_ANNOUNCER_PROVIDER;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;

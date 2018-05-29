@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Observable, of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Injectable, defineInjectable } from '@angular/core';
 
 /**
@@ -18,34 +18,6 @@ import { Injectable, defineInjectable } from '@angular/core';
  * @template T
  */
 class DataSource {
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * DataSource wrapper for a native array.
- * @template T
- */
-class ArrayDataSource extends DataSource {
-    /**
-     * @param {?} _data
-     */
-    constructor(_data) {
-        super();
-        this._data = _data;
-    }
-    /**
-     * @return {?}
-     */
-    connect() {
-        return this._data instanceof Observable ? this._data : of(this._data);
-    }
-    /**
-     * @return {?}
-     */
-    disconnect() { }
 }
 
 /**
@@ -311,5 +283,5 @@ UniqueSelectionDispatcher.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
+export { UniqueSelectionDispatcher, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
 //# sourceMappingURL=collections.js.map

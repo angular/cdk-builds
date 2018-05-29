@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { PositionStrategy } from './position/position-strategy';
-import { Direction, Directionality } from '@angular/cdk/bidi';
+import { Direction } from '@angular/cdk/bidi';
 import { ScrollStrategy } from './scroll/scroll-strategy';
 /** Initial configuration used when creating an overlay. */
 export declare class OverlayConfig {
@@ -32,10 +32,7 @@ export declare class OverlayConfig {
     maxWidth?: number | string;
     /** The max-height of the overlay panel. If a number is provided, pixel units are assumed. */
     maxHeight?: number | string;
-    /**
-     * Direction of the text in the overlay panel. If a `Directionality` instance
-     * is passed in, the overlay will handle changes to its value automatically.
-     */
-    direction?: Direction | Directionality;
+    /** The direction of the text in the overlay panel. */
+    direction?: Direction;
     constructor(config?: OverlayConfig);
 }

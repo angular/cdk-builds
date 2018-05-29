@@ -1186,24 +1186,6 @@ OverlayRef = /** @class */ (function () {
         this._updateElementDirection();
     };
     /**
-     * Returns the layout direction of the overlay panel.
-     */
-    /**
-     * Returns the layout direction of the overlay panel.
-     * @return {?}
-     */
-    OverlayRef.prototype.getDirection = /**
-     * Returns the layout direction of the overlay panel.
-     * @return {?}
-     */
-    function () {
-        var /** @type {?} */ direction = this._config.direction;
-        if (!direction) {
-            return 'ltr';
-        }
-        return typeof direction === 'string' ? direction : direction.value;
-    };
-    /**
      * Updates the text direction of the overlay panel.
      * @return {?}
      */
@@ -1212,7 +1194,7 @@ OverlayRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._host.setAttribute('dir', this.getDirection());
+        this._host.setAttribute('dir', /** @type {?} */ ((this._config.direction)));
     };
     /**
      * Updates the size of the overlay element based on the overlay config.
@@ -2551,7 +2533,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._overlayRef.getDirection() === 'rtl';
+        return this._overlayRef.getConfig().direction === 'rtl';
     };
     /**
      * Determines whether the overlay uses exact or flexible positioning.
@@ -2671,7 +2653,7 @@ ConnectedPositionStrategy = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._overlayRef.getDirection() === 'rtl';
+            return this._overlayRef.getConfig().direction === 'rtl';
         },
         enumerable: true,
         configurable: true
@@ -3773,7 +3755,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function () {
         var /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
         var /** @type {?} */ overlayConfig = new OverlayConfig({
-            direction: this._dir,
             positionStrategy: positionStrategy,
             scrollStrategy: this.scrollStrategy,
             hasBackdrop: this.hasBackdrop
@@ -3869,6 +3850,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
                 minHeight: this.minHeight,
             });
         }
+        this._overlayRef.setDirection(this.dir);
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
             this.attach.emit();
