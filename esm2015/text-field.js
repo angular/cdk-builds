@@ -169,6 +169,10 @@ class CdkTextareaAutosize {
     }
     /**
      * Minimum amount of rows in the textarea.
+     * @return {?}
+     */
+    get minRows() { return this._minRows; }
+    /**
      * @param {?} value
      * @return {?}
      */
@@ -176,10 +180,6 @@ class CdkTextareaAutosize {
         this._minRows = value;
         this._setMinHeight();
     }
-    /**
-     * @return {?}
-     */
-    get minRows() { return this._minRows; }
     /**
      * Maximum amount of rows in the textarea.
      * @return {?}

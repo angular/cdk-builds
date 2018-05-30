@@ -188,11 +188,11 @@ var CdkTextareaAutosize = /** @class */ (function () {
     }
     Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
         get: /**
+         * Minimum amount of rows in the textarea.
          * @return {?}
          */
         function () { return this._minRows; },
         set: /**
-         * Minimum amount of rows in the textarea.
          * @param {?} value
          * @return {?}
          */
