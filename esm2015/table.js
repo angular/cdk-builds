@@ -5,13 +5,72 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, ViewChild, NgModule } from '@angular/core';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, Optional, ViewChild, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Directionality } from '@angular/cdk/bidi';
 import { CommonModule } from '@angular/common';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Mixin to provide a directive with a function that checks if the sticky input has been
+ * changed since the last time the function was called. Essentially adds a dirty-check to the
+ * sticky value.
+ * @template T
+ * @param {?} base
+ * @return {?}
+ */
+function mixinHasStickyInput(base) {
+    return class extends base {
+        /**
+         * @param {...?} args
+         */
+        constructor(...args) {
+            super(...args);
+            this._sticky = false;
+            /**
+             * Whether the sticky input has changed since it was last checked.
+             */
+            this._hasStickyChanged = false;
+        }
+        /**
+         * Whether sticky positioning should be applied.
+         * @return {?}
+         */
+        get sticky() { return this._sticky; }
+        /**
+         * @param {?} v
+         * @return {?}
+         */
+        set sticky(v) {
+            const /** @type {?} */ prevValue = this._sticky;
+            this._sticky = coerceBooleanProperty(v);
+            this._hasStickyChanged = prevValue !== this._sticky;
+        }
+        /**
+         * Whether the sticky value has changed since this was last called.
+         * @return {?}
+         */
+        hasStickyChanged() {
+            const /** @type {?} */ hasStickyChanged = this._hasStickyChanged;
+            this._hasStickyChanged = false;
+            return hasStickyChanged;
+        }
+        /**
+         * Resets the dirty check for cases where the sticky state has been used without checking.
+         * @return {?}
+         */
+        resetStickyChanged() {
+            this._hasStickyChanged = false;
+        }
+    };
+}
 
 /**
  * @fileoverview added by tsickle
@@ -75,10 +134,20 @@ CdkFooterCellDef.ctorParameters = () => [
     { type: TemplateRef, },
 ];
 /**
+ * \@docs-private
+ */
+class CdkColumnDefBase {
+}
+const /** @type {?} */ _CdkColumnDefBase = mixinHasStickyInput(CdkColumnDefBase);
+/**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
-class CdkColumnDef {
+class CdkColumnDef extends _CdkColumnDefBase {
+    constructor() {
+        super(...arguments);
+        this._stickyEnd = false;
+    }
     /**
      * Unique name for this column.
      * @return {?}
@@ -97,13 +166,33 @@ class CdkColumnDef {
         this._name = name;
         this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
     }
+    /**
+     * Whether this column should be sticky positioned on the end of the row. Should make sure
+     * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
+     * has been changed.
+     * @return {?}
+     */
+    get stickyEnd() { return this._stickyEnd; }
+    /**
+     * @param {?} v
+     * @return {?}
+     */
+    set stickyEnd(v) {
+        const /** @type {?} */ prevValue = this._stickyEnd;
+        this._stickyEnd = coerceBooleanProperty(v);
+        this._hasStickyChanged = prevValue !== this._stickyEnd;
+    }
 }
 CdkColumnDef.decorators = [
-    { type: Directive, args: [{ selector: '[cdkColumnDef]' },] },
+    { type: Directive, args: [{
+                selector: '[cdkColumnDef]',
+                inputs: ['sticky']
+            },] },
 ];
 /** @nocollapse */
 CdkColumnDef.propDecorators = {
     "name": [{ type: Input, args: ['cdkColumnDef',] },],
+    "stickyEnd": [{ type: Input, args: ['stickyEnd',] },],
     "cell": [{ type: ContentChild, args: [CdkCellDef,] },],
     "headerCell": [{ type: ContentChild, args: [CdkHeaderCellDef,] },],
     "footerCell": [{ type: ContentChild, args: [CdkFooterCellDef,] },],
@@ -230,8 +319,8 @@ class BaseRowDef {
     ngOnChanges(changes) {
         // Create a new columns differ if one does not yet exist. Initialize it based on initial value
         // of the columns property or an empty array if none is provided.
-        const /** @type {?} */ columns = changes['columns'].currentValue || [];
         if (!this._columnsDiffer) {
+            const /** @type {?} */ columns = (changes['columns'] && changes['columns'].currentValue) || [];
             this._columnsDiffer = this._differs.find(columns).create();
             this._columnsDiffer.diff(columns);
         }
@@ -244,12 +333,34 @@ class BaseRowDef {
     getColumnsDiff() {
         return this._columnsDiffer.diff(this.columns);
     }
+    /**
+     * Gets this row def's relevant cell template from the provided column def.
+     * @param {?} column
+     * @return {?}
+     */
+    extractCellTemplate(column) {
+        if (this instanceof CdkHeaderRowDef) {
+            return column.headerCell.template;
+        }
+        if (this instanceof CdkFooterRowDef) {
+            return column.footerCell.template;
+        }
+        else {
+            return column.cell.template;
+        }
+    }
 }
+/**
+ * \@docs-private
+ */
+class CdkHeaderRowDefBase extends BaseRowDef {
+}
+const /** @type {?} */ _CdkHeaderRowDefBase = mixinHasStickyInput(CdkHeaderRowDefBase);
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
  */
-class CdkHeaderRowDef extends BaseRowDef {
+class CdkHeaderRowDef extends _CdkHeaderRowDefBase {
     /**
      * @param {?} template
      * @param {?} _differs
@@ -258,18 +369,17 @@ class CdkHeaderRowDef extends BaseRowDef {
         super(template, _differs);
     }
     /**
-     * Gets this row def's relevant cell template from the provided column def.
-     * @param {?} column
+     * @param {?} changes
      * @return {?}
      */
-    extractCellTemplate(column) {
-        return column.headerCell.template;
+    ngOnChanges(changes) {
+        super.ngOnChanges(changes);
     }
 }
 CdkHeaderRowDef.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkHeaderRowDef]',
-                inputs: ['columns: cdkHeaderRowDef'],
+                inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
             },] },
 ];
 /** @nocollapse */
@@ -278,10 +388,16 @@ CdkHeaderRowDef.ctorParameters = () => [
     { type: IterableDiffers, },
 ];
 /**
+ * \@docs-private
+ */
+class CdkFooterRowDefBase extends BaseRowDef {
+}
+const /** @type {?} */ _CdkFooterRowDefBase = mixinHasStickyInput(CdkFooterRowDefBase);
+/**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
-class CdkFooterRowDef extends BaseRowDef {
+class CdkFooterRowDef extends _CdkFooterRowDefBase {
     /**
      * @param {?} template
      * @param {?} _differs
@@ -290,18 +406,17 @@ class CdkFooterRowDef extends BaseRowDef {
         super(template, _differs);
     }
     /**
-     * Gets this row def's relevant cell template from the provided column def.
-     * @param {?} column
+     * @param {?} changes
      * @return {?}
      */
-    extractCellTemplate(column) {
-        return column.footerCell.template;
+    ngOnChanges(changes) {
+        super.ngOnChanges(changes);
     }
 }
 CdkFooterRowDef.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkFooterRowDef]',
-                inputs: ['columns: cdkFooterRowDef'],
+                inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
             },] },
 ];
 /** @nocollapse */
@@ -322,14 +437,6 @@ class CdkRowDef extends BaseRowDef {
      */
     constructor(template, _differs) {
         super(template, _differs);
-    }
-    /**
-     * Gets this row def's relevant cell template from the provided column def.
-     * @param {?} column
-     * @return {?}
-     */
-    extractCellTemplate(column) {
-        return column.cell.template;
     }
 }
 CdkRowDef.decorators = [
@@ -483,6 +590,258 @@ function getTableUnknownDataSourceError() {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+
+/**
+ * List of all possible directions that can be used for sticky positioning.
+ * \@docs-private
+ */
+const /** @type {?} */ STICKY_DIRECTIONS = ['top', 'bottom', 'left', 'right'];
+/**
+ * Applies and removes sticky positioning styles to the `CdkTable` rows and columns cells.
+ * \@docs-private
+ */
+class StickyStyler {
+    /**
+     * @param {?} isNativeHtmlTable Whether the sticky logic should be based on a table
+     *     that uses the native `<table>` element.
+     * @param {?} stickCellCss The CSS class that will be applied to every row/cell that has
+     *     sticky positioning applied.
+     * @param {?} direction The directionality context of the table (ltr/rtl); affects column positioning
+     *     by reversing left/right positions.
+     */
+    constructor(isNativeHtmlTable, stickCellCss, direction) {
+        this.isNativeHtmlTable = isNativeHtmlTable;
+        this.stickCellCss = stickCellCss;
+        this.direction = direction;
+    }
+    /**
+     * Clears the sticky positioning styles from the row and its cells by resetting the `position`
+     * style, setting the zIndex to 0, and unsetting each provided sticky direction.
+     * @param {?} rows The list of rows that should be cleared from sticking in the provided directions
+     * @param {?} stickyDirections The directions that should no longer be set as sticky on the rows.
+     * @return {?}
+     */
+    clearStickyPositioning(rows, stickyDirections) {
+        for (const /** @type {?} */ row of rows) {
+            this._removeStickyStyle(row, stickyDirections);
+            for (let /** @type {?} */ i = 0; i < row.children.length; i++) {
+                const /** @type {?} */ cell = /** @type {?} */ (row.children[i]);
+                this._removeStickyStyle(cell, stickyDirections);
+            }
+        }
+    }
+    /**
+     * Applies sticky left and right positions to the cells of each row according to the sticky
+     * states of the rendered column definitions.
+     * @param {?} rows The rows that should have its set of cells stuck according to the sticky states.
+     * @param {?} stickyStartStates A list of boolean states where each state represents whether the cell
+     *     in this index position should be stuck to the start of the row.
+     * @param {?} stickyEndStates A list of boolean states where each state represents whether the cell
+     *     in this index position should be stuck to the end of the row.
+     * @return {?}
+     */
+    updateStickyColumns(rows, stickyStartStates, stickyEndStates) {
+        const /** @type {?} */ hasStickyColumns = stickyStartStates.some(state => state) || stickyEndStates.some(state => state);
+        if (!rows.length || !hasStickyColumns) {
+            return;
+        }
+        const /** @type {?} */ firstRow = rows[0];
+        const /** @type {?} */ numCells = firstRow.children.length;
+        const /** @type {?} */ cellWidths = this._getCellWidths(firstRow);
+        const /** @type {?} */ startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
+        const /** @type {?} */ endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
+        const /** @type {?} */ isRtl = this.direction === 'rtl';
+        for (const /** @type {?} */ row of rows) {
+            for (let /** @type {?} */ i = 0; i < numCells; i++) {
+                const /** @type {?} */ cell = /** @type {?} */ (row.children[i]);
+                if (stickyStartStates[i]) {
+                    this._addStickyStyle(cell, isRtl ? 'right' : 'left', startPositions[i]);
+                }
+                if (stickyEndStates[i]) {
+                    this._addStickyStyle(cell, isRtl ? 'left' : 'right', endPositions[i]);
+                }
+            }
+        }
+    }
+    /**
+     * Applies sticky positioning to the row's cells if using the native table layout, and to the
+     * row itself otherwise.
+     * @param {?} rowsToStick The list of rows that should be stuck according to their corresponding
+     *     sticky state and to the provided top or bottom position.
+     * @param {?} stickyStates A list of boolean states where each state represents whether the row
+     *     should be stuck in the particular top or bottom position.
+     * @param {?} position The position direction in which the row should be stuck if that row should be
+     *     sticky.
+     *
+     * @return {?}
+     */
+    stickRows(rowsToStick, stickyStates, position) {
+        // If positioning the rows to the bottom, reverse their order when evaluating the sticky
+        // position such that the last row stuck will be "bottom: 0px" and so on.
+        const /** @type {?} */ rows = position === 'bottom' ? rowsToStick.reverse() : rowsToStick;
+        let /** @type {?} */ stickyHeight = 0;
+        for (let /** @type {?} */ rowIndex = 0; rowIndex < rows.length; rowIndex++) {
+            if (!stickyStates[rowIndex]) {
+                continue;
+            }
+            const /** @type {?} */ row = rows[rowIndex];
+            if (this.isNativeHtmlTable) {
+                for (let /** @type {?} */ j = 0; j < row.children.length; j++) {
+                    const /** @type {?} */ cell = /** @type {?} */ (row.children[j]);
+                    this._addStickyStyle(cell, position, stickyHeight);
+                }
+            }
+            else {
+                // Flex does not respect the stick positioning on the cells, needs to be applied to the row.
+                // If this is applied on a native table, Safari causes the header to fly in wrong direction.
+                this._addStickyStyle(row, position, stickyHeight);
+            }
+            stickyHeight += row.getBoundingClientRect().height;
+        }
+    }
+    /**
+     * When using the native table in Safari, sticky footer cells do not stick. The only way to stick
+     * footer rows is to apply sticky styling to the tfoot container. This should only be done if
+     * all footer rows are sticky. If not all footer rows are sticky, remove sticky positioning from
+     * the tfoot element.
+     * @param {?} tableElement
+     * @param {?} stickyStates
+     * @return {?}
+     */
+    updateStickyFooterContainer(tableElement, stickyStates) {
+        if (!this.isNativeHtmlTable) {
+            return;
+        }
+        const /** @type {?} */ tfoot = /** @type {?} */ ((tableElement.querySelector('tfoot')));
+        if (stickyStates.some(state => !state)) {
+            this._removeStickyStyle(tfoot, ['bottom']);
+        }
+        else {
+            this._addStickyStyle(tfoot, 'bottom', 0);
+        }
+    }
+    /**
+     * Removes the sticky style on the element by removing the sticky cell CSS class, re-evaluating
+     * the zIndex, removing each of the provided sticky directions, and removing the
+     * sticky position if there are no more directions.
+     * @param {?} element
+     * @param {?} stickyDirections
+     * @return {?}
+     */
+    _removeStickyStyle(element, stickyDirections) {
+        for (const /** @type {?} */ dir of stickyDirections) {
+            element.style[dir] = '';
+        }
+        element.style.zIndex = this._getCalculatedZIndex(element);
+        // If the element no longer has any more sticky directions, remove sticky positioning and
+        // the sticky CSS class.
+        const /** @type {?} */ hasDirection = STICKY_DIRECTIONS.some(dir => !!element.style[dir]);
+        if (!hasDirection) {
+            element.style.position = '';
+            element.classList.remove(this.stickCellCss);
+        }
+    }
+    /**
+     * Adds the sticky styling to the element by adding the sticky style class, changing position
+     * to be sticky (and -webkit-sticky), setting the appropriate zIndex, and adding a sticky
+     * direction and value.
+     * @param {?} element
+     * @param {?} dir
+     * @param {?} dirValue
+     * @return {?}
+     */
+    _addStickyStyle(element, dir, dirValue) {
+        element.classList.add(this.stickCellCss);
+        element.style[dir] = `${dirValue}px`;
+        element.style.cssText += 'position: -webkit-sticky; position: sticky; ';
+        element.style.zIndex = this._getCalculatedZIndex(element);
+    }
+    /**
+     * Calculate what the z-index should be for the element, depending on what directions (top,
+     * bottom, left, right) have been set. It should be true that elements with a top direction
+     * should have the highest index since these are elements like a table header. If any of those
+     * elements are also sticky in another direction, then they should appear above other elements
+     * that are only sticky top (e.g. a sticky column on a sticky header). Bottom-sticky elements
+     * (e.g. footer rows) should then be next in the ordering such that they are below the header
+     * but above any non-sticky elements. Finally, left/right sticky elements (e.g. sticky columns)
+     * should minimally increment so that they are above non-sticky elements but below top and bottom
+     * elements.
+     * @param {?} element
+     * @return {?}
+     */
+    _getCalculatedZIndex(element) {
+        const /** @type {?} */ zIndexIncrements = {
+            top: 100,
+            bottom: 10,
+            left: 1,
+            right: 1,
+        };
+        let /** @type {?} */ zIndex = 0;
+        for (const /** @type {?} */ dir of STICKY_DIRECTIONS) {
+            if (element.style[dir]) {
+                zIndex += zIndexIncrements[dir];
+            }
+        }
+        return zIndex ? `${zIndex}` : '';
+    }
+    /**
+     * Gets the widths for each cell in the provided row.
+     * @param {?} row
+     * @return {?}
+     */
+    _getCellWidths(row) {
+        const /** @type {?} */ cellWidths = [];
+        const /** @type {?} */ firstRowCells = row.children;
+        for (let /** @type {?} */ i = 0; i < firstRowCells.length; i++) {
+            let /** @type {?} */ cell = /** @type {?} */ (firstRowCells[i]);
+            cellWidths.push(cell.getBoundingClientRect().width);
+        }
+        return cellWidths;
+    }
+    /**
+     * Determines the left and right positions of each sticky column cell, which will be the
+     * accumulation of all sticky column cell widths to the left and right, respectively.
+     * Non-sticky cells do not need to have a value set since their positions will not be applied.
+     * @param {?} widths
+     * @param {?} stickyStates
+     * @return {?}
+     */
+    _getStickyStartColumnPositions(widths, stickyStates) {
+        const /** @type {?} */ positions = [];
+        let /** @type {?} */ nextPosition = 0;
+        for (let /** @type {?} */ i = 0; i < widths.length; i++) {
+            if (stickyStates[i]) {
+                positions[i] = nextPosition;
+                nextPosition += widths[i];
+            }
+        }
+        return positions;
+    }
+    /**
+     * Determines the left and right positions of each sticky column cell, which will be the
+     * accumulation of all sticky column cell widths to the left and right, respectively.
+     * Non-sticky cells do not need to have a value set since their positions will not be applied.
+     * @param {?} widths
+     * @param {?} stickyStates
+     * @return {?}
+     */
+    _getStickyEndColumnPositions(widths, stickyStates) {
+        const /** @type {?} */ positions = [];
+        let /** @type {?} */ nextPosition = 0;
+        for (let /** @type {?} */ i = widths.length; i > 0; i--) {
+            if (stickyStates[i]) {
+                positions[i] = nextPosition;
+                nextPosition += widths[i];
+            }
+        }
+        return positions;
+    }
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
@@ -571,11 +930,13 @@ class CdkTable {
      * @param {?} _changeDetectorRef
      * @param {?} _elementRef
      * @param {?} role
+     * @param {?} _dir
      */
-    constructor(_differs, _changeDetectorRef, _elementRef, role) {
+    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
+        this._dir = _dir;
         /**
          * Subject that emits when the component has been destroyed.
          */
@@ -634,6 +995,11 @@ class CdkTable {
          * stored.
          */
         this._cachedRenderRowsMap = new Map();
+        /**
+         * CSS class added to any row or cell that has sticky positioning applied. May be overriden by
+         * table subclasses.
+         */
+        this.stickyCssClass = 'cdk-table-sticky';
         this._multiTemplateDataRows = false;
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
@@ -643,6 +1009,7 @@ class CdkTable {
         if (!role) {
             this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
+        this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';
     }
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
@@ -716,7 +1083,8 @@ class CdkTable {
      * @return {?}
      */
     ngOnInit() {
-        if (this._elementRef.nativeElement.nodeName === 'TABLE') {
+        this._setupStickyStyler();
+        if (this._isNativeHtmlTable) {
             this._applyNativeTableSections();
         }
         // Set up the trackBy function so that it uses the `RenderRow` as its identity by default. If
@@ -754,6 +1122,7 @@ class CdkTable {
         if (this.dataSource && this._rowDefs.length > 0 && !this._renderChangeSubscription) {
             this._observeRenderChanges();
         }
+        this._checkStickyStates();
     }
     /**
      * @return {?}
@@ -807,6 +1176,7 @@ class CdkTable {
             const /** @type {?} */ rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
             rowView.context.$implicit = record.item.data;
         });
+        this.updateStickyColumnStyles();
     }
     /**
      * Sets the header row definition to be used. Overrides the header row definition gathered by
@@ -905,6 +1275,76 @@ class CdkTable {
         this._footerRowDefChanged = true;
     }
     /**
+     * Updates the header sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the top. Then, evaluating which cells need to be stuck to the top. This is
+     * automatically called when the header row changes its displayed set of columns, or if its
+     * sticky input changes. May be called manually for cases where the cell content changes outside
+     * of these events.
+     * @return {?}
+     */
+    updateStickyHeaderRowStyles() {
+        const /** @type {?} */ headerRows = this._getRenderedRows(this._headerRowOutlet);
+        this._stickyStyler.clearStickyPositioning(headerRows, ['top']);
+        const /** @type {?} */ stickyStates = this._headerRowDefs.map(def => def.sticky);
+        this._stickyStyler.stickRows(headerRows, stickyStates, 'top');
+        // Reset the dirty state of the sticky input change since it has been used.
+        this._headerRowDefs.forEach(def => def.resetStickyChanged());
+    }
+    /**
+     * Updates the footer sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the bottom. Then, evaluating which cells need to be stuck to the bottom. This is
+     * automatically called when the footer row changes its displayed set of columns, or if its
+     * sticky input changes. May be called manually for cases where the cell content changes outside
+     * of these events.
+     * @return {?}
+     */
+    updateStickyFooterRowStyles() {
+        const /** @type {?} */ footerRows = this._getRenderedRows(this._footerRowOutlet);
+        this._stickyStyler.clearStickyPositioning(footerRows, ['bottom']);
+        const /** @type {?} */ stickyStates = this._footerRowDefs.map(def => def.sticky);
+        this._stickyStyler.stickRows(footerRows, stickyStates, 'bottom');
+        this._stickyStyler.updateStickyFooterContainer(this._elementRef.nativeElement, stickyStates);
+        // Reset the dirty state of the sticky input change since it has been used.
+        this._footerRowDefs.forEach(def => def.resetStickyChanged());
+    }
+    /**
+     * Updates the column sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the left and right. Then sticky styles are added for the left and right according
+     * to the column definitions for each cell in each row. This is automatically called when
+     * the data source provides a new set of data or when a column definition changes its sticky
+     * input. May be called manually for cases where the cell content changes outside of these events.
+     * @return {?}
+     */
+    updateStickyColumnStyles() {
+        const /** @type {?} */ headerRows = this._getRenderedRows(this._headerRowOutlet);
+        const /** @type {?} */ dataRows = this._getRenderedRows(this._rowOutlet);
+        const /** @type {?} */ footerRows = this._getRenderedRows(this._footerRowOutlet);
+        // Clear the left and right positioning from all columns in the table across all rows since
+        // sticky columns span across all table sections (header, data, footer)
+        this._stickyStyler.clearStickyPositioning([...headerRows, ...dataRows, ...footerRows], ['left', 'right']);
+        // Update the sticky styles for each header row depending on the def's sticky state
+        headerRows.forEach((headerRow, i) => {
+            this._addStickyColumnStyles([headerRow], this._headerRowDefs[i]);
+        });
+        // Update the sticky styles for each data row depending on its def's sticky state
+        this._rowDefs.forEach(rowDef => {
+            // Collect all the rows rendered with this row definition.
+            const /** @type {?} */ rows = [];
+            for (let /** @type {?} */ i = 0; i < dataRows.length; i++) {
+                if (this._renderRows[i].rowDef === rowDef) {
+                    rows.push(dataRows[i]);
+                }
+            }
+            this._addStickyColumnStyles(rows, rowDef);
+        });
+        // Update the sticky styles for each footer row depending on the def's sticky state
+        footerRows.forEach((footerRow, i) => {
+            this._addStickyColumnStyles([footerRow], this._footerRowDefs[i]);
+        });
+        // Reset the dirty state of the sticky input change since it has been used.
+        Array.from(this._columnDefsByName.values()).forEach(def => def.resetStickyChanged());
+    }
+    /**
      * Get the list of RenderRow objects to render according to the current list of data and defined
      * row definitions. If the previous list already contained a particular pair, it should be reused
      * so that the differ equates their references.
@@ -994,19 +1434,22 @@ class CdkTable {
         this._defaultRowDef = defaultRowDefs[0];
     }
     /**
-     * Check if the header, data, or footer rows have changed what columns they want to display.
-     * If there is a diff, then re-render that section.
+     * Check if the header, data, or footer rows have changed what columns they want to display or
+     * whether the sticky states have changed for the header or footer. If there is a diff, then
+     * re-render that section.
      * @return {?}
      */
     _renderUpdatedColumns() {
-        const /** @type {?} */ defColumnsDiffReducer = (accumulator, def) => accumulator || !!def.getColumnsDiff();
-        if (this._rowDefs.reduce(defColumnsDiffReducer, false)) {
+        const /** @type {?} */ columnsDiffReducer = (acc, def) => acc || !!def.getColumnsDiff();
+        // Force re-render data rows if the list of column definitions have changed.
+        if (this._rowDefs.reduce(columnsDiffReducer, false)) {
             this._forceRenderDataRows();
         }
-        if (this._headerRowDefs.reduce(defColumnsDiffReducer, false)) {
+        // Force re-render header/footer rows if the list of column definitions have changed..
+        if (this._headerRowDefs.reduce(columnsDiffReducer, false)) {
             this._forceRenderHeaderRows();
         }
-        if (this._footerRowDefs.reduce(defColumnsDiffReducer, false)) {
+        if (this._footerRowDefs.reduce(columnsDiffReducer, false)) {
             this._forceRenderFooterRows();
         }
     }
@@ -1074,11 +1517,13 @@ class CdkTable {
      * @return {?}
      */
     _forceRenderHeaderRows() {
-        // Clear the footer row outlet if any content exists.
+        // Clear the header row outlet if any content exists.
         if (this._headerRowOutlet.viewContainer.length > 0) {
             this._headerRowOutlet.viewContainer.clear();
         }
         this._headerRowDefs.forEach((def, i) => this._renderRow(this._headerRowOutlet, def, i));
+        this.updateStickyHeaderRowStyles();
+        this.updateStickyColumnStyles();
     }
     /**
      * Clears any existing content in the footer row outlet and creates a new embedded view
@@ -1091,6 +1536,33 @@ class CdkTable {
             this._footerRowOutlet.viewContainer.clear();
         }
         this._footerRowDefs.forEach((def, i) => this._renderRow(this._footerRowOutlet, def, i));
+        this.updateStickyFooterRowStyles();
+        this.updateStickyColumnStyles();
+    }
+    /**
+     * Adds the sticky column styles for the rows according to the columns' stick states.
+     * @param {?} rows
+     * @param {?} rowDef
+     * @return {?}
+     */
+    _addStickyColumnStyles(rows, rowDef) {
+        const /** @type {?} */ columnDefs = Array.from(rowDef.columns || []).map(c => /** @type {?} */ ((this._columnDefsByName.get(c))));
+        const /** @type {?} */ stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
+        const /** @type {?} */ stickyEndStates = columnDefs.map(columnDef => columnDef.stickyEnd);
+        this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates);
+    }
+    /**
+     * Gets the list of rows that have been rendered in the row outlet.
+     * @param {?} rowOutlet
+     * @return {?}
+     */
+    _getRenderedRows(rowOutlet) {
+        const /** @type {?} */ renderedRows = [];
+        for (let /** @type {?} */ i = 0; i < rowOutlet.viewContainer.length; i++) {
+            const /** @type {?} */ viewRef = (/** @type {?} */ (((rowOutlet.viewContainer.get(i)))));
+            renderedRows.push(viewRef.rootNodes[0]);
+        }
+        return renderedRows;
     }
     /**
      * Get the matching row definitions that should be used for this row data. If there is only
@@ -1219,6 +1691,46 @@ class CdkTable {
         this._dataDiffer.diff([]);
         this._rowOutlet.viewContainer.clear();
         this.renderRows();
+        this.updateStickyColumnStyles();
+    }
+    /**
+     * Checks if there has been a change in sticky states since last check and applies the correct
+     * sticky styles. Since checking resets the "dirty" state, this should only be performed once
+     * during a change detection and after the inputs are settled (after content check).
+     * @return {?}
+     */
+    _checkStickyStates() {
+        const /** @type {?} */ stickyCheckReducer = (acc, d) => {
+            return acc || d.hasStickyChanged();
+        };
+        // Note that the check needs to occur for every definition since it notifies the definition
+        // that it can reset its dirty state. Using another operator like `some` may short-circuit
+        // remaining definitions and leave them in an unchecked state.
+        if (this._headerRowDefs.reduce(stickyCheckReducer, false)) {
+            this.updateStickyHeaderRowStyles();
+        }
+        if (this._footerRowDefs.reduce(stickyCheckReducer, false)) {
+            this.updateStickyFooterRowStyles();
+        }
+        if (Array.from(this._columnDefsByName.values()).reduce(stickyCheckReducer, false)) {
+            this.updateStickyColumnStyles();
+        }
+    }
+    /**
+     * Creates the sticky styler that will be used for sticky rows and columns. Listens
+     * for directionality changes and provides the latest direction to the styler. Re-applies column
+     * stickiness when directionality changes.
+     * @return {?}
+     */
+    _setupStickyStyler() {
+        const /** @type {?} */ direction = this._dir ? this._dir.value : 'ltr';
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction);
+        (this._dir ? this._dir.change : of())
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(value => {
+            this._stickyStyler.direction = value;
+            this.updateStickyColumnStyles();
+        });
     }
 }
 CdkTable.decorators = [
@@ -1238,6 +1750,7 @@ CdkTable.ctorParameters = () => [
     { type: ChangeDetectorRef, },
     { type: ElementRef, },
     { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
+    { type: Directionality, decorators: [{ type: Optional },] },
 ];
 CdkTable.propDecorators = {
     "trackBy": [{ type: Input },],
@@ -1306,5 +1819,5 @@ CdkTableModule.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule };
+export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDefBase, _CdkColumnDefBase, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDefBase, _CdkHeaderRowDefBase, CdkHeaderRowDef, CdkFooterRowDefBase, _CdkFooterRowDefBase, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule, STICKY_DIRECTIONS, StickyStyler, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

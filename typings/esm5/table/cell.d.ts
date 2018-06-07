@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, TemplateRef } from '@angular/core';
+import { CanStick } from './can-stick';
 /** Base interface for a cell definition. Captures a column's cell template definition. */
 export interface CellDef {
     template: TemplateRef<any>;
@@ -34,14 +35,25 @@ export declare class CdkFooterCellDef implements CellDef {
     /** @docs-private */ template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
 }
+/** @docs-private */
+export declare class CdkColumnDefBase {
+}
+export declare const _CdkColumnDefBase: (new (...args: any[]) => CanStick) & typeof CdkColumnDefBase;
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
  */
-export declare class CdkColumnDef {
+export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick {
     /** Unique name for this column. */
     name: string;
     _name: string;
+    /**
+     * Whether this column should be sticky positioned on the end of the row. Should make sure
+     * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
+     * has been changed.
+     */
+    stickyEnd: boolean;
+    _stickyEnd: boolean;
     /** @docs-private */
     cell: CdkCellDef;
     /** @docs-private */

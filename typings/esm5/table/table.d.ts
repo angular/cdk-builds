@@ -10,6 +10,7 @@ import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, On
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
+import { Directionality } from '@angular/cdk/bidi';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;
@@ -81,6 +82,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef;
+    protected readonly _dir: Directionality;
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
     /** Latest data provided by the data source. */
@@ -164,6 +166,18 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * stored.
      */
     private _cachedRenderRowsMap;
+    /** Whether the table is applied to a native `<table>`. */
+    private _isNativeHtmlTable;
+    /**
+     * Utility class that is responsible for applying the appropriate sticky positioning styles to
+     * the table's rows and cells.
+     */
+    private _stickyStyler;
+    /**
+     * CSS class added to any row or cell that has sticky positioning applied. May be overriden by
+     * table subclasses.
+     */
+    protected stickyCssClass: string;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
@@ -224,7 +238,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentHeaderRowDefs: QueryList<CdkHeaderRowDef>;
     /** Set of footer row definitions that were provided to the table as content children. */
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -274,6 +288,30 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Removes a footer row definition that was not included as part of the content children. */
     removeFooterRowDef(footerRowDef: CdkFooterRowDef): void;
     /**
+     * Updates the header sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the top. Then, evaluating which cells need to be stuck to the top. This is
+     * automatically called when the header row changes its displayed set of columns, or if its
+     * sticky input changes. May be called manually for cases where the cell content changes outside
+     * of these events.
+     */
+    updateStickyHeaderRowStyles(): void;
+    /**
+     * Updates the footer sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the bottom. Then, evaluating which cells need to be stuck to the bottom. This is
+     * automatically called when the footer row changes its displayed set of columns, or if its
+     * sticky input changes. May be called manually for cases where the cell content changes outside
+     * of these events.
+     */
+    updateStickyFooterRowStyles(): void;
+    /**
+     * Updates the column sticky styles. First resets all applied styles with respect to the cells
+     * sticking to the left and right. Then sticky styles are added for the left and right according
+     * to the column definitions for each cell in each row. This is automatically called when
+     * the data source provides a new set of data or when a column definition changes its sticky
+     * input. May be called manually for cases where the cell content changes outside of these events.
+     */
+    updateStickyColumnStyles(): void;
+    /**
      * Get the list of RenderRow objects to render according to the current list of data and defined
      * row definitions. If the previous list already contained a particular pair, it should be reused
      * so that the differ equates their references.
@@ -290,8 +328,9 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Update the list of all available row definitions that can be used. */
     private _cacheRowDefs();
     /**
-     * Check if the header, data, or footer rows have changed what columns they want to display.
-     * If there is a diff, then re-render that section.
+     * Check if the header, data, or footer rows have changed what columns they want to display or
+     * whether the sticky states have changed for the header or footer. If there is a diff, then
+     * re-render that section.
      */
     private _renderUpdatedColumns();
     /**
@@ -312,6 +351,10 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * in the outlet using the footer row definition.
      */
     private _forceRenderFooterRows();
+    /** Adds the sticky column styles for the rows according to the columns' stick states. */
+    private _addStickyColumnStyles(rows, rowDef);
+    /** Gets the list of rows that have been rendered in the row outlet. */
+    _getRenderedRows(rowOutlet: RowOutlet): HTMLElement[];
     /**
      * Get the matching row definitions that should be used for this row data. If there is only
      * one row definition, it is returned. Otherwise, find the row definitions that has a when
@@ -345,4 +388,16 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * `multiTemplateDataRows` or adding/removing row definitions.
      */
     private _forceRenderDataRows();
+    /**
+     * Checks if there has been a change in sticky states since last check and applies the correct
+     * sticky styles. Since checking resets the "dirty" state, this should only be performed once
+     * during a change detection and after the inputs are settled (after content check).
+     */
+    private _checkStickyStates();
+    /**
+     * Creates the sticky styler that will be used for sticky rows and columns. Listens
+     * for directionality changes and provides the latest direction to the styler. Re-applies column
+     * stickiness when directionality changes.
+     */
+    private _setupStickyStyler();
 }

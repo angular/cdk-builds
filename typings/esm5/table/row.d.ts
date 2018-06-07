@@ -7,6 +7,7 @@
  */
 import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkCellDef, CdkColumnDef } from './cell';
+import { CanStick } from './can-stick';
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -31,25 +32,31 @@ export declare abstract class BaseRowDef implements OnChanges {
      */
     getColumnsDiff(): IterableChanges<any> | null;
     /** Gets this row def's relevant cell template from the provided column def. */
-    abstract extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
+    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
 }
+/** @docs-private */
+export declare class CdkHeaderRowDefBase extends BaseRowDef {
+}
+export declare const _CdkHeaderRowDefBase: (new (...args: any[]) => CanStick) & typeof CdkHeaderRowDefBase;
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
  */
-export declare class CdkHeaderRowDef extends BaseRowDef {
+export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
-    /** Gets this row def's relevant cell template from the provided column def. */
-    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
+    ngOnChanges(changes: SimpleChanges): void;
 }
+/** @docs-private */
+export declare class CdkFooterRowDefBase extends BaseRowDef {
+}
+export declare const _CdkFooterRowDefBase: (new (...args: any[]) => CanStick) & typeof CdkFooterRowDefBase;
 /**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
-export declare class CdkFooterRowDef extends BaseRowDef {
+export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
-    /** Gets this row def's relevant cell template from the provided column def. */
-    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
+    ngOnChanges(changes: SimpleChanges): void;
 }
 /**
  * Data row definition for the CDK table.
@@ -65,8 +72,6 @@ export declare class CdkRowDef<T> extends BaseRowDef {
      */
     when: (index: number, rowData: T) => boolean;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
-    /** Gets this row def's relevant cell template from the provided column def. */
-    extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
 }
 /** Context provided to the row cells when `multiTemplateDataRows` is false */
 export interface CdkCellOutletRowContext<T> {
