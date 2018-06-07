@@ -1223,24 +1223,13 @@ OverlayRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this._config.width || this._config.width === 0) {
-            this._pane.style.width = coercion.coerceCssPixelValue(this._config.width);
-        }
-        if (this._config.height || this._config.height === 0) {
-            this._pane.style.height = coercion.coerceCssPixelValue(this._config.height);
-        }
-        if (this._config.minWidth || this._config.minWidth === 0) {
-            this._pane.style.minWidth = coercion.coerceCssPixelValue(this._config.minWidth);
-        }
-        if (this._config.minHeight || this._config.minHeight === 0) {
-            this._pane.style.minHeight = coercion.coerceCssPixelValue(this._config.minHeight);
-        }
-        if (this._config.maxWidth || this._config.maxWidth === 0) {
-            this._pane.style.maxWidth = coercion.coerceCssPixelValue(this._config.maxWidth);
-        }
-        if (this._config.maxHeight || this._config.maxHeight === 0) {
-            this._pane.style.maxHeight = coercion.coerceCssPixelValue(this._config.maxHeight);
-        }
+        var /** @type {?} */ style = this._pane.style;
+        style.width = coercion.coerceCssPixelValue(this._config.width);
+        style.height = coercion.coerceCssPixelValue(this._config.height);
+        style.minWidth = coercion.coerceCssPixelValue(this._config.minWidth);
+        style.minHeight = coercion.coerceCssPixelValue(this._config.minHeight);
+        style.maxWidth = coercion.coerceCssPixelValue(this._config.maxWidth);
+        style.maxHeight = coercion.coerceCssPixelValue(this._config.maxHeight);
     };
     /**
      * Toggles the pointer events for the overlay pane element.

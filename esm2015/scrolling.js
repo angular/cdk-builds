@@ -244,6 +244,7 @@ class CdkScrollable {
         if (this._scrollListener) {
             this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
         }
+        this._elementScrolled.complete();
     }
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
