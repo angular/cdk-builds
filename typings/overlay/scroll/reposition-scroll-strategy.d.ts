@@ -7,7 +7,7 @@
  */
 import { NgZone } from '@angular/core';
 import { ScrollStrategy } from './scroll-strategy';
-import { OverlayRef } from '../overlay-ref';
+import { OverlayReference } from '../overlay-reference';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 /**
  * Config options for the RepositionScrollStrategy.
@@ -30,7 +30,7 @@ export declare class RepositionScrollStrategy implements ScrollStrategy {
     private _overlayRef;
     constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
     /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
+    attach(overlayRef: OverlayReference): void;
     /** Enables repositioning of the attached overlay on scroll. */
     enable(): void;
     /** Disables repositioning of the attached overlay on scroll. */

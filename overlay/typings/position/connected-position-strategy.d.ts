@@ -1,11 +1,11 @@
 import { CdkScrollable, ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { OverlayRef } from '../overlay-ref';
 import { ConnectedOverlayPositionChange, ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition } from './connected-position';
 import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';
 import { PositionStrategy } from './position-strategy';
 import { Platform } from '@angular/cdk/platform';
+import { OverlayReference } from '../overlay-reference';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative to some origin element. The relative position is defined in terms of
@@ -34,7 +34,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
     /** Attach this position strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
+    attach(overlayRef: OverlayReference): void;
     /** Disposes all resources used by the position strategy. */
     dispose(): void;
     /** @docs-private */

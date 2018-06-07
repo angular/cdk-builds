@@ -10,7 +10,7 @@ import { ElementRef } from '@angular/core';
 import { ViewportRuler, CdkScrollable } from '@angular/cdk/scrolling';
 import { ConnectedOverlayPositionChange, ConnectionPositionPair } from './connected-position';
 import { Observable } from 'rxjs';
-import { OverlayRef } from '../overlay-ref';
+import { OverlayReference } from '../overlay-reference';
 import { Platform } from '@angular/cdk/platform';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -82,7 +82,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     readonly positions: ConnectionPositionPair[];
     constructor(connectedTo: ElementRef | HTMLElement, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined);
     /** Attaches this position strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
+    attach(overlayRef: OverlayReference): void;
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin best fits on-screen.

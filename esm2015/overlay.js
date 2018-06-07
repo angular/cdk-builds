@@ -2361,7 +2361,24 @@ class GlobalPositionStrategy {
         styles.marginTop = config.height === '100%' ? '0' : this._topOffset;
         styles.marginBottom = this._bottomOffset;
         styles.marginRight = this._rightOffset;
-        parentStyles.justifyContent = config.width === '100%' ? 'flex-start' : this._justifyContent;
+        if (config.width === '100%') {
+            parentStyles.justifyContent = 'flex-start';
+        }
+        else if (this._overlayRef.getConfig().direction === 'rtl') {
+            // In RTL the browser will invert `flex-start` and `flex-end` automatically, but we
+            // don't want that because our positioning is explicitly `left` and `right`, hence
+            // why we do another inversion to ensure that the overlay stays in the same position.
+            // TODO: reconsider this if we add `start` and `end` methods.
+            if (this._justifyContent === 'flex-start') {
+                parentStyles.justifyContent = 'flex-end';
+            }
+            else if (this._justifyContent === 'flex-end') {
+                parentStyles.justifyContent = 'flex-start';
+            }
+        }
+        else {
+            parentStyles.justifyContent = this._justifyContent;
+        }
         parentStyles.alignItems = config.height === '100%' ? 'flex-start' : this._alignItems;
     }
     /**

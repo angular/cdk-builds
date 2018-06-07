@@ -7,7 +7,7 @@
  */
 import { NgZone } from '@angular/core';
 import { ScrollStrategy } from './scroll-strategy';
-import { OverlayRef } from '../overlay-ref';
+import { OverlayReference } from '../overlay-reference';
 import { ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 /**
  * Config options for the CloseScrollStrategy.
@@ -29,7 +29,7 @@ export declare class CloseScrollStrategy implements ScrollStrategy {
     private _initialScrollPosition;
     constructor(_scrollDispatcher: ScrollDispatcher, _ngZone: NgZone, _viewportRuler: ViewportRuler, _config?: CloseScrollStrategyConfig | undefined);
     /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayRef): void;
+    attach(overlayRef: OverlayReference): void;
     /** Enables the closing of the attached overlay on scroll. */
     enable(): void;
     /** Disables the closing the attached overlay on scroll. */
