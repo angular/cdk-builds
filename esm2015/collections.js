@@ -171,6 +171,13 @@ class SelectionModel {
         }
     }
     /**
+     * Gets whether multiple values can be selected.
+     * @return {?}
+     */
+    isMultipleSelection() {
+        return this._multiple;
+    }
+    /**
      * Emits a change event and clears the records of selected and deselected values.
      * @return {?}
      */

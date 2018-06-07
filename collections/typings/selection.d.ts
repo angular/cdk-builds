@@ -57,6 +57,10 @@ export declare class SelectionModel<T> {
      * Sorts the selected values based on a predicate function.
      */
     sort(predicate?: (a: T, b: T) => number): void;
+    /**
+     * Gets whether multiple values can be selected.
+     */
+    isMultipleSelection(): boolean;
     /** Emits a change event and clears the records of selected and deselected values. */
     private _emitChangeEvent();
     /** Selects a value. */

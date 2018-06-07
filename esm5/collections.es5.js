@@ -267,6 +267,20 @@ SelectionModel = /** @class */ (function () {
         }
     };
     /**
+     * Gets whether multiple values can be selected.
+     */
+    /**
+     * Gets whether multiple values can be selected.
+     * @return {?}
+     */
+    SelectionModel.prototype.isMultipleSelection = /**
+     * Gets whether multiple values can be selected.
+     * @return {?}
+     */
+    function () {
+        return this._multiple;
+    };
+    /**
      * Emits a change event and clears the records of selected and deselected values.
      * @return {?}
      */
