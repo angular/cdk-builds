@@ -83,10 +83,10 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
+    /** Latest data provided by the data source. */
+    protected _data: T[];
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
-    /** Latest data provided by the data source. */
-    private _data;
     /** List of the rendered rows as identified by their `RenderRow` object. */
     private _renderRows;
     /** Subscription that listens for the data provided by the data source. */

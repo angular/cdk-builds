@@ -290,8 +290,8 @@ SelectionModel = /** @class */ (function () {
      * @return {?}
      */
     function (predicate) {
-        if (this._multiple && this._selected) {
-            this._selected.sort(predicate);
+        if (this._multiple && this.selected) {
+            /** @type {?} */ ((this._selected)).sort(predicate);
         }
     };
     /**
