@@ -3710,20 +3710,20 @@ var CdkConnectedOverlay = /** @class */ (function () {
      */
     function (changes) {
         if (this._position) {
-            if (changes['positions'] || changes['_deprecatedPositions']) {
+            if (changes['positions']) {
                 this._position.withPositions(this.positions);
             }
             if (changes['lockPosition']) {
                 this._position.withLockedPosition(this.lockPosition);
             }
-            if (changes['origin'] || changes['_deprecatedOrigin']) {
+            if (changes['origin']) {
                 this._position.setOrigin(this.origin.elementRef);
                 if (this.open) {
                     this._position.apply();
                 }
             }
         }
-        if (changes['open'] || changes['_deprecatedOpen']) {
+        if (changes['open']) {
             this.open ? this._attachOverlay() : this._detachOverlay();
         }
     };
