@@ -51,11 +51,11 @@ class AutofillMonitor {
         const /** @type {?} */ listener = (event) => {
             if (event.animationName === 'cdk-text-field-autofill-start') {
                 element.classList.add('cdk-text-field-autofilled');
-                result.next({ target: /** @type {?} */ (event.target), isAutofilled: true });
+                this._ngZone.run(() => result.next({ target: /** @type {?} */ (event.target), isAutofilled: true }));
             }
             else if (event.animationName === 'cdk-text-field-autofill-end') {
                 element.classList.remove('cdk-text-field-autofilled');
-                result.next({ target: /** @type {?} */ (event.target), isAutofilled: false });
+                this._ngZone.run(() => result.next({ target: /** @type {?} */ (event.target), isAutofilled: false }));
             }
         };
         this._ngZone.runOutsideAngular(() => {
