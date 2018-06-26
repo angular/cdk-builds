@@ -11,6 +11,7 @@ import { ComponentRef, EmbeddedViewRef, NgZone } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayConfig } from './overlay-config';
+import { OverlayReference } from './overlay-reference';
 /** An object where all of its properties cannot be written. */
 export declare type ImmutableObject<T> = {
     readonly [P in keyof T]: T[P];
@@ -19,7 +20,7 @@ export declare type ImmutableObject<T> = {
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
  */
-export declare class OverlayRef implements PortalOutlet {
+export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _portalOutlet;
     private _host;
     private _pane;
