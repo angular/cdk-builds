@@ -476,21 +476,25 @@ ListKeyManager = /** @class */ (function () {
         return this;
     };
     /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * Configures wrapping mode, which determines whether the active item will wrap to
      * the other end of list when there are no more items in the given direction.
+     * @param shouldWrap Whether the list should wrap when reaching the end.
      */
     /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * Configures wrapping mode, which determines whether the active item will wrap to
      * the other end of list when there are no more items in the given direction.
+     * @param {?=} shouldWrap Whether the list should wrap when reaching the end.
      * @return {?}
      */
     ListKeyManager.prototype.withWrap = /**
-     * Turns on wrapping mode, which ensures that the active item will wrap to
+     * Configures wrapping mode, which determines whether the active item will wrap to
      * the other end of list when there are no more items in the given direction.
+     * @param {?=} shouldWrap Whether the list should wrap when reaching the end.
      * @return {?}
      */
-    function () {
-        this._wrap = true;
+    function (shouldWrap) {
+        if (shouldWrap === void 0) { shouldWrap = true; }
+        this._wrap = shouldWrap;
         return this;
     };
     /**
