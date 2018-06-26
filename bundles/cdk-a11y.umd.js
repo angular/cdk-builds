@@ -221,9 +221,7 @@ var AriaDescriber = /** @class */ (function () {
         var /** @type {?} */ messageElement = this._document.createElement('div');
         messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
         messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
-        if (!messagesContainer) {
-            this._createMessagesContainer();
-        } /** @type {?} */
+        this._createMessagesContainer(); /** @type {?} */
         ((messagesContainer)).appendChild(messageElement);
         messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
     };
@@ -254,11 +252,21 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        messagesContainer = this._document.createElement('div');
-        messagesContainer.setAttribute('id', MESSAGES_CONTAINER_ID);
-        messagesContainer.setAttribute('aria-hidden', 'true');
-        messagesContainer.style.display = 'none';
-        this._document.body.appendChild(messagesContainer);
+        if (!messagesContainer) {
+            var /** @type {?} */ preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
+            // When going from the server to the client, we may end up in a situation where there's
+            // already a container on the page, but we don't have a reference to it. Clear the
+            // old container so we don't get duplicates. Doing this, instead of emptying the previous
+            // container, should be slightly faster.
+            if (preExistingContainer) {
+                /** @type {?} */ ((preExistingContainer.parentNode)).removeChild(preExistingContainer);
+            }
+            messagesContainer = this._document.createElement('div');
+            messagesContainer.id = MESSAGES_CONTAINER_ID;
+            messagesContainer.setAttribute('aria-hidden', 'true');
+            messagesContainer.style.display = 'none';
+            this._document.body.appendChild(messagesContainer);
+        }
     };
     /**
      * Deletes the global messages container.
