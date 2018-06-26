@@ -1021,6 +1021,7 @@ class OverlayRef {
     detachBackdrop() {
         let /** @type {?} */ backdropToDetach = this._backdropElement;
         if (backdropToDetach) {
+            let /** @type {?} */ timeoutId;
             let /** @type {?} */ finishDetach = () => {
                 // It may not be attached to anything in certain cases (e.g. unit tests).
                 if (backdropToDetach && backdropToDetach.parentNode) {
@@ -1032,19 +1033,22 @@ class OverlayRef {
                 if (this._backdropElement == backdropToDetach) {
                     this._backdropElement = null;
                 }
+                clearTimeout(timeoutId);
             };
             backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
             if (this._config.backdropClass) {
                 this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
             }
-            backdropToDetach.addEventListener('transitionend', finishDetach);
+            this._ngZone.runOutsideAngular(() => {
+                /** @type {?} */ ((backdropToDetach)).addEventListener('transitionend', finishDetach);
+            });
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
             // In this case we make it unclickable and we try to remove it after a delay.
             backdropToDetach.style.pointerEvents = 'none';
             // Run this outside the Angular zone because there's nothing that Angular cares about.
             // If it were to run inside the Angular zone, every test that used Overlay would have to be
             // either async or fakeAsync.
-            this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
+            timeoutId = this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
         }
     }
     /**

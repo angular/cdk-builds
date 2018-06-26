@@ -1288,6 +1288,7 @@ OverlayRef = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ backdropToDetach = this._backdropElement;
         if (backdropToDetach) {
+            var /** @type {?} */ timeoutId_1;
             var /** @type {?} */ finishDetach_1 = function () {
                 // It may not be attached to anything in certain cases (e.g. unit tests).
                 if (backdropToDetach && backdropToDetach.parentNode) {
@@ -1299,19 +1300,25 @@ OverlayRef = /** @class */ (function () {
                 if (_this._backdropElement == backdropToDetach) {
                     _this._backdropElement = null;
                 }
+                clearTimeout(timeoutId_1);
             };
             backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
             if (this._config.backdropClass) {
                 this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
             }
-            backdropToDetach.addEventListener('transitionend', finishDetach_1);
+            this._ngZone.runOutsideAngular(function () {
+                /** @type {?} */ ((backdropToDetach)).addEventListener('transitionend', finishDetach_1);
+            });
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
             // In this case we make it unclickable and we try to remove it after a delay.
             backdropToDetach.style.pointerEvents = 'none';
             // Run this outside the Angular zone because there's nothing that Angular cares about.
             // If it were to run inside the Angular zone, every test that used Overlay would have to be
             // either async or fakeAsync.
-            this._ngZone.runOutsideAngular(function () { return setTimeout(finishDetach_1, 500); });
+            // Run this outside the Angular zone because there's nothing that Angular cares about.
+            // If it were to run inside the Angular zone, every test that used Overlay would have to be
+            // either async or fakeAsync.
+            timeoutId_1 = this._ngZone.runOutsideAngular(function () { return setTimeout(finishDetach_1, 500); });
         }
     };
     /**
