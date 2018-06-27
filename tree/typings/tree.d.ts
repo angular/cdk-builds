@@ -13,35 +13,6 @@ import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
 import { CdkTreeNodeOutlet } from './outlet';
 /**
- * Tree node for CdkTree. It contains the data in the tree node.
- */
-export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
-    protected _elementRef: ElementRef;
-    protected _tree: CdkTree<T>;
-    /**
-     * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
-     * in `CdkTree` and set the data to it.
-     */
-    static mostRecentTreeNode: CdkTreeNode<{}> | null;
-    /** Subject that emits when the component has been destroyed. */
-    protected _destroyed: Subject<void>;
-    /** The tree node's data. */
-    data: T;
-    protected _data: T;
-    readonly isExpanded: boolean;
-    readonly level: number;
-    /**
-     * The role of the node should be 'group' if it's an internal node,
-     * and 'treeitem' if it's a leaf node.
-     */
-    role: 'treeitem' | 'group';
-    constructor(_elementRef: ElementRef, _tree: CdkTree<T>);
-    ngOnDestroy(): void;
-    /** Focuses the menu item. Implements for FocusableOption. */
-    focus(): void;
-    private _setRoleFromData();
-}
-/**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
@@ -111,4 +82,33 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
      * within the data node view container.
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
+}
+/**
+ * Tree node for CdkTree. It contains the data in the tree node.
+ */
+export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
+    protected _elementRef: ElementRef;
+    protected _tree: CdkTree<T>;
+    /**
+     * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
+     * in `CdkTree` and set the data to it.
+     */
+    static mostRecentTreeNode: CdkTreeNode<{}> | null;
+    /** Subject that emits when the component has been destroyed. */
+    protected _destroyed: Subject<void>;
+    /** The tree node's data. */
+    data: T;
+    protected _data: T;
+    readonly isExpanded: boolean;
+    readonly level: number;
+    /**
+     * The role of the node should be 'group' if it's an internal node,
+     * and 'treeitem' if it's a leaf node.
+     */
+    role: 'treeitem' | 'group';
+    constructor(_elementRef: ElementRef, _tree: CdkTree<T>);
+    ngOnDestroy(): void;
+    /** Focuses the menu item. Implements for FocusableOption. */
+    focus(): void;
+    private _setRoleFromData();
 }
