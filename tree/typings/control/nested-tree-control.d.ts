@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 import { BaseTreeControl } from './base-tree-control';
 /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
 export declare class NestedTreeControl<T> extends BaseTreeControl<T> {
-    getChildren: (dataNode: T) => Observable<T[]>;
+    getChildren: (dataNode: T) => (Observable<T[]> | T[]);
     /** Construct with nested tree function getChildren. */
-    constructor(getChildren: (dataNode: T) => Observable<T[]>);
+    constructor(getChildren: (dataNode: T) => (Observable<T[]> | T[]));
     /**
      * Expands all dataNodes in the tree.
      *

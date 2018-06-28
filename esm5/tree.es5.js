@@ -7,9 +7,9 @@
  */
 import { SelectionModel } from '@angular/cdk/collections';
 import { __extends } from 'tslib';
+import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Directive, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, IterableDiffers, ViewChild, ViewEncapsulation, Optional, Renderer2, NgModule } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -323,11 +323,15 @@ NestedTreeControl = /** @class */ (function (_super) {
     function (descendants, dataNode) {
         var _this = this;
         descendants.push(dataNode);
-        this.getChildren(dataNode).pipe(take(1)).subscribe(function (children) {
-            if (children && children.length > 0) {
+        var /** @type {?} */ childrenNodes = this.getChildren(dataNode);
+        if (Array.isArray(childrenNodes)) {
+            childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
+        }
+        else if (childrenNodes instanceof Observable) {
+            childrenNodes.pipe(take(1)).subscribe(function (children) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
-            }
-        });
+            });
+        }
     };
     return NestedTreeControl;
 }(BaseTreeControl));
@@ -841,11 +845,26 @@ var CdkTreeNode = /** @class */ (function () {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            this._tree.treeControl.getChildren(this._data).pipe(takeUntil(this._destroyed))
-                .subscribe(function (children) {
-                _this.role = children && children.length ? 'group' : 'treeitem';
-            });
+            var /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this._data);
+            if (Array.isArray(childrenNodes)) {
+                this._setRoleFromChildren(/** @type {?} */ (childrenNodes));
+            }
+            else if (childrenNodes instanceof Observable) {
+                childrenNodes.pipe(takeUntil(this._destroyed))
+                    .subscribe(function (children) { return _this._setRoleFromChildren(children); });
+            }
         }
+    };
+    /**
+     * @param {?} children
+     * @return {?}
+     */
+    CdkTreeNode.prototype._setRoleFromChildren = /**
+     * @param {?} children
+     * @return {?}
+     */
+    function (children) {
+        this.role = children && children.length ? 'group' : 'treeitem';
     };
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
@@ -922,11 +941,14 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        this._tree.treeControl.getChildren(this.data).pipe(takeUntil(this._destroyed))
-            .subscribe(function (result) {
-            _this._children = result;
-            _this.updateChildrenNodes();
-        });
+        var /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this.data);
+        if (Array.isArray(childrenNodes)) {
+            this.updateChildrenNodes(/** @type {?} */ (childrenNodes));
+        }
+        else if (childrenNodes instanceof Observable) {
+            childrenNodes.pipe(takeUntil(this._destroyed))
+                .subscribe(function (result) { return _this.updateChildrenNodes(result); });
+        }
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
             .subscribe(function () { return _this.updateChildrenNodes(); });
     };
@@ -943,13 +965,18 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
     /** Add children dataNodes to the NodeOutlet */
     /**
      * Add children dataNodes to the NodeOutlet
+     * @param {?=} children
      * @return {?}
      */
     CdkNestedTreeNode.prototype.updateChildrenNodes = /**
      * Add children dataNodes to the NodeOutlet
+     * @param {?=} children
      * @return {?}
      */
-    function () {
+    function (children) {
+        if (children) {
+            this._children = children;
+        }
         if (this.nodeOutlet.length && this._children) {
             var /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);

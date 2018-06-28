@@ -43,7 +43,7 @@ export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements Afte
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /** Add children dataNodes to the NodeOutlet */
-    protected updateChildrenNodes(): void;
+    protected updateChildrenNodes(children?: T[]): void;
     /** Clear the children dataNodes. */
     protected _clear(): void;
 }

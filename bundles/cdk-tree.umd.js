@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs/operators'), require('@angular/core'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs/operators', '@angular/core', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.rxjs.operators,global.ng.core,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
-}(this, (function (exports,collections,operators,core,rxjs,bidi,coercion,a11y,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}),global.ng.cdk.collections,global.rxjs,global.rxjs.operators,global.ng.core,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.a11y,global.ng.common));
+}(this, (function (exports,collections,rxjs,operators,core,bidi,coercion,a11y,common) { 'use strict';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -345,11 +345,15 @@ NestedTreeControl = /** @class */ (function (_super) {
     function (descendants, dataNode) {
         var _this = this;
         descendants.push(dataNode);
-        this.getChildren(dataNode).pipe(operators.take(1)).subscribe(function (children) {
-            if (children && children.length > 0) {
+        var /** @type {?} */ childrenNodes = this.getChildren(dataNode);
+        if (Array.isArray(childrenNodes)) {
+            childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
+        }
+        else if (childrenNodes instanceof rxjs.Observable) {
+            childrenNodes.pipe(operators.take(1)).subscribe(function (children) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
-            }
-        });
+            });
+        }
     };
     return NestedTreeControl;
 }(BaseTreeControl));
@@ -863,11 +867,26 @@ var CdkTreeNode = /** @class */ (function () {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            this._tree.treeControl.getChildren(this._data).pipe(operators.takeUntil(this._destroyed))
-                .subscribe(function (children) {
-                _this.role = children && children.length ? 'group' : 'treeitem';
-            });
+            var /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this._data);
+            if (Array.isArray(childrenNodes)) {
+                this._setRoleFromChildren(/** @type {?} */ (childrenNodes));
+            }
+            else if (childrenNodes instanceof rxjs.Observable) {
+                childrenNodes.pipe(operators.takeUntil(this._destroyed))
+                    .subscribe(function (children) { return _this._setRoleFromChildren(children); });
+            }
         }
+    };
+    /**
+     * @param {?} children
+     * @return {?}
+     */
+    CdkTreeNode.prototype._setRoleFromChildren = /**
+     * @param {?} children
+     * @return {?}
+     */
+    function (children) {
+        this.role = children && children.length ? 'group' : 'treeitem';
     };
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
@@ -944,11 +963,14 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        this._tree.treeControl.getChildren(this.data).pipe(operators.takeUntil(this._destroyed))
-            .subscribe(function (result) {
-            _this._children = result;
-            _this.updateChildrenNodes();
-        });
+        var /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this.data);
+        if (Array.isArray(childrenNodes)) {
+            this.updateChildrenNodes(/** @type {?} */ (childrenNodes));
+        }
+        else if (childrenNodes instanceof rxjs.Observable) {
+            childrenNodes.pipe(operators.takeUntil(this._destroyed))
+                .subscribe(function (result) { return _this.updateChildrenNodes(result); });
+        }
         this.nodeOutlet.changes.pipe(operators.takeUntil(this._destroyed))
             .subscribe(function () { return _this.updateChildrenNodes(); });
     };
@@ -965,13 +987,18 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
     /** Add children dataNodes to the NodeOutlet */
     /**
      * Add children dataNodes to the NodeOutlet
+     * @param {?=} children
      * @return {?}
      */
     CdkNestedTreeNode.prototype.updateChildrenNodes = /**
      * Add children dataNodes to the NodeOutlet
+     * @param {?=} children
      * @return {?}
      */
-    function () {
+    function (children) {
+        if (children) {
+            this._children = children;
+        }
         if (this.nodeOutlet.length && this._children) {
             var /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);

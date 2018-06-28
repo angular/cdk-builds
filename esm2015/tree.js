@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { SelectionModel } from '@angular/cdk/collections';
+import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Directive, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, IterableDiffers, ViewChild, ViewEncapsulation, Optional, Renderer2, NgModule } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -202,11 +202,15 @@ class NestedTreeControl extends BaseTreeControl {
      */
     _getDescendants(descendants, dataNode) {
         descendants.push(dataNode);
-        this.getChildren(dataNode).pipe(take(1)).subscribe(children => {
-            if (children && children.length > 0) {
+        const /** @type {?} */ childrenNodes = this.getChildren(dataNode);
+        if (Array.isArray(childrenNodes)) {
+            childrenNodes.forEach((child) => this._getDescendants(descendants, child));
+        }
+        else if (childrenNodes instanceof Observable) {
+            childrenNodes.pipe(take(1)).subscribe(children => {
                 children.forEach((child) => this._getDescendants(descendants, child));
-            }
-        });
+            });
+        }
     }
 }
 
@@ -638,11 +642,22 @@ class CdkTreeNode {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            this._tree.treeControl.getChildren(this._data).pipe(takeUntil(this._destroyed))
-                .subscribe(children => {
-                this.role = children && children.length ? 'group' : 'treeitem';
-            });
+            const /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this._data);
+            if (Array.isArray(childrenNodes)) {
+                this._setRoleFromChildren(/** @type {?} */ (childrenNodes));
+            }
+            else if (childrenNodes instanceof Observable) {
+                childrenNodes.pipe(takeUntil(this._destroyed))
+                    .subscribe(children => this._setRoleFromChildren(children));
+            }
         }
+    }
+    /**
+     * @param {?} children
+     * @return {?}
+     */
+    _setRoleFromChildren(children) {
+        this.role = children && children.length ? 'group' : 'treeitem';
     }
 }
 /**
@@ -717,11 +732,14 @@ class CdkNestedTreeNode extends CdkTreeNode {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        this._tree.treeControl.getChildren(this.data).pipe(takeUntil(this._destroyed))
-            .subscribe(result => {
-            this._children = result;
-            this.updateChildrenNodes();
-        });
+        const /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this.data);
+        if (Array.isArray(childrenNodes)) {
+            this.updateChildrenNodes(/** @type {?} */ (childrenNodes));
+        }
+        else if (childrenNodes instanceof Observable) {
+            childrenNodes.pipe(takeUntil(this._destroyed))
+                .subscribe(result => this.updateChildrenNodes(result));
+        }
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
             .subscribe(() => this.updateChildrenNodes());
     }
@@ -734,9 +752,13 @@ class CdkNestedTreeNode extends CdkTreeNode {
     }
     /**
      * Add children dataNodes to the NodeOutlet
+     * @param {?=} children
      * @return {?}
      */
-    updateChildrenNodes() {
+    updateChildrenNodes(children) {
+        if (children) {
+            this._children = children;
+        }
         if (this.nodeOutlet.length && this._children) {
             const /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);

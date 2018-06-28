@@ -110,5 +110,6 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     ngOnDestroy(): void;
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;
-    private _setRoleFromData();
+    protected _setRoleFromData(): void;
+    protected _setRoleFromChildren(children: T[]): void;
 }
