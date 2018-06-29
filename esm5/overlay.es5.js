@@ -11,7 +11,7 @@ import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_P
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { __assign, __extends } from 'tslib';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -630,14 +630,18 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
          * Keyboard event listener that will be attached to the body.
          */
         this._keydownListener = function (event) {
-            if (_this._attachedOverlays.length) {
-                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
-                // rather than trying to match where the event came from, because some components might open
-                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
-                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
-                // rather than trying to match where the event came from, because some components might open
-                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
-                _this._attachedOverlays[_this._attachedOverlays.length - 1]._keydownEvents.next(event);
+            var /** @type {?} */ overlays = _this._attachedOverlays;
+            for (var /** @type {?} */ i = overlays.length - 1; i > -1; i--) {
+                // Dispatch the keydown event to the top overlay which has subscribers to its keydown events.
+                // We want to target the most recent overlay, rather than trying to match where the event came
+                // from, because some components might open an overlay, but keep focus on a trigger element
+                // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
+                // because we don't want overlays that don't handle keyboard events to block the ones below
+                // them that do.
+                if (overlays[i]._keydownEventSubscriptions > 0) {
+                    overlays[i]._keydownEvents.next(event);
+                    break;
+                }
             }
         };
         this._document = document;
@@ -854,6 +858,7 @@ var  /**
  */
 OverlayRef = /** @class */ (function () {
     function OverlayRef(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document) {
+        var _this = this;
         this._portalOutlet = _portalOutlet;
         this._host = _host;
         this._pane = _pane;
@@ -865,10 +870,22 @@ OverlayRef = /** @class */ (function () {
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
+        this._keydownEventsObservable = Observable.create(function (observer) {
+            var /** @type {?} */ subscription = _this._keydownEvents.subscribe(observer);
+            _this._keydownEventSubscriptions++;
+            return function () {
+                subscription.unsubscribe();
+                _this._keydownEventSubscriptions--;
+            };
+        });
         /**
          * Stream of keydown events dispatched to this overlay.
          */
         this._keydownEvents = new Subject();
+        /**
+         * Amount of subscriptions to the keydown events.
+         */
+        this._keydownEventSubscriptions = 0;
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -1100,7 +1117,7 @@ OverlayRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._keydownEvents.asObservable();
+        return this._keydownEventsObservable;
     };
     /** Gets the the current overlay configuration, which is immutable. */
     /**

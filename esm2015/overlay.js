@@ -10,7 +10,7 @@ import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angula
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -536,11 +536,18 @@ class OverlayKeyboardDispatcher {
          * Keyboard event listener that will be attached to the body.
          */
         this._keydownListener = (event) => {
-            if (this._attachedOverlays.length) {
-                // Dispatch the keydown event to the top overlay. We want to target the most recent overlay,
-                // rather than trying to match where the event came from, because some components might open
-                // an overlay, but keep focus on a trigger element (e.g. for select and autocomplete).
-                this._attachedOverlays[this._attachedOverlays.length - 1]._keydownEvents.next(event);
+            const /** @type {?} */ overlays = this._attachedOverlays;
+            for (let /** @type {?} */ i = overlays.length - 1; i > -1; i--) {
+                // Dispatch the keydown event to the top overlay which has subscribers to its keydown events.
+                // We want to target the most recent overlay, rather than trying to match where the event came
+                // from, because some components might open an overlay, but keep focus on a trigger element
+                // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
+                // because we don't want overlays that don't handle keyboard events to block the ones below
+                // them that do.
+                if (overlays[i]._keydownEventSubscriptions > 0) {
+                    overlays[i]._keydownEvents.next(event);
+                    break;
+                }
             }
         };
         this._document = document;
@@ -731,10 +738,22 @@ class OverlayRef {
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
+        this._keydownEventsObservable = Observable.create(observer => {
+            const /** @type {?} */ subscription = this._keydownEvents.subscribe(observer);
+            this._keydownEventSubscriptions++;
+            return () => {
+                subscription.unsubscribe();
+                this._keydownEventSubscriptions--;
+            };
+        });
         /**
          * Stream of keydown events dispatched to this overlay.
          */
         this._keydownEvents = new Subject();
+        /**
+         * Amount of subscriptions to the keydown events.
+         */
+        this._keydownEventSubscriptions = 0;
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
@@ -894,7 +913,7 @@ class OverlayRef {
      * @return {?}
      */
     keydownEvents() {
-        return this._keydownEvents.asObservable();
+        return this._keydownEventsObservable;
     }
     /**
      * Gets the the current overlay configuration, which is immutable.
