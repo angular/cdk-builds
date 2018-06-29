@@ -982,6 +982,7 @@ class FocusTrap {
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._hasAttached = false;
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1018,27 +1019,30 @@ class FocusTrap {
     /**
      * Inserts the anchors into the DOM. This is usually done automatically
      * in the constructor, but can be deferred for cases like directives with `*ngIf`.
-     * @return {?}
+     * @return {?} Whether the focus trap managed to attach successfuly. This may not be the case
+     * if the target element isn't currently in the DOM.
      */
     attachAnchors() {
-        if (!this._startAnchor) {
-            this._startAnchor = this._createAnchor();
-        }
-        if (!this._endAnchor) {
-            this._endAnchor = this._createAnchor();
+        // If we're not on the browser, there can be no focus to trap.
+        if (this._hasAttached) {
+            return true;
         }
         this._ngZone.runOutsideAngular(() => {
-            /** @type {?} */ ((this._startAnchor)).addEventListener('focus', () => {
-                this.focusLastTabbableElement();
-            }); /** @type {?} */
-            ((this._endAnchor)).addEventListener('focus', () => {
-                this.focusFirstTabbableElement();
-            });
-            if (this._element.parentNode) {
-                this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
-                this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
+            if (!this._startAnchor) {
+                this._startAnchor = this._createAnchor(); /** @type {?} */
+                ((this._startAnchor)).addEventListener('focus', () => this.focusLastTabbableElement());
+            }
+            if (!this._endAnchor) {
+                this._endAnchor = this._createAnchor(); /** @type {?} */
+                ((this._endAnchor)).addEventListener('focus', () => this.focusFirstTabbableElement());
             }
         });
+        if (this._element.parentNode) {
+            this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
+            this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
+            this._hasAttached = true;
+        }
+        return this._hasAttached;
     }
     /**
      * Waits for the zone to stabilize, then either focuses the first element that the
@@ -1143,6 +1147,13 @@ class FocusTrap {
             redirectToElement.focus();
         }
         return !!redirectToElement;
+    }
+    /**
+     * Checks whether the focus trap has successfuly been attached.
+     * @return {?}
+     */
+    hasAttached() {
+        return this._hasAttached;
     }
     /**
      * Get the first tabbable element from a DOM subtree (inclusive).
@@ -1307,6 +1318,14 @@ class CdkTrapFocus {
         if (this.autoCapture) {
             this._previouslyFocusedElement = /** @type {?} */ (this._document.activeElement);
             this.focusTrap.focusInitialElementWhenReady();
+        }
+    }
+    /**
+     * @return {?}
+     */
+    ngDoCheck() {
+        if (!this.focusTrap.hasAttached()) {
+            this.focusTrap.attachAnchors();
         }
     }
 }

@@ -1,4 +1,4 @@
-import { AfterContentInit, ElementRef, NgZone, OnDestroy } from '@angular/core';
+import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -14,6 +14,7 @@ export declare class FocusTrap {
     private _document;
     private _startAnchor;
     private _endAnchor;
+    private _hasAttached;
     /** Whether the focus trap is active. */
     enabled: boolean;
     private _enabled;
@@ -23,8 +24,10 @@ export declare class FocusTrap {
     /**
      * Inserts the anchors into the DOM. This is usually done automatically
      * in the constructor, but can be deferred for cases like directives with `*ngIf`.
+     * @returns Whether the focus trap managed to attach successfuly. This may not be the case
+     * if the target element isn't currently in the DOM.
      */
-    attachAnchors(): void;
+    attachAnchors(): boolean;
     /**
      * Waits for the zone to stabilize, then either focuses the first element that the
      * user specified, or the first tabbable element.
@@ -67,6 +70,10 @@ export declare class FocusTrap {
      * @returns Whether focus was moved successfuly.
      */
     focusLastTabbableElement(): boolean;
+    /**
+     * Checks whether the focus trap has successfuly been attached.
+     */
+    hasAttached(): boolean;
     /** Get the first tabbable element from a DOM subtree (inclusive). */
     private _getFirstTabbableElement(root);
     /** Get the last tabbable element from a DOM subtree (inclusive). */
@@ -92,7 +99,7 @@ export declare class FocusTrapFactory {
     create(element: HTMLElement, deferCaptureElements?: boolean): FocusTrap;
 }
 /** Directive for trapping focus within a region. */
-export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
+export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoCheck {
     private _elementRef;
     private _focusTrapFactory;
     private _document;
@@ -111,4 +118,5 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit {
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
+    ngDoCheck(): void;
 }

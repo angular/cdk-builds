@@ -1295,6 +1295,7 @@ FocusTrap = /** @class */ (function () {
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
+        this._hasAttached = false;
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1341,37 +1342,43 @@ FocusTrap = /** @class */ (function () {
     /**
      * Inserts the anchors into the DOM. This is usually done automatically
      * in the constructor, but can be deferred for cases like directives with `*ngIf`.
+     * @returns Whether the focus trap managed to attach successfuly. This may not be the case
+     * if the target element isn't currently in the DOM.
      */
     /**
      * Inserts the anchors into the DOM. This is usually done automatically
      * in the constructor, but can be deferred for cases like directives with `*ngIf`.
-     * @return {?}
+     * @return {?} Whether the focus trap managed to attach successfuly. This may not be the case
+     * if the target element isn't currently in the DOM.
      */
     FocusTrap.prototype.attachAnchors = /**
      * Inserts the anchors into the DOM. This is usually done automatically
      * in the constructor, but can be deferred for cases like directives with `*ngIf`.
-     * @return {?}
+     * @return {?} Whether the focus trap managed to attach successfuly. This may not be the case
+     * if the target element isn't currently in the DOM.
      */
     function () {
         var _this = this;
-        if (!this._startAnchor) {
-            this._startAnchor = this._createAnchor();
-        }
-        if (!this._endAnchor) {
-            this._endAnchor = this._createAnchor();
+        // If we're not on the browser, there can be no focus to trap.
+        if (this._hasAttached) {
+            return true;
         }
         this._ngZone.runOutsideAngular(function () {
-            /** @type {?} */ ((_this._startAnchor)).addEventListener('focus', function () {
-                _this.focusLastTabbableElement();
-            }); /** @type {?} */
-            ((_this._endAnchor)).addEventListener('focus', function () {
-                _this.focusFirstTabbableElement();
-            });
-            if (_this._element.parentNode) {
-                _this._element.parentNode.insertBefore(/** @type {?} */ ((_this._startAnchor)), _this._element);
-                _this._element.parentNode.insertBefore(/** @type {?} */ ((_this._endAnchor)), _this._element.nextSibling);
+            if (!_this._startAnchor) {
+                _this._startAnchor = _this._createAnchor(); /** @type {?} */
+                ((_this._startAnchor)).addEventListener('focus', function () { return _this.focusLastTabbableElement(); });
+            }
+            if (!_this._endAnchor) {
+                _this._endAnchor = _this._createAnchor(); /** @type {?} */
+                ((_this._endAnchor)).addEventListener('focus', function () { return _this.focusFirstTabbableElement(); });
             }
         });
+        if (this._element.parentNode) {
+            this._element.parentNode.insertBefore(/** @type {?} */ ((this._startAnchor)), this._element);
+            this._element.parentNode.insertBefore(/** @type {?} */ ((this._endAnchor)), this._element.nextSibling);
+            this._hasAttached = true;
+        }
+        return this._hasAttached;
     };
     /**
      * Waits for the zone to stabilize, then either focuses the first element that the
@@ -1544,6 +1551,20 @@ FocusTrap = /** @class */ (function () {
             redirectToElement.focus();
         }
         return !!redirectToElement;
+    };
+    /**
+     * Checks whether the focus trap has successfuly been attached.
+     */
+    /**
+     * Checks whether the focus trap has successfuly been attached.
+     * @return {?}
+     */
+    FocusTrap.prototype.hasAttached = /**
+     * Checks whether the focus trap has successfuly been attached.
+     * @return {?}
+     */
+    function () {
+        return this._hasAttached;
     };
     /**
      * Get the first tabbable element from a DOM subtree (inclusive).
@@ -1748,6 +1769,17 @@ var CdkTrapFocus = /** @class */ (function () {
         if (this.autoCapture) {
             this._previouslyFocusedElement = /** @type {?} */ (this._document.activeElement);
             this.focusTrap.focusInitialElementWhenReady();
+        }
+    };
+    /**
+     * @return {?}
+     */
+    CdkTrapFocus.prototype.ngDoCheck = /**
+     * @return {?}
+     */
+    function () {
+        if (!this.focusTrap.hasAttached()) {
+            this.focusTrap.attachAnchors();
         }
     };
     CdkTrapFocus.decorators = [
