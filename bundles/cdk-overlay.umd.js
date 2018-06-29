@@ -3230,6 +3230,9 @@ GlobalPositionStrategy = /** @class */ (function () {
         if (config.width === '100%') {
             parentStyles.justifyContent = 'flex-start';
         }
+        else if (this._justifyContent === 'center') {
+            parentStyles.justifyContent = 'center';
+        }
         else if (this._overlayRef.getConfig().direction === 'rtl') {
             // In RTL the browser will invert `flex-start` and `flex-end` automatically, but we
             // don't want that because our positioning is explicitly `left` and `right`, hence
