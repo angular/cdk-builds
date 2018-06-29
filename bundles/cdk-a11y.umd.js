@@ -2107,26 +2107,30 @@ var FocusMonitor = /** @class */ (function () {
     };
     /**
      * Focuses the element via the specified focus origin.
-     * @param element The element to focus.
-     * @param origin The focus origin.
+     * @param element Element to focus.
+     * @param origin Focus origin.
+     * @param focusOption Options that can be used to configure the focus behavior.
      */
     /**
      * Focuses the element via the specified focus origin.
-     * @param {?} element The element to focus.
-     * @param {?} origin The focus origin.
+     * @param {?} element Element to focus.
+     * @param {?} origin Focus origin.
+     * @param {?=} options
      * @return {?}
      */
     FocusMonitor.prototype.focusVia = /**
      * Focuses the element via the specified focus origin.
-     * @param {?} element The element to focus.
-     * @param {?} origin The focus origin.
+     * @param {?} element Element to focus.
+     * @param {?} origin Focus origin.
+     * @param {?=} options
      * @return {?}
      */
-    function (element, origin) {
+    function (element, origin, options) {
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
         if (typeof element.focus === 'function') {
-            element.focus();
+            // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
+            (/** @type {?} */ (element)).focus(options);
         }
     };
     /**

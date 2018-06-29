@@ -10,6 +10,14 @@ import { ElementRef, EventEmitter, NgZone, OnDestroy, Optional } from '@angular/
 import { Observable } from 'rxjs';
 export declare const TOUCH_BUFFER_MS = 650;
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
+/**
+ * Corresponds to the options that can be passed to the native `focus` event.
+ * via https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+ */
+export interface FocusOptions {
+    /** Whether the browser should scroll to the element when it is focused. */
+    preventScroll?: boolean;
+}
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
 export declare class FocusMonitor implements OnDestroy {
     private _ngZone;
@@ -50,10 +58,11 @@ export declare class FocusMonitor implements OnDestroy {
     stopMonitoring(element: HTMLElement): void;
     /**
      * Focuses the element via the specified focus origin.
-     * @param element The element to focus.
-     * @param origin The focus origin.
+     * @param element Element to focus.
+     * @param origin Focus origin.
+     * @param focusOption Options that can be used to configure the focus behavior.
      */
-    focusVia(element: HTMLElement, origin: FocusOrigin): void;
+    focusVia(element: HTMLElement, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
     /** Register necessary event listeners on the document and window. */
     private _registerGlobalListeners();

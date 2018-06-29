@@ -1598,15 +1598,17 @@ class FocusMonitor {
     }
     /**
      * Focuses the element via the specified focus origin.
-     * @param {?} element The element to focus.
-     * @param {?} origin The focus origin.
+     * @param {?} element Element to focus.
+     * @param {?} origin Focus origin.
+     * @param {?=} options
      * @return {?}
      */
-    focusVia(element, origin) {
+    focusVia(element, origin, options) {
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
         if (typeof element.focus === 'function') {
-            element.focus();
+            // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
+            (/** @type {?} */ (element)).focus(options);
         }
     }
     /**
