@@ -2202,7 +2202,7 @@ var FocusMonitor = /** @class */ (function () {
             }
         };
         // When the touchstart event fires the focus event is not yet in the event queue. This means
-        // we can't rely on the trick used above (setting timeout of 0ms). Instead we wait 650ms to
+        // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
         // see if a focus happens.
         var /** @type {?} */ documentTouchstartListener = function (event) {
             if (_this._touchTimeoutId != null) {
@@ -2292,7 +2292,13 @@ var FocusMonitor = /** @class */ (function () {
         var _this = this;
         this._ngZone.runOutsideAngular(function () {
             _this._origin = origin;
-            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; });
+            // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
+            // tick after the interaction event fired. To ensure the focus origin is always correct,
+            // the focus origin will be determined at the beginning of the next tick.
+            // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
+            // tick after the interaction event fired. To ensure the focus origin is always correct,
+            // the focus origin will be determined at the beginning of the next tick.
+            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
         });
     };
     /**
