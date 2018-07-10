@@ -2695,6 +2695,10 @@ class CdkConnectedOverlay {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new EventEmitter();
+        /**
+         * Emits when there are keyboard events that are targeted at the overlay.
+         */
+        this.overlayKeydown = new EventEmitter();
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
     }
     /**
@@ -2900,6 +2904,7 @@ class CdkConnectedOverlay {
         if (!this._overlayRef) {
             this._createOverlay(); /** @type {?} */
             ((this._overlayRef)).keydownEvents().subscribe((event) => {
+                this.overlayKeydown.next(event);
                 if (event.keyCode === ESCAPE) {
                     this._detachOverlay();
                 }
@@ -2982,6 +2987,7 @@ CdkConnectedOverlay.propDecorators = {
     "positionChange": [{ type: Output },],
     "attach": [{ type: Output },],
     "detach": [{ type: Output },],
+    "overlayKeydown": [{ type: Output },],
 };
 /**
  * \@docs-private

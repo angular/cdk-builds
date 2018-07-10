@@ -88,6 +88,8 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     attach: EventEmitter<void>;
     /** Event emitted when the overlay has been detached. */
     detach: EventEmitter<void>;
+    /** Emits when there are keyboard events that are targeted at the overlay. */
+    overlayKeydown: EventEmitter<KeyboardEvent>;
     constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, _scrollStrategy: any, _dir: Directionality);
     /** The associated overlay reference. */
     readonly overlayRef: OverlayRef;

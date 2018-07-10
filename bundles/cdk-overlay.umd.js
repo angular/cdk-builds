@@ -3611,6 +3611,10 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * Event emitted when the overlay has been detached.
          */
         this.detach = new core.EventEmitter();
+        /**
+         * Emits when there are keyboard events that are targeted at the overlay.
+         */
+        this.overlayKeydown = new core.EventEmitter();
         this._templatePortal = new portal.TemplatePortal(templateRef, viewContainerRef);
     }
     Object.defineProperty(CdkConnectedOverlay.prototype, "offsetX", {
@@ -3888,6 +3892,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         if (!this._overlayRef) {
             this._createOverlay(); /** @type {?} */
             ((this._overlayRef)).keydownEvents().subscribe(function (event) {
+                _this.overlayKeydown.next(event);
                 if (event.keyCode === keycodes.ESCAPE) {
                     _this._detachOverlay();
                 }
@@ -3977,6 +3982,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         "positionChange": [{ type: core.Output },],
         "attach": [{ type: core.Output },],
         "detach": [{ type: core.Output },],
+        "overlayKeydown": [{ type: core.Output },],
     };
     return CdkConnectedOverlay;
 }());
