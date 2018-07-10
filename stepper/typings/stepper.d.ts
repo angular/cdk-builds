@@ -39,8 +39,15 @@ export declare class CdkStep implements OnChanges {
     stepControl: AbstractControl;
     /** Whether user has seen the expanded step content or not. */
     interacted: boolean;
-    /** Label of the step. */
+    /** Plain text label of the step. */
     label: string;
+    /** Aria label for the tab. */
+    ariaLabel: string;
+    /**
+     * Reference to the element that the tab is labelled by.
+     * Will be cleared if `aria-label` is set at the same time.
+     */
+    ariaLabelledby: string;
     /** Whether the user can return to this step once it has been marked as complted. */
     editable: boolean;
     private _editable;

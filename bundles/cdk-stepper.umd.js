@@ -179,6 +179,8 @@ var CdkStep = /** @class */ (function () {
         "content": [{ type: core.ViewChild, args: [core.TemplateRef,] },],
         "stepControl": [{ type: core.Input },],
         "label": [{ type: core.Input },],
+        "ariaLabel": [{ type: core.Input, args: ['aria-label',] },],
+        "ariaLabelledby": [{ type: core.Input, args: ['aria-labelledby',] },],
         "editable": [{ type: core.Input },],
         "optional": [{ type: core.Input },],
         "completed": [{ type: core.Input },],

@@ -154,6 +154,8 @@ CdkStep.propDecorators = {
     "content": [{ type: ViewChild, args: [TemplateRef,] },],
     "stepControl": [{ type: Input },],
     "label": [{ type: Input },],
+    "ariaLabel": [{ type: Input, args: ['aria-label',] },],
+    "ariaLabelledby": [{ type: Input, args: ['aria-labelledby',] },],
     "editable": [{ type: Input },],
     "optional": [{ type: Input },],
     "completed": [{ type: Input },],
