@@ -2119,20 +2119,20 @@ var FocusMonitor = /** @class */ (function () {
      * Focuses the element via the specified focus origin.
      * @param element Element to focus.
      * @param origin Focus origin.
-     * @param focusOption Options that can be used to configure the focus behavior.
+     * @param options Options that can be used to configure the focus behavior.
      */
     /**
      * Focuses the element via the specified focus origin.
      * @param {?} element Element to focus.
      * @param {?} origin Focus origin.
-     * @param {?=} options
+     * @param {?=} options Options that can be used to configure the focus behavior.
      * @return {?}
      */
     FocusMonitor.prototype.focusVia = /**
      * Focuses the element via the specified focus origin.
      * @param {?} element Element to focus.
      * @param {?} origin Focus origin.
-     * @param {?=} options
+     * @param {?=} options Options that can be used to configure the focus behavior.
      * @return {?}
      */
     function (element, origin, options) {

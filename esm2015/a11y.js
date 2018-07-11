@@ -1619,7 +1619,7 @@ class FocusMonitor {
      * Focuses the element via the specified focus origin.
      * @param {?} element Element to focus.
      * @param {?} origin Focus origin.
-     * @param {?=} options
+     * @param {?=} options Options that can be used to configure the focus behavior.
      * @return {?}
      */
     focusVia(element, origin, options) {
