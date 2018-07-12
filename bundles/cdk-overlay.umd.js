@@ -1052,10 +1052,13 @@ OverlayRef = /** @class */ (function () {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
+        if (this._config.panelClass) {
+            this._toggleClasses(this._pane, this._config.panelClass, false);
+        }
         var /** @type {?} */ detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
         this._detachments.next();
-        // Remove this overlay from keyboard dispatcher tracking
+        // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
         return detachmentResult;
     };
@@ -1414,11 +1417,12 @@ var   /**
  * of the overlay.
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
-    function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform) {
+    function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform, _overlayContainer) {
         var _this = this;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
+        this._overlayContainer = _overlayContainer;
         /**
          * Whether we're performing the very first positioning of the overlay.
          */
@@ -1574,6 +1578,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function () {
         // We shouldn't do anything if the strategy was disposed or we're on the server.
+        // @deletion-target 7.0.0 Remove `_platform` null check once it's guaranteed to be defined.
         if (this._isDisposed || (this._platform && !this._platform.isBrowser)) {
             return;
         }
@@ -2432,6 +2437,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
         }
+        // @deletion-target 7.0.0 Currently the `_overlayContainer` is optional in order to avoid a
+        // breaking change. The null check here can be removed once the `_overlayContainer` becomes
+        // a required parameter.
+        var /** @type {?} */ virtualKeyboardOffset = this._overlayContainer ?
+            this._overlayContainer.getContainerElement().getBoundingClientRect().top : 0;
+        // Normally this would be zero, however when the overlay is attached to an input (e.g. in an
+        // autocomplete), mobile browsers will shift everything in order to put the input in the middle
+        // of the screen and to make space for the virtual keyboard. We need to account for this offset,
+        // otherwise our positioning will be thrown off.
+        overlayPoint.y -= virtualKeyboardOffset;
         // We want to set either `top` or `bottom` based on whether the overlay wants to appear
         // above or below the origin and the direction in which the element will expand.
         if (position.overlayY === 'bottom') {
@@ -3300,11 +3315,12 @@ GlobalPositionStrategy = /** @class */ (function () {
  */
 var OverlayPositionBuilder = /** @class */ (function () {
     function OverlayPositionBuilder(_viewportRuler, _document, 
-    // @deletion-target 7.0.0 `_platform` parameter to be made required.
-    _platform) {
+    // @deletion-target 7.0.0 `_platform` and `_overlayContainer` parameters to be made required.
+    _platform, _overlayContainer) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
+        this._overlayContainer = _overlayContainer;
     }
     /**
      * Creates a global position strategy.
@@ -3364,7 +3380,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
      * @return {?}
      */
     function (elementRef) {
-        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document, this._platform);
+        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     };
     OverlayPositionBuilder.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
@@ -3374,8 +3390,9 @@ var OverlayPositionBuilder = /** @class */ (function () {
         { type: scrolling.ViewportRuler, },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
         { type: platform.Platform, decorators: [{ type: core.Optional },] },
+        { type: OverlayContainer, decorators: [{ type: core.Optional },] },
     ]; };
-    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.inject(scrolling.ViewportRuler), core.inject(common.DOCUMENT), core.inject(platform.Platform, 8)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.inject(scrolling.ViewportRuler), core.inject(common.DOCUMENT), core.inject(platform.Platform, 8), core.inject(OverlayContainer, 8)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
 
