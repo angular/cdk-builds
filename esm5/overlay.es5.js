@@ -667,6 +667,8 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
      * @return {?}
      */
     function (overlayRef) {
+        // Ensure that we don't get the same overlay multiple times.
+        this.remove(overlayRef);
         // Lazily start dispatcher once first overlay is added
         if (!this._isAttached) {
             this._document.body.addEventListener('keydown', this._keydownListener, true);
