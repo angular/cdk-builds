@@ -621,6 +621,11 @@ class CdkTreeNode {
      * @return {?}
      */
     ngOnDestroy() {
+        // If this is the last tree node being destroyed,
+        // clear out the reference to avoid leaking memory.
+        if (CdkTreeNode.mostRecentTreeNode === this) {
+            CdkTreeNode.mostRecentTreeNode = null;
+        }
         this._destroyed.next();
         this._destroyed.complete();
     }
