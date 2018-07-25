@@ -1375,9 +1375,9 @@ class LiveAnnouncer {
      */
     constructor(elementToken, _document) {
         this._document = _document;
-        // We inject the live element as `any` because the constructor signature cannot reference
-        // browser globals (HTMLElement) on non-browser environments, since having a class decorator
-        // causes TypeScript to preserve the constructor signature types.
+        // We inject the live element and document as `any` because the constructor signature cannot
+        // reference browser globals (HTMLElement, Document) on non-browser environments, since having
+        // a class decorator causes TypeScript to preserve the constructor signature types.
         this._liveElement = elementToken || this._createLiveElement();
     }
     /**
@@ -1415,6 +1415,7 @@ class LiveAnnouncer {
      */
     _createLiveElement() {
         let /** @type {?} */ liveEl = this._document.createElement('div');
+        liveEl.classList.add('cdk-live-announcer-element');
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
         liveEl.setAttribute('aria-live', 'polite');
