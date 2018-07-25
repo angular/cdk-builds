@@ -111,6 +111,14 @@ function supportsPassiveEventListeners() {
     return supportsPassiveEvents;
 }
 /**
+ * Check whether the browser supports scroll behaviors.
+ * @return {?}
+ */
+function supportsScrollBehavior() {
+    return !!(document && document.documentElement && document.documentElement.style &&
+        'scrollBehavior' in document.documentElement.style);
+}
+/**
  * Cached result Set of input types support by the current browser.
  */
 var /** @type {?} */ supportedInputTypes;
@@ -179,6 +187,7 @@ var PlatformModule = /** @class */ (function () {
 
 exports.Platform = Platform;
 exports.supportsPassiveEventListeners = supportsPassiveEventListeners;
+exports.supportsScrollBehavior = supportsScrollBehavior;
 exports.getSupportedInputTypes = getSupportedInputTypes;
 exports.PlatformModule = PlatformModule;
 
