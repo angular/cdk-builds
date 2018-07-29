@@ -555,6 +555,19 @@ var CdkCellOutlet = /** @class */ (function () {
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
     /**
+     * @return {?}
+     */
+    CdkCellOutlet.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        // If this was the last outlet being rendered in the view, remove the reference
+        // from the static property after it has been destroyed to avoid leaking memory.
+        if (CdkCellOutlet.mostRecentCellOutlet === this) {
+            CdkCellOutlet.mostRecentCellOutlet = null;
+        }
+    };
+    /**
      * Static property containing the latest constructed instance of this class.
      * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
      * createEmbeddedView. After one of these components are created, this property will provide
