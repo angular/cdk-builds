@@ -462,6 +462,16 @@ class CdkCellOutlet {
         this._viewContainer = _viewContainer;
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        // If this was the last outlet being rendered in the view, remove the reference
+        // from the static property after it has been destroyed to avoid leaking memory.
+        if (CdkCellOutlet.mostRecentCellOutlet === this) {
+            CdkCellOutlet.mostRecentCellOutlet = null;
+        }
+    }
 }
 /**
  * Static property containing the latest constructed instance of this class.
