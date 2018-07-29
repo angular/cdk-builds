@@ -1480,7 +1480,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * @deletion-target 8.0.0
+     * @breaking-change 8.0.0
      */
     /**
      * Sets the header row definition to be used. Overrides the header row definition gathered by
@@ -1488,7 +1488,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@deletion-target 8.0.0
+     * \@breaking-change 8.0.0
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1498,7 +1498,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@deletion-target 8.0.0
+     * \@breaking-change 8.0.0
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1512,7 +1512,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * @deletion-target 8.0.0
+     * @breaking-change 8.0.0
      */
     /**
      * Sets the footer row definition to be used. Overrides the footer row definition gathered by
@@ -1520,7 +1520,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@deletion-target 8.0.0
+     * \@breaking-change 8.0.0
      * @param {?} footerRowDef
      * @return {?}
      */
@@ -1530,7 +1530,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@deletion-target 8.0.0
+     * \@breaking-change 8.0.0
      * @param {?} footerRowDef
      * @return {?}
      */

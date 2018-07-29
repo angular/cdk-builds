@@ -24,7 +24,7 @@ var /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @
  */
 var Platform = /** @class */ (function () {
     /**
-     * @deletion-target v7.0.0 remove optional decorator
+     * @breaking-change v7.0.0 remove optional decorator
      */
     function Platform(_platformId) {
         this._platformId = _platformId;

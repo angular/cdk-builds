@@ -186,7 +186,7 @@ ScrollDispatcher.ctorParameters = () => [
 ];
 /** @nocollapse */ ScrollDispatcher.ngInjectableDef = defineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(inject(NgZone), inject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -196,7 +196,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) 
     return parentDispatcher || new ScrollDispatcher(ngZone, platform);
 }
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  */
 const /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
@@ -393,7 +393,7 @@ ViewportRuler.ctorParameters = () => [
 ];
 /** @nocollapse */ ViewportRuler.ngInjectableDef = defineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(inject(Platform), inject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -403,7 +403,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
     return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  */
 const /** @type {?} */ VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.

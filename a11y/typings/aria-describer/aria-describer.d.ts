@@ -62,9 +62,9 @@ export declare class AriaDescriber implements OnDestroy {
     /** Determines whether a message can be described on a particular element. */
     private _canBeDescribed(element, message);
 }
-/** @docs-private @deprecated @deletion-target 7.0.0 */
+/** @docs-private @deprecated @breaking-change 7.0.0 */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
-/** @docs-private @deprecated @deletion-target 7.0.0 */
+/** @docs-private @deprecated @breaking-change 7.0.0 */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
     deps: (Optional[] | InjectionToken<any>)[];

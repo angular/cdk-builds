@@ -13,7 +13,7 @@ import { OverlayReference } from '../overlay-reference';
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * @deletion-target 7.0.0
+ * @breaking-change 7.0.0
  */
 export declare class ConnectedPositionStrategy implements PositionStrategy {
     /**

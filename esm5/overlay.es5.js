@@ -722,7 +722,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     return OverlayKeyboardDispatcher;
 }());
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  * @param {?} dispatcher
  * @param {?} _document
  * @return {?}
@@ -731,7 +731,7 @@ function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
     return dispatcher || new OverlayKeyboardDispatcher(_document);
 }
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  */
 var /** @type {?} */ OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     // If there is already an OverlayKeyboardDispatcher available, use that.
@@ -824,7 +824,7 @@ var OverlayContainer = /** @class */ (function () {
     return OverlayContainer;
 }());
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  * @param {?} parentContainer
  * @param {?} _document
  * @return {?}
@@ -833,7 +833,7 @@ function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
     return parentContainer || new OverlayContainer(_document);
 }
 /**
- * \@docs-private \@deprecated \@deletion-target 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 7.0.0
  */
 var /** @type {?} */ OVERLAY_CONTAINER_PROVIDER = {
     // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
@@ -1547,7 +1547,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function () {
         // We shouldn't do anything if the strategy was disposed or we're on the server.
-        // @deletion-target 7.0.0 Remove `_platform` null check once it's guaranteed to be defined.
+        // @breaking-change 7.0.0 Remove `_platform` null check once it's guaranteed to be defined.
         if (this._isDisposed || (this._platform && !this._platform.isBrowser)) {
             return;
         }
@@ -2406,7 +2406,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
         }
-        // @deletion-target 7.0.0 Currently the `_overlayContainer` is optional in order to avoid a
+        // @breaking-change 7.0.0 Currently the `_overlayContainer` is optional in order to avoid a
         // breaking change. The null check here can be removed once the `_overlayContainer` becomes
         // a required parameter.
         var /** @type {?} */ virtualKeyboardOffset = this._overlayContainer ?
@@ -2636,7 +2636,7 @@ function extendStyles(dest, source) {
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * \@deletion-target 7.0.0
+ * \@breaking-change 7.0.0
  */
 var  /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -2645,12 +2645,12 @@ var  /**
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * \@deletion-target 7.0.0
+ * \@breaking-change 7.0.0
  */
 ConnectedPositionStrategy = /** @class */ (function () {
     function ConnectedPositionStrategy(originPos, overlayPos, connectedTo, viewportRuler, document, 
-    // @deletion-target 7.0.0 `platform` parameter to be made required.
-    // @deletion-target 7.0.0 `platform` parameter to be made required.
+    // @breaking-change 7.0.0 `platform` parameter to be made required.
+    // @breaking-change 7.0.0 `platform` parameter to be made required.
     platform) {
         /**
          * Ordered list of preferred positions, from most to least desirable.
@@ -3097,19 +3097,19 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay width and clears any previously set width.
      * @param value New width for the overlay
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * @deletion-target 7.0.0
+     * @breaking-change 7.0.0
      */
     /**
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?=} value New width for the overlay
      * @return {?}
      */
     GlobalPositionStrategy.prototype.width = /**
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?=} value New width for the overlay
      * @return {?}
      */
@@ -3127,19 +3127,19 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay height and clears any previously set height.
      * @param value New height for the overlay
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * @deletion-target 7.0.0
+     * @breaking-change 7.0.0
      */
     /**
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?=} value New height for the overlay
      * @return {?}
      */
     GlobalPositionStrategy.prototype.height = /**
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?=} value New height for the overlay
      * @return {?}
      */
@@ -3284,7 +3284,7 @@ GlobalPositionStrategy = /** @class */ (function () {
  */
 var OverlayPositionBuilder = /** @class */ (function () {
     function OverlayPositionBuilder(_viewportRuler, _document, 
-    // @deletion-target 7.0.0 `_platform` and `_overlayContainer` parameters to be made required.
+    // @breaking-change 7.0.0 `_platform` and `_overlayContainer` parameters to be made required.
     _platform, _overlayContainer) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
@@ -3311,12 +3311,12 @@ var OverlayPositionBuilder = /** @class */ (function () {
      * @param originPos
      * @param overlayPos
      * @deprecated Use `flexibleConnectedTo` instead.
-     * @deletion-target 7.0.0
+     * @breaking-change 7.0.0
      */
     /**
      * Creates a relative position strategy.
      * @deprecated Use `flexibleConnectedTo` instead.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?} elementRef
      * @param {?} originPos
      * @param {?} overlayPos
@@ -3325,7 +3325,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
     OverlayPositionBuilder.prototype.connectedTo = /**
      * Creates a relative position strategy.
      * @deprecated Use `flexibleConnectedTo` instead.
-     * \@deletion-target 7.0.0
+     * \@breaking-change 7.0.0
      * @param {?} elementRef
      * @param {?} originPos
      * @param {?} overlayPos
@@ -4017,7 +4017,7 @@ var OverlayModule = /** @class */ (function () {
 }());
 /**
  * @deprecated Use `OverlayModule` instead.
- * \@deletion-target 7.0.0
+ * \@breaking-change 7.0.0
  */
 var /** @type {?} */ OVERLAY_PROVIDERS = [
     Overlay,

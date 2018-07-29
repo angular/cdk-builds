@@ -21,7 +21,7 @@ const /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/**
  */
 class Platform {
     /**
-     * \@deletion-target v7.0.0 remove optional decorator
+     * \@breaking-change v7.0.0 remove optional decorator
      * @param {?=} _platformId
      */
     constructor(_platformId) {
