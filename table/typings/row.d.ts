@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CdkCellDef, CdkColumnDef } from './cell';
 import { CanStick } from './can-stick';
 /**
@@ -117,7 +117,7 @@ export interface CdkCellOutletMultiRowContext<T> {
  * Outlet for rendering cells inside of a row or header row.
  * @docs-private
  */
-export declare class CdkCellOutlet implements OnDestroy {
+export declare class CdkCellOutlet {
     _viewContainer: ViewContainerRef;
     /** The ordered list of cells to render within this outlet's view container */
     cells: CdkCellDef[];
@@ -132,7 +132,6 @@ export declare class CdkCellOutlet implements OnDestroy {
      */
     static mostRecentCellOutlet: CdkCellOutlet | null;
     constructor(_viewContainer: ViewContainerRef);
-    ngOnDestroy(): void;
 }
 /** Header template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkHeaderRow {
