@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "6.4.2-e4ac04d",
+  "version": "6.4.2-f5f7f1c",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -36,5 +36,8 @@
       "@angular/material-moment-adapter"
     ]
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "releaseGitCommitSha": "f5f7f1c3d110dbfedb82b46454f4aaee30668b31",
+  "releaseGitBranch": "",
+  "releaseGitUser": "Travis CI User <travis@example.org>"
 }
