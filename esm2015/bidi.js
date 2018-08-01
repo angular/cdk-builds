@@ -67,7 +67,8 @@ class Directionality {
             // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
             const /** @type {?} */ bodyDir = _document.body ? _document.body.dir : null;
             const /** @type {?} */ htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            this.value = /** @type {?} */ ((bodyDir || htmlDir || 'ltr'));
+            const /** @type {?} */ value = bodyDir || htmlDir;
+            this.value = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
         }
     }
     /**
@@ -114,12 +115,12 @@ class Dir {
      */
     get dir() { return this._dir; }
     /**
-     * @param {?} v
+     * @param {?} value
      * @return {?}
      */
-    set dir(v) {
+    set dir(value) {
         const /** @type {?} */ old = this._dir;
-        this._dir = v;
+        this._dir = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
         if (old !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
         }

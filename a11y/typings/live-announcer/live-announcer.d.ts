@@ -10,8 +10,8 @@ import { ElementRef, NgZone, OnDestroy, Provider } from '@angular/core';
 /** Possible politeness levels. */
 export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
 export declare class LiveAnnouncer implements OnDestroy {
-    private _document;
     private readonly _liveElement;
+    private _document;
     constructor(elementToken: any, _document: any);
     /**
      * Announces a message to screenreaders.
