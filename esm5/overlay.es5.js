@@ -7,7 +7,7 @@
  */
 import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable, inject } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
+import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { __assign, __extends } from 'tslib';
@@ -4026,8 +4026,8 @@ var OverlayModule = /** @class */ (function () {
     }
     OverlayModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [BidiModule, PortalModule, ScrollDispatchModule],
-                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollDispatchModule],
+                    imports: [BidiModule, PortalModule, ScrollingModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollingModule],
                     declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
                     providers: [
                         Overlay,
