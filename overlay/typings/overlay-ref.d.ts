@@ -32,6 +32,11 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _backdropClick;
     private _attachments;
     private _detachments;
+    /**
+     * Reference to the parent of the `_host` at the time it was detached. Used to restore
+     * the `_host` to its original position in the DOM when it gets re-attached.
+     */
+    private _previousHostParent;
     private _keydownEventsObservable;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;

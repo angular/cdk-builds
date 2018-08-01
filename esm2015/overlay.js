@@ -10,8 +10,8 @@ import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angula
 import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -796,6 +796,9 @@ class OverlayRef {
             this._config.positionStrategy.attach(this);
         }
         // Update the pane element with the given configuration.
+        if (!this._host.parentElement && this._previousHostParent) {
+            this._previousHostParent.appendChild(this._host);
+        }
         this._updateStackingOrder();
         this._updateElementSize();
         this._updateElementDirection();
@@ -855,6 +858,24 @@ class OverlayRef {
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
+        // Keeping the host element in DOM the can cause scroll jank, because it still gets rendered,
+        // even though it's transparent and unclickable. We can't remove the host here immediately,
+        // because the overlay pane's content might still be animating. This stream helps us avoid
+        // interrupting the animation by waiting for the pane to become empty.
+        const /** @type {?} */ subscription = this._ngZone.onStable
+            .asObservable()
+            .pipe(takeUntil(merge(this._attachments, this._detachments)))
+            .subscribe(() => {
+            // Needs a couple of checks for the pane and host, because
+            // they may have been removed by the time the zone stabilizes.
+            if (!this._pane || !this._host || this._pane.children.length === 0) {
+                if (this._host && this._host.parentElement) {
+                    this._previousHostParent = this._host.parentElement;
+                    this._previousHostParent.removeChild(this._host);
+                }
+                subscription.unsubscribe();
+            }
+        });
         return detachmentResult;
     }
     /**
@@ -879,7 +900,7 @@ class OverlayRef {
             this._host.parentNode.removeChild(this._host);
             this._host = /** @type {?} */ ((null));
         }
-        this._pane = /** @type {?} */ ((null));
+        this._previousHostParent = this._pane = /** @type {?} */ ((null));
         if (isAttached) {
             this._detachments.next();
         }

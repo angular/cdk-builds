@@ -11,8 +11,8 @@ import { ScrollDispatcher, ViewportRuler, ScrollDispatchModule, VIEWPORT_RULER_P
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { __assign, __extends } from 'tslib';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, Subject, merge, Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -962,6 +962,9 @@ OverlayRef = /** @class */ (function () {
             this._config.positionStrategy.attach(this);
         }
         // Update the pane element with the given configuration.
+        if (!this._host.parentElement && this._previousHostParent) {
+            this._previousHostParent.appendChild(this._host);
+        }
         this._updateStackingOrder();
         this._updateElementSize();
         this._updateElementDirection();
@@ -1007,6 +1010,7 @@ OverlayRef = /** @class */ (function () {
      * @return {?} The portal detachment result.
      */
     function () {
+        var _this = this;
         if (!this.hasAttached()) {
             return;
         }
@@ -1029,6 +1033,24 @@ OverlayRef = /** @class */ (function () {
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
+        // Keeping the host element in DOM the can cause scroll jank, because it still gets rendered,
+        // even though it's transparent and unclickable. We can't remove the host here immediately,
+        // because the overlay pane's content might still be animating. This stream helps us avoid
+        // interrupting the animation by waiting for the pane to become empty.
+        var /** @type {?} */ subscription = this._ngZone.onStable
+            .asObservable()
+            .pipe(takeUntil(merge(this._attachments, this._detachments)))
+            .subscribe(function () {
+            // Needs a couple of checks for the pane and host, because
+            // they may have been removed by the time the zone stabilizes.
+            if (!_this._pane || !_this._host || _this._pane.children.length === 0) {
+                if (_this._host && _this._host.parentElement) {
+                    _this._previousHostParent = _this._host.parentElement;
+                    _this._previousHostParent.removeChild(_this._host);
+                }
+                subscription.unsubscribe();
+            }
+        });
         return detachmentResult;
     };
     /** Cleans up the overlay from the DOM. */
@@ -1058,7 +1080,7 @@ OverlayRef = /** @class */ (function () {
             this._host.parentNode.removeChild(this._host);
             this._host = /** @type {?} */ ((null));
         }
-        this._pane = /** @type {?} */ ((null));
+        this._previousHostParent = this._pane = /** @type {?} */ ((null));
         if (isAttached) {
             this._detachments.next();
         }
