@@ -633,6 +633,11 @@ class StickyStyler {
      */
     clearStickyPositioning(rows, stickyDirections) {
         for (const /** @type {?} */ row of rows) {
+            // If the row isn't an element (e.g. if it's an `ng-container`),
+            // it won't have inline styles or `children` so we skip it.
+            if (row.nodeType !== row.ELEMENT_NODE) {
+                continue;
+            }
             this._removeStickyStyle(row, stickyDirections);
             for (let /** @type {?} */ i = 0; i < row.children.length; i++) {
                 const /** @type {?} */ cell = /** @type {?} */ (row.children[i]);
