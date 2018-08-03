@@ -542,6 +542,11 @@ class CdkVirtualScrollViewport {
          */
         this.renderedRangeStream = this._renderedRangeSubject.asObservable();
         /**
+         * The transform used to scale the spacer to the same size as all content, including content that
+         * is not currently rendered.
+         */
+        this._totalContentSizeTransform = '';
+        /**
          * The total size of all content (in pixels), including content that is not currently rendered.
          */
         this._totalContentSize = 0;
@@ -670,6 +675,8 @@ class CdkVirtualScrollViewport {
     setTotalContentSize(size) {
         if (this._totalContentSize !== size) {
             this._totalContentSize = size;
+            const /** @type {?} */ axis = this.orientation == 'horizontal' ? 'X' : 'Y';
+            this._totalContentSizeTransform = `scale${axis}(${this._totalContentSize})`;
             this._markChangeDetectionNeeded();
         }
     }
@@ -864,8 +871,8 @@ class CdkVirtualScrollViewport {
 }
 CdkVirtualScrollViewport.decorators = [
     { type: Component, args: [{selector: 'cdk-virtual-scroll-viewport',
-                template: "<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\"><ng-content></ng-content></div><div class=\"cdk-virtual-scroll-spacer\" [style.height.px]=\"orientation === 'horizontal' ? 1 : _totalContentSize\" [style.width.px]=\"orientation === 'horizontal' ? _totalContentSize : 1\"></div>",
-                styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;will-change:contents,transform}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{bottom:0}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{right:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:0}.cdk-virtual-scroll-spacer{will-change:height,width}"],
+                template: "<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\"><ng-content></ng-content></div><div class=\"cdk-virtual-scroll-spacer\" [style.transform]=\"_totalContentSizeTransform\"></div>",
+                styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content;will-change:transform}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{bottom:0}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{right:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:0}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0;will-change:transform}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"],
                 host: {
                     'class': 'cdk-virtual-scroll-viewport',
                     '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',

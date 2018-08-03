@@ -31,9 +31,14 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
     /** A stream that emits whenever the rendered range changes. */
     renderedRangeStream: Observable<ListRange>;
     /**
+     * The transform used to scale the spacer to the same size as all content, including content that
+     * is not currently rendered.
+     */
+    _totalContentSizeTransform: string;
+    /**
      * The total size of all content (in pixels), including content that is not currently rendered.
      */
-    _totalContentSize: number;
+    private _totalContentSize;
     /**
      * The CSS transform applied to the rendered subset of items so that they appear within the bounds
      * of the visible viewport.
