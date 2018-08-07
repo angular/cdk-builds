@@ -462,16 +462,6 @@ class CdkCellOutlet {
         this._viewContainer = _viewContainer;
         CdkCellOutlet.mostRecentCellOutlet = this;
     }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        // If this was the last outlet being rendered in the view, remove the reference
-        // from the static property after it has been destroyed to avoid leaking memory.
-        if (CdkCellOutlet.mostRecentCellOutlet === this) {
-            CdkCellOutlet.mostRecentCellOutlet = null;
-        }
-    }
 }
 /**
  * Static property containing the latest constructed instance of this class.
@@ -1199,7 +1189,7 @@ class CdkTable {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@breaking-change 8.0.0
+     * \@deletion-target 8.0.0
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1213,7 +1203,7 @@ class CdkTable {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@breaking-change 8.0.0
+     * \@deletion-target 8.0.0
      * @param {?} footerRowDef
      * @return {?}
      */

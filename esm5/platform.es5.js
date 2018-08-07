@@ -21,7 +21,7 @@ var /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @
  */
 var Platform = /** @class */ (function () {
     /**
-     * @breaking-change v7.0.0 remove optional decorator
+     * @deletion-target v7.0.0 remove optional decorator
      */
     function Platform(_platformId) {
         this._platformId = _platformId;
@@ -108,14 +108,6 @@ function supportsPassiveEventListeners() {
     return supportsPassiveEvents;
 }
 /**
- * Check whether the browser supports scroll behaviors.
- * @return {?}
- */
-function supportsScrollBehavior() {
-    return !!(document && document.documentElement && document.documentElement.style &&
-        'scrollBehavior' in document.documentElement.style);
-}
-/**
  * Cached result Set of input types support by the current browser.
  */
 var /** @type {?} */ supportedInputTypes;
@@ -192,5 +184,5 @@ var PlatformModule = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Platform, supportsPassiveEventListeners, supportsScrollBehavior, getSupportedInputTypes, PlatformModule };
+export { Platform, supportsPassiveEventListeners, getSupportedInputTypes, PlatformModule };
 //# sourceMappingURL=platform.es5.js.map
