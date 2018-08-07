@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { NgZone, OnDestroy, SkipSelf } from '@angular/core';
+import { NgZone, OnDestroy, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
@@ -49,6 +49,6 @@ export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRul
 /** @docs-private @deprecated @breaking-change 7.0.0 */
 export declare const VIEWPORT_RULER_PROVIDER: {
     provide: typeof ViewportRuler;
-    deps: (SkipSelf[] | typeof NgZone | typeof Platform)[];
+    deps: (Optional[] | typeof NgZone | typeof Platform)[];
     useFactory: typeof VIEWPORT_RULER_PROVIDER_FACTORY;
 };

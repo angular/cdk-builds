@@ -4059,8 +4059,8 @@ var OverlayModule = /** @class */ (function () {
     }
     OverlayModule.decorators = [
         { type: core.NgModule, args: [{
-                    imports: [bidi.BidiModule, portal.PortalModule, scrolling.ScrollingModule],
-                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, scrolling.ScrollingModule],
+                    imports: [bidi.BidiModule, portal.PortalModule, scrolling.ScrollDispatchModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, scrolling.ScrollDispatchModule],
                     declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
                     providers: [
                         Overlay,
