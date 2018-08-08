@@ -162,9 +162,15 @@ class BreakpointObserver {
         const /** @type {?} */ queries = splitQueries(coerceArray(value));
         const /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
         return combineLatest(observables).pipe(map((breakpointStates) => {
-            return {
-                matches: breakpointStates.some(state => state && state.matches)
+            const /** @type {?} */ response = {
+                matches: false,
+                breakpoints: {},
             };
+            breakpointStates.forEach((state) => {
+                response.matches = response.matches || state.matches;
+                response.breakpoints[state.query] = state.matches;
+            });
+            return response;
         }));
     }
     /**
@@ -190,9 +196,9 @@ class BreakpointObserver {
         }, (listener) => {
             mql.removeListener((e) => this.zone.run(() => listener(e)));
         })
-            .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ matches: nextMql.matches })));
+            .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })));
         // Add the MediaQueryList to the set of queries.
-        const /** @type {?} */ output = { observable: queryObservable, mql: mql };
+        const /** @type {?} */ output = { observable: queryObservable, mql };
         this._queries.set(query, output);
         return output;
     }

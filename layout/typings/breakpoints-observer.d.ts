@@ -12,6 +12,13 @@ import { Observable } from 'rxjs';
 export interface BreakpointState {
     /** Whether the breakpoint is currently matching. */
     matches: boolean;
+    /**
+     * A key boolean pair for each query provided to the observe method,
+     * with its current matched state.
+     */
+    breakpoints: {
+        [key: string]: boolean;
+    };
 }
 /** Utility for checking the matching state of @media queries. */
 export declare class BreakpointObserver implements OnDestroy {
