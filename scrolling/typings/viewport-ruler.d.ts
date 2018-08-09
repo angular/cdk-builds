@@ -10,6 +10,11 @@ import { NgZone, OnDestroy, SkipSelf } from '@angular/core';
 import { Observable } from 'rxjs';
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
+/** Object that holds the scroll position of the viewport in each direction. */
+export interface ViewportScrollPosition {
+    top: number;
+    left: number;
+}
 /**
  * Simple utility for getting the bounds of the browser viewport.
  * @docs-private
@@ -32,10 +37,7 @@ export declare class ViewportRuler implements OnDestroy {
     /** Gets a ClientRect for the viewport's bounds. */
     getViewportRect(): ClientRect;
     /** Gets the (top, left) scroll position of the viewport. */
-    getViewportScrollPosition(): {
-        top: number;
-        left: number;
-    };
+    getViewportScrollPosition(): ViewportScrollPosition;
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
      * @param throttleTime Time in milliseconds to throttle the stream.
