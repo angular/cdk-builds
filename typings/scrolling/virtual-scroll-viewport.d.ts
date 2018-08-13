@@ -20,8 +20,6 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
     private _detachedSubject;
     /** Emits when the rendered range changes. */
     private _renderedRangeSubject;
-    /** Emits when a change detection cycle completes. */
-    private _changeDetectionComplete;
     /** The direction the viewport scrolls. */
     orientation: 'horizontal' | 'vertical';
     /** Emits when the index of the first element visible in the viewport changes. */

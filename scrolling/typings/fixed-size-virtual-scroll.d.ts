@@ -11,13 +11,16 @@ export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStra
     private _viewport;
     /** The size of the items in the virtually scrolling list. */
     private _itemSize;
-    /** The number of buffer items to render beyond the edge of the viewport. */
-    private _bufferSize;
+    /** The minimum amount of buffer rendered beyond the viewport (in pixels). */
+    private _minBufferPx;
+    /** The number of buffer items to render beyond the edge of the viewport (in pixels). */
+    private _maxBufferPx;
     /**
      * @param itemSize The size of the items in the virtually scrolling list.
-     * @param bufferSize The number of buffer items to render beyond the edge of the viewport.
+     * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
-    constructor(itemSize: number, bufferSize: number);
+    constructor(itemSize: number, minBufferPx: number, maxBufferPx: number);
     /**
      * Attaches this scroll strategy to a viewport.
      * @param viewport The viewport to attach this strategy to.
@@ -28,9 +31,10 @@ export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStra
     /**
      * Update the item size and buffer size.
      * @param itemSize The size of the items in the virtually scrolling list.
-     * @param bufferSize he number of buffer items to render beyond the edge of the viewport.
+     * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
-    updateItemAndBufferSize(itemSize: number, bufferSize: number): void;
+    updateItemAndBufferSize(itemSize: number, minBufferPx: number, maxBufferPx: number): void;
     /** @docs-private Implemented as part of VirtualScrollStrategy. */
     onContentScrolled(): void;
     /** @docs-private Implemented as part of VirtualScrollStrategy. */
@@ -49,14 +53,6 @@ export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStra
     private _updateTotalContentSize();
     /** Update the viewport's rendered range. */
     private _updateRenderedRange();
-    /**
-     * Expand the given range by the given amount in either direction.
-     * @param range The range to expand
-     * @param expandStart The number of items to expand the start of the range by.
-     * @param expandEnd The number of items to expand the end of the range by.
-     * @return The expanded range.
-     */
-    private _expandRange(range, expandStart, expandEnd);
 }
 /**
  * Provider factory for `FixedSizeVirtualScrollStrategy` that simply extracts the already created
@@ -71,11 +67,16 @@ export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     itemSize: number;
     _itemSize: number;
     /**
-     * The number of extra elements to render on either side of the scrolling viewport.
-     * Defaults to 5 elements.
+     * The minimum amount of buffer rendered beyond the viewport (in pixels).
+     * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
      */
-    bufferSize: number;
-    _bufferSize: number;
+    minBufferPx: number;
+    _minBufferPx: number;
+    /**
+     * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
+     */
+    maxBufferPx: number;
+    _maxBufferPx: number;
     /** The scroll strategy used by this directive. */
     _scrollStrategy: FixedSizeVirtualScrollStrategy;
     ngOnChanges(): void;

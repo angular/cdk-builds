@@ -8,7 +8,7 @@
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, defineInjectable, inject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, takeUntil, sample, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, auditTime, filter, takeUntil, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { Platform, PlatformModule, supportsScrollBehavior } from '@angular/cdk/platform';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
 
@@ -31,9 +31,10 @@ const /** @type {?} */ VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCR
 class FixedSizeVirtualScrollStrategy {
     /**
      * @param {?} itemSize The size of the items in the virtually scrolling list.
-     * @param {?} bufferSize The number of buffer items to render beyond the edge of the viewport.
+     * @param {?} minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param {?} maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
-    constructor(itemSize, bufferSize) {
+    constructor(itemSize, minBufferPx, maxBufferPx) {
         this._scrolledIndexChange = new Subject();
         /**
          * \@docs-private Implemented as part of VirtualScrollStrategy.
@@ -44,7 +45,8 @@ class FixedSizeVirtualScrollStrategy {
          */
         this._viewport = null;
         this._itemSize = itemSize;
-        this._bufferSize = bufferSize;
+        this._minBufferPx = minBufferPx;
+        this._maxBufferPx = maxBufferPx;
     }
     /**
      * Attaches this scroll strategy to a viewport.
@@ -67,12 +69,17 @@ class FixedSizeVirtualScrollStrategy {
     /**
      * Update the item size and buffer size.
      * @param {?} itemSize The size of the items in the virtually scrolling list.
-     * @param {?} bufferSize he number of buffer items to render beyond the edge of the viewport.
+     * @param {?} minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param {?} maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      * @return {?}
      */
-    updateItemAndBufferSize(itemSize, bufferSize) {
+    updateItemAndBufferSize(itemSize, minBufferPx, maxBufferPx) {
+        if (maxBufferPx < minBufferPx) {
+            throw Error('CDK virtual scroll: maxBufferPx must be greater than or equal to minBufferPx');
+        }
         this._itemSize = itemSize;
-        this._bufferSize = bufferSize;
+        this._minBufferPx = minBufferPx;
+        this._maxBufferPx = maxBufferPx;
         this._updateTotalContentSize();
         this._updateRenderedRange();
     }
@@ -135,28 +142,30 @@ class FixedSizeVirtualScrollStrategy {
             return;
         }
         const /** @type {?} */ scrollOffset = this._viewport.measureScrollOffset();
-        const /** @type {?} */ firstVisibleIndex = Math.floor(scrollOffset / this._itemSize);
-        const /** @type {?} */ firstItemRemainder = scrollOffset % this._itemSize;
-        const /** @type {?} */ range = this._expandRange({ start: firstVisibleIndex, end: firstVisibleIndex }, this._bufferSize, Math.ceil((this._viewport.getViewportSize() + firstItemRemainder) / this._itemSize) +
-            this._bufferSize);
-        this._viewport.setRenderedRange(range);
-        this._viewport.setRenderedContentOffset(this._itemSize * range.start);
-        this._scrolledIndexChange.next(firstVisibleIndex);
-    }
-    /**
-     * Expand the given range by the given amount in either direction.
-     * @param {?} range The range to expand
-     * @param {?} expandStart The number of items to expand the start of the range by.
-     * @param {?} expandEnd The number of items to expand the end of the range by.
-     * @return {?} The expanded range.
-     */
-    _expandRange(range, expandStart, expandEnd) {
-        if (!this._viewport) {
-            return Object.assign({}, range);
+        const /** @type {?} */ firstVisibleIndex = scrollOffset / this._itemSize;
+        const /** @type {?} */ renderedRange = this._viewport.getRenderedRange();
+        const /** @type {?} */ newRange = { start: renderedRange.start, end: renderedRange.end };
+        const /** @type {?} */ viewportSize = this._viewport.getViewportSize();
+        const /** @type {?} */ dataLength = this._viewport.getDataLength();
+        const /** @type {?} */ startBuffer = scrollOffset - newRange.start * this._itemSize;
+        if (startBuffer < this._minBufferPx && newRange.start != 0) {
+            const /** @type {?} */ expandStart = Math.ceil((this._maxBufferPx - startBuffer) / this._itemSize);
+            newRange.start = Math.max(0, newRange.start - expandStart);
+            newRange.end = Math.min(dataLength, Math.ceil(firstVisibleIndex + (viewportSize + this._minBufferPx) / this._itemSize));
         }
-        const /** @type {?} */ start = Math.max(0, range.start - expandStart);
-        const /** @type {?} */ end = Math.min(this._viewport.getDataLength(), range.end + expandEnd);
-        return { start, end };
+        else {
+            const /** @type {?} */ endBuffer = newRange.end * this._itemSize - (scrollOffset + viewportSize);
+            if (endBuffer < this._minBufferPx && newRange.end != dataLength) {
+                const /** @type {?} */ expandEnd = Math.ceil((this._maxBufferPx - endBuffer) / this._itemSize);
+                if (expandEnd > 0) {
+                    newRange.end = Math.min(dataLength, newRange.end + expandEnd);
+                    newRange.start = Math.max(0, Math.floor(firstVisibleIndex - this._minBufferPx / this._itemSize));
+                }
+            }
+        }
+        this._viewport.setRenderedRange(newRange);
+        this._viewport.setRenderedContentOffset(this._itemSize * newRange.start);
+        this._scrolledIndexChange.next(Math.floor(firstVisibleIndex));
     }
 }
 /**
@@ -175,11 +184,12 @@ function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir) {
 class CdkFixedSizeVirtualScroll {
     constructor() {
         this._itemSize = 20;
-        this._bufferSize = 5;
+        this._minBufferPx = 100;
+        this._maxBufferPx = 200;
         /**
          * The scroll strategy used by this directive.
          */
-        this._scrollStrategy = new FixedSizeVirtualScrollStrategy(this.itemSize, this.bufferSize);
+        this._scrollStrategy = new FixedSizeVirtualScrollStrategy(this.itemSize, this.minBufferPx, this.maxBufferPx);
     }
     /**
      * The size of the items in the list (in pixels).
@@ -192,21 +202,31 @@ class CdkFixedSizeVirtualScroll {
      */
     set itemSize(value) { this._itemSize = coerceNumberProperty(value); }
     /**
-     * The number of extra elements to render on either side of the scrolling viewport.
-     * Defaults to 5 elements.
+     * The minimum amount of buffer rendered beyond the viewport (in pixels).
+     * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
      * @return {?}
      */
-    get bufferSize() { return this._bufferSize; }
+    get minBufferPx() { return this._minBufferPx; }
     /**
      * @param {?} value
      * @return {?}
      */
-    set bufferSize(value) { this._bufferSize = coerceNumberProperty(value); }
+    set minBufferPx(value) { this._minBufferPx = coerceNumberProperty(value); }
+    /**
+     * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
+     * @return {?}
+     */
+    get maxBufferPx() { return this._maxBufferPx; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set maxBufferPx(value) { this._maxBufferPx = coerceNumberProperty(value); }
     /**
      * @return {?}
      */
     ngOnChanges() {
-        this._scrollStrategy.updateItemAndBufferSize(this.itemSize, this.bufferSize);
+        this._scrollStrategy.updateItemAndBufferSize(this.itemSize, this.minBufferPx, this.maxBufferPx);
     }
 }
 CdkFixedSizeVirtualScroll.decorators = [
@@ -222,7 +242,8 @@ CdkFixedSizeVirtualScroll.decorators = [
 /** @nocollapse */
 CdkFixedSizeVirtualScroll.propDecorators = {
     "itemSize": [{ type: Input },],
-    "bufferSize": [{ type: Input },],
+    "minBufferPx": [{ type: Input },],
+    "maxBufferPx": [{ type: Input },],
 };
 
 /**
@@ -520,19 +541,13 @@ class CdkVirtualScrollViewport {
          */
         this._renderedRangeSubject = new Subject();
         /**
-         * Emits when a change detection cycle completes.
-         */
-        this._changeDetectionComplete = new Subject();
-        /**
          * The direction the viewport scrolls.
          */
         this.orientation = 'vertical';
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
-        this.scrolledIndexChange = Observable.create(observer => this._scrollStrategy.scrolledIndexChange
-            .pipe(sample(this._changeDetectionComplete))
-            .subscribe(observer));
+        this.scrolledIndexChange = Observable.create(observer => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this._ngZone.run(() => observer.next(index)))));
         /**
          * A stream that emits whenever the rendered range changes.
          */
@@ -607,7 +622,6 @@ class CdkVirtualScrollViewport {
         // Complete all subjects
         this._renderedRangeSubject.complete();
         this._detachedSubject.complete();
-        this._changeDetectionComplete.complete();
         this._destroyed.complete();
     }
     /**
@@ -862,7 +876,6 @@ class CdkVirtualScrollViewport {
         for (const /** @type {?} */ fn of runAfterChangeDetection) {
             fn();
         }
-        this._ngZone.run(() => this._changeDetectionComplete.next());
     }
 }
 CdkVirtualScrollViewport.decorators = [
