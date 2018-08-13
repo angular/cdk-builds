@@ -9,7 +9,8 @@ import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optio
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
-import { Platform, PlatformModule, supportsScrollBehavior } from '@angular/cdk/platform';
+import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
+import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
 
 /**
@@ -618,11 +619,12 @@ var /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
  * can be listened to through the service.
  */
 var CdkScrollable = /** @class */ (function () {
-    function CdkScrollable(_elementRef, _scroll, _ngZone) {
+    function CdkScrollable(_elementRef, _scroll, _ngZone, _dir) {
         var _this = this;
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
+        this._dir = _dir;
         this._destroyed = new Subject();
         this._elementScrolled = Observable.create(function (observer) {
             return _this._ngZone.runOutsideAngular(function () {
@@ -651,9 +653,7 @@ var CdkScrollable = /** @class */ (function () {
         this._destroyed.next();
         this._destroyed.complete();
     };
-    /**
-     * Returns observable that emits when a scroll event is fired on the host element.
-     */
+    /** Returns observable that emits when a scroll event is fired on the host element. */
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
      * @return {?}
@@ -665,14 +665,172 @@ var CdkScrollable = /** @class */ (function () {
     function () {
         return this._elementScrolled;
     };
+    /** Gets the ElementRef for the viewport. */
     /**
+     * Gets the ElementRef for the viewport.
      * @return {?}
      */
     CdkScrollable.prototype.getElementRef = /**
+     * Gets the ElementRef for the viewport.
      * @return {?}
      */
     function () {
         return this._elementRef;
+    };
+    /**
+     * Scrolls to the specified offsets. This is a normalized version of the browser's native scrollTo
+     * method, since browsers are not consistent about what scrollLeft means in RTL. For this method
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param options specified the offsets to scroll to.
+     */
+    /**
+     * Scrolls to the specified offsets. This is a normalized version of the browser's native scrollTo
+     * method, since browsers are not consistent about what scrollLeft means in RTL. For this method
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param {?} options specified the offsets to scroll to.
+     * @return {?}
+     */
+    CdkScrollable.prototype.scrollTo = /**
+     * Scrolls to the specified offsets. This is a normalized version of the browser's native scrollTo
+     * method, since browsers are not consistent about what scrollLeft means in RTL. For this method
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param {?} options specified the offsets to scroll to.
+     * @return {?}
+     */
+    function (options) {
+        var /** @type {?} */ el = this._elementRef.nativeElement;
+        var /** @type {?} */ isRtl = this._dir && this._dir.value == 'rtl';
+        // Rewrite start & end offsets as right or left offsets.
+        options.left = options.left == null ? (isRtl ? options.end : options.start) : options.left;
+        options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
+        // Rewrite the bottom offset as a top offset.
+        if (options.bottom != null) {
+            options.top = el.scrollHeight - el.clientHeight - options.bottom;
+        }
+        // Rewrite the right offset as a left offset.
+        if (isRtl && getRtlScrollAxisType() != RtlScrollAxisType.NORMAL) {
+            if (options.left != null) {
+                options.right = el.scrollWidth - el.clientWidth - options.left;
+            }
+            if (getRtlScrollAxisType() == RtlScrollAxisType.INVERTED) {
+                options.left = options.right;
+            }
+            else if (getRtlScrollAxisType() == RtlScrollAxisType.NEGATED) {
+                options.left = options.right ? -options.right : options.right;
+            }
+        }
+        else {
+            if (options.right != null) {
+                options.left = el.scrollWidth - el.clientWidth - options.right;
+            }
+        }
+        this._applyScrollToOptions(options);
+    };
+    /**
+     * @param {?} options
+     * @return {?}
+     */
+    CdkScrollable.prototype._applyScrollToOptions = /**
+     * @param {?} options
+     * @return {?}
+     */
+    function (options) {
+        var /** @type {?} */ el = this._elementRef.nativeElement;
+        if (supportsScrollBehavior()) {
+            el.scrollTo(options);
+        }
+        else {
+            if (options.top != null) {
+                el.scrollTop = options.top;
+            }
+            if (options.left != null) {
+                el.scrollLeft = options.left;
+            }
+        }
+    };
+    /**
+     * Measures the scroll offset relative to the specified edge of the viewport. This method can be
+     * used instead of directly checking scrollLeft or scrollTop, since browsers are not consistent
+     * about what scrollLeft means in RTL. The values returned by this method are normalized such that
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param from The edge to measure from.
+     */
+    /**
+     * Measures the scroll offset relative to the specified edge of the viewport. This method can be
+     * used instead of directly checking scrollLeft or scrollTop, since browsers are not consistent
+     * about what scrollLeft means in RTL. The values returned by this method are normalized such that
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param {?} from The edge to measure from.
+     * @return {?}
+     */
+    CdkScrollable.prototype.measureScrollOffset = /**
+     * Measures the scroll offset relative to the specified edge of the viewport. This method can be
+     * used instead of directly checking scrollLeft or scrollTop, since browsers are not consistent
+     * about what scrollLeft means in RTL. The values returned by this method are normalized such that
+     * left and right always refer to the left and right side of the scrolling container irrespective
+     * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
+     * in an RTL context.
+     * @param {?} from The edge to measure from.
+     * @return {?}
+     */
+    function (from) {
+        var /** @type {?} */ LEFT = 'left';
+        var /** @type {?} */ RIGHT = 'right';
+        var /** @type {?} */ el = this._elementRef.nativeElement;
+        if (from == 'top') {
+            return el.scrollTop;
+        }
+        if (from == 'bottom') {
+            return el.scrollHeight - el.clientHeight - el.scrollTop;
+        }
+        // Rewrite start & end as left or right offsets.
+        var /** @type {?} */ isRtl = this._dir && this._dir.value == 'rtl';
+        if (from == 'start') {
+            from = isRtl ? RIGHT : LEFT;
+        }
+        else if (from == 'end') {
+            from = isRtl ? LEFT : RIGHT;
+        }
+        if (isRtl && getRtlScrollAxisType() == RtlScrollAxisType.INVERTED) {
+            // For INVERTED, scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and
+            // 0 when scrolled all the way right.
+            if (from == LEFT) {
+                return el.scrollWidth - el.clientWidth - el.scrollLeft;
+            }
+            else {
+                return el.scrollLeft;
+            }
+        }
+        else if (isRtl && getRtlScrollAxisType() == RtlScrollAxisType.NEGATED) {
+            // For NEGATED, scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and
+            // 0 when scrolled all the way right.
+            if (from == LEFT) {
+                return el.scrollLeft + el.scrollWidth - el.clientWidth;
+            }
+            else {
+                return -el.scrollLeft;
+            }
+        }
+        else {
+            // For NORMAL, as well as non-RTL contexts, scrollLeft is 0 when scrolled all the way left and
+            // (scrollWidth - clientWidth) when scrolled all the way right.
+            if (from == LEFT) {
+                return el.scrollLeft;
+            }
+            else {
+                return el.scrollWidth - el.clientWidth - el.scrollLeft;
+            }
+        }
     };
     CdkScrollable.decorators = [
         { type: Directive, args: [{
@@ -684,6 +842,7 @@ var CdkScrollable = /** @class */ (function () {
         { type: ElementRef, },
         { type: ScrollDispatcher, },
         { type: NgZone, },
+        { type: Directionality, decorators: [{ type: Optional },] },
     ]; };
     return CdkScrollable;
 }());
@@ -1655,8 +1814,9 @@ var ScrollingModule = /** @class */ (function () {
     }
     ScrollingModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [PlatformModule],
+                    imports: [PlatformModule, BidiModule],
                     exports: [
+                        BidiModule,
                         CdkFixedSizeVirtualScroll,
                         CdkScrollable,
                         CdkVirtualForOf,
