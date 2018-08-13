@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ScrollDispatcher } from './scroll-dispatcher';
 /**
@@ -17,14 +17,14 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
     private _elementRef;
     private _scroll;
     private _ngZone;
+    private _destroyed;
     private _elementScrolled;
-    private _scrollListener;
     constructor(_elementRef: ElementRef, _scroll: ScrollDispatcher, _ngZone: NgZone);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
      */
-    elementScrolled(): Observable<any>;
+    elementScrolled(): Observable<Event>;
     getElementRef(): ElementRef;
 }

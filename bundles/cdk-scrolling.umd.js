@@ -628,8 +628,13 @@ var CdkScrollable = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._elementScrolled = new rxjs.Subject();
-        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
+        this._destroyed = new rxjs.Subject();
+        this._elementScrolled = rxjs.Observable.create(function (observer) {
+            return _this._ngZone.runOutsideAngular(function () {
+                return rxjs.fromEvent(_this._elementRef.nativeElement, 'scroll').pipe(operators.takeUntil(_this._destroyed))
+                    .subscribe(observer);
+            });
+        });
     }
     /**
      * @return {?}
@@ -638,10 +643,6 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var _this = this;
-        this._ngZone.runOutsideAngular(function () {
-            _this.getElementRef().nativeElement.addEventListener('scroll', _this._scrollListener);
-        });
         this._scroll.register(this);
     };
     /**
@@ -652,10 +653,8 @@ var CdkScrollable = /** @class */ (function () {
      */
     function () {
         this._scroll.deregister(this);
-        if (this._scrollListener) {
-            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
-        }
-        this._elementScrolled.complete();
+        this._destroyed.next();
+        this._destroyed.complete();
     };
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
@@ -669,7 +668,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._elementScrolled.asObservable();
+        return this._elementScrolled;
     };
     /**
      * @return {?}

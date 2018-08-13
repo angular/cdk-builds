@@ -9,7 +9,7 @@ import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optio
 import { __assign } from 'tslib';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, sample, sampleTime, takeUntil, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, auditTime, filter, takeUntil, sample, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { Platform, PlatformModule, supportsScrollBehavior } from '@angular/cdk/platform';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
 
@@ -604,8 +604,13 @@ var CdkScrollable = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._elementScrolled = new Subject();
-        this._scrollListener = function (event) { return _this._elementScrolled.next(event); };
+        this._destroyed = new Subject();
+        this._elementScrolled = Observable.create(function (observer) {
+            return _this._ngZone.runOutsideAngular(function () {
+                return fromEvent(_this._elementRef.nativeElement, 'scroll').pipe(takeUntil(_this._destroyed))
+                    .subscribe(observer);
+            });
+        });
     }
     /**
      * @return {?}
@@ -614,10 +619,6 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var _this = this;
-        this._ngZone.runOutsideAngular(function () {
-            _this.getElementRef().nativeElement.addEventListener('scroll', _this._scrollListener);
-        });
         this._scroll.register(this);
     };
     /**
@@ -628,10 +629,8 @@ var CdkScrollable = /** @class */ (function () {
      */
     function () {
         this._scroll.deregister(this);
-        if (this._scrollListener) {
-            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
-        }
-        this._elementScrolled.complete();
+        this._destroyed.next();
+        this._destroyed.complete();
     };
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
@@ -645,7 +644,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._elementScrolled.asObservable();
+        return this._elementScrolled;
     };
     /**
      * @return {?}

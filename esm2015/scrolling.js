@@ -8,7 +8,7 @@
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, defineInjectable, inject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, sample, sampleTime, takeUntil, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, auditTime, filter, takeUntil, sample, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
 import { Platform, PlatformModule, supportsScrollBehavior } from '@angular/cdk/platform';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
 
@@ -439,16 +439,14 @@ class CdkScrollable {
         this._elementRef = _elementRef;
         this._scroll = _scroll;
         this._ngZone = _ngZone;
-        this._elementScrolled = new Subject();
-        this._scrollListener = (event) => this._elementScrolled.next(event);
+        this._destroyed = new Subject();
+        this._elementScrolled = Observable.create(observer => this._ngZone.runOutsideAngular(() => fromEvent(this._elementRef.nativeElement, 'scroll').pipe(takeUntil(this._destroyed))
+            .subscribe(observer)));
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        this._ngZone.runOutsideAngular(() => {
-            this.getElementRef().nativeElement.addEventListener('scroll', this._scrollListener);
-        });
         this._scroll.register(this);
     }
     /**
@@ -456,17 +454,15 @@ class CdkScrollable {
      */
     ngOnDestroy() {
         this._scroll.deregister(this);
-        if (this._scrollListener) {
-            this.getElementRef().nativeElement.removeEventListener('scroll', this._scrollListener);
-        }
-        this._elementScrolled.complete();
+        this._destroyed.next();
+        this._destroyed.complete();
     }
     /**
      * Returns observable that emits when a scroll event is fired on the host element.
      * @return {?}
      */
     elementScrolled() {
-        return this._elementScrolled.asObservable();
+        return this._elementScrolled;
     }
     /**
      * @return {?}
