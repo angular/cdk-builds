@@ -202,9 +202,15 @@ var BreakpointObserver = /** @class */ (function () {
         var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
         return rxjs.combineLatest(observables).pipe(operators.map(function (breakpointStates) {
-            return {
-                matches: breakpointStates.some(function (state) { return state && state.matches; })
+            var /** @type {?} */ response = {
+                matches: false,
+                breakpoints: {},
             };
+            breakpointStates.forEach(function (state) {
+                response.matches = response.matches || state.matches;
+                response.breakpoints[state.query] = state.matches;
+            });
+            return response;
         }));
     };
     /**
@@ -241,7 +247,7 @@ var BreakpointObserver = /** @class */ (function () {
         }, function (listener) {
             mql.removeListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
         })
-            .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ matches: nextMql.matches }); }));
+            .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }));
         // Add the MediaQueryList to the set of queries.
         var /** @type {?} */ output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);
