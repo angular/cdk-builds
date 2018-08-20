@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
  * Mixin to provide a directive with a function that checks if the sticky input has been
  * changed since the last time the function was called. Essentially adds a dirty-check to the
  * sticky value.
+ * \@docs-private
  * @template T
  * @param {?} base
  * @return {?}

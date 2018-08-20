@@ -378,6 +378,7 @@ SelectionModel = /** @class */ (function () {
 /**
  * Returns an error that reports that multiple values are passed into a selection model
  * with a single value.
+ * \@docs-private
  * @return {?}
  */
 function getMultipleValuesInSingleSelectionError() {
