@@ -103,7 +103,7 @@ var CdkStep = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._customCompleted == null ? this._defaultCompleted : this._customCompleted;
+            return this._customCompleted == null ? this._defaultCompleted() : this._customCompleted;
         },
         set: /**
          * @param {?} value
@@ -115,16 +115,15 @@ var CdkStep = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CdkStep.prototype, "_defaultCompleted", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    /**
+     * @return {?}
+     */
+    CdkStep.prototype._defaultCompleted = /**
+     * @return {?}
+     */
+    function () {
+        return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
+    };
     /** Selects this step component. */
     /**
      * Selects this step component.

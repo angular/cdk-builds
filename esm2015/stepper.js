@@ -93,7 +93,7 @@ class CdkStep {
      * @return {?}
      */
     get completed() {
-        return this._customCompleted == null ? this._defaultCompleted : this._customCompleted;
+        return this._customCompleted == null ? this._defaultCompleted() : this._customCompleted;
     }
     /**
      * @param {?} value
@@ -105,7 +105,7 @@ class CdkStep {
     /**
      * @return {?}
      */
-    get _defaultCompleted() {
+    _defaultCompleted() {
         return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
     }
     /**

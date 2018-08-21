@@ -2066,25 +2066,14 @@ var FocusMonitor = /** @class */ (function () {
         this._monitoredElementCount = 0;
     }
     /**
-     * Monitors focus on an element and applies appropriate CSS classes.
-     * @param element The element to monitor
-     * @param checkChildren Whether to count the element as focused when its children are focused.
-     * @returns An observable that emits when the focus state of the element changes.
-     *     When the element is blurred, null will be emitted.
-     */
-    /**
-     * Monitors focus on an element and applies appropriate CSS classes.
-     * @param {?} element The element to monitor
-     * @param {?=} checkChildren Whether to count the element as focused when its children are focused.
-     * @return {?} An observable that emits when the focus state of the element changes.
-     *     When the element is blurred, null will be emitted.
+     * @param {?} element
+     * @param {?=} checkChildren
+     * @return {?}
      */
     FocusMonitor.prototype.monitor = /**
-     * Monitors focus on an element and applies appropriate CSS classes.
-     * @param {?} element The element to monitor
-     * @param {?=} checkChildren Whether to count the element as focused when its children are focused.
-     * @return {?} An observable that emits when the focus state of the element changes.
-     *     When the element is blurred, null will be emitted.
+     * @param {?} element
+     * @param {?=} checkChildren
+     * @return {?}
      */
     function (element, checkChildren) {
         var _this = this;
@@ -2093,9 +2082,10 @@ var FocusMonitor = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return rxjs.of(null);
         }
+        var /** @type {?} */ nativeElement = this._getNativeElement(element);
         // Check if we're already monitoring this element.
-        if (this._elementInfo.has(element)) {
-            var /** @type {?} */ cachedInfo = this._elementInfo.get(element); /** @type {?} */
+        if (this._elementInfo.has(nativeElement)) {
+            var /** @type {?} */ cachedInfo = this._elementInfo.get(nativeElement); /** @type {?} */
             ((cachedInfo)).checkChildren = checkChildren;
             return /** @type {?} */ ((cachedInfo)).subject.asObservable();
         }
@@ -2105,43 +2095,38 @@ var FocusMonitor = /** @class */ (function () {
             checkChildren: checkChildren,
             subject: new rxjs.Subject()
         };
-        this._elementInfo.set(element, info);
+        this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
         // Start listening. We need to listen in capture phase since focus events don't bubble.
-        var /** @type {?} */ focusListener = function (event) { return _this._onFocus(event, element); };
-        var /** @type {?} */ blurListener = function (event) { return _this._onBlur(event, element); };
+        var /** @type {?} */ focusListener = function (event) { return _this._onFocus(event, nativeElement); };
+        var /** @type {?} */ blurListener = function (event) { return _this._onBlur(event, nativeElement); };
         this._ngZone.runOutsideAngular(function () {
-            element.addEventListener('focus', focusListener, true);
-            element.addEventListener('blur', blurListener, true);
+            nativeElement.addEventListener('focus', focusListener, true);
+            nativeElement.addEventListener('blur', blurListener, true);
         });
         // Create an unlisten function for later.
         info.unlisten = function () {
-            element.removeEventListener('focus', focusListener, true);
-            element.removeEventListener('blur', blurListener, true);
+            nativeElement.removeEventListener('focus', focusListener, true);
+            nativeElement.removeEventListener('blur', blurListener, true);
         };
         return info.subject.asObservable();
     };
     /**
-     * Stops monitoring an element and removes all focus classes.
-     * @param element The element to stop monitoring.
-     */
-    /**
-     * Stops monitoring an element and removes all focus classes.
-     * @param {?} element The element to stop monitoring.
+     * @param {?} element
      * @return {?}
      */
     FocusMonitor.prototype.stopMonitoring = /**
-     * Stops monitoring an element and removes all focus classes.
-     * @param {?} element The element to stop monitoring.
+     * @param {?} element
      * @return {?}
      */
     function (element) {
-        var /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        var /** @type {?} */ nativeElement = this._getNativeElement(element);
+        var /** @type {?} */ elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
             elementInfo.unlisten();
             elementInfo.subject.complete();
-            this._setClasses(element);
-            this._elementInfo.delete(element);
+            this._setClasses(nativeElement);
+            this._elementInfo.delete(nativeElement);
             this._decrementMonitoredElementCount();
         }
     };
@@ -2452,6 +2437,17 @@ var FocusMonitor = /** @class */ (function () {
             this._unregisterGlobalListeners = function () { };
         }
     };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    FocusMonitor.prototype._getNativeElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        return element instanceof core.ElementRef ? element.nativeElement : element;
+    };
     FocusMonitor.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
@@ -2478,7 +2474,7 @@ var CdkMonitorFocus = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
         this.cdkFocusChange = new core.EventEmitter();
-        this._monitorSubscription = this._focusMonitor.monitor(this._elementRef.nativeElement, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
+        this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
     }
     /**
@@ -2488,7 +2484,7 @@ var CdkMonitorFocus = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._focusMonitor.stopMonitoring(this._elementRef.nativeElement);
+        this._focusMonitor.stopMonitoring(this._elementRef);
         this._monitorSubscription.unsubscribe();
     };
     CdkMonitorFocus.decorators = [

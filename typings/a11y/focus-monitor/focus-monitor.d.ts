@@ -52,10 +52,23 @@ export declare class FocusMonitor implements OnDestroy {
      */
     monitor(element: HTMLElement, checkChildren?: boolean): Observable<FocusOrigin>;
     /**
+     * Monitors focus on an element and applies appropriate CSS classes.
+     * @param element The element to monitor
+     * @param checkChildren Whether to count the element as focused when its children are focused.
+     * @returns An observable that emits when the focus state of the element changes.
+     *     When the element is blurred, null will be emitted.
+     */
+    monitor(element: ElementRef<HTMLElement>, checkChildren?: boolean): Observable<FocusOrigin>;
+    /**
      * Stops monitoring an element and removes all focus classes.
      * @param element The element to stop monitoring.
      */
     stopMonitoring(element: HTMLElement): void;
+    /**
+     * Stops monitoring an element and removes all focus classes.
+     * @param element The element to stop monitoring.
+     */
+    stopMonitoring(element: ElementRef<HTMLElement>): void;
     /**
      * Focuses the element via the specified focus origin.
      * @param element Element to focus.
@@ -99,6 +112,7 @@ export declare class FocusMonitor implements OnDestroy {
     private _emitOrigin(subject, origin);
     private _incrementMonitoredElementCount();
     private _decrementMonitoredElementCount();
+    private _getNativeElement(element);
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or

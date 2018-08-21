@@ -57,7 +57,7 @@ export declare class CdkStep implements OnChanges {
     /** Whether step is marked as completed. */
     completed: boolean;
     private _customCompleted;
-    private readonly _defaultCompleted;
+    private _defaultCompleted();
     constructor(_stepper: CdkStepper);
     /** Selects this step component. */
     select(): void;
