@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('@angular/cdk/collections')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs', '@angular/cdk/collections'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.core,global.ng.cdk.coercion,global.rxjs,global.ng.cdk.collections));
-}(this, (function (exports,core,coercion,rxjs,collections) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('@angular/cdk/collections')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', '@angular/cdk/collections'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}),global.ng.cdk.coercion,global.ng.core,global.rxjs,global.ng.cdk.collections));
+}(this, (function (exports,coercion,core,rxjs,collections) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -24,6 +24,10 @@ var /** @type {?} */ nextId = 0;
  */
 var CdkAccordion = /** @class */ (function () {
     function CdkAccordion() {
+        /**
+         * Emits when the state of the accordion changes
+         */
+        this._stateChanges = new rxjs.Subject();
         /**
          * Stream that emits true/false when openAll/closeAll is triggered.
          */
@@ -71,6 +75,26 @@ var CdkAccordion = /** @class */ (function () {
      */
     function () {
         this._openCloseAll(false);
+    };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    CdkAccordion.prototype.ngOnChanges = /**
+     * @param {?} changes
+     * @return {?}
+     */
+    function (changes) {
+        this._stateChanges.next(changes);
+    };
+    /**
+     * @return {?}
+     */
+    CdkAccordion.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._stateChanges.complete();
     };
     /**
      * @param {?} expanded

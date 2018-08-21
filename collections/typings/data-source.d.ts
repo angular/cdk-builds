@@ -16,7 +16,7 @@ export declare abstract class DataSource<T> {
      *     data source.
      * @returns Observable that emits a new value when the data changes.
      */
-    abstract connect(collectionViewer: CollectionViewer): Observable<T[]>;
+    abstract connect(collectionViewer: CollectionViewer): Observable<T[] | ReadonlyArray<T>>;
     /**
      * Disconnects a collection viewer (such as a data-table) from this data source. Can be used
      * to perform any clean-up or tear-down operations when a view is being destroyed.

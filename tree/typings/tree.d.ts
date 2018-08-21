@@ -69,7 +69,7 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
     /** Set up a subscription for the data provided by the data source. */
     private _observeRenderChanges();
     /** Check for changes made in the data and render each change (node added/removed/moved). */
-    renderNodeChanges(data: T[], dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef, parentData?: T): void;
+    renderNodeChanges(data: T[] | ReadonlyArray<T>, dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef, parentData?: T): void;
     /**
      * Finds the matching node definition that should be used for this node data. If there is only
      * one node definition, it is returned. Otherwise, find the node definition that has a when

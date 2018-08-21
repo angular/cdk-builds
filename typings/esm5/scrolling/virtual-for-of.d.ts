@@ -62,7 +62,7 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
      */
     cdkVirtualForTemplateCacheSize: number;
     /** Emits whenever the data in the current DataSource changes. */
-    dataStream: Observable<T[]>;
+    dataStream: Observable<T[] | ReadonlyArray<T>>;
     /** The differ used to calculate changes to the data. */
     private _differ;
     /** The most recent data emitted from the DataSource. */
