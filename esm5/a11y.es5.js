@@ -1941,14 +1941,12 @@ var CdkAriaLive = /** @class */ (function () {
                     this._subscription = null;
                 }
             }
-            else {
-                if (!this._subscription) {
-                    this._subscription = this._ngZone.runOutsideAngular(function () {
-                        return _this._contentObserver.observe(_this._elementRef.nativeElement).subscribe(function () {
-                            return _this._liveAnnouncer.announce(_this._elementRef.nativeElement.innerText, _this._politeness);
-                        });
+            else if (!this._subscription) {
+                this._subscription = this._ngZone.runOutsideAngular(function () {
+                    return _this._contentObserver.observe(_this._elementRef).subscribe(function () {
+                        return _this._liveAnnouncer.announce(_this._elementRef.nativeElement.innerText, _this._politeness);
                     });
-                }
+                });
             }
         },
         enumerable: true,

@@ -20,6 +20,11 @@ export declare class ContentObserver implements OnDestroy {
      */
     observe(element: Element): Observable<MutationRecord[]>;
     /**
+     * Observe content changes on an element.
+     * @param element The element to observe for content changes.
+     */
+    observe(element: ElementRef<Element>): Observable<MutationRecord[]>;
+    /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
      * new one if not.
      */
