@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { TemplateRef, ViewContainerRef, ElementRef, ComponentRef, EmbeddedViewRef, Injector } from '@angular/core';
+import { TemplateRef, ViewContainerRef, ElementRef, ComponentRef, EmbeddedViewRef, Injector, ComponentFactoryResolver } from '@angular/core';
 /** Interface that can be used to generically type a class. */
 export interface ComponentType<T> {
     new (...args: any[]): T;
@@ -42,7 +42,12 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
     viewContainerRef?: ViewContainerRef | null;
     /** [Optional] Injector used for the instantiation of the component. */
     injector?: Injector | null;
-    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null);
+    /**
+     * Alternate `ComponentFactoryResolver` to use when resolving the associated component.
+     * Defaults to using the resolver from the outlet that the portal is attached to.
+     */
+    componentFactoryResolver?: ComponentFactoryResolver | null;
+    constructor(component: ComponentType<T>, viewContainerRef?: ViewContainerRef | null, injector?: Injector | null, componentFactoryResolver?: ComponentFactoryResolver | null);
 }
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).

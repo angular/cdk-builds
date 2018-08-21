@@ -197,11 +197,12 @@ var   /**
  */
 ComponentPortal = /** @class */ (function (_super) {
     __extends(ComponentPortal, _super);
-    function ComponentPortal(component, viewContainerRef, injector) {
+    function ComponentPortal(component, viewContainerRef, injector, componentFactoryResolver) {
         var _this = _super.call(this) || this;
         _this.component = component;
         _this.viewContainerRef = viewContainerRef;
         _this.injector = injector;
+        _this.componentFactoryResolver = componentFactoryResolver;
         return _this;
     }
     return ComponentPortal;
@@ -433,7 +434,8 @@ DomPortalOutlet = /** @class */ (function (_super) {
      */
     function (portal) {
         var _this = this;
-        var /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
+        var /** @type {?} */ resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+        var /** @type {?} */ componentFactory = resolver.resolveComponentFactory(portal.component);
         var /** @type {?} */ componentRef;
         // If the portal specifies a ViewContainerRef, we will use that as the attachment point
         // for the component (in terms of Angular's component tree, not rendering).

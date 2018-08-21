@@ -128,12 +128,14 @@ class ComponentPortal extends Portal {
      * @param {?} component
      * @param {?=} viewContainerRef
      * @param {?=} injector
+     * @param {?=} componentFactoryResolver
      */
-    constructor(component, viewContainerRef, injector) {
+    constructor(component, viewContainerRef, injector, componentFactoryResolver) {
         super();
         this.component = component;
         this.viewContainerRef = viewContainerRef;
         this.injector = injector;
+        this.componentFactoryResolver = componentFactoryResolver;
     }
 }
 /**
@@ -292,7 +294,8 @@ class DomPortalOutlet extends BasePortalOutlet {
      * @return {?} Reference to the created component.
      */
     attachComponentPortal(portal) {
-        let /** @type {?} */ componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
+        const /** @type {?} */ resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+        const /** @type {?} */ componentFactory = resolver.resolveComponentFactory(portal.component);
         let /** @type {?} */ componentRef;
         // If the portal specifies a ViewContainerRef, we will use that as the attachment point
         // for the component (in terms of Angular's component tree, not rendering).
