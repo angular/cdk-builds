@@ -13,8 +13,12 @@ export interface OverlayConnectionPosition {
 }
 /** The points of the origin element and the overlay element to connect. */
 export declare class ConnectionPositionPair {
+    /** Offset along the X axis. */
     offsetX: number | undefined;
+    /** Offset along the Y axis. */
     offsetY: number | undefined;
+    /** Class(es) to be applied to the panel while this position is active. */
+    panelClass: string | string[] | undefined;
     /** X-axis attachment point for connected overlay origin. Can be 'start', 'end', or 'center'. */
     originX: HorizontalConnectionPos;
     /** Y-axis attachment point for connected overlay origin. Can be 'top', 'bottom', or 'center'. */
@@ -23,7 +27,13 @@ export declare class ConnectionPositionPair {
     overlayX: HorizontalConnectionPos;
     /** Y-axis attachment point for connected overlay. Can be 'top', 'bottom', or 'center'. */
     overlayY: VerticalConnectionPos;
-    constructor(origin: OriginConnectionPosition, overlay: OverlayConnectionPosition, offsetX?: number | undefined, offsetY?: number | undefined);
+    constructor(origin: OriginConnectionPosition, overlay: OverlayConnectionPosition, 
+        /** Offset along the X axis. */
+        offsetX?: number | undefined, 
+        /** Offset along the Y axis. */
+        offsetY?: number | undefined, 
+        /** Class(es) to be applied to the panel while this position is active. */
+        panelClass?: string | string[] | undefined);
 }
 /**
  * Set of properties regarding the position of the origin and overlay relative to the viewport

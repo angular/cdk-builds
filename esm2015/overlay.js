@@ -92,10 +92,12 @@ class ConnectionPositionPair {
      * @param {?} overlay
      * @param {?=} offsetX
      * @param {?=} offsetY
+     * @param {?=} panelClass
      */
-    constructor(origin, overlay, offsetX, offsetY) {
+    constructor(origin, overlay, offsetX, offsetY, panelClass) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        this.panelClass = panelClass;
         this.originX = origin.originX;
         this.originY = origin.originY;
         this.overlayX = overlay.overlayX;
@@ -1197,6 +1199,10 @@ class FlexibleConnectedPositionStrategy {
          */
         this._positionChangeSubscriptions = 0;
         /**
+         * Keeps track of the CSS classes that the position strategy has applied on the overlay panel.
+         */
+        this._appliedPanelClasses = [];
+        /**
          * Observable sequence of position changes.
          */
         this.positionChanges = Observable.create(observer => {
@@ -1261,6 +1267,7 @@ class FlexibleConnectedPositionStrategy {
             this.reapplyLastPosition();
             return;
         }
+        this._clearPanelClasses();
         this._resetOverlayElementStyles();
         this._resetBoundingBoxStyles();
         // We need the bounding rects for the origin and the overlay to determine how to position
@@ -1345,6 +1352,7 @@ class FlexibleConnectedPositionStrategy {
      * @return {?}
      */
     detach() {
+        this._clearPanelClasses();
         this._resizeSubscription.unsubscribe();
     }
     /**
@@ -1653,6 +1661,9 @@ class FlexibleConnectedPositionStrategy {
         this._setTransformOrigin(position);
         this._setOverlayElementStyles(originPoint, position);
         this._setBoundingBoxStyles(originPoint, position);
+        if (position.panelClass) {
+            this._addPanelClasses(position.panelClass);
+        }
         // Save the last connected position in case the position needs to be re-calculated.
         this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
@@ -2050,6 +2061,31 @@ class FlexibleConnectedPositionStrategy {
             validateHorizontalPosition('overlayX', pair.overlayX);
             validateVerticalPosition('overlayY', pair.overlayY);
         });
+    }
+    /**
+     * Adds a single CSS class or an array of classes on the overlay panel.
+     * @param {?} cssClasses
+     * @return {?}
+     */
+    _addPanelClasses(cssClasses) {
+        if (this._pane) {
+            coerceArray(cssClasses).forEach(cssClass => {
+                if (this._appliedPanelClasses.indexOf(cssClass) === -1) {
+                    this._appliedPanelClasses.push(cssClass);
+                    this._pane.classList.add(cssClass);
+                }
+            });
+        }
+    }
+    /**
+     * Clears the classes that the position strategy has applied from the overlay panel.
+     * @return {?}
+     */
+    _clearPanelClasses() {
+        if (this._pane) {
+            this._appliedPanelClasses.forEach(cssClass => this._pane.classList.remove(cssClass));
+            this._appliedPanelClasses = [];
+        }
     }
 }
 /**

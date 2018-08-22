@@ -78,6 +78,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _transformOriginSelector;
     /** Amount of subscribers to the `positionChanges` stream. */
     private _positionChangeSubscriptions;
+    /** Keeps track of the CSS classes that the position strategy has applied on the overlay panel. */
+    private _appliedPanelClasses;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -241,6 +243,10 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _getOffset(position, axis);
     /** Validates that the current position match the expected values. */
     private _validatePositions();
+    /** Adds a single CSS class or an array of classes on the overlay panel. */
+    private _addPanelClasses(cssClasses);
+    /** Clears the classes that the position strategy has applied from the overlay panel. */
+    private _clearPanelClasses();
 }
 /** A connected position as specified by the user. */
 export interface ConnectedPosition {
@@ -251,4 +257,5 @@ export interface ConnectedPosition {
     weight?: number;
     offsetX?: number;
     offsetY?: number;
+    panelClass?: string | string[];
 }

@@ -147,9 +147,10 @@ var   /**
  * The points of the origin element and the overlay element to connect.
  */
 ConnectionPositionPair = /** @class */ (function () {
-    function ConnectionPositionPair(origin, overlay, offsetX, offsetY) {
+    function ConnectionPositionPair(origin, overlay, offsetX, offsetY, panelClass) {
         this.offsetX = offsetX;
         this.offsetY = offsetY;
+        this.panelClass = panelClass;
         this.originX = origin.originX;
         this.originY = origin.originY;
         this.overlayX = overlay.overlayX;
@@ -1508,6 +1509,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          */
         this._positionChangeSubscriptions = 0;
         /**
+         * Keeps track of the CSS classes that the position strategy has applied on the overlay panel.
+         */
+        this._appliedPanelClasses = [];
+        /**
          * Observable sequence of position changes.
          */
         this.positionChanges = rxjs.Observable.create(function (observer) {
@@ -1613,6 +1618,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             this.reapplyLastPosition();
             return;
         }
+        this._clearPanelClasses();
         this._resetOverlayElementStyles();
         this._resetBoundingBoxStyles();
         // We need the bounding rects for the origin and the overlay to determine how to position
@@ -1702,6 +1708,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        this._clearPanelClasses();
         this._resizeSubscription.unsubscribe();
     };
     /** Cleanup after the element gets destroyed. */
@@ -2180,6 +2187,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this._setTransformOrigin(position);
         this._setOverlayElementStyles(originPoint, position);
         this._setBoundingBoxStyles(originPoint, position);
+        if (position.panelClass) {
+            this._addPanelClasses(position.panelClass);
+        }
         // Save the last connected position in case the position needs to be re-calculated.
         this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
@@ -2662,6 +2672,42 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             validateHorizontalPosition('overlayX', pair.overlayX);
             validateVerticalPosition('overlayY', pair.overlayY);
         });
+    };
+    /**
+     * Adds a single CSS class or an array of classes on the overlay panel.
+     * @param {?} cssClasses
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._addPanelClasses = /**
+     * Adds a single CSS class or an array of classes on the overlay panel.
+     * @param {?} cssClasses
+     * @return {?}
+     */
+    function (cssClasses) {
+        var _this = this;
+        if (this._pane) {
+            coercion.coerceArray(cssClasses).forEach(function (cssClass) {
+                if (_this._appliedPanelClasses.indexOf(cssClass) === -1) {
+                    _this._appliedPanelClasses.push(cssClass);
+                    _this._pane.classList.add(cssClass);
+                }
+            });
+        }
+    };
+    /**
+     * Clears the classes that the position strategy has applied from the overlay panel.
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._clearPanelClasses = /**
+     * Clears the classes that the position strategy has applied from the overlay panel.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (this._pane) {
+            this._appliedPanelClasses.forEach(function (cssClass) { return _this._pane.classList.remove(cssClass); });
+            this._appliedPanelClasses = [];
+        }
     };
     return FlexibleConnectedPositionStrategy;
 }());
