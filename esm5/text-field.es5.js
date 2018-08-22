@@ -31,25 +31,19 @@ var AutofillMonitor = /** @class */ (function () {
         this._monitoredElements = new Map();
     }
     /**
-     * Monitor for changes in the autofill state of the given input element.
-     * @param element The element to monitor.
-     * @return A stream of autofill state changes.
-     */
-    /**
-     * Monitor for changes in the autofill state of the given input element.
-     * @param {?} element The element to monitor.
-     * @return {?} A stream of autofill state changes.
+     * @param {?} elementOrRef
+     * @return {?}
      */
     AutofillMonitor.prototype.monitor = /**
-     * Monitor for changes in the autofill state of the given input element.
-     * @param {?} element The element to monitor.
-     * @return {?} A stream of autofill state changes.
+     * @param {?} elementOrRef
+     * @return {?}
      */
-    function (element) {
+    function (elementOrRef) {
         var _this = this;
         if (!this._platform.isBrowser) {
             return EMPTY;
         }
+        var /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         var /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
             return info.subject.asObservable();
@@ -84,20 +78,15 @@ var AutofillMonitor = /** @class */ (function () {
         return result.asObservable();
     };
     /**
-     * Stop monitoring the autofill state of the given input element.
-     * @param element The element to stop monitoring.
-     */
-    /**
-     * Stop monitoring the autofill state of the given input element.
-     * @param {?} element The element to stop monitoring.
+     * @param {?} elementOrRef
      * @return {?}
      */
     AutofillMonitor.prototype.stopMonitoring = /**
-     * Stop monitoring the autofill state of the given input element.
-     * @param {?} element The element to stop monitoring.
+     * @param {?} elementOrRef
      * @return {?}
      */
-    function (element) {
+    function (elementOrRef) {
+        var /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         var /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
             info.unlisten();
@@ -149,7 +138,7 @@ var CdkAutofill = /** @class */ (function () {
     function () {
         var _this = this;
         this._autofillMonitor
-            .monitor(this._elementRef.nativeElement)
+            .monitor(this._elementRef)
             .subscribe(function (event) { return _this.cdkAutofill.emit(event); });
     };
     /**
@@ -159,7 +148,7 @@ var CdkAutofill = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._autofillMonitor.stopMonitoring(this._elementRef.nativeElement);
+        this._autofillMonitor.stopMonitoring(this._elementRef);
     };
     CdkAutofill.decorators = [
         { type: Directive, args: [{

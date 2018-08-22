@@ -35,14 +35,14 @@ class AutofillMonitor {
         this._monitoredElements = new Map();
     }
     /**
-     * Monitor for changes in the autofill state of the given input element.
-     * @param {?} element The element to monitor.
-     * @return {?} A stream of autofill state changes.
+     * @param {?} elementOrRef
+     * @return {?}
      */
-    monitor(element) {
+    monitor(elementOrRef) {
         if (!this._platform.isBrowser) {
             return EMPTY;
         }
+        const /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         const /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
             return info.subject.asObservable();
@@ -77,11 +77,11 @@ class AutofillMonitor {
         return result.asObservable();
     }
     /**
-     * Stop monitoring the autofill state of the given input element.
-     * @param {?} element The element to stop monitoring.
+     * @param {?} elementOrRef
      * @return {?}
      */
-    stopMonitoring(element) {
+    stopMonitoring(elementOrRef) {
+        const /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         const /** @type {?} */ info = this._monitoredElements.get(element);
         if (info) {
             info.unlisten();
@@ -128,14 +128,14 @@ class CdkAutofill {
      */
     ngOnInit() {
         this._autofillMonitor
-            .monitor(this._elementRef.nativeElement)
+            .monitor(this._elementRef)
             .subscribe(event => this.cdkAutofill.emit(event));
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
-        this._autofillMonitor.stopMonitoring(this._elementRef.nativeElement);
+        this._autofillMonitor.stopMonitoring(this._elementRef);
     }
 }
 CdkAutofill.decorators = [
