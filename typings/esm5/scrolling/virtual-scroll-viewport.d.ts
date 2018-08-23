@@ -5,16 +5,18 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { Directionality } from '@angular/cdk/bidi';
 import { ListRange } from '@angular/cdk/collections';
 import { ChangeDetectorRef, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ScrollDispatcher } from './scroll-dispatcher';
+import { CdkScrollable } from './scrollable';
 import { CdkVirtualForOf } from './virtual-for-of';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 /** A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`. */
-export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
+export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
     private _changeDetectorRef;
-    private _ngZone;
     private _scrollStrategy;
     /** Emits when the viewport is detached from a CdkVirtualForOf. */
     private _detachedSubject;
@@ -48,8 +50,6 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
     private _dataLength;
     /** The size of the viewport (in pixels). */
     private _viewportSize;
-    /** The pending scroll offset to be applied during the next change detection cycle. */
-    private _pendingScrollOffset;
     /** the currently attached CdkVirtualForOf. */
     private _forOf;
     /** The last rendered content offset that was set. */
@@ -59,13 +59,11 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
      * be rewritten as an offset to the start of the content).
      */
     private _renderedContentOffsetNeedsRewrite;
-    /** Observable that emits when the viewport is destroyed. */
-    private _destroyed;
     /** Whether there is a pending change detection cycle. */
     private _isChangeDetectionPending;
     /** A list of functions to run after the next change detection cycle. */
     private _runAfterChangeDetection;
-    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, _ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy);
+    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Attaches a `CdkVirtualForOf` to this viewport. */
@@ -95,7 +93,9 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
      */
     setRenderedContentOffset(offset: number, to?: 'to-start' | 'to-end'): void;
     /**
-     * Scrolls to the offset on the viewport.
+     * Scrolls to the given offset from the start of the viewport. Please note that this is not always
+     * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
+     * direction, this would be the equivalent of setting a fictional `scrollRight` property.
      * @param offset The offset to scroll to.
      * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
      */
@@ -106,10 +106,12 @@ export declare class CdkVirtualScrollViewport implements OnInit, OnDestroy {
      * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
      */
     scrollToIndex(index: number, behavior?: ScrollBehavior): void;
-    /** @docs-private Internal method to set the scroll offset on the viewport. */
-    setScrollOffset(offset: number): void;
-    /** Gets the current scroll offset of the viewport (in pixels). */
-    measureScrollOffset(): number;
+    /**
+     * Gets the current scroll offset from the start of the viewport (in pixels).
+     * @param from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
+     *     in horizontal mode.
+     */
+    measureScrollOffset(from?: 'top' | 'left' | 'right' | 'bottom' | 'start' | 'end'): number;
     /** Measure the combined size of all of the rendered items. */
     measureRenderedContentSize(): number;
     /**

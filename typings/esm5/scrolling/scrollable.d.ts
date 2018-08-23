@@ -46,13 +46,13 @@ export declare type ExtendedScrollToOptions = _XAxis & _YAxis & ScrollOptions;
  * can be listened to through the service.
  */
 export declare class CdkScrollable implements OnInit, OnDestroy {
-    private _elementRef;
-    private _scroll;
-    private _ngZone;
-    private _dir;
+    protected elementRef: ElementRef<HTMLElement>;
+    protected scrollDispatcher: ScrollDispatcher;
+    protected ngZone: NgZone;
+    protected dir: Directionality | undefined;
     private _destroyed;
     private _elementScrolled;
-    constructor(_elementRef: ElementRef<HTMLElement>, _scroll: ScrollDispatcher, _ngZone: NgZone, _dir?: Directionality | undefined);
+    constructor(elementRef: ElementRef<HTMLElement>, scrollDispatcher: ScrollDispatcher, ngZone: NgZone, dir?: Directionality | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Returns observable that emits when a scroll event is fired on the host element. */

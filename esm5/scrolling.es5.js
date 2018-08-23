@@ -8,9 +8,10 @@
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, defineInjectable, inject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, takeUntil, sampleTime, pairwise, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, auditTime, filter, takeUntil, sampleTime, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
+import { __extends } from 'tslib';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
 
 /**
@@ -619,16 +620,16 @@ var /** @type {?} */ SCROLL_DISPATCHER_PROVIDER = {
  * can be listened to through the service.
  */
 var CdkScrollable = /** @class */ (function () {
-    function CdkScrollable(_elementRef, _scroll, _ngZone, _dir) {
+    function CdkScrollable(elementRef, scrollDispatcher, ngZone, dir) {
         var _this = this;
-        this._elementRef = _elementRef;
-        this._scroll = _scroll;
-        this._ngZone = _ngZone;
-        this._dir = _dir;
+        this.elementRef = elementRef;
+        this.scrollDispatcher = scrollDispatcher;
+        this.ngZone = ngZone;
+        this.dir = dir;
         this._destroyed = new Subject();
         this._elementScrolled = Observable.create(function (observer) {
-            return _this._ngZone.runOutsideAngular(function () {
-                return fromEvent(_this._elementRef.nativeElement, 'scroll').pipe(takeUntil(_this._destroyed))
+            return _this.ngZone.runOutsideAngular(function () {
+                return fromEvent(_this.elementRef.nativeElement, 'scroll').pipe(takeUntil(_this._destroyed))
                     .subscribe(observer);
             });
         });
@@ -640,7 +641,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._scroll.register(this);
+        this.scrollDispatcher.register(this);
     };
     /**
      * @return {?}
@@ -649,7 +650,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._scroll.deregister(this);
+        this.scrollDispatcher.deregister(this);
         this._destroyed.next();
         this._destroyed.complete();
     };
@@ -675,7 +676,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._elementRef;
+        return this.elementRef;
     };
     /**
      * Scrolls to the specified offsets. This is a normalized version of the browser's native scrollTo
@@ -704,8 +705,8 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function (options) {
-        var /** @type {?} */ el = this._elementRef.nativeElement;
-        var /** @type {?} */ isRtl = this._dir && this._dir.value == 'rtl';
+        var /** @type {?} */ el = this.elementRef.nativeElement;
+        var /** @type {?} */ isRtl = this.dir && this.dir.value == 'rtl';
         // Rewrite start & end offsets as right or left offsets.
         options.left = options.left == null ? (isRtl ? options.end : options.start) : options.left;
         options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
@@ -741,7 +742,7 @@ var CdkScrollable = /** @class */ (function () {
      * @return {?}
      */
     function (options) {
-        var /** @type {?} */ el = this._elementRef.nativeElement;
+        var /** @type {?} */ el = this.elementRef.nativeElement;
         if (supportsScrollBehavior()) {
             el.scrollTo(options);
         }
@@ -786,7 +787,7 @@ var CdkScrollable = /** @class */ (function () {
     function (from) {
         var /** @type {?} */ LEFT = 'left';
         var /** @type {?} */ RIGHT = 'right';
-        var /** @type {?} */ el = this._elementRef.nativeElement;
+        var /** @type {?} */ el = this.elementRef.nativeElement;
         if (from == 'top') {
             return el.scrollTop;
         }
@@ -794,7 +795,7 @@ var CdkScrollable = /** @class */ (function () {
             return el.scrollHeight - el.clientHeight - el.scrollTop;
         }
         // Rewrite start & end as left or right offsets.
-        var /** @type {?} */ isRtl = this._dir && this._dir.value == 'rtl';
+        var /** @type {?} */ isRtl = this.dir && this.dir.value == 'rtl';
         if (from == 'start') {
             from = isRtl ? RIGHT : LEFT;
         }
@@ -863,79 +864,76 @@ function rangesEqual(r1, r2) {
 /**
  * A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`.
  */
-var CdkVirtualScrollViewport = /** @class */ (function () {
-    function CdkVirtualScrollViewport(elementRef, _changeDetectorRef, _ngZone, _scrollStrategy) {
-        var _this = this;
-        this.elementRef = elementRef;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._ngZone = _ngZone;
-        this._scrollStrategy = _scrollStrategy;
+var CdkVirtualScrollViewport = /** @class */ (function (_super) {
+    __extends(CdkVirtualScrollViewport, _super);
+    function CdkVirtualScrollViewport(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher) {
+        var _this = _super.call(this, elementRef, scrollDispatcher, ngZone, dir) || this;
+        _this.elementRef = elementRef;
+        _this._changeDetectorRef = _changeDetectorRef;
+        _this._scrollStrategy = _scrollStrategy;
         /**
          * Emits when the viewport is detached from a CdkVirtualForOf.
          */
-        this._detachedSubject = new Subject();
+        _this._detachedSubject = new Subject();
         /**
          * Emits when the rendered range changes.
          */
-        this._renderedRangeSubject = new Subject();
+        _this._renderedRangeSubject = new Subject();
         /**
          * The direction the viewport scrolls.
          */
-        this.orientation = 'vertical';
+        _this.orientation = 'vertical';
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
-        this.scrolledIndexChange = Observable.create(function (observer) {
+        _this.scrolledIndexChange = Observable.create(function (observer) {
             return _this._scrollStrategy.scrolledIndexChange.subscribe(function (index) {
-                return Promise.resolve().then(function () { return _this._ngZone.run(function () { return observer.next(index); }); });
+                return Promise.resolve().then(function () { return _this.ngZone.run(function () { return observer.next(index); }); });
             });
         });
         /**
          * A stream that emits whenever the rendered range changes.
          */
-        this.renderedRangeStream = this._renderedRangeSubject.asObservable();
+        _this.renderedRangeStream = _this._renderedRangeSubject.asObservable();
         /**
          * The transform used to scale the spacer to the same size as all content, including content that
          * is not currently rendered.
          */
-        this._totalContentSizeTransform = '';
+        _this._totalContentSizeTransform = '';
         /**
          * The total size of all content (in pixels), including content that is not currently rendered.
          */
-        this._totalContentSize = 0;
+        _this._totalContentSize = 0;
         /**
          * The currently rendered range of indices.
          */
-        this._renderedRange = { start: 0, end: 0 };
+        _this._renderedRange = { start: 0, end: 0 };
         /**
          * The length of the data bound to this viewport (in number of items).
          */
-        this._dataLength = 0;
+        _this._dataLength = 0;
         /**
          * The size of the viewport (in pixels).
          */
-        this._viewportSize = 0;
+        _this._viewportSize = 0;
         /**
          * The last rendered content offset that was set.
          */
-        this._renderedContentOffset = 0;
+        _this._renderedContentOffset = 0;
         /**
          * Whether the last rendered content offset was to the end of the content (and therefore needs to
          * be rewritten as an offset to the start of the content).
          */
-        this._renderedContentOffsetNeedsRewrite = false;
-        /**
-         * Observable that emits when the viewport is destroyed.
-         */
-        this._destroyed = new Subject();
+        _this._renderedContentOffsetNeedsRewrite = false;
         /**
          * Whether there is a pending change detection cycle.
          */
-        this._isChangeDetectionPending = false;
+        _this._isChangeDetectionPending = false;
         /**
          * A list of functions to run after the next change detection cycle.
          */
-        this._runAfterChangeDetection = [];
+        _this._runAfterChangeDetection = [];
+        return _this;
     }
     /**
      * @return {?}
@@ -945,16 +943,22 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        _super.prototype.ngOnInit.call(this);
         // It's still too early to measure the viewport at this point. Deferring with a promise allows
         // the Viewport to be rendered with the correct size before we measure. We run this outside the
         // zone to avoid causing more change detection cycles. We handle the change detection loop
         // ourselves instead.
-        this._ngZone.runOutsideAngular(function () {
+        this.ngZone.runOutsideAngular(function () {
             return Promise.resolve().then(function () {
                 _this._measureViewportSize();
                 _this._scrollStrategy.attach(_this);
-                fromEvent(_this.elementRef.nativeElement, 'scroll')
-                    .pipe(sampleTime(0, animationFrameScheduler), takeUntil(_this._destroyed))
+                _this.elementScrolled()
+                    .pipe(
+                // Start off with a fake scroll event so we properly detect our initial position.
+                startWith(/** @type {?} */ ((null))), 
+                // Sample the scroll stream at every animation frame. This way if there are multiple
+                // scroll events in the same frame we only need to recheck our layout once.
+                sampleTime(0, animationFrameScheduler))
                     .subscribe(function () { return _this._scrollStrategy.onContentScrolled(); });
                 _this._markChangeDetectionNeeded();
             });
@@ -969,11 +973,10 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
     function () {
         this.detach();
         this._scrollStrategy.detach();
-        this._destroyed.next();
         // Complete all subjects
         this._renderedRangeSubject.complete();
         this._detachedSubject.complete();
-        this._destroyed.complete();
+        _super.prototype.ngOnDestroy.call(this);
     };
     /** Attaches a `CdkVirtualForOf` to this viewport. */
     /**
@@ -994,7 +997,7 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         // Subscribe to the data stream of the CdkVirtualForOf to keep track of when the data length
         // changes. Run outside the zone to avoid triggering change detection, since we're managing the
         // change detection loop ourselves.
-        this._ngZone.runOutsideAngular(function () {
+        this.ngZone.runOutsideAngular(function () {
             _this._forOf = forOf;
             _this._forOf.dataStream.pipe(takeUntil(_this._detachedSubject)).subscribe(function (data) {
                 var /** @type {?} */ newLength = data.length;
@@ -1135,8 +1138,13 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
     function (offset, to) {
         var _this = this;
         if (to === void 0) { to = 'to-start'; }
-        var /** @type {?} */ axis = this.orientation === 'horizontal' ? 'X' : 'Y';
-        var /** @type {?} */ transform = "translate" + axis + "(" + Number(offset) + "px)";
+        // For a horizontal viewport in a right-to-left language we need to translate along the x-axis
+        // in the negative direction.
+        var /** @type {?} */ isRtl = this.dir && this.dir.value == 'rtl';
+        var /** @type {?} */ isHorizontal = this.orientation == 'horizontal';
+        var /** @type {?} */ axis = isHorizontal ? 'X' : 'Y';
+        var /** @type {?} */ axisDirection = isHorizontal && isRtl ? -1 : 1;
+        var /** @type {?} */ transform = "translate" + axis + "(" + Number(axisDirection * offset) + "px)";
         this._renderedContentOffset = offset;
         if (to === 'to-end') {
             transform += " translate" + axis + "(-100%)";
@@ -1162,38 +1170,38 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         }
     };
     /**
-     * Scrolls to the offset on the viewport.
+     * Scrolls to the given offset from the start of the viewport. Please note that this is not always
+     * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
+     * direction, this would be the equivalent of setting a fictional `scrollRight` property.
      * @param offset The offset to scroll to.
      * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
      */
     /**
-     * Scrolls to the offset on the viewport.
+     * Scrolls to the given offset from the start of the viewport. Please note that this is not always
+     * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
+     * direction, this would be the equivalent of setting a fictional `scrollRight` property.
      * @param {?} offset The offset to scroll to.
      * @param {?=} behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
      * @return {?}
      */
     CdkVirtualScrollViewport.prototype.scrollToOffset = /**
-     * Scrolls to the offset on the viewport.
+     * Scrolls to the given offset from the start of the viewport. Please note that this is not always
+     * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
+     * direction, this would be the equivalent of setting a fictional `scrollRight` property.
      * @param {?} offset The offset to scroll to.
      * @param {?=} behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
      * @return {?}
      */
     function (offset, behavior) {
         if (behavior === void 0) { behavior = 'auto'; }
-        var /** @type {?} */ viewportElement = this.elementRef.nativeElement;
-        if (supportsScrollBehavior()) {
-            var /** @type {?} */ offsetDirection = this.orientation === 'horizontal' ? 'left' : 'top';
-            viewportElement.scrollTo((_a = {}, _a[offsetDirection] = offset, _a.behavior = behavior, _a));
+        var /** @type {?} */ options = { behavior: behavior };
+        if (this.orientation === 'horizontal') {
+            options.start = offset;
         }
         else {
-            if (this.orientation === 'horizontal') {
-                viewportElement.scrollLeft = offset;
-            }
-            else {
-                viewportElement.scrollTop = offset;
-            }
+            options.top = offset;
         }
-        var _a;
+        this.scrollTo(options);
     };
     /**
      * Scrolls to the offset for the given index.
@@ -1216,35 +1224,25 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         if (behavior === void 0) { behavior = 'auto'; }
         this._scrollStrategy.scrollToIndex(index, behavior);
     };
-    /** @docs-private Internal method to set the scroll offset on the viewport. */
     /**
-     * \@docs-private Internal method to set the scroll offset on the viewport.
-     * @param {?} offset
-     * @return {?}
+     * Gets the current scroll offset from the start of the viewport (in pixels).
+     * @param from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
+     *     in horizontal mode.
      */
-    CdkVirtualScrollViewport.prototype.setScrollOffset = /**
-     * \@docs-private Internal method to set the scroll offset on the viewport.
-     * @param {?} offset
-     * @return {?}
-     */
-    function (offset) {
-        // Rather than setting the offset immediately, we batch it up to be applied along with other DOM
-        // writes during the next change detection cycle.
-        this._pendingScrollOffset = offset;
-        this._markChangeDetectionNeeded();
-    };
-    /** Gets the current scroll offset of the viewport (in pixels). */
     /**
-     * Gets the current scroll offset of the viewport (in pixels).
+     * Gets the current scroll offset from the start of the viewport (in pixels).
+     * @param {?=} from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
+     *     in horizontal mode.
      * @return {?}
      */
     CdkVirtualScrollViewport.prototype.measureScrollOffset = /**
-     * Gets the current scroll offset of the viewport (in pixels).
+     * Gets the current scroll offset from the start of the viewport (in pixels).
+     * @param {?=} from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
+     *     in horizontal mode.
      * @return {?}
      */
-    function () {
-        return this.orientation === 'horizontal' ?
-            this.elementRef.nativeElement.scrollLeft : this.elementRef.nativeElement.scrollTop;
+    function (from) {
+        return _super.prototype.measureScrollOffset.call(this, from ? from : this.orientation === 'horizontal' ? 'start' : 'top');
     };
     /** Measure the combined size of all of the rendered items. */
     /**
@@ -1327,7 +1325,7 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         // properties sequentially we only have to run `_doChangeDetection` once at the end.
         if (!this._isChangeDetectionPending) {
             this._isChangeDetectionPending = true;
-            this._ngZone.runOutsideAngular(function () {
+            this.ngZone.runOutsideAngular(function () {
                 return Promise.resolve().then(function () {
                     _this._doChangeDetection();
                 });
@@ -1348,21 +1346,12 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         // Apply changes to Angular bindings. Note: We must call `markForCheck` to run change detection
         // from the root, since the repeated items are content projected in. Calling `detectChanges`
         // instead does not properly check the projected content.
-        this._ngZone.run(function () { return _this._changeDetectorRef.markForCheck(); });
+        this.ngZone.run(function () { return _this._changeDetectorRef.markForCheck(); });
         // Apply the content transform. The transform can't be set via an Angular binding because
         // bypassSecurityTrustStyle is banned in Google. However the value is safe, it's composed of
         // string literals, a variable that can only be 'X' or 'Y', and user input that is run through
         // the `Number` function first to coerce it to a numeric value.
         this._contentWrapper.nativeElement.style.transform = this._renderedContentTransform;
-        // Apply the pending scroll offset separately, since it can't be set up as an Angular binding.
-        if (this._pendingScrollOffset != null) {
-            if (this.orientation === 'horizontal') {
-                this.elementRef.nativeElement.scrollLeft = this._pendingScrollOffset;
-            }
-            else {
-                this.elementRef.nativeElement.scrollTop = this._pendingScrollOffset;
-            }
-        }
         var /** @type {?} */ runAfterChangeDetection = this._runAfterChangeDetection;
         this._runAfterChangeDetection = [];
         for (var _i = 0, runAfterChangeDetection_1 = runAfterChangeDetection; _i < runAfterChangeDetection_1.length; _i++) {
@@ -1373,7 +1362,7 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
     CdkVirtualScrollViewport.decorators = [
         { type: Component, args: [{selector: 'cdk-virtual-scroll-viewport',
                     template: "<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\"><ng-content></ng-content></div><div class=\"cdk-virtual-scroll-spacer\" [style.transform]=\"_totalContentSizeTransform\"></div>",
-                    styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content;will-change:transform}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{bottom:0}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{right:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:0}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0;will-change:transform}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"],
+                    styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{bottom:0}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{right:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:0}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"],
                     host: {
                         'class': 'cdk-virtual-scroll-viewport',
                         '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',
@@ -1389,6 +1378,8 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         { type: ChangeDetectorRef, },
         { type: NgZone, },
         { type: undefined, decorators: [{ type: Inject, args: [VIRTUAL_SCROLL_STRATEGY,] },] },
+        { type: Directionality, decorators: [{ type: Optional },] },
+        { type: ScrollDispatcher, },
     ]; };
     CdkVirtualScrollViewport.propDecorators = {
         "orientation": [{ type: Input },],
@@ -1396,7 +1387,7 @@ var CdkVirtualScrollViewport = /** @class */ (function () {
         "_contentWrapper": [{ type: ViewChild, args: ['contentWrapper',] },],
     };
     return CdkVirtualScrollViewport;
-}());
+}(CdkScrollable));
 
 /**
  * @fileoverview added by tsickle
@@ -1814,7 +1805,7 @@ var ScrollingModule = /** @class */ (function () {
     }
     ScrollingModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [PlatformModule, BidiModule],
+                    imports: [BidiModule, PlatformModule],
                     exports: [
                         BidiModule,
                         CdkFixedSizeVirtualScroll,
