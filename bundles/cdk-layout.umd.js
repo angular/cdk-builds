@@ -201,7 +201,7 @@ var BreakpointObserver = /** @class */ (function () {
         var _this = this;
         var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
         var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
-        return rxjs.combineLatest(observables).pipe(operators.map(function (breakpointStates) {
+        return rxjs.combineLatest(observables).pipe(operators.debounceTime(0, rxjs.asapScheduler), operators.map(function (breakpointStates) {
             var /** @type {?} */ response = {
                 matches: false,
                 breakpoints: {},
