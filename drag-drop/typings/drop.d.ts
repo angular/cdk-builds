@@ -20,7 +20,7 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * container's items can be transferred. Can either be references to other drop containers,
      * or their unique IDs.
      */
-    connectedTo: (CdkDrop | string)[];
+    connectedTo: (CdkDrop | string)[] | CdkDrop | string;
     /** Arbitrary data to attach to this container. */
     data: T;
     /** Direction in which the list is oriented. */

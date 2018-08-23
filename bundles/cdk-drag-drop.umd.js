@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/overlay'), require('rxjs/operators')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/overlay', 'rxjs/operators'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.overlay,global.rxjs.operators));
-}(this, (function (exports,core,common,platform,rxjs,bidi,overlay,operators) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/overlay'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/overlay', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.overlay,global.rxjs.operators,global.ng.cdk.coercion));
+}(this, (function (exports,core,common,platform,rxjs,bidi,overlay,operators,coercion) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -1370,7 +1370,7 @@ var CdkDrop = /** @class */ (function () {
             };
         })
             .sort(function (a, b) { return a.clientRect.top - b.clientRect.top; });
-        this._positionCache.siblings = this.connectedTo
+        this._positionCache.siblings = coercion.coerceArray(this.connectedTo)
             .map(function (drop) { return typeof drop === 'string' ? /** @type {?} */ ((_this._dragDropRegistry.getDropContainer(drop))) : drop; })
             .filter(function (drop) { return drop && drop !== _this; })
             .map(function (drop) { return ({ drop: drop, clientRect: drop.element.nativeElement.getBoundingClientRect() }); });

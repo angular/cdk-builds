@@ -12,6 +12,7 @@ import { Subject, merge, Observable } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/overlay';
 import { takeUntil } from 'rxjs/operators';
+import { coerceArray } from '@angular/cdk/coercion';
 
 /**
  * @fileoverview added by tsickle
@@ -1142,7 +1143,7 @@ class CdkDrop {
             };
         })
             .sort((a, b) => a.clientRect.top - b.clientRect.top);
-        this._positionCache.siblings = this.connectedTo
+        this._positionCache.siblings = coerceArray(this.connectedTo)
             .map(drop => typeof drop === 'string' ? /** @type {?} */ ((this._dragDropRegistry.getDropContainer(drop))) : drop)
             .filter(drop => drop && drop !== this)
             .map(drop => ({ drop, clientRect: drop.element.nativeElement.getBoundingClientRect() }));
