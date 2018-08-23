@@ -7,8 +7,8 @@
  */
 import { NgModule, Injectable, NgZone, defineInjectable, inject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { asapScheduler, combineLatest, fromEventPattern, Subject } from 'rxjs';
-import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
+import { combineLatest, fromEventPattern, Subject } from 'rxjs';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
 /**
@@ -161,7 +161,7 @@ class BreakpointObserver {
     observe(value) {
         const /** @type {?} */ queries = splitQueries(coerceArray(value));
         const /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
-        return combineLatest(observables).pipe(debounceTime(0, asapScheduler), map((breakpointStates) => {
+        return combineLatest(observables).pipe(map((breakpointStates) => {
             const /** @type {?} */ response = {
                 matches: false,
                 breakpoints: {},
