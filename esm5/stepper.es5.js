@@ -286,6 +286,11 @@ var CdkStepper = /** @class */ (function () {
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._steps.changes.pipe(takeUntil(this._destroyed)).subscribe(function () {
+            if (!_this.selected) {
+                _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
+            }
+        });
     };
     /**
      * @return {?}

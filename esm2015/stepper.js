@@ -246,6 +246,11 @@ class CdkStepper {
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
+            if (!this.selected) {
+                this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
+            }
+        });
     }
     /**
      * @return {?}
