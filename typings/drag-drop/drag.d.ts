@@ -105,6 +105,8 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     ngOnDestroy(): void;
     /** Starts the dragging sequence. */
     _startDragging(event: MouseEvent | TouchEvent): void;
+    /** Checks whether the element is currently being dragged. */
+    _isDragging(): boolean;
     /** Handler for when the pointer is pressed down on the element or the handle. */
     private _pointerDown;
     /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */

@@ -392,7 +392,7 @@ class CdkDrag {
          * Handler for when the pointer is pressed down on the element or the handle.
          */
         this._pointerDown = (referenceElement, event) => {
-            const /** @type {?} */ isDragging = this._dragDropRegistry.isDragging(this);
+            const /** @type {?} */ isDragging = this._isDragging();
             // Abort if the user is already dragging or is using a mouse button other than the primary one.
             if (isDragging || (!this._isTouchEvent(event) && event.button !== 0)) {
                 return;
@@ -434,7 +434,7 @@ class CdkDrag {
         this._pointerMove = (event) => {
             // TODO(crisbeto): this should start dragging after a certain threshold,
             // otherwise we risk interfering with clicks on the element.
-            if (!this._dragDropRegistry.isDragging(this)) {
+            if (!this._isDragging()) {
                 return;
             }
             this._hasMoved = true;
@@ -468,7 +468,7 @@ class CdkDrag {
          * Handler that is invoked when the user lifts their pointer up, after initiating a drag.
          */
         this._pointerUp = () => {
-            if (!this._dragDropRegistry.isDragging(this)) {
+            if (!this._isDragging()) {
                 return;
             }
             this._dragDropRegistry.stopDragging(this);
@@ -502,7 +502,7 @@ class CdkDrag {
         this._destroyPlaceholder();
         // Do this check before removing from the registry since it'll
         // stop being considered as dragged once it is removed.
-        if (this._dragDropRegistry.isDragging(this)) {
+        if (this._isDragging()) {
             // Since we move out the element to the end of the body while it's being
             // dragged, we have to make sure that it's removed if it gets destroyed.
             this._removeElement(this.element.nativeElement);
@@ -533,6 +533,13 @@ class CdkDrag {
         else {
             this._pointerDown(this.element, event);
         }
+    }
+    /**
+     * Checks whether the element is currently being dragged.
+     * @return {?}
+     */
+    _isDragging() {
+        return this._dragDropRegistry.isDragging(this);
     }
     /**
      * Cleans up the DOM artifacts that were added to facilitate the element being dragged.
@@ -779,6 +786,7 @@ CdkDrag.decorators = [
                 exportAs: 'cdkDrag',
                 host: {
                     'class': 'cdk-drag',
+                    '[class.cdk-drag-dragging]': '_isDragging()',
                     '(mousedown)': '_startDragging($event)',
                     '(touchstart)': '_startDragging($event)',
                 }
