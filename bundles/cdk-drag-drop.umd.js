@@ -465,13 +465,17 @@ var CdkDrag = /** @class */ (function () {
             _this.started.emit({ source: _this });
             if (_this.dropContainer) {
                 var /** @type {?} */ element = _this.element.nativeElement;
+                // Grab the `nextSibling` before the preview and placeholder
+                // have been created so we don't get the preview by accident.
+                // Grab the `nextSibling` before the preview and placeholder
+                // have been created so we don't get the preview by accident.
+                _this._nextSibling = element.nextSibling;
                 var /** @type {?} */ preview = _this._preview = _this._createPreviewElement();
                 var /** @type {?} */ placeholder = _this._placeholder = _this._createPlaceholderElement();
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 element.style.display = 'none';
-                _this._nextSibling = element.nextSibling;
                 _this._document.body.appendChild(/** @type {?} */ ((element.parentNode)).replaceChild(placeholder, element));
                 _this._document.body.appendChild(preview);
                 _this.dropContainer.start();
