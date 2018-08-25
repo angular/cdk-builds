@@ -73,10 +73,10 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
-     * @param xOffset Position of the item along the X axis.
-     * @param yOffset Position of the item along the Y axis.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
      */
-    enter(item: CdkDrag, xOffset: number, yOffset: number): void;
+    enter(item: CdkDrag, pointerX: number, pointerY: number): void;
     /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param item Item that was dragged out.
@@ -90,10 +90,10 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
     /**
      * Sorts an item inside the container based on its position.
      * @param item Item to be sorted.
-     * @param xOffset Position of the item along the X axis.
-     * @param yOffset Position of the item along the Y axis.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
      */
-    _sortItem(item: CdkDrag, xOffset: number, yOffset: number): void;
+    _sortItem(item: CdkDrag, pointerX: number, pointerY: number): void;
     /**
      * Figures out whether an item should be moved into a sibling
      * drop container, based on its current position.
@@ -116,8 +116,14 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
     /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param item Item that is being sorted.
-     * @param xOffset Position of the user's pointer along the X axis.
-     * @param yOffset Position of the user's pointer along the Y axis.
+     * @param pointerX Position of the user's pointer along the X axis.
+     * @param pointerY Position of the user's pointer along the Y axis.
      */
-    private _getItemIndexFromPointerPosition(item, xOffset, yOffset);
+    private _getItemIndexFromPointerPosition(item, pointerX, pointerY);
+    /**
+     * Checks whether the pointer coordinates are close to the drop container.
+     * @param pointerX Coordinates along the X axis.
+     * @param pointerY Coordinates along the Y axis.
+     */
+    private _isPointerNearDropContainer(pointerX, pointerY);
 }

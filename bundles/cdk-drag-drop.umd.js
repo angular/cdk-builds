@@ -1049,6 +1049,11 @@ function clamp(value, max) {
  */
 var /** @type {?} */ _uniqueIdCounter = 0;
 /**
+ * Proximity, as a ratio to width/height, at which a
+ * dragged item will affect the drop container.
+ */
+var /** @type {?} */ DROP_PROXIMITY_THRESHOLD = 0.05;
+/**
  * Container that wraps a set of draggable items.
  * @template T
  */
@@ -1098,7 +1103,8 @@ var CdkDrop = /** @class */ (function () {
          */
         this._positionCache = {
             items: /** @type {?} */ ([]),
-            siblings: /** @type {?} */ ([])
+            siblings: /** @type {?} */ ([]),
+            self: /** @type {?} */ ({})
         };
     }
     /**
@@ -1167,29 +1173,29 @@ var CdkDrop = /** @class */ (function () {
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
-     * @param xOffset Position of the item along the X axis.
-     * @param yOffset Position of the item along the Y axis.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
      */
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param {?} item Item that was moved into the container.
-     * @param {?} xOffset Position of the item along the X axis.
-     * @param {?} yOffset Position of the item along the Y axis.
+     * @param {?} pointerX Position of the item along the X axis.
+     * @param {?} pointerY Position of the item along the Y axis.
      * @return {?}
      */
     CdkDrop.prototype.enter = /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param {?} item Item that was moved into the container.
-     * @param {?} xOffset Position of the item along the X axis.
-     * @param {?} yOffset Position of the item along the Y axis.
+     * @param {?} pointerX Position of the item along the X axis.
+     * @param {?} pointerY Position of the item along the Y axis.
      * @return {?}
      */
-    function (item, xOffset, yOffset) {
+    function (item, pointerX, pointerY) {
         this.entered.emit({ item: item, container: this });
         this.start();
         // We use the coordinates of where the item entered the drop
         // zone to figure out at which index it should be inserted.
-        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, xOffset, yOffset);
+        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
         var /** @type {?} */ currentIndex = this._activeDraggables.indexOf(item);
         var /** @type {?} */ newPositionReference = this._activeDraggables[newIndex];
         var /** @type {?} */ placeholder = item.getPlaceholderElement();
@@ -1255,27 +1261,31 @@ var CdkDrop = /** @class */ (function () {
     /**
      * Sorts an item inside the container based on its position.
      * @param item Item to be sorted.
-     * @param xOffset Position of the item along the X axis.
-     * @param yOffset Position of the item along the Y axis.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
      */
     /**
      * Sorts an item inside the container based on its position.
      * @param {?} item Item to be sorted.
-     * @param {?} xOffset Position of the item along the X axis.
-     * @param {?} yOffset Position of the item along the Y axis.
+     * @param {?} pointerX Position of the item along the X axis.
+     * @param {?} pointerY Position of the item along the Y axis.
      * @return {?}
      */
     CdkDrop.prototype._sortItem = /**
      * Sorts an item inside the container based on its position.
      * @param {?} item Item to be sorted.
-     * @param {?} xOffset Position of the item along the X axis.
-     * @param {?} yOffset Position of the item along the Y axis.
+     * @param {?} pointerX Position of the item along the X axis.
+     * @param {?} pointerY Position of the item along the Y axis.
      * @return {?}
      */
-    function (item, xOffset, yOffset) {
+    function (item, pointerX, pointerY) {
         var _this = this;
+        // Don't sort the item if it's out of range.
+        if (!this._isPointerNearDropContainer(pointerX, pointerY)) {
+            return;
+        }
         var /** @type {?} */ siblings = this._positionCache.items;
-        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, xOffset, yOffset);
+        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
         if (newIndex === -1 && siblings.length > 0) {
             return;
         }
@@ -1391,6 +1401,7 @@ var CdkDrop = /** @class */ (function () {
             .map(function (drop) { return typeof drop === 'string' ? /** @type {?} */ ((_this._dragDropRegistry.getDropContainer(drop))) : drop; })
             .filter(function (drop) { return drop && drop !== _this; })
             .map(function (drop) { return ({ drop: drop, clientRect: drop.element.nativeElement.getBoundingClientRect() }); });
+        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
     };
     /**
      * Resets the container to its initial state.
@@ -1431,18 +1442,18 @@ var CdkDrop = /** @class */ (function () {
     /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param {?} item Item that is being sorted.
-     * @param {?} xOffset Position of the user's pointer along the X axis.
-     * @param {?} yOffset Position of the user's pointer along the Y axis.
+     * @param {?} pointerX Position of the user's pointer along the X axis.
+     * @param {?} pointerY Position of the user's pointer along the Y axis.
      * @return {?}
      */
     CdkDrop.prototype._getItemIndexFromPointerPosition = /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param {?} item Item that is being sorted.
-     * @param {?} xOffset Position of the user's pointer along the X axis.
-     * @param {?} yOffset Position of the user's pointer along the Y axis.
+     * @param {?} pointerX Position of the user's pointer along the X axis.
+     * @param {?} pointerY Position of the user's pointer along the Y axis.
      * @return {?}
      */
-    function (item, xOffset, yOffset) {
+    function (item, pointerX, pointerY) {
         var _this = this;
         return this._positionCache.items.findIndex(function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
@@ -1454,9 +1465,28 @@ var CdkDrop = /** @class */ (function () {
             return _this.orientation === 'horizontal' ?
                 // Round these down since most browsers report client rects with
                 // sub-pixel precision, whereas the mouse coordinates are rounded to pixels.
-                xOffset >= Math.floor(clientRect.left) && xOffset <= Math.floor(clientRect.right) :
-                yOffset >= Math.floor(clientRect.top) && yOffset <= Math.floor(clientRect.bottom);
+                pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
+                pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         });
+    };
+    /**
+     * Checks whether the pointer coordinates are close to the drop container.
+     * @param {?} pointerX Coordinates along the X axis.
+     * @param {?} pointerY Coordinates along the Y axis.
+     * @return {?}
+     */
+    CdkDrop.prototype._isPointerNearDropContainer = /**
+     * Checks whether the pointer coordinates are close to the drop container.
+     * @param {?} pointerX Coordinates along the X axis.
+     * @param {?} pointerY Coordinates along the Y axis.
+     * @return {?}
+     */
+    function (pointerX, pointerY) {
+        var _a = this._positionCache.self, top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left, width = _a.width, height = _a.height;
+        var /** @type {?} */ xThreshold = width * DROP_PROXIMITY_THRESHOLD;
+        var /** @type {?} */ yThreshold = height * DROP_PROXIMITY_THRESHOLD;
+        return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
+            pointerX > left - xThreshold && pointerX < right + xThreshold;
     };
     CdkDrop.decorators = [
         { type: core.Component, args: [{selector: 'cdk-drop',
