@@ -3890,6 +3890,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
         if (this.backdropClass) {
             overlayConfig.backdropClass = this.backdropClass;
         }
+        if (this.panelClass) {
+            overlayConfig.panelClass = this.panelClass;
+        }
         return overlayConfig;
     };
     /**
@@ -4030,6 +4033,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         "minWidth": [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] },],
         "minHeight": [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] },],
         "backdropClass": [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] },],
+        "panelClass": [{ type: Input, args: ['cdkConnectedOverlayPanelClass',] },],
         "viewportMargin": [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] },],
         "scrollStrategy": [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] },],
         "open": [{ type: Input, args: ['cdkConnectedOverlayOpen',] },],

@@ -64,6 +64,8 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     minHeight: number | string;
     /** The custom class to be set on the backdrop element. */
     backdropClass: string;
+    /** The custom class to add to the overlay pane element. */
+    panelClass: string | string[];
     /** Margin between the overlay and the viewport edges. */
     viewportMargin: number;
     /** Strategy to be used when handling scroll events while the overlay is open. */
