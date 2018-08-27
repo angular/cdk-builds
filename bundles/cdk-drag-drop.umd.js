@@ -363,6 +363,11 @@ var DragDropRegistry = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 /**
+ * Amount the pixels the user should drag before we
+ * consider them to have changed the drag direction.
+ */
+var /** @type {?} */ POINTER_DIRECTION_CHANGE_THRESHOLD = 5;
+/**
  * Element that can be moved inside a CdkDrop container.
  * @template T
  */
@@ -459,7 +464,9 @@ var CdkDrag = /** @class */ (function () {
             // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
             _this._pickupPositionInElement = _this._previewTemplate ? { x: 0, y: 0 } :
                 _this._getPointerPositionInElement(referenceElement, event);
-            _this._pickupPositionOnPage = _this._getPointerPositionOnPage(event);
+            var /** @type {?} */ pointerPosition = _this._pickupPositionOnPage = _this._getPointerPositionOnPage(event);
+            _this._pointerDirectionDelta = { x: 0, y: 0 };
+            _this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
             // Emit the event on the item before the one on the container.
             // Emit the event on the item before the one on the container.
             _this.started.emit({ source: _this });
@@ -493,6 +500,7 @@ var CdkDrag = /** @class */ (function () {
             _this._hasMoved = true;
             event.preventDefault();
             var /** @type {?} */ pointerPosition = _this._getConstrainedPointerPosition(event);
+            _this._updatePointerDirectionDelta(pointerPosition);
             if (_this.dropContainer) {
                 _this._updateActiveDropContainer(pointerPosition);
             }
@@ -687,7 +695,7 @@ var CdkDrag = /** @class */ (function () {
                 _this.dropContainer.enter(_this, x, y);
             });
         }
-        this.dropContainer._sortItem(this, x, y);
+        this.dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
         this._setTransform(this._preview, x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
     };
     /**
@@ -928,6 +936,36 @@ var CdkDrag = /** @class */ (function () {
         }
         this._placeholder = this._placeholderRef = /** @type {?} */ ((null));
     };
+    /**
+     * Updates the current drag delta, based on the user's current pointer position on the page.
+     * @param {?} pointerPositionOnPage
+     * @return {?}
+     */
+    CdkDrag.prototype._updatePointerDirectionDelta = /**
+     * Updates the current drag delta, based on the user's current pointer position on the page.
+     * @param {?} pointerPositionOnPage
+     * @return {?}
+     */
+    function (pointerPositionOnPage) {
+        var x = pointerPositionOnPage.x, y = pointerPositionOnPage.y;
+        var /** @type {?} */ delta = this._pointerDirectionDelta;
+        var /** @type {?} */ positionSinceLastChange = this._pointerPositionAtLastDirectionChange;
+        // Amount of pixels the user has dragged since the last time the direction changed.
+        var /** @type {?} */ changeX = Math.abs(x - positionSinceLastChange.x);
+        var /** @type {?} */ changeY = Math.abs(y - positionSinceLastChange.y);
+        // Because we handle pointer events on a per-pixel basis, we don't want the delta
+        // to change for every pixel, otherwise anything that depends on it can look erratic.
+        // To make the delta more consistent, we track how much the user has moved since the last
+        // delta change and we only update it after it has reached a certain threshold.
+        if (changeX > POINTER_DIRECTION_CHANGE_THRESHOLD) {
+            delta.x = x > positionSinceLastChange.x ? 1 : -1;
+            positionSinceLastChange.x = x;
+        }
+        if (changeY > POINTER_DIRECTION_CHANGE_THRESHOLD) {
+            delta.y = y > positionSinceLastChange.y ? 1 : -1;
+            positionSinceLastChange.y = y;
+        }
+    };
     CdkDrag.decorators = [
         { type: core.Directive, args: [{
                     selector: '[cdkDrag]',
@@ -1106,6 +1144,11 @@ var CdkDrop = /** @class */ (function () {
             siblings: /** @type {?} */ ([]),
             self: /** @type {?} */ ({})
         };
+        /**
+         * Keeps track of the item that was last swapped with the dragged item, as
+         * well as what direction the pointer was moving in when the swap occured.
+         */
+        this._previousSwap = { drag: /** @type {?} */ (null), delta: 0 };
     }
     /**
      * @return {?}
@@ -1263,12 +1306,14 @@ var CdkDrop = /** @class */ (function () {
      * @param item Item to be sorted.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
+     * @param pointerDeta Direction in which the pointer is moving along each axis.
      */
     /**
      * Sorts an item inside the container based on its position.
      * @param {?} item Item to be sorted.
      * @param {?} pointerX Position of the item along the X axis.
      * @param {?} pointerY Position of the item along the Y axis.
+     * @param {?} pointerDelta
      * @return {?}
      */
     CdkDrop.prototype._sortItem = /**
@@ -1276,24 +1321,28 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} item Item to be sorted.
      * @param {?} pointerX Position of the item along the X axis.
      * @param {?} pointerY Position of the item along the Y axis.
+     * @param {?} pointerDelta
      * @return {?}
      */
-    function (item, pointerX, pointerY) {
+    function (item, pointerX, pointerY, pointerDelta) {
         var _this = this;
         // Don't sort the item if it's out of range.
         if (!this._isPointerNearDropContainer(pointerX, pointerY)) {
             return;
         }
         var /** @type {?} */ siblings = this._positionCache.items;
-        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
         if (newIndex === -1 && siblings.length > 0) {
             return;
         }
         var /** @type {?} */ isHorizontal = this.orientation === 'horizontal';
         var /** @type {?} */ currentIndex = siblings.findIndex(function (currentItem) { return currentItem.drag === item; });
+        var /** @type {?} */ siblingAtNewPosition = siblings[newIndex];
         var /** @type {?} */ currentPosition = siblings[currentIndex].clientRect;
-        var /** @type {?} */ newPosition = siblings[newIndex].clientRect;
+        var /** @type {?} */ newPosition = siblingAtNewPosition.clientRect;
         var /** @type {?} */ delta = currentIndex > newIndex ? 1 : -1;
+        this._previousSwap.drag = siblingAtNewPosition.drag;
+        this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
         // How many pixels the item's placeholder should be offset.
         var /** @type {?} */ itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
             newPosition.top - currentPosition.top;
@@ -1418,6 +1467,8 @@ var CdkDrop = /** @class */ (function () {
         this._activeDraggables = [];
         this._positionCache.items = [];
         this._positionCache.siblings = [];
+        this._previousSwap.drag = null;
+        this._previousSwap.delta = 0;
     };
     /**
      * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
@@ -1444,6 +1495,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} item Item that is being sorted.
      * @param {?} pointerX Position of the user's pointer along the X axis.
      * @param {?} pointerY Position of the user's pointer along the Y axis.
+     * @param {?=} delta Direction in which the user is moving their pointer.
      * @return {?}
      */
     CdkDrop.prototype._getItemIndexFromPointerPosition = /**
@@ -1451,10 +1503,12 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} item Item that is being sorted.
      * @param {?} pointerX Position of the user's pointer along the X axis.
      * @param {?} pointerY Position of the user's pointer along the Y axis.
+     * @param {?=} delta Direction in which the user is moving their pointer.
      * @return {?}
      */
-    function (item, pointerX, pointerY) {
+    function (item, pointerX, pointerY, delta) {
         var _this = this;
+        var /** @type {?} */ isHorizontal = this.orientation === 'horizontal';
         return this._positionCache.items.findIndex(function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
             if (drag === item) {
@@ -1462,9 +1516,17 @@ var CdkDrop = /** @class */ (function () {
                 // the dragged item itself so we use it as a reference.
                 return array.length < 2;
             }
-            return _this.orientation === 'horizontal' ?
+            if (delta) {
+                var /** @type {?} */ direction = isHorizontal ? delta.x : delta.y;
+                // If the user is still hovering over the same item as last time, and they didn't change
+                // the direction in which they're dragging, we don't consider it a direction swap.
+                if (drag === _this._previousSwap.drag && direction === _this._previousSwap.delta) {
+                    return false;
+                }
+            }
+            return isHorizontal ?
                 // Round these down since most browsers report client rects with
-                // sub-pixel precision, whereas the mouse coordinates are rounded to pixels.
+                // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         });

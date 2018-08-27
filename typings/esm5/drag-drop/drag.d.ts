@@ -67,6 +67,10 @@ export declare class CdkDrag<T = any> implements OnDestroy {
      * hitting the zone if the consumer didn't subscribe to it.
      */
     private _moveEventSubscriptions;
+    /** Keeps track of the direction in which the user is dragging along each axis. */
+    private _pointerDirectionDelta;
+    /** Pointer position at which the last change in the delta occurred. */
+    private _pointerPositionAtLastDirectionChange;
     /** Elements that can be used to drag the draggable item. */
     _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
@@ -160,4 +164,6 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     private _destroyPreview();
     /** Destroys the placeholder element and its ViewRef. */
     private _destroyPlaceholder();
+    /** Updates the current drag delta, based on the user's current pointer position on the page. */
+    private _updatePointerDirectionDelta(pointerPositionOnPage);
 }

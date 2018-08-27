@@ -61,6 +61,11 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * been dropped yet.
      */
     private _activeDraggables;
+    /**
+     * Keeps track of the item that was last swapped with the dragged item, as
+     * well as what direction the pointer was moving in when the swap occured.
+     */
+    private _previousSwap;
     /** Starts dragging an item. */
     start(): void;
     /**
@@ -92,8 +97,12 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * @param item Item to be sorted.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
+     * @param pointerDeta Direction in which the pointer is moving along each axis.
      */
-    _sortItem(item: CdkDrag, pointerX: number, pointerY: number): void;
+    _sortItem(item: CdkDrag, pointerX: number, pointerY: number, pointerDelta: {
+        x: number;
+        y: number;
+    }): void;
     /**
      * Figures out whether an item should be moved into a sibling
      * drop container, based on its current position.
@@ -118,8 +127,9 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * @param item Item that is being sorted.
      * @param pointerX Position of the user's pointer along the X axis.
      * @param pointerY Position of the user's pointer along the Y axis.
+     * @param delta Direction in which the user is moving their pointer.
      */
-    private _getItemIndexFromPointerPosition(item, pointerX, pointerY);
+    private _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta?);
     /**
      * Checks whether the pointer coordinates are close to the drop container.
      * @param pointerX Coordinates along the X axis.
