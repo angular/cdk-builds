@@ -1968,8 +1968,12 @@ var CdkAriaLive = /** @class */ (function () {
             }
             else if (!this._subscription) {
                 this._subscription = this._ngZone.runOutsideAngular(function () {
-                    return _this._contentObserver.observe(_this._elementRef).subscribe(function () {
-                        return _this._liveAnnouncer.announce(_this._elementRef.nativeElement.innerText, _this._politeness);
+                    return _this._contentObserver
+                        .observe(_this._elementRef)
+                        .subscribe(function () {
+                        // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
+                        var /** @type {?} */ element = _this._elementRef.nativeElement;
+                        _this._liveAnnouncer.announce(element.textContent, _this._politeness);
                     });
                 });
             }
