@@ -1265,7 +1265,13 @@ class FlexibleConnectedPositionStrategy {
         this._boundingBox = overlayRef.hostElement;
         this._pane = overlayRef.overlayElement;
         this._resizeSubscription.unsubscribe();
-        this._resizeSubscription = this._viewportRuler.change().subscribe(() => this.apply());
+        this._resizeSubscription = this._viewportRuler.change().subscribe(() => {
+            // When the window is resized, we want to trigger the next reposition as if it
+            // was an initial render, in order for the strategy to pick a new optimal position,
+            // otherwise position locking will cause it to stay at the old one.
+            this._isInitialRender = true;
+            this.apply();
+        });
     }
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
@@ -1385,6 +1391,8 @@ class FlexibleConnectedPositionStrategy {
      */
     detach() {
         this._clearPanelClasses();
+        this._lastPosition = null;
+        this._previousPushAmount = null;
         this._resizeSubscription.unsubscribe();
     }
     /**
@@ -1667,12 +1675,22 @@ class FlexibleConnectedPositionStrategy {
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
-     * @param {?} start The starting point from which the overlay is pushed.
-     * @param {?} overlay The overlay dimensions.
+     * @param {?} start Starting point from which the overlay is pushed.
+     * @param {?} overlay Dimensions of the overlay.
+     * @param {?} scrollPosition Current viewport scroll position.
      * @return {?} The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
      */
-    _pushOverlayOnScreen(start, overlay) {
+    _pushOverlayOnScreen(start, overlay, scrollPosition) {
+        // If the position is locked and we've pushed the overlay already, reuse the previous push
+        // amount, rather than pushing it again. If we were to continue pushing, the element would
+        // remain in the viewport, which goes against the expectations when position locking is enabled.
+        if (this._previousPushAmount && this._positionLocked) {
+            return {
+                x: start.x + this._previousPushAmount.x,
+                y: start.y + this._previousPushAmount.y
+            };
+        }
         /** @type {?} */
         const viewport = this._viewportRect;
         /** @type {?} */
@@ -1680,28 +1698,29 @@ class FlexibleConnectedPositionStrategy {
         /** @type {?} */
         const overflowBottom = Math.max(start.y + overlay.height - viewport.bottom, 0);
         /** @type {?} */
-        const overflowTop = Math.max(viewport.top - start.y, 0);
+        const overflowTop = Math.max(viewport.top - scrollPosition.top - start.y, 0);
         /** @type {?} */
-        const overflowLeft = Math.max(viewport.left - start.x, 0);
+        const overflowLeft = Math.max(viewport.left - scrollPosition.left - start.x, 0);
         /** @type {?} */
-        let pushX;
+        let pushX = 0;
         /** @type {?} */
         let pushY = 0;
         // If the overlay fits completely within the bounds of the viewport, push it from whichever
         // direction is goes off-screen. Otherwise, push the top-left corner such that its in the
         // viewport and allow for the trailing end of the overlay to go out of bounds.
-        if (overlay.width <= viewport.width) {
+        if (overlay.width < viewport.width) {
             pushX = overflowLeft || -overflowRight;
         }
         else {
-            pushX = viewport.left - start.x;
+            pushX = start.x < this._viewportMargin ? (viewport.left - scrollPosition.left) - start.x : 0;
         }
-        if (overlay.height <= viewport.height) {
+        if (overlay.height < viewport.height) {
             pushY = overflowTop || -overflowBottom;
         }
         else {
-            pushY = viewport.top - start.y;
+            pushY = start.y < this._viewportMargin ? (viewport.top - scrollPosition.top) - start.y : 0;
         }
+        this._previousPushAmount = { x: pushX, y: pushY };
         return {
             x: start.x + pushX,
             y: start.y + pushY,
@@ -1935,8 +1954,10 @@ class FlexibleConnectedPositionStrategy {
         /** @type {?} */
         const styles = /** @type {?} */ ({});
         if (this._hasExactPosition()) {
-            extendStyles(styles, this._getExactOverlayY(position, originPoint));
-            extendStyles(styles, this._getExactOverlayX(position, originPoint));
+            /** @type {?} */
+            const scrollPosition = this._viewportRuler.getViewportScrollPosition();
+            extendStyles(styles, this._getExactOverlayY(position, originPoint, scrollPosition));
+            extendStyles(styles, this._getExactOverlayX(position, originPoint, scrollPosition));
         }
         else {
             styles.position = 'static';
@@ -1969,15 +1990,16 @@ class FlexibleConnectedPositionStrategy {
      * Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
-    _getExactOverlayY(position, originPoint) {
+    _getExactOverlayY(position, originPoint, scrollPosition) {
         /** @type {?} */
         let styles = /** @type {?} */ ({ top: null, bottom: null });
         /** @type {?} */
         let overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
-            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
+            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
         /** @type {?} */
         let virtualKeyboardOffset = this._overlayContainer ?
@@ -2003,15 +2025,16 @@ class FlexibleConnectedPositionStrategy {
      * Gets the exact left/right for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
-    _getExactOverlayX(position, originPoint) {
+    _getExactOverlayX(position, originPoint, scrollPosition) {
         /** @type {?} */
         let styles = /** @type {?} */ ({ left: null, right: null });
         /** @type {?} */
         let overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
-            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
+            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
         /** @type {?} */
         let horizontalStyleProperty;

@@ -80,6 +80,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _positionChangeSubscriptions;
     /** Keeps track of the CSS classes that the position strategy has applied on the overlay panel. */
     private _appliedPanelClasses;
+    /** Amount by which the overlay was pushed in each axis during the last time it was positioned. */
+    private _previousPushAmount;
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -187,8 +189,9 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
-     * @param start The starting point from which the overlay is pushed.
-     * @param overlay The overlay dimensions.
+     * @param start Starting point from which the overlay is pushed.
+     * @param overlay Dimensions of the overlay.
+     * @param scrollPosition Current viewport scroll position.
      * @returns The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
      */
