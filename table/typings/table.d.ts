@@ -11,6 +11,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
 import { Directionality } from '@angular/cdk/bidi';
+import { Platform } from '@angular/cdk/platform';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;
@@ -83,6 +84,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
+    private _platform?;
+    private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
     /** Subject that emits when the component has been destroyed. */
@@ -238,7 +241,13 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentHeaderRowDefs: QueryList<CdkHeaderRowDef>;
     /** Set of footer row definitions that were provided to the table as content children. */
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, 
+    /**
+     * @deprecated
+     * @breaking-change 8.0.0 `_document` and `_platform` to
+     *    be made into a required parameters.
+     */
+    _document?: any, _platform?: Platform | undefined);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;

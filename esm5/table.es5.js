@@ -7,13 +7,14 @@
  */
 import { __extends } from 'tslib';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, EmbeddedViewRef, isDevMode, Optional, ViewChild, NgModule } from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, EmbeddedViewRef, isDevMode, Optional, ViewChild, Inject, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
+import { DOCUMENT, CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Directionality } from '@angular/cdk/bidi';
-import { CommonModule } from '@angular/common';
+import { Platform } from '@angular/cdk/platform';
 
 /**
  * @fileoverview added by tsickle
@@ -716,11 +717,14 @@ StickyStyler = /** @class */ (function () {
      *     sticky positioning applied.
      * @param direction The directionality context of the table (ltr/rtl); affects column positioning
      *     by reversing left/right positions.
+     * @param _isBrowser Whether the table is currently being rendered on the server or the client.
      */
-    function StickyStyler(isNativeHtmlTable, stickCellCss, direction) {
+    function StickyStyler(isNativeHtmlTable, stickCellCss, direction, _isBrowser) {
+        if (_isBrowser === void 0) { _isBrowser = true; }
         this.isNativeHtmlTable = isNativeHtmlTable;
         this.stickCellCss = stickCellCss;
         this.direction = direction;
+        this._isBrowser = _isBrowser;
     }
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -790,7 +794,7 @@ StickyStyler = /** @class */ (function () {
     function (rows, stickyStartStates, stickyEndStates) {
         /** @type {?} */
         var hasStickyColumns = stickyStartStates.some(function (state) { return state; }) || stickyEndStates.some(function (state) { return state; });
-        if (!rows.length || !hasStickyColumns) {
+        if (!rows.length || !hasStickyColumns || !this._isBrowser) {
             return;
         }
         /** @type {?} */
@@ -855,6 +859,10 @@ StickyStyler = /** @class */ (function () {
      * @return {?}
      */
     function (rowsToStick, stickyStates, position) {
+        // Since we can't measure the rows on the server, we can't stick the rows properly.
+        if (!this._isBrowser) {
+            return;
+        }
         /** @type {?} */
         var rows = position === 'bottom' ? rowsToStick.reverse() : rowsToStick;
         /** @type {?} */
@@ -1223,11 +1231,17 @@ RowViewRef = /** @class */ (function (_super) {
  * @template T
  */
 var CdkTable = /** @class */ (function () {
-    function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir) {
+    function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, /**
+                   * @deprecated
+                   * @breaking-change 8.0.0 `_document` and `_platform` to
+                   *    be made into a required parameters.
+                   */
+    _document, _platform) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
         this._dir = _dir;
+        this._platform = _platform;
         /**
          * Subject that emits when the component has been destroyed.
          */
@@ -1300,6 +1314,7 @@ var CdkTable = /** @class */ (function () {
         if (!role) {
             this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
+        this._document = _document;
         this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';
     }
     Object.defineProperty(CdkTable.prototype, "trackBy", {
@@ -2326,7 +2341,9 @@ var CdkTable = /** @class */ (function () {
         for (var _a = 0, sections_1 = sections; _a < sections_1.length; _a++) {
             var section = sections_1[_a];
             /** @type {?} */
-            var element = document.createElement(section.tag);
+            var documentRef = this._document || document;
+            /** @type {?} */
+            var element = documentRef.createElement(section.tag);
             element.appendChild(section.outlet.elementRef.nativeElement);
             this._elementRef.nativeElement.appendChild(element);
         }
@@ -2395,7 +2412,9 @@ var CdkTable = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, 
+        // @breaking-change 8.0.0 remove the null check for `this._platform`.
+        this.stickyCssClass, direction, this._platform ? this._platform.isBrowser : true);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(function (value) {
@@ -2420,7 +2439,9 @@ var CdkTable = /** @class */ (function () {
         { type: ChangeDetectorRef },
         { type: ElementRef },
         { type: String, decorators: [{ type: Attribute, args: ['role',] }] },
-        { type: Directionality, decorators: [{ type: Optional }] }
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
     ]; };
     CdkTable.propDecorators = {
         trackBy: [{ type: Input }],
