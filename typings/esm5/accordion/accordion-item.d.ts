@@ -49,5 +49,5 @@ export declare class CdkAccordionItem implements OnDestroy {
     close(): void;
     /** Sets the expanded state of the accordion item to true. */
     open(): void;
-    private _subscribeToOpenCloseAllActions();
+    private _subscribeToOpenCloseAllActions;
 }

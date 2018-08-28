@@ -498,8 +498,8 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
 exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
 exports.ArrayDataSource = ArrayDataSource;
 exports.DataSource = DataSource;
-exports.SelectionModel = SelectionModel;
 exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
+exports.SelectionModel = SelectionModel;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

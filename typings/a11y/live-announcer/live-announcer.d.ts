@@ -21,7 +21,7 @@ export declare class LiveAnnouncer implements OnDestroy {
      */
     announce(message: string, politeness?: AriaLivePoliteness): Promise<void>;
     ngOnDestroy(): void;
-    private _createLiveElement();
+    private _createLiveElement;
 }
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility

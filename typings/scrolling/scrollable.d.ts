@@ -49,7 +49,7 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
     protected elementRef: ElementRef<HTMLElement>;
     protected scrollDispatcher: ScrollDispatcher;
     protected ngZone: NgZone;
-    protected dir: Directionality | undefined;
+    protected dir?: Directionality | undefined;
     private _destroyed;
     private _elementScrolled;
     constructor(elementRef: ElementRef<HTMLElement>, scrollDispatcher: ScrollDispatcher, ngZone: NgZone, dir?: Directionality | undefined);
@@ -68,7 +68,7 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
      * @param options specified the offsets to scroll to.
      */
     scrollTo(options: ExtendedScrollToOptions): void;
-    private _applyScrollToOptions(options);
+    private _applyScrollToOptions;
     /**
      * Measures the scroll offset relative to the specified edge of the viewport. This method can be
      * used instead of directly checking scrollLeft or scrollTop, since browsers are not consistent

@@ -97,10 +97,10 @@ export declare class CdkDrag<T = any> implements OnDestroy {
      */
     moved: Observable<CdkDragMove<T>>;
     constructor(
-        /** Element that the draggable is attached to. */
-        element: ElementRef<HTMLElement>, 
-        /** Droppable container that the draggable is a part of. */
-        dropContainer: CdkDropContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropContainer>, _dir: Directionality);
+    /** Element that the draggable is attached to. */
+    element: ElementRef<HTMLElement>, 
+    /** Droppable container that the draggable is a part of. */
+    dropContainer: CdkDropContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropContainer>, _dir: Directionality);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -118,52 +118,52 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     /** Handler that is invoked when the user lifts their pointer up, after initiating a drag. */
     private _pointerUp;
     /** Cleans up the DOM artifacts that were added to facilitate the element being dragged. */
-    private _cleanupDragArtifacts();
+    private _cleanupDragArtifacts;
     /**
      * Updates the item's position in its drop container, or moves it
      * into a new one, depending on its current drag position.
      */
-    private _updateActiveDropContainer({x, y});
+    private _updateActiveDropContainer;
     /**
      * Creates the element that will be rendered next to the user's pointer
      * and will be used as a preview of the element that is being dragged.
      */
-    private _createPreviewElement();
+    private _createPreviewElement;
     /** Creates an element that will be shown instead of the current element while dragging. */
-    private _createPlaceholderElement();
+    private _createPlaceholderElement;
     /**
      * Figures out the coordinates at which an element was picked up.
      * @param referenceElement Element that initiated the dragging.
      * @param event Event that initiated the dragging.
      */
-    private _getPointerPositionInElement(referenceElement, event);
+    private _getPointerPositionInElement;
     /**
      * Animates the preview element from its current position to the location of the drop placeholder.
      * @returns Promise that resolves when the animation completes.
      */
-    private _animatePreviewToPlaceholder();
+    private _animatePreviewToPlaceholder;
     /**
      * Sets the `transform` style on an element.
      * @param element Element on which to set the transform.
      * @param x Desired position of the element along the X axis.
      * @param y Desired position of the element along the Y axis.
      */
-    private _setTransform(element, x, y);
+    private _setTransform;
     /**
      * Helper to remove an element from the DOM and to do all the necessary null checks.
      * @param element Element to be removed.
      */
-    private _removeElement(element);
+    private _removeElement;
     /** Determines the point of the page that was touched by the user. */
-    private _getPointerPositionOnPage(event);
+    private _getPointerPositionOnPage;
     /** Gets the pointer position on the page, accounting for any position constraints. */
-    private _getConstrainedPointerPosition(event);
+    private _getConstrainedPointerPosition;
     /** Determines whether an event is a touch event. */
-    private _isTouchEvent(event);
+    private _isTouchEvent;
     /** Destroys the preview element and its ViewRef. */
-    private _destroyPreview();
+    private _destroyPreview;
     /** Destroys the placeholder element and its ViewRef. */
-    private _destroyPlaceholder();
+    private _destroyPlaceholder;
     /** Updates the current drag delta, based on the user's current pointer position on the page. */
-    private _updatePointerDirectionDelta(pointerPositionOnPage);
+    private _updatePointerDirectionDelta;
 }

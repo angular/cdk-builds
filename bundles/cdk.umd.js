@@ -15,10 +15,10 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Current version of the Angular Component Development Kit.
- */
-var /** @type {?} */ VERSION = new core.Version('6.4.6-6aa7727');
+  @type {?} */
+var VERSION = new core.Version('6.4.6-d424c70');
 
 exports.VERSION = VERSION;
 

@@ -474,5 +474,5 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
+export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };
 //# sourceMappingURL=collections.es5.js.map

@@ -316,43 +316,43 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * row definitions. If the previous list already contained a particular pair, it should be reused
      * so that the differ equates their references.
      */
-    private _getAllRenderRows();
+    private _getAllRenderRows;
     /**
      * Gets a list of `RenderRow<T>` for the provided data object and any `CdkRowDef` objects that
      * should be rendered for this data. Reuses the cached RenderRow objects if they match the same
      * `(T, CdkRowDef)` pair.
      */
-    private _getRenderRowsForData(data, dataIndex, cache?);
+    private _getRenderRowsForData;
     /** Update the map containing the content's column definitions. */
-    private _cacheColumnDefs();
+    private _cacheColumnDefs;
     /** Update the list of all available row definitions that can be used. */
-    private _cacheRowDefs();
+    private _cacheRowDefs;
     /**
      * Check if the header, data, or footer rows have changed what columns they want to display or
      * whether the sticky states have changed for the header or footer. If there is a diff, then
      * re-render that section.
      */
-    private _renderUpdatedColumns();
+    private _renderUpdatedColumns;
     /**
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
      * clearing the row outlet. Otherwise start listening for new data.
      */
-    private _switchDataSource(dataSource);
+    private _switchDataSource;
     /** Set up a subscription for the data provided by the data source. */
-    private _observeRenderChanges();
+    private _observeRenderChanges;
     /**
      * Clears any existing content in the header row outlet and creates a new embedded view
      * in the outlet using the header row definition.
      */
-    private _forceRenderHeaderRows();
+    private _forceRenderHeaderRows;
     /**
      * Clears any existing content in the footer row outlet and creates a new embedded view
      * in the outlet using the footer row definition.
      */
-    private _forceRenderFooterRows();
+    private _forceRenderFooterRows;
     /** Adds the sticky column styles for the rows according to the columns' stick states. */
-    private _addStickyColumnStyles(rows, rowDef);
+    private _addStickyColumnStyles;
     /** Gets the list of rows that have been rendered in the row outlet. */
     _getRenderedRows(rowOutlet: RowOutlet): HTMLElement[];
     /**
@@ -366,38 +366,38 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
      */
-    private _insertRow(renderRow, renderIndex);
+    private _insertRow;
     /**
      * Creates a new row template in the outlet and fills it with the set of cell templates.
      * Optionally takes a context to provide to the row and cells, as well as an optional index
      * of where to place the new row template in the outlet.
      */
-    private _renderRow(outlet, rowDef, index, context?);
+    private _renderRow;
     /**
      * Updates the index-related context for each row to reflect any changes in the index of the rows,
      * e.g. first/last/even/odd.
      */
-    private _updateRowIndexContext();
+    private _updateRowIndexContext;
     /** Gets the column definitions for the provided row def. */
-    private _getCellTemplates(rowDef);
+    private _getCellTemplates;
     /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
-    private _applyNativeTableSections();
+    private _applyNativeTableSections;
     /**
      * Forces a re-render of the data rows. Should be called in cases where there has been an input
      * change that affects the evaluation of which rows should be rendered, e.g. toggling
      * `multiTemplateDataRows` or adding/removing row definitions.
      */
-    private _forceRenderDataRows();
+    private _forceRenderDataRows;
     /**
      * Checks if there has been a change in sticky states since last check and applies the correct
      * sticky styles. Since checking resets the "dirty" state, this should only be performed once
      * during a change detection and after the inputs are settled (after content check).
      */
-    private _checkStickyStates();
+    private _checkStickyStates;
     /**
      * Creates the sticky styler that will be used for sticky rows and columns. Listens
      * for directionality changes and provides the latest direction to the styler. Re-applies column
      * stickiness when directionality changes.
      */
-    private _setupStickyStyler();
+    private _setupStickyStyler;
 }

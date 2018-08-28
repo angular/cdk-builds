@@ -12,9 +12,8 @@ import { isPlatformBrowser } from '@angular/common';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-// Whether the current platform supports the V8 Break Iterator. The V8 check
-// is necessary to detect all Blink based browsers.
-var /** @type {?} */ hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
+/** @type {?} */
+var hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (Intl)).v8BreakIterator);
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
@@ -74,7 +73,7 @@ var Platform = /** @class */ (function () {
     ];
     /** @nocollapse */
     Platform.ctorParameters = function () { return [
-        { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] },] },
+        { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] }] }
     ]; };
     /** @nocollapse */ Platform.ngInjectableDef = defineInjectable({ factory: function Platform_Factory() { return new Platform(inject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
     return Platform;
@@ -98,14 +97,14 @@ var PlatformModule = /** @class */ (function () {
  * @suppress {checkTypes} checked by tsc
  */
 
-/**
+/** *
  * Cached result Set of input types support by the current browser.
- */
-var /** @type {?} */ supportedInputTypes;
-/**
+  @type {?} */
+var supportedInputTypes;
+/** *
  * Types of `<input>` that *might* be supported.
- */
-var /** @type {?} */ candidateInputTypes = [
+  @type {?} */
+var candidateInputTypes = [
     'color',
     'button',
     'checkbox',
@@ -144,7 +143,8 @@ function getSupportedInputTypes() {
         supportedInputTypes = new Set(candidateInputTypes);
         return supportedInputTypes;
     }
-    var /** @type {?} */ featureTestInput = document.createElement('input');
+    /** @type {?} */
+    var featureTestInput = document.createElement('input');
     supportedInputTypes = new Set(candidateInputTypes.filter(function (value) {
         featureTestInput.setAttribute('type', value);
         return featureTestInput.type === value;
@@ -157,10 +157,10 @@ function getSupportedInputTypes() {
  * @suppress {checkTypes} checked by tsc
  */
 
-/**
+/** *
  * Cached result of whether the user's browser supports passive event listeners.
- */
-var /** @type {?} */ supportsPassiveEvents;
+  @type {?} */
+var supportsPassiveEvents;
 /**
  * Checks whether the user's browser supports passive event listeners.
  * See: https://github.com/WICG/EventListenerOptions/blob/gh-pages/explainer.md
@@ -203,13 +203,13 @@ var RtlScrollAxisType = {
        */
     INVERTED: 2,
 };
-RtlScrollAxisType[RtlScrollAxisType.NORMAL] = "NORMAL";
-RtlScrollAxisType[RtlScrollAxisType.NEGATED] = "NEGATED";
-RtlScrollAxisType[RtlScrollAxisType.INVERTED] = "INVERTED";
-/**
+RtlScrollAxisType[RtlScrollAxisType.NORMAL] = 'NORMAL';
+RtlScrollAxisType[RtlScrollAxisType.NEGATED] = 'NEGATED';
+RtlScrollAxisType[RtlScrollAxisType.INVERTED] = 'INVERTED';
+/** *
  * Cached result of the way the browser handles the horizontal scroll axis in RTL mode.
- */
-var /** @type {?} */ rtlScrollAxisType;
+  @type {?} */
+var rtlScrollAxisType;
 /**
  * Check whether the browser supports scroll behaviors.
  * @return {?}
@@ -228,9 +228,10 @@ function getRtlScrollAxisType() {
         return RtlScrollAxisType.NORMAL;
     }
     if (!rtlScrollAxisType) {
-        // Create a 1px wide scrolling container and a 2px wide content element.
-        var /** @type {?} */ scrollContainer = document.createElement('div');
-        var /** @type {?} */ containerStyle = scrollContainer.style;
+        /** @type {?} */
+        var scrollContainer = document.createElement('div');
+        /** @type {?} */
+        var containerStyle = scrollContainer.style;
         scrollContainer.dir = 'rtl';
         containerStyle.height = '1px';
         containerStyle.width = '1px';
@@ -238,8 +239,10 @@ function getRtlScrollAxisType() {
         containerStyle.visibility = 'hidden';
         containerStyle.pointerEvents = 'none';
         containerStyle.position = 'absolute';
-        var /** @type {?} */ content = document.createElement('div');
-        var /** @type {?} */ contentStyle = content.style;
+        /** @type {?} */
+        var content = document.createElement('div');
+        /** @type {?} */
+        var contentStyle = content.style;
         contentStyle.width = '2px';
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
@@ -272,5 +275,5 @@ function getRtlScrollAxisType() {
  * @suppress {checkTypes} checked by tsc
  */
 
-export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, RtlScrollAxisType, supportsScrollBehavior, getRtlScrollAxisType };
+export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, supportsScrollBehavior, getRtlScrollAxisType, RtlScrollAxisType };
 //# sourceMappingURL=platform.es5.js.map

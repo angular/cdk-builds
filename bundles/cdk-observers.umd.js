@@ -70,10 +70,13 @@ var ContentObserver = /** @class */ (function () {
      */
     function (elementOrRef) {
         var _this = this;
-        var /** @type {?} */ element = elementOrRef instanceof core.ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        var element = elementOrRef instanceof core.ElementRef ? elementOrRef.nativeElement : elementOrRef;
         return rxjs.Observable.create(function (observer) {
-            var /** @type {?} */ stream = _this._observeElement(element);
-            var /** @type {?} */ subscription = stream.subscribe(observer);
+            /** @type {?} */
+            var stream = _this._observeElement(element);
+            /** @type {?} */
+            var subscription = stream.subscribe(observer);
             return function () {
                 subscription.unsubscribe();
                 _this._unobserveElement(element);
@@ -94,8 +97,10 @@ var ContentObserver = /** @class */ (function () {
      */
     function (element) {
         if (!this._observedElements.has(element)) {
-            var /** @type {?} */ stream_1 = new rxjs.Subject();
-            var /** @type {?} */ observer = this._mutationObserverFactory.create(function (mutations) { return stream_1.next(mutations); });
+            /** @type {?} */
+            var stream_1 = new rxjs.Subject();
+            /** @type {?} */
+            var observer = this._mutationObserverFactory.create(function (mutations) { return stream_1.next(mutations); });
             if (observer) {
                 observer.observe(element, {
                     characterData: true,
@@ -155,7 +160,7 @@ var ContentObserver = /** @class */ (function () {
     ];
     /** @nocollapse */
     ContentObserver.ctorParameters = function () { return [
-        { type: MutationObserverFactory, },
+        { type: MutationObserverFactory }
     ]; };
     /** @nocollapse */ ContentObserver.ngInjectableDef = core.defineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(core.inject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     return ContentObserver;
@@ -177,6 +182,10 @@ var CdkObserveContent = /** @class */ (function () {
         this._currentSubscription = null;
     }
     Object.defineProperty(CdkObserveContent.prototype, "disabled", {
+        /**
+         * Whether observing content is disabled. This option can be used
+         * to disconnect the underlying MutationObserver until it is needed.
+         */
         get: /**
          * Whether observing content is disabled. This option can be used
          * to disconnect the underlying MutationObserver until it is needed.
@@ -200,6 +209,7 @@ var CdkObserveContent = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkObserveContent.prototype, "debounce", {
+        /** Debounce interval for emitting the changes. */
         get: /**
          * Debounce interval for emitting the changes.
          * @return {?}
@@ -245,7 +255,8 @@ var CdkObserveContent = /** @class */ (function () {
     function () {
         var _this = this;
         this._unsubscribe();
-        var /** @type {?} */ stream = this._contentObserver.observe(this._elementRef);
+        /** @type {?} */
+        var stream = this._contentObserver.observe(this._elementRef);
         // TODO(mmalerba): We shouldn't be emitting on this @Output() outside the zone.
         // Consider brining it back inside the zone next time we're making breaking changes.
         // Bringing it back inside can cause things like infinite change detection loops and changed
@@ -274,14 +285,14 @@ var CdkObserveContent = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkObserveContent.ctorParameters = function () { return [
-        { type: ContentObserver, },
-        { type: core.ElementRef, },
-        { type: core.NgZone, },
+        { type: ContentObserver },
+        { type: core.ElementRef },
+        { type: core.NgZone }
     ]; };
     CdkObserveContent.propDecorators = {
-        "event": [{ type: core.Output, args: ['cdkObserveContent',] },],
-        "disabled": [{ type: core.Input, args: ['cdkObserveContentDisabled',] },],
-        "debounce": [{ type: core.Input },],
+        event: [{ type: core.Output, args: ['cdkObserveContent',] }],
+        disabled: [{ type: core.Input, args: ['cdkObserveContentDisabled',] }],
+        debounce: [{ type: core.Input }]
     };
     return CdkObserveContent;
 }());

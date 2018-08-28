@@ -85,7 +85,8 @@ class BaseTreeControl {
      * @return {?}
      */
     expandDescendants(dataNode) {
-        let /** @type {?} */ toBeProcessed = [dataNode];
+        /** @type {?} */
+        let toBeProcessed = [dataNode];
         toBeProcessed.push(...this.getDescendants(dataNode));
         this.expansionModel.select(...toBeProcessed);
     }
@@ -95,7 +96,8 @@ class BaseTreeControl {
      * @return {?}
      */
     collapseDescendants(dataNode) {
-        let /** @type {?} */ toBeProcessed = [dataNode];
+        /** @type {?} */
+        let toBeProcessed = [dataNode];
         toBeProcessed.push(...this.getDescendants(dataNode));
         this.expansionModel.deselect(...toBeProcessed);
     }
@@ -129,15 +131,17 @@ class FlatTreeControl extends BaseTreeControl {
      * @return {?}
      */
     getDescendants(dataNode) {
-        const /** @type {?} */ startIndex = this.dataNodes.indexOf(dataNode);
-        const /** @type {?} */ results = [];
+        /** @type {?} */
+        const startIndex = this.dataNodes.indexOf(dataNode);
+        /** @type {?} */
+        const results = [];
         // Goes through flattened tree nodes in the `dataNodes` array, and get all descendants.
         // The level of descendants of a tree node must be greater than the level of the given
         // tree node.
         // If we reach a node whose level is equal to the level of the tree node, we hit a sibling.
         // If we reach a node whose level is greater than the level of the tree node, we hit a
         // sibling of an ancestor.
-        for (let /** @type {?} */ i = startIndex + 1; i < this.dataNodes.length && this.getLevel(dataNode) < this.getLevel(this.dataNodes[i]); i++) {
+        for (let i = startIndex + 1; i < this.dataNodes.length && this.getLevel(dataNode) < this.getLevel(this.dataNodes[i]); i++) {
             results.push(this.dataNodes[i]);
         }
         return results;
@@ -180,7 +184,8 @@ class NestedTreeControl extends BaseTreeControl {
      */
     expandAll() {
         this.expansionModel.clear();
-        const /** @type {?} */ allNodes = this.dataNodes.reduce((accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode], []);
+        /** @type {?} */
+        const allNodes = this.dataNodes.reduce((accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode], []);
         this.expansionModel.select(...allNodes);
     }
     /**
@@ -189,7 +194,8 @@ class NestedTreeControl extends BaseTreeControl {
      * @return {?}
      */
     getDescendants(dataNode) {
-        const /** @type {?} */ descendants = [];
+        /** @type {?} */
+        const descendants = [];
         this._getDescendants(descendants, dataNode);
         // Remove the node itself
         return descendants.splice(1);
@@ -202,7 +208,8 @@ class NestedTreeControl extends BaseTreeControl {
      */
     _getDescendants(descendants, dataNode) {
         descendants.push(dataNode);
-        const /** @type {?} */ childrenNodes = this.getChildren(dataNode);
+        /** @type {?} */
+        const childrenNodes = this.getChildren(dataNode);
         if (Array.isArray(childrenNodes)) {
             childrenNodes.forEach((child) => this._getDescendants(descendants, child));
         }
@@ -254,7 +261,7 @@ CdkTreeNodeDef.decorators = [
 ];
 /** @nocollapse */
 CdkTreeNodeDef.ctorParameters = () => [
-    { type: TemplateRef, },
+    { type: TemplateRef }
 ];
 
 /**
@@ -280,7 +287,7 @@ CdkTreeNodeOutlet.decorators = [
 ];
 /** @nocollapse */
 CdkTreeNodeOutlet.ctorParameters = () => [
-    { type: ViewContainerRef, },
+    { type: ViewContainerRef }
 ];
 
 /**
@@ -404,7 +411,8 @@ class CdkTree {
      * @return {?}
      */
     ngAfterContentChecked() {
-        const /** @type {?} */ defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
+        /** @type {?} */
+        const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
         if (defaultNodeDefs.length > 1) {
             throw getTreeMultipleDefaultNodeDefsError();
         }
@@ -442,7 +450,8 @@ class CdkTree {
      * @return {?}
      */
     _observeRenderChanges() {
-        let /** @type {?} */ dataStream;
+        /** @type {?} */
+        let dataStream;
         // Cannot use `instanceof DataSource` since the data source could be a literal with
         // `connect` function and may not extends DataSource.
         if (typeof (/** @type {?} */ (this._dataSource)).connect === 'function') {
@@ -471,20 +480,22 @@ class CdkTree {
      * @return {?}
      */
     renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer, parentData) {
-        const /** @type {?} */ changes = dataDiffer.diff(data);
+        /** @type {?} */
+        const changes = dataDiffer.diff(data);
         if (!changes) {
             return;
         }
         changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
             if (item.previousIndex == null) {
-                this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
+                this.insertNode(data[/** @type {?} */ ((currentIndex))], /** @type {?} */ ((currentIndex)), viewContainer, parentData);
             }
             else if (currentIndex == null) {
-                viewContainer.remove(adjustedPreviousIndex);
+                viewContainer.remove(/** @type {?} */ ((adjustedPreviousIndex)));
                 this._levels.delete(item.item);
             }
             else {
-                const /** @type {?} */ view = viewContainer.get(adjustedPreviousIndex);
+                /** @type {?} */
+                const view = viewContainer.get(/** @type {?} */ ((adjustedPreviousIndex)));
                 viewContainer.move(/** @type {?} */ ((view)), currentIndex);
             }
         });
@@ -503,7 +514,8 @@ class CdkTree {
         if (this._nodeDefs.length === 1) {
             return this._nodeDefs.first;
         }
-        const /** @type {?} */ nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
+        /** @type {?} */
+        const nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
         if (!nodeDef) {
             throw getTreeMissingMatchingNodeDefError();
         }
@@ -519,9 +531,10 @@ class CdkTree {
      * @return {?}
      */
     insertNode(nodeData, index, viewContainer, parentData) {
-        const /** @type {?} */ node = this._getNodeDef(nodeData, index);
-        // Node context that will be provided to created embedded view
-        const /** @type {?} */ context = new CdkTreeNodeOutletContext(nodeData);
+        /** @type {?} */
+        const node = this._getNodeDef(nodeData, index);
+        /** @type {?} */
+        const context = new CdkTreeNodeOutletContext(nodeData);
         // If the tree is flat tree, then use the `getLevel` function in flat tree control
         // Otherwise, use the level of parent node.
         if (this.treeControl.getLevel) {
@@ -534,8 +547,8 @@ class CdkTree {
             context.level = 0;
         }
         this._levels.set(nodeData, context.level);
-        // Use default tree nodeOutlet, or nested node's nodeOutlet
-        const /** @type {?} */ container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
+        /** @type {?} */
+        const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
         container.createEmbeddedView(node.template, context, index);
         // Set the data to just created `CdkTreeNode`.
         // The `CdkTreeNode` created from `createEmbeddedView` will be saved in static variable
@@ -559,15 +572,15 @@ CdkTree.decorators = [
 ];
 /** @nocollapse */
 CdkTree.ctorParameters = () => [
-    { type: IterableDiffers, },
-    { type: ChangeDetectorRef, },
+    { type: IterableDiffers },
+    { type: ChangeDetectorRef }
 ];
 CdkTree.propDecorators = {
-    "dataSource": [{ type: Input },],
-    "treeControl": [{ type: Input },],
-    "trackBy": [{ type: Input },],
-    "_nodeOutlet": [{ type: ViewChild, args: [CdkTreeNodeOutlet,] },],
-    "_nodeDefs": [{ type: ContentChildren, args: [CdkTreeNodeDef,] },],
+    dataSource: [{ type: Input }],
+    treeControl: [{ type: Input }],
+    trackBy: [{ type: Input }],
+    _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet,] }],
+    _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef,] }]
 };
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
@@ -647,7 +660,8 @@ class CdkTreeNode {
             if (!this._tree.treeControl.getChildren) {
                 throw getTreeControlFunctionsMissingError();
             }
-            const /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this._data);
+            /** @type {?} */
+            const childrenNodes = this._tree.treeControl.getChildren(this._data);
             if (Array.isArray(childrenNodes)) {
                 this._setRoleFromChildren(/** @type {?} */ (childrenNodes));
             }
@@ -684,11 +698,11 @@ CdkTreeNode.decorators = [
 ];
 /** @nocollapse */
 CdkTreeNode.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: CdkTree, },
+    { type: ElementRef },
+    { type: CdkTree }
 ];
 CdkTreeNode.propDecorators = {
-    "role": [{ type: Input },],
+    role: [{ type: Input }]
 };
 
 /**
@@ -737,7 +751,8 @@ class CdkNestedTreeNode extends CdkTreeNode {
         if (!this._tree.treeControl.getChildren) {
             throw getTreeControlFunctionsMissingError();
         }
-        const /** @type {?} */ childrenNodes = this._tree.treeControl.getChildren(this.data);
+        /** @type {?} */
+        const childrenNodes = this._tree.treeControl.getChildren(this.data);
         if (Array.isArray(childrenNodes)) {
             this.updateChildrenNodes(/** @type {?} */ (childrenNodes));
         }
@@ -765,7 +780,8 @@ class CdkNestedTreeNode extends CdkTreeNode {
             this._children = children;
         }
         if (this.nodeOutlet.length && this._children) {
-            const /** @type {?} */ viewContainer = this.nodeOutlet.first.viewContainer;
+            /** @type {?} */
+            const viewContainer = this.nodeOutlet.first.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);
         }
         else {
@@ -798,12 +814,12 @@ CdkNestedTreeNode.decorators = [
 ];
 /** @nocollapse */
 CdkNestedTreeNode.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: CdkTree, },
-    { type: IterableDiffers, },
+    { type: ElementRef },
+    { type: CdkTree },
+    { type: IterableDiffers }
 ];
 CdkNestedTreeNode.propDecorators = {
-    "nodeOutlet": [{ type: ContentChildren, args: [CdkTreeNodeOutlet,] },],
+    nodeOutlet: [{ type: ContentChildren, args: [CdkTreeNodeOutlet,] }]
 };
 
 /**
@@ -877,18 +893,22 @@ class CdkTreeNodePadding {
      * @return {?}
      */
     _paddingIndent() {
-        const /** @type {?} */ nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
+        /** @type {?} */
+        const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
             ? this._tree.treeControl.getLevel(this._treeNode.data)
             : null;
-        const /** @type {?} */ level = this._level || nodeLevel;
+        /** @type {?} */
+        const level = this._level || nodeLevel;
         return level ? `${level * this._indent}px` : null;
     }
     /**
      * @return {?}
      */
     _setPadding() {
-        const /** @type {?} */ padding = this._paddingIndent();
-        const /** @type {?} */ paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
+        /** @type {?} */
+        const padding = this._paddingIndent();
+        /** @type {?} */
+        const paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
         this._renderer.setStyle(this._element.nativeElement, paddingProp, padding);
     }
 }
@@ -899,15 +919,15 @@ CdkTreeNodePadding.decorators = [
 ];
 /** @nocollapse */
 CdkTreeNodePadding.ctorParameters = () => [
-    { type: CdkTreeNode, },
-    { type: CdkTree, },
-    { type: Renderer2, },
-    { type: ElementRef, },
-    { type: Directionality, decorators: [{ type: Optional },] },
+    { type: CdkTreeNode },
+    { type: CdkTree },
+    { type: Renderer2 },
+    { type: ElementRef },
+    { type: Directionality, decorators: [{ type: Optional }] }
 ];
 CdkTreeNodePadding.propDecorators = {
-    "level": [{ type: Input, args: ['cdkTreeNodePadding',] },],
-    "indent": [{ type: Input, args: ['cdkTreeNodePaddingIndent',] },],
+    level: [{ type: Input, args: ['cdkTreeNodePadding',] }],
+    indent: [{ type: Input, args: ['cdkTreeNodePaddingIndent',] }]
 };
 
 /**
@@ -959,18 +979,19 @@ CdkTreeNodeToggle.decorators = [
 ];
 /** @nocollapse */
 CdkTreeNodeToggle.ctorParameters = () => [
-    { type: CdkTree, },
-    { type: CdkTreeNode, },
+    { type: CdkTree },
+    { type: CdkTreeNode }
 ];
 CdkTreeNodeToggle.propDecorators = {
-    "recursive": [{ type: Input, args: ['cdkTreeNodeToggleRecursive',] },],
+    recursive: [{ type: Input, args: ['cdkTreeNodeToggleRecursive',] }]
 };
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-const /** @type {?} */ EXPORTED_DECLARATIONS = [
+/** @type {?} */
+const EXPORTED_DECLARATIONS = [
     CdkNestedTreeNode,
     CdkTreeNodeDef,
     CdkTreeNodePadding,

@@ -62,18 +62,18 @@ export declare class SelectionModel<T> {
      */
     isMultipleSelection(): boolean;
     /** Emits a change event and clears the records of selected and deselected values. */
-    private _emitChangeEvent();
+    private _emitChangeEvent;
     /** Selects a value. */
-    private _markSelected(value);
+    private _markSelected;
     /** Deselects a value. */
-    private _unmarkSelected(value);
+    private _unmarkSelected;
     /** Clears out the selected values. */
-    private _unmarkAll();
+    private _unmarkAll;
     /**
      * Verifies the value assignment and throws an error if the specified value array is
      * including multiple values while the selection model is not supporting multiple values.
      */
-    private _verifyValueAssignment(values);
+    private _verifyValueAssignment;
 }
 /**
  * Event emitted when the value of a MatSelectionModel has changed.

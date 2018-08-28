@@ -12,7 +12,7 @@ import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Dir
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
  *
@@ -26,8 +26,8 @@ import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Dir
  * https://github.com/angular/angular/issues/22559
  *
  * \@docs-private
- */
-const /** @type {?} */ DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
+  @type {?} */
+const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
     factory: DIR_DOCUMENT_FACTORY,
 });
@@ -61,13 +61,12 @@ class Directionality {
          */
         this.change = new EventEmitter();
         if (_document) {
-            // TODO: handle 'auto' value -
-            // We still need to account for dir="auto".
-            // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
-            // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
-            const /** @type {?} */ bodyDir = _document.body ? _document.body.dir : null;
-            const /** @type {?} */ htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            const /** @type {?} */ value = bodyDir || htmlDir;
+            /** @type {?} */
+            const bodyDir = _document.body ? _document.body.dir : null;
+            /** @type {?} */
+            const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
+            /** @type {?} */
+            const value = bodyDir || htmlDir;
             this.value = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
         }
     }
@@ -83,7 +82,7 @@ Directionality.decorators = [
 ];
 /** @nocollapse */
 Directionality.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] }] }
 ];
 /** @nocollapse */ Directionality.ngInjectableDef = defineInjectable({ factory: function Directionality_Factory() { return new Directionality(inject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
 
@@ -119,7 +118,8 @@ class Dir {
      * @return {?}
      */
     set dir(value) {
-        const /** @type {?} */ old = this._dir;
+        /** @type {?} */
+        const old = this._dir;
         this._dir = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
         if (old !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
@@ -152,10 +152,9 @@ Dir.decorators = [
                 exportAs: 'dir',
             },] },
 ];
-/** @nocollapse */
 Dir.propDecorators = {
-    "change": [{ type: Output, args: ['dirChange',] },],
-    "dir": [{ type: Input },],
+    change: [{ type: Output, args: ['dirChange',] }],
+    dir: [{ type: Input }]
 };
 
 /**

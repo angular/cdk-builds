@@ -118,25 +118,25 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * currently active item and the new active item. It will calculate differently
      * depending on whether wrap mode is turned on.
      */
-    private _setActiveItemByDelta(delta);
+    private _setActiveItemByDelta;
     /**
      * Sets the active item properly given "wrap" mode. In other words, it will continue to move
      * down the list until it finds an item that is not disabled, and it will wrap if it
      * encounters either end of the list.
      */
-    private _setActiveInWrapMode(delta);
+    private _setActiveInWrapMode;
     /**
      * Sets the active item properly given the default mode. In other words, it will
      * continue to move down the list until it finds an item that is not disabled. If
      * it encounters either end of the list, it will stop and not wrap.
      */
-    private _setActiveInDefaultMode(delta);
+    private _setActiveInDefaultMode;
     /**
      * Sets the active item to the first enabled item starting at the index specified. If the
      * item is disabled, it will move in the fallbackDelta direction until it either
      * finds an enabled item or encounters the end of the list.
      */
-    private _setActiveItemByIndex(index, fallbackDelta);
+    private _setActiveItemByIndex;
     /** Returns the items as an array. */
-    private _getItemsArray();
+    private _getItemsArray;
 }

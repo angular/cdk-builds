@@ -64,5 +64,5 @@ export declare class DragDropRegistry<I, C extends {
      */
     private _preventScrollListener;
     /** Clears out the global event listeners from the `document`. */
-    private _clearGlobalListeners();
+    private _clearGlobalListeners;
 }

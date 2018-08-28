@@ -34,8 +34,8 @@ export declare class Overlay {
     private _directionality;
     private _appRef;
     constructor(
-        /** Scrolling strategies that can be used when creating an overlay. */
-        scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality);
+    /** Scrolling strategies that can be used when creating an overlay. */
+    scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.
@@ -52,17 +52,17 @@ export declare class Overlay {
      * Creates the DOM element for an overlay and appends it to the overlay container.
      * @returns Newly-created pane element
      */
-    private _createPaneElement(host);
+    private _createPaneElement;
     /**
      * Creates the host element that wraps around an overlay
      * and can be used for advanced positioning.
      * @returns Newly-create host element.
      */
-    private _createHostElement();
+    private _createHostElement;
     /**
      * Create a DomPortalOutlet into which the overlay content can be loaded.
      * @param pane The DOM element to turn into a portal outlet.
      * @returns A portal outlet for the given DOM element.
      */
-    private _createPortalOutlet(pane);
+    private _createPortalOutlet;
 }

@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { AfterContentInit, ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 /**
@@ -28,14 +35,14 @@ export declare class ContentObserver implements OnDestroy {
      * Observes the given element by using the existing MutationObserver if available, or creating a
      * new one if not.
      */
-    private _observeElement(element);
+    private _observeElement;
     /**
      * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
      * observing this element.
      */
-    private _unobserveElement(element);
+    private _unobserveElement;
     /** Clean up the underlying MutationObserver for the specified element. */
-    private _cleanupObserver(element);
+    private _cleanupObserver;
 }
 /**
  * Directive that triggers a callback whenever the content of
@@ -60,8 +67,8 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     constructor(_contentObserver: ContentObserver, _elementRef: ElementRef, _ngZone: NgZone);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
-    private _subscribe();
-    private _unsubscribe();
+    private _subscribe;
+    private _unsubscribe;
 }
 export declare class ObserversModule {
 }

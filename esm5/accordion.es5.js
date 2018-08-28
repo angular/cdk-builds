@@ -14,10 +14,10 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each accordion.
- */
-var /** @type {?} */ nextId = 0;
+  @type {?} */
+var nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
@@ -38,6 +38,7 @@ var CdkAccordion = /** @class */ (function () {
         this._multi = false;
     }
     Object.defineProperty(CdkAccordion.prototype, "multi", {
+        /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
         get: /**
          * Whether the accordion should allow multiple expanded accordion items simultaneously.
          * @return {?}
@@ -114,9 +115,8 @@ var CdkAccordion = /** @class */ (function () {
                     exportAs: 'cdkAccordion',
                 },] },
     ];
-    /** @nocollapse */
     CdkAccordion.propDecorators = {
-        "multi": [{ type: Input },],
+        multi: [{ type: Input }]
     };
     return CdkAccordion;
 }());
@@ -125,10 +125,10 @@ var CdkAccordion = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each accordion item.
- */
-var /** @type {?} */ nextId$1 = 0;
+  @type {?} */
+var nextId$1 = 0;
 var ɵ0 = undefined;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
@@ -185,6 +185,7 @@ var CdkAccordionItem = /** @class */ (function () {
         }
     }
     Object.defineProperty(CdkAccordionItem.prototype, "expanded", {
+        /** Whether the AccordionItem is expanded. */
         get: /**
          * Whether the AccordionItem is expanded.
          * @return {?}
@@ -202,11 +203,11 @@ var CdkAccordionItem = /** @class */ (function () {
                 this.expandedChange.emit(expanded);
                 if (expanded) {
                     this.opened.emit();
-                    /**
+                    /** *
                      * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                      * the name value is the id of the accordion.
-                     */
-                    var /** @type {?} */ accordionId = this.accordion ? this.accordion.id : this.id;
+                      @type {?} */
+                    var accordionId = this.accordion ? this.accordion.id : this.id;
                     this._expansionDispatcher.notify(this.id, accordionId);
                 }
                 else {
@@ -221,6 +222,7 @@ var CdkAccordionItem = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkAccordionItem.prototype, "disabled", {
+        /** Whether the AccordionItem is disabled. */
         get: /**
          * Whether the AccordionItem is disabled.
          * @return {?}
@@ -321,17 +323,17 @@ var CdkAccordionItem = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkAccordionItem.ctorParameters = function () { return [
-        { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf },] },
-        { type: ChangeDetectorRef, },
-        { type: UniqueSelectionDispatcher, },
+        { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf }] },
+        { type: ChangeDetectorRef },
+        { type: UniqueSelectionDispatcher }
     ]; };
     CdkAccordionItem.propDecorators = {
-        "closed": [{ type: Output },],
-        "opened": [{ type: Output },],
-        "destroyed": [{ type: Output },],
-        "expandedChange": [{ type: Output },],
-        "expanded": [{ type: Input },],
-        "disabled": [{ type: Input },],
+        closed: [{ type: Output }],
+        opened: [{ type: Output }],
+        destroyed: [{ type: Output }],
+        expandedChange: [{ type: Output }],
+        expanded: [{ type: Input }],
+        disabled: [{ type: Input }]
     };
     return CdkAccordionItem;
 }());

@@ -23,8 +23,8 @@ import { OverlayContainer } from '../overlay-container';
 export declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _viewportRuler;
     private _document;
-    private _platform;
-    private _overlayContainer;
+    private _platform?;
+    private _overlayContainer?;
     /** The overlay to which this strategy is attached. */
     private _overlayRef;
     /** Whether we're performing the very first positioning of the overlay. */
@@ -167,21 +167,21 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
-    private _getOriginPoint(originRect, pos);
+    private _getOriginPoint;
     /**
      * Gets the (x, y) coordinate of the top-left corner of the overlay given a given position and
      * origin point to which the overlay should be connected.
      */
-    private _getOverlayPoint(originPoint, overlayRect, pos);
+    private _getOverlayPoint;
     /** Gets how well an overlay at the given point will fit within the viewport. */
-    private _getOverlayFit(point, overlay, viewport, position);
+    private _getOverlayFit;
     /**
      * Whether the overlay can fit within the viewport when it may resize either its width or height.
      * @param fit How well the overlay fits in the viewport at some position.
      * @param point The (x, y) coordinates of the overlat at some position.
      * @param viewport The geometry of the viewport.
      */
-    private _canFitWithFlexibleDimensions(fit, point, viewport);
+    private _canFitWithFlexibleDimensions;
     /**
      * Gets the point at which the overlay can be "pushed" on-screen. If the overlay is larger than
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
@@ -192,22 +192,22 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * @returns The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
      */
-    private _pushOverlayOnScreen(start, overlay);
+    private _pushOverlayOnScreen;
     /**
      * Applies a computed position to the overlay and emits a position change.
      * @param position The position preference
      * @param originPoint The point on the origin element where the overlay is connected.
      */
-    private _applyPosition(position, originPoint);
+    private _applyPosition;
     /** Sets the transform origin based on the configured selector and the passed-in position.  */
-    private _setTransformOrigin(position);
+    private _setTransformOrigin;
     /**
      * Gets the position and size of the overlay's sizing container.
      *
      * This method does no measuring and applies no styles so that we can cheaply compute the
      * bounds for all positions and choose the best fit based on these results.
      */
-    private _calculateBoundingBoxRect(origin, position);
+    private _calculateBoundingBoxRect;
     /**
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
      * origin's connection point and stetches to the bounds of the viewport.
@@ -215,38 +215,38 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * @param origin The point on the origin element where the overlay is connected.
      * @param position The position preference
      */
-    private _setBoundingBoxStyles(origin, position);
+    private _setBoundingBoxStyles;
     /** Resets the styles for the bounding box so that a new positioning can be computed. */
-    private _resetBoundingBoxStyles();
+    private _resetBoundingBoxStyles;
     /** Resets the styles for the overlay pane so that a new positioning can be computed. */
-    private _resetOverlayElementStyles();
+    private _resetOverlayElementStyles;
     /** Sets positioning styles to the overlay element. */
-    private _setOverlayElementStyles(originPoint, position);
+    private _setOverlayElementStyles;
     /** Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing. */
-    private _getExactOverlayY(position, originPoint);
+    private _getExactOverlayY;
     /** Gets the exact left/right for the overlay when not using flexible sizing or when pushing. */
-    private _getExactOverlayX(position, originPoint);
+    private _getExactOverlayX;
     /**
      * Gets the view properties of the trigger and overlay, including whether they are clipped
      * or completely outside the view of any of the strategy's scrollables.
      */
-    private _getScrollVisibility();
+    private _getScrollVisibility;
     /** Subtracts the amount that an element is overflowing on an axis from it's length. */
-    private _subtractOverflows(length, ...overflows);
+    private _subtractOverflows;
     /** Narrows the given viewport rect by the current _viewportMargin. */
-    private _getNarrowedViewportRect();
+    private _getNarrowedViewportRect;
     /** Whether the we're dealing with an RTL context */
-    private _isRtl();
+    private _isRtl;
     /** Determines whether the overlay uses exact or flexible positioning. */
-    private _hasExactPosition();
+    private _hasExactPosition;
     /** Retrieves the offset of a position along the x or y axis. */
-    private _getOffset(position, axis);
+    private _getOffset;
     /** Validates that the current position match the expected values. */
-    private _validatePositions();
+    private _validatePositions;
     /** Adds a single CSS class or an array of classes on the overlay panel. */
-    private _addPanelClasses(cssClasses);
+    private _addPanelClasses;
     /** Clears the classes that the position strategy has applied from the overlay panel. */
-    private _clearPanelClasses();
+    private _clearPanelClasses;
 }
 /** A connected position as specified by the user. */
 export interface ConnectedPosition {

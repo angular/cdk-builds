@@ -57,7 +57,7 @@ export declare class CdkStep implements OnChanges {
     /** Whether step is marked as completed. */
     completed: boolean;
     private _customCompleted;
-    private _defaultCompleted();
+    private _defaultCompleted;
     constructor(_stepper: CdkStepper);
     /** Selects this step component. */
     select(): void;
@@ -68,7 +68,7 @@ export declare class CdkStep implements OnChanges {
 export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
-    private _elementRef;
+    private _elementRef?;
     /** Emits when the component is destroyed. */
     protected _destroyed: Subject<void>;
     /** Used for managing keyboard focus. */
@@ -116,10 +116,10 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     _getIndicatorType(index: number): 'number' | 'edit' | 'done';
     /** Returns the index of the currently-focused step header. */
     _getFocusIndex(): number | null;
-    private _updateSelectedItemIndex(newIndex);
+    private _updateSelectedItemIndex;
     _onKeydown(event: KeyboardEvent): void;
-    private _anyControlsInvalidOrPending(index);
-    private _layoutDirection();
+    private _anyControlsInvalidOrPending;
+    private _layoutDirection;
     /** Checks whether the stepper contains the focused element. */
-    private _containsFocus();
+    private _containsFocus;
 }

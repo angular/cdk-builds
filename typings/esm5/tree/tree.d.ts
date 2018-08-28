@@ -65,9 +65,9 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
      * render change subscription if one exists. If the data source is null, interpret this by
      * clearing the node outlet. Otherwise start listening for new data.
      */
-    private _switchDataSource(dataSource);
+    private _switchDataSource;
     /** Set up a subscription for the data provided by the data source. */
-    private _observeRenderChanges();
+    private _observeRenderChanges;
     /** Check for changes made in the data and render each change (node added/removed/moved). */
     renderNodeChanges(data: T[] | ReadonlyArray<T>, dataDiffer?: IterableDiffer<T>, viewContainer?: ViewContainerRef, parentData?: T): void;
     /**
@@ -93,7 +93,7 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
      * in `CdkTree` and set the data to it.
      */
-    static mostRecentTreeNode: CdkTreeNode<{}> | null;
+    static mostRecentTreeNode: CdkTreeNode<any> | null;
     /** Subject that emits when the component has been destroyed. */
     protected _destroyed: Subject<void>;
     /** The tree node's data. */

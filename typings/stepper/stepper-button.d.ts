@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { CdkStepper } from './stepper';
 /** Button that moves to the next step in a stepper workflow. */
 export declare class CdkStepperNext {

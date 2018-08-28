@@ -11,10 +11,10 @@ import { Version } from '@angular/core';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Current version of the Angular Component Development Kit.
- */
-const /** @type {?} */ VERSION = new Version('6.4.6-6aa7727');
+  @type {?} */
+const VERSION = new Version('6.4.6-d424c70');
 
 /**
  * @fileoverview added by tsickle

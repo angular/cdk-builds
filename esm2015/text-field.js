@@ -15,10 +15,10 @@ import { auditTime, takeUntil } from 'rxjs/operators';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Options to pass to the animationstart listener.
- */
-const /** @type {?} */ listenerOptions = supportsPassiveEventListeners() ? { passive: true } : false;
+  @type {?} */
+const listenerOptions = supportsPassiveEventListeners() ? { passive: true } : false;
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:
@@ -42,14 +42,19 @@ class AutofillMonitor {
         if (!this._platform.isBrowser) {
             return EMPTY;
         }
-        const /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-        const /** @type {?} */ info = this._monitoredElements.get(element);
+        /** @type {?} */
+        const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        const info = this._monitoredElements.get(element);
         if (info) {
             return info.subject.asObservable();
         }
-        const /** @type {?} */ result = new Subject();
-        const /** @type {?} */ cssClass = 'cdk-text-field-autofilled';
-        const /** @type {?} */ listener = (event) => {
+        /** @type {?} */
+        const result = new Subject();
+        /** @type {?} */
+        const cssClass = 'cdk-text-field-autofilled';
+        /** @type {?} */
+        const listener = /** @type {?} */ (((event) => {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
@@ -63,7 +68,7 @@ class AutofillMonitor {
                 element.classList.remove(cssClass);
                 this._ngZone.run(() => result.next({ target: /** @type {?} */ (event.target), isAutofilled: false }));
             }
-        };
+        }));
         this._ngZone.runOutsideAngular(() => {
             element.addEventListener('animationstart', listener, listenerOptions);
             element.classList.add('cdk-text-field-autofill-monitored');
@@ -81,8 +86,10 @@ class AutofillMonitor {
      * @return {?}
      */
     stopMonitoring(elementOrRef) {
-        const /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-        const /** @type {?} */ info = this._monitoredElements.get(element);
+        /** @type {?} */
+        const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        const info = this._monitoredElements.get(element);
         if (info) {
             info.unlisten();
             info.subject.complete();
@@ -103,8 +110,8 @@ AutofillMonitor.decorators = [
 ];
 /** @nocollapse */
 AutofillMonitor.ctorParameters = () => [
-    { type: Platform, },
-    { type: NgZone, },
+    { type: Platform },
+    { type: NgZone }
 ];
 /** @nocollapse */ AutofillMonitor.ngInjectableDef = defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(inject(Platform), inject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
 /**
@@ -145,11 +152,11 @@ CdkAutofill.decorators = [
 ];
 /** @nocollapse */
 CdkAutofill.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: AutofillMonitor, },
+    { type: ElementRef },
+    { type: AutofillMonitor }
 ];
 CdkAutofill.propDecorators = {
-    "cdkAutofill": [{ type: Output },],
+    cdkAutofill: [{ type: Output }]
 };
 
 /**
@@ -221,7 +228,8 @@ class CdkTextareaAutosize {
      * @return {?}
      */
     _setMinHeight() {
-        const /** @type {?} */ minHeight = this.minRows && this._cachedLineHeight ?
+        /** @type {?} */
+        const minHeight = this.minRows && this._cachedLineHeight ?
             `${this.minRows * this._cachedLineHeight}px` : null;
         if (minHeight) {
             this._setTextareaStyle('minHeight', minHeight);
@@ -232,7 +240,8 @@ class CdkTextareaAutosize {
      * @return {?}
      */
     _setMaxHeight() {
-        const /** @type {?} */ maxHeight = this.maxRows && this._cachedLineHeight ?
+        /** @type {?} */
+        const maxHeight = this.maxRows && this._cachedLineHeight ?
             `${this.maxRows * this._cachedLineHeight}px` : null;
         if (maxHeight) {
             this._setTextareaStyle('maxHeight', maxHeight);
@@ -281,8 +290,8 @@ class CdkTextareaAutosize {
         if (this._cachedLineHeight) {
             return;
         }
-        // Use a clone element because we have to override some styles.
-        let /** @type {?} */ textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
+        /** @type {?} */
+        let textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
         textareaClone.rows = 1;
         // Use `position: absolute` so that this doesn't cause a browser layout and use
         // `visibility: hidden` so that nothing is rendered. Clear any other styles that
@@ -332,13 +341,16 @@ class CdkTextareaAutosize {
         if (!this._cachedLineHeight) {
             return;
         }
-        const /** @type {?} */ textarea = /** @type {?} */ (this._elementRef.nativeElement);
-        const /** @type {?} */ value = textarea.value;
+        /** @type {?} */
+        const textarea = /** @type {?} */ (this._elementRef.nativeElement);
+        /** @type {?} */
+        const value = textarea.value;
         // Only resize of the value changed since these calculations can be expensive.
         if (value === this._previousValue && !force) {
             return;
         }
-        const /** @type {?} */ placeholderText = textarea.placeholder;
+        /** @type {?} */
+        const placeholderText = textarea.placeholder;
         // Reset the textarea height to auto in order to shrink back to its default size.
         // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
         // Long placeholders that are wider than the textarea width may lead to a bigger scrollHeight
@@ -346,9 +358,8 @@ class CdkTextareaAutosize {
         // need to be removed temporarily.
         textarea.classList.add('cdk-textarea-autosize-measuring');
         textarea.placeholder = '';
-        // The cdk-textarea-autosize-measuring class includes a 2px padding to workaround an issue with
-        // Chrome, so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
-        const /** @type {?} */ height = textarea.scrollHeight - 4;
+        /** @type {?} */
+        const height = textarea.scrollHeight - 4;
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
         textarea.style.height = `${height}px`;
         textarea.classList.remove('cdk-textarea-autosize-measuring');
@@ -405,14 +416,14 @@ CdkTextareaAutosize.decorators = [
 ];
 /** @nocollapse */
 CdkTextareaAutosize.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: Platform, },
-    { type: NgZone, },
+    { type: ElementRef },
+    { type: Platform },
+    { type: NgZone }
 ];
 CdkTextareaAutosize.propDecorators = {
-    "minRows": [{ type: Input, args: ['cdkAutosizeMinRows',] },],
-    "maxRows": [{ type: Input, args: ['cdkAutosizeMaxRows',] },],
-    "enabled": [{ type: Input, args: ['cdkTextareaAutosize',] },],
+    minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],
+    maxRows: [{ type: Input, args: ['cdkAutosizeMaxRows',] }],
+    enabled: [{ type: Input, args: ['cdkTextareaAutosize',] }]
 };
 
 /**

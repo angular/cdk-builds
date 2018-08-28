@@ -14,10 +14,10 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each accordion.
- */
-let /** @type {?} */ nextId = 0;
+  @type {?} */
+let nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
@@ -90,19 +90,18 @@ CdkAccordion.decorators = [
                 exportAs: 'cdkAccordion',
             },] },
 ];
-/** @nocollapse */
 CdkAccordion.propDecorators = {
-    "multi": [{ type: Input },],
+    multi: [{ type: Input }]
 };
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each accordion item.
- */
-let /** @type {?} */ nextId$1 = 0;
+  @type {?} */
+let nextId$1 = 0;
 const ɵ0 = undefined;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
@@ -179,11 +178,11 @@ class CdkAccordionItem {
             this.expandedChange.emit(expanded);
             if (expanded) {
                 this.opened.emit();
-                /**
+                /** *
                  * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                  * the name value is the id of the accordion.
-                 */
-                const /** @type {?} */ accordionId = this.accordion ? this.accordion.id : this.id;
+                  @type {?} */
+                const accordionId = this.accordion ? this.accordion.id : this.id;
                 this._expansionDispatcher.notify(this.id, accordionId);
             }
             else {
@@ -268,17 +267,17 @@ CdkAccordionItem.decorators = [
 ];
 /** @nocollapse */
 CdkAccordionItem.ctorParameters = () => [
-    { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf },] },
-    { type: ChangeDetectorRef, },
-    { type: UniqueSelectionDispatcher, },
+    { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf }] },
+    { type: ChangeDetectorRef },
+    { type: UniqueSelectionDispatcher }
 ];
 CdkAccordionItem.propDecorators = {
-    "closed": [{ type: Output },],
-    "opened": [{ type: Output },],
-    "destroyed": [{ type: Output },],
-    "expandedChange": [{ type: Output },],
-    "expanded": [{ type: Input },],
-    "disabled": [{ type: Input },],
+    closed: [{ type: Output }],
+    opened: [{ type: Output }],
+    destroyed: [{ type: Output }],
+    expandedChange: [{ type: Output }],
+    expanded: [{ type: Input }],
+    disabled: [{ type: Input }]
 };
 
 /**

@@ -24,8 +24,8 @@ export declare class CdkOverlayOrigin {
     /** Reference to the element on which the directive is applied. */
     elementRef: ElementRef;
     constructor(
-        /** Reference to the element on which the directive is applied. */
-        elementRef: ElementRef);
+    /** Reference to the element on which the directive is applied. */
+    elementRef: ElementRef);
 }
 /**
  * Directive to facilitate declarative creation of an
@@ -100,22 +100,22 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     ngOnDestroy(): void;
     ngOnChanges(changes: SimpleChanges): void;
     /** Creates an overlay */
-    private _createOverlay();
+    private _createOverlay;
     /** Builds the overlay config based on the directive's inputs */
-    private _buildConfig();
+    private _buildConfig;
     /** Returns the position strategy of the overlay to be set on the overlay config */
-    private _createPositionStrategy();
+    private _createPositionStrategy;
     /**
      * Sets the primary and fallback positions of a positions strategy,
      * based on the current directive inputs.
      */
-    private _setPositions(positionStrategy);
+    private _setPositions;
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
-    private _attachOverlay();
+    private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
-    private _detachOverlay();
+    private _detachOverlay;
     /** Destroys the overlay created by this directive. */
-    private _destroyOverlay();
+    private _destroyOverlay;
 }
 /** @docs-private */
 export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;

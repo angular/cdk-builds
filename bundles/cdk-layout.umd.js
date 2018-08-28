@@ -28,14 +28,14 @@ var LayoutModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Global registry for all dynamically-created, injected media queries.
- */
-var /** @type {?} */ mediaQueriesForWebkitCompatibility = new Set();
-/**
+  @type {?} */
+var mediaQueriesForWebkitCompatibility = new Set();
+/** *
  * Style tag that holds all of the dynamically-created media queries.
- */
-var /** @type {?} */ mediaQueryStyleNode;
+  @type {?} */
+var mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
  */
@@ -81,7 +81,7 @@ var MediaMatcher = /** @class */ (function () {
     ];
     /** @nocollapse */
     MediaMatcher.ctorParameters = function () { return [
-        { type: platform.Platform, },
+        { type: platform.Platform }
     ]; };
     /** @nocollapse */ MediaMatcher.ngInjectableDef = core.defineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(core.inject(platform.Platform)); }, token: MediaMatcher, providedIn: "root" });
     return MediaMatcher;
@@ -108,7 +108,7 @@ function createEmptyStyleRule(query) {
             mediaQueriesForWebkitCompatibility.add(query);
         }
     }
-    catch (/** @type {?} */ e) {
+    catch (e) {
         console.error(e);
     }
 }
@@ -176,7 +176,8 @@ var BreakpointObserver = /** @class */ (function () {
      */
     function (value) {
         var _this = this;
-        var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
+        /** @type {?} */
+        var queries = splitQueries(coercion.coerceArray(value));
         return queries.some(function (mediaQuery) { return _this._registerQuery(mediaQuery).mql.matches; });
     };
     /**
@@ -199,10 +200,13 @@ var BreakpointObserver = /** @class */ (function () {
      */
     function (value) {
         var _this = this;
-        var /** @type {?} */ queries = splitQueries(coercion.coerceArray(value));
-        var /** @type {?} */ observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
+        /** @type {?} */
+        var queries = splitQueries(coercion.coerceArray(value));
+        /** @type {?} */
+        var observables = queries.map(function (query) { return _this._registerQuery(query).observable; });
         return rxjs.combineLatest(observables).pipe(operators.debounceTime(0, rxjs.asapScheduler), operators.map(function (breakpointStates) {
-            var /** @type {?} */ response = {
+            /** @type {?} */
+            var response = {
                 matches: false,
                 breakpoints: {},
             };
@@ -229,9 +233,10 @@ var BreakpointObserver = /** @class */ (function () {
         if (this._queries.has(query)) {
             return /** @type {?} */ ((this._queries.get(query)));
         }
-        var /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
-        // Create callback for match changes and add it is as a listener.
-        var /** @type {?} */ queryObservable = rxjs.fromEventPattern(
+        /** @type {?} */
+        var mql = this.mediaMatcher.matchMedia(query);
+        /** @type {?} */
+        var queryObservable = rxjs.fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -248,8 +253,8 @@ var BreakpointObserver = /** @class */ (function () {
             mql.removeListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
         })
             .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }));
-        // Add the MediaQueryList to the set of queries.
-        var /** @type {?} */ output = { observable: queryObservable, mql: mql };
+        /** @type {?} */
+        var output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);
         return output;
     };
@@ -258,8 +263,8 @@ var BreakpointObserver = /** @class */ (function () {
     ];
     /** @nocollapse */
     BreakpointObserver.ctorParameters = function () { return [
-        { type: MediaMatcher, },
-        { type: core.NgZone, },
+        { type: MediaMatcher },
+        { type: core.NgZone }
     ]; };
     /** @nocollapse */ BreakpointObserver.ngInjectableDef = core.defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(core.inject(MediaMatcher), core.inject(core.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
@@ -280,8 +285,14 @@ function splitQueries(queries) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-var /** @type {?} */ Breakpoints = {
+/** *
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+  @type {?} */
+var Breakpoints = {
     XSmall: '(max-width: 599px)',
     Small: '(min-width: 600px) and (max-width: 959px)',
     Medium: '(min-width: 960px) and (max-width: 1279px)',

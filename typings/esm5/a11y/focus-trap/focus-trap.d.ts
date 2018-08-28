@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
@@ -54,7 +61,7 @@ export declare class FocusTrap {
      * @param bound The boundary to get (start or end of trapped region).
      * @returns The boundary element.
      */
-    private _getRegionBoundary(bound);
+    private _getRegionBoundary;
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
      * @returns Whether focus was moved successfuly.
@@ -75,13 +82,13 @@ export declare class FocusTrap {
      */
     hasAttached(): boolean;
     /** Get the first tabbable element from a DOM subtree (inclusive). */
-    private _getFirstTabbableElement(root);
+    private _getFirstTabbableElement;
     /** Get the last tabbable element from a DOM subtree (inclusive). */
-    private _getLastTabbableElement(root);
+    private _getLastTabbableElement;
     /** Creates an anchor element. */
-    private _createAnchor();
+    private _createAnchor;
     /** Executes a function when the zone is stable. */
-    private _executeOnStable(fn);
+    private _executeOnStable;
 }
 /** Factory that allows easy instantiation of focus traps. */
 export declare class FocusTrapFactory {

@@ -104,5 +104,5 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
     dispose(): void;
     /** @docs-private */
     setDisposeFn(fn: () => void): void;
-    private _invokeDisposeFn();
+    private _invokeDisposeFn;
 }

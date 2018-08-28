@@ -18,7 +18,7 @@ export declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-contai
  * for changes and notifying the table.
  */
 export declare abstract class BaseRowDef implements OnChanges {
-    /** @docs-private */ template: TemplateRef<any>;
+    template: TemplateRef<any>;
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */
     columns: Iterable<string>;
@@ -37,7 +37,7 @@ export declare abstract class BaseRowDef implements OnChanges {
 /** @docs-private */
 export declare class CdkHeaderRowDefBase extends BaseRowDef {
 }
-export declare const _CdkHeaderRowDefBase: (new (...args: any[]) => CanStick) & typeof CdkHeaderRowDefBase;
+export declare const _CdkHeaderRowDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkHeaderRowDefBase;
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
@@ -49,7 +49,7 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
 /** @docs-private */
 export declare class CdkFooterRowDefBase extends BaseRowDef {
 }
-export declare const _CdkFooterRowDefBase: (new (...args: any[]) => CanStick) & typeof CdkFooterRowDefBase;
+export declare const _CdkFooterRowDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkFooterRowDefBase;
 /**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.

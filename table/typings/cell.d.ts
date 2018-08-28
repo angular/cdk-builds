@@ -16,7 +16,7 @@ export interface CellDef {
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 export declare class CdkCellDef implements CellDef {
-    /** @docs-private */ template: TemplateRef<any>;
+    template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
 }
 /**
@@ -24,7 +24,7 @@ export declare class CdkCellDef implements CellDef {
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 export declare class CdkHeaderCellDef implements CellDef {
-    /** @docs-private */ template: TemplateRef<any>;
+    template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
 }
 /**
@@ -32,13 +32,13 @@ export declare class CdkHeaderCellDef implements CellDef {
  * Captures the template of a column's footer cell and as well as cell-specific properties.
  */
 export declare class CdkFooterCellDef implements CellDef {
-    /** @docs-private */ template: TemplateRef<any>;
+    template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
 }
 /** @docs-private */
 export declare class CdkColumnDefBase {
 }
-export declare const _CdkColumnDefBase: (new (...args: any[]) => CanStick) & typeof CdkColumnDefBase;
+export declare const _CdkColumnDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkColumnDefBase;
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.

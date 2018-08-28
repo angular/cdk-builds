@@ -32,7 +32,7 @@ var CdkDragHandle = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDragHandle.ctorParameters = function () { return [
-        { type: core.ElementRef, },
+        { type: core.ElementRef }
     ]; };
     return CdkDragHandle;
 }());
@@ -41,11 +41,11 @@ var CdkDragHandle = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Injection token that is used to provide a CdkDrop instance to CdkDrag.
  * Used for avoiding circular imports.
- */
-var /** @type {?} */ CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
+  @type {?} */
+var CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
 
 /**
  * @fileoverview added by tsickle
@@ -67,10 +67,10 @@ var CdkDragPreview = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDragPreview.ctorParameters = function () { return [
-        { type: core.TemplateRef, },
+        { type: core.TemplateRef }
     ]; };
     CdkDragPreview.propDecorators = {
-        "data": [{ type: core.Input },],
+        data: [{ type: core.Input }]
     };
     return CdkDragPreview;
 }());
@@ -95,10 +95,10 @@ var CdkDragPlaceholder = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDragPlaceholder.ctorParameters = function () { return [
-        { type: core.TemplateRef, },
+        { type: core.TemplateRef }
     ]; };
     CdkDragPlaceholder.propDecorators = {
-        "data": [{ type: core.Input },],
+        data: [{ type: core.Input }]
     };
     return CdkDragPlaceholder;
 }());
@@ -107,10 +107,10 @@ var CdkDragPlaceholder = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Event options that can be used to bind an active event.
- */
-var /** @type {?} */ activeEventOptions = platform.supportsPassiveEventListeners() ? { passive: false } : false;
+  @type {?} */
+var activeEventOptions = platform.supportsPassiveEventListeners() ? { passive: false } : false;
 // unsupported: template constraints.
 /**
  * Service that keeps track of all the drag item and drop container
@@ -256,9 +256,12 @@ var DragDropRegistry = /** @class */ (function () {
         var _this = this;
         this._activeDragInstances.add(drag);
         if (this._activeDragInstances.size === 1) {
-            var /** @type {?} */ isTouchEvent = event.type.startsWith('touch');
-            var /** @type {?} */ moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
-            var /** @type {?} */ upEvent = isTouchEvent ? 'touchend' : 'mouseup';
+            /** @type {?} */
+            var isTouchEvent = event.type.startsWith('touch');
+            /** @type {?} */
+            var moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
+            /** @type {?} */
+            var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
@@ -351,8 +354,8 @@ var DragDropRegistry = /** @class */ (function () {
     ];
     /** @nocollapse */
     DragDropRegistry.ctorParameters = function () { return [
-        { type: core.NgZone, },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: core.NgZone },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
@@ -362,11 +365,11 @@ var DragDropRegistry = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Amount the pixels the user should drag before we
  * consider them to have changed the drag direction.
- */
-var /** @type {?} */ POINTER_DIRECTION_CHANGE_THRESHOLD = 5;
+  @type {?} */
+var POINTER_DIRECTION_CHANGE_THRESHOLD = 5;
 /**
  * Element that can be moved inside a CdkDrop container.
  * @template T
@@ -432,7 +435,8 @@ var CdkDrag = /** @class */ (function () {
          * because this event will fire for every pixel that the user has dragged.
          */
         this.moved = rxjs.Observable.create(function (observer) {
-            var /** @type {?} */ subscription = _this._moveEvents.subscribe(observer);
+            /** @type {?} */
+            var subscription = _this._moveEvents.subscribe(observer);
             _this._moveEventSubscriptions++;
             return function () {
                 subscription.unsubscribe();
@@ -443,12 +447,14 @@ var CdkDrag = /** @class */ (function () {
          * Handler for when the pointer is pressed down on the element or the handle.
          */
         this._pointerDown = function (referenceElement, event) {
-            var /** @type {?} */ isDragging = _this._isDragging();
+            /** @type {?} */
+            var isDragging = _this._isDragging();
             // Abort if the user is already dragging or is using a mouse button other than the primary one.
             if (isDragging || (!_this._isTouchEvent(event) && event.button !== 0)) {
                 return;
             }
-            var /** @type {?} */ endedOrDestroyed = rxjs.merge(_this.ended, _this._destroyed);
+            /** @type {?} */
+            var endedOrDestroyed = rxjs.merge(_this.ended, _this._destroyed);
             _this._dragDropRegistry.pointerMove
                 .pipe(operators.takeUntil(endedOrDestroyed))
                 .subscribe(_this._pointerMove);
@@ -464,21 +470,25 @@ var CdkDrag = /** @class */ (function () {
             // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
             _this._pickupPositionInElement = _this._previewTemplate ? { x: 0, y: 0 } :
                 _this._getPointerPositionInElement(referenceElement, event);
-            var /** @type {?} */ pointerPosition = _this._pickupPositionOnPage = _this._getPointerPositionOnPage(event);
+            /** @type {?} */
+            var pointerPosition = _this._pickupPositionOnPage = _this._getPointerPositionOnPage(event);
             _this._pointerDirectionDelta = { x: 0, y: 0 };
             _this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
             // Emit the event on the item before the one on the container.
             // Emit the event on the item before the one on the container.
             _this.started.emit({ source: _this });
             if (_this.dropContainer) {
-                var /** @type {?} */ element = _this.element.nativeElement;
+                /** @type {?} */
+                var element = _this.element.nativeElement;
                 // Grab the `nextSibling` before the preview and placeholder
                 // have been created so we don't get the preview by accident.
                 // Grab the `nextSibling` before the preview and placeholder
                 // have been created so we don't get the preview by accident.
                 _this._nextSibling = element.nextSibling;
-                var /** @type {?} */ preview = _this._preview = _this._createPreviewElement();
-                var /** @type {?} */ placeholder = _this._placeholder = _this._createPlaceholderElement();
+                /** @type {?} */
+                var preview = _this._preview = _this._createPreviewElement();
+                /** @type {?} */
+                var placeholder = _this._placeholder = _this._createPlaceholderElement();
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
@@ -499,13 +509,15 @@ var CdkDrag = /** @class */ (function () {
             }
             _this._hasMoved = true;
             event.preventDefault();
-            var /** @type {?} */ pointerPosition = _this._getConstrainedPointerPosition(event);
+            /** @type {?} */
+            var pointerPosition = _this._getConstrainedPointerPosition(event);
             _this._updatePointerDirectionDelta(pointerPosition);
             if (_this.dropContainer) {
                 _this._updateActiveDropContainer(pointerPosition);
             }
             else {
-                var /** @type {?} */ activeTransform = _this._activeTransform;
+                /** @type {?} */
+                var activeTransform = _this._activeTransform;
                 activeTransform.x =
                     pointerPosition.x - _this._pickupPositionOnPage.x + _this._passiveTransform.x;
                 activeTransform.y =
@@ -603,9 +615,12 @@ var CdkDrag = /** @class */ (function () {
     function (event) {
         // Delegate the event based on whether it started from a handle or the element itself.
         if (this._handles.length) {
-            var /** @type {?} */ targetHandle = this._handles.find(function (handle) {
-                var /** @type {?} */ element = handle.element.nativeElement;
-                var /** @type {?} */ target = event.target;
+            /** @type {?} */
+            var targetHandle = this._handles.find(function (handle) {
+                /** @type {?} */
+                var element = handle.element.nativeElement;
+                /** @type {?} */
+                var target = event.target;
                 return !!target && (target === element || element.contains(/** @type {?} */ (target)));
             });
             if (targetHandle) {
@@ -653,7 +668,8 @@ var CdkDrag = /** @class */ (function () {
         this._destroyPlaceholder();
         // Re-enter the NgZone since we bound `document` events on the outside.
         this._ngZone.run(function () {
-            var /** @type {?} */ currentIndex = _this.dropContainer.getItemIndex(_this);
+            /** @type {?} */
+            var currentIndex = _this.dropContainer.getItemIndex(_this);
             _this.ended.emit({ source: _this });
             _this.dropped.emit({
                 item: _this,
@@ -680,8 +696,8 @@ var CdkDrag = /** @class */ (function () {
     function (_a) {
         var _this = this;
         var x = _a.x, y = _a.y;
-        // Drop container that draggable has been moved into.
-        var /** @type {?} */ newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
+        /** @type {?} */
+        var newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
         if (newContainer) {
             this._ngZone.run(function () {
                 // Notify the old container that the item has left.
@@ -709,16 +725,20 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ preview;
+        /** @type {?} */
+        var preview;
         if (this._previewTemplate) {
-            var /** @type {?} */ viewRef = this._viewContainerRef.createEmbeddedView(this._previewTemplate.templateRef, this._previewTemplate.data);
+            /** @type {?} */
+            var viewRef = this._viewContainerRef.createEmbeddedView(this._previewTemplate.templateRef, this._previewTemplate.data);
             preview = viewRef.rootNodes[0];
             this._previewRef = viewRef;
             this._setTransform(preview, this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
         }
         else {
-            var /** @type {?} */ element = this.element.nativeElement;
-            var /** @type {?} */ elementRect = element.getBoundingClientRect();
+            /** @type {?} */
+            var element = this.element.nativeElement;
+            /** @type {?} */
+            var elementRect = element.getBoundingClientRect();
             preview = /** @type {?} */ (element.cloneNode(true));
             preview.style.width = elementRect.width + "px";
             preview.style.height = elementRect.height + "px";
@@ -737,7 +757,8 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ placeholder;
+        /** @type {?} */
+        var placeholder;
         if (this._placeholderTemplate) {
             this._placeholderRef = this._viewContainerRef.createEmbeddedView(this._placeholderTemplate.templateRef, this._placeholderTemplate.data);
             placeholder = this._placeholderRef.rootNodes[0];
@@ -761,13 +782,18 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function (referenceElement, event) {
-        var /** @type {?} */ elementRect = this.element.nativeElement.getBoundingClientRect();
-        var /** @type {?} */ handleElement = referenceElement === this.element ? null : referenceElement.nativeElement;
-        var /** @type {?} */ referenceRect = handleElement ? handleElement.getBoundingClientRect() : elementRect;
-        var /** @type {?} */ x = this._isTouchEvent(event) ?
+        /** @type {?} */
+        var elementRect = this.element.nativeElement.getBoundingClientRect();
+        /** @type {?} */
+        var handleElement = referenceElement === this.element ? null : referenceElement.nativeElement;
+        /** @type {?} */
+        var referenceRect = handleElement ? handleElement.getBoundingClientRect() : elementRect;
+        /** @type {?} */
+        var x = this._isTouchEvent(event) ?
             event.targetTouches[0].pageX - referenceRect.left - this._scrollPosition.left :
             event.offsetX;
-        var /** @type {?} */ y = this._isTouchEvent(event) ?
+        /** @type {?} */
+        var y = this._isTouchEvent(event) ?
             event.targetTouches[0].pageY - referenceRect.top - this._scrollPosition.top :
             event.offsetY;
         return {
@@ -789,32 +815,29 @@ var CdkDrag = /** @class */ (function () {
         if (!this._hasMoved) {
             return Promise.resolve();
         }
-        var /** @type {?} */ placeholderRect = this._placeholder.getBoundingClientRect();
+        /** @type {?} */
+        var placeholderRect = this._placeholder.getBoundingClientRect();
         // Apply the class that adds a transition to the preview.
         this._preview.classList.add('cdk-drag-animating');
         // Move the preview to the placeholder position.
         this._setTransform(this._preview, placeholderRect.left, placeholderRect.top);
-        // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
-        // we need to trigger a style recalculation in order for the `cdk-drag-animating` class to
-        // apply its style, we take advantage of the available info to figure out whether we need to
-        // bind the event in the first place.
-        var /** @type {?} */ duration = getTransitionDurationInMs(this._preview);
+        /** @type {?} */
+        var duration = getTransitionDurationInMs(this._preview);
         if (duration === 0) {
             return Promise.resolve();
         }
         return this._ngZone.runOutsideAngular(function () {
             return new Promise(function (resolve) {
-                var /** @type {?} */ handler = function (event) {
+                /** @type {?} */
+                var handler = /** @type {?} */ ((function (event) {
                     if (!event || event.target === _this._preview) {
                         _this._preview.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
                     }
-                };
-                // If a transition is short enough, the browser might not fire the `transitionend` event.
-                // Since we know how long it's supposed to take, add a timeout with a 50% buffer that'll
-                // fire if the transition hasn't completed when it was supposed to.
-                var /** @type {?} */ timeout = setTimeout(handler, duration * 1.5);
+                }));
+                /** @type {?} */
+                var timeout = setTimeout(handler, duration * 1.5);
                 _this._preview.addEventListener('transitionend', handler);
             });
         });
@@ -862,7 +885,8 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        var /** @type {?} */ point = this._isTouchEvent(event) ? event.touches[0] : event;
+        /** @type {?} */
+        var point = this._isTouchEvent(event) ? event.touches[0] : event;
         return {
             x: point.pageX - this._scrollPosition.left,
             y: point.pageY - this._scrollPosition.top
@@ -879,8 +903,10 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        var /** @type {?} */ point = this._getPointerPositionOnPage(event);
-        var /** @type {?} */ dropContainerLock = this.dropContainer ? this.dropContainer.lockAxis : null;
+        /** @type {?} */
+        var point = this._getPointerPositionOnPage(event);
+        /** @type {?} */
+        var dropContainerLock = this.dropContainer ? this.dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
             point.y = this._pickupPositionOnPage.y;
         }
@@ -948,11 +974,14 @@ var CdkDrag = /** @class */ (function () {
      */
     function (pointerPositionOnPage) {
         var x = pointerPositionOnPage.x, y = pointerPositionOnPage.y;
-        var /** @type {?} */ delta = this._pointerDirectionDelta;
-        var /** @type {?} */ positionSinceLastChange = this._pointerPositionAtLastDirectionChange;
-        // Amount of pixels the user has dragged since the last time the direction changed.
-        var /** @type {?} */ changeX = Math.abs(x - positionSinceLastChange.x);
-        var /** @type {?} */ changeY = Math.abs(y - positionSinceLastChange.y);
+        /** @type {?} */
+        var delta = this._pointerDirectionDelta;
+        /** @type {?} */
+        var positionSinceLastChange = this._pointerPositionAtLastDirectionChange;
+        /** @type {?} */
+        var changeX = Math.abs(x - positionSinceLastChange.x);
+        /** @type {?} */
+        var changeY = Math.abs(y - positionSinceLastChange.y);
         // Because we handle pointer events on a per-pixel basis, we don't want the delta
         // to change for every pixel, otherwise anything that depends on it can look erratic.
         // To make the delta more consistent, we track how much the user has moved since the last
@@ -980,27 +1009,27 @@ var CdkDrag = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDrag.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_CONTAINER,] }, { type: core.Optional }, { type: core.SkipSelf },] },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
-        { type: core.NgZone, },
-        { type: core.ViewContainerRef, },
-        { type: overlay.ViewportRuler, },
-        { type: DragDropRegistry, },
-        { type: bidi.Directionality, decorators: [{ type: core.Optional },] },
+        { type: core.ElementRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_CONTAINER,] }, { type: core.Optional }, { type: core.SkipSelf }] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+        { type: core.NgZone },
+        { type: core.ViewContainerRef },
+        { type: overlay.ViewportRuler },
+        { type: DragDropRegistry },
+        { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };
     CdkDrag.propDecorators = {
-        "_handles": [{ type: core.ContentChildren, args: [CdkDragHandle,] },],
-        "_previewTemplate": [{ type: core.ContentChild, args: [CdkDragPreview,] },],
-        "_placeholderTemplate": [{ type: core.ContentChild, args: [CdkDragPlaceholder,] },],
-        "data": [{ type: core.Input, args: ['cdkDragData',] },],
-        "lockAxis": [{ type: core.Input, args: ['cdkDragLockAxis',] },],
-        "started": [{ type: core.Output, args: ['cdkDragStarted',] },],
-        "ended": [{ type: core.Output, args: ['cdkDragEnded',] },],
-        "entered": [{ type: core.Output, args: ['cdkDragEntered',] },],
-        "exited": [{ type: core.Output, args: ['cdkDragExited',] },],
-        "dropped": [{ type: core.Output, args: ['cdkDragDropped',] },],
-        "moved": [{ type: core.Output, args: ['cdkDragMoved',] },],
+        _handles: [{ type: core.ContentChildren, args: [CdkDragHandle,] }],
+        _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview,] }],
+        _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder,] }],
+        data: [{ type: core.Input, args: ['cdkDragData',] }],
+        lockAxis: [{ type: core.Input, args: ['cdkDragLockAxis',] }],
+        started: [{ type: core.Output, args: ['cdkDragStarted',] }],
+        ended: [{ type: core.Output, args: ['cdkDragEnded',] }],
+        entered: [{ type: core.Output, args: ['cdkDragEntered',] }],
+        exited: [{ type: core.Output, args: ['cdkDragExited',] }],
+        dropped: [{ type: core.Output, args: ['cdkDragDropped',] }],
+        moved: [{ type: core.Output, args: ['cdkDragMoved',] }]
     };
     return CdkDrag;
 }());
@@ -1010,8 +1039,8 @@ var CdkDrag = /** @class */ (function () {
  * @return {?}
  */
 function parseCssTimeUnitsToMs(value) {
-    // Some browsers will return it in seconds, whereas others will return milliseconds.
-    var /** @type {?} */ multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
+    /** @type {?} */
+    var multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
     return parseFloat(value) * multiplier;
 }
 /**
@@ -1020,9 +1049,12 @@ function parseCssTimeUnitsToMs(value) {
  * @return {?}
  */
 function getTransitionDurationInMs(element) {
-    var /** @type {?} */ computedStyle = getComputedStyle(element);
-    var /** @type {?} */ rawDuration = computedStyle.getPropertyValue('transition-duration');
-    var /** @type {?} */ rawDelay = computedStyle.getPropertyValue('transition-delay');
+    /** @type {?} */
+    var computedStyle = getComputedStyle(element);
+    /** @type {?} */
+    var rawDuration = computedStyle.getPropertyValue('transition-duration');
+    /** @type {?} */
+    var rawDelay = computedStyle.getPropertyValue('transition-delay');
     return parseCssTimeUnitsToMs(rawDuration) + parseCssTimeUnitsToMs(rawDelay);
 }
 
@@ -1040,14 +1072,18 @@ function getTransitionDurationInMs(element) {
  * @return {?}
  */
 function moveItemInArray(array, fromIndex, toIndex) {
-    var /** @type {?} */ from = clamp(fromIndex, array.length - 1);
-    var /** @type {?} */ to = clamp(toIndex, array.length - 1);
+    /** @type {?} */
+    var from = clamp(fromIndex, array.length - 1);
+    /** @type {?} */
+    var to = clamp(toIndex, array.length - 1);
     if (from === to) {
         return;
     }
-    var /** @type {?} */ target = array[from];
-    var /** @type {?} */ delta = to < from ? -1 : 1;
-    for (var /** @type {?} */ i = from; i !== to; i += delta) {
+    /** @type {?} */
+    var target = array[from];
+    /** @type {?} */
+    var delta = to < from ? -1 : 1;
+    for (var i = from; i !== to; i += delta) {
         array[i] = array[i + delta];
     }
     array[to] = target;
@@ -1062,8 +1098,10 @@ function moveItemInArray(array, fromIndex, toIndex) {
  * @return {?}
  */
 function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-    var /** @type {?} */ from = clamp(currentIndex, currentArray.length - 1);
-    var /** @type {?} */ to = clamp(targetIndex, targetArray.length);
+    /** @type {?} */
+    var from = clamp(currentIndex, currentArray.length - 1);
+    /** @type {?} */
+    var to = clamp(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
     }
@@ -1082,15 +1120,15 @@ function clamp(value, max) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Counter used to generate unique ids for drop zones.
- */
-var /** @type {?} */ _uniqueIdCounter = 0;
-/**
+  @type {?} */
+var _uniqueIdCounter = 0;
+/** *
  * Proximity, as a ratio to width/height, at which a
  * dragged item will affect the drop container.
- */
-var /** @type {?} */ DROP_PROXIMITY_THRESHOLD = 0.05;
+  @type {?} */
+var DROP_PROXIMITY_THRESHOLD = 0.05;
 /**
  * Container that wraps a set of draggable items.
  * @template T
@@ -1236,12 +1274,14 @@ var CdkDrop = /** @class */ (function () {
     function (item, pointerX, pointerY) {
         this.entered.emit({ item: item, container: this });
         this.start();
-        // We use the coordinates of where the item entered the drop
-        // zone to figure out at which index it should be inserted.
-        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
-        var /** @type {?} */ currentIndex = this._activeDraggables.indexOf(item);
-        var /** @type {?} */ newPositionReference = this._activeDraggables[newIndex];
-        var /** @type {?} */ placeholder = item.getPlaceholderElement();
+        /** @type {?} */
+        var newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+        /** @type {?} */
+        var currentIndex = this._activeDraggables.indexOf(item);
+        /** @type {?} */
+        var newPositionReference = this._activeDraggables[newIndex];
+        /** @type {?} */
+        var placeholder = item.getPlaceholderElement();
         // Since the item may be in the `activeDraggables` already (e.g. if the user dragged it
         // into another container and back again), we have to ensure that it isn't duplicated.
         if (currentIndex > -1) {
@@ -1250,7 +1290,8 @@ var CdkDrop = /** @class */ (function () {
         // Don't use items that are being dragged as a reference, because
         // their element has been moved down to the bottom of the body.
         if (newPositionReference && !this._dragDropRegistry.isDragging(newPositionReference)) {
-            var /** @type {?} */ element = newPositionReference.element.nativeElement; /** @type {?} */
+            /** @type {?} */
+            var element = newPositionReference.element.nativeElement; /** @type {?} */
             ((element.parentElement)).insertBefore(placeholder, element);
             this._activeDraggables.splice(newIndex, 0, item);
         }
@@ -1330,28 +1371,35 @@ var CdkDrop = /** @class */ (function () {
         if (!this._isPointerNearDropContainer(pointerX, pointerY)) {
             return;
         }
-        var /** @type {?} */ siblings = this._positionCache.items;
-        var /** @type {?} */ newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
+        /** @type {?} */
+        var siblings = this._positionCache.items;
+        /** @type {?} */
+        var newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
         if (newIndex === -1 && siblings.length > 0) {
             return;
         }
-        var /** @type {?} */ isHorizontal = this.orientation === 'horizontal';
-        var /** @type {?} */ currentIndex = siblings.findIndex(function (currentItem) { return currentItem.drag === item; });
-        var /** @type {?} */ siblingAtNewPosition = siblings[newIndex];
-        var /** @type {?} */ currentPosition = siblings[currentIndex].clientRect;
-        var /** @type {?} */ newPosition = siblingAtNewPosition.clientRect;
-        var /** @type {?} */ delta = currentIndex > newIndex ? 1 : -1;
+        /** @type {?} */
+        var isHorizontal = this.orientation === 'horizontal';
+        /** @type {?} */
+        var currentIndex = siblings.findIndex(function (currentItem) { return currentItem.drag === item; });
+        /** @type {?} */
+        var siblingAtNewPosition = siblings[newIndex];
+        /** @type {?} */
+        var currentPosition = siblings[currentIndex].clientRect;
+        /** @type {?} */
+        var newPosition = siblingAtNewPosition.clientRect;
+        /** @type {?} */
+        var delta = currentIndex > newIndex ? 1 : -1;
         this._previousSwap.drag = siblingAtNewPosition.drag;
         this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
-        // How many pixels the item's placeholder should be offset.
-        var /** @type {?} */ itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
+        /** @type {?} */
+        var itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
             newPosition.top - currentPosition.top;
-        // How many pixels all the other items should be offset.
-        var /** @type {?} */ siblingOffset = isHorizontal ? currentPosition.width * delta :
+        /** @type {?} */
+        var siblingOffset = isHorizontal ? currentPosition.width * delta :
             currentPosition.height * delta;
-        // Save the previous order of the items before moving the item to its new index.
-        // We use this to check whether an item has been moved as a result of the sorting.
-        var /** @type {?} */ oldOrder = siblings.slice();
+        /** @type {?} */
+        var oldOrder = siblings.slice();
         // Shuffle the array in place.
         moveItemInArray(siblings, currentIndex, newIndex);
         siblings.forEach(function (sibling, index) {
@@ -1359,9 +1407,12 @@ var CdkDrop = /** @class */ (function () {
             if (oldOrder[index] === sibling) {
                 return;
             }
-            var /** @type {?} */ isDraggedItem = sibling.drag === item;
-            var /** @type {?} */ offset = isDraggedItem ? itemOffset : siblingOffset;
-            var /** @type {?} */ elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
+            /** @type {?} */
+            var isDraggedItem = sibling.drag === item;
+            /** @type {?} */
+            var offset = isDraggedItem ? itemOffset : siblingOffset;
+            /** @type {?} */
+            var elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
                 sibling.drag.element.nativeElement;
             // Update the offset to reflect the new position.
             sibling.offset += offset;
@@ -1403,7 +1454,8 @@ var CdkDrop = /** @class */ (function () {
      * @return {?}
      */
     function (item, x, y) {
-        var /** @type {?} */ result = this._positionCache.siblings.find(function (_a) {
+        /** @type {?} */
+        var result = this._positionCache.siblings.find(function (_a) {
             var clientRect = _a.clientRect;
             var top = clientRect.top, bottom = clientRect.bottom, left = clientRect.left, right = clientRect.right;
             return y >= top && y <= bottom && x >= left && x <= right;
@@ -1422,12 +1474,14 @@ var CdkDrop = /** @class */ (function () {
         var _this = this;
         this._positionCache.items = this._activeDraggables
             .map(function (drag) {
-            var /** @type {?} */ elementToMeasure = _this._dragDropRegistry.isDragging(drag) ?
+            /** @type {?} */
+            var elementToMeasure = _this._dragDropRegistry.isDragging(drag) ?
                 // If the element is being dragged, we have to measure the
                 // placeholder, because the element is hidden.
                 drag.getPlaceholderElement() :
                 drag.element.nativeElement;
-            var /** @type {?} */ clientRect = elementToMeasure.getBoundingClientRect();
+            /** @type {?} */
+            var clientRect = elementToMeasure.getBoundingClientRect();
             return {
                 drag: drag,
                 offset: 0,
@@ -1508,7 +1562,8 @@ var CdkDrop = /** @class */ (function () {
      */
     function (item, pointerX, pointerY, delta) {
         var _this = this;
-        var /** @type {?} */ isHorizontal = this.orientation === 'horizontal';
+        /** @type {?} */
+        var isHorizontal = this.orientation === 'horizontal';
         return this._positionCache.items.findIndex(function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
             if (drag === item) {
@@ -1517,7 +1572,8 @@ var CdkDrop = /** @class */ (function () {
                 return array.length < 2;
             }
             if (delta) {
-                var /** @type {?} */ direction = isHorizontal ? delta.x : delta.y;
+                /** @type {?} */
+                var direction = isHorizontal ? delta.x : delta.y;
                 // If the user is still hovering over the same item as last time, and they didn't change
                 // the direction in which they're dragging, we don't consider it a direction swap.
                 if (drag === _this._previousSwap.drag && direction === _this._previousSwap.delta) {
@@ -1545,8 +1601,10 @@ var CdkDrop = /** @class */ (function () {
      */
     function (pointerX, pointerY) {
         var _a = this._positionCache.self, top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left, width = _a.width, height = _a.height;
-        var /** @type {?} */ xThreshold = width * DROP_PROXIMITY_THRESHOLD;
-        var /** @type {?} */ yThreshold = height * DROP_PROXIMITY_THRESHOLD;
+        /** @type {?} */
+        var xThreshold = width * DROP_PROXIMITY_THRESHOLD;
+        /** @type {?} */
+        var yThreshold = height * DROP_PROXIMITY_THRESHOLD;
         return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
             pointerX > left - xThreshold && pointerX < right + xThreshold;
     };
@@ -1569,20 +1627,20 @@ var CdkDrop = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDrop.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: DragDropRegistry, },
+        { type: core.ElementRef },
+        { type: DragDropRegistry }
     ]; };
     CdkDrop.propDecorators = {
-        "_draggables": [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] },],
-        "connectedTo": [{ type: core.Input },],
-        "data": [{ type: core.Input },],
-        "orientation": [{ type: core.Input },],
-        "id": [{ type: core.Input },],
-        "lockAxis": [{ type: core.Input },],
-        "enterPredicate": [{ type: core.Input },],
-        "dropped": [{ type: core.Output },],
-        "entered": [{ type: core.Output },],
-        "exited": [{ type: core.Output },],
+        _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] }],
+        connectedTo: [{ type: core.Input }],
+        data: [{ type: core.Input }],
+        orientation: [{ type: core.Input }],
+        id: [{ type: core.Input }],
+        lockAxis: [{ type: core.Input }],
+        enterPredicate: [{ type: core.Input }],
+        dropped: [{ type: core.Output }],
+        entered: [{ type: core.Output }],
+        exited: [{ type: core.Output }]
     };
     return CdkDrop;
 }());

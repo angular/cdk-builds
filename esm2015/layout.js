@@ -25,14 +25,14 @@ LayoutModule.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Global registry for all dynamically-created, injected media queries.
- */
-const /** @type {?} */ mediaQueriesForWebkitCompatibility = new Set();
-/**
+  @type {?} */
+const mediaQueriesForWebkitCompatibility = new Set();
+/** *
  * Style tag that holds all of the dynamically-created media queries.
- */
-let /** @type {?} */ mediaQueryStyleNode;
+  @type {?} */
+let mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
  */
@@ -68,7 +68,7 @@ MediaMatcher.decorators = [
 ];
 /** @nocollapse */
 MediaMatcher.ctorParameters = () => [
-    { type: Platform, },
+    { type: Platform }
 ];
 /** @nocollapse */ MediaMatcher.ngInjectableDef = defineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(inject(Platform)); }, token: MediaMatcher, providedIn: "root" });
 /**
@@ -93,7 +93,7 @@ function createEmptyStyleRule(query) {
             mediaQueriesForWebkitCompatibility.add(query);
         }
     }
-    catch (/** @type {?} */ e) {
+    catch (e) {
         console.error(e);
     }
 }
@@ -149,7 +149,8 @@ class BreakpointObserver {
      * @return {?} Whether any of the media queries match.
      */
     isMatched(value) {
-        const /** @type {?} */ queries = splitQueries(coerceArray(value));
+        /** @type {?} */
+        const queries = splitQueries(coerceArray(value));
         return queries.some(mediaQuery => this._registerQuery(mediaQuery).mql.matches);
     }
     /**
@@ -159,10 +160,13 @@ class BreakpointObserver {
      * @return {?} A stream of matches for the given queries.
      */
     observe(value) {
-        const /** @type {?} */ queries = splitQueries(coerceArray(value));
-        const /** @type {?} */ observables = queries.map(query => this._registerQuery(query).observable);
+        /** @type {?} */
+        const queries = splitQueries(coerceArray(value));
+        /** @type {?} */
+        const observables = queries.map(query => this._registerQuery(query).observable);
         return combineLatest(observables).pipe(debounceTime(0, asapScheduler), map((breakpointStates) => {
-            const /** @type {?} */ response = {
+            /** @type {?} */
+            const response = {
                 matches: false,
                 breakpoints: {},
             };
@@ -183,9 +187,10 @@ class BreakpointObserver {
         if (this._queries.has(query)) {
             return /** @type {?} */ ((this._queries.get(query)));
         }
-        const /** @type {?} */ mql = this.mediaMatcher.matchMedia(query);
-        // Create callback for match changes and add it is as a listener.
-        const /** @type {?} */ queryObservable = fromEventPattern(
+        /** @type {?} */
+        const mql = this.mediaMatcher.matchMedia(query);
+        /** @type {?} */
+        const queryObservable = fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -197,8 +202,8 @@ class BreakpointObserver {
             mql.removeListener((e) => this.zone.run(() => listener(e)));
         })
             .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })));
-        // Add the MediaQueryList to the set of queries.
-        const /** @type {?} */ output = { observable: queryObservable, mql };
+        /** @type {?} */
+        const output = { observable: queryObservable, mql };
         this._queries.set(query, output);
         return output;
     }
@@ -208,8 +213,8 @@ BreakpointObserver.decorators = [
 ];
 /** @nocollapse */
 BreakpointObserver.ctorParameters = () => [
-    { type: MediaMatcher, },
-    { type: NgZone, },
+    { type: MediaMatcher },
+    { type: NgZone }
 ];
 /** @nocollapse */ BreakpointObserver.ngInjectableDef = defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(inject(MediaMatcher), inject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
 /**
@@ -228,8 +233,14 @@ function splitQueries(queries) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-
-const /** @type {?} */ Breakpoints = {
+/** *
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+  @type {?} */
+const Breakpoints = {
     XSmall: '(max-width: 599px)',
     Small: '(min-width: 600px) and (max-width: 959px)',
     Medium: '(min-width: 960px) and (max-width: 1279px)',

@@ -112,16 +112,16 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      */
     _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDrop | null;
     /** Refreshes the position cache of the items and sibling containers. */
-    private _cachePositions();
+    private _cachePositions;
     /** Resets the container to its initial state. */
-    private _reset();
+    private _reset;
     /**
      * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
      * @param clientRect `ClientRect` that should be updated.
      * @param top Amount to add to the `top` position.
      * @param left Amount to add to the `left` position.
      */
-    private _adjustClientRect(clientRect, top, left);
+    private _adjustClientRect;
     /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param item Item that is being sorted.
@@ -129,11 +129,11 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * @param pointerY Position of the user's pointer along the Y axis.
      * @param delta Direction in which the user is moving their pointer.
      */
-    private _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta?);
+    private _getItemIndexFromPointerPosition;
     /**
      * Checks whether the pointer coordinates are close to the drop container.
      * @param pointerX Coordinates along the X axis.
      * @param pointerY Coordinates along the Y axis.
      */
-    private _isPointerNearDropContainer(pointerX, pointerY);
+    private _isPointerNearDropContainer;
 }

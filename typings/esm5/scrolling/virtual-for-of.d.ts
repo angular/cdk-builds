@@ -81,14 +81,14 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     private _needsUpdate;
     private _destroyed;
     constructor(
-        /** The view container to add items to. */
-        _viewContainerRef: ViewContainerRef, 
-        /** The template to use when stamping out new items. */
-        _template: TemplateRef<CdkVirtualForOfContext<T>>, 
-        /** The set of available differs. */
-        _differs: IterableDiffers, 
-        /** The virtual scrolling viewport that these items are being rendered in. */
-        _viewport: CdkVirtualScrollViewport);
+    /** The view container to add items to. */
+    _viewContainerRef: ViewContainerRef, 
+    /** The template to use when stamping out new items. */
+    _template: TemplateRef<CdkVirtualForOfContext<T>>, 
+    /** The set of available differs. */
+    _differs: IterableDiffers, 
+    /** The virtual scrolling viewport that these items are being rendered in. */
+    _viewport: CdkVirtualScrollViewport);
     /**
      * Measures the combined size (width for horizontal orientation, height for vertical) of all items
      * in the specified range. Throws an error if the range includes items that are not currently
@@ -98,17 +98,17 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     ngDoCheck(): void;
     ngOnDestroy(): void;
     /** React to scroll state changes in the viewport. */
-    private _onRenderedDataChange();
+    private _onRenderedDataChange;
     /** Swap out one `DataSource` for another. */
-    private _changeDataSource(oldDs, newDs);
+    private _changeDataSource;
     /** Update the `CdkVirtualForOfContext` for all views. */
-    private _updateContext();
+    private _updateContext;
     /** Apply changes to the DOM. */
-    private _applyChanges(changes);
+    private _applyChanges;
     /** Cache the given detached view. */
-    private _cacheView(view);
+    private _cacheView;
     /** Get a view for a new item, either from the cache or by creating a new one. */
-    private _getViewForNewItem();
+    private _getViewForNewItem;
     /** Update the computed properties on the `CdkVirtualForOfContext`. */
-    private _updateComputedContextProperties(context);
+    private _updateComputedContextProperties;
 }

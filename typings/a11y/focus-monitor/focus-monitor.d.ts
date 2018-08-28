@@ -78,41 +78,41 @@ export declare class FocusMonitor implements OnDestroy {
     focusVia(element: HTMLElement, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
     /** Register necessary event listeners on the document and window. */
-    private _registerGlobalListeners();
-    private _toggleClass(element, className, shouldSet);
+    private _registerGlobalListeners;
+    private _toggleClass;
     /**
      * Sets the focus classes on the element based on the given focus origin.
      * @param element The element to update the classes on.
      * @param origin The focus origin.
      */
-    private _setClasses(element, origin?);
+    private _setClasses;
     /**
      * Sets the origin and schedules an async function to clear it at the end of the event queue.
      * @param origin The origin to set.
      */
-    private _setOriginForCurrentEventQueue(origin);
+    private _setOriginForCurrentEventQueue;
     /**
      * Checks whether the given focus event was caused by a touchstart event.
      * @param event The focus event to check.
      * @returns Whether the event was caused by a touch.
      */
-    private _wasCausedByTouch(event);
+    private _wasCausedByTouch;
     /**
      * Handles focus events on a registered element.
      * @param event The focus event.
      * @param element The monitored element.
      */
-    private _onFocus(event, element);
+    private _onFocus;
     /**
      * Handles blur events on a registered element.
      * @param event The blur event.
      * @param element The monitored element.
      */
     _onBlur(event: FocusEvent, element: HTMLElement): void;
-    private _emitOrigin(subject, origin);
-    private _incrementMonitoredElementCount();
-    private _decrementMonitoredElementCount();
-    private _getNativeElement(element);
+    private _emitOrigin;
+    private _incrementMonitoredElementCount;
+    private _decrementMonitoredElementCount;
+    private _getNativeElement;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or

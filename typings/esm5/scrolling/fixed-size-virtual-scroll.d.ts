@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
@@ -50,9 +57,9 @@ export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStra
      */
     scrollToIndex(index: number, behavior: ScrollBehavior): void;
     /** Update the viewport's total content size. */
-    private _updateTotalContentSize();
+    private _updateTotalContentSize;
     /** Update the viewport's rendered range. */
-    private _updateRenderedRange();
+    private _updateRenderedRange;
 }
 /**
  * Provider factory for `FixedSizeVirtualScrollStrategy` that simply extracts the already created

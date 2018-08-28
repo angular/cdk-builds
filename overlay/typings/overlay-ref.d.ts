@@ -86,13 +86,13 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
      */
     getDirection(): Direction;
     /** Updates the text direction of the overlay panel. */
-    private _updateElementDirection();
+    private _updateElementDirection;
     /** Updates the size of the overlay element based on the overlay config. */
-    private _updateElementSize();
+    private _updateElementSize;
     /** Toggles the pointer events for the overlay pane element. */
-    private _togglePointerEvents(enablePointer);
+    private _togglePointerEvents;
     /** Attaches a backdrop for this overlay. */
-    private _attachBackdrop();
+    private _attachBackdrop;
     /**
      * Updates the stacking order of the element, moving it to the top if necessary.
      * This is required in cases where one overlay was detached, while another one,
@@ -100,11 +100,11 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
      * the stacking will be wrong, because the detached element's pane will still be
      * in its original DOM position.
      */
-    private _updateStackingOrder();
+    private _updateStackingOrder;
     /** Detaches the backdrop (if any) associated with the overlay. */
     detachBackdrop(): void;
     /** Toggles a single CSS class or an array of classes on an element. */
-    private _toggleClasses(element, cssClasses, isAdd);
+    private _toggleClasses;
 }
 /** Size properties for an overlay. */
 export interface OverlaySizeConfig {

@@ -10,124 +10,242 @@
  * @suppress {checkTypes} checked by tsc
  */
 
-const /** @type {?} */ MAC_ENTER = 3;
-const /** @type {?} */ BACKSPACE = 8;
-const /** @type {?} */ TAB = 9;
-const /** @type {?} */ NUM_CENTER = 12;
-const /** @type {?} */ ENTER = 13;
-const /** @type {?} */ SHIFT = 16;
-const /** @type {?} */ CONTROL = 17;
-const /** @type {?} */ ALT = 18;
-const /** @type {?} */ PAUSE = 19;
-const /** @type {?} */ CAPS_LOCK = 20;
-const /** @type {?} */ ESCAPE = 27;
-const /** @type {?} */ SPACE = 32;
-const /** @type {?} */ PAGE_UP = 33;
-const /** @type {?} */ PAGE_DOWN = 34;
-const /** @type {?} */ END = 35;
-const /** @type {?} */ HOME = 36;
-const /** @type {?} */ LEFT_ARROW = 37;
-const /** @type {?} */ UP_ARROW = 38;
-const /** @type {?} */ RIGHT_ARROW = 39;
-const /** @type {?} */ DOWN_ARROW = 40;
-const /** @type {?} */ PLUS_SIGN = 43;
-const /** @type {?} */ PRINT_SCREEN = 44;
-const /** @type {?} */ INSERT = 45;
-const /** @type {?} */ DELETE = 46;
-const /** @type {?} */ ZERO = 48;
-const /** @type {?} */ ONE = 49;
-const /** @type {?} */ TWO = 50;
-const /** @type {?} */ THREE = 51;
-const /** @type {?} */ FOUR = 52;
-const /** @type {?} */ FIVE = 53;
-const /** @type {?} */ SIX = 54;
-const /** @type {?} */ SEVEN = 55;
-const /** @type {?} */ EIGHT = 56;
-const /** @type {?} */ NINE = 57;
-const /** @type {?} */ FF_SEMICOLON = 59; // Firefox (Gecko) fires this for semicolon instead of 186
-const /** @type {?} */ FF_EQUALS = 61; // Firefox (Gecko) fires this for equals instead of 187
-const /** @type {?} */ QUESTION_MARK = 63;
-const /** @type {?} */ AT_SIGN = 64;
-const /** @type {?} */ A = 65;
-const /** @type {?} */ B = 66;
-const /** @type {?} */ C = 67;
-const /** @type {?} */ D = 68;
-const /** @type {?} */ E = 69;
-const /** @type {?} */ F = 70;
-const /** @type {?} */ G = 71;
-const /** @type {?} */ H = 72;
-const /** @type {?} */ I = 73;
-const /** @type {?} */ J = 74;
-const /** @type {?} */ K = 75;
-const /** @type {?} */ L = 76;
-const /** @type {?} */ M = 77;
-const /** @type {?} */ N = 78;
-const /** @type {?} */ O = 79;
-const /** @type {?} */ P = 80;
-const /** @type {?} */ Q = 81;
-const /** @type {?} */ R = 82;
-const /** @type {?} */ S = 83;
-const /** @type {?} */ T = 84;
-const /** @type {?} */ U = 85;
-const /** @type {?} */ V = 86;
-const /** @type {?} */ W = 87;
-const /** @type {?} */ X = 88;
-const /** @type {?} */ Y = 89;
-const /** @type {?} */ Z = 90;
-const /** @type {?} */ META = 91; // WIN_KEY_LEFT
-const /** @type {?} */ MAC_WK_CMD_LEFT = 91;
-const /** @type {?} */ MAC_WK_CMD_RIGHT = 93;
-const /** @type {?} */ CONTEXT_MENU = 93;
-const /** @type {?} */ NUMPAD_ZERO = 96;
-const /** @type {?} */ NUMPAD_ONE = 97;
-const /** @type {?} */ NUMPAD_TWO = 98;
-const /** @type {?} */ NUMPAD_THREE = 99;
-const /** @type {?} */ NUMPAD_FOUR = 100;
-const /** @type {?} */ NUMPAD_FIVE = 101;
-const /** @type {?} */ NUMPAD_SIX = 102;
-const /** @type {?} */ NUMPAD_SEVEN = 103;
-const /** @type {?} */ NUMPAD_EIGHT = 104;
-const /** @type {?} */ NUMPAD_NINE = 105;
-const /** @type {?} */ NUMPAD_MULTIPLY = 106;
-const /** @type {?} */ NUMPAD_PLUS = 107;
-const /** @type {?} */ NUMPAD_MINUS = 109;
-const /** @type {?} */ NUMPAD_PERIOD = 110;
-const /** @type {?} */ NUMPAD_DIVIDE = 111;
-const /** @type {?} */ F1 = 112;
-const /** @type {?} */ F2 = 113;
-const /** @type {?} */ F3 = 114;
-const /** @type {?} */ F4 = 115;
-const /** @type {?} */ F5 = 116;
-const /** @type {?} */ F6 = 117;
-const /** @type {?} */ F7 = 118;
-const /** @type {?} */ F8 = 119;
-const /** @type {?} */ F9 = 120;
-const /** @type {?} */ F10 = 121;
-const /** @type {?} */ F11 = 122;
-const /** @type {?} */ F12 = 123;
-const /** @type {?} */ NUM_LOCK = 144;
-const /** @type {?} */ SCROLL_LOCK = 145;
-const /** @type {?} */ FIRST_MEDIA = 166;
-const /** @type {?} */ FF_MINUS = 173;
-const /** @type {?} */ MUTE = 173; // Firefox (Gecko) fires 181 for MUTE
-const /** @type {?} */ VOLUME_DOWN = 174; // Firefox (Gecko) fires 182 for VOLUME_DOWN
-const /** @type {?} */ VOLUME_UP = 175; // Firefox (Gecko) fires 183 for VOLUME_UP
-const /** @type {?} */ FF_MUTE = 181;
-const /** @type {?} */ FF_VOLUME_DOWN = 182;
-const /** @type {?} */ LAST_MEDIA = 183;
-const /** @type {?} */ FF_VOLUME_UP = 183;
-const /** @type {?} */ SEMICOLON = 186; // Firefox (Gecko) fires 59 for SEMICOLON
-const /** @type {?} */ EQUALS = 187; // Firefox (Gecko) fires 61 for EQUALS
-const /** @type {?} */ COMMA = 188;
-const /** @type {?} */ DASH = 189; // Firefox (Gecko) fires 173 for DASH/MINUS
-const /** @type {?} */ SLASH = 191;
-const /** @type {?} */ APOSTROPHE = 192;
-const /** @type {?} */ TILDE = 192;
-const /** @type {?} */ OPEN_SQUARE_BRACKET = 219;
-const /** @type {?} */ BACKSLASH = 220;
-const /** @type {?} */ CLOSE_SQUARE_BRACKET = 221;
-const /** @type {?} */ SINGLE_QUOTE = 222;
-const /** @type {?} */ MAC_META = 224;
+/** @type {?} */
+const MAC_ENTER = 3;
+/** @type {?} */
+const BACKSPACE = 8;
+/** @type {?} */
+const TAB = 9;
+/** @type {?} */
+const NUM_CENTER = 12;
+/** @type {?} */
+const ENTER = 13;
+/** @type {?} */
+const SHIFT = 16;
+/** @type {?} */
+const CONTROL = 17;
+/** @type {?} */
+const ALT = 18;
+/** @type {?} */
+const PAUSE = 19;
+/** @type {?} */
+const CAPS_LOCK = 20;
+/** @type {?} */
+const ESCAPE = 27;
+/** @type {?} */
+const SPACE = 32;
+/** @type {?} */
+const PAGE_UP = 33;
+/** @type {?} */
+const PAGE_DOWN = 34;
+/** @type {?} */
+const END = 35;
+/** @type {?} */
+const HOME = 36;
+/** @type {?} */
+const LEFT_ARROW = 37;
+/** @type {?} */
+const UP_ARROW = 38;
+/** @type {?} */
+const RIGHT_ARROW = 39;
+/** @type {?} */
+const DOWN_ARROW = 40;
+/** @type {?} */
+const PLUS_SIGN = 43;
+/** @type {?} */
+const PRINT_SCREEN = 44;
+/** @type {?} */
+const INSERT = 45;
+/** @type {?} */
+const DELETE = 46;
+/** @type {?} */
+const ZERO = 48;
+/** @type {?} */
+const ONE = 49;
+/** @type {?} */
+const TWO = 50;
+/** @type {?} */
+const THREE = 51;
+/** @type {?} */
+const FOUR = 52;
+/** @type {?} */
+const FIVE = 53;
+/** @type {?} */
+const SIX = 54;
+/** @type {?} */
+const SEVEN = 55;
+/** @type {?} */
+const EIGHT = 56;
+/** @type {?} */
+const NINE = 57;
+/** @type {?} */
+const FF_SEMICOLON = 59;
+/** @type {?} */
+const FF_EQUALS = 61;
+/** @type {?} */
+const QUESTION_MARK = 63;
+/** @type {?} */
+const AT_SIGN = 64;
+/** @type {?} */
+const A = 65;
+/** @type {?} */
+const B = 66;
+/** @type {?} */
+const C = 67;
+/** @type {?} */
+const D = 68;
+/** @type {?} */
+const E = 69;
+/** @type {?} */
+const F = 70;
+/** @type {?} */
+const G = 71;
+/** @type {?} */
+const H = 72;
+/** @type {?} */
+const I = 73;
+/** @type {?} */
+const J = 74;
+/** @type {?} */
+const K = 75;
+/** @type {?} */
+const L = 76;
+/** @type {?} */
+const M = 77;
+/** @type {?} */
+const N = 78;
+/** @type {?} */
+const O = 79;
+/** @type {?} */
+const P = 80;
+/** @type {?} */
+const Q = 81;
+/** @type {?} */
+const R = 82;
+/** @type {?} */
+const S = 83;
+/** @type {?} */
+const T = 84;
+/** @type {?} */
+const U = 85;
+/** @type {?} */
+const V = 86;
+/** @type {?} */
+const W = 87;
+/** @type {?} */
+const X = 88;
+/** @type {?} */
+const Y = 89;
+/** @type {?} */
+const Z = 90;
+/** @type {?} */
+const META = 91;
+/** @type {?} */
+const MAC_WK_CMD_LEFT = 91;
+/** @type {?} */
+const MAC_WK_CMD_RIGHT = 93;
+/** @type {?} */
+const CONTEXT_MENU = 93;
+/** @type {?} */
+const NUMPAD_ZERO = 96;
+/** @type {?} */
+const NUMPAD_ONE = 97;
+/** @type {?} */
+const NUMPAD_TWO = 98;
+/** @type {?} */
+const NUMPAD_THREE = 99;
+/** @type {?} */
+const NUMPAD_FOUR = 100;
+/** @type {?} */
+const NUMPAD_FIVE = 101;
+/** @type {?} */
+const NUMPAD_SIX = 102;
+/** @type {?} */
+const NUMPAD_SEVEN = 103;
+/** @type {?} */
+const NUMPAD_EIGHT = 104;
+/** @type {?} */
+const NUMPAD_NINE = 105;
+/** @type {?} */
+const NUMPAD_MULTIPLY = 106;
+/** @type {?} */
+const NUMPAD_PLUS = 107;
+/** @type {?} */
+const NUMPAD_MINUS = 109;
+/** @type {?} */
+const NUMPAD_PERIOD = 110;
+/** @type {?} */
+const NUMPAD_DIVIDE = 111;
+/** @type {?} */
+const F1 = 112;
+/** @type {?} */
+const F2 = 113;
+/** @type {?} */
+const F3 = 114;
+/** @type {?} */
+const F4 = 115;
+/** @type {?} */
+const F5 = 116;
+/** @type {?} */
+const F6 = 117;
+/** @type {?} */
+const F7 = 118;
+/** @type {?} */
+const F8 = 119;
+/** @type {?} */
+const F9 = 120;
+/** @type {?} */
+const F10 = 121;
+/** @type {?} */
+const F11 = 122;
+/** @type {?} */
+const F12 = 123;
+/** @type {?} */
+const NUM_LOCK = 144;
+/** @type {?} */
+const SCROLL_LOCK = 145;
+/** @type {?} */
+const FIRST_MEDIA = 166;
+/** @type {?} */
+const FF_MINUS = 173;
+/** @type {?} */
+const MUTE = 173;
+/** @type {?} */
+const VOLUME_DOWN = 174;
+/** @type {?} */
+const VOLUME_UP = 175;
+/** @type {?} */
+const FF_MUTE = 181;
+/** @type {?} */
+const FF_VOLUME_DOWN = 182;
+/** @type {?} */
+const LAST_MEDIA = 183;
+/** @type {?} */
+const FF_VOLUME_UP = 183;
+/** @type {?} */
+const SEMICOLON = 186;
+/** @type {?} */
+const EQUALS = 187;
+/** @type {?} */
+const COMMA = 188;
+/** @type {?} */
+const DASH = 189;
+/** @type {?} */
+const SLASH = 191;
+/** @type {?} */
+const APOSTROPHE = 192;
+/** @type {?} */
+const TILDE = 192;
+/** @type {?} */
+const OPEN_SQUARE_BRACKET = 219;
+/** @type {?} */
+const BACKSLASH = 220;
+/** @type {?} */
+const CLOSE_SQUARE_BRACKET = 221;
+/** @type {?} */
+const SINGLE_QUOTE = 222;
+/** @type {?} */
+const MAC_META = 224;
 
 /**
  * @fileoverview added by tsickle

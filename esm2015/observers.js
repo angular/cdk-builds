@@ -56,10 +56,13 @@ class ContentObserver {
      * @return {?}
      */
     observe(elementOrRef) {
-        const /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         return Observable.create(observer => {
-            const /** @type {?} */ stream = this._observeElement(element);
-            const /** @type {?} */ subscription = stream.subscribe(observer);
+            /** @type {?} */
+            const stream = this._observeElement(element);
+            /** @type {?} */
+            const subscription = stream.subscribe(observer);
             return () => {
                 subscription.unsubscribe();
                 this._unobserveElement(element);
@@ -74,8 +77,10 @@ class ContentObserver {
      */
     _observeElement(element) {
         if (!this._observedElements.has(element)) {
-            const /** @type {?} */ stream = new Subject();
-            const /** @type {?} */ observer = this._mutationObserverFactory.create(mutations => stream.next(mutations));
+            /** @type {?} */
+            const stream = new Subject();
+            /** @type {?} */
+            const observer = this._mutationObserverFactory.create(mutations => stream.next(mutations));
             if (observer) {
                 observer.observe(element, {
                     characterData: true,
@@ -125,7 +130,7 @@ ContentObserver.decorators = [
 ];
 /** @nocollapse */
 ContentObserver.ctorParameters = () => [
-    { type: MutationObserverFactory, },
+    { type: MutationObserverFactory }
 ];
 /** @nocollapse */ ContentObserver.ngInjectableDef = defineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(inject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
 /**
@@ -200,7 +205,8 @@ class CdkObserveContent {
      */
     _subscribe() {
         this._unsubscribe();
-        const /** @type {?} */ stream = this._contentObserver.observe(this._elementRef);
+        /** @type {?} */
+        const stream = this._contentObserver.observe(this._elementRef);
         // TODO(mmalerba): We shouldn't be emitting on this @Output() outside the zone.
         // Consider brining it back inside the zone next time we're making breaking changes.
         // Bringing it back inside can cause things like infinite change detection loops and changed
@@ -227,14 +233,14 @@ CdkObserveContent.decorators = [
 ];
 /** @nocollapse */
 CdkObserveContent.ctorParameters = () => [
-    { type: ContentObserver, },
-    { type: ElementRef, },
-    { type: NgZone, },
+    { type: ContentObserver },
+    { type: ElementRef },
+    { type: NgZone }
 ];
 CdkObserveContent.propDecorators = {
-    "event": [{ type: Output, args: ['cdkObserveContent',] },],
-    "disabled": [{ type: Input, args: ['cdkObserveContentDisabled',] },],
-    "debounce": [{ type: Input },],
+    event: [{ type: Output, args: ['cdkObserveContent',] }],
+    disabled: [{ type: Input, args: ['cdkObserveContentDisabled',] }],
+    debounce: [{ type: Input }]
 };
 class ObserversModule {
 }

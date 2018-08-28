@@ -280,7 +280,7 @@ class UniqueSelectionDispatcher {
      * @return {?}
      */
     notify(id, name) {
-        for (let /** @type {?} */ listener of this._listeners) {
+        for (let listener of this._listeners) {
             listener(id, name);
         }
     }
@@ -319,5 +319,5 @@ UniqueSelectionDispatcher.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
+export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };
 //# sourceMappingURL=collections.js.map

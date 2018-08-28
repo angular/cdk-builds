@@ -1,9 +1,16 @@
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
  */
 export declare class Platform {
-    private _platformId;
+    private _platformId?;
     /**
      * Whether the Angular application is being rendered in the browser.
      * We want to use the Angular platform check because if the Document is shimmed

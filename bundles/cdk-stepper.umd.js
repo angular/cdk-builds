@@ -26,7 +26,7 @@ var CdkStepLabel = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStepLabel.ctorParameters = function () { return [
-        { type: core.TemplateRef, },
+        { type: core.TemplateRef }
     ]; };
     return CdkStepLabel;
 }());
@@ -35,10 +35,10 @@ var CdkStepLabel = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each stepper component.
- */
-var /** @type {?} */ nextId = 0;
+  @type {?} */
+var nextId = 0;
 /**
  * Change event emitted on selection changes.
  */
@@ -62,6 +62,7 @@ var CdkStep = /** @class */ (function () {
         this._customCompleted = null;
     }
     Object.defineProperty(CdkStep.prototype, "editable", {
+        /** Whether the user can return to this step once it has been marked as complted. */
         get: /**
          * Whether the user can return to this step once it has been marked as complted.
          * @return {?}
@@ -78,6 +79,7 @@ var CdkStep = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkStep.prototype, "optional", {
+        /** Whether the completion of step is optional. */
         get: /**
          * Whether the completion of step is optional.
          * @return {?}
@@ -94,6 +96,7 @@ var CdkStep = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkStep.prototype, "completed", {
+        /** Whether step is marked as completed. */
         get: /**
          * Whether step is marked as completed.
          * @return {?}
@@ -171,18 +174,18 @@ var CdkStep = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStep.ctorParameters = function () { return [
-        { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef(function () { return CdkStepper; }),] },] },
+        { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef(function () { return CdkStepper; }),] }] }
     ]; };
     CdkStep.propDecorators = {
-        "stepLabel": [{ type: core.ContentChild, args: [CdkStepLabel,] },],
-        "content": [{ type: core.ViewChild, args: [core.TemplateRef,] },],
-        "stepControl": [{ type: core.Input },],
-        "label": [{ type: core.Input },],
-        "ariaLabel": [{ type: core.Input, args: ['aria-label',] },],
-        "ariaLabelledby": [{ type: core.Input, args: ['aria-labelledby',] },],
-        "editable": [{ type: core.Input },],
-        "optional": [{ type: core.Input },],
-        "completed": [{ type: core.Input },],
+        stepLabel: [{ type: core.ContentChild, args: [CdkStepLabel,] }],
+        content: [{ type: core.ViewChild, args: [core.TemplateRef,] }],
+        stepControl: [{ type: core.Input }],
+        label: [{ type: core.Input }],
+        ariaLabel: [{ type: core.Input, args: ['aria-label',] }],
+        ariaLabelledby: [{ type: core.Input, args: ['aria-labelledby',] }],
+        editable: [{ type: core.Input }],
+        optional: [{ type: core.Input }],
+        completed: [{ type: core.Input }]
     };
     return CdkStep;
 }());
@@ -206,6 +209,7 @@ var CdkStepper = /** @class */ (function () {
         this._document = _document;
     }
     Object.defineProperty(CdkStepper.prototype, "linear", {
+        /** Whether the validity of previous steps should be checked or not. */
         get: /**
          * Whether the validity of previous steps should be checked or not.
          * @return {?}
@@ -220,6 +224,7 @@ var CdkStepper = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkStepper.prototype, "selectedIndex", {
+        /** The index of the selected step. */
         get: /**
          * The index of the selected step.
          * @return {?}
@@ -249,6 +254,7 @@ var CdkStepper = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkStepper.prototype, "selected", {
+        /** The step that is selected. */
         get: /**
          * The step that is selected.
          * @return {?}
@@ -388,7 +394,8 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (index) {
-        var /** @type {?} */ position = index - this._selectedIndex;
+        /** @type {?} */
+        var position = index - this._selectedIndex;
         if (position < 0) {
             return this._layoutDirection() === 'rtl' ? 'next' : 'previous';
         }
@@ -409,7 +416,8 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (index) {
-        var /** @type {?} */ step = this._steps.toArray()[index];
+        /** @type {?} */
+        var step = this._steps.toArray()[index];
         if (!step.completed || this._selectedIndex == index) {
             return 'number';
         }
@@ -438,7 +446,8 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (newIndex) {
-        var /** @type {?} */ stepsArray = this._steps.toArray();
+        /** @type {?} */
+        var stepsArray = this._steps.toArray();
         this.selectionChange.emit({
             selectedIndex: newIndex,
             previouslySelectedIndex: this._selectedIndex,
@@ -463,7 +472,8 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        var /** @type {?} */ keyCode = event.keyCode;
+        /** @type {?} */
+        var keyCode = event.keyCode;
         if (this._keyManager.activeItemIndex != null && (keyCode === keycodes.SPACE || keyCode === keycodes.ENTER)) {
             this.selectedIndex = this._keyManager.activeItemIndex;
             event.preventDefault();
@@ -489,12 +499,15 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function (index) {
-        var /** @type {?} */ steps = this._steps.toArray();
+        /** @type {?} */
+        var steps = this._steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(function (step) {
-                var /** @type {?} */ control = step.stepControl;
-                var /** @type {?} */ isIncomplete = control ?
+                /** @type {?} */
+                var control = step.stepControl;
+                /** @type {?} */
+                var isIncomplete = control ?
                     (control.invalid || control.pending || !step.interacted) :
                     !step.completed;
                 return isIncomplete && !step.optional;
@@ -523,8 +536,10 @@ var CdkStepper = /** @class */ (function () {
         if (!this._document || !this._elementRef) {
             return false;
         }
-        var /** @type {?} */ stepperElement = this._elementRef.nativeElement;
-        var /** @type {?} */ focusedElement = this._document.activeElement;
+        /** @type {?} */
+        var stepperElement = this._elementRef.nativeElement;
+        /** @type {?} */
+        var focusedElement = this._document.activeElement;
         return stepperElement === focusedElement || stepperElement.contains(focusedElement);
     };
     CdkStepper.decorators = [
@@ -535,17 +550,17 @@ var CdkStepper = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStepper.ctorParameters = function () { return [
-        { type: bidi.Directionality, decorators: [{ type: core.Optional },] },
-        { type: core.ChangeDetectorRef, },
-        { type: core.ElementRef, },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
+        { type: core.ChangeDetectorRef },
+        { type: core.ElementRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     CdkStepper.propDecorators = {
-        "_steps": [{ type: core.ContentChildren, args: [CdkStep,] },],
-        "linear": [{ type: core.Input },],
-        "selectedIndex": [{ type: core.Input },],
-        "selected": [{ type: core.Input },],
-        "selectionChange": [{ type: core.Output },],
+        _steps: [{ type: core.ContentChildren, args: [CdkStep,] }],
+        linear: [{ type: core.Input }],
+        selectedIndex: [{ type: core.Input }],
+        selected: [{ type: core.Input }],
+        selectionChange: [{ type: core.Output }]
     };
     return CdkStepper;
 }());
@@ -576,10 +591,10 @@ var CdkStepperNext = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStepperNext.ctorParameters = function () { return [
-        { type: CdkStepper, },
+        { type: CdkStepper }
     ]; };
     CdkStepperNext.propDecorators = {
-        "type": [{ type: core.Input },],
+        type: [{ type: core.Input }]
     };
     return CdkStepperNext;
 }());
@@ -605,10 +620,10 @@ var CdkStepperPrevious = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStepperPrevious.ctorParameters = function () { return [
-        { type: CdkStepper, },
+        { type: CdkStepper }
     ]; };
     CdkStepperPrevious.propDecorators = {
-        "type": [{ type: core.Input },],
+        type: [{ type: core.Input }]
     };
     return CdkStepperPrevious;
 }());

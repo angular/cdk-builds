@@ -15,10 +15,10 @@ import { auditTime, takeUntil } from 'rxjs/operators';
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Options to pass to the animationstart listener.
- */
-var /** @type {?} */ listenerOptions = supportsPassiveEventListeners() ? { passive: true } : false;
+  @type {?} */
+var listenerOptions = supportsPassiveEventListeners() ? { passive: true } : false;
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:
@@ -43,14 +43,19 @@ var AutofillMonitor = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return EMPTY;
         }
-        var /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-        var /** @type {?} */ info = this._monitoredElements.get(element);
+        /** @type {?} */
+        var element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        var info = this._monitoredElements.get(element);
         if (info) {
             return info.subject.asObservable();
         }
-        var /** @type {?} */ result = new Subject();
-        var /** @type {?} */ cssClass = 'cdk-text-field-autofilled';
-        var /** @type {?} */ listener = function (event) {
+        /** @type {?} */
+        var result = new Subject();
+        /** @type {?} */
+        var cssClass = 'cdk-text-field-autofilled';
+        /** @type {?} */
+        var listener = /** @type {?} */ ((function (event) {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
@@ -64,7 +69,7 @@ var AutofillMonitor = /** @class */ (function () {
                 element.classList.remove(cssClass);
                 _this._ngZone.run(function () { return result.next({ target: /** @type {?} */ (event.target), isAutofilled: false }); });
             }
-        };
+        }));
         this._ngZone.runOutsideAngular(function () {
             element.addEventListener('animationstart', listener, listenerOptions);
             element.classList.add('cdk-text-field-autofill-monitored');
@@ -86,8 +91,10 @@ var AutofillMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (elementOrRef) {
-        var /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-        var /** @type {?} */ info = this._monitoredElements.get(element);
+        /** @type {?} */
+        var element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        /** @type {?} */
+        var info = this._monitoredElements.get(element);
         if (info) {
             info.unlisten();
             info.subject.complete();
@@ -111,8 +118,8 @@ var AutofillMonitor = /** @class */ (function () {
     ];
     /** @nocollapse */
     AutofillMonitor.ctorParameters = function () { return [
-        { type: Platform, },
-        { type: NgZone, },
+        { type: Platform },
+        { type: NgZone }
     ]; };
     /** @nocollapse */ AutofillMonitor.ngInjectableDef = defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(inject(Platform), inject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     return AutofillMonitor;
@@ -157,11 +164,11 @@ var CdkAutofill = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkAutofill.ctorParameters = function () { return [
-        { type: ElementRef, },
-        { type: AutofillMonitor, },
+        { type: ElementRef },
+        { type: AutofillMonitor }
     ]; };
     CdkAutofill.propDecorators = {
-        "cdkAutofill": [{ type: Output },],
+        cdkAutofill: [{ type: Output }]
     };
     return CdkAutofill;
 }());
@@ -183,6 +190,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         this._textareaElement = /** @type {?} */ (this._elementRef.nativeElement);
     }
     Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
+        /** Minimum amount of rows in the textarea. */
         get: /**
          * Minimum amount of rows in the textarea.
          * @return {?}
@@ -200,6 +208,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkTextareaAutosize.prototype, "maxRows", {
+        /** Maximum amount of rows in the textarea. */
         get: /**
          * Maximum amount of rows in the textarea.
          * @return {?}
@@ -217,6 +226,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkTextareaAutosize.prototype, "enabled", {
+        /** Whether autosizing is enabled or not */
         get: /**
          * Whether autosizing is enabled or not
          * @return {?}
@@ -247,7 +257,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ minHeight = this.minRows && this._cachedLineHeight ?
+        /** @type {?} */
+        var minHeight = this.minRows && this._cachedLineHeight ?
             this.minRows * this._cachedLineHeight + "px" : null;
         if (minHeight) {
             this._setTextareaStyle('minHeight', minHeight);
@@ -263,7 +274,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ maxHeight = this.maxRows && this._cachedLineHeight ?
+        /** @type {?} */
+        var maxHeight = this.maxRows && this._cachedLineHeight ?
             this.maxRows * this._cachedLineHeight + "px" : null;
         if (maxHeight) {
             this._setTextareaStyle('maxHeight', maxHeight);
@@ -333,8 +345,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
         if (this._cachedLineHeight) {
             return;
         }
-        // Use a clone element because we have to override some styles.
-        var /** @type {?} */ textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
+        /** @type {?} */
+        var textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
         textareaClone.rows = 1;
         // Use `position: absolute` so that this doesn't cause a browser layout and use
         // `visibility: hidden` so that nothing is rendered. Clear any other styles that
@@ -400,13 +412,16 @@ var CdkTextareaAutosize = /** @class */ (function () {
         if (!this._cachedLineHeight) {
             return;
         }
-        var /** @type {?} */ textarea = /** @type {?} */ (this._elementRef.nativeElement);
-        var /** @type {?} */ value = textarea.value;
+        /** @type {?} */
+        var textarea = /** @type {?} */ (this._elementRef.nativeElement);
+        /** @type {?} */
+        var value = textarea.value;
         // Only resize of the value changed since these calculations can be expensive.
         if (value === this._previousValue && !force) {
             return;
         }
-        var /** @type {?} */ placeholderText = textarea.placeholder;
+        /** @type {?} */
+        var placeholderText = textarea.placeholder;
         // Reset the textarea height to auto in order to shrink back to its default size.
         // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
         // Long placeholders that are wider than the textarea width may lead to a bigger scrollHeight
@@ -414,9 +429,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
         // need to be removed temporarily.
         textarea.classList.add('cdk-textarea-autosize-measuring');
         textarea.placeholder = '';
-        // The cdk-textarea-autosize-measuring class includes a 2px padding to workaround an issue with
-        // Chrome, so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
-        var /** @type {?} */ height = textarea.scrollHeight - 4;
+        /** @type {?} */
+        var height = textarea.scrollHeight - 4;
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
         textarea.style.height = height + "px";
         textarea.classList.remove('cdk-textarea-autosize-measuring');
@@ -424,20 +438,18 @@ var CdkTextareaAutosize = /** @class */ (function () {
         // On Firefox resizing the textarea will prevent it from scrolling to the caret position.
         // We need to re-set the selection in order for it to scroll to the proper position.
         if (typeof requestAnimationFrame !== 'undefined') {
-            this._ngZone.runOutsideAngular(function () {
-                return requestAnimationFrame(function () {
-                    var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
-                    // IE will throw an "Unspecified error" if we try to set the selection range after the
-                    // element has been removed from the DOM. Assert that the directive hasn't been destroyed
-                    // between the time we requested the animation frame and when it was executed.
-                    // Also note that we have to assert that the textarea is focused before we set the
-                    // selection range. Setting the selection range on a non-focused textarea will cause
-                    // it to receive focus on IE and Edge.
-                    if (!_this._destroyed.isStopped && document.activeElement === textarea) {
-                        textarea.setSelectionRange(selectionStart, selectionEnd);
-                    }
-                });
-            });
+            this._ngZone.runOutsideAngular(function () { return requestAnimationFrame(function () {
+                var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
+                // IE will throw an "Unspecified error" if we try to set the selection range after the
+                // element has been removed from the DOM. Assert that the directive hasn't been destroyed
+                // between the time we requested the animation frame and when it was executed.
+                // Also note that we have to assert that the textarea is focused before we set the
+                // selection range. Setting the selection range on a non-focused textarea will cause
+                // it to receive focus on IE and Edge.
+                if (!_this._destroyed.isStopped && document.activeElement === textarea) {
+                    textarea.setSelectionRange(selectionStart, selectionEnd);
+                }
+            }); });
         }
         this._previousValue = value;
     };
@@ -484,14 +496,14 @@ var CdkTextareaAutosize = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkTextareaAutosize.ctorParameters = function () { return [
-        { type: ElementRef, },
-        { type: Platform, },
-        { type: NgZone, },
+        { type: ElementRef },
+        { type: Platform },
+        { type: NgZone }
     ]; };
     CdkTextareaAutosize.propDecorators = {
-        "minRows": [{ type: Input, args: ['cdkAutosizeMinRows',] },],
-        "maxRows": [{ type: Input, args: ['cdkAutosizeMaxRows',] },],
-        "enabled": [{ type: Input, args: ['cdkTextareaAutosize',] },],
+        minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],
+        maxRows: [{ type: Input, args: ['cdkAutosizeMaxRows',] }],
+        enabled: [{ type: Input, args: ['cdkTextareaAutosize',] }]
     };
     return CdkTextareaAutosize;
 }());

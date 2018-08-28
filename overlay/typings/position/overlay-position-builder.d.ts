@@ -17,8 +17,8 @@ import { OverlayContainer } from '../overlay-container';
 export declare class OverlayPositionBuilder {
     private _viewportRuler;
     private _document;
-    private _platform;
-    private _overlayContainer;
+    private _platform?;
+    private _overlayContainer?;
     constructor(_viewportRuler: ViewportRuler, _document: any, _platform?: Platform | undefined, _overlayContainer?: OverlayContainer | undefined);
     /**
      * Creates a global position strategy.

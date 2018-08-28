@@ -34,17 +34,17 @@ CdkStepLabel.decorators = [
 ];
 /** @nocollapse */
 CdkStepLabel.ctorParameters = () => [
-    { type: TemplateRef, },
+    { type: TemplateRef }
 ];
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * Used to generate unique ID for each stepper component.
- */
-let /** @type {?} */ nextId = 0;
+  @type {?} */
+let nextId = 0;
 /**
  * Change event emitted on selection changes.
  */
@@ -147,18 +147,18 @@ CdkStep.decorators = [
 ];
 /** @nocollapse */
 CdkStep.ctorParameters = () => [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] },] },
+    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] }
 ];
 CdkStep.propDecorators = {
-    "stepLabel": [{ type: ContentChild, args: [CdkStepLabel,] },],
-    "content": [{ type: ViewChild, args: [TemplateRef,] },],
-    "stepControl": [{ type: Input },],
-    "label": [{ type: Input },],
-    "ariaLabel": [{ type: Input, args: ['aria-label',] },],
-    "ariaLabelledby": [{ type: Input, args: ['aria-labelledby',] },],
-    "editable": [{ type: Input },],
-    "optional": [{ type: Input },],
-    "completed": [{ type: Input },],
+    stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
+    content: [{ type: ViewChild, args: [TemplateRef,] }],
+    stepControl: [{ type: Input }],
+    label: [{ type: Input }],
+    ariaLabel: [{ type: Input, args: ['aria-label',] }],
+    ariaLabelledby: [{ type: Input, args: ['aria-labelledby',] }],
+    editable: [{ type: Input }],
+    optional: [{ type: Input }],
+    completed: [{ type: Input }]
 };
 class CdkStepper {
     /**
@@ -311,7 +311,8 @@ class CdkStepper {
      * @return {?}
      */
     _getAnimationDirection(index) {
-        const /** @type {?} */ position = index - this._selectedIndex;
+        /** @type {?} */
+        const position = index - this._selectedIndex;
         if (position < 0) {
             return this._layoutDirection() === 'rtl' ? 'next' : 'previous';
         }
@@ -326,7 +327,8 @@ class CdkStepper {
      * @return {?}
      */
     _getIndicatorType(index) {
-        const /** @type {?} */ step = this._steps.toArray()[index];
+        /** @type {?} */
+        const step = this._steps.toArray()[index];
         if (!step.completed || this._selectedIndex == index) {
             return 'number';
         }
@@ -346,7 +348,8 @@ class CdkStepper {
      * @return {?}
      */
     _updateSelectedItemIndex(newIndex) {
-        const /** @type {?} */ stepsArray = this._steps.toArray();
+        /** @type {?} */
+        const stepsArray = this._steps.toArray();
         this.selectionChange.emit({
             selectedIndex: newIndex,
             previouslySelectedIndex: this._selectedIndex,
@@ -367,7 +370,8 @@ class CdkStepper {
      * @return {?}
      */
     _onKeydown(event) {
-        const /** @type {?} */ keyCode = event.keyCode;
+        /** @type {?} */
+        const keyCode = event.keyCode;
         if (this._keyManager.activeItemIndex != null && (keyCode === SPACE || keyCode === ENTER)) {
             this.selectedIndex = this._keyManager.activeItemIndex;
             event.preventDefault();
@@ -389,12 +393,15 @@ class CdkStepper {
      * @return {?}
      */
     _anyControlsInvalidOrPending(index) {
-        const /** @type {?} */ steps = this._steps.toArray();
+        /** @type {?} */
+        const steps = this._steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(step => {
-                const /** @type {?} */ control = step.stepControl;
-                const /** @type {?} */ isIncomplete = control ?
+                /** @type {?} */
+                const control = step.stepControl;
+                /** @type {?} */
+                const isIncomplete = control ?
                     (control.invalid || control.pending || !step.interacted) :
                     !step.completed;
                 return isIncomplete && !step.optional;
@@ -416,8 +423,10 @@ class CdkStepper {
         if (!this._document || !this._elementRef) {
             return false;
         }
-        const /** @type {?} */ stepperElement = this._elementRef.nativeElement;
-        const /** @type {?} */ focusedElement = this._document.activeElement;
+        /** @type {?} */
+        const stepperElement = this._elementRef.nativeElement;
+        /** @type {?} */
+        const focusedElement = this._document.activeElement;
         return stepperElement === focusedElement || stepperElement.contains(focusedElement);
     }
 }
@@ -429,17 +438,17 @@ CdkStepper.decorators = [
 ];
 /** @nocollapse */
 CdkStepper.ctorParameters = () => [
-    { type: Directionality, decorators: [{ type: Optional },] },
-    { type: ChangeDetectorRef, },
-    { type: ElementRef, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Directionality, decorators: [{ type: Optional }] },
+    { type: ChangeDetectorRef },
+    { type: ElementRef },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 CdkStepper.propDecorators = {
-    "_steps": [{ type: ContentChildren, args: [CdkStep,] },],
-    "linear": [{ type: Input },],
-    "selectedIndex": [{ type: Input },],
-    "selected": [{ type: Input },],
-    "selectionChange": [{ type: Output },],
+    _steps: [{ type: ContentChildren, args: [CdkStep,] }],
+    linear: [{ type: Input }],
+    selectedIndex: [{ type: Input }],
+    selected: [{ type: Input }],
+    selectionChange: [{ type: Output }]
 };
 
 /**
@@ -472,10 +481,10 @@ CdkStepperNext.decorators = [
 ];
 /** @nocollapse */
 CdkStepperNext.ctorParameters = () => [
-    { type: CdkStepper, },
+    { type: CdkStepper }
 ];
 CdkStepperNext.propDecorators = {
-    "type": [{ type: Input },],
+    type: [{ type: Input }]
 };
 /**
  * Button that moves to the previous step in a stepper workflow.
@@ -503,10 +512,10 @@ CdkStepperPrevious.decorators = [
 ];
 /** @nocollapse */
 CdkStepperPrevious.ctorParameters = () => [
-    { type: CdkStepper, },
+    { type: CdkStepper }
 ];
 CdkStepperPrevious.propDecorators = {
-    "type": [{ type: Input },],
+    type: [{ type: Input }]
 };
 
 /**

@@ -20,9 +20,9 @@ export declare class FullscreenOverlayContainer extends OverlayContainer impleme
     constructor(_document: any);
     ngOnDestroy(): void;
     protected _createContainer(): void;
-    private _adjustParentForFullscreenChange();
-    private _addFullscreenChangeListener(fn);
-    private _getEventName();
+    private _adjustParentForFullscreenChange;
+    private _addFullscreenChangeListener;
+    private _getEventName;
     /**
      * When the page is put into fullscreen mode, a specific element is specified.
      * Only that element and its children are visible when in fullscreen mode.

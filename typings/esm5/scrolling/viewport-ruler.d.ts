@@ -42,7 +42,7 @@ export declare class ViewportRuler implements OnDestroy {
      */
     change(throttleTime?: number): Observable<Event>;
     /** Updates the cached viewport size. */
-    private _updateViewportSize();
+    private _updateViewportSize;
 }
 /** @docs-private @deprecated @breaking-change 7.0.0 */
 export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone): ViewportRuler;

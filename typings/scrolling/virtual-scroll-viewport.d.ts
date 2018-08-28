@@ -122,9 +122,9 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     /** Update the viewport dimensions and re-render. */
     checkViewportSize(): void;
     /** Measure the viewport size. */
-    private _measureViewportSize();
+    private _measureViewportSize;
     /** Queue up change detection to run. */
-    private _markChangeDetectionNeeded(runAfter?);
+    private _markChangeDetectionNeeded;
     /** Run change detection. */
-    private _doChangeDetection();
+    private _doChangeDetection;
 }

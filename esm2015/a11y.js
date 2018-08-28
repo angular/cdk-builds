@@ -19,10 +19,10 @@ import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
  * @suppress {checkTypes} checked by tsc
  */
 
-/**
+/** *
  * IDs are deliminated by an empty space, as per the spec.
- */
-const /** @type {?} */ ID_DELIMINATOR = ' ';
+  @type {?} */
+const ID_DELIMINATOR = ' ';
 /**
  * Adds the given ID to the specified ARIA attribute on an element.
  * Used for attributes such as aria-labelledby, aria-owns, etc.
@@ -32,7 +32,8 @@ const /** @type {?} */ ID_DELIMINATOR = ' ';
  * @return {?}
  */
 function addAriaReferencedId(el, attr, id) {
-    const /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    /** @type {?} */
+    const ids = getAriaReferenceIds(el, attr);
     if (ids.some(existingId => existingId.trim() == id.trim())) {
         return;
     }
@@ -48,8 +49,10 @@ function addAriaReferencedId(el, attr, id) {
  * @return {?}
  */
 function removeAriaReferencedId(el, attr, id) {
-    const /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    const /** @type {?} */ filteredIds = ids.filter(val => val != id.trim());
+    /** @type {?} */
+    const ids = getAriaReferenceIds(el, attr);
+    /** @type {?} */
+    const filteredIds = ids.filter(val => val != id.trim());
     el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
 }
 /**
@@ -68,30 +71,30 @@ function getAriaReferenceIds(el, attr) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * ID used for the body container where all messages are appended.
- */
-const /** @type {?} */ MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
-/**
+  @type {?} */
+const MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+/** *
  * ID prefix used for each created message element.
- */
-const /** @type {?} */ CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
-/**
+  @type {?} */
+const CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+/** *
  * Attribute given to each host element that is described by a message element.
- */
-const /** @type {?} */ CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
-/**
+  @type {?} */
+const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+/** *
  * Global incremental identifier for each registered message element.
- */
-let /** @type {?} */ nextId = 0;
-/**
+  @type {?} */
+let nextId = 0;
+/** *
  * Global map of all registered message elements that have been placed into the document.
- */
-const /** @type {?} */ messageRegistry = new Map();
-/**
+  @type {?} */
+const messageRegistry = new Map();
+/** *
  * Container for all registered messages.
- */
-let /** @type {?} */ messagesContainer = null;
+  @type {?} */
+let messagesContainer = null;
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
@@ -137,7 +140,8 @@ class AriaDescriber {
         if (this._isElementDescribedByMessage(hostElement, message)) {
             this._removeMessageReference(hostElement, message);
         }
-        const /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        const registeredMessage = messageRegistry.get(message);
         if (registeredMessage && registeredMessage.referenceCount === 0) {
             this._deleteMessageElement(message);
         }
@@ -150,8 +154,9 @@ class AriaDescriber {
      * @return {?}
      */
     ngOnDestroy() {
-        const /** @type {?} */ describedElements = this._document.querySelectorAll(`[${CDK_DESCRIBEDBY_HOST_ATTRIBUTE}]`);
-        for (let /** @type {?} */ i = 0; i < describedElements.length; i++) {
+        /** @type {?} */
+        const describedElements = this._document.querySelectorAll(`[${CDK_DESCRIBEDBY_HOST_ATTRIBUTE}]`);
+        for (let i = 0; i < describedElements.length; i++) {
             this._removeCdkDescribedByReferenceIds(describedElements[i]);
             describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
         }
@@ -167,7 +172,8 @@ class AriaDescriber {
      * @return {?}
      */
     _createMessageElement(message) {
-        const /** @type {?} */ messageElement = this._document.createElement('div');
+        /** @type {?} */
+        const messageElement = this._document.createElement('div');
         messageElement.setAttribute('id', `${CDK_DESCRIBEDBY_ID_PREFIX}-${nextId++}`);
         messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
         this._createMessagesContainer(); /** @type {?} */
@@ -180,8 +186,10 @@ class AriaDescriber {
      * @return {?}
      */
     _deleteMessageElement(message) {
-        const /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        const /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+        /** @type {?} */
+        const registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        const messageElement = registeredMessage && registeredMessage.messageElement;
         if (messagesContainer && messageElement) {
             messagesContainer.removeChild(messageElement);
         }
@@ -193,7 +201,8 @@ class AriaDescriber {
      */
     _createMessagesContainer() {
         if (!messagesContainer) {
-            const /** @type {?} */ preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
+            /** @type {?} */
+            const preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
             // When going from the server to the client, we may end up in a situation where there's
             // already a container on the page, but we don't have a reference to it. Clear the
             // old container so we don't get duplicates. Doing this, instead of emptying the previous
@@ -224,8 +233,8 @@ class AriaDescriber {
      * @return {?}
      */
     _removeCdkDescribedByReferenceIds(element) {
-        // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-        const /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+        /** @type {?} */
+        const originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
             .filter(id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0);
         element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
     }
@@ -237,7 +246,8 @@ class AriaDescriber {
      * @return {?}
      */
     _addMessageReference(element, message) {
-        const /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        /** @type {?} */
+        const registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
         // Add the aria-describedby reference and set the
         // describedby_host attribute to mark the element.
         addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
@@ -252,7 +262,8 @@ class AriaDescriber {
      * @return {?}
      */
     _removeMessageReference(element, message) {
-        const /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        /** @type {?} */
+        const registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
         registeredMessage.referenceCount--;
         removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
         element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
@@ -264,9 +275,12 @@ class AriaDescriber {
      * @return {?}
      */
     _isElementDescribedByMessage(element, message) {
-        const /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-        const /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        const /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+        /** @type {?} */
+        const referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+        /** @type {?} */
+        const registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        const messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
     }
     /**
@@ -285,7 +299,7 @@ AriaDescriber.decorators = [
 ];
 /** @nocollapse */
 AriaDescriber.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 /** @nocollapse */ AriaDescriber.ngInjectableDef = defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(inject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 /**
@@ -297,10 +311,10 @@ AriaDescriber.ctorParameters = () => [
 function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-const /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
+  @type {?} */
+const ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
     provide: AriaDescriber,
     deps: [
@@ -352,8 +366,10 @@ class ListKeyManager {
         if (_items instanceof QueryList) {
             _items.changes.subscribe((newItems) => {
                 if (this._activeItem) {
-                    const /** @type {?} */ itemArray = newItems.toArray();
-                    const /** @type {?} */ newIndex = itemArray.indexOf(this._activeItem);
+                    /** @type {?} */
+                    const itemArray = newItems.toArray();
+                    /** @type {?} */
+                    const newIndex = itemArray.indexOf(this._activeItem);
                     if (newIndex > -1 && newIndex !== this._activeItemIndex) {
                         this._activeItemIndex = newIndex;
                     }
@@ -414,12 +430,15 @@ class ListKeyManager {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         this._typeaheadSubscription = this._letterKeyStream.pipe(tap(keyCode => this._pressedLetters.push(keyCode)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join(''))).subscribe(inputString => {
-            const /** @type {?} */ items = this._getItemsArray();
+            /** @type {?} */
+            const items = this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
-            for (let /** @type {?} */ i = 1; i < items.length + 1; i++) {
-                const /** @type {?} */ index = (this._activeItemIndex + i) % items.length;
-                const /** @type {?} */ item = items[index];
+            for (let i = 1; i < items.length + 1; i++) {
+                /** @type {?} */
+                const index = (this._activeItemIndex + i) % items.length;
+                /** @type {?} */
+                const item = items[index];
                 if (!this._skipPredicateFn(item) && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     this.setActiveItem(index);
                     break;
@@ -434,7 +453,8 @@ class ListKeyManager {
      * @return {?}
      */
     setActiveItem(item) {
-        const /** @type {?} */ previousIndex = this._activeItemIndex;
+        /** @type {?} */
+        const previousIndex = this._activeItemIndex;
         this.updateActiveItem(item);
         if (this._activeItemIndex !== previousIndex) {
             this.change.next(this._activeItemIndex);
@@ -446,7 +466,8 @@ class ListKeyManager {
      * @return {?}
      */
     onKeydown(event) {
-        const /** @type {?} */ keyCode = event.keyCode;
+        /** @type {?} */
+        const keyCode = event.keyCode;
         switch (keyCode) {
             case TAB:
                 this.tabOut.next();
@@ -555,8 +576,10 @@ class ListKeyManager {
      * @return {?}
      */
     updateActiveItem(item) {
-        const /** @type {?} */ itemArray = this._getItemsArray();
-        const /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        /** @type {?} */
+        const itemArray = this._getItemsArray();
+        /** @type {?} */
+        const index = typeof item === 'number' ? item : itemArray.indexOf(item);
         this._activeItemIndex = index;
         this._activeItem = itemArray[index];
     }
@@ -588,10 +611,13 @@ class ListKeyManager {
      * @return {?}
      */
     _setActiveInWrapMode(delta) {
-        const /** @type {?} */ items = this._getItemsArray();
-        for (let /** @type {?} */ i = 1; i <= items.length; i++) {
-            const /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
-            const /** @type {?} */ item = items[index];
+        /** @type {?} */
+        const items = this._getItemsArray();
+        for (let i = 1; i <= items.length; i++) {
+            /** @type {?} */
+            const index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
+            /** @type {?} */
+            const item = items[index];
             if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
                 return;
@@ -617,7 +643,8 @@ class ListKeyManager {
      * @return {?}
      */
     _setActiveItemByIndex(index, fallbackDelta) {
-        const /** @type {?} */ items = this._getItemsArray();
+        /** @type {?} */
+        const items = this._getItemsArray();
         if (!items[index]) {
             return;
         }
@@ -744,9 +771,11 @@ class InteractivityChecker {
         if (!this._platform.isBrowser) {
             return false;
         }
-        const /** @type {?} */ frameElement = getFrameElement(getWindow(element));
+        /** @type {?} */
+        const frameElement = getFrameElement(getWindow(element));
         if (frameElement) {
-            const /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
+            /** @type {?} */
+            const frameType = frameElement && frameElement.nodeName.toLowerCase();
             // Frame elements inherit their tabindex onto all child elements.
             if (getTabIndexValue(frameElement) === -1) {
                 return false;
@@ -760,8 +789,10 @@ class InteractivityChecker {
                 return false;
             }
         }
-        let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-        let /** @type {?} */ tabIndexValue = getTabIndexValue(element);
+        /** @type {?} */
+        let nodeName = element.nodeName.toLowerCase();
+        /** @type {?} */
+        let tabIndexValue = getTabIndexValue(element);
         if (element.hasAttribute('contenteditable')) {
             return tabIndexValue !== -1;
         }
@@ -817,7 +848,7 @@ InteractivityChecker.decorators = [
 ];
 /** @nocollapse */
 InteractivityChecker.ctorParameters = () => [
-    { type: Platform, },
+    { type: Platform }
 ];
 /** @nocollapse */ InteractivityChecker.ngInjectableDef = defineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(inject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
 /**
@@ -831,7 +862,7 @@ function getFrameElement(window) {
     try {
         return /** @type {?} */ (window.frameElement);
     }
-    catch (/** @type {?} */ e) {
+    catch (e) {
         return null;
     }
 }
@@ -852,7 +883,8 @@ function hasGeometry(element) {
  * @return {?}
  */
 function isNativeFormElement(element) {
-    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
+    /** @type {?} */
+    let nodeName = element.nodeName.toLowerCase();
     return nodeName === 'input' ||
         nodeName === 'select' ||
         nodeName === 'button' ||
@@ -899,7 +931,8 @@ function hasValidTabIndex(element) {
     if (!element.hasAttribute('tabindex') || element.tabIndex === undefined) {
         return false;
     }
-    let /** @type {?} */ tabIndex = element.getAttribute('tabindex');
+    /** @type {?} */
+    let tabIndex = element.getAttribute('tabindex');
     // IE11 parses tabindex="" as the value "-32768"
     if (tabIndex == '-32768') {
         return false;
@@ -916,8 +949,8 @@ function getTabIndexValue(element) {
     if (!hasValidTabIndex(element)) {
         return null;
     }
-    // See browser issue in Gecko https://bugzilla.mozilla.org/show_bug.cgi?id=1128054
-    const /** @type {?} */ tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
+    /** @type {?} */
+    const tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
     return isNaN(tabIndex) ? -1 : tabIndex;
 }
 /**
@@ -926,8 +959,10 @@ function getTabIndexValue(element) {
  * @return {?}
  */
 function isPotentiallyTabbableIOS(element) {
-    let /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-    let /** @type {?} */ inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
+    /** @type {?} */
+    let nodeName = element.nodeName.toLowerCase();
+    /** @type {?} */
+    let inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
     return inputType === 'text'
         || inputType === 'password'
         || nodeName === 'select'
@@ -1083,11 +1118,11 @@ class FocusTrap {
      * @return {?} The boundary element.
      */
     _getRegionBoundary(bound) {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        let /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
+        /** @type {?} */
+        let markers = /** @type {?} */ (this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
             `[cdkFocusRegion${bound}], ` +
             `[cdk-focus-${bound}]`));
-        for (let /** @type {?} */ i = 0; i < markers.length; i++) {
+        for (let i = 0; i < markers.length; i++) {
             // @breaking-change 7.0.0
             if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
                 console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}', ` +
@@ -1111,8 +1146,8 @@ class FocusTrap {
      * @return {?} Whether focus was moved successfuly.
      */
     focusInitialElement() {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        const /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
+        /** @type {?} */
+        const redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
             `[cdkFocusInitial]`));
         if (redirectToElement) {
             // @breaking-change 7.0.0
@@ -1131,7 +1166,8 @@ class FocusTrap {
      * @return {?} Whether focus was moved successfuly.
      */
     focusFirstTabbableElement() {
-        const /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
+        /** @type {?} */
+        const redirectToElement = this._getRegionBoundary('start');
         if (redirectToElement) {
             redirectToElement.focus();
         }
@@ -1142,7 +1178,8 @@ class FocusTrap {
      * @return {?} Whether focus was moved successfuly.
      */
     focusLastTabbableElement() {
-        const /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
+        /** @type {?} */
+        const redirectToElement = this._getRegionBoundary('end');
         if (redirectToElement) {
             redirectToElement.focus();
         }
@@ -1164,11 +1201,11 @@ class FocusTrap {
         if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
             return root;
         }
-        // Iterate in DOM order. Note that IE doesn't have `children` for SVG so we fall
-        // back to `childNodes` which includes text nodes, comments etc.
-        let /** @type {?} */ children = root.children || root.childNodes;
-        for (let /** @type {?} */ i = 0; i < children.length; i++) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+        /** @type {?} */
+        let children = root.children || root.childNodes;
+        for (let i = 0; i < children.length; i++) {
+            /** @type {?} */
+            let tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -1186,10 +1223,11 @@ class FocusTrap {
         if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
             return root;
         }
-        // Iterate in reverse DOM order.
-        let /** @type {?} */ children = root.children || root.childNodes;
-        for (let /** @type {?} */ i = children.length - 1; i >= 0; i--) {
-            let /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+        /** @type {?} */
+        let children = root.children || root.childNodes;
+        for (let i = children.length - 1; i >= 0; i--) {
+            /** @type {?} */
+            let tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getLastTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -1203,7 +1241,8 @@ class FocusTrap {
      * @return {?}
      */
     _createAnchor() {
-        const /** @type {?} */ anchor = this._document.createElement('div');
+        /** @type {?} */
+        const anchor = this._document.createElement('div');
         anchor.tabIndex = this._enabled ? 0 : -1;
         anchor.classList.add('cdk-visually-hidden');
         anchor.classList.add('cdk-focus-trap-anchor');
@@ -1253,9 +1292,9 @@ FocusTrapFactory.decorators = [
 ];
 /** @nocollapse */
 FocusTrapFactory.ctorParameters = () => [
-    { type: InteractivityChecker, },
-    { type: NgZone, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: InteractivityChecker },
+    { type: NgZone },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 /** @nocollapse */ FocusTrapFactory.ngInjectableDef = defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(inject(InteractivityChecker), inject(NgZone), inject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
 /**
@@ -1337,22 +1376,21 @@ CdkTrapFocus.decorators = [
 ];
 /** @nocollapse */
 CdkTrapFocus.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusTrapFactory, },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: ElementRef },
+    { type: FocusTrapFactory },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 CdkTrapFocus.propDecorators = {
-    "enabled": [{ type: Input, args: ['cdkTrapFocus',] },],
-    "autoCapture": [{ type: Input, args: ['cdkTrapFocusAutoCapture',] },],
+    enabled: [{ type: Input, args: ['cdkTrapFocus',] }],
+    autoCapture: [{ type: Input, args: ['cdkTrapFocusAutoCapture',] }]
 };
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-// The token for the live announcer element is defined in a separate file from LiveAnnouncer
-// as a workaround for https://github.com/angular/angular/issues/22559
-const /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
+/** @type {?} */
+const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
@@ -1414,13 +1452,16 @@ class LiveAnnouncer {
      * @return {?}
      */
     _createLiveElement() {
-        const /** @type {?} */ elementClass = 'cdk-live-announcer-element';
-        const /** @type {?} */ previousElements = this._document.getElementsByClassName(elementClass);
+        /** @type {?} */
+        const elementClass = 'cdk-live-announcer-element';
+        /** @type {?} */
+        const previousElements = this._document.getElementsByClassName(elementClass);
         // Remove any old containers. This can happen when coming in from a server-side-rendered page.
-        for (let /** @type {?} */ i = 0; i < previousElements.length; i++) {
+        for (let i = 0; i < previousElements.length; i++) {
             /** @type {?} */ ((previousElements[i].parentNode)).removeChild(previousElements[i]);
         }
-        const /** @type {?} */ liveEl = this._document.createElement('div');
+        /** @type {?} */
+        const liveEl = this._document.createElement('div');
         liveEl.classList.add(elementClass);
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
@@ -1434,8 +1475,8 @@ LiveAnnouncer.decorators = [
 ];
 /** @nocollapse */
 LiveAnnouncer.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 /** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
 /**
@@ -1478,8 +1519,8 @@ class CdkAriaLive {
                 return this._contentObserver
                     .observe(this._elementRef)
                     .subscribe(() => {
-                    // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
-                    const /** @type {?} */ element = this._elementRef.nativeElement;
+                    /** @type {?} */
+                    const element = this._elementRef.nativeElement;
                     this._liveAnnouncer.announce(element.textContent, this._politeness);
                 });
             });
@@ -1502,13 +1543,13 @@ CdkAriaLive.decorators = [
 ];
 /** @nocollapse */
 CdkAriaLive.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: LiveAnnouncer, },
-    { type: ContentObserver, },
-    { type: NgZone, },
+    { type: ElementRef },
+    { type: LiveAnnouncer },
+    { type: ContentObserver },
+    { type: NgZone }
 ];
 CdkAriaLive.propDecorators = {
-    "politeness": [{ type: Input, args: ['cdkAriaLive',] },],
+    politeness: [{ type: Input, args: ['cdkAriaLive',] }]
 };
 /**
  * \@docs-private \@deprecated \@breaking-change 7.0.0
@@ -1520,10 +1561,10 @@ CdkAriaLive.propDecorators = {
 function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document) {
     return parentDispatcher || new LiveAnnouncer(liveElement, _document);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-const /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
+  @type {?} */
+const LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
     provide: LiveAnnouncer,
     deps: [
@@ -1538,9 +1579,8 @@ const /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-// This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
-// that a value of around 650ms seems appropriate.
-const /** @type {?} */ TOUCH_BUFFER_MS = 650;
+/** @type {?} */
+const TOUCH_BUFFER_MS = 650;
 /**
  * Monitors mouse and keyboard events to determine the cause of focus events.
  */
@@ -1583,24 +1623,27 @@ class FocusMonitor {
         if (!this._platform.isBrowser) {
             return of(null);
         }
-        const /** @type {?} */ nativeElement = this._getNativeElement(element);
+        /** @type {?} */
+        const nativeElement = this._getNativeElement(element);
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
-            let /** @type {?} */ cachedInfo = this._elementInfo.get(nativeElement); /** @type {?} */
+            /** @type {?} */
+            let cachedInfo = this._elementInfo.get(nativeElement); /** @type {?} */
             ((cachedInfo)).checkChildren = checkChildren;
             return /** @type {?} */ ((cachedInfo)).subject.asObservable();
         }
-        // Create monitored element info.
-        let /** @type {?} */ info = {
+        /** @type {?} */
+        let info = {
             unlisten: () => { },
             checkChildren: checkChildren,
             subject: new Subject()
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
-        // Start listening. We need to listen in capture phase since focus events don't bubble.
-        let /** @type {?} */ focusListener = (event) => this._onFocus(event, nativeElement);
-        let /** @type {?} */ blurListener = (event) => this._onBlur(event, nativeElement);
+        /** @type {?} */
+        let focusListener = (event) => this._onFocus(event, nativeElement);
+        /** @type {?} */
+        let blurListener = (event) => this._onBlur(event, nativeElement);
         this._ngZone.runOutsideAngular(() => {
             nativeElement.addEventListener('focus', focusListener, true);
             nativeElement.addEventListener('blur', blurListener, true);
@@ -1617,8 +1660,10 @@ class FocusMonitor {
      * @return {?}
      */
     stopMonitoring(element) {
-        const /** @type {?} */ nativeElement = this._getNativeElement(element);
-        const /** @type {?} */ elementInfo = this._elementInfo.get(nativeElement);
+        /** @type {?} */
+        const nativeElement = this._getNativeElement(element);
+        /** @type {?} */
+        const elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
             elementInfo.unlisten();
             elementInfo.subject.complete();
@@ -1657,31 +1702,27 @@ class FocusMonitor {
         if (!this._platform.isBrowser) {
             return;
         }
-        // On keydown record the origin and clear any touch event that may be in progress.
-        let /** @type {?} */ documentKeydownListener = () => {
+        /** @type {?} */
+        let documentKeydownListener = () => {
             this._lastTouchTarget = null;
             this._setOriginForCurrentEventQueue('keyboard');
         };
-        // On mousedown record the origin only if there is not touch target, since a mousedown can
-        // happen as a result of a touch event.
-        let /** @type {?} */ documentMousedownListener = () => {
+        /** @type {?} */
+        let documentMousedownListener = () => {
             if (!this._lastTouchTarget) {
                 this._setOriginForCurrentEventQueue('mouse');
             }
         };
-        // When the touchstart event fires the focus event is not yet in the event queue. This means
-        // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
-        // see if a focus happens.
-        let /** @type {?} */ documentTouchstartListener = (event) => {
+        /** @type {?} */
+        let documentTouchstartListener = (event) => {
             if (this._touchTimeoutId != null) {
                 clearTimeout(this._touchTimeoutId);
             }
             this._lastTouchTarget = event.target;
             this._touchTimeoutId = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
         };
-        // Make a note of when the window regains focus, so we can restore the origin info for the
-        // focused element.
-        let /** @type {?} */ windowFocusListener = () => {
+        /** @type {?} */
+        let windowFocusListener = () => {
             this._windowFocused = true;
             this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false);
         };
@@ -1725,7 +1766,8 @@ class FocusMonitor {
      * @return {?}
      */
     _setClasses(element, origin) {
-        const /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        const elementInfo = this._elementInfo.get(element);
         if (elementInfo) {
             this._toggleClass(element, 'cdk-focused', !!origin);
             this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
@@ -1754,24 +1796,8 @@ class FocusMonitor {
      * @return {?} Whether the event was caused by a touch.
      */
     _wasCausedByTouch(event) {
-        // Note(mmalerba): This implementation is not quite perfect, there is a small edge case.
-        // Consider the following dom structure:
-        //
-        // <div #parent tabindex="0" cdkFocusClasses>
-        //   <div #child (click)="#parent.focus()"></div>
-        // </div>
-        //
-        // If the user touches the #child element and the #parent is programmatically focused as a
-        // result, this code will still consider it to have been caused by the touch event and will
-        // apply the cdk-touch-focused class rather than the cdk-program-focused class. This is a
-        // relatively small edge-case that can be worked around by using
-        // focusVia(parentEl, 'program') to focus the parent element.
-        //
-        // If we decide that we absolutely must handle this case correctly, we can do so by listening
-        // for the first focus event after the touchstart, and then the first blur event after that
-        // focus event. When that blur event fires we know that whatever follows is not a result of the
-        // touchstart.
-        let /** @type {?} */ focusTarget = event.target;
+        /** @type {?} */
+        let focusTarget = event.target;
         return this._lastTouchTarget instanceof Node && focusTarget instanceof Node &&
             (focusTarget === this._lastTouchTarget || focusTarget.contains(this._lastTouchTarget));
     }
@@ -1782,23 +1808,13 @@ class FocusMonitor {
      * @return {?}
      */
     _onFocus(event, element) {
-        // NOTE(mmalerba): We currently set the classes based on the focus origin of the most recent
-        // focus event affecting the monitored element. If we want to use the origin of the first event
-        // instead we should check for the cdk-focused class here and return if the element already has
-        // it. (This only matters for elements that have includesChildren = true).
-        // If we are not counting child-element-focus as focused, make sure that the event target is the
-        // monitored element itself.
-        const /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        const elementInfo = this._elementInfo.get(element);
         if (!elementInfo || (!elementInfo.checkChildren && element !== event.target)) {
             return;
         }
-        // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
-        // 1) The window has just regained focus, in which case we want to restore the focused state of
-        //    the element from before the window blurred.
-        // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
-        // 3) The element was programmatically focused, in which case we should mark the origin as
-        //    'program'.
-        let /** @type {?} */ origin = this._origin;
+        /** @type {?} */
+        let origin = this._origin;
         if (!origin) {
             if (this._windowFocused && this._lastFocusOrigin) {
                 origin = this._lastFocusOrigin;
@@ -1821,9 +1837,8 @@ class FocusMonitor {
      * @return {?}
      */
     _onBlur(event, element) {
-        // If we are counting child-element-focus as focused, make sure that we aren't just blurring in
-        // order to focus another child of the monitored element.
-        const /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        const elementInfo = this._elementInfo.get(element);
         if (!elementInfo || (elementInfo.checkChildren && event.relatedTarget instanceof Node &&
             element.contains(event.relatedTarget))) {
             return;
@@ -1871,8 +1886,8 @@ FocusMonitor.decorators = [
 ];
 /** @nocollapse */
 FocusMonitor.ctorParameters = () => [
-    { type: NgZone, },
-    { type: Platform, },
+    { type: NgZone },
+    { type: Platform }
 ];
 /** @nocollapse */ FocusMonitor.ngInjectableDef = defineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(inject(NgZone), inject(Platform)); }, token: FocusMonitor, providedIn: "root" });
 /**
@@ -1911,11 +1926,11 @@ CdkMonitorFocus.decorators = [
 ];
 /** @nocollapse */
 CdkMonitorFocus.ctorParameters = () => [
-    { type: ElementRef, },
-    { type: FocusMonitor, },
+    { type: ElementRef },
+    { type: FocusMonitor }
 ];
 CdkMonitorFocus.propDecorators = {
-    "cdkFocusChange": [{ type: Output },],
+    cdkFocusChange: [{ type: Output }]
 };
 /**
  * \@docs-private \@deprecated \@breaking-change 7.0.0
@@ -1927,10 +1942,10 @@ CdkMonitorFocus.propDecorators = {
 function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
     return parentDispatcher || new FocusMonitor(ngZone, platform);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-const /** @type {?} */ FOCUS_MONITOR_PROVIDER = {
+  @type {?} */
+const FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
     provide: FocusMonitor,
     deps: [[new Optional(), new SkipSelf(), FocusMonitor], NgZone, Platform],
@@ -1979,5 +1994,5 @@ A11yModule.decorators = [
  * @suppress {checkTypes} checked by tsc
  */
 
-export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER_FACTORY, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER_FACTORY, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER_FACTORY, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { ARIA_DESCRIBER_PROVIDER_FACTORY, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_PROVIDER_FACTORY, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, FOCUS_MONITOR_PROVIDER_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.js.map

@@ -21,7 +21,7 @@ export declare enum RtlScrollAxisType {
      * scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
      * all the way right.
      */
-    INVERTED = 2,
+    INVERTED = 2
 }
 /** Check whether the browser supports scroll behaviors. */
 export declare function supportsScrollBehavior(): boolean;

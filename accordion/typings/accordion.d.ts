@@ -1,3 +1,10 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 import { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 /**
@@ -19,5 +26,5 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     closeAll(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
-    private _openCloseAll(expanded);
+    private _openCloseAll;
 }

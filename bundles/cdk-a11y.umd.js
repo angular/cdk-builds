@@ -45,10 +45,10 @@ function __extends(d, b) {
  * @suppress {checkTypes} checked by tsc
  */
 
-/**
+/** *
  * IDs are deliminated by an empty space, as per the spec.
- */
-var /** @type {?} */ ID_DELIMINATOR = ' ';
+  @type {?} */
+var ID_DELIMINATOR = ' ';
 /**
  * Adds the given ID to the specified ARIA attribute on an element.
  * Used for attributes such as aria-labelledby, aria-owns, etc.
@@ -58,7 +58,8 @@ var /** @type {?} */ ID_DELIMINATOR = ' ';
  * @return {?}
  */
 function addAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
+    /** @type {?} */
+    var ids = getAriaReferenceIds(el, attr);
     if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
         return;
     }
@@ -74,8 +75,10 @@ function addAriaReferencedId(el, attr, id) {
  * @return {?}
  */
 function removeAriaReferencedId(el, attr, id) {
-    var /** @type {?} */ ids = getAriaReferenceIds(el, attr);
-    var /** @type {?} */ filteredIds = ids.filter(function (val) { return val != id.trim(); });
+    /** @type {?} */
+    var ids = getAriaReferenceIds(el, attr);
+    /** @type {?} */
+    var filteredIds = ids.filter(function (val) { return val != id.trim(); });
     el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
 }
 /**
@@ -94,30 +97,30 @@ function getAriaReferenceIds(el, attr) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-/**
+/** *
  * ID used for the body container where all messages are appended.
- */
-var /** @type {?} */ MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
-/**
+  @type {?} */
+var MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
+/** *
  * ID prefix used for each created message element.
- */
-var /** @type {?} */ CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
-/**
+  @type {?} */
+var CDK_DESCRIBEDBY_ID_PREFIX = 'cdk-describedby-message';
+/** *
  * Attribute given to each host element that is described by a message element.
- */
-var /** @type {?} */ CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
-/**
+  @type {?} */
+var CDK_DESCRIBEDBY_HOST_ATTRIBUTE = 'cdk-describedby-host';
+/** *
  * Global incremental identifier for each registered message element.
- */
-var /** @type {?} */ nextId = 0;
-/**
+  @type {?} */
+var nextId = 0;
+/** *
  * Global map of all registered message elements that have been placed into the document.
- */
-var /** @type {?} */ messageRegistry = new Map();
-/**
+  @type {?} */
+var messageRegistry = new Map();
+/** *
  * Container for all registered messages.
- */
-var /** @type {?} */ messagesContainer = null;
+  @type {?} */
+var messagesContainer = null;
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
@@ -180,7 +183,8 @@ var AriaDescriber = /** @class */ (function () {
         if (this._isElementDescribedByMessage(hostElement, message)) {
             this._removeMessageReference(hostElement, message);
         }
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        var registeredMessage = messageRegistry.get(message);
         if (registeredMessage && registeredMessage.referenceCount === 0) {
             this._deleteMessageElement(message);
         }
@@ -198,8 +202,9 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ describedElements = this._document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
-        for (var /** @type {?} */ i = 0; i < describedElements.length; i++) {
+        /** @type {?} */
+        var describedElements = this._document.querySelectorAll("[" + CDK_DESCRIBEDBY_HOST_ATTRIBUTE + "]");
+        for (var i = 0; i < describedElements.length; i++) {
             this._removeCdkDescribedByReferenceIds(describedElements[i]);
             describedElements[i].removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
         }
@@ -221,7 +226,8 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (message) {
-        var /** @type {?} */ messageElement = this._document.createElement('div');
+        /** @type {?} */
+        var messageElement = this._document.createElement('div');
         messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
         messageElement.appendChild(/** @type {?} */ ((this._document.createTextNode(message))));
         this._createMessagesContainer(); /** @type {?} */
@@ -239,8 +245,10 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (message) {
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        var /** @type {?} */ messageElement = registeredMessage && registeredMessage.messageElement;
+        /** @type {?} */
+        var registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        var messageElement = registeredMessage && registeredMessage.messageElement;
         if (messagesContainer && messageElement) {
             messagesContainer.removeChild(messageElement);
         }
@@ -256,7 +264,8 @@ var AriaDescriber = /** @class */ (function () {
      */
     function () {
         if (!messagesContainer) {
-            var /** @type {?} */ preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
+            /** @type {?} */
+            var preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
             // When going from the server to the client, we may end up in a situation where there's
             // already a container on the page, but we don't have a reference to it. Clear the
             // old container so we don't get duplicates. Doing this, instead of emptying the previous
@@ -296,8 +305,8 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (element) {
-        // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-        var /** @type {?} */ originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
+        /** @type {?} */
+        var originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
             .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
         element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
     };
@@ -316,7 +325,8 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (element, message) {
-        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        /** @type {?} */
+        var registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
         // Add the aria-describedby reference and set the
         // describedby_host attribute to mark the element.
         addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
@@ -338,7 +348,8 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (element, message) {
-        var /** @type {?} */ registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
+        /** @type {?} */
+        var registeredMessage = /** @type {?} */ ((messageRegistry.get(message)));
         registeredMessage.referenceCount--;
         removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
         element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
@@ -356,9 +367,12 @@ var AriaDescriber = /** @class */ (function () {
      * @return {?}
      */
     function (element, message) {
-        var /** @type {?} */ referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-        var /** @type {?} */ registeredMessage = messageRegistry.get(message);
-        var /** @type {?} */ messageId = registeredMessage && registeredMessage.messageElement.id;
+        /** @type {?} */
+        var referenceIds = getAriaReferenceIds(element, 'aria-describedby');
+        /** @type {?} */
+        var registeredMessage = messageRegistry.get(message);
+        /** @type {?} */
+        var messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
     };
     /**
@@ -382,7 +396,7 @@ var AriaDescriber = /** @class */ (function () {
     ];
     /** @nocollapse */
     AriaDescriber.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     /** @nocollapse */ AriaDescriber.ngInjectableDef = core.defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.inject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
@@ -396,10 +410,10 @@ var AriaDescriber = /** @class */ (function () {
 function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-var /** @type {?} */ ARIA_DESCRIBER_PROVIDER = {
+  @type {?} */
+var ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
     provide: AriaDescriber,
     deps: [
@@ -456,8 +470,10 @@ ListKeyManager = /** @class */ (function () {
         if (_items instanceof core.QueryList) {
             _items.changes.subscribe(function (newItems) {
                 if (_this._activeItem) {
-                    var /** @type {?} */ itemArray = newItems.toArray();
-                    var /** @type {?} */ newIndex = itemArray.indexOf(_this._activeItem);
+                    /** @type {?} */
+                    var itemArray = newItems.toArray();
+                    /** @type {?} */
+                    var newIndex = itemArray.indexOf(_this._activeItem);
                     if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
                         _this._activeItemIndex = newIndex;
                     }
@@ -573,12 +589,15 @@ ListKeyManager = /** @class */ (function () {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         this._typeaheadSubscription = this._letterKeyStream.pipe(operators.tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), operators.debounceTime(debounceInterval), operators.filter(function () { return _this._pressedLetters.length > 0; }), operators.map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
-            var /** @type {?} */ items = _this._getItemsArray();
+            /** @type {?} */
+            var items = _this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
-            for (var /** @type {?} */ i = 1; i < items.length + 1; i++) {
-                var /** @type {?} */ index = (_this._activeItemIndex + i) % items.length;
-                var /** @type {?} */ item = items[index];
+            for (var i = 1; i < items.length + 1; i++) {
+                /** @type {?} */
+                var index = (_this._activeItemIndex + i) % items.length;
+                /** @type {?} */
+                var item = items[index];
                 if (!_this._skipPredicateFn(item) && /** @type {?} */ ((item.getLabel))().toUpperCase().trim().indexOf(inputString) === 0) {
                     _this.setActiveItem(index);
                     break;
@@ -597,7 +616,8 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (item) {
-        var /** @type {?} */ previousIndex = this._activeItemIndex;
+        /** @type {?} */
+        var previousIndex = this._activeItemIndex;
         this.updateActiveItem(item);
         if (this._activeItemIndex !== previousIndex) {
             this.change.next(this._activeItemIndex);
@@ -618,7 +638,8 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
-        var /** @type {?} */ keyCode = event.keyCode;
+        /** @type {?} */
+        var keyCode = event.keyCode;
         switch (keyCode) {
             case keycodes.TAB:
                 this.tabOut.next();
@@ -761,8 +782,10 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (item) {
-        var /** @type {?} */ itemArray = this._getItemsArray();
-        var /** @type {?} */ index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        /** @type {?} */
+        var itemArray = this._getItemsArray();
+        /** @type {?} */
+        var index = typeof item === 'number' ? item : itemArray.indexOf(item);
         this._activeItemIndex = index;
         this._activeItem = itemArray[index];
     };
@@ -821,10 +844,13 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (delta) {
-        var /** @type {?} */ items = this._getItemsArray();
-        for (var /** @type {?} */ i = 1; i <= items.length; i++) {
-            var /** @type {?} */ index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
-            var /** @type {?} */ item = items[index];
+        /** @type {?} */
+        var items = this._getItemsArray();
+        for (var i = 1; i <= items.length; i++) {
+            /** @type {?} */
+            var index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
+            /** @type {?} */
+            var item = items[index];
             if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
                 return;
@@ -865,7 +891,8 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (index, fallbackDelta) {
-        var /** @type {?} */ items = this._getItemsArray();
+        /** @type {?} */
+        var items = this._getItemsArray();
         if (!items[index]) {
             return;
         }
@@ -1068,9 +1095,11 @@ var InteractivityChecker = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return false;
         }
-        var /** @type {?} */ frameElement = getFrameElement(getWindow(element));
+        /** @type {?} */
+        var frameElement = getFrameElement(getWindow(element));
         if (frameElement) {
-            var /** @type {?} */ frameType = frameElement && frameElement.nodeName.toLowerCase();
+            /** @type {?} */
+            var frameType = frameElement && frameElement.nodeName.toLowerCase();
             // Frame elements inherit their tabindex onto all child elements.
             if (getTabIndexValue(frameElement) === -1) {
                 return false;
@@ -1084,8 +1113,10 @@ var InteractivityChecker = /** @class */ (function () {
                 return false;
             }
         }
-        var /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-        var /** @type {?} */ tabIndexValue = getTabIndexValue(element);
+        /** @type {?} */
+        var nodeName = element.nodeName.toLowerCase();
+        /** @type {?} */
+        var tabIndexValue = getTabIndexValue(element);
         if (element.hasAttribute('contenteditable')) {
             return tabIndexValue !== -1;
         }
@@ -1152,7 +1183,7 @@ var InteractivityChecker = /** @class */ (function () {
     ];
     /** @nocollapse */
     InteractivityChecker.ctorParameters = function () { return [
-        { type: platform.Platform, },
+        { type: platform.Platform }
     ]; };
     /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.defineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.inject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
@@ -1168,7 +1199,7 @@ function getFrameElement(window) {
     try {
         return /** @type {?} */ (window.frameElement);
     }
-    catch (/** @type {?} */ e) {
+    catch (e) {
         return null;
     }
 }
@@ -1189,7 +1220,8 @@ function hasGeometry(element) {
  * @return {?}
  */
 function isNativeFormElement(element) {
-    var /** @type {?} */ nodeName = element.nodeName.toLowerCase();
+    /** @type {?} */
+    var nodeName = element.nodeName.toLowerCase();
     return nodeName === 'input' ||
         nodeName === 'select' ||
         nodeName === 'button' ||
@@ -1236,7 +1268,8 @@ function hasValidTabIndex(element) {
     if (!element.hasAttribute('tabindex') || element.tabIndex === undefined) {
         return false;
     }
-    var /** @type {?} */ tabIndex = element.getAttribute('tabindex');
+    /** @type {?} */
+    var tabIndex = element.getAttribute('tabindex');
     // IE11 parses tabindex="" as the value "-32768"
     if (tabIndex == '-32768') {
         return false;
@@ -1253,8 +1286,8 @@ function getTabIndexValue(element) {
     if (!hasValidTabIndex(element)) {
         return null;
     }
-    // See browser issue in Gecko https://bugzilla.mozilla.org/show_bug.cgi?id=1128054
-    var /** @type {?} */ tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
+    /** @type {?} */
+    var tabIndex = parseInt(element.getAttribute('tabindex') || '', 10);
     return isNaN(tabIndex) ? -1 : tabIndex;
 }
 /**
@@ -1263,8 +1296,10 @@ function getTabIndexValue(element) {
  * @return {?}
  */
 function isPotentiallyTabbableIOS(element) {
-    var /** @type {?} */ nodeName = element.nodeName.toLowerCase();
-    var /** @type {?} */ inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
+    /** @type {?} */
+    var nodeName = element.nodeName.toLowerCase();
+    /** @type {?} */
+    var inputType = nodeName === 'input' && (/** @type {?} */ (element)).type;
     return inputType === 'text'
         || inputType === 'password'
         || nodeName === 'select'
@@ -1488,11 +1523,11 @@ FocusTrap = /** @class */ (function () {
      * @return {?} The boundary element.
      */
     function (bound) {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        var /** @type {?} */ markers = /** @type {?} */ (this._element.querySelectorAll("[cdk-focus-region-" + bound + "], " +
+        /** @type {?} */
+        var markers = /** @type {?} */ (this._element.querySelectorAll("[cdk-focus-region-" + bound + "], " +
             ("[cdkFocusRegion" + bound + "], ") +
             ("[cdk-focus-" + bound + "]")));
-        for (var /** @type {?} */ i = 0; i < markers.length; i++) {
+        for (var i = 0; i < markers.length; i++) {
             // @breaking-change 7.0.0
             if (markers[i].hasAttribute("cdk-focus-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-" + bound + "', " +
@@ -1524,8 +1559,8 @@ FocusTrap = /** @class */ (function () {
      * @return {?} Whether focus was moved successfuly.
      */
     function () {
-        // Contains the deprecated version of selector, for temporary backwards comparability.
-        var /** @type {?} */ redirectToElement = /** @type {?} */ (this._element.querySelector("[cdk-focus-initial], " +
+        /** @type {?} */
+        var redirectToElement = /** @type {?} */ (this._element.querySelector("[cdk-focus-initial], " +
             "[cdkFocusInitial]"));
         if (redirectToElement) {
             // @breaking-change 7.0.0
@@ -1552,7 +1587,8 @@ FocusTrap = /** @class */ (function () {
      * @return {?} Whether focus was moved successfuly.
      */
     function () {
-        var /** @type {?} */ redirectToElement = this._getRegionBoundary('start');
+        /** @type {?} */
+        var redirectToElement = this._getRegionBoundary('start');
         if (redirectToElement) {
             redirectToElement.focus();
         }
@@ -1571,7 +1607,8 @@ FocusTrap = /** @class */ (function () {
      * @return {?} Whether focus was moved successfuly.
      */
     function () {
-        var /** @type {?} */ redirectToElement = this._getRegionBoundary('end');
+        /** @type {?} */
+        var redirectToElement = this._getRegionBoundary('end');
         if (redirectToElement) {
             redirectToElement.focus();
         }
@@ -1605,11 +1642,11 @@ FocusTrap = /** @class */ (function () {
         if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
             return root;
         }
-        // Iterate in DOM order. Note that IE doesn't have `children` for SVG so we fall
-        // back to `childNodes` which includes text nodes, comments etc.
-        var /** @type {?} */ children = root.children || root.childNodes;
-        for (var /** @type {?} */ i = 0; i < children.length; i++) {
-            var /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+        /** @type {?} */
+        var children = root.children || root.childNodes;
+        for (var i = 0; i < children.length; i++) {
+            /** @type {?} */
+            var tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getFirstTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -1632,10 +1669,11 @@ FocusTrap = /** @class */ (function () {
         if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
             return root;
         }
-        // Iterate in reverse DOM order.
-        var /** @type {?} */ children = root.children || root.childNodes;
-        for (var /** @type {?} */ i = children.length - 1; i >= 0; i--) {
-            var /** @type {?} */ tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+        /** @type {?} */
+        var children = root.children || root.childNodes;
+        for (var i = children.length - 1; i >= 0; i--) {
+            /** @type {?} */
+            var tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getLastTabbableElement(/** @type {?} */ (children[i])) :
                 null;
             if (tabbableChild) {
@@ -1653,7 +1691,8 @@ FocusTrap = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ anchor = this._document.createElement('div');
+        /** @type {?} */
+        var anchor = this._document.createElement('div');
         anchor.tabIndex = this._enabled ? 0 : -1;
         anchor.classList.add('cdk-visually-hidden');
         anchor.classList.add('cdk-focus-trap-anchor');
@@ -1718,9 +1757,9 @@ var FocusTrapFactory = /** @class */ (function () {
     ];
     /** @nocollapse */
     FocusTrapFactory.ctorParameters = function () { return [
-        { type: InteractivityChecker, },
-        { type: core.NgZone, },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: InteractivityChecker },
+        { type: core.NgZone },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.inject(InteractivityChecker), core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
@@ -1740,6 +1779,7 @@ var CdkTrapFocus = /** @class */ (function () {
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
     Object.defineProperty(CdkTrapFocus.prototype, "enabled", {
+        /** Whether the focus trap is active. */
         get: /**
          * Whether the focus trap is active.
          * @return {?}
@@ -1754,6 +1794,10 @@ var CdkTrapFocus = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkTrapFocus.prototype, "autoCapture", {
+        /**
+         * Whether the directive should automatially move focus into the trapped region upon
+         * initialization and return focus to the previous activeElement upon destruction.
+         */
         get: /**
          * Whether the directive should automatially move focus into the trapped region upon
          * initialization and return focus to the previous activeElement upon destruction.
@@ -1815,13 +1859,13 @@ var CdkTrapFocus = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkTrapFocus.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: FocusTrapFactory, },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: core.ElementRef },
+        { type: FocusTrapFactory },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     CdkTrapFocus.propDecorators = {
-        "enabled": [{ type: core.Input, args: ['cdkTrapFocus',] },],
-        "autoCapture": [{ type: core.Input, args: ['cdkTrapFocusAutoCapture',] },],
+        enabled: [{ type: core.Input, args: ['cdkTrapFocus',] }],
+        autoCapture: [{ type: core.Input, args: ['cdkTrapFocusAutoCapture',] }]
     };
     return CdkTrapFocus;
 }());
@@ -1830,9 +1874,8 @@ var CdkTrapFocus = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-// The token for the live announcer element is defined in a separate file from LiveAnnouncer
-// as a workaround for https://github.com/angular/angular/issues/22559
-var /** @type {?} */ LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement', {
+/** @type {?} */
+var LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
 });
@@ -1910,13 +1953,16 @@ var LiveAnnouncer = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var /** @type {?} */ elementClass = 'cdk-live-announcer-element';
-        var /** @type {?} */ previousElements = this._document.getElementsByClassName(elementClass);
+        /** @type {?} */
+        var elementClass = 'cdk-live-announcer-element';
+        /** @type {?} */
+        var previousElements = this._document.getElementsByClassName(elementClass);
         // Remove any old containers. This can happen when coming in from a server-side-rendered page.
-        for (var /** @type {?} */ i = 0; i < previousElements.length; i++) {
+        for (var i = 0; i < previousElements.length; i++) {
             /** @type {?} */ ((previousElements[i].parentNode)).removeChild(previousElements[i]);
         }
-        var /** @type {?} */ liveEl = this._document.createElement('div');
+        /** @type {?} */
+        var liveEl = this._document.createElement('div');
         liveEl.classList.add(elementClass);
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
@@ -1929,8 +1975,8 @@ var LiveAnnouncer = /** @class */ (function () {
     ];
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] },] },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
     /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
@@ -1948,6 +1994,7 @@ var CdkAriaLive = /** @class */ (function () {
         this._politeness = 'off';
     }
     Object.defineProperty(CdkAriaLive.prototype, "politeness", {
+        /** The aria-live politeness level to use when announcing messages. */
         get: /**
          * The aria-live politeness level to use when announcing messages.
          * @return {?}
@@ -1971,8 +2018,8 @@ var CdkAriaLive = /** @class */ (function () {
                     return _this._contentObserver
                         .observe(_this._elementRef)
                         .subscribe(function () {
-                        // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
-                        var /** @type {?} */ element = _this._elementRef.nativeElement;
+                        /** @type {?} */
+                        var element = _this._elementRef.nativeElement;
                         _this._liveAnnouncer.announce(element.textContent, _this._politeness);
                     });
                 });
@@ -2000,13 +2047,13 @@ var CdkAriaLive = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkAriaLive.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: LiveAnnouncer, },
-        { type: observers.ContentObserver, },
-        { type: core.NgZone, },
+        { type: core.ElementRef },
+        { type: LiveAnnouncer },
+        { type: observers.ContentObserver },
+        { type: core.NgZone }
     ]; };
     CdkAriaLive.propDecorators = {
-        "politeness": [{ type: core.Input, args: ['cdkAriaLive',] },],
+        politeness: [{ type: core.Input, args: ['cdkAriaLive',] }]
     };
     return CdkAriaLive;
 }());
@@ -2020,10 +2067,10 @@ var CdkAriaLive = /** @class */ (function () {
 function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document) {
     return parentDispatcher || new LiveAnnouncer(liveElement, _document);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-var /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
+  @type {?} */
+var LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
     provide: LiveAnnouncer,
     deps: [
@@ -2038,9 +2085,8 @@ var /** @type {?} */ LIVE_ANNOUNCER_PROVIDER = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
-// This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
-// that a value of around 650ms seems appropriate.
-var /** @type {?} */ TOUCH_BUFFER_MS = 650;
+/** @type {?} */
+var TOUCH_BUFFER_MS = 650;
 /**
  * Monitors mouse and keyboard events to determine the cause of focus events.
  */
@@ -2086,24 +2132,27 @@ var FocusMonitor = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return rxjs.of(null);
         }
-        var /** @type {?} */ nativeElement = this._getNativeElement(element);
+        /** @type {?} */
+        var nativeElement = this._getNativeElement(element);
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
-            var /** @type {?} */ cachedInfo = this._elementInfo.get(nativeElement); /** @type {?} */
+            /** @type {?} */
+            var cachedInfo = this._elementInfo.get(nativeElement); /** @type {?} */
             ((cachedInfo)).checkChildren = checkChildren;
             return /** @type {?} */ ((cachedInfo)).subject.asObservable();
         }
-        // Create monitored element info.
-        var /** @type {?} */ info = {
+        /** @type {?} */
+        var info = {
             unlisten: function () { },
             checkChildren: checkChildren,
             subject: new rxjs.Subject()
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
-        // Start listening. We need to listen in capture phase since focus events don't bubble.
-        var /** @type {?} */ focusListener = function (event) { return _this._onFocus(event, nativeElement); };
-        var /** @type {?} */ blurListener = function (event) { return _this._onBlur(event, nativeElement); };
+        /** @type {?} */
+        var focusListener = function (event) { return _this._onFocus(event, nativeElement); };
+        /** @type {?} */
+        var blurListener = function (event) { return _this._onBlur(event, nativeElement); };
         this._ngZone.runOutsideAngular(function () {
             nativeElement.addEventListener('focus', focusListener, true);
             nativeElement.addEventListener('blur', blurListener, true);
@@ -2124,8 +2173,10 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (element) {
-        var /** @type {?} */ nativeElement = this._getNativeElement(element);
-        var /** @type {?} */ elementInfo = this._elementInfo.get(nativeElement);
+        /** @type {?} */
+        var nativeElement = this._getNativeElement(element);
+        /** @type {?} */
+        var elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
             elementInfo.unlisten();
             elementInfo.subject.complete();
@@ -2186,31 +2237,27 @@ var FocusMonitor = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return;
         }
-        // On keydown record the origin and clear any touch event that may be in progress.
-        var /** @type {?} */ documentKeydownListener = function () {
+        /** @type {?} */
+        var documentKeydownListener = function () {
             _this._lastTouchTarget = null;
             _this._setOriginForCurrentEventQueue('keyboard');
         };
-        // On mousedown record the origin only if there is not touch target, since a mousedown can
-        // happen as a result of a touch event.
-        var /** @type {?} */ documentMousedownListener = function () {
+        /** @type {?} */
+        var documentMousedownListener = function () {
             if (!_this._lastTouchTarget) {
                 _this._setOriginForCurrentEventQueue('mouse');
             }
         };
-        // When the touchstart event fires the focus event is not yet in the event queue. This means
-        // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
-        // see if a focus happens.
-        var /** @type {?} */ documentTouchstartListener = function (event) {
+        /** @type {?} */
+        var documentTouchstartListener = function (event) {
             if (_this._touchTimeoutId != null) {
                 clearTimeout(_this._touchTimeoutId);
             }
             _this._lastTouchTarget = event.target;
             _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
         };
-        // Make a note of when the window regains focus, so we can restore the origin info for the
-        // focused element.
-        var /** @type {?} */ windowFocusListener = function () {
+        /** @type {?} */
+        var windowFocusListener = function () {
             _this._windowFocused = true;
             _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
         };
@@ -2266,7 +2313,8 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (element, origin) {
-        var /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        var elementInfo = this._elementInfo.get(element);
         if (elementInfo) {
             this._toggleClass(element, 'cdk-focused', !!origin);
             this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
@@ -2309,24 +2357,8 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?} Whether the event was caused by a touch.
      */
     function (event) {
-        // Note(mmalerba): This implementation is not quite perfect, there is a small edge case.
-        // Consider the following dom structure:
-        //
-        // <div #parent tabindex="0" cdkFocusClasses>
-        //   <div #child (click)="#parent.focus()"></div>
-        // </div>
-        //
-        // If the user touches the #child element and the #parent is programmatically focused as a
-        // result, this code will still consider it to have been caused by the touch event and will
-        // apply the cdk-touch-focused class rather than the cdk-program-focused class. This is a
-        // relatively small edge-case that can be worked around by using
-        // focusVia(parentEl, 'program') to focus the parent element.
-        //
-        // If we decide that we absolutely must handle this case correctly, we can do so by listening
-        // for the first focus event after the touchstart, and then the first blur event after that
-        // focus event. When that blur event fires we know that whatever follows is not a result of the
-        // touchstart.
-        var /** @type {?} */ focusTarget = event.target;
+        /** @type {?} */
+        var focusTarget = event.target;
         return this._lastTouchTarget instanceof Node && focusTarget instanceof Node &&
             (focusTarget === this._lastTouchTarget || focusTarget.contains(this._lastTouchTarget));
     };
@@ -2343,23 +2375,13 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (event, element) {
-        // NOTE(mmalerba): We currently set the classes based on the focus origin of the most recent
-        // focus event affecting the monitored element. If we want to use the origin of the first event
-        // instead we should check for the cdk-focused class here and return if the element already has
-        // it. (This only matters for elements that have includesChildren = true).
-        // If we are not counting child-element-focus as focused, make sure that the event target is the
-        // monitored element itself.
-        var /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        var elementInfo = this._elementInfo.get(element);
         if (!elementInfo || (!elementInfo.checkChildren && element !== event.target)) {
             return;
         }
-        // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
-        // 1) The window has just regained focus, in which case we want to restore the focused state of
-        //    the element from before the window blurred.
-        // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
-        // 3) The element was programmatically focused, in which case we should mark the origin as
-        //    'program'.
-        var /** @type {?} */ origin = this._origin;
+        /** @type {?} */
+        var origin = this._origin;
         if (!origin) {
             if (this._windowFocused && this._lastFocusOrigin) {
                 origin = this._lastFocusOrigin;
@@ -2393,9 +2415,8 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (event, element) {
-        // If we are counting child-element-focus as focused, make sure that we aren't just blurring in
-        // order to focus another child of the monitored element.
-        var /** @type {?} */ elementInfo = this._elementInfo.get(element);
+        /** @type {?} */
+        var elementInfo = this._elementInfo.get(element);
         if (!elementInfo || (elementInfo.checkChildren && event.relatedTarget instanceof Node &&
             element.contains(event.relatedTarget))) {
             return;
@@ -2457,8 +2478,8 @@ var FocusMonitor = /** @class */ (function () {
     ];
     /** @nocollapse */
     FocusMonitor.ctorParameters = function () { return [
-        { type: core.NgZone, },
-        { type: platform.Platform, },
+        { type: core.NgZone },
+        { type: platform.Platform }
     ]; };
     /** @nocollapse */ FocusMonitor.ngInjectableDef = core.defineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.inject(core.NgZone), core.inject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
@@ -2498,11 +2519,11 @@ var CdkMonitorFocus = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkMonitorFocus.ctorParameters = function () { return [
-        { type: core.ElementRef, },
-        { type: FocusMonitor, },
+        { type: core.ElementRef },
+        { type: FocusMonitor }
     ]; };
     CdkMonitorFocus.propDecorators = {
-        "cdkFocusChange": [{ type: core.Output },],
+        cdkFocusChange: [{ type: core.Output }]
     };
     return CdkMonitorFocus;
 }());
@@ -2516,10 +2537,10 @@ var CdkMonitorFocus = /** @class */ (function () {
 function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
     return parentDispatcher || new FocusMonitor(ngZone, platform$$1);
 }
-/**
+/** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
- */
-var /** @type {?} */ FOCUS_MONITOR_PROVIDER = {
+  @type {?} */
+var FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
     provide: FocusMonitor,
     deps: [[new core.Optional(), new core.SkipSelf(), FocusMonitor], core.NgZone, platform.Platform],
@@ -2561,11 +2582,11 @@ var A11yModule = /** @class */ (function () {
     return A11yModule;
 }());
 
+exports.ARIA_DESCRIBER_PROVIDER_FACTORY = ARIA_DESCRIBER_PROVIDER_FACTORY;
 exports.MESSAGES_CONTAINER_ID = MESSAGES_CONTAINER_ID;
 exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
 exports.CDK_DESCRIBEDBY_HOST_ATTRIBUTE = CDK_DESCRIBEDBY_HOST_ATTRIBUTE;
 exports.AriaDescriber = AriaDescriber;
-exports.ARIA_DESCRIBER_PROVIDER_FACTORY = ARIA_DESCRIBER_PROVIDER_FACTORY;
 exports.ARIA_DESCRIBER_PROVIDER = ARIA_DESCRIBER_PROVIDER;
 exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
 exports.FocusKeyManager = FocusKeyManager;
@@ -2574,16 +2595,16 @@ exports.FocusTrap = FocusTrap;
 exports.FocusTrapFactory = FocusTrapFactory;
 exports.CdkTrapFocus = CdkTrapFocus;
 exports.InteractivityChecker = InteractivityChecker;
+exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
 exports.LiveAnnouncer = LiveAnnouncer;
 exports.CdkAriaLive = CdkAriaLive;
-exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
 exports.LIVE_ANNOUNCER_PROVIDER = LIVE_ANNOUNCER_PROVIDER;
-exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
 exports.LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY = LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY;
+exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
+exports.FOCUS_MONITOR_PROVIDER_FACTORY = FOCUS_MONITOR_PROVIDER_FACTORY;
 exports.TOUCH_BUFFER_MS = TOUCH_BUFFER_MS;
 exports.FocusMonitor = FocusMonitor;
 exports.CdkMonitorFocus = CdkMonitorFocus;
-exports.FOCUS_MONITOR_PROVIDER_FACTORY = FOCUS_MONITOR_PROVIDER_FACTORY;
 exports.FOCUS_MONITOR_PROVIDER = FOCUS_MONITOR_PROVIDER;
 exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
 exports.A11yModule = A11yModule;
