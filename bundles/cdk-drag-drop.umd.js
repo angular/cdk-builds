@@ -6,102 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/overlay'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/overlay', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.overlay,global.rxjs.operators,global.ng.cdk.coercion));
-}(this, (function (exports,core,common,platform,rxjs,bidi,overlay,operators,coercion) { 'use strict';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Handle that can be used to drag and CdkDrag instance.
- */
-var CdkDragHandle = /** @class */ (function () {
-    function CdkDragHandle(element) {
-        this.element = element;
-    }
-    CdkDragHandle.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkDragHandle]',
-                    host: {
-                        'class': 'cdk-drag-handle'
-                    }
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragHandle.ctorParameters = function () { return [
-        { type: core.ElementRef }
-    ]; };
-    return CdkDragHandle;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/** *
- * Injection token that is used to provide a CdkDrop instance to CdkDrag.
- * Used for avoiding circular imports.
-  @type {?} */
-var CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Element that will be used as a template for the preview
- * of a CdkDrag when it is being dragged.
- * @template T
- */
-var CdkDragPreview = /** @class */ (function () {
-    function CdkDragPreview(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPreview.decorators = [
-        { type: core.Directive, args: [{
-                    selector: 'ng-template[cdkDragPreview]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPreview.ctorParameters = function () { return [
-        { type: core.TemplateRef }
-    ]; };
-    CdkDragPreview.propDecorators = {
-        data: [{ type: core.Input }]
-    };
-    return CdkDragPreview;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Element that will be used as a template for the placeholder of a CdkDrag when
- * it is being dragged. The placeholder is displayed in place of the element being dragged.
- * @template T
- */
-var CdkDragPlaceholder = /** @class */ (function () {
-    function CdkDragPlaceholder(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPlaceholder.decorators = [
-        { type: core.Directive, args: [{
-                    selector: 'ng-template[cdkDragPlaceholder]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPlaceholder.ctorParameters = function () { return [
-        { type: core.TemplateRef }
-    ]; };
-    CdkDragPlaceholder.propDecorators = {
-        data: [{ type: core.Input }]
-    };
-    return CdkDragPlaceholder;
-}());
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/scrolling'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.scrolling,global.rxjs.operators,global.ng.cdk.coercion));
+}(this, (function (exports,core,common,platform,rxjs,bidi,scrolling,operators,coercion) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -360,6 +268,98 @@ var DragDropRegistry = /** @class */ (function () {
     /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Handle that can be used to drag and CdkDrag instance.
+ */
+var CdkDragHandle = /** @class */ (function () {
+    function CdkDragHandle(element) {
+        this.element = element;
+    }
+    CdkDragHandle.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    }
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragHandle.ctorParameters = function () { return [
+        { type: core.ElementRef }
+    ]; };
+    return CdkDragHandle;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the placeholder of a CdkDrag when
+ * it is being dragged. The placeholder is displayed in place of the element being dragged.
+ * @template T
+ */
+var CdkDragPlaceholder = /** @class */ (function () {
+    function CdkDragPlaceholder(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPlaceholder.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPlaceholder.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: core.Input }]
+    };
+    return CdkDragPlaceholder;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the preview
+ * of a CdkDrag when it is being dragged.
+ * @template T
+ */
+var CdkDragPreview = /** @class */ (function () {
+    function CdkDragPreview(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPreview.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPreview.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
+    CdkDragPreview.propDecorators = {
+        data: [{ type: core.Input }]
+    };
+    return CdkDragPreview;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/** *
+ * Injection token that is used to provide a CdkDrop instance to CdkDrag.
+ * Used for avoiding circular imports.
+  @type {?} */
+var CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
 
 /**
  * @fileoverview added by tsickle
@@ -1014,7 +1014,7 @@ var CdkDrag = /** @class */ (function () {
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: core.NgZone },
         { type: core.ViewContainerRef },
-        { type: overlay.ViewportRuler },
+        { type: scrolling.ViewportRuler },
         { type: DragDropRegistry },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };

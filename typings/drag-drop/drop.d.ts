@@ -7,8 +7,8 @@
  */
 import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { CdkDrag } from './drag';
-import { CdkDragExit, CdkDragEnter, CdkDragDrop } from './drag-events';
 import { DragDropRegistry } from './drag-drop-registry';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
 /** Container that wraps a set of draggable items. */
 export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
     element: ElementRef<HTMLElement>;

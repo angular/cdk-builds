@@ -5,16 +5,16 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
-import { CdkDragHandle } from './drag-handle';
-import { CdkDropContainer } from './drop-container';
-import { CdkDragStart, CdkDragEnd, CdkDragExit, CdkDragEnter, CdkDragDrop, CdkDragMove } from './drag-events';
-import { CdkDragPreview } from './drag-preview';
-import { CdkDragPlaceholder } from './drag-placeholder';
-import { ViewportRuler } from '@angular/cdk/overlay';
-import { DragDropRegistry } from './drag-drop-registry';
+import { ViewportRuler } from '@angular/cdk/scrolling';
+import { ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
+import { DragDropRegistry } from './drag-drop-registry';
+import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart } from './drag-events';
+import { CdkDragHandle } from './drag-handle';
+import { CdkDragPlaceholder } from './drag-placeholder';
+import { CdkDragPreview } from './drag-preview';
+import { CdkDropContainer } from './drop-container';
 /** Element that can be moved inside a CdkDrop container. */
 export declare class CdkDrag<T = any> implements OnDestroy {
     /** Element that the draggable is attached to. */

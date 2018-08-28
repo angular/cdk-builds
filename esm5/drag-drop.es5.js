@@ -5,106 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, ElementRef, InjectionToken, TemplateRef, Input, Injectable, NgZone, Inject, ChangeDetectionStrategy, Component, ContentChildren, EventEmitter, forwardRef, Output, ViewEncapsulation, ContentChild, Optional, SkipSelf, ViewContainerRef, NgModule, defineInjectable, inject } from '@angular/core';
+import { Injectable, NgZone, Inject, ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, ViewEncapsulation, ContentChild, Directive, Optional, SkipSelf, ViewContainerRef, TemplateRef, InjectionToken, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { Subject, merge, Observable } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
-import { ViewportRuler } from '@angular/cdk/overlay';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Handle that can be used to drag and CdkDrag instance.
- */
-var CdkDragHandle = /** @class */ (function () {
-    function CdkDragHandle(element) {
-        this.element = element;
-    }
-    CdkDragHandle.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkDragHandle]',
-                    host: {
-                        'class': 'cdk-drag-handle'
-                    }
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragHandle.ctorParameters = function () { return [
-        { type: ElementRef }
-    ]; };
-    return CdkDragHandle;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/** *
- * Injection token that is used to provide a CdkDrop instance to CdkDrag.
- * Used for avoiding circular imports.
-  @type {?} */
-var CDK_DROP_CONTAINER = new InjectionToken('CDK_DROP_CONTAINER');
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Element that will be used as a template for the preview
- * of a CdkDrag when it is being dragged.
- * @template T
- */
-var CdkDragPreview = /** @class */ (function () {
-    function CdkDragPreview(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPreview.decorators = [
-        { type: Directive, args: [{
-                    selector: 'ng-template[cdkDragPreview]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPreview.ctorParameters = function () { return [
-        { type: TemplateRef }
-    ]; };
-    CdkDragPreview.propDecorators = {
-        data: [{ type: Input }]
-    };
-    return CdkDragPreview;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
- */
-/**
- * Element that will be used as a template for the placeholder of a CdkDrag when
- * it is being dragged. The placeholder is displayed in place of the element being dragged.
- * @template T
- */
-var CdkDragPlaceholder = /** @class */ (function () {
-    function CdkDragPlaceholder(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPlaceholder.decorators = [
-        { type: Directive, args: [{
-                    selector: 'ng-template[cdkDragPlaceholder]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPlaceholder.ctorParameters = function () { return [
-        { type: TemplateRef }
-    ]; };
-    CdkDragPlaceholder.propDecorators = {
-        data: [{ type: Input }]
-    };
-    return CdkDragPlaceholder;
-}());
 
 /**
  * @fileoverview added by tsickle
@@ -363,6 +271,98 @@ var DragDropRegistry = /** @class */ (function () {
     /** @nocollapse */ DragDropRegistry.ngInjectableDef = defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(inject(NgZone), inject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Handle that can be used to drag and CdkDrag instance.
+ */
+var CdkDragHandle = /** @class */ (function () {
+    function CdkDragHandle(element) {
+        this.element = element;
+    }
+    CdkDragHandle.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    }
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragHandle.ctorParameters = function () { return [
+        { type: ElementRef }
+    ]; };
+    return CdkDragHandle;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the placeholder of a CdkDrag when
+ * it is being dragged. The placeholder is displayed in place of the element being dragged.
+ * @template T
+ */
+var CdkDragPlaceholder = /** @class */ (function () {
+    function CdkDragPlaceholder(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPlaceholder.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPlaceholder.ctorParameters = function () { return [
+        { type: TemplateRef }
+    ]; };
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: Input }]
+    };
+    return CdkDragPlaceholder;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the preview
+ * of a CdkDrag when it is being dragged.
+ * @template T
+ */
+var CdkDragPreview = /** @class */ (function () {
+    function CdkDragPreview(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPreview.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPreview.ctorParameters = function () { return [
+        { type: TemplateRef }
+    ]; };
+    CdkDragPreview.propDecorators = {
+        data: [{ type: Input }]
+    };
+    return CdkDragPreview;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes} checked by tsc
+ */
+/** *
+ * Injection token that is used to provide a CdkDrop instance to CdkDrag.
+ * Used for avoiding circular imports.
+  @type {?} */
+var CDK_DROP_CONTAINER = new InjectionToken('CDK_DROP_CONTAINER');
 
 /**
  * @fileoverview added by tsickle
