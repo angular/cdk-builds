@@ -87,7 +87,7 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
  * Tree node for CdkTree. It contains the data in the tree node.
  */
 export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
-    protected _elementRef: ElementRef;
+    protected _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T>;
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
@@ -106,7 +106,7 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
      * and 'treeitem' if it's a leaf node.
      */
     role: 'treeitem' | 'group';
-    constructor(_elementRef: ElementRef, _tree: CdkTree<T>);
+    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>);
     ngOnDestroy(): void;
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;
