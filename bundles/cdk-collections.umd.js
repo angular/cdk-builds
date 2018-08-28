@@ -131,7 +131,13 @@ SelectionModel = /** @class */ (function () {
         /**
          * Event emitted when the value has changed.
          */
-        this.onChange = this._emitChanges ? new rxjs.Subject() : null;
+        this.changed = this._emitChanges ? new rxjs.Subject() : null;
+        /**
+         * Event emitted when the value has changed.
+         * @deprecated Use `changed` instead.
+         * \@deletion-target 8.0.0 To be changed to `changed`
+         */
+        this.onChange = this.changed;
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
                 initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });
@@ -323,8 +329,8 @@ SelectionModel = /** @class */ (function () {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            if (this.onChange) {
-                this.onChange.next({
+            if (this.changed) {
+                this.changed.next({
                     source: this,
                     added: this._selectedToEmit,
                     removed: this._deselectedToEmit
