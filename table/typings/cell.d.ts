@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, TemplateRef } from '@angular/core';
-import { CanStick } from './can-stick';
+import { CanStick, CanStickCtor } from './can-stick';
 /** Base interface for a cell definition. Captures a column's cell template definition. */
 export interface CellDef {
     template: TemplateRef<any>;
@@ -38,7 +38,7 @@ export declare class CdkFooterCellDef implements CellDef {
 /** @docs-private */
 export declare class CdkColumnDefBase {
 }
-export declare const _CdkColumnDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkColumnDefBase;
+export declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.

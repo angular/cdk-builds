@@ -13,12 +13,12 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes} checked by tsc
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** *
  * Current version of the Angular Component Development Kit.
   @type {?} */
-var VERSION = new core.Version('6.4.6-73d54a4');
+var VERSION = new core.Version('6.4.6-515912b');
 
 exports.VERSION = VERSION;
 
