@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { CanStick, CanStickCtor } from './can-stick';
 import { CdkCellDef, CdkColumnDef } from './cell';
-import { CanStick } from './can-stick';
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -37,7 +37,7 @@ export declare abstract class BaseRowDef implements OnChanges {
 /** @docs-private */
 export declare class CdkHeaderRowDefBase extends BaseRowDef {
 }
-export declare const _CdkHeaderRowDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkHeaderRowDefBase;
+export declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
@@ -49,7 +49,7 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
 /** @docs-private */
 export declare class CdkFooterRowDefBase extends BaseRowDef {
 }
-export declare const _CdkFooterRowDefBase: import("./can-stick").Constructor<CanStick> & typeof CdkFooterRowDefBase;
+export declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 /**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { CollectionViewer, DataSource, ListRange } from '@angular/cdk/collections';
-import { DoCheck, IterableDiffers, NgIterable, OnDestroy, TemplateRef, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { DoCheck, IterableDiffers, NgIterable, NgZone, OnDestroy, TemplateRef, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
 /** The context for an item rendered by `CdkVirtualForOf` */
@@ -88,7 +88,7 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     /** The set of available differs. */
     _differs: IterableDiffers, 
     /** The virtual scrolling viewport that these items are being rendered in. */
-    _viewport: CdkVirtualScrollViewport);
+    _viewport: CdkVirtualScrollViewport, ngZone: NgZone);
     /**
      * Measures the combined size (width for horizontal orientation, height for vertical) of all items
      * in the specified range. Throws an error if the range includes items that are not currently
