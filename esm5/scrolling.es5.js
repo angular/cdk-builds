@@ -224,7 +224,7 @@ var ScrollDispatcher = /** @class */ (function () {
             if (element == scrollableElement) {
                 return true;
             }
-        } while (element = element.parentElement);
+        } while (element = /** @type {?} */ ((element)).parentElement);
         return false;
     };
     /**

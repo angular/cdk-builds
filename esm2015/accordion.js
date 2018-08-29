@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, SkipSelf, NgModule } from '@angular/core';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Directive, Input, Output, EventEmitter, Optional, ChangeDetectorRef, SkipSelf, NgModule } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 
@@ -23,6 +23,10 @@ let /** @type {?} */ nextId = 0;
  */
 class CdkAccordion {
     constructor() {
+        /**
+         * Emits when the state of the accordion changes
+         */
+        this._stateChanges = new Subject();
         /**
          * Stream that emits true/false when openAll/closeAll is triggered.
          */
@@ -56,6 +60,19 @@ class CdkAccordion {
      */
     closeAll() {
         this._openCloseAll(false);
+    }
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    ngOnChanges(changes) {
+        this._stateChanges.next(changes);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._stateChanges.complete();
     }
     /**
      * @param {?} expanded

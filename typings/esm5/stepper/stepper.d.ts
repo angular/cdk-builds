@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
-import { AfterViewInit, ChangeDetectorRef, EventEmitter, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, EventEmitter, ElementRef, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { CdkStepLabel } from './step-label';
 import { Subject } from 'rxjs';
@@ -68,10 +68,16 @@ export declare class CdkStep implements OnChanges {
 export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
+    private _elementRef;
     /** Emits when the component is destroyed. */
     protected _destroyed: Subject<void>;
     /** Used for managing keyboard focus. */
     private _keyManager;
+    /**
+     * @breaking-change 8.0.0 Remove `| undefined` once the `_document`
+     * constructor param is required.
+     */
+    private _document;
     /** The list of step components that the stepper is holding. */
     _steps: QueryList<CdkStep>;
     /** The list of step headers of the steps in the stepper. */
@@ -89,7 +95,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
     protected _orientation: StepperOrientation;
-    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef);
+    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef?: ElementRef<HTMLElement> | undefined, _document?: any);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Selects and focuses the next step in list. */
@@ -114,4 +120,6 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     _onKeydown(event: KeyboardEvent): void;
     private _anyControlsInvalidOrPending(index);
     private _layoutDirection();
+    /** Checks whether the stepper contains the focused element. */
+    private _containsFocus();
 }

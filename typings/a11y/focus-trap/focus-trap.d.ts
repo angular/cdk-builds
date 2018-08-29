@@ -115,7 +115,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoChec
      */
     autoCapture: boolean;
     private _autoCapture;
-    constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any);
+    constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, _document: any);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;

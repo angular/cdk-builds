@@ -60,21 +60,16 @@ var ContentObserver = /** @class */ (function () {
         this._observedElements.forEach(function (_, element) { return _this._cleanupObserver(element); });
     };
     /**
-     * Observe content changes on an element.
-     * @param element The element to observe for content changes.
-     */
-    /**
-     * Observe content changes on an element.
-     * @param {?} element The element to observe for content changes.
+     * @param {?} elementOrRef
      * @return {?}
      */
     ContentObserver.prototype.observe = /**
-     * Observe content changes on an element.
-     * @param {?} element The element to observe for content changes.
+     * @param {?} elementOrRef
      * @return {?}
      */
-    function (element) {
+    function (elementOrRef) {
         var _this = this;
+        var /** @type {?} */ element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
         return Observable.create(function (observer) {
             var /** @type {?} */ stream = _this._observeElement(element);
             var /** @type {?} */ subscription = stream.subscribe(observer);
@@ -249,7 +244,7 @@ var CdkObserveContent = /** @class */ (function () {
     function () {
         var _this = this;
         this._unsubscribe();
-        var /** @type {?} */ stream = this._contentObserver.observe(this._elementRef.nativeElement);
+        var /** @type {?} */ stream = this._contentObserver.observe(this._elementRef);
         // TODO(mmalerba): We shouldn't be emitting on this @Output() outside the zone.
         // Consider brining it back inside the zone next time we're making breaking changes.
         // Bringing it back inside can cause things like infinite change detection loops and changed

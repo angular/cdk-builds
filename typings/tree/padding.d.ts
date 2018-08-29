@@ -26,7 +26,7 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     /** The indent for each level. Default number 40px from material design menu sub-menu spec. */
     indent: number;
     _indent: number;
-    constructor(_treeNode: CdkTreeNode<T>, _tree: CdkTree<T>, _renderer: Renderer2, _element: ElementRef, _dir: Directionality);
+    constructor(_treeNode: CdkTreeNode<T>, _tree: CdkTree<T>, _renderer: Renderer2, _element: ElementRef<HTMLElement>, _dir: Directionality);
     ngOnDestroy(): void;
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;

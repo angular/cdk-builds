@@ -6,13 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, Optional, ViewChild, NgModule } from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, Optional, ViewChild, Inject, NgModule } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
+import { DOCUMENT, CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Directionality } from '@angular/cdk/bidi';
-import { CommonModule } from '@angular/common';
+import { Platform } from '@angular/cdk/platform';
 
 /**
  * @fileoverview added by tsickle
@@ -618,11 +619,13 @@ class StickyStyler {
      *     sticky positioning applied.
      * @param {?} direction The directionality context of the table (ltr/rtl); affects column positioning
      *     by reversing left/right positions.
+     * @param {?=} _isBrowser Whether the table is currently being rendered on the server or the client.
      */
-    constructor(isNativeHtmlTable, stickCellCss, direction) {
+    constructor(isNativeHtmlTable, stickCellCss, direction, _isBrowser = true) {
         this.isNativeHtmlTable = isNativeHtmlTable;
         this.stickCellCss = stickCellCss;
         this.direction = direction;
+        this._isBrowser = _isBrowser;
     }
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -657,7 +660,7 @@ class StickyStyler {
      */
     updateStickyColumns(rows, stickyStartStates, stickyEndStates) {
         const /** @type {?} */ hasStickyColumns = stickyStartStates.some(state => state) || stickyEndStates.some(state => state);
-        if (!rows.length || !hasStickyColumns) {
+        if (!rows.length || !hasStickyColumns || !this._isBrowser) {
             return;
         }
         const /** @type {?} */ firstRow = rows[0];
@@ -691,6 +694,10 @@ class StickyStyler {
      * @return {?}
      */
     stickRows(rowsToStick, stickyStates, position) {
+        // Since we can't measure the rows on the server, we can't stick the rows properly.
+        if (!this._isBrowser) {
+            return;
+        }
         // If positioning the rows to the bottom, reverse their order when evaluating the sticky
         // position such that the last row stuck will be "bottom: 0px" and so on.
         const /** @type {?} */ rows = position === 'bottom' ? rowsToStick.reverse() : rowsToStick;
@@ -946,12 +953,20 @@ class CdkTable {
      * @param {?} _elementRef
      * @param {?} role
      * @param {?} _dir
+     * @param {?=} _document
+     * @param {?=} _platform
      */
-    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir) {
+    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, /**
+                   * @deprecated
+                   * @breaking-change 8.0.0 `_document` and `_platform` to
+                   *    be made into a required parameters.
+                   */
+    _document, _platform) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
         this._dir = _dir;
+        this._platform = _platform;
         /**
          * Subject that emits when the component has been destroyed.
          */
@@ -1024,6 +1039,7 @@ class CdkTable {
         if (!role) {
             this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
+        this._document = _document;
         this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';
     }
     /**
@@ -1691,7 +1707,9 @@ class CdkTable {
             { tag: 'tfoot', outlet: this._footerRowOutlet },
         ];
         for (const /** @type {?} */ section of sections) {
-            const /** @type {?} */ element = document.createElement(section.tag);
+            // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
+            const /** @type {?} */ documentRef = this._document || document;
+            const /** @type {?} */ element = documentRef.createElement(section.tag);
             element.appendChild(section.outlet.elementRef.nativeElement);
             this._elementRef.nativeElement.appendChild(element);
         }
@@ -1739,7 +1757,9 @@ class CdkTable {
      */
     _setupStickyStyler() {
         const /** @type {?} */ direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, 
+        // @breaking-change 8.0.0 remove the null check for `this._platform`.
+        this.stickyCssClass, direction, this._platform ? this._platform.isBrowser : true);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(value => {
@@ -1766,6 +1786,8 @@ CdkTable.ctorParameters = () => [
     { type: ElementRef, },
     { type: undefined, decorators: [{ type: Attribute, args: ['role',] },] },
     { type: Directionality, decorators: [{ type: Optional },] },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
+    { type: Platform, },
 ];
 CdkTable.propDecorators = {
     "trackBy": [{ type: Input },],

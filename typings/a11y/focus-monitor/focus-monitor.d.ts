@@ -114,7 +114,7 @@ export declare class CdkMonitorFocus implements OnDestroy {
     private _focusMonitor;
     private _monitorSubscription;
     cdkFocusChange: EventEmitter<FocusOrigin>;
-    constructor(_elementRef: ElementRef, _focusMonitor: FocusMonitor);
+    constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
     ngOnDestroy(): void;
 }
 /** @docs-private @deprecated @breaking-change 7.0.0 */

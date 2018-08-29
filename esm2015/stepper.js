@@ -5,15 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, NgModule } from '@angular/core';
+import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, ElementRef, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { END, ENTER, HOME, SPACE } from '@angular/cdk/keycodes';
+import { DOCUMENT, CommonModule } from '@angular/common';
 import '@angular/forms';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -164,10 +164,13 @@ class CdkStepper {
     /**
      * @param {?} _dir
      * @param {?} _changeDetectorRef
+     * @param {?=} _elementRef
+     * @param {?=} _document
      */
-    constructor(_dir, _changeDetectorRef) {
+    constructor(_dir, _changeDetectorRef, _elementRef, _document) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        this._elementRef = _elementRef;
         /**
          * Emits when the component is destroyed.
          */
@@ -180,6 +183,7 @@ class CdkStepper {
         this.selectionChange = new EventEmitter();
         this._orientation = 'horizontal';
         this._groupId = nextId++;
+        this._document = _document;
     }
     /**
      * Whether the validity of previous steps should be checked or not.
@@ -242,6 +246,11 @@ class CdkStepper {
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
+            if (!this.selected) {
+                this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
+            }
+        });
     }
     /**
      * @return {?}
@@ -344,7 +353,12 @@ class CdkStepper {
             selectedStep: stepsArray[newIndex],
             previouslySelectedStep: stepsArray[this._selectedIndex],
         });
-        this._keyManager.updateActiveItemIndex(newIndex);
+        // If focus is inside the stepper, move it to the next header, otherwise it may become
+        // lost when the active step content is hidden. We can't be more granular with the check
+        // (e.g. checking whether focus is inside the active step), because we don't have a
+        // reference to the elements that are rendering out the content.
+        this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
+            this._keyManager.updateActiveItemIndex(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     }
@@ -394,6 +408,18 @@ class CdkStepper {
     _layoutDirection() {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     }
+    /**
+     * Checks whether the stepper contains the focused element.
+     * @return {?}
+     */
+    _containsFocus() {
+        if (!this._document || !this._elementRef) {
+            return false;
+        }
+        const /** @type {?} */ stepperElement = this._elementRef.nativeElement;
+        const /** @type {?} */ focusedElement = this._document.activeElement;
+        return stepperElement === focusedElement || stepperElement.contains(focusedElement);
+    }
 }
 CdkStepper.decorators = [
     { type: Directive, args: [{
@@ -405,6 +431,8 @@ CdkStepper.decorators = [
 CdkStepper.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional },] },
     { type: ChangeDetectorRef, },
+    { type: ElementRef, },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] },] },
 ];
 CdkStepper.propDecorators = {
     "_steps": [{ type: ContentChildren, args: [CdkStep,] },],

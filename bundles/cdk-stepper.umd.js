@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/common')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/common'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.a11y,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.ng.forms,global.rxjs,global.rxjs.operators,global.ng.common));
-}(this, (function (exports,core,a11y,bidi,coercion,keycodes,forms,rxjs,operators,common) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/common'), require('@angular/forms'), require('rxjs'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/core', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/common', '@angular/forms', 'rxjs', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}),global.ng.core,global.ng.cdk.a11y,global.ng.cdk.bidi,global.ng.cdk.coercion,global.ng.cdk.keycodes,global.ng.common,global.ng.forms,global.rxjs,global.rxjs.operators));
+}(this, (function (exports,core,a11y,bidi,coercion,keycodes,common,forms,rxjs,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -188,9 +188,10 @@ var CdkStep = /** @class */ (function () {
     return CdkStep;
 }());
 var CdkStepper = /** @class */ (function () {
-    function CdkStepper(_dir, _changeDetectorRef) {
+    function CdkStepper(_dir, _changeDetectorRef, _elementRef, _document) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        this._elementRef = _elementRef;
         /**
          * Emits when the component is destroyed.
          */
@@ -203,6 +204,7 @@ var CdkStepper = /** @class */ (function () {
         this.selectionChange = new core.EventEmitter();
         this._orientation = 'horizontal';
         this._groupId = nextId++;
+        this._document = _document;
     }
     Object.defineProperty(CdkStepper.prototype, "linear", {
         get: /**
@@ -281,6 +283,11 @@ var CdkStepper = /** @class */ (function () {
             .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
             .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
+            if (!_this.selected) {
+                _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
+            }
+        });
     };
     /**
      * @return {?}
@@ -439,7 +446,12 @@ var CdkStepper = /** @class */ (function () {
             selectedStep: stepsArray[newIndex],
             previouslySelectedStep: stepsArray[this._selectedIndex],
         });
-        this._keyManager.updateActiveItemIndex(newIndex);
+        // If focus is inside the stepper, move it to the next header, otherwise it may become
+        // lost when the active step content is hidden. We can't be more granular with the check
+        // (e.g. checking whether focus is inside the active step), because we don't have a
+        // reference to the elements that are rendering out the content.
+        this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
+            this._keyManager.updateActiveItemIndex(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     };
@@ -500,6 +512,22 @@ var CdkStepper = /** @class */ (function () {
     function () {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
+    /**
+     * Checks whether the stepper contains the focused element.
+     * @return {?}
+     */
+    CdkStepper.prototype._containsFocus = /**
+     * Checks whether the stepper contains the focused element.
+     * @return {?}
+     */
+    function () {
+        if (!this._document || !this._elementRef) {
+            return false;
+        }
+        var /** @type {?} */ stepperElement = this._elementRef.nativeElement;
+        var /** @type {?} */ focusedElement = this._document.activeElement;
+        return stepperElement === focusedElement || stepperElement.contains(focusedElement);
+    };
     CdkStepper.decorators = [
         { type: core.Directive, args: [{
                     selector: '[cdkStepper]',
@@ -510,6 +538,8 @@ var CdkStepper = /** @class */ (function () {
     CdkStepper.ctorParameters = function () { return [
         { type: bidi.Directionality, decorators: [{ type: core.Optional },] },
         { type: core.ChangeDetectorRef, },
+        { type: core.ElementRef, },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] },] },
     ]; };
     CdkStepper.propDecorators = {
         "_steps": [{ type: core.ContentChildren, args: [CdkStep,] },],
