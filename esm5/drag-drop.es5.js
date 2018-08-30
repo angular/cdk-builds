@@ -1387,7 +1387,7 @@ var CdkDrop = /** @class */ (function () {
      */
     function (item) {
         return this._dragging ?
-            this._positionCache.items.findIndex(function (currentItem) { return currentItem.drag === item; }) :
+            findIndex(this._positionCache.items, function (currentItem) { return currentItem.drag === item; }) :
             this._draggables.toArray().indexOf(item);
     };
     /**
@@ -1429,7 +1429,7 @@ var CdkDrop = /** @class */ (function () {
         /** @type {?} */
         var isHorizontal = this.orientation === 'horizontal';
         /** @type {?} */
-        var currentIndex = siblings.findIndex(function (currentItem) { return currentItem.drag === item; });
+        var currentIndex = findIndex(siblings, function (currentItem) { return currentItem.drag === item; });
         /** @type {?} */
         var siblingAtNewPosition = siblings[newIndex];
         /** @type {?} */
@@ -1612,7 +1612,7 @@ var CdkDrop = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this.orientation === 'horizontal';
-        return this._positionCache.items.findIndex(function (_a, _, array) {
+        return findIndex(this._positionCache.items, function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
             if (drag === item) {
                 // If there's only one item left in the container, it must be
@@ -1692,6 +1692,22 @@ var CdkDrop = /** @class */ (function () {
     };
     return CdkDrop;
 }());
+/**
+ * Finds the index of an item that matches a predicate function. Used as an equivalent
+ * of `Array.prototype.find` which isn't part of the standard Google typings.
+ * @template T
+ * @param {?} array Array in which to look for matches.
+ * @param {?} predicate Function used to determine whether an item is a match.
+ * @return {?}
+ */
+function findIndex(array, predicate) {
+    for (var i = 0; i < array.length; i++) {
+        if (predicate(array[i], i, array)) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 /**
  * @fileoverview added by tsickle

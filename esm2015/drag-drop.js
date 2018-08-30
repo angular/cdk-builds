@@ -1173,7 +1173,7 @@ class CdkDrop {
      */
     getItemIndex(item) {
         return this._dragging ?
-            this._positionCache.items.findIndex(currentItem => currentItem.drag === item) :
+            findIndex(this._positionCache.items, currentItem => currentItem.drag === item) :
             this._draggables.toArray().indexOf(item);
     }
     /**
@@ -1199,7 +1199,7 @@ class CdkDrop {
         /** @type {?} */
         const isHorizontal = this.orientation === 'horizontal';
         /** @type {?} */
-        const currentIndex = siblings.findIndex(currentItem => currentItem.drag === item);
+        const currentIndex = findIndex(siblings, currentItem => currentItem.drag === item);
         /** @type {?} */
         const siblingAtNewPosition = siblings[newIndex];
         /** @type {?} */
@@ -1341,7 +1341,7 @@ class CdkDrop {
     _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta) {
         /** @type {?} */
         const isHorizontal = this.orientation === 'horizontal';
-        return this._positionCache.items.findIndex(({ drag, clientRect }, _, array) => {
+        return findIndex(this._positionCache.items, ({ drag, clientRect }, _, array) => {
             if (drag === item) {
                 // If there's only one item left in the container, it must be
                 // the dragged item itself so we use it as a reference.
@@ -1413,6 +1413,22 @@ CdkDrop.propDecorators = {
     entered: [{ type: Output }],
     exited: [{ type: Output }]
 };
+/**
+ * Finds the index of an item that matches a predicate function. Used as an equivalent
+ * of `Array.prototype.find` which isn't part of the standard Google typings.
+ * @template T
+ * @param {?} array Array in which to look for matches.
+ * @param {?} predicate Function used to determine whether an item is a match.
+ * @return {?}
+ */
+function findIndex(array, predicate) {
+    for (let i = 0; i < array.length; i++) {
+        if (predicate(array[i], i, array)) {
+            return i;
+        }
+    }
+    return -1;
+}
 
 /**
  * @fileoverview added by tsickle
