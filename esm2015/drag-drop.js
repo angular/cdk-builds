@@ -11,7 +11,7 @@ import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { Subject, merge, Observable } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, take } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
 /**
@@ -398,6 +398,28 @@ class CdkDrag {
             };
         });
         /**
+         * Starts the dragging sequence.
+         */
+        this._startDragging = (event) => {
+            // Delegate the event based on whether it started from a handle or the element itself.
+            if (this._handles.length) {
+                /** @type {?} */
+                const targetHandle = this._handles.find(handle => {
+                    /** @type {?} */
+                    const element = handle.element.nativeElement;
+                    /** @type {?} */
+                    const target = event.target;
+                    return !!target && (target === element || element.contains(/** @type {?} */ (target)));
+                });
+                if (targetHandle) {
+                    this._pointerDown(targetHandle.element.nativeElement, event);
+                }
+            }
+            else {
+                this._pointerDown(this._rootElement, event);
+            }
+        };
+        /**
          * Handler for when the pointer is pressed down on the element or the handle.
          */
         this._pointerDown = (referenceElement, event) => {
@@ -430,7 +452,7 @@ class CdkDrag {
             this.started.emit({ source: this });
             if (this.dropContainer) {
                 /** @type {?} */
-                const element = this.element.nativeElement;
+                const element = this._rootElement;
                 // Grab the `nextSibling` before the preview and placeholder
                 // have been created so we don't get the preview by accident.
                 this._nextSibling = element.nextSibling;
@@ -471,7 +493,7 @@ class CdkDrag {
                     pointerPosition.x - this._pickupPositionOnPage.x + this._passiveTransform.x;
                 activeTransform.y =
                     pointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
-                this._setTransform(this.element.nativeElement, activeTransform.x, activeTransform.y);
+                this._setTransform(this._rootElement, activeTransform.x, activeTransform.y);
             }
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
@@ -517,9 +539,33 @@ class CdkDrag {
         return this._placeholder;
     }
     /**
+     * Returns the root draggable element.
+     * @return {?}
+     */
+    getRootElement() {
+        return this._rootElement;
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterViewInit() {
+        // We need to wait for the zone to stabilize, in order for the reference
+        // element to be in the proper place in the DOM. This is mostly relevant
+        // for draggable elements inside portals since they get stamped out in
+        // their original DOM position and then they get transferred to the portal.
+        this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
+            /** @type {?} */
+            const rootElement = this._rootElement = this._getRootElement();
+            rootElement.addEventListener('mousedown', this._startDragging);
+            rootElement.addEventListener('touchstart', this._startDragging);
+        });
+    }
+    /**
      * @return {?}
      */
     ngOnDestroy() {
+        this._rootElement.removeEventListener('mousedown', this._startDragging);
+        this._rootElement.removeEventListener('touchstart', this._startDragging);
         this._destroyPreview();
         this._destroyPlaceholder();
         // Do this check before removing from the registry since it'll
@@ -527,37 +573,13 @@ class CdkDrag {
         if (this._isDragging()) {
             // Since we move out the element to the end of the body while it's being
             // dragged, we have to make sure that it's removed if it gets destroyed.
-            this._removeElement(this.element.nativeElement);
+            this._removeElement(this._rootElement);
         }
         this._nextSibling = null;
         this._dragDropRegistry.removeDragItem(this);
         this._moveEvents.complete();
         this._destroyed.next();
         this._destroyed.complete();
-    }
-    /**
-     * Starts the dragging sequence.
-     * @param {?} event
-     * @return {?}
-     */
-    _startDragging(event) {
-        // Delegate the event based on whether it started from a handle or the element itself.
-        if (this._handles.length) {
-            /** @type {?} */
-            const targetHandle = this._handles.find(handle => {
-                /** @type {?} */
-                const element = handle.element.nativeElement;
-                /** @type {?} */
-                const target = event.target;
-                return !!target && (target === element || element.contains(/** @type {?} */ (target)));
-            });
-            if (targetHandle) {
-                this._pointerDown(targetHandle.element, event);
-            }
-        }
-        else {
-            this._pointerDown(this.element, event);
-        }
     }
     /**
      * Checks whether the element is currently being dragged.
@@ -575,12 +597,12 @@ class CdkDrag {
         // It's important that we maintain the position, because moving the element around in the DOM
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
         // while moving the existing elements in all other cases.
-        this.element.nativeElement.style.display = '';
+        this._rootElement.style.display = '';
         if (this._nextSibling) {
-            /** @type {?} */ ((this._nextSibling.parentNode)).insertBefore(this.element.nativeElement, this._nextSibling);
+            /** @type {?} */ ((this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
         }
         else {
-            /** @type {?} */ ((this._placeholder.parentNode)).appendChild(this.element.nativeElement);
+            /** @type {?} */ ((this._placeholder.parentNode)).appendChild(this._rootElement);
         }
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -639,7 +661,7 @@ class CdkDrag {
         }
         else {
             /** @type {?} */
-            const element = this.element.nativeElement;
+            const element = this._rootElement;
             /** @type {?} */
             const elementRect = element.getBoundingClientRect();
             preview = /** @type {?} */ (element.cloneNode(true));
@@ -663,7 +685,7 @@ class CdkDrag {
             placeholder = this._placeholderRef.rootNodes[0];
         }
         else {
-            placeholder = /** @type {?} */ (this.element.nativeElement.cloneNode(true));
+            placeholder = /** @type {?} */ (this._rootElement.cloneNode(true));
         }
         placeholder.classList.add('cdk-drag-placeholder');
         return placeholder;
@@ -676,9 +698,9 @@ class CdkDrag {
      */
     _getPointerPositionInElement(referenceElement, event) {
         /** @type {?} */
-        const elementRect = this.element.nativeElement.getBoundingClientRect();
+        const elementRect = this._rootElement.getBoundingClientRect();
         /** @type {?} */
-        const handleElement = referenceElement === this.element ? null : referenceElement.nativeElement;
+        const handleElement = referenceElement === this._rootElement ? null : referenceElement;
         /** @type {?} */
         const referenceRect = handleElement ? handleElement.getBoundingClientRect() : elementRect;
         /** @type {?} */
@@ -843,6 +865,23 @@ class CdkDrag {
             positionSinceLastChange.y = y;
         }
     }
+    /**
+     * Gets the root draggable element, based on the `rootElementSelector`.
+     * @return {?}
+     */
+    _getRootElement() {
+        if (this.rootElementSelector) {
+            /** @type {?} */
+            let currentElement = /** @type {?} */ (this.element.nativeElement.parentElement);
+            while (currentElement) {
+                if (currentElement.matches(this.rootElementSelector)) {
+                    return currentElement;
+                }
+                currentElement = currentElement.parentElement;
+            }
+        }
+        return this.element.nativeElement;
+    }
 }
 CdkDrag.decorators = [
     { type: Directive, args: [{
@@ -851,8 +890,6 @@ CdkDrag.decorators = [
                 host: {
                     'class': 'cdk-drag',
                     '[class.cdk-drag-dragging]': '_isDragging()',
-                    '(mousedown)': '_startDragging($event)',
-                    '(touchstart)': '_startDragging($event)',
                 }
             },] },
 ];
@@ -873,6 +910,7 @@ CdkDrag.propDecorators = {
     _placeholderTemplate: [{ type: ContentChild, args: [CdkDragPlaceholder,] }],
     data: [{ type: Input, args: ['cdkDragData',] }],
     lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
+    rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
     started: [{ type: Output, args: ['cdkDragStarted',] }],
     ended: [{ type: Output, args: ['cdkDragEnded',] }],
     entered: [{ type: Output, args: ['cdkDragEntered',] }],
@@ -1105,7 +1143,7 @@ class CdkDrop {
         // their element has been moved down to the bottom of the body.
         if (newPositionReference && !this._dragDropRegistry.isDragging(newPositionReference)) {
             /** @type {?} */
-            const element = newPositionReference.element.nativeElement; /** @type {?} */
+            const element = newPositionReference.getRootElement(); /** @type {?} */
             ((element.parentElement)).insertBefore(placeholder, element);
             this._activeDraggables.splice(newIndex, 0, item);
         }
@@ -1193,7 +1231,7 @@ class CdkDrop {
             const offset = isDraggedItem ? itemOffset : siblingOffset;
             /** @type {?} */
             const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
-                sibling.drag.element.nativeElement;
+                sibling.drag.getRootElement();
             // Update the offset to reflect the new position.
             sibling.offset += offset;
             // Since we're moving the items with a `transform`, we need to adjust their cached
@@ -1238,7 +1276,7 @@ class CdkDrop {
                 // If the element is being dragged, we have to measure the
                 // placeholder, because the element is hidden.
                 drag.getPlaceholderElement() :
-                drag.element.nativeElement;
+                drag.getRootElement();
             /** @type {?} */
             const clientRect = elementToMeasure.getBoundingClientRect();
             return {
@@ -1272,7 +1310,7 @@ class CdkDrop {
     _reset() {
         this._dragging = false;
         // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(item => item.element.nativeElement.style.transform = '');
+        this._activeDraggables.forEach(item => item.getRootElement().style.transform = '');
         this._activeDraggables = [];
         this._positionCache.items = [];
         this._positionCache.siblings = [];

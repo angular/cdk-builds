@@ -7,7 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DragDropRegistry } from './drag-drop-registry';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart } from './drag-events';
@@ -16,7 +16,7 @@ import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
 import { CdkDropContainer } from './drop-container';
 /** Element that can be moved inside a CdkDrop container. */
-export declare class CdkDrag<T = any> implements OnDestroy {
+export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;
     /** Droppable container that the draggable is a part of. */
@@ -71,6 +71,8 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     private _pointerDirectionDelta;
     /** Pointer position at which the last change in the delta occurred. */
     private _pointerPositionAtLastDirectionChange;
+    /** Root element that will be dragged by the user. */
+    private _rootElement;
     /** Elements that can be used to drag the draggable item. */
     _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
@@ -81,6 +83,12 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     data: T;
     /** Locks the position of the dragged element along the specified axis. */
     lockAxis: 'x' | 'y';
+    /**
+     * Selector that will be used to determine the root draggable element, starting from
+     * the `cdkDrag` element and going up the DOM. Passing an alternate root element is useful
+     * when trying to enable dragging on an element that you might not have access to.
+     */
+    rootElementSelector: string;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user stops dragging an item in the container. */
@@ -106,9 +114,12 @@ export declare class CdkDrag<T = any> implements OnDestroy {
      * while the current element is being dragged.
      */
     getPlaceholderElement(): HTMLElement;
+    /** Returns the root draggable element. */
+    getRootElement(): HTMLElement;
+    ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Starts the dragging sequence. */
-    _startDragging(event: MouseEvent | TouchEvent): void;
+    _startDragging: (event: TouchEvent | MouseEvent) => void;
     /** Checks whether the element is currently being dragged. */
     _isDragging(): boolean;
     /** Handler for when the pointer is pressed down on the element or the handle. */
@@ -166,4 +177,6 @@ export declare class CdkDrag<T = any> implements OnDestroy {
     private _destroyPlaceholder;
     /** Updates the current drag delta, based on the user's current pointer position on the page. */
     private _updatePointerDirectionDelta;
+    /** Gets the root draggable element, based on the `rootElementSelector`. */
+    private _getRootElement;
 }
