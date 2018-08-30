@@ -183,7 +183,7 @@ function supportsPassiveEventListeners() {
  */
 
 /** @enum {number} */
-const RtlScrollAxisType = {
+var RtlScrollAxisType = {
     /**
        * scrollLeft is 0 when scrolled all the way left and (scrollWidth - clientWidth) when scrolled
        * all the way right.
