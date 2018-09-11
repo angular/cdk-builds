@@ -1551,6 +1551,8 @@ var CdkDrop = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        /** @type {?} */
+        var isHorizontal = this.orientation === 'horizontal';
         this._positionCache.items = this._activeDraggables
             .map(function (drag) {
             /** @type {?} */
@@ -1578,7 +1580,10 @@ var CdkDrop = /** @class */ (function () {
                 }
             };
         })
-            .sort(function (a, b) { return a.clientRect.top - b.clientRect.top; });
+            .sort(function (a, b) {
+            return isHorizontal ? a.clientRect.left - b.clientRect.left :
+                a.clientRect.top - b.clientRect.top;
+        });
         this._positionCache.siblings = coercion.coerceArray(this.connectedTo)
             .map(function (drop) { return typeof drop === 'string' ? /** @type {?} */ ((_this._dragDropRegistry.getDropContainer(drop))) : drop; })
             .filter(function (drop) { return drop && drop !== _this; })

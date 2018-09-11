@@ -1302,6 +1302,8 @@ class CdkDrop {
      * @return {?}
      */
     _cachePositions() {
+        /** @type {?} */
+        const isHorizontal = this.orientation === 'horizontal';
         this._positionCache.items = this._activeDraggables
             .map(drag => {
             /** @type {?} */
@@ -1329,7 +1331,10 @@ class CdkDrop {
                 }
             };
         })
-            .sort((a, b) => a.clientRect.top - b.clientRect.top);
+            .sort((a, b) => {
+            return isHorizontal ? a.clientRect.left - b.clientRect.left :
+                a.clientRect.top - b.clientRect.top;
+        });
         this._positionCache.siblings = coerceArray(this.connectedTo)
             .map(drop => typeof drop === 'string' ? /** @type {?} */ ((this._dragDropRegistry.getDropContainer(drop))) : drop)
             .filter(drop => drop && drop !== this)
