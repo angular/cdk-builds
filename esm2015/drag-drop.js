@@ -482,7 +482,8 @@ class CdkDrag {
             event.preventDefault();
             /** @type {?} */
             const pointerPosition = this._getConstrainedPointerPosition(event);
-            this._updatePointerDirectionDelta(pointerPosition);
+            /** @type {?} */
+            const delta = this._updatePointerDirectionDelta(pointerPosition);
             if (this.dropContainer) {
                 this._updateActiveDropContainer(pointerPosition);
             }
@@ -497,13 +498,14 @@ class CdkDrag {
             }
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
-            // re-enter the zone becaus we run all of the events on the outside.
+            // re-enter the zone because we run all of the events on the outside.
             if (this._moveEventSubscriptions > 0) {
                 this._ngZone.run(() => {
                     this._moveEvents.next({
                         source: this,
                         pointerPosition,
-                        event
+                        event,
+                        delta
                     });
                 });
             }
@@ -864,6 +866,7 @@ class CdkDrag {
             delta.y = y > positionSinceLastChange.y ? 1 : -1;
             positionSinceLastChange.y = y;
         }
+        return delta;
     }
     /**
      * Gets the root draggable element, based on the `rootElementSelector`.
