@@ -32,7 +32,7 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
     /**
      * Provides a stream containing the latest data array to render. Influenced by the tree's
      * stream of view window (what dataNodes are currently on screen).
-     * Data source can be an observable of data array, or a dara array to render.
+     * Data source can be an observable of data array, or a data array to render.
      */
     dataSource: DataSource<T> | Observable<T[]> | T[];
     private _dataSource;
