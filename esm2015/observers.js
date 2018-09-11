@@ -166,12 +166,7 @@ class CdkObserveContent {
      */
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
-        if (this._disabled) {
-            this._unsubscribe();
-        }
-        else {
-            this._subscribe();
-        }
+        this._disabled ? this._unsubscribe() : this._subscribe();
     }
     /**
      * Debounce interval for emitting the changes.
