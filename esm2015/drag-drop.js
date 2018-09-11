@@ -604,7 +604,7 @@ class CdkDrag {
             /** @type {?} */ ((this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
         }
         else {
-            /** @type {?} */ ((this._placeholder.parentNode)).appendChild(this._rootElement);
+            this._initialContainer.element.nativeElement.appendChild(this._rootElement);
         }
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -621,6 +621,7 @@ class CdkDrag {
                 previousContainer: this._initialContainer
             });
             this.dropContainer.drop(this, currentIndex, this._initialContainer);
+            this.dropContainer = this._initialContainer;
         });
     }
     /**

@@ -692,7 +692,7 @@ var CdkDrag = /** @class */ (function () {
             /** @type {?} */ ((this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
         }
         else {
-            /** @type {?} */ ((this._placeholder.parentNode)).appendChild(this._rootElement);
+            this._initialContainer.element.nativeElement.appendChild(this._rootElement);
         }
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -709,6 +709,7 @@ var CdkDrag = /** @class */ (function () {
                 previousContainer: _this._initialContainer
             });
             _this.dropContainer.drop(_this, currentIndex, _this._initialContainer);
+            _this.dropContainer = _this._initialContainer;
         });
     };
     /**
