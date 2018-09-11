@@ -170,6 +170,9 @@ var DragDropRegistry = /** @class */ (function () {
             var moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
             /** @type {?} */
             var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
+            // We need to disable the native interactions on the entire body, because
+            // the user can start marking text if they drag too far in Safari.
+            this._document.body.classList.add('cdk-drag-drop-disable-native-interactions');
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
@@ -198,6 +201,7 @@ var DragDropRegistry = /** @class */ (function () {
         this._activeDragInstances.delete(drag);
         if (this._activeDragInstances.size === 0) {
             this._clearGlobalListeners();
+            this._document.body.classList.remove('cdk-drag-drop-disable-native-interactions');
         }
     };
     /** Gets whether a drag item instance is currently being dragged. */
@@ -1689,7 +1693,7 @@ var CdkDrop = /** @class */ (function () {
                     template: '<ng-content></ng-content>',
                     encapsulation: core.ViewEncapsulation.None,
                     changeDetection: core.ChangeDetectionStrategy.OnPush,
-                    styles: [".cdk-drag-preview{position:fixed;top:0;left:0;z-index:1000}.cdk-drag,.cdk-drag-handle{touch-action:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}"],
+                    styles: [".cdk-drag-preview{position:fixed;top:0;left:0;z-index:1000}.cdk-drag,.cdk-drag-drop-disable-native-interactions,.cdk-drag-handle{touch-action:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}"],
                     providers: [
                         { provide: CDK_DROP_CONTAINER, useExisting: CdkDrop },
                     ],

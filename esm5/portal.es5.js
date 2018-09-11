@@ -414,7 +414,7 @@ DomPortalOutlet = /** @class */ (function (_super) {
         // When the ViewContainerRef is missing, we use the factory to create the component directly
         // and then manually attach the view to the application.
         if (portal.viewContainerRef) {
-            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.parentInjector);
+            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector);
             this.setDisposeFn(function () { return componentRef.destroy(); });
         }
         else {
@@ -641,7 +641,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
         /** @type {?} */
         var componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         /** @type {?} */
-        var ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.parentInjector);
+        var ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
         _super.prototype.setDisposeFn.call(this, function () { return ref.destroy(); });
         this._attachedPortal = portal;
         this._attachedRef = ref;

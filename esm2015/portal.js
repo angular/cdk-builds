@@ -306,7 +306,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         // When the ViewContainerRef is missing, we use the factory to create the component directly
         // and then manually attach the view to the application.
         if (portal.viewContainerRef) {
-            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.parentInjector);
+            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector);
             this.setDisposeFn(() => componentRef.destroy());
         }
         else {
@@ -483,7 +483,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
         /** @type {?} */
         const componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
         /** @type {?} */
-        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.parentInjector);
+        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
         super.setDisposeFn(() => ref.destroy());
         this._attachedPortal = portal;
         this._attachedRef = ref;
