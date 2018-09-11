@@ -630,8 +630,12 @@ var CdkDrag = /** @class */ (function () {
         this._ngZone.onStable.asObservable().pipe(operators.take(1)).subscribe(function () {
             /** @type {?} */
             var rootElement = _this._rootElement = _this._getRootElement();
-            rootElement.addEventListener('mousedown', _this._startDragging);
-            rootElement.addEventListener('touchstart', _this._startDragging);
+            // We need to bring the events back into the `NgZone`, because of the `onStable` call.
+            // We need to bring the events back into the `NgZone`, because of the `onStable` call.
+            _this._ngZone.run(function () {
+                rootElement.addEventListener('mousedown', _this._startDragging);
+                rootElement.addEventListener('touchstart', _this._startDragging);
+            });
         });
     };
     /**
