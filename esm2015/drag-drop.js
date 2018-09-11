@@ -732,7 +732,7 @@ class CdkDrag {
         // Move the preview to the placeholder position.
         this._setTransform(this._preview, placeholderRect.left, placeholderRect.top);
         /** @type {?} */
-        const duration = getTransitionDurationInMs(this._preview);
+        const duration = getTransformTransitionDurationInMs(this._preview);
         if (duration === 0) {
             return Promise.resolve();
         }
@@ -740,7 +740,7 @@ class CdkDrag {
             return new Promise(resolve => {
                 /** @type {?} */
                 const handler = /** @type {?} */ (((event) => {
-                    if (!event || event.target === this._preview) {
+                    if (!event || (event.target === this._preview && event.propertyName === 'transform')) {
                         this._preview.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
@@ -929,18 +929,40 @@ function parseCssTimeUnitsToMs(value) {
     return parseFloat(value) * multiplier;
 }
 /**
- * Gets the transition duration, including the delay, of an element in milliseconds.
+ * Gets the transform transition duration, including the delay, of an element in milliseconds.
  * @param {?} element
  * @return {?}
  */
-function getTransitionDurationInMs(element) {
+function getTransformTransitionDurationInMs(element) {
     /** @type {?} */
     const computedStyle = getComputedStyle(element);
     /** @type {?} */
-    const rawDuration = computedStyle.getPropertyValue('transition-duration');
+    const transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
     /** @type {?} */
-    const rawDelay = computedStyle.getPropertyValue('transition-delay');
-    return parseCssTimeUnitsToMs(rawDuration) + parseCssTimeUnitsToMs(rawDelay);
+    const property = transitionedProperties.find(prop => prop === 'transform' || prop === 'all');
+    // If there's no transition for `all` or `transform`, we shouldn't do anything.
+    if (!property) {
+        return 0;
+    }
+    /** @type {?} */
+    const propertyIndex = transitionedProperties.indexOf(property);
+    /** @type {?} */
+    const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
+    /** @type {?} */
+    const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
+    return parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]);
+}
+/**
+ * Parses out multiple values from a computed style into an array.
+ * @param {?} computedStyle
+ * @param {?} name
+ * @return {?}
+ */
+function parseCssPropertyValue(computedStyle, name) {
+    /** @type {?} */
+    const value = computedStyle.getPropertyValue(name);
+    return value.split(',').map(part => part.trim());
 }
 
 /**

@@ -850,7 +850,7 @@ var CdkDrag = /** @class */ (function () {
         // Move the preview to the placeholder position.
         this._setTransform(this._preview, placeholderRect.left, placeholderRect.top);
         /** @type {?} */
-        var duration = getTransitionDurationInMs(this._preview);
+        var duration = getTransformTransitionDurationInMs(this._preview);
         if (duration === 0) {
             return Promise.resolve();
         }
@@ -858,7 +858,7 @@ var CdkDrag = /** @class */ (function () {
             return new Promise(function (resolve) {
                 /** @type {?} */
                 var handler = /** @type {?} */ ((function (event) {
-                    if (!event || event.target === _this._preview) {
+                    if (!event || (event.target === _this._preview && event.propertyName === 'transform')) {
                         _this._preview.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
@@ -1092,18 +1092,40 @@ function parseCssTimeUnitsToMs(value) {
     return parseFloat(value) * multiplier;
 }
 /**
- * Gets the transition duration, including the delay, of an element in milliseconds.
+ * Gets the transform transition duration, including the delay, of an element in milliseconds.
  * @param {?} element
  * @return {?}
  */
-function getTransitionDurationInMs(element) {
+function getTransformTransitionDurationInMs(element) {
     /** @type {?} */
     var computedStyle = getComputedStyle(element);
     /** @type {?} */
-    var rawDuration = computedStyle.getPropertyValue('transition-duration');
+    var transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
     /** @type {?} */
-    var rawDelay = computedStyle.getPropertyValue('transition-delay');
-    return parseCssTimeUnitsToMs(rawDuration) + parseCssTimeUnitsToMs(rawDelay);
+    var property = transitionedProperties.find(function (prop) { return prop === 'transform' || prop === 'all'; });
+    // If there's no transition for `all` or `transform`, we shouldn't do anything.
+    if (!property) {
+        return 0;
+    }
+    /** @type {?} */
+    var propertyIndex = transitionedProperties.indexOf(property);
+    /** @type {?} */
+    var rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
+    /** @type {?} */
+    var rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
+    return parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]);
+}
+/**
+ * Parses out multiple values from a computed style into an array.
+ * @param {?} computedStyle
+ * @param {?} name
+ * @return {?}
+ */
+function parseCssPropertyValue(computedStyle, name) {
+    /** @type {?} */
+    var value = computedStyle.getPropertyValue(name);
+    return value.split(',').map(function (part) { return part.trim(); });
 }
 
 /**
