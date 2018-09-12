@@ -189,12 +189,7 @@ var CdkObserveContent = /** @class */ (function () {
          */
         function (value) {
             this._disabled = coercion.coerceBooleanProperty(value);
-            if (this._disabled) {
-                this._unsubscribe();
-            }
-            else {
-                this._subscribe();
-            }
+            this._disabled ? this._unsubscribe() : this._subscribe();
         },
         enumerable: true,
         configurable: true

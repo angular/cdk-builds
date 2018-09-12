@@ -27,12 +27,9 @@ and limitations under the License.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
+var extendStatics = Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
 
 function __extends(d, b) {
     extendStatics(d, b);
@@ -2150,31 +2147,24 @@ var FocusMonitor = /** @class */ (function () {
         }
     };
     /**
-     * Focuses the element via the specified focus origin.
-     * @param element Element to focus.
-     * @param origin Focus origin.
-     * @param options Options that can be used to configure the focus behavior.
-     */
-    /**
-     * Focuses the element via the specified focus origin.
-     * @param {?} element Element to focus.
-     * @param {?} origin Focus origin.
-     * @param {?=} options Options that can be used to configure the focus behavior.
+     * @param {?} element
+     * @param {?} origin
+     * @param {?=} options
      * @return {?}
      */
     FocusMonitor.prototype.focusVia = /**
-     * Focuses the element via the specified focus origin.
-     * @param {?} element Element to focus.
-     * @param {?} origin Focus origin.
-     * @param {?=} options Options that can be used to configure the focus behavior.
+     * @param {?} element
+     * @param {?} origin
+     * @param {?=} options
      * @return {?}
      */
     function (element, origin, options) {
+        var /** @type {?} */ nativeElement = this._getNativeElement(element);
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
-        if (typeof element.focus === 'function') {
+        if (typeof nativeElement.focus === 'function') {
             // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
-            (/** @type {?} */ (element)).focus(options);
+            (/** @type {?} */ (nativeElement)).focus(options);
         }
     };
     /**
@@ -2455,6 +2445,17 @@ var FocusMonitor = /** @class */ (function () {
             this._unregisterGlobalListeners();
             this._unregisterGlobalListeners = function () { };
         }
+    };
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    FocusMonitor.prototype._getNativeElement = /**
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        return element instanceof core.ElementRef ? element.nativeElement : element;
     };
     FocusMonitor.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },

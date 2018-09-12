@@ -63,6 +63,13 @@ export declare class FocusMonitor implements OnDestroy {
      * @param options Options that can be used to configure the focus behavior.
      */
     focusVia(element: HTMLElement, origin: FocusOrigin, options?: FocusOptions): void;
+    /**
+     * Focuses the element via the specified focus origin.
+     * @param element Element to focus.
+     * @param origin Focus origin.
+     * @param options Options that can be used to configure the focus behavior.
+     */
+    focusVia(element: ElementRef<HTMLElement>, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
     /** Register necessary event listeners on the document and window. */
     private _registerGlobalListeners();
@@ -99,6 +106,7 @@ export declare class FocusMonitor implements OnDestroy {
     private _emitOrigin(subject, origin);
     private _incrementMonitoredElementCount();
     private _decrementMonitoredElementCount();
+    private _getNativeElement(element);
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or

@@ -1629,18 +1629,18 @@ class FocusMonitor {
         }
     }
     /**
-     * Focuses the element via the specified focus origin.
-     * @param {?} element Element to focus.
-     * @param {?} origin Focus origin.
-     * @param {?=} options Options that can be used to configure the focus behavior.
+     * @param {?} element
+     * @param {?} origin
+     * @param {?=} options
      * @return {?}
      */
     focusVia(element, origin, options) {
+        const /** @type {?} */ nativeElement = this._getNativeElement(element);
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
-        if (typeof element.focus === 'function') {
+        if (typeof nativeElement.focus === 'function') {
             // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
-            (/** @type {?} */ (element)).focus(options);
+            (/** @type {?} */ (nativeElement)).focus(options);
         }
     }
     /**
@@ -1858,6 +1858,13 @@ class FocusMonitor {
             this._unregisterGlobalListeners();
             this._unregisterGlobalListeners = () => { };
         }
+    }
+    /**
+     * @param {?} element
+     * @return {?}
+     */
+    _getNativeElement(element) {
+        return element instanceof ElementRef ? element.nativeElement : element;
     }
 }
 FocusMonitor.decorators = [
