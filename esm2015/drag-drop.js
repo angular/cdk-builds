@@ -356,10 +356,6 @@ class CdkDrag {
          */
         this._activeTransform = { x: 0, y: 0 };
         /**
-         * Whether the element has moved since the user started dragging it.
-         */
-        this._hasMoved = false;
-        /**
          * Emits when the item is being moved.
          */
         this._moveEvents = new Subject();
@@ -435,6 +431,7 @@ class CdkDrag {
             }
             /** @type {?} */
             const endedOrDestroyed = merge(this.ended, this._destroyed);
+            this._hasMoved = false;
             this._dragDropRegistry.pointerMove
                 .pipe(takeUntil(endedOrDestroyed))
                 .subscribe(this._pointerMove);
@@ -714,13 +711,11 @@ class CdkDrag {
         /** @type {?} */
         const referenceRect = handleElement ? handleElement.getBoundingClientRect() : elementRect;
         /** @type {?} */
-        const x = this._isTouchEvent(event) ?
-            event.targetTouches[0].pageX - referenceRect.left - this._scrollPosition.left :
-            event.offsetX;
+        const point = this._isTouchEvent(event) ? event.targetTouches[0] : event;
         /** @type {?} */
-        const y = this._isTouchEvent(event) ?
-            event.targetTouches[0].pageY - referenceRect.top - this._scrollPosition.top :
-            event.offsetY;
+        const x = point.pageX - referenceRect.left - this._scrollPosition.left;
+        /** @type {?} */
+        const y = point.pageY - referenceRect.top - this._scrollPosition.top;
         return {
             x: referenceRect.left - elementRect.left + x,
             y: referenceRect.top - elementRect.top + y
