@@ -825,13 +825,11 @@ var CdkDrag = /** @class */ (function () {
         /** @type {?} */
         var referenceRect = handleElement ? handleElement.getBoundingClientRect() : elementRect;
         /** @type {?} */
-        var x = this._isTouchEvent(event) ?
-            event.targetTouches[0].pageX - referenceRect.left - this._scrollPosition.left :
-            event.offsetX;
+        var point = this._isTouchEvent(event) ? event.targetTouches[0] : event;
         /** @type {?} */
-        var y = this._isTouchEvent(event) ?
-            event.targetTouches[0].pageY - referenceRect.top - this._scrollPosition.top :
-            event.offsetY;
+        var x = point.pageX - referenceRect.left - this._scrollPosition.left;
+        /** @type {?} */
+        var y = point.pageY - referenceRect.top - this._scrollPosition.top;
         return {
             x: referenceRect.left - elementRect.left + x,
             y: referenceRect.top - elementRect.top + y
