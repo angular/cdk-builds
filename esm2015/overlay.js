@@ -2949,12 +2949,14 @@ class CdkConnectedOverlay {
      * Whether the overlay's width and height can be constrained to fit within the viewport.
      * @return {?}
      */
-    get flexibleDiemsions() { return this._flexibleDimensions; }
+    get flexibleDimensions() { return this._flexibleDimensions; }
     /**
      * @param {?} value
      * @return {?}
      */
-    set flexibleDiemsions(value) { this._flexibleDimensions = coerceBooleanProperty(value); }
+    set flexibleDimensions(value) {
+        this._flexibleDimensions = coerceBooleanProperty(value);
+    }
     /**
      * Whether the overlay can grow after the initial open when flexible positioning is turned on.
      * @return {?}
@@ -3070,7 +3072,7 @@ class CdkConnectedOverlay {
         /** @type {?} */
         const strategy = this._overlay.position()
             .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleDimensions(this.flexibleDiemsions)
+            .withFlexibleDimensions(this.flexibleDimensions)
             .withPush(this.push)
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
@@ -3182,7 +3184,7 @@ CdkConnectedOverlay.propDecorators = {
     open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
     hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
     lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
-    flexibleDiemsions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
+    flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
     growAfterOpen: [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
     push: [{ type: Input, args: ['cdkConnectedOverlayPush',] }],
     backdropClick: [{ type: Output }],

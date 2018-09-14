@@ -3869,7 +3869,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CdkConnectedOverlay.prototype, "flexibleDiemsions", {
+    Object.defineProperty(CdkConnectedOverlay.prototype, "flexibleDimensions", {
         /** Whether the overlay's width and height can be constrained to fit within the viewport. */
         get: /**
          * Whether the overlay's width and height can be constrained to fit within the viewport.
@@ -3880,7 +3880,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * @param {?} value
          * @return {?}
          */
-        function (value) { this._flexibleDimensions = coerceBooleanProperty(value); },
+        function (value) {
+            this._flexibleDimensions = coerceBooleanProperty(value);
+        },
         enumerable: true,
         configurable: true
     });
@@ -4039,7 +4041,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         /** @type {?} */
         var strategy = this._overlay.position()
             .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleDimensions(this.flexibleDiemsions)
+            .withFlexibleDimensions(this.flexibleDimensions)
             .withPush(this.push)
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
@@ -4170,7 +4172,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
         hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
         lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
-        flexibleDiemsions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
+        flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
         growAfterOpen: [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
         push: [{ type: Input, args: ['cdkConnectedOverlayPush',] }],
         backdropClick: [{ type: Output }],

@@ -3902,7 +3902,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(CdkConnectedOverlay.prototype, "flexibleDiemsions", {
+    Object.defineProperty(CdkConnectedOverlay.prototype, "flexibleDimensions", {
         /** Whether the overlay's width and height can be constrained to fit within the viewport. */
         get: /**
          * Whether the overlay's width and height can be constrained to fit within the viewport.
@@ -3913,7 +3913,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * @param {?} value
          * @return {?}
          */
-        function (value) { this._flexibleDimensions = coercion.coerceBooleanProperty(value); },
+        function (value) {
+            this._flexibleDimensions = coercion.coerceBooleanProperty(value);
+        },
         enumerable: true,
         configurable: true
     });
@@ -4072,7 +4074,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         /** @type {?} */
         var strategy = this._overlay.position()
             .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleDimensions(this.flexibleDiemsions)
+            .withFlexibleDimensions(this.flexibleDimensions)
             .withPush(this.push)
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
@@ -4203,7 +4205,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         open: [{ type: core.Input, args: ['cdkConnectedOverlayOpen',] }],
         hasBackdrop: [{ type: core.Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
         lockPosition: [{ type: core.Input, args: ['cdkConnectedOverlayLockPosition',] }],
-        flexibleDiemsions: [{ type: core.Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
+        flexibleDimensions: [{ type: core.Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
         growAfterOpen: [{ type: core.Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
         push: [{ type: core.Input, args: ['cdkConnectedOverlayPush',] }],
         backdropClick: [{ type: core.Output }],

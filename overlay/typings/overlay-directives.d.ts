@@ -77,7 +77,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Whether or not the overlay should be locked when scrolling. */
     lockPosition: any;
     /** Whether the overlay's width and height can be constrained to fit within the viewport. */
-    flexibleDiemsions: boolean;
+    flexibleDimensions: boolean;
     /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
     growAfterOpen: boolean;
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
