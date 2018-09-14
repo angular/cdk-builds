@@ -105,6 +105,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     detachBackdrop(): void;
     /** Toggles a single CSS class or an array of classes on an element. */
     private _toggleClasses;
+    /** Detaches the overlay content next time the zone stabilizes. */
+    private _detachContentWhenStable;
 }
 /** Size properties for an overlay. */
 export interface OverlaySizeConfig {

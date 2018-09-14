@@ -1028,7 +1028,6 @@ OverlayRef = /** @class */ (function () {
      * @return {?} The portal detachment result.
      */
     function () {
-        var _this = this;
         if (!this.hasAttached()) {
             return;
         }
@@ -1052,21 +1051,9 @@ OverlayRef = /** @class */ (function () {
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
-        /** @type {?} */
-        var subscription = this._ngZone.onStable
-            .asObservable()
-            .pipe(takeUntil(merge(this._attachments, this._detachments)))
-            .subscribe(function () {
-            // Needs a couple of checks for the pane and host, because
-            // they may have been removed by the time the zone stabilizes.
-            if (!_this._pane || !_this._host || _this._pane.children.length === 0) {
-                if (_this._host && _this._host.parentElement) {
-                    _this._previousHostParent = _this._host.parentElement;
-                    _this._previousHostParent.removeChild(_this._host);
-                }
-                subscription.unsubscribe();
-            }
-        });
+        // Keeping the host element in DOM the can cause scroll jank, because it still gets
+        // rendered, even though it's transparent and unclickable which is why we remove it.
+        this._detachContentWhenStable();
         return detachmentResult;
     };
     /** Cleans up the overlay from the DOM. */
@@ -1408,6 +1395,37 @@ OverlayRef = /** @class */ (function () {
         coerceArray(cssClasses).forEach(function (cssClass) {
             // We can't do a spread here, because IE doesn't support setting multiple classes.
             isAdd ? classList.add(cssClass) : classList.remove(cssClass);
+        });
+    };
+    /**
+     * Detaches the overlay content next time the zone stabilizes.
+     * @return {?}
+     */
+    OverlayRef.prototype._detachContentWhenStable = /**
+     * Detaches the overlay content next time the zone stabilizes.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        // Normally we wouldn't have to explicitly run this outside the `NgZone`, however
+        // if the consumer is using `zone-patch-rxjs`, the `Subscription.unsubscribe` call will
+        // be patched to run inside the zone, which will throw us into an infinite loop.
+        this._ngZone.runOutsideAngular(function () {
+            /** @type {?} */
+            var subscription = _this._ngZone.onStable
+                .asObservable()
+                .pipe(takeUntil(merge(_this._attachments, _this._detachments)))
+                .subscribe(function () {
+                // Needs a couple of checks for the pane and host, because
+                // they may have been removed by the time the zone stabilizes.
+                if (!_this._pane || !_this._host || _this._pane.children.length === 0) {
+                    if (_this._host && _this._host.parentElement) {
+                        _this._previousHostParent = _this._host.parentElement;
+                        _this._previousHostParent.removeChild(_this._host);
+                    }
+                    subscription.unsubscribe();
+                }
+            });
         });
     };
     return OverlayRef;
