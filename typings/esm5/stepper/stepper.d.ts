@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
-import { AfterViewInit, ChangeDetectorRef, EventEmitter, ElementRef, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, EventEmitter, ElementRef, OnChanges, OnDestroy, QueryList, TemplateRef, InjectionToken } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { CdkStepLabel } from './step-label';
 import { Subject } from 'rxjs';
@@ -29,8 +29,36 @@ export declare class StepperSelectionEvent {
     /** The step instance previously selected. */
     previouslySelectedStep: CdkStep;
 }
+/** The state of each step. */
+export declare type StepState = 'number' | 'edit' | 'done' | 'error' | string;
+/** Enum to represent the different states of the steps. */
+export declare const STEP_STATE: {
+    NUMBER: string;
+    EDIT: string;
+    DONE: string;
+    ERROR: string;
+};
+/** InjectionToken that can be used to specify the global stepper options. */
+export declare const MAT_STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
+/** Configurable options for stepper. */
+export interface StepperOptions {
+    /**
+     * Whether the stepper should display an error state or not.
+     * Default behavior is assumed to be false.
+     */
+    showError?: boolean;
+    /**
+     * Whether the stepper should display the default indicator type
+     * or not.
+     * Default behavior is assumed to be true.
+     */
+    displayDefaultIndicatorType?: boolean;
+}
 export declare class CdkStep implements OnChanges {
     private _stepper;
+    private _stepperOptions;
+    _showError: boolean;
+    _displayDefaultIndicatorType: boolean;
     /** Template for step label if it exists. */
     stepLabel: CdkStepLabel;
     /** Template for step content. */
@@ -41,6 +69,8 @@ export declare class CdkStep implements OnChanges {
     interacted: boolean;
     /** Plain text label of the step. */
     label: string;
+    /** Error message to display when there's an error. */
+    errorMessage: string;
     /** Aria label for the tab. */
     ariaLabel: string;
     /**
@@ -48,6 +78,8 @@ export declare class CdkStep implements OnChanges {
      * Will be cleared if `aria-label` is set at the same time.
      */
     ariaLabelledby: string;
+    /** State of the step. */
+    state: StepState;
     /** Whether the user can return to this step once it has been marked as complted. */
     editable: boolean;
     private _editable;
@@ -57,8 +89,13 @@ export declare class CdkStep implements OnChanges {
     /** Whether step is marked as completed. */
     completed: boolean;
     private _customCompleted;
-    private _defaultCompleted;
-    constructor(_stepper: CdkStepper);
+    private _getDefaultCompleted;
+    /** Whether step has an error. */
+    hasError: boolean;
+    private _customError;
+    private _getDefaultError;
+    /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
+    constructor(_stepper: CdkStepper, stepperOptions?: StepperOptions);
     /** Selects this step component. */
     select(): void;
     /** Resets the step to its initial state. Note that this includes resetting form data. */
@@ -113,7 +150,10 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     /** Returns position state of the step with the given index. */
     _getAnimationDirection(index: number): StepContentPositionState;
     /** Returns the type of icon to be displayed. */
-    _getIndicatorType(index: number): 'number' | 'edit' | 'done';
+    _getIndicatorType(index: number, state?: StepState): StepState;
+    private _getDefaultIndicatorLogic;
+    private _getGuidelineLogic;
+    private _isCurrentStep;
     /** Returns the index of the currently-focused step header. */
     _getFocusIndex(): number | null;
     private _updateSelectedItemIndex;

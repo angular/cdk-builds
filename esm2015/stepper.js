@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, ElementRef, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, NgModule } from '@angular/core';
+import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, ElementRef, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -50,11 +50,26 @@ let nextId = 0;
  */
 class StepperSelectionEvent {
 }
+/** *
+ * Enum to represent the different states of the steps.
+  @type {?} */
+const STEP_STATE = {
+    NUMBER: 'number',
+    EDIT: 'edit',
+    DONE: 'done',
+    ERROR: 'error'
+};
+/** *
+ * InjectionToken that can be used to specify the global stepper options.
+  @type {?} */
+const MAT_STEPPER_GLOBAL_OPTIONS = new InjectionToken('mat-stepper-global-options');
 class CdkStep {
     /**
+     * \@breaking-change 8.0.0 remove the `?` after `stepperOptions`
      * @param {?} _stepper
+     * @param {?=} stepperOptions
      */
-    constructor(_stepper) {
+    constructor(_stepper, stepperOptions) {
         this._stepper = _stepper;
         /**
          * Whether user has seen the expanded step content or not.
@@ -63,6 +78,10 @@ class CdkStep {
         this._editable = true;
         this._optional = false;
         this._customCompleted = null;
+        this._customError = null;
+        this._stepperOptions = stepperOptions ? stepperOptions : {};
+        this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
+        this._showError = !!this._stepperOptions.showError;
     }
     /**
      * Whether the user can return to this step once it has been marked as complted.
@@ -93,7 +112,7 @@ class CdkStep {
      * @return {?}
      */
     get completed() {
-        return this._customCompleted == null ? this._defaultCompleted() : this._customCompleted;
+        return this._customCompleted == null ? this._getDefaultCompleted() : this._customCompleted;
     }
     /**
      * @param {?} value
@@ -105,8 +124,28 @@ class CdkStep {
     /**
      * @return {?}
      */
-    _defaultCompleted() {
+    _getDefaultCompleted() {
         return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
+    }
+    /**
+     * Whether step has an error.
+     * @return {?}
+     */
+    get hasError() {
+        return this._customError || this._getDefaultError();
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set hasError(value) {
+        this._customError = coerceBooleanProperty(value);
+    }
+    /**
+     * @return {?}
+     */
+    _getDefaultError() {
+        return this.stepControl && this.stepControl.invalid && this.interacted;
     }
     /**
      * Selects this step component.
@@ -123,6 +162,9 @@ class CdkStep {
         this.interacted = false;
         if (this._customCompleted != null) {
             this._customCompleted = false;
+        }
+        if (this._customError != null) {
+            this._customError = false;
         }
         if (this.stepControl) {
             this.stepControl.reset();
@@ -147,18 +189,22 @@ CdkStep.decorators = [
 ];
 /** @nocollapse */
 CdkStep.ctorParameters = () => [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] }
+    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [MAT_STEPPER_GLOBAL_OPTIONS,] }] }
 ];
 CdkStep.propDecorators = {
     stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
     content: [{ type: ViewChild, args: [TemplateRef,] }],
     stepControl: [{ type: Input }],
     label: [{ type: Input }],
+    errorMessage: [{ type: Input }],
     ariaLabel: [{ type: Input, args: ['aria-label',] }],
     ariaLabelledby: [{ type: Input, args: ['aria-labelledby',] }],
+    state: [{ type: Input }],
     editable: [{ type: Input }],
     optional: [{ type: Input }],
-    completed: [{ type: Input }]
+    completed: [{ type: Input }],
+    hasError: [{ type: Input }]
 };
 class CdkStepper {
     /**
@@ -324,17 +370,63 @@ class CdkStepper {
     /**
      * Returns the type of icon to be displayed.
      * @param {?} index
+     * @param {?=} state
      * @return {?}
      */
-    _getIndicatorType(index) {
+    _getIndicatorType(index, state = STEP_STATE.NUMBER) {
         /** @type {?} */
         const step = this._steps.toArray()[index];
-        if (!step.completed || this._selectedIndex == index) {
-            return 'number';
+        /** @type {?} */
+        const isCurrentStep = this._isCurrentStep(index);
+        return step._displayDefaultIndicatorType
+            ? this._getDefaultIndicatorLogic(step, isCurrentStep)
+            : this._getGuidelineLogic(step, isCurrentStep, state);
+    }
+    /**
+     * @param {?} step
+     * @param {?} isCurrentStep
+     * @return {?}
+     */
+    _getDefaultIndicatorLogic(step, isCurrentStep) {
+        if (step._showError && step.hasError && !isCurrentStep) {
+            return STEP_STATE.ERROR;
+        }
+        else if (!step.completed || isCurrentStep) {
+            return STEP_STATE.NUMBER;
         }
         else {
-            return step.editable ? 'edit' : 'done';
+            return step.editable ? STEP_STATE.EDIT : STEP_STATE.DONE;
         }
+    }
+    /**
+     * @param {?} step
+     * @param {?} isCurrentStep
+     * @param {?=} state
+     * @return {?}
+     */
+    _getGuidelineLogic(step, isCurrentStep, state = STEP_STATE.NUMBER) {
+        if (step._showError && step.hasError && !isCurrentStep) {
+            return STEP_STATE.ERROR;
+        }
+        else if (step.completed && !isCurrentStep) {
+            return STEP_STATE.DONE;
+        }
+        else if (step.completed && isCurrentStep) {
+            return state;
+        }
+        else if (step.editable && isCurrentStep) {
+            return STEP_STATE.EDIT;
+        }
+        else {
+            return state;
+        }
+    }
+    /**
+     * @param {?} index
+     * @return {?}
+     */
+    _isCurrentStep(index) {
+        return this._selectedIndex === index;
     }
     /**
      * Returns the index of the currently-focused step header.
@@ -542,5 +634,5 @@ CdkStepperModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { StepperSelectionEvent, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };
+export { StepperSelectionEvent, STEP_STATE, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };
 //# sourceMappingURL=stepper.js.map
