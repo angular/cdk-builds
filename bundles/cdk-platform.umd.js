@@ -57,7 +57,7 @@ var Platform = /** @class */ (function () {
          * Whether the current platform is Apple iOS.
          */
         this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-            !(/** @type {?} */ (window)).MSStream;
+            !('MSStream' in window);
         /**
          * Whether the current browser is Firefox.
          */
