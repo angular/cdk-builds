@@ -3846,7 +3846,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         function (offsetX) {
             this._offsetX = offsetX;
             if (this._position) {
-                this._setPositions(this._position);
+                this._updatePositionStrategy(this._position);
             }
         },
         enumerable: true,
@@ -3866,7 +3866,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         function (offsetY) {
             this._offsetY = offsetY;
             if (this._position) {
-                this._setPositions(this._position);
+                this._updatePositionStrategy(this._position);
             }
         },
         enumerable: true,
@@ -3992,17 +3992,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
      */
     function (changes) {
         if (this._position) {
-            if (changes['positions']) {
-                this._position.withPositions(this.positions);
-            }
-            if (changes['lockPosition']) {
-                this._position.withLockedPosition(this.lockPosition);
-            }
-            if (changes['origin']) {
-                this._position.setOrigin(this.origin.elementRef);
-                if (this.open) {
-                    this._position.apply();
-                }
+            this._updatePositionStrategy(this._position);
+            if (changes['origin'] && this.open) {
+                this._position.apply();
             }
         }
         if (changes['open']) {
@@ -4018,10 +4010,17 @@ var CdkConnectedOverlay = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         if (!this.positions || !this.positions.length) {
             this.positions = defaultPositionList;
         }
         this._overlayRef = this._overlay.create(this._buildConfig());
+        this._overlayRef.keydownEvents().subscribe(function (event) {
+            _this.overlayKeydown.next(event);
+            if (event.keyCode === keycodes.ESCAPE) {
+                _this._detachOverlay();
+            }
+        });
     };
     /**
      * Builds the overlay config based on the directive's inputs
@@ -4062,6 +4061,36 @@ var CdkConnectedOverlay = /** @class */ (function () {
         return overlayConfig;
     };
     /**
+     * Updates the state of a position strategy, based on the values of the directive inputs.
+     * @param {?} positionStrategy
+     * @return {?}
+     */
+    CdkConnectedOverlay.prototype._updatePositionStrategy = /**
+     * Updates the state of a position strategy, based on the values of the directive inputs.
+     * @param {?} positionStrategy
+     * @return {?}
+     */
+    function (positionStrategy) {
+        var _this = this;
+        /** @type {?} */
+        var positions = this.positions.map(function (currentPosition) { return ({
+            originX: currentPosition.originX,
+            originY: currentPosition.originY,
+            overlayX: currentPosition.overlayX,
+            overlayY: currentPosition.overlayY,
+            offsetX: currentPosition.offsetX || _this.offsetX,
+            offsetY: currentPosition.offsetY || _this.offsetY
+        }); });
+        return positionStrategy
+            .setOrigin(this.origin.elementRef)
+            .withPositions(positions)
+            .withFlexibleDimensions(this.flexibleDimensions)
+            .withPush(this.push)
+            .withGrowAfterOpen(this.growAfterOpen)
+            .withViewportMargin(this.viewportMargin)
+            .withLockedPosition(this.lockPosition);
+    };
+    /**
      * Returns the position strategy of the overlay to be set on the overlay config
      * @return {?}
      */
@@ -4072,41 +4101,10 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function () {
         var _this = this;
         /** @type {?} */
-        var strategy = this._overlay.position()
-            .flexibleConnectedTo(this.origin.elementRef)
-            .withFlexibleDimensions(this.flexibleDimensions)
-            .withPush(this.push)
-            .withGrowAfterOpen(this.growAfterOpen)
-            .withViewportMargin(this.viewportMargin)
-            .withLockedPosition(this.lockPosition);
-        this._setPositions(strategy);
+        var strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
+        this._updatePositionStrategy(strategy);
         strategy.positionChanges.subscribe(function (p) { return _this.positionChange.emit(p); });
         return strategy;
-    };
-    /**
-     * Sets the primary and fallback positions of a positions strategy,
-     * based on the current directive inputs.
-     * @param {?} positionStrategy
-     * @return {?}
-     */
-    CdkConnectedOverlay.prototype._setPositions = /**
-     * Sets the primary and fallback positions of a positions strategy,
-     * based on the current directive inputs.
-     * @param {?} positionStrategy
-     * @return {?}
-     */
-    function (positionStrategy) {
-        var _this = this;
-        /** @type {?} */
-        var positions = this.positions.map(function (pos) { return ({
-            originX: pos.originX,
-            originY: pos.originY,
-            overlayX: pos.overlayX,
-            overlayY: pos.overlayY,
-            offsetX: pos.offsetX || _this.offsetX,
-            offsetY: pos.offsetY || _this.offsetY
-        }); });
-        positionStrategy.withPositions(positions);
     };
     /**
      * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
@@ -4119,13 +4117,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function () {
         var _this = this;
         if (!this._overlayRef) {
-            this._createOverlay(); /** @type {?} */
-            ((this._overlayRef)).keydownEvents().subscribe(function (event) {
-                _this.overlayKeydown.next(event);
-                if (event.keyCode === keycodes.ESCAPE) {
-                    _this._detachOverlay();
-                }
-            });
+            this._createOverlay();
         }
         else {
             // Update the overlay size, in case the directive's inputs have changed
