@@ -12,6 +12,7 @@ import { Observable, Subject } from 'rxjs';
 import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayConfig } from './overlay-config';
 import { OverlayReference } from './overlay-reference';
+import { PositionStrategy } from './position/position-strategy';
 /** An object where all of its properties cannot be written. */
 export declare type ImmutableObject<T> = {
     readonly [P in keyof T]: T[P];
@@ -32,6 +33,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _backdropClick;
     private _attachments;
     private _detachments;
+    private _positionStrategy;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -77,6 +79,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     getConfig(): OverlayConfig;
     /** Updates the position of the overlay based on the position strategy. */
     updatePosition(): void;
+    /** Switches to a new position strategy and updates the overlay position. */
+    updatePositionStrategy(strategy: PositionStrategy): void;
     /** Update the size properties of the overlay. */
     updateSize(sizeConfig: OverlaySizeConfig): void;
     /** Sets the LTR/RTL direction for the overlay. */

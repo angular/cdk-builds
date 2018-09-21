@@ -25,6 +25,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _justifyContent;
     private _width;
     private _height;
+    private _isDisposed;
     attach(overlayRef: OverlayReference): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
@@ -80,7 +81,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
      */
     apply(): void;
     /**
-     * Noop implemented as a part of the PositionStrategy interface.
+     * Cleans up the DOM changes from the position strategy.
      * @docs-private
      */
     dispose(): void;

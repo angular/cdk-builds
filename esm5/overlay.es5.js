@@ -908,6 +908,7 @@ OverlayRef = /** @class */ (function () {
         if (_config.scrollStrategy) {
             _config.scrollStrategy.attach(this);
         }
+        this._positionStrategy = _config.positionStrategy;
     }
     Object.defineProperty(OverlayRef.prototype, "overlayElement", {
         /** The overlay's HTML element */
@@ -976,8 +977,8 @@ OverlayRef = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var attachResult = this._portalOutlet.attach(portal);
-        if (this._config.positionStrategy) {
-            this._config.positionStrategy.attach(this);
+        if (this._positionStrategy) {
+            this._positionStrategy.attach(this);
         }
         // Update the pane element with the given configuration.
         if (!this._host.parentElement && this._previousHostParent) {
@@ -1036,8 +1037,8 @@ OverlayRef = /** @class */ (function () {
         // This is necessary because otherwise the pane element will cover the page and disable
         // pointer events therefore. Depends on the position strategy and the applied pane boundaries.
         this._togglePointerEvents(false);
-        if (this._config.positionStrategy && this._config.positionStrategy.detach) {
-            this._config.positionStrategy.detach();
+        if (this._positionStrategy && this._positionStrategy.detach) {
+            this._positionStrategy.detach();
         }
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
@@ -1068,8 +1069,8 @@ OverlayRef = /** @class */ (function () {
     function () {
         /** @type {?} */
         var isAttached = this.hasAttached();
-        if (this._config.positionStrategy) {
-            this._config.positionStrategy.dispose();
+        if (this._positionStrategy) {
+            this._positionStrategy.dispose();
         }
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
@@ -1172,8 +1173,32 @@ OverlayRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this._config.positionStrategy) {
-            this._config.positionStrategy.apply();
+        if (this._positionStrategy) {
+            this._positionStrategy.apply();
+        }
+    };
+    /** Switches to a new position strategy and updates the overlay position. */
+    /**
+     * Switches to a new position strategy and updates the overlay position.
+     * @param {?} strategy
+     * @return {?}
+     */
+    OverlayRef.prototype.updatePositionStrategy = /**
+     * Switches to a new position strategy and updates the overlay position.
+     * @param {?} strategy
+     * @return {?}
+     */
+    function (strategy) {
+        if (strategy === this._positionStrategy) {
+            return;
+        }
+        if (this._positionStrategy) {
+            this._positionStrategy.dispose();
+        }
+        this._positionStrategy = strategy;
+        if (this.hasAttached()) {
+            strategy.attach(this);
+            this.updatePosition();
         }
     };
     /** Update the size properties of the overlay. */
@@ -1435,6 +1460,10 @@ OverlayRef = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** *
+ * Class to be added to the overlay bounding box.
+  @type {?} */
+var boundingBoxClass = 'cdk-overlay-connected-position-bounding-box';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -1456,10 +1485,6 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this._document = _document;
         this._platform = _platform;
         this._overlayContainer = _overlayContainer;
-        /**
-         * Whether we're performing the very first positioning of the overlay.
-         */
-        this._isInitialRender = true;
         /**
          * Last size used for the bounding box. Used to avoid resizing the overlay after open.
          */
@@ -1563,10 +1588,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             throw Error('This position strategy is already attached to an overlay');
         }
         this._validatePositions();
-        overlayRef.hostElement.classList.add('cdk-overlay-connected-position-bounding-box');
+        overlayRef.hostElement.classList.add(boundingBoxClass);
         this._overlayRef = overlayRef;
         this._boundingBox = overlayRef.hostElement;
         this._pane = overlayRef.overlayElement;
+        this._isDisposed = false;
+        this._isInitialRender = true;
+        this._lastPosition = null;
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = this._viewportRuler.change().subscribe(function () {
             // When the window is resized, we want to trigger the next reposition as if it
@@ -1745,12 +1773,33 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (!this._isDisposed) {
-            this.detach();
-            this._boundingBox = null;
-            this._positionChanges.complete();
-            this._isDisposed = true;
+        if (this._isDisposed) {
+            return;
         }
+        // We can't use `_resetBoundingBoxStyles` here, because it resets
+        // some properties to zero, rather than removing them.
+        if (this._boundingBox) {
+            extendStyles(this._boundingBox.style, /** @type {?} */ ({
+                top: '',
+                left: '',
+                right: '',
+                bottom: '',
+                height: '',
+                width: '',
+                alignItems: '',
+                justifyContent: '',
+            }));
+        }
+        if (this._pane) {
+            this._resetOverlayElementStyles();
+        }
+        if (this._overlayRef) {
+            this._overlayRef.hostElement.classList.remove(boundingBoxClass);
+        }
+        this.detach();
+        this._positionChanges.complete();
+        this._overlayRef = this._boundingBox = /** @type {?} */ ((null));
+        this._isDisposed = true;
     };
     /**
      * This re-aligns the overlay element with the trigger in its last calculated position,
@@ -3146,6 +3195,10 @@ ConnectedPositionStrategy = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
+/** *
+ * Class to be added to the overlay pane wrapper.
+  @type {?} */
+var wrapperClass = 'cdk-global-overlay-wrapper';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * explicit position relative to the browser's viewport. We use flexbox, instead of
@@ -3188,7 +3241,8 @@ GlobalPositionStrategy = /** @class */ (function () {
         if (this._height && !config.height) {
             overlayRef.updateSize({ height: this._height });
         }
-        overlayRef.hostElement.classList.add('cdk-global-overlay-wrapper');
+        overlayRef.hostElement.classList.add(wrapperClass);
+        this._isDisposed = false;
     };
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
@@ -3404,7 +3458,7 @@ GlobalPositionStrategy = /** @class */ (function () {
         // Since the overlay ref applies the strategy asynchronously, it could
         // have been disposed before it ends up being applied. If that is the
         // case, we shouldn't do anything.
-        if (!this._overlayRef.hasAttached()) {
+        if (!this._overlayRef || !this._overlayRef.hasAttached()) {
             return;
         }
         /** @type {?} */
@@ -3442,20 +3496,35 @@ GlobalPositionStrategy = /** @class */ (function () {
         parentStyles.alignItems = config.height === '100%' ? 'flex-start' : this._alignItems;
     };
     /**
-     * Noop implemented as a part of the PositionStrategy interface.
+     * Cleans up the DOM changes from the position strategy.
      * @docs-private
      */
     /**
-     * Noop implemented as a part of the PositionStrategy interface.
+     * Cleans up the DOM changes from the position strategy.
      * \@docs-private
      * @return {?}
      */
     GlobalPositionStrategy.prototype.dispose = /**
-     * Noop implemented as a part of the PositionStrategy interface.
+     * Cleans up the DOM changes from the position strategy.
      * \@docs-private
      * @return {?}
      */
-    function () { };
+    function () {
+        if (this._isDisposed || !this._overlayRef) {
+            return;
+        }
+        /** @type {?} */
+        var styles = this._overlayRef.overlayElement.style;
+        /** @type {?} */
+        var parent = this._overlayRef.hostElement;
+        /** @type {?} */
+        var parentStyles = parent.style;
+        parent.classList.remove(wrapperClass);
+        parentStyles.justifyContent = parentStyles.alignItems = styles.marginTop =
+            styles.marginBottom = styles.marginLeft = styles.marginRight = styles.position = '';
+        this._overlayRef = /** @type {?} */ ((null));
+        this._isDisposed = true;
+    };
     return GlobalPositionStrategy;
 }());
 

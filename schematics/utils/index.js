@@ -13,7 +13,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./ast"));
 __export(require("./build-component"));
 __export(require("./get-project"));
-__export(require("./package-json"));
 __export(require("./parse5-element"));
 __export(require("./project-main-file"));
 __export(require("./project-style-file"));
