@@ -1009,9 +1009,10 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
                 .pipe(
             // Start off with a fake scroll event so we properly detect our initial position.
             operators.startWith(/** @type {?} */ ((null))), 
-            // Sample the scroll stream at every animation frame. This way if there are multiple
-            // scroll events in the same frame we only need to recheck our layout once.
-            operators.sampleTime(0, rxjs.animationFrameScheduler))
+            // Collect multiple events into one until the next animation frame. This way if
+            // there are multiple scroll events in the same frame we only need to recheck
+            // our layout once.
+            operators.auditTime(0, rxjs.animationFrameScheduler))
                 .subscribe(function () { return _this._scrollStrategy.onContentScrolled(); });
             _this._markChangeDetectionNeeded();
         }); });

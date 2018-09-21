@@ -8,7 +8,7 @@
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, defineInjectable, inject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
-import { distinctUntilChanged, auditTime, filter, takeUntil, sampleTime, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
@@ -749,9 +749,10 @@ class CdkVirtualScrollViewport extends CdkScrollable {
                 .pipe(
             // Start off with a fake scroll event so we properly detect our initial position.
             startWith(/** @type {?} */ ((null))), 
-            // Sample the scroll stream at every animation frame. This way if there are multiple
-            // scroll events in the same frame we only need to recheck our layout once.
-            sampleTime(0, animationFrameScheduler))
+            // Collect multiple events into one until the next animation frame. This way if
+            // there are multiple scroll events in the same frame we only need to recheck
+            // our layout once.
+            auditTime(0, animationFrameScheduler))
                 .subscribe(() => this._scrollStrategy.onContentScrolled());
             this._markChangeDetectionNeeded();
         }));
