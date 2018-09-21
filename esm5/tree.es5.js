@@ -1055,6 +1055,10 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** *
+ * Regex used to split a string on its CSS units.
+  @type {?} */
+var cssUnitPattern = /([A-Za-z%]+)$/;
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
@@ -1072,6 +1076,10 @@ var CdkTreeNodePadding = /** @class */ (function () {
          * Subject that emits when the component has been destroyed.
          */
         this._destroyed = new Subject();
+        /**
+         * CSS units used for the indentation value.
+         */
+        this.indentUnits = 'px';
         this._indent = 40;
         this._setPadding();
         if (this._dir) {
@@ -1097,18 +1105,32 @@ var CdkTreeNodePadding = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkTreeNodePadding.prototype, "indent", {
-        /** The indent for each level. Default number 40px from material design menu sub-menu spec. */
-        // TODO(tinayuangao): Make indent working with a string with unit, e.g. 10em
+        /**
+         * The indent for each level. Can be a number or a CSS string.
+         * Default number 40px from material design menu sub-menu spec.
+         */
         get: /**
-         * The indent for each level. Default number 40px from material design menu sub-menu spec.
+         * The indent for each level. Can be a number or a CSS string.
+         * Default number 40px from material design menu sub-menu spec.
          * @return {?}
          */
         function () { return this._indent; },
         set: /**
-         * @param {?} value
+         * @param {?} indent
          * @return {?}
          */
-        function (value) {
+        function (indent) {
+            /** @type {?} */
+            var value = indent;
+            /** @type {?} */
+            var units = 'px';
+            if (typeof indent === 'string') {
+                /** @type {?} */
+                var parts = indent.split(cssUnitPattern);
+                value = parts[0];
+                units = parts[1] || units;
+            }
+            this.indentUnits = units;
             this._indent = coerceNumberProperty(value);
             this._setPadding();
         },
@@ -1141,7 +1163,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
             : null;
         /** @type {?} */
         var level = this._level || nodeLevel;
-        return level ? level * this._indent + "px" : null;
+        return level ? "" + level * this._indent + this.indentUnits : null;
     };
     /**
      * @return {?}

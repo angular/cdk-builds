@@ -826,6 +826,10 @@ CdkNestedTreeNode.propDecorators = {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** *
+ * Regex used to split a string on its CSS units.
+  @type {?} */
+const cssUnitPattern = /([A-Za-z%]+)$/;
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
@@ -849,6 +853,10 @@ class CdkTreeNodePadding {
          * Subject that emits when the component has been destroyed.
          */
         this._destroyed = new Subject();
+        /**
+         * CSS units used for the indentation value.
+         */
+        this.indentUnits = 'px';
         this._indent = 40;
         this._setPadding();
         if (this._dir) {
@@ -869,15 +877,27 @@ class CdkTreeNodePadding {
         this._setPadding();
     }
     /**
-     * The indent for each level. Default number 40px from material design menu sub-menu spec.
+     * The indent for each level. Can be a number or a CSS string.
+     * Default number 40px from material design menu sub-menu spec.
      * @return {?}
      */
     get indent() { return this._indent; }
     /**
-     * @param {?} value
+     * @param {?} indent
      * @return {?}
      */
-    set indent(value) {
+    set indent(indent) {
+        /** @type {?} */
+        let value = indent;
+        /** @type {?} */
+        let units = 'px';
+        if (typeof indent === 'string') {
+            /** @type {?} */
+            const parts = indent.split(cssUnitPattern);
+            value = parts[0];
+            units = parts[1] || units;
+        }
+        this.indentUnits = units;
         this._indent = coerceNumberProperty(value);
         this._setPadding();
     }
@@ -899,7 +919,7 @@ class CdkTreeNodePadding {
             : null;
         /** @type {?} */
         const level = this._level || nodeLevel;
-        return level ? `${level * this._indent}px` : null;
+        return level ? `${level * this._indent}${this.indentUnits}` : null;
     }
     /**
      * @return {?}
