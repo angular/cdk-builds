@@ -37,5 +37,11 @@ export declare class OverlayConfig {
      * is passed in, the overlay will handle changes to its value automatically.
      */
     direction?: Direction | Directionality;
+    /**
+     * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
+     * Note that this usually doesn't include clicking on links (unless the user is using
+     * the `HashLocationStrategy`).
+     */
+    disposeOnNavigation?: boolean;
     constructor(config?: OverlayConfig);
 }

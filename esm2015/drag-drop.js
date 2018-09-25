@@ -636,15 +636,23 @@ class CdkDrag {
      */
     _updateActiveDropContainer({ x, y }) {
         /** @type {?} */
-        const newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
+        let newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
+        // If we couldn't find a new container to move the item into, and the item has left it's
+        // initial container, check whether the it's allowed to return into its original container.
+        // This handles the case where two containers are connected one way and the user tries to
+        // undo dragging an item into a new container.
+        if (!newContainer && this.dropContainer !== this._initialContainer &&
+            this._initialContainer._canReturnItem(this, x, y)) {
+            newContainer = this._initialContainer;
+        }
         if (newContainer) {
             this._ngZone.run(() => {
                 // Notify the old container that the item has left.
                 this.exited.emit({ item: this, container: this.dropContainer });
                 this.dropContainer.exit(this);
                 // Notify the new container that the item has entered.
-                this.entered.emit({ item: this, container: newContainer });
-                this.dropContainer = newContainer;
+                this.entered.emit({ item: this, container: /** @type {?} */ ((newContainer)) });
+                this.dropContainer = /** @type {?} */ ((newContainer));
                 this.dropContainer.enter(this, x, y);
             });
         }
@@ -1290,11 +1298,20 @@ class CdkDrop {
      */
     _getSiblingContainerFromPosition(item, x, y) {
         /** @type {?} */
-        const result = this._positionCache.siblings.find(({ clientRect }) => {
-            const { top, bottom, left, right } = clientRect;
-            return y >= top && y <= bottom && x >= left && x <= right;
-        });
+        const result = this._positionCache.siblings
+            .find(sibling => isInsideClientRect(sibling.clientRect, x, y));
         return result && result.drop.enterPredicate(item, this) ? result.drop : null;
+    }
+    /**
+     * Checks whether an item that started in this container can be returned to it,
+     * after it was moved out into another container.
+     * @param {?} item Item that is being checked.
+     * @param {?} x Position of the item along the X axis.
+     * @param {?} y Position of the item along the Y axis.
+     * @return {?}
+     */
+    _canReturnItem(item, x, y) {
+        return isInsideClientRect(this._positionCache.self, x, y) && this.enterPredicate(item, this);
     }
     /**
      * Refreshes the position cache of the items and sibling containers.
@@ -1465,6 +1482,17 @@ function findIndex(array, predicate) {
         }
     }
     return -1;
+}
+/**
+ * Checks whether some coordinates are within a `ClientRect`.
+ * @param {?} clientRect ClientRect that is being checked.
+ * @param {?} x Coordinates along the X axis.
+ * @param {?} y Coordinates along the Y axis.
+ * @return {?}
+ */
+function isInsideClientRect(clientRect, x, y) {
+    const { top, bottom, left, right } = clientRect;
+    return y >= top && y <= bottom && x >= left && x <= right;
 }
 
 /**

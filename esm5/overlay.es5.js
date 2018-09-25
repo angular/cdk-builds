@@ -9,7 +9,7 @@ import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRe
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, Location } from '@angular/common';
 import { __assign, __extends } from 'tslib';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -94,6 +94,12 @@ OverlayConfig = /** @class */ (function () {
          * Custom class to add to the backdrop
          */
         this.backdropClass = 'cdk-overlay-dark-backdrop';
+        /**
+         * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
+         * Note that this usually doesn't include clicking on links (unless the user is using
+         * the `HashLocationStrategy`).
+         */
+        this.disposeOnNavigation = false;
         if (config) {
             Object.keys(config)
                 .filter(function (key) { return typeof config[key] !== 'undefined'; })
@@ -875,7 +881,7 @@ var  /**
  * Used to manipulate or dispose of said overlay.
  */
 OverlayRef = /** @class */ (function () {
-    function OverlayRef(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document) {
+    function OverlayRef(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location) {
         var _this = this;
         this._portalOutlet = _portalOutlet;
         this._host = _host;
@@ -884,10 +890,12 @@ OverlayRef = /** @class */ (function () {
         this._ngZone = _ngZone;
         this._keyboardDispatcher = _keyboardDispatcher;
         this._document = _document;
+        this._location = _location;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
         this._detachments = new Subject();
+        this._locationChanges = Subscription.EMPTY;
         this._keydownEventsObservable = Observable.create(function (observer) {
             /** @type {?} */
             var subscription = _this._keydownEvents.subscribe(observer);
@@ -1014,6 +1022,11 @@ OverlayRef = /** @class */ (function () {
         this._attachments.next();
         // Track this overlay by the keyboard dispatcher
         this._keyboardDispatcher.add(this);
+        // @breaking-change 8.0.0 remove the null check for `_location`
+        // once the constructor parameter is made required.
+        if (this._config.disposeOnNavigation && this._location) {
+            this._locationChanges = this._location.subscribe(function () { return _this.dispose(); });
+        }
         return attachResult;
     };
     /**
@@ -1055,6 +1068,8 @@ OverlayRef = /** @class */ (function () {
         // Keeping the host element in DOM the can cause scroll jank, because it still gets
         // rendered, even though it's transparent and unclickable which is why we remove it.
         this._detachContentWhenStable();
+        // Stop listening for location changes.
+        this._locationChanges.unsubscribe();
         return detachmentResult;
     };
     /** Cleans up the overlay from the DOM. */
@@ -1076,6 +1091,7 @@ OverlayRef = /** @class */ (function () {
             this._config.scrollStrategy.disable();
         }
         this.detachBackdrop();
+        this._locationChanges.unsubscribe();
         this._keyboardDispatcher.remove(this);
         this._portalOutlet.dispose();
         this._attachments.complete();
@@ -3635,7 +3651,9 @@ var nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = /** @class */ (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, 
+    // @breaking-change 8.0.0 `_location` parameter to be made required.
+    _location) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -3645,6 +3663,7 @@ var Overlay = /** @class */ (function () {
         this._ngZone = _ngZone;
         this._document = _document;
         this._directionality = _directionality;
+        this._location = _location;
     }
     /**
      * Creates an overlay.
@@ -3671,7 +3690,7 @@ var Overlay = /** @class */ (function () {
         /** @type {?} */
         var overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document);
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location);
     };
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -3756,7 +3775,8 @@ var Overlay = /** @class */ (function () {
         { type: Injector },
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-        { type: Directionality }
+        { type: Directionality },
+        { type: Location, decorators: [{ type: Optional }] }
     ]; };
     return Overlay;
 }());

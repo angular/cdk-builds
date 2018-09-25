@@ -734,6 +734,14 @@ var CdkDrag = /** @class */ (function () {
         var x = _a.x, y = _a.y;
         /** @type {?} */
         var newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
+        // If we couldn't find a new container to move the item into, and the item has left it's
+        // initial container, check whether the it's allowed to return into its original container.
+        // This handles the case where two containers are connected one way and the user tries to
+        // undo dragging an item into a new container.
+        if (!newContainer && this.dropContainer !== this._initialContainer &&
+            this._initialContainer._canReturnItem(this, x, y)) {
+            newContainer = this._initialContainer;
+        }
         if (newContainer) {
             this._ngZone.run(function () {
                 // Notify the old container that the item has left.
@@ -742,8 +750,8 @@ var CdkDrag = /** @class */ (function () {
                 _this.dropContainer.exit(_this);
                 // Notify the new container that the item has entered.
                 // Notify the new container that the item has entered.
-                _this.entered.emit({ item: _this, container: newContainer });
-                _this.dropContainer = newContainer;
+                _this.entered.emit({ item: _this, container: /** @type {?} */ ((newContainer)) });
+                _this.dropContainer = /** @type {?} */ ((newContainer));
                 _this.dropContainer.enter(_this, x, y);
             });
         }
@@ -1536,12 +1544,35 @@ var CdkDrop = /** @class */ (function () {
      */
     function (item, x, y) {
         /** @type {?} */
-        var result = this._positionCache.siblings.find(function (_a) {
-            var clientRect = _a.clientRect;
-            var top = clientRect.top, bottom = clientRect.bottom, left = clientRect.left, right = clientRect.right;
-            return y >= top && y <= bottom && x >= left && x <= right;
-        });
+        var result = this._positionCache.siblings
+            .find(function (sibling) { return isInsideClientRect(sibling.clientRect, x, y); });
         return result && result.drop.enterPredicate(item, this) ? result.drop : null;
+    };
+    /**
+     * Checks whether an item that started in this container can be returned to it,
+     * after it was moved out into another container.
+     * @param item Item that is being checked.
+     * @param x Position of the item along the X axis.
+     * @param y Position of the item along the Y axis.
+     */
+    /**
+     * Checks whether an item that started in this container can be returned to it,
+     * after it was moved out into another container.
+     * @param {?} item Item that is being checked.
+     * @param {?} x Position of the item along the X axis.
+     * @param {?} y Position of the item along the Y axis.
+     * @return {?}
+     */
+    CdkDrop.prototype._canReturnItem = /**
+     * Checks whether an item that started in this container can be returned to it,
+     * after it was moved out into another container.
+     * @param {?} item Item that is being checked.
+     * @param {?} x Position of the item along the X axis.
+     * @param {?} y Position of the item along the Y axis.
+     * @return {?}
+     */
+    function (item, x, y) {
+        return isInsideClientRect(this._positionCache.self, x, y) && this.enterPredicate(item, this);
     };
     /**
      * Refreshes the position cache of the items and sibling containers.
@@ -1745,6 +1776,17 @@ function findIndex(array, predicate) {
         }
     }
     return -1;
+}
+/**
+ * Checks whether some coordinates are within a `ClientRect`.
+ * @param {?} clientRect ClientRect that is being checked.
+ * @param {?} x Coordinates along the X axis.
+ * @param {?} y Coordinates along the Y axis.
+ * @return {?}
+ */
+function isInsideClientRect(clientRect, x, y) {
+    var top = clientRect.top, bottom = clientRect.bottom, left = clientRect.left, right = clientRect.right;
+    return y >= top && y <= bottom && x >= left && x <= right;
 }
 
 /**

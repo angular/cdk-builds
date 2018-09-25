@@ -8,6 +8,7 @@
 import { Direction, Directionality } from '@angular/cdk/bidi';
 import { ComponentPortal, PortalOutlet, TemplatePortal } from '@angular/cdk/portal';
 import { ComponentRef, EmbeddedViewRef, NgZone } from '@angular/core';
+import { Location } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
 import { OverlayConfig } from './overlay-config';
@@ -29,11 +30,13 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _ngZone;
     private _keyboardDispatcher;
     private _document;
+    private _location?;
     private _backdropElement;
     private _backdropClick;
     private _attachments;
     private _detachments;
     private _positionStrategy;
+    private _locationChanges;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
@@ -44,7 +47,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     _keydownEvents: Subject<KeyboardEvent>;
     /** Amount of subscriptions to the keydown events. */
     _keydownEventSubscriptions: number;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document);
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
     /** The overlay's backdrop HTML element. */
