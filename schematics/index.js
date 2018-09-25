@@ -11,4 +11,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./utils"));
+__export(require("./ng-update/public-api"));
 //# sourceMappingURL=index.js.map
