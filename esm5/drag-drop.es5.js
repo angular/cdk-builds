@@ -1041,9 +1041,13 @@ var CdkDrag = /** @class */ (function () {
     function () {
         if (this.rootElementSelector) {
             /** @type {?} */
+            var selector = this.rootElementSelector;
+            /** @type {?} */
             var currentElement = /** @type {?} */ (this.element.nativeElement.parentElement);
             while (currentElement) {
-                if (currentElement.matches(this.rootElementSelector)) {
+                // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
+                if (currentElement.matches ? currentElement.matches(selector) :
+                    currentElement.msMatchesSelector(selector)) {
                     return currentElement;
                 }
                 currentElement = currentElement.parentElement;
