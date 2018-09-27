@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "7.0.0-beta.2-4e475f9",
+  "version": "7.0.0-beta.2-ac3f8c4",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -34,15 +34,10 @@
   },
   "schematics": "./schematics/collection.json",
   "ng-update": {
-    "migrations": "./schematics/migration.json",
-    "packageGroup": [
-      "@angular/material",
-      "@angular/cdk",
-      "@angular/material-moment-adapter"
-    ]
+    "migrations": "./schematics/migration.json"
   },
   "sideEffects": false,
-  "releaseGitCommitSha": "4e475f91c75151d2d198b9cd7e31a57f105546ae",
+  "releaseGitCommitSha": "ac3f8c4d1a83e5a8cfe1347ee5ba7619ccef130f",
   "releaseGitBranch": "",
   "releaseGitUser": "Travis CI User <travis@example.org>"
 }
