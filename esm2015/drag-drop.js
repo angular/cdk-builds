@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, Inject, ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, ViewEncapsulation, ContentChild, Directive, Optional, SkipSelf, ViewContainerRef, TemplateRef, InjectionToken, NgModule, defineInjectable, inject } from '@angular/core';
+import { Injectable, NgZone, Inject, ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, ViewEncapsulation, Optional, ContentChild, Directive, SkipSelf, ViewContainerRef, TemplateRef, InjectionToken, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { Subject, merge, Observable } from 'rxjs';
@@ -1062,10 +1062,12 @@ class CdkDrop {
     /**
      * @param {?} element
      * @param {?} _dragDropRegistry
+     * @param {?=} _dir
      */
-    constructor(element, _dragDropRegistry) {
+    constructor(element, _dragDropRegistry, _dir) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
+        this._dir = _dir;
         /**
          * Other draggable containers that this container is connected to and into which the
          * container's items can be transferred. Can either be references to other drop containers,
@@ -1212,9 +1214,13 @@ class CdkDrop {
      * @return {?}
      */
     getItemIndex(item) {
-        return this._dragging ?
-            findIndex(this._positionCache.items, currentItem => currentItem.drag === item) :
-            this._draggables.toArray().indexOf(item);
+        if (!this._dragging) {
+            return this._draggables.toArray().indexOf(item);
+        }
+        /** @type {?} */
+        const items = this.orientation === 'horizontal' && this._dir && this._dir.value === 'rtl' ?
+            this._positionCache.items.slice().reverse() : this._positionCache.items;
+        return findIndex(items, currentItem => currentItem.drag === item);
     }
     /**
      * Sorts an item inside the container based on its position.
@@ -1453,7 +1459,8 @@ CdkDrop.decorators = [
 /** @nocollapse */
 CdkDrop.ctorParameters = () => [
     { type: ElementRef },
-    { type: DragDropRegistry }
+    { type: DragDropRegistry },
+    { type: Directionality, decorators: [{ type: Optional }] }
 ];
 CdkDrop.propDecorators = {
     _draggables: [{ type: ContentChildren, args: [forwardRef(() => CdkDrag),] }],
