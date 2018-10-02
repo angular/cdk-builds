@@ -1451,10 +1451,14 @@ class ViewportRuler {
      */
     constructor(_platform, ngZone) {
         this._platform = _platform;
-        this._change = _platform.isBrowser ? ngZone.runOutsideAngular(() => {
-            return merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange'));
-        }) : of();
-        this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
+        ngZone.runOutsideAngular(() => {
+            this._change = _platform.isBrowser ?
+                merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
+                of();
+            // Note that we need to do the subscription inside `runOutsideAngular`
+            // since subscribing is what causes the event listener to be added.
+            this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
+        });
     }
     /**
      * @return {?}

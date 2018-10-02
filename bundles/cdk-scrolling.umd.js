@@ -1932,10 +1932,14 @@ var ViewportRuler = /** @class */ (function () {
     function ViewportRuler(_platform, ngZone) {
         var _this = this;
         this._platform = _platform;
-        this._change = _platform.isBrowser ? ngZone.runOutsideAngular(function () {
-            return rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange'));
-        }) : rxjs.of();
-        this._invalidateCache = this.change().subscribe(function () { return _this._updateViewportSize(); });
+        ngZone.runOutsideAngular(function () {
+            _this._change = _platform.isBrowser ?
+                rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange')) :
+                rxjs.of();
+            // Note that we need to do the subscription inside `runOutsideAngular`
+            // since subscribing is what causes the event listener to be added.
+            _this._invalidateCache = _this.change().subscribe(function () { return _this._updateViewportSize(); });
+        });
     }
     /**
      * @return {?}
