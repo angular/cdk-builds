@@ -80,7 +80,7 @@ class SelectionModel {
         /**
          * Event emitted when the value has changed.
          */
-        this.changed = this._emitChanges ? new Subject() : null;
+        this.changed = new Subject();
         /**
          * Event emitted when the value has changed.
          * @deprecated Use `changed` instead.
@@ -191,13 +191,11 @@ class SelectionModel {
         // Clear the selected values so they can be re-cached.
         this._selected = null;
         if (this._selectedToEmit.length || this._deselectedToEmit.length) {
-            if (this.changed) {
-                this.changed.next({
-                    source: this,
-                    added: this._selectedToEmit,
-                    removed: this._deselectedToEmit
-                });
-            }
+            this.changed.next({
+                source: this,
+                added: this._selectedToEmit,
+                removed: this._deselectedToEmit
+            });
             this._deselectedToEmit = [];
             this._selectedToEmit = [];
         }

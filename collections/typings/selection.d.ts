@@ -23,13 +23,13 @@ export declare class SelectionModel<T> {
     /** Selected values. */
     readonly selected: T[];
     /** Event emitted when the value has changed. */
-    changed: Subject<SelectionChange<T>> | null;
+    changed: Subject<SelectionChange<T>>;
     /**
      * Event emitted when the value has changed.
      * @deprecated Use `changed` instead.
      * @breaking-change 8.0.0 To be changed to `changed`
      */
-    onChange: Subject<SelectionChange<T>> | null;
+    onChange: Subject<SelectionChange<T>>;
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
     /**
      * Selects a value or an array of values.
