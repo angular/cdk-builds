@@ -213,7 +213,7 @@ class BlockScrollStrategy {
     enable() {
         if (this._canBeEnabled()) {
             /** @type {?} */
-            const root = this._document.documentElement;
+            const root = /** @type {?} */ ((this._document.documentElement));
             this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
             // Cache the previous inline styles in case the user had set them.
             this._previousHTMLStyles.left = root.style.left || '';
@@ -233,9 +233,9 @@ class BlockScrollStrategy {
     disable() {
         if (this._isEnabled) {
             /** @type {?} */
-            const html = this._document.documentElement;
+            const html = /** @type {?} */ ((this._document.documentElement));
             /** @type {?} */
-            const body = this._document.body;
+            const body = /** @type {?} */ ((this._document.body));
             /** @type {?} */
             const previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
             /** @type {?} */
@@ -257,7 +257,7 @@ class BlockScrollStrategy {
      */
     _canBeEnabled() {
         /** @type {?} */
-        const html = this._document.documentElement;
+        const html = /** @type {?} */ ((this._document.documentElement));
         if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
@@ -2087,7 +2087,7 @@ class FlexibleConnectedPositionStrategy {
         // above or below the origin and the direction in which the element will expand.
         if (position.overlayY === 'bottom') {
             /** @type {?} */
-            const documentHeight = this._document.documentElement.clientHeight;
+            const documentHeight = /** @type {?} */ ((this._document.documentElement)).clientHeight;
             styles.bottom = `${documentHeight - (overlayPoint.y + this._overlayRect.height)}px`;
         }
         else {
@@ -2122,7 +2122,7 @@ class FlexibleConnectedPositionStrategy {
         // from the right edge of the viewport rather than the left edge.
         if (horizontalStyleProperty === 'right') {
             /** @type {?} */
-            const documentWidth = this._document.documentElement.clientWidth;
+            const documentWidth = /** @type {?} */ ((this._document.documentElement)).clientWidth;
             styles.right = `${documentWidth - (overlayPoint.x + this._overlayRect.width)}px`;
         }
         else {
@@ -2168,9 +2168,9 @@ class FlexibleConnectedPositionStrategy {
      */
     _getNarrowedViewportRect() {
         /** @type {?} */
-        const width = this._document.documentElement.clientWidth;
+        const width = /** @type {?} */ ((this._document.documentElement)).clientWidth;
         /** @type {?} */
-        const height = this._document.documentElement.clientHeight;
+        const height = /** @type {?} */ ((this._document.documentElement)).clientHeight;
         /** @type {?} */
         const scrollPosition = this._viewportRuler.getViewportScrollPosition();
         return {
@@ -2291,7 +2291,6 @@ class ConnectedPositionStrategy {
      * @param {?=} platform
      */
     constructor(originPos, overlayPos, connectedTo, viewportRuler, document, 
-    // @breaking-change 7.0.0 `platform` parameter to be made required.
     // @breaking-change 7.0.0 `platform` parameter to be made required.
     platform) {
         /**

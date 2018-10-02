@@ -84,8 +84,8 @@ function createEmptyStyleRule(query) {
     try {
         if (!mediaQueryStyleNode) {
             mediaQueryStyleNode = document.createElement('style');
-            mediaQueryStyleNode.setAttribute('type', 'text/css');
-            document.head.appendChild(mediaQueryStyleNode);
+            mediaQueryStyleNode.setAttribute('type', 'text/css'); /** @type {?} */
+            ((document.head)).appendChild(mediaQueryStyleNode);
         }
         if (mediaQueryStyleNode.sheet) {
             (/** @type {?} */ (mediaQueryStyleNode.sheet))
@@ -103,12 +103,14 @@ function createEmptyStyleRule(query) {
  * @return {?}
  */
 function noopMatchMedia(query) {
-    return {
+    // Use `as any` here to avoid adding additional necessary properties for
+    // the noop matcher.
+    return /** @type {?} */ ({
         matches: query === 'all' || query === '',
         media: query,
         addListener: () => { },
         removeListener: () => { }
-    };
+    });
 }
 
 /**
@@ -190,6 +192,8 @@ class BreakpointObserver {
         /** @type {?} */
         const mql = this.mediaMatcher.matchMedia(query);
         /** @type {?} */
+        let queryListener;
+        /** @type {?} */
         const queryObservable = fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
@@ -197,10 +201,11 @@ class BreakpointObserver {
         // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
         // patches it.
         (listener) => {
-            mql.addListener((e) => this.zone.run(() => listener(e)));
-        }, (listener) => {
-            mql.removeListener((e) => this.zone.run(() => listener(e)));
-        })
+            // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
+            // TypeScript 3.1 (the type is unavailable before then).
+            queryListener = (e) => this.zone.run(() => listener(e));
+            mql.addListener(queryListener);
+        }, () => mql.removeListener(queryListener))
             .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })));
         /** @type {?} */
         const output = { observable: queryObservable, mql };

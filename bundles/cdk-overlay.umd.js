@@ -301,7 +301,7 @@ BlockScrollStrategy = /** @class */ (function () {
     function () {
         if (this._canBeEnabled()) {
             /** @type {?} */
-            var root = this._document.documentElement;
+            var root = /** @type {?} */ ((this._document.documentElement));
             this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
             // Cache the previous inline styles in case the user had set them.
             this._previousHTMLStyles.left = root.style.left || '';
@@ -326,9 +326,9 @@ BlockScrollStrategy = /** @class */ (function () {
     function () {
         if (this._isEnabled) {
             /** @type {?} */
-            var html = this._document.documentElement;
+            var html = /** @type {?} */ ((this._document.documentElement));
             /** @type {?} */
-            var body = this._document.body;
+            var body = /** @type {?} */ ((this._document.body));
             /** @type {?} */
             var previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
             /** @type {?} */
@@ -353,7 +353,7 @@ BlockScrollStrategy = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var html = this._document.documentElement;
+        var html = /** @type {?} */ ((this._document.documentElement));
         if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
@@ -1443,9 +1443,6 @@ OverlayRef = /** @class */ (function () {
             // Run this outside the Angular zone because there's nothing that Angular cares about.
             // If it were to run inside the Angular zone, every test that used Overlay would have to be
             // either async or fakeAsync.
-            // Run this outside the Angular zone because there's nothing that Angular cares about.
-            // If it were to run inside the Angular zone, every test that used Overlay would have to be
-            // either async or fakeAsync.
             timeoutId_1 = this._ngZone.runOutsideAngular(function () { return setTimeout(finishDetach_1, 500); });
         }
     };
@@ -1646,9 +1643,6 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this._lastPosition = null;
         this._resizeSubscription.unsubscribe();
         this._resizeSubscription = this._viewportRuler.change().subscribe(function () {
-            // When the window is resized, we want to trigger the next reposition as if it
-            // was an initial render, in order for the strategy to pick a new optimal position,
-            // otherwise position locking will cause it to stay at the old one.
             // When the window is resized, we want to trigger the next reposition as if it
             // was an initial render, in order for the strategy to pick a new optimal position,
             // otherwise position locking will cause it to stay at the old one.
@@ -2665,7 +2659,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // above or below the origin and the direction in which the element will expand.
         if (position.overlayY === 'bottom') {
             /** @type {?} */
-            var documentHeight = this._document.documentElement.clientHeight;
+            var documentHeight = /** @type {?} */ ((this._document.documentElement)).clientHeight;
             styles.bottom = documentHeight - (overlayPoint.y + this._overlayRect.height) + "px";
         }
         else {
@@ -2707,7 +2701,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // from the right edge of the viewport rather than the left edge.
         if (horizontalStyleProperty === 'right') {
             /** @type {?} */
-            var documentWidth = this._document.documentElement.clientWidth;
+            var documentWidth = /** @type {?} */ ((this._document.documentElement)).clientWidth;
             styles.right = documentWidth - (overlayPoint.x + this._overlayRect.width) + "px";
         }
         else {
@@ -2772,9 +2766,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var width = this._document.documentElement.clientWidth;
+        var width = /** @type {?} */ ((this._document.documentElement)).clientWidth;
         /** @type {?} */
-        var height = this._document.documentElement.clientHeight;
+        var height = /** @type {?} */ ((this._document.documentElement)).clientHeight;
         /** @type {?} */
         var scrollPosition = this._viewportRuler.getViewportScrollPosition();
         return {
@@ -2926,7 +2920,6 @@ var   /**
  */
 ConnectedPositionStrategy = /** @class */ (function () {
     function ConnectedPositionStrategy(originPos, overlayPos, connectedTo, viewportRuler, document, 
-    // @breaking-change 7.0.0 `platform` parameter to be made required.
     // @breaking-change 7.0.0 `platform` parameter to be made required.
     platform$$1) {
         /**

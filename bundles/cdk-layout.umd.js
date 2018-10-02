@@ -99,8 +99,8 @@ function createEmptyStyleRule(query) {
     try {
         if (!mediaQueryStyleNode) {
             mediaQueryStyleNode = document.createElement('style');
-            mediaQueryStyleNode.setAttribute('type', 'text/css');
-            document.head.appendChild(mediaQueryStyleNode);
+            mediaQueryStyleNode.setAttribute('type', 'text/css'); /** @type {?} */
+            ((document.head)).appendChild(mediaQueryStyleNode);
         }
         if (mediaQueryStyleNode.sheet) {
             (/** @type {?} */ (mediaQueryStyleNode.sheet))
@@ -118,12 +118,14 @@ function createEmptyStyleRule(query) {
  * @return {?}
  */
 function noopMatchMedia(query) {
-    return {
+    // Use `as any` here to avoid adding additional necessary properties for
+    // the noop matcher.
+    return /** @type {?} */ ({
         matches: query === 'all' || query === '',
         media: query,
         addListener: function () { },
         removeListener: function () { }
-    };
+    });
 }
 
 /**
@@ -236,6 +238,8 @@ var BreakpointObserver = /** @class */ (function () {
         /** @type {?} */
         var mql = this.mediaMatcher.matchMedia(query);
         /** @type {?} */
+        var queryListener;
+        /** @type {?} */
         var queryObservable = rxjs.fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
@@ -248,10 +252,11 @@ var BreakpointObserver = /** @class */ (function () {
         // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
         // patches it.
         function (listener) {
-            mql.addListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
-        }, function (listener) {
-            mql.removeListener(function (e) { return _this.zone.run(function () { return listener(e); }); });
-        })
+            // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
+            // TypeScript 3.1 (the type is unavailable before then).
+            queryListener = function (e) { return _this.zone.run(function () { return listener(e); }); };
+            mql.addListener(queryListener);
+        }, function () { return mql.removeListener(queryListener); })
             .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }));
         /** @type {?} */
         var output = { observable: queryObservable, mql: mql };

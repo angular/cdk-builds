@@ -218,7 +218,7 @@ var rtlScrollAxisType;
  * @return {?}
  */
 function supportsScrollBehavior() {
-    return !!(typeof document == 'object' && 'scrollBehavior' in document.documentElement.style);
+    return !!(typeof document == 'object' && 'scrollBehavior' in /** @type {?} */ ((document.documentElement)).style);
 }
 /**
  * Checks the type of RTL scroll axis used by this browser. As of time of writing, Chrome is NORMAL,

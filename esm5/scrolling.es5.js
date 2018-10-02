@@ -1979,13 +1979,15 @@ var ViewportRuler = /** @class */ (function () {
             return { top: 0, left: 0 };
         }
         /** @type {?} */
-        var documentRect = document.documentElement.getBoundingClientRect();
+        var documentElement = /** @type {?} */ ((document.documentElement));
+        /** @type {?} */
+        var documentRect = documentElement.getBoundingClientRect();
         /** @type {?} */
         var top = -documentRect.top || document.body.scrollTop || window.scrollY ||
-            document.documentElement.scrollTop || 0;
+            documentElement.scrollTop || 0;
         /** @type {?} */
         var left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
-            document.documentElement.scrollLeft || 0;
+            documentElement.scrollLeft || 0;
         return { top: top, left: left };
     };
     /**

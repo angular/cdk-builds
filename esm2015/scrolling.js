@@ -1506,13 +1506,15 @@ class ViewportRuler {
             return { top: 0, left: 0 };
         }
         /** @type {?} */
-        const documentRect = document.documentElement.getBoundingClientRect();
+        const documentElement = /** @type {?} */ ((document.documentElement));
+        /** @type {?} */
+        const documentRect = documentElement.getBoundingClientRect();
         /** @type {?} */
         const top = -documentRect.top || document.body.scrollTop || window.scrollY ||
-            document.documentElement.scrollTop || 0;
+            documentElement.scrollTop || 0;
         /** @type {?} */
         const left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
-            document.documentElement.scrollLeft || 0;
+            documentElement.scrollLeft || 0;
         return { top, left };
     }
     /**

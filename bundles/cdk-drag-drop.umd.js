@@ -105,8 +105,6 @@ var DragDropRegistry = /** @class */ (function () {
             this._ngZone.runOutsideAngular(function () {
                 // The event handler has to be explicitly active, because
                 // newer browsers make it passive by default.
-                // The event handler has to be explicitly active, because
-                // newer browsers make it passive by default.
                 _this._document.addEventListener('touchmove', _this._preventScrollListener, activeEventOptions);
             });
         }
@@ -489,8 +487,6 @@ var CdkDrag = /** @class */ (function () {
             _this._scrollPosition = _this._viewportRuler.getViewportScrollPosition();
             // If we have a custom preview template, the element won't be visible anyway so we avoid the
             // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
-            // If we have a custom preview template, the element won't be visible anyway so we avoid the
-            // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
             _this._pickupPositionInElement = _this._previewTemplate ? { x: 0, y: 0 } :
                 _this._getPointerPositionInElement(referenceElement, event);
             /** @type {?} */
@@ -498,13 +494,10 @@ var CdkDrag = /** @class */ (function () {
             _this._pointerDirectionDelta = { x: 0, y: 0 };
             _this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
             // Emit the event on the item before the one on the container.
-            // Emit the event on the item before the one on the container.
             _this.started.emit({ source: _this });
             if (_this.dropContainer) {
                 /** @type {?} */
                 var element = _this._rootElement;
-                // Grab the `nextSibling` before the preview and placeholder
-                // have been created so we don't get the preview by accident.
                 // Grab the `nextSibling` before the preview and placeholder
                 // have been created so we don't get the preview by accident.
                 _this._nextSibling = element.nextSibling;
@@ -574,9 +567,6 @@ var CdkDrag = /** @class */ (function () {
                 // Convert the active transform into a passive one. This means that next time
                 // the user starts dragging the item, its position will be calculated relatively
                 // to the new passive transform.
-                // Convert the active transform into a passive one. This means that next time
-                // the user starts dragging the item, its position will be calculated relatively
-                // to the new passive transform.
                 _this._passiveTransform.x = _this._activeTransform.x;
                 _this._passiveTransform.y = _this._activeTransform.y;
                 _this._ngZone.run(function () { return _this.ended.emit({ source: _this }); });
@@ -631,7 +621,6 @@ var CdkDrag = /** @class */ (function () {
         this._ngZone.onStable.asObservable().pipe(operators.take(1)).subscribe(function () {
             /** @type {?} */
             var rootElement = _this._rootElement = _this._getRootElement();
-            // We need to bring the events back into the `NgZone`, because of the `onStable` call.
             // We need to bring the events back into the `NgZone`, because of the `onStable` call.
             _this._ngZone.run(function () {
                 rootElement.addEventListener('mousedown', _this._startDragging);
@@ -742,10 +731,8 @@ var CdkDrag = /** @class */ (function () {
         if (newContainer) {
             this._ngZone.run(function () {
                 // Notify the old container that the item has left.
-                // Notify the old container that the item has left.
                 _this.exited.emit({ item: _this, container: _this.dropContainer });
                 _this.dropContainer.exit(_this);
-                // Notify the new container that the item has entered.
                 // Notify the new container that the item has entered.
                 _this.entered.emit({ item: _this, container: /** @type {?} */ ((newContainer)) });
                 _this.dropContainer = /** @type {?} */ ((newContainer));
@@ -876,7 +863,7 @@ var CdkDrag = /** @class */ (function () {
                     }
                 }));
                 /** @type {?} */
-                var timeout = setTimeout(handler, duration * 1.5);
+                var timeout = setTimeout(/** @type {?} */ (handler), duration * 1.5);
                 _this._preview.addEventListener('transitionend', handler);
             });
         });
@@ -1052,7 +1039,7 @@ var CdkDrag = /** @class */ (function () {
             while (currentElement) {
                 // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
                 if (currentElement.matches ? currentElement.matches(selector) :
-                    currentElement.msMatchesSelector(selector)) {
+                    (/** @type {?} */ (currentElement)).msMatchesSelector(selector)) {
                     return currentElement;
                 }
                 currentElement = currentElement.parentElement;

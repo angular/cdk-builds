@@ -1327,7 +1327,8 @@ function isPotentiallyFocusable(element) {
  * @return {?}
  */
 function getWindow(node) {
-    return node.ownerDocument.defaultView || window;
+    // ownerDocument is null if `node` itself *is* a document.
+    return node.ownerDocument && node.ownerDocument.defaultView || window;
 }
 
 /**
@@ -2331,9 +2332,6 @@ var FocusMonitor = /** @class */ (function () {
         var _this = this;
         this._ngZone.runOutsideAngular(function () {
             _this._origin = origin;
-            // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
-            // tick after the interaction event fired. To ensure the focus origin is always correct,
-            // the focus origin will be determined at the beginning of the next tick.
             // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
             // tick after the interaction event fired. To ensure the focus origin is always correct,
             // the focus origin will be determined at the beginning of the next tick.

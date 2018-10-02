@@ -760,7 +760,7 @@ class CdkDrag {
                     }
                 }));
                 /** @type {?} */
-                const timeout = setTimeout(handler, duration * 1.5);
+                const timeout = setTimeout(/** @type {?} */ (handler), duration * 1.5);
                 this._preview.addEventListener('transitionend', handler);
             });
         });
@@ -892,7 +892,7 @@ class CdkDrag {
             while (currentElement) {
                 // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
                 if (currentElement.matches ? currentElement.matches(selector) :
-                    currentElement.msMatchesSelector(selector)) {
+                    (/** @type {?} */ (currentElement)).msMatchesSelector(selector)) {
                     return currentElement;
                 }
                 currentElement = currentElement.parentElement;
