@@ -736,6 +736,10 @@ class StickyStyler {
                 // If this is applied on a native table, Safari causes the header to fly in wrong direction.
                 this._addStickyStyle(row, position, stickyHeight);
             }
+            if (rowIndex === rows.length - 1) {
+                // prevent unnecessary reflow from getBoundingClientRect()
+                return;
+            }
             stickyHeight += row.getBoundingClientRect().height;
         }
     }
