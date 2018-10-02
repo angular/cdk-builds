@@ -888,9 +888,6 @@ class OverlayRef {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
-        if (this._config.panelClass) {
-            this._toggleClasses(this._pane, this._config.panelClass, false);
-        }
         /** @type {?} */
         const detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
@@ -1180,6 +1177,9 @@ class OverlayRef {
                 // Needs a couple of checks for the pane and host, because
                 // they may have been removed by the time the zone stabilizes.
                 if (!this._pane || !this._host || this._pane.children.length === 0) {
+                    if (this._pane && this._config.panelClass) {
+                        this._toggleClasses(this._pane, this._config.panelClass, false);
+                    }
                     if (this._host && this._host.parentElement) {
                         this._previousHostParent = this._host.parentElement;
                         this._previousHostParent.removeChild(this._host);
@@ -1889,7 +1889,7 @@ class FlexibleConnectedPositionStrategy {
         }
         else {
             /** @type {?} */
-            const smallestDistanceToViewportEdge = Math.min(viewport.bottom - origin.y, origin.y - viewport.left);
+            const smallestDistanceToViewportEdge = Math.min(viewport.bottom - origin.y + viewport.top, origin.y);
             /** @type {?} */
             const previousHeight = this._lastBoundingBoxSize.height;
             height = smallestDistanceToViewportEdge * 2;
@@ -1920,7 +1920,7 @@ class FlexibleConnectedPositionStrategy {
         }
         else {
             /** @type {?} */
-            const smallestDistanceToViewportEdge = Math.min(viewport.right - origin.x, origin.x - viewport.top);
+            const smallestDistanceToViewportEdge = Math.min(viewport.right - origin.x + viewport.left, origin.x);
             /** @type {?} */
             const previousWidth = this._lastBoundingBoxSize.width;
             width = smallestDistanceToViewportEdge * 2;

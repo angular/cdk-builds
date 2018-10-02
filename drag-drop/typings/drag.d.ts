@@ -7,7 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterViewInit, ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DragDropRegistry } from './drag-drop-registry';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart } from './drag-events';
@@ -15,6 +15,23 @@ import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
 import { CdkDropContainer } from './drop-container';
+/** Object that can be used to configure the behavior of CdkDrag. */
+export interface CdkDragConfig {
+    /**
+     * Minimum amount of pixels that the user should
+     * drag, before the CDK initiates a drag sequence.
+     */
+    dragStartThreshold: number;
+    /**
+     * Amount the pixels the user should drag before the CDK
+     * considers them to have changed the drag direction.
+     */
+    pointerDirectionChangeThreshold: number;
+}
+/** Injection token that can be used to configure the behavior of `CdkDrag`. */
+export declare const CDK_DRAG_CONFIG: InjectionToken<CdkDragConfig>;
+/** @docs-private */
+export declare function CDK_DRAG_CONFIG_FACTORY(): CdkDragConfig;
 /** Element that can be moved inside a CdkDrop container. */
 export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
@@ -25,9 +42,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _viewContainerRef;
     private _viewportRuler;
     private _dragDropRegistry;
+    private _config;
     private _dir;
     private _document;
-    private _destroyed;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
     /** Reference to the view of the preview element. */
@@ -54,6 +71,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _passiveTransform;
     /** CSS `transform` that is applied to the element while it's being dragged. */
     private _activeTransform;
+    /**
+     * Whether the dragging sequence has been started. Doesn't
+     * necessarily mean that the element has been moved.
+     */
+    _hasStartedDragging: boolean;
     /** Whether the element has moved since the user started dragging it. */
     private _hasMoved;
     /** Drop container in which the CdkDrag resided when dragging began. */
@@ -73,6 +95,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _pointerPositionAtLastDirectionChange;
     /** Root element that will be dragged by the user. */
     private _rootElement;
+    /** Subscription to pointer movement events. */
+    private _pointerMoveSubscription;
+    /** Subscription to the event that is dispatched when the user lifts their pointer. */
+    private _pointerUpSubscription;
     /** Elements that can be used to drag the draggable item. */
     _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
@@ -108,7 +134,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropContainer>, _dir: Directionality);
+    dropContainer: CdkDropContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropContainer>, _config: CdkDragConfig, _dir: Directionality);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -118,12 +144,19 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     getRootElement(): HTMLElement;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
-    /** Starts the dragging sequence. */
-    _startDragging: (event: TouchEvent | MouseEvent) => void;
     /** Checks whether the element is currently being dragged. */
     _isDragging(): boolean;
-    /** Handler for when the pointer is pressed down on the element or the handle. */
-    private _pointerDown;
+    /** Handler for the `mousedown`/`touchstart` events. */
+    _pointerDown: (event: TouchEvent | MouseEvent) => void;
+    /**
+     * Sets up the different variables and subscriptions
+     * that will be necessary for the dragging sequence.
+     * @param referenceElement Element that started the drag sequence.
+     * @param event Browser event object that started the sequence.
+     */
+    private _initializeDragSequence;
+    /** Starts the dragging sequence. */
+    private _startDragSequence;
     /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
     private _pointerMove;
     /** Handler that is invoked when the user lifts their pointer up, after initiating a drag. */
@@ -179,4 +212,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _updatePointerDirectionDelta;
     /** Gets the root draggable element, based on the `rootElementSelector`. */
     private _getRootElement;
+    /** Unsubscribes from the global subscriptions. */
+    private _removeSubscriptions;
 }

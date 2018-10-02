@@ -1056,9 +1056,6 @@ OverlayRef = /** @class */ (function () {
         if (this._config.scrollStrategy) {
             this._config.scrollStrategy.disable();
         }
-        if (this._config.panelClass) {
-            this._toggleClasses(this._pane, this._config.panelClass, false);
-        }
         /** @type {?} */
         var detachmentResult = this._portalOutlet.detach();
         // Only emit after everything is detached.
@@ -1457,6 +1454,9 @@ OverlayRef = /** @class */ (function () {
                 // Needs a couple of checks for the pane and host, because
                 // they may have been removed by the time the zone stabilizes.
                 if (!_this._pane || !_this._host || _this._pane.children.length === 0) {
+                    if (_this._pane && _this._config.panelClass) {
+                        _this._toggleClasses(_this._pane, _this._config.panelClass, false);
+                    }
                     if (_this._host && _this._host.parentElement) {
                         _this._previousHostParent = _this._host.parentElement;
                         _this._previousHostParent.removeChild(_this._host);
@@ -2399,7 +2399,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         else {
             /** @type {?} */
-            var smallestDistanceToViewportEdge = Math.min(viewport.bottom - origin.y, origin.y - viewport.left);
+            var smallestDistanceToViewportEdge = Math.min(viewport.bottom - origin.y + viewport.top, origin.y);
             /** @type {?} */
             var previousHeight = this._lastBoundingBoxSize.height;
             height = smallestDistanceToViewportEdge * 2;
@@ -2430,7 +2430,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         else {
             /** @type {?} */
-            var smallestDistanceToViewportEdge = Math.min(viewport.right - origin.x, origin.x - viewport.top);
+            var smallestDistanceToViewportEdge = Math.min(viewport.right - origin.x + viewport.left, origin.x);
             /** @type {?} */
             var previousWidth = this._lastBoundingBoxSize.width;
             width = smallestDistanceToViewportEdge * 2;

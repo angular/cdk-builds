@@ -367,18 +367,79 @@ var CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+
+/**
+ * Parses a CSS time value to milliseconds.
+ * @param {?} value
+ * @return {?}
+ */
+function parseCssTimeUnitsToMs(value) {
+    /** @type {?} */
+    var multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
+    return parseFloat(value) * multiplier;
+}
+/**
+ * Gets the transform transition duration, including the delay, of an element in milliseconds.
+ * @param {?} element
+ * @return {?}
+ */
+function getTransformTransitionDurationInMs(element) {
+    /** @type {?} */
+    var computedStyle = getComputedStyle(element);
+    /** @type {?} */
+    var transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
+    /** @type {?} */
+    var property = transitionedProperties.find(function (prop) { return prop === 'transform' || prop === 'all'; });
+    // If there's no transition for `all` or `transform`, we shouldn't do anything.
+    if (!property) {
+        return 0;
+    }
+    /** @type {?} */
+    var propertyIndex = transitionedProperties.indexOf(property);
+    /** @type {?} */
+    var rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
+    /** @type {?} */
+    var rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
+    return parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]);
+}
+/**
+ * Parses out multiple values from a computed style into an array.
+ * @param {?} computedStyle
+ * @param {?} name
+ * @return {?}
+ */
+function parseCssPropertyValue(computedStyle, name) {
+    /** @type {?} */
+    var value = computedStyle.getPropertyValue(name);
+    return value.split(',').map(function (part) { return part.trim(); });
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /** *
- * Amount the pixels the user should drag before we
- * consider them to have changed the drag direction.
+ * Injection token that can be used to configure the behavior of `CdkDrag`.
   @type {?} */
-var POINTER_DIRECTION_CHANGE_THRESHOLD = 5;
+var CDK_DRAG_CONFIG = new core.InjectionToken('CDK_DRAG_CONFIG', {
+    providedIn: 'root',
+    factory: CDK_DRAG_CONFIG_FACTORY
+});
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function CDK_DRAG_CONFIG_FACTORY() {
+    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
+}
 /**
  * Element that can be moved inside a CdkDrop container.
  * @template T
  */
 var CdkDrag = /** @class */ (function () {
     function CdkDrag(element, /** Droppable container that the draggable is a part of. */
-    dropContainer, document, _ngZone, _viewContainerRef, _viewportRuler, _dragDropRegistry, _dir) {
+    dropContainer, document, _ngZone, _viewContainerRef, _viewportRuler, _dragDropRegistry, _config, _dir) {
         var _this = this;
         this.element = element;
         this.dropContainer = dropContainer;
@@ -386,8 +447,8 @@ var CdkDrag = /** @class */ (function () {
         this._viewContainerRef = _viewContainerRef;
         this._viewportRuler = _viewportRuler;
         this._dragDropRegistry = _dragDropRegistry;
+        this._config = _config;
         this._dir = _dir;
-        this._destroyed = new rxjs.Subject();
         /**
          * CSS `transform` applied to the element when it isn't being dragged. We need a
          * passive transform in order for the dragged element to retain its new position
@@ -408,6 +469,14 @@ var CdkDrag = /** @class */ (function () {
          * hitting the zone if the consumer didn't subscribe to it.
          */
         this._moveEventSubscriptions = 0;
+        /**
+         * Subscription to pointer movement events.
+         */
+        this._pointerMoveSubscription = rxjs.Subscription.EMPTY;
+        /**
+         * Subscription to the event that is dispatched when the user lifts their pointer.
+         */
+        this._pointerUpSubscription = rxjs.Subscription.EMPTY;
         /**
          * Emits when the user starts dragging the item.
          */
@@ -442,9 +511,9 @@ var CdkDrag = /** @class */ (function () {
             };
         });
         /**
-         * Starts the dragging sequence.
+         * Handler for the `mousedown`/`touchstart` events.
          */
-        this._startDragging = function (event) {
+        this._pointerDown = function (event) {
             // Delegate the event based on whether it started from a handle or the element itself.
             if (_this._handles.length) {
                 /** @type {?} */
@@ -456,79 +525,39 @@ var CdkDrag = /** @class */ (function () {
                     return !!target && (target === element || element.contains(/** @type {?} */ (target)));
                 });
                 if (targetHandle) {
-                    _this._pointerDown(targetHandle.element.nativeElement, event);
+                    _this._initializeDragSequence(targetHandle.element.nativeElement, event);
                 }
             }
             else {
-                _this._pointerDown(_this._rootElement, event);
-            }
-        };
-        /**
-         * Handler for when the pointer is pressed down on the element or the handle.
-         */
-        this._pointerDown = function (referenceElement, event) {
-            /** @type {?} */
-            var isDragging = _this._isDragging();
-            // Abort if the user is already dragging or is using a mouse button other than the primary one.
-            if (isDragging || (!_this._isTouchEvent(event) && event.button !== 0)) {
-                return;
-            }
-            /** @type {?} */
-            var endedOrDestroyed = rxjs.merge(_this.ended, _this._destroyed);
-            _this._hasMoved = false;
-            _this._dragDropRegistry.pointerMove
-                .pipe(operators.takeUntil(endedOrDestroyed))
-                .subscribe(_this._pointerMove);
-            _this._dragDropRegistry.pointerUp
-                .pipe(operators.takeUntil(endedOrDestroyed))
-                .subscribe(_this._pointerUp);
-            _this._dragDropRegistry.startDragging(_this, event);
-            _this._initialContainer = _this.dropContainer;
-            _this._scrollPosition = _this._viewportRuler.getViewportScrollPosition();
-            // If we have a custom preview template, the element won't be visible anyway so we avoid the
-            // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
-            _this._pickupPositionInElement = _this._previewTemplate ? { x: 0, y: 0 } :
-                _this._getPointerPositionInElement(referenceElement, event);
-            /** @type {?} */
-            var pointerPosition = _this._pickupPositionOnPage = _this._getPointerPositionOnPage(event);
-            _this._pointerDirectionDelta = { x: 0, y: 0 };
-            _this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
-            // Emit the event on the item before the one on the container.
-            _this.started.emit({ source: _this });
-            if (_this.dropContainer) {
-                /** @type {?} */
-                var element = _this._rootElement;
-                // Grab the `nextSibling` before the preview and placeholder
-                // have been created so we don't get the preview by accident.
-                _this._nextSibling = element.nextSibling;
-                /** @type {?} */
-                var preview = _this._preview = _this._createPreviewElement();
-                /** @type {?} */
-                var placeholder = _this._placeholder = _this._createPlaceholderElement();
-                // We move the element out at the end of the body and we make it hidden, because keeping it in
-                // place will throw off the consumer's `:last-child` selectors. We can't remove the element
-                // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
-                element.style.display = 'none';
-                _this._document.body.appendChild(/** @type {?} */ ((element.parentNode)).replaceChild(placeholder, element));
-                _this._document.body.appendChild(preview);
-                _this.dropContainer.start();
+                _this._initializeDragSequence(_this._rootElement, event);
             }
         };
         /**
          * Handler that is invoked when the user moves their pointer after they've initiated a drag.
          */
         this._pointerMove = function (event) {
-            // TODO(crisbeto): this should start dragging after a certain threshold,
-            // otherwise we risk interfering with clicks on the element.
-            if (!_this._isDragging()) {
+            /** @type {?} */
+            var pointerPosition = _this._getConstrainedPointerPosition(event);
+            if (!_this._hasStartedDragging) {
+                /** @type {?} */
+                var distanceX = Math.abs(pointerPosition.x - _this._pickupPositionOnPage.x);
+                /** @type {?} */
+                var distanceY = Math.abs(pointerPosition.y - _this._pickupPositionOnPage.y);
+                /** @type {?} */
+                var minimumDistance = _this._config.dragStartThreshold;
+                // Only start dragging after the user has moved more than the minimum distance in either
+                // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
+                // in the `pointerMove` subscription, because we're not guaranteed to have one move event
+                // per pixel of movement (e.g. if the user moves their pointer quickly).
+                if (distanceX + distanceY >= minimumDistance) {
+                    _this._hasStartedDragging = true;
+                    _this._ngZone.run(function () { return _this._startDragSequence(); });
+                }
                 return;
             }
             _this._hasMoved = true;
             event.preventDefault();
-            /** @type {?} */
-            var pointerPosition = _this._getConstrainedPointerPosition(event);
-            /** @type {?} */
-            var delta = _this._updatePointerDirectionDelta(pointerPosition);
+            _this._updatePointerDirectionDelta(pointerPosition);
             if (_this.dropContainer) {
                 _this._updateActiveDropContainer(pointerPosition);
             }
@@ -550,7 +579,7 @@ var CdkDrag = /** @class */ (function () {
                         source: _this,
                         pointerPosition: pointerPosition,
                         event: event,
-                        delta: delta
+                        delta: _this._pointerDirectionDelta
                     });
                 });
             }
@@ -562,7 +591,11 @@ var CdkDrag = /** @class */ (function () {
             if (!_this._isDragging()) {
                 return;
             }
+            _this._removeSubscriptions();
             _this._dragDropRegistry.stopDragging(_this);
+            if (!_this._hasStartedDragging) {
+                return;
+            }
             if (!_this.dropContainer) {
                 // Convert the active transform into a passive one. This means that next time
                 // the user starts dragging the item, its position will be calculated relatively
@@ -621,11 +654,8 @@ var CdkDrag = /** @class */ (function () {
         this._ngZone.onStable.asObservable().pipe(operators.take(1)).subscribe(function () {
             /** @type {?} */
             var rootElement = _this._rootElement = _this._getRootElement();
-            // We need to bring the events back into the `NgZone`, because of the `onStable` call.
-            _this._ngZone.run(function () {
-                rootElement.addEventListener('mousedown', _this._startDragging);
-                rootElement.addEventListener('touchstart', _this._startDragging);
-            });
+            rootElement.addEventListener('mousedown', _this._pointerDown);
+            rootElement.addEventListener('touchstart', _this._pointerDown);
         });
     };
     /**
@@ -635,8 +665,8 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._rootElement.removeEventListener('mousedown', this._startDragging);
-        this._rootElement.removeEventListener('touchstart', this._startDragging);
+        this._rootElement.removeEventListener('mousedown', this._pointerDown);
+        this._rootElement.removeEventListener('touchstart', this._pointerDown);
         this._destroyPreview();
         this._destroyPlaceholder();
         // Do this check before removing from the registry since it'll
@@ -648,9 +678,8 @@ var CdkDrag = /** @class */ (function () {
         }
         this._nextSibling = null;
         this._dragDropRegistry.removeDragItem(this);
+        this._removeSubscriptions();
         this._moveEvents.complete();
-        this._destroyed.next();
-        this._destroyed.complete();
     };
     /** Checks whether the element is currently being dragged. */
     /**
@@ -663,6 +692,72 @@ var CdkDrag = /** @class */ (function () {
      */
     function () {
         return this._dragDropRegistry.isDragging(this);
+    };
+    /**
+     * Sets up the different variables and subscriptions
+     * that will be necessary for the dragging sequence.
+     * @param {?} referenceElement Element that started the drag sequence.
+     * @param {?} event Browser event object that started the sequence.
+     * @return {?}
+     */
+    CdkDrag.prototype._initializeDragSequence = /**
+     * Sets up the different variables and subscriptions
+     * that will be necessary for the dragging sequence.
+     * @param {?} referenceElement Element that started the drag sequence.
+     * @param {?} event Browser event object that started the sequence.
+     * @return {?}
+     */
+    function (referenceElement, event) {
+        /** @type {?} */
+        var isDragging = this._isDragging();
+        // Abort if the user is already dragging or is using a mouse button other than the primary one.
+        if (isDragging || (!this._isTouchEvent(event) && event.button !== 0)) {
+            return;
+        }
+        this._hasStartedDragging = this._hasMoved = false;
+        this._initialContainer = this.dropContainer;
+        this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
+        this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
+        this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
+        // If we have a custom preview template, the element won't be visible anyway so we avoid the
+        // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
+        this._pickupPositionInElement = this._previewTemplate ? { x: 0, y: 0 } :
+            this._getPointerPositionInElement(referenceElement, event);
+        /** @type {?} */
+        var pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
+        this._pointerDirectionDelta = { x: 0, y: 0 };
+        this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
+        this._dragDropRegistry.startDragging(this, event);
+    };
+    /**
+     * Starts the dragging sequence.
+     * @return {?}
+     */
+    CdkDrag.prototype._startDragSequence = /**
+     * Starts the dragging sequence.
+     * @return {?}
+     */
+    function () {
+        // Emit the event on the item before the one on the container.
+        this.started.emit({ source: this });
+        if (this.dropContainer) {
+            /** @type {?} */
+            var element = this._rootElement;
+            // Grab the `nextSibling` before the preview and placeholder
+            // have been created so we don't get the preview by accident.
+            this._nextSibling = element.nextSibling;
+            /** @type {?} */
+            var preview = this._preview = this._createPreviewElement();
+            /** @type {?} */
+            var placeholder = this._placeholder = this._createPlaceholderElement();
+            // We move the element out at the end of the body and we make it hidden, because keeping it in
+            // place will throw off the consumer's `:last-child` selectors. We can't remove the element
+            // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
+            element.style.display = 'none';
+            this._document.body.appendChild(/** @type {?} */ ((element.parentNode)).replaceChild(placeholder, element));
+            this._document.body.appendChild(preview);
+            this.dropContainer.start();
+        }
     };
     /**
      * Cleans up the DOM artifacts that were added to facilitate the element being dragged.
@@ -1012,11 +1107,11 @@ var CdkDrag = /** @class */ (function () {
         // to change for every pixel, otherwise anything that depends on it can look erratic.
         // To make the delta more consistent, we track how much the user has moved since the last
         // delta change and we only update it after it has reached a certain threshold.
-        if (changeX > POINTER_DIRECTION_CHANGE_THRESHOLD) {
+        if (changeX > this._config.pointerDirectionChangeThreshold) {
             delta.x = x > positionSinceLastChange.x ? 1 : -1;
             positionSinceLastChange.x = x;
         }
-        if (changeY > POINTER_DIRECTION_CHANGE_THRESHOLD) {
+        if (changeY > this._config.pointerDirectionChangeThreshold) {
             delta.y = y > positionSinceLastChange.y ? 1 : -1;
             positionSinceLastChange.y = y;
         }
@@ -1047,13 +1142,25 @@ var CdkDrag = /** @class */ (function () {
         }
         return this.element.nativeElement;
     };
+    /**
+     * Unsubscribes from the global subscriptions.
+     * @return {?}
+     */
+    CdkDrag.prototype._removeSubscriptions = /**
+     * Unsubscribes from the global subscriptions.
+     * @return {?}
+     */
+    function () {
+        this._pointerMoveSubscription.unsubscribe();
+        this._pointerUpSubscription.unsubscribe();
+    };
     CdkDrag.decorators = [
         { type: core.Directive, args: [{
                     selector: '[cdkDrag]',
                     exportAs: 'cdkDrag',
                     host: {
                         'class': 'cdk-drag',
-                        '[class.cdk-drag-dragging]': '_isDragging()',
+                        '[class.cdk-drag-dragging]': '_hasStartedDragging && _isDragging()',
                     }
                 },] },
     ];
@@ -1066,6 +1173,7 @@ var CdkDrag = /** @class */ (function () {
         { type: core.ViewContainerRef },
         { type: scrolling.ViewportRuler },
         { type: DragDropRegistry },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_CONFIG,] }] },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };
     CdkDrag.propDecorators = {
@@ -1084,52 +1192,6 @@ var CdkDrag = /** @class */ (function () {
     };
     return CdkDrag;
 }());
-/**
- * Parses a CSS time value to milliseconds.
- * @param {?} value
- * @return {?}
- */
-function parseCssTimeUnitsToMs(value) {
-    /** @type {?} */
-    var multiplier = value.toLowerCase().indexOf('ms') > -1 ? 1 : 1000;
-    return parseFloat(value) * multiplier;
-}
-/**
- * Gets the transform transition duration, including the delay, of an element in milliseconds.
- * @param {?} element
- * @return {?}
- */
-function getTransformTransitionDurationInMs(element) {
-    /** @type {?} */
-    var computedStyle = getComputedStyle(element);
-    /** @type {?} */
-    var transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
-    /** @type {?} */
-    var property = transitionedProperties.find(function (prop) { return prop === 'transform' || prop === 'all'; });
-    // If there's no transition for `all` or `transform`, we shouldn't do anything.
-    if (!property) {
-        return 0;
-    }
-    /** @type {?} */
-    var propertyIndex = transitionedProperties.indexOf(property);
-    /** @type {?} */
-    var rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
-    /** @type {?} */
-    var rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
-    return parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
-        parseCssTimeUnitsToMs(rawDelays[propertyIndex]);
-}
-/**
- * Parses out multiple values from a computed style into an array.
- * @param {?} computedStyle
- * @param {?} name
- * @return {?}
- */
-function parseCssPropertyValue(computedStyle, name) {
-    /** @type {?} */
-    var value = computedStyle.getPropertyValue(name);
-    return value.split(',').map(function (part) { return part.trim(); });
-}
 
 /**
  * @fileoverview added by tsickle
@@ -1809,6 +1871,8 @@ var DragDropModule = /** @class */ (function () {
 
 exports.CdkDrop = CdkDrop;
 exports.CDK_DROP_CONTAINER = CDK_DROP_CONTAINER;
+exports.CDK_DRAG_CONFIG_FACTORY = CDK_DRAG_CONFIG_FACTORY;
+exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
 exports.CdkDrag = CdkDrag;
 exports.CdkDragHandle = CdkDragHandle;
 exports.moveItemInArray = moveItemInArray;
