@@ -1370,13 +1370,14 @@ FocusTrap = /** @class */ (function () {
          */
         function () { return this._enabled; },
         set: /**
-         * @param {?} val
+         * @param {?} value
          * @return {?}
          */
-        function (val) {
-            this._enabled = val;
+        function (value) {
+            this._enabled = value;
             if (this._startAnchor && this._endAnchor) {
-                this._startAnchor.tabIndex = this._endAnchor.tabIndex = this._enabled ? 0 : -1;
+                this._toggleAnchorTabIndex(value, this._startAnchor);
+                this._toggleAnchorTabIndex(value, this._endAnchor);
             }
         },
         enumerable: true,
@@ -1694,10 +1695,27 @@ FocusTrap = /** @class */ (function () {
     function () {
         /** @type {?} */
         var anchor = this._document.createElement('div');
-        anchor.tabIndex = this._enabled ? 0 : -1;
+        this._toggleAnchorTabIndex(this._enabled, anchor);
         anchor.classList.add('cdk-visually-hidden');
         anchor.classList.add('cdk-focus-trap-anchor');
         return anchor;
+    };
+    /**
+     * Toggles the `tabindex` of an anchor, based on the enabled state of the focus trap.
+     * @param {?} isEnabled Whether the focus trap is enabled.
+     * @param {?} anchor Anchor on which to toggle the tabindex.
+     * @return {?}
+     */
+    FocusTrap.prototype._toggleAnchorTabIndex = /**
+     * Toggles the `tabindex` of an anchor, based on the enabled state of the focus trap.
+     * @param {?} isEnabled Whether the focus trap is enabled.
+     * @param {?} anchor Anchor on which to toggle the tabindex.
+     * @return {?}
+     */
+    function (isEnabled, anchor) {
+        // Remove the tabindex completely, rather than setting it to -1, because if the
+        // element has a tabindex, the user might still hit it when navigating with the arrow keys.
+        isEnabled ? anchor.setAttribute('tabindex', '0') : anchor.removeAttribute('tabindex');
     };
     /**
      * Executes a function when the zone is stable.

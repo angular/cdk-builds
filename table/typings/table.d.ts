@@ -17,6 +17,11 @@ export interface RowOutlet {
     viewContainer: ViewContainerRef;
 }
 /**
+ * Union of the types that can be set as the data source for a `CdkTable`.
+ * @docs-private
+ */
+declare type CdkTableDataSourceInput<T> = DataSource<T> | Observable<ReadonlyArray<T> | T[]> | ReadonlyArray<T> | T[];
+/**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
  */
@@ -209,7 +214,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table will call the DataSource's `disconnect` function (may be useful for cleaning up any
      * subscriptions registered during the connect process).
      */
-    dataSource: DataSource<T> | Observable<T[]> | T[];
+    dataSource: CdkTableDataSourceInput<T>;
     private _dataSource;
     /**
      * Whether to allow multiple rows per data object by evaluating which rows evaluate their 'when'
@@ -410,3 +415,4 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     private _setupStickyStyler;
 }
+export {};

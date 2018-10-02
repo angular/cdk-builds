@@ -87,6 +87,12 @@ export declare class FocusTrap {
     private _getLastTabbableElement;
     /** Creates an anchor element. */
     private _createAnchor;
+    /**
+     * Toggles the `tabindex` of an anchor, based on the enabled state of the focus trap.
+     * @param isEnabled Whether the focus trap is enabled.
+     * @param anchor Anchor on which to toggle the tabindex.
+     */
+    private _toggleAnchorTabIndex;
     /** Executes a function when the zone is stable. */
     private _executeOnStable;
 }
