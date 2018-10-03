@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "7.0.0-rc.0-3f8ee74",
+  "version": "7.0.0-rc.0-f013f77",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/angular/material2#readme",
   "peerDependencies": {
-    "@angular/core": ">=7.0.0-rc.0-3f8ee74",
-    "@angular/common": ">=7.0.0-rc.0-3f8ee74"
+    "@angular/core": ">=7.0.0-rc.0-f013f77",
+    "@angular/common": ">=7.0.0-rc.0-f013f77"
   },
   "dependencies": {
     "tslib": "^1.7.1"
@@ -37,7 +37,7 @@
     "migrations": "./schematics/migration.json"
   },
   "sideEffects": false,
-  "releaseGitCommitSha": "3f8ee748ddfbed08203e623963d9a544766a19d8",
+  "releaseGitCommitSha": "f013f776a80d7fa1f36ab97e9f6662a22d846bf9",
   "releaseGitBranch": "",
   "releaseGitUser": "Travis CI User <travis@example.org>"
 }
