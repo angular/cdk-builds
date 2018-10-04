@@ -11,6 +11,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./ast"));
+__export(require("./ast/ng-module-imports"));
 __export(require("./build-component"));
 __export(require("./get-project"));
 __export(require("./parse5-element"));
