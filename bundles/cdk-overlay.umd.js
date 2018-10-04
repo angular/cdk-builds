@@ -1548,7 +1548,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         this._boundingBox = overlayRef.hostElement;
         this._pane = overlayRef.overlayElement;
         this._resizeSubscription.unsubscribe();
-        this._resizeSubscription = this._viewportRuler.change().subscribe(function () { return _this.apply(); });
+        this._resizeSubscription = this._viewportRuler.change().subscribe(function () {
+            // When the window is resized, we want to trigger the next reposition as if it
+            // was an initial render, in order for the strategy to pick a new optimal position,
+            // otherwise position locking will cause it to stay at the old one.
+            // When the window is resized, we want to trigger the next reposition as if it
+            // was an initial render, in order for the strategy to pick a new optimal position,
+            // otherwise position locking will cause it to stay at the old one.
+            _this._isInitialRender = true;
+            _this.apply();
+        });
     };
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
@@ -1696,6 +1705,8 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        this._lastPosition = null;
+        this._previousPushAmount = null;
         this._resizeSubscription.unsubscribe();
     };
     /** Cleanup after the element gets destroyed. */
@@ -2113,8 +2124,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
-     * @param {?} start The starting point from which the overlay is pushed.
-     * @param {?} overlay The overlay dimensions.
+     * @param {?} start Starting point from which the overlay is pushed.
+     * @param {?} overlay Dimensions of the overlay.
+     * @param {?} scrollPosition Current viewport scroll position.
      * @return {?} The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
      */
@@ -2123,36 +2135,48 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
-     * @param {?} start The starting point from which the overlay is pushed.
-     * @param {?} overlay The overlay dimensions.
+     * @param {?} start Starting point from which the overlay is pushed.
+     * @param {?} overlay Dimensions of the overlay.
+     * @param {?} scrollPosition Current viewport scroll position.
      * @return {?} The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
      */
-    function (start, overlay) {
+    function (start, overlay, scrollPosition) {
+        // If the position is locked and we've pushed the overlay already, reuse the previous push
+        // amount, rather than pushing it again. If we were to continue pushing, the element would
+        // remain in the viewport, which goes against the expectations when position locking is enabled.
+        if (this._previousPushAmount && this._positionLocked) {
+            return {
+                x: start.x + this._previousPushAmount.x,
+                y: start.y + this._previousPushAmount.y
+            };
+        }
         var /** @type {?} */ viewport = this._viewportRect;
-        // Determine how much the overlay goes outside the viewport on each side, which we'll use to
-        // decide which direction to push it.
+        // Determine how much the overlay goes outside the viewport on each
+        // side, which we'll use to decide which direction to push it.
         var /** @type {?} */ overflowRight = Math.max(start.x + overlay.width - viewport.right, 0);
         var /** @type {?} */ overflowBottom = Math.max(start.y + overlay.height - viewport.bottom, 0);
-        var /** @type {?} */ overflowTop = Math.max(viewport.top - start.y, 0);
-        var /** @type {?} */ overflowLeft = Math.max(viewport.left - start.x, 0);
-        // Amount by which to push the overlay in each direction such that it remains on-screen.
-        var /** @type {?} */ pushX, /** @type {?} */ pushY = 0;
+        var /** @type {?} */ overflowTop = Math.max(viewport.top - scrollPosition.top - start.y, 0);
+        var /** @type {?} */ overflowLeft = Math.max(viewport.left - scrollPosition.left - start.x, 0);
+        // Amount by which to push the overlay in each axis such that it remains on-screen.
+        var /** @type {?} */ pushX = 0;
+        var /** @type {?} */ pushY = 0;
         // If the overlay fits completely within the bounds of the viewport, push it from whichever
         // direction is goes off-screen. Otherwise, push the top-left corner such that its in the
         // viewport and allow for the trailing end of the overlay to go out of bounds.
-        if (overlay.width <= viewport.width) {
+        if (overlay.width < viewport.width) {
             pushX = overflowLeft || -overflowRight;
         }
         else {
-            pushX = viewport.left - start.x;
+            pushX = start.x < this._viewportMargin ? (viewport.left - scrollPosition.left) - start.x : 0;
         }
-        if (overlay.height <= viewport.height) {
+        if (overlay.height < viewport.height) {
             pushY = overflowTop || -overflowBottom;
         }
         else {
-            pushY = viewport.top - start.y;
+            pushY = start.y < this._viewportMargin ? (viewport.top - scrollPosition.top) - start.y : 0;
         }
+        this._previousPushAmount = { x: pushX, y: pushY };
         return {
             x: start.x + pushX,
             y: start.y + pushY,
@@ -2403,8 +2427,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     function (originPoint, position) {
         var /** @type {?} */ styles = /** @type {?} */ ({});
         if (this._hasExactPosition()) {
-            extendStyles(styles, this._getExactOverlayY(position, originPoint));
-            extendStyles(styles, this._getExactOverlayX(position, originPoint));
+            var /** @type {?} */ scrollPosition = this._viewportRuler.getViewportScrollPosition();
+            extendStyles(styles, this._getExactOverlayY(position, originPoint, scrollPosition));
+            extendStyles(styles, this._getExactOverlayX(position, originPoint, scrollPosition));
         }
         else {
             styles.position = 'static';
@@ -2439,21 +2464,23 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayY = /**
      * Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
-    function (position, originPoint) {
+    function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the
         // preferred position has changed since the last `apply`.
         var /** @type {?} */ styles = /** @type {?} */ ({ top: null, bottom: null });
         var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
-            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
+            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
         // @breaking-change 7.0.0 Currently the `_overlayContainer` is optional in order to avoid a
         // breaking change. The null check here can be removed once the `_overlayContainer` becomes
@@ -2482,21 +2509,23 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * Gets the exact left/right for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayX = /**
      * Gets the exact left/right for the overlay when not using flexible sizing or when pushing.
      * @param {?} position
      * @param {?} originPoint
+     * @param {?} scrollPosition
      * @return {?}
      */
-    function (position, originPoint) {
+    function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
         var /** @type {?} */ styles = /** @type {?} */ ({ left: null, right: null });
         var /** @type {?} */ overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
-            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect);
+            overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
         // We want to set either `left` or `right` based on whether the overlay wants to appear "before"
         // or "after" the origin, which determines the direction in which the element will expand.
