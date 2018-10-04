@@ -4330,6 +4330,7 @@ var OverlayModule = /** @class */ (function () {
 /** *
  * @deprecated Use `OverlayModule` instead.
  * \@breaking-change 7.0.0
+ * \@docs-private
   @type {?} */
 var OVERLAY_PROVIDERS = [
     Overlay,

@@ -3306,6 +3306,7 @@ OverlayModule.decorators = [
 /** *
  * @deprecated Use `OverlayModule` instead.
  * \@breaking-change 7.0.0
+ * \@docs-private
   @type {?} */
 const OVERLAY_PROVIDERS = [
     Overlay,
