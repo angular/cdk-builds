@@ -1911,7 +1911,8 @@ function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 var LiveAnnouncer = /** @class */ (function () {
-    function LiveAnnouncer(elementToken, _document) {
+    function LiveAnnouncer(elementToken, _ngZone, _document) {
+        this._ngZone = _ngZone;
         // We inject the live element and document as `any` because the constructor signature cannot
         // reference browser globals (HTMLElement, Document) on non-browser environments, since having
         // a class decorator causes TypeScript to preserve the constructor signature types.
@@ -1947,11 +1948,13 @@ var LiveAnnouncer = /** @class */ (function () {
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
-        return new Promise(function (resolve) {
-            setTimeout(function () {
-                _this._liveElement.textContent = message;
-                resolve();
-            }, 100);
+        return this._ngZone.runOutsideAngular(function () {
+            return new Promise(function (resolve) {
+                setTimeout(function () {
+                    _this._liveElement.textContent = message;
+                    resolve();
+                }, 100);
+            });
         });
     };
     /**
@@ -1976,12 +1979,12 @@ var LiveAnnouncer = /** @class */ (function () {
         var elementClass = 'cdk-live-announcer-element';
         /** @type {?} */
         var previousElements = this._document.getElementsByClassName(elementClass);
+        /** @type {?} */
+        var liveEl = this._document.createElement('div');
         // Remove any old containers. This can happen when coming in from a server-side-rendered page.
         for (var i = 0; i < previousElements.length; i++) {
             /** @type {?} */ ((previousElements[i].parentNode)).removeChild(previousElements[i]);
         }
-        /** @type {?} */
-        var liveEl = this._document.createElement('div');
         liveEl.classList.add(elementClass);
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
@@ -1995,9 +1998,10 @@ var LiveAnnouncer = /** @class */ (function () {
     /** @nocollapse */
     LiveAnnouncer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
+        { type: core.NgZone },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
@@ -2081,10 +2085,11 @@ var CdkAriaLive = /** @class */ (function () {
  * @param {?} parentDispatcher
  * @param {?} liveElement
  * @param {?} _document
+ * @param {?} ngZone
  * @return {?}
  */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document) {
-    return parentDispatcher || new LiveAnnouncer(liveElement, _document);
+function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document, ngZone) {
+    return parentDispatcher || new LiveAnnouncer(liveElement, _document, ngZone);
 }
 /** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
@@ -2096,6 +2101,7 @@ var LIVE_ANNOUNCER_PROVIDER = {
         [new core.Optional(), new core.SkipSelf(), LiveAnnouncer],
         [new core.Optional(), new core.Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
         common.DOCUMENT,
+        core.NgZone,
     ],
     useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
 };

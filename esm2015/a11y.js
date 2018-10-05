@@ -1422,9 +1422,11 @@ function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
 class LiveAnnouncer {
     /**
      * @param {?} elementToken
+     * @param {?} _ngZone
      * @param {?} _document
      */
-    constructor(elementToken, _document) {
+    constructor(elementToken, _ngZone, _document) {
+        this._ngZone = _ngZone;
         // We inject the live element and document as `any` because the constructor signature cannot
         // reference browser globals (HTMLElement, Document) on non-browser environments, since having
         // a class decorator causes TypeScript to preserve the constructor signature types.
@@ -1446,11 +1448,13 @@ class LiveAnnouncer {
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
-        return new Promise(resolve => {
-            setTimeout(() => {
-                this._liveElement.textContent = message;
-                resolve();
-            }, 100);
+        return this._ngZone.runOutsideAngular(() => {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    this._liveElement.textContent = message;
+                    resolve();
+                }, 100);
+            });
         });
     }
     /**
@@ -1469,12 +1473,12 @@ class LiveAnnouncer {
         const elementClass = 'cdk-live-announcer-element';
         /** @type {?} */
         const previousElements = this._document.getElementsByClassName(elementClass);
+        /** @type {?} */
+        const liveEl = this._document.createElement('div');
         // Remove any old containers. This can happen when coming in from a server-side-rendered page.
         for (let i = 0; i < previousElements.length; i++) {
             /** @type {?} */ ((previousElements[i].parentNode)).removeChild(previousElements[i]);
         }
-        /** @type {?} */
-        const liveEl = this._document.createElement('div');
         liveEl.classList.add(elementClass);
         liveEl.classList.add('cdk-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
@@ -1489,9 +1493,10 @@ LiveAnnouncer.decorators = [
 /** @nocollapse */
 LiveAnnouncer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
+    { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
+/** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(NgZone), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
  * with a wider range of browsers and screen readers.
@@ -1569,10 +1574,11 @@ CdkAriaLive.propDecorators = {
  * @param {?} parentDispatcher
  * @param {?} liveElement
  * @param {?} _document
+ * @param {?} ngZone
  * @return {?}
  */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document) {
-    return parentDispatcher || new LiveAnnouncer(liveElement, _document);
+function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document, ngZone) {
+    return parentDispatcher || new LiveAnnouncer(liveElement, _document, ngZone);
 }
 /** *
  * \@docs-private \@deprecated \@breaking-change 7.0.0
@@ -1584,6 +1590,7 @@ const LIVE_ANNOUNCER_PROVIDER = {
         [new Optional(), new SkipSelf(), LiveAnnouncer],
         [new Optional(), new Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
         DOCUMENT,
+        NgZone,
     ],
     useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
 };
