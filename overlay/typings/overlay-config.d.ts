@@ -7,7 +7,7 @@
  */
 import { PositionStrategy } from './position/position-strategy';
 import { Direction, Directionality } from '@angular/cdk/bidi';
-import { ScrollStrategy } from './scroll/scroll-strategy';
+import { ScrollStrategy } from './scroll/index';
 /** Initial configuration used when creating an overlay. */
 export declare class OverlayConfig {
     /** Strategy with which to position the overlay. */

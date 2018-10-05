@@ -232,7 +232,7 @@ class CdkTextareaAutosize {
         const minHeight = this.minRows && this._cachedLineHeight ?
             `${this.minRows * this._cachedLineHeight}px` : null;
         if (minHeight) {
-            this._setTextareaStyle('minHeight', minHeight);
+            this._textareaElement.style.minHeight = minHeight;
         }
     }
     /**
@@ -244,7 +244,7 @@ class CdkTextareaAutosize {
         const maxHeight = this.maxRows && this._cachedLineHeight ?
             `${this.maxRows * this._cachedLineHeight}px` : null;
         if (maxHeight) {
-            this._setTextareaStyle('maxHeight', maxHeight);
+            this._textareaElement.style.maxHeight = maxHeight;
         }
     }
     /**
@@ -268,15 +268,6 @@ class CdkTextareaAutosize {
     ngOnDestroy() {
         this._destroyed.next();
         this._destroyed.complete();
-    }
-    /**
-     * Sets a style property on the textarea element.
-     * @param {?} property
-     * @param {?} value
-     * @return {?}
-     */
-    _setTextareaStyle(property, value) {
-        this._textareaElement.style[property] = value;
     }
     /**
      * Cache the height of a single-row textarea if it has not already been cached.

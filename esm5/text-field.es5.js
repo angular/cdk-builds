@@ -261,7 +261,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         var minHeight = this.minRows && this._cachedLineHeight ?
             this.minRows * this._cachedLineHeight + "px" : null;
         if (minHeight) {
-            this._setTextareaStyle('minHeight', minHeight);
+            this._textareaElement.style.minHeight = minHeight;
         }
     };
     /** Sets the maximum height of the textarea as determined by maxRows. */
@@ -278,7 +278,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         var maxHeight = this.maxRows && this._cachedLineHeight ?
             this.maxRows * this._cachedLineHeight + "px" : null;
         if (maxHeight) {
-            this._setTextareaStyle('maxHeight', maxHeight);
+            this._textareaElement.style.maxHeight = maxHeight;
         }
     };
     /**
@@ -309,21 +309,6 @@ var CdkTextareaAutosize = /** @class */ (function () {
     function () {
         this._destroyed.next();
         this._destroyed.complete();
-    };
-    /**
-     * Sets a style property on the textarea element.
-     * @param {?} property
-     * @param {?} value
-     * @return {?}
-     */
-    CdkTextareaAutosize.prototype._setTextareaStyle = /**
-     * Sets a style property on the textarea element.
-     * @param {?} property
-     * @param {?} value
-     * @return {?}
-     */
-    function (property, value) {
-        this._textareaElement.style[property] = value;
     };
     /**
      * Cache the height of a single-row textarea if it has not already been cached.

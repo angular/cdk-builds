@@ -494,7 +494,10 @@ var ScrollDispatcher = /** @class */ (function () {
     function (auditTimeInMs) {
         var _this = this;
         if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
-        return this._platform.isBrowser ? rxjs.Observable.create(function (observer) {
+        if (!this._platform.isBrowser) {
+            return rxjs.of();
+        }
+        return rxjs.Observable.create(function (observer) {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
@@ -510,7 +513,7 @@ var ScrollDispatcher = /** @class */ (function () {
                     _this._removeGlobalListener();
                 }
             };
-        }) : rxjs.of();
+        });
     };
     /**
      * @return {?}

@@ -35,8 +35,6 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     _setMaxHeight(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
-    /** Sets a style property on the textarea element. */
-    private _setTextareaStyle;
     /**
      * Cache the height of a single-row textarea if it has not already been cached.
      *

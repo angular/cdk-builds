@@ -458,7 +458,7 @@ class CdkDrag {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = Observable.create(observer => {
+        this.moved = Observable.create((observer) => {
             /** @type {?} */
             const subscription = this._moveEvents.subscribe(observer);
             this._moveEventSubscriptions++;

@@ -22,13 +22,13 @@ export interface VirtualScrollStrategy {
     /** Detaches this scroll strategy from the currently attached viewport. */
     detach(): void;
     /** Called when the viewport is scrolled (debounced using requestAnimationFrame). */
-    onContentScrolled(): any;
+    onContentScrolled(): void;
     /** Called when the length of the data changes. */
-    onDataLengthChanged(): any;
+    onDataLengthChanged(): void;
     /** Called when the range of items rendered in the DOM has changed. */
-    onContentRendered(): any;
+    onContentRendered(): void;
     /** Called when the offset of the rendered items changed. */
-    onRenderedOffsetChanged(): any;
+    onRenderedOffsetChanged(): void;
     /**
      * Scroll to the offset for the given index.
      * @param index The index of the element to scroll to.

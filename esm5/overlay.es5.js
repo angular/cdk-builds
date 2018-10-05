@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Optional, Inject, Injectable, NgZone, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable, inject } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
+import { Inject, Injectable, NgZone, Optional, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable, inject } from '@angular/core';
 import { __assign, __extends } from 'tslib';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -17,217 +17,6 @@ import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { ESCAPE } from '@angular/cdk/keycodes';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-
-/**
- * Scroll strategy that doesn't do anything.
- */
-var  /**
- * Scroll strategy that doesn't do anything.
- */
-NoopScrollStrategy = /** @class */ (function () {
-    function NoopScrollStrategy() {
-    }
-    /** Does nothing, as this scroll strategy is a no-op. */
-    /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    NoopScrollStrategy.prototype.enable = /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    function () { };
-    /** Does nothing, as this scroll strategy is a no-op. */
-    /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    NoopScrollStrategy.prototype.disable = /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    function () { };
-    /** Does nothing, as this scroll strategy is a no-op. */
-    /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    NoopScrollStrategy.prototype.attach = /**
-     * Does nothing, as this scroll strategy is a no-op.
-     * @return {?}
-     */
-    function () { };
-    return NoopScrollStrategy;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * Initial configuration used when creating an overlay.
- */
-var  /**
- * Initial configuration used when creating an overlay.
- */
-OverlayConfig = /** @class */ (function () {
-    function OverlayConfig(config) {
-        var _this = this;
-        /**
-         * Strategy to be used when handling scroll events while the overlay is open.
-         */
-        this.scrollStrategy = new NoopScrollStrategy();
-        /**
-         * Custom class to add to the overlay pane.
-         */
-        this.panelClass = '';
-        /**
-         * Whether the overlay has a backdrop.
-         */
-        this.hasBackdrop = false;
-        /**
-         * Custom class to add to the backdrop
-         */
-        this.backdropClass = 'cdk-overlay-dark-backdrop';
-        /**
-         * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
-         * Note that this usually doesn't include clicking on links (unless the user is using
-         * the `HashLocationStrategy`).
-         */
-        this.disposeOnNavigation = false;
-        if (config) {
-            Object.keys(config)
-                .filter(function (key) { return typeof config[key] !== 'undefined'; })
-                .forEach(function (key) { return _this[key] = config[key]; });
-        }
-    }
-    return OverlayConfig;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
-/**
- * The points of the origin element and the overlay element to connect.
- */
-var  /**
- * The points of the origin element and the overlay element to connect.
- */
-ConnectionPositionPair = /** @class */ (function () {
-    function ConnectionPositionPair(origin, overlay, offsetX, offsetY, panelClass) {
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.panelClass = panelClass;
-        this.originX = origin.originX;
-        this.originY = origin.originY;
-        this.overlayX = overlay.overlayX;
-        this.overlayY = overlay.overlayY;
-    }
-    return ConnectionPositionPair;
-}());
-/**
- * Set of properties regarding the position of the origin and overlay relative to the viewport
- * with respect to the containing Scrollable elements.
- *
- * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
- * bounds of any one of the strategy's Scrollable's bounding client rectangle.
- *
- * The overlay and origin are outside view if there is no overlap between their bounding client
- * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
- *
- *       -----------                    -----------
- *       | outside |                    | clipped |
- *       |  view   |              --------------------------
- *       |         |              |     |         |        |
- *       ----------               |     -----------        |
- *  --------------------------    |                        |
- *  |                        |    |      Scrollable        |
- *  |                        |    |                        |
- *  |                        |     --------------------------
- *  |      Scrollable        |
- *  |                        |
- *  --------------------------
- *
- * \@docs-private
- */
-var  /**
- * Set of properties regarding the position of the origin and overlay relative to the viewport
- * with respect to the containing Scrollable elements.
- *
- * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
- * bounds of any one of the strategy's Scrollable's bounding client rectangle.
- *
- * The overlay and origin are outside view if there is no overlap between their bounding client
- * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
- *
- *       -----------                    -----------
- *       | outside |                    | clipped |
- *       |  view   |              --------------------------
- *       |         |              |     |         |        |
- *       ----------               |     -----------        |
- *  --------------------------    |                        |
- *  |                        |    |      Scrollable        |
- *  |                        |    |                        |
- *  |                        |     --------------------------
- *  |      Scrollable        |
- *  |                        |
- *  --------------------------
- *
- * \@docs-private
- */
-ScrollingVisibility = /** @class */ (function () {
-    function ScrollingVisibility() {
-    }
-    return ScrollingVisibility;
-}());
-/**
- * The change event emitted by the strategy when a fallback position is used.
- */
-var ConnectedOverlayPositionChange = /** @class */ (function () {
-    function ConnectedOverlayPositionChange(connectionPair, /** @docs-private */
-    scrollableViewProperties) {
-        this.connectionPair = connectionPair;
-        this.scrollableViewProperties = scrollableViewProperties;
-    }
-    /** @nocollapse */
-    ConnectedOverlayPositionChange.ctorParameters = function () { return [
-        { type: ConnectionPositionPair },
-        { type: ScrollingVisibility, decorators: [{ type: Optional }] }
-    ]; };
-    return ConnectedOverlayPositionChange;
-}());
-/**
- * Validates whether a vertical position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateVerticalPosition(property, value) {
-    if (value !== 'top' && value !== 'bottom' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"top\", \"bottom\" or \"center\".");
-    }
-}
-/**
- * Validates whether a horizontal position property matches the expected values.
- * \@docs-private
- * @param {?} property Name of the property being validated.
- * @param {?} value Value of the property being validated.
- * @return {?}
- */
-function validateHorizontalPosition(property, value) {
-    if (value !== 'start' && value !== 'end' && value !== 'center') {
-        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
-            "Expected \"start\", \"end\" or \"center\".");
-    }
-}
 
 /**
  * @fileoverview added by tsickle
@@ -297,19 +86,23 @@ BlockScrollStrategy = /** @class */ (function () {
             /** @type {?} */
             var body = /** @type {?} */ ((this._document.body));
             /** @type {?} */
-            var previousHtmlScrollBehavior = html.style['scrollBehavior'] || '';
+            var htmlStyle = /** @type {?} */ (html.style);
             /** @type {?} */
-            var previousBodyScrollBehavior = body.style['scrollBehavior'] || '';
+            var bodyStyle = /** @type {?} */ (body.style);
+            /** @type {?} */
+            var previousHtmlScrollBehavior = htmlStyle.scrollBehavior || '';
+            /** @type {?} */
+            var previousBodyScrollBehavior = bodyStyle.scrollBehavior || '';
             this._isEnabled = false;
-            html.style.left = this._previousHTMLStyles.left;
-            html.style.top = this._previousHTMLStyles.top;
+            htmlStyle.left = this._previousHTMLStyles.left;
+            htmlStyle.top = this._previousHTMLStyles.top;
             html.classList.remove('cdk-global-scrollblock');
             // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
             // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
-            html.style['scrollBehavior'] = body.style['scrollBehavior'] = 'auto';
+            htmlStyle.scrollBehavior = bodyStyle.scrollBehavior = 'auto';
             window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
-            html.style['scrollBehavior'] = previousHtmlScrollBehavior;
-            body.style['scrollBehavior'] = previousBodyScrollBehavior;
+            htmlStyle.scrollBehavior = previousHtmlScrollBehavior;
+            bodyStyle.scrollBehavior = previousBodyScrollBehavior;
         }
     };
     /**
@@ -439,6 +232,53 @@ CloseScrollStrategy = /** @class */ (function () {
         }
     };
     return CloseScrollStrategy;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+
+/**
+ * Scroll strategy that doesn't do anything.
+ */
+var  /**
+ * Scroll strategy that doesn't do anything.
+ */
+NoopScrollStrategy = /** @class */ (function () {
+    function NoopScrollStrategy() {
+    }
+    /** Does nothing, as this scroll strategy is a no-op. */
+    /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    NoopScrollStrategy.prototype.enable = /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    function () { };
+    /** Does nothing, as this scroll strategy is a no-op. */
+    /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    NoopScrollStrategy.prototype.disable = /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    function () { };
+    /** Does nothing, as this scroll strategy is a no-op. */
+    /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    NoopScrollStrategy.prototype.attach = /**
+     * Does nothing, as this scroll strategy is a no-op.
+     * @return {?}
+     */
+    function () { };
+    return NoopScrollStrategy;
 }());
 
 /**
@@ -628,6 +468,174 @@ var ScrollStrategyOptions = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * Initial configuration used when creating an overlay.
+ */
+var  /**
+ * Initial configuration used when creating an overlay.
+ */
+OverlayConfig = /** @class */ (function () {
+    function OverlayConfig(config) {
+        var _this = this;
+        /**
+         * Strategy to be used when handling scroll events while the overlay is open.
+         */
+        this.scrollStrategy = new NoopScrollStrategy();
+        /**
+         * Custom class to add to the overlay pane.
+         */
+        this.panelClass = '';
+        /**
+         * Whether the overlay has a backdrop.
+         */
+        this.hasBackdrop = false;
+        /**
+         * Custom class to add to the backdrop
+         */
+        this.backdropClass = 'cdk-overlay-dark-backdrop';
+        /**
+         * Whether the overlay should be disposed of when the user goes backwards/forwards in history.
+         * Note that this usually doesn't include clicking on links (unless the user is using
+         * the `HashLocationStrategy`).
+         */
+        this.disposeOnNavigation = false;
+        if (config) {
+            Object.keys(config).forEach(function (k) {
+                /** @type {?} */
+                var key = /** @type {?} */ (k);
+                if (typeof config[key] !== 'undefined') {
+                    _this[key] = config[key];
+                }
+            });
+        }
+    }
+    return OverlayConfig;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * The points of the origin element and the overlay element to connect.
+ */
+var  /**
+ * The points of the origin element and the overlay element to connect.
+ */
+ConnectionPositionPair = /** @class */ (function () {
+    function ConnectionPositionPair(origin, overlay, offsetX, offsetY, panelClass) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.panelClass = panelClass;
+        this.originX = origin.originX;
+        this.originY = origin.originY;
+        this.overlayX = overlay.overlayX;
+        this.overlayY = overlay.overlayY;
+    }
+    return ConnectionPositionPair;
+}());
+/**
+ * Set of properties regarding the position of the origin and overlay relative to the viewport
+ * with respect to the containing Scrollable elements.
+ *
+ * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
+ * bounds of any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ * The overlay and origin are outside view if there is no overlap between their bounding client
+ * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ *       -----------                    -----------
+ *       | outside |                    | clipped |
+ *       |  view   |              --------------------------
+ *       |         |              |     |         |        |
+ *       ----------               |     -----------        |
+ *  --------------------------    |                        |
+ *  |                        |    |      Scrollable        |
+ *  |                        |    |                        |
+ *  |                        |     --------------------------
+ *  |      Scrollable        |
+ *  |                        |
+ *  --------------------------
+ *
+ * \@docs-private
+ */
+var  /**
+ * Set of properties regarding the position of the origin and overlay relative to the viewport
+ * with respect to the containing Scrollable elements.
+ *
+ * The overlay and origin are clipped if any part of their bounding client rectangle exceeds the
+ * bounds of any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ * The overlay and origin are outside view if there is no overlap between their bounding client
+ * rectangle and any one of the strategy's Scrollable's bounding client rectangle.
+ *
+ *       -----------                    -----------
+ *       | outside |                    | clipped |
+ *       |  view   |              --------------------------
+ *       |         |              |     |         |        |
+ *       ----------               |     -----------        |
+ *  --------------------------    |                        |
+ *  |                        |    |      Scrollable        |
+ *  |                        |    |                        |
+ *  |                        |     --------------------------
+ *  |      Scrollable        |
+ *  |                        |
+ *  --------------------------
+ *
+ * \@docs-private
+ */
+ScrollingVisibility = /** @class */ (function () {
+    function ScrollingVisibility() {
+    }
+    return ScrollingVisibility;
+}());
+/**
+ * The change event emitted by the strategy when a fallback position is used.
+ */
+var ConnectedOverlayPositionChange = /** @class */ (function () {
+    function ConnectedOverlayPositionChange(connectionPair, /** @docs-private */
+    scrollableViewProperties) {
+        this.connectionPair = connectionPair;
+        this.scrollableViewProperties = scrollableViewProperties;
+    }
+    /** @nocollapse */
+    ConnectedOverlayPositionChange.ctorParameters = function () { return [
+        { type: ConnectionPositionPair },
+        { type: ScrollingVisibility, decorators: [{ type: Optional }] }
+    ]; };
+    return ConnectedOverlayPositionChange;
+}());
+/**
+ * Validates whether a vertical position property matches the expected values.
+ * \@docs-private
+ * @param {?} property Name of the property being validated.
+ * @param {?} value Value of the property being validated.
+ * @return {?}
+ */
+function validateVerticalPosition(property, value) {
+    if (value !== 'top' && value !== 'bottom' && value !== 'center') {
+        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
+            "Expected \"top\", \"bottom\" or \"center\".");
+    }
+}
+/**
+ * Validates whether a horizontal position property matches the expected values.
+ * \@docs-private
+ * @param {?} property Name of the property being validated.
+ * @param {?} value Value of the property being validated.
+ * @return {?}
+ */
+function validateHorizontalPosition(property, value) {
+    if (value !== 'start' && value !== 'end' && value !== 'center') {
+        throw Error("ConnectedPosition: Invalid " + property + " \"" + value + "\". " +
+            "Expected \"start\", \"end\" or \"center\".");
+    }
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2439,7 +2447,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 left = origin.x - (previousWidth / 2);
             }
         }
-        return { top: top, left: left, bottom: bottom, right: right, width: width, height: height };
+        return { top: /** @type {?} */ ((top)), left: /** @type {?} */ ((left)), bottom: /** @type {?} */ ((bottom)), right: /** @type {?} */ ((right)), width: width, height: height };
     };
     /**
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
@@ -3837,9 +3845,8 @@ var CdkOverlayOrigin = /** @class */ (function () {
  */
 var CdkConnectedOverlay = /** @class */ (function () {
     // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
-    function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, _scrollStrategy, _dir) {
+    function CdkConnectedOverlay(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
         this._overlay = _overlay;
-        this._scrollStrategy = _scrollStrategy;
         this._dir = _dir;
         this._hasBackdrop = false;
         this._lockPosition = false;
@@ -3851,10 +3858,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
          * Margin between the overlay and the viewport edges.
          */
         this.viewportMargin = 0;
-        /**
-         * Strategy to be used when handling scroll events while the overlay is open.
-         */
-        this.scrollStrategy = this._scrollStrategy();
         /**
          * Whether the overlay is open.
          */
@@ -3880,6 +3883,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
          */
         this.overlayKeydown = new EventEmitter();
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
+        this._scrollStrategyFactory = scrollStrategyFactory;
+        this.scrollStrategy = this._scrollStrategyFactory();
     }
     Object.defineProperty(CdkConnectedOverlay.prototype, "offsetX", {
         /** The offset in pixels for the overlay connection point on the x-axis */

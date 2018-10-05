@@ -41,12 +41,12 @@ export declare class AutofillMonitor implements OnDestroy {
      * Stop monitoring the autofill state of the given input element.
      * @param element The element to stop monitoring.
      */
-    stopMonitoring(element: Element): any;
+    stopMonitoring(element: Element): void;
     /**
      * Stop monitoring the autofill state of the given input element.
      * @param element The element to stop monitoring.
      */
-    stopMonitoring(element: ElementRef<Element>): any;
+    stopMonitoring(element: ElementRef<Element>): void;
     ngOnDestroy(): void;
 }
 /** A directive that can be used to monitor the autofill state of an input. */

@@ -58,7 +58,7 @@ class ContentObserver {
     observe(elementOrRef) {
         /** @type {?} */
         const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
-        return Observable.create(observer => {
+        return Observable.create((observer) => {
             /** @type {?} */
             const stream = this._observeElement(element);
             /** @type {?} */

@@ -33,7 +33,6 @@ export declare class CdkOverlayOrigin {
  */
 export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _overlay;
-    private _scrollStrategy;
     private _dir;
     private _overlayRef;
     private _templatePortal;
@@ -46,6 +45,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _offsetX;
     private _offsetY;
     private _position;
+    private _scrollStrategyFactory;
     /** Origin for the connected overlay. */
     origin: CdkOverlayOrigin;
     /** Registered connected position pairs. */
@@ -92,7 +92,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     detach: EventEmitter<void>;
     /** Emits when there are keyboard events that are targeted at the overlay. */
     overlayKeydown: EventEmitter<KeyboardEvent>;
-    constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, _scrollStrategy: any, _dir: Directionality);
+    constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, scrollStrategyFactory: any, _dir: Directionality);
     /** The associated overlay reference. */
     readonly overlayRef: OverlayRef;
     /** The element's layout direction. */

@@ -252,8 +252,6 @@ var BreakpointObserver = /** @class */ (function () {
         // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
         // patches it.
         function (listener) {
-            // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
-            // TypeScript 3.1 (the type is unavailable before then).
             queryListener = function (e) { return _this.zone.run(function () { return listener(e); }); };
             mql.addListener(queryListener);
         }, function () { return mql.removeListener(queryListener); })
