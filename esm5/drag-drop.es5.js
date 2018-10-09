@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, Inject, ChangeDetectionStrategy, Component, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, ViewEncapsulation, Optional, ContentChild, Directive, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
+import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ContentChild, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
@@ -13,6 +13,46 @@ import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { take } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * Shallow-extends a stylesheet object with another stylesheet object.
+ * \@docs-private
+ * @param {?} dest
+ * @param {?} source
+ * @return {?}
+ */
+function extendStyles(dest, source) {
+    for (var key in source) {
+        if (source.hasOwnProperty(key)) {
+            dest[/** @type {?} */ (key)] = source[/** @type {?} */ (key)];
+        }
+    }
+    return dest;
+}
+/**
+ * Toggles whether the native drag interactions should be enabled for an element.
+ * \@docs-private
+ * @param {?} element Element on which to toggle the drag interactions.
+ * @param {?} enable Whether the drag interactions should be enabled.
+ * @return {?}
+ */
+function toggleNativeDragInteractions(element, enable) {
+    /** @type {?} */
+    var userSelect = enable ? '' : 'none';
+    extendStyles(element.style, {
+        touchAction: enable ? '' : 'none',
+        webkitUserDrag: enable ? '' : 'none',
+        webkitTapHighlightColor: enable ? '' : 'transparent',
+        userSelect: userSelect,
+        msUserSelect: userSelect,
+        webkitUserSelect: userSelect,
+        MozUserSelect: userSelect
+    });
+}
 
 /**
  * @fileoverview added by tsickle
@@ -173,7 +213,7 @@ var DragDropRegistry = /** @class */ (function () {
             var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
             // We need to disable the native interactions on the entire body, because
             // the user can start marking text if they drag too far in Safari.
-            this._document.body.classList.add('cdk-drag-drop-disable-native-interactions');
+            toggleNativeDragInteractions(this._document.body, false);
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
@@ -202,7 +242,7 @@ var DragDropRegistry = /** @class */ (function () {
         this._activeDragInstances.delete(drag);
         if (this._activeDragInstances.size === 0) {
             this._clearGlobalListeners();
-            this._document.body.classList.remove('cdk-drag-drop-disable-native-interactions');
+            toggleNativeDragInteractions(this._document.body, true);
         }
     };
     /** Gets whether a drag item instance is currently being dragged. */
@@ -284,6 +324,7 @@ var DragDropRegistry = /** @class */ (function () {
 var CdkDragHandle = /** @class */ (function () {
     function CdkDragHandle(element) {
         this.element = element;
+        toggleNativeDragInteractions(element.nativeElement, false);
     }
     CdkDragHandle.decorators = [
         { type: Directive, args: [{
@@ -659,6 +700,7 @@ var CdkDrag = /** @class */ (function () {
             var rootElement = _this._rootElement = _this._getRootElement();
             rootElement.addEventListener('mousedown', _this._pointerDown);
             rootElement.addEventListener('touchstart', _this._pointerDown);
+            toggleNativeDragInteractions(rootElement, false);
         });
     };
     /**
@@ -870,6 +912,12 @@ var CdkDrag = /** @class */ (function () {
             preview.style.height = elementRect.height + "px";
             this._setTransform(preview, elementRect.left, elementRect.top);
         }
+        extendStyles(preview.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            zIndex: '1000'
+        });
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._dir ? this._dir.value : 'ltr');
         return preview;
@@ -1780,12 +1828,9 @@ var CdkDrop = /** @class */ (function () {
             pointerX > left - xThreshold && pointerX < right + xThreshold;
     };
     CdkDrop.decorators = [
-        { type: Component, args: [{selector: 'cdk-drop',
+        { type: Directive, args: [{
+                    selector: '[cdkDrop], cdk-drop',
                     exportAs: 'cdkDrop',
-                    template: '<ng-content></ng-content>',
-                    encapsulation: ViewEncapsulation.None,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    styles: [".cdk-drag-preview{position:fixed;top:0;left:0;z-index:1000}.cdk-drag,.cdk-drag-drop-disable-native-interactions,.cdk-drag-handle{touch-action:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}"],
                     providers: [
                         { provide: CDK_DROP_CONTAINER, useExisting: CdkDrop },
                     ],
@@ -1804,15 +1849,15 @@ var CdkDrop = /** @class */ (function () {
     ]; };
     CdkDrop.propDecorators = {
         _draggables: [{ type: ContentChildren, args: [forwardRef(function () { return CdkDrag; }),] }],
-        connectedTo: [{ type: Input }],
-        data: [{ type: Input }],
-        orientation: [{ type: Input }],
+        connectedTo: [{ type: Input, args: ['cdkDropConnectedTo',] }],
+        data: [{ type: Input, args: ['cdkDropData',] }],
+        orientation: [{ type: Input, args: ['cdkDropOrientation',] }],
         id: [{ type: Input }],
-        lockAxis: [{ type: Input }],
-        enterPredicate: [{ type: Input }],
-        dropped: [{ type: Output }],
-        entered: [{ type: Output }],
-        exited: [{ type: Output }]
+        lockAxis: [{ type: Input, args: ['cdkDropLockAxis',] }],
+        enterPredicate: [{ type: Input, args: ['cdkDropEnterPredication',] }],
+        dropped: [{ type: Output, args: ['cdkDropDropped',] }],
+        entered: [{ type: Output, args: ['cdkDropEntered',] }],
+        exited: [{ type: Output, args: ['cdkDropExited',] }]
     };
     return CdkDrop;
 }());

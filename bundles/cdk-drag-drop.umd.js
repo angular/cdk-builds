@@ -15,6 +15,46 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/**
+ * Shallow-extends a stylesheet object with another stylesheet object.
+ * \@docs-private
+ * @param {?} dest
+ * @param {?} source
+ * @return {?}
+ */
+function extendStyles(dest, source) {
+    for (var key in source) {
+        if (source.hasOwnProperty(key)) {
+            dest[/** @type {?} */ (key)] = source[/** @type {?} */ (key)];
+        }
+    }
+    return dest;
+}
+/**
+ * Toggles whether the native drag interactions should be enabled for an element.
+ * \@docs-private
+ * @param {?} element Element on which to toggle the drag interactions.
+ * @param {?} enable Whether the drag interactions should be enabled.
+ * @return {?}
+ */
+function toggleNativeDragInteractions(element, enable) {
+    /** @type {?} */
+    var userSelect = enable ? '' : 'none';
+    extendStyles(element.style, {
+        touchAction: enable ? '' : 'none',
+        webkitUserDrag: enable ? '' : 'none',
+        webkitTapHighlightColor: enable ? '' : 'transparent',
+        userSelect: userSelect,
+        msUserSelect: userSelect,
+        webkitUserSelect: userSelect,
+        MozUserSelect: userSelect
+    });
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /** *
  * Event options that can be used to bind an active event.
   @type {?} */
@@ -170,7 +210,7 @@ var DragDropRegistry = /** @class */ (function () {
             var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
             // We need to disable the native interactions on the entire body, because
             // the user can start marking text if they drag too far in Safari.
-            this._document.body.classList.add('cdk-drag-drop-disable-native-interactions');
+            toggleNativeDragInteractions(this._document.body, false);
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
@@ -199,7 +239,7 @@ var DragDropRegistry = /** @class */ (function () {
         this._activeDragInstances.delete(drag);
         if (this._activeDragInstances.size === 0) {
             this._clearGlobalListeners();
-            this._document.body.classList.remove('cdk-drag-drop-disable-native-interactions');
+            toggleNativeDragInteractions(this._document.body, true);
         }
     };
     /** Gets whether a drag item instance is currently being dragged. */
@@ -281,6 +321,7 @@ var DragDropRegistry = /** @class */ (function () {
 var CdkDragHandle = /** @class */ (function () {
     function CdkDragHandle(element) {
         this.element = element;
+        toggleNativeDragInteractions(element.nativeElement, false);
     }
     CdkDragHandle.decorators = [
         { type: core.Directive, args: [{
@@ -656,6 +697,7 @@ var CdkDrag = /** @class */ (function () {
             var rootElement = _this._rootElement = _this._getRootElement();
             rootElement.addEventListener('mousedown', _this._pointerDown);
             rootElement.addEventListener('touchstart', _this._pointerDown);
+            toggleNativeDragInteractions(rootElement, false);
         });
     };
     /**
@@ -867,6 +909,12 @@ var CdkDrag = /** @class */ (function () {
             preview.style.height = elementRect.height + "px";
             this._setTransform(preview, elementRect.left, elementRect.top);
         }
+        extendStyles(preview.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            zIndex: '1000'
+        });
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._dir ? this._dir.value : 'ltr');
         return preview;
@@ -1777,12 +1825,9 @@ var CdkDrop = /** @class */ (function () {
             pointerX > left - xThreshold && pointerX < right + xThreshold;
     };
     CdkDrop.decorators = [
-        { type: core.Component, args: [{selector: 'cdk-drop',
+        { type: core.Directive, args: [{
+                    selector: '[cdkDrop], cdk-drop',
                     exportAs: 'cdkDrop',
-                    template: '<ng-content></ng-content>',
-                    encapsulation: core.ViewEncapsulation.None,
-                    changeDetection: core.ChangeDetectionStrategy.OnPush,
-                    styles: [".cdk-drag-preview{position:fixed;top:0;left:0;z-index:1000}.cdk-drag,.cdk-drag-drop-disable-native-interactions,.cdk-drag-handle{touch-action:none;-webkit-user-drag:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}"],
                     providers: [
                         { provide: CDK_DROP_CONTAINER, useExisting: CdkDrop },
                     ],
@@ -1801,15 +1846,15 @@ var CdkDrop = /** @class */ (function () {
     ]; };
     CdkDrop.propDecorators = {
         _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] }],
-        connectedTo: [{ type: core.Input }],
-        data: [{ type: core.Input }],
-        orientation: [{ type: core.Input }],
+        connectedTo: [{ type: core.Input, args: ['cdkDropConnectedTo',] }],
+        data: [{ type: core.Input, args: ['cdkDropData',] }],
+        orientation: [{ type: core.Input, args: ['cdkDropOrientation',] }],
         id: [{ type: core.Input }],
-        lockAxis: [{ type: core.Input }],
-        enterPredicate: [{ type: core.Input }],
-        dropped: [{ type: core.Output }],
-        entered: [{ type: core.Output }],
-        exited: [{ type: core.Output }]
+        lockAxis: [{ type: core.Input, args: ['cdkDropLockAxis',] }],
+        enterPredicate: [{ type: core.Input, args: ['cdkDropEnterPredication',] }],
+        dropped: [{ type: core.Output, args: ['cdkDropDropped',] }],
+        entered: [{ type: core.Output, args: ['cdkDropEntered',] }],
+        exited: [{ type: core.Output, args: ['cdkDropExited',] }]
     };
     return CdkDrop;
 }());
