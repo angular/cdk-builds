@@ -1,6 +1,4 @@
 "use strict";
-/* tslint:disable */
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -8,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@angular-devkit/core");
 const schematics_1 = require("@angular-devkit/schematics");
 const ast_utils_1 = require("@schematics/angular/utility/ast-utils");
@@ -35,7 +34,7 @@ function addDeclarationToNgModule(options) {
             return host;
         }
         const modulePath = options.module;
-        const source = readIntoSourceFile(host, modulePath);
+        let source = readIntoSourceFile(host, modulePath);
         const componentPath = `/${options.path}/`
             + (options.flat ? '' : core_1.strings.dasherize(options.name) + '/')
             + core_1.strings.dasherize(options.name)
@@ -52,7 +51,7 @@ function addDeclarationToNgModule(options) {
         host.commitUpdate(declarationRecorder);
         if (options.export) {
             // Need to refresh the AST because we overwrote the file in the host.
-            const source = readIntoSourceFile(host, modulePath);
+            source = readIntoSourceFile(host, modulePath);
             const exportRecorder = host.beginUpdate(modulePath);
             const exportChanges = ast_utils_1.addExportToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of exportChanges) {
@@ -64,7 +63,7 @@ function addDeclarationToNgModule(options) {
         }
         if (options.entryComponent) {
             // Need to refresh the AST because we overwrote the file in the host.
-            const source = readIntoSourceFile(host, modulePath);
+            source = readIntoSourceFile(host, modulePath);
             const entryComponentRecorder = host.beginUpdate(modulePath);
             const entryComponentChanges = ast_utils_1.addEntryComponentToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of entryComponentChanges) {
