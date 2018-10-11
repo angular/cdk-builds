@@ -1745,12 +1745,12 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             /** @type {?} */
             var bestScore = -1;
             for (var _b = 0, flexibleFits_1 = flexibleFits; _b < flexibleFits_1.length; _b++) {
-                var fit_1 = flexibleFits_1[_b];
+                var fit = flexibleFits_1[_b];
                 /** @type {?} */
-                var score = fit_1.boundingBoxRect.width * fit_1.boundingBoxRect.height * (fit_1.position.weight || 1);
+                var score = fit.boundingBoxRect.width * fit.boundingBoxRect.height * (fit.position.weight || 1);
                 if (score > bestScore) {
                     bestScore = score;
-                    bestFit = fit_1;
+                    bestFit = fit;
                 }
             }
             this._isPushed = false;
