@@ -1854,7 +1854,7 @@ var CdkDrop = /** @class */ (function () {
         orientation: [{ type: Input, args: ['cdkDropOrientation',] }],
         id: [{ type: Input }],
         lockAxis: [{ type: Input, args: ['cdkDropLockAxis',] }],
-        enterPredicate: [{ type: Input, args: ['cdkDropEnterPredication',] }],
+        enterPredicate: [{ type: Input, args: ['cdkDropEnterPredicate',] }],
         dropped: [{ type: Output, args: ['cdkDropDropped',] }],
         entered: [{ type: Output, args: ['cdkDropEntered',] }],
         exited: [{ type: Output, args: ['cdkDropExited',] }]
