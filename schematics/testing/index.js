@@ -12,4 +12,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./post-scheduled-tasks"));
 __export(require("./test-app"));
+__export(require("./test-case-setup"));
 //# sourceMappingURL=index.js.map

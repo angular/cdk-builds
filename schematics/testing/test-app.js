@@ -14,7 +14,7 @@ function createTestApp(runner, appOptions = {}) {
         version: '6.0.0',
         newProjectRoot: 'projects',
     });
-    return runner.runExternalSchematic('@schematics/angular', 'application', Object.assign({}, appOptions, { name: 'material' }), workspaceTree);
+    return runner.runExternalSchematic('@schematics/angular', 'application', Object.assign({ name: 'material' }, appOptions), workspaceTree);
 }
 exports.createTestApp = createTestApp;
 //# sourceMappingURL=test-app.js.map
