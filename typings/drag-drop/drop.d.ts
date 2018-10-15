@@ -35,10 +35,11 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
     /**
-     * Function that is used to determine whether an item
-     * is allowed to be moved into a drop container.
+     * Function that is used to determine whether an item is allowed to be moved
+     * into a drop container. The function will be called with the item that is
+     * being dragged and the container that it's being moved into.
      */
-    enterPredicate: (drag?: CdkDrag, drop?: CdkDrop) => boolean;
+    enterPredicate: (drag: CdkDrag, drop: CdkDrop) => boolean;
     /** Emits when the user drops an item inside the container. */
     dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**

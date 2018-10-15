@@ -1340,8 +1340,9 @@ var CdkDrop = /** @class */ (function () {
          */
         this.id = "cdk-drop-" + _uniqueIdCounter++;
         /**
-         * Function that is used to determine whether an item
-         * is allowed to be moved into a drop container.
+         * Function that is used to determine whether an item is allowed to be moved
+         * into a drop container. The function will be called with the item that is
+         * being dragged and the container that it's being moved into.
          */
         this.enterPredicate = function () { return true; };
         /**
@@ -1648,7 +1649,7 @@ var CdkDrop = /** @class */ (function () {
         /** @type {?} */
         var result = this._positionCache.siblings
             .find(function (sibling) { return isInsideClientRect(sibling.clientRect, x, y); });
-        return result && result.drop.enterPredicate(item, this) ? result.drop : null;
+        return result && result.drop.enterPredicate(item, result.drop) ? result.drop : null;
     };
     /**
      * Checks whether an item that started in this container can be returned to it,
