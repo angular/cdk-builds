@@ -349,7 +349,7 @@ CdkDragPreview.propDecorators = {
  * Injection token that is used to provide a CdkDrop instance to CdkDrag.
  * Used for avoiding circular imports.
   @type {?} */
-const CDK_DROP_CONTAINER = new InjectionToken('CDK_DROP_CONTAINER');
+const CDK_DROP_LIST_CONTAINER = new InjectionToken('CDK_DROP_LIST_CONTAINER');
 
 /**
  * @fileoverview added by tsickle
@@ -1055,7 +1055,7 @@ CdkDrag.decorators = [
 /** @nocollapse */
 CdkDrag.ctorParameters = () => [
     { type: ElementRef },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_CONTAINER,] }, { type: Optional }, { type: SkipSelf }] },
+    { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_LIST_CONTAINER,] }, { type: Optional }, { type: SkipSelf }] },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: NgZone },
     { type: ViewContainerRef },
@@ -1154,7 +1154,7 @@ const DROP_PROXIMITY_THRESHOLD = 0.05;
  * Container that wraps a set of draggable items.
  * @template T
  */
-class CdkDrop {
+class CdkDropList {
     /**
      * @param {?} element
      * @param {?} _dragDropRegistry
@@ -1176,13 +1176,12 @@ class CdkDrop {
         this.orientation = 'vertical';
         /**
          * Unique ID for the drop zone. Can be used as a reference
-         * in the `connectedTo` of another `CdkDrop`.
+         * in the `connectedTo` of another `CdkDropList`.
          */
-        this.id = `cdk-drop-${_uniqueIdCounter++}`;
+        this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
         /**
-         * Function that is used to determine whether an item is allowed to be moved
-         * into a drop container. The function will be called with the item that is
-         * being dragged and the container that it's being moved into.
+         * Function that is used to determine whether an item
+         * is allowed to be moved into a drop container.
          */
         this.enterPredicate = () => true;
         /**
@@ -1536,37 +1535,37 @@ class CdkDrop {
             pointerX > left - xThreshold && pointerX < right + xThreshold;
     }
 }
-CdkDrop.decorators = [
+CdkDropList.decorators = [
     { type: Directive, args: [{
-                selector: '[cdkDrop], cdk-drop',
-                exportAs: 'cdkDrop',
+                selector: '[cdkDropList], cdk-drop-list',
+                exportAs: 'cdkDropList',
                 providers: [
-                    { provide: CDK_DROP_CONTAINER, useExisting: CdkDrop },
+                    { provide: CDK_DROP_LIST_CONTAINER, useExisting: CdkDropList },
                 ],
                 host: {
-                    'class': 'cdk-drop',
+                    'class': 'cdk-drop-list',
                     '[id]': 'id',
-                    '[class.cdk-drop-dragging]': '_dragging'
+                    '[class.cdk-drop-list-dragging]': '_dragging'
                 }
             },] },
 ];
 /** @nocollapse */
-CdkDrop.ctorParameters = () => [
+CdkDropList.ctorParameters = () => [
     { type: ElementRef },
     { type: DragDropRegistry },
     { type: Directionality, decorators: [{ type: Optional }] }
 ];
-CdkDrop.propDecorators = {
+CdkDropList.propDecorators = {
     _draggables: [{ type: ContentChildren, args: [forwardRef(() => CdkDrag),] }],
-    connectedTo: [{ type: Input, args: ['cdkDropConnectedTo',] }],
-    data: [{ type: Input, args: ['cdkDropData',] }],
-    orientation: [{ type: Input, args: ['cdkDropOrientation',] }],
+    connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
+    data: [{ type: Input, args: ['cdkDropListData',] }],
+    orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
     id: [{ type: Input }],
-    lockAxis: [{ type: Input, args: ['cdkDropLockAxis',] }],
-    enterPredicate: [{ type: Input, args: ['cdkDropEnterPredicate',] }],
-    dropped: [{ type: Output, args: ['cdkDropDropped',] }],
-    entered: [{ type: Output, args: ['cdkDropEntered',] }],
-    exited: [{ type: Output, args: ['cdkDropExited',] }]
+    lockAxis: [{ type: Input, args: ['cdkDropListLockAxis',] }],
+    enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
+    dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
+    entered: [{ type: Output, args: ['cdkDropListEntered',] }],
+    exited: [{ type: Output, args: ['cdkDropListExited',] }]
 };
 /**
  * Finds the index of an item that matches a predicate function. Used as an equivalent
@@ -1605,14 +1604,14 @@ class DragDropModule {
 DragDropModule.decorators = [
     { type: NgModule, args: [{
                 declarations: [
-                    CdkDrop,
+                    CdkDropList,
                     CdkDrag,
                     CdkDragHandle,
                     CdkDragPreview,
                     CdkDragPlaceholder,
                 ],
                 exports: [
-                    CdkDrop,
+                    CdkDropList,
                     CdkDrag,
                     CdkDragHandle,
                     CdkDragPreview,
@@ -1631,5 +1630,5 @@ DragDropModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { CdkDrop, CDK_DROP_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry };
+export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry };
 //# sourceMappingURL=drag-drop.js.map

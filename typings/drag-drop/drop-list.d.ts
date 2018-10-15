@@ -11,7 +11,7 @@ import { CdkDrag } from './drag';
 import { DragDropRegistry } from './drag-drop-registry';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
 /** Container that wraps a set of draggable items. */
-export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
+export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     element: ElementRef<HTMLElement>;
     private _dragDropRegistry;
     private _dir?;
@@ -22,24 +22,23 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * container's items can be transferred. Can either be references to other drop containers,
      * or their unique IDs.
      */
-    connectedTo: (CdkDrop | string)[] | CdkDrop | string;
+    connectedTo: (CdkDropList | string)[] | CdkDropList | string;
     /** Arbitrary data to attach to this container. */
     data: T;
     /** Direction in which the list is oriented. */
     orientation: 'horizontal' | 'vertical';
     /**
      * Unique ID for the drop zone. Can be used as a reference
-     * in the `connectedTo` of another `CdkDrop`.
+     * in the `connectedTo` of another `CdkDropList`.
      */
     id: string;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
     /**
-     * Function that is used to determine whether an item is allowed to be moved
-     * into a drop container. The function will be called with the item that is
-     * being dragged and the container that it's being moved into.
+     * Function that is used to determine whether an item
+     * is allowed to be moved into a drop container.
      */
-    enterPredicate: (drag: CdkDrag, drop: CdkDrop) => boolean;
+    enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean;
     /** Emits when the user drops an item inside the container. */
     dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
@@ -51,7 +50,7 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * by dragging it into another container.
      */
     exited: EventEmitter<CdkDragExit<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDrop<T>>, _dir?: Directionality | undefined);
+    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _dir?: Directionality | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Whether an item in the container is being dragged. */
@@ -77,7 +76,7 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * @param currentIndex Index at which the item should be inserted.
      * @param previousContainer Container from which the item got dragged in.
      */
-    drop(item: CdkDrag, currentIndex: number, previousContainer: CdkDrop): void;
+    drop(item: CdkDrag, currentIndex: number, previousContainer: CdkDropList): void;
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
@@ -113,7 +112,7 @@ export declare class CdkDrop<T = any> implements OnInit, OnDestroy {
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDrop | null;
+    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropList | null;
     /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.

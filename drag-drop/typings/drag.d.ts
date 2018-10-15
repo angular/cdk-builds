@@ -14,7 +14,7 @@ import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDra
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
-import { CdkDropContainer } from './drop-container';
+import { CdkDropListContainer } from './drop-list-container';
 /** Object that can be used to configure the behavior of CdkDrag. */
 export interface CdkDragConfig {
     /**
@@ -37,7 +37,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropContainer;
+    dropContainer: CdkDropListContainer;
     private _ngZone;
     private _viewContainerRef;
     private _viewportRuler;
@@ -134,7 +134,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropContainer>, _config: CdkDragConfig, _dir: Directionality);
+    dropContainer: CdkDropListContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropListContainer>, _config: CdkDragConfig, _dir: Directionality);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.

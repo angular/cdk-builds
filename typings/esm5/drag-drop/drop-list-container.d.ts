@@ -7,7 +7,7 @@
  */
 import { InjectionToken, QueryList, ElementRef } from '@angular/core';
 import { CdkDrag } from './drag';
-export interface CdkDropContainer<T = any> {
+export interface CdkDropListContainer<T = any> {
     /** DOM node that corresponds to the drop container. */
     element: ElementRef<HTMLElement>;
     /** Arbitrary data to attach to all events emitted by this container. */
@@ -26,7 +26,7 @@ export interface CdkDropContainer<T = any> {
      * @param currentIndex Index at which the item should be inserted.
      * @param previousContainer Container from which the item got dragged in.
      */
-    drop(item: CdkDrag, currentIndex: number, previousContainer?: CdkDropContainer): void;
+    drop(item: CdkDrag, currentIndex: number, previousContainer?: CdkDropListContainer): void;
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
@@ -49,11 +49,11 @@ export interface CdkDropContainer<T = any> {
         y: number;
     }): void;
     _draggables: QueryList<CdkDrag>;
-    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropContainer | null;
+    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropListContainer | null;
     _canReturnItem(item: CdkDrag, x: number, y: number): boolean;
 }
 /**
  * Injection token that is used to provide a CdkDrop instance to CdkDrag.
  * Used for avoiding circular imports.
  */
-export declare const CDK_DROP_CONTAINER: InjectionToken<CdkDropContainer<any>>;
+export declare const CDK_DROP_LIST_CONTAINER: InjectionToken<CdkDropListContainer<any>>;

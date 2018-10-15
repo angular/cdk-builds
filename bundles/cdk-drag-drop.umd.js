@@ -402,7 +402,7 @@ var CdkDragPreview = /** @class */ (function () {
  * Injection token that is used to provide a CdkDrop instance to CdkDrag.
  * Used for avoiding circular imports.
   @type {?} */
-var CDK_DROP_CONTAINER = new core.InjectionToken('CDK_DROP_CONTAINER');
+var CDK_DROP_LIST_CONTAINER = new core.InjectionToken('CDK_DROP_LIST_CONTAINER');
 
 /**
  * @fileoverview added by tsickle
@@ -1215,7 +1215,7 @@ var CdkDrag = /** @class */ (function () {
     /** @nocollapse */
     CdkDrag.ctorParameters = function () { return [
         { type: core.ElementRef },
-        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_CONTAINER,] }, { type: core.Optional }, { type: core.SkipSelf }] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_LIST_CONTAINER,] }, { type: core.Optional }, { type: core.SkipSelf }] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: core.NgZone },
         { type: core.ViewContainerRef },
@@ -1316,8 +1316,8 @@ var DROP_PROXIMITY_THRESHOLD = 0.05;
  * Container that wraps a set of draggable items.
  * @template T
  */
-var CdkDrop = /** @class */ (function () {
-    function CdkDrop(element, _dragDropRegistry, _dir) {
+var CdkDropList = /** @class */ (function () {
+    function CdkDropList(element, _dragDropRegistry, _dir) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
         this._dir = _dir;
@@ -1333,13 +1333,12 @@ var CdkDrop = /** @class */ (function () {
         this.orientation = 'vertical';
         /**
          * Unique ID for the drop zone. Can be used as a reference
-         * in the `connectedTo` of another `CdkDrop`.
+         * in the `connectedTo` of another `CdkDropList`.
          */
-        this.id = "cdk-drop-" + _uniqueIdCounter++;
+        this.id = "cdk-drop-list-" + _uniqueIdCounter++;
         /**
-         * Function that is used to determine whether an item is allowed to be moved
-         * into a drop container. The function will be called with the item that is
-         * being dragged and the container that it's being moved into.
+         * Function that is used to determine whether an item
+         * is allowed to be moved into a drop container.
          */
         this.enterPredicate = function () { return true; };
         /**
@@ -1376,7 +1375,7 @@ var CdkDrop = /** @class */ (function () {
     /**
      * @return {?}
      */
-    CdkDrop.prototype.ngOnInit = /**
+    CdkDropList.prototype.ngOnInit = /**
      * @return {?}
      */
     function () {
@@ -1385,7 +1384,7 @@ var CdkDrop = /** @class */ (function () {
     /**
      * @return {?}
      */
-    CdkDrop.prototype.ngOnDestroy = /**
+    CdkDropList.prototype.ngOnDestroy = /**
      * @return {?}
      */
     function () {
@@ -1396,7 +1395,7 @@ var CdkDrop = /** @class */ (function () {
      * Starts dragging an item.
      * @return {?}
      */
-    CdkDrop.prototype.start = /**
+    CdkDropList.prototype.start = /**
      * Starts dragging an item.
      * @return {?}
      */
@@ -1418,7 +1417,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} previousContainer Container from which the item got dragged in.
      * @return {?}
      */
-    CdkDrop.prototype.drop = /**
+    CdkDropList.prototype.drop = /**
      * Drops an item into this container.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
@@ -1449,7 +1448,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} pointerY Position of the item along the Y axis.
      * @return {?}
      */
-    CdkDrop.prototype.enter = /**
+    CdkDropList.prototype.enter = /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param {?} item Item that was moved into the container.
      * @param {?} pointerX Position of the item along the X axis.
@@ -1499,7 +1498,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} item Item that was dragged out.
      * @return {?}
      */
-    CdkDrop.prototype.exit = /**
+    CdkDropList.prototype.exit = /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param {?} item Item that was dragged out.
      * @return {?}
@@ -1517,7 +1516,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} item Item whose index should be determined.
      * @return {?}
      */
-    CdkDrop.prototype.getItemIndex = /**
+    CdkDropList.prototype.getItemIndex = /**
      * Figures out the index of an item in the container.
      * @param {?} item Item whose index should be determined.
      * @return {?}
@@ -1546,7 +1545,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} pointerDelta
      * @return {?}
      */
-    CdkDrop.prototype._sortItem = /**
+    CdkDropList.prototype._sortItem = /**
      * Sorts an item inside the container based on its position.
      * @param {?} item Item to be sorted.
      * @param {?} pointerX Position of the item along the X axis.
@@ -1634,7 +1633,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} y Position of the item along the Y axis.
      * @return {?}
      */
-    CdkDrop.prototype._getSiblingContainerFromPosition = /**
+    CdkDropList.prototype._getSiblingContainerFromPosition = /**
      * Figures out whether an item should be moved into a sibling
      * drop container, based on its current position.
      * @param {?} item Drag item that is being moved.
@@ -1663,7 +1662,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} y Position of the item along the Y axis.
      * @return {?}
      */
-    CdkDrop.prototype._canReturnItem = /**
+    CdkDropList.prototype._canReturnItem = /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
      * @param {?} item Item that is being checked.
@@ -1678,7 +1677,7 @@ var CdkDrop = /** @class */ (function () {
      * Refreshes the position cache of the items and sibling containers.
      * @return {?}
      */
-    CdkDrop.prototype._cachePositions = /**
+    CdkDropList.prototype._cachePositions = /**
      * Refreshes the position cache of the items and sibling containers.
      * @return {?}
      */
@@ -1727,7 +1726,7 @@ var CdkDrop = /** @class */ (function () {
      * Resets the container to its initial state.
      * @return {?}
      */
-    CdkDrop.prototype._reset = /**
+    CdkDropList.prototype._reset = /**
      * Resets the container to its initial state.
      * @return {?}
      */
@@ -1748,7 +1747,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} left Amount to add to the `left` position.
      * @return {?}
      */
-    CdkDrop.prototype._adjustClientRect = /**
+    CdkDropList.prototype._adjustClientRect = /**
      * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
      * @param {?} clientRect `ClientRect` that should be updated.
      * @param {?} top Amount to add to the `top` position.
@@ -1769,7 +1768,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?=} delta Direction in which the user is moving their pointer.
      * @return {?}
      */
-    CdkDrop.prototype._getItemIndexFromPointerPosition = /**
+    CdkDropList.prototype._getItemIndexFromPointerPosition = /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param {?} item Item that is being sorted.
      * @param {?} pointerX Position of the user's pointer along the X axis.
@@ -1810,7 +1809,7 @@ var CdkDrop = /** @class */ (function () {
      * @param {?} pointerY Coordinates along the Y axis.
      * @return {?}
      */
-    CdkDrop.prototype._isPointerNearDropContainer = /**
+    CdkDropList.prototype._isPointerNearDropContainer = /**
      * Checks whether the pointer coordinates are close to the drop container.
      * @param {?} pointerX Coordinates along the X axis.
      * @param {?} pointerY Coordinates along the Y axis.
@@ -1825,39 +1824,39 @@ var CdkDrop = /** @class */ (function () {
         return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
             pointerX > left - xThreshold && pointerX < right + xThreshold;
     };
-    CdkDrop.decorators = [
+    CdkDropList.decorators = [
         { type: core.Directive, args: [{
-                    selector: '[cdkDrop], cdk-drop',
-                    exportAs: 'cdkDrop',
+                    selector: '[cdkDropList], cdk-drop-list',
+                    exportAs: 'cdkDropList',
                     providers: [
-                        { provide: CDK_DROP_CONTAINER, useExisting: CdkDrop },
+                        { provide: CDK_DROP_LIST_CONTAINER, useExisting: CdkDropList },
                     ],
                     host: {
-                        'class': 'cdk-drop',
+                        'class': 'cdk-drop-list',
                         '[id]': 'id',
-                        '[class.cdk-drop-dragging]': '_dragging'
+                        '[class.cdk-drop-list-dragging]': '_dragging'
                     }
                 },] },
     ];
     /** @nocollapse */
-    CdkDrop.ctorParameters = function () { return [
+    CdkDropList.ctorParameters = function () { return [
         { type: core.ElementRef },
         { type: DragDropRegistry },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };
-    CdkDrop.propDecorators = {
+    CdkDropList.propDecorators = {
         _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] }],
-        connectedTo: [{ type: core.Input, args: ['cdkDropConnectedTo',] }],
-        data: [{ type: core.Input, args: ['cdkDropData',] }],
-        orientation: [{ type: core.Input, args: ['cdkDropOrientation',] }],
+        connectedTo: [{ type: core.Input, args: ['cdkDropListConnectedTo',] }],
+        data: [{ type: core.Input, args: ['cdkDropListData',] }],
+        orientation: [{ type: core.Input, args: ['cdkDropListOrientation',] }],
         id: [{ type: core.Input }],
-        lockAxis: [{ type: core.Input, args: ['cdkDropLockAxis',] }],
-        enterPredicate: [{ type: core.Input, args: ['cdkDropEnterPredicate',] }],
-        dropped: [{ type: core.Output, args: ['cdkDropDropped',] }],
-        entered: [{ type: core.Output, args: ['cdkDropEntered',] }],
-        exited: [{ type: core.Output, args: ['cdkDropExited',] }]
+        lockAxis: [{ type: core.Input, args: ['cdkDropListLockAxis',] }],
+        enterPredicate: [{ type: core.Input, args: ['cdkDropListEnterPredicate',] }],
+        dropped: [{ type: core.Output, args: ['cdkDropListDropped',] }],
+        entered: [{ type: core.Output, args: ['cdkDropListEntered',] }],
+        exited: [{ type: core.Output, args: ['cdkDropListExited',] }]
     };
-    return CdkDrop;
+    return CdkDropList;
 }());
 /**
  * Finds the index of an item that matches a predicate function. Used as an equivalent
@@ -1897,14 +1896,14 @@ var DragDropModule = /** @class */ (function () {
     DragDropModule.decorators = [
         { type: core.NgModule, args: [{
                     declarations: [
-                        CdkDrop,
+                        CdkDropList,
                         CdkDrag,
                         CdkDragHandle,
                         CdkDragPreview,
                         CdkDragPlaceholder,
                     ],
                     exports: [
-                        CdkDrop,
+                        CdkDropList,
                         CdkDrag,
                         CdkDragHandle,
                         CdkDragPreview,
@@ -1915,8 +1914,8 @@ var DragDropModule = /** @class */ (function () {
     return DragDropModule;
 }());
 
-exports.CdkDrop = CdkDrop;
-exports.CDK_DROP_CONTAINER = CDK_DROP_CONTAINER;
+exports.CdkDropList = CdkDropList;
+exports.CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST_CONTAINER;
 exports.CDK_DRAG_CONFIG_FACTORY = CDK_DRAG_CONFIG_FACTORY;
 exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
 exports.CdkDrag = CdkDrag;
