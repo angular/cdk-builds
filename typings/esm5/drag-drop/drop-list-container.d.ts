@@ -53,7 +53,7 @@ export interface CdkDropListContainer<T = any> {
     _canReturnItem(item: CdkDrag, x: number, y: number): boolean;
 }
 /**
- * Injection token that is used to provide a CdkDrop instance to CdkDrag.
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  */
 export declare const CDK_DROP_LIST_CONTAINER: InjectionToken<CdkDropListContainer<any>>;

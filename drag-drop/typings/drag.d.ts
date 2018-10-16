@@ -32,7 +32,7 @@ export interface CdkDragConfig {
 export declare const CDK_DRAG_CONFIG: InjectionToken<CdkDragConfig>;
 /** @docs-private */
 export declare function CDK_DRAG_CONFIG_FACTORY(): CdkDragConfig;
-/** Element that can be moved inside a CdkDrop container. */
+/** Element that can be moved inside a CdkDropList container. */
 export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;

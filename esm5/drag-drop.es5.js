@@ -402,7 +402,7 @@ var CdkDragPreview = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** *
- * Injection token that is used to provide a CdkDrop instance to CdkDrag.
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
   @type {?} */
 var CDK_DROP_LIST_CONTAINER = new InjectionToken('CDK_DROP_LIST_CONTAINER');
@@ -478,7 +478,7 @@ function CDK_DRAG_CONFIG_FACTORY() {
     return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
 }
 /**
- * Element that can be moved inside a CdkDrop container.
+ * Element that can be moved inside a CdkDropList container.
  * @template T
  */
 var CdkDrag = /** @class */ (function () {
