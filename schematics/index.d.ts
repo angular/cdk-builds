@@ -6,5 +6,4 @@
  * found in the LICENSE file at https://angular.io/license
  */
 export * from './utils';
-export * from './testing';
 export * from './ng-update/public-api';
