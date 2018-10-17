@@ -40,7 +40,7 @@ export declare class CdkAriaLive implements OnDestroy {
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
 }
-/** @docs-private @deprecated @breaking-change 7.0.0 */
+/** @docs-private @deprecated @breaking-change 8.0.0 */
 export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher: LiveAnnouncer, liveElement: any, _document: any, ngZone: NgZone): LiveAnnouncer;
-/** @docs-private @deprecated @breaking-change 7.0.0 */
+/** @docs-private @deprecated @breaking-change 8.0.0 */
 export declare const LIVE_ANNOUNCER_PROVIDER: Provider;

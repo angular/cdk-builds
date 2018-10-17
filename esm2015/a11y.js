@@ -303,7 +303,7 @@ AriaDescriber.ctorParameters = () => [
 ];
 /** @nocollapse */ AriaDescriber.ngInjectableDef = defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(inject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 /**
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
  * @param {?} _document
  * @return {?}
@@ -312,7 +312,7 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
 /** *
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
   @type {?} */
 const ARIA_DESCRIBER_PROVIDER = {
     // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
@@ -586,7 +586,7 @@ class ListKeyManager {
     /**
      * Allows setting of the activeItemIndex without any other effects.
      * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 7.0.0
+     * \@breaking-change 8.0.0
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
@@ -1125,16 +1125,16 @@ class FocusTrap {
             `[cdkFocusRegion${bound}], ` +
             `[cdk-focus-${bound}]`));
         for (let i = 0; i < markers.length; i++) {
-            // @breaking-change 7.0.0
+            // @breaking-change 8.0.0
             if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
                 console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}', ` +
                     `use 'cdkFocusRegion${bound}' instead. The deprecated ` +
-                    `attribute will be removed in 7.0.0.`, markers[i]);
+                    `attribute will be removed in 8.0.0.`, markers[i]);
             }
             else if (markers[i].hasAttribute(`cdk-focus-region-${bound}`)) {
                 console.warn(`Found use of deprecated attribute 'cdk-focus-region-${bound}', ` +
                     `use 'cdkFocusRegion${bound}' instead. The deprecated attribute ` +
-                    `will be removed in 7.0.0.`, markers[i]);
+                    `will be removed in 8.0.0.`, markers[i]);
             }
         }
         if (bound == 'start') {
@@ -1152,11 +1152,11 @@ class FocusTrap {
         const redirectToElement = /** @type {?} */ (this._element.querySelector(`[cdk-focus-initial], ` +
             `[cdkFocusInitial]`));
         if (redirectToElement) {
-            // @breaking-change 7.0.0
+            // @breaking-change 8.0.0
             if (redirectToElement.hasAttribute(`cdk-focus-initial`)) {
                 console.warn(`Found use of deprecated attribute 'cdk-focus-initial', ` +
                     `use 'cdkFocusInitial' instead. The deprecated attribute ` +
-                    `will be removed in 7.0.0`, redirectToElement);
+                    `will be removed in 8.0.0`, redirectToElement);
             }
             redirectToElement.focus();
             return true;
@@ -1570,7 +1570,7 @@ CdkAriaLive.propDecorators = {
     politeness: [{ type: Input, args: ['cdkAriaLive',] }]
 };
 /**
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
  * @param {?} liveElement
  * @param {?} _document
@@ -1581,7 +1581,7 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _documen
     return parentDispatcher || new LiveAnnouncer(liveElement, _document, ngZone);
 }
 /** *
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
   @type {?} */
 const LIVE_ANNOUNCER_PROVIDER = {
     // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
@@ -1954,7 +1954,7 @@ CdkMonitorFocus.propDecorators = {
     cdkFocusChange: [{ type: Output }]
 };
 /**
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -1964,7 +1964,7 @@ function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
     return parentDispatcher || new FocusMonitor(ngZone, platform);
 }
 /** *
- * \@docs-private \@deprecated \@breaking-change 7.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0
   @type {?} */
 const FOCUS_MONITOR_PROVIDER = {
     // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.

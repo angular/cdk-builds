@@ -317,7 +317,7 @@ var CdkStepper = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            // @breaking-change 7.0.0 Change return type to `CdkStep | undefined`.
+            // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
             return this._steps ? this._steps.toArray()[this.selectedIndex] : /** @type {?} */ ((undefined));
         },
         set: /**

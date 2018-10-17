@@ -20,7 +20,7 @@ const hasV8BreakIterator = (typeof Intl !== 'undefined' && (/** @type {?} */ (In
  */
 class Platform {
     /**
-     * \@breaking-change v7.0.0 remove optional decorator
+     * \@breaking-change 8.0.0 remove optional decorator
      * @param {?=} _platformId
      */
     constructor(_platformId) {
