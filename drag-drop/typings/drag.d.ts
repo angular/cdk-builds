@@ -71,6 +71,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _passiveTransform;
     /** CSS `transform` that is applied to the element while it's being dragged. */
     private _activeTransform;
+    /** Inline `transform` value that the element had before the first dragging sequence. */
+    private _initialTransform?;
     /**
      * Whether the dragging sequence has been started. Doesn't
      * necessarily mean that the element has been moved.
@@ -186,13 +188,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * @returns Promise that resolves when the animation completes.
      */
     private _animatePreviewToPlaceholder;
-    /**
-     * Sets the `transform` style on an element.
-     * @param element Element on which to set the transform.
-     * @param x Desired position of the element along the X axis.
-     * @param y Desired position of the element along the Y axis.
-     */
-    private _setTransform;
     /**
      * Helper to remove an element from the DOM and to do all the necessary null checks.
      * @param element Element to be removed.

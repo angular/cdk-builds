@@ -1174,7 +1174,7 @@ function getFrameElement(window) {
     try {
         return /** @type {?} */ (window.frameElement);
     }
-    catch (e) {
+    catch (_a) {
         return null;
     }
 }
@@ -2255,18 +2255,21 @@ var FocusMonitor = /** @class */ (function () {
             _this._windowFocused = true;
             _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
         };
+        /** @type {?} */
+        var captureEventListenerOptions = supportsPassiveEventListeners() ?
+            { passive: true, capture: true } : true;
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
         this._ngZone.runOutsideAngular(function () {
-            document.addEventListener('keydown', documentKeydownListener, true);
-            document.addEventListener('mousedown', documentMousedownListener, true);
-            document.addEventListener('touchstart', documentTouchstartListener, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            document.addEventListener('keydown', documentKeydownListener, captureEventListenerOptions);
+            document.addEventListener('mousedown', documentMousedownListener, captureEventListenerOptions);
+            document.addEventListener('touchstart', documentTouchstartListener, captureEventListenerOptions);
             window.addEventListener('focus', windowFocusListener);
         });
         this._unregisterGlobalListeners = function () {
-            document.removeEventListener('keydown', documentKeydownListener, true);
-            document.removeEventListener('mousedown', documentMousedownListener, true);
-            document.removeEventListener('touchstart', documentTouchstartListener, supportsPassiveEventListeners() ? (/** @type {?} */ ({ passive: true, capture: true })) : true);
+            document.removeEventListener('keydown', documentKeydownListener, captureEventListenerOptions);
+            document.removeEventListener('mousedown', documentMousedownListener, captureEventListenerOptions);
+            document.removeEventListener('touchstart', documentTouchstartListener, captureEventListenerOptions);
             window.removeEventListener('focus', windowFocusListener);
             // Clear timeouts for all potentially pending timeouts to prevent the leaks.
             clearTimeout(_this._windowFocusTimeoutId);
