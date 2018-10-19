@@ -13,12 +13,18 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _platform;
     private _ngZone;
     /** Keep track of the previous textarea value to avoid resizing when the value hasn't changed. */
-    private _previousValue;
+    private _previousValue?;
     private _initialHeight;
     private readonly _destroyed;
     private _minRows;
     private _maxRows;
     private _enabled;
+    /**
+     * Value of minRows as of last resize. If the minRows has decreased, the
+     * height of the textarea needs to be recomputed to reflect the new minimum. The maxHeight
+     * does not have the same problem because it does not affect the textarea's scrollHeight.
+     */
+    private _previousMinRows;
     private _textareaElement;
     /** Minimum amount of rows in the textarea. */
     minRows: number;
