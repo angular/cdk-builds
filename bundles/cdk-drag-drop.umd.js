@@ -58,7 +58,7 @@ function toggleNativeDragInteractions(element, enable) {
 /** *
  * Event options that can be used to bind an active event.
   @type {?} */
-var activeEventOptions = platform.supportsPassiveEventListeners() ? { passive: false } : false;
+var activeEventOptions = platform.normalizePassiveListenerOptions({ passive: false });
 // unsupported: template constraints.
 /**
  * Service that keeps track of all the drag item and drop container

@@ -10,7 +10,7 @@ import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRe
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
-import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
+import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
@@ -1748,8 +1748,10 @@ class FocusMonitor {
             this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false);
         };
         /** @type {?} */
-        const captureEventListenerOptions = supportsPassiveEventListeners() ?
-            { passive: true, capture: true } : true;
+        const captureEventListenerOptions = normalizePassiveListenerOptions({
+            passive: true,
+            capture: true
+        });
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
         this._ngZone.runOutsideAngular(() => {

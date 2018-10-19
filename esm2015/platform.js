@@ -176,6 +176,16 @@ function supportsPassiveEventListeners() {
     }
     return supportsPassiveEvents;
 }
+/**
+ * Normalizes an `AddEventListener` object to something that can be passed
+ * to `addEventListener` on any browser, no matter whether it supports the
+ * `options` parameter.
+ * @param {?} options Object to be normalized.
+ * @return {?}
+ */
+function normalizePassiveListenerOptions(options) {
+    return supportsPassiveEventListeners() ? options : !!options.capture;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -272,5 +282,5 @@ function getRtlScrollAxisType() {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, supportsScrollBehavior, getRtlScrollAxisType, RtlScrollAxisType };
+export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, normalizePassiveListenerOptions, supportsScrollBehavior, getRtlScrollAxisType, RtlScrollAxisType };
 //# sourceMappingURL=platform.js.map

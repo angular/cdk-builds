@@ -2281,8 +2281,10 @@ var FocusMonitor = /** @class */ (function () {
             _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
         };
         /** @type {?} */
-        var captureEventListenerOptions = platform.supportsPassiveEventListeners() ?
-            { passive: true, capture: true } : true;
+        var captureEventListenerOptions = platform.normalizePassiveListenerOptions({
+            passive: true,
+            capture: true
+        });
         // Note: we listen to events in the capture phase so we can detect them even if the user stops
         // propagation.
         this._ngZone.runOutsideAngular(function () {

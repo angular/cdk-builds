@@ -7,7 +7,7 @@
  */
 import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ContentChild, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { supportsPassiveEventListeners } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions, supportsPassiveEventListeners } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
@@ -61,7 +61,7 @@ function toggleNativeDragInteractions(element, enable) {
 /** *
  * Event options that can be used to bind an active event.
   @type {?} */
-const activeEventOptions = supportsPassiveEventListeners() ? { passive: false } : false;
+const activeEventOptions = normalizePassiveListenerOptions({ passive: false });
 // unsupported: template constraints.
 /**
  * Service that keeps track of all the drag item and drop container
