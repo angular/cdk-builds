@@ -8,7 +8,7 @@
 import { Rule } from '@angular-devkit/schematics';
 /** Entry point for the migration schematics with target of Angular Material 6.0.0 */
 export declare function updateToV6(): Rule;
-/** Entry point for the migration schematics with target of Angular Material 7.0.0-992bcfb */
+/** Entry point for the migration schematics with target of Angular Material 7.0.0-2f15784 */
 export declare function updateToV7(): Rule;
 /** Post-update schematic to be called when update is finished. */
 export declare function postUpdate(): Rule;
