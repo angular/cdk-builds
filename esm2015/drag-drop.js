@@ -421,6 +421,10 @@ const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG', {
 function CDK_DRAG_CONFIG_FACTORY() {
     return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
 }
+/** *
+ * Options that can be used to bind a passive event listener.
+  @type {?} */
+const passiveEventListenerOptions = supportsPassiveEventListeners() ? /** @type {?} */ ({ passive: true }) : false;
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -541,13 +545,11 @@ class CdkDrag {
                 const distanceX = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
                 /** @type {?} */
                 const distanceY = Math.abs(pointerPosition.y - this._pickupPositionOnPage.y);
-                /** @type {?} */
-                const minimumDistance = this._config.dragStartThreshold;
                 // Only start dragging after the user has moved more than the minimum distance in either
                 // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
-                if (distanceX + distanceY >= minimumDistance) {
+                if (distanceX + distanceY >= this._config.dragStartThreshold) {
                     this._hasStartedDragging = true;
                     this._ngZone.run(() => this._startDragSequence());
                 }
@@ -566,7 +568,11 @@ class CdkDrag {
                     pointerPosition.x - this._pickupPositionOnPage.x + this._passiveTransform.x;
                 activeTransform.y =
                     pointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
-                this._setTransform(this._rootElement, activeTransform.x, activeTransform.y);
+                /** @type {?} */
+                const transform = getTransform(activeTransform.x, activeTransform.y);
+                // Preserve the previous `transform` value, if there was one.
+                this._rootElement.style.transform = this._initialTransform ?
+                    this._initialTransform + ' ' + transform : transform;
             }
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
@@ -634,8 +640,8 @@ class CdkDrag {
         this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(() => {
             /** @type {?} */
             const rootElement = this._rootElement = this._getRootElement();
-            rootElement.addEventListener('mousedown', this._pointerDown);
-            rootElement.addEventListener('touchstart', this._pointerDown);
+            rootElement.addEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
+            rootElement.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
             toggleNativeDragInteractions(rootElement, false);
         });
     }
@@ -643,8 +649,8 @@ class CdkDrag {
      * @return {?}
      */
     ngOnDestroy() {
-        this._rootElement.removeEventListener('mousedown', this._pointerDown);
-        this._rootElement.removeEventListener('touchstart', this._pointerDown);
+        this._rootElement.removeEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
+        this._rootElement.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
         this._destroyPreview();
         this._destroyPlaceholder();
         // Do this check before removing from the registry since it'll
@@ -679,6 +685,11 @@ class CdkDrag {
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
         if (isDragging || (!this._isTouchEvent(event) && event.button !== 0)) {
             return;
+        }
+        // Cache the previous transform amount only after the first drag sequence, because
+        // we don't want our own transforms to stack on top of each other.
+        if (this._initialTransform == null) {
+            this._initialTransform = this._rootElement.style.transform || '';
         }
         this._hasStartedDragging = this._hasMoved = false;
         this._initialContainer = this.dropContainer;
@@ -784,7 +795,8 @@ class CdkDrag {
             });
         }
         this.dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
-        this._setTransform(this._preview, x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
+        this._preview.style.transform =
+            getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
     }
     /**
      * Creates the element that will be rendered next to the user's pointer
@@ -799,7 +811,8 @@ class CdkDrag {
             const viewRef = this._viewContainerRef.createEmbeddedView(this._previewTemplate.templateRef, this._previewTemplate.data);
             preview = viewRef.rootNodes[0];
             this._previewRef = viewRef;
-            this._setTransform(preview, this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+            preview.style.transform =
+                getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
         }
         else {
             /** @type {?} */
@@ -809,7 +822,7 @@ class CdkDrag {
             preview = /** @type {?} */ (element.cloneNode(true));
             preview.style.width = `${elementRect.width}px`;
             preview.style.height = `${elementRect.height}px`;
-            this._setTransform(preview, elementRect.left, elementRect.top);
+            preview.style.transform = getTransform(elementRect.left, elementRect.top);
         }
         extendStyles(preview.style, {
             position: 'fixed',
@@ -876,7 +889,7 @@ class CdkDrag {
         // Apply the class that adds a transition to the preview.
         this._preview.classList.add('cdk-drag-animating');
         // Move the preview to the placeholder position.
-        this._setTransform(this._preview, placeholderRect.left, placeholderRect.top);
+        this._preview.style.transform = getTransform(placeholderRect.left, placeholderRect.top);
         /** @type {?} */
         const duration = getTransformTransitionDurationInMs(this._preview);
         if (duration === 0) {
@@ -897,16 +910,6 @@ class CdkDrag {
                 this._preview.addEventListener('transitionend', handler);
             });
         });
-    }
-    /**
-     * Sets the `transform` style on an element.
-     * @param {?} element Element on which to set the transform.
-     * @param {?} x Desired position of the element along the X axis.
-     * @param {?} y Desired position of the element along the Y axis.
-     * @return {?}
-     */
-    _setTransform(element, x, y) {
-        element.style.transform = `translate3d(${x}px, ${y}px, 0)`;
     }
     /**
      * Helper to remove an element from the DOM and to do all the necessary null checks.
@@ -1078,6 +1081,15 @@ CdkDrag.propDecorators = {
     dropped: [{ type: Output, args: ['cdkDragDropped',] }],
     moved: [{ type: Output, args: ['cdkDragMoved',] }]
 };
+/**
+ * Gets a 3d `transform` that can be applied to an element.
+ * @param {?} x Desired position of the element along the X axis.
+ * @param {?} y Desired position of the element along the Y axis.
+ * @return {?}
+ */
+function getTransform(x, y) {
+    return `translate3d(${x}px, ${y}px, 0)`;
+}
 
 /**
  * @fileoverview added by tsickle

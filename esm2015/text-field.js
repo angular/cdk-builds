@@ -178,6 +178,12 @@ class CdkTextareaAutosize {
         this._ngZone = _ngZone;
         this._destroyed = new Subject();
         this._enabled = true;
+        /**
+         * Value of minRows as of last resize. If the minRows has decreased, the
+         * height of the textarea needs to be recomputed to reflect the new minimum. The maxHeight
+         * does not have the same problem because it does not affect the textarea's scrollHeight.
+         */
+        this._previousMinRows = -1;
         this._textareaElement = /** @type {?} */ (this._elementRef.nativeElement);
     }
     /**
@@ -336,8 +342,8 @@ class CdkTextareaAutosize {
         const textarea = /** @type {?} */ (this._elementRef.nativeElement);
         /** @type {?} */
         const value = textarea.value;
-        // Only resize of the value changed since these calculations can be expensive.
-        if (value === this._previousValue && !force) {
+        // Only resize if the value or minRows have changed since these calculations can be expensive.
+        if (!force && this._minRows === this._previousMinRows && value === this._previousValue) {
             return;
         }
         /** @type {?} */
@@ -372,6 +378,7 @@ class CdkTextareaAutosize {
             }));
         }
         this._previousValue = value;
+        this._previousMinRows = this._minRows;
     }
     /**
      * Resets the textarea to it's original size
