@@ -18,7 +18,7 @@
 /** *
  * Options to pass to the animationstart listener.
   @type {?} */
-var listenerOptions = platform.supportsPassiveEventListeners() ? { passive: true } : false;
+var listenerOptions = platform.normalizePassiveListenerOptions({ passive: true });
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:

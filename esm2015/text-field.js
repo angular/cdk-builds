@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Platform, supportsPassiveEventListeners, PlatformModule } from '@angular/cdk/platform';
+import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -18,7 +18,7 @@ import { auditTime, takeUntil } from 'rxjs/operators';
 /** *
  * Options to pass to the animationstart listener.
   @type {?} */
-const listenerOptions = supportsPassiveEventListeners() ? { passive: true } : false;
+const listenerOptions = normalizePassiveListenerOptions({ passive: true });
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:

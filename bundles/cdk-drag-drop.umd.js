@@ -58,7 +58,7 @@ function toggleNativeDragInteractions(element, enable) {
 /** *
  * Event options that can be used to bind an active event.
   @type {?} */
-var activeEventOptions = platform.supportsPassiveEventListeners() ? { passive: false } : false;
+var activeEventOptions = platform.normalizePassiveListenerOptions({ passive: false });
 // unsupported: template constraints.
 /**
  * Service that keeps track of all the drag item and drop container
@@ -315,12 +315,25 @@ var DragDropRegistry = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** *
+ * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
+ * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
+ * to avoid circular imports.
+ * \@docs-private
+  @type {?} */
+var CDK_DRAG_PARENT = new core.InjectionToken('CDK_DRAG_PARENT');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /**
  * Handle that can be used to drag and CdkDrag instance.
  */
 var CdkDragHandle = /** @class */ (function () {
-    function CdkDragHandle(element) {
+    function CdkDragHandle(element, parentDrag) {
         this.element = element;
+        this._parentDrag = parentDrag;
         toggleNativeDragInteractions(element.nativeElement, false);
     }
     CdkDragHandle.decorators = [
@@ -333,7 +346,8 @@ var CdkDragHandle = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkDragHandle.ctorParameters = function () { return [
-        { type: core.ElementRef }
+        { type: core.ElementRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_PARENT,] }, { type: core.Optional }] }
     ]; };
     return CdkDragHandle;
 }());
@@ -559,10 +573,12 @@ var CdkDrag = /** @class */ (function () {
          * Handler for the `mousedown`/`touchstart` events.
          */
         this._pointerDown = function (event) {
+            /** @type {?} */
+            var handles = _this._handles.filter(function (handle) { return handle._parentDrag === _this; });
             // Delegate the event based on whether it started from a handle or the element itself.
-            if (_this._handles.length) {
+            if (handles.length) {
                 /** @type {?} */
-                var targetHandle = _this._handles.find(function (handle) {
+                var targetHandle = handles.find(function (handle) {
                     /** @type {?} */
                     var element = handle.element.nativeElement;
                     /** @type {?} */
@@ -1205,7 +1221,11 @@ var CdkDrag = /** @class */ (function () {
                     host: {
                         'class': 'cdk-drag',
                         '[class.cdk-drag-dragging]': '_hasStartedDragging && _isDragging()',
-                    }
+                    },
+                    providers: [{
+                            provide: CDK_DRAG_PARENT,
+                            useExisting: CdkDrag
+                        }]
                 },] },
     ];
     /** @nocollapse */
@@ -1221,7 +1241,7 @@ var CdkDrag = /** @class */ (function () {
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };
     CdkDrag.propDecorators = {
-        _handles: [{ type: core.ContentChildren, args: [CdkDragHandle,] }],
+        _handles: [{ type: core.ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
         _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview,] }],
         _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder,] }],
         data: [{ type: core.Input, args: ['cdkDragData',] }],
@@ -1931,6 +1951,7 @@ exports.CdkDragPreview = CdkDragPreview;
 exports.CdkDragPlaceholder = CdkDragPlaceholder;
 exports.DragDropModule = DragDropModule;
 exports.DragDropRegistry = DragDropRegistry;
+exports.ɵa = CDK_DRAG_PARENT;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
