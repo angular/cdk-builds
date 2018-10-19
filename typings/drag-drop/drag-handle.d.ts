@@ -9,5 +9,7 @@ import { ElementRef } from '@angular/core';
 /** Handle that can be used to drag and CdkDrag instance. */
 export declare class CdkDragHandle {
     element: ElementRef<HTMLElement>;
-    constructor(element: ElementRef<HTMLElement>);
+    /** Closest parent draggable instance. */
+    _parentDrag: {} | undefined;
+    constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
 }

@@ -256,15 +256,29 @@ DragDropRegistry.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/** *
+ * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
+ * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
+ * to avoid circular imports.
+ * \@docs-private
+  @type {?} */
+const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /**
  * Handle that can be used to drag and CdkDrag instance.
  */
 class CdkDragHandle {
     /**
      * @param {?} element
+     * @param {?=} parentDrag
      */
-    constructor(element) {
+    constructor(element, parentDrag) {
         this.element = element;
+        this._parentDrag = parentDrag;
         toggleNativeDragInteractions(element.nativeElement, false);
     }
 }
@@ -278,7 +292,8 @@ CdkDragHandle.decorators = [
 ];
 /** @nocollapse */
 CdkDragHandle.ctorParameters = () => [
-    { type: ElementRef }
+    { type: ElementRef },
+    { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
 ];
 
 /**
@@ -516,10 +531,12 @@ class CdkDrag {
          * Handler for the `mousedown`/`touchstart` events.
          */
         this._pointerDown = (event) => {
+            /** @type {?} */
+            const handles = this._handles.filter(handle => handle._parentDrag === this);
             // Delegate the event based on whether it started from a handle or the element itself.
-            if (this._handles.length) {
+            if (handles.length) {
                 /** @type {?} */
-                const targetHandle = this._handles.find(handle => {
+                const targetHandle = handles.find(handle => {
                     /** @type {?} */
                     const element = handle.element.nativeElement;
                     /** @type {?} */
@@ -1052,7 +1069,11 @@ CdkDrag.decorators = [
                 host: {
                     'class': 'cdk-drag',
                     '[class.cdk-drag-dragging]': '_hasStartedDragging && _isDragging()',
-                }
+                },
+                providers: [{
+                        provide: CDK_DRAG_PARENT,
+                        useExisting: CdkDrag
+                    }]
             },] },
 ];
 /** @nocollapse */
@@ -1068,7 +1089,7 @@ CdkDrag.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional }] }
 ];
 CdkDrag.propDecorators = {
-    _handles: [{ type: ContentChildren, args: [CdkDragHandle,] }],
+    _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
     _previewTemplate: [{ type: ContentChild, args: [CdkDragPreview,] }],
     _placeholderTemplate: [{ type: ContentChild, args: [CdkDragPlaceholder,] }],
     data: [{ type: Input, args: ['cdkDragData',] }],
@@ -1642,5 +1663,5 @@ DragDropModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry };
+export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
 //# sourceMappingURL=drag-drop.js.map
