@@ -192,7 +192,11 @@ class CdkColumnDef extends _CdkColumnDefBase {
 CdkColumnDef.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkColumnDef]',
-                inputs: ['sticky']
+                inputs: ['sticky'],
+                providers: [{
+                        provide: 'MAT_SORT_HEADER_COLUMN_DEF',
+                        useExisting: CdkColumnDef
+                    }],
             },] },
 ];
 CdkColumnDef.propDecorators = {

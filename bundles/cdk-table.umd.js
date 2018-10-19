@@ -251,7 +251,11 @@ var CdkColumnDef = /** @class */ (function (_super) {
     CdkColumnDef.decorators = [
         { type: core.Directive, args: [{
                     selector: '[cdkColumnDef]',
-                    inputs: ['sticky']
+                    inputs: ['sticky'],
+                    providers: [{
+                            provide: 'MAT_SORT_HEADER_COLUMN_DEF',
+                            useExisting: CdkColumnDef
+                        }],
                 },] },
     ];
     CdkColumnDef.propDecorators = {
