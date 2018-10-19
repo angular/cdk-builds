@@ -862,7 +862,7 @@ function getFrameElement(window) {
     try {
         return /** @type {?} */ (window.frameElement);
     }
-    catch (e) {
+    catch (_a) {
         return null;
     }
 }
