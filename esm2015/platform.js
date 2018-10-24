@@ -86,7 +86,7 @@ Platform.ctorParameters = () => [
 class PlatformModule {
 }
 PlatformModule.decorators = [
-    { type: NgModule },
+    { type: NgModule, args: [{},] },
 ];
 
 /**
