@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, ElementRef, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, NgModule } from '@angular/core';
+import { Directive, TemplateRef, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -35,6 +35,38 @@ CdkStepLabel.decorators = [
 /** @nocollapse */
 CdkStepLabel.ctorParameters = () => [
     { type: TemplateRef }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+class CdkStepHeader {
+    /**
+     * @param {?} _elementRef
+     */
+    constructor(_elementRef) {
+        this._elementRef = _elementRef;
+    }
+    /**
+     * Focuses the step header.
+     * @return {?}
+     */
+    focus() {
+        this._elementRef.nativeElement.focus();
+    }
+}
+CdkStepHeader.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkStepHeader]',
+                host: {
+                    'role': 'tab',
+                },
+            },] },
+];
+/** @nocollapse */
+CdkStepHeader.ctorParameters = () => [
+    { type: ElementRef }
 ];
 
 /**
@@ -285,6 +317,9 @@ class CdkStepper {
      * @return {?}
      */
     ngAfterViewInit() {
+        // Note that while the step headers are content children by default, any components that
+        // extend this one might have them as view chidren. We initialize the keyboard handling in
+        // AfterViewInit so we're guaranteed for both view and content children to be defined.
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
@@ -537,6 +572,7 @@ CdkStepper.ctorParameters = () => [
 ];
 CdkStepper.propDecorators = {
     _steps: [{ type: ContentChildren, args: [CdkStep,] }],
+    _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader,] }],
     linear: [{ type: Input }],
     selectedIndex: [{ type: Input }],
     selected: [{ type: Input }],
@@ -619,8 +655,22 @@ class CdkStepperModule {
 CdkStepperModule.decorators = [
     { type: NgModule, args: [{
                 imports: [BidiModule, CommonModule],
-                exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
-                declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
+                exports: [
+                    CdkStep,
+                    CdkStepper,
+                    CdkStepHeader,
+                    CdkStepLabel,
+                    CdkStepperNext,
+                    CdkStepperPrevious,
+                ],
+                declarations: [
+                    CdkStep,
+                    CdkStepper,
+                    CdkStepHeader,
+                    CdkStepLabel,
+                    CdkStepperNext,
+                    CdkStepperPrevious,
+                ]
             },] },
 ];
 
@@ -634,5 +684,5 @@ CdkStepperModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { StepperSelectionEvent, STEP_STATE, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule };
+export { StepperSelectionEvent, STEP_STATE, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule, CdkStepHeader };
 //# sourceMappingURL=stepper.js.map
