@@ -1161,6 +1161,24 @@ function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex)
     }
 }
 /**
+ * Copies an item from one array to another, leaving it in its
+ * original position in current array.
+ * @template T
+ * @param {?} currentArray Array from which to copy the item.
+ * @param {?} targetArray Array into which is copy the item.
+ * @param {?} currentIndex Index of the item in its current array.
+ * @param {?} targetIndex Index at which to insert the item.
+ *
+ * @return {?}
+ */
+function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
+    /** @type {?} */
+    const to = clamp(targetIndex, targetArray.length);
+    if (currentArray.length) {
+        targetArray.splice(to, 0, currentArray[currentIndex]);
+    }
+}
+/**
  * Clamps a number between zero and a maximum.
  * @param {?} value
  * @param {?} max
@@ -1663,5 +1681,5 @@ DragDropModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
+export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, copyArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
 //# sourceMappingURL=drag-drop.js.map

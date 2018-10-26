@@ -1315,6 +1315,24 @@ function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex)
     }
 }
 /**
+ * Copies an item from one array to another, leaving it in its
+ * original position in current array.
+ * @template T
+ * @param {?} currentArray Array from which to copy the item.
+ * @param {?} targetArray Array into which is copy the item.
+ * @param {?} currentIndex Index of the item in its current array.
+ * @param {?} targetIndex Index at which to insert the item.
+ *
+ * @return {?}
+ */
+function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
+    /** @type {?} */
+    var to = clamp(targetIndex, targetArray.length);
+    if (currentArray.length) {
+        targetArray.splice(to, 0, currentArray[currentIndex]);
+    }
+}
+/**
  * Clamps a number between zero and a maximum.
  * @param {?} value
  * @param {?} max
@@ -1947,6 +1965,7 @@ exports.CdkDrag = CdkDrag;
 exports.CdkDragHandle = CdkDragHandle;
 exports.moveItemInArray = moveItemInArray;
 exports.transferArrayItem = transferArrayItem;
+exports.copyArrayItem = copyArrayItem;
 exports.CdkDragPreview = CdkDragPreview;
 exports.CdkDragPlaceholder = CdkDragPlaceholder;
 exports.DragDropModule = DragDropModule;

@@ -20,3 +20,13 @@ export declare function moveItemInArray<T = any>(array: T[], fromIndex: number, 
  * @param targetIndex Index at which to insert the item.
  */
 export declare function transferArrayItem<T = any>(currentArray: T[], targetArray: T[], currentIndex: number, targetIndex: number): void;
+/**
+ * Copies an item from one array to another, leaving it in its
+ * original position in current array.
+ * @param currentArray Array from which to copy the item.
+ * @param targetArray Array into which is copy the item.
+ * @param currentIndex Index of the item in its current array.
+ * @param targetIndex Index at which to insert the item.
+ *
+ */
+export declare function copyArrayItem<T = any>(currentArray: T[], targetArray: T[], currentIndex: number, targetIndex: number): void;

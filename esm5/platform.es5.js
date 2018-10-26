@@ -87,7 +87,7 @@ var PlatformModule = /** @class */ (function () {
     function PlatformModule() {
     }
     PlatformModule.decorators = [
-        { type: NgModule },
+        { type: NgModule, args: [{},] },
     ];
     return PlatformModule;
 }());
