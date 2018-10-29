@@ -632,26 +632,21 @@ var CdkStepper = /** @class */ (function () {
      */
     function (event) {
         /** @type {?} */
-        var hasModifier = event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
-        /** @type {?} */
         var keyCode = event.keyCode;
-        /** @type {?} */
-        var manager = this._keyManager;
-        if (manager.activeItemIndex != null && !hasModifier &&
-            (keyCode === SPACE || keyCode === ENTER)) {
-            this.selectedIndex = manager.activeItemIndex;
+        if (this._keyManager.activeItemIndex != null && (keyCode === SPACE || keyCode === ENTER)) {
+            this.selectedIndex = this._keyManager.activeItemIndex;
             event.preventDefault();
         }
         else if (keyCode === HOME) {
-            manager.setFirstItemActive();
+            this._keyManager.setFirstItemActive();
             event.preventDefault();
         }
         else if (keyCode === END) {
-            manager.setLastItemActive();
+            this._keyManager.setLastItemActive();
             event.preventDefault();
         }
         else {
-            manager.onKeydown(event);
+            this._keyManager.onKeydown(event);
         }
     };
     /**
