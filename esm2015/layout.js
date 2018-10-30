@@ -18,7 +18,7 @@ import { coerceArray } from '@angular/cdk/coercion';
 class LayoutModule {
 }
 LayoutModule.decorators = [
-    { type: NgModule },
+    { type: NgModule, args: [{},] },
 ];
 
 /**

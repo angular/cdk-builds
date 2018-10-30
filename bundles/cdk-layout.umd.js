@@ -19,7 +19,7 @@ var LayoutModule = /** @class */ (function () {
     function LayoutModule() {
     }
     LayoutModule.decorators = [
-        { type: core.NgModule },
+        { type: core.NgModule, args: [{},] },
     ];
     return LayoutModule;
 }());
