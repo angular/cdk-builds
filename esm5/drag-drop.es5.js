@@ -775,10 +775,12 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function (referenceElement, event) {
-        /** @type {?} */
-        var isDragging = this._isDragging();
+        // Always stop propagation for the event that initializes
+        // the dragging sequence, in order to prevent it from potentially
+        // starting another sequence for a draggable parent somewhere up the DOM tree.
+        event.stopPropagation();
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
-        if (isDragging || (!this._isTouchEvent(event) && event.button !== 0)) {
+        if (this._isDragging() || (!this._isTouchEvent(event) && event.button !== 0)) {
             return;
         }
         // Cache the previous transform amount only after the first drag sequence, because
