@@ -1819,7 +1819,17 @@ var CdkVirtualForOf = /** @class */ (function () {
             this._templateCache.push(view);
         }
         else {
-            view.destroy();
+            /** @type {?} */
+            var index = this._viewContainerRef.indexOf(view);
+            // It's very unlikely that the index will ever be -1, but just in case,
+            // destroy the view on its own, otherwise destroy it through the
+            // container to ensure that all the references are removed.
+            if (index === -1) {
+                view.destroy();
+            }
+            else {
+                this._viewContainerRef.remove(index);
+            }
         }
     };
     /**
