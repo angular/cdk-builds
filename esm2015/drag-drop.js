@@ -1255,11 +1255,7 @@ class CdkDropList {
         /**
          * Cache of the dimensions of all the items and the sibling containers.
          */
-        this._positionCache = {
-            items: /** @type {?} */ ([]),
-            siblings: /** @type {?} */ ([]),
-            self: /** @type {?} */ ({})
-        };
+        this._positionCache = { items: [], siblings: [], self: /** @type {?} */ ({}) };
         /**
          * Keeps track of the item that was last swapped with the dragged item, as
          * well as what direction the pointer was moving in when the swap occured.
@@ -1404,11 +1400,9 @@ class CdkDropList {
         this._previousSwap.drag = siblingAtNewPosition.drag;
         this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
         /** @type {?} */
-        const itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
-            newPosition.top - currentPosition.top;
+        const itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
         /** @type {?} */
-        const siblingOffset = isHorizontal ? currentPosition.width * delta :
-            currentPosition.height * delta;
+        const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
         /** @type {?} */
         const oldOrder = siblings.slice();
         // Shuffle the array in place.
@@ -1584,6 +1578,60 @@ class CdkDropList {
         const yThreshold = height * DROP_PROXIMITY_THRESHOLD;
         return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
             pointerX > left - xThreshold && pointerX < right + xThreshold;
+    }
+    /**
+     * Gets the offset in pixels by which the item that is being dragged should be moved.
+     * @param {?} currentPosition Current position of the item.
+     * @param {?} newPosition Position of the item where the current item should be moved.
+     * @param {?} delta Direction in which the user is moving.
+     * @return {?}
+     */
+    _getItemOffsetPx(currentPosition, newPosition, delta) {
+        /** @type {?} */
+        const isHorizontal = this.orientation === 'horizontal';
+        /** @type {?} */
+        let itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
+            newPosition.top - currentPosition.top;
+        // Account for differences in the item width/height.
+        if (delta === -1) {
+            itemOffset += isHorizontal ? newPosition.width - currentPosition.width :
+                newPosition.height - currentPosition.height;
+        }
+        return itemOffset;
+    }
+    /**
+     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
+     * @param {?} currentIndex Index of the item currently being dragged.
+     * @param {?} siblings All of the items in the list.
+     * @param {?} delta Direction in which the user is moving.
+     * @return {?}
+     */
+    _getSiblingOffsetPx(currentIndex, siblings, delta) {
+        /** @type {?} */
+        const isHorizontal = this.orientation === 'horizontal';
+        /** @type {?} */
+        const currentPosition = siblings[currentIndex].clientRect;
+        /** @type {?} */
+        const immediateSibling = siblings[currentIndex + delta * -1];
+        /** @type {?} */
+        let siblingOffset = currentPosition[isHorizontal ? 'width' : 'height'] * delta;
+        if (immediateSibling) {
+            /** @type {?} */
+            const start = isHorizontal ? 'left' : 'top';
+            /** @type {?} */
+            const end = isHorizontal ? 'right' : 'bottom';
+            // Get the spacing between the start of the current item and the end of the one immediately
+            // after it in the direction in which the user is dragging, or vice versa. We add it to the
+            // offset in order to push the element to where it will be when it's inline and is influenced
+            // by the `margin` of its siblings.
+            if (delta === -1) {
+                siblingOffset -= immediateSibling.clientRect[start] - currentPosition[end];
+            }
+            else {
+                siblingOffset += currentPosition[start] - immediateSibling.clientRect[end];
+            }
+        }
+        return siblingOffset;
     }
 }
 CdkDropList.decorators = [

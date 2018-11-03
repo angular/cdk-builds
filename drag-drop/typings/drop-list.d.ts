@@ -146,4 +146,18 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param pointerY Coordinates along the Y axis.
      */
     private _isPointerNearDropContainer;
+    /**
+     * Gets the offset in pixels by which the item that is being dragged should be moved.
+     * @param currentPosition Current position of the item.
+     * @param newPosition Position of the item where the current item should be moved.
+     * @param delta Direction in which the user is moving.
+     */
+    private _getItemOffsetPx;
+    /**
+     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
+     * @param currentIndex Index of the item currently being dragged.
+     * @param siblings All of the items in the list.
+     * @param delta Direction in which the user is moving.
+     */
+    private _getSiblingOffsetPx;
 }
