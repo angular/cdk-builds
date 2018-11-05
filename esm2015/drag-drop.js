@@ -5,9 +5,9 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ContentChild, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
+import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, ContentChild, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { normalizePassiveListenerOptions, supportsPassiveEventListeners } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
@@ -439,7 +439,7 @@ function CDK_DRAG_CONFIG_FACTORY() {
 /** *
  * Options that can be used to bind a passive event listener.
   @type {?} */
-const passiveEventListenerOptions = supportsPassiveEventListeners() ? /** @type {?} */ ({ passive: true }) : false;
+const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -1211,11 +1211,13 @@ class CdkDropList {
     /**
      * @param {?} element
      * @param {?} _dragDropRegistry
+     * @param {?} _changeDetectorRef
      * @param {?=} _dir
      */
-    constructor(element, _dragDropRegistry, _dir) {
+    constructor(element, _dragDropRegistry, _changeDetectorRef, _dir) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
+        this._changeDetectorRef = _changeDetectorRef;
         this._dir = _dir;
         /**
          * Other draggable containers that this container is connected to and into which the
@@ -1284,6 +1286,7 @@ class CdkDropList {
         this._dragging = true;
         this._activeDraggables = this._draggables.toArray();
         this._cachePositions();
+        this._changeDetectorRef.markForCheck();
     }
     /**
      * Drops an item into this container.
@@ -1654,6 +1657,7 @@ CdkDropList.decorators = [
 CdkDropList.ctorParameters = () => [
     { type: ElementRef },
     { type: DragDropRegistry },
+    { type: ChangeDetectorRef },
     { type: Directionality, decorators: [{ type: Optional }] }
 ];
 CdkDropList.propDecorators = {

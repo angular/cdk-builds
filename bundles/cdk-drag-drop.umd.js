@@ -491,7 +491,7 @@ function CDK_DRAG_CONFIG_FACTORY() {
 /** *
  * Options that can be used to bind a passive event listener.
   @type {?} */
-var passiveEventListenerOptions = platform.supportsPassiveEventListeners() ? /** @type {?} */ ({ passive: true }) : false;
+var passiveEventListenerOptions = platform.normalizePassiveListenerOptions({ passive: true });
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -1362,9 +1362,10 @@ var DROP_PROXIMITY_THRESHOLD = 0.05;
  * @template T
  */
 var CdkDropList = /** @class */ (function () {
-    function CdkDropList(element, _dragDropRegistry, _dir) {
+    function CdkDropList(element, _dragDropRegistry, _changeDetectorRef, _dir) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
+        this._changeDetectorRef = _changeDetectorRef;
         this._dir = _dir;
         /**
          * Other draggable containers that this container is connected to and into which the
@@ -1444,6 +1445,7 @@ var CdkDropList = /** @class */ (function () {
         this._dragging = true;
         this._activeDraggables = this._draggables.toArray();
         this._cachePositions();
+        this._changeDetectorRef.markForCheck();
     };
     /**
      * Drops an item into this container.
@@ -1949,6 +1951,7 @@ var CdkDropList = /** @class */ (function () {
     CdkDropList.ctorParameters = function () { return [
         { type: core.ElementRef },
         { type: DragDropRegistry },
+        { type: core.ChangeDetectorRef },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };
     CdkDropList.propDecorators = {

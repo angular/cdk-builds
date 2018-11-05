@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ChangeDetectorRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
 import { DragDropRegistry } from './drag-drop-registry';
@@ -14,6 +14,7 @@ import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
 export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     element: ElementRef<HTMLElement>;
     private _dragDropRegistry;
+    private _changeDetectorRef;
     private _dir?;
     /** Draggable items in the container. */
     _draggables: QueryList<CdkDrag>;
@@ -50,7 +51,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * by dragging it into another container.
      */
     exited: EventEmitter<CdkDragExit<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _dir?: Directionality | undefined);
+    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Whether an item in the container is being dragged. */
