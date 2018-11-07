@@ -301,10 +301,10 @@ class ScrollDispatcher {
      * @return {?}
      */
     register(scrollable) {
-        /** @type {?} */
-        const scrollSubscription = scrollable.elementScrolled()
-            .subscribe(() => this._scrolled.next(scrollable));
-        this.scrollContainers.set(scrollable, scrollSubscription);
+        if (!this.scrollContainers.has(scrollable)) {
+            this.scrollContainers.set(scrollable, scrollable.elementScrolled()
+                .subscribe(() => this._scrolled.next(scrollable)));
+        }
     }
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.

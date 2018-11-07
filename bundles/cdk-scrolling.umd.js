@@ -430,10 +430,10 @@ var ScrollDispatcher = /** @class */ (function () {
      */
     function (scrollable) {
         var _this = this;
-        /** @type {?} */
-        var scrollSubscription = scrollable.elementScrolled()
-            .subscribe(function () { return _this._scrolled.next(scrollable); });
-        this.scrollContainers.set(scrollable, scrollSubscription);
+        if (!this.scrollContainers.has(scrollable)) {
+            this.scrollContainers.set(scrollable, scrollable.elementScrolled()
+                .subscribe(function () { return _this._scrolled.next(scrollable); }));
+        }
     };
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
