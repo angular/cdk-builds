@@ -50,7 +50,7 @@ export interface CdkDropListContainer<T = any> {
     }): void;
     _draggables: QueryList<CdkDrag>;
     _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropListContainer | null;
-    _canReturnItem(item: CdkDrag, x: number, y: number): boolean;
+    _canReturnItem(x: number, y: number): boolean;
 }
 /**
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.

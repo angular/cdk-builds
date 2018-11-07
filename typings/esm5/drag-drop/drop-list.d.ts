@@ -117,11 +117,10 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
-     * @param item Item that is being checked.
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _canReturnItem(item: CdkDrag, x: number, y: number): boolean;
+    _canReturnItem(x: number, y: number): boolean;
     /** Refreshes the position cache of the items and sibling containers. */
     private _cachePositions;
     /** Resets the container to its initial state. */

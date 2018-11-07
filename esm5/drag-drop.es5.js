@@ -904,7 +904,7 @@ var CdkDrag = /** @class */ (function () {
         // This handles the case where two containers are connected one way and the user tries to
         // undo dragging an item into a new container.
         if (!newContainer && this.dropContainer !== this._initialContainer &&
-            this._initialContainer._canReturnItem(this, x, y)) {
+            this._initialContainer._canReturnItem(x, y)) {
             newContainer = this._initialContainer;
         }
         if (newContainer) {
@@ -1704,14 +1704,12 @@ var CdkDropList = /** @class */ (function () {
     /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
-     * @param item Item that is being checked.
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
     /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
-     * @param {?} item Item that is being checked.
      * @param {?} x Position of the item along the X axis.
      * @param {?} y Position of the item along the Y axis.
      * @return {?}
@@ -1719,13 +1717,12 @@ var CdkDropList = /** @class */ (function () {
     CdkDropList.prototype._canReturnItem = /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
-     * @param {?} item Item that is being checked.
      * @param {?} x Position of the item along the X axis.
      * @param {?} y Position of the item along the Y axis.
      * @return {?}
      */
-    function (item, x, y) {
-        return isInsideClientRect(this._positionCache.self, x, y) && this.enterPredicate(item, this);
+    function (x, y) {
+        return isInsideClientRect(this._positionCache.self, x, y);
     };
     /**
      * Refreshes the position cache of the items and sibling containers.
