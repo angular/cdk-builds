@@ -150,6 +150,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     ngOnDestroy(): void;
     /** Checks whether the element is currently being dragged. */
     _isDragging(): boolean;
+    /** Gets only handles that are not inside descendant `CdkDrag` instances. */
+    private getChildHandles;
     /** Handler for the `mousedown`/`touchstart` events. */
     _pointerDown: (event: TouchEvent | MouseEvent) => void;
     /**

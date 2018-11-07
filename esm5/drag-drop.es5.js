@@ -11,7 +11,7 @@ import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { take } from 'rxjs/operators';
+import { startWith, take } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
 /**
@@ -581,7 +581,7 @@ var CdkDrag = /** @class */ (function () {
          */
         this._pointerDown = function (event) {
             /** @type {?} */
-            var handles = _this._handles.filter(function (handle) { return handle._parentDrag === _this; });
+            var handles = _this.getChildHandles();
             // Delegate the event based on whether it started from a handle or the element itself.
             if (handles.length) {
                 /** @type {?} */
@@ -728,7 +728,9 @@ var CdkDrag = /** @class */ (function () {
             var rootElement = _this._rootElement = _this._getRootElement();
             rootElement.addEventListener('mousedown', _this._pointerDown, passiveEventListenerOptions);
             rootElement.addEventListener('touchstart', _this._pointerDown, passiveEventListenerOptions);
-            toggleNativeDragInteractions(rootElement, false);
+            _this._handles.changes.pipe(startWith(null)).subscribe(function () {
+                return toggleNativeDragInteractions(rootElement, _this.getChildHandles().length > 0);
+            });
         });
     };
     /**
@@ -769,6 +771,18 @@ var CdkDrag = /** @class */ (function () {
      */
     function () {
         return this._dragDropRegistry.isDragging(this);
+    };
+    /**
+     * Gets only handles that are not inside descendant `CdkDrag` instances.
+     * @return {?}
+     */
+    CdkDrag.prototype.getChildHandles = /**
+     * Gets only handles that are not inside descendant `CdkDrag` instances.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        return this._handles.filter(function (handle) { return handle._parentDrag === _this; });
     };
     /**
      * Sets up the different variables and subscriptions

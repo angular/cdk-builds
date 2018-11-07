@@ -11,7 +11,7 @@ import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { take } from 'rxjs/operators';
+import { startWith, take } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
 /**
@@ -536,7 +536,7 @@ class CdkDrag {
          */
         this._pointerDown = (event) => {
             /** @type {?} */
-            const handles = this._handles.filter(handle => handle._parentDrag === this);
+            const handles = this.getChildHandles();
             // Delegate the event based on whether it started from a handle or the element itself.
             if (handles.length) {
                 /** @type {?} */
@@ -665,7 +665,7 @@ class CdkDrag {
             const rootElement = this._rootElement = this._getRootElement();
             rootElement.addEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
             rootElement.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
-            toggleNativeDragInteractions(rootElement, false);
+            this._handles.changes.pipe(startWith(null)).subscribe(() => toggleNativeDragInteractions(rootElement, this.getChildHandles().length > 0));
         });
     }
     /**
@@ -698,6 +698,13 @@ class CdkDrag {
      */
     _isDragging() {
         return this._dragDropRegistry.isDragging(this);
+    }
+    /**
+     * Gets only handles that are not inside descendant `CdkDrag` instances.
+     * @return {?}
+     */
+    getChildHandles() {
+        return this._handles.filter(handle => handle._parentDrag === this);
     }
     /**
      * Sets up the different variables and subscriptions
