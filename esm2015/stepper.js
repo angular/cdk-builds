@@ -9,7 +9,7 @@ import { Directive, TemplateRef, ElementRef, ChangeDetectionStrategy, ChangeDete
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { END, ENTER, HOME, SPACE } from '@angular/cdk/keycodes';
+import { END, ENTER, HOME, SPACE, hasModifierKey } from '@angular/cdk/keycodes';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import '@angular/forms';
 import { Subject, of } from 'rxjs';
@@ -498,7 +498,7 @@ class CdkStepper {
      */
     _onKeydown(event) {
         /** @type {?} */
-        const hasModifier = event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+        const hasModifier = hasModifierKey(event);
         /** @type {?} */
         const keyCode = event.keyCode;
         /** @type {?} */

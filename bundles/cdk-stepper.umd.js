@@ -628,7 +628,7 @@ var CdkStepper = /** @class */ (function () {
      */
     function (event) {
         /** @type {?} */
-        var hasModifier = event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+        var hasModifier = keycodes.hasModifierKey(event);
         /** @type {?} */
         var keyCode = event.keyCode;
         /** @type {?} */
