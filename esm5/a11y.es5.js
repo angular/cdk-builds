@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -1545,6 +1545,11 @@ FocusTrap = /** @class */ (function () {
                 console.warn("Found use of deprecated attribute 'cdk-focus-initial', " +
                     "use 'cdkFocusInitial' instead. The deprecated attribute " +
                     "will be removed in 8.0.0", redirectToElement);
+            }
+            // Warn the consumer if the element they've pointed to
+            // isn't focusable, when not in production mode.
+            if (isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+                console.warn("Element matching '[cdkFocusInitial]' is not focusable.", redirectToElement);
             }
             redirectToElement.focus();
             return true;

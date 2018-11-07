@@ -1571,6 +1571,11 @@ FocusTrap = /** @class */ (function () {
                     "use 'cdkFocusInitial' instead. The deprecated attribute " +
                     "will be removed in 8.0.0", redirectToElement);
             }
+            // Warn the consumer if the element they've pointed to
+            // isn't focusable, when not in production mode.
+            if (core.isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+                console.warn("Element matching '[cdkFocusInitial]' is not focusable.", redirectToElement);
+            }
             redirectToElement.focus();
             return true;
         }
