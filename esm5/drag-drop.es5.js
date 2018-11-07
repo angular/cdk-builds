@@ -540,6 +540,10 @@ var CdkDrag = /** @class */ (function () {
          */
         this._pointerUpSubscription = Subscription.EMPTY;
         /**
+         * Subscription to the stream that initializes the root element.
+         */
+        this._rootElementInitSubscription = Subscription.EMPTY;
+        /**
          * Emits when the user starts dragging the item.
          */
         this.started = new EventEmitter();
@@ -717,7 +721,9 @@ var CdkDrag = /** @class */ (function () {
         // element to be in the proper place in the DOM. This is mostly relevant
         // for draggable elements inside portals since they get stamped out in
         // their original DOM position and then they get transferred to the portal.
-        this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(function () {
+        this._rootElementInitSubscription = this._ngZone.onStable.asObservable()
+            .pipe(take(1))
+            .subscribe(function () {
             /** @type {?} */
             var rootElement = _this._rootElement = _this._getRootElement();
             rootElement.addEventListener('mousedown', _this._pointerDown, passiveEventListenerOptions);
@@ -732,17 +738,21 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._rootElement.removeEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
-        this._rootElement.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+        // The directive might have been destroyed before the root element is initialized.
+        if (this._rootElement) {
+            this._rootElement.removeEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
+            this._rootElement.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+            // Do this check before removing from the registry since it'll
+            // stop being considered as dragged once it is removed.
+            if (this._isDragging()) {
+                // Since we move out the element to the end of the body while it's being
+                // dragged, we have to make sure that it's removed if it gets destroyed.
+                this._removeElement(this._rootElement);
+            }
+        }
+        this._rootElementInitSubscription.unsubscribe();
         this._destroyPreview();
         this._destroyPlaceholder();
-        // Do this check before removing from the registry since it'll
-        // stop being considered as dragged once it is removed.
-        if (this._isDragging()) {
-            // Since we move out the element to the end of the body while it's being
-            // dragged, we have to make sure that it's removed if it gets destroyed.
-            this._removeElement(this._rootElement);
-        }
         this._nextSibling = null;
         this._dragDropRegistry.removeDragItem(this);
         this._removeSubscriptions();
