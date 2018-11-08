@@ -14,6 +14,8 @@ export interface ListKeyManagerOption {
     /** Gets the label for this option. */
     getLabel?(): string;
 }
+/** Modifier keys handled by the ListKeyManager. */
+export declare type ListKeyManagerModifierKey = 'altKey' | 'ctrlKey' | 'metaKey' | 'shiftKey';
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
@@ -27,6 +29,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _typeaheadSubscription;
     private _vertical;
     private _horizontal;
+    private _allowedModifierKeys;
     /**
      * Predicate function that can be used to check whether an item should be skipped
      * by the key manager. By default, disabled items are skipped.
@@ -64,6 +67,11 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param direction Direction in which the selection can be moved.
      */
     withHorizontalOrientation(direction: 'ltr' | 'rtl' | null): this;
+    /**
+     * Modifier keys which are allowed to be held down and whose default actions will be prevented
+     * as the user is pressing the arrow keys. Defaults to not allowing any modifier keys.
+     */
+    withAllowedModifierKeys(keys: ListKeyManagerModifierKey[]): this;
     /**
      * Turns on typeahead mode which allows users to set the active item by typing.
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
