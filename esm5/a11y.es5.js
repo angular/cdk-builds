@@ -1930,7 +1930,8 @@ var LiveAnnouncer = /** @class */ (function () {
         // (using JAWS 17 at time of this writing).
         return this._ngZone.runOutsideAngular(function () {
             return new Promise(function (resolve) {
-                setTimeout(function () {
+                clearTimeout(_this._previousTimeout);
+                _this._previousTimeout = setTimeout(function () {
                     _this._liveElement.textContent = message;
                     resolve();
                 }, 100);
@@ -1944,8 +1945,10 @@ var LiveAnnouncer = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        clearTimeout(this._previousTimeout);
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
+            this._liveElement = /** @type {?} */ ((null));
         }
     };
     /**

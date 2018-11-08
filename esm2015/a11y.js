@@ -1455,7 +1455,8 @@ class LiveAnnouncer {
         // (using JAWS 17 at time of this writing).
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
-                setTimeout(() => {
+                clearTimeout(this._previousTimeout);
+                this._previousTimeout = setTimeout(() => {
                     this._liveElement.textContent = message;
                     resolve();
                 }, 100);
@@ -1466,8 +1467,10 @@ class LiveAnnouncer {
      * @return {?}
      */
     ngOnDestroy() {
+        clearTimeout(this._previousTimeout);
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
+            this._liveElement = /** @type {?} */ ((null));
         }
     }
     /**
