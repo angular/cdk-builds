@@ -59,9 +59,12 @@ function toggleNativeDragInteractions(element, enable) {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 /** *
- * Event options that can be used to bind an active event.
+ * Event options that can be used to bind an active, capturing event.
   @type {?} */
-const activeEventOptions = normalizePassiveListenerOptions({ passive: false });
+const activeCapturingEventOptions = normalizePassiveListenerOptions({
+    passive: false,
+    capture: true
+});
 // unsupported: template constraints.
 /**
  * Service that keeps track of all the drag item and drop container
@@ -138,7 +141,7 @@ class DragDropRegistry {
             this._ngZone.runOutsideAngular(() => {
                 // The event handler has to be explicitly active, because
                 // newer browsers make it passive by default.
-                this._document.addEventListener('touchmove', this._preventScrollListener, activeEventOptions);
+                this._document.addEventListener('touchmove', this._preventScrollListener, activeCapturingEventOptions);
             });
         }
     }
@@ -159,7 +162,7 @@ class DragDropRegistry {
         this._dragInstances.delete(drag);
         this.stopDragging(drag);
         if (this._dragInstances.size === 0) {
-            this._document.removeEventListener('touchmove', this._preventScrollListener, /** @type {?} */ (activeEventOptions));
+            this._document.removeEventListener('touchmove', this._preventScrollListener, activeCapturingEventOptions);
         }
     }
     /**
@@ -184,8 +187,14 @@ class DragDropRegistry {
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
             this._globalListeners
-                .set(moveEvent, { handler: e => this.pointerMove.next(e), options: activeEventOptions })
-                .set(upEvent, { handler: e => this.pointerUp.next(e) })
+                .set(moveEvent, {
+                handler: e => this.pointerMove.next(e),
+                options: activeCapturingEventOptions
+            })
+                .set(upEvent, {
+                handler: e => this.pointerUp.next(e),
+                options: true
+            })
                 .forEach((config, name) => {
                 this._ngZone.runOutsideAngular(() => {
                     this._document.addEventListener(name, config.handler, config.options);
