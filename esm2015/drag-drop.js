@@ -669,6 +669,15 @@ class CdkDrag {
         return this._rootElement;
     }
     /**
+     * Resets a standalone drag item to its initial position.
+     * @return {?}
+     */
+    reset() {
+        this._rootElement.style.transform = '';
+        this._activeTransform = { x: 0, y: 0 };
+        this._passiveTransform = { x: 0, y: 0 };
+    }
+    /**
      * @return {?}
      */
     ngAfterViewInit() {

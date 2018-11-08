@@ -727,6 +727,20 @@ var CdkDrag = /** @class */ (function () {
     function () {
         return this._rootElement;
     };
+    /** Resets a standalone drag item to its initial position. */
+    /**
+     * Resets a standalone drag item to its initial position.
+     * @return {?}
+     */
+    CdkDrag.prototype.reset = /**
+     * Resets a standalone drag item to its initial position.
+     * @return {?}
+     */
+    function () {
+        this._rootElement.style.transform = '';
+        this._activeTransform = { x: 0, y: 0 };
+        this._passiveTransform = { x: 0, y: 0 };
+    };
     /**
      * @return {?}
      */

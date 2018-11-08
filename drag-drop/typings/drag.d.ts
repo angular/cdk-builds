@@ -146,6 +146,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     getPlaceholderElement(): HTMLElement;
     /** Returns the root draggable element. */
     getRootElement(): HTMLElement;
+    /** Resets a standalone drag item to its initial position. */
+    reset(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Checks whether the element is currently being dragged. */
