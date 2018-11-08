@@ -37,6 +37,7 @@ export declare class CdkAriaLive implements OnDestroy {
     /** The aria-live politeness level to use when announcing messages. */
     politeness: AriaLivePoliteness;
     private _politeness;
+    private _previousAnnouncedText?;
     private _subscription;
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;

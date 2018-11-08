@@ -2070,8 +2070,13 @@ var CdkAriaLive = /** @class */ (function () {
                         .observe(_this._elementRef)
                         .subscribe(function () {
                         /** @type {?} */
-                        var element = _this._elementRef.nativeElement;
-                        _this._liveAnnouncer.announce(element.textContent, _this._politeness);
+                        var elementText = _this._elementRef.nativeElement.textContent;
+                        // The `MutationObserver` fires also for attribute
+                        // changes which we don't want to announce.
+                        if (elementText !== _this._previousAnnouncedText) {
+                            _this._liveAnnouncer.announce(elementText, _this._politeness);
+                            _this._previousAnnouncedText = elementText;
+                        }
                     });
                 });
             }

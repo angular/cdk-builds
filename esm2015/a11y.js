@@ -1555,8 +1555,13 @@ class CdkAriaLive {
                     .observe(this._elementRef)
                     .subscribe(() => {
                     /** @type {?} */
-                    const element = this._elementRef.nativeElement;
-                    this._liveAnnouncer.announce(element.textContent, this._politeness);
+                    const elementText = this._elementRef.nativeElement.textContent;
+                    // The `MutationObserver` fires also for attribute
+                    // changes which we don't want to announce.
+                    if (elementText !== this._previousAnnouncedText) {
+                        this._liveAnnouncer.announce(elementText, this._politeness);
+                        this._previousAnnouncedText = elementText;
+                    }
                 });
             });
         }
