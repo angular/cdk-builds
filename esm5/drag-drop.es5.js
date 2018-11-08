@@ -103,9 +103,7 @@ var DragDropRegistry = /** @class */ (function () {
          */
         this.pointerUp = new Subject();
         /**
-         * Listener used to prevent `touchmove` events while the element is being dragged.
-         * This gets bound once, ahead of time, because WebKit won't preventDefault on a
-         * dynamically-added `touchmove` listener. See https://bugs.webkit.org/show_bug.cgi?id=184250.
+         * Listener used to prevent `touchmove` and `wheel` events while the element is being dragged.
          */
         this._preventScrollListener = function (event) {
             if (_this._activeDragInstances.size) {
@@ -147,10 +145,13 @@ var DragDropRegistry = /** @class */ (function () {
     function (drag) {
         var _this = this;
         this._dragInstances.add(drag);
+        // The `touchmove` event gets bound once, ahead of time, because WebKit
+        // won't preventDefault on a dynamically-added `touchmove` listener.
+        // See https://bugs.webkit.org/show_bug.cgi?id=184250.
         if (this._dragInstances.size === 1) {
             this._ngZone.runOutsideAngular(function () {
-                // The event handler has to be explicitly active, because
-                // newer browsers make it passive by default.
+                // The event handler has to be explicitly active,
+                // because newer browsers make it passive by default.
                 _this._document.addEventListener('touchmove', _this._preventScrollListener, activeCapturingEventOptions);
             });
         }
@@ -228,9 +229,17 @@ var DragDropRegistry = /** @class */ (function () {
                 .set(upEvent, {
                 handler: function (e) { return _this.pointerUp.next(e); },
                 options: true
-            })
-                .forEach(function (config, name) {
-                _this._ngZone.runOutsideAngular(function () {
+            });
+            // TODO(crisbeto): prevent mouse wheel scrolling while
+            // dragging until we've set up proper scroll handling.
+            if (!isTouchEvent) {
+                this._globalListeners.set('wheel', {
+                    handler: this._preventScrollListener,
+                    options: activeCapturingEventOptions
+                });
+            }
+            this._ngZone.runOutsideAngular(function () {
+                _this._globalListeners.forEach(function (config, name) {
                     _this._document.addEventListener(name, config.handler, config.options);
                 });
             });

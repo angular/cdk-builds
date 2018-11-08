@@ -106,9 +106,7 @@ class DragDropRegistry {
          */
         this.pointerUp = new Subject();
         /**
-         * Listener used to prevent `touchmove` events while the element is being dragged.
-         * This gets bound once, ahead of time, because WebKit won't preventDefault on a
-         * dynamically-added `touchmove` listener. See https://bugs.webkit.org/show_bug.cgi?id=184250.
+         * Listener used to prevent `touchmove` and `wheel` events while the element is being dragged.
          */
         this._preventScrollListener = (event) => {
             if (this._activeDragInstances.size) {
@@ -137,10 +135,13 @@ class DragDropRegistry {
      */
     registerDragItem(drag) {
         this._dragInstances.add(drag);
+        // The `touchmove` event gets bound once, ahead of time, because WebKit
+        // won't preventDefault on a dynamically-added `touchmove` listener.
+        // See https://bugs.webkit.org/show_bug.cgi?id=184250.
         if (this._dragInstances.size === 1) {
             this._ngZone.runOutsideAngular(() => {
-                // The event handler has to be explicitly active, because
-                // newer browsers make it passive by default.
+                // The event handler has to be explicitly active,
+                // because newer browsers make it passive by default.
                 this._document.addEventListener('touchmove', this._preventScrollListener, activeCapturingEventOptions);
             });
         }
@@ -194,9 +195,17 @@ class DragDropRegistry {
                 .set(upEvent, {
                 handler: e => this.pointerUp.next(e),
                 options: true
-            })
-                .forEach((config, name) => {
-                this._ngZone.runOutsideAngular(() => {
+            });
+            // TODO(crisbeto): prevent mouse wheel scrolling while
+            // dragging until we've set up proper scroll handling.
+            if (!isTouchEvent) {
+                this._globalListeners.set('wheel', {
+                    handler: this._preventScrollListener,
+                    options: activeCapturingEventOptions
+                });
+            }
+            this._ngZone.runOutsideAngular(() => {
+                this._globalListeners.forEach((config, name) => {
                     this._document.addEventListener(name, config.handler, config.options);
                 });
             });
