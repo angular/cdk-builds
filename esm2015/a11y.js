@@ -1448,15 +1448,25 @@ class LiveAnnouncer {
         this._liveElement = elementToken || this._createLiveElement();
     }
     /**
-     * Announces a message to screenreaders.
-     * @param {?} message Message to be announced to the screenreader
-     * @param {?=} politeness The politeness of the announcer element
-     * @return {?} Promise that will be resolved when the message is added to the DOM.
+     * @param {?} message
+     * @param {...?} args
+     * @return {?}
      */
-    announce(message, politeness = 'polite') {
-        this._liveElement.textContent = '';
+    announce(message, ...args) {
+        /** @type {?} */
+        let politeness;
+        /** @type {?} */
+        let duration;
+        if (args.length === 1 && typeof args[0] === 'number') {
+            duration = args[0];
+        }
+        else {
+            [politeness, duration] = args;
+        }
+        this.clear();
+        clearTimeout(this._previousTimeout);
         // TODO: ensure changing the politeness works on all environments we support.
-        this._liveElement.setAttribute('aria-live', politeness);
+        this._liveElement.setAttribute('aria-live', /** @type {?} */ ((politeness)) || 'polite');
         // This 100ms timeout is necessary for some browser + screen-reader combinations:
         // - Both JAWS and NVDA over IE11 will not announce anything without a non-zero timeout.
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
@@ -1468,9 +1478,23 @@ class LiveAnnouncer {
                 this._previousTimeout = setTimeout(() => {
                     this._liveElement.textContent = message;
                     resolve();
+                    if (typeof duration === 'number') {
+                        this._previousTimeout = setTimeout(() => this.clear(), duration);
+                    }
                 }, 100);
             });
         });
+    }
+    /**
+     * Clears the current text from the announcer element. Can be used to prevent
+     * screen readers from reading the text out again while the user is going
+     * through the page landmarks.
+     * @return {?}
+     */
+    clear() {
+        if (this._liveElement) {
+            this._liveElement.textContent = '';
+        }
     }
     /**
      * @return {?}
