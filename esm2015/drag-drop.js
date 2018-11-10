@@ -458,6 +458,10 @@ function CDK_DRAG_CONFIG_FACTORY() {
  * Options that can be used to bind a passive event listener.
   @type {?} */
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
+/** *
+ * Options that can be used to bind an active event listener.
+  @type {?} */
+const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: false });
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -690,7 +694,7 @@ class CdkDrag {
             .subscribe(() => {
             /** @type {?} */
             const rootElement = this._rootElement = this._getRootElement();
-            rootElement.addEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
+            rootElement.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
             rootElement.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
             this._handles.changes.pipe(startWith(null)).subscribe(() => toggleNativeDragInteractions(rootElement, this.getChildHandles().length > 0));
         });
@@ -701,7 +705,7 @@ class CdkDrag {
     ngOnDestroy() {
         // The directive might have been destroyed before the root element is initialized.
         if (this._rootElement) {
-            this._rootElement.removeEventListener('mousedown', this._pointerDown, passiveEventListenerOptions);
+            this._rootElement.removeEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
             this._rootElement.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
             // Do this check before removing from the registry since it'll
             // stop being considered as dragged once it is removed.
@@ -745,6 +749,15 @@ class CdkDrag {
         // the dragging sequence, in order to prevent it from potentially
         // starting another sequence for a draggable parent somewhere up the DOM tree.
         event.stopPropagation();
+        // If the event started from an element with the native HTML drag&drop, it'll interfere
+        // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
+        // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
+        // it's flaky and it fails if the user drags it away quickly. Also note that we only want
+        // to do this for `mousedown` since doing the same for `touchstart` will stop any `click`
+        // events from firing on touch devices.
+        if (event.target && (/** @type {?} */ (event.target)).draggable && event.type === 'mousedown') {
+            event.preventDefault();
+        }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
         if (this._isDragging() || (!this._isTouchEvent(event) && event.button !== 0)) {
             return;
