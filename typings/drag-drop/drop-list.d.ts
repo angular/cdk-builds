@@ -10,12 +10,14 @@ import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
 import { DragDropRegistry } from './drag-drop-registry';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
+import { CdkDropListGroup } from './drop-list-group';
 /** Container that wraps a set of draggable items. */
 export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     element: ElementRef<HTMLElement>;
     private _dragDropRegistry;
     private _changeDetectorRef;
     private _dir?;
+    private _group?;
     /** Draggable items in the container. */
     _draggables: QueryList<CdkDrag>;
     /**
@@ -51,7 +53,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * by dragging it into another container.
      */
     exited: EventEmitter<CdkDragExit<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined);
+    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Whether an item in the container is being dragged. */
@@ -160,4 +162,6 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param delta Direction in which the user is moving.
      */
     private _getSiblingOffsetPx;
+    /** Gets an array of unique drop lists that the current list is connected to. */
+    private _getConnectedLists;
 }

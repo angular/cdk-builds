@@ -1251,6 +1251,37 @@ function clamp(value, max) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/**
+ * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
+ * elements that are placed inside a `cdkDropListGroup` will be connected to each other
+ * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
+ * from `cdkDropList`.
+ * @template T
+ */
+class CdkDropListGroup {
+    constructor() {
+        /**
+         * Drop lists registered inside the group.
+         */
+        this._items = new Set();
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._items.clear();
+    }
+}
+CdkDropListGroup.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkDropListGroup]'
+            },] },
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /** *
  * Counter used to generate unique ids for drop zones.
   @type {?} */
@@ -1270,12 +1301,14 @@ class CdkDropList {
      * @param {?} _dragDropRegistry
      * @param {?} _changeDetectorRef
      * @param {?=} _dir
+     * @param {?=} _group
      */
-    constructor(element, _dragDropRegistry, _changeDetectorRef, _dir) {
+    constructor(element, _dragDropRegistry, _changeDetectorRef, _dir, _group) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
         this._changeDetectorRef = _changeDetectorRef;
         this._dir = _dir;
+        this._group = _group;
         /**
          * Other draggable containers that this container is connected to and into which the
          * container's items can be transferred. Can either be references to other drop containers,
@@ -1328,12 +1361,18 @@ class CdkDropList {
      */
     ngOnInit() {
         this._dragDropRegistry.registerDropContainer(this);
+        if (this._group) {
+            this._group._items.add(this);
+        }
     }
     /**
      * @return {?}
      */
     ngOnDestroy() {
         this._dragDropRegistry.removeDropContainer(this);
+        if (this._group) {
+            this._group._items.delete(this);
+        }
     }
     /**
      * Starts dragging an item.
@@ -1528,6 +1567,7 @@ class CdkDropList {
     _cachePositions() {
         /** @type {?} */
         const isHorizontal = this.orientation === 'horizontal';
+        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
         this._positionCache.items = this._activeDraggables
             .map(drag => {
             /** @type {?} */
@@ -1559,11 +1599,10 @@ class CdkDropList {
             return isHorizontal ? a.clientRect.left - b.clientRect.left :
                 a.clientRect.top - b.clientRect.top;
         });
-        this._positionCache.siblings = coerceArray(this.connectedTo)
-            .map(drop => typeof drop === 'string' ? /** @type {?} */ ((this._dragDropRegistry.getDropContainer(drop))) : drop)
-            .filter(drop => drop && drop !== this)
-            .map(drop => ({ drop, clientRect: drop.element.nativeElement.getBoundingClientRect() }));
-        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
+        this._positionCache.siblings = this._getConnectedLists().map(drop => ({
+            drop,
+            clientRect: drop.element.nativeElement.getBoundingClientRect()
+        }));
     }
     /**
      * Resets the container to its initial state.
@@ -1694,6 +1733,24 @@ class CdkDropList {
         }
         return siblingOffset;
     }
+    /**
+     * Gets an array of unique drop lists that the current list is connected to.
+     * @return {?}
+     */
+    _getConnectedLists() {
+        /** @type {?} */
+        const siblings = coerceArray(this.connectedTo).map(drop => {
+            return typeof drop === 'string' ? /** @type {?} */ ((this._dragDropRegistry.getDropContainer(drop))) : drop;
+        });
+        if (this._group) {
+            this._group._items.forEach(drop => {
+                if (siblings.indexOf(drop) === -1) {
+                    siblings.push(drop);
+                }
+            });
+        }
+        return siblings.filter(drop => drop && drop !== this);
+    }
 }
 CdkDropList.decorators = [
     { type: Directive, args: [{
@@ -1714,7 +1771,8 @@ CdkDropList.ctorParameters = () => [
     { type: ElementRef },
     { type: DragDropRegistry },
     { type: ChangeDetectorRef },
-    { type: Directionality, decorators: [{ type: Optional }] }
+    { type: Directionality, decorators: [{ type: Optional }] },
+    { type: CdkDropListGroup, decorators: [{ type: Optional }] }
 ];
 CdkDropList.propDecorators = {
     _draggables: [{ type: ContentChildren, args: [forwardRef(() => CdkDrag),] }],
@@ -1766,6 +1824,7 @@ DragDropModule.decorators = [
     { type: NgModule, args: [{
                 declarations: [
                     CdkDropList,
+                    CdkDropListGroup,
                     CdkDrag,
                     CdkDragHandle,
                     CdkDragPreview,
@@ -1773,6 +1832,7 @@ DragDropModule.decorators = [
                 ],
                 exports: [
                     CdkDropList,
+                    CdkDropListGroup,
                     CdkDrag,
                     CdkDragHandle,
                     CdkDragPreview,
@@ -1791,5 +1851,5 @@ DragDropModule.decorators = [
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, copyArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
+export { CdkDropList, CdkDropListGroup, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, copyArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
 //# sourceMappingURL=drag-drop.js.map

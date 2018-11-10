@@ -1420,6 +1420,41 @@ function clamp(value, max) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+/**
+ * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
+ * elements that are placed inside a `cdkDropListGroup` will be connected to each other
+ * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
+ * from `cdkDropList`.
+ * @template T
+ */
+var CdkDropListGroup = /** @class */ (function () {
+    function CdkDropListGroup() {
+        /**
+         * Drop lists registered inside the group.
+         */
+        this._items = new Set();
+    }
+    /**
+     * @return {?}
+     */
+    CdkDropListGroup.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._items.clear();
+    };
+    CdkDropListGroup.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDropListGroup]'
+                },] },
+    ];
+    return CdkDropListGroup;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /** *
  * Counter used to generate unique ids for drop zones.
   @type {?} */
@@ -1434,11 +1469,12 @@ var DROP_PROXIMITY_THRESHOLD = 0.05;
  * @template T
  */
 var CdkDropList = /** @class */ (function () {
-    function CdkDropList(element, _dragDropRegistry, _changeDetectorRef, _dir) {
+    function CdkDropList(element, _dragDropRegistry, _changeDetectorRef, _dir, _group) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
         this._changeDetectorRef = _changeDetectorRef;
         this._dir = _dir;
+        this._group = _group;
         /**
          * Other draggable containers that this container is connected to and into which the
          * container's items can be transferred. Can either be references to other drop containers,
@@ -1494,6 +1530,9 @@ var CdkDropList = /** @class */ (function () {
      */
     function () {
         this._dragDropRegistry.registerDropContainer(this);
+        if (this._group) {
+            this._group._items.add(this);
+        }
     };
     /**
      * @return {?}
@@ -1503,6 +1542,9 @@ var CdkDropList = /** @class */ (function () {
      */
     function () {
         this._dragDropRegistry.removeDropContainer(this);
+        if (this._group) {
+            this._group._items.delete(this);
+        }
     };
     /** Starts dragging an item. */
     /**
@@ -1795,6 +1837,7 @@ var CdkDropList = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this.orientation === 'horizontal';
+        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
         this._positionCache.items = this._activeDraggables
             .map(function (drag) {
             /** @type {?} */
@@ -1826,11 +1869,10 @@ var CdkDropList = /** @class */ (function () {
             return isHorizontal ? a.clientRect.left - b.clientRect.left :
                 a.clientRect.top - b.clientRect.top;
         });
-        this._positionCache.siblings = coerceArray(this.connectedTo)
-            .map(function (drop) { return typeof drop === 'string' ? /** @type {?} */ ((_this._dragDropRegistry.getDropContainer(drop))) : drop; })
-            .filter(function (drop) { return drop && drop !== _this; })
-            .map(function (drop) { return ({ drop: drop, clientRect: drop.element.nativeElement.getBoundingClientRect() }); });
-        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
+        this._positionCache.siblings = this._getConnectedLists().map(function (drop) { return ({
+            drop: drop,
+            clientRect: drop.element.nativeElement.getBoundingClientRect()
+        }); });
     };
     /**
      * Resets the container to its initial state.
@@ -2002,6 +2044,29 @@ var CdkDropList = /** @class */ (function () {
         }
         return siblingOffset;
     };
+    /**
+     * Gets an array of unique drop lists that the current list is connected to.
+     * @return {?}
+     */
+    CdkDropList.prototype._getConnectedLists = /**
+     * Gets an array of unique drop lists that the current list is connected to.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        /** @type {?} */
+        var siblings = coerceArray(this.connectedTo).map(function (drop) {
+            return typeof drop === 'string' ? /** @type {?} */ ((_this._dragDropRegistry.getDropContainer(drop))) : drop;
+        });
+        if (this._group) {
+            this._group._items.forEach(function (drop) {
+                if (siblings.indexOf(drop) === -1) {
+                    siblings.push(drop);
+                }
+            });
+        }
+        return siblings.filter(function (drop) { return drop && drop !== _this; });
+    };
     CdkDropList.decorators = [
         { type: Directive, args: [{
                     selector: '[cdkDropList], cdk-drop-list',
@@ -2021,7 +2086,8 @@ var CdkDropList = /** @class */ (function () {
         { type: ElementRef },
         { type: DragDropRegistry },
         { type: ChangeDetectorRef },
-        { type: Directionality, decorators: [{ type: Optional }] }
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: CdkDropListGroup, decorators: [{ type: Optional }] }
     ]; };
     CdkDropList.propDecorators = {
         _draggables: [{ type: ContentChildren, args: [forwardRef(function () { return CdkDrag; }),] }],
@@ -2076,6 +2142,7 @@ var DragDropModule = /** @class */ (function () {
         { type: NgModule, args: [{
                     declarations: [
                         CdkDropList,
+                        CdkDropListGroup,
                         CdkDrag,
                         CdkDragHandle,
                         CdkDragPreview,
@@ -2083,6 +2150,7 @@ var DragDropModule = /** @class */ (function () {
                     ],
                     exports: [
                         CdkDropList,
+                        CdkDropListGroup,
                         CdkDrag,
                         CdkDragHandle,
                         CdkDragPreview,
@@ -2103,5 +2171,5 @@ var DragDropModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
 
-export { CdkDropList, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, copyArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
+export { CdkDropList, CdkDropListGroup, CDK_DROP_LIST_CONTAINER, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, moveItemInArray, transferArrayItem, copyArrayItem, CdkDragPreview, CdkDragPlaceholder, DragDropModule, DragDropRegistry, CDK_DRAG_PARENT as ɵa };
 //# sourceMappingURL=drag-drop.es5.js.map
