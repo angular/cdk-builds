@@ -895,7 +895,7 @@ class CdkDrag {
             const element = this._rootElement;
             /** @type {?} */
             const elementRect = element.getBoundingClientRect();
-            preview = /** @type {?} */ (element.cloneNode(true));
+            preview = deepCloneNode(element);
             preview.style.width = `${elementRect.width}px`;
             preview.style.height = `${elementRect.height}px`;
             preview.style.transform = getTransform(elementRect.left, elementRect.top);
@@ -922,7 +922,7 @@ class CdkDrag {
             placeholder = this._placeholderRef.rootNodes[0];
         }
         else {
-            placeholder = /** @type {?} */ (this._rootElement.cloneNode(true));
+            placeholder = deepCloneNode(this._rootElement);
         }
         placeholder.classList.add('cdk-drag-placeholder');
         return placeholder;
@@ -1169,6 +1169,18 @@ CdkDrag.propDecorators = {
  */
 function getTransform(x, y) {
     return `translate3d(${x}px, ${y}px, 0)`;
+}
+/**
+ * Creates a deep clone of an element.
+ * @param {?} node
+ * @return {?}
+ */
+function deepCloneNode(node) {
+    /** @type {?} */
+    const clone = /** @type {?} */ (node.cloneNode(true));
+    // Remove the `id` to avoid having multiple elements with the same id on the page.
+    clone.removeAttribute('id');
+    return clone;
 }
 
 /**
