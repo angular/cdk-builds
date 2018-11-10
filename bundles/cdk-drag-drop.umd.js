@@ -1518,6 +1518,10 @@ var CdkDropList = /** @class */ (function () {
          */
         this.exited = new core.EventEmitter();
         /**
+         * Emits as the user is swapping items while actively dragging.
+         */
+        this.sorted = new core.EventEmitter();
+        /**
          * Whether an item in the container is being dragged.
          */
         this._dragging = false;
@@ -1754,6 +1758,12 @@ var CdkDropList = /** @class */ (function () {
         var oldOrder = siblings.slice();
         // Shuffle the array in place.
         moveItemInArray(siblings, currentIndex, newIndex);
+        this.sorted.emit({
+            previousIndex: currentIndex,
+            currentIndex: newIndex,
+            container: this,
+            item: item
+        });
         siblings.forEach(function (sibling, index) {
             // Don't do anything if the position hasn't changed.
             if (oldOrder[index] === sibling) {
@@ -2108,7 +2118,8 @@ var CdkDropList = /** @class */ (function () {
         enterPredicate: [{ type: core.Input, args: ['cdkDropListEnterPredicate',] }],
         dropped: [{ type: core.Output, args: ['cdkDropListDropped',] }],
         entered: [{ type: core.Output, args: ['cdkDropListEntered',] }],
-        exited: [{ type: core.Output, args: ['cdkDropListExited',] }]
+        exited: [{ type: core.Output, args: ['cdkDropListExited',] }],
+        sorted: [{ type: core.Output, args: ['cdkDropListSorted',] }]
     };
     return CdkDropList;
 }());

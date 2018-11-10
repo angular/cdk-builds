@@ -1355,6 +1355,10 @@ class CdkDropList {
          */
         this.exited = new EventEmitter();
         /**
+         * Emits as the user is swapping items while actively dragging.
+         */
+        this.sorted = new EventEmitter();
+        /**
          * Whether an item in the container is being dragged.
          */
         this._dragging = false;
@@ -1520,6 +1524,12 @@ class CdkDropList {
         const oldOrder = siblings.slice();
         // Shuffle the array in place.
         moveItemInArray(siblings, currentIndex, newIndex);
+        this.sorted.emit({
+            previousIndex: currentIndex,
+            currentIndex: newIndex,
+            container: this,
+            item
+        });
         siblings.forEach((sibling, index) => {
             // Don't do anything if the position hasn't changed.
             if (oldOrder[index] === sibling) {
@@ -1796,7 +1806,8 @@ CdkDropList.propDecorators = {
     enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
     dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
     entered: [{ type: Output, args: ['cdkDropListEntered',] }],
-    exited: [{ type: Output, args: ['cdkDropListExited',] }]
+    exited: [{ type: Output, args: ['cdkDropListExited',] }],
+    sorted: [{ type: Output, args: ['cdkDropListSorted',] }]
 };
 /**
  * Finds the index of an item that matches a predicate function. Used as an equivalent

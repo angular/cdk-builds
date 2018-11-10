@@ -9,7 +9,7 @@ import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ChangeDetectorR
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
 import { DragDropRegistry } from './drag-drop-registry';
-import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from './drag-events';
 import { CdkDropListGroup } from './drop-list-group';
 /** Container that wraps a set of draggable items. */
 export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
@@ -53,6 +53,8 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * by dragging it into another container.
      */
     exited: EventEmitter<CdkDragExit<T>>;
+    /** Emits as the user is swapping items while actively dragging. */
+    sorted: EventEmitter<CdkDragSortEvent<T>>;
     constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
