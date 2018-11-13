@@ -430,10 +430,10 @@ var ScrollDispatcher = /** @class */ (function () {
      */
     function (scrollable) {
         var _this = this;
-        /** @type {?} */
-        var scrollSubscription = scrollable.elementScrolled()
-            .subscribe(function () { return _this._scrolled.next(scrollable); });
-        this.scrollContainers.set(scrollable, scrollSubscription);
+        if (!this.scrollContainers.has(scrollable)) {
+            this.scrollContainers.set(scrollable, scrollable.elementScrolled()
+                .subscribe(function () { return _this._scrolled.next(scrollable); }));
+        }
     };
     /**
      * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
@@ -1819,7 +1819,17 @@ var CdkVirtualForOf = /** @class */ (function () {
             this._templateCache.push(view);
         }
         else {
-            view.destroy();
+            /** @type {?} */
+            var index = this._viewContainerRef.indexOf(view);
+            // It's very unlikely that the index will ever be -1, but just in case,
+            // destroy the view on its own, otherwise destroy it through the
+            // container to ensure that all the references are removed.
+            if (index === -1) {
+                view.destroy();
+            }
+            else {
+                this._viewContainerRef.remove(index);
+            }
         }
     };
     /**

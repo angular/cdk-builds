@@ -98,6 +98,9 @@ Directionality.ctorParameters = () => [
  */
 class Dir {
     constructor() {
+        /**
+         * Normalized direction that accounts for invalid/unsupported values.
+         */
         this._dir = 'ltr';
         /**
          * Whether the `value` has been set to its initial value.
@@ -120,6 +123,7 @@ class Dir {
     set dir(value) {
         /** @type {?} */
         const old = this._dir;
+        this._rawDir = value;
         this._dir = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
         if (old !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
@@ -148,7 +152,7 @@ Dir.decorators = [
     { type: Directive, args: [{
                 selector: '[dir]',
                 providers: [{ provide: Directionality, useExisting: Dir }],
-                host: { '[dir]': 'dir' },
+                host: { '[attr.dir]': '_rawDir' },
                 exportAs: 'dir',
             },] },
 ];

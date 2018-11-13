@@ -449,6 +449,7 @@ ListKeyManager = /** @class */ (function () {
         this._letterKeyStream = new rxjs.Subject();
         this._typeaheadSubscription = rxjs.Subscription.EMPTY;
         this._vertical = true;
+        this._allowedModifierKeys = [];
         /**
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
@@ -565,6 +566,26 @@ ListKeyManager = /** @class */ (function () {
         return this;
     };
     /**
+     * Modifier keys which are allowed to be held down and whose default actions will be prevented
+     * as the user is pressing the arrow keys. Defaults to not allowing any modifier keys.
+     */
+    /**
+     * Modifier keys which are allowed to be held down and whose default actions will be prevented
+     * as the user is pressing the arrow keys. Defaults to not allowing any modifier keys.
+     * @param {?} keys
+     * @return {?}
+     */
+    ListKeyManager.prototype.withAllowedModifierKeys = /**
+     * Modifier keys which are allowed to be held down and whose default actions will be prevented
+     * as the user is pressing the arrow keys. Defaults to not allowing any modifier keys.
+     * @param {?} keys
+     * @return {?}
+     */
+    function (keys) {
+        this._allowedModifierKeys = keys;
+        return this;
+    };
+    /**
      * Turns on typeahead mode which allows users to set the active item by typing.
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
@@ -638,14 +659,21 @@ ListKeyManager = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
+        var _this = this;
         /** @type {?} */
         var keyCode = event.keyCode;
+        /** @type {?} */
+        var modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'];
+        /** @type {?} */
+        var isModifierAllowed = modifiers.every(function (modifier) {
+            return !event[modifier] || _this._allowedModifierKeys.indexOf(modifier) > -1;
+        });
         switch (keyCode) {
             case keycodes.TAB:
                 this.tabOut.next();
                 return;
             case keycodes.DOWN_ARROW:
-                if (this._vertical) {
+                if (this._vertical && isModifierAllowed) {
                     this.setNextItemActive();
                     break;
                 }
@@ -653,7 +681,7 @@ ListKeyManager = /** @class */ (function () {
                     return;
                 }
             case keycodes.UP_ARROW:
-                if (this._vertical) {
+                if (this._vertical && isModifierAllowed) {
                     this.setPreviousItemActive();
                     break;
                 }
@@ -661,24 +689,16 @@ ListKeyManager = /** @class */ (function () {
                     return;
                 }
             case keycodes.RIGHT_ARROW:
-                if (this._horizontal === 'ltr') {
-                    this.setNextItemActive();
-                    break;
-                }
-                else if (this._horizontal === 'rtl') {
-                    this.setPreviousItemActive();
+                if (this._horizontal && isModifierAllowed) {
+                    this._horizontal === 'rtl' ? this.setPreviousItemActive() : this.setNextItemActive();
                     break;
                 }
                 else {
                     return;
                 }
             case keycodes.LEFT_ARROW:
-                if (this._horizontal === 'ltr') {
-                    this.setPreviousItemActive();
-                    break;
-                }
-                else if (this._horizontal === 'rtl') {
-                    this.setNextItemActive();
+                if (this._horizontal && isModifierAllowed) {
+                    this._horizontal === 'rtl' ? this.setNextItemActive() : this.setPreviousItemActive();
                     break;
                 }
                 else {
@@ -1571,6 +1591,11 @@ FocusTrap = /** @class */ (function () {
                     "use 'cdkFocusInitial' instead. The deprecated attribute " +
                     "will be removed in 8.0.0", redirectToElement);
             }
+            // Warn the consumer if the element they've pointed to
+            // isn't focusable, when not in production mode.
+            if (core.isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+                console.warn("Element matching '[cdkFocusInitial]' is not focusable.", redirectToElement);
+            }
             redirectToElement.focus();
             return true;
         }
@@ -1950,7 +1975,8 @@ var LiveAnnouncer = /** @class */ (function () {
         // (using JAWS 17 at time of this writing).
         return this._ngZone.runOutsideAngular(function () {
             return new Promise(function (resolve) {
-                setTimeout(function () {
+                clearTimeout(_this._previousTimeout);
+                _this._previousTimeout = setTimeout(function () {
                     _this._liveElement.textContent = message;
                     resolve();
                 }, 100);
@@ -1964,8 +1990,10 @@ var LiveAnnouncer = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        clearTimeout(this._previousTimeout);
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
+            this._liveElement = /** @type {?} */ ((null));
         }
     };
     /**
@@ -2042,8 +2070,13 @@ var CdkAriaLive = /** @class */ (function () {
                         .observe(_this._elementRef)
                         .subscribe(function () {
                         /** @type {?} */
-                        var element = _this._elementRef.nativeElement;
-                        _this._liveAnnouncer.announce(element.textContent, _this._politeness);
+                        var elementText = _this._elementRef.nativeElement.textContent;
+                        // The `MutationObserver` fires also for attribute
+                        // changes which we don't want to announce.
+                        if (elementText !== _this._previousAnnouncedText) {
+                            _this._liveAnnouncer.announce(elementText, _this._politeness);
+                            _this._previousAnnouncedText = elementText;
+                        }
                     });
                 });
             }

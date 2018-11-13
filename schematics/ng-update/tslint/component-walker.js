@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const path_1 = require("path");
 const ts = require("typescript");
+const literal_1 = require("../typescript/literal");
 const component_file_1 = require("./component-file");
 const external_failure_walker_1 = require("./external-failure-walker");
 /**
@@ -52,10 +53,10 @@ class ComponentWalker extends external_failure_walker_1.ExternalFailureWalker {
         }
         for (const property of directiveMetadata.properties) {
             const propertyName = property.name.getText();
-            if (propertyName === 'template' && ts.isStringLiteralLike(property.initializer)) {
+            if (propertyName === 'template' && literal_1.isStringLiteralLike(property.initializer)) {
                 this.visitInlineTemplate(property.initializer);
             }
-            if (propertyName === 'templateUrl' && ts.isStringLiteralLike(property.initializer)) {
+            if (propertyName === 'templateUrl' && literal_1.isStringLiteralLike(property.initializer)) {
                 this._reportExternalTemplate(property.initializer);
             }
             if (propertyName === 'styles' && ts.isArrayLiteralExpression(property.initializer)) {
@@ -79,14 +80,14 @@ class ComponentWalker extends external_failure_walker_1.ExternalFailureWalker {
     }
     _reportInlineStyles(expression) {
         expression.elements.forEach(node => {
-            if (ts.isStringLiteralLike(node)) {
+            if (literal_1.isStringLiteralLike(node)) {
                 this.visitInlineStylesheet(node);
             }
         });
     }
     _visitExternalStylesArrayLiteral(expression) {
         expression.elements.forEach(node => {
-            if (ts.isStringLiteralLike(node)) {
+            if (literal_1.isStringLiteralLike(node)) {
                 const stylePath = path_1.resolve(path_1.dirname(this.getSourceFile().fileName), node.text);
                 // Check if the external stylesheet file exists before proceeding.
                 if (!fs_1.existsSync(stylePath)) {

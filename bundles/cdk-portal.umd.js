@@ -577,6 +577,9 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
          * Whether the portal component is initialized.
          */
         _this._isInitialized = false;
+        /**
+         * Emits when a portal is attached to the outlet.
+         */
         _this.attached = new core.EventEmitter();
         return _this;
     }
@@ -671,7 +674,9 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
             portal.viewContainerRef :
             this._viewContainerRef;
         /** @type {?} */
-        var componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
+        var resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+        /** @type {?} */
+        var componentFactory = resolver.resolveComponentFactory(portal.component);
         /** @type {?} */
         var ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
         _super.prototype.setDisposeFn.call(this, function () { return ref.destroy(); });

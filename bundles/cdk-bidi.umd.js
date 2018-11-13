@@ -102,6 +102,9 @@ var Directionality = /** @class */ (function () {
  */
 var Dir = /** @class */ (function () {
     function Dir() {
+        /**
+         * Normalized direction that accounts for invalid/unsupported values.
+         */
         this._dir = 'ltr';
         /**
          * Whether the `value` has been set to its initial value.
@@ -126,6 +129,7 @@ var Dir = /** @class */ (function () {
         function (value) {
             /** @type {?} */
             var old = this._dir;
+            this._rawDir = value;
             this._dir = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
             if (old !== this._dir && this._isInitialized) {
                 this.change.emit(this._dir);
@@ -169,7 +173,7 @@ var Dir = /** @class */ (function () {
         { type: core.Directive, args: [{
                     selector: '[dir]',
                     providers: [{ provide: Directionality, useExisting: Dir }],
-                    host: { '[dir]': 'dir' },
+                    host: { '[attr.dir]': '_rawDir' },
                     exportAs: 'dir',
                 },] },
     ];

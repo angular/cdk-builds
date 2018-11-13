@@ -11,8 +11,9 @@ import { ElementRef, NgZone, OnDestroy, Provider } from '@angular/core';
 export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
 export declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
-    private readonly _liveElement;
+    private _liveElement;
     private _document;
+    private _previousTimeout?;
     constructor(elementToken: any, _ngZone: NgZone, _document: any);
     /**
      * Announces a message to screenreaders.
@@ -36,6 +37,7 @@ export declare class CdkAriaLive implements OnDestroy {
     /** The aria-live politeness level to use when announcing messages. */
     politeness: AriaLivePoliteness;
     private _politeness;
+    private _previousAnnouncedText?;
     private _subscription;
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;

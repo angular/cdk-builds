@@ -463,21 +463,26 @@ class CdkStepper {
      */
     _onKeydown(event) {
         /** @type {?} */
+        const hasModifier = event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+        /** @type {?} */
         const keyCode = event.keyCode;
-        if (this._keyManager.activeItemIndex != null && (keyCode === SPACE || keyCode === ENTER)) {
-            this.selectedIndex = this._keyManager.activeItemIndex;
+        /** @type {?} */
+        const manager = this._keyManager;
+        if (manager.activeItemIndex != null && !hasModifier &&
+            (keyCode === SPACE || keyCode === ENTER)) {
+            this.selectedIndex = manager.activeItemIndex;
             event.preventDefault();
         }
         else if (keyCode === HOME) {
-            this._keyManager.setFirstItemActive();
+            manager.setFirstItemActive();
             event.preventDefault();
         }
         else if (keyCode === END) {
-            this._keyManager.setLastItemActive();
+            manager.setLastItemActive();
             event.preventDefault();
         }
         else {
-            this._keyManager.onKeydown(event);
+            manager.onKeydown(event);
         }
     }
     /**

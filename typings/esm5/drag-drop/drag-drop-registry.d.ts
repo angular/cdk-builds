@@ -58,9 +58,7 @@ export declare class DragDropRegistry<I, C extends {
     getDropContainer(id: string): C | undefined;
     ngOnDestroy(): void;
     /**
-     * Listener used to prevent `touchmove` events while the element is being dragged.
-     * This gets bound once, ahead of time, because WebKit won't preventDefault on a
-     * dynamically-added `touchmove` listener. See https://bugs.webkit.org/show_bug.cgi?id=184250.
+     * Listener used to prevent `touchmove` and `wheel` events while the element is being dragged.
      */
     private _preventScrollListener;
     /** Clears out the global event listeners from the `document`. */
