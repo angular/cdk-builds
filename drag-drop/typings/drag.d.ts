@@ -125,6 +125,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * when trying to enable dragging on an element that you might not have access to.
      */
     rootElementSelector: string;
+    /** Whether starting to drag this element is disabled. */
+    disabled: boolean;
+    private _disabled;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user stops dragging an item in the container. */
