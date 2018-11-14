@@ -4433,12 +4433,13 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
             null;
     };
     FullscreenOverlayContainer.decorators = [
-        { type: Injectable },
+        { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
     /** @nocollapse */
     FullscreenOverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
+    /** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = defineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(inject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

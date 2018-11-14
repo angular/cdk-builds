@@ -3419,12 +3419,13 @@ class FullscreenOverlayContainer extends OverlayContainer {
     }
 }
 FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 FullscreenOverlayContainer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
+/** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = defineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(inject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
