@@ -462,6 +462,13 @@ const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: t
  * Options that can be used to bind an active event listener.
   @type {?} */
 const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: false });
+/** *
+ * Time in milliseconds for which to ignore mouse events, after
+ * receiving a touch event. Used to avoid doing double work for
+ * touch devices where the browser fires fake mouse events, in
+ * addition to touch events.
+  @type {?} */
+const MOUSE_EVENT_IGNORE_TIME = 800;
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -594,7 +601,7 @@ class CdkDrag {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (distanceX + distanceY >= this._config.dragStartThreshold) {
                     this._hasStartedDragging = true;
-                    this._ngZone.run(() => this._startDragSequence());
+                    this._ngZone.run(() => this._startDragSequence(event));
                 }
                 return;
             }
@@ -650,9 +657,13 @@ class CdkDrag {
                 this._passiveTransform.x = this._activeTransform.x;
                 this._passiveTransform.y = this._activeTransform.y;
                 this._ngZone.run(() => this.ended.emit({ source: this }));
+                this._dragDropRegistry.stopDragging(this);
                 return;
             }
-            this._animatePreviewToPlaceholder().then(() => this._cleanupDragArtifacts());
+            this._animatePreviewToPlaceholder().then(() => {
+                this._cleanupDragArtifacts();
+                this._dragDropRegistry.stopDragging(this);
+            });
         };
         this._document = document;
         _dragDropRegistry.registerDragItem(this);
@@ -749,6 +760,15 @@ class CdkDrag {
         // the dragging sequence, in order to prevent it from potentially
         // starting another sequence for a draggable parent somewhere up the DOM tree.
         event.stopPropagation();
+        /** @type {?} */
+        const isDragging = this._isDragging();
+        /** @type {?} */
+        const isTouchEvent = this._isTouchEvent(event);
+        /** @type {?} */
+        const isAuxiliaryMouseButton = !isTouchEvent && (/** @type {?} */ (event)).button !== 0;
+        /** @type {?} */
+        const isSyntheticEvent = !isTouchEvent && this._lastTouchEventTime &&
+            this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
         // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
         // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -759,7 +779,7 @@ class CdkDrag {
             event.preventDefault();
         }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
-        if (this._isDragging() || (!this._isTouchEvent(event) && event.button !== 0)) {
+        if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
             return;
         }
         // Cache the previous transform amount only after the first drag sequence, because
@@ -784,11 +804,15 @@ class CdkDrag {
     }
     /**
      * Starts the dragging sequence.
+     * @param {?} event
      * @return {?}
      */
-    _startDragSequence() {
+    _startDragSequence(event) {
         // Emit the event on the item before the one on the container.
         this.started.emit({ source: this });
+        if (this._isTouchEvent(event)) {
+            this._lastTouchEventTime = Date.now();
+        }
         if (this.dropContainer) {
             /** @type {?} */
             const element = this._rootElement;

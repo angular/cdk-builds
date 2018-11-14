@@ -514,6 +514,13 @@ var passiveEventListenerOptions = platform.normalizePassiveListenerOptions({ pas
  * Options that can be used to bind an active event listener.
   @type {?} */
 var activeEventListenerOptions = platform.normalizePassiveListenerOptions({ passive: false });
+/** *
+ * Time in milliseconds for which to ignore mouse events, after
+ * receiving a touch event. Used to avoid doing double work for
+ * touch devices where the browser fires fake mouse events, in
+ * addition to touch events.
+  @type {?} */
+var MOUSE_EVENT_IGNORE_TIME = 800;
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -636,7 +643,7 @@ var CdkDrag = /** @class */ (function () {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (distanceX + distanceY >= _this._config.dragStartThreshold) {
                     _this._hasStartedDragging = true;
-                    _this._ngZone.run(function () { return _this._startDragSequence(); });
+                    _this._ngZone.run(function () { return _this._startDragSequence(event); });
                 }
                 return;
             }
@@ -692,9 +699,13 @@ var CdkDrag = /** @class */ (function () {
                 _this._passiveTransform.x = _this._activeTransform.x;
                 _this._passiveTransform.y = _this._activeTransform.y;
                 _this._ngZone.run(function () { return _this.ended.emit({ source: _this }); });
+                _this._dragDropRegistry.stopDragging(_this);
                 return;
             }
-            _this._animatePreviewToPlaceholder().then(function () { return _this._cleanupDragArtifacts(); });
+            _this._animatePreviewToPlaceholder().then(function () {
+                _this._cleanupDragArtifacts();
+                _this._dragDropRegistry.stopDragging(_this);
+            });
         };
         this._document = document;
         _dragDropRegistry.registerDragItem(this);
@@ -836,6 +847,15 @@ var CdkDrag = /** @class */ (function () {
         // the dragging sequence, in order to prevent it from potentially
         // starting another sequence for a draggable parent somewhere up the DOM tree.
         event.stopPropagation();
+        /** @type {?} */
+        var isDragging = this._isDragging();
+        /** @type {?} */
+        var isTouchEvent = this._isTouchEvent(event);
+        /** @type {?} */
+        var isAuxiliaryMouseButton = !isTouchEvent && (/** @type {?} */ (event)).button !== 0;
+        /** @type {?} */
+        var isSyntheticEvent = !isTouchEvent && this._lastTouchEventTime &&
+            this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
         // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
         // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -846,7 +866,7 @@ var CdkDrag = /** @class */ (function () {
             event.preventDefault();
         }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
-        if (this._isDragging() || (!this._isTouchEvent(event) && event.button !== 0)) {
+        if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
             return;
         }
         // Cache the previous transform amount only after the first drag sequence, because
@@ -871,15 +891,20 @@ var CdkDrag = /** @class */ (function () {
     };
     /**
      * Starts the dragging sequence.
+     * @param {?} event
      * @return {?}
      */
     CdkDrag.prototype._startDragSequence = /**
      * Starts the dragging sequence.
+     * @param {?} event
      * @return {?}
      */
-    function () {
+    function (event) {
         // Emit the event on the item before the one on the container.
         this.started.emit({ source: this });
+        if (this._isTouchEvent(event)) {
+            this._lastTouchEventTime = Date.now();
+        }
         if (this.dropContainer) {
             /** @type {?} */
             var element = this._rootElement;
