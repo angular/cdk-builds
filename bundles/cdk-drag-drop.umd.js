@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/bidi'), require('@angular/cdk/scrolling'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.bidi,global.ng.cdk.scrolling,global.rxjs.operators,global.ng.cdk.coercion));
-}(this, (function (exports,core,common,platform,rxjs,bidi,scrolling,operators,coercion) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/scrolling'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.coercion,global.ng.cdk.bidi,global.ng.cdk.scrolling,global.rxjs.operators));
+}(this, (function (exports,core,common,platform,rxjs,coercion,bidi,scrolling,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -351,9 +351,27 @@ var CDK_DRAG_PARENT = new core.InjectionToken('CDK_DRAG_PARENT');
 var CdkDragHandle = /** @class */ (function () {
     function CdkDragHandle(element, parentDrag) {
         this.element = element;
+        this._disabled = false;
         this._parentDrag = parentDrag;
         toggleNativeDragInteractions(element.nativeElement, false);
     }
+    Object.defineProperty(CdkDragHandle.prototype, "disabled", {
+        /** Whether starting to drag through this handle is disabled. */
+        get: /**
+         * Whether starting to drag through this handle is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     CdkDragHandle.decorators = [
         { type: core.Directive, args: [{
                     selector: '[cdkDragHandle]',
@@ -367,6 +385,9 @@ var CdkDragHandle = /** @class */ (function () {
         { type: core.ElementRef },
         { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_PARENT,] }, { type: core.Optional }] }
     ]; };
+    CdkDragHandle.propDecorators = {
+        disabled: [{ type: core.Input, args: ['cdkDragHandleDisabled',] }]
+    };
     return CdkDragHandle;
 }());
 
@@ -514,6 +535,13 @@ var passiveEventListenerOptions = platform.normalizePassiveListenerOptions({ pas
  * Options that can be used to bind an active event listener.
   @type {?} */
 var activeEventListenerOptions = platform.normalizePassiveListenerOptions({ passive: false });
+/** *
+ * Time in milliseconds for which to ignore mouse events, after
+ * receiving a touch event. Used to avoid doing double work for
+ * touch devices where the browser fires fake mouse events, in
+ * addition to touch events.
+  @type {?} */
+var MOUSE_EVENT_IGNORE_TIME = 800;
 /**
  * Element that can be moved inside a CdkDropList container.
  * @template T
@@ -562,6 +590,7 @@ var CdkDrag = /** @class */ (function () {
          * Subscription to the stream that initializes the root element.
          */
         this._rootElementInitSubscription = rxjs.Subscription.EMPTY;
+        this._disabled = false;
         /**
          * Emits when the user starts dragging the item.
          */
@@ -611,11 +640,11 @@ var CdkDrag = /** @class */ (function () {
                     var target = event.target;
                     return !!target && (target === element || element.contains(/** @type {?} */ (target)));
                 });
-                if (targetHandle) {
+                if (targetHandle && !targetHandle.disabled && !_this.disabled) {
                     _this._initializeDragSequence(targetHandle.element.nativeElement, event);
                 }
             }
-            else {
+            else if (!_this.disabled) {
                 _this._initializeDragSequence(_this._rootElement, event);
             }
         };
@@ -636,7 +665,7 @@ var CdkDrag = /** @class */ (function () {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (distanceX + distanceY >= _this._config.dragStartThreshold) {
                     _this._hasStartedDragging = true;
-                    _this._ngZone.run(function () { return _this._startDragSequence(); });
+                    _this._ngZone.run(function () { return _this._startDragSequence(event); });
                 }
                 return;
             }
@@ -692,13 +721,36 @@ var CdkDrag = /** @class */ (function () {
                 _this._passiveTransform.x = _this._activeTransform.x;
                 _this._passiveTransform.y = _this._activeTransform.y;
                 _this._ngZone.run(function () { return _this.ended.emit({ source: _this }); });
+                _this._dragDropRegistry.stopDragging(_this);
                 return;
             }
-            _this._animatePreviewToPlaceholder().then(function () { return _this._cleanupDragArtifacts(); });
+            _this._animatePreviewToPlaceholder().then(function () {
+                _this._cleanupDragArtifacts();
+                _this._dragDropRegistry.stopDragging(_this);
+            });
         };
         this._document = document;
         _dragDropRegistry.registerDragItem(this);
     }
+    Object.defineProperty(CdkDrag.prototype, "disabled", {
+        /** Whether starting to drag this element is disabled. */
+        get: /**
+         * Whether starting to drag this element is disabled.
+         * @return {?}
+         */
+        function () {
+            return this._disabled || (this.dropContainer && this.dropContainer.disabled);
+        },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -836,6 +888,15 @@ var CdkDrag = /** @class */ (function () {
         // the dragging sequence, in order to prevent it from potentially
         // starting another sequence for a draggable parent somewhere up the DOM tree.
         event.stopPropagation();
+        /** @type {?} */
+        var isDragging = this._isDragging();
+        /** @type {?} */
+        var isTouchEvent = this._isTouchEvent(event);
+        /** @type {?} */
+        var isAuxiliaryMouseButton = !isTouchEvent && (/** @type {?} */ (event)).button !== 0;
+        /** @type {?} */
+        var isSyntheticEvent = !isTouchEvent && this._lastTouchEventTime &&
+            this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
         // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
         // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -846,7 +907,7 @@ var CdkDrag = /** @class */ (function () {
             event.preventDefault();
         }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
-        if (this._isDragging() || (!this._isTouchEvent(event) && event.button !== 0)) {
+        if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
             return;
         }
         // Cache the previous transform amount only after the first drag sequence, because
@@ -871,15 +932,20 @@ var CdkDrag = /** @class */ (function () {
     };
     /**
      * Starts the dragging sequence.
+     * @param {?} event
      * @return {?}
      */
     CdkDrag.prototype._startDragSequence = /**
      * Starts the dragging sequence.
+     * @param {?} event
      * @return {?}
      */
-    function () {
+    function (event) {
         // Emit the event on the item before the one on the container.
         this.started.emit({ source: this });
+        if (this._isTouchEvent(event)) {
+            this._lastTouchEventTime = Date.now();
+        }
         if (this.dropContainer) {
             /** @type {?} */
             var element = this._rootElement;
@@ -1318,6 +1384,7 @@ var CdkDrag = /** @class */ (function () {
         data: [{ type: core.Input, args: ['cdkDragData',] }],
         lockAxis: [{ type: core.Input, args: ['cdkDragLockAxis',] }],
         rootElementSelector: [{ type: core.Input, args: ['cdkDragRootElement',] }],
+        disabled: [{ type: core.Input, args: ['cdkDragDisabled',] }],
         started: [{ type: core.Output, args: ['cdkDragStarted',] }],
         ended: [{ type: core.Output, args: ['cdkDragEnded',] }],
         entered: [{ type: core.Output, args: ['cdkDragEntered',] }],
@@ -1499,6 +1566,7 @@ var CdkDropList = /** @class */ (function () {
          * in the `connectedTo` of another `CdkDropList`.
          */
         this.id = "cdk-drop-list-" + _uniqueIdCounter++;
+        this._disabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -1535,6 +1603,23 @@ var CdkDropList = /** @class */ (function () {
          */
         this._previousSwap = { drag: /** @type {?} */ (null), delta: 0 };
     }
+    Object.defineProperty(CdkDropList.prototype, "disabled", {
+        /** Whether starting a dragging sequence from this container is disabled. */
+        get: /**
+         * Whether starting a dragging sequence from this container is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -2115,6 +2200,7 @@ var CdkDropList = /** @class */ (function () {
         orientation: [{ type: core.Input, args: ['cdkDropListOrientation',] }],
         id: [{ type: core.Input }],
         lockAxis: [{ type: core.Input, args: ['cdkDropListLockAxis',] }],
+        disabled: [{ type: core.Input, args: ['cdkDropListDisabled',] }],
         enterPredicate: [{ type: core.Input, args: ['cdkDropListEnterPredicate',] }],
         dropped: [{ type: core.Output, args: ['cdkDropListDropped',] }],
         entered: [{ type: core.Output, args: ['cdkDropListEntered',] }],

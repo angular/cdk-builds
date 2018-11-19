@@ -101,6 +101,12 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _pointerMoveSubscription;
     /** Subscription to the event that is dispatched when the user lifts their pointer. */
     private _pointerUpSubscription;
+    /**
+     * Time at which the last touch event occurred. Used to avoid firing the same
+     * events multiple times on touch devices where the browser will fire a fake
+     * mouse event for each touch event, after a certain time.
+     */
+    private _lastTouchEventTime;
     /** Subscription to the stream that initializes the root element. */
     private _rootElementInitSubscription;
     /** Elements that can be used to drag the draggable item. */
@@ -119,6 +125,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * when trying to enable dragging on an element that you might not have access to.
      */
     rootElementSelector: string;
+    /** Whether starting to drag this element is disabled. */
+    disabled: boolean;
+    private _disabled;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user stops dragging an item in the container. */

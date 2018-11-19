@@ -37,6 +37,9 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     id: string;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
+    /** Whether starting a dragging sequence from this container is disabled. */
+    disabled: boolean;
+    private _disabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.

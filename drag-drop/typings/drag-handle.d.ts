@@ -11,5 +11,8 @@ export declare class CdkDragHandle {
     element: ElementRef<HTMLElement>;
     /** Closest parent draggable instance. */
     _parentDrag: {} | undefined;
+    /** Whether starting to drag through this handle is disabled. */
+    disabled: boolean;
+    private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
 }

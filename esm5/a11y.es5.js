@@ -2090,14 +2090,14 @@ var CdkAriaLive = /** @class */ (function () {
 }());
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentDispatcher
+ * @param {?} parentAnnouncer
  * @param {?} liveElement
  * @param {?} _document
  * @param {?} ngZone
  * @return {?}
  */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document, ngZone) {
-    return parentDispatcher || new LiveAnnouncer(liveElement, _document, ngZone);
+function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document, ngZone) {
+    return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
 }
 /** *
  * \@docs-private \@deprecated \@breaking-change 8.0.0
