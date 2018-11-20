@@ -35,6 +35,41 @@ var CdkStepLabel = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
  */
+var CdkStepHeader = /** @class */ (function () {
+    function CdkStepHeader(_elementRef) {
+        this._elementRef = _elementRef;
+    }
+    /** Focuses the step header. */
+    /**
+     * Focuses the step header.
+     * @return {?}
+     */
+    CdkStepHeader.prototype.focus = /**
+     * Focuses the step header.
+     * @return {?}
+     */
+    function () {
+        this._elementRef.nativeElement.focus();
+    };
+    CdkStepHeader.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkStepHeader]',
+                    host: {
+                        'role': 'tab',
+                    },
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepHeader.ctorParameters = function () { return [
+        { type: core.ElementRef }
+    ]; };
+    return CdkStepHeader;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
 /** *
  * Used to generate unique ID for each stepper component.
   @type {?} */
@@ -334,6 +369,9 @@ var CdkStepper = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        // Note that while the step headers are content children by default, any components that
+        // extend this one might have them as view chidren. We initialize the keyboard handling in
+        // AfterViewInit so we're guaranteed for both view and content children to be defined.
         this._keyManager = new a11y.FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
@@ -679,6 +717,7 @@ var CdkStepper = /** @class */ (function () {
     ]; };
     CdkStepper.propDecorators = {
         _steps: [{ type: core.ContentChildren, args: [CdkStep,] }],
+        _stepHeader: [{ type: core.ContentChildren, args: [CdkStepHeader,] }],
         linear: [{ type: core.Input }],
         selectedIndex: [{ type: core.Input }],
         selected: [{ type: core.Input }],
@@ -760,8 +799,22 @@ var CdkStepperModule = /** @class */ (function () {
     CdkStepperModule.decorators = [
         { type: core.NgModule, args: [{
                     imports: [bidi.BidiModule, common.CommonModule],
-                    exports: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
-                    declarations: [CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious]
+                    exports: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ],
+                    declarations: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ]
                 },] },
     ];
     return CdkStepperModule;
@@ -776,6 +829,7 @@ exports.CdkStepLabel = CdkStepLabel;
 exports.CdkStepperNext = CdkStepperNext;
 exports.CdkStepperPrevious = CdkStepperPrevious;
 exports.CdkStepperModule = CdkStepperModule;
+exports.CdkStepHeader = CdkStepHeader;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
