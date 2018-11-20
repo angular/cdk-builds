@@ -14,7 +14,7 @@ import { Version } from '@angular/core';
 /** *
  * Current version of the Angular Component Development Kit.
   @type {?} */
-var VERSION = new Version('7.0.4-8d9db6a');
+var VERSION = new Version('7.0.4-4e17003');
 
 /**
  * @fileoverview added by tsickle
