@@ -253,6 +253,27 @@ var SINGLE_QUOTE = 222;
 /** @type {?} */
 var MAC_META = 224;
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ */
+/**
+ * Checks whether a modifier key is pressed.
+ * @param {?} event Event to be checked.
+ * @param {...?} modifiers
+ * @return {?}
+ */
+function hasModifierKey(event) {
+    var modifiers = [];
+    for (var _i = 1; _i < arguments.length; _i++) {
+        modifiers[_i - 1] = arguments[_i];
+    }
+    if (modifiers.length) {
+        return modifiers.some(function (modifier) { return event[modifier]; });
+    }
+    return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
+}
+
 exports.MAC_ENTER = MAC_ENTER;
 exports.BACKSPACE = BACKSPACE;
 exports.TAB = TAB;
@@ -371,6 +392,7 @@ exports.BACKSLASH = BACKSLASH;
 exports.CLOSE_SQUARE_BRACKET = CLOSE_SQUARE_BRACKET;
 exports.SINGLE_QUOTE = SINGLE_QUOTE;
 exports.MAC_META = MAC_META;
+exports.hasModifierKey = hasModifierKey;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

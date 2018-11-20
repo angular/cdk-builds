@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -345,6 +345,7 @@ class ListKeyManager {
         this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
+        this._allowedModifierKeys = [];
         /**
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
@@ -417,6 +418,16 @@ class ListKeyManager {
         return this;
     }
     /**
+     * Modifier keys which are allowed to be held down and whose default actions will be prevented
+     * as the user is pressing the arrow keys. Defaults to not allowing any modifier keys.
+     * @param {?} keys
+     * @return {?}
+     */
+    withAllowedModifierKeys(keys) {
+        this._allowedModifierKeys = keys;
+        return this;
+    }
+    /**
      * Turns on typeahead mode which allows users to set the active item by typing.
      * @param {?=} debounceInterval Time to wait after the last keystroke before setting the active item.
      * @return {?}
@@ -468,12 +479,18 @@ class ListKeyManager {
     onKeydown(event) {
         /** @type {?} */
         const keyCode = event.keyCode;
+        /** @type {?} */
+        const modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'];
+        /** @type {?} */
+        const isModifierAllowed = modifiers.every(modifier => {
+            return !event[modifier] || this._allowedModifierKeys.indexOf(modifier) > -1;
+        });
         switch (keyCode) {
             case TAB:
                 this.tabOut.next();
                 return;
             case DOWN_ARROW:
-                if (this._vertical) {
+                if (this._vertical && isModifierAllowed) {
                     this.setNextItemActive();
                     break;
                 }
@@ -481,7 +498,7 @@ class ListKeyManager {
                     return;
                 }
             case UP_ARROW:
-                if (this._vertical) {
+                if (this._vertical && isModifierAllowed) {
                     this.setPreviousItemActive();
                     break;
                 }
@@ -489,24 +506,16 @@ class ListKeyManager {
                     return;
                 }
             case RIGHT_ARROW:
-                if (this._horizontal === 'ltr') {
-                    this.setNextItemActive();
-                    break;
-                }
-                else if (this._horizontal === 'rtl') {
-                    this.setPreviousItemActive();
+                if (this._horizontal && isModifierAllowed) {
+                    this._horizontal === 'rtl' ? this.setPreviousItemActive() : this.setNextItemActive();
                     break;
                 }
                 else {
                     return;
                 }
             case LEFT_ARROW:
-                if (this._horizontal === 'ltr') {
-                    this.setPreviousItemActive();
-                    break;
-                }
-                else if (this._horizontal === 'rtl') {
-                    this.setNextItemActive();
+                if (this._horizontal && isModifierAllowed) {
+                    this._horizontal === 'rtl' ? this.setNextItemActive() : this.setPreviousItemActive();
                     break;
                 }
                 else {
@@ -1158,6 +1167,11 @@ class FocusTrap {
                     `use 'cdkFocusInitial' instead. The deprecated attribute ` +
                     `will be removed in 8.0.0`, redirectToElement);
             }
+            // Warn the consumer if the element they've pointed to
+            // isn't focusable, when not in production mode.
+            if (isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+                console.warn(`Element matching '[cdkFocusInitial]' is not focusable.`, redirectToElement);
+            }
             redirectToElement.focus();
             return true;
         }
@@ -1450,7 +1464,8 @@ class LiveAnnouncer {
         // (using JAWS 17 at time of this writing).
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
-                setTimeout(() => {
+                clearTimeout(this._previousTimeout);
+                this._previousTimeout = setTimeout(() => {
                     this._liveElement.textContent = message;
                     resolve();
                 }, 100);
@@ -1461,8 +1476,10 @@ class LiveAnnouncer {
      * @return {?}
      */
     ngOnDestroy() {
+        clearTimeout(this._previousTimeout);
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
+            this._liveElement = /** @type {?} */ ((null));
         }
     }
     /**
@@ -1538,8 +1555,13 @@ class CdkAriaLive {
                     .observe(this._elementRef)
                     .subscribe(() => {
                     /** @type {?} */
-                    const element = this._elementRef.nativeElement;
-                    this._liveAnnouncer.announce(element.textContent, this._politeness);
+                    const elementText = this._elementRef.nativeElement.textContent;
+                    // The `MutationObserver` fires also for attribute
+                    // changes which we don't want to announce.
+                    if (elementText !== this._previousAnnouncedText) {
+                        this._liveAnnouncer.announce(elementText, this._politeness);
+                        this._previousAnnouncedText = elementText;
+                    }
                 });
             });
         }
@@ -1571,14 +1593,14 @@ CdkAriaLive.propDecorators = {
 };
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentDispatcher
+ * @param {?} parentAnnouncer
  * @param {?} liveElement
  * @param {?} _document
  * @param {?} ngZone
  * @return {?}
  */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement, _document, ngZone) {
-    return parentDispatcher || new LiveAnnouncer(liveElement, _document, ngZone);
+function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document, ngZone) {
+    return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
 }
 /** *
  * \@docs-private \@deprecated \@breaking-change 8.0.0

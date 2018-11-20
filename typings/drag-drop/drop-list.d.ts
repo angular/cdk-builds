@@ -5,16 +5,19 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ChangeDetectorRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
 import { DragDropRegistry } from './drag-drop-registry';
-import { CdkDragDrop, CdkDragEnter, CdkDragExit } from './drag-events';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from './drag-events';
+import { CdkDropListGroup } from './drop-list-group';
 /** Container that wraps a set of draggable items. */
 export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     element: ElementRef<HTMLElement>;
     private _dragDropRegistry;
+    private _changeDetectorRef;
     private _dir?;
+    private _group?;
     /** Draggable items in the container. */
     _draggables: QueryList<CdkDrag>;
     /**
@@ -34,6 +37,9 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     id: string;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
+    /** Whether starting a dragging sequence from this container is disabled. */
+    disabled: boolean;
+    private _disabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
@@ -50,7 +56,9 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * by dragging it into another container.
      */
     exited: EventEmitter<CdkDragExit<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _dir?: Directionality | undefined);
+    /** Emits as the user is swapping items while actively dragging. */
+    sorted: EventEmitter<CdkDragSortEvent<T>>;
+    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Whether an item in the container is being dragged. */
@@ -116,11 +124,10 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     /**
      * Checks whether an item that started in this container can be returned to it,
      * after it was moved out into another container.
-     * @param item Item that is being checked.
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _canReturnItem(item: CdkDrag, x: number, y: number): boolean;
+    _canReturnItem(x: number, y: number): boolean;
     /** Refreshes the position cache of the items and sibling containers. */
     private _cachePositions;
     /** Resets the container to its initial state. */
@@ -146,4 +153,20 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param pointerY Coordinates along the Y axis.
      */
     private _isPointerNearDropContainer;
+    /**
+     * Gets the offset in pixels by which the item that is being dragged should be moved.
+     * @param currentPosition Current position of the item.
+     * @param newPosition Position of the item where the current item should be moved.
+     * @param delta Direction in which the user is moving.
+     */
+    private _getItemOffsetPx;
+    /**
+     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
+     * @param currentIndex Index of the item currently being dragged.
+     * @param siblings All of the items in the list.
+     * @param delta Direction in which the user is moving.
+     */
+    private _getSiblingOffsetPx;
+    /** Gets an array of unique drop lists that the current list is connected to. */
+    private _getConnectedLists;
 }

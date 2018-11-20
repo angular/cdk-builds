@@ -101,6 +101,14 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _pointerMoveSubscription;
     /** Subscription to the event that is dispatched when the user lifts their pointer. */
     private _pointerUpSubscription;
+    /**
+     * Time at which the last touch event occurred. Used to avoid firing the same
+     * events multiple times on touch devices where the browser will fire a fake
+     * mouse event for each touch event, after a certain time.
+     */
+    private _lastTouchEventTime;
+    /** Subscription to the stream that initializes the root element. */
+    private _rootElementInitSubscription;
     /** Elements that can be used to drag the draggable item. */
     _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
@@ -117,6 +125,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * when trying to enable dragging on an element that you might not have access to.
      */
     rootElementSelector: string;
+    /** Whether starting to drag this element is disabled. */
+    disabled: boolean;
+    private _disabled;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user stops dragging an item in the container. */
@@ -144,10 +155,14 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     getPlaceholderElement(): HTMLElement;
     /** Returns the root draggable element. */
     getRootElement(): HTMLElement;
+    /** Resets a standalone drag item to its initial position. */
+    reset(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Checks whether the element is currently being dragged. */
     _isDragging(): boolean;
+    /** Gets only handles that are not inside descendant `CdkDrag` instances. */
+    private getChildHandles;
     /** Handler for the `mousedown`/`touchstart` events. */
     _pointerDown: (event: TouchEvent | MouseEvent) => void;
     /**

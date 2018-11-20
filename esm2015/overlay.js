@@ -1120,38 +1120,39 @@ class OverlayRef {
     detachBackdrop() {
         /** @type {?} */
         let backdropToDetach = this._backdropElement;
-        if (backdropToDetach) {
-            /** @type {?} */
-            let timeoutId;
-            /** @type {?} */
-            let finishDetach = () => {
-                // It may not be attached to anything in certain cases (e.g. unit tests).
-                if (backdropToDetach && backdropToDetach.parentNode) {
-                    backdropToDetach.parentNode.removeChild(backdropToDetach);
-                }
-                // It is possible that a new portal has been attached to this overlay since we started
-                // removing the backdrop. If that is the case, only clear the backdrop reference if it
-                // is still the same instance that we started to remove.
-                if (this._backdropElement == backdropToDetach) {
-                    this._backdropElement = null;
-                }
-                clearTimeout(timeoutId);
-            };
-            backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
-            if (this._config.backdropClass) {
-                this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
-            }
-            this._ngZone.runOutsideAngular(() => {
-                /** @type {?} */ ((backdropToDetach)).addEventListener('transitionend', finishDetach);
-            });
-            // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
-            // In this case we make it unclickable and we try to remove it after a delay.
-            backdropToDetach.style.pointerEvents = 'none';
-            // Run this outside the Angular zone because there's nothing that Angular cares about.
-            // If it were to run inside the Angular zone, every test that used Overlay would have to be
-            // either async or fakeAsync.
-            timeoutId = this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
+        if (!backdropToDetach) {
+            return;
         }
+        /** @type {?} */
+        let timeoutId;
+        /** @type {?} */
+        let finishDetach = () => {
+            // It may not be attached to anything in certain cases (e.g. unit tests).
+            if (backdropToDetach && backdropToDetach.parentNode) {
+                backdropToDetach.parentNode.removeChild(backdropToDetach);
+            }
+            // It is possible that a new portal has been attached to this overlay since we started
+            // removing the backdrop. If that is the case, only clear the backdrop reference if it
+            // is still the same instance that we started to remove.
+            if (this._backdropElement == backdropToDetach) {
+                this._backdropElement = null;
+            }
+            if (this._config.backdropClass) {
+                this._toggleClasses(/** @type {?} */ ((backdropToDetach)), this._config.backdropClass, false);
+            }
+            clearTimeout(timeoutId);
+        };
+        backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
+        this._ngZone.runOutsideAngular(() => {
+            /** @type {?} */ ((backdropToDetach)).addEventListener('transitionend', finishDetach);
+        });
+        // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
+        // In this case we make it unclickable and we try to remove it after a delay.
+        backdropToDetach.style.pointerEvents = 'none';
+        // Run this outside the Angular zone because there's nothing that Angular cares about.
+        // If it were to run inside the Angular zone, every test that used Overlay would have to be
+        // either async or fakeAsync.
+        timeoutId = this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
     }
     /**
      * Toggles a single CSS class or an array of classes on an element.
@@ -3419,12 +3420,13 @@ class FullscreenOverlayContainer extends OverlayContainer {
     }
 }
 FullscreenOverlayContainer.decorators = [
-    { type: Injectable },
+    { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
 /** @nocollapse */
 FullscreenOverlayContainer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
+/** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = defineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(inject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

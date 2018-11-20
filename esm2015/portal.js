@@ -417,6 +417,9 @@ class CdkPortalOutlet extends BasePortalOutlet {
          * Whether the portal component is initialized.
          */
         this._isInitialized = false;
+        /**
+         * Emits when a portal is attached to the outlet.
+         */
         this.attached = new EventEmitter();
     }
     /**
@@ -481,7 +484,9 @@ class CdkPortalOutlet extends BasePortalOutlet {
             portal.viewContainerRef :
             this._viewContainerRef;
         /** @type {?} */
-        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
+        const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+        /** @type {?} */
+        const componentFactory = resolver.resolveComponentFactory(portal.component);
         /** @type {?} */
         const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
         super.setDisposeFn(() => ref.destroy());

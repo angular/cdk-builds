@@ -9,7 +9,7 @@ import { Directive, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Com
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { END, ENTER, HOME, SPACE } from '@angular/cdk/keycodes';
+import { END, ENTER, HOME, SPACE, hasModifierKey } from '@angular/cdk/keycodes';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import '@angular/forms';
 import { Subject, of } from 'rxjs';
@@ -463,21 +463,26 @@ class CdkStepper {
      */
     _onKeydown(event) {
         /** @type {?} */
+        const hasModifier = hasModifierKey(event);
+        /** @type {?} */
         const keyCode = event.keyCode;
-        if (this._keyManager.activeItemIndex != null && (keyCode === SPACE || keyCode === ENTER)) {
-            this.selectedIndex = this._keyManager.activeItemIndex;
+        /** @type {?} */
+        const manager = this._keyManager;
+        if (manager.activeItemIndex != null && !hasModifier &&
+            (keyCode === SPACE || keyCode === ENTER)) {
+            this.selectedIndex = manager.activeItemIndex;
             event.preventDefault();
         }
         else if (keyCode === HOME) {
-            this._keyManager.setFirstItemActive();
+            manager.setFirstItemActive();
             event.preventDefault();
         }
         else if (keyCode === END) {
-            this._keyManager.setLastItemActive();
+            manager.setLastItemActive();
             event.preventDefault();
         }
         else {
-            this._keyManager.onKeydown(event);
+            manager.onKeydown(event);
         }
     }
     /**
