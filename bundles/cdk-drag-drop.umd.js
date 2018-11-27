@@ -1625,7 +1625,8 @@ var CdkDropListGroup = /** @class */ (function () {
     };
     CdkDropListGroup.decorators = [
         { type: core.Directive, args: [{
-                    selector: '[cdkDropListGroup]'
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
                 },] },
     ];
     return CdkDropListGroup;
@@ -1646,6 +1647,7 @@ var _uniqueIdCounter = 0;
  * @type {?}
  */
 var DROP_PROXIMITY_THRESHOLD = 0.05;
+var ɵ0 = undefined;
 /**
  * Container that wraps a set of draggable items.
  * @template T
@@ -2340,6 +2342,8 @@ var CdkDropList = /** @class */ (function () {
                     selector: '[cdkDropList], cdk-drop-list',
                     exportAs: 'cdkDropList',
                     providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CdkDropListGroup, useValue: ɵ0 },
                         { provide: CDK_DROP_LIST_CONTAINER, useExisting: CdkDropList },
                     ],
                     host: {
@@ -2355,7 +2359,7 @@ var CdkDropList = /** @class */ (function () {
         { type: DragDropRegistry },
         { type: core.ChangeDetectorRef },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
-        { type: CdkDropListGroup, decorators: [{ type: core.Optional }] }
+        { type: CdkDropListGroup, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
         _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] }],

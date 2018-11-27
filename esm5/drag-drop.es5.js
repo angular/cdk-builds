@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, ContentChild, InjectionToken, SkipSelf, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
+import { Injectable, NgZone, Inject, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, InjectionToken, ViewContainerRef, TemplateRef, NgModule, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { Subject, Observable, Subscription } from 'rxjs';
@@ -1628,7 +1628,8 @@ var CdkDropListGroup = /** @class */ (function () {
     };
     CdkDropListGroup.decorators = [
         { type: Directive, args: [{
-                    selector: '[cdkDropListGroup]'
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
                 },] },
     ];
     return CdkDropListGroup;
@@ -1649,6 +1650,7 @@ var _uniqueIdCounter = 0;
  * @type {?}
  */
 var DROP_PROXIMITY_THRESHOLD = 0.05;
+var ɵ0 = undefined;
 /**
  * Container that wraps a set of draggable items.
  * @template T
@@ -2343,6 +2345,8 @@ var CdkDropList = /** @class */ (function () {
                     selector: '[cdkDropList], cdk-drop-list',
                     exportAs: 'cdkDropList',
                     providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CdkDropListGroup, useValue: ɵ0 },
                         { provide: CDK_DROP_LIST_CONTAINER, useExisting: CdkDropList },
                     ],
                     host: {
@@ -2358,7 +2362,7 @@ var CdkDropList = /** @class */ (function () {
         { type: DragDropRegistry },
         { type: ChangeDetectorRef },
         { type: Directionality, decorators: [{ type: Optional }] },
-        { type: CdkDropListGroup, decorators: [{ type: Optional }] }
+        { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
         _draggables: [{ type: ContentChildren, args: [forwardRef(function () { return CdkDrag; }),] }],

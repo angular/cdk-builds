@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "7.1.0-d8cd6a7",
+  "version": "7.1.0-db7491c",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -37,7 +37,7 @@
     "migrations": "./schematics/migration.json"
   },
   "sideEffects": false,
-  "releaseGitCommitSha": "d8cd6a788bea68350d8ce768646a11619db0a813",
+  "releaseGitCommitSha": "db7491c8b069b985b9eb4a799f0857920e7d8f8c",
   "releaseGitBranch": "master",
   "releaseGitUser": " <>"
 }
