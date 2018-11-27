@@ -13,11 +13,12 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each accordion.
-  @type {?} */
+ * @type {?}
+ */
 var nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
@@ -98,10 +99,12 @@ var CdkAccordion = /** @class */ (function () {
         this._stateChanges.complete();
     };
     /**
+     * @private
      * @param {?} expanded
      * @return {?}
      */
     CdkAccordion.prototype._openCloseAll = /**
+     * @private
      * @param {?} expanded
      * @return {?}
      */
@@ -124,11 +127,12 @@ var CdkAccordion = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each accordion item.
-  @type {?} */
+ * @type {?}
+ */
 var nextId$1 = 0;
 var ɵ0 = undefined;
 /**
@@ -204,10 +208,11 @@ var CdkAccordionItem = /** @class */ (function () {
                 this.expandedChange.emit(expanded);
                 if (expanded) {
                     this.opened.emit();
-                    /** *
+                    /**
                      * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                      * the name value is the id of the accordion.
-                      @type {?} */
+                     * @type {?}
+                     */
                     var accordionId = this.accordion ? this.accordion.id : this.id;
                     this._expansionDispatcher.notify(this.id, accordionId);
                 }
@@ -297,9 +302,11 @@ var CdkAccordionItem = /** @class */ (function () {
         }
     };
     /**
+     * @private
      * @return {?}
      */
     CdkAccordionItem.prototype._subscribeToOpenCloseAllActions = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -341,7 +348,7 @@ var CdkAccordionItem = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkAccordionModule = /** @class */ (function () {
     function CdkAccordionModule() {

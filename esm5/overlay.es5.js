@@ -20,7 +20,7 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
@@ -57,7 +57,7 @@ BlockScrollStrategy = /** @class */ (function () {
     function () {
         if (this._canBeEnabled()) {
             /** @type {?} */
-            var root = /** @type {?} */ ((this._document.documentElement));
+            var root = (/** @type {?} */ (this._document.documentElement));
             this._previousScrollPosition = this._viewportRuler.getViewportScrollPosition();
             // Cache the previous inline styles in case the user had set them.
             this._previousHTMLStyles.left = root.style.left || '';
@@ -82,13 +82,13 @@ BlockScrollStrategy = /** @class */ (function () {
     function () {
         if (this._isEnabled) {
             /** @type {?} */
-            var html = /** @type {?} */ ((this._document.documentElement));
+            var html = (/** @type {?} */ (this._document.documentElement));
             /** @type {?} */
-            var body = /** @type {?} */ ((this._document.body));
+            var body = (/** @type {?} */ (this._document.body));
             /** @type {?} */
-            var htmlStyle = /** @type {?} */ (html.style);
+            var htmlStyle = (/** @type {?} */ (html.style));
             /** @type {?} */
-            var bodyStyle = /** @type {?} */ (body.style);
+            var bodyStyle = (/** @type {?} */ (body.style));
             /** @type {?} */
             var previousHtmlScrollBehavior = htmlStyle.scrollBehavior || '';
             /** @type {?} */
@@ -106,14 +106,19 @@ BlockScrollStrategy = /** @class */ (function () {
         }
     };
     /**
+     * @private
      * @return {?}
      */
     BlockScrollStrategy.prototype._canBeEnabled = /**
+     * @private
      * @return {?}
      */
     function () {
+        // Since the scroll strategies can't be singletons, we have to use a global CSS class
+        // (`cdk-global-scrollblock`) to make sure that we don't try to disable global
+        // scrolling multiple times.
         /** @type {?} */
-        var html = /** @type {?} */ ((this._document.documentElement));
+        var html = (/** @type {?} */ (this._document.documentElement));
         if (html.classList.contains('cdk-global-scrollblock') || this._isEnabled) {
             return false;
         }
@@ -128,7 +133,7 @@ BlockScrollStrategy = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
@@ -140,7 +145,7 @@ function getMatScrollStrategyAlreadyAttachedError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Strategy that will close the overlay as soon as the user starts scrolling.
@@ -204,7 +209,7 @@ CloseScrollStrategy = /** @class */ (function () {
             this._scrollSubscription = stream.subscribe(function () {
                 /** @type {?} */
                 var scrollPosition = _this._viewportRuler.getViewportScrollPosition().top;
-                if (Math.abs(scrollPosition - _this._initialScrollPosition) > /** @type {?} */ ((/** @type {?} */ ((_this._config)).threshold))) {
+                if (Math.abs(scrollPosition - _this._initialScrollPosition) > (/** @type {?} */ ((/** @type {?} */ (_this._config)).threshold))) {
                     _this._detach();
                 }
                 else {
@@ -236,7 +241,7 @@ CloseScrollStrategy = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -283,7 +288,7 @@ NoopScrollStrategy = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 // TODO(jelbourn): move this to live with the rest of the scrolling code
@@ -331,7 +336,7 @@ function isElementClippedByScrolling(element, scrollContainers) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Strategy that will update the element position as the user is scrolling.
@@ -385,6 +390,8 @@ RepositionScrollStrategy = /** @class */ (function () {
                     /** @type {?} */
                     var overlayRect = _this._overlayRef.overlayElement.getBoundingClientRect();
                     var _a = _this._viewportRuler.getViewportSize(), width = _a.width, height = _a.height;
+                    // TODO(crisbeto): include all ancestor scroll containers here once
+                    // we have a way of exposing the trigger element to the scroll strategy.
                     /** @type {?} */
                     var parentRects = [{ width: width, height: height, bottom: height, right: width, top: 0, left: 0 }];
                     if (isElementScrolledOutsideView(overlayRect, parentRects)) {
@@ -415,7 +422,7 @@ RepositionScrollStrategy = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Options for how an overlay will handle scrolling.
@@ -466,12 +473,12 @@ var ScrollStrategyOptions = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Initial configuration used when creating an overlay.
@@ -507,7 +514,7 @@ OverlayConfig = /** @class */ (function () {
         if (config) {
             Object.keys(config).forEach(function (k) {
                 /** @type {?} */
-                var key = /** @type {?} */ (k);
+                var key = (/** @type {?} */ (k));
                 if (typeof config[key] !== 'undefined') {
                     _this[key] = config[key];
                 }
@@ -519,7 +526,7 @@ OverlayConfig = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * The points of the origin element and the overlay element to connect.
@@ -598,8 +605,7 @@ ScrollingVisibility = /** @class */ (function () {
  * The change event emitted by the strategy when a fallback position is used.
  */
 var ConnectedOverlayPositionChange = /** @class */ (function () {
-    function ConnectedOverlayPositionChange(connectionPair, /** @docs-private */
-    scrollableViewProperties) {
+    function ConnectedOverlayPositionChange(connectionPair, scrollableViewProperties) {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
@@ -639,7 +645,7 @@ function validateHorizontalPosition(property, value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
@@ -726,12 +732,15 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
             this._detach();
         }
     };
+    /** Detaches the global keyboard event listener. */
     /**
      * Detaches the global keyboard event listener.
+     * @private
      * @return {?}
      */
     OverlayKeyboardDispatcher.prototype._detach = /**
      * Detaches the global keyboard event listener.
+     * @private
      * @return {?}
      */
     function () {
@@ -759,16 +768,17 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
 function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
     return dispatcher || new OverlayKeyboardDispatcher(_document);
 }
-/** *
+/**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
-  @type {?} */
+ * @type {?}
+ */
 var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     // If there is already an OverlayKeyboardDispatcher available, use that.
     // Otherwise, provide a new one.
     provide: OverlayKeyboardDispatcher,
     deps: [
         [new Optional(), new SkipSelf(), OverlayKeyboardDispatcher],
-        /** @type {?} */ ((
+        (/** @type {?} */ (
         // Coerce to `InjectionToken` so that the `deps` match the "shape"
         // of the type expected by Angular
         DOCUMENT))
@@ -778,7 +788,7 @@ var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Container inside which all overlays will render.
@@ -829,11 +839,13 @@ var OverlayContainer = /** @class */ (function () {
     /**
      * Create the overlay container element, which is simply a div
      * with the 'cdk-overlay-container' class on the document body.
+     * @protected
      * @return {?}
      */
     OverlayContainer.prototype._createContainer = /**
      * Create the overlay container element, which is simply a div
      * with the 'cdk-overlay-container' class on the document body.
+     * @protected
      * @return {?}
      */
     function () {
@@ -862,23 +874,23 @@ var OverlayContainer = /** @class */ (function () {
 function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
     return parentContainer || new OverlayContainer(_document);
 }
-/** *
+/**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
-  @type {?} */
+ * @type {?}
+ */
 var OVERLAY_CONTAINER_PROVIDER = {
     // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
     provide: OverlayContainer,
     deps: [
         [new Optional(), new SkipSelf(), OverlayContainer],
-        /** @type {?} */ (DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
-        ) // We need to use the InjectionToken somewhere to keep TS happy
+        (/** @type {?} */ (DOCUMENT))
     ],
     useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Reference to an overlay that has been created with the Overlay service.
@@ -1104,9 +1116,9 @@ OverlayRef = /** @class */ (function () {
         this._keydownEvents.complete();
         if (this._host && this._host.parentNode) {
             this._host.parentNode.removeChild(this._host);
-            this._host = /** @type {?} */ ((null));
+            this._host = (/** @type {?} */ (null));
         }
-        this._previousHostParent = this._pane = /** @type {?} */ ((null));
+        this._previousHostParent = this._pane = (/** @type {?} */ (null));
         if (isAttached) {
             this._detachments.next();
         }
@@ -1271,23 +1283,29 @@ OverlayRef = /** @class */ (function () {
         }
         return typeof direction === 'string' ? direction : direction.value;
     };
+    /** Updates the text direction of the overlay panel. */
     /**
      * Updates the text direction of the overlay panel.
+     * @private
      * @return {?}
      */
     OverlayRef.prototype._updateElementDirection = /**
      * Updates the text direction of the overlay panel.
+     * @private
      * @return {?}
      */
     function () {
         this._host.setAttribute('dir', this.getDirection());
     };
+    /** Updates the size of the overlay element based on the overlay config. */
     /**
      * Updates the size of the overlay element based on the overlay config.
+     * @private
      * @return {?}
      */
     OverlayRef.prototype._updateElementSize = /**
      * Updates the size of the overlay element based on the overlay config.
+     * @private
      * @return {?}
      */
     function () {
@@ -1300,25 +1318,31 @@ OverlayRef = /** @class */ (function () {
         style.maxWidth = coerceCssPixelValue(this._config.maxWidth);
         style.maxHeight = coerceCssPixelValue(this._config.maxHeight);
     };
+    /** Toggles the pointer events for the overlay pane element. */
     /**
      * Toggles the pointer events for the overlay pane element.
+     * @private
      * @param {?} enablePointer
      * @return {?}
      */
     OverlayRef.prototype._togglePointerEvents = /**
      * Toggles the pointer events for the overlay pane element.
+     * @private
      * @param {?} enablePointer
      * @return {?}
      */
     function (enablePointer) {
         this._pane.style.pointerEvents = enablePointer ? 'auto' : 'none';
     };
+    /** Attaches a backdrop for this overlay. */
     /**
      * Attaches a backdrop for this overlay.
+     * @private
      * @return {?}
      */
     OverlayRef.prototype._attachBackdrop = /**
      * Attaches a backdrop for this overlay.
+     * @private
      * @return {?}
      */
     function () {
@@ -1329,11 +1353,10 @@ OverlayRef = /** @class */ (function () {
         this._backdropElement.classList.add('cdk-overlay-backdrop');
         if (this._config.backdropClass) {
             this._toggleClasses(this._backdropElement, this._config.backdropClass, true);
-        } /** @type {?} */
-        ((
+        }
         // Insert the backdrop before the pane in the DOM order,
         // in order to handle stacked overlays properly.
-        this._host.parentElement)).insertBefore(this._backdropElement, this._host);
+        (/** @type {?} */ (this._host.parentElement)).insertBefore(this._backdropElement, this._host);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
         // action desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', function (event) { return _this._backdropClick.next(event); });
@@ -1357,6 +1380,14 @@ OverlayRef = /** @class */ (function () {
      * that should be behind it, was destroyed. The next time both of them are opened,
      * the stacking will be wrong, because the detached element's pane will still be
      * in its original DOM position.
+     */
+    /**
+     * Updates the stacking order of the element, moving it to the top if necessary.
+     * This is required in cases where one overlay was detached, while another one,
+     * that should be behind it, was destroyed. The next time both of them are opened,
+     * the stacking will be wrong, because the detached element's pane will still be
+     * in its original DOM position.
+     * @private
      * @return {?}
      */
     OverlayRef.prototype._updateStackingOrder = /**
@@ -1365,11 +1396,12 @@ OverlayRef = /** @class */ (function () {
      * that should be behind it, was destroyed. The next time both of them are opened,
      * the stacking will be wrong, because the detached element's pane will still be
      * in its original DOM position.
+     * @private
      * @return {?}
      */
     function () {
         if (this._host.nextSibling) {
-            /** @type {?} */ ((this._host.parentNode)).appendChild(this._host);
+            (/** @type {?} */ (this._host.parentNode)).appendChild(this._host);
         }
     };
     /** Detaches the backdrop (if any) associated with the overlay. */
@@ -1403,13 +1435,13 @@ OverlayRef = /** @class */ (function () {
                 _this._backdropElement = null;
             }
             if (_this._config.backdropClass) {
-                _this._toggleClasses(/** @type {?} */ ((backdropToDetach)), _this._config.backdropClass, false);
+                _this._toggleClasses((/** @type {?} */ (backdropToDetach)), _this._config.backdropClass, false);
             }
             clearTimeout(timeoutId);
         };
         backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
         this._ngZone.runOutsideAngular(function () {
-            /** @type {?} */ ((backdropToDetach)).addEventListener('transitionend', finishDetach);
+            (/** @type {?} */ (backdropToDetach)).addEventListener('transitionend', finishDetach);
         });
         // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
         // In this case we make it unclickable and we try to remove it after a delay.
@@ -1419,8 +1451,10 @@ OverlayRef = /** @class */ (function () {
         // either async or fakeAsync.
         timeoutId = this._ngZone.runOutsideAngular(function () { return setTimeout(finishDetach, 500); });
     };
+    /** Toggles a single CSS class or an array of classes on an element. */
     /**
      * Toggles a single CSS class or an array of classes on an element.
+     * @private
      * @param {?} element
      * @param {?} cssClasses
      * @param {?} isAdd
@@ -1428,6 +1462,7 @@ OverlayRef = /** @class */ (function () {
      */
     OverlayRef.prototype._toggleClasses = /**
      * Toggles a single CSS class or an array of classes on an element.
+     * @private
      * @param {?} element
      * @param {?} cssClasses
      * @param {?} isAdd
@@ -1441,12 +1476,15 @@ OverlayRef = /** @class */ (function () {
             isAdd ? classList.add(cssClass) : classList.remove(cssClass);
         });
     };
+    /** Detaches the overlay content next time the zone stabilizes. */
     /**
      * Detaches the overlay content next time the zone stabilizes.
+     * @private
      * @return {?}
      */
     OverlayRef.prototype._detachContentWhenStable = /**
      * Detaches the overlay content next time the zone stabilizes.
+     * @private
      * @return {?}
      */
     function () {
@@ -1455,6 +1493,9 @@ OverlayRef = /** @class */ (function () {
         // if the consumer is using `zone-patch-rxjs`, the `Subscription.unsubscribe` call will
         // be patched to run inside the zone, which will throw us into an infinite loop.
         this._ngZone.runOutsideAngular(function () {
+            // We can't remove the host here immediately, because the overlay pane's content
+            // might still be animating. This stream helps us avoid interrupting the animation
+            // by waiting for the pane to become empty.
             /** @type {?} */
             var subscription = _this._ngZone.onStable
                 .asObservable()
@@ -1480,11 +1521,14 @@ OverlayRef = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+// TODO: refactor clipping detection into a separate thing (part of scrolling module)
+// TODO: doesn't handle both flexible width and height when it has to scroll along both axis.
+/**
  * Class to be added to the overlay bounding box.
-  @type {?} */
+ * @type {?}
+ */
 var boundingBoxClass = 'cdk-overlay-connected-position-bounding-box';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -1698,18 +1742,25 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         var overlayRect = this._overlayRect;
         /** @type {?} */
         var viewportRect = this._viewportRect;
+        // Positions where the overlay will fit with flexible dimensions.
         /** @type {?} */
         var flexibleFits = [];
+        // Fallback if none of the preferred positions fit within the viewport.
         /** @type {?} */
         var fallback;
         // Go through each of the preferred positions looking for a good fit.
         // If a good fit is found, it will be applied immediately.
         for (var _i = 0, _a = this._preferredPositions; _i < _a.length; _i++) {
             var pos = _a[_i];
+            // Get the exact (x, y) coordinate for the point-of-origin on the origin element.
             /** @type {?} */
             var originPoint = this._getOriginPoint(originRect, pos);
+            // From that point-of-origin, get the exact (x, y) coordinate for the top-left corner of the
+            // overlay in this position. We use the top-left corner for calculations and later translate
+            // this into an appropriate (top, left, bottom, right) style.
             /** @type {?} */
             var overlayPoint = this._getOverlayPoint(originPoint, overlayRect, pos);
+            // Calculate how well the overlay would fit into the viewport with this point.
             /** @type {?} */
             var overlayFit = this._getOverlayFit(overlayPoint, overlayRect, viewportRect, pos);
             // If the overlay, without any further work, fits into the viewport, use this position.
@@ -1755,7 +1806,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 }
             }
             this._isPushed = false;
-            this._applyPosition(/** @type {?} */ ((bestFit)).position, /** @type {?} */ ((bestFit)).origin);
+            this._applyPosition((/** @type {?} */ (bestFit)).position, (/** @type {?} */ (bestFit)).origin);
             return;
         }
         // When none of the preferred positions fit within the viewport, take the position
@@ -1763,12 +1814,12 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (this._canPush) {
             // TODO(jelbourn): after pushing, the opening "direction" of the overlay might not make sense.
             this._isPushed = true;
-            this._applyPosition(/** @type {?} */ ((fallback)).position, /** @type {?} */ ((fallback)).originPoint);
+            this._applyPosition((/** @type {?} */ (fallback)).position, (/** @type {?} */ (fallback)).originPoint);
             return;
         }
         // All options for getting the overlay within the viewport have been exhausted, so go with the
         // position that went off-screen the least.
-        this._applyPosition(/** @type {?} */ ((fallback)).position, /** @type {?} */ ((fallback)).originPoint);
+        this._applyPosition((/** @type {?} */ (fallback)).position, (/** @type {?} */ (fallback)).originPoint);
     };
     /**
      * @return {?}
@@ -1798,7 +1849,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // We can't use `_resetBoundingBoxStyles` here, because it resets
         // some properties to zero, rather than removing them.
         if (this._boundingBox) {
-            extendStyles(this._boundingBox.style, /** @type {?} */ ({
+            extendStyles(this._boundingBox.style, (/** @type {?} */ ({
                 top: '',
                 left: '',
                 right: '',
@@ -1807,7 +1858,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 width: '',
                 alignItems: '',
                 justifyContent: '',
-            }));
+            })));
         }
         if (this._pane) {
             this._resetOverlayElementStyles();
@@ -1817,7 +1868,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         this.detach();
         this._positionChanges.complete();
-        this._overlayRef = this._boundingBox = /** @type {?} */ ((null));
+        this._overlayRef = this._boundingBox = (/** @type {?} */ (null));
         this._isDisposed = true;
     };
     /**
@@ -1877,23 +1928,27 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Adds new preferred positions.
+     * @template THIS
+     * @this {THIS}
      * @param {?} positions List of positions options for this overlay.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withPositions = /**
      * Adds new preferred positions.
+     * @template THIS
+     * @this {THIS}
      * @param {?} positions List of positions options for this overlay.
-     * @return {?}
+     * @return {THIS}
      */
     function (positions) {
-        this._preferredPositions = positions;
+        (/** @type {?} */ (this))._preferredPositions = positions;
         // If the last calculated position object isn't part of the positions anymore, clear
         // it in order to avoid it being picked up if the consumer tries to re-apply.
-        if (positions.indexOf(/** @type {?} */ ((this._lastPosition))) === -1) {
-            this._lastPosition = null;
+        if (positions.indexOf((/** @type {?} */ ((/** @type {?} */ (this))._lastPosition))) === -1) {
+            (/** @type {?} */ (this))._lastPosition = null;
         }
-        this._validatePositions();
-        return this;
+        (/** @type {?} */ (this))._validatePositions();
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
@@ -1901,65 +1956,81 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
+     * @template THIS
+     * @this {THIS}
      * @param {?} margin Required margin between the overlay and the viewport edge in pixels.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withViewportMargin = /**
      * Sets a minimum distance the overlay may be positioned to the edge of the viewport.
+     * @template THIS
+     * @this {THIS}
      * @param {?} margin Required margin between the overlay and the viewport edge in pixels.
-     * @return {?}
+     * @return {THIS}
      */
     function (margin) {
-        this._viewportMargin = margin;
-        return this;
+        (/** @type {?} */ (this))._viewportMargin = margin;
+        return (/** @type {?} */ (this));
     };
     /** Sets whether the overlay's width and height can be constrained to fit within the viewport. */
     /**
      * Sets whether the overlay's width and height can be constrained to fit within the viewport.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} flexibleDimensions
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withFlexibleDimensions = /**
      * Sets whether the overlay's width and height can be constrained to fit within the viewport.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} flexibleDimensions
-     * @return {?}
+     * @return {THIS}
      */
     function (flexibleDimensions) {
         if (flexibleDimensions === void 0) { flexibleDimensions = true; }
-        this._hasFlexibleDimensions = flexibleDimensions;
-        return this;
+        (/** @type {?} */ (this))._hasFlexibleDimensions = flexibleDimensions;
+        return (/** @type {?} */ (this));
     };
     /** Sets whether the overlay can grow after the initial open via flexible width/height. */
     /**
      * Sets whether the overlay can grow after the initial open via flexible width/height.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} growAfterOpen
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withGrowAfterOpen = /**
      * Sets whether the overlay can grow after the initial open via flexible width/height.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} growAfterOpen
-     * @return {?}
+     * @return {THIS}
      */
     function (growAfterOpen) {
         if (growAfterOpen === void 0) { growAfterOpen = true; }
-        this._growAfterOpen = growAfterOpen;
-        return this;
+        (/** @type {?} */ (this))._growAfterOpen = growAfterOpen;
+        return (/** @type {?} */ (this));
     };
     /** Sets whether the overlay can be pushed on-screen if none of the provided positions fit. */
     /**
      * Sets whether the overlay can be pushed on-screen if none of the provided positions fit.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} canPush
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withPush = /**
      * Sets whether the overlay can be pushed on-screen if none of the provided positions fit.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} canPush
-     * @return {?}
+     * @return {THIS}
      */
     function (canPush) {
         if (canPush === void 0) { canPush = true; }
-        this._canPush = canPush;
-        return this;
+        (/** @type {?} */ (this))._canPush = canPush;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets whether the overlay's position should be locked in after it is positioned
@@ -1971,20 +2042,24 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * Sets whether the overlay's position should be locked in after it is positioned
      * initially. When an overlay is locked in, it won't attempt to reposition itself
      * when the position is re-applied (e.g. when the user scrolls away).
+     * @template THIS
+     * @this {THIS}
      * @param {?=} isLocked Whether the overlay should locked in.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withLockedPosition = /**
      * Sets whether the overlay's position should be locked in after it is positioned
      * initially. When an overlay is locked in, it won't attempt to reposition itself
      * when the position is re-applied (e.g. when the user scrolls away).
+     * @template THIS
+     * @this {THIS}
      * @param {?=} isLocked Whether the overlay should locked in.
-     * @return {?}
+     * @return {THIS}
      */
     function (isLocked) {
         if (isLocked === void 0) { isLocked = true; }
-        this._positionLocked = isLocked;
-        return this;
+        (/** @type {?} */ (this))._positionLocked = isLocked;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the origin element, relative to which to position the overlay.
@@ -1992,17 +2067,21 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the origin element, relative to which to position the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} origin Reference to the new origin element.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.setOrigin = /**
      * Sets the origin element, relative to which to position the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} origin Reference to the new origin element.
-     * @return {?}
+     * @return {THIS}
      */
     function (origin) {
-        this._origin = origin instanceof ElementRef ? origin.nativeElement : origin;
-        return this;
+        (/** @type {?} */ (this))._origin = origin instanceof ElementRef ? origin.nativeElement : origin;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the default offset for the overlay's connection point on the x-axis.
@@ -2010,17 +2089,21 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the default offset for the overlay's connection point on the x-axis.
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the X axis.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withDefaultOffsetX = /**
      * Sets the default offset for the overlay's connection point on the x-axis.
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the X axis.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
-        this._offsetX = offset;
-        return this;
+        (/** @type {?} */ (this))._offsetX = offset;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the default offset for the overlay's connection point on the y-axis.
@@ -2028,17 +2111,21 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the default offset for the overlay's connection point on the y-axis.
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the Y axis.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withDefaultOffsetY = /**
      * Sets the default offset for the overlay's connection point on the y-axis.
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the Y axis.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
-        this._offsetY = offset;
-        return this;
+        (/** @type {?} */ (this))._offsetY = offset;
+        return (/** @type {?} */ (this));
     };
     /**
      * Configures that the position strategy should set a `transform-origin` on some elements
@@ -2053,31 +2140,40 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * inside the overlay, depending on the current position that is being applied. This is
      * useful for the cases where the origin of an animation can change depending on the
      * alignment of the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} selector CSS selector that will be used to find the target
      *    elements onto which to set the transform origin.
-     * @return {?}
+     * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.withTransformOriginOn = /**
      * Configures that the position strategy should set a `transform-origin` on some elements
      * inside the overlay, depending on the current position that is being applied. This is
      * useful for the cases where the origin of an animation can change depending on the
      * alignment of the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} selector CSS selector that will be used to find the target
      *    elements onto which to set the transform origin.
-     * @return {?}
+     * @return {THIS}
      */
     function (selector) {
-        this._transformOriginSelector = selector;
-        return this;
+        (/** @type {?} */ (this))._transformOriginSelector = selector;
+        return (/** @type {?} */ (this));
     };
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
+     */
+    /**
+     * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
+     * @private
      * @param {?} originRect
      * @param {?} pos
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getOriginPoint = /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
+     * @private
      * @param {?} originRect
      * @param {?} pos
      * @return {?}
@@ -2110,6 +2206,11 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     /**
      * Gets the (x, y) coordinate of the top-left corner of the overlay given a given position and
      * origin point to which the overlay should be connected.
+     */
+    /**
+     * Gets the (x, y) coordinate of the top-left corner of the overlay given a given position and
+     * origin point to which the overlay should be connected.
+     * @private
      * @param {?} originPoint
      * @param {?} overlayRect
      * @param {?} pos
@@ -2118,12 +2219,15 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     FlexibleConnectedPositionStrategy.prototype._getOverlayPoint = /**
      * Gets the (x, y) coordinate of the top-left corner of the overlay given a given position and
      * origin point to which the overlay should be connected.
+     * @private
      * @param {?} originPoint
      * @param {?} overlayRect
      * @param {?} pos
      * @return {?}
      */
     function (originPoint, overlayRect, pos) {
+        // Calculate the (overlayStartX, overlayStartY), the start of the
+        // potential overlay position relative to the origin point.
         /** @type {?} */
         var overlayStartX;
         if (pos.overlayX == 'center') {
@@ -2149,8 +2253,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             y: originPoint.y + overlayStartY,
         };
     };
+    /** Gets how well an overlay at the given point will fit within the viewport. */
     /**
      * Gets how well an overlay at the given point will fit within the viewport.
+     * @private
      * @param {?} point
      * @param {?} overlay
      * @param {?} viewport
@@ -2159,6 +2265,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     FlexibleConnectedPositionStrategy.prototype._getOverlayFit = /**
      * Gets how well an overlay at the given point will fit within the viewport.
+     * @private
      * @param {?} point
      * @param {?} overlay
      * @param {?} viewport
@@ -2178,6 +2285,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (offsetY) {
             y += offsetY;
         }
+        // How much the overlay would overflow at this position, on each side.
         /** @type {?} */
         var leftOverflow = 0 - x;
         /** @type {?} */
@@ -2186,6 +2294,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         var topOverflow = 0 - y;
         /** @type {?} */
         var bottomOverflow = (y + overlay.height) - viewport.height;
+        // Visible parts of the element on each axis.
         /** @type {?} */
         var visibleWidth = this._subtractOverflows(overlay.width, leftOverflow, rightOverflow);
         /** @type {?} */
@@ -2201,6 +2310,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     };
     /**
      * Whether the overlay can fit within the viewport when it may resize either its width or height.
+     * @param fit How well the overlay fits in the viewport at some position.
+     * @param point The (x, y) coordinates of the overlat at some position.
+     * @param viewport The geometry of the viewport.
+     */
+    /**
+     * Whether the overlay can fit within the viewport when it may resize either its width or height.
+     * @private
      * @param {?} fit How well the overlay fits in the viewport at some position.
      * @param {?} point The (x, y) coordinates of the overlat at some position.
      * @param {?} viewport The geometry of the viewport.
@@ -2208,6 +2324,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     FlexibleConnectedPositionStrategy.prototype._canFitWithFlexibleDimensions = /**
      * Whether the overlay can fit within the viewport when it may resize either its width or height.
+     * @private
      * @param {?} fit How well the overlay fits in the viewport at some position.
      * @param {?} point The (x, y) coordinates of the overlat at some position.
      * @param {?} viewport The geometry of the viewport.
@@ -2237,6 +2354,18 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
+     * @param start Starting point from which the overlay is pushed.
+     * @param overlay Dimensions of the overlay.
+     * @param scrollPosition Current viewport scroll position.
+     * @returns The point at which to position the overlay after pushing. This is effectively a new
+     *     originPoint.
+     */
+    /**
+     * Gets the point at which the overlay can be "pushed" on-screen. If the overlay is larger than
+     * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
+     * right and bottom).
+     *
+     * @private
      * @param {?} start Starting point from which the overlay is pushed.
      * @param {?} overlay Dimensions of the overlay.
      * @param {?} scrollPosition Current viewport scroll position.
@@ -2248,6 +2377,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
      * right and bottom).
      *
+     * @private
      * @param {?} start Starting point from which the overlay is pushed.
      * @param {?} overlay Dimensions of the overlay.
      * @param {?} scrollPosition Current viewport scroll position.
@@ -2266,6 +2396,8 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         /** @type {?} */
         var viewport = this._viewportRect;
+        // Determine how much the overlay goes outside the viewport on each
+        // side, which we'll use to decide which direction to push it.
         /** @type {?} */
         var overflowRight = Math.max(start.x + overlay.width - viewport.right, 0);
         /** @type {?} */
@@ -2274,6 +2406,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         var overflowTop = Math.max(viewport.top - scrollPosition.top - start.y, 0);
         /** @type {?} */
         var overflowLeft = Math.max(viewport.left - scrollPosition.left - start.x, 0);
+        // Amount by which to push the overlay in each axis such that it remains on-screen.
         /** @type {?} */
         var pushX = 0;
         /** @type {?} */
@@ -2301,12 +2434,19 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     };
     /**
      * Applies a computed position to the overlay and emits a position change.
+     * @param position The position preference
+     * @param originPoint The point on the origin element where the overlay is connected.
+     */
+    /**
+     * Applies a computed position to the overlay and emits a position change.
+     * @private
      * @param {?} position The position preference
      * @param {?} originPoint The point on the origin element where the overlay is connected.
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._applyPosition = /**
      * Applies a computed position to the overlay and emits a position change.
+     * @private
      * @param {?} position The position preference
      * @param {?} originPoint The point on the origin element where the overlay is connected.
      * @return {?}
@@ -2332,13 +2472,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         this._isInitialRender = false;
     };
+    /** Sets the transform origin based on the configured selector and the passed-in position.  */
     /**
      * Sets the transform origin based on the configured selector and the passed-in position.
+     * @private
      * @param {?} position
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._setTransformOrigin = /**
      * Sets the transform origin based on the configured selector and the passed-in position.
+     * @private
      * @param {?} position
      * @return {?}
      */
@@ -2347,7 +2490,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             return;
         }
         /** @type {?} */
-        var elements = /** @type {?} */ ((this._boundingBox)).querySelectorAll(this._transformOriginSelector);
+        var elements = (/** @type {?} */ (this._boundingBox)).querySelectorAll(this._transformOriginSelector);
         /** @type {?} */
         var xOrigin;
         /** @type {?} */
@@ -2370,6 +2513,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      *
      * This method does no measuring and applies no styles so that we can cheaply compute the
      * bounds for all positions and choose the best fit based on these results.
+     */
+    /**
+     * Gets the position and size of the overlay's sizing container.
+     *
+     * This method does no measuring and applies no styles so that we can cheaply compute the
+     * bounds for all positions and choose the best fit based on these results.
+     * @private
      * @param {?} origin
      * @param {?} position
      * @return {?}
@@ -2379,6 +2529,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      *
      * This method does no measuring and applies no styles so that we can cheaply compute the
      * bounds for all positions and choose the best fit based on these results.
+     * @private
      * @param {?} origin
      * @param {?} position
      * @return {?}
@@ -2407,6 +2558,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             height = viewport.height - bottom + this._viewportMargin;
         }
         else {
+            // If neither top nor bottom, it means that the overlay is vertically centered on the
+            // origin point. Note that we want the position relative to the viewport, rather than
+            // the page, which is why we don't use something like `viewport.bottom - origin.y` and
+            // `origin.y - viewport.top`.
             /** @type {?} */
             var smallestDistanceToViewportEdge = Math.min(viewport.bottom - origin.y + viewport.top, origin.y);
             /** @type {?} */
@@ -2417,9 +2572,11 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 top = origin.y - (previousHeight / 2);
             }
         }
+        // The overlay is opening 'right-ward' (the content flows to the right).
         /** @type {?} */
         var isBoundedByRightViewportEdge = (position.overlayX === 'start' && !isRtl) ||
             (position.overlayX === 'end' && isRtl);
+        // The overlay is opening 'left-ward' (the content flows to the left).
         /** @type {?} */
         var isBoundedByLeftViewportEdge = (position.overlayX === 'end' && !isRtl) ||
             (position.overlayX === 'start' && isRtl);
@@ -2438,6 +2595,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             width = viewport.right - origin.x;
         }
         else {
+            // If neither start nor end, it means that the overlay is horizontally centered on the
+            // origin point. Note that we want the position relative to the viewport, rather than
+            // the page, which is why we don't use something like `viewport.right - origin.x` and
+            // `origin.x - viewport.left`.
             /** @type {?} */
             var smallestDistanceToViewportEdge = Math.min(viewport.right - origin.x + viewport.left, origin.x);
             /** @type {?} */
@@ -2448,12 +2609,20 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 left = origin.x - (previousWidth / 2);
             }
         }
-        return { top: /** @type {?} */ ((top)), left: /** @type {?} */ ((left)), bottom: /** @type {?} */ ((bottom)), right: /** @type {?} */ ((right)), width: width, height: height };
+        return { top: (/** @type {?} */ (top)), left: (/** @type {?} */ (left)), bottom: (/** @type {?} */ (bottom)), right: (/** @type {?} */ (right)), width: width, height: height };
     };
     /**
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
      * origin's connection point and stetches to the bounds of the viewport.
      *
+     * @param origin The point on the origin element where the overlay is connected.
+     * @param position The position preference
+     */
+    /**
+     * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
+     * origin's connection point and stetches to the bounds of the viewport.
+     *
+     * @private
      * @param {?} origin The point on the origin element where the overlay is connected.
      * @param {?} position The position preference
      * @return {?}
@@ -2462,6 +2631,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
      * origin's connection point and stetches to the bounds of the viewport.
      *
+     * @private
      * @param {?} origin The point on the origin element where the overlay is connected.
      * @param {?} position The position preference
      * @return {?}
@@ -2476,7 +2646,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             boundingBoxRect.width = Math.min(boundingBoxRect.width, this._lastBoundingBoxSize.width);
         }
         /** @type {?} */
-        var styles = /** @type {?} */ ({});
+        var styles = (/** @type {?} */ ({}));
         if (this._hasExactPosition()) {
             styles.top = styles.left = '0';
             styles.bottom = styles.right = '';
@@ -2514,18 +2684,21 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             }
         }
         this._lastBoundingBoxSize = boundingBoxRect;
-        extendStyles(/** @type {?} */ ((this._boundingBox)).style, styles);
+        extendStyles((/** @type {?} */ (this._boundingBox)).style, styles);
     };
+    /** Resets the styles for the bounding box so that a new positioning can be computed. */
     /**
      * Resets the styles for the bounding box so that a new positioning can be computed.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._resetBoundingBoxStyles = /**
      * Resets the styles for the bounding box so that a new positioning can be computed.
+     * @private
      * @return {?}
      */
     function () {
-        extendStyles(/** @type {?} */ ((this._boundingBox)).style, /** @type {?} */ ({
+        extendStyles((/** @type {?} */ (this._boundingBox)).style, (/** @type {?} */ ({
             top: '0',
             left: '0',
             right: '0',
@@ -2534,40 +2707,46 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             width: '',
             alignItems: '',
             justifyContent: '',
-        }));
+        })));
     };
+    /** Resets the styles for the overlay pane so that a new positioning can be computed. */
     /**
      * Resets the styles for the overlay pane so that a new positioning can be computed.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._resetOverlayElementStyles = /**
      * Resets the styles for the overlay pane so that a new positioning can be computed.
+     * @private
      * @return {?}
      */
     function () {
-        extendStyles(this._pane.style, /** @type {?} */ ({
+        extendStyles(this._pane.style, (/** @type {?} */ ({
             top: '',
             left: '',
             bottom: '',
             right: '',
             position: '',
-        }));
+        })));
     };
+    /** Sets positioning styles to the overlay element. */
     /**
      * Sets positioning styles to the overlay element.
+     * @private
      * @param {?} originPoint
      * @param {?} position
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._setOverlayElementStyles = /**
      * Sets positioning styles to the overlay element.
+     * @private
      * @param {?} originPoint
      * @param {?} position
      * @return {?}
      */
     function (originPoint, position) {
         /** @type {?} */
-        var styles = /** @type {?} */ ({});
+        var styles = (/** @type {?} */ ({}));
         if (this._hasExactPosition()) {
             /** @type {?} */
             var scrollPosition = this._viewportRuler.getViewportScrollPosition();
@@ -2577,6 +2756,11 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         else {
             styles.position = 'static';
         }
+        // Use a transform to apply the offsets. We do this because the `center` positions rely on
+        // being in the normal flex flow and setting a `top` / `left` at all will completely throw
+        // off the position. We also can't use margins, because they won't have an effect in some
+        // cases where the element doesn't have anything to "push off of". Finally, this works
+        // better both with flexible and non-flexible positioning.
         /** @type {?} */
         var transformString = '';
         /** @type {?} */
@@ -2601,8 +2785,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         extendStyles(this._pane.style, styles);
     };
+    /** Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing. */
     /**
      * Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing.
+     * @private
      * @param {?} position
      * @param {?} originPoint
      * @param {?} scrollPosition
@@ -2610,19 +2796,25 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayY = /**
      * Gets the exact top/bottom for the overlay when not using flexible sizing or when pushing.
+     * @private
      * @param {?} position
      * @param {?} originPoint
      * @param {?} scrollPosition
      * @return {?}
      */
     function (position, originPoint, scrollPosition) {
+        // Reset any existing styles. This is necessary in case the
+        // preferred position has changed since the last `apply`.
         /** @type {?} */
-        var styles = /** @type {?} */ ({ top: null, bottom: null });
+        var styles = (/** @type {?} */ ({ top: null, bottom: null }));
         /** @type {?} */
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
+        // @breaking-change 8.0.0 Currently the `_overlayContainer` is optional in order to avoid a
+        // breaking change. The null check here can be removed once the `_overlayContainer` becomes
+        // a required parameter.
         /** @type {?} */
         var virtualKeyboardOffset = this._overlayContainer ?
             this._overlayContainer.getContainerElement().getBoundingClientRect().top : 0;
@@ -2634,8 +2826,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // We want to set either `top` or `bottom` based on whether the overlay wants to appear
         // above or below the origin and the direction in which the element will expand.
         if (position.overlayY === 'bottom') {
+            // When using `bottom`, we adjust the y position such that it is the distance
+            // from the bottom of the viewport rather than the top.
             /** @type {?} */
-            var documentHeight = /** @type {?} */ ((this._document.documentElement)).clientHeight;
+            var documentHeight = (/** @type {?} */ (this._document.documentElement)).clientHeight;
             styles.bottom = documentHeight - (overlayPoint.y + this._overlayRect.height) + "px";
         }
         else {
@@ -2643,8 +2837,10 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         return styles;
     };
+    /** Gets the exact left/right for the overlay when not using flexible sizing or when pushing. */
     /**
      * Gets the exact left/right for the overlay when not using flexible sizing or when pushing.
+     * @private
      * @param {?} position
      * @param {?} originPoint
      * @param {?} scrollPosition
@@ -2652,19 +2848,26 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayX = /**
      * Gets the exact left/right for the overlay when not using flexible sizing or when pushing.
+     * @private
      * @param {?} position
      * @param {?} originPoint
      * @param {?} scrollPosition
      * @return {?}
      */
     function (position, originPoint, scrollPosition) {
+        // Reset any existing styles. This is necessary in case the preferred position has
+        // changed since the last `apply`.
         /** @type {?} */
-        var styles = /** @type {?} */ ({ left: null, right: null });
+        var styles = (/** @type {?} */ ({ left: null, right: null }));
         /** @type {?} */
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
+        // We want to set either `left` or `right` based on whether the overlay wants to appear "before"
+        // or "after" the origin, which determines the direction in which the element will expand.
+        // For the horizontal axis, the meaning of "before" and "after" change based on whether the
+        // page is in RTL or LTR.
         /** @type {?} */
         var horizontalStyleProperty;
         if (this._isRtl()) {
@@ -2677,7 +2880,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // from the right edge of the viewport rather than the left edge.
         if (horizontalStyleProperty === 'right') {
             /** @type {?} */
-            var documentWidth = /** @type {?} */ ((this._document.documentElement)).clientWidth;
+            var documentWidth = (/** @type {?} */ (this._document.documentElement)).clientWidth;
             styles.right = documentWidth - (overlayPoint.x + this._overlayRect.width) + "px";
         }
         else {
@@ -2688,18 +2891,28 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     /**
      * Gets the view properties of the trigger and overlay, including whether they are clipped
      * or completely outside the view of any of the strategy's scrollables.
+     */
+    /**
+     * Gets the view properties of the trigger and overlay, including whether they are clipped
+     * or completely outside the view of any of the strategy's scrollables.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getScrollVisibility = /**
      * Gets the view properties of the trigger and overlay, including whether they are clipped
      * or completely outside the view of any of the strategy's scrollables.
+     * @private
      * @return {?}
      */
     function () {
+        // Note: needs fresh rects since the position could've changed.
         /** @type {?} */
         var originBounds = this._origin.getBoundingClientRect();
         /** @type {?} */
         var overlayBounds = this._pane.getBoundingClientRect();
+        // TODO(jelbourn): instead of needing all of the client rects for these scrolling containers
+        // every time, we should be able to use the scrollTop of the containers if the size of those
+        // containers hasn't changed.
         /** @type {?} */
         var scrollContainerBounds = this.scrollables.map(function (scrollable) {
             return scrollable.getElementRef().nativeElement.getBoundingClientRect();
@@ -2711,14 +2924,17 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             isOverlayOutsideView: isElementScrolledOutsideView(overlayBounds, scrollContainerBounds),
         };
     };
+    /** Subtracts the amount that an element is overflowing on an axis from it's length. */
     /**
      * Subtracts the amount that an element is overflowing on an axis from it's length.
+     * @private
      * @param {?} length
      * @param {...?} overflows
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._subtractOverflows = /**
      * Subtracts the amount that an element is overflowing on an axis from it's length.
+     * @private
      * @param {?} length
      * @param {...?} overflows
      * @return {?}
@@ -2732,19 +2948,27 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             return currentValue - Math.max(currentOverflow, 0);
         }, length);
     };
+    /** Narrows the given viewport rect by the current _viewportMargin. */
     /**
      * Narrows the given viewport rect by the current _viewportMargin.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getNarrowedViewportRect = /**
      * Narrows the given viewport rect by the current _viewportMargin.
+     * @private
      * @return {?}
      */
     function () {
+        // We recalculate the viewport rect here ourselves, rather than using the ViewportRuler,
+        // because we want to use the `clientWidth` and `clientHeight` as the base. The difference
+        // being that the client properties don't include the scrollbar, as opposed to `innerWidth`
+        // and `innerHeight` that do. This is necessary, because the overlay container uses
+        // 100% `width` and `height` which don't include the scrollbar either.
         /** @type {?} */
-        var width = /** @type {?} */ ((this._document.documentElement)).clientWidth;
+        var width = (/** @type {?} */ (this._document.documentElement)).clientWidth;
         /** @type {?} */
-        var height = /** @type {?} */ ((this._document.documentElement)).clientHeight;
+        var height = (/** @type {?} */ (this._document.documentElement)).clientHeight;
         /** @type {?} */
         var scrollPosition = this._viewportRuler.getViewportScrollPosition();
         return {
@@ -2756,36 +2980,45 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             height: height - (2 * this._viewportMargin),
         };
     };
+    /** Whether the we're dealing with an RTL context */
     /**
      * Whether the we're dealing with an RTL context
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._isRtl = /**
      * Whether the we're dealing with an RTL context
+     * @private
      * @return {?}
      */
     function () {
         return this._overlayRef.getDirection() === 'rtl';
     };
+    /** Determines whether the overlay uses exact or flexible positioning. */
     /**
      * Determines whether the overlay uses exact or flexible positioning.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._hasExactPosition = /**
      * Determines whether the overlay uses exact or flexible positioning.
+     * @private
      * @return {?}
      */
     function () {
         return !this._hasFlexibleDimensions || this._isPushed;
     };
+    /** Retrieves the offset of a position along the x or y axis. */
     /**
      * Retrieves the offset of a position along the x or y axis.
+     * @private
      * @param {?} position
      * @param {?} axis
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._getOffset = /**
      * Retrieves the offset of a position along the x or y axis.
+     * @private
      * @param {?} position
      * @param {?} axis
      * @return {?}
@@ -2798,12 +3031,15 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         }
         return position.offsetY == null ? this._offsetY : position.offsetY;
     };
+    /** Validates that the current position match the expected values. */
     /**
      * Validates that the current position match the expected values.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._validatePositions = /**
      * Validates that the current position match the expected values.
+     * @private
      * @return {?}
      */
     function () {
@@ -2819,13 +3055,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             validateVerticalPosition('overlayY', pair.overlayY);
         });
     };
+    /** Adds a single CSS class or an array of classes on the overlay panel. */
     /**
      * Adds a single CSS class or an array of classes on the overlay panel.
+     * @private
      * @param {?} cssClasses
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._addPanelClasses = /**
      * Adds a single CSS class or an array of classes on the overlay panel.
+     * @private
      * @param {?} cssClasses
      * @return {?}
      */
@@ -2840,12 +3079,15 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             });
         }
     };
+    /** Clears the classes that the position strategy has applied from the overlay panel. */
     /**
      * Clears the classes that the position strategy has applied from the overlay panel.
+     * @private
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._clearPanelClasses = /**
      * Clears the classes that the position strategy has applied from the overlay panel.
+     * @private
      * @return {?}
      */
     function () {
@@ -2874,7 +3116,7 @@ function extendStyles(dest, source) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -3061,26 +3303,30 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Adds a new preferred fallback position.
+     * @template THIS
+     * @this {THIS}
      * @param {?} originPos
      * @param {?} overlayPos
      * @param {?=} offsetX
      * @param {?=} offsetY
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withFallbackPosition = /**
      * Adds a new preferred fallback position.
+     * @template THIS
+     * @this {THIS}
      * @param {?} originPos
      * @param {?} overlayPos
      * @param {?=} offsetX
      * @param {?=} offsetY
-     * @return {?}
+     * @return {THIS}
      */
     function (originPos, overlayPos, offsetX, offsetY) {
         /** @type {?} */
         var position = new ConnectionPositionPair(originPos, overlayPos, offsetX, offsetY);
-        this._preferredPositions.push(position);
-        this._positionStrategy.withPositions(this._preferredPositions);
-        return this;
+        (/** @type {?} */ (this))._preferredPositions.push(position);
+        (/** @type {?} */ (this))._positionStrategy.withPositions((/** @type {?} */ (this))._preferredPositions);
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the layout direction so the overlay's position can be adjusted to match.
@@ -3088,25 +3334,29 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the layout direction so the overlay's position can be adjusted to match.
+     * @template THIS
+     * @this {THIS}
      * @param {?} dir New layout direction.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withDirection = /**
      * Sets the layout direction so the overlay's position can be adjusted to match.
+     * @template THIS
+     * @this {THIS}
      * @param {?} dir New layout direction.
-     * @return {?}
+     * @return {THIS}
      */
     function (dir) {
         // Since the direction might be declared before the strategy is attached,
         // we save the value in a temporary property and we'll transfer it to the
         // overlay ref on attachment.
-        if (this._overlayRef) {
-            this._overlayRef.setDirection(dir);
+        if ((/** @type {?} */ (this))._overlayRef) {
+            (/** @type {?} */ (this))._overlayRef.setDirection(dir);
         }
         else {
-            this._direction = dir;
+            (/** @type {?} */ (this))._direction = dir;
         }
-        return this;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets an offset for the overlay's connection point on the x-axis
@@ -3114,17 +3364,21 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets an offset for the overlay's connection point on the x-axis
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the X axis.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withOffsetX = /**
      * Sets an offset for the overlay's connection point on the x-axis
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the X axis.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
-        this._positionStrategy.withDefaultOffsetX(offset);
-        return this;
+        (/** @type {?} */ (this))._positionStrategy.withDefaultOffsetX(offset);
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets an offset for the overlay's connection point on the y-axis
@@ -3132,17 +3386,21 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets an offset for the overlay's connection point on the y-axis
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the Y axis.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withOffsetY = /**
      * Sets an offset for the overlay's connection point on the y-axis
+     * @template THIS
+     * @this {THIS}
      * @param {?} offset New offset in the Y axis.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
-        this._positionStrategy.withDefaultOffsetY(offset);
-        return this;
+        (/** @type {?} */ (this))._positionStrategy.withDefaultOffsetY(offset);
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets whether the overlay's position should be locked in after it is positioned
@@ -3154,19 +3412,23 @@ ConnectedPositionStrategy = /** @class */ (function () {
      * Sets whether the overlay's position should be locked in after it is positioned
      * initially. When an overlay is locked in, it won't attempt to reposition itself
      * when the position is re-applied (e.g. when the user scrolls away).
+     * @template THIS
+     * @this {THIS}
      * @param {?} isLocked Whether the overlay should locked in.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withLockedPosition = /**
      * Sets whether the overlay's position should be locked in after it is positioned
      * initially. When an overlay is locked in, it won't attempt to reposition itself
      * when the position is re-applied (e.g. when the user scrolls away).
+     * @template THIS
+     * @this {THIS}
      * @param {?} isLocked Whether the overlay should locked in.
-     * @return {?}
+     * @return {THIS}
      */
     function (isLocked) {
-        this._positionStrategy.withLockedPosition(isLocked);
-        return this;
+        (/** @type {?} */ (this))._positionStrategy.withLockedPosition(isLocked);
+        return (/** @type {?} */ (this));
     };
     /**
      * Overwrites the current set of positions with an array of new ones.
@@ -3174,18 +3436,22 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Overwrites the current set of positions with an array of new ones.
+     * @template THIS
+     * @this {THIS}
      * @param {?} positions Position pairs to be set on the strategy.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.withPositions = /**
      * Overwrites the current set of positions with an array of new ones.
+     * @template THIS
+     * @this {THIS}
      * @param {?} positions Position pairs to be set on the strategy.
-     * @return {?}
+     * @return {THIS}
      */
     function (positions) {
-        this._preferredPositions = positions.slice();
-        this._positionStrategy.withPositions(this._preferredPositions);
-        return this;
+        (/** @type {?} */ (this))._preferredPositions = positions.slice();
+        (/** @type {?} */ (this))._positionStrategy.withPositions((/** @type {?} */ (this))._preferredPositions);
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the origin element, relative to which to position the overlay.
@@ -3193,29 +3459,34 @@ ConnectedPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the origin element, relative to which to position the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} origin Reference to the new origin element.
-     * @return {?}
+     * @return {THIS}
      */
     ConnectedPositionStrategy.prototype.setOrigin = /**
      * Sets the origin element, relative to which to position the overlay.
+     * @template THIS
+     * @this {THIS}
      * @param {?} origin Reference to the new origin element.
-     * @return {?}
+     * @return {THIS}
      */
     function (origin) {
-        this._positionStrategy.setOrigin(origin);
-        return this;
+        (/** @type {?} */ (this))._positionStrategy.setOrigin(origin);
+        return (/** @type {?} */ (this));
     };
     return ConnectedPositionStrategy;
 }());
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-/** *
+/**
  * Class to be added to the overlay pane wrapper.
-  @type {?} */
+ * @type {?}
+ */
 var wrapperClass = 'cdk-global-overlay-wrapper';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -3268,20 +3539,24 @@ GlobalPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New top offset.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.top = /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New top offset.
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        this._bottomOffset = '';
-        this._topOffset = value;
-        this._alignItems = 'flex-start';
-        return this;
+        (/** @type {?} */ (this))._bottomOffset = '';
+        (/** @type {?} */ (this))._topOffset = value;
+        (/** @type {?} */ (this))._alignItems = 'flex-start';
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the left position of the overlay. Clears any previously set horizontal position.
@@ -3289,20 +3564,24 @@ GlobalPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the left position of the overlay. Clears any previously set horizontal position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New left offset.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.left = /**
      * Sets the left position of the overlay. Clears any previously set horizontal position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New left offset.
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        this._rightOffset = '';
-        this._leftOffset = value;
-        this._justifyContent = 'flex-start';
-        return this;
+        (/** @type {?} */ (this))._rightOffset = '';
+        (/** @type {?} */ (this))._leftOffset = value;
+        (/** @type {?} */ (this))._justifyContent = 'flex-start';
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the bottom position of the overlay. Clears any previously set vertical position.
@@ -3310,20 +3589,24 @@ GlobalPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the bottom position of the overlay. Clears any previously set vertical position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New bottom offset.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.bottom = /**
      * Sets the bottom position of the overlay. Clears any previously set vertical position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New bottom offset.
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        this._topOffset = '';
-        this._bottomOffset = value;
-        this._alignItems = 'flex-end';
-        return this;
+        (/** @type {?} */ (this))._topOffset = '';
+        (/** @type {?} */ (this))._bottomOffset = value;
+        (/** @type {?} */ (this))._alignItems = 'flex-end';
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the right position of the overlay. Clears any previously set horizontal position.
@@ -3331,20 +3614,24 @@ GlobalPositionStrategy = /** @class */ (function () {
      */
     /**
      * Sets the right position of the overlay. Clears any previously set horizontal position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New right offset.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.right = /**
      * Sets the right position of the overlay. Clears any previously set horizontal position.
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New right offset.
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        this._leftOffset = '';
-        this._rightOffset = value;
-        this._justifyContent = 'flex-end';
-        return this;
+        (/** @type {?} */ (this))._leftOffset = '';
+        (/** @type {?} */ (this))._rightOffset = value;
+        (/** @type {?} */ (this))._justifyContent = 'flex-end';
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the overlay width and clears any previously set width.
@@ -3356,25 +3643,29 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
      * \@breaking-change 8.0.0
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New width for the overlay
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.width = /**
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
      * \@breaking-change 8.0.0
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New width for the overlay
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        if (this._overlayRef) {
-            this._overlayRef.updateSize({ width: value });
+        if ((/** @type {?} */ (this))._overlayRef) {
+            (/** @type {?} */ (this))._overlayRef.updateSize({ width: value });
         }
         else {
-            this._width = value;
+            (/** @type {?} */ (this))._width = value;
         }
-        return this;
+        return (/** @type {?} */ (this));
     };
     /**
      * Sets the overlay height and clears any previously set height.
@@ -3386,25 +3677,29 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
      * \@breaking-change 8.0.0
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New height for the overlay
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.height = /**
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
      * \@breaking-change 8.0.0
+     * @template THIS
+     * @this {THIS}
      * @param {?=} value New height for the overlay
-     * @return {?}
+     * @return {THIS}
      */
     function (value) {
         if (value === void 0) { value = ''; }
-        if (this._overlayRef) {
-            this._overlayRef.updateSize({ height: value });
+        if ((/** @type {?} */ (this))._overlayRef) {
+            (/** @type {?} */ (this))._overlayRef.updateSize({ height: value });
         }
         else {
-            this._height = value;
+            (/** @type {?} */ (this))._height = value;
         }
-        return this;
+        return (/** @type {?} */ (this));
     };
     /**
      * Centers the overlay horizontally with an optional offset.
@@ -3416,21 +3711,25 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Centers the overlay horizontally with an optional offset.
      * Clears any previously set horizontal position.
      *
+     * @template THIS
+     * @this {THIS}
      * @param {?=} offset Overlay offset from the horizontal center.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.centerHorizontally = /**
      * Centers the overlay horizontally with an optional offset.
      * Clears any previously set horizontal position.
      *
+     * @template THIS
+     * @this {THIS}
      * @param {?=} offset Overlay offset from the horizontal center.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
         if (offset === void 0) { offset = ''; }
-        this.left(offset);
-        this._justifyContent = 'center';
-        return this;
+        (/** @type {?} */ (this)).left(offset);
+        (/** @type {?} */ (this))._justifyContent = 'center';
+        return (/** @type {?} */ (this));
     };
     /**
      * Centers the overlay vertically with an optional offset.
@@ -3442,21 +3741,25 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Centers the overlay vertically with an optional offset.
      * Clears any previously set vertical position.
      *
+     * @template THIS
+     * @this {THIS}
      * @param {?=} offset Overlay offset from the vertical center.
-     * @return {?}
+     * @return {THIS}
      */
     GlobalPositionStrategy.prototype.centerVertically = /**
      * Centers the overlay vertically with an optional offset.
      * Clears any previously set vertical position.
      *
+     * @template THIS
+     * @this {THIS}
      * @param {?=} offset Overlay offset from the vertical center.
-     * @return {?}
+     * @return {THIS}
      */
     function (offset) {
         if (offset === void 0) { offset = ''; }
-        this.top(offset);
-        this._alignItems = 'center';
-        return this;
+        (/** @type {?} */ (this)).top(offset);
+        (/** @type {?} */ (this))._alignItems = 'center';
+        return (/** @type {?} */ (this));
     };
     /**
      * Apply the position to the element.
@@ -3540,7 +3843,7 @@ GlobalPositionStrategy = /** @class */ (function () {
         parent.classList.remove(wrapperClass);
         parentStyles.justifyContent = parentStyles.alignItems = styles.marginTop =
             styles.marginBottom = styles.marginLeft = styles.marginRight = styles.position = '';
-        this._overlayRef = /** @type {?} */ ((null));
+        this._overlayRef = (/** @type {?} */ (null));
         this._isDisposed = true;
     };
     return GlobalPositionStrategy;
@@ -3548,15 +3851,13 @@ GlobalPositionStrategy = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Builder for overlay position strategy.
  */
 var OverlayPositionBuilder = /** @class */ (function () {
-    function OverlayPositionBuilder(_viewportRuler, _document, 
-    // @breaking-change 8.0.0 `_platform` and `_overlayContainer` parameters to be made required.
-    _platform, _overlayContainer) {
+    function OverlayPositionBuilder(_viewportRuler, _document, _platform, _overlayContainer) {
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -3638,12 +3939,15 @@ var OverlayPositionBuilder = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Next overlay unique ID.
-  @type {?} */
+ * @type {?}
+ */
 var nextUniqueId = 0;
+// Note that Overlay is *not* scoped to the app root because the ComponentFactoryResolver
+// it needs is different based on where OverlayModule is imported.
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
@@ -3653,9 +3957,7 @@ var nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 var Overlay = /** @class */ (function () {
-    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, 
-    // @breaking-change 8.0.0 `_location` parameter to be made required.
-    _location) {
+    function Overlay(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -3714,11 +4016,17 @@ var Overlay = /** @class */ (function () {
     };
     /**
      * Creates the DOM element for an overlay and appends it to the overlay container.
+     * @returns Newly-created pane element
+     */
+    /**
+     * Creates the DOM element for an overlay and appends it to the overlay container.
+     * @private
      * @param {?} host
      * @return {?} Newly-created pane element
      */
     Overlay.prototype._createPaneElement = /**
      * Creates the DOM element for an overlay and appends it to the overlay container.
+     * @private
      * @param {?} host
      * @return {?} Newly-created pane element
      */
@@ -3733,11 +4041,18 @@ var Overlay = /** @class */ (function () {
     /**
      * Creates the host element that wraps around an overlay
      * and can be used for advanced positioning.
+     * @returns Newly-create host element.
+     */
+    /**
+     * Creates the host element that wraps around an overlay
+     * and can be used for advanced positioning.
+     * @private
      * @return {?} Newly-create host element.
      */
     Overlay.prototype._createHostElement = /**
      * Creates the host element that wraps around an overlay
      * and can be used for advanced positioning.
+     * @private
      * @return {?} Newly-create host element.
      */
     function () {
@@ -3748,11 +4063,18 @@ var Overlay = /** @class */ (function () {
     };
     /**
      * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @param pane The DOM element to turn into a portal outlet.
+     * @returns A portal outlet for the given DOM element.
+     */
+    /**
+     * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @private
      * @param {?} pane The DOM element to turn into a portal outlet.
      * @return {?} A portal outlet for the given DOM element.
      */
     Overlay.prototype._createPortalOutlet = /**
      * Create a DomPortalOutlet into which the overlay content can be loaded.
+     * @private
      * @param {?} pane The DOM element to turn into a portal outlet.
      * @return {?} A portal outlet for the given DOM element.
      */
@@ -3785,11 +4107,12 @@ var Overlay = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Default set of positions for the overlay. Follows the behavior of a dropdown.
-  @type {?} */
+ * @type {?}
+ */
 var defaultPositionList = [
     {
         originX: 'start',
@@ -3816,9 +4139,10 @@ var defaultPositionList = [
         overlayY: 'top'
     }
 ];
-/** *
+/**
  * Injection token that determines the scroll handling while the connected overlay is open.
-  @type {?} */
+ * @type {?}
+ */
 var CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new InjectionToken('cdk-connected-overlay-scroll-strategy');
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
@@ -4056,12 +4380,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
             this.open ? this._attachOverlay() : this._detachOverlay();
         }
     };
+    /** Creates an overlay */
     /**
      * Creates an overlay
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._createOverlay = /**
      * Creates an overlay
+     * @private
      * @return {?}
      */
     function () {
@@ -4077,12 +4404,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
             }
         });
     };
+    /** Builds the overlay config based on the directive's inputs */
     /**
      * Builds the overlay config based on the directive's inputs
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._buildConfig = /**
      * Builds the overlay config based on the directive's inputs
+     * @private
      * @return {?}
      */
     function () {
@@ -4115,13 +4445,16 @@ var CdkConnectedOverlay = /** @class */ (function () {
         }
         return overlayConfig;
     };
+    /** Updates the state of a position strategy, based on the values of the directive inputs. */
     /**
      * Updates the state of a position strategy, based on the values of the directive inputs.
+     * @private
      * @param {?} positionStrategy
      * @return {?}
      */
     CdkConnectedOverlay.prototype._updatePositionStrategy = /**
      * Updates the state of a position strategy, based on the values of the directive inputs.
+     * @private
      * @param {?} positionStrategy
      * @return {?}
      */
@@ -4145,12 +4478,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
             .withViewportMargin(this.viewportMargin)
             .withLockedPosition(this.lockPosition);
     };
+    /** Returns the position strategy of the overlay to be set on the overlay config */
     /**
      * Returns the position strategy of the overlay to be set on the overlay config
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._createPositionStrategy = /**
      * Returns the position strategy of the overlay to be set on the overlay config
+     * @private
      * @return {?}
      */
     function () {
@@ -4161,12 +4497,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
         strategy.positionChanges.subscribe(function (p) { return _this.positionChange.emit(p); });
         return strategy;
     };
+    /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     /**
      * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._attachOverlay = /**
      * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
+     * @private
      * @return {?}
      */
     function () {
@@ -4193,12 +4532,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
             });
         }
     };
+    /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     /**
      * Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._detachOverlay = /**
      * Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists
+     * @private
      * @return {?}
      */
     function () {
@@ -4208,12 +4550,15 @@ var CdkConnectedOverlay = /** @class */ (function () {
         }
         this._backdropSubscription.unsubscribe();
     };
+    /** Destroys the overlay created by this directive. */
     /**
      * Destroys the overlay created by this directive.
+     * @private
      * @return {?}
      */
     CdkConnectedOverlay.prototype._destroyOverlay = /**
      * Destroys the overlay created by this directive.
+     * @private
      * @return {?}
      */
     function () {
@@ -4271,9 +4616,10 @@ var CdkConnectedOverlay = /** @class */ (function () {
 function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
     return function () { return overlay.scrollStrategies.reposition(); };
 }
-/** *
+/**
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 var CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
     provide: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
     deps: [Overlay],
@@ -4282,7 +4628,7 @@ var CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var OverlayModule = /** @class */ (function () {
     function OverlayModule() {
@@ -4300,11 +4646,12 @@ var OverlayModule = /** @class */ (function () {
     ];
     return OverlayModule;
 }());
-/** *
+/**
  * @deprecated Use `OverlayModule` instead.
  * \@breaking-change 8.0.0
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 var OVERLAY_PROVIDERS = [
     Overlay,
     OverlayPositionBuilder,
@@ -4316,7 +4663,7 @@ var OVERLAY_PROVIDERS = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
@@ -4343,9 +4690,11 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
         }
     };
     /**
+     * @protected
      * @return {?}
      */
     FullscreenOverlayContainer.prototype._createContainer = /**
+     * @protected
      * @return {?}
      */
     function () {
@@ -4355,9 +4704,11 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
         this._addFullscreenChangeListener(function () { return _this._adjustParentForFullscreenChange(); });
     };
     /**
+     * @private
      * @return {?}
      */
     FullscreenOverlayContainer.prototype._adjustParentForFullscreenChange = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -4371,10 +4722,12 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
         parent.appendChild(this._containerElement);
     };
     /**
+     * @private
      * @param {?} fn
      * @return {?}
      */
     FullscreenOverlayContainer.prototype._addFullscreenChangeListener = /**
+     * @private
      * @param {?} fn
      * @return {?}
      */
@@ -4390,9 +4743,11 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
         }
     };
     /**
+     * @private
      * @return {?}
      */
     FullscreenOverlayContainer.prototype._getEventName = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -4403,10 +4758,10 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
             else if (this._document.webkitFullscreenEnabled) {
                 this._fullScreenEventName = 'webkitfullscreenchange';
             }
-            else if ((/** @type {?} */ (this._document)).mozFullScreenEnabled) {
+            else if (((/** @type {?} */ (this._document))).mozFullScreenEnabled) {
                 this._fullScreenEventName = 'mozfullscreenchange';
             }
-            else if ((/** @type {?} */ (this._document)).msFullscreenEnabled) {
+            else if (((/** @type {?} */ (this._document))).msFullscreenEnabled) {
                 this._fullScreenEventName = 'MSFullscreenChange';
             }
         }
@@ -4429,8 +4784,8 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     function () {
         return this._document.fullscreenElement ||
             this._document.webkitFullscreenElement ||
-            (/** @type {?} */ (this._document)).mozFullScreenElement ||
-            (/** @type {?} */ (this._document)).msFullscreenElement ||
+            ((/** @type {?} */ (this._document))).mozFullScreenElement ||
+            ((/** @type {?} */ (this._document))).msFullscreenElement ||
             null;
     };
     FullscreenOverlayContainer.decorators = [
@@ -4446,12 +4801,12 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { Overlay, OverlayContainer, CdkOverlayOrigin, CdkConnectedOverlay, FullscreenOverlayContainer, OverlayRef, OverlayKeyboardDispatcher, OverlayPositionBuilder, GlobalPositionStrategy, ConnectedPositionStrategy, FlexibleConnectedPositionStrategy, OverlayConfig, validateVerticalPosition, validateHorizontalPosition, ConnectionPositionPair, ScrollingVisibility, ConnectedOverlayPositionChange, ScrollStrategyOptions, RepositionScrollStrategy, CloseScrollStrategy, NoopScrollStrategy, BlockScrollStrategy, OverlayModule, OVERLAY_PROVIDERS, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵg, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵf, OVERLAY_CONTAINER_PROVIDER as ɵb, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵa, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵc, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵe, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵd };

@@ -13,10 +13,10 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepLabel = /** @class */ (function () {
-    function CdkStepLabel(template) {
+    function CdkStepLabel(/** @docs-private */ template) {
         this.template = template;
     }
     CdkStepLabel.decorators = [
@@ -33,7 +33,7 @@ var CdkStepLabel = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepHeader = /** @class */ (function () {
     function CdkStepHeader(_elementRef) {
@@ -68,11 +68,12 @@ var CdkStepHeader = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each stepper component.
-  @type {?} */
+ * @type {?}
+ */
 var nextId = 0;
 /**
  * Change event emitted on selection changes.
@@ -85,18 +86,20 @@ StepperSelectionEvent = /** @class */ (function () {
     }
     return StepperSelectionEvent;
 }());
-/** *
+/**
  * Enum to represent the different states of the steps.
-  @type {?} */
+ * @type {?}
+ */
 var STEP_STATE = {
     NUMBER: 'number',
     EDIT: 'edit',
     DONE: 'done',
     ERROR: 'error'
 };
-/** *
+/**
  * InjectionToken that can be used to specify the global stepper options.
-  @type {?} */
+ * @type {?}
+ */
 var MAT_STEPPER_GLOBAL_OPTIONS = new core.InjectionToken('mat-stepper-global-options');
 var CdkStep = /** @class */ (function () {
     /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
@@ -168,9 +171,11 @@ var CdkStep = /** @class */ (function () {
         configurable: true
     });
     /**
+     * @private
      * @return {?}
      */
     CdkStep.prototype._getDefaultCompleted = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -196,9 +201,11 @@ var CdkStep = /** @class */ (function () {
         configurable: true
     });
     /**
+     * @private
      * @return {?}
      */
     CdkStep.prototype._getDefaultError = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -349,7 +356,7 @@ var CdkStepper = /** @class */ (function () {
          */
         function () {
             // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
-            return this._steps ? this._steps.toArray()[this.selectedIndex] : /** @type {?} */ ((undefined));
+            return this._steps ? this._steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
         },
         set: /**
          * @param {?} step
@@ -375,7 +382,7 @@ var CdkStepper = /** @class */ (function () {
         this._keyManager = new a11y.FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
-        (this._dir ? /** @type {?} */ (this._dir.change) : rxjs.of())
+        (this._dir ? (/** @type {?} */ (this._dir.change)) : rxjs.of())
             .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
             .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
@@ -519,11 +526,13 @@ var CdkStepper = /** @class */ (function () {
             : this._getGuidelineLogic(step, isCurrentStep, state);
     };
     /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @return {?}
      */
     CdkStepper.prototype._getDefaultIndicatorLogic = /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @return {?}
@@ -540,12 +549,14 @@ var CdkStepper = /** @class */ (function () {
         }
     };
     /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @param {?=} state
      * @return {?}
      */
     CdkStepper.prototype._getGuidelineLogic = /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @param {?=} state
@@ -570,10 +581,12 @@ var CdkStepper = /** @class */ (function () {
         }
     };
     /**
+     * @private
      * @param {?} index
      * @return {?}
      */
     CdkStepper.prototype._isCurrentStep = /**
+     * @private
      * @param {?} index
      * @return {?}
      */
@@ -593,10 +606,12 @@ var CdkStepper = /** @class */ (function () {
         return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
     };
     /**
+     * @private
      * @param {?} newIndex
      * @return {?}
      */
     CdkStepper.prototype._updateSelectedItemIndex = /**
+     * @private
      * @param {?} newIndex
      * @return {?}
      */
@@ -651,10 +666,12 @@ var CdkStepper = /** @class */ (function () {
         }
     };
     /**
+     * @private
      * @param {?} index
      * @return {?}
      */
     CdkStepper.prototype._anyControlsInvalidOrPending = /**
+     * @private
      * @param {?} index
      * @return {?}
      */
@@ -676,20 +693,25 @@ var CdkStepper = /** @class */ (function () {
         return false;
     };
     /**
+     * @private
      * @return {?}
      */
     CdkStepper.prototype._layoutDirection = /**
+     * @private
      * @return {?}
      */
     function () {
         return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
     };
+    /** Checks whether the stepper contains the focused element. */
     /**
      * Checks whether the stepper contains the focused element.
+     * @private
      * @return {?}
      */
     CdkStepper.prototype._containsFocus = /**
      * Checks whether the stepper contains the focused element.
+     * @private
      * @return {?}
      */
     function () {
@@ -728,7 +750,7 @@ var CdkStepper = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Button that moves to the next step in a stepper workflow.
@@ -791,7 +813,7 @@ var CdkStepperPrevious = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepperModule = /** @class */ (function () {
     function CdkStepperModule() {

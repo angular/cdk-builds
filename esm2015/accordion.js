@@ -12,11 +12,12 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each accordion.
-  @type {?} */
+ * @type {?}
+ */
 let nextId = 0;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
@@ -75,6 +76,7 @@ class CdkAccordion {
         this._stateChanges.complete();
     }
     /**
+     * @private
      * @param {?} expanded
      * @return {?}
      */
@@ -96,11 +98,12 @@ CdkAccordion.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each accordion item.
-  @type {?} */
+ * @type {?}
+ */
 let nextId$1 = 0;
 const ɵ0 = undefined;
 /**
@@ -178,10 +181,11 @@ class CdkAccordionItem {
             this.expandedChange.emit(expanded);
             if (expanded) {
                 this.opened.emit();
-                /** *
+                /**
                  * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
                  * the name value is the id of the accordion.
-                  @type {?} */
+                 * @type {?}
+                 */
                 const accordionId = this.accordion ? this.accordion.id : this.id;
                 this._expansionDispatcher.notify(this.id, accordionId);
             }
@@ -243,6 +247,7 @@ class CdkAccordionItem {
         }
     }
     /**
+     * @private
      * @return {?}
      */
     _subscribeToOpenCloseAllActions() {
@@ -282,7 +287,7 @@ CdkAccordionItem.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkAccordionModule {
 }
@@ -295,12 +300,12 @@ CdkAccordionModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { CdkAccordionItem, CdkAccordion, CdkAccordionModule };

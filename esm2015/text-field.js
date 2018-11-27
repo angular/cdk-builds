@@ -13,11 +13,12 @@ import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Options to pass to the animationstart listener.
-  @type {?} */
+ * @type {?}
+ */
 const listenerOptions = normalizePassiveListenerOptions({ passive: true });
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
@@ -54,21 +55,21 @@ class AutofillMonitor {
         /** @type {?} */
         const cssClass = 'cdk-text-field-autofilled';
         /** @type {?} */
-        const listener = /** @type {?} */ (((event) => {
+        const listener = (/** @type {?} */ (((event) => {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
             if (event.animationName === 'cdk-text-field-autofill-start' &&
                 !element.classList.contains(cssClass)) {
                 element.classList.add(cssClass);
-                this._ngZone.run(() => result.next({ target: /** @type {?} */ (event.target), isAutofilled: true }));
+                this._ngZone.run(() => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true }));
             }
             else if (event.animationName === 'cdk-text-field-autofill-end' &&
                 element.classList.contains(cssClass)) {
                 element.classList.remove(cssClass);
-                this._ngZone.run(() => result.next({ target: /** @type {?} */ (event.target), isAutofilled: false }));
+                this._ngZone.run(() => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false }));
             }
-        }));
+        })));
         this._ngZone.runOutsideAngular(() => {
             element.addEventListener('animationstart', listener, listenerOptions);
             element.classList.add('cdk-text-field-autofill-monitored');
@@ -161,7 +162,7 @@ CdkAutofill.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive to automatically resize a textarea to fit its content.
@@ -184,7 +185,7 @@ class CdkTextareaAutosize {
          * does not have the same problem because it does not affect the textarea's scrollHeight.
          */
         this._previousMinRows = -1;
-        this._textareaElement = /** @type {?} */ (this._elementRef.nativeElement);
+        this._textareaElement = (/** @type {?} */ (this._elementRef.nativeElement));
     }
     /**
      * Minimum amount of rows in the textarea.
@@ -281,14 +282,16 @@ class CdkTextareaAutosize {
      * We need to know how large a single "row" of a textarea is in order to apply minRows and
      * maxRows. For the initial version, we will assume that the height of a single line in the
      * textarea does not ever change.
+     * @private
      * @return {?}
      */
     _cacheTextareaLineHeight() {
         if (this._cachedLineHeight) {
             return;
         }
+        // Use a clone element because we have to override some styles.
         /** @type {?} */
-        let textareaClone = /** @type {?} */ (this._textareaElement.cloneNode(false));
+        let textareaClone = (/** @type {?} */ (this._textareaElement.cloneNode(false)));
         textareaClone.rows = 1;
         // Use `position: absolute` so that this doesn't cause a browser layout and use
         // `visibility: hidden` so that nothing is rendered. Clear any other styles that
@@ -305,10 +308,10 @@ class CdkTextareaAutosize {
         // As a workaround that removes the extra space for the scrollbar, we can just set overflow
         // to hidden. This ensures that there is no invalid calculation of the line height.
         // See Firefox bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=33654
-        textareaClone.style.overflow = 'hidden'; /** @type {?} */
-        ((this._textareaElement.parentNode)).appendChild(textareaClone);
-        this._cachedLineHeight = textareaClone.clientHeight; /** @type {?} */
-        ((this._textareaElement.parentNode)).removeChild(textareaClone);
+        textareaClone.style.overflow = 'hidden';
+        (/** @type {?} */ (this._textareaElement.parentNode)).appendChild(textareaClone);
+        this._cachedLineHeight = textareaClone.clientHeight;
+        (/** @type {?} */ (this._textareaElement.parentNode)).removeChild(textareaClone);
         // Min and max heights have to be re-calculated if the cached line height changes
         this._setMinHeight();
         this._setMaxHeight();
@@ -339,7 +342,7 @@ class CdkTextareaAutosize {
             return;
         }
         /** @type {?} */
-        const textarea = /** @type {?} */ (this._elementRef.nativeElement);
+        const textarea = (/** @type {?} */ (this._elementRef.nativeElement));
         /** @type {?} */
         const value = textarea.value;
         // Only resize if the value or minRows have changed since these calculations can be expensive.
@@ -355,6 +358,8 @@ class CdkTextareaAutosize {
         // need to be removed temporarily.
         textarea.classList.add('cdk-textarea-autosize-measuring');
         textarea.placeholder = '';
+        // The cdk-textarea-autosize-measuring class includes a 2px padding to workaround an issue with
+        // Chrome, so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
         /** @type {?} */
         const height = textarea.scrollHeight - 4;
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
@@ -426,7 +431,7 @@ CdkTextareaAutosize.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class TextFieldModule {
 }
@@ -440,12 +445,12 @@ TextFieldModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };

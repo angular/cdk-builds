@@ -12,7 +12,7 @@ import { debounceTime } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -85,12 +85,18 @@ var ContentObserver = /** @class */ (function () {
     /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
      * new one if not.
+     */
+    /**
+     * Observes the given element by using the existing MutationObserver if available, or creating a
+     * new one if not.
+     * @private
      * @param {?} element
      * @return {?}
      */
     ContentObserver.prototype._observeElement = /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
      * new one if not.
+     * @private
      * @param {?} element
      * @return {?}
      */
@@ -110,43 +116,52 @@ var ContentObserver = /** @class */ (function () {
             this._observedElements.set(element, { observer: observer, stream: stream_1, count: 1 });
         }
         else {
-            /** @type {?} */ ((this._observedElements.get(element))).count++;
+            (/** @type {?} */ (this._observedElements.get(element))).count++;
         }
-        return /** @type {?} */ ((this._observedElements.get(element))).stream;
+        return (/** @type {?} */ (this._observedElements.get(element))).stream;
     };
     /**
      * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
      * observing this element.
+     */
+    /**
+     * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
+     * observing this element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     ContentObserver.prototype._unobserveElement = /**
      * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
      * observing this element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     function (element) {
         if (this._observedElements.has(element)) {
-            /** @type {?} */ ((this._observedElements.get(element))).count--;
-            if (!/** @type {?} */ ((this._observedElements.get(element))).count) {
+            (/** @type {?} */ (this._observedElements.get(element))).count--;
+            if (!(/** @type {?} */ (this._observedElements.get(element))).count) {
                 this._cleanupObserver(element);
             }
         }
     };
+    /** Clean up the underlying MutationObserver for the specified element. */
     /**
      * Clean up the underlying MutationObserver for the specified element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     ContentObserver.prototype._cleanupObserver = /**
      * Clean up the underlying MutationObserver for the specified element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     function (element) {
         if (this._observedElements.has(element)) {
-            var _a = /** @type {?} */ ((this._observedElements.get(element))), observer = _a.observer, stream = _a.stream;
+            var _a = (/** @type {?} */ (this._observedElements.get(element))), observer = _a.observer, stream = _a.stream;
             if (observer) {
                 observer.disconnect();
             }
@@ -241,9 +256,11 @@ var CdkObserveContent = /** @class */ (function () {
         this._unsubscribe();
     };
     /**
+     * @private
      * @return {?}
      */
     CdkObserveContent.prototype._subscribe = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -261,9 +278,11 @@ var CdkObserveContent = /** @class */ (function () {
         });
     };
     /**
+     * @private
      * @return {?}
      */
     CdkObserveContent.prototype._unsubscribe = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -305,12 +324,12 @@ var ObserversModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { MutationObserverFactory, ContentObserver, CdkObserveContent, ObserversModule };

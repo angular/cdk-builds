@@ -10,7 +10,7 @@ import { ComponentFactoryResolver, Directive, EventEmitter, NgModule, Output, Te
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -65,7 +65,7 @@ function throwNoPortalAttachedError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A `Portal` is something that you want to render somewhere else.
@@ -101,7 +101,7 @@ Portal = /** @class */ (function () {
             throwPortalAlreadyAttachedError();
         }
         this._attachedHost = host;
-        return /** @type {?} */ (host.attach(this));
+        return (/** @type {?} */ (host.attach(this)));
     };
     /** Detach this portal from its host */
     /**
@@ -348,9 +348,11 @@ BasePortalOutlet = /** @class */ (function () {
         this._disposeFn = fn;
     };
     /**
+     * @private
      * @return {?}
      */
     BasePortalOutlet.prototype._invokeDisposeFn = /**
+     * @private
      * @return {?}
      */
     function () {
@@ -364,7 +366,7 @@ BasePortalOutlet = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
@@ -486,25 +488,28 @@ DomPortalOutlet = /** @class */ (function (_super) {
             this.outletElement.parentNode.removeChild(this.outletElement);
         }
     };
+    /** Gets the root HTMLElement for an instantiated component. */
     /**
      * Gets the root HTMLElement for an instantiated component.
+     * @private
      * @param {?} componentRef
      * @return {?}
      */
     DomPortalOutlet.prototype._getComponentRootNode = /**
      * Gets the root HTMLElement for an instantiated component.
+     * @private
      * @param {?} componentRef
      * @return {?}
      */
     function (componentRef) {
-        return /** @type {?} */ ((/** @type {?} */ (componentRef.hostView)).rootNodes[0]);
+        return (/** @type {?} */ (((/** @type {?} */ (componentRef.hostView))).rootNodes[0]));
     };
     return DomPortalOutlet;
 }(BasePortalOutlet));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -637,6 +642,8 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
      */
     function (portal) {
         portal.setAttachedHost(this);
+        // If the portal specifies an origin, use that as the logical location of the component
+        // in the application tree. Otherwise use the location of this PortalOutlet.
         /** @type {?} */
         var viewContainerRef = portal.viewContainerRef != null ?
             portal.viewContainerRef :
@@ -712,7 +719,7 @@ var PortalModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -753,12 +760,12 @@ PortalInjector = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { DomPortalOutlet as DomPortalHost, CdkPortalOutlet as PortalHostDirective, CdkPortal as TemplatePortalDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, CdkPortal, CdkPortalOutlet, PortalModule, PortalInjector };

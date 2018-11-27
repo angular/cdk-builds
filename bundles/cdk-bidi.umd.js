@@ -13,9 +13,9 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
  *
@@ -29,7 +29,8 @@
  * https://github.com/angular/angular/issues/22559
  *
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 var DIR_DOCUMENT = new core.InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
     factory: DIR_DOCUMENT_FACTORY,
@@ -44,7 +45,7 @@ function DIR_DOCUMENT_FACTORY() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
@@ -61,6 +62,10 @@ var Directionality = /** @class */ (function () {
          */
         this.change = new core.EventEmitter();
         if (_document) {
+            // TODO: handle 'auto' value -
+            // We still need to account for dir="auto".
+            // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
+            // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
             /** @type {?} */
             var bodyDir = _document.body ? _document.body.dir : null;
             /** @type {?} */
@@ -92,7 +97,7 @@ var Directionality = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -186,7 +191,7 @@ var Dir = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var BidiModule = /** @class */ (function () {
     function BidiModule() {

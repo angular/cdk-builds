@@ -17,7 +17,7 @@ import { Platform } from '@angular/cdk/platform';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Mixin to provide a directive with a function that checks if the sticky input has been
@@ -78,7 +78,7 @@ function mixinHasStickyInput(base) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Cell definition for a CDK table.
@@ -88,7 +88,7 @@ class CdkCellDef {
     /**
      * @param {?} template
      */
-    constructor(template) {
+    constructor(/** @docs-private */ template) {
         this.template = template;
     }
 }
@@ -107,7 +107,7 @@ class CdkHeaderCellDef {
     /**
      * @param {?} template
      */
-    constructor(template) {
+    constructor(/** @docs-private */ template) {
         this.template = template;
     }
 }
@@ -126,7 +126,7 @@ class CdkFooterCellDef {
     /**
      * @param {?} template
      */
-    constructor(template) {
+    constructor(/** @docs-private */ template) {
         this.template = template;
     }
 }
@@ -137,6 +137,7 @@ CdkFooterCellDef.decorators = [
 CdkFooterCellDef.ctorParameters = () => [
     { type: TemplateRef }
 ];
+// Boilerplate for applying mixins to CdkColumnDef.
 /**
  * \@docs-private
  */
@@ -301,12 +302,13 @@ CdkCell.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
-  @type {?} */
+ * @type {?}
+ */
 const CDK_ROW_TEMPLATE = `<ng-container cdkCellOutlet></ng-container>`;
 /**
  * Base class for the CdkHeaderRowDef and CdkRowDef that handles checking their columns inputs
@@ -318,7 +320,7 @@ class BaseRowDef {
      * @param {?} template
      * @param {?} _differs
      */
-    constructor(template, _differs) {
+    constructor(/** @docs-private */ template, _differs) {
         this.template = template;
         this._differs = _differs;
     }
@@ -361,6 +363,7 @@ class BaseRowDef {
         }
     }
 }
+// Boilerplate for applying mixins to CdkHeaderRowDef.
 /**
  * \@docs-private
  */
@@ -380,6 +383,8 @@ class CdkHeaderRowDef extends _CdkHeaderRowDefBase {
     constructor(template, _differs) {
         super(template, _differs);
     }
+    // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
+    // Explicitly define it so that the method is called as part of the Angular lifecycle.
     /**
      * @param {?} changes
      * @return {?}
@@ -399,6 +404,7 @@ CdkHeaderRowDef.ctorParameters = () => [
     { type: TemplateRef },
     { type: IterableDiffers }
 ];
+// Boilerplate for applying mixins to CdkFooterRowDef.
 /**
  * \@docs-private
  */
@@ -418,6 +424,8 @@ class CdkFooterRowDef extends _CdkFooterRowDefBase {
     constructor(template, _differs) {
         super(template, _differs);
     }
+    // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
+    // Explicitly define it so that the method is called as part of the Angular lifecycle.
     /**
      * @param {?} changes
      * @return {?}
@@ -444,6 +452,8 @@ CdkFooterRowDef.ctorParameters = () => [
  * @template T
  */
 class CdkRowDef extends BaseRowDef {
+    // TODO(andrewseguin): Add an input for providing a switch function to determine
+    //   if this template should be used.
     /**
      * @param {?} template
      * @param {?} _differs
@@ -552,7 +562,7 @@ CdkRow.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -611,12 +621,14 @@ function getTableUnknownDataSourceError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+
+/**
  * List of all possible directions that can be used for sticky positioning.
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 const STICKY_DIRECTIONS = ['top', 'bottom', 'left', 'right'];
 /**
  * Applies and removes sticky positioning styles to the `CdkTable` rows and columns cells.
@@ -655,7 +667,7 @@ class StickyStyler {
             this._removeStickyStyle(row, stickyDirections);
             for (let i = 0; i < row.children.length; i++) {
                 /** @type {?} */
-                const cell = /** @type {?} */ (row.children[i]);
+                const cell = (/** @type {?} */ (row.children[i]));
                 this._removeStickyStyle(cell, stickyDirections);
             }
         }
@@ -691,7 +703,7 @@ class StickyStyler {
         for (const row of rows) {
             for (let i = 0; i < numCells; i++) {
                 /** @type {?} */
-                const cell = /** @type {?} */ (row.children[i]);
+                const cell = (/** @type {?} */ (row.children[i]));
                 if (stickyStartStates[i]) {
                     this._addStickyStyle(cell, isRtl ? 'right' : 'left', startPositions[i]);
                 }
@@ -718,6 +730,8 @@ class StickyStyler {
         if (!this._isBrowser) {
             return;
         }
+        // If positioning the rows to the bottom, reverse their order when evaluating the sticky
+        // position such that the last row stuck will be "bottom: 0px" and so on.
         /** @type {?} */
         const rows = position === 'bottom' ? rowsToStick.reverse() : rowsToStick;
         /** @type {?} */
@@ -731,7 +745,7 @@ class StickyStyler {
             if (this.isNativeHtmlTable) {
                 for (let j = 0; j < row.children.length; j++) {
                     /** @type {?} */
-                    const cell = /** @type {?} */ (row.children[j]);
+                    const cell = (/** @type {?} */ (row.children[j]));
                     this._addStickyStyle(cell, position, stickyHeight);
                 }
             }
@@ -761,7 +775,7 @@ class StickyStyler {
             return;
         }
         /** @type {?} */
-        const tfoot = /** @type {?} */ ((tableElement.querySelector('tfoot')));
+        const tfoot = (/** @type {?} */ (tableElement.querySelector('tfoot')));
         if (stickyStates.some(state => !state)) {
             this._removeStickyStyle(tfoot, ['bottom']);
         }
@@ -782,6 +796,8 @@ class StickyStyler {
             element.style[dir] = '';
         }
         element.style.zIndex = this._getCalculatedZIndex(element);
+        // If the element no longer has any more sticky directions, remove sticky positioning and
+        // the sticky CSS class.
         /** @type {?} */
         const hasDirection = STICKY_DIRECTIONS.some(dir => !!element.style[dir]);
         if (!hasDirection) {
@@ -846,7 +862,7 @@ class StickyStyler {
         const firstRowCells = row.children;
         for (let i = 0; i < firstRowCells.length; i++) {
             /** @type {?} */
-            let cell = /** @type {?} */ (firstRowCells[i]);
+            let cell = (/** @type {?} */ (firstRowCells[i]));
             cellWidths.push(cell.getBoundingClientRect().width);
         }
         return cellWidths;
@@ -897,7 +913,7 @@ class StickyStyler {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
@@ -965,11 +981,12 @@ FooterRowOutlet.ctorParameters = () => [
     { type: ViewContainerRef },
     { type: ElementRef }
 ];
-/** *
+/**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 const CDK_TABLE_TEMPLATE = `
   <ng-container headerRowOutlet></ng-container>
   <ng-container rowOutlet></ng-container>
@@ -991,11 +1008,12 @@ class CdkTable {
      * @param {?=} _document
      * @param {?=} _platform
      */
-    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, /**
-                   * @deprecated
-                   * @breaking-change 8.0.0 `_document` and `_platform` to
-                   *    be made into a required parameters.
-                   */
+    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, 
+    /**
+     * @deprecated
+     * @breaking-change 8.0.0 `_document` and `_platform` to
+     *    be made into a required parameters.
+     */
     _document, _platform) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
@@ -1066,6 +1084,8 @@ class CdkTable {
          */
         this.stickyCssClass = 'cdk-table-sticky';
         this._multiTemplateDataRows = false;
+        // TODO(andrewseguin): Remove max value as the end index
+        //   and instead calculate the view on init and scroll.
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
@@ -1091,7 +1111,8 @@ class CdkTable {
      */
     set trackBy(fn) {
         if (isDevMode() &&
-            fn != null && typeof fn !== 'function' && /** @type {?} */ (console) && /** @type {?} */ (console.warn)) {
+            fn != null && typeof fn !== 'function' &&
+            (/** @type {?} */ (console)) && (/** @type {?} */ (console.warn))) {
             console.warn(`trackBy must be a function, but received ${JSON.stringify(fn)}.`);
         }
         this._trackByFn = fn;
@@ -1226,15 +1247,15 @@ class CdkTable {
         const viewContainer = this._rowOutlet.viewContainer;
         changes.forEachOperation((record, prevIndex, currentIndex) => {
             if (record.previousIndex == null) {
-                this._insertRow(record.item, /** @type {?} */ ((currentIndex)));
+                this._insertRow(record.item, (/** @type {?} */ (currentIndex)));
             }
             else if (currentIndex == null) {
-                viewContainer.remove(/** @type {?} */ ((prevIndex)));
+                viewContainer.remove((/** @type {?} */ (prevIndex)));
             }
             else {
                 /** @type {?} */
-                const view = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((prevIndex))));
-                viewContainer.move(/** @type {?} */ ((view)), currentIndex);
+                const view = (/** @type {?} */ (viewContainer.get((/** @type {?} */ (prevIndex)))));
+                viewContainer.move((/** @type {?} */ (view)), currentIndex);
             }
         });
         // Update the meta context of a row's context data (index, count, first, last, ...)
@@ -1243,7 +1264,7 @@ class CdkTable {
         // e.g. if trackBy matched data on some property but the actual data reference changed.
         changes.forEachIdentityChange((record) => {
             /** @type {?} */
-            const rowView = /** @type {?} */ (viewContainer.get(/** @type {?} */ ((record.currentIndex))));
+            const rowView = (/** @type {?} */ (viewContainer.get((/** @type {?} */ (record.currentIndex)))));
             rowView.context.$implicit = record.item.data;
         });
         this.updateStickyColumnStyles();
@@ -1405,6 +1426,7 @@ class CdkTable {
         });
         // Update the sticky styles for each data row depending on its def's sticky state
         this._rowDefs.forEach(rowDef => {
+            // Collect all the rows rendered with this row definition.
             /** @type {?} */
             const rows = [];
             for (let i = 0; i < dataRows.length; i++) {
@@ -1425,11 +1447,14 @@ class CdkTable {
      * Get the list of RenderRow objects to render according to the current list of data and defined
      * row definitions. If the previous list already contained a particular pair, it should be reused
      * so that the differ equates their references.
+     * @private
      * @return {?}
      */
     _getAllRenderRows() {
         /** @type {?} */
         const renderRows = [];
+        // Store the cache and create a new one. Any re-used RenderRow objects will be moved into the
+        // new cache while unused ones can be picked up by garbage collection.
         /** @type {?} */
         const prevCachedRenderRows = this._cachedRenderRowsMap;
         this._cachedRenderRowsMap = new Map();
@@ -1447,9 +1472,9 @@ class CdkTable {
                 /** @type {?} */
                 let renderRow = renderRowsForData[j];
                 /** @type {?} */
-                const cache = /** @type {?} */ ((this._cachedRenderRowsMap.get(renderRow.data)));
+                const cache = (/** @type {?} */ (this._cachedRenderRowsMap.get(renderRow.data)));
                 if (cache.has(renderRow.rowDef)) {
-                    /** @type {?} */ ((cache.get(renderRow.rowDef))).push(renderRow);
+                    (/** @type {?} */ (cache.get(renderRow.rowDef))).push(renderRow);
                 }
                 else {
                     cache.set(renderRow.rowDef, [renderRow]);
@@ -1463,6 +1488,7 @@ class CdkTable {
      * Gets a list of `RenderRow<T>` for the provided data object and any `CdkRowDef` objects that
      * should be rendered for this data. Reuses the cached RenderRow objects if they match the same
      * `(T, CdkRowDef)` pair.
+     * @private
      * @param {?} data
      * @param {?} dataIndex
      * @param {?=} cache
@@ -1473,10 +1499,10 @@ class CdkTable {
         const rowDefs = this._getRowDefs(data, dataIndex);
         return rowDefs.map(rowDef => {
             /** @type {?} */
-            const cachedRenderRows = (cache && cache.has(rowDef)) ? /** @type {?} */ ((cache.get(rowDef))) : [];
+            const cachedRenderRows = (cache && cache.has(rowDef)) ? (/** @type {?} */ (cache.get(rowDef))) : [];
             if (cachedRenderRows.length) {
                 /** @type {?} */
-                const dataRow = /** @type {?} */ ((cachedRenderRows.shift()));
+                const dataRow = (/** @type {?} */ (cachedRenderRows.shift()));
                 dataRow.dataIndex = dataIndex;
                 return dataRow;
             }
@@ -1487,6 +1513,7 @@ class CdkTable {
     }
     /**
      * Update the map containing the content's column definitions.
+     * @private
      * @return {?}
      */
     _cacheColumnDefs() {
@@ -1502,6 +1529,7 @@ class CdkTable {
     }
     /**
      * Update the list of all available row definitions that can be used.
+     * @private
      * @return {?}
      */
     _cacheRowDefs() {
@@ -1511,6 +1539,7 @@ class CdkTable {
             mergeQueryListAndSet(this._contentFooterRowDefs, this._customFooterRowDefs);
         this._rowDefs =
             mergeQueryListAndSet(this._contentRowDefs, this._customRowDefs);
+        // After all row definitions are determined, find the row definition to be considered default.
         /** @type {?} */
         const defaultRowDefs = this._rowDefs.filter(def => !def.when);
         if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
@@ -1522,6 +1551,7 @@ class CdkTable {
      * Check if the header, data, or footer rows have changed what columns they want to display or
      * whether the sticky states have changed for the header or footer. If there is a diff, then
      * re-render that section.
+     * @private
      * @return {?}
      */
     _renderUpdatedColumns() {
@@ -1543,6 +1573,7 @@ class CdkTable {
      * Switch to the provided data source by resetting the data and unsubscribing from the current
      * render change subscription if one exists. If the data source is null, interpret this by
      * clearing the row outlet. Otherwise start listening for new data.
+     * @private
      * @param {?} dataSource
      * @return {?}
      */
@@ -1566,6 +1597,7 @@ class CdkTable {
     }
     /**
      * Set up a subscription for the data provided by the data source.
+     * @private
      * @return {?}
      */
     _observeRenderChanges() {
@@ -1579,8 +1611,8 @@ class CdkTable {
         // Cannot check this.dataSource['connect'] due to potential property renaming, nor can it
         // checked as an instanceof DataSource<T> since the table should allow for data sources
         // that did not explicitly extend DataSource<T>.
-        if ((/** @type {?} */ (this.dataSource)).connect instanceof Function) {
-            dataStream = (/** @type {?} */ (this.dataSource)).connect(this);
+        if (((/** @type {?} */ (this.dataSource))).connect instanceof Function) {
+            dataStream = ((/** @type {?} */ (this.dataSource))).connect(this);
         }
         else if (this.dataSource instanceof Observable) {
             dataStream = this.dataSource;
@@ -1601,6 +1633,7 @@ class CdkTable {
     /**
      * Clears any existing content in the header row outlet and creates a new embedded view
      * in the outlet using the header row definition.
+     * @private
      * @return {?}
      */
     _forceRenderHeaderRows() {
@@ -1615,6 +1648,7 @@ class CdkTable {
     /**
      * Clears any existing content in the footer row outlet and creates a new embedded view
      * in the outlet using the footer row definition.
+     * @private
      * @return {?}
      */
     _forceRenderFooterRows() {
@@ -1628,13 +1662,14 @@ class CdkTable {
     }
     /**
      * Adds the sticky column styles for the rows according to the columns' stick states.
+     * @private
      * @param {?} rows
      * @param {?} rowDef
      * @return {?}
      */
     _addStickyColumnStyles(rows, rowDef) {
         /** @type {?} */
-        const columnDefs = Array.from(rowDef.columns || []).map(c => /** @type {?} */ ((this._columnDefsByName.get(c))));
+        const columnDefs = Array.from(rowDef.columns || []).map(c => (/** @type {?} */ (this._columnDefsByName.get(c))));
         /** @type {?} */
         const stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
         /** @type {?} */
@@ -1651,7 +1686,7 @@ class CdkTable {
         const renderedRows = [];
         for (let i = 0; i < rowOutlet.viewContainer.length; i++) {
             /** @type {?} */
-            const viewRef = (/** @type {?} */ (((rowOutlet.viewContainer.get(i)))));
+            const viewRef = ((/** @type {?} */ ((/** @type {?} */ (rowOutlet.viewContainer.get(i))))));
             renderedRows.push(viewRef.rootNodes[0]);
         }
         return renderedRows;
@@ -1689,6 +1724,7 @@ class CdkTable {
     /**
      * Create the embedded view for the data row template and place it in the correct index location
      * within the data row view container.
+     * @private
      * @param {?} renderRow
      * @param {?} renderIndex
      * @return {?}
@@ -1704,6 +1740,7 @@ class CdkTable {
      * Creates a new row template in the outlet and fills it with the set of cell templates.
      * Optionally takes a context to provide to the row and cells, as well as an optional index
      * of where to place the new row template in the outlet.
+     * @private
      * @param {?} outlet
      * @param {?} rowDef
      * @param {?} index
@@ -1723,6 +1760,7 @@ class CdkTable {
     /**
      * Updates the index-related context for each row to reflect any changes in the index of the rows,
      * e.g. first/last/even/odd.
+     * @private
      * @return {?}
      */
     _updateRowIndexContext() {
@@ -1730,9 +1768,9 @@ class CdkTable {
         const viewContainer = this._rowOutlet.viewContainer;
         for (let renderIndex = 0, count = viewContainer.length; renderIndex < count; renderIndex++) {
             /** @type {?} */
-            const viewRef = /** @type {?} */ (viewContainer.get(renderIndex));
+            const viewRef = (/** @type {?} */ (viewContainer.get(renderIndex)));
             /** @type {?} */
-            const context = /** @type {?} */ (viewRef.context);
+            const context = (/** @type {?} */ (viewRef.context));
             context.count = count;
             context.first = renderIndex === 0;
             context.last = renderIndex === count - 1;
@@ -1749,6 +1787,7 @@ class CdkTable {
     }
     /**
      * Gets the column definitions for the provided row def.
+     * @private
      * @param {?} rowDef
      * @return {?}
      */
@@ -1767,6 +1806,7 @@ class CdkTable {
     }
     /**
      * Adds native table sections (e.g. tbody) and moves the row outlets into them.
+     * @private
      * @return {?}
      */
     _applyNativeTableSections() {
@@ -1777,6 +1817,7 @@ class CdkTable {
             { tag: 'tfoot', outlet: this._footerRowOutlet },
         ];
         for (const section of sections) {
+            // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
             /** @type {?} */
             const documentRef = this._document || document;
             /** @type {?} */
@@ -1789,6 +1830,7 @@ class CdkTable {
      * Forces a re-render of the data rows. Should be called in cases where there has been an input
      * change that affects the evaluation of which rows should be rendered, e.g. toggling
      * `multiTemplateDataRows` or adding/removing row definitions.
+     * @private
      * @return {?}
      */
     _forceRenderDataRows() {
@@ -1801,6 +1843,7 @@ class CdkTable {
      * Checks if there has been a change in sticky states since last check and applies the correct
      * sticky styles. Since checking resets the "dirty" state, this should only be performed once
      * during a change detection and after the inputs are settled (after content check).
+     * @private
      * @return {?}
      */
     _checkStickyStates() {
@@ -1825,6 +1868,7 @@ class CdkTable {
      * Creates the sticky styler that will be used for sticky rows and columns. Listens
      * for directionality changes and provides the latest direction to the styler. Re-applies column
      * stickiness when directionality changes.
+     * @private
      * @return {?}
      */
     _setupStickyStyler() {
@@ -1887,7 +1931,7 @@ function mergeQueryListAndSet(queryList, set) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EXPORTED_DECLARATIONS = [
@@ -1922,12 +1966,12 @@ CdkTableModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDefBase, _CdkColumnDefBase, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDefBase, _CdkHeaderRowDefBase, CdkHeaderRowDef, CdkFooterRowDefBase, _CdkFooterRowDefBase, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule, STICKY_DIRECTIONS, StickyStyler, mixinHasStickyInput };

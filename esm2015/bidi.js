@@ -10,9 +10,9 @@ import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Dir
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Injection token used to inject the document into Directionality.
  * This is used so that the value can be faked in tests.
  *
@@ -26,7 +26,8 @@ import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Dir
  * https://github.com/angular/angular/issues/22559
  *
  * \@docs-private
-  @type {?} */
+ * @type {?}
+ */
 const DIR_DOCUMENT = new InjectionToken('cdk-dir-doc', {
     providedIn: 'root',
     factory: DIR_DOCUMENT_FACTORY,
@@ -41,7 +42,7 @@ function DIR_DOCUMENT_FACTORY() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
@@ -61,6 +62,10 @@ class Directionality {
          */
         this.change = new EventEmitter();
         if (_document) {
+            // TODO: handle 'auto' value -
+            // We still need to account for dir="auto".
+            // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
+            // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
             /** @type {?} */
             const bodyDir = _document.body ? _document.body.dir : null;
             /** @type {?} */
@@ -88,7 +93,7 @@ Directionality.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive to listen for changes of direction of part of the DOM.
@@ -163,7 +168,7 @@ Dir.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class BidiModule {
 }
@@ -176,12 +181,12 @@ BidiModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { Directionality, DIR_DOCUMENT, Dir, BidiModule, DIR_DOCUMENT_FACTORY as ɵa };

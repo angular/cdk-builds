@@ -42,16 +42,17 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * The injection token used to specify the virtual scrolling strategy.
-  @type {?} */
+ * @type {?}
+ */
 var VIRTUAL_SCROLL_STRATEGY = new core.InjectionToken('VIRTUAL_SCROLL_STRATEGY');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Virtual scrolling strategy for lists with items of known fixed size.
@@ -175,9 +176,7 @@ FixedSizeVirtualScrollStrategy = /** @class */ (function () {
      * \@docs-private Implemented as part of VirtualScrollStrategy.
      * @return {?}
      */
-    function () {
-        /* no-op */ 
-    };
+    function () { };
     /** @docs-private Implemented as part of VirtualScrollStrategy. */
     /**
      * \@docs-private Implemented as part of VirtualScrollStrategy.
@@ -187,9 +186,7 @@ FixedSizeVirtualScrollStrategy = /** @class */ (function () {
      * \@docs-private Implemented as part of VirtualScrollStrategy.
      * @return {?}
      */
-    function () {
-        /* no-op */ 
-    };
+    function () { };
     /**
      * Scroll to the offset for the given index.
      * @param index The index of the element to scroll to.
@@ -212,12 +209,15 @@ FixedSizeVirtualScrollStrategy = /** @class */ (function () {
             this._viewport.scrollToOffset(index * this._itemSize, behavior);
         }
     };
+    /** Update the viewport's total content size. */
     /**
      * Update the viewport's total content size.
+     * @private
      * @return {?}
      */
     FixedSizeVirtualScrollStrategy.prototype._updateTotalContentSize = /**
      * Update the viewport's total content size.
+     * @private
      * @return {?}
      */
     function () {
@@ -226,12 +226,15 @@ FixedSizeVirtualScrollStrategy = /** @class */ (function () {
         }
         this._viewport.setTotalContentSize(this._viewport.getDataLength() * this._itemSize);
     };
+    /** Update the viewport's rendered range. */
     /**
      * Update the viewport's rendered range.
+     * @private
      * @return {?}
      */
     FixedSizeVirtualScrollStrategy.prototype._updateRenderedRange = /**
      * Update the viewport's rendered range.
+     * @private
      * @return {?}
      */
     function () {
@@ -379,11 +382,12 @@ var CdkFixedSizeVirtualScroll = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Time in ms to throttle the scrolling events by default.
-  @type {?} */
+ * @type {?}
+ */
 var DEFAULT_SCROLL_TIME = 20;
 /**
  * Service contained all registered Scrollable references and emits an event when any one of the
@@ -501,6 +505,8 @@ var ScrollDispatcher = /** @class */ (function () {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
+            // In the case of a 0ms delay, use an observable without auditTime
+            // since it does add a perceptible delay in processing overhead.
             /** @type {?} */
             var subscription = auditTimeInMs > 0 ?
                 _this._scrolled.pipe(operators.auditTime(auditTimeInMs)).subscribe(observer) :
@@ -576,14 +582,17 @@ var ScrollDispatcher = /** @class */ (function () {
         });
         return scrollingContainers;
     };
+    /** Returns true if the element is contained within the provided Scrollable. */
     /**
      * Returns true if the element is contained within the provided Scrollable.
+     * @private
      * @param {?} scrollable
      * @param {?} elementRef
      * @return {?}
      */
     ScrollDispatcher.prototype._scrollableContainsElement = /**
      * Returns true if the element is contained within the provided Scrollable.
+     * @private
      * @param {?} scrollable
      * @param {?} elementRef
      * @return {?}
@@ -599,15 +608,18 @@ var ScrollDispatcher = /** @class */ (function () {
             if (element == scrollableElement) {
                 return true;
             }
-        } while (element = /** @type {?} */ ((element)).parentElement);
+        } while (element = (/** @type {?} */ (element)).parentElement);
         return false;
     };
+    /** Sets up the global scroll listeners. */
     /**
      * Sets up the global scroll listeners.
+     * @private
      * @return {?}
      */
     ScrollDispatcher.prototype._addGlobalListener = /**
      * Sets up the global scroll listeners.
+     * @private
      * @return {?}
      */
     function () {
@@ -616,12 +628,15 @@ var ScrollDispatcher = /** @class */ (function () {
             return rxjs.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
+    /** Cleans up the global scroll listener. */
     /**
      * Cleans up the global scroll listener.
+     * @private
      * @return {?}
      */
     ScrollDispatcher.prototype._removeGlobalListener = /**
      * Cleans up the global scroll listener.
+     * @private
      * @return {?}
      */
     function () {
@@ -651,9 +666,10 @@ var ScrollDispatcher = /** @class */ (function () {
 function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
     return parentDispatcher || new ScrollDispatcher(ngZone, platform$$1);
 }
-/** *
+/**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
-  @type {?} */
+ * @type {?}
+ */
 var SCROLL_DISPATCHER_PROVIDER = {
     // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
     provide: ScrollDispatcher,
@@ -663,7 +679,7 @@ var SCROLL_DISPATCHER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
@@ -787,10 +803,12 @@ var CdkScrollable = /** @class */ (function () {
         this._applyScrollToOptions(options);
     };
     /**
+     * @private
      * @param {?} options
      * @return {?}
      */
     CdkScrollable.prototype._applyScrollToOptions = /**
+     * @private
      * @param {?} options
      * @return {?}
      */
@@ -851,6 +869,7 @@ var CdkScrollable = /** @class */ (function () {
         if (from == 'bottom') {
             return el.scrollHeight - el.clientHeight - el.scrollTop;
         }
+        // Rewrite start & end as left or right offsets.
         /** @type {?} */
         var isRtl = this.dir && this.dir.value == 'rtl';
         if (from == 'start') {
@@ -907,7 +926,7 @@ var CdkScrollable = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Checks if the given ranges are equal.
@@ -940,6 +959,10 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
          * The direction the viewport scrolls.
          */
         _this.orientation = 'vertical';
+        // Note: we don't use the typical EventEmitter here because we need to subscribe to the scroll
+        // strategy lazily (i.e. only if the user is actually listening to the events). We do this because
+        // depending on how the strategy calculates the scrolled index, it may come at a cost to
+        // performance.
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
@@ -1014,7 +1037,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
             _this.elementScrolled()
                 .pipe(
             // Start off with a fake scroll event so we properly detect our initial position.
-            operators.startWith(/** @type {?} */ ((null))), 
+            operators.startWith((/** @type {?} */ (null))), 
             // Collect multiple events into one until the next animation frame. This way if
             // there are multiple scroll events in the same frame we only need to recheck
             // our layout once.
@@ -1111,11 +1134,20 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
     // setting it to something else, but its error prone and should probably be split into
     // `pendingRange` and `renderedRange`, the latter reflecting whats actually in the DOM.
     /** Get the current rendered range of items. */
+    // TODO(mmalerba): This is technically out of sync with what's really rendered until a render
+    // cycle happens. I'm being careful to only call it after the render cycle is complete and before
+    // setting it to something else, but its error prone and should probably be split into
+    // `pendingRange` and `renderedRange`, the latter reflecting whats actually in the DOM.
     /**
      * Get the current rendered range of items.
      * @return {?}
      */
-    CdkVirtualScrollViewport.prototype.getRenderedRange = /**
+    CdkVirtualScrollViewport.prototype.getRenderedRange = 
+    // TODO(mmalerba): This is technically out of sync with what's really rendered until a render
+    // cycle happens. I'm being careful to only call it after the render cycle is complete and before
+    // setting it to something else, but its error prone and should probably be split into
+    // `pendingRange` and `renderedRange`, the latter reflecting whats actually in the DOM.
+    /**
      * Get the current rendered range of items.
      * @return {?}
      */
@@ -1200,6 +1232,8 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
     function (offset, to) {
         var _this = this;
         if (to === void 0) { to = 'to-start'; }
+        // For a horizontal viewport in a right-to-left language we need to translate along the x-axis
+        // in the negative direction.
         /** @type {?} */
         var isRtl = this.dir && this.dir.value == 'rtl';
         /** @type {?} */
@@ -1360,12 +1394,15 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
         this._measureViewportSize();
         this._scrollStrategy.onDataLengthChanged();
     };
+    /** Measure the viewport size. */
     /**
      * Measure the viewport size.
+     * @private
      * @return {?}
      */
     CdkVirtualScrollViewport.prototype._measureViewportSize = /**
      * Measure the viewport size.
+     * @private
      * @return {?}
      */
     function () {
@@ -1374,13 +1411,16 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
         this._viewportSize = this.orientation === 'horizontal' ?
             viewportEl.clientWidth : viewportEl.clientHeight;
     };
+    /** Queue up change detection to run. */
     /**
      * Queue up change detection to run.
+     * @private
      * @param {?=} runAfter
      * @return {?}
      */
     CdkVirtualScrollViewport.prototype._markChangeDetectionNeeded = /**
      * Queue up change detection to run.
+     * @private
      * @param {?=} runAfter
      * @return {?}
      */
@@ -1398,12 +1438,15 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
             }); });
         }
     };
+    /** Run change detection. */
     /**
      * Run change detection.
+     * @private
      * @return {?}
      */
     CdkVirtualScrollViewport.prototype._doChangeDetection = /**
      * Run change detection.
+     * @private
      * @return {?}
      */
     function () {
@@ -1458,7 +1501,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Helper to extract size from a DOM Node.
@@ -1468,7 +1511,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
  */
 function getSize(orientation, node) {
     /** @type {?} */
-    var el = /** @type {?} */ (node);
+    var el = (/** @type {?} */ (node));
     if (!el.getBoundingClientRect) {
         return 0;
     }
@@ -1482,8 +1525,7 @@ function getSize(orientation, node) {
  * @template T
  */
 var CdkVirtualForOf = /** @class */ (function () {
-    function CdkVirtualForOf(_viewContainerRef, _template, _differs, /** The virtual scrolling viewport that these items are being rendered in. */
-    _viewport, ngZone) {
+    function CdkVirtualForOf(_viewContainerRef, _template, _differs, _viewport, ngZone) {
         var _this = this;
         this._viewContainerRef = _viewContainerRef;
         this._template = _template;
@@ -1508,7 +1550,7 @@ var CdkVirtualForOf = /** @class */ (function () {
         this.dataStream = this._dataSourceChanges
             .pipe(
         // Start off with null `DataSource`.
-        operators.startWith(/** @type {?} */ ((null))), 
+        operators.startWith((/** @type {?} */ (null))), 
         // Bundle up the previous and current data sources so we can work with both.
         operators.pairwise(), 
         // Use `_changeDataSource` to disconnect from the previous data source and connect to the
@@ -1641,21 +1683,24 @@ var CdkVirtualForOf = /** @class */ (function () {
         if (range.start < this._renderedRange.start || range.end > this._renderedRange.end) {
             throw Error("Error: attempted to measure an item that isn't rendered.");
         }
+        // The index into the list of rendered views for the first item in the range.
         /** @type {?} */
         var renderedStartIndex = range.start - this._renderedRange.start;
+        // The length of the range we're measuring.
         /** @type {?} */
         var rangeLen = range.end - range.start;
+        // Loop over all root nodes for all items in the range and sum up their size.
         /** @type {?} */
         var totalSize = 0;
         /** @type {?} */
         var i = rangeLen;
         while (i--) {
             /** @type {?} */
-            var view = /** @type {?} */ (this._viewContainerRef.get(i + renderedStartIndex));
+            var view = (/** @type {?} */ (this._viewContainerRef.get(i + renderedStartIndex)));
             /** @type {?} */
             var j = view ? view.rootNodes.length : 0;
             while (j--) {
-                totalSize += getSize(orientation, /** @type {?} */ ((view)).rootNodes[j]);
+                totalSize += getSize(orientation, (/** @type {?} */ (view)).rootNodes[j]);
             }
         }
         return totalSize;
@@ -1668,6 +1713,9 @@ var CdkVirtualForOf = /** @class */ (function () {
      */
     function () {
         if (this._differ && this._needsUpdate) {
+            // TODO(mmalerba): We should differentiate needs update due to scrolling and a new portion of
+            // this list being rendered (can use simpler algorithm) vs needs update due to data actually
+            // changing (need to do this diff).
             /** @type {?} */
             var changes = this._differ.diff(this._renderedItems);
             if (!changes) {
@@ -1696,12 +1744,15 @@ var CdkVirtualForOf = /** @class */ (function () {
             view.destroy();
         }
     };
+    /** React to scroll state changes in the viewport. */
     /**
      * React to scroll state changes in the viewport.
+     * @private
      * @return {?}
      */
     CdkVirtualForOf.prototype._onRenderedDataChange = /**
      * React to scroll state changes in the viewport.
+     * @private
      * @return {?}
      */
     function () {
@@ -1714,14 +1765,17 @@ var CdkVirtualForOf = /** @class */ (function () {
         }
         this._needsUpdate = true;
     };
+    /** Swap out one `DataSource` for another. */
     /**
      * Swap out one `DataSource` for another.
+     * @private
      * @param {?} oldDs
      * @param {?} newDs
      * @return {?}
      */
     CdkVirtualForOf.prototype._changeDataSource = /**
      * Swap out one `DataSource` for another.
+     * @private
      * @param {?} oldDs
      * @param {?} newDs
      * @return {?}
@@ -1733,12 +1787,15 @@ var CdkVirtualForOf = /** @class */ (function () {
         this._needsUpdate = true;
         return newDs.connect(this);
     };
+    /** Update the `CdkVirtualForOfContext` for all views. */
     /**
      * Update the `CdkVirtualForOfContext` for all views.
+     * @private
      * @return {?}
      */
     CdkVirtualForOf.prototype._updateContext = /**
      * Update the `CdkVirtualForOfContext` for all views.
+     * @private
      * @return {?}
      */
     function () {
@@ -1748,20 +1805,23 @@ var CdkVirtualForOf = /** @class */ (function () {
         var i = this._viewContainerRef.length;
         while (i--) {
             /** @type {?} */
-            var view = /** @type {?} */ (this._viewContainerRef.get(i));
+            var view = (/** @type {?} */ (this._viewContainerRef.get(i)));
             view.context.index = this._renderedRange.start + i;
             view.context.count = count;
             this._updateComputedContextProperties(view.context);
             view.detectChanges();
         }
     };
+    /** Apply changes to the DOM. */
     /**
      * Apply changes to the DOM.
+     * @private
      * @param {?} changes
      * @return {?}
      */
     CdkVirtualForOf.prototype._applyChanges = /**
      * Apply changes to the DOM.
+     * @private
      * @param {?} changes
      * @return {?}
      */
@@ -1770,18 +1830,19 @@ var CdkVirtualForOf = /** @class */ (function () {
         // Rearrange the views to put them in the right location.
         changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
             if (record.previousIndex == null) { // Item added.
+                // Item added.
                 /** @type {?} */
                 var view = _this._getViewForNewItem();
-                _this._viewContainerRef.insert(view, /** @type {?} */ ((currentIndex)));
+                _this._viewContainerRef.insert(view, (/** @type {?} */ (currentIndex)));
                 view.context.$implicit = record.item;
             }
             else if (currentIndex == null) { // Item removed.
-                // Item removed.
-                _this._cacheView(/** @type {?} */ (_this._viewContainerRef.detach(/** @type {?} */ ((adjustedPreviousIndex)))));
+                _this._cacheView((/** @type {?} */ (_this._viewContainerRef.detach((/** @type {?} */ (adjustedPreviousIndex))))));
             }
             else { // Item moved.
+                // Item moved.
                 /** @type {?} */
-                var view = /** @type {?} */ (_this._viewContainerRef.get(/** @type {?} */ ((adjustedPreviousIndex))));
+                var view = (/** @type {?} */ (_this._viewContainerRef.get((/** @type {?} */ (adjustedPreviousIndex)))));
                 _this._viewContainerRef.move(view, currentIndex);
                 view.context.$implicit = record.item;
             }
@@ -1789,28 +1850,32 @@ var CdkVirtualForOf = /** @class */ (function () {
         // Update $implicit for any items that had an identity change.
         changes.forEachIdentityChange(function (record) {
             /** @type {?} */
-            var view = /** @type {?} */ (_this._viewContainerRef.get(/** @type {?} */ ((record.currentIndex))));
+            var view = (/** @type {?} */ (_this._viewContainerRef.get((/** @type {?} */ (record.currentIndex)))));
             view.context.$implicit = record.item;
         });
+        // Update the context variables on all items.
         /** @type {?} */
         var count = this._data.length;
         /** @type {?} */
         var i = this._viewContainerRef.length;
         while (i--) {
             /** @type {?} */
-            var view = /** @type {?} */ (this._viewContainerRef.get(i));
+            var view = (/** @type {?} */ (this._viewContainerRef.get(i)));
             view.context.index = this._renderedRange.start + i;
             view.context.count = count;
             this._updateComputedContextProperties(view.context);
         }
     };
+    /** Cache the given detached view. */
     /**
      * Cache the given detached view.
+     * @private
      * @param {?} view
      * @return {?}
      */
     CdkVirtualForOf.prototype._cacheView = /**
      * Cache the given detached view.
+     * @private
      * @param {?} view
      * @return {?}
      */
@@ -1832,17 +1897,20 @@ var CdkVirtualForOf = /** @class */ (function () {
             }
         }
     };
+    /** Get a view for a new item, either from the cache or by creating a new one. */
     /**
      * Get a view for a new item, either from the cache or by creating a new one.
+     * @private
      * @return {?}
      */
     CdkVirtualForOf.prototype._getViewForNewItem = /**
      * Get a view for a new item, either from the cache or by creating a new one.
+     * @private
      * @return {?}
      */
     function () {
         return this._templateCache.pop() || this._viewContainerRef.createEmbeddedView(this._template, {
-            $implicit: /** @type {?} */ ((null)),
+            $implicit: (/** @type {?} */ (null)),
             cdkVirtualForOf: this._cdkVirtualForOf,
             index: -1,
             count: -1,
@@ -1852,13 +1920,16 @@ var CdkVirtualForOf = /** @class */ (function () {
             even: false
         });
     };
+    /** Update the computed properties on the `CdkVirtualForOfContext`. */
     /**
      * Update the computed properties on the `CdkVirtualForOfContext`.
+     * @private
      * @param {?} context
      * @return {?}
      */
     CdkVirtualForOf.prototype._updateComputedContextProperties = /**
      * Update the computed properties on the `CdkVirtualForOfContext`.
+     * @private
      * @param {?} context
      * @return {?}
      */
@@ -1892,7 +1963,7 @@ var CdkVirtualForOf = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ScrollingModule = /** @class */ (function () {
     function ScrollingModule() {
@@ -1935,11 +2006,12 @@ var ScrollDispatchModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Time in ms to throttle the resize events by default.
-  @type {?} */
+ * @type {?}
+ */
 var DEFAULT_RESIZE_TIME = 20;
 /**
  * Simple utility for getting the bounds of the browser viewport.
@@ -1984,7 +2056,7 @@ var ViewportRuler = /** @class */ (function () {
         var output = { width: this._viewportSize.width, height: this._viewportSize.height };
         // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
         if (!this._platform.isBrowser) {
-            this._viewportSize = /** @type {?} */ ((null));
+            this._viewportSize = (/** @type {?} */ (null));
         }
         return output;
     };
@@ -1998,6 +2070,15 @@ var ViewportRuler = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        // Use the document element's bounding rect rather than the window scroll properties
+        // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
+        // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
+        // conceptual viewports. Under most circumstances these viewports are equivalent, but they
+        // can disagree when the page is pinch-zoomed (on devices that support touch).
+        // See https://bugs.chromium.org/p/chromium/issues/detail?id=489206#c4
+        // We use the documentElement instead of the body because, by default (without a css reset)
+        // browsers typically give the document body an 8px margin, which is not included in
+        // getBoundingClientRect().
         /** @type {?} */
         var scrollPosition = this.getViewportScrollPosition();
         var _a = this.getViewportSize(), width = _a.width, height = _a.height;
@@ -2025,8 +2106,14 @@ var ViewportRuler = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return { top: 0, left: 0 };
         }
+        // The top-left-corner of the viewport is determined by the scroll position of the document
+        // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
+        // whether `document.body` or `document.documentElement` is the scrolled element, so reading
+        // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
+        // `document.documentElement` works consistently, where the `top` and `left` values will
+        // equal negative the scroll position.
         /** @type {?} */
-        var documentElement = /** @type {?} */ ((document.documentElement));
+        var documentElement = (/** @type {?} */ (document.documentElement));
         /** @type {?} */
         var documentRect = documentElement.getBoundingClientRect();
         /** @type {?} */
@@ -2055,12 +2142,15 @@ var ViewportRuler = /** @class */ (function () {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
         return throttleTime > 0 ? this._change.pipe(operators.auditTime(throttleTime)) : this._change;
     };
+    /** Updates the cached viewport size. */
     /**
      * Updates the cached viewport size.
+     * @private
      * @return {?}
      */
     ViewportRuler.prototype._updateViewportSize = /**
      * Updates the cached viewport size.
+     * @private
      * @return {?}
      */
     function () {
@@ -2089,9 +2179,10 @@ var ViewportRuler = /** @class */ (function () {
 function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform$$1, ngZone) {
     return parentRuler || new ViewportRuler(platform$$1, ngZone);
 }
-/** *
+/**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
-  @type {?} */
+ * @type {?}
+ */
 var VIEWPORT_RULER_PROVIDER = {
     // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
     provide: ViewportRuler,

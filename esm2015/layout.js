@@ -13,7 +13,7 @@ import { coerceArray } from '@angular/cdk/coercion';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LayoutModule {
 }
@@ -23,15 +23,17 @@ LayoutModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Global registry for all dynamically-created, injected media queries.
-  @type {?} */
+ * @type {?}
+ */
 const mediaQueriesForWebkitCompatibility = new Set();
-/** *
+/**
  * Style tag that holds all of the dynamically-created media queries.
-  @type {?} */
+ * @type {?}
+ */
 let mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
@@ -84,11 +86,11 @@ function createEmptyStyleRule(query) {
     try {
         if (!mediaQueryStyleNode) {
             mediaQueryStyleNode = document.createElement('style');
-            mediaQueryStyleNode.setAttribute('type', 'text/css'); /** @type {?} */
-            ((document.head)).appendChild(mediaQueryStyleNode);
+            mediaQueryStyleNode.setAttribute('type', 'text/css');
+            (/** @type {?} */ (document.head)).appendChild(mediaQueryStyleNode);
         }
         if (mediaQueryStyleNode.sheet) {
-            (/** @type {?} */ (mediaQueryStyleNode.sheet))
+            ((/** @type {?} */ (mediaQueryStyleNode.sheet)))
                 .insertRule(`@media ${query} {.fx-query-test{ }}`, 0);
             mediaQueriesForWebkitCompatibility.add(query);
         }
@@ -105,17 +107,17 @@ function createEmptyStyleRule(query) {
 function noopMatchMedia(query) {
     // Use `as any` here to avoid adding additional necessary properties for
     // the noop matcher.
-    return /** @type {?} */ ({
+    return (/** @type {?} */ ({
         matches: query === 'all' || query === '',
         media: query,
         addListener: () => { },
         removeListener: () => { }
-    });
+    }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Utility for checking the matching state of \@media queries.
@@ -181,18 +183,22 @@ class BreakpointObserver {
     }
     /**
      * Registers a specific query to be listened for.
+     * @private
      * @param {?} query
      * @return {?}
      */
     _registerQuery(query) {
         // Only set up a new MediaQueryList if it is not already being listened for.
         if (this._queries.has(query)) {
-            return /** @type {?} */ ((this._queries.get(query)));
+            return (/** @type {?} */ (this._queries.get(query)));
         }
         /** @type {?} */
         const mql = this.mediaMatcher.matchMedia(query);
+        // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
+        // TypeScript 3.1 (the type is unavailable before then).
         /** @type {?} */
         let queryListener;
+        // Create callback for match changes and add it is as a listener.
         /** @type {?} */
         const queryObservable = fromEventPattern(
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
@@ -205,6 +211,7 @@ class BreakpointObserver {
             mql.addListener(queryListener);
         }, () => mql.removeListener(queryListener))
             .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })));
+        // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         const output = { observable: queryObservable, mql };
         this._queries.set(query, output);
@@ -234,15 +241,18 @@ function splitQueries(queries) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+// PascalCase is being used as Breakpoints is used like an enum.
+// tslint:disable-next-line:variable-name
+/**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
-  @type {?} */
+ * @type {?}
+ */
 const Breakpoints = {
     XSmall: '(max-width: 599.99px)',
     Small: '(min-width: 600px) and (max-width: 959.99px)',
@@ -265,12 +275,12 @@ const Breakpoints = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { LayoutModule, BreakpointObserver, Breakpoints, MediaMatcher };
