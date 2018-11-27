@@ -2323,10 +2323,20 @@ var LIVE_ANNOUNCER_PROVIDER = {
 /** @type {?} */
 var TOUCH_BUFFER_MS = 650;
 /**
+ * Event listener options that enable capturing and also
+ * mark the the listener as passive if the browser supports it.
+ * @type {?}
+ */
+var captureEventListenerOptions = platform.normalizePassiveListenerOptions({
+    passive: true,
+    capture: true
+});
+/**
  * Monitors mouse and keyboard events to determine the cause of focus events.
  */
 var FocusMonitor = /** @class */ (function () {
     function FocusMonitor(_ngZone, _platform) {
+        var _this = this;
         this._ngZone = _ngZone;
         this._platform = _platform;
         /**
@@ -2342,13 +2352,53 @@ var FocusMonitor = /** @class */ (function () {
          */
         this._elementInfo = new Map();
         /**
-         * A map of global objects to lists of current listeners.
-         */
-        this._unregisterGlobalListeners = function () { };
-        /**
          * The number of elements currently being monitored.
          */
         this._monitoredElementCount = 0;
+        /**
+         * Event listener for `keydown` events on the document.
+         * Needs to be an arrow function in order to preserve the context when it gets bound.
+         */
+        this._documentKeydownListener = function () {
+            // On keydown record the origin and clear any touch event that may be in progress.
+            _this._lastTouchTarget = null;
+            _this._setOriginForCurrentEventQueue('keyboard');
+        };
+        /**
+         * Event listener for `mousedown` events on the document.
+         * Needs to be an arrow function in order to preserve the context when it gets bound.
+         */
+        this._documentMousedownListener = function () {
+            // On mousedown record the origin only if there is not touch
+            // target, since a mousedown can happen as a result of a touch event.
+            if (!_this._lastTouchTarget) {
+                _this._setOriginForCurrentEventQueue('mouse');
+            }
+        };
+        /**
+         * Event listener for `touchstart` events on the document.
+         * Needs to be an arrow function in order to preserve the context when it gets bound.
+         */
+        this._documentTouchstartListener = function (event) {
+            // When the touchstart event fires the focus event is not yet in the event queue. This means
+            // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
+            // see if a focus happens.
+            if (_this._touchTimeoutId != null) {
+                clearTimeout(_this._touchTimeoutId);
+            }
+            _this._lastTouchTarget = event.target;
+            _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
+        };
+        /**
+         * Event listener for `focus` events on the window.
+         * Needs to be an arrow function in order to preserve the context when it gets bound.
+         */
+        this._windowFocusListener = function () {
+            // Make a note of when the window regains focus, so we can
+            // restore the origin info for the focused element.
+            _this._windowFocused = true;
+            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
+        };
     }
     /**
      * @param {?} element
@@ -2453,81 +2503,6 @@ var FocusMonitor = /** @class */ (function () {
     function () {
         var _this = this;
         this._elementInfo.forEach(function (_info, element) { return _this.stopMonitoring(element); });
-    };
-    /** Register necessary event listeners on the document and window. */
-    /**
-     * Register necessary event listeners on the document and window.
-     * @private
-     * @return {?}
-     */
-    FocusMonitor.prototype._registerGlobalListeners = /**
-     * Register necessary event listeners on the document and window.
-     * @private
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        // Do nothing if we're not on the browser platform.
-        if (!this._platform.isBrowser) {
-            return;
-        }
-        // On keydown record the origin and clear any touch event that may be in progress.
-        /** @type {?} */
-        var documentKeydownListener = function () {
-            _this._lastTouchTarget = null;
-            _this._setOriginForCurrentEventQueue('keyboard');
-        };
-        // On mousedown record the origin only if there is not touch target, since a mousedown can
-        // happen as a result of a touch event.
-        /** @type {?} */
-        var documentMousedownListener = function () {
-            if (!_this._lastTouchTarget) {
-                _this._setOriginForCurrentEventQueue('mouse');
-            }
-        };
-        // When the touchstart event fires the focus event is not yet in the event queue. This means
-        // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
-        // see if a focus happens.
-        /** @type {?} */
-        var documentTouchstartListener = function (event) {
-            if (_this._touchTimeoutId != null) {
-                clearTimeout(_this._touchTimeoutId);
-            }
-            _this._lastTouchTarget = event.target;
-            _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
-        };
-        // Make a note of when the window regains focus, so we can restore the origin info for the
-        // focused element.
-        /** @type {?} */
-        var windowFocusListener = function () {
-            _this._windowFocused = true;
-            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
-        };
-        // Event listener options that enable capturing and also mark the the listener as passive
-        // if the browser supports it.
-        /** @type {?} */
-        var captureEventListenerOptions = platform.normalizePassiveListenerOptions({
-            passive: true,
-            capture: true
-        });
-        // Note: we listen to events in the capture phase so we can detect them even if the user stops
-        // propagation.
-        this._ngZone.runOutsideAngular(function () {
-            document.addEventListener('keydown', documentKeydownListener, captureEventListenerOptions);
-            document.addEventListener('mousedown', documentMousedownListener, captureEventListenerOptions);
-            document.addEventListener('touchstart', documentTouchstartListener, captureEventListenerOptions);
-            window.addEventListener('focus', windowFocusListener);
-        });
-        this._unregisterGlobalListeners = function () {
-            document.removeEventListener('keydown', documentKeydownListener, captureEventListenerOptions);
-            document.removeEventListener('mousedown', documentMousedownListener, captureEventListenerOptions);
-            document.removeEventListener('touchstart', documentTouchstartListener, captureEventListenerOptions);
-            window.removeEventListener('focus', windowFocusListener);
-            // Clear timeouts for all potentially pending timeouts to prevent the leaks.
-            clearTimeout(_this._windowFocusTimeoutId);
-            clearTimeout(_this._touchTimeoutId);
-            clearTimeout(_this._originTimeoutId);
-        };
     };
     /**
      * @private
@@ -2758,9 +2733,17 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         // Register global listeners when first element is monitored.
-        if (++this._monitoredElementCount == 1) {
-            this._registerGlobalListeners();
+        if (++this._monitoredElementCount == 1 && this._platform.isBrowser) {
+            // Note: we listen to events in the capture phase so we
+            // can detect them even if the user stops propagation.
+            this._ngZone.runOutsideAngular(function () {
+                document.addEventListener('keydown', _this._documentKeydownListener, captureEventListenerOptions);
+                document.addEventListener('mousedown', _this._documentMousedownListener, captureEventListenerOptions);
+                document.addEventListener('touchstart', _this._documentTouchstartListener, captureEventListenerOptions);
+                window.addEventListener('focus', _this._windowFocusListener);
+            });
         }
     };
     /**
@@ -2774,8 +2757,14 @@ var FocusMonitor = /** @class */ (function () {
     function () {
         // Unregister global listeners when last element is unmonitored.
         if (!--this._monitoredElementCount) {
-            this._unregisterGlobalListeners();
-            this._unregisterGlobalListeners = function () { };
+            document.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
+            document.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
+            document.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
+            window.removeEventListener('focus', this._windowFocusListener);
+            // Clear timeouts for all potentially pending timeouts to prevent the leaks.
+            clearTimeout(this._windowFocusTimeoutId);
+            clearTimeout(this._touchTimeoutId);
+            clearTimeout(this._originTimeoutId);
         }
     };
     /**
