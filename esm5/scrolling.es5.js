@@ -1454,6 +1454,10 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
                     },
                     encapsulation: ViewEncapsulation.None,
                     changeDetection: ChangeDetectionStrategy.OnPush,
+                    providers: [{
+                            provide: CdkScrollable,
+                            useExisting: CdkVirtualScrollViewport,
+                        }]
                 },] },
     ];
     /** @nocollapse */

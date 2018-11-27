@@ -1053,6 +1053,10 @@ CdkVirtualScrollViewport.decorators = [
                 },
                 encapsulation: ViewEncapsulation.None,
                 changeDetection: ChangeDetectionStrategy.OnPush,
+                providers: [{
+                        provide: CdkScrollable,
+                        useExisting: CdkVirtualScrollViewport,
+                    }]
             },] },
 ];
 /** @nocollapse */
