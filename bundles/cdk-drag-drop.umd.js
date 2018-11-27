@@ -701,6 +701,12 @@ var CdkDrag = /** @class */ (function () {
                 // Preserve the previous `transform` value, if there was one.
                 _this._rootElement.style.transform = _this._initialTransform ?
                     _this._initialTransform + ' ' + transform : transform;
+                // Apply transform as attribute if dragging and svg element to work for IE
+                if (typeof SVGElement !== 'undefined' && _this._rootElement instanceof SVGElement) {
+                    /** @type {?} */
+                    var appliedTransform = "translate(" + activeTransform.x + " " + activeTransform.y + ")";
+                    _this._rootElement.setAttribute('transform', appliedTransform);
+                }
             }
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
