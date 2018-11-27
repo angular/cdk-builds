@@ -210,7 +210,7 @@ class BreakpointObserver {
             queryListener = (e) => this.zone.run(() => listener(e));
             mql.addListener(queryListener);
         }, () => mql.removeListener(queryListener))
-            .pipe(takeUntil(this._destroySubject), startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })));
+            .pipe(startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })), takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         const output = { observable: queryObservable, mql };

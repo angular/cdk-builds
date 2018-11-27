@@ -258,7 +258,7 @@ var BreakpointObserver = /** @class */ (function () {
             queryListener = function (e) { return _this.zone.run(function () { return listener(e); }); };
             mql.addListener(queryListener);
         }, function () { return mql.removeListener(queryListener); })
-            .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }));
+            .pipe(operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }), operators.takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         var output = { observable: queryObservable, mql: mql };
