@@ -1476,7 +1476,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
                     host: {
                         'class': 'cdk-virtual-scroll-viewport',
                         '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',
-                        '[class.cdk-virtual-scroll-orientation-vertical]': 'orientation === "vertical"',
+                        '[class.cdk-virtual-scroll-orientation-vertical]': 'orientation !== "horizontal"',
                     },
                     encapsulation: core.ViewEncapsulation.None,
                     changeDetection: core.ChangeDetectionStrategy.OnPush,
