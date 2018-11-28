@@ -1269,7 +1269,9 @@ CdkDrag.propDecorators = {
  * @return {?}
  */
 function getTransform(x, y) {
-    return `translate3d(${x}px, ${y}px, 0)`;
+    // Round the transforms since some browsers will
+    // blur the elements, for sub-pixel transforms.
+    return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 /**
  * Creates a deep clone of an element.
@@ -1676,11 +1678,13 @@ class CdkDropList {
             // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
             // elements may be mid-animation which will give us a wrong result.
             if (isHorizontal) {
-                elementToOffset.style.transform = `translate3d(${sibling.offset}px, 0, 0)`;
+                // Round the transforms since some browsers will
+                // blur the elements, for sub-pixel transforms.
+                elementToOffset.style.transform = `translate3d(${Math.round(sibling.offset)}px, 0, 0)`;
                 this._adjustClientRect(sibling.clientRect, 0, offset);
             }
             else {
-                elementToOffset.style.transform = `translate3d(0, ${sibling.offset}px, 0)`;
+                elementToOffset.style.transform = `translate3d(0, ${Math.round(sibling.offset)}px, 0)`;
                 this._adjustClientRect(sibling.clientRect, offset, 0);
             }
         });
