@@ -8,7 +8,7 @@
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
-import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
+import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -553,13 +553,15 @@ class ListKeyManager {
                     return;
                 }
             default:
-                // Attempt to use the `event.key` which also maps it to the user's keyboard language,
-                // otherwise fall back to resolving alphanumeric characters via the keyCode.
-                if (event.key && event.key.length === 1) {
-                    this._letterKeyStream.next(event.key.toLocaleUpperCase());
-                }
-                else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
-                    this._letterKeyStream.next(String.fromCharCode(keyCode));
+                if (isModifierAllowed || hasModifierKey(event, 'shiftKey')) {
+                    // Attempt to use the `event.key` which also maps it to the user's keyboard language,
+                    // otherwise fall back to resolving alphanumeric characters via the keyCode.
+                    if (event.key && event.key.length === 1) {
+                        this._letterKeyStream.next(event.key.toLocaleUpperCase());
+                    }
+                    else if ((keyCode >= A && keyCode <= Z) || (keyCode >= ZERO && keyCode <= NINE)) {
+                        this._letterKeyStream.next(String.fromCharCode(keyCode));
+                    }
                 }
                 // Note that we return here, in order to avoid preventing
                 // the default action of non-navigational keys.
