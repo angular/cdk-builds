@@ -728,7 +728,7 @@ var CdkDrag = /** @class */ (function () {
         /**
          * Handler that is invoked when the user lifts their pointer up, after initiating a drag.
          */
-        this._pointerUp = function () {
+        this._pointerUp = function (event) {
             if (!_this._isDragging()) {
                 return;
             }
@@ -748,7 +748,7 @@ var CdkDrag = /** @class */ (function () {
                 return;
             }
             _this._animatePreviewToPlaceholder().then(function () {
-                _this._cleanupDragArtifacts();
+                _this._cleanupDragArtifacts(event);
                 _this._dragDropRegistry.stopDragging(_this);
             });
         };
@@ -1006,14 +1006,16 @@ var CdkDrag = /** @class */ (function () {
     /**
      * Cleans up the DOM artifacts that were added to facilitate the element being dragged.
      * @private
+     * @param {?} event
      * @return {?}
      */
     CdkDrag.prototype._cleanupDragArtifacts = /**
      * Cleans up the DOM artifacts that were added to facilitate the element being dragged.
      * @private
+     * @param {?} event
      * @return {?}
      */
-    function () {
+    function (event) {
         var _this = this;
         // Restore the element's visibility and insert it at its old position in the DOM.
         // It's important that we maintain the position, because moving the element around in the DOM
@@ -1032,15 +1034,19 @@ var CdkDrag = /** @class */ (function () {
         this._ngZone.run(function () {
             /** @type {?} */
             var currentIndex = _this.dropContainer.getItemIndex(_this);
+            var _a = _this._getPointerPositionOnPage(event), x = _a.x, y = _a.y;
+            /** @type {?} */
+            var isPointerOverContainer = _this.dropContainer._isOverContainer(x, y);
             _this.ended.emit({ source: _this });
             _this.dropped.emit({
                 item: _this,
                 currentIndex: currentIndex,
                 previousIndex: _this._initialContainer.getItemIndex(_this),
                 container: _this.dropContainer,
-                previousContainer: _this._initialContainer
+                previousContainer: _this._initialContainer,
+                isPointerOverContainer: isPointerOverContainer
             });
-            _this.dropContainer.drop(_this, currentIndex, _this._initialContainer);
+            _this.dropContainer.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer);
             _this.dropContainer = _this._initialContainer;
         });
     };
@@ -1069,11 +1075,11 @@ var CdkDrag = /** @class */ (function () {
         /** @type {?} */
         var newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left it's
-        // initial container, check whether the it's allowed to return into its original container.
-        // This handles the case where two containers are connected one way and the user tries to
-        // undo dragging an item into a new container.
+        // initial container, check whether the it's over the initial container. This handles the
+        // case where two containers are connected one way and the user tries to undo dragging an
+        // item into a new container.
         if (!newContainer && this.dropContainer !== this._initialContainer &&
-            this._initialContainer._canReturnItem(x, y)) {
+            this._initialContainer._isOverContainer(x, y)) {
             newContainer = this._initialContainer;
         }
         if (newContainer) {
@@ -1777,12 +1783,16 @@ var CdkDropList = /** @class */ (function () {
      * @param item Item being dropped into the container.
      * @param currentIndex Index at which the item should be inserted.
      * @param previousContainer Container from which the item got dragged in.
+     * @param isPointerOverContainer Whether the user's pointer was over the
+     *    container when the item was dropped.
      */
     /**
      * Drops an item into this container.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
+     * @param {?} isPointerOverContainer Whether the user's pointer was over the
+     *    container when the item was dropped.
      * @return {?}
      */
     CdkDropList.prototype.drop = /**
@@ -1790,17 +1800,19 @@ var CdkDropList = /** @class */ (function () {
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
+     * @param {?} isPointerOverContainer Whether the user's pointer was over the
+     *    container when the item was dropped.
      * @return {?}
      */
-    function (item, currentIndex, previousContainer) {
+    function (item, currentIndex, previousContainer, isPointerOverContainer) {
         this._reset();
         this.dropped.emit({
             item: item,
             currentIndex: currentIndex,
             previousIndex: previousContainer.getItemIndex(item),
             container: this,
-            // TODO(crisbeto): reconsider whether to make this null if the containers are the same.
-            previousContainer: previousContainer
+            previousContainer: previousContainer,
+            isPointerOverContainer: isPointerOverContainer
         });
     };
     /**
@@ -2031,23 +2043,20 @@ var CdkDropList = /** @class */ (function () {
         return result && result.drop.enterPredicate(item, result.drop) ? result.drop : null;
     };
     /**
-     * Checks whether an item that started in this container can be returned to it,
-     * after it was moved out into another container.
-     * @param x Position of the item along the X axis.
-     * @param y Position of the item along the Y axis.
+     * Checks whether the user's pointer is positioned over the container.
+     * @param x Pointer position along the X axis.
+     * @param y Pointer position along the Y axis.
      */
     /**
-     * Checks whether an item that started in this container can be returned to it,
-     * after it was moved out into another container.
-     * @param {?} x Position of the item along the X axis.
-     * @param {?} y Position of the item along the Y axis.
+     * Checks whether the user's pointer is positioned over the container.
+     * @param {?} x Pointer position along the X axis.
+     * @param {?} y Pointer position along the Y axis.
      * @return {?}
      */
-    CdkDropList.prototype._canReturnItem = /**
-     * Checks whether an item that started in this container can be returned to it,
-     * after it was moved out into another container.
-     * @param {?} x Position of the item along the X axis.
-     * @param {?} y Position of the item along the Y axis.
+    CdkDropList.prototype._isOverContainer = /**
+     * Checks whether the user's pointer is positioned over the container.
+     * @param {?} x Pointer position along the X axis.
+     * @param {?} y Pointer position along the Y axis.
      * @return {?}
      */
     function (x, y) {

@@ -676,7 +676,7 @@ class CdkDrag {
         /**
          * Handler that is invoked when the user lifts their pointer up, after initiating a drag.
          */
-        this._pointerUp = () => {
+        this._pointerUp = (event) => {
             if (!this._isDragging()) {
                 return;
             }
@@ -696,7 +696,7 @@ class CdkDrag {
                 return;
             }
             this._animatePreviewToPlaceholder().then(() => {
-                this._cleanupDragArtifacts();
+                this._cleanupDragArtifacts(event);
                 this._dragDropRegistry.stopDragging(this);
             });
         };
@@ -887,9 +887,10 @@ class CdkDrag {
     /**
      * Cleans up the DOM artifacts that were added to facilitate the element being dragged.
      * @private
+     * @param {?} event
      * @return {?}
      */
-    _cleanupDragArtifacts() {
+    _cleanupDragArtifacts(event) {
         // Restore the element's visibility and insert it at its old position in the DOM.
         // It's important that we maintain the position, because moving the element around in the DOM
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
@@ -907,15 +908,19 @@ class CdkDrag {
         this._ngZone.run(() => {
             /** @type {?} */
             const currentIndex = this.dropContainer.getItemIndex(this);
+            const { x, y } = this._getPointerPositionOnPage(event);
+            /** @type {?} */
+            const isPointerOverContainer = this.dropContainer._isOverContainer(x, y);
             this.ended.emit({ source: this });
             this.dropped.emit({
                 item: this,
                 currentIndex,
                 previousIndex: this._initialContainer.getItemIndex(this),
                 container: this.dropContainer,
-                previousContainer: this._initialContainer
+                previousContainer: this._initialContainer,
+                isPointerOverContainer
             });
-            this.dropContainer.drop(this, currentIndex, this._initialContainer);
+            this.dropContainer.drop(this, currentIndex, this._initialContainer, isPointerOverContainer);
             this.dropContainer = this._initialContainer;
         });
     }
@@ -931,11 +936,11 @@ class CdkDrag {
         /** @type {?} */
         let newContainer = this.dropContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left it's
-        // initial container, check whether the it's allowed to return into its original container.
-        // This handles the case where two containers are connected one way and the user tries to
-        // undo dragging an item into a new container.
+        // initial container, check whether the it's over the initial container. This handles the
+        // case where two containers are connected one way and the user tries to undo dragging an
+        // item into a new container.
         if (!newContainer && this.dropContainer !== this._initialContainer &&
-            this._initialContainer._canReturnItem(x, y)) {
+            this._initialContainer._isOverContainer(x, y)) {
             newContainer = this._initialContainer;
         }
         if (newContainer) {
@@ -1525,17 +1530,19 @@ class CdkDropList {
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
+     * @param {?} isPointerOverContainer Whether the user's pointer was over the
+     *    container when the item was dropped.
      * @return {?}
      */
-    drop(item, currentIndex, previousContainer) {
+    drop(item, currentIndex, previousContainer, isPointerOverContainer) {
         this._reset();
         this.dropped.emit({
             item,
             currentIndex,
             previousIndex: previousContainer.getItemIndex(item),
             container: this,
-            // TODO(crisbeto): reconsider whether to make this null if the containers are the same.
-            previousContainer
+            previousContainer,
+            isPointerOverContainer
         });
     }
     /**
@@ -1704,13 +1711,12 @@ class CdkDropList {
         return result && result.drop.enterPredicate(item, result.drop) ? result.drop : null;
     }
     /**
-     * Checks whether an item that started in this container can be returned to it,
-     * after it was moved out into another container.
-     * @param {?} x Position of the item along the X axis.
-     * @param {?} y Position of the item along the Y axis.
+     * Checks whether the user's pointer is positioned over the container.
+     * @param {?} x Pointer position along the X axis.
+     * @param {?} y Pointer position along the Y axis.
      * @return {?}
      */
-    _canReturnItem(x, y) {
+    _isOverContainer(x, y) {
         return isInsideClientRect(this._positionCache.self, x, y);
     }
     /**
