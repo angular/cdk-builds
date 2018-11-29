@@ -16,46 +16,6 @@
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
- * Shallow-extends a stylesheet object with another stylesheet object.
- * \@docs-private
- * @param {?} dest
- * @param {?} source
- * @return {?}
- */
-function extendStyles(dest, source) {
-    for (var key in source) {
-        if (source.hasOwnProperty(key)) {
-            dest[(/** @type {?} */ (key))] = source[(/** @type {?} */ (key))];
-        }
-    }
-    return dest;
-}
-/**
- * Toggles whether the native drag interactions should be enabled for an element.
- * \@docs-private
- * @param {?} element Element on which to toggle the drag interactions.
- * @param {?} enable Whether the drag interactions should be enabled.
- * @return {?}
- */
-function toggleNativeDragInteractions(element, enable) {
-    /** @type {?} */
-    var userSelect = enable ? '' : 'none';
-    extendStyles(element.style, {
-        touchAction: enable ? '' : 'none',
-        webkitUserDrag: enable ? '' : 'none',
-        webkitTapHighlightColor: enable ? '' : 'transparent',
-        userSelect: userSelect,
-        msUserSelect: userSelect,
-        webkitUserSelect: userSelect,
-        MozUserSelect: userSelect
-    });
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
  * Event options that can be used to bind an active, capturing event.
  * @type {?}
  */
@@ -215,9 +175,6 @@ var DragDropRegistry = /** @class */ (function () {
             var moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
             /** @type {?} */
             var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
-            // We need to disable the native interactions on the entire body, because
-            // the user can start marking text if they drag too far in Safari.
-            toggleNativeDragInteractions(this._document.body, false);
             // We explicitly bind __active__ listeners here, because newer browsers will default to
             // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
@@ -260,7 +217,6 @@ var DragDropRegistry = /** @class */ (function () {
         this._activeDragInstances.delete(drag);
         if (this._activeDragInstances.size === 0) {
             this._clearGlobalListeners();
-            toggleNativeDragInteractions(this._document.body, true);
         }
     };
     /** Gets whether a drag item instance is currently being dragged. */
@@ -347,6 +303,46 @@ var DragDropRegistry = /** @class */ (function () {
  * @type {?}
  */
 var CDK_DRAG_PARENT = new core.InjectionToken('CDK_DRAG_PARENT');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Shallow-extends a stylesheet object with another stylesheet object.
+ * \@docs-private
+ * @param {?} dest
+ * @param {?} source
+ * @return {?}
+ */
+function extendStyles(dest, source) {
+    for (var key in source) {
+        if (source.hasOwnProperty(key)) {
+            dest[(/** @type {?} */ (key))] = source[(/** @type {?} */ (key))];
+        }
+    }
+    return dest;
+}
+/**
+ * Toggles whether the native drag interactions should be enabled for an element.
+ * \@docs-private
+ * @param {?} element Element on which to toggle the drag interactions.
+ * @param {?} enable Whether the drag interactions should be enabled.
+ * @return {?}
+ */
+function toggleNativeDragInteractions(element, enable) {
+    /** @type {?} */
+    var userSelect = enable ? '' : 'none';
+    extendStyles(element.style, {
+        touchAction: enable ? '' : 'none',
+        webkitUserDrag: enable ? '' : 'none',
+        webkitTapHighlightColor: enable ? '' : 'transparent',
+        userSelect: userSelect,
+        msUserSelect: userSelect,
+        webkitUserSelect: userSelect,
+        MozUserSelect: userSelect
+    });
+}
 
 /**
  * @fileoverview added by tsickle
