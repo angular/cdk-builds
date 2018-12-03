@@ -97,7 +97,14 @@ const STEP_STATE = {
  * InjectionToken that can be used to specify the global stepper options.
  * @type {?}
  */
-const MAT_STEPPER_GLOBAL_OPTIONS = new InjectionToken('mat-stepper-global-options');
+const STEPPER_GLOBAL_OPTIONS = new InjectionToken('STEPPER_GLOBAL_OPTIONS');
+/**
+ * InjectionToken that can be used to specify the global stepper options.
+ * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
+ * \@breaking-change 8.0.0.
+ * @type {?}
+ */
+const MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 class CdkStep {
     /**
      * \@breaking-change 8.0.0 remove the `?` after `stepperOptions`
@@ -227,7 +234,7 @@ CdkStep.decorators = [
 /** @nocollapse */
 CdkStep.ctorParameters = () => [
     { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [MAT_STEPPER_GLOBAL_OPTIONS,] }] }
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
 ];
 CdkStep.propDecorators = {
     stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
@@ -701,5 +708,5 @@ CdkStepperModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { StepperSelectionEvent, STEP_STATE, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule, CdkStepHeader };
+export { StepperSelectionEvent, STEP_STATE, STEPPER_GLOBAL_OPTIONS, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule, CdkStepHeader };
 //# sourceMappingURL=stepper.js.map
