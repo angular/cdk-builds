@@ -109,6 +109,12 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _lastTouchEventTime;
     /** Subscription to the stream that initializes the root element. */
     private _rootElementInitSubscription;
+    /** Cached reference to the boundary element. */
+    private _boundaryElement?;
+    /** Cached dimensions of the preview element. */
+    private _previewRect?;
+    /** Cached dimensions of the boundary element. */
+    private _boundaryRect?;
     /** Elements that can be used to drag the draggable item. */
     _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
@@ -125,6 +131,12 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * when trying to enable dragging on an element that you might not have access to.
      */
     rootElementSelector: string;
+    /**
+     * Selector that will be used to determine the element to which the draggable's position will
+     * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
+     * element has been found.
+     */
+    boundaryElementSelector: string;
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
@@ -222,6 +234,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _updatePointerDirectionDelta;
     /** Gets the root draggable element, based on the `rootElementSelector`. */
     private _getRootElement;
+    /** Gets the boundary element, based on the `boundaryElementSelector`. */
+    private _getBoundaryElement;
     /** Unsubscribes from the global subscriptions. */
     private _removeSubscriptions;
 }

@@ -665,9 +665,9 @@ var CdkDrag = /** @class */ (function () {
          * Handler that is invoked when the user moves their pointer after they've initiated a drag.
          */
         this._pointerMove = function (event) {
-            /** @type {?} */
-            var pointerPosition = _this._getConstrainedPointerPosition(event);
             if (!_this._hasStartedDragging) {
+                /** @type {?} */
+                var pointerPosition = _this._getPointerPositionOnPage(event);
                 /** @type {?} */
                 var distanceX = Math.abs(pointerPosition.x - _this._pickupPositionOnPage.x);
                 /** @type {?} */
@@ -682,19 +682,29 @@ var CdkDrag = /** @class */ (function () {
                 }
                 return;
             }
+            // We only need the preview dimensions if we have a boundary element.
+            if (_this._boundaryElement) {
+                // Cache the preview element rect if we haven't cached it already or if
+                // we cached it too early before the element dimensions were computed.
+                if (!_this._previewRect || (!_this._previewRect.width && !_this._previewRect.height)) {
+                    _this._previewRect = (_this._preview || _this._rootElement).getBoundingClientRect();
+                }
+            }
+            /** @type {?} */
+            var constrainedPointerPosition = _this._getConstrainedPointerPosition(event);
             _this._hasMoved = true;
             event.preventDefault();
-            _this._updatePointerDirectionDelta(pointerPosition);
+            _this._updatePointerDirectionDelta(constrainedPointerPosition);
             if (_this.dropContainer) {
-                _this._updateActiveDropContainer(pointerPosition);
+                _this._updateActiveDropContainer(constrainedPointerPosition);
             }
             else {
                 /** @type {?} */
                 var activeTransform = _this._activeTransform;
                 activeTransform.x =
-                    pointerPosition.x - _this._pickupPositionOnPage.x + _this._passiveTransform.x;
+                    constrainedPointerPosition.x - _this._pickupPositionOnPage.x + _this._passiveTransform.x;
                 activeTransform.y =
-                    pointerPosition.y - _this._pickupPositionOnPage.y + _this._passiveTransform.y;
+                    constrainedPointerPosition.y - _this._pickupPositionOnPage.y + _this._passiveTransform.y;
                 /** @type {?} */
                 var transform = getTransform(activeTransform.x, activeTransform.y);
                 // Preserve the previous `transform` value, if there was one.
@@ -714,7 +724,7 @@ var CdkDrag = /** @class */ (function () {
                 _this._ngZone.run(function () {
                     _this._moveEvents.next({
                         source: _this,
-                        pointerPosition: pointerPosition,
+                        pointerPosition: constrainedPointerPosition,
                         event: event,
                         delta: _this._pointerDirectionDelta
                     });
@@ -859,7 +869,7 @@ var CdkDrag = /** @class */ (function () {
         this._rootElementInitSubscription.unsubscribe();
         this._destroyPreview();
         this._destroyPlaceholder();
-        this._nextSibling = null;
+        this._boundaryElement = this._nextSibling = (/** @type {?} */ (null));
         this._dragDropRegistry.removeDragItem(this);
         this._removeSubscriptions();
         this._moveEvents.complete();
@@ -950,6 +960,10 @@ var CdkDrag = /** @class */ (function () {
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
+        this._boundaryElement = this._getBoundaryElement();
+        if (this._boundaryElement) {
+            this._boundaryRect = this._boundaryElement.getBoundingClientRect();
+        }
         // If we have a custom preview template, the element won't be visible anyway so we avoid the
         // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
         this._pickupPositionInElement = this._previewTemplate ? { x: 0, y: 0 } :
@@ -1026,6 +1040,7 @@ var CdkDrag = /** @class */ (function () {
         }
         this._destroyPreview();
         this._destroyPlaceholder();
+        this._boundaryRect = this._previewRect = undefined;
         // Re-enter the NgZone since we bound `document` events on the outside.
         this._ngZone.run(function () {
             /** @type {?} */
@@ -1321,6 +1336,23 @@ var CdkDrag = /** @class */ (function () {
         else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
             point.x = this._pickupPositionOnPage.x;
         }
+        if (this._boundaryRect) {
+            var _a = this._pickupPositionInElement, pickupX = _a.x, pickupY = _a.y;
+            /** @type {?} */
+            var boundaryRect = this._boundaryRect;
+            /** @type {?} */
+            var previewRect = (/** @type {?} */ (this._previewRect));
+            /** @type {?} */
+            var minY = boundaryRect.top + pickupY;
+            /** @type {?} */
+            var maxY = boundaryRect.bottom - (previewRect.height - pickupY);
+            /** @type {?} */
+            var minX = boundaryRect.left + pickupX;
+            /** @type {?} */
+            var maxX = boundaryRect.right - (previewRect.width - pickupX);
+            point.x = clamp(point.x, minX, maxX);
+            point.y = clamp(point.y, minY, maxY);
+        }
         return point;
     };
     /** Determines whether an event is a touch event. */
@@ -1429,21 +1461,28 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this.rootElementSelector) {
-            /** @type {?} */
-            var selector = this.rootElementSelector;
-            /** @type {?} */
-            var currentElement = (/** @type {?} */ (this.element.nativeElement.parentElement));
-            while (currentElement) {
-                // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
-                if (currentElement.matches ? currentElement.matches(selector) :
-                    ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
-                    return currentElement;
-                }
-                currentElement = currentElement.parentElement;
-            }
-        }
-        return this.element.nativeElement;
+        /** @type {?} */
+        var element = this.element.nativeElement;
+        /** @type {?} */
+        var rootElement = this.rootElementSelector ?
+            getClosestMatchingAncestor(element, this.rootElementSelector) : null;
+        return rootElement || element;
+    };
+    /** Gets the boundary element, based on the `boundaryElementSelector`. */
+    /**
+     * Gets the boundary element, based on the `boundaryElementSelector`.
+     * @private
+     * @return {?}
+     */
+    CdkDrag.prototype._getBoundaryElement = /**
+     * Gets the boundary element, based on the `boundaryElementSelector`.
+     * @private
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var selector = this.boundaryElementSelector;
+        return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : undefined;
     };
     /** Unsubscribes from the global subscriptions. */
     /**
@@ -1493,6 +1532,7 @@ var CdkDrag = /** @class */ (function () {
         data: [{ type: Input, args: ['cdkDragData',] }],
         lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
         rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
+        boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
         disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
         started: [{ type: Output, args: ['cdkDragStarted',] }],
         ended: [{ type: Output, args: ['cdkDragEnded',] }],
@@ -1526,6 +1566,34 @@ function deepCloneNode(node) {
     clone.removeAttribute('id');
     return clone;
 }
+/**
+ * Clamps a value between a minimum and a maximum.
+ * @param {?} value
+ * @param {?} min
+ * @param {?} max
+ * @return {?}
+ */
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+/**
+ * Gets the closest ancestor of an element that matches a selector.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function getClosestMatchingAncestor(element, selector) {
+    /** @type {?} */
+    var currentElement = (/** @type {?} */ (element.parentElement));
+    while (currentElement) {
+        // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
+        if (currentElement.matches ? currentElement.matches(selector) :
+            ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
+            return currentElement;
+        }
+        currentElement = currentElement.parentElement;
+    }
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1542,9 +1610,9 @@ function deepCloneNode(node) {
  */
 function moveItemInArray(array, fromIndex, toIndex) {
     /** @type {?} */
-    var from = clamp(fromIndex, array.length - 1);
+    var from = clamp$1(fromIndex, array.length - 1);
     /** @type {?} */
-    var to = clamp(toIndex, array.length - 1);
+    var to = clamp$1(toIndex, array.length - 1);
     if (from === to) {
         return;
     }
@@ -1568,9 +1636,9 @@ function moveItemInArray(array, fromIndex, toIndex) {
  */
 function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
     /** @type {?} */
-    var from = clamp(currentIndex, currentArray.length - 1);
+    var from = clamp$1(currentIndex, currentArray.length - 1);
     /** @type {?} */
-    var to = clamp(targetIndex, targetArray.length);
+    var to = clamp$1(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
     }
@@ -1588,7 +1656,7 @@ function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex)
  */
 function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
     /** @type {?} */
-    var to = clamp(targetIndex, targetArray.length);
+    var to = clamp$1(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray[currentIndex]);
     }
@@ -1599,7 +1667,7 @@ function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
  * @param {?} max
  * @return {?}
  */
-function clamp(value, max) {
+function clamp$1(value, max) {
     return Math.max(0, Math.min(max, value));
 }
 

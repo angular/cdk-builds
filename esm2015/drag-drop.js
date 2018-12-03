@@ -613,9 +613,9 @@ class CdkDrag {
          * Handler that is invoked when the user moves their pointer after they've initiated a drag.
          */
         this._pointerMove = (event) => {
-            /** @type {?} */
-            const pointerPosition = this._getConstrainedPointerPosition(event);
             if (!this._hasStartedDragging) {
+                /** @type {?} */
+                const pointerPosition = this._getPointerPositionOnPage(event);
                 /** @type {?} */
                 const distanceX = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
                 /** @type {?} */
@@ -630,19 +630,29 @@ class CdkDrag {
                 }
                 return;
             }
+            // We only need the preview dimensions if we have a boundary element.
+            if (this._boundaryElement) {
+                // Cache the preview element rect if we haven't cached it already or if
+                // we cached it too early before the element dimensions were computed.
+                if (!this._previewRect || (!this._previewRect.width && !this._previewRect.height)) {
+                    this._previewRect = (this._preview || this._rootElement).getBoundingClientRect();
+                }
+            }
+            /** @type {?} */
+            const constrainedPointerPosition = this._getConstrainedPointerPosition(event);
             this._hasMoved = true;
             event.preventDefault();
-            this._updatePointerDirectionDelta(pointerPosition);
+            this._updatePointerDirectionDelta(constrainedPointerPosition);
             if (this.dropContainer) {
-                this._updateActiveDropContainer(pointerPosition);
+                this._updateActiveDropContainer(constrainedPointerPosition);
             }
             else {
                 /** @type {?} */
                 const activeTransform = this._activeTransform;
                 activeTransform.x =
-                    pointerPosition.x - this._pickupPositionOnPage.x + this._passiveTransform.x;
+                    constrainedPointerPosition.x - this._pickupPositionOnPage.x + this._passiveTransform.x;
                 activeTransform.y =
-                    pointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
+                    constrainedPointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
                 /** @type {?} */
                 const transform = getTransform(activeTransform.x, activeTransform.y);
                 // Preserve the previous `transform` value, if there was one.
@@ -662,7 +672,7 @@ class CdkDrag {
                 this._ngZone.run(() => {
                     this._moveEvents.next({
                         source: this,
-                        pointerPosition,
+                        pointerPosition: constrainedPointerPosition,
                         event,
                         delta: this._pointerDirectionDelta
                     });
@@ -774,7 +784,7 @@ class CdkDrag {
         this._rootElementInitSubscription.unsubscribe();
         this._destroyPreview();
         this._destroyPlaceholder();
-        this._nextSibling = null;
+        this._boundaryElement = this._nextSibling = (/** @type {?} */ (null));
         this._dragDropRegistry.removeDragItem(this);
         this._removeSubscriptions();
         this._moveEvents.complete();
@@ -839,6 +849,10 @@ class CdkDrag {
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
+        this._boundaryElement = this._getBoundaryElement();
+        if (this._boundaryElement) {
+            this._boundaryRect = this._boundaryElement.getBoundingClientRect();
+        }
         // If we have a custom preview template, the element won't be visible anyway so we avoid the
         // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
         this._pickupPositionInElement = this._previewTemplate ? { x: 0, y: 0 } :
@@ -900,6 +914,7 @@ class CdkDrag {
         }
         this._destroyPreview();
         this._destroyPlaceholder();
+        this._boundaryRect = this._previewRect = undefined;
         // Re-enter the NgZone since we bound `document` events on the outside.
         this._ngZone.run(() => {
             /** @type {?} */
@@ -1120,6 +1135,23 @@ class CdkDrag {
         else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
             point.x = this._pickupPositionOnPage.x;
         }
+        if (this._boundaryRect) {
+            const { x: pickupX, y: pickupY } = this._pickupPositionInElement;
+            /** @type {?} */
+            const boundaryRect = this._boundaryRect;
+            /** @type {?} */
+            const previewRect = (/** @type {?} */ (this._previewRect));
+            /** @type {?} */
+            const minY = boundaryRect.top + pickupY;
+            /** @type {?} */
+            const maxY = boundaryRect.bottom - (previewRect.height - pickupY);
+            /** @type {?} */
+            const minX = boundaryRect.left + pickupX;
+            /** @type {?} */
+            const maxX = boundaryRect.right - (previewRect.width - pickupX);
+            point.x = clamp(point.x, minX, maxX);
+            point.y = clamp(point.y, minY, maxY);
+        }
         return point;
     }
     /**
@@ -1196,21 +1228,22 @@ class CdkDrag {
      * @return {?}
      */
     _getRootElement() {
-        if (this.rootElementSelector) {
-            /** @type {?} */
-            const selector = this.rootElementSelector;
-            /** @type {?} */
-            let currentElement = (/** @type {?} */ (this.element.nativeElement.parentElement));
-            while (currentElement) {
-                // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
-                if (currentElement.matches ? currentElement.matches(selector) :
-                    ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
-                    return currentElement;
-                }
-                currentElement = currentElement.parentElement;
-            }
-        }
-        return this.element.nativeElement;
+        /** @type {?} */
+        const element = this.element.nativeElement;
+        /** @type {?} */
+        const rootElement = this.rootElementSelector ?
+            getClosestMatchingAncestor(element, this.rootElementSelector) : null;
+        return rootElement || element;
+    }
+    /**
+     * Gets the boundary element, based on the `boundaryElementSelector`.
+     * @private
+     * @return {?}
+     */
+    _getBoundaryElement() {
+        /** @type {?} */
+        const selector = this.boundaryElementSelector;
+        return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : undefined;
     }
     /**
      * Unsubscribes from the global subscriptions.
@@ -1255,6 +1288,7 @@ CdkDrag.propDecorators = {
     data: [{ type: Input, args: ['cdkDragData',] }],
     lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
     rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
+    boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
     disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
     started: [{ type: Output, args: ['cdkDragStarted',] }],
     ended: [{ type: Output, args: ['cdkDragEnded',] }],
@@ -1286,6 +1320,34 @@ function deepCloneNode(node) {
     clone.removeAttribute('id');
     return clone;
 }
+/**
+ * Clamps a value between a minimum and a maximum.
+ * @param {?} value
+ * @param {?} min
+ * @param {?} max
+ * @return {?}
+ */
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+/**
+ * Gets the closest ancestor of an element that matches a selector.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function getClosestMatchingAncestor(element, selector) {
+    /** @type {?} */
+    let currentElement = (/** @type {?} */ (element.parentElement));
+    while (currentElement) {
+        // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
+        if (currentElement.matches ? currentElement.matches(selector) :
+            ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
+            return currentElement;
+        }
+        currentElement = currentElement.parentElement;
+    }
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1302,9 +1364,9 @@ function deepCloneNode(node) {
  */
 function moveItemInArray(array, fromIndex, toIndex) {
     /** @type {?} */
-    const from = clamp(fromIndex, array.length - 1);
+    const from = clamp$1(fromIndex, array.length - 1);
     /** @type {?} */
-    const to = clamp(toIndex, array.length - 1);
+    const to = clamp$1(toIndex, array.length - 1);
     if (from === to) {
         return;
     }
@@ -1328,9 +1390,9 @@ function moveItemInArray(array, fromIndex, toIndex) {
  */
 function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
     /** @type {?} */
-    const from = clamp(currentIndex, currentArray.length - 1);
+    const from = clamp$1(currentIndex, currentArray.length - 1);
     /** @type {?} */
-    const to = clamp(targetIndex, targetArray.length);
+    const to = clamp$1(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
     }
@@ -1348,7 +1410,7 @@ function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex)
  */
 function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
     /** @type {?} */
-    const to = clamp(targetIndex, targetArray.length);
+    const to = clamp$1(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray[currentIndex]);
     }
@@ -1359,7 +1421,7 @@ function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
  * @param {?} max
  * @return {?}
  */
-function clamp(value, max) {
+function clamp$1(value, max) {
     return Math.max(0, Math.min(max, value));
 }
 
