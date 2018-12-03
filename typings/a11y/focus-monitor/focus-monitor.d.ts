@@ -38,10 +38,28 @@ export declare class FocusMonitor implements OnDestroy {
     private _originTimeoutId;
     /** Map of elements being monitored to their info. */
     private _elementInfo;
-    /** A map of global objects to lists of current listeners. */
-    private _unregisterGlobalListeners;
     /** The number of elements currently being monitored. */
     private _monitoredElementCount;
+    /**
+     * Event listener for `keydown` events on the document.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     */
+    private _documentKeydownListener;
+    /**
+     * Event listener for `mousedown` events on the document.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     */
+    private _documentMousedownListener;
+    /**
+     * Event listener for `touchstart` events on the document.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     */
+    private _documentTouchstartListener;
+    /**
+     * Event listener for `focus` events on the window.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     */
+    private _windowFocusListener;
     constructor(_ngZone: NgZone, _platform: Platform);
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
@@ -84,8 +102,6 @@ export declare class FocusMonitor implements OnDestroy {
      */
     focusVia(element: ElementRef<HTMLElement>, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
-    /** Register necessary event listeners on the document and window. */
-    private _registerGlobalListeners;
     private _toggleClass;
     /**
      * Sets the focus classes on the element based on the given focus origin.

@@ -13,12 +13,13 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Current version of the Angular Component Development Kit.
-  @type {?} */
-var VERSION = new core.Version('7.1.0-b1045ee');
+ * @type {?}
+ */
+var VERSION = new core.Version('7.1.0-6eae08f');
 
 exports.VERSION = VERSION;
 

@@ -10,7 +10,7 @@ import { Injectable, defineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -22,7 +22,7 @@ class DataSource {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * DataSource wrapper for a native array.
@@ -50,7 +50,12 @@ class ArrayDataSource extends DataSource {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to be used to power selecting one or more options from a list.
@@ -173,7 +178,7 @@ class SelectionModel {
      */
     sort(predicate) {
         if (this._multiple && this.selected) {
-            /** @type {?} */ ((this._selected)).sort(predicate);
+            (/** @type {?} */ (this._selected)).sort(predicate);
         }
     }
     /**
@@ -185,6 +190,7 @@ class SelectionModel {
     }
     /**
      * Emits a change event and clears the records of selected and deselected values.
+     * @private
      * @return {?}
      */
     _emitChangeEvent() {
@@ -202,6 +208,7 @@ class SelectionModel {
     }
     /**
      * Selects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
@@ -218,6 +225,7 @@ class SelectionModel {
     }
     /**
      * Deselects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
@@ -231,6 +239,7 @@ class SelectionModel {
     }
     /**
      * Clears out the selected values.
+     * @private
      * @return {?}
      */
     _unmarkAll() {
@@ -241,6 +250,7 @@ class SelectionModel {
     /**
      * Verifies the value assignment and throws an error if the specified value array is
      * including multiple values while the selection model is not supporting multiple values.
+     * @private
      * @param {?} values
      * @return {?}
      */
@@ -262,7 +272,7 @@ function getMultipleValuesInSingleSelectionError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to coordinate unique selection based on name.
@@ -315,12 +325,17 @@ UniqueSelectionDispatcher.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };

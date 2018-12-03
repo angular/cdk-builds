@@ -7,7 +7,7 @@
  */
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /** @type {?} */
@@ -80,8 +80,10 @@ const EIGHT = 56;
 const NINE = 57;
 /** @type {?} */
 const FF_SEMICOLON = 59;
+// Firefox (Gecko) fires this for semicolon instead of 186
 /** @type {?} */
 const FF_EQUALS = 61;
+// Firefox (Gecko) fires this for equals instead of 187
 /** @type {?} */
 const QUESTION_MARK = 63;
 /** @type {?} */
@@ -140,6 +142,7 @@ const Y = 89;
 const Z = 90;
 /** @type {?} */
 const META = 91;
+// WIN_KEY_LEFT
 /** @type {?} */
 const MAC_WK_CMD_LEFT = 91;
 /** @type {?} */
@@ -210,10 +213,13 @@ const FIRST_MEDIA = 166;
 const FF_MINUS = 173;
 /** @type {?} */
 const MUTE = 173;
+// Firefox (Gecko) fires 181 for MUTE
 /** @type {?} */
 const VOLUME_DOWN = 174;
+// Firefox (Gecko) fires 182 for VOLUME_DOWN
 /** @type {?} */
 const VOLUME_UP = 175;
+// Firefox (Gecko) fires 183 for VOLUME_UP
 /** @type {?} */
 const FF_MUTE = 181;
 /** @type {?} */
@@ -224,12 +230,15 @@ const LAST_MEDIA = 183;
 const FF_VOLUME_UP = 183;
 /** @type {?} */
 const SEMICOLON = 186;
+// Firefox (Gecko) fires 59 for SEMICOLON
 /** @type {?} */
 const EQUALS = 187;
+// Firefox (Gecko) fires 61 for EQUALS
 /** @type {?} */
 const COMMA = 188;
 /** @type {?} */
 const DASH = 189;
+// Firefox (Gecko) fires 173 for DASH/MINUS
 /** @type {?} */
 const SLASH = 191;
 /** @type {?} */
@@ -249,8 +258,9 @@ const MAC_META = 224;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
 /**
  * Checks whether a modifier key is pressed.
  * @param {?} event Event to be checked.
@@ -266,12 +276,12 @@ function hasModifierKey(event, ...modifiers) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { MAC_ENTER, BACKSPACE, TAB, NUM_CENTER, ENTER, SHIFT, CONTROL, ALT, PAUSE, CAPS_LOCK, ESCAPE, SPACE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, PLUS_SIGN, PRINT_SCREEN, INSERT, DELETE, ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, FF_SEMICOLON, FF_EQUALS, QUESTION_MARK, AT_SIGN, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, CONTEXT_MENU, NUMPAD_ZERO, NUMPAD_ONE, NUMPAD_TWO, NUMPAD_THREE, NUMPAD_FOUR, NUMPAD_FIVE, NUMPAD_SIX, NUMPAD_SEVEN, NUMPAD_EIGHT, NUMPAD_NINE, NUMPAD_MULTIPLY, NUMPAD_PLUS, NUMPAD_MINUS, NUMPAD_PERIOD, NUMPAD_DIVIDE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, NUM_LOCK, SCROLL_LOCK, FIRST_MEDIA, FF_MINUS, MUTE, VOLUME_DOWN, VOLUME_UP, FF_MUTE, FF_VOLUME_DOWN, LAST_MEDIA, FF_VOLUME_UP, SEMICOLON, EQUALS, COMMA, DASH, SLASH, APOSTROPHE, TILDE, OPEN_SQUARE_BRACKET, BACKSLASH, CLOSE_SQUARE_BRACKET, SINGLE_QUOTE, MAC_META, hasModifierKey };

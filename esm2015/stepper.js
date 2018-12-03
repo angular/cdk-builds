@@ -17,13 +17,13 @@ import { startWith, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepLabel {
     /**
      * @param {?} template
      */
-    constructor(template) {
+    constructor(/** @docs-private */ template) {
         this.template = template;
     }
 }
@@ -39,7 +39,7 @@ CdkStepLabel.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepHeader {
     /**
@@ -71,29 +71,32 @@ CdkStepHeader.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Used to generate unique ID for each stepper component.
-  @type {?} */
+ * @type {?}
+ */
 let nextId = 0;
 /**
  * Change event emitted on selection changes.
  */
 class StepperSelectionEvent {
 }
-/** *
+/**
  * Enum to represent the different states of the steps.
-  @type {?} */
+ * @type {?}
+ */
 const STEP_STATE = {
     NUMBER: 'number',
     EDIT: 'edit',
     DONE: 'done',
     ERROR: 'error'
 };
-/** *
+/**
  * InjectionToken that can be used to specify the global stepper options.
-  @type {?} */
+ * @type {?}
+ */
 const MAT_STEPPER_GLOBAL_OPTIONS = new InjectionToken('mat-stepper-global-options');
 class CdkStep {
     /**
@@ -154,6 +157,7 @@ class CdkStep {
         this._customCompleted = coerceBooleanProperty(value);
     }
     /**
+     * @private
      * @return {?}
      */
     _getDefaultCompleted() {
@@ -174,6 +178,7 @@ class CdkStep {
         this._customError = coerceBooleanProperty(value);
     }
     /**
+     * @private
      * @return {?}
      */
     _getDefaultError() {
@@ -304,7 +309,7 @@ class CdkStepper {
      */
     get selected() {
         // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
-        return this._steps ? this._steps.toArray()[this.selectedIndex] : /** @type {?} */ ((undefined));
+        return this._steps ? this._steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
     }
     /**
      * @param {?} step
@@ -323,7 +328,7 @@ class CdkStepper {
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
-        (this._dir ? /** @type {?} */ (this._dir.change) : of())
+        (this._dir ? (/** @type {?} */ (this._dir.change)) : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
@@ -418,6 +423,7 @@ class CdkStepper {
             : this._getGuidelineLogic(step, isCurrentStep, state);
     }
     /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @return {?}
@@ -434,6 +440,7 @@ class CdkStepper {
         }
     }
     /**
+     * @private
      * @param {?} step
      * @param {?} isCurrentStep
      * @param {?=} state
@@ -457,6 +464,7 @@ class CdkStepper {
         }
     }
     /**
+     * @private
      * @param {?} index
      * @return {?}
      */
@@ -471,6 +479,7 @@ class CdkStepper {
         return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
     }
     /**
+     * @private
      * @param {?} newIndex
      * @return {?}
      */
@@ -521,6 +530,7 @@ class CdkStepper {
         }
     }
     /**
+     * @private
      * @param {?} index
      * @return {?}
      */
@@ -542,6 +552,7 @@ class CdkStepper {
         return false;
     }
     /**
+     * @private
      * @return {?}
      */
     _layoutDirection() {
@@ -549,6 +560,7 @@ class CdkStepper {
     }
     /**
      * Checks whether the stepper contains the focused element.
+     * @private
      * @return {?}
      */
     _containsFocus() {
@@ -586,7 +598,7 @@ CdkStepper.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Button that moves to the next step in a stepper workflow.
@@ -653,7 +665,7 @@ CdkStepperPrevious.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepperModule {
 }
@@ -681,12 +693,12 @@ CdkStepperModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { StepperSelectionEvent, STEP_STATE, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule, CdkStepHeader };

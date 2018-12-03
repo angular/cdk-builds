@@ -12,7 +12,7 @@ import { debounceTime } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -72,6 +72,7 @@ class ContentObserver {
     /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
      * new one if not.
+     * @private
      * @param {?} element
      * @return {?}
      */
@@ -91,32 +92,34 @@ class ContentObserver {
             this._observedElements.set(element, { observer, stream, count: 1 });
         }
         else {
-            /** @type {?} */ ((this._observedElements.get(element))).count++;
+            (/** @type {?} */ (this._observedElements.get(element))).count++;
         }
-        return /** @type {?} */ ((this._observedElements.get(element))).stream;
+        return (/** @type {?} */ (this._observedElements.get(element))).stream;
     }
     /**
      * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
      * observing this element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     _unobserveElement(element) {
         if (this._observedElements.has(element)) {
-            /** @type {?} */ ((this._observedElements.get(element))).count--;
-            if (!/** @type {?} */ ((this._observedElements.get(element))).count) {
+            (/** @type {?} */ (this._observedElements.get(element))).count--;
+            if (!(/** @type {?} */ (this._observedElements.get(element))).count) {
                 this._cleanupObserver(element);
             }
         }
     }
     /**
      * Clean up the underlying MutationObserver for the specified element.
+     * @private
      * @param {?} element
      * @return {?}
      */
     _cleanupObserver(element) {
         if (this._observedElements.has(element)) {
-            const { observer, stream } = /** @type {?} */ ((this._observedElements.get(element)));
+            const { observer, stream } = (/** @type {?} */ (this._observedElements.get(element)));
             if (observer) {
                 observer.disconnect();
             }
@@ -196,6 +199,7 @@ class CdkObserveContent {
         this._unsubscribe();
     }
     /**
+     * @private
      * @return {?}
      */
     _subscribe() {
@@ -212,6 +216,7 @@ class CdkObserveContent {
         });
     }
     /**
+     * @private
      * @return {?}
      */
     _unsubscribe() {
@@ -249,12 +254,12 @@ ObserversModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { MutationObserverFactory, ContentObserver, CdkObserveContent, ObserversModule };

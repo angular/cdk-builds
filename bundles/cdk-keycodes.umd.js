@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /** @type {?} */
@@ -86,8 +86,10 @@ var EIGHT = 56;
 var NINE = 57;
 /** @type {?} */
 var FF_SEMICOLON = 59;
+// Firefox (Gecko) fires this for semicolon instead of 186
 /** @type {?} */
 var FF_EQUALS = 61;
+// Firefox (Gecko) fires this for equals instead of 187
 /** @type {?} */
 var QUESTION_MARK = 63;
 /** @type {?} */
@@ -146,6 +148,7 @@ var Y = 89;
 var Z = 90;
 /** @type {?} */
 var META = 91;
+// WIN_KEY_LEFT
 /** @type {?} */
 var MAC_WK_CMD_LEFT = 91;
 /** @type {?} */
@@ -216,10 +219,13 @@ var FIRST_MEDIA = 166;
 var FF_MINUS = 173;
 /** @type {?} */
 var MUTE = 173;
+// Firefox (Gecko) fires 181 for MUTE
 /** @type {?} */
 var VOLUME_DOWN = 174;
+// Firefox (Gecko) fires 182 for VOLUME_DOWN
 /** @type {?} */
 var VOLUME_UP = 175;
+// Firefox (Gecko) fires 183 for VOLUME_UP
 /** @type {?} */
 var FF_MUTE = 181;
 /** @type {?} */
@@ -230,12 +236,15 @@ var LAST_MEDIA = 183;
 var FF_VOLUME_UP = 183;
 /** @type {?} */
 var SEMICOLON = 186;
+// Firefox (Gecko) fires 59 for SEMICOLON
 /** @type {?} */
 var EQUALS = 187;
+// Firefox (Gecko) fires 61 for EQUALS
 /** @type {?} */
 var COMMA = 188;
 /** @type {?} */
 var DASH = 189;
+// Firefox (Gecko) fires 173 for DASH/MINUS
 /** @type {?} */
 var SLASH = 191;
 /** @type {?} */
@@ -255,8 +264,9 @@ var MAC_META = 224;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
 /**
  * Checks whether a modifier key is pressed.
  * @param {?} event Event to be checked.

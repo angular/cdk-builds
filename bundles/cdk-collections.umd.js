@@ -42,7 +42,7 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -61,7 +61,7 @@ DataSource = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * DataSource wrapper for a native array.
@@ -99,7 +99,12 @@ ArrayDataSource = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to be used to power selecting one or more options from a list.
@@ -300,7 +305,7 @@ SelectionModel = /** @class */ (function () {
      */
     function (predicate) {
         if (this._multiple && this.selected) {
-            /** @type {?} */ ((this._selected)).sort(predicate);
+            (/** @type {?} */ (this._selected)).sort(predicate);
         }
     };
     /**
@@ -317,12 +322,15 @@ SelectionModel = /** @class */ (function () {
     function () {
         return this._multiple;
     };
+    /** Emits a change event and clears the records of selected and deselected values. */
     /**
      * Emits a change event and clears the records of selected and deselected values.
+     * @private
      * @return {?}
      */
     SelectionModel.prototype._emitChangeEvent = /**
      * Emits a change event and clears the records of selected and deselected values.
+     * @private
      * @return {?}
      */
     function () {
@@ -338,13 +346,16 @@ SelectionModel = /** @class */ (function () {
             this._selectedToEmit = [];
         }
     };
+    /** Selects a value. */
     /**
      * Selects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
     SelectionModel.prototype._markSelected = /**
      * Selects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
@@ -359,13 +370,16 @@ SelectionModel = /** @class */ (function () {
             }
         }
     };
+    /** Deselects a value. */
     /**
      * Deselects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
     SelectionModel.prototype._unmarkSelected = /**
      * Deselects a value.
+     * @private
      * @param {?} value
      * @return {?}
      */
@@ -377,12 +391,15 @@ SelectionModel = /** @class */ (function () {
             }
         }
     };
+    /** Clears out the selected values. */
     /**
      * Clears out the selected values.
+     * @private
      * @return {?}
      */
     SelectionModel.prototype._unmarkAll = /**
      * Clears out the selected values.
+     * @private
      * @return {?}
      */
     function () {
@@ -394,12 +411,18 @@ SelectionModel = /** @class */ (function () {
     /**
      * Verifies the value assignment and throws an error if the specified value array is
      * including multiple values while the selection model is not supporting multiple values.
+     */
+    /**
+     * Verifies the value assignment and throws an error if the specified value array is
+     * including multiple values while the selection model is not supporting multiple values.
+     * @private
      * @param {?} values
      * @return {?}
      */
     SelectionModel.prototype._verifyValueAssignment = /**
      * Verifies the value assignment and throws an error if the specified value array is
      * including multiple values while the selection model is not supporting multiple values.
+     * @private
      * @param {?} values
      * @return {?}
      */
@@ -422,7 +445,7 @@ function getMultipleValuesInSingleSelectionError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to coordinate unique selection based on name.

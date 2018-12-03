@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LayoutModule = /** @class */ (function () {
     function LayoutModule() {
@@ -26,15 +26,17 @@ var LayoutModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+/**
  * Global registry for all dynamically-created, injected media queries.
-  @type {?} */
+ * @type {?}
+ */
 var mediaQueriesForWebkitCompatibility = new Set();
-/** *
+/**
  * Style tag that holds all of the dynamically-created media queries.
-  @type {?} */
+ * @type {?}
+ */
 var mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
@@ -99,11 +101,11 @@ function createEmptyStyleRule(query) {
     try {
         if (!mediaQueryStyleNode) {
             mediaQueryStyleNode = document.createElement('style');
-            mediaQueryStyleNode.setAttribute('type', 'text/css'); /** @type {?} */
-            ((document.head)).appendChild(mediaQueryStyleNode);
+            mediaQueryStyleNode.setAttribute('type', 'text/css');
+            (/** @type {?} */ (document.head)).appendChild(mediaQueryStyleNode);
         }
         if (mediaQueryStyleNode.sheet) {
-            (/** @type {?} */ (mediaQueryStyleNode.sheet))
+            ((/** @type {?} */ (mediaQueryStyleNode.sheet)))
                 .insertRule("@media " + query + " {.fx-query-test{ }}", 0);
             mediaQueriesForWebkitCompatibility.add(query);
         }
@@ -120,17 +122,17 @@ function createEmptyStyleRule(query) {
 function noopMatchMedia(query) {
     // Use `as any` here to avoid adding additional necessary properties for
     // the noop matcher.
-    return /** @type {?} */ ({
+    return (/** @type {?} */ ({
         matches: query === 'all' || query === '',
         media: query,
         addListener: function () { },
         removeListener: function () { }
-    });
+    }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Utility for checking the matching state of \@media queries.
@@ -219,13 +221,16 @@ var BreakpointObserver = /** @class */ (function () {
             return response;
         }));
     };
+    /** Registers a specific query to be listened for. */
     /**
      * Registers a specific query to be listened for.
+     * @private
      * @param {?} query
      * @return {?}
      */
     BreakpointObserver.prototype._registerQuery = /**
      * Registers a specific query to be listened for.
+     * @private
      * @param {?} query
      * @return {?}
      */
@@ -233,19 +238,17 @@ var BreakpointObserver = /** @class */ (function () {
         var _this = this;
         // Only set up a new MediaQueryList if it is not already being listened for.
         if (this._queries.has(query)) {
-            return /** @type {?} */ ((this._queries.get(query)));
+            return (/** @type {?} */ (this._queries.get(query)));
         }
         /** @type {?} */
         var mql = this.mediaMatcher.matchMedia(query);
+        // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
+        // TypeScript 3.1 (the type is unavailable before then).
         /** @type {?} */
         var queryListener;
+        // Create callback for match changes and add it is as a listener.
         /** @type {?} */
         var queryObservable = rxjs.fromEventPattern(
-        // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
-        // back into the zone because matchMedia is only included in Zone.js by loading the
-        // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
-        // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
-        // patches it.
         // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
         // back into the zone because matchMedia is only included in Zone.js by loading the
         // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
@@ -255,7 +258,8 @@ var BreakpointObserver = /** @class */ (function () {
             queryListener = function (e) { return _this.zone.run(function () { return listener(e); }); };
             mql.addListener(queryListener);
         }, function () { return mql.removeListener(queryListener); })
-            .pipe(operators.takeUntil(this._destroySubject), operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }));
+            .pipe(operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }), operators.takeUntil(this._destroySubject));
+        // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         var output = { observable: queryObservable, mql: mql };
         this._queries.set(query, output);
@@ -286,15 +290,18 @@ function splitQueries(queries) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** *
+// PascalCase is being used as Breakpoints is used like an enum.
+// tslint:disable-next-line:variable-name
+/**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
-  @type {?} */
+ * @type {?}
+ */
 var Breakpoints = {
     XSmall: '(max-width: 599.99px)',
     Small: '(min-width: 600px) and (max-width: 959.99px)',
