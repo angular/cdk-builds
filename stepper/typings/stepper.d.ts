@@ -39,6 +39,12 @@ export declare const STEP_STATE: {
     ERROR: string;
 };
 /** InjectionToken that can be used to specify the global stepper options. */
+export declare const STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
+/**
+ * InjectionToken that can be used to specify the global stepper options.
+ * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
+ * @breaking-change 8.0.0.
+ */
 export declare const MAT_STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
 /** Configurable options for stepper. */
 export interface StepperOptions {

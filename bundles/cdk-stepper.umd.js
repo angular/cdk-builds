@@ -100,7 +100,14 @@ var STEP_STATE = {
  * InjectionToken that can be used to specify the global stepper options.
  * @type {?}
  */
-var MAT_STEPPER_GLOBAL_OPTIONS = new core.InjectionToken('mat-stepper-global-options');
+var STEPPER_GLOBAL_OPTIONS = new core.InjectionToken('STEPPER_GLOBAL_OPTIONS');
+/**
+ * InjectionToken that can be used to specify the global stepper options.
+ * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
+ * \@breaking-change 8.0.0.
+ * @type {?}
+ */
+var MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 var CdkStep = /** @class */ (function () {
     /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
     function CdkStep(_stepper, stepperOptions) {
@@ -188,7 +195,7 @@ var CdkStep = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._customError || this._getDefaultError();
+            return this._customError == null ? this._getDefaultError() : this._customError;
         },
         set: /**
          * @param {?} value
@@ -266,7 +273,7 @@ var CdkStep = /** @class */ (function () {
     /** @nocollapse */
     CdkStep.ctorParameters = function () { return [
         { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef(function () { return CdkStepper; }),] }] },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [MAT_STEPPER_GLOBAL_OPTIONS,] }] }
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
     ]; };
     CdkStep.propDecorators = {
         stepLabel: [{ type: core.ContentChild, args: [CdkStepLabel,] }],
@@ -844,6 +851,7 @@ var CdkStepperModule = /** @class */ (function () {
 
 exports.StepperSelectionEvent = StepperSelectionEvent;
 exports.STEP_STATE = STEP_STATE;
+exports.STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 exports.MAT_STEPPER_GLOBAL_OPTIONS = MAT_STEPPER_GLOBAL_OPTIONS;
 exports.CdkStep = CdkStep;
 exports.CdkStepper = CdkStepper;
