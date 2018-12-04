@@ -7,13 +7,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 /** Determines the indentation of child elements for the given Parse5 element. */
 function getChildElementIndentation(element) {
     const childElement = element.childNodes
         .find(node => node['tagName']);
     if ((childElement && !childElement.sourceCodeLocation) || !element.sourceCodeLocation) {
-        throw new Error('Cannot determine child element indentation because the specified Parse5 ' +
-            'element does not have any source code location metadata.');
+        throw new schematics_1.SchematicsException('Cannot determine child element indentation because the ' +
+            'specified Parse5 element does not have any source code location metadata.');
     }
     const startColumns = childElement ?
         // In case there are child elements inside of the element, we assume that their

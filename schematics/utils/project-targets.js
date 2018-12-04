@@ -7,6 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 /** Resolves the architect options for the build target of the given project. */
 function getProjectTargetOptions(project, buildTarget) {
     if (project.targets &&
@@ -22,7 +23,7 @@ function getProjectTargetOptions(project, buildTarget) {
         project.architect[buildTarget].options) {
         return project.architect[buildTarget].options;
     }
-    throw new Error(`Cannot determine project target configuration for: ${buildTarget}.`);
+    throw new schematics_1.SchematicsException(`Cannot determine project target configuration for: ${buildTarget}.`);
 }
 exports.getProjectTargetOptions = getProjectTargetOptions;
 //# sourceMappingURL=project-targets.js.map

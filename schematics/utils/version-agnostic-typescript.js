@@ -7,6 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 /**
  * This is an agnostic re-export of TypeScript. Depending on the context, this module file will
  * return the TypeScript version that is being shipped within the `@schematics/angular` package,
@@ -25,8 +26,8 @@ catch (_a) {
         exports.ts = ts = require('typescript');
     }
     catch (_b) {
-        throw new Error('Error: Could not find a TypeScript version for the schematics. ' +
-            'Please report an issue on the Angular Material repository.');
+        throw new schematics_1.SchematicsException('Error: Could not find a TypeScript version for the ' +
+            'schematics. Please report an issue on the Angular Material repository.');
     }
 }
 //# sourceMappingURL=version-agnostic-typescript.js.map

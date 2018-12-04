@@ -7,6 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 const data_1 = require("./data");
 const target_version_1 = require("./target-version");
 /** Upgrade data for the Angular CDK. */
@@ -31,7 +32,7 @@ exports.cdkUpgradeData = {
  */
 function getChangesForTarget(target, data) {
     if (!data) {
-        throw new Error(`No data could be found for target version: ${target_version_1.TargetVersion[target]}`);
+        throw new schematics_1.SchematicsException(`No data could be found for target version: ${target_version_1.TargetVersion[target]}`);
     }
     if (!data[target]) {
         return [];

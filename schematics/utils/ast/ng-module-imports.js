@@ -7,14 +7,15 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 const ts = require("typescript");
 /**
- * Whether the Angular module in the given path imports the specifed module class name.
+ * Whether the Angular module in the given path imports the specified module class name.
  */
 function hasNgModuleImport(tree, modulePath, className) {
     const moduleFileContent = tree.read(modulePath);
     if (!moduleFileContent) {
-        throw new Error(`Could not read Angular module file: ${modulePath}`);
+        throw new schematics_1.SchematicsException(`Could not read Angular module file: ${modulePath}`);
     }
     const parsedFile = ts.createSourceFile(modulePath, moduleFileContent.toString(), ts.ScriptTarget.Latest, true);
     let ngModuleMetadata = null;
@@ -28,7 +29,7 @@ function hasNgModuleImport(tree, modulePath, className) {
     };
     ts.forEachChild(parsedFile, findModuleDecorator);
     if (!ngModuleMetadata) {
-        throw new Error(`Could not find NgModule declaration inside: "${modulePath}"`);
+        throw new schematics_1.SchematicsException(`Could not find NgModule declaration inside: "${modulePath}"`);
     }
     for (let property of ngModuleMetadata.properties) {
         if (!ts.isPropertyAssignment(property) || property.name.getText() !== 'imports' ||
