@@ -997,6 +997,9 @@ class CdkDrag {
             preview.style.transform = getTransform(elementRect.left, elementRect.top);
         }
         extendStyles(preview.style, {
+            // It's important that we disable the pointer events on the preview, because
+            // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
+            pointerEvents: 'none',
             position: 'fixed',
             top: '0',
             left: '0',
@@ -1484,8 +1487,11 @@ class CdkDropList {
      * @param {?} _changeDetectorRef
      * @param {?=} _dir
      * @param {?=} _group
+     * @param {?=} _document
      */
-    constructor(element, _dragDropRegistry, _changeDetectorRef, _dir, _group) {
+    constructor(element, _dragDropRegistry, _changeDetectorRef, _dir, _group, 
+    // @breaking-change 8.0.0 `_document` parameter to be made required.
+    _document) {
         this.element = element;
         this._dragDropRegistry = _dragDropRegistry;
         this._changeDetectorRef = _changeDetectorRef;
@@ -1542,6 +1548,13 @@ class CdkDropList {
          * well as what direction the pointer was moving in when the swap occured.
          */
         this._previousSwap = { drag: (/** @type {?} */ (null)), delta: 0 };
+        // @breaking-change 8.0.0 Remove null checks once `_document` parameter is required.
+        if (_document) {
+            this._document = _document;
+        }
+        else if (typeof document !== 'undefined') {
+            this._document = document;
+        }
     }
     /**
      * Whether starting a dragging sequence from this container is disabled.
@@ -1764,8 +1777,37 @@ class CdkDropList {
      */
     _getSiblingContainerFromPosition(item, x, y) {
         /** @type {?} */
-        const result = this._positionCache.siblings
-            .find(sibling => isInsideClientRect(sibling.clientRect, x, y));
+        const results = this._positionCache.siblings.filter(sibling => {
+            return isInsideClientRect(sibling.clientRect, x, y);
+        });
+        // No drop containers are intersecting with the pointer.
+        if (!results.length) {
+            return null;
+        }
+        /** @type {?} */
+        let result = results[0];
+        // @breaking-change 8.0.0 remove null check once the
+        //  `_document` is made into a required parameter.
+        if (this._document) {
+            /** @type {?} */
+            const elementFromPoint = this._document.elementFromPoint(x, y);
+            // If there's no element at the pointer position, then
+            // the client rect is probably scrolled out of the view.
+            if (!elementFromPoint) {
+                return null;
+            }
+            // The `ClientRect`, that we're using to find the container over which the user is
+            // hovering, doesn't give us any information on whether the element has been scrolled
+            // out of the view or whether it's overlapping with other containers. This means that
+            // we could end up transferring the item into a container that's invisible or is positioned
+            // below another one. We use the result from `elementFromPoint` to get the top-most element
+            // at the pointer position and to find whether it's one of the intersecting drop containers.
+            result = results.find(sibling => {
+                /** @type {?} */
+                const element = sibling.drop.element.nativeElement;
+                return element === elementFromPoint || element.contains(elementFromPoint);
+            });
+        }
         return result && result.drop.enterPredicate(item, result.drop) ? result.drop : null;
     }
     /**
@@ -1999,7 +2041,8 @@ CdkDropList.ctorParameters = () => [
     { type: DragDropRegistry },
     { type: ChangeDetectorRef },
     { type: Directionality, decorators: [{ type: Optional }] },
-    { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
+    { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
 ];
 CdkDropList.propDecorators = {
     _draggables: [{ type: ContentChildren, args: [forwardRef(() => CdkDrag),] }],

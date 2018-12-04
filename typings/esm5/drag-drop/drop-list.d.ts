@@ -18,6 +18,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     private _changeDetectorRef;
     private _dir?;
     private _group?;
+    private _document;
     /** Draggable items in the container. */
     _draggables: QueryList<CdkDrag>;
     /**
@@ -58,7 +59,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     exited: EventEmitter<CdkDragExit<T>>;
     /** Emits as the user is swapping items while actively dragging. */
     sorted: EventEmitter<CdkDragSortEvent<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
+    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, _document?: any);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Whether an item in the container is being dragged. */
