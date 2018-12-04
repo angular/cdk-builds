@@ -840,6 +840,10 @@ var CdkDrag = /** @class */ (function () {
             .subscribe(function () {
             /** @type {?} */
             var rootElement = _this._rootElement = _this._getRootElement();
+            if (rootElement.nodeType !== _this._document.ELEMENT_NODE) {
+                throw Error("cdkDrag must be attached to an element node. " +
+                    ("Currently attached to \"" + rootElement.nodeName + "\"."));
+            }
             rootElement.addEventListener('mousedown', _this._pointerDown, activeEventListenerOptions);
             rootElement.addEventListener('touchstart', _this._pointerDown, passiveEventListenerOptions);
             _this._handles.changes.pipe(startWith(null)).subscribe(function () {
