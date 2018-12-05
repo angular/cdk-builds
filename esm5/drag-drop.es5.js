@@ -1312,8 +1312,9 @@ var CdkDrag = /** @class */ (function () {
      * @return {?}
      */
     function (event) {
+        // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
         /** @type {?} */
-        var point = this._isTouchEvent(event) ? event.touches[0] : event;
+        var point = this._isTouchEvent(event) ? (event.touches[0] || event.changedTouches[0]) : event;
         return {
             x: point.pageX - this._scrollPosition.left,
             y: point.pageY - this._scrollPosition.top
