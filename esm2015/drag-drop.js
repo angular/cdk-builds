@@ -760,10 +760,6 @@ class CdkDrag {
             .subscribe(() => {
             /** @type {?} */
             const rootElement = this._rootElement = this._getRootElement();
-            if (rootElement.nodeType !== this._document.ELEMENT_NODE) {
-                throw Error(`cdkDrag must be attached to an element node. ` +
-                    `Currently attached to "${rootElement.nodeName}".`);
-            }
             rootElement.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
             rootElement.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
             this._handles.changes.pipe(startWith(null)).subscribe(() => toggleNativeDragInteractions(rootElement, this.getChildHandles().length > 0));
@@ -1118,9 +1114,8 @@ class CdkDrag {
      * @return {?}
      */
     _getPointerPositionOnPage(event) {
-        // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
         /** @type {?} */
-        const point = this._isTouchEvent(event) ? (event.touches[0] || event.changedTouches[0]) : event;
+        const point = this._isTouchEvent(event) ? event.touches[0] : event;
         return {
             x: point.pageX - this._scrollPosition.left,
             y: point.pageY - this._scrollPosition.top
