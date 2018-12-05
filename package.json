@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "7.1.1-63be232",
+  "version": "7.1.1-f6cf946",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "module": "./esm5/cdk.es5.js",
@@ -37,7 +37,7 @@
     "migrations": "./schematics/migration.json"
   },
   "sideEffects": false,
-  "releaseGitCommitSha": "63be232283262615fa2130900c80dd570eff6cda",
-  "releaseGitBranch": "master",
+  "releaseGitCommitSha": "f6cf9464ff06d12dcdd47.1.1-f6cf946a807a88c4c61ae9",
+  "releaseGitBranch": "revert-13814-fix/dynamically-changing-autocomplete",
   "releaseGitUser": " <>"
 }
