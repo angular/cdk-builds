@@ -5,18 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directionality } from '@angular/cdk/bidi';
+import { ElementRef, NgZone, ViewContainerRef, TemplateRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Directionality } from '@angular/cdk/bidi';
+import { Subject, Observable } from 'rxjs';
+import { DropListRefInternal as DropListRef } from './drop-list-ref';
 import { DragDropRegistry } from './drag-drop-registry';
-import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart } from './drag-events';
-import { CdkDragHandle } from './drag-handle';
-import { CdkDragPlaceholder } from './drag-placeholder';
-import { CdkDragPreview } from './drag-preview';
-import { CdkDropListContainer } from './drop-list-container';
-/** Object that can be used to configure the behavior of CdkDrag. */
-export interface CdkDragConfig {
+/** Object that can be used to configure the behavior of DragRef. */
+export interface DragRefConfig {
     /**
      * Minimum amount of pixels that the user should
      * drag, before the CDK initiates a drag sequence.
@@ -28,23 +24,38 @@ export interface CdkDragConfig {
      */
     pointerDirectionChangeThreshold: number;
 }
-/** Injection token that can be used to configure the behavior of `CdkDrag`. */
-export declare const CDK_DRAG_CONFIG: InjectionToken<CdkDragConfig>;
-/** @docs-private */
-export declare function CDK_DRAG_CONFIG_FACTORY(): CdkDragConfig;
-/** Element that can be moved inside a CdkDropList container. */
-export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
-    /** Element that the draggable is attached to. */
+/**
+ * Template that can be used to create a drag helper element (e.g. a preview or a placeholder).
+ */
+interface DragHelperTemplate<T = any> {
+    templateRef: TemplateRef<T>;
+    data: T;
+}
+interface DragHandle {
     element: ElementRef<HTMLElement>;
-    /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropListContainer;
+    disabled: boolean;
+}
+/**
+ * Internal compile-time-only representation of a `DragRef`.
+ * Used to avoid circular import issues between the `DragRef` and the `DropListRef`.
+ * @docs-private
+ */
+export interface DragRefInternal extends DragRef {
+}
+/**
+ * Reference to a draggable item. Used to manipulate or dispose of the item.
+ * @docs-private
+ */
+export declare class DragRef<T = any> {
+    private _document;
     private _ngZone;
     private _viewContainerRef;
     private _viewportRuler;
     private _dragDropRegistry;
     private _config;
-    private _dir;
-    private _document;
+    /** Droppable container that the draggable is a part of. */
+    dropContainer?: DropListRef | undefined;
+    private _dir?;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
     /** Reference to the view of the preview element. */
@@ -77,10 +88,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * Whether the dragging sequence has been started. Doesn't
      * necessarily mean that the element has been moved.
      */
-    _hasStartedDragging: boolean;
+    private _hasStartedDragging;
     /** Whether the element has moved since the user started dragging it. */
     private _hasMoved;
-    /** Drop container in which the CdkDrag resided when dragging began. */
+    /** Drop container in which the DragRef resided when dragging began. */
     private _initialContainer;
     /** Cached scroll position on the page when the element was picked up. */
     private _scrollPosition;
@@ -95,7 +106,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _pointerDirectionDelta;
     /** Pointer position at which the last change in the delta occurred. */
     private _pointerPositionAtLastDirectionChange;
-    /** Root element that will be dragged by the user. */
+    /**
+     * Root DOM node of the drag instance. This is the element that will
+     * be moved around as the user is dragging.
+     */
     private _rootElement;
     /** Subscription to pointer movement events. */
     private _pointerMoveSubscription;
@@ -107,59 +121,75 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * mouse event for each touch event, after a certain time.
      */
     private _lastTouchEventTime;
-    /** Subscription to the stream that initializes the root element. */
-    private _rootElementInitSubscription;
     /** Cached reference to the boundary element. */
-    private _boundaryElement?;
+    private _boundaryElement;
     /** Cached dimensions of the preview element. */
     private _previewRect?;
     /** Cached dimensions of the boundary element. */
     private _boundaryRect?;
-    /** Elements that can be used to drag the draggable item. */
-    _handles: QueryList<CdkDragHandle>;
     /** Element that will be used as a template to create the draggable item's preview. */
-    _previewTemplate: CdkDragPreview;
+    private _previewTemplate;
     /** Template for placeholder element rendered to show where a draggable would be dropped. */
-    _placeholderTemplate: CdkDragPlaceholder;
-    /** Arbitrary data to attach to this drag instance. */
-    data: T;
-    /** Locks the position of the dragged element along the specified axis. */
+    private _placeholderTemplate;
+    /** Elements that can be used to drag the draggable item. */
+    private _handles;
+    /** Whether the native interactions on the element are enabled. */
+    private _nativeInteractionsEnabled;
+    /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
-    /**
-     * Selector that will be used to determine the root draggable element, starting from
-     * the `cdkDrag` element and going up the DOM. Passing an alternate root element is useful
-     * when trying to enable dragging on an element that you might not have access to.
-     */
-    rootElementSelector: string;
-    /**
-     * Selector that will be used to determine the element to which the draggable's position will
-     * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-     * element has been found.
-     */
-    boundaryElementSelector: string;
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
+    /** Emits as the drag sequence is being prepared. */
+    beforeStarted: Subject<void>;
     /** Emits when the user starts dragging the item. */
-    started: EventEmitter<CdkDragStart>;
+    started: Subject<{
+        source: DragRef<any>;
+    }>;
     /** Emits when the user stops dragging an item in the container. */
-    ended: EventEmitter<CdkDragEnd>;
+    ended: Subject<{
+        source: DragRef<any>;
+    }>;
     /** Emits when the user has moved the item into a new container. */
-    entered: EventEmitter<CdkDragEnter<any>>;
+    entered: Subject<{
+        container: DropListRef;
+        item: DragRef<any>;
+    }>;
     /** Emits when the user removes the item its container by dragging it into another container. */
-    exited: EventEmitter<CdkDragExit<any>>;
+    exited: Subject<{
+        container: DropListRef;
+        item: DragRef<any>;
+    }>;
     /** Emits when the user drops the item inside a container. */
-    dropped: EventEmitter<CdkDragDrop<any>>;
+    dropped: Subject<{
+        previousIndex: number;
+        currentIndex: number;
+        item: DragRef<any>;
+        container: DropListRef;
+        previousContainer: DropListRef;
+        isPointerOverContainer: boolean;
+    }>;
     /**
      * Emits as the user is dragging the item. Use with caution,
      * because this event will fire for every pixel that the user has dragged.
      */
-    moved: Observable<CdkDragMove<T>>;
-    constructor(
-    /** Element that the draggable is attached to. */
-    element: ElementRef<HTMLElement>, 
+    moved: Observable<{
+        source: DragRef;
+        pointerPosition: {
+            x: number;
+            y: number;
+        };
+        event: MouseEvent | TouchEvent;
+        delta: {
+            x: -1 | 0 | 1;
+            y: -1 | 0 | 1;
+        };
+    }>;
+    /** Arbitrary data that can be attached to the drag item. */
+    data: T;
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _document: Document, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _config: DragRefConfig, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropListContainer, document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<CdkDrag<T>, CdkDropListContainer>, _config: CdkDragConfig, _dir: Directionality);
+    dropContainer?: DropListRef | undefined, _dir?: Directionality | undefined);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -167,16 +197,42 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     getPlaceholderElement(): HTMLElement;
     /** Returns the root draggable element. */
     getRootElement(): HTMLElement;
+    /** Registers the handles that can be used to drag the element. */
+    withHandles(handles: DragHandle[]): this;
+    /** Registers the template that should be used for the drag preview. */
+    withPreviewTemplate(template: DragHelperTemplate | null): this;
+    /** Registers the template that should be used for the drag placeholder. */
+    withPlaceholderTemplate(template: DragHelperTemplate | null): this;
+    /**
+     * Sets an alternate drag root element. The root element is the element that will be moved as
+     * the user is dragging. Passing an alternate root element is useful when trying to enable
+     * dragging on an element that you might not have access to.
+     */
+    withRootElement(rootElement: ElementRef<HTMLElement> | HTMLElement): this;
+    /**
+     * Element to which the draggable's position will be constrained.
+     */
+    withBoundaryElement(boundaryElement: ElementRef<HTMLElement> | HTMLElement | null): this;
+    /** Removes the dragging functionality from the DOM element. */
+    dispose(): void;
+    /** Checks whether the element is currently being dragged. */
+    isDragging(): boolean;
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
-    ngAfterViewInit(): void;
-    ngOnDestroy(): void;
-    /** Checks whether the element is currently being dragged. */
-    _isDragging(): boolean;
-    /** Gets only handles that are not inside descendant `CdkDrag` instances. */
-    private getChildHandles;
+    /** Unsubscribes from the global subscriptions. */
+    private _removeSubscriptions;
+    /** Destroys the preview element and its ViewRef. */
+    private _destroyPreview;
+    /** Destroys the placeholder element and its ViewRef. */
+    private _destroyPlaceholder;
     /** Handler for the `mousedown`/`touchstart` events. */
-    _pointerDown: (event: TouchEvent | MouseEvent) => void;
+    private _pointerDown;
+    /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
+    private _pointerMove;
+    /** Handler that is invoked when the user lifts their pointer up, after initiating a drag. */
+    private _pointerUp;
+    /** Starts the dragging sequence. */
+    private _startDragSequence;
     /**
      * Sets up the different variables and subscriptions
      * that will be necessary for the dragging sequence.
@@ -184,12 +240,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * @param event Browser event object that started the sequence.
      */
     private _initializeDragSequence;
-    /** Starts the dragging sequence. */
-    private _startDragSequence;
-    /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
-    private _pointerMove;
-    /** Handler that is invoked when the user lifts their pointer up, after initiating a drag. */
-    private _pointerUp;
     /** Cleans up the DOM artifacts that were added to facilitate the element being dragged. */
     private _cleanupDragArtifacts;
     /**
@@ -202,6 +252,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * and will be used as a preview of the element that is being dragged.
      */
     private _createPreviewElement;
+    /**
+     * Animates the preview element from its current position to the location of the drop placeholder.
+     * @returns Promise that resolves when the animation completes.
+     */
+    private _animatePreviewToPlaceholder;
     /** Creates an element that will be shown instead of the current element while dragging. */
     private _createPlaceholderElement;
     /**
@@ -210,32 +265,15 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
      * @param event Event that initiated the dragging.
      */
     private _getPointerPositionInElement;
-    /**
-     * Animates the preview element from its current position to the location of the drop placeholder.
-     * @returns Promise that resolves when the animation completes.
-     */
-    private _animatePreviewToPlaceholder;
-    /**
-     * Helper to remove an element from the DOM and to do all the necessary null checks.
-     * @param element Element to be removed.
-     */
-    private _removeElement;
     /** Determines the point of the page that was touched by the user. */
     private _getPointerPositionOnPage;
     /** Gets the pointer position on the page, accounting for any position constraints. */
     private _getConstrainedPointerPosition;
-    /** Determines whether an event is a touch event. */
-    private _isTouchEvent;
-    /** Destroys the preview element and its ViewRef. */
-    private _destroyPreview;
-    /** Destroys the placeholder element and its ViewRef. */
-    private _destroyPlaceholder;
     /** Updates the current drag delta, based on the user's current pointer position on the page. */
     private _updatePointerDirectionDelta;
-    /** Gets the root draggable element, based on the `rootElementSelector`. */
-    private _getRootElement;
-    /** Gets the boundary element, based on the `boundaryElementSelector`. */
-    private _getBoundaryElement;
-    /** Unsubscribes from the global subscriptions. */
-    private _removeSubscriptions;
+    /** Toggles the native drag interactions, based on how many handles are registered. */
+    private _toggleNativeDragInteractions;
+    /** Removes the manually-added event listeners from the root element. */
+    private _removeRootElementListeners;
 }
+export {};

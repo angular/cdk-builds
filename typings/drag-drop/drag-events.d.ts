@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { CdkDrag } from './drag';
-import { CdkDropListContainer } from './drop-list-container';
+import { CdkDrag } from './directives/drag';
+import { CdkDropList } from './directives/drop-list';
 /** Event emitted when the user starts dragging a draggable. */
 export interface CdkDragStart<T = any> {
     /** Draggable that emitted the event. */
@@ -20,7 +20,7 @@ export interface CdkDragEnd<T = any> {
 /** Event emitted when the user moves an item into a new drop container. */
 export interface CdkDragEnter<T = any, I = T> {
     /** Container into which the user has moved the item. */
-    container: CdkDropListContainer<T>;
+    container: CdkDropList<T>;
     /** Item that was removed from the container. */
     item: CdkDrag<I>;
 }
@@ -30,7 +30,7 @@ export interface CdkDragEnter<T = any, I = T> {
  */
 export interface CdkDragExit<T = any, I = T> {
     /** Container from which the user has a removed an item. */
-    container: CdkDropListContainer<T>;
+    container: CdkDropList<T>;
     /** Item that was removed from the container. */
     item: CdkDrag<I>;
 }
@@ -43,9 +43,9 @@ export interface CdkDragDrop<T, O = T> {
     /** Item that is being dropped. */
     item: CdkDrag;
     /** Container in which the item was dropped. */
-    container: CdkDropListContainer<T>;
+    container: CdkDropList<T>;
     /** Container from which the item was picked up. Can be the same as the `container`. */
-    previousContainer: CdkDropListContainer<O>;
+    previousContainer: CdkDropList<O>;
     /** Whether the user's pointer was over the container when the item was dropped. */
     isPointerOverContainer: boolean;
 }
@@ -78,7 +78,7 @@ export interface CdkDragSortEvent<T = any, I = T> {
     /** Index that the item is currently in. */
     currentIndex: number;
     /** Container that the item belongs to. */
-    container: CdkDropListContainer<T>;
+    container: CdkDropList<T>;
     /** Item that is being sorted. */
     item: CdkDrag<I>;
 }

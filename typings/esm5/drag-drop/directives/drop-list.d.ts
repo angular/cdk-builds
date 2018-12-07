@@ -5,20 +5,31 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementRef, EventEmitter, OnDestroy, OnInit, QueryList, ChangeDetectorRef } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
-import { DragDropRegistry } from './drag-drop-registry';
-import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from './drag-events';
+import { DragDropRegistry } from '../drag-drop-registry';
+import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from '../drag-events';
+import { CdkDropListContainer } from '../drop-list-container';
 import { CdkDropListGroup } from './drop-list-group';
+import { DropListRef } from '../drop-list-ref';
+import { DragRef } from '../drag-ref';
+/**
+ * Internal compile-time-only representation of a `CdkDropList`.
+ * Used to avoid circular import issues between the `CdkDropList` and the `CdkDrag`.
+ * @docs-private
+ */
+export interface CdkDropListInternal extends CdkDropList {
+}
 /** Container that wraps a set of draggable items. */
-export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
+export declare class CdkDropList<T = any> implements CdkDropListContainer, OnDestroy {
     element: ElementRef<HTMLElement>;
-    private _dragDropRegistry;
     private _changeDetectorRef;
-    private _dir?;
     private _group?;
-    private _document;
+    /** Keeps track of the drop lists that are currently on the page. */
+    private static _dropLists;
+    /** Reference to the underlying drop list instance. */
+    _dropListRef: DropListRef<CdkDropList<T>>;
     /** Draggable items in the container. */
     _draggables: QueryList<CdkDrag>;
     /**
@@ -40,7 +51,6 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     lockAxis: 'x' | 'y';
     /** Whether starting a dragging sequence from this container is disabled. */
     disabled: boolean;
-    private _disabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
@@ -59,24 +69,8 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
     exited: EventEmitter<CdkDragExit<T>>;
     /** Emits as the user is swapping items while actively dragging. */
     sorted: EventEmitter<CdkDragSortEvent<T>>;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<CdkDrag, CdkDropList<T>>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, _document?: any);
-    ngOnInit(): void;
+    constructor(element: ElementRef<HTMLElement>, dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _changeDetectorRef: ChangeDetectorRef, dir?: Directionality, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, _document?: any);
     ngOnDestroy(): void;
-    /** Whether an item in the container is being dragged. */
-    _dragging: boolean;
-    /** Cache of the dimensions of all the items and the sibling containers. */
-    private _positionCache;
-    /**
-     * Draggable items that are currently active inside the container. Includes the items
-     * from `_draggables`, as well as any items that have been dragged in, but haven't
-     * been dropped yet.
-     */
-    private _activeDraggables;
-    /**
-     * Keeps track of the item that was last swapped with the dragged item, as
-     * well as what direction the pointer was moving in when the swap occured.
-     */
-    private _previousSwap;
     /** Starts dragging an item. */
     start(): void;
     /**
@@ -87,7 +81,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      */
-    drop(item: CdkDrag, currentIndex: number, previousContainer: CdkDropList, isPointerOverContainer: boolean): void;
+    drop(item: CdkDrag, currentIndex: number, previousContainer: Partial<CdkDropListContainer>, isPointerOverContainer: boolean): void;
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
@@ -110,7 +104,7 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param item Item to be sorted.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
-     * @param pointerDeta Direction in which the pointer is moving along each axis.
+     * @param pointerDelta Direction in which the pointer is moving along each axis.
      */
     _sortItem(item: CdkDrag, pointerX: number, pointerY: number, pointerDelta: {
         x: number;
@@ -123,52 +117,18 @@ export declare class CdkDropList<T = any> implements OnInit, OnDestroy {
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropList | null;
+    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropListContainer | null;
     /**
      * Checks whether the user's pointer is positioned over the container.
      * @param x Pointer position along the X axis.
      * @param y Pointer position along the Y axis.
      */
     _isOverContainer(x: number, y: number): boolean;
-    /** Refreshes the position cache of the items and sibling containers. */
-    private _cachePositions;
-    /** Resets the container to its initial state. */
-    private _reset;
+    /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
+    private _syncInputs;
     /**
-     * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
-     * @param clientRect `ClientRect` that should be updated.
-     * @param top Amount to add to the `top` position.
-     * @param left Amount to add to the `left` position.
+     * Proxies the events from a DropListRef to events that
+     * match the interfaces of the CdkDropList outputs.
      */
-    private _adjustClientRect;
-    /**
-     * Gets the index of an item in the drop container, based on the position of the user's pointer.
-     * @param item Item that is being sorted.
-     * @param pointerX Position of the user's pointer along the X axis.
-     * @param pointerY Position of the user's pointer along the Y axis.
-     * @param delta Direction in which the user is moving their pointer.
-     */
-    private _getItemIndexFromPointerPosition;
-    /**
-     * Checks whether the pointer coordinates are close to the drop container.
-     * @param pointerX Coordinates along the X axis.
-     * @param pointerY Coordinates along the Y axis.
-     */
-    private _isPointerNearDropContainer;
-    /**
-     * Gets the offset in pixels by which the item that is being dragged should be moved.
-     * @param currentPosition Current position of the item.
-     * @param newPosition Position of the item where the current item should be moved.
-     * @param delta Direction in which the user is moving.
-     */
-    private _getItemOffsetPx;
-    /**
-     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
-     * @param currentIndex Index of the item currently being dragged.
-     * @param siblings All of the items in the list.
-     * @param delta Direction in which the user is moving.
-     */
-    private _getSiblingOffsetPx;
-    /** Gets an array of unique drop lists that the current list is connected to. */
-    private _getConnectedLists;
+    private _proxyEvents;
 }
