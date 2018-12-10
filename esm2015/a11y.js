@@ -358,6 +358,7 @@ class ListKeyManager {
     constructor(_items) {
         this._items = _items;
         this._activeItemIndex = -1;
+        this._activeItem = null;
         this._wrap = false;
         this._letterKeyStream = new Subject();
         this._typeaheadSubscription = Subscription.EMPTY;
@@ -389,8 +390,8 @@ class ListKeyManager {
                     const itemArray = newItems.toArray();
                     /** @type {?} */
                     const newIndex = itemArray.indexOf(this._activeItem);
-                    if (newIndex > -1 && newIndex !== this._activeItemIndex) {
-                        this._activeItemIndex = newIndex;
+                    if (newIndex !== this._activeItemIndex) {
+                        this.updateActiveItem(newIndex > -1 ? newIndex : this._activeItemIndex);
                     }
                 }
             });
@@ -622,8 +623,11 @@ class ListKeyManager {
         const itemArray = this._getItemsArray();
         /** @type {?} */
         const index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        /** @type {?} */
+        const activeItem = itemArray[index];
+        // Explicitly check for `null` and `undefined` because other falsy values are valid.
+        this._activeItem = activeItem == null ? null : activeItem;
         this._activeItemIndex = index;
-        this._activeItem = itemArray[index];
     }
     /**
      * Allows setting of the activeItemIndex without any other effects.

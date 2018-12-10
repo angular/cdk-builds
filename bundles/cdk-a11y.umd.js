@@ -487,6 +487,7 @@ ListKeyManager = /** @class */ (function () {
         var _this = this;
         this._items = _items;
         this._activeItemIndex = -1;
+        this._activeItem = null;
         this._wrap = false;
         this._letterKeyStream = new rxjs.Subject();
         this._typeaheadSubscription = rxjs.Subscription.EMPTY;
@@ -518,8 +519,8 @@ ListKeyManager = /** @class */ (function () {
                     var itemArray = newItems.toArray();
                     /** @type {?} */
                     var newIndex = itemArray.indexOf(_this._activeItem);
-                    if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
-                        _this._activeItemIndex = newIndex;
+                    if (newIndex !== _this._activeItemIndex) {
+                        _this.updateActiveItem(newIndex > -1 ? newIndex : _this._activeItemIndex);
                     }
                 }
             });
@@ -876,8 +877,11 @@ ListKeyManager = /** @class */ (function () {
         var itemArray = this._getItemsArray();
         /** @type {?} */
         var index = typeof item === 'number' ? item : itemArray.indexOf(item);
+        /** @type {?} */
+        var activeItem = itemArray[index];
+        // Explicitly check for `null` and `undefined` because other falsy values are valid.
+        this._activeItem = activeItem == null ? null : activeItem;
         this._activeItemIndex = index;
-        this._activeItem = itemArray[index];
     };
     /**
      * Allows setting of the activeItemIndex without any other effects.

@@ -1091,8 +1091,9 @@ class CdkDrag {
      * @return {?}
      */
     _getPointerPositionOnPage(event) {
+        // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
         /** @type {?} */
-        const point = this._isTouchEvent(event) ? event.touches[0] : event;
+        const point = this._isTouchEvent(event) ? (event.touches[0] || event.changedTouches[0]) : event;
         return {
             x: point.pageX - this._scrollPosition.left,
             y: point.pageY - this._scrollPosition.top

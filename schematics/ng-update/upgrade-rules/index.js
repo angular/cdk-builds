@@ -7,6 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
+const schematics_1 = require("@angular-devkit/schematics");
 const tasks_1 = require("@angular-devkit/schematics/tasks");
 const glob_1 = require("glob");
 const project_tsconfig_paths_1 = require("./project-tsconfig-paths");
@@ -17,8 +18,8 @@ function createUpgradeRule(targetVersion, upgradeConfig) {
         const projectTsConfigPaths = project_tsconfig_paths_1.getProjectTsConfigPaths(tree);
         const tslintFixTasks = [];
         if (!projectTsConfigPaths.length) {
-            throw new Error('Could not find any tsconfig file. Please submit an issue on the Angular ' +
-                'Material repository that includes the name of your TypeScript configuration.');
+            throw new schematics_1.SchematicsException('Could not find any tsconfig file. Please submit an issue ' +
+                'on the Angular Material repository that includes the path to your "tsconfig" file.');
         }
         // In some applications, developers will have global stylesheets which are not specified in any
         // Angular component. Therefore we glob up all CSS and SCSS files outside of node_modules and
