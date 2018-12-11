@@ -54,11 +54,7 @@ export declare class DragDropRegistry<I, C extends {
     stopDragging(drag: I): void;
     /** Gets whether a drag item instance is currently being dragged. */
     isDragging(drag: I): boolean;
-    /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0
-     */
+    /** Gets a drop container by its id. */
     getDropContainer(id: string): C | undefined;
     ngOnDestroy(): void;
     /**
