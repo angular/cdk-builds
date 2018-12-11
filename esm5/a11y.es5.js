@@ -494,8 +494,8 @@ ListKeyManager = /** @class */ (function () {
                     var itemArray = newItems.toArray();
                     /** @type {?} */
                     var newIndex = itemArray.indexOf(_this._activeItem);
-                    if (newIndex > -1 && newIndex !== _this._activeItemIndex) {
-                        _this._activeItemIndex = newIndex;
+                    if (newIndex !== _this._activeItemIndex) {
+                        _this.updateActiveItem(newIndex > -1 ? newIndex : _this._activeItemIndex);
                     }
                 }
             });
