@@ -2070,7 +2070,25 @@ var CdkDropListGroup = /** @class */ (function () {
          * Drop lists registered inside the group.
          */
         this._items = new Set();
+        this._disabled = false;
     }
+    Object.defineProperty(CdkDropListGroup.prototype, "disabled", {
+        /** Whether starting a dragging sequence from inside this group is disabled. */
+        get: /**
+         * Whether starting a dragging sequence from inside this group is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -2086,6 +2104,9 @@ var CdkDropListGroup = /** @class */ (function () {
                     exportAs: 'cdkDropListGroup',
                 },] },
     ];
+    CdkDropListGroup.propDecorators = {
+        disabled: [{ type: core.Input, args: ['cdkDropListGroupDisabled',] }]
+    };
     return CdkDropListGroup;
 }());
 
@@ -2916,6 +2937,7 @@ var CdkDropList = /** @class */ (function () {
          * in the `connectedTo` of another `CdkDropList`.
          */
         this.id = "cdk-drop-list-" + _uniqueIdCounter$1++;
+        this._disabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -2958,13 +2980,15 @@ var CdkDropList = /** @class */ (function () {
          * Whether starting a dragging sequence from this container is disabled.
          * @return {?}
          */
-        function () { return this._dropListRef.disabled; },
+        function () {
+            return this._disabled || (!!this._group && this._group.disabled);
+        },
         set: /**
          * @param {?} value
          * @return {?}
          */
         function (value) {
-            this._dropListRef.disabled = coercion.coerceBooleanProperty(value);
+            this._disabled = coercion.coerceBooleanProperty(value);
         },
         enumerable: true,
         configurable: true

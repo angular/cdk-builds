@@ -1749,6 +1749,19 @@ class CdkDropListGroup {
          * Drop lists registered inside the group.
          */
         this._items = new Set();
+        this._disabled = false;
+    }
+    /**
+     * Whether starting a dragging sequence from inside this group is disabled.
+     * @return {?}
+     */
+    get disabled() { return this._disabled; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set disabled(value) {
+        this._disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
@@ -1763,6 +1776,9 @@ CdkDropListGroup.decorators = [
                 exportAs: 'cdkDropListGroup',
             },] },
 ];
+CdkDropListGroup.propDecorators = {
+    disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
+};
 
 /**
  * @fileoverview added by tsickle
@@ -2388,6 +2404,7 @@ class CdkDropList {
          * in the `connectedTo` of another `CdkDropList`.
          */
         this.id = `cdk-drop-list-${_uniqueIdCounter$1++}`;
+        this._disabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -2428,13 +2445,15 @@ class CdkDropList {
      * Whether starting a dragging sequence from this container is disabled.
      * @return {?}
      */
-    get disabled() { return this._dropListRef.disabled; }
+    get disabled() {
+        return this._disabled || (!!this._group && this._group.disabled);
+    }
     /**
      * @param {?} value
      * @return {?}
      */
     set disabled(value) {
-        this._dropListRef.disabled = coerceBooleanProperty(value);
+        this._disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
