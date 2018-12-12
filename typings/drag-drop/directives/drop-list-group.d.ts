@@ -15,5 +15,8 @@ import { OnDestroy } from '@angular/core';
 export declare class CdkDropListGroup<T> implements OnDestroy {
     /** Drop lists registered inside the group. */
     readonly _items: Set<T>;
+    /** Whether starting a dragging sequence from inside this group is disabled. */
+    disabled: boolean;
+    private _disabled;
     ngOnDestroy(): void;
 }
