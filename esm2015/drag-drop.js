@@ -169,10 +169,9 @@ class DragDropRegistry {
          */
         this.pointerUp = new Subject();
         /**
-         * Event listener that will prevent the default browser action while the user is dragging.
-         * @param event Event whose default action should be prevented.
+         * Listener used to prevent `touchmove` and `wheel` events while the element is being dragged.
          */
-        this._preventDefaultWhileDragging = (event) => {
+        this._preventScrollListener = (event) => {
             if (this._activeDragInstances.size) {
                 event.preventDefault();
             }
@@ -206,7 +205,7 @@ class DragDropRegistry {
             this._ngZone.runOutsideAngular(() => {
                 // The event handler has to be explicitly active,
                 // because newer browsers make it passive by default.
-                this._document.addEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
+                this._document.addEventListener('touchmove', this._preventScrollListener, activeCapturingEventOptions);
             });
         }
     }
@@ -227,7 +226,7 @@ class DragDropRegistry {
         this._dragInstances.delete(drag);
         this.stopDragging(drag);
         if (this._dragInstances.size === 0) {
-            this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
+            this._document.removeEventListener('touchmove', this._preventScrollListener, activeCapturingEventOptions);
         }
     }
     /**
@@ -250,26 +249,18 @@ class DragDropRegistry {
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
             this._globalListeners
                 .set(moveEvent, {
-                handler: (e) => this.pointerMove.next((/** @type {?} */ (e))),
+                handler: e => this.pointerMove.next(e),
                 options: activeCapturingEventOptions
             })
                 .set(upEvent, {
-                handler: (e) => this.pointerUp.next((/** @type {?} */ (e))),
+                handler: e => this.pointerUp.next(e),
                 options: true
-            })
-                // Preventing the default action on `mousemove` isn't enough to disable text selection
-                // on Safari so we need to prevent the selection event as well. Alternatively this can
-                // be done by setting `user-select: none` on the `body`, however it has causes a style
-                // recalculation which can be expensive on pages with a lot of elements.
-                .set('selectstart', {
-                handler: this._preventDefaultWhileDragging,
-                options: activeCapturingEventOptions
             });
             // TODO(crisbeto): prevent mouse wheel scrolling while
             // dragging until we've set up proper scroll handling.
             if (!isTouchEvent) {
                 this._globalListeners.set('wheel', {
-                    handler: this._preventDefaultWhileDragging,
+                    handler: this._preventScrollListener,
                     options: activeCapturingEventOptions
                 });
             }
@@ -1191,7 +1182,6 @@ class DragRef {
             left: '0',
             zIndex: '1000'
         });
-        toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._dir ? this._dir.value : 'ltr');
         return preview;
@@ -1749,19 +1739,6 @@ class CdkDropListGroup {
          * Drop lists registered inside the group.
          */
         this._items = new Set();
-        this._disabled = false;
-    }
-    /**
-     * Whether starting a dragging sequence from inside this group is disabled.
-     * @return {?}
-     */
-    get disabled() { return this._disabled; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
@@ -1776,9 +1753,6 @@ CdkDropListGroup.decorators = [
                 exportAs: 'cdkDropListGroup',
             },] },
 ];
-CdkDropListGroup.propDecorators = {
-    disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2404,7 +2378,6 @@ class CdkDropList {
          * in the `connectedTo` of another `CdkDropList`.
          */
         this.id = `cdk-drop-list-${_uniqueIdCounter$1++}`;
-        this._disabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -2445,15 +2418,13 @@ class CdkDropList {
      * Whether starting a dragging sequence from this container is disabled.
      * @return {?}
      */
-    get disabled() {
-        return this._disabled || (!!this._group && this._group.disabled);
-    }
+    get disabled() { return this._dropListRef.disabled; }
     /**
      * @param {?} value
      * @return {?}
      */
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        this._dropListRef.disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}

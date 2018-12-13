@@ -62,10 +62,9 @@ export declare class DragDropRegistry<I, C extends {
     getDropContainer(id: string): C | undefined;
     ngOnDestroy(): void;
     /**
-     * Event listener that will prevent the default browser action while the user is dragging.
-     * @param event Event whose default action should be prevented.
+     * Listener used to prevent `touchmove` and `wheel` events while the element is being dragged.
      */
-    private _preventDefaultWhileDragging;
+    private _preventScrollListener;
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
 }
