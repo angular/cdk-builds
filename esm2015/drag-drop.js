@@ -1877,6 +1877,10 @@ class DropListRef {
          * Direction in which the list is oriented.
          */
         this._orientation = 'vertical';
+        /**
+         * Amount of connected siblings that currently have a dragged item.
+         */
+        this._activeSiblings = 0;
         _dragDropRegistry.registerDropContainer(this);
         this._document = _document;
     }
@@ -1908,6 +1912,7 @@ class DropListRef {
         this._isDragging = true;
         this._activeDraggables = this._draggables.slice();
         this._cachePositions();
+        this._positionCache.siblings.forEach(sibling => sibling.drop._toggleIsReceiving(true));
     }
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -2031,6 +2036,14 @@ class DropListRef {
         const items = this._orientation === 'horizontal' && this._dir && this._dir.value === 'rtl' ?
             this._positionCache.items.slice().reverse() : this._positionCache.items;
         return findIndex(items, currentItem => currentItem.drag === item);
+    }
+    /**
+     * Whether the list is able to receive the item that
+     * is currently being dragged inside a connected drop list.
+     * @return {?}
+     */
+    isReceiving() {
+        return this._activeSiblings > 0;
     }
     /**
      * Sorts an item inside the container based on its position.
@@ -2160,6 +2173,15 @@ class DropListRef {
         }));
     }
     /**
+     * Toggles whether the list can receive the item that is currently being dragged.
+     * Usually called by a sibling that initiated the dragging.
+     * @param {?} isDragging
+     * @return {?}
+     */
+    _toggleIsReceiving(isDragging) {
+        this._activeSiblings = Math.max(0, this._activeSiblings + (isDragging ? 1 : -1));
+    }
+    /**
      * Resets the container to its initial state.
      * @private
      * @return {?}
@@ -2168,6 +2190,7 @@ class DropListRef {
         this._isDragging = false;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach(item => item.getRootElement().style.transform = '');
+        this._positionCache.siblings.forEach(sibling => sibling.drop._toggleIsReceiving(false));
         this._activeDraggables = [];
         this._positionCache.items = [];
         this._positionCache.siblings = [];
@@ -2645,7 +2668,8 @@ CdkDropList.decorators = [
                 host: {
                     'class': 'cdk-drop-list',
                     '[id]': 'id',
-                    '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()'
+                    '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                    '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
                 }
             },] },
 ];

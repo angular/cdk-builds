@@ -2209,6 +2209,10 @@ DropListRef = /** @class */ (function () {
          * Direction in which the list is oriented.
          */
         this._orientation = 'vertical';
+        /**
+         * Amount of connected siblings that currently have a dragged item.
+         */
+        this._activeSiblings = 0;
         _dragDropRegistry.registerDropContainer(this);
         this._document = _document;
     }
@@ -2255,6 +2259,7 @@ DropListRef = /** @class */ (function () {
         this._isDragging = true;
         this._activeDraggables = this._draggables.slice();
         this._cachePositions();
+        this._positionCache.siblings.forEach(function (sibling) { return sibling.drop._toggleIsReceiving(true); });
     };
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -2463,6 +2468,23 @@ DropListRef = /** @class */ (function () {
         return findIndex(items, function (currentItem) { return currentItem.drag === item; });
     };
     /**
+     * Whether the list is able to receive the item that
+     * is currently being dragged inside a connected drop list.
+     */
+    /**
+     * Whether the list is able to receive the item that
+     * is currently being dragged inside a connected drop list.
+     * @return {?}
+     */
+    DropListRef.prototype.isReceiving = /**
+     * Whether the list is able to receive the item that
+     * is currently being dragged inside a connected drop list.
+     * @return {?}
+     */
+    function () {
+        return this._activeSiblings > 0;
+    };
+    /**
      * Sorts an item inside the container based on its position.
      * @param item Item to be sorted.
      * @param pointerX Position of the item along the X axis.
@@ -2611,6 +2633,25 @@ DropListRef = /** @class */ (function () {
             clientRect: drop.element.nativeElement.getBoundingClientRect()
         }); });
     };
+    /**
+     * Toggles whether the list can receive the item that is currently being dragged.
+     * Usually called by a sibling that initiated the dragging.
+     */
+    /**
+     * Toggles whether the list can receive the item that is currently being dragged.
+     * Usually called by a sibling that initiated the dragging.
+     * @param {?} isDragging
+     * @return {?}
+     */
+    DropListRef.prototype._toggleIsReceiving = /**
+     * Toggles whether the list can receive the item that is currently being dragged.
+     * Usually called by a sibling that initiated the dragging.
+     * @param {?} isDragging
+     * @return {?}
+     */
+    function (isDragging) {
+        this._activeSiblings = Math.max(0, this._activeSiblings + (isDragging ? 1 : -1));
+    };
     /** Resets the container to its initial state. */
     /**
      * Resets the container to its initial state.
@@ -2626,6 +2667,7 @@ DropListRef = /** @class */ (function () {
         this._isDragging = false;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
+        this._positionCache.siblings.forEach(function (sibling) { return sibling.drop._toggleIsReceiving(false); });
         this._activeDraggables = [];
         this._positionCache.items = [];
         this._positionCache.siblings = [];
@@ -3302,7 +3344,8 @@ var CdkDropList = /** @class */ (function () {
                     host: {
                         'class': 'cdk-drop-list',
                         '[id]': 'id',
-                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()'
+                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
                     }
                 },] },
     ];

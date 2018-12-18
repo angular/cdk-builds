@@ -99,6 +99,8 @@ export declare class DropListRef<T = any> {
     private _siblings;
     /** Direction in which the list is oriented. */
     private _orientation;
+    /** Amount of connected siblings that currently have a dragged item. */
+    private _activeSiblings;
     constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _dir?: Directionality | undefined);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
@@ -149,6 +151,11 @@ export declare class DropListRef<T = any> {
      */
     getItemIndex(item: DragRef): number;
     /**
+     * Whether the list is able to receive the item that
+     * is currently being dragged inside a connected drop list.
+     */
+    isReceiving(): boolean;
+    /**
      * Sorts an item inside the container based on its position.
      * @param item Item to be sorted.
      * @param pointerX Position of the item along the X axis.
@@ -161,6 +168,11 @@ export declare class DropListRef<T = any> {
     }): void;
     /** Refreshes the position cache of the items and sibling containers. */
     private _cachePositions;
+    /**
+     * Toggles whether the list can receive the item that is currently being dragged.
+     * Usually called by a sibling that initiated the dragging.
+     */
+    _toggleIsReceiving(isDragging: boolean): void;
     /** Resets the container to its initial state. */
     private _reset;
     /**
