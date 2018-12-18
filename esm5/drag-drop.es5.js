@@ -718,6 +718,10 @@ DragRef = /** @class */ (function () {
          */
         this.started = new Subject();
         /**
+         * Emits when the user has released a drag item, before any animations have started.
+         */
+        this.released = new Subject();
+        /**
          * Emits when the user stops dragging an item in the container.
          */
         this.ended = new Subject();
@@ -854,6 +858,7 @@ DragRef = /** @class */ (function () {
             if (!_this._hasStartedDragging) {
                 return;
             }
+            _this.released.next({ source: _this });
             if (!_this.dropContainer) {
                 // Convert the active transform into a passive one. This means that next time
                 // the user starts dragging the item, its position will be calculated relatively
@@ -1064,6 +1069,7 @@ DragRef = /** @class */ (function () {
         this._removeSubscriptions();
         this.beforeStarted.complete();
         this.started.complete();
+        this.released.complete();
         this.ended.complete();
         this.entered.complete();
         this.exited.complete();
@@ -1778,6 +1784,10 @@ var CdkDrag = /** @class */ (function () {
          */
         this.started = new EventEmitter();
         /**
+         * Emits when the user has released a drag item, before any animations have started.
+         */
+        this.released = new EventEmitter();
+        /**
          * Emits when the user stops dragging an item in the container.
          */
         this.ended = new EventEmitter();
@@ -1981,6 +1991,9 @@ var CdkDrag = /** @class */ (function () {
         ref.started.subscribe(function () {
             _this.started.emit({ source: _this });
         });
+        ref.released.subscribe(function () {
+            _this.released.emit({ source: _this });
+        });
         ref.ended.subscribe(function () {
             _this.ended.emit({ source: _this });
         });
@@ -2040,6 +2053,7 @@ var CdkDrag = /** @class */ (function () {
         boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
         disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
         started: [{ type: Output, args: ['cdkDragStarted',] }],
+        released: [{ type: Output, args: ['cdkDragReleased',] }],
         ended: [{ type: Output, args: ['cdkDragEnded',] }],
         entered: [{ type: Output, args: ['cdkDragEntered',] }],
         exited: [{ type: Output, args: ['cdkDragExited',] }],

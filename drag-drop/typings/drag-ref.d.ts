@@ -151,6 +151,10 @@ export declare class DragRef<T = any> {
     started: Subject<{
         source: DragRef<any>;
     }>;
+    /** Emits when the user has released a drag item, before any animations have started. */
+    released: Subject<{
+        source: DragRef<any>;
+    }>;
     /** Emits when the user stops dragging an item in the container. */
     ended: Subject<{
         source: DragRef<any>;

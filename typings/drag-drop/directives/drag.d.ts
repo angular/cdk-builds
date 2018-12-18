@@ -10,7 +10,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
-import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart } from '../drag-events';
+import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
@@ -65,6 +65,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     private _disabled;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
+    /** Emits when the user has released a drag item, before any animations have started. */
+    released: EventEmitter<CdkDragRelease>;
     /** Emits when the user stops dragging an item in the container. */
     ended: EventEmitter<CdkDragEnd>;
     /** Emits when the user has moved the item into a new container. */

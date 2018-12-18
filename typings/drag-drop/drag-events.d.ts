@@ -12,6 +12,11 @@ export interface CdkDragStart<T = any> {
     /** Draggable that emitted the event. */
     source: CdkDrag<T>;
 }
+/** Event emitted when the user releases an item, before any animations have started. */
+export interface CdkDragRelease<T = any> {
+    /** Draggable that emitted the event. */
+    source: CdkDrag<T>;
+}
 /** Event emitted when the user stops dragging a draggable. */
 export interface CdkDragEnd<T = any> {
     /** Draggable that emitted the event. */
