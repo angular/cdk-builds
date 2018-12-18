@@ -1813,7 +1813,10 @@ var CdkDrag = /** @class */ (function () {
             if (!ref.isDragging()) {
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
-                ref.withBoundaryElement(_this._getBoundaryElement());
+                ref
+                    .withBoundaryElement(_this._getBoundaryElement())
+                    .withPlaceholderTemplate(_this._placeholderTemplate)
+                    .withPreviewTemplate(_this._previewTemplate);
             }
         });
         this._proxyEvents(ref);
@@ -1899,10 +1902,7 @@ var CdkDrag = /** @class */ (function () {
                 throw Error("cdkDrag must be attached to an element node. " +
                     ("Currently attached to \"" + rootElement.nodeName + "\"."));
             }
-            _this._dragRef
-                .withRootElement(rootElement)
-                .withPlaceholderTemplate(_this._placeholderTemplate)
-                .withPreviewTemplate(_this._previewTemplate);
+            _this._dragRef.withRootElement(rootElement);
             _this._handles.changes
                 .pipe(operators.startWith(_this._handles))
                 .subscribe(function (handleList) {

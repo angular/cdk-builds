@@ -1548,7 +1548,10 @@ class CdkDrag {
             if (!ref.isDragging()) {
                 ref.disabled = this.disabled;
                 ref.lockAxis = this.lockAxis;
-                ref.withBoundaryElement(this._getBoundaryElement());
+                ref
+                    .withBoundaryElement(this._getBoundaryElement())
+                    .withPlaceholderTemplate(this._placeholderTemplate)
+                    .withPreviewTemplate(this._previewTemplate);
             }
         });
         this._proxyEvents(ref);
@@ -1606,10 +1609,7 @@ class CdkDrag {
                 throw Error(`cdkDrag must be attached to an element node. ` +
                     `Currently attached to "${rootElement.nodeName}".`);
             }
-            this._dragRef
-                .withRootElement(rootElement)
-                .withPlaceholderTemplate(this._placeholderTemplate)
-                .withPreviewTemplate(this._previewTemplate);
+            this._dragRef.withRootElement(rootElement);
             this._handles.changes
                 .pipe(startWith(this._handles))
                 .subscribe((handleList) => {
