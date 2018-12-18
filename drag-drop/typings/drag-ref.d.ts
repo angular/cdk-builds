@@ -111,6 +111,11 @@ export declare class DragRef<T = any> {
      * be moved around as the user is dragging.
      */
     private _rootElement;
+    /**
+     * Inline style value of `-webkit-tap-highlight-color` at the time the
+     * dragging was started. Used to restore the value once we're done dragging.
+     */
+    private _rootElementTapHighlight;
     /** Subscription to pointer movement events. */
     private _pointerMoveSubscription;
     /** Subscription to the event that is dispatched when the user lifts their pointer. */

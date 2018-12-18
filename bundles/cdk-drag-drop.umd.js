@@ -845,6 +845,9 @@ DragRef = /** @class */ (function () {
             }
             _this._removeSubscriptions();
             _this._dragDropRegistry.stopDragging(_this);
+            if (_this._handles) {
+                _this._rootElement.style.webkitTapHighlightColor = _this._rootElementTapHighlight;
+            }
             if (!_this._hasStartedDragging) {
                 return;
             }
@@ -1220,6 +1223,8 @@ DragRef = /** @class */ (function () {
         /** @type {?} */
         var isAuxiliaryMouseButton = !isTouchSequence && ((/** @type {?} */ (event))).button !== 0;
         /** @type {?} */
+        var rootElement = this._rootElement;
+        /** @type {?} */
         var isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -1239,6 +1244,13 @@ DragRef = /** @class */ (function () {
         // we don't want our own transforms to stack on top of each other.
         if (this._initialTransform == null) {
             this._initialTransform = this._rootElement.style.transform || '';
+        }
+        // If we've got handles, we need to disable the tap highlight on the entire root element,
+        // otherwise iOS will still add it, even though all the drag interactions on the handle
+        // are disabled.
+        if (this._handles.length) {
+            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor;
+            rootElement.style.webkitTapHighlightColor = 'transparent';
         }
         this._toggleNativeDragInteractions();
         this._hasStartedDragging = this._hasMoved = false;
