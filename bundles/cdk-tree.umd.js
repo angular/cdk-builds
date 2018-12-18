@@ -362,7 +362,7 @@ NestedTreeControl = /** @class */ (function (_super) {
             childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
         }
         else if (childrenNodes instanceof rxjs.Observable) {
-            childrenNodes.pipe(operators.take(1)).subscribe(function (children) {
+            childrenNodes.pipe(operators.take(1), operators.filter(Boolean)).subscribe(function (children) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
             });
         }

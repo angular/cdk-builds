@@ -8,7 +8,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { __extends } from 'tslib';
 import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, filter, takeUntil } from 'rxjs/operators';
 import { Directive, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, IterableDiffers, ViewChild, ViewEncapsulation, Optional, Renderer2, NgModule } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -337,7 +337,7 @@ NestedTreeControl = /** @class */ (function (_super) {
             childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
         }
         else if (childrenNodes instanceof Observable) {
-            childrenNodes.pipe(take(1)).subscribe(function (children) {
+            childrenNodes.pipe(take(1), filter(Boolean)).subscribe(function (children) {
                 children.forEach(function (child) { return _this._getDescendants(descendants, child); });
             });
         }
