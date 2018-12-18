@@ -439,22 +439,14 @@ var CdkTextareaAutosize = /** @class */ (function () {
         textarea.style.height = height + "px";
         textarea.classList.remove('cdk-textarea-autosize-measuring');
         textarea.placeholder = placeholderText;
-        // On Firefox resizing the textarea will prevent it from scrolling to the caret position.
-        // We need to re-set the selection in order for it to scroll to the proper position.
-        if (typeof requestAnimationFrame !== 'undefined') {
-            this._ngZone.runOutsideAngular(function () { return requestAnimationFrame(function () {
-                var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
-                // IE will throw an "Unspecified error" if we try to set the selection range after the
-                // element has been removed from the DOM. Assert that the directive hasn't been destroyed
-                // between the time we requested the animation frame and when it was executed.
-                // Also note that we have to assert that the textarea is focused before we set the
-                // selection range. Setting the selection range on a non-focused textarea will cause
-                // it to receive focus on IE and Edge.
-                if (!_this._destroyed.isStopped && document.activeElement === textarea) {
-                    textarea.setSelectionRange(selectionStart, selectionEnd);
-                }
-            }); });
-        }
+        this._ngZone.runOutsideAngular(function () {
+            if (typeof requestAnimationFrame !== 'undefined') {
+                requestAnimationFrame(function () { return _this._scrollToCaretPosition(textarea); });
+            }
+            else {
+                setTimeout(function () { return _this._scrollToCaretPosition(textarea); });
+            }
+        });
         this._previousValue = value;
         this._previousMinRows = this._minRows;
     };
@@ -485,6 +477,39 @@ var CdkTextareaAutosize = /** @class */ (function () {
      */
     function () {
         // no-op handler that ensures we're running change detection on input events.
+    };
+    /**
+     * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
+     * prevent it from scrolling to the caret position. We need to re-set the selection
+     * in order for it to scroll to the proper position.
+     */
+    /**
+     * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
+     * prevent it from scrolling to the caret position. We need to re-set the selection
+     * in order for it to scroll to the proper position.
+     * @private
+     * @param {?} textarea
+     * @return {?}
+     */
+    CdkTextareaAutosize.prototype._scrollToCaretPosition = /**
+     * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
+     * prevent it from scrolling to the caret position. We need to re-set the selection
+     * in order for it to scroll to the proper position.
+     * @private
+     * @param {?} textarea
+     * @return {?}
+     */
+    function (textarea) {
+        var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
+        // IE will throw an "Unspecified error" if we try to set the selection range after the
+        // element has been removed from the DOM. Assert that the directive hasn't been destroyed
+        // between the time we requested the animation frame and when it was executed.
+        // Also note that we have to assert that the textarea is focused before we set the
+        // selection range. Setting the selection range on a non-focused textarea will cause
+        // it to receive focus on IE and Edge.
+        if (!this._destroyed.isStopped && document.activeElement === textarea) {
+            textarea.setSelectionRange(selectionStart, selectionEnd);
+        }
     };
     CdkTextareaAutosize.decorators = [
         { type: Directive, args: [{

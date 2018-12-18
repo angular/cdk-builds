@@ -61,4 +61,10 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      */
     reset(): void;
     _noopInputHandler(): void;
+    /**
+     * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
+     * prevent it from scrolling to the caret position. We need to re-set the selection
+     * in order for it to scroll to the proper position.
+     */
+    private _scrollToCaretPosition;
 }
