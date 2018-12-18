@@ -844,7 +844,11 @@ DragRef = /** @class */ (function () {
          * Handler that is invoked when the user lifts their pointer up, after initiating a drag.
          */
         this._pointerUp = function (event) {
-            if (!_this.isDragging()) {
+            // Note that here we use `isDragging` from the service, rather than from `this`.
+            // The difference is that the one from the service reflects whether a dragging sequence
+            // has been initiated, whereas the one on `this` includes whether the user has passed
+            // the minimum dragging threshold.
+            if (!_this._dragDropRegistry.isDragging(_this)) {
                 return;
             }
             _this._removeSubscriptions();
