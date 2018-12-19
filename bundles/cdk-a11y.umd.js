@@ -2424,7 +2424,7 @@ var FocusMonitor = /** @class */ (function () {
             return rxjs.of(null);
         }
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coercion.coerceElement(element);
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
             /** @type {?} */
@@ -2467,7 +2467,7 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (element) {
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coercion.coerceElement(element);
         /** @type {?} */
         var elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
@@ -2492,7 +2492,7 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (element, origin, options) {
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coercion.coerceElement(element);
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
         if (typeof nativeElement.focus === 'function') {
@@ -2772,19 +2772,6 @@ var FocusMonitor = /** @class */ (function () {
             clearTimeout(this._touchTimeoutId);
             clearTimeout(this._originTimeoutId);
         }
-    };
-    /**
-     * @private
-     * @param {?} element
-     * @return {?}
-     */
-    FocusMonitor.prototype._getNativeElement = /**
-     * @private
-     * @param {?} element
-     * @return {?}
-     */
-    function (element) {
-        return element instanceof core.ElementRef ? element.nativeElement : element;
     };
     FocusMonitor.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },

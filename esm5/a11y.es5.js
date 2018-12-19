@@ -12,7 +12,7 @@ import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, h
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { __extends } from 'tslib';
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -2399,7 +2399,7 @@ var FocusMonitor = /** @class */ (function () {
             return of(null);
         }
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coerceElement(element);
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
             /** @type {?} */
@@ -2442,7 +2442,7 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (element) {
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coerceElement(element);
         /** @type {?} */
         var elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
@@ -2467,7 +2467,7 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (element, origin, options) {
         /** @type {?} */
-        var nativeElement = this._getNativeElement(element);
+        var nativeElement = coerceElement(element);
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
         if (typeof nativeElement.focus === 'function') {
@@ -2747,19 +2747,6 @@ var FocusMonitor = /** @class */ (function () {
             clearTimeout(this._touchTimeoutId);
             clearTimeout(this._originTimeoutId);
         }
-    };
-    /**
-     * @private
-     * @param {?} element
-     * @return {?}
-     */
-    FocusMonitor.prototype._getNativeElement = /**
-     * @private
-     * @param {?} element
-     * @return {?}
-     */
-    function (element) {
-        return element instanceof ElementRef ? element.nativeElement : element;
     };
     FocusMonitor.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] },

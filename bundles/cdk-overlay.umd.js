@@ -2113,7 +2113,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {THIS}
      */
     function (origin) {
-        (/** @type {?} */ (this))._origin = origin instanceof core.ElementRef ? origin.nativeElement : origin;
+        (/** @type {?} */ (this))._origin = coercion.coerceElement(origin);
         return (/** @type {?} */ (this));
     };
     /**

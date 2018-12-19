@@ -71,7 +71,7 @@ var ContentObserver = /** @class */ (function () {
     function (elementOrRef) {
         var _this = this;
         /** @type {?} */
-        var element = elementOrRef instanceof core.ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        var element = coercion.coerceElement(elementOrRef);
         return rxjs.Observable.create(function (observer) {
             /** @type {?} */
             var stream = _this._observeElement(element);

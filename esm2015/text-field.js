@@ -7,8 +7,8 @@
  */
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
+import { coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
@@ -44,7 +44,7 @@ class AutofillMonitor {
             return EMPTY;
         }
         /** @type {?} */
-        const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        const element = coerceElement(elementOrRef);
         /** @type {?} */
         const info = this._monitoredElements.get(element);
         if (info) {
@@ -88,7 +88,7 @@ class AutofillMonitor {
      */
     stopMonitoring(elementOrRef) {
         /** @type {?} */
-        const element = elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        const element = coerceElement(elementOrRef);
         /** @type {?} */
         const info = this._monitoredElements.get(element);
         if (info) {

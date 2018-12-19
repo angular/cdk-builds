@@ -6,10 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('rxjs'), require('@angular/cdk/coercion'), require('rxjs/operators')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/textField', ['exports', '@angular/cdk/platform', '@angular/core', 'rxjs', '@angular/cdk/coercion', 'rxjs/operators'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}),global.ng.cdk.platform,global.ng.core,global.rxjs,global.ng.cdk.coercion,global.rxjs.operators));
-}(this, (function (exports,platform,core,rxjs,coercion,operators) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/textField', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}),global.ng.cdk.platform,global.ng.core,global.ng.cdk.coercion,global.rxjs,global.rxjs.operators));
+}(this, (function (exports,platform,core,coercion,rxjs,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -45,7 +45,7 @@ var AutofillMonitor = /** @class */ (function () {
             return rxjs.EMPTY;
         }
         /** @type {?} */
-        var element = elementOrRef instanceof core.ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        var element = coercion.coerceElement(elementOrRef);
         /** @type {?} */
         var info = this._monitoredElements.get(element);
         if (info) {
@@ -93,7 +93,7 @@ var AutofillMonitor = /** @class */ (function () {
      */
     function (elementOrRef) {
         /** @type {?} */
-        var element = elementOrRef instanceof core.ElementRef ? elementOrRef.nativeElement : elementOrRef;
+        var element = coercion.coerceElement(elementOrRef);
         /** @type {?} */
         var info = this._monitoredElements.get(element);
         if (info) {

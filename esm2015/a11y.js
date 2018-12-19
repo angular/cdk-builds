@@ -11,7 +11,7 @@ import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -1805,7 +1805,7 @@ class FocusMonitor {
             return of(null);
         }
         /** @type {?} */
-        const nativeElement = this._getNativeElement(element);
+        const nativeElement = coerceElement(element);
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
             /** @type {?} */
@@ -1844,7 +1844,7 @@ class FocusMonitor {
      */
     stopMonitoring(element) {
         /** @type {?} */
-        const nativeElement = this._getNativeElement(element);
+        const nativeElement = coerceElement(element);
         /** @type {?} */
         const elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
@@ -1863,7 +1863,7 @@ class FocusMonitor {
      */
     focusVia(element, origin, options) {
         /** @type {?} */
-        const nativeElement = this._getNativeElement(element);
+        const nativeElement = coerceElement(element);
         this._setOriginForCurrentEventQueue(origin);
         // `focus` isn't available on the server
         if (typeof nativeElement.focus === 'function') {
@@ -2060,14 +2060,6 @@ class FocusMonitor {
             clearTimeout(this._touchTimeoutId);
             clearTimeout(this._originTimeoutId);
         }
-    }
-    /**
-     * @private
-     * @param {?} element
-     * @return {?}
-     */
-    _getNativeElement(element) {
-        return element instanceof ElementRef ? element.nativeElement : element;
     }
 }
 FocusMonitor.decorators = [

@@ -135,7 +135,6 @@ export declare class FocusMonitor implements OnDestroy {
     private _emitOrigin;
     private _incrementMonitoredElementCount;
     private _decrementMonitoredElementCount;
-    private _getNativeElement;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
