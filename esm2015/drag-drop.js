@@ -638,13 +638,13 @@ class DragRef {
          */
         this._boundaryElement = null;
         /**
+         * Whether the native dragging interactions have been enabled on the root element.
+         */
+        this._nativeInteractionsEnabled = true;
+        /**
          * Elements that can be used to drag the draggable item.
          */
         this._handles = [];
-        /**
-         * Whether the native interactions on the element are enabled.
-         */
-        this._nativeInteractionsEnabled = true;
         this._disabled = false;
         /**
          * Emits as the drag sequence is being prepared.
@@ -830,7 +830,12 @@ class DragRef {
      * @return {?}
      */
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        /** @type {?} */
+        const newValue = coerceBooleanProperty(value);
+        if (newValue !== this._disabled) {
+            this._disabled = newValue;
+            this._toggleNativeDragInteractions();
+        }
     }
     /**
      * Returns the element that is being used as a placeholder
@@ -1393,10 +1398,11 @@ class DragRef {
      * @return {?}
      */
     _toggleNativeDragInteractions() {
+        if (!this._rootElement || !this._handles) {
+            return;
+        }
         /** @type {?} */
-        const shouldEnable = this._handles.length > 0;
-        // We go through the trouble of keeping track of whether the interactions are enabled,
-        // because we want to avoid triggering style recalculations unless we really have to.
+        const shouldEnable = this.disabled || this._handles.length > 0;
         if (shouldEnable !== this._nativeInteractionsEnabled) {
             this._nativeInteractionsEnabled = shouldEnable;
             toggleNativeDragInteractions(this._rootElement, shouldEnable);
@@ -1583,6 +1589,7 @@ class CdkDrag {
      */
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
+        this._dragRef.disabled = this._disabled;
     }
     /**
      * Returns the element that is being used as a placeholder

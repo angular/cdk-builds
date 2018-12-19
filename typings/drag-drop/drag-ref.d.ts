@@ -128,6 +128,8 @@ export declare class DragRef<T = any> {
     private _lastTouchEventTime;
     /** Cached reference to the boundary element. */
     private _boundaryElement;
+    /** Whether the native dragging interactions have been enabled on the root element. */
+    private _nativeInteractionsEnabled;
     /** Cached dimensions of the preview element. */
     private _previewRect?;
     /** Cached dimensions of the boundary element. */
@@ -138,8 +140,6 @@ export declare class DragRef<T = any> {
     private _placeholderTemplate;
     /** Elements that can be used to drag the draggable item. */
     private _handles;
-    /** Whether the native interactions on the element are enabled. */
-    private _nativeInteractionsEnabled;
     /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
     /** Whether starting to drag this element is disabled. */
