@@ -1913,19 +1913,30 @@ var CdkDrag = /** @class */ (function () {
         this._rootElementInitSubscription = this._ngZone.onStable.asObservable()
             .pipe(take(1))
             .subscribe(function () {
-            /** @type {?} */
-            var rootElement = _this._getRootElement();
-            if (rootElement.nodeType !== _this._document.ELEMENT_NODE) {
-                throw Error("cdkDrag must be attached to an element node. " +
-                    ("Currently attached to \"" + rootElement.nodeName + "\"."));
-            }
-            _this._dragRef.withRootElement(rootElement);
+            _this._updateRootElement();
             _this._handles.changes
                 .pipe(startWith(_this._handles))
                 .subscribe(function (handleList) {
                 _this._dragRef.withHandles(handleList.filter(function (handle) { return handle._parentDrag === _this; }));
             });
         });
+    };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    CdkDrag.prototype.ngOnChanges = /**
+     * @param {?} changes
+     * @return {?}
+     */
+    function (changes) {
+        /** @type {?} */
+        var rootSelectorChange = changes.rootElementSelector;
+        // We don't have to react to the first change since it's being
+        // handled in `ngAfterViewInit` where it needs to be deferred.
+        if (rootSelectorChange && !rootSelectorChange.firstChange) {
+            this._updateRootElement();
+        }
     };
     /**
      * @return {?}
@@ -1937,14 +1948,14 @@ var CdkDrag = /** @class */ (function () {
         this._rootElementInitSubscription.unsubscribe();
         this._dragRef.dispose();
     };
-    /** Gets the root draggable element, based on the `rootElementSelector`. */
+    /** Syncs the root element with the `DragRef`. */
     /**
-     * Gets the root draggable element, based on the `rootElementSelector`.
+     * Syncs the root element with the `DragRef`.
      * @private
      * @return {?}
      */
-    CdkDrag.prototype._getRootElement = /**
-     * Gets the root draggable element, based on the `rootElementSelector`.
+    CdkDrag.prototype._updateRootElement = /**
+     * Syncs the root element with the `DragRef`.
      * @private
      * @return {?}
      */
@@ -1953,8 +1964,12 @@ var CdkDrag = /** @class */ (function () {
         var element = this.element.nativeElement;
         /** @type {?} */
         var rootElement = this.rootElementSelector ?
-            getClosestMatchingAncestor(element, this.rootElementSelector) : null;
-        return rootElement || element;
+            getClosestMatchingAncestor(element, this.rootElementSelector) : element;
+        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
+            throw Error("cdkDrag must be attached to an element node. " +
+                ("Currently attached to \"" + rootElement.nodeName + "\"."));
+        }
+        this._dragRef.withRootElement(rootElement || element);
     };
     /** Gets the boundary element, based on the `boundaryElementSelector`. */
     /**

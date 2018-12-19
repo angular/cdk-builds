@@ -7,7 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
@@ -22,7 +22,7 @@ export declare const CDK_DRAG_CONFIG: InjectionToken<DragRefConfig>;
 /** @docs-private */
 export declare function CDK_DRAG_CONFIG_FACTORY(): DragRefConfig;
 /** Element that can be moved inside a CdkDropList container. */
-export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
+export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;
     /** Droppable container that the draggable is a part of. */
@@ -95,9 +95,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnDestroy {
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
     ngAfterViewInit(): void;
+    ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
-    /** Gets the root draggable element, based on the `rootElementSelector`. */
-    private _getRootElement;
+    /** Syncs the root element with the `DragRef`. */
+    private _updateRootElement;
     /** Gets the boundary element, based on the `boundaryElementSelector`. */
     private _getBoundaryElement;
     /**
