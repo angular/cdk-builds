@@ -111,8 +111,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
-    /** Destroys the overlay created by this directive. */
-    private _destroyOverlay;
 }
 /** @docs-private */
 export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;

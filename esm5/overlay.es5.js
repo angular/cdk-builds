@@ -4359,7 +4359,10 @@ var CdkConnectedOverlay = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._destroyOverlay();
+        if (this._overlayRef) {
+            this._overlayRef.dispose();
+        }
+        this._backdropSubscription.unsubscribe();
     };
     /**
      * @param {?} changes
@@ -4521,6 +4524,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
                 height: this.height,
                 minHeight: this.minHeight,
             });
+            this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
@@ -4530,6 +4534,9 @@ var CdkConnectedOverlay = /** @class */ (function () {
             this._backdropSubscription = this._overlayRef.backdropClick().subscribe(function (event) {
                 _this.backdropClick.emit(event);
             });
+        }
+        else {
+            this._backdropSubscription.unsubscribe();
         }
     };
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
@@ -4547,23 +4554,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         if (this._overlayRef) {
             this._overlayRef.detach();
             this.detach.emit();
-        }
-        this._backdropSubscription.unsubscribe();
-    };
-    /** Destroys the overlay created by this directive. */
-    /**
-     * Destroys the overlay created by this directive.
-     * @private
-     * @return {?}
-     */
-    CdkConnectedOverlay.prototype._destroyOverlay = /**
-     * Destroys the overlay created by this directive.
-     * @private
-     * @return {?}
-     */
-    function () {
-        if (this._overlayRef) {
-            this._overlayRef.dispose();
         }
         this._backdropSubscription.unsubscribe();
     };

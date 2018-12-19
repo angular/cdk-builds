@@ -3235,7 +3235,10 @@ class CdkConnectedOverlay {
      * @return {?}
      */
     ngOnDestroy() {
-        this._destroyOverlay();
+        if (this._overlayRef) {
+            this._overlayRef.dispose();
+        }
+        this._backdropSubscription.unsubscribe();
     }
     /**
      * @param {?} changes
@@ -3358,6 +3361,7 @@ class CdkConnectedOverlay {
                 height: this.height,
                 minHeight: this.minHeight,
             });
+            this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
@@ -3367,6 +3371,9 @@ class CdkConnectedOverlay {
             this._backdropSubscription = this._overlayRef.backdropClick().subscribe(event => {
                 this.backdropClick.emit(event);
             });
+        }
+        else {
+            this._backdropSubscription.unsubscribe();
         }
     }
     /**
@@ -3378,17 +3385,6 @@ class CdkConnectedOverlay {
         if (this._overlayRef) {
             this._overlayRef.detach();
             this.detach.emit();
-        }
-        this._backdropSubscription.unsubscribe();
-    }
-    /**
-     * Destroys the overlay created by this directive.
-     * @private
-     * @return {?}
-     */
-    _destroyOverlay() {
-        if (this._overlayRef) {
-            this._overlayRef.dispose();
         }
         this._backdropSubscription.unsubscribe();
     }
