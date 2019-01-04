@@ -1460,11 +1460,15 @@ var  /**
 FocusTrap = /** @class */ (function () {
     function FocusTrap(_element, _checker, _ngZone, _document, deferAnchors) {
         if (deferAnchors === void 0) { deferAnchors = false; }
+        var _this = this;
         this._element = _element;
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
         this._hasAttached = false;
+        // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
+        this._startAnchorListener = function () { return _this.focusLastTabbableElement(); };
+        this._endAnchorListener = function () { return _this.focusFirstTabbableElement(); };
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1501,11 +1505,21 @@ FocusTrap = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this._startAnchor && this._startAnchor.parentNode) {
-            this._startAnchor.parentNode.removeChild(this._startAnchor);
+        /** @type {?} */
+        var startAnchor = this._startAnchor;
+        /** @type {?} */
+        var endAnchor = this._endAnchor;
+        if (startAnchor) {
+            startAnchor.removeEventListener('focus', this._startAnchorListener);
+            if (startAnchor.parentNode) {
+                startAnchor.parentNode.removeChild(startAnchor);
+            }
         }
-        if (this._endAnchor && this._endAnchor.parentNode) {
-            this._endAnchor.parentNode.removeChild(this._endAnchor);
+        if (endAnchor) {
+            endAnchor.removeEventListener('focus', this._endAnchorListener);
+            if (endAnchor.parentNode) {
+                endAnchor.parentNode.removeChild(endAnchor);
+            }
         }
         this._startAnchor = this._endAnchor = null;
     };
@@ -1536,11 +1550,11 @@ FocusTrap = /** @class */ (function () {
         this._ngZone.runOutsideAngular(function () {
             if (!_this._startAnchor) {
                 _this._startAnchor = _this._createAnchor();
-                (/** @type {?} */ (_this._startAnchor)).addEventListener('focus', function () { return _this.focusLastTabbableElement(); });
+                (/** @type {?} */ (_this._startAnchor)).addEventListener('focus', _this._startAnchorListener);
             }
             if (!_this._endAnchor) {
                 _this._endAnchor = _this._createAnchor();
-                (/** @type {?} */ (_this._endAnchor)).addEventListener('focus', function () { return _this.focusFirstTabbableElement(); });
+                (/** @type {?} */ (_this._endAnchor)).addEventListener('focus', _this._endAnchorListener);
             }
         });
         if (this._element.parentNode) {
