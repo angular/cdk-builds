@@ -1076,6 +1076,9 @@ class FocusTrap {
         this._ngZone = _ngZone;
         this._document = _document;
         this._hasAttached = false;
+        // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
+        this._startAnchorListener = () => this.focusLastTabbableElement();
+        this._endAnchorListener = () => this.focusFirstTabbableElement();
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1102,11 +1105,21 @@ class FocusTrap {
      * @return {?}
      */
     destroy() {
-        if (this._startAnchor && this._startAnchor.parentNode) {
-            this._startAnchor.parentNode.removeChild(this._startAnchor);
+        /** @type {?} */
+        const startAnchor = this._startAnchor;
+        /** @type {?} */
+        const endAnchor = this._endAnchor;
+        if (startAnchor) {
+            startAnchor.removeEventListener('focus', this._startAnchorListener);
+            if (startAnchor.parentNode) {
+                startAnchor.parentNode.removeChild(startAnchor);
+            }
         }
-        if (this._endAnchor && this._endAnchor.parentNode) {
-            this._endAnchor.parentNode.removeChild(this._endAnchor);
+        if (endAnchor) {
+            endAnchor.removeEventListener('focus', this._endAnchorListener);
+            if (endAnchor.parentNode) {
+                endAnchor.parentNode.removeChild(endAnchor);
+            }
         }
         this._startAnchor = this._endAnchor = null;
     }
@@ -1124,11 +1137,11 @@ class FocusTrap {
         this._ngZone.runOutsideAngular(() => {
             if (!this._startAnchor) {
                 this._startAnchor = this._createAnchor();
-                (/** @type {?} */ (this._startAnchor)).addEventListener('focus', () => this.focusLastTabbableElement());
+                (/** @type {?} */ (this._startAnchor)).addEventListener('focus', this._startAnchorListener);
             }
             if (!this._endAnchor) {
                 this._endAnchor = this._createAnchor();
-                (/** @type {?} */ (this._endAnchor)).addEventListener('focus', () => this.focusFirstTabbableElement());
+                (/** @type {?} */ (this._endAnchor)).addEventListener('focus', this._endAnchorListener);
             }
         });
         if (this._element.parentNode) {
