@@ -162,7 +162,7 @@ class TemplatePortal extends Portal {
         return this.templateRef.elementRef;
     }
     /**
-     * Attach the the portal to the provided `PortalOutlet`.
+     * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      * @param {?} host

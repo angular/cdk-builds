@@ -204,12 +204,12 @@ TemplatePortal = /** @class */ (function (_super) {
         configurable: true
     });
     /**
-     * Attach the the portal to the provided `PortalOutlet`.
+     * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      */
     /**
-     * Attach the the portal to the provided `PortalOutlet`.
+     * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      * @param {?} host
@@ -217,7 +217,7 @@ TemplatePortal = /** @class */ (function (_super) {
      * @return {?}
      */
     TemplatePortal.prototype.attach = /**
-     * Attach the the portal to the provided `PortalOutlet`.
+     * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      * @param {?} host

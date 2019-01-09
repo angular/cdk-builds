@@ -62,7 +62,7 @@ export declare class TemplatePortal<C = any> extends Portal<C> {
     constructor(template: TemplateRef<C>, viewContainerRef: ViewContainerRef, context?: C);
     readonly origin: ElementRef;
     /**
-     * Attach the the portal to the provided `PortalOutlet`.
+     * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      */
