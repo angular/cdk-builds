@@ -78,7 +78,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     detachments(): Observable<void>;
     /** Gets an observable of keydown events targeted to this overlay. */
     keydownEvents(): Observable<KeyboardEvent>;
-    /** Gets the the current overlay configuration, which is immutable. */
+    /** Gets the current overlay configuration, which is immutable. */
     getConfig(): OverlayConfig;
     /** Updates the position of the overlay based on the position strategy. */
     updatePosition(): void;

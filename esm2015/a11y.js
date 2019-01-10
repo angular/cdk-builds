@@ -823,7 +823,7 @@ class InteractivityChecker {
      * @return {?} Whether the element is tabbable.
      */
     isTabbable(element) {
-        // Nothing is tabbable on the the server 😎
+        // Nothing is tabbable on the server 😎
         if (!this._platform.isBrowser) {
             return false;
         }

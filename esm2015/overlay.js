@@ -983,7 +983,7 @@ class OverlayRef {
         return this._keydownEventsObservable;
     }
     /**
-     * Gets the the current overlay configuration, which is immutable.
+     * Gets the current overlay configuration, which is immutable.
      * @return {?}
      */
     getConfig() {

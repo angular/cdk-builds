@@ -1198,7 +1198,7 @@ var InteractivityChecker = /** @class */ (function () {
      * @return {?} Whether the element is tabbable.
      */
     function (element) {
-        // Nothing is tabbable on the the server 😎
+        // Nothing is tabbable on the server 😎
         if (!this._platform.isBrowser) {
             return false;
         }

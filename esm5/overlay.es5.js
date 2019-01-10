@@ -1184,13 +1184,13 @@ OverlayRef = /** @class */ (function () {
     function () {
         return this._keydownEventsObservable;
     };
-    /** Gets the the current overlay configuration, which is immutable. */
+    /** Gets the current overlay configuration, which is immutable. */
     /**
-     * Gets the the current overlay configuration, which is immutable.
+     * Gets the current overlay configuration, which is immutable.
      * @return {?}
      */
     OverlayRef.prototype.getConfig = /**
-     * Gets the the current overlay configuration, which is immutable.
+     * Gets the current overlay configuration, which is immutable.
      * @return {?}
      */
     function () {

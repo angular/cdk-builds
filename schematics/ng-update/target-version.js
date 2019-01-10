@@ -12,5 +12,15 @@ var TargetVersion;
 (function (TargetVersion) {
     TargetVersion[TargetVersion["V6"] = 0] = "V6";
     TargetVersion[TargetVersion["V7"] = 1] = "V7";
+    TargetVersion[TargetVersion["V8"] = 2] = "V8";
 })(TargetVersion = exports.TargetVersion || (exports.TargetVersion = {}));
+/**
+ * Returns all versions that are supported by "ng update". The versions are determined
+ * based on the "TargetVersion" enum.
+ */
+function getAllVersionNames() {
+    return Object.keys(TargetVersion)
+        .filter(enumValue => typeof TargetVersion[enumValue] === 'number');
+}
+exports.getAllVersionNames = getAllVersionNames;
 //# sourceMappingURL=target-version.js.map
