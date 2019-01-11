@@ -7,7 +7,7 @@
  */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/scrolling'), require('rxjs/operators')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/dragDrop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators'], factory) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators'], factory) :
 	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.coercion,global.ng.cdk.bidi,global.ng.cdk.scrolling,global.rxjs.operators));
 }(this, (function (exports,core,common,platform,rxjs,coercion,bidi,scrolling,operators) { 'use strict';
 
