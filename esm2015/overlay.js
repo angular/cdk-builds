@@ -1035,6 +1035,26 @@ class OverlayRef {
         this._updateElementDirection();
     }
     /**
+     * Add a CSS class or an array of classes to the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    addPanelClass(classes) {
+        if (this._pane) {
+            this._toggleClasses(this._pane, classes, true);
+        }
+    }
+    /**
+     * Remove a CSS class or an array of classes from the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    removePanelClass(classes) {
+        if (this._pane) {
+            this._toggleClasses(this._pane, classes, false);
+        }
+    }
+    /**
      * Returns the layout direction of the overlay panel.
      * @return {?}
      */

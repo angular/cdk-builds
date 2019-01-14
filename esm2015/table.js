@@ -1810,6 +1810,11 @@ class CdkTable {
      * @return {?}
      */
     _applyNativeTableSections() {
+        // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
+        /** @type {?} */
+        const documentRef = this._document || document;
+        /** @type {?} */
+        const documentFragment = documentRef.createDocumentFragment();
         /** @type {?} */
         const sections = [
             { tag: 'thead', outlet: this._headerRowOutlet },
@@ -1817,14 +1822,13 @@ class CdkTable {
             { tag: 'tfoot', outlet: this._footerRowOutlet },
         ];
         for (const section of sections) {
-            // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
-            /** @type {?} */
-            const documentRef = this._document || document;
             /** @type {?} */
             const element = documentRef.createElement(section.tag);
             element.appendChild(section.outlet.elementRef.nativeElement);
-            this._elementRef.nativeElement.appendChild(element);
+            documentFragment.appendChild(element);
         }
+        // Use a DocumentFragment so we don't hit the DOM on each iteration.
+        this._elementRef.nativeElement.appendChild(documentFragment);
     }
     /**
      * Forces a re-render of the data rows. Should be called in cases where there has been an input

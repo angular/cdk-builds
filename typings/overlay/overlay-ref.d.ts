@@ -88,6 +88,10 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     updateSize(sizeConfig: OverlaySizeConfig): void;
     /** Sets the LTR/RTL direction for the overlay. */
     setDirection(dir: Direction | Directionality): void;
+    /** Add a CSS class or an array of classes to the overlay pane. */
+    addPanelClass(classes: string | string[]): void;
+    /** Remove a CSS class or an array of classes from the overlay pane. */
+    removePanelClass(classes: string | string[]): void;
     /**
      * Returns the layout direction of the overlay panel.
      */

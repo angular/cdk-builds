@@ -1264,6 +1264,38 @@ OverlayRef = /** @class */ (function () {
         this._config = __assign({}, this._config, { direction: dir });
         this._updateElementDirection();
     };
+    /** Add a CSS class or an array of classes to the overlay pane. */
+    /**
+     * Add a CSS class or an array of classes to the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    OverlayRef.prototype.addPanelClass = /**
+     * Add a CSS class or an array of classes to the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    function (classes) {
+        if (this._pane) {
+            this._toggleClasses(this._pane, classes, true);
+        }
+    };
+    /** Remove a CSS class or an array of classes from the overlay pane. */
+    /**
+     * Remove a CSS class or an array of classes from the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    OverlayRef.prototype.removePanelClass = /**
+     * Remove a CSS class or an array of classes from the overlay pane.
+     * @param {?} classes
+     * @return {?}
+     */
+    function (classes) {
+        if (this._pane) {
+            this._toggleClasses(this._pane, classes, false);
+        }
+    };
     /**
      * Returns the layout direction of the overlay panel.
      */
