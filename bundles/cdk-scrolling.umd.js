@@ -501,7 +501,7 @@ var ScrollDispatcher = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return rxjs.of();
         }
-        return rxjs.Observable.create(function (observer) {
+        return new rxjs.Observable(function (observer) {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
@@ -694,7 +694,7 @@ var CdkScrollable = /** @class */ (function () {
         this.ngZone = ngZone;
         this.dir = dir;
         this._destroyed = new rxjs.Subject();
-        this._elementScrolled = rxjs.Observable.create(function (observer) {
+        this._elementScrolled = new rxjs.Observable(function (observer) {
             return _this.ngZone.runOutsideAngular(function () {
                 return rxjs.fromEvent(_this.elementRef.nativeElement, 'scroll').pipe(operators.takeUntil(_this._destroyed))
                     .subscribe(observer);
@@ -966,7 +966,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
-        _this.scrolledIndexChange = rxjs.Observable.create(function (observer) {
+        _this.scrolledIndexChange = new rxjs.Observable(function (observer) {
             return _this._scrollStrategy.scrolledIndexChange.subscribe(function (index) {
                 return Promise.resolve().then(function () { return _this.ngZone.run(function () { return observer.next(index); }); });
             });

@@ -335,7 +335,7 @@ class ScrollDispatcher {
         if (!this._platform.isBrowser) {
             return of();
         }
-        return Observable.create((observer) => {
+        return new Observable((observer) => {
             if (!this._globalSubscription) {
                 this._addGlobalListener();
             }
@@ -487,7 +487,7 @@ class CdkScrollable {
         this.ngZone = ngZone;
         this.dir = dir;
         this._destroyed = new Subject();
-        this._elementScrolled = Observable.create((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, 'scroll').pipe(takeUntil(this._destroyed))
+        this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, 'scroll').pipe(takeUntil(this._destroyed))
             .subscribe(observer)));
     }
     /**
@@ -704,7 +704,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
-        this.scrolledIndexChange = Observable.create((observer) => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
+        this.scrolledIndexChange = new Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
         /**
          * A stream that emits whenever the rendered range changes.
          */

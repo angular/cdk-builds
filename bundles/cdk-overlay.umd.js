@@ -949,7 +949,7 @@ OverlayRef = /** @class */ (function () {
         this._attachments = new rxjs.Subject();
         this._detachments = new rxjs.Subject();
         this._locationChanges = rxjs.Subscription.EMPTY;
-        this._keydownEventsObservable = rxjs.Observable.create(function (observer) {
+        this._keydownEventsObservable = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._keydownEvents.subscribe(observer);
             _this._keydownEventSubscriptions++;
@@ -1647,7 +1647,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = rxjs.Observable.create(function (observer) {
+        this.positionChanges = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._positionChanges.subscribe(observer);
             _this._positionChangeSubscriptions++;

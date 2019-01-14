@@ -786,7 +786,7 @@ class OverlayRef {
         this._attachments = new Subject();
         this._detachments = new Subject();
         this._locationChanges = Subscription.EMPTY;
-        this._keydownEventsObservable = Observable.create((observer) => {
+        this._keydownEventsObservable = new Observable((observer) => {
             /** @type {?} */
             const subscription = this._keydownEvents.subscribe(observer);
             this._keydownEventSubscriptions++;
@@ -1311,7 +1311,7 @@ class FlexibleConnectedPositionStrategy {
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = Observable.create((observer) => {
+        this.positionChanges = new Observable((observer) => {
             /** @type {?} */
             const subscription = this._positionChanges.subscribe(observer);
             this._positionChangeSubscriptions++;

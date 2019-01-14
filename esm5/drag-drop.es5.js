@@ -741,7 +741,7 @@ DragRef = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = Observable.create(function (observer) {
+        this.moved = new Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._moveEvents.subscribe(observer);
             _this._moveEventSubscriptions++;
@@ -1817,7 +1817,7 @@ var CdkDrag = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = Observable.create(function (observer) {
+        this.moved = new Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._dragRef.moved.pipe(map(function (movedEvent) { return ({
                 source: _this,

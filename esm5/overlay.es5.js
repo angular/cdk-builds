@@ -916,7 +916,7 @@ OverlayRef = /** @class */ (function () {
         this._attachments = new Subject();
         this._detachments = new Subject();
         this._locationChanges = Subscription.EMPTY;
-        this._keydownEventsObservable = Observable.create(function (observer) {
+        this._keydownEventsObservable = new Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._keydownEvents.subscribe(observer);
             _this._keydownEventSubscriptions++;
@@ -1614,7 +1614,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = Observable.create(function (observer) {
+        this.positionChanges = new Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._positionChanges.subscribe(observer);
             _this._positionChangeSubscriptions++;

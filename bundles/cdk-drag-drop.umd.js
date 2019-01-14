@@ -738,7 +738,7 @@ DragRef = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = rxjs.Observable.create(function (observer) {
+        this.moved = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._moveEvents.subscribe(observer);
             _this._moveEventSubscriptions++;
@@ -1814,7 +1814,7 @@ var CdkDrag = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = rxjs.Observable.create(function (observer) {
+        this.moved = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._dragRef.moved.pipe(operators.map(function (movedEvent) { return ({
                 source: _this,

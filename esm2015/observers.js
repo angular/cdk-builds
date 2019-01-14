@@ -58,7 +58,7 @@ class ContentObserver {
     observe(elementOrRef) {
         /** @type {?} */
         const element = coerceElement(elementOrRef);
-        return Observable.create((observer) => {
+        return new Observable((observer) => {
             /** @type {?} */
             const stream = this._observeElement(element);
             /** @type {?} */
