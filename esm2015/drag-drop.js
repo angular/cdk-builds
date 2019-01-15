@@ -2566,7 +2566,7 @@ class CdkDropList {
             return this.enterPredicate(drag.data, drop.data);
         };
         this._syncInputs(ref);
-        this._proxyEvents(ref);
+        this._handleEvents(ref);
         CdkDropList._dropLists.push(this);
         if (_group) {
             _group._items.add(this);
@@ -2706,13 +2706,12 @@ class CdkDropList {
         });
     }
     /**
-     * Proxies the events from a DropListRef to events that
-     * match the interfaces of the CdkDropList outputs.
+     * Handles events from the underlying DropListRef.
      * @private
      * @param {?} ref
      * @return {?}
      */
-    _proxyEvents(ref) {
+    _handleEvents(ref) {
         ref.beforeStarted.subscribe(() => {
             this._changeDetectorRef.markForCheck();
         });
@@ -2745,6 +2744,9 @@ class CdkDropList {
                 item: event.item.data,
                 isPointerOverContainer: event.isPointerOverContainer
             });
+            // Mark for check since all of these events run outside of change
+            // detection and we're not guaranteed for something else to have triggered it.
+            this._changeDetectorRef.markForCheck();
         });
     }
 }

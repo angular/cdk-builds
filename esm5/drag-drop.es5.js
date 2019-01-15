@@ -3164,7 +3164,7 @@ var CdkDropList = /** @class */ (function () {
             return _this.enterPredicate(drag.data, drop.data);
         };
         this._syncInputs(ref);
-        this._proxyEvents(ref);
+        this._handleEvents(ref);
         CdkDropList._dropLists.push(this);
         if (_group) {
             _group._items.add(this);
@@ -3413,20 +3413,15 @@ var CdkDropList = /** @class */ (function () {
                 .withItems(_this._draggables.map(function (drag) { return drag._dragRef; }));
         });
     };
+    /** Handles events from the underlying DropListRef. */
     /**
-     * Proxies the events from a DropListRef to events that
-     * match the interfaces of the CdkDropList outputs.
-     */
-    /**
-     * Proxies the events from a DropListRef to events that
-     * match the interfaces of the CdkDropList outputs.
+     * Handles events from the underlying DropListRef.
      * @private
      * @param {?} ref
      * @return {?}
      */
-    CdkDropList.prototype._proxyEvents = /**
-     * Proxies the events from a DropListRef to events that
-     * match the interfaces of the CdkDropList outputs.
+    CdkDropList.prototype._handleEvents = /**
+     * Handles events from the underlying DropListRef.
      * @private
      * @param {?} ref
      * @return {?}
@@ -3465,6 +3460,9 @@ var CdkDropList = /** @class */ (function () {
                 item: event.item.data,
                 isPointerOverContainer: event.isPointerOverContainer
             });
+            // Mark for check since all of these events run outside of change
+            // detection and we're not guaranteed for something else to have triggered it.
+            _this._changeDetectorRef.markForCheck();
         });
     };
     /**
