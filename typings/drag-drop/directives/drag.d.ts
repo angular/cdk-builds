@@ -34,8 +34,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _dragDropRegistry;
     private _config;
     private _dir;
-    /** Subscription to the stream that initializes the root element. */
-    private _rootElementInitSubscription;
+    private _destroyed;
     /** Reference to the underlying drag instance. */
     _dragRef: DragRef<CdkDrag<T>>;
     /** Elements that can be used to drag the draggable item. */
@@ -101,6 +100,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _updateRootElement;
     /** Gets the boundary element, based on the `boundaryElementSelector`. */
     private _getBoundaryElement;
+    /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
+    private _syncInputs;
     /**
      * Proxies the events from a DragRef to events that
      * match the interfaces of the CdkDrag outputs.

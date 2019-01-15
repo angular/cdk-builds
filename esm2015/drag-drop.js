@@ -8,11 +8,11 @@
 import { InjectionToken, Injectable, NgZone, Inject, NgModule, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, TemplateRef, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
-import { Subject, Subscription, Observable } from 'rxjs';
-import { coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
+import { Subject, Subscription, Observable, merge } from 'rxjs';
+import { coerceBooleanProperty, coerceElement, coerceArray } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { startWith, take, map } from 'rxjs/operators';
+import { startWith, take, map, takeUntil, switchMap, tap } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
@@ -408,6 +408,10 @@ class CdkDragHandle {
      */
     constructor(element, parentDrag) {
         this.element = element;
+        /**
+         * Emits when the state of the handle has changed.
+         */
+        this._stateChanges = new Subject();
         this._disabled = false;
         this._parentDrag = parentDrag;
         toggleNativeDragInteractions(element.nativeElement, false);
@@ -423,6 +427,13 @@ class CdkDragHandle {
      */
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
+        this._stateChanges.next(this);
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._stateChanges.complete();
     }
 }
 CdkDragHandle.decorators = [
@@ -645,6 +656,10 @@ class DragRef {
          * Elements that can be used to drag the draggable item.
          */
         this._handles = [];
+        /**
+         * Registered handles that are currently disabled.
+         */
+        this._disabledHandles = new Set();
         this._disabled = false;
         /**
          * Emits as the drag sequence is being prepared.
@@ -697,13 +712,11 @@ class DragRef {
                 /** @type {?} */
                 const targetHandle = this._handles.find(handle => {
                     /** @type {?} */
-                    const element = handle.element.nativeElement;
-                    /** @type {?} */
                     const target = event.target;
-                    return !!target && (target === element || element.contains((/** @type {?} */ (target))));
+                    return !!target && (target === handle || handle.contains((/** @type {?} */ (target))));
                 });
-                if (targetHandle && !targetHandle.disabled && !this.disabled) {
-                    this._initializeDragSequence(targetHandle.element.nativeElement, event);
+                if (targetHandle && !this._disabledHandles.has(targetHandle) && !this.disabled) {
+                    this._initializeDragSequence(targetHandle, event);
                 }
             }
             else if (!this.disabled) {
@@ -860,9 +873,8 @@ class DragRef {
      * @return {THIS}
      */
     withHandles(handles) {
-        // TODO(crisbeto): have this accept HTMLElement[] | ElementRef<HTMLElement>[]
-        (/** @type {?} */ (this))._handles = handles;
-        handles.forEach(handle => toggleNativeDragInteractions(handle.element.nativeElement, false));
+        (/** @type {?} */ (this))._handles = handles.map(handle => coerceElement(handle));
+        (/** @type {?} */ (this))._handles.forEach(handle => toggleNativeDragInteractions(handle, false));
         (/** @type {?} */ (this))._toggleNativeDragInteractions();
         return (/** @type {?} */ (this));
     }
@@ -870,24 +882,24 @@ class DragRef {
      * Registers the template that should be used for the drag preview.
      * @template THIS
      * @this {THIS}
-     * @param {?} template
+     * @param {?} template Template that from which to stamp out the preview.
+     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
-    withPreviewTemplate(template) {
-        // TODO(crisbeto): have this accept a TemplateRef
-        (/** @type {?} */ (this))._previewTemplate = template;
+    withPreviewTemplate(template, context) {
+        (/** @type {?} */ (this))._previewTemplate = { template, context };
         return (/** @type {?} */ (this));
     }
     /**
      * Registers the template that should be used for the drag placeholder.
      * @template THIS
      * @this {THIS}
-     * @param {?} template
+     * @param {?} template Template that from which to stamp out the placeholder.
+     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
-    withPlaceholderTemplate(template) {
-        // TODO(crisbeto): have this accept a TemplateRef
-        (/** @type {?} */ (this))._placeholderTemplate = template;
+    withPlaceholderTemplate(template, context) {
+        (/** @type {?} */ (this))._placeholderTemplate = { template, context };
         return (/** @type {?} */ (this));
     }
     /**
@@ -901,7 +913,7 @@ class DragRef {
      */
     withRootElement(rootElement) {
         /** @type {?} */
-        const element = rootElement instanceof ElementRef ? rootElement.nativeElement : rootElement;
+        const element = coerceElement(rootElement);
         if (element !== (/** @type {?} */ (this))._rootElement) {
             if ((/** @type {?} */ (this))._rootElement) {
                 (/** @type {?} */ (this))._removeRootElementListeners((/** @type {?} */ (this))._rootElement);
@@ -920,8 +932,7 @@ class DragRef {
      * @return {THIS}
      */
     withBoundaryElement(boundaryElement) {
-        (/** @type {?} */ (this))._boundaryElement = boundaryElement instanceof ElementRef ?
-            boundaryElement.nativeElement : boundaryElement;
+        (/** @type {?} */ (this))._boundaryElement = boundaryElement ? coerceElement(boundaryElement) : null;
         return (/** @type {?} */ (this));
     }
     /**
@@ -950,6 +961,7 @@ class DragRef {
         this.dropped.complete();
         this._moveEvents.complete();
         this._handles = [];
+        this._disabledHandles.clear();
         this._boundaryElement = this._rootElement = this._placeholderTemplate =
             this._previewTemplate = this._nextSibling = (/** @type {?} */ (null));
     }
@@ -968,6 +980,24 @@ class DragRef {
         this._rootElement.style.transform = '';
         this._activeTransform = { x: 0, y: 0 };
         this._passiveTransform = { x: 0, y: 0 };
+    }
+    /**
+     * Sets a handle as disabled. While a handle is disabled, it'll capture and interrupt dragging.
+     * @param {?} handle Handle element that should be disabled.
+     * @return {?}
+     */
+    disableHandle(handle) {
+        if (this._handles.indexOf(handle) > -1) {
+            this._disabledHandles.add(handle);
+        }
+    }
+    /**
+     * Enables a handle, if it has been disabled.
+     * @param {?} handle Handle element to be enabled.
+     * @return {?}
+     */
+    enableHandle(handle) {
+        this._disabledHandles.delete(handle);
     }
     /**
      * Unsubscribes from the global subscriptions.
@@ -1097,7 +1127,8 @@ class DragRef {
         }
         // If we have a custom preview template, the element won't be visible anyway so we avoid the
         // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
-        this._pickupPositionInElement = this._previewTemplate ? { x: 0, y: 0 } :
+        this._pickupPositionInElement = this._previewTemplate && this._previewTemplate.template ?
+            { x: 0, y: 0 } :
             this._getPointerPositionInElement(referenceElement, event);
         /** @type {?} */
         const pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
@@ -1190,10 +1221,12 @@ class DragRef {
      */
     _createPreviewElement() {
         /** @type {?} */
+        const previewTemplate = this._previewTemplate;
+        /** @type {?} */
         let preview;
-        if (this._previewTemplate) {
+        if (previewTemplate && previewTemplate.template) {
             /** @type {?} */
-            const viewRef = this._viewContainerRef.createEmbeddedView(this._previewTemplate.templateRef, this._previewTemplate.data);
+            const viewRef = this._viewContainerRef.createEmbeddedView(previewTemplate.template, previewTemplate.context);
             preview = viewRef.rootNodes[0];
             this._previewRef = viewRef;
             preview.style.transform =
@@ -1274,9 +1307,11 @@ class DragRef {
      */
     _createPlaceholderElement() {
         /** @type {?} */
+        const placeholderTemplate = this._placeholderTemplate;
+        /** @type {?} */
         let placeholder;
-        if (this._placeholderTemplate) {
-            this._placeholderRef = this._viewContainerRef.createEmbeddedView(this._placeholderTemplate.templateRef, this._placeholderTemplate.data);
+        if (placeholderTemplate && placeholderTemplate.template) {
+            this._placeholderRef = this._viewContainerRef.createEmbeddedView(placeholderTemplate.template, placeholderTemplate.context);
             placeholder = this._placeholderRef.rootNodes[0];
         }
         else {
@@ -1516,10 +1551,7 @@ class CdkDrag {
         this._dragDropRegistry = _dragDropRegistry;
         this._config = _config;
         this._dir = _dir;
-        /**
-         * Subscription to the stream that initializes the root element.
-         */
-        this._rootElementInitSubscription = Subscription.EMPTY;
+        this._destroyed = new Subject();
         this._disabled = false;
         /**
          * Emits when the user starts dragging the item.
@@ -1564,16 +1596,7 @@ class CdkDrag {
         /** @type {?} */
         const ref = this._dragRef = new DragRef(element, this._document, this._ngZone, this._viewContainerRef, this._viewportRuler, this._dragDropRegistry, this._config, this.dropContainer ? this.dropContainer._dropListRef : undefined, this._dir);
         ref.data = this;
-        ref.beforeStarted.subscribe(() => {
-            if (!ref.isDragging()) {
-                ref.disabled = this.disabled;
-                ref.lockAxis = this.lockAxis;
-                ref
-                    .withBoundaryElement(this._getBoundaryElement())
-                    .withPlaceholderTemplate(this._placeholderTemplate)
-                    .withPreviewTemplate(this._previewTemplate);
-            }
-        });
+        this._syncInputs(ref);
         this._proxyEvents(ref);
     }
     /**
@@ -1621,14 +1644,30 @@ class CdkDrag {
         // element to be in the proper place in the DOM. This is mostly relevant
         // for draggable elements inside portals since they get stamped out in
         // their original DOM position and then they get transferred to the portal.
-        this._rootElementInitSubscription = this._ngZone.onStable.asObservable()
-            .pipe(take(1))
+        this._ngZone.onStable.asObservable()
+            .pipe(take(1), takeUntil(this._destroyed))
             .subscribe(() => {
             this._updateRootElement();
-            this._handles.changes
-                .pipe(startWith(this._handles))
-                .subscribe((handleList) => {
-                this._dragRef.withHandles(handleList.filter(handle => handle._parentDrag === this));
+            // Listen for any newly-added handles.
+            this._handles.changes.pipe(startWith(this._handles), 
+            // Sync the new handles with the DragRef.
+            tap((handles) => {
+                /** @type {?} */
+                const childHandleElements = handles
+                    .filter(handle => handle._parentDrag === this)
+                    .map(handle => handle.element);
+                this._dragRef.withHandles(childHandleElements);
+            }), 
+            // Listen if the state of any of the handles changes.
+            switchMap((handles) => {
+                return merge(...handles.map(item => item._stateChanges));
+            }), takeUntil(this._destroyed)).subscribe(handleInstance => {
+                // Enabled/disable the handle that changed in the DragRef.
+                /** @type {?} */
+                const dragRef = this._dragRef;
+                /** @type {?} */
+                const handle = handleInstance.element.nativeElement;
+                handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
             });
         });
     }
@@ -1649,7 +1688,8 @@ class CdkDrag {
      * @return {?}
      */
     ngOnDestroy() {
-        this._rootElementInitSubscription.unsubscribe();
+        this._destroyed.next();
+        this._destroyed.complete();
         this._dragRef.dispose();
     }
     /**
@@ -1678,6 +1718,26 @@ class CdkDrag {
         /** @type {?} */
         const selector = this.boundaryElementSelector;
         return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : null;
+    }
+    /**
+     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
+     * @private
+     * @param {?} ref
+     * @return {?}
+     */
+    _syncInputs(ref) {
+        ref.beforeStarted.subscribe(() => {
+            if (!ref.isDragging()) {
+                const { _placeholderTemplate: placeholder, _previewTemplate: preview } = this;
+                ref.disabled = this.disabled;
+                ref.lockAxis = this.lockAxis;
+                ref.withBoundaryElement(this._getBoundaryElement());
+                placeholder ? ref.withPlaceholderTemplate(placeholder.templateRef, placeholder.data) :
+                    ref.withPlaceholderTemplate(null);
+                preview ? ref.withPreviewTemplate(preview.templateRef, preview.data) :
+                    ref.withPreviewTemplate(null);
+            }
+        });
     }
     /**
      * Proxies the events from a DragRef to events that

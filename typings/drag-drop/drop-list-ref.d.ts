@@ -91,10 +91,7 @@ export declare class DropListRef<T = any> {
      * well as what direction the pointer was moving in when the swap occured.
      */
     private _previousSwap;
-    /**
-     * Draggable items in the container.
-     * TODO(crisbeto): support arrays.
-     */
+    /** Draggable items in the container. */
     private _draggables;
     private _siblings;
     /** Direction in which the list is oriented. */
