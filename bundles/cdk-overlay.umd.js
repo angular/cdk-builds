@@ -1799,7 +1799,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // the overlay relative to the origin.
         // We use the viewport rect to determine whether a position would go off-screen.
         this._viewportRect = this._getNarrowedViewportRect();
-        this._originRect = this._origin.getBoundingClientRect();
+        this._originRect = this._getOriginRect();
         this._overlayRect = this._pane.getBoundingClientRect();
         /** @type {?} */
         var originRect = this._originRect;
@@ -1955,7 +1955,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      */
     function () {
         if (!this._isDisposed && (!this._platform || this._platform.isBrowser)) {
-            this._originRect = this._origin.getBoundingClientRect();
+            this._originRect = this._getOriginRect();
             this._overlayRect = this._pane.getBoundingClientRect();
             this._viewportRect = this._getNarrowedViewportRect();
             /** @type {?} */
@@ -2127,25 +2127,34 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         return (/** @type {?} */ (this));
     };
     /**
-     * Sets the origin element, relative to which to position the overlay.
-     * @param origin Reference to the new origin element.
+     * Sets the origin, relative to which to position the overlay.
+     * Using an element origin is useful for building components that need to be positioned
+     * relatively to a trigger (e.g. dropdown menus or tooltips), whereas using a point can be
+     * used for cases like contextual menus which open relative to the user's pointer.
+     * @param origin Reference to the new origin.
      */
     /**
-     * Sets the origin element, relative to which to position the overlay.
+     * Sets the origin, relative to which to position the overlay.
+     * Using an element origin is useful for building components that need to be positioned
+     * relatively to a trigger (e.g. dropdown menus or tooltips), whereas using a point can be
+     * used for cases like contextual menus which open relative to the user's pointer.
      * @template THIS
      * @this {THIS}
-     * @param {?} origin Reference to the new origin element.
+     * @param {?} origin Reference to the new origin.
      * @return {THIS}
      */
     FlexibleConnectedPositionStrategy.prototype.setOrigin = /**
-     * Sets the origin element, relative to which to position the overlay.
+     * Sets the origin, relative to which to position the overlay.
+     * Using an element origin is useful for building components that need to be positioned
+     * relatively to a trigger (e.g. dropdown menus or tooltips), whereas using a point can be
+     * used for cases like contextual menus which open relative to the user's pointer.
      * @template THIS
      * @this {THIS}
-     * @param {?} origin Reference to the new origin element.
+     * @param {?} origin Reference to the new origin.
      * @return {THIS}
      */
     function (origin) {
-        (/** @type {?} */ (this))._origin = coercion.coerceElement(origin);
+        (/** @type {?} */ (this))._origin = origin;
         return (/** @type {?} */ (this));
     };
     /**
@@ -2613,7 +2622,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
             top = origin.y;
-            height = viewport.bottom - origin.y;
+            height = viewport.height - top + this._viewportMargin;
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
@@ -2792,6 +2801,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             bottom: '',
             right: '',
             position: '',
+            transform: '',
         })));
     };
     /** Sets positioning styles to the overlay element. */
@@ -2972,7 +2982,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     function () {
         // Note: needs fresh rects since the position could've changed.
         /** @type {?} */
-        var originBounds = this._origin.getBoundingClientRect();
+        var originBounds = this._getOriginRect();
         /** @type {?} */
         var overlayBounds = this._pane.getBoundingClientRect();
         // TODO(jelbourn): instead of needing all of the client rects for these scrolling containers
@@ -3161,6 +3171,36 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             this._appliedPanelClasses.forEach(function (cssClass) { return _this._pane.classList.remove(cssClass); });
             this._appliedPanelClasses = [];
         }
+    };
+    /** Returns the ClientRect of the current origin. */
+    /**
+     * Returns the ClientRect of the current origin.
+     * @private
+     * @return {?}
+     */
+    FlexibleConnectedPositionStrategy.prototype._getOriginRect = /**
+     * Returns the ClientRect of the current origin.
+     * @private
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var origin = this._origin;
+        if (origin instanceof core.ElementRef) {
+            return origin.nativeElement.getBoundingClientRect();
+        }
+        if (origin instanceof HTMLElement) {
+            return origin.getBoundingClientRect();
+        }
+        // If the origin is a point, return a client rect as if it was a 0x0 element at the point.
+        return {
+            top: origin.y,
+            bottom: origin.y,
+            left: origin.x,
+            right: origin.x,
+            height: 0,
+            width: 0
+        };
     };
     return FlexibleConnectedPositionStrategy;
 }());
@@ -3973,20 +4013,20 @@ var OverlayPositionBuilder = /** @class */ (function () {
     };
     /**
      * Creates a flexible position strategy.
-     * @param elementRef
+     * @param origin Origin relative to which to position the overlay.
      */
     /**
      * Creates a flexible position strategy.
-     * @param {?} elementRef
+     * @param {?} origin Origin relative to which to position the overlay.
      * @return {?}
      */
     OverlayPositionBuilder.prototype.flexibleConnectedTo = /**
      * Creates a flexible position strategy.
-     * @param {?} elementRef
+     * @param {?} origin Origin relative to which to position the overlay.
      * @return {?}
      */
-    function (elementRef) {
-        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
+    function (origin) {
+        return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     };
     OverlayPositionBuilder.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
@@ -4440,6 +4480,12 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function (changes) {
         if (this._position) {
             this._updatePositionStrategy(this._position);
+            this._overlayRef.updateSize({
+                width: this.width,
+                minWidth: this.minWidth,
+                height: this.height,
+                minHeight: this.minHeight,
+            });
             if (changes['origin'] && this.open) {
                 this._position.apply();
             }
@@ -4583,12 +4629,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         }
         else {
             // Update the overlay size, in case the directive's inputs have changed
-            this._overlayRef.updateSize({
-                width: this.width,
-                minWidth: this.minWidth,
-                height: this.height,
-                minHeight: this.minHeight,
-            });
             this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {

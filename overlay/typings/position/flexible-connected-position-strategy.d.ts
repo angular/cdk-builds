@@ -13,6 +13,8 @@ import { Observable } from 'rxjs';
 import { OverlayReference } from '../overlay-reference';
 import { Platform } from '@angular/cdk/platform';
 import { OverlayContainer } from '../overlay-container';
+/** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */
+export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | HTMLElement | Point;
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
@@ -86,7 +88,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
-    constructor(connectedTo: ElementRef | HTMLElement, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined, _overlayContainer?: OverlayContainer | undefined);
+    constructor(connectedTo: FlexibleConnectedPositionStrategyOrigin, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined, _overlayContainer?: OverlayContainer | undefined);
     /** Attaches this position strategy to an overlay. */
     attach(overlayRef: OverlayReference): void;
     /**
@@ -143,10 +145,13 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      */
     withLockedPosition(isLocked?: boolean): this;
     /**
-     * Sets the origin element, relative to which to position the overlay.
-     * @param origin Reference to the new origin element.
+     * Sets the origin, relative to which to position the overlay.
+     * Using an element origin is useful for building components that need to be positioned
+     * relatively to a trigger (e.g. dropdown menus or tooltips), whereas using a point can be
+     * used for cases like contextual menus which open relative to the user's pointer.
+     * @param origin Reference to the new origin.
      */
-    setOrigin(origin: ElementRef | HTMLElement): this;
+    setOrigin(origin: FlexibleConnectedPositionStrategyOrigin): this;
     /**
      * Sets the default offset for the overlay's connection point on the x-axis.
      * @param offset New offset in the X axis.
@@ -250,6 +255,13 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _addPanelClasses;
     /** Clears the classes that the position strategy has applied from the overlay panel. */
     private _clearPanelClasses;
+    /** Returns the ClientRect of the current origin. */
+    private _getOriginRect;
+}
+/** A simple (x, y) coordinate. */
+interface Point {
+    x: number;
+    y: number;
 }
 /** A connected position as specified by the user. */
 export interface ConnectedPosition {
@@ -262,3 +274,4 @@ export interface ConnectedPosition {
     offsetY?: number;
     panelClass?: string | string[];
 }
+export {};

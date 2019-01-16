@@ -310,6 +310,18 @@ var CdkStepper = /** @class */ (function () {
         this._groupId = nextId++;
         this._document = _document;
     }
+    Object.defineProperty(CdkStepper.prototype, "steps", {
+        /** The list of step components that the stepper is holding. */
+        get: /**
+         * The list of step components that the stepper is holding.
+         * @return {?}
+         */
+        function () {
+            return this._steps;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(CdkStepper.prototype, "linear", {
         /** Whether the validity of previous steps should be checked or not. */
         get: /**
@@ -337,14 +349,14 @@ var CdkStepper = /** @class */ (function () {
          * @return {?}
          */
         function (index) {
-            if (this._steps) {
+            if (this.steps) {
                 // Ensure that the index can't be out of bounds.
-                if (index < 0 || index > this._steps.length - 1) {
+                if (index < 0 || index > this.steps.length - 1) {
                     throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                 }
                 if (this._selectedIndex != index &&
                     !this._anyControlsInvalidOrPending(index) &&
-                    (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
+                    (index >= this._selectedIndex || this.steps.toArray()[index].editable)) {
                     this._updateSelectedItemIndex(index);
                 }
             }
@@ -363,14 +375,14 @@ var CdkStepper = /** @class */ (function () {
          */
         function () {
             // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
-            return this._steps ? this._steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
+            return this.steps ? this.steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
         },
         set: /**
          * @param {?} step
          * @return {?}
          */
         function (step) {
-            this.selectedIndex = this._steps ? this._steps.toArray().indexOf(step) : -1;
+            this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
         },
         enumerable: true,
         configurable: true
@@ -393,7 +405,7 @@ var CdkStepper = /** @class */ (function () {
             .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
             .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
-        this._steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
+        this.steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
             if (!_this.selected) {
                 _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
             }
@@ -419,7 +431,7 @@ var CdkStepper = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.selectedIndex = Math.min(this._selectedIndex + 1, this._steps.length - 1);
+        this.selectedIndex = Math.min(this._selectedIndex + 1, this.steps.length - 1);
     };
     /** Selects and focuses the previous step in list. */
     /**
@@ -444,7 +456,7 @@ var CdkStepper = /** @class */ (function () {
      */
     function () {
         this._updateSelectedItemIndex(0);
-        this._steps.forEach(function (step) { return step.reset(); });
+        this.steps.forEach(function (step) { return step.reset(); });
         this._stateChanged();
     };
     /** Returns a unique id for each step label element. */
@@ -525,7 +537,7 @@ var CdkStepper = /** @class */ (function () {
     function (index, state) {
         if (state === void 0) { state = STEP_STATE.NUMBER; }
         /** @type {?} */
-        var step = this._steps.toArray()[index];
+        var step = this.steps.toArray()[index];
         /** @type {?} */
         var isCurrentStep = this._isCurrentStep(index);
         return step._displayDefaultIndicatorType
@@ -624,7 +636,7 @@ var CdkStepper = /** @class */ (function () {
      */
     function (newIndex) {
         /** @type {?} */
-        var stepsArray = this._steps.toArray();
+        var stepsArray = this.steps.toArray();
         this.selectionChange.emit({
             selectedIndex: newIndex,
             previouslySelectedIndex: this._selectedIndex,
@@ -684,7 +696,7 @@ var CdkStepper = /** @class */ (function () {
      */
     function (index) {
         /** @type {?} */
-        var steps = this._steps.toArray();
+        var steps = this.steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(function (step) {

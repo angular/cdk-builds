@@ -121,8 +121,14 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
      * constructor param is required.
      */
     private _document;
-    /** The list of step components that the stepper is holding. */
+    /**
+     * The list of step components that the stepper is holding.
+     * @deprecated use `steps` instead
+     * @breaking-change 9.0.0 remove this property
+     */
     _steps: QueryList<CdkStep>;
+    /** The list of step components that the stepper is holding. */
+    readonly steps: QueryList<CdkStep>;
     /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.

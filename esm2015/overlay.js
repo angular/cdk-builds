@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { coerceCssPixelValue, coerceArray, coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
-import { Inject, Injectable, NgZone, Optional, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, Directive, ElementRef, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable, inject } from '@angular/core';
+import { Inject, Injectable, NgZone, Optional, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, defineInjectable, inject } from '@angular/core';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
@@ -1410,7 +1410,7 @@ class FlexibleConnectedPositionStrategy {
         // the overlay relative to the origin.
         // We use the viewport rect to determine whether a position would go off-screen.
         this._viewportRect = this._getNarrowedViewportRect();
-        this._originRect = this._origin.getBoundingClientRect();
+        this._originRect = this._getOriginRect();
         this._overlayRect = this._pane.getBoundingClientRect();
         /** @type {?} */
         const originRect = this._originRect;
@@ -1545,7 +1545,7 @@ class FlexibleConnectedPositionStrategy {
      */
     reapplyLastPosition() {
         if (!this._isDisposed && (!this._platform || this._platform.isBrowser)) {
-            this._originRect = this._origin.getBoundingClientRect();
+            this._originRect = this._getOriginRect();
             this._overlayRect = this._pane.getBoundingClientRect();
             this._viewportRect = this._getNarrowedViewportRect();
             /** @type {?} */
@@ -1640,14 +1640,17 @@ class FlexibleConnectedPositionStrategy {
         return (/** @type {?} */ (this));
     }
     /**
-     * Sets the origin element, relative to which to position the overlay.
+     * Sets the origin, relative to which to position the overlay.
+     * Using an element origin is useful for building components that need to be positioned
+     * relatively to a trigger (e.g. dropdown menus or tooltips), whereas using a point can be
+     * used for cases like contextual menus which open relative to the user's pointer.
      * @template THIS
      * @this {THIS}
-     * @param {?} origin Reference to the new origin element.
+     * @param {?} origin Reference to the new origin.
      * @return {THIS}
      */
     setOrigin(origin) {
-        (/** @type {?} */ (this))._origin = coerceElement(origin);
+        (/** @type {?} */ (this))._origin = origin;
         return (/** @type {?} */ (this));
     }
     /**
@@ -1969,7 +1972,7 @@ class FlexibleConnectedPositionStrategy {
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
             top = origin.y;
-            height = viewport.bottom - origin.y;
+            height = viewport.height - top + this._viewportMargin;
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
@@ -2120,6 +2123,7 @@ class FlexibleConnectedPositionStrategy {
             bottom: '',
             right: '',
             position: '',
+            transform: '',
         })));
     }
     /**
@@ -2264,7 +2268,7 @@ class FlexibleConnectedPositionStrategy {
     _getScrollVisibility() {
         // Note: needs fresh rects since the position could've changed.
         /** @type {?} */
-        const originBounds = this._origin.getBoundingClientRect();
+        const originBounds = this._getOriginRect();
         /** @type {?} */
         const overlayBounds = this._pane.getBoundingClientRect();
         // TODO(jelbourn): instead of needing all of the client rects for these scrolling containers
@@ -2394,6 +2398,30 @@ class FlexibleConnectedPositionStrategy {
             this._appliedPanelClasses.forEach(cssClass => this._pane.classList.remove(cssClass));
             this._appliedPanelClasses = [];
         }
+    }
+    /**
+     * Returns the ClientRect of the current origin.
+     * @private
+     * @return {?}
+     */
+    _getOriginRect() {
+        /** @type {?} */
+        const origin = this._origin;
+        if (origin instanceof ElementRef) {
+            return origin.nativeElement.getBoundingClientRect();
+        }
+        if (origin instanceof HTMLElement) {
+            return origin.getBoundingClientRect();
+        }
+        // If the origin is a point, return a client rect as if it was a 0x0 element at the point.
+        return {
+            top: origin.y,
+            bottom: origin.y,
+            left: origin.x,
+            right: origin.x,
+            height: 0,
+            width: 0
+        };
     }
 }
 /**
@@ -2894,11 +2922,11 @@ class OverlayPositionBuilder {
     }
     /**
      * Creates a flexible position strategy.
-     * @param {?} elementRef
+     * @param {?} origin Origin relative to which to position the overlay.
      * @return {?}
      */
-    flexibleConnectedTo(elementRef) {
-        return new FlexibleConnectedPositionStrategy(elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
+    flexibleConnectedTo(origin) {
+        return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     }
 }
 OverlayPositionBuilder.decorators = [
@@ -3267,6 +3295,12 @@ class CdkConnectedOverlay {
     ngOnChanges(changes) {
         if (this._position) {
             this._updatePositionStrategy(this._position);
+            this._overlayRef.updateSize({
+                width: this.width,
+                minWidth: this.minWidth,
+                height: this.height,
+                minHeight: this.minHeight,
+            });
             if (changes['origin'] && this.open) {
                 this._position.apply();
             }
@@ -3375,12 +3409,6 @@ class CdkConnectedOverlay {
         }
         else {
             // Update the overlay size, in case the directive's inputs have changed
-            this._overlayRef.updateSize({
-                width: this.width,
-                minWidth: this.minWidth,
-                height: this.height,
-                minHeight: this.minHeight,
-            });
             this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {

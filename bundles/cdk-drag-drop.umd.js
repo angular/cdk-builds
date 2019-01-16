@@ -832,9 +832,11 @@ DragRef = /** @class */ (function () {
                     constrainedPointerPosition.y - _this._pickupPositionOnPage.y + _this._passiveTransform.y;
                 /** @type {?} */
                 var transform = getTransform(activeTransform.x, activeTransform.y);
-                // Preserve the previous `transform` value, if there was one.
+                // Preserve the previous `transform` value, if there was one. Note that we apply our own
+                // transform before the user's, because things like rotation can affect which direction
+                // the element will be translated towards.
                 _this._rootElement.style.transform = _this._initialTransform ?
-                    _this._initialTransform + ' ' + transform : transform;
+                    transform + ' ' + _this._initialTransform : transform;
                 // Apply transform as attribute if dragging and svg element to work for IE
                 if (typeof SVGElement !== 'undefined' && _this._rootElement instanceof SVGElement) {
                     /** @type {?} */
@@ -1050,6 +1052,7 @@ DragRef = /** @class */ (function () {
             }
             element.addEventListener('mousedown', (/** @type {?} */ (this))._pointerDown, activeEventListenerOptions);
             element.addEventListener('touchstart', (/** @type {?} */ (this))._pointerDown, passiveEventListenerOptions);
+            (/** @type {?} */ (this))._initialTransform = undefined;
             (/** @type {?} */ (this))._rootElement = element;
         }
         return (/** @type {?} */ (this));
@@ -1132,7 +1135,7 @@ DragRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._rootElement.style.transform = '';
+        this._rootElement.style.transform = this._initialTransform || '';
         this._activeTransform = { x: 0, y: 0 };
         this._passiveTransform = { x: 0, y: 0 };
     };
@@ -1422,7 +1425,8 @@ DragRef = /** @class */ (function () {
         var x = _a.x, y = _a.y;
         // Drop container that draggable has been moved into.
         /** @type {?} */
-        var newContainer = (/** @type {?} */ (this.dropContainer))._getSiblingContainerFromPosition(this, x, y);
+        var newContainer = (/** @type {?} */ (this.dropContainer))._getSiblingContainerFromPosition(this, x, y) ||
+            this._initialContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left it's
         // initial container, check whether the it's over the initial container. This handles the
         // case where two containers are connected one way and the user tries to undo dragging an
@@ -1431,7 +1435,7 @@ DragRef = /** @class */ (function () {
             this._initialContainer._isOverContainer(x, y)) {
             newContainer = this._initialContainer;
         }
-        if (newContainer) {
+        if (newContainer && newContainer !== this.dropContainer) {
             this._ngZone.run(function () {
                 // Notify the old container that the item has left.
                 _this.exited.next({ item: _this, container: (/** @type {?} */ (_this.dropContainer)) });
@@ -2332,23 +2336,26 @@ DropListRef = /** @class */ (function () {
          */
         this._isDragging = false;
         /**
-         * Cache of the dimensions of all the items and the sibling containers.
+         * Cache of the dimensions of all the items inside the container.
          */
-        this._positionCache = { items: [], siblings: [], self: (/** @type {?} */ ({})) };
+        this._itemPositions = [];
         /**
          * Keeps track of the item that was last swapped with the dragged item, as
          * well as what direction the pointer was moving in when the swap occured.
          */
         this._previousSwap = { drag: (/** @type {?} */ (null)), delta: 0 };
+        /**
+         * Drop lists that are connected to the current one.
+         */
         this._siblings = [];
         /**
          * Direction in which the list is oriented.
          */
         this._orientation = 'vertical';
         /**
-         * Amount of connected siblings that currently have a dragged item.
+         * Connected siblings that currently have a dragged item.
          */
-        this._activeSiblings = 0;
+        this._activeSiblings = new Set();
         _dragDropRegistry.registerDropContainer(this);
         this._document = _document;
     }
@@ -2367,6 +2374,7 @@ DropListRef = /** @class */ (function () {
         this.exited.complete();
         this.dropped.complete();
         this.sorted.complete();
+        this._activeSiblings.clear();
         this._dragDropRegistry.removeDropContainer(this);
     };
     /** Whether an item from this list is currently being dragged. */
@@ -2391,11 +2399,13 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         this.beforeStarted.next();
         this._isDragging = true;
         this._activeDraggables = this._draggables.slice();
-        this._cachePositions();
-        this._positionCache.siblings.forEach(function (sibling) { return sibling.drop._toggleIsReceiving(true); });
+        this._cacheOwnPosition();
+        this._cacheItemPositions();
+        this._siblings.forEach(function (sibling) { return sibling._startReceiving(_this); });
     };
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -2451,7 +2461,7 @@ DropListRef = /** @class */ (function () {
         placeholder.style.transform = '';
         // Note that the positions were already cached when we called `start` above,
         // but we need to refresh them since the amount of items has changed.
-        this._cachePositions();
+        this._cacheItemPositions();
     };
     /**
      * Removes an item from the container after it was dragged into another container by the user.
@@ -2600,7 +2610,7 @@ DropListRef = /** @class */ (function () {
         // we need to invert the array when determining the index.
         /** @type {?} */
         var items = this._orientation === 'horizontal' && this._dir && this._dir.value === 'rtl' ?
-            this._positionCache.items.slice().reverse() : this._positionCache.items;
+            this._itemPositions.slice().reverse() : this._itemPositions;
         return findIndex(items, function (currentItem) { return currentItem.drag === item; });
     };
     /**
@@ -2618,7 +2628,7 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return this._activeSiblings > 0;
+        return this._activeSiblings.size > 0;
     };
     /**
      * Sorts an item inside the container based on its position.
@@ -2649,7 +2659,7 @@ DropListRef = /** @class */ (function () {
             return;
         }
         /** @type {?} */
-        var siblings = this._positionCache.items;
+        var siblings = this._itemPositions;
         /** @type {?} */
         var newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
         if (newIndex === -1 && siblings.length > 0) {
@@ -2717,13 +2727,27 @@ DropListRef = /** @class */ (function () {
             }
         });
     };
+    /** Caches the position of the drop list. */
+    /**
+     * Caches the position of the drop list.
+     * @private
+     * @return {?}
+     */
+    DropListRef.prototype._cacheOwnPosition = /**
+     * Caches the position of the drop list.
+     * @private
+     * @return {?}
+     */
+    function () {
+        this._clientRect = this.element.nativeElement.getBoundingClientRect();
+    };
     /** Refreshes the position cache of the items and sibling containers. */
     /**
      * Refreshes the position cache of the items and sibling containers.
      * @private
      * @return {?}
      */
-    DropListRef.prototype._cachePositions = /**
+    DropListRef.prototype._cacheItemPositions = /**
      * Refreshes the position cache of the items and sibling containers.
      * @private
      * @return {?}
@@ -2732,9 +2756,7 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this._orientation === 'horizontal';
-        this._positionCache.self = this.element.nativeElement.getBoundingClientRect();
-        this._positionCache.items = this._activeDraggables
-            .map(function (drag) {
+        this._itemPositions = this._activeDraggables.map(function (drag) {
             /** @type {?} */
             var elementToMeasure = _this._dragDropRegistry.isDragging(drag) ?
                 // If the element is being dragged, we have to measure the
@@ -2759,34 +2781,10 @@ DropListRef = /** @class */ (function () {
                     height: clientRect.height
                 }
             };
-        })
-            .sort(function (a, b) {
+        }).sort(function (a, b) {
             return isHorizontal ? a.clientRect.left - b.clientRect.left :
                 a.clientRect.top - b.clientRect.top;
         });
-        this._positionCache.siblings = this._siblings.map(function (drop) { return ({
-            drop: drop,
-            clientRect: drop.element.nativeElement.getBoundingClientRect()
-        }); });
-    };
-    /**
-     * Toggles whether the list can receive the item that is currently being dragged.
-     * Usually called by a sibling that initiated the dragging.
-     */
-    /**
-     * Toggles whether the list can receive the item that is currently being dragged.
-     * Usually called by a sibling that initiated the dragging.
-     * @param {?} isDragging
-     * @return {?}
-     */
-    DropListRef.prototype._toggleIsReceiving = /**
-     * Toggles whether the list can receive the item that is currently being dragged.
-     * Usually called by a sibling that initiated the dragging.
-     * @param {?} isDragging
-     * @return {?}
-     */
-    function (isDragging) {
-        this._activeSiblings = Math.max(0, this._activeSiblings + (isDragging ? 1 : -1));
     };
     /** Resets the container to its initial state. */
     /**
@@ -2800,13 +2798,13 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         this._isDragging = false;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
-        this._positionCache.siblings.forEach(function (sibling) { return sibling.drop._toggleIsReceiving(false); });
+        this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });
         this._activeDraggables = [];
-        this._positionCache.items = [];
-        this._positionCache.siblings = [];
+        this._itemPositions = [];
         this._previousSwap.drag = null;
         this._previousSwap.delta = 0;
     };
@@ -2879,7 +2877,7 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (pointerX, pointerY) {
-        var _a = this._positionCache.self, top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left, width = _a.width, height = _a.height;
+        var _a = this._clientRect, top = _a.top, right = _a.right, bottom = _a.bottom, left = _a.left, width = _a.width, height = _a.height;
         /** @type {?} */
         var xThreshold = width * DROP_PROXIMITY_THRESHOLD;
         /** @type {?} */
@@ -2951,7 +2949,7 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this._orientation === 'horizontal';
-        return findIndex(this._positionCache.items, function (_a, _, array) {
+        return findIndex(this._itemPositions, function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
             if (drag === item) {
                 // If there's only one item left in the container, it must be
@@ -2992,7 +2990,7 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (x, y) {
-        return isInsideClientRect(this._positionCache.self, x, y);
+        return isInsideClientRect(this._clientRect, x, y);
     };
     /**
      * Figures out whether an item should be moved into a sibling
@@ -3018,34 +3016,87 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (item, x, y) {
-        /** @type {?} */
-        var results = this._positionCache.siblings.filter(function (sibling) {
-            return isInsideClientRect(sibling.clientRect, x, y);
-        });
-        // No drop containers are intersecting with the pointer.
-        if (!results.length) {
-            return null;
+        return this._siblings.find(function (sibling) { return sibling._canReceive(item, x, y); });
+    };
+    /**
+     * Checks whether the drop list can receive the passed-in item.
+     * @param item Item that is being dragged into the list.
+     * @param x Position of the item along the X axis.
+     * @param y Position of the item along the Y axis.
+     */
+    /**
+     * Checks whether the drop list can receive the passed-in item.
+     * @param {?} item Item that is being dragged into the list.
+     * @param {?} x Position of the item along the X axis.
+     * @param {?} y Position of the item along the Y axis.
+     * @return {?}
+     */
+    DropListRef.prototype._canReceive = /**
+     * Checks whether the drop list can receive the passed-in item.
+     * @param {?} item Item that is being dragged into the list.
+     * @param {?} x Position of the item along the X axis.
+     * @param {?} y Position of the item along the Y axis.
+     * @return {?}
+     */
+    function (item, x, y) {
+        if (!this.enterPredicate(item, this) || !isInsideClientRect(this._clientRect, x, y)) {
+            return false;
         }
         /** @type {?} */
         var elementFromPoint = this._document.elementFromPoint(x, y);
         // If there's no element at the pointer position, then
         // the client rect is probably scrolled out of the view.
         if (!elementFromPoint) {
-            return null;
+            return false;
         }
+        /** @type {?} */
+        var element = this.element.nativeElement;
         // The `ClientRect`, that we're using to find the container over which the user is
         // hovering, doesn't give us any information on whether the element has been scrolled
         // out of the view or whether it's overlapping with other containers. This means that
         // we could end up transferring the item into a container that's invisible or is positioned
         // below another one. We use the result from `elementFromPoint` to get the top-most element
         // at the pointer position and to find whether it's one of the intersecting drop containers.
+        return elementFromPoint === element || element.contains(elementFromPoint);
+    };
+    /**
+     * Called by one of the connected drop lists when a dragging sequence has started.
+     * @param sibling Sibling in which dragging has started.
+     */
+    /**
+     * Called by one of the connected drop lists when a dragging sequence has started.
+     * @param {?} sibling Sibling in which dragging has started.
+     * @return {?}
+     */
+    DropListRef.prototype._startReceiving = /**
+     * Called by one of the connected drop lists when a dragging sequence has started.
+     * @param {?} sibling Sibling in which dragging has started.
+     * @return {?}
+     */
+    function (sibling) {
         /** @type {?} */
-        var result = results.find(function (sibling) {
-            /** @type {?} */
-            var element = sibling.drop.element.nativeElement;
-            return element === elementFromPoint || element.contains(elementFromPoint);
-        });
-        return result && result.drop.enterPredicate(item, result.drop) ? result.drop : null;
+        var activeSiblings = this._activeSiblings;
+        if (!activeSiblings.has(sibling)) {
+            activeSiblings.add(sibling);
+            this._cacheOwnPosition();
+        }
+    };
+    /**
+     * Called by a connected drop list when dragging has stopped.
+     * @param sibling Sibling whose dragging has stopped.
+     */
+    /**
+     * Called by a connected drop list when dragging has stopped.
+     * @param {?} sibling Sibling whose dragging has stopped.
+     * @return {?}
+     */
+    DropListRef.prototype._stopReceiving = /**
+     * Called by a connected drop list when dragging has stopped.
+     * @param {?} sibling Sibling whose dragging has stopped.
+     * @return {?}
+     */
+    function (sibling) {
+        this._activeSiblings.delete(sibling);
     };
     return DropListRef;
 }());
