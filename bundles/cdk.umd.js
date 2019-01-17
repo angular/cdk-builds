@@ -19,7 +19,7 @@
  * Current version of the Angular Component Development Kit.
  * @type {?}
  */
-var VERSION = new core.Version('7.2.1-5a8dd1e');
+var VERSION = new core.Version('7.2.1-63e6a67');
 
 exports.VERSION = VERSION;
 
