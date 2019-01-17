@@ -755,12 +755,14 @@ var CdkScrollable = /** @class */ (function () {
         options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
         // Rewrite the bottom offset as a top offset.
         if (options.bottom != null) {
-            options.top = el.scrollHeight - el.clientHeight - options.bottom;
+            ((/** @type {?} */ (options))).top =
+                el.scrollHeight - el.clientHeight - options.bottom;
         }
         // Rewrite the right offset as a left offset.
         if (isRtl && getRtlScrollAxisType() != RtlScrollAxisType.NORMAL) {
             if (options.left != null) {
-                options.right = el.scrollWidth - el.clientWidth - options.left;
+                ((/** @type {?} */ (options))).right =
+                    el.scrollWidth - el.clientWidth - options.left;
             }
             if (getRtlScrollAxisType() == RtlScrollAxisType.INVERTED) {
                 options.left = options.right;
@@ -771,7 +773,8 @@ var CdkScrollable = /** @class */ (function () {
         }
         else {
             if (options.right != null) {
-                options.left = el.scrollWidth - el.clientWidth - options.right;
+                ((/** @type {?} */ (options))).left =
+                    el.scrollWidth - el.clientWidth - options.right;
             }
         }
         this._applyScrollToOptions(options);
