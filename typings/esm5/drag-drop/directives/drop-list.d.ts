@@ -127,9 +127,6 @@ export declare class CdkDropList<T = any> implements CdkDropListContainer, OnDes
     _isOverContainer(x: number, y: number): boolean;
     /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
     private _syncInputs;
-    /**
-     * Proxies the events from a DropListRef to events that
-     * match the interfaces of the CdkDropList outputs.
-     */
-    private _proxyEvents;
+    /** Handles events from the underlying DropListRef. */
+    private _handleEvents;
 }

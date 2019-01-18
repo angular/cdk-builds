@@ -71,7 +71,7 @@ var ContentObserver = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var element = coerceElement(elementOrRef);
-        return Observable.create(function (observer) {
+        return new Observable(function (observer) {
             /** @type {?} */
             var stream = _this._observeElement(element);
             /** @type {?} */

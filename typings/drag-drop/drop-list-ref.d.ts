@@ -78,8 +78,10 @@ export declare class DropListRef<T = any> {
     data: T;
     /** Whether an item in the list is being dragged. */
     private _isDragging;
-    /** Cache of the dimensions of all the items and the sibling containers. */
-    private _positionCache;
+    /** Cache of the dimensions of all the items inside the container. */
+    private _itemPositions;
+    /** Cached `ClientRect` of the drop list. */
+    private _clientRect;
     /**
      * Draggable items that are currently active inside the container. Includes the items
      * from `_draggables`, as well as any items that have been dragged in, but haven't
@@ -91,15 +93,13 @@ export declare class DropListRef<T = any> {
      * well as what direction the pointer was moving in when the swap occured.
      */
     private _previousSwap;
-    /**
-     * Draggable items in the container.
-     * TODO(crisbeto): support arrays.
-     */
+    /** Draggable items in the container. */
     private _draggables;
+    /** Drop lists that are connected to the current one. */
     private _siblings;
     /** Direction in which the list is oriented. */
     private _orientation;
-    /** Amount of connected siblings that currently have a dragged item. */
+    /** Connected siblings that currently have a dragged item. */
     private _activeSiblings;
     constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _dir?: Directionality | undefined);
     /** Removes the drop list functionality from the DOM element. */
@@ -166,13 +166,10 @@ export declare class DropListRef<T = any> {
         x: number;
         y: number;
     }): void;
+    /** Caches the position of the drop list. */
+    private _cacheOwnPosition;
     /** Refreshes the position cache of the items and sibling containers. */
-    private _cachePositions;
-    /**
-     * Toggles whether the list can receive the item that is currently being dragged.
-     * Usually called by a sibling that initiated the dragging.
-     */
-    _toggleIsReceiving(isDragging: boolean): void;
+    private _cacheItemPositions;
     /** Resets the container to its initial state. */
     private _reset;
     /**
@@ -216,5 +213,22 @@ export declare class DropListRef<T = any> {
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropListRef | null;
+    _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropListRef | undefined;
+    /**
+     * Checks whether the drop list can receive the passed-in item.
+     * @param item Item that is being dragged into the list.
+     * @param x Position of the item along the X axis.
+     * @param y Position of the item along the Y axis.
+     */
+    _canReceive(item: DragRef, x: number, y: number): boolean;
+    /**
+     * Called by one of the connected drop lists when a dragging sequence has started.
+     * @param sibling Sibling in which dragging has started.
+     */
+    _startReceiving(sibling: DropListRef): void;
+    /**
+     * Called by a connected drop list when dragging has stopped.
+     * @param sibling Sibling whose dragging has stopped.
+     */
+    _stopReceiving(sibling: DropListRef): void;
 }

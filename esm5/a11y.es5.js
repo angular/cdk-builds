@@ -1846,6 +1846,7 @@ FocusTrap = /** @class */ (function () {
         this._toggleAnchorTabIndex(this._enabled, anchor);
         anchor.classList.add('cdk-visually-hidden');
         anchor.classList.add('cdk-focus-trap-anchor');
+        anchor.setAttribute('aria-hidden', 'true');
         return anchor;
     };
     /**

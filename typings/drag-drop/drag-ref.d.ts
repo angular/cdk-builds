@@ -25,17 +25,6 @@ export interface DragRefConfig {
     pointerDirectionChangeThreshold: number;
 }
 /**
- * Template that can be used to create a drag helper element (e.g. a preview or a placeholder).
- */
-interface DragHelperTemplate<T = any> {
-    templateRef: TemplateRef<T>;
-    data: T;
-}
-interface DragHandle {
-    element: ElementRef<HTMLElement>;
-    disabled: boolean;
-}
-/**
  * Internal compile-time-only representation of a `DragRef`.
  * Used to avoid circular import issues between the `DragRef` and the `DropListRef`.
  * @docs-private
@@ -135,11 +124,13 @@ export declare class DragRef<T = any> {
     /** Cached dimensions of the boundary element. */
     private _boundaryRect?;
     /** Element that will be used as a template to create the draggable item's preview. */
-    private _previewTemplate;
+    private _previewTemplate?;
     /** Template for placeholder element rendered to show where a draggable would be dropped. */
-    private _placeholderTemplate;
+    private _placeholderTemplate?;
     /** Elements that can be used to drag the draggable item. */
     private _handles;
+    /** Registered handles that are currently disabled. */
+    private _disabledHandles;
     /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
     /** Whether starting to drag this element is disabled. */
@@ -207,11 +198,19 @@ export declare class DragRef<T = any> {
     /** Returns the root draggable element. */
     getRootElement(): HTMLElement;
     /** Registers the handles that can be used to drag the element. */
-    withHandles(handles: DragHandle[]): this;
-    /** Registers the template that should be used for the drag preview. */
-    withPreviewTemplate(template: DragHelperTemplate | null): this;
-    /** Registers the template that should be used for the drag placeholder. */
-    withPlaceholderTemplate(template: DragHelperTemplate | null): this;
+    withHandles(handles: (HTMLElement | ElementRef<HTMLElement>)[]): this;
+    /**
+     * Registers the template that should be used for the drag preview.
+     * @param template Template that from which to stamp out the preview.
+     * @param context Variables to add to the template's context.
+     */
+    withPreviewTemplate(template: TemplateRef<any> | null, context?: any): this;
+    /**
+     * Registers the template that should be used for the drag placeholder.
+     * @param template Template that from which to stamp out the placeholder.
+     * @param context Variables to add to the template's context.
+     */
+    withPlaceholderTemplate(template: TemplateRef<any> | null, context?: any): this;
     /**
      * Sets an alternate drag root element. The root element is the element that will be moved as
      * the user is dragging. Passing an alternate root element is useful when trying to enable
@@ -228,6 +227,16 @@ export declare class DragRef<T = any> {
     isDragging(): boolean;
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
+    /**
+     * Sets a handle as disabled. While a handle is disabled, it'll capture and interrupt dragging.
+     * @param handle Handle element that should be disabled.
+     */
+    disableHandle(handle: HTMLElement): void;
+    /**
+     * Enables a handle, if it has been disabled.
+     * @param handle Handle element to be enabled.
+     */
+    enableHandle(handle: HTMLElement): void;
     /** Unsubscribes from the global subscriptions. */
     private _removeSubscriptions;
     /** Destroys the preview element and its ViewRef. */
@@ -285,4 +294,3 @@ export declare class DragRef<T = any> {
     /** Removes the manually-added event listeners from the root element. */
     private _removeRootElementListeners;
 }
-export {};

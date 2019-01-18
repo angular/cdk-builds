@@ -2451,6 +2451,11 @@ var CdkTable = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
+        /** @type {?} */
+        var documentRef = this._document || document;
+        /** @type {?} */
+        var documentFragment = documentRef.createDocumentFragment();
         /** @type {?} */
         var sections = [
             { tag: 'thead', outlet: this._headerRowOutlet },
@@ -2459,14 +2464,13 @@ var CdkTable = /** @class */ (function () {
         ];
         for (var _a = 0, sections_1 = sections; _a < sections_1.length; _a++) {
             var section = sections_1[_a];
-            // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
-            /** @type {?} */
-            var documentRef = this._document || document;
             /** @type {?} */
             var element = documentRef.createElement(section.tag);
             element.appendChild(section.outlet.elementRef.nativeElement);
-            this._elementRef.nativeElement.appendChild(element);
+            documentFragment.appendChild(element);
         }
+        // Use a DocumentFragment so we don't hit the DOM on each iteration.
+        this._elementRef.nativeElement.appendChild(documentFragment);
     };
     /**
      * Forces a re-render of the data rows. Should be called in cases where there has been an input

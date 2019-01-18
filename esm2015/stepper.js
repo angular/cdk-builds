@@ -276,6 +276,13 @@ class CdkStepper {
         this._document = _document;
     }
     /**
+     * The list of step components that the stepper is holding.
+     * @return {?}
+     */
+    get steps() {
+        return this._steps;
+    }
+    /**
      * Whether the validity of previous steps should be checked or not.
      * @return {?}
      */
@@ -295,14 +302,14 @@ class CdkStepper {
      * @return {?}
      */
     set selectedIndex(index) {
-        if (this._steps) {
+        if (this.steps) {
             // Ensure that the index can't be out of bounds.
-            if (index < 0 || index > this._steps.length - 1) {
+            if (index < 0 || index > this.steps.length - 1) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
             if (this._selectedIndex != index &&
                 !this._anyControlsInvalidOrPending(index) &&
-                (index >= this._selectedIndex || this._steps.toArray()[index].editable)) {
+                (index >= this._selectedIndex || this.steps.toArray()[index].editable)) {
                 this._updateSelectedItemIndex(index);
             }
         }
@@ -316,14 +323,14 @@ class CdkStepper {
      */
     get selected() {
         // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
-        return this._steps ? this._steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
+        return this.steps ? this.steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
     }
     /**
      * @param {?} step
      * @return {?}
      */
     set selected(step) {
-        this.selectedIndex = this._steps ? this._steps.toArray().indexOf(step) : -1;
+        this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
     }
     /**
      * @return {?}
@@ -339,7 +346,7 @@ class CdkStepper {
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
-        this._steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
+        this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
             if (!this.selected) {
                 this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
             }
@@ -357,7 +364,7 @@ class CdkStepper {
      * @return {?}
      */
     next() {
-        this.selectedIndex = Math.min(this._selectedIndex + 1, this._steps.length - 1);
+        this.selectedIndex = Math.min(this._selectedIndex + 1, this.steps.length - 1);
     }
     /**
      * Selects and focuses the previous step in list.
@@ -372,7 +379,7 @@ class CdkStepper {
      */
     reset() {
         this._updateSelectedItemIndex(0);
-        this._steps.forEach(step => step.reset());
+        this.steps.forEach(step => step.reset());
         this._stateChanged();
     }
     /**
@@ -422,7 +429,7 @@ class CdkStepper {
      */
     _getIndicatorType(index, state = STEP_STATE.NUMBER) {
         /** @type {?} */
-        const step = this._steps.toArray()[index];
+        const step = this.steps.toArray()[index];
         /** @type {?} */
         const isCurrentStep = this._isCurrentStep(index);
         return step._displayDefaultIndicatorType
@@ -492,7 +499,7 @@ class CdkStepper {
      */
     _updateSelectedItemIndex(newIndex) {
         /** @type {?} */
-        const stepsArray = this._steps.toArray();
+        const stepsArray = this.steps.toArray();
         this.selectionChange.emit({
             selectedIndex: newIndex,
             previouslySelectedIndex: this._selectedIndex,
@@ -543,7 +550,7 @@ class CdkStepper {
      */
     _anyControlsInvalidOrPending(index) {
         /** @type {?} */
-        const steps = this._steps.toArray();
+        const steps = this.steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
             return steps.slice(0, index).some(step => {

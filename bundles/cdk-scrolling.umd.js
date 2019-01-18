@@ -501,7 +501,7 @@ var ScrollDispatcher = /** @class */ (function () {
         if (!this._platform.isBrowser) {
             return rxjs.of();
         }
-        return rxjs.Observable.create(function (observer) {
+        return new rxjs.Observable(function (observer) {
             if (!_this._globalSubscription) {
                 _this._addGlobalListener();
             }
@@ -694,7 +694,7 @@ var CdkScrollable = /** @class */ (function () {
         this.ngZone = ngZone;
         this.dir = dir;
         this._destroyed = new rxjs.Subject();
-        this._elementScrolled = rxjs.Observable.create(function (observer) {
+        this._elementScrolled = new rxjs.Observable(function (observer) {
             return _this.ngZone.runOutsideAngular(function () {
                 return rxjs.fromEvent(_this.elementRef.nativeElement, 'scroll').pipe(operators.takeUntil(_this._destroyed))
                     .subscribe(observer);
@@ -781,12 +781,14 @@ var CdkScrollable = /** @class */ (function () {
         options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
         // Rewrite the bottom offset as a top offset.
         if (options.bottom != null) {
-            options.top = el.scrollHeight - el.clientHeight - options.bottom;
+            ((/** @type {?} */ (options))).top =
+                el.scrollHeight - el.clientHeight - options.bottom;
         }
         // Rewrite the right offset as a left offset.
         if (isRtl && platform.getRtlScrollAxisType() != platform.RtlScrollAxisType.NORMAL) {
             if (options.left != null) {
-                options.right = el.scrollWidth - el.clientWidth - options.left;
+                ((/** @type {?} */ (options))).right =
+                    el.scrollWidth - el.clientWidth - options.left;
             }
             if (platform.getRtlScrollAxisType() == platform.RtlScrollAxisType.INVERTED) {
                 options.left = options.right;
@@ -797,7 +799,8 @@ var CdkScrollable = /** @class */ (function () {
         }
         else {
             if (options.right != null) {
-                options.left = el.scrollWidth - el.clientWidth - options.right;
+                ((/** @type {?} */ (options))).left =
+                    el.scrollWidth - el.clientWidth - options.right;
             }
         }
         this._applyScrollToOptions(options);
@@ -966,7 +969,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
         /**
          * Emits when the index of the first element visible in the viewport changes.
          */
-        _this.scrolledIndexChange = rxjs.Observable.create(function (observer) {
+        _this.scrolledIndexChange = new rxjs.Observable(function (observer) {
             return _this._scrollStrategy.scrolledIndexChange.subscribe(function (index) {
                 return Promise.resolve().then(function () { return _this.ngZone.run(function () { return observer.next(index); }); });
             });

@@ -786,7 +786,7 @@ class OverlayRef {
         this._attachments = new Subject();
         this._detachments = new Subject();
         this._locationChanges = Subscription.EMPTY;
-        this._keydownEventsObservable = Observable.create((observer) => {
+        this._keydownEventsObservable = new Observable((observer) => {
             /** @type {?} */
             const subscription = this._keydownEvents.subscribe(observer);
             this._keydownEventSubscriptions++;
@@ -1311,7 +1311,7 @@ class FlexibleConnectedPositionStrategy {
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = Observable.create((observer) => {
+        this.positionChanges = new Observable((observer) => {
             /** @type {?} */
             const subscription = this._positionChanges.subscribe(observer);
             this._positionChangeSubscriptions++;
@@ -1949,7 +1949,7 @@ class FlexibleConnectedPositionStrategy {
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
             top = origin.y;
-            height = viewport.bottom - origin.y;
+            height = viewport.height - top + this._viewportMargin;
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
@@ -2100,6 +2100,7 @@ class FlexibleConnectedPositionStrategy {
             bottom: '',
             right: '',
             position: '',
+            transform: '',
         })));
     }
     /**
@@ -3247,6 +3248,12 @@ class CdkConnectedOverlay {
     ngOnChanges(changes) {
         if (this._position) {
             this._updatePositionStrategy(this._position);
+            this._overlayRef.updateSize({
+                width: this.width,
+                minWidth: this.minWidth,
+                height: this.height,
+                minHeight: this.minHeight,
+            });
             if (changes['origin'] && this.open) {
                 this._position.apply();
             }
@@ -3355,12 +3362,6 @@ class CdkConnectedOverlay {
         }
         else {
             // Update the overlay size, in case the directive's inputs have changed
-            this._overlayRef.updateSize({
-                width: this.width,
-                minWidth: this.minWidth,
-                height: this.height,
-                minHeight: this.minHeight,
-            });
             this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {

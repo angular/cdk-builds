@@ -949,7 +949,7 @@ OverlayRef = /** @class */ (function () {
         this._attachments = new rxjs.Subject();
         this._detachments = new rxjs.Subject();
         this._locationChanges = rxjs.Subscription.EMPTY;
-        this._keydownEventsObservable = rxjs.Observable.create(function (observer) {
+        this._keydownEventsObservable = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._keydownEvents.subscribe(observer);
             _this._keydownEventSubscriptions++;
@@ -1647,7 +1647,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = rxjs.Observable.create(function (observer) {
+        this.positionChanges = new rxjs.Observable(function (observer) {
             /** @type {?} */
             var subscription = _this._positionChanges.subscribe(observer);
             _this._positionChangeSubscriptions++;
@@ -2581,7 +2581,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         if (position.overlayY === 'top') {
             // Overlay is opening "downward" and thus is bound by the bottom viewport edge.
             top = origin.y;
-            height = viewport.bottom - origin.y;
+            height = viewport.height - top + this._viewportMargin;
         }
         else if (position.overlayY === 'bottom') {
             // Overlay is opening "upward" and thus is bound by the top viewport edge. We need to add
@@ -2760,6 +2760,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             bottom: '',
             right: '',
             position: '',
+            transform: '',
         })));
     };
     /** Sets positioning styles to the overlay element. */
@@ -4408,6 +4409,12 @@ var CdkConnectedOverlay = /** @class */ (function () {
     function (changes) {
         if (this._position) {
             this._updatePositionStrategy(this._position);
+            this._overlayRef.updateSize({
+                width: this.width,
+                minWidth: this.minWidth,
+                height: this.height,
+                minHeight: this.minHeight,
+            });
             if (changes['origin'] && this.open) {
                 this._position.apply();
             }
@@ -4551,12 +4558,6 @@ var CdkConnectedOverlay = /** @class */ (function () {
         }
         else {
             // Update the overlay size, in case the directive's inputs have changed
-            this._overlayRef.updateSize({
-                width: this.width,
-                minWidth: this.minWidth,
-                height: this.height,
-                minHeight: this.minHeight,
-            });
             this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
         }
         if (!this._overlayRef.hasAttached()) {
