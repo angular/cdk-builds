@@ -126,7 +126,7 @@ class CdkStep {
         this._showError = !!this._stepperOptions.showError;
     }
     /**
-     * Whether the user can return to this step once it has been marked as complted.
+     * Whether the user can return to this step once it has been marked as completed.
      * @return {?}
      */
     get editable() { return this._editable; }
