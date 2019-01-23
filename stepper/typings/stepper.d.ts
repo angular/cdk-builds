@@ -86,7 +86,7 @@ export declare class CdkStep implements OnChanges {
     ariaLabelledby: string;
     /** State of the step. */
     state: StepState;
-    /** Whether the user can return to this step once it has been marked as completed. */
+    /** Whether the user can return to this step once it has been marked as complted. */
     editable: boolean;
     private _editable;
     /** Whether the completion of step is optional. */
