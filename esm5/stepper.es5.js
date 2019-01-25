@@ -129,9 +129,9 @@ var CdkStep = /** @class */ (function () {
         this._showError = !!this._stepperOptions.showError;
     }
     Object.defineProperty(CdkStep.prototype, "editable", {
-        /** Whether the user can return to this step once it has been marked as complted. */
+        /** Whether the user can return to this step once it has been marked as completed. */
         get: /**
-         * Whether the user can return to this step once it has been marked as complted.
+         * Whether the user can return to this step once it has been marked as completed.
          * @return {?}
          */
         function () { return this._editable; },
