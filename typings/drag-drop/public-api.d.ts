@@ -5,12 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+export { DragDrop } from './drag-drop';
+export { DragRef, DragRefConfig } from './drag-ref';
+export { DropListRef } from './drop-list-ref';
 export * from './drop-list-container';
 export * from './drag-events';
 export * from './drag-utils';
 export * from './drag-drop-module';
 export * from './drag-drop-registry';
-export * from './directives/drop-list';
+export { CdkDropList } from './directives/drop-list';
 export * from './directives/drop-list-group';
 export * from './directives/drag';
 export * from './directives/drag-handle';

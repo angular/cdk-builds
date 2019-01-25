@@ -6,420 +6,10 @@
  * found in the LICENSE file at https://angular.io/license
  */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/scrolling'), require('rxjs/operators')) :
-	typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/platform', 'rxjs', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/scrolling', 'rxjs/operators'], factory) :
-	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.core,global.ng.common,global.ng.cdk.platform,global.rxjs,global.ng.cdk.coercion,global.ng.cdk.bidi,global.ng.cdk.scrolling,global.rxjs.operators));
-}(this, (function (exports,core,common,platform,rxjs,coercion,bidi,scrolling,operators) { 'use strict';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Injection token that is used to provide a CdkDropList instance to CdkDrag.
- * Used for avoiding circular imports.
- * @type {?}
- */
-var CDK_DROP_LIST = new core.InjectionToken('CDK_DROP_LIST');
-/**
- * Injection token that is used to provide a CdkDropList instance to CdkDrag.
- * Used for avoiding circular imports.
- * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0
- * @type {?}
- */
-var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * Moves an item one index in an array to another.
- * @template T
- * @param {?} array Array in which to move the item.
- * @param {?} fromIndex Starting index of the item.
- * @param {?} toIndex Index to which the item should be moved.
- * @return {?}
- */
-function moveItemInArray(array, fromIndex, toIndex) {
-    /** @type {?} */
-    var from = clamp(fromIndex, array.length - 1);
-    /** @type {?} */
-    var to = clamp(toIndex, array.length - 1);
-    if (from === to) {
-        return;
-    }
-    /** @type {?} */
-    var target = array[from];
-    /** @type {?} */
-    var delta = to < from ? -1 : 1;
-    for (var i = from; i !== to; i += delta) {
-        array[i] = array[i + delta];
-    }
-    array[to] = target;
-}
-/**
- * Moves an item from one array to another.
- * @template T
- * @param {?} currentArray Array from which to transfer the item.
- * @param {?} targetArray Array into which to put the item.
- * @param {?} currentIndex Index of the item in its current array.
- * @param {?} targetIndex Index at which to insert the item.
- * @return {?}
- */
-function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-    /** @type {?} */
-    var from = clamp(currentIndex, currentArray.length - 1);
-    /** @type {?} */
-    var to = clamp(targetIndex, targetArray.length);
-    if (currentArray.length) {
-        targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
-    }
-}
-/**
- * Copies an item from one array to another, leaving it in its
- * original position in current array.
- * @template T
- * @param {?} currentArray Array from which to copy the item.
- * @param {?} targetArray Array into which is copy the item.
- * @param {?} currentIndex Index of the item in its current array.
- * @param {?} targetIndex Index at which to insert the item.
- *
- * @return {?}
- */
-function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-    /** @type {?} */
-    var to = clamp(targetIndex, targetArray.length);
-    if (currentArray.length) {
-        targetArray.splice(to, 0, currentArray[currentIndex]);
-    }
-}
-/**
- * Clamps a number between zero and a maximum.
- * @param {?} value
- * @param {?} max
- * @return {?}
- */
-function clamp(value, max) {
-    return Math.max(0, Math.min(max, value));
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Event options that can be used to bind an active, capturing event.
- * @type {?}
- */
-var activeCapturingEventOptions = platform.normalizePassiveListenerOptions({
-    passive: false,
-    capture: true
-});
-/**
- * Service that keeps track of all the drag item and drop container
- * instances, and manages global event listeners on the `document`.
- * \@docs-private
- * @template I, C
- */
-// Note: this class is generic, rather than referencing CdkDrag and CdkDropList directly, in order
-// to avoid circular imports. If we were to reference them here, importing the registry into the
-// classes that are registering themselves will introduce a circular import.
-var DragDropRegistry = /** @class */ (function () {
-    function DragDropRegistry(_ngZone, _document) {
-        var _this = this;
-        this._ngZone = _ngZone;
-        /**
-         * Registered drop container instances.
-         */
-        this._dropInstances = new Set();
-        /**
-         * Registered drag item instances.
-         */
-        this._dragInstances = new Set();
-        /**
-         * Drag item instances that are currently being dragged.
-         */
-        this._activeDragInstances = new Set();
-        /**
-         * Keeps track of the event listeners that we've bound to the `document`.
-         */
-        this._globalListeners = new Map();
-        /**
-         * Emits the `touchmove` or `mousemove` events that are dispatched
-         * while the user is dragging a drag item instance.
-         */
-        this.pointerMove = new rxjs.Subject();
-        /**
-         * Emits the `touchend` or `mouseup` events that are dispatched
-         * while the user is dragging a drag item instance.
-         */
-        this.pointerUp = new rxjs.Subject();
-        /**
-         * Event listener that will prevent the default browser action while the user is dragging.
-         * @param event Event whose default action should be prevented.
-         */
-        this._preventDefaultWhileDragging = function (event) {
-            if (_this._activeDragInstances.size) {
-                event.preventDefault();
-            }
-        };
-        this._document = _document;
-    }
-    /** Adds a drop container to the registry. */
-    /**
-     * Adds a drop container to the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    DragDropRegistry.prototype.registerDropContainer = /**
-     * Adds a drop container to the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    function (drop) {
-        if (!this._dropInstances.has(drop)) {
-            if (this.getDropContainer(drop.id)) {
-                throw Error("Drop instance with id \"" + drop.id + "\" has already been registered.");
-            }
-            this._dropInstances.add(drop);
-        }
-    };
-    /** Adds a drag item instance to the registry. */
-    /**
-     * Adds a drag item instance to the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    DragDropRegistry.prototype.registerDragItem = /**
-     * Adds a drag item instance to the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    function (drag) {
-        var _this = this;
-        this._dragInstances.add(drag);
-        // The `touchmove` event gets bound once, ahead of time, because WebKit
-        // won't preventDefault on a dynamically-added `touchmove` listener.
-        // See https://bugs.webkit.org/show_bug.cgi?id=184250.
-        if (this._dragInstances.size === 1) {
-            this._ngZone.runOutsideAngular(function () {
-                // The event handler has to be explicitly active,
-                // because newer browsers make it passive by default.
-                _this._document.addEventListener('touchmove', _this._preventDefaultWhileDragging, activeCapturingEventOptions);
-            });
-        }
-    };
-    /** Removes a drop container from the registry. */
-    /**
-     * Removes a drop container from the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    DragDropRegistry.prototype.removeDropContainer = /**
-     * Removes a drop container from the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    function (drop) {
-        this._dropInstances.delete(drop);
-    };
-    /** Removes a drag item instance from the registry. */
-    /**
-     * Removes a drag item instance from the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    DragDropRegistry.prototype.removeDragItem = /**
-     * Removes a drag item instance from the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    function (drag) {
-        this._dragInstances.delete(drag);
-        this.stopDragging(drag);
-        if (this._dragInstances.size === 0) {
-            this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
-        }
-    };
-    /**
-     * Starts the dragging sequence for a drag instance.
-     * @param drag Drag instance which is being dragged.
-     * @param event Event that initiated the dragging.
-     */
-    /**
-     * Starts the dragging sequence for a drag instance.
-     * @param {?} drag Drag instance which is being dragged.
-     * @param {?} event Event that initiated the dragging.
-     * @return {?}
-     */
-    DragDropRegistry.prototype.startDragging = /**
-     * Starts the dragging sequence for a drag instance.
-     * @param {?} drag Drag instance which is being dragged.
-     * @param {?} event Event that initiated the dragging.
-     * @return {?}
-     */
-    function (drag, event) {
-        var _this = this;
-        this._activeDragInstances.add(drag);
-        if (this._activeDragInstances.size === 1) {
-            /** @type {?} */
-            var isTouchEvent = event.type.startsWith('touch');
-            /** @type {?} */
-            var moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
-            /** @type {?} */
-            var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
-            // We explicitly bind __active__ listeners here, because newer browsers will default to
-            // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
-            // use `preventDefault` to prevent the page from scrolling while the user is dragging.
-            this._globalListeners
-                .set(moveEvent, {
-                handler: function (e) { return _this.pointerMove.next((/** @type {?} */ (e))); },
-                options: activeCapturingEventOptions
-            })
-                .set(upEvent, {
-                handler: function (e) { return _this.pointerUp.next((/** @type {?} */ (e))); },
-                options: true
-            })
-                // Preventing the default action on `mousemove` isn't enough to disable text selection
-                // on Safari so we need to prevent the selection event as well. Alternatively this can
-                // be done by setting `user-select: none` on the `body`, however it has causes a style
-                // recalculation which can be expensive on pages with a lot of elements.
-                .set('selectstart', {
-                handler: this._preventDefaultWhileDragging,
-                options: activeCapturingEventOptions
-            });
-            // TODO(crisbeto): prevent mouse wheel scrolling while
-            // dragging until we've set up proper scroll handling.
-            if (!isTouchEvent) {
-                this._globalListeners.set('wheel', {
-                    handler: this._preventDefaultWhileDragging,
-                    options: activeCapturingEventOptions
-                });
-            }
-            this._ngZone.runOutsideAngular(function () {
-                _this._globalListeners.forEach(function (config, name) {
-                    _this._document.addEventListener(name, config.handler, config.options);
-                });
-            });
-        }
-    };
-    /** Stops dragging a drag item instance. */
-    /**
-     * Stops dragging a drag item instance.
-     * @param {?} drag
-     * @return {?}
-     */
-    DragDropRegistry.prototype.stopDragging = /**
-     * Stops dragging a drag item instance.
-     * @param {?} drag
-     * @return {?}
-     */
-    function (drag) {
-        this._activeDragInstances.delete(drag);
-        if (this._activeDragInstances.size === 0) {
-            this._clearGlobalListeners();
-        }
-    };
-    /** Gets whether a drag item instance is currently being dragged. */
-    /**
-     * Gets whether a drag item instance is currently being dragged.
-     * @param {?} drag
-     * @return {?}
-     */
-    DragDropRegistry.prototype.isDragging = /**
-     * Gets whether a drag item instance is currently being dragged.
-     * @param {?} drag
-     * @return {?}
-     */
-    function (drag) {
-        return this._activeDragInstances.has(drag);
-    };
-    /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0
-     */
-    /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0
-     * @param {?} id
-     * @return {?}
-     */
-    DragDropRegistry.prototype.getDropContainer = /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0
-     * @param {?} id
-     * @return {?}
-     */
-    function (id) {
-        return Array.from(this._dropInstances).find(function (instance) { return instance.id === id; });
-    };
-    /**
-     * @return {?}
-     */
-    DragDropRegistry.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        this._dragInstances.forEach(function (instance) { return _this.removeDragItem(instance); });
-        this._dropInstances.forEach(function (instance) { return _this.removeDropContainer(instance); });
-        this._clearGlobalListeners();
-        this.pointerMove.complete();
-        this.pointerUp.complete();
-    };
-    /** Clears out the global event listeners from the `document`. */
-    /**
-     * Clears out the global event listeners from the `document`.
-     * @private
-     * @return {?}
-     */
-    DragDropRegistry.prototype._clearGlobalListeners = /**
-     * Clears out the global event listeners from the `document`.
-     * @private
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        this._globalListeners.forEach(function (config, name) {
-            _this._document.removeEventListener(name, config.handler, config.options);
-        });
-        this._globalListeners.clear();
-    };
-    DragDropRegistry.decorators = [
-        { type: core.Injectable, args: [{ providedIn: 'root' },] },
-    ];
-    /** @nocollapse */
-    DragDropRegistry.ctorParameters = function () { return [
-        { type: core.NgZone },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
-    ]; };
-    /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
-    return DragDropRegistry;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
- * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
- * to avoid circular imports.
- * \@docs-private
- * @type {?}
- */
-var CDK_DRAG_PARENT = new core.InjectionToken('CDK_DRAG_PARENT');
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/bidi'), require('rxjs/operators')) :
+	typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/bidi', 'rxjs/operators'], factory) :
+	(factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}),global.ng.cdk.platform,global.ng.cdk.coercion,global.rxjs,global.ng.core,global.ng.common,global.ng.cdk.scrolling,global.ng.cdk.bidi,global.rxjs.operators));
+}(this, (function (exports,platform,coercion,rxjs,core,common,scrolling,bidi,operators) { 'use strict';
 
 /**
  * @fileoverview added by tsickle
@@ -460,126 +50,6 @@ function toggleNativeDragInteractions(element, enable) {
         MozUserSelect: userSelect
     });
 }
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Handle that can be used to drag and CdkDrag instance.
- */
-var CdkDragHandle = /** @class */ (function () {
-    function CdkDragHandle(element, parentDrag) {
-        this.element = element;
-        /**
-         * Emits when the state of the handle has changed.
-         */
-        this._stateChanges = new rxjs.Subject();
-        this._disabled = false;
-        this._parentDrag = parentDrag;
-        toggleNativeDragInteractions(element.nativeElement, false);
-    }
-    Object.defineProperty(CdkDragHandle.prototype, "disabled", {
-        /** Whether starting to drag through this handle is disabled. */
-        get: /**
-         * Whether starting to drag through this handle is disabled.
-         * @return {?}
-         */
-        function () { return this._disabled; },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this._disabled = coercion.coerceBooleanProperty(value);
-            this._stateChanges.next(this);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * @return {?}
-     */
-    CdkDragHandle.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this._stateChanges.complete();
-    };
-    CdkDragHandle.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkDragHandle]',
-                    host: {
-                        'class': 'cdk-drag-handle'
-                    }
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragHandle.ctorParameters = function () { return [
-        { type: core.ElementRef },
-        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_PARENT,] }, { type: core.Optional }] }
-    ]; };
-    CdkDragHandle.propDecorators = {
-        disabled: [{ type: core.Input, args: ['cdkDragHandleDisabled',] }]
-    };
-    return CdkDragHandle;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Element that will be used as a template for the placeholder of a CdkDrag when
- * it is being dragged. The placeholder is displayed in place of the element being dragged.
- * @template T
- */
-var CdkDragPlaceholder = /** @class */ (function () {
-    function CdkDragPlaceholder(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPlaceholder.decorators = [
-        { type: core.Directive, args: [{
-                    selector: 'ng-template[cdkDragPlaceholder]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPlaceholder.ctorParameters = function () { return [
-        { type: core.TemplateRef }
-    ]; };
-    CdkDragPlaceholder.propDecorators = {
-        data: [{ type: core.Input }]
-    };
-    return CdkDragPlaceholder;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Element that will be used as a template for the preview
- * of a CdkDrag when it is being dragged.
- * @template T
- */
-var CdkDragPreview = /** @class */ (function () {
-    function CdkDragPreview(templateRef) {
-        this.templateRef = templateRef;
-    }
-    CdkDragPreview.decorators = [
-        { type: core.Directive, args: [{
-                    selector: 'ng-template[cdkDragPreview]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDragPreview.ctorParameters = function () { return [
-        { type: core.TemplateRef }
-    ]; };
-    CdkDragPreview.propDecorators = {
-        data: [{ type: core.Input }]
-    };
-    return CdkDragPreview;
-}());
 
 /**
  * @fileoverview added by tsickle
@@ -663,22 +133,19 @@ var MOUSE_EVENT_IGNORE_TIME = 800;
  * \@docs-private
  * @template T
  */
-var /**
+var   /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  * \@docs-private
  * @template T
  */
 DragRef = /** @class */ (function () {
-    function DragRef(element, _document, _ngZone, _viewContainerRef, _viewportRuler, _dragDropRegistry, _config, dropContainer, _dir) {
+    function DragRef(element, _config, _document, _ngZone, _viewportRuler, _dragDropRegistry) {
         var _this = this;
+        this._config = _config;
         this._document = _document;
         this._ngZone = _ngZone;
-        this._viewContainerRef = _viewContainerRef;
         this._viewportRuler = _viewportRuler;
         this._dragDropRegistry = _dragDropRegistry;
-        this._config = _config;
-        this.dropContainer = dropContainer;
-        this._dir = _dir;
         /**
          * CSS `transform` applied to the element when it isn't being dragged. We need a
          * passive transform in order for the dragged element to retain its new position
@@ -723,6 +190,10 @@ DragRef = /** @class */ (function () {
          * Registered handles that are currently disabled.
          */
         this._disabledHandles = new Set();
+        /**
+         * Layout direction of the item.
+         */
+        this._direction = 'ltr';
         this._disabled = false;
         /**
          * Emits as the drag sequence is being prepared.
@@ -820,7 +291,7 @@ DragRef = /** @class */ (function () {
             _this._hasMoved = true;
             event.preventDefault();
             _this._updatePointerDirectionDelta(constrainedPointerPosition);
-            if (_this.dropContainer) {
+            if (_this._dropContainer) {
                 _this._updateActiveDropContainer(constrainedPointerPosition);
             }
             else {
@@ -878,7 +349,7 @@ DragRef = /** @class */ (function () {
                 return;
             }
             _this.released.next({ source: _this });
-            if (!_this.dropContainer) {
+            if (!_this._dropContainer) {
                 // Convert the active transform into a passive one. This means that next time
                 // the user starts dragging the item, its position will be calculated relatively
                 // to the new passive transform.
@@ -903,7 +374,7 @@ DragRef = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._disabled || !!(this.dropContainer && this.dropContainer.disabled);
+            return this._disabled || !!(this._dropContainer && this._dropContainer.disabled);
         },
         set: /**
          * @param {?} value
@@ -973,14 +444,12 @@ DragRef = /** @class */ (function () {
     /**
      * Registers the template that should be used for the drag preview.
      * @param template Template that from which to stamp out the preview.
-     * @param context Variables to add to the template's context.
      */
     /**
      * Registers the template that should be used for the drag preview.
      * @template THIS
      * @this {THIS}
      * @param {?} template Template that from which to stamp out the preview.
-     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
     DragRef.prototype.withPreviewTemplate = /**
@@ -988,24 +457,21 @@ DragRef = /** @class */ (function () {
      * @template THIS
      * @this {THIS}
      * @param {?} template Template that from which to stamp out the preview.
-     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
-    function (template, context) {
-        (/** @type {?} */ (this))._previewTemplate = { template: template, context: context };
+    function (template) {
+        (/** @type {?} */ (this))._previewTemplate = template;
         return (/** @type {?} */ (this));
     };
     /**
      * Registers the template that should be used for the drag placeholder.
      * @param template Template that from which to stamp out the placeholder.
-     * @param context Variables to add to the template's context.
      */
     /**
      * Registers the template that should be used for the drag placeholder.
      * @template THIS
      * @this {THIS}
      * @param {?} template Template that from which to stamp out the placeholder.
-     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
     DragRef.prototype.withPlaceholderTemplate = /**
@@ -1013,11 +479,10 @@ DragRef = /** @class */ (function () {
      * @template THIS
      * @this {THIS}
      * @param {?} template Template that from which to stamp out the placeholder.
-     * @param {?=} context Variables to add to the template's context.
      * @return {THIS}
      */
-    function (template, context) {
-        (/** @type {?} */ (this))._placeholderTemplate = { template: template, context: context };
+    function (template) {
+        (/** @type {?} */ (this))._placeholderTemplate = template;
         return (/** @type {?} */ (this));
     };
     /**
@@ -1110,6 +575,7 @@ DragRef = /** @class */ (function () {
         this._moveEvents.complete();
         this._handles = [];
         this._disabledHandles.clear();
+        this._dropContainer = undefined;
         this._boundaryElement = this._rootElement = this._placeholderTemplate =
             this._previewTemplate = this._nextSibling = (/** @type {?} */ (null));
     };
@@ -1174,6 +640,39 @@ DragRef = /** @class */ (function () {
      */
     function (handle) {
         this._disabledHandles.delete(handle);
+    };
+    /** Sets the layout direction of the draggable item. */
+    /**
+     * Sets the layout direction of the draggable item.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} direction
+     * @return {THIS}
+     */
+    DragRef.prototype.withDirection = /**
+     * Sets the layout direction of the draggable item.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} direction
+     * @return {THIS}
+     */
+    function (direction) {
+        (/** @type {?} */ (this))._direction = direction;
+        return (/** @type {?} */ (this));
+    };
+    /** Sets the container that the item is part of. */
+    /**
+     * Sets the container that the item is part of.
+     * @param {?} container
+     * @return {?}
+     */
+    DragRef.prototype._withDropContainer = /**
+     * Sets the container that the item is part of.
+     * @param {?} container
+     * @return {?}
+     */
+    function (container) {
+        this._dropContainer = container;
     };
     /** Unsubscribes from the global subscriptions. */
     /**
@@ -1249,7 +748,7 @@ DragRef = /** @class */ (function () {
         if (isTouchEvent(event)) {
             this._lastTouchEventTime = Date.now();
         }
-        if (this.dropContainer) {
+        if (this._dropContainer) {
             /** @type {?} */
             var element = this._rootElement;
             // Grab the `nextSibling` before the preview and placeholder
@@ -1265,7 +764,7 @@ DragRef = /** @class */ (function () {
             element.style.display = 'none';
             this._document.body.appendChild((/** @type {?} */ (element.parentNode)).replaceChild(placeholder, element));
             this._document.body.appendChild(preview);
-            this.dropContainer.start();
+            this._dropContainer.start();
         }
     };
     /**
@@ -1333,7 +832,7 @@ DragRef = /** @class */ (function () {
         }
         this._toggleNativeDragInteractions();
         this._hasStartedDragging = this._hasMoved = false;
-        this._initialContainer = (/** @type {?} */ (this.dropContainer));
+        this._initialContainer = (/** @type {?} */ (this._dropContainer));
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
@@ -1375,7 +874,7 @@ DragRef = /** @class */ (function () {
             (/** @type {?} */ (this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
         }
         else {
-            this._initialContainer.element.nativeElement.appendChild(this._rootElement);
+            this._initialContainer.element.appendChild(this._rootElement);
         }
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -1383,7 +882,7 @@ DragRef = /** @class */ (function () {
         // Re-enter the NgZone since we bound `document` events on the outside.
         this._ngZone.run(function () {
             /** @type {?} */
-            var container = (/** @type {?} */ (_this.dropContainer));
+            var container = (/** @type {?} */ (_this._dropContainer));
             /** @type {?} */
             var currentIndex = container.getItemIndex(_this);
             var _a = _this._getPointerPositionOnPage(event), x = _a.x, y = _a.y;
@@ -1399,7 +898,7 @@ DragRef = /** @class */ (function () {
                 isPointerOverContainer: isPointerOverContainer
             });
             container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer);
-            _this.dropContainer = _this._initialContainer;
+            _this._dropContainer = _this._initialContainer;
         });
     };
     /**
@@ -1425,28 +924,28 @@ DragRef = /** @class */ (function () {
         var x = _a.x, y = _a.y;
         // Drop container that draggable has been moved into.
         /** @type {?} */
-        var newContainer = (/** @type {?} */ (this.dropContainer))._getSiblingContainerFromPosition(this, x, y) ||
+        var newContainer = (/** @type {?} */ (this._dropContainer))._getSiblingContainerFromPosition(this, x, y) ||
             this._initialContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left it's
         // initial container, check whether the it's over the initial container. This handles the
         // case where two containers are connected one way and the user tries to undo dragging an
         // item into a new container.
-        if (!newContainer && this.dropContainer !== this._initialContainer &&
+        if (!newContainer && this._dropContainer !== this._initialContainer &&
             this._initialContainer._isOverContainer(x, y)) {
             newContainer = this._initialContainer;
         }
-        if (newContainer && newContainer !== this.dropContainer) {
+        if (newContainer && newContainer !== this._dropContainer) {
             this._ngZone.run(function () {
                 // Notify the old container that the item has left.
-                _this.exited.next({ item: _this, container: (/** @type {?} */ (_this.dropContainer)) });
-                (/** @type {?} */ (_this.dropContainer)).exit(_this);
+                _this.exited.next({ item: _this, container: (/** @type {?} */ (_this._dropContainer)) });
+                (/** @type {?} */ (_this._dropContainer)).exit(_this);
                 // Notify the new container that the item has entered.
                 _this.entered.next({ item: _this, container: (/** @type {?} */ (newContainer)) });
-                _this.dropContainer = (/** @type {?} */ (newContainer));
-                _this.dropContainer.enter(_this, x, y);
+                _this._dropContainer = (/** @type {?} */ (newContainer));
+                _this._dropContainer.enter(_this, x, y);
             });
         }
-        (/** @type {?} */ (this.dropContainer))._sortItem(this, x, y, this._pointerDirectionDelta);
+        (/** @type {?} */ (this._dropContainer))._sortItem(this, x, y, this._pointerDirectionDelta);
         this._preview.style.transform =
             getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
     };
@@ -1468,12 +967,14 @@ DragRef = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var previewTemplate = this._previewTemplate;
+        var previewConfig = this._previewTemplate;
+        /** @type {?} */
+        var previewTemplate = previewConfig ? previewConfig.template : null;
         /** @type {?} */
         var preview;
-        if (previewTemplate && previewTemplate.template) {
+        if (previewTemplate) {
             /** @type {?} */
-            var viewRef = this._viewContainerRef.createEmbeddedView(previewTemplate.template, previewTemplate.context);
+            var viewRef = (/** @type {?} */ (previewConfig)).viewContainer.createEmbeddedView(previewTemplate, (/** @type {?} */ (previewConfig)).context);
             preview = viewRef.rootNodes[0];
             this._previewRef = viewRef;
             preview.style.transform =
@@ -1500,7 +1001,7 @@ DragRef = /** @class */ (function () {
         });
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
-        preview.setAttribute('dir', this._dir ? this._dir.value : 'ltr');
+        preview.setAttribute('dir', this._direction);
         return preview;
     };
     /**
@@ -1570,11 +1071,13 @@ DragRef = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var placeholderTemplate = this._placeholderTemplate;
+        var placeholderConfig = this._placeholderTemplate;
+        /** @type {?} */
+        var placeholderTemplate = placeholderConfig ? placeholderConfig.template : null;
         /** @type {?} */
         var placeholder;
-        if (placeholderTemplate && placeholderTemplate.template) {
-            this._placeholderRef = this._viewContainerRef.createEmbeddedView(placeholderTemplate.template, placeholderTemplate.context);
+        if (placeholderTemplate) {
+            this._placeholderRef = (/** @type {?} */ (placeholderConfig)).viewContainer.createEmbeddedView(placeholderTemplate, (/** @type {?} */ (placeholderConfig)).context);
             placeholder = this._placeholderRef.rootNodes[0];
         }
         else {
@@ -1659,7 +1162,7 @@ DragRef = /** @class */ (function () {
         /** @type {?} */
         var point = this._getPointerPositionOnPage(event);
         /** @type {?} */
-        var dropContainerLock = this.dropContainer ? this.dropContainer.lockAxis : null;
+        var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
             point.y = this._pickupPositionOnPage.y;
         }
@@ -1680,8 +1183,8 @@ DragRef = /** @class */ (function () {
             var minX = boundaryRect.left + pickupX;
             /** @type {?} */
             var maxX = boundaryRect.right - (previewRect.width - pickupX);
-            point.x = clamp$1(point.x, minX, maxX);
-            point.y = clamp$1(point.y, minY, maxY);
+            point.x = clamp(point.x, minX, maxX);
+            point.y = clamp(point.y, minY, maxY);
         }
         return point;
     };
@@ -1794,7 +1297,7 @@ function deepCloneNode(node) {
  * @param {?} max
  * @return {?}
  */
-function clamp$1(value, min, max) {
+function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
 }
 /**
@@ -1820,450 +1323,77 @@ function isTouchEvent(event) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/**
- * Injection token that can be used to configure the behavior of `CdkDrag`.
- * @type {?}
- */
-var CDK_DRAG_CONFIG = new core.InjectionToken('CDK_DRAG_CONFIG', {
-    providedIn: 'root',
-    factory: CDK_DRAG_CONFIG_FACTORY
-});
-/**
- * \@docs-private
- * @return {?}
- */
-function CDK_DRAG_CONFIG_FACTORY() {
-    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
-}
-/**
- * Element that can be moved inside a CdkDropList container.
- * @template T
- */
-var CdkDrag = /** @class */ (function () {
-    function CdkDrag(element, dropContainer, _document, _ngZone, _viewContainerRef, _viewportRuler, _dragDropRegistry, _config, _dir) {
-        var _this = this;
-        this.element = element;
-        this.dropContainer = dropContainer;
-        this._document = _document;
-        this._ngZone = _ngZone;
-        this._viewContainerRef = _viewContainerRef;
-        this._viewportRuler = _viewportRuler;
-        this._dragDropRegistry = _dragDropRegistry;
-        this._config = _config;
-        this._dir = _dir;
-        this._destroyed = new rxjs.Subject();
-        this._disabled = false;
-        /**
-         * Emits when the user starts dragging the item.
-         */
-        this.started = new core.EventEmitter();
-        /**
-         * Emits when the user has released a drag item, before any animations have started.
-         */
-        this.released = new core.EventEmitter();
-        /**
-         * Emits when the user stops dragging an item in the container.
-         */
-        this.ended = new core.EventEmitter();
-        /**
-         * Emits when the user has moved the item into a new container.
-         */
-        this.entered = new core.EventEmitter();
-        /**
-         * Emits when the user removes the item its container by dragging it into another container.
-         */
-        this.exited = new core.EventEmitter();
-        /**
-         * Emits when the user drops the item inside a container.
-         */
-        this.dropped = new core.EventEmitter();
-        /**
-         * Emits as the user is dragging the item. Use with caution,
-         * because this event will fire for every pixel that the user has dragged.
-         */
-        this.moved = new rxjs.Observable(function (observer) {
-            /** @type {?} */
-            var subscription = _this._dragRef.moved.pipe(operators.map(function (movedEvent) { return ({
-                source: _this,
-                pointerPosition: movedEvent.pointerPosition,
-                event: movedEvent.event,
-                delta: movedEvent.delta
-            }); })).subscribe(observer);
-            return function () {
-                subscription.unsubscribe();
-            };
-        });
-        /** @type {?} */
-        var ref = this._dragRef = new DragRef(element, this._document, this._ngZone, this._viewContainerRef, this._viewportRuler, this._dragDropRegistry, this._config, this.dropContainer ? this.dropContainer._dropListRef : undefined, this._dir);
-        ref.data = this;
-        this._syncInputs(ref);
-        this._proxyEvents(ref);
-    }
-    Object.defineProperty(CdkDrag.prototype, "disabled", {
-        /** Whether starting to drag this element is disabled. */
-        get: /**
-         * Whether starting to drag this element is disabled.
-         * @return {?}
-         */
-        function () {
-            return this._disabled || (this.dropContainer && this.dropContainer.disabled);
-        },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this._disabled = coercion.coerceBooleanProperty(value);
-            this._dragRef.disabled = this._disabled;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Returns the element that is being used as a placeholder
-     * while the current element is being dragged.
-     */
-    /**
-     * Returns the element that is being used as a placeholder
-     * while the current element is being dragged.
-     * @return {?}
-     */
-    CdkDrag.prototype.getPlaceholderElement = /**
-     * Returns the element that is being used as a placeholder
-     * while the current element is being dragged.
-     * @return {?}
-     */
-    function () {
-        return this._dragRef.getPlaceholderElement();
-    };
-    /** Returns the root draggable element. */
-    /**
-     * Returns the root draggable element.
-     * @return {?}
-     */
-    CdkDrag.prototype.getRootElement = /**
-     * Returns the root draggable element.
-     * @return {?}
-     */
-    function () {
-        return this._dragRef.getRootElement();
-    };
-    /** Resets a standalone drag item to its initial position. */
-    /**
-     * Resets a standalone drag item to its initial position.
-     * @return {?}
-     */
-    CdkDrag.prototype.reset = /**
-     * Resets a standalone drag item to its initial position.
-     * @return {?}
-     */
-    function () {
-        this._dragRef.reset();
-    };
-    /**
-     * @return {?}
-     */
-    CdkDrag.prototype.ngAfterViewInit = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        // We need to wait for the zone to stabilize, in order for the reference
-        // element to be in the proper place in the DOM. This is mostly relevant
-        // for draggable elements inside portals since they get stamped out in
-        // their original DOM position and then they get transferred to the portal.
-        this._ngZone.onStable.asObservable()
-            .pipe(operators.take(1), operators.takeUntil(this._destroyed))
-            .subscribe(function () {
-            _this._updateRootElement();
-            // Listen for any newly-added handles.
-            _this._handles.changes.pipe(operators.startWith(_this._handles), 
-            // Sync the new handles with the DragRef.
-            operators.tap(function (handles) {
-                /** @type {?} */
-                var childHandleElements = handles
-                    .filter(function (handle) { return handle._parentDrag === _this; })
-                    .map(function (handle) { return handle.element; });
-                _this._dragRef.withHandles(childHandleElements);
-            }), 
-            // Listen if the state of any of the handles changes.
-            operators.switchMap(function (handles) {
-                return rxjs.merge.apply(void 0, handles.map(function (item) { return item._stateChanges; }));
-            }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
-                // Enabled/disable the handle that changed in the DragRef.
-                /** @type {?} */
-                var dragRef = _this._dragRef;
-                /** @type {?} */
-                var handle = handleInstance.element.nativeElement;
-                handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
-            });
-        });
-    };
-    /**
-     * @param {?} changes
-     * @return {?}
-     */
-    CdkDrag.prototype.ngOnChanges = /**
-     * @param {?} changes
-     * @return {?}
-     */
-    function (changes) {
-        /** @type {?} */
-        var rootSelectorChange = changes.rootElementSelector;
-        // We don't have to react to the first change since it's being
-        // handled in `ngAfterViewInit` where it needs to be deferred.
-        if (rootSelectorChange && !rootSelectorChange.firstChange) {
-            this._updateRootElement();
-        }
-    };
-    /**
-     * @return {?}
-     */
-    CdkDrag.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this._destroyed.next();
-        this._destroyed.complete();
-        this._dragRef.dispose();
-    };
-    /** Syncs the root element with the `DragRef`. */
-    /**
-     * Syncs the root element with the `DragRef`.
-     * @private
-     * @return {?}
-     */
-    CdkDrag.prototype._updateRootElement = /**
-     * Syncs the root element with the `DragRef`.
-     * @private
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var element = this.element.nativeElement;
-        /** @type {?} */
-        var rootElement = this.rootElementSelector ?
-            getClosestMatchingAncestor(element, this.rootElementSelector) : element;
-        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
-            throw Error("cdkDrag must be attached to an element node. " +
-                ("Currently attached to \"" + rootElement.nodeName + "\"."));
-        }
-        this._dragRef.withRootElement(rootElement || element);
-    };
-    /** Gets the boundary element, based on the `boundaryElementSelector`. */
-    /**
-     * Gets the boundary element, based on the `boundaryElementSelector`.
-     * @private
-     * @return {?}
-     */
-    CdkDrag.prototype._getBoundaryElement = /**
-     * Gets the boundary element, based on the `boundaryElementSelector`.
-     * @private
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var selector = this.boundaryElementSelector;
-        return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : null;
-    };
-    /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
-    /**
-     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    CdkDrag.prototype._syncInputs = /**
-     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    function (ref) {
-        var _this = this;
-        ref.beforeStarted.subscribe(function () {
-            if (!ref.isDragging()) {
-                var _a = _this, placeholder = _a._placeholderTemplate, preview = _a._previewTemplate;
-                ref.disabled = _this.disabled;
-                ref.lockAxis = _this.lockAxis;
-                ref.withBoundaryElement(_this._getBoundaryElement());
-                placeholder ? ref.withPlaceholderTemplate(placeholder.templateRef, placeholder.data) :
-                    ref.withPlaceholderTemplate(null);
-                preview ? ref.withPreviewTemplate(preview.templateRef, preview.data) :
-                    ref.withPreviewTemplate(null);
-            }
-        });
-    };
-    /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
-     */
-    /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    CdkDrag.prototype._proxyEvents = /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    function (ref) {
-        var _this = this;
-        ref.started.subscribe(function () {
-            _this.started.emit({ source: _this });
-        });
-        ref.released.subscribe(function () {
-            _this.released.emit({ source: _this });
-        });
-        ref.ended.subscribe(function () {
-            _this.ended.emit({ source: _this });
-        });
-        ref.entered.subscribe(function (event) {
-            _this.entered.emit({
-                container: event.container.data,
-                item: _this
-            });
-        });
-        ref.exited.subscribe(function (event) {
-            _this.exited.emit({
-                container: event.container.data,
-                item: _this
-            });
-        });
-        ref.dropped.subscribe(function (event) {
-            _this.dropped.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                previousContainer: event.previousContainer.data,
-                container: event.container.data,
-                isPointerOverContainer: event.isPointerOverContainer,
-                item: _this
-            });
-        });
-    };
-    CdkDrag.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkDrag]',
-                    exportAs: 'cdkDrag',
-                    host: {
-                        'class': 'cdk-drag',
-                        '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
-                    },
-                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
-                },] },
-    ];
-    /** @nocollapse */
-    CdkDrag.ctorParameters = function () { return [
-        { type: core.ElementRef },
-        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_LIST,] }, { type: core.Optional }, { type: core.SkipSelf }] },
-        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-        { type: core.NgZone },
-        { type: core.ViewContainerRef },
-        { type: scrolling.ViewportRuler },
-        { type: DragDropRegistry },
-        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_CONFIG,] }] },
-        { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
-    ]; };
-    CdkDrag.propDecorators = {
-        _handles: [{ type: core.ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
-        _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview,] }],
-        _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder,] }],
-        data: [{ type: core.Input, args: ['cdkDragData',] }],
-        lockAxis: [{ type: core.Input, args: ['cdkDragLockAxis',] }],
-        rootElementSelector: [{ type: core.Input, args: ['cdkDragRootElement',] }],
-        boundaryElementSelector: [{ type: core.Input, args: ['cdkDragBoundary',] }],
-        disabled: [{ type: core.Input, args: ['cdkDragDisabled',] }],
-        started: [{ type: core.Output, args: ['cdkDragStarted',] }],
-        released: [{ type: core.Output, args: ['cdkDragReleased',] }],
-        ended: [{ type: core.Output, args: ['cdkDragEnded',] }],
-        entered: [{ type: core.Output, args: ['cdkDragEntered',] }],
-        exited: [{ type: core.Output, args: ['cdkDragExited',] }],
-        dropped: [{ type: core.Output, args: ['cdkDragDropped',] }],
-        moved: [{ type: core.Output, args: ['cdkDragMoved',] }]
-    };
-    return CdkDrag;
-}());
-/**
- * Gets the closest ancestor of an element that matches a selector.
- * @param {?} element
- * @param {?} selector
- * @return {?}
- */
-function getClosestMatchingAncestor(element, selector) {
-    /** @type {?} */
-    var currentElement = (/** @type {?} */ (element.parentElement));
-    while (currentElement) {
-        // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
-        if (currentElement.matches ? currentElement.matches(selector) :
-            ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
-            return currentElement;
-        }
-        currentElement = currentElement.parentElement;
-    }
-    return null;
-}
 
 /**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
- * elements that are placed inside a `cdkDropListGroup` will be connected to each other
- * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
- * from `cdkDropList`.
+ * Moves an item one index in an array to another.
  * @template T
+ * @param {?} array Array in which to move the item.
+ * @param {?} fromIndex Starting index of the item.
+ * @param {?} toIndex Index to which the item should be moved.
+ * @return {?}
  */
-var CdkDropListGroup = /** @class */ (function () {
-    function CdkDropListGroup() {
-        /**
-         * Drop lists registered inside the group.
-         */
-        this._items = new Set();
-        this._disabled = false;
+function moveItemInArray(array, fromIndex, toIndex) {
+    /** @type {?} */
+    var from = clamp$1(fromIndex, array.length - 1);
+    /** @type {?} */
+    var to = clamp$1(toIndex, array.length - 1);
+    if (from === to) {
+        return;
     }
-    Object.defineProperty(CdkDropListGroup.prototype, "disabled", {
-        /** Whether starting a dragging sequence from inside this group is disabled. */
-        get: /**
-         * Whether starting a dragging sequence from inside this group is disabled.
-         * @return {?}
-         */
-        function () { return this._disabled; },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this._disabled = coercion.coerceBooleanProperty(value);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * @return {?}
-     */
-    CdkDropListGroup.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this._items.clear();
-    };
-    CdkDropListGroup.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkDropListGroup]',
-                    exportAs: 'cdkDropListGroup',
-                },] },
-    ];
-    CdkDropListGroup.propDecorators = {
-        disabled: [{ type: core.Input, args: ['cdkDropListGroupDisabled',] }]
-    };
-    return CdkDropListGroup;
-}());
+    /** @type {?} */
+    var target = array[from];
+    /** @type {?} */
+    var delta = to < from ? -1 : 1;
+    for (var i = from; i !== to; i += delta) {
+        array[i] = array[i + delta];
+    }
+    array[to] = target;
+}
+/**
+ * Moves an item from one array to another.
+ * @template T
+ * @param {?} currentArray Array from which to transfer the item.
+ * @param {?} targetArray Array into which to put the item.
+ * @param {?} currentIndex Index of the item in its current array.
+ * @param {?} targetIndex Index at which to insert the item.
+ * @return {?}
+ */
+function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
+    /** @type {?} */
+    var from = clamp$1(currentIndex, currentArray.length - 1);
+    /** @type {?} */
+    var to = clamp$1(targetIndex, targetArray.length);
+    if (currentArray.length) {
+        targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
+    }
+}
+/**
+ * Copies an item from one array to another, leaving it in its
+ * original position in current array.
+ * @template T
+ * @param {?} currentArray Array from which to copy the item.
+ * @param {?} targetArray Array into which is copy the item.
+ * @param {?} currentIndex Index of the item in its current array.
+ * @param {?} targetIndex Index at which to insert the item.
+ *
+ * @return {?}
+ */
+function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
+    /** @type {?} */
+    var to = clamp$1(targetIndex, targetArray.length);
+    if (currentArray.length) {
+        targetArray.splice(to, 0, currentArray[currentIndex]);
+    }
+}
+/**
+ * Clamps a number between zero and a maximum.
+ * @param {?} value
+ * @param {?} max
+ * @return {?}
+ */
+function clamp$1(value, max) {
+    return Math.max(0, Math.min(max, value));
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2285,16 +1415,14 @@ var DROP_PROXIMITY_THRESHOLD = 0.05;
  * \@docs-private
  * @template T
  */
-var /**
+var   /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  * \@docs-private
  * @template T
  */
 DropListRef = /** @class */ (function () {
-    function DropListRef(element, _dragDropRegistry, _document, _dir) {
-        this.element = element;
+    function DropListRef(element, _dragDropRegistry, _document) {
         this._dragDropRegistry = _dragDropRegistry;
-        this._dir = _dir;
         /**
          * Unique ID for the drop list.
          * @deprecated No longer being used. To be removed.
@@ -2356,8 +1484,13 @@ DropListRef = /** @class */ (function () {
          * Connected siblings that currently have a dragged item.
          */
         this._activeSiblings = new Set();
+        /**
+         * Layout direction of the drop list.
+         */
+        this._direction = 'ltr';
         _dragDropRegistry.registerDropContainer(this);
         this._document = _document;
+        this.element = element instanceof core.ElementRef ? element.nativeElement : element;
     }
     /** Removes the drop list functionality from the DOM element. */
     /**
@@ -2454,7 +1587,7 @@ DropListRef = /** @class */ (function () {
             this._activeDraggables.splice(newIndex, 0, item);
         }
         else {
-            this.element.nativeElement.appendChild(placeholder);
+            this.element.appendChild(placeholder);
             this._activeDraggables.push(item);
         }
         // The transform needs to be cleared so it doesn't throw off the measurements.
@@ -2537,7 +1670,28 @@ DropListRef = /** @class */ (function () {
      * @return {THIS}
      */
     function (items) {
+        var _this = this;
         (/** @type {?} */ (this))._draggables = items.slice();
+        items.forEach(function (item) { return item._withDropContainer((/** @type {?} */ (_this))); });
+        return (/** @type {?} */ (this));
+    };
+    /** Sets the layout direction of the drop list. */
+    /**
+     * Sets the layout direction of the drop list.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} direction
+     * @return {THIS}
+     */
+    DropListRef.prototype.withDirection = /**
+     * Sets the layout direction of the drop list.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} direction
+     * @return {THIS}
+     */
+    function (direction) {
+        (/** @type {?} */ (this))._direction = direction;
         return (/** @type {?} */ (this));
     };
     /**
@@ -2609,7 +1763,7 @@ DropListRef = /** @class */ (function () {
         // The rest of the logic still stands no matter what orientation we're in, however
         // we need to invert the array when determining the index.
         /** @type {?} */
-        var items = this._orientation === 'horizontal' && this._dir && this._dir.value === 'rtl' ?
+        var items = this._orientation === 'horizontal' && this._direction === 'rtl' ?
             this._itemPositions.slice().reverse() : this._itemPositions;
         return findIndex(items, function (currentItem) { return currentItem.drag === item; });
     };
@@ -2739,7 +1893,7 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this._clientRect = this.element.nativeElement.getBoundingClientRect();
+        this._clientRect = this.element.getBoundingClientRect();
     };
     /** Refreshes the position cache of the items and sibling containers. */
     /**
@@ -3049,15 +2203,13 @@ DropListRef = /** @class */ (function () {
         if (!elementFromPoint) {
             return false;
         }
-        /** @type {?} */
-        var element = this.element.nativeElement;
         // The `ClientRect`, that we're using to find the container over which the user is
         // hovering, doesn't give us any information on whether the element has been scrolled
         // out of the view or whether it's overlapping with other containers. This means that
         // we could end up transferring the item into a container that's invisible or is positioned
         // below another one. We use the result from `elementFromPoint` to get the top-most element
         // at the pointer position and to find whether it's one of the intersecting drop containers.
-        return elementFromPoint === element || element.contains(elementFromPoint);
+        return elementFromPoint === this.element || this.element.contains(elementFromPoint);
     };
     /**
      * Called by one of the connected drop lists when a dragging sequence has started.
@@ -3146,6 +2298,1011 @@ function isInsideClientRect(clientRect, x, y) {
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Event options that can be used to bind an active, capturing event.
+ * @type {?}
+ */
+var activeCapturingEventOptions = platform.normalizePassiveListenerOptions({
+    passive: false,
+    capture: true
+});
+/**
+ * Service that keeps track of all the drag item and drop container
+ * instances, and manages global event listeners on the `document`.
+ * \@docs-private
+ * @template I, C
+ */
+// Note: this class is generic, rather than referencing CdkDrag and CdkDropList directly, in order
+// to avoid circular imports. If we were to reference them here, importing the registry into the
+// classes that are registering themselves will introduce a circular import.
+var DragDropRegistry = /** @class */ (function () {
+    function DragDropRegistry(_ngZone, _document) {
+        var _this = this;
+        this._ngZone = _ngZone;
+        /**
+         * Registered drop container instances.
+         */
+        this._dropInstances = new Set();
+        /**
+         * Registered drag item instances.
+         */
+        this._dragInstances = new Set();
+        /**
+         * Drag item instances that are currently being dragged.
+         */
+        this._activeDragInstances = new Set();
+        /**
+         * Keeps track of the event listeners that we've bound to the `document`.
+         */
+        this._globalListeners = new Map();
+        /**
+         * Emits the `touchmove` or `mousemove` events that are dispatched
+         * while the user is dragging a drag item instance.
+         */
+        this.pointerMove = new rxjs.Subject();
+        /**
+         * Emits the `touchend` or `mouseup` events that are dispatched
+         * while the user is dragging a drag item instance.
+         */
+        this.pointerUp = new rxjs.Subject();
+        /**
+         * Event listener that will prevent the default browser action while the user is dragging.
+         * @param event Event whose default action should be prevented.
+         */
+        this._preventDefaultWhileDragging = function (event) {
+            if (_this._activeDragInstances.size) {
+                event.preventDefault();
+            }
+        };
+        this._document = _document;
+    }
+    /** Adds a drop container to the registry. */
+    /**
+     * Adds a drop container to the registry.
+     * @param {?} drop
+     * @return {?}
+     */
+    DragDropRegistry.prototype.registerDropContainer = /**
+     * Adds a drop container to the registry.
+     * @param {?} drop
+     * @return {?}
+     */
+    function (drop) {
+        if (!this._dropInstances.has(drop)) {
+            if (this.getDropContainer(drop.id)) {
+                throw Error("Drop instance with id \"" + drop.id + "\" has already been registered.");
+            }
+            this._dropInstances.add(drop);
+        }
+    };
+    /** Adds a drag item instance to the registry. */
+    /**
+     * Adds a drag item instance to the registry.
+     * @param {?} drag
+     * @return {?}
+     */
+    DragDropRegistry.prototype.registerDragItem = /**
+     * Adds a drag item instance to the registry.
+     * @param {?} drag
+     * @return {?}
+     */
+    function (drag) {
+        var _this = this;
+        this._dragInstances.add(drag);
+        // The `touchmove` event gets bound once, ahead of time, because WebKit
+        // won't preventDefault on a dynamically-added `touchmove` listener.
+        // See https://bugs.webkit.org/show_bug.cgi?id=184250.
+        if (this._dragInstances.size === 1) {
+            this._ngZone.runOutsideAngular(function () {
+                // The event handler has to be explicitly active,
+                // because newer browsers make it passive by default.
+                _this._document.addEventListener('touchmove', _this._preventDefaultWhileDragging, activeCapturingEventOptions);
+            });
+        }
+    };
+    /** Removes a drop container from the registry. */
+    /**
+     * Removes a drop container from the registry.
+     * @param {?} drop
+     * @return {?}
+     */
+    DragDropRegistry.prototype.removeDropContainer = /**
+     * Removes a drop container from the registry.
+     * @param {?} drop
+     * @return {?}
+     */
+    function (drop) {
+        this._dropInstances.delete(drop);
+    };
+    /** Removes a drag item instance from the registry. */
+    /**
+     * Removes a drag item instance from the registry.
+     * @param {?} drag
+     * @return {?}
+     */
+    DragDropRegistry.prototype.removeDragItem = /**
+     * Removes a drag item instance from the registry.
+     * @param {?} drag
+     * @return {?}
+     */
+    function (drag) {
+        this._dragInstances.delete(drag);
+        this.stopDragging(drag);
+        if (this._dragInstances.size === 0) {
+            this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
+        }
+    };
+    /**
+     * Starts the dragging sequence for a drag instance.
+     * @param drag Drag instance which is being dragged.
+     * @param event Event that initiated the dragging.
+     */
+    /**
+     * Starts the dragging sequence for a drag instance.
+     * @param {?} drag Drag instance which is being dragged.
+     * @param {?} event Event that initiated the dragging.
+     * @return {?}
+     */
+    DragDropRegistry.prototype.startDragging = /**
+     * Starts the dragging sequence for a drag instance.
+     * @param {?} drag Drag instance which is being dragged.
+     * @param {?} event Event that initiated the dragging.
+     * @return {?}
+     */
+    function (drag, event) {
+        var _this = this;
+        this._activeDragInstances.add(drag);
+        if (this._activeDragInstances.size === 1) {
+            /** @type {?} */
+            var isTouchEvent = event.type.startsWith('touch');
+            /** @type {?} */
+            var moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
+            /** @type {?} */
+            var upEvent = isTouchEvent ? 'touchend' : 'mouseup';
+            // We explicitly bind __active__ listeners here, because newer browsers will default to
+            // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
+            // use `preventDefault` to prevent the page from scrolling while the user is dragging.
+            this._globalListeners
+                .set(moveEvent, {
+                handler: function (e) { return _this.pointerMove.next((/** @type {?} */ (e))); },
+                options: activeCapturingEventOptions
+            })
+                .set(upEvent, {
+                handler: function (e) { return _this.pointerUp.next((/** @type {?} */ (e))); },
+                options: true
+            })
+                // Preventing the default action on `mousemove` isn't enough to disable text selection
+                // on Safari so we need to prevent the selection event as well. Alternatively this can
+                // be done by setting `user-select: none` on the `body`, however it has causes a style
+                // recalculation which can be expensive on pages with a lot of elements.
+                .set('selectstart', {
+                handler: this._preventDefaultWhileDragging,
+                options: activeCapturingEventOptions
+            });
+            // TODO(crisbeto): prevent mouse wheel scrolling while
+            // dragging until we've set up proper scroll handling.
+            if (!isTouchEvent) {
+                this._globalListeners.set('wheel', {
+                    handler: this._preventDefaultWhileDragging,
+                    options: activeCapturingEventOptions
+                });
+            }
+            this._ngZone.runOutsideAngular(function () {
+                _this._globalListeners.forEach(function (config, name) {
+                    _this._document.addEventListener(name, config.handler, config.options);
+                });
+            });
+        }
+    };
+    /** Stops dragging a drag item instance. */
+    /**
+     * Stops dragging a drag item instance.
+     * @param {?} drag
+     * @return {?}
+     */
+    DragDropRegistry.prototype.stopDragging = /**
+     * Stops dragging a drag item instance.
+     * @param {?} drag
+     * @return {?}
+     */
+    function (drag) {
+        this._activeDragInstances.delete(drag);
+        if (this._activeDragInstances.size === 0) {
+            this._clearGlobalListeners();
+        }
+    };
+    /** Gets whether a drag item instance is currently being dragged. */
+    /**
+     * Gets whether a drag item instance is currently being dragged.
+     * @param {?} drag
+     * @return {?}
+     */
+    DragDropRegistry.prototype.isDragging = /**
+     * Gets whether a drag item instance is currently being dragged.
+     * @param {?} drag
+     * @return {?}
+     */
+    function (drag) {
+        return this._activeDragInstances.has(drag);
+    };
+    /**
+     * Gets a drop container by its id.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 8.0.0
+     */
+    /**
+     * Gets a drop container by its id.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 8.0.0
+     * @param {?} id
+     * @return {?}
+     */
+    DragDropRegistry.prototype.getDropContainer = /**
+     * Gets a drop container by its id.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 8.0.0
+     * @param {?} id
+     * @return {?}
+     */
+    function (id) {
+        return Array.from(this._dropInstances).find(function (instance) { return instance.id === id; });
+    };
+    /**
+     * @return {?}
+     */
+    DragDropRegistry.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._dragInstances.forEach(function (instance) { return _this.removeDragItem(instance); });
+        this._dropInstances.forEach(function (instance) { return _this.removeDropContainer(instance); });
+        this._clearGlobalListeners();
+        this.pointerMove.complete();
+        this.pointerUp.complete();
+    };
+    /** Clears out the global event listeners from the `document`. */
+    /**
+     * Clears out the global event listeners from the `document`.
+     * @private
+     * @return {?}
+     */
+    DragDropRegistry.prototype._clearGlobalListeners = /**
+     * Clears out the global event listeners from the `document`.
+     * @private
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._globalListeners.forEach(function (config, name) {
+            _this._document.removeEventListener(name, config.handler, config.options);
+        });
+        this._globalListeners.clear();
+    };
+    DragDropRegistry.decorators = [
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
+    ];
+    /** @nocollapse */
+    DragDropRegistry.ctorParameters = function () { return [
+        { type: core.NgZone },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
+    ]; };
+    /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    return DragDropRegistry;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Default configuration to be used when creating a `DragRef`.
+ * @type {?}
+ */
+var DEFAULT_CONFIG = {
+    dragStartThreshold: 5,
+    pointerDirectionChangeThreshold: 5
+};
+/**
+ * Service that allows for drag-and-drop functionality to be attached to DOM elements.
+ */
+var DragDrop = /** @class */ (function () {
+    function DragDrop(_document, _ngZone, _viewportRuler, _dragDropRegistry) {
+        this._document = _document;
+        this._ngZone = _ngZone;
+        this._viewportRuler = _viewportRuler;
+        this._dragDropRegistry = _dragDropRegistry;
+    }
+    /**
+     * Turns an element into a draggable item.
+     * @param element Element to which to attach the dragging functionality.
+     * @param config Object used to configure the dragging behavior.
+     */
+    /**
+     * Turns an element into a draggable item.
+     * @template T
+     * @param {?} element Element to which to attach the dragging functionality.
+     * @param {?=} config Object used to configure the dragging behavior.
+     * @return {?}
+     */
+    DragDrop.prototype.createDrag = /**
+     * Turns an element into a draggable item.
+     * @template T
+     * @param {?} element Element to which to attach the dragging functionality.
+     * @param {?=} config Object used to configure the dragging behavior.
+     * @return {?}
+     */
+    function (element, config) {
+        if (config === void 0) { config = DEFAULT_CONFIG; }
+        return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry);
+    };
+    /**
+     * Turns an element into a drop list.
+     * @param element Element to which to attach the drop list functionality.
+     */
+    /**
+     * Turns an element into a drop list.
+     * @template T
+     * @param {?} element Element to which to attach the drop list functionality.
+     * @return {?}
+     */
+    DragDrop.prototype.createDropList = /**
+     * Turns an element into a drop list.
+     * @template T
+     * @param {?} element Element to which to attach the drop list functionality.
+     * @return {?}
+     */
+    function (element) {
+        return new DropListRef(element, this._dragDropRegistry, this._document);
+    };
+    DragDrop.decorators = [
+        { type: core.Injectable, args: [{ providedIn: 'root' },] },
+    ];
+    /** @nocollapse */
+    DragDrop.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+        { type: core.NgZone },
+        { type: scrolling.ViewportRuler },
+        { type: DragDropRegistry }
+    ]; };
+    /** @nocollapse */ DragDrop.ngInjectableDef = core.defineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(core.inject(common.DOCUMENT), core.inject(core.NgZone), core.inject(scrolling.ViewportRuler), core.inject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    return DragDrop;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
+ * Used for avoiding circular imports.
+ * @type {?}
+ */
+var CDK_DROP_LIST = new core.InjectionToken('CDK_DROP_LIST');
+/**
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
+ * Used for avoiding circular imports.
+ * @deprecated Use `CDK_DROP_LIST` instead.
+ * \@breaking-change 8.0.0
+ * @type {?}
+ */
+var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
+ * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
+ * to avoid circular imports.
+ * \@docs-private
+ * @type {?}
+ */
+var CDK_DRAG_PARENT = new core.InjectionToken('CDK_DRAG_PARENT');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Handle that can be used to drag and CdkDrag instance.
+ */
+var CdkDragHandle = /** @class */ (function () {
+    function CdkDragHandle(element, parentDrag) {
+        this.element = element;
+        /**
+         * Emits when the state of the handle has changed.
+         */
+        this._stateChanges = new rxjs.Subject();
+        this._disabled = false;
+        this._parentDrag = parentDrag;
+        toggleNativeDragInteractions(element.nativeElement, false);
+    }
+    Object.defineProperty(CdkDragHandle.prototype, "disabled", {
+        /** Whether starting to drag through this handle is disabled. */
+        get: /**
+         * Whether starting to drag through this handle is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+            this._stateChanges.next(this);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    CdkDragHandle.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._stateChanges.complete();
+    };
+    CdkDragHandle.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    }
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragHandle.ctorParameters = function () { return [
+        { type: core.ElementRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_PARENT,] }, { type: core.Optional }] }
+    ]; };
+    CdkDragHandle.propDecorators = {
+        disabled: [{ type: core.Input, args: ['cdkDragHandleDisabled',] }]
+    };
+    return CdkDragHandle;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the placeholder of a CdkDrag when
+ * it is being dragged. The placeholder is displayed in place of the element being dragged.
+ * @template T
+ */
+var CdkDragPlaceholder = /** @class */ (function () {
+    function CdkDragPlaceholder(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPlaceholder.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPlaceholder.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: core.Input }]
+    };
+    return CdkDragPlaceholder;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Element that will be used as a template for the preview
+ * of a CdkDrag when it is being dragged.
+ * @template T
+ */
+var CdkDragPreview = /** @class */ (function () {
+    function CdkDragPreview(templateRef) {
+        this.templateRef = templateRef;
+    }
+    CdkDragPreview.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDragPreview.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
+    CdkDragPreview.propDecorators = {
+        data: [{ type: core.Input }]
+    };
+    return CdkDragPreview;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Injection token that can be used to configure the behavior of `CdkDrag`.
+ * @type {?}
+ */
+var CDK_DRAG_CONFIG = new core.InjectionToken('CDK_DRAG_CONFIG', {
+    providedIn: 'root',
+    factory: CDK_DRAG_CONFIG_FACTORY
+});
+/**
+ * \@docs-private
+ * @return {?}
+ */
+function CDK_DRAG_CONFIG_FACTORY() {
+    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
+}
+/**
+ * Element that can be moved inside a CdkDropList container.
+ * @template T
+ */
+var CdkDrag = /** @class */ (function () {
+    function CdkDrag(element, dropContainer, _document, _ngZone, _viewContainerRef, viewportRuler, dragDropRegistry, config, _dir, 
+    /**
+     * @deprecated `viewportRuler` and `dragDropRegistry` parameters
+     * to be removed. Also `dragDrop` parameter to be made required.
+     * @breaking-change 8.0.0.
+     */
+    dragDrop) {
+        var _this = this;
+        this.element = element;
+        this.dropContainer = dropContainer;
+        this._document = _document;
+        this._ngZone = _ngZone;
+        this._viewContainerRef = _viewContainerRef;
+        this._dir = _dir;
+        this._destroyed = new rxjs.Subject();
+        this._disabled = false;
+        /**
+         * Emits when the user starts dragging the item.
+         */
+        this.started = new core.EventEmitter();
+        /**
+         * Emits when the user has released a drag item, before any animations have started.
+         */
+        this.released = new core.EventEmitter();
+        /**
+         * Emits when the user stops dragging an item in the container.
+         */
+        this.ended = new core.EventEmitter();
+        /**
+         * Emits when the user has moved the item into a new container.
+         */
+        this.entered = new core.EventEmitter();
+        /**
+         * Emits when the user removes the item its container by dragging it into another container.
+         */
+        this.exited = new core.EventEmitter();
+        /**
+         * Emits when the user drops the item inside a container.
+         */
+        this.dropped = new core.EventEmitter();
+        /**
+         * Emits as the user is dragging the item. Use with caution,
+         * because this event will fire for every pixel that the user has dragged.
+         */
+        this.moved = new rxjs.Observable(function (observer) {
+            /** @type {?} */
+            var subscription = _this._dragRef.moved.pipe(operators.map(function (movedEvent) { return ({
+                source: _this,
+                pointerPosition: movedEvent.pointerPosition,
+                event: movedEvent.event,
+                delta: movedEvent.delta
+            }); })).subscribe(observer);
+            return function () {
+                subscription.unsubscribe();
+            };
+        });
+        // @breaking-change 8.0.0 Remove null check once the paramter is made required.
+        if (dragDrop) {
+            this._dragRef = dragDrop.createDrag(element, config);
+        }
+        else {
+            this._dragRef = new DragRef(element, config, _document, _ngZone, viewportRuler, dragDropRegistry);
+        }
+        this._dragRef.data = this;
+        this._syncInputs(this._dragRef);
+        this._proxyEvents(this._dragRef);
+    }
+    Object.defineProperty(CdkDrag.prototype, "disabled", {
+        /** Whether starting to drag this element is disabled. */
+        get: /**
+         * Whether starting to drag this element is disabled.
+         * @return {?}
+         */
+        function () {
+            return this._disabled || (this.dropContainer && this.dropContainer.disabled);
+        },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+            this._dragRef.disabled = this._disabled;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Returns the element that is being used as a placeholder
+     * while the current element is being dragged.
+     */
+    /**
+     * Returns the element that is being used as a placeholder
+     * while the current element is being dragged.
+     * @return {?}
+     */
+    CdkDrag.prototype.getPlaceholderElement = /**
+     * Returns the element that is being used as a placeholder
+     * while the current element is being dragged.
+     * @return {?}
+     */
+    function () {
+        return this._dragRef.getPlaceholderElement();
+    };
+    /** Returns the root draggable element. */
+    /**
+     * Returns the root draggable element.
+     * @return {?}
+     */
+    CdkDrag.prototype.getRootElement = /**
+     * Returns the root draggable element.
+     * @return {?}
+     */
+    function () {
+        return this._dragRef.getRootElement();
+    };
+    /** Resets a standalone drag item to its initial position. */
+    /**
+     * Resets a standalone drag item to its initial position.
+     * @return {?}
+     */
+    CdkDrag.prototype.reset = /**
+     * Resets a standalone drag item to its initial position.
+     * @return {?}
+     */
+    function () {
+        this._dragRef.reset();
+    };
+    /**
+     * @return {?}
+     */
+    CdkDrag.prototype.ngAfterViewInit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        // We need to wait for the zone to stabilize, in order for the reference
+        // element to be in the proper place in the DOM. This is mostly relevant
+        // for draggable elements inside portals since they get stamped out in
+        // their original DOM position and then they get transferred to the portal.
+        this._ngZone.onStable.asObservable()
+            .pipe(operators.take(1), operators.takeUntil(this._destroyed))
+            .subscribe(function () {
+            _this._updateRootElement();
+            // Listen for any newly-added handles.
+            _this._handles.changes.pipe(operators.startWith(_this._handles), 
+            // Sync the new handles with the DragRef.
+            operators.tap(function (handles) {
+                /** @type {?} */
+                var childHandleElements = handles
+                    .filter(function (handle) { return handle._parentDrag === _this; })
+                    .map(function (handle) { return handle.element; });
+                _this._dragRef.withHandles(childHandleElements);
+            }), 
+            // Listen if the state of any of the handles changes.
+            operators.switchMap(function (handles) {
+                return rxjs.merge.apply(void 0, handles.map(function (item) { return item._stateChanges; }));
+            }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
+                // Enabled/disable the handle that changed in the DragRef.
+                /** @type {?} */
+                var dragRef = _this._dragRef;
+                /** @type {?} */
+                var handle = handleInstance.element.nativeElement;
+                handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
+            });
+        });
+    };
+    /**
+     * @param {?} changes
+     * @return {?}
+     */
+    CdkDrag.prototype.ngOnChanges = /**
+     * @param {?} changes
+     * @return {?}
+     */
+    function (changes) {
+        /** @type {?} */
+        var rootSelectorChange = changes.rootElementSelector;
+        // We don't have to react to the first change since it's being
+        // handled in `ngAfterViewInit` where it needs to be deferred.
+        if (rootSelectorChange && !rootSelectorChange.firstChange) {
+            this._updateRootElement();
+        }
+    };
+    /**
+     * @return {?}
+     */
+    CdkDrag.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._destroyed.next();
+        this._destroyed.complete();
+        this._dragRef.dispose();
+    };
+    /** Syncs the root element with the `DragRef`. */
+    /**
+     * Syncs the root element with the `DragRef`.
+     * @private
+     * @return {?}
+     */
+    CdkDrag.prototype._updateRootElement = /**
+     * Syncs the root element with the `DragRef`.
+     * @private
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var element = this.element.nativeElement;
+        /** @type {?} */
+        var rootElement = this.rootElementSelector ?
+            getClosestMatchingAncestor(element, this.rootElementSelector) : element;
+        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
+            throw Error("cdkDrag must be attached to an element node. " +
+                ("Currently attached to \"" + rootElement.nodeName + "\"."));
+        }
+        this._dragRef.withRootElement(rootElement || element);
+    };
+    /** Gets the boundary element, based on the `boundaryElementSelector`. */
+    /**
+     * Gets the boundary element, based on the `boundaryElementSelector`.
+     * @private
+     * @return {?}
+     */
+    CdkDrag.prototype._getBoundaryElement = /**
+     * Gets the boundary element, based on the `boundaryElementSelector`.
+     * @private
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var selector = this.boundaryElementSelector;
+        return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : null;
+    };
+    /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
+    /**
+     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
+     * @private
+     * @param {?} ref
+     * @return {?}
+     */
+    CdkDrag.prototype._syncInputs = /**
+     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
+     * @private
+     * @param {?} ref
+     * @return {?}
+     */
+    function (ref) {
+        var _this = this;
+        ref.beforeStarted.subscribe(function () {
+            if (!ref.isDragging()) {
+                /** @type {?} */
+                var dir = _this._dir;
+                /** @type {?} */
+                var placeholder = _this._placeholderTemplate ? {
+                    template: _this._placeholderTemplate.templateRef,
+                    context: _this._placeholderTemplate.data,
+                    viewContainer: _this._viewContainerRef
+                } : null;
+                /** @type {?} */
+                var preview = _this._previewTemplate ? {
+                    template: _this._previewTemplate.templateRef,
+                    context: _this._previewTemplate.data,
+                    viewContainer: _this._viewContainerRef
+                } : null;
+                ref.disabled = _this.disabled;
+                ref.lockAxis = _this.lockAxis;
+                ref
+                    .withBoundaryElement(_this._getBoundaryElement())
+                    .withPlaceholderTemplate(placeholder)
+                    .withPreviewTemplate(preview);
+                if (dir) {
+                    ref.withDirection(dir.value);
+                }
+            }
+        });
+    };
+    /**
+     * Proxies the events from a DragRef to events that
+     * match the interfaces of the CdkDrag outputs.
+     */
+    /**
+     * Proxies the events from a DragRef to events that
+     * match the interfaces of the CdkDrag outputs.
+     * @private
+     * @param {?} ref
+     * @return {?}
+     */
+    CdkDrag.prototype._proxyEvents = /**
+     * Proxies the events from a DragRef to events that
+     * match the interfaces of the CdkDrag outputs.
+     * @private
+     * @param {?} ref
+     * @return {?}
+     */
+    function (ref) {
+        var _this = this;
+        ref.started.subscribe(function () {
+            _this.started.emit({ source: _this });
+        });
+        ref.released.subscribe(function () {
+            _this.released.emit({ source: _this });
+        });
+        ref.ended.subscribe(function () {
+            _this.ended.emit({ source: _this });
+        });
+        ref.entered.subscribe(function (event) {
+            _this.entered.emit({
+                container: event.container.data,
+                item: _this
+            });
+        });
+        ref.exited.subscribe(function (event) {
+            _this.exited.emit({
+                container: event.container.data,
+                item: _this
+            });
+        });
+        ref.dropped.subscribe(function (event) {
+            _this.dropped.emit({
+                previousIndex: event.previousIndex,
+                currentIndex: event.currentIndex,
+                previousContainer: event.previousContainer.data,
+                container: event.container.data,
+                isPointerOverContainer: event.isPointerOverContainer,
+                item: _this
+            });
+        });
+    };
+    CdkDrag.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkDrag]',
+                    exportAs: 'cdkDrag',
+                    host: {
+                        'class': 'cdk-drag',
+                        '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
+                    },
+                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
+                },] },
+    ];
+    /** @nocollapse */
+    CdkDrag.ctorParameters = function () { return [
+        { type: core.ElementRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DROP_LIST,] }, { type: core.Optional }, { type: core.SkipSelf }] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+        { type: core.NgZone },
+        { type: core.ViewContainerRef },
+        { type: scrolling.ViewportRuler },
+        { type: DragDropRegistry },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_DRAG_CONFIG,] }] },
+        { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
+        { type: DragDrop }
+    ]; };
+    CdkDrag.propDecorators = {
+        _handles: [{ type: core.ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
+        _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview,] }],
+        _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder,] }],
+        data: [{ type: core.Input, args: ['cdkDragData',] }],
+        lockAxis: [{ type: core.Input, args: ['cdkDragLockAxis',] }],
+        rootElementSelector: [{ type: core.Input, args: ['cdkDragRootElement',] }],
+        boundaryElementSelector: [{ type: core.Input, args: ['cdkDragBoundary',] }],
+        disabled: [{ type: core.Input, args: ['cdkDragDisabled',] }],
+        started: [{ type: core.Output, args: ['cdkDragStarted',] }],
+        released: [{ type: core.Output, args: ['cdkDragReleased',] }],
+        ended: [{ type: core.Output, args: ['cdkDragEnded',] }],
+        entered: [{ type: core.Output, args: ['cdkDragEntered',] }],
+        exited: [{ type: core.Output, args: ['cdkDragExited',] }],
+        dropped: [{ type: core.Output, args: ['cdkDragDropped',] }],
+        moved: [{ type: core.Output, args: ['cdkDragMoved',] }]
+    };
+    return CdkDrag;
+}());
+/**
+ * Gets the closest ancestor of an element that matches a selector.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function getClosestMatchingAncestor(element, selector) {
+    /** @type {?} */
+    var currentElement = (/** @type {?} */ (element.parentElement));
+    while (currentElement) {
+        // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
+        if (currentElement.matches ? currentElement.matches(selector) :
+            ((/** @type {?} */ (currentElement))).msMatchesSelector(selector)) {
+            return currentElement;
+        }
+        currentElement = currentElement.parentElement;
+    }
+    return null;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
+ * elements that are placed inside a `cdkDropListGroup` will be connected to each other
+ * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
+ * from `cdkDropList`.
+ * @template T
+ */
+var CdkDropListGroup = /** @class */ (function () {
+    function CdkDropListGroup() {
+        /**
+         * Drop lists registered inside the group.
+         */
+        this._items = new Set();
+        this._disabled = false;
+    }
+    Object.defineProperty(CdkDropListGroup.prototype, "disabled", {
+        /** Whether starting a dragging sequence from inside this group is disabled. */
+        get: /**
+         * Whether starting a dragging sequence from inside this group is disabled.
+         * @return {?}
+         */
+        function () { return this._disabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    CdkDropListGroup.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () {
+        this._items.clear();
+    };
+    CdkDropListGroup.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
+                },] },
+    ];
+    CdkDropListGroup.propDecorators = {
+        disabled: [{ type: core.Input, args: ['cdkDropListGroupDisabled',] }]
+    };
+    return CdkDropListGroup;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
  * Counter used to generate unique ids for drop zones.
  * @type {?}
  */
@@ -3159,13 +3316,22 @@ var ɵ0 = undefined;
  * @template T
  */
 var CdkDropList = /** @class */ (function () {
-    function CdkDropList(element, dragDropRegistry, _changeDetectorRef, dir, _group, 
-    // @breaking-change 8.0.0 `_document` parameter to be made required.
-    _document) {
+    function CdkDropList(element, dragDropRegistry, _changeDetectorRef, _dir, _group, _document, 
+    /**
+     * @deprecated `dragDropRegistry` and `_document` parameters to be removed.
+     * Also `dragDrop` parameter to be made required.
+     * @breaking-change 8.0.0.
+     */
+    dragDrop) {
         var _this = this;
         this.element = element;
         this._changeDetectorRef = _changeDetectorRef;
+        this._dir = _dir;
         this._group = _group;
+        /**
+         * Emits when the list has been destroyed.
+         */
+        this._destroyed = new rxjs.Subject();
         /**
          * Other draggable containers that this container is connected to and into which the
          * container's items can be transferred. Can either be references to other drop containers,
@@ -3204,15 +3370,19 @@ var CdkDropList = /** @class */ (function () {
          * Emits as the user is swapping items while actively dragging.
          */
         this.sorted = new core.EventEmitter();
-        // @breaking-change 8.0.0 Remove || once `_document` parameter is required.
-        /** @type {?} */
-        var ref = this._dropListRef = new DropListRef(element, dragDropRegistry, _document || document, dir);
-        ref.data = this;
-        ref.enterPredicate = function (drag, drop) {
+        // @breaking-change 8.0.0 Remove null check once `dragDrop` parameter is made required.
+        if (dragDrop) {
+            this._dropListRef = dragDrop.createDropList(element);
+        }
+        else {
+            this._dropListRef = new DropListRef(element, dragDropRegistry, _document || document);
+        }
+        this._dropListRef.data = this;
+        this._dropListRef.enterPredicate = function (drag, drop) {
             return _this.enterPredicate(drag.data, drop.data);
         };
-        this._syncInputs(ref);
-        this._handleEvents(ref);
+        this._syncInputs(this._dropListRef);
+        this._handleEvents(this._dropListRef);
         CdkDropList._dropLists.push(this);
         if (_group) {
             _group._items.add(this);
@@ -3240,19 +3410,35 @@ var CdkDropList = /** @class */ (function () {
     /**
      * @return {?}
      */
+    CdkDropList.prototype.ngAfterContentInit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._draggables.changes
+            .pipe(operators.startWith(this._draggables), operators.takeUntil(this._destroyed))
+            .subscribe(function (items) {
+            _this._dropListRef.withItems(items.map(function (drag) { return drag._dragRef; }));
+        });
+    };
+    /**
+     * @return {?}
+     */
     CdkDropList.prototype.ngOnDestroy = /**
      * @return {?}
      */
     function () {
         /** @type {?} */
         var index = CdkDropList._dropLists.indexOf(this);
-        this._dropListRef.dispose();
         if (index > -1) {
             CdkDropList._dropLists.splice(index, 1);
         }
         if (this._group) {
             this._group._items.delete(this);
         }
+        this._dropListRef.dispose();
+        this._destroyed.next();
+        this._destroyed.complete();
     };
     /** Starts dragging an item. */
     /**
@@ -3441,6 +3627,11 @@ var CdkDropList = /** @class */ (function () {
      */
     function (ref) {
         var _this = this;
+        if (this._dir) {
+            this._dir.change
+                .pipe(operators.startWith(this._dir.value), operators.takeUntil(this._destroyed))
+                .subscribe(function (value) { return ref.withDirection(value); });
+        }
         ref.beforeStarted.subscribe(function () {
             /** @type {?} */
             var siblings = coercion.coerceArray(_this.connectedTo).map(function (drop) {
@@ -3457,8 +3648,7 @@ var CdkDropList = /** @class */ (function () {
             ref.lockAxis = _this.lockAxis;
             ref
                 .connectedTo(siblings.filter(function (drop) { return drop && drop !== _this; }).map(function (list) { return list._dropListRef; }))
-                .withOrientation(_this.orientation)
-                .withItems(_this._draggables.map(function (drag) { return drag._dragRef; }));
+                .withOrientation(_this.orientation);
         });
     };
     /** Handles events from the underlying DropListRef. */
@@ -3541,10 +3731,15 @@ var CdkDropList = /** @class */ (function () {
         { type: core.ChangeDetectorRef },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
         { type: CdkDropListGroup, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [common.DOCUMENT,] }] }
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [common.DOCUMENT,] }] },
+        { type: DragDrop }
     ]; };
     CdkDropList.propDecorators = {
-        _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }),] }],
+        _draggables: [{ type: core.ContentChildren, args: [core.forwardRef(function () { return CdkDrag; }), {
+                        // Explicitly set to false since some of the logic below makes assumptions about it.
+                        // The `.withItems` call below should be updated if we ever need to switch this to `true`.
+                        descendants: false
+                    },] }],
         connectedTo: [{ type: core.Input, args: ['cdkDropListConnectedTo',] }],
         data: [{ type: core.Input, args: ['cdkDropListData',] }],
         orientation: [{ type: core.Input, args: ['cdkDropListOrientation',] }],
@@ -3585,11 +3780,18 @@ var DragDropModule = /** @class */ (function () {
                         CdkDragPreview,
                         CdkDragPlaceholder,
                     ],
+                    providers: [
+                        DragDrop,
+                    ]
                 },] },
     ];
     return DragDropModule;
 }());
 
+exports.DragDrop = DragDrop;
+exports.DragRef = DragRef;
+exports.DropListRef = DropListRef;
+exports.CdkDropList = CdkDropList;
 exports.CDK_DROP_LIST = CDK_DROP_LIST;
 exports.CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST_CONTAINER;
 exports.moveItemInArray = moveItemInArray;
@@ -3597,7 +3799,6 @@ exports.transferArrayItem = transferArrayItem;
 exports.copyArrayItem = copyArrayItem;
 exports.DragDropModule = DragDropModule;
 exports.DragDropRegistry = DragDropRegistry;
-exports.CdkDropList = CdkDropList;
 exports.CdkDropListGroup = CdkDropListGroup;
 exports.CDK_DRAG_CONFIG_FACTORY = CDK_DRAG_CONFIG_FACTORY;
 exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
@@ -3605,7 +3806,7 @@ exports.CdkDrag = CdkDrag;
 exports.CdkDragHandle = CdkDragHandle;
 exports.CdkDragPreview = CdkDragPreview;
 exports.CdkDragPlaceholder = CdkDragPlaceholder;
-exports.ɵa = CDK_DRAG_PARENT;
+exports.ɵb = CDK_DRAG_PARENT;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

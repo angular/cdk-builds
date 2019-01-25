@@ -7,7 +7,7 @@
  */
 import { ElementRef, NgZone, ViewContainerRef, TemplateRef } from '@angular/core';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { Directionality } from '@angular/cdk/bidi';
+import { Direction } from '@angular/cdk/bidi';
 import { Subject, Observable } from 'rxjs';
 import { DropListRefInternal as DropListRef } from './drop-list-ref';
 import { DragDropRegistry } from './drag-drop-registry';
@@ -31,20 +31,22 @@ export interface DragRefConfig {
  */
 export interface DragRefInternal extends DragRef {
 }
+/** Template that can be used to create a drag helper element (e.g. a preview or a placeholder). */
+interface DragHelperTemplate<T = any> {
+    template: TemplateRef<T> | null;
+    viewContainer: ViewContainerRef;
+    context: T;
+}
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  * @docs-private
  */
 export declare class DragRef<T = any> {
+    private _config;
     private _document;
     private _ngZone;
-    private _viewContainerRef;
     private _viewportRuler;
     private _dragDropRegistry;
-    private _config;
-    /** Droppable container that the draggable is a part of. */
-    dropContainer?: DropListRef | undefined;
-    private _dir?;
     /** Element displayed next to the user's pointer while the element is dragged. */
     private _preview;
     /** Reference to the view of the preview element. */
@@ -131,6 +133,10 @@ export declare class DragRef<T = any> {
     private _handles;
     /** Registered handles that are currently disabled. */
     private _disabledHandles;
+    /** Droppable container that the draggable is a part of. */
+    private _dropContainer?;
+    /** Layout direction of the item. */
+    private _direction;
     /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
     /** Whether starting to drag this element is disabled. */
@@ -187,9 +193,7 @@ export declare class DragRef<T = any> {
     }>;
     /** Arbitrary data that can be attached to the drag item. */
     data: T;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _document: Document, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _config: DragRefConfig, 
-    /** Droppable container that the draggable is a part of. */
-    dropContainer?: DropListRef | undefined, _dir?: Directionality | undefined);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -202,15 +206,13 @@ export declare class DragRef<T = any> {
     /**
      * Registers the template that should be used for the drag preview.
      * @param template Template that from which to stamp out the preview.
-     * @param context Variables to add to the template's context.
      */
-    withPreviewTemplate(template: TemplateRef<any> | null, context?: any): this;
+    withPreviewTemplate(template: DragHelperTemplate | null): this;
     /**
      * Registers the template that should be used for the drag placeholder.
      * @param template Template that from which to stamp out the placeholder.
-     * @param context Variables to add to the template's context.
      */
-    withPlaceholderTemplate(template: TemplateRef<any> | null, context?: any): this;
+    withPlaceholderTemplate(template: DragHelperTemplate | null): this;
     /**
      * Sets an alternate drag root element. The root element is the element that will be moved as
      * the user is dragging. Passing an alternate root element is useful when trying to enable
@@ -237,6 +239,10 @@ export declare class DragRef<T = any> {
      * @param handle Handle element to be enabled.
      */
     enableHandle(handle: HTMLElement): void;
+    /** Sets the layout direction of the draggable item. */
+    withDirection(direction: Direction): this;
+    /** Sets the container that the item is part of. */
+    _withDropContainer(container: DropListRef): void;
     /** Unsubscribes from the global subscriptions. */
     private _removeSubscriptions;
     /** Destroys the preview element and its ViewRef. */
@@ -294,3 +300,4 @@ export declare class DragRef<T = any> {
     /** Removes the manually-added event listeners from the root element. */
     private _removeRootElementListeners;
 }
+export {};

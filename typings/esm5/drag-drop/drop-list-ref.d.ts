@@ -7,7 +7,7 @@
  */
 import { ElementRef } from '@angular/core';
 import { DragDropRegistry } from './drag-drop-registry';
-import { Directionality } from '@angular/cdk/bidi';
+import { Direction } from '@angular/cdk/bidi';
 import { Subject } from 'rxjs';
 import { DragRefInternal as DragRef } from './drag-ref';
 /**
@@ -22,10 +22,10 @@ export interface DropListRefInternal extends DropListRef {
  * @docs-private
  */
 export declare class DropListRef<T = any> {
-    element: ElementRef<HTMLElement>;
     private _dragDropRegistry;
-    private _dir?;
     private _document;
+    /** Element that the drop list is attached to. */
+    readonly element: HTMLElement;
     /**
      * Unique ID for the drop list.
      * @deprecated No longer being used. To be removed.
@@ -101,7 +101,9 @@ export declare class DropListRef<T = any> {
     private _orientation;
     /** Connected siblings that currently have a dragged item. */
     private _activeSiblings;
-    constructor(element: ElementRef<HTMLElement>, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _dir?: Directionality | undefined);
+    /** Layout direction of the drop list. */
+    private _direction;
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
     /** Whether an item from this list is currently being dragged. */
@@ -134,6 +136,8 @@ export declare class DropListRef<T = any> {
      * @param items Items that are a part of this list.
      */
     withItems(items: DragRef[]): this;
+    /** Sets the layout direction of the drop list. */
+    withDirection(direction: Direction): this;
     /**
      * Sets the containers that are connected to this one. When two or more containers are
      * connected, the user will be allowed to transfer items between them.

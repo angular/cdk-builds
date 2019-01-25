@@ -17,6 +17,7 @@ import { CdkDragPreview } from './drag-preview';
 import { DragRef, DragRefConfig } from '../drag-ref';
 import { DropListRef } from '../drop-list-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
+import { DragDrop } from '../drag-drop';
 /** Injection token that can be used to configure the behavior of `CdkDrag`. */
 export declare const CDK_DRAG_CONFIG: InjectionToken<DragRefConfig>;
 /** @docs-private */
@@ -30,9 +31,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _document;
     private _ngZone;
     private _viewContainerRef;
-    private _viewportRuler;
-    private _dragDropRegistry;
-    private _config;
     private _dir;
     private _destroyed;
     /** Reference to the underlying drag instance. */
@@ -83,7 +81,13 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _config: DragRefConfig, _dir: Directionality);
+    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, viewportRuler: ViewportRuler, dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, config: DragRefConfig, _dir: Directionality, 
+    /**
+     * @deprecated `viewportRuler` and `dragDropRegistry` parameters
+     * to be removed. Also `dragDrop` parameter to be made required.
+     * @breaking-change 8.0.0.
+     */
+    dragDrop?: DragDrop);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
