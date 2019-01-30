@@ -1237,7 +1237,10 @@ var FooterRowOutlet = /** @class */ (function () {
  * \@docs-private
  * @type {?}
  */
-var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>";
+var CDK_TABLE_TEMPLATE = 
+// Note that according to MDN, the `caption` element has to be projected as the **first** element
+// in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
+"\n  <ng-content select=\"caption\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
 /**
  * Class used to conveniently type the embedded view ref for rows with a context.
  * \@docs-private

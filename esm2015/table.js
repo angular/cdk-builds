@@ -987,10 +987,15 @@ FooterRowOutlet.ctorParameters = () => [
  * \@docs-private
  * @type {?}
  */
-const CDK_TABLE_TEMPLATE = `
+const CDK_TABLE_TEMPLATE = 
+// Note that according to MDN, the `caption` element has to be projected as the **first** element
+// in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
+`
+  <ng-content select="caption"></ng-content>
   <ng-container headerRowOutlet></ng-container>
   <ng-container rowOutlet></ng-container>
-  <ng-container footerRowOutlet></ng-container>`;
+  <ng-container footerRowOutlet></ng-container>
+`;
 /**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
