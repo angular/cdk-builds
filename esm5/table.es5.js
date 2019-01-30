@@ -8,7 +8,7 @@
 import { __extends } from 'tslib';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, EmbeddedViewRef, isDevMode, Optional, ViewChild, Inject, NgModule } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
+import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -1532,7 +1532,7 @@ var CdkTable = /** @class */ (function () {
         this._cachedRenderRowsMap.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
-        if (this.dataSource instanceof DataSource) {
+        if (isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
     };
@@ -2107,7 +2107,7 @@ var CdkTable = /** @class */ (function () {
      */
     function (dataSource) {
         this._data = [];
-        if (this.dataSource instanceof DataSource) {
+        if (isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
         // Stop listening for data from the previous data source.
@@ -2142,12 +2142,8 @@ var CdkTable = /** @class */ (function () {
         }
         /** @type {?} */
         var dataStream;
-        // Check if the datasource is a DataSource object by observing if it has a connect function.
-        // Cannot check this.dataSource['connect'] due to potential property renaming, nor can it
-        // checked as an instanceof DataSource<T> since the table should allow for data sources
-        // that did not explicitly extend DataSource<T>.
-        if (((/** @type {?} */ (this.dataSource))).connect instanceof Function) {
-            dataStream = ((/** @type {?} */ (this.dataSource))).connect(this);
+        if (isDataSource(this.dataSource)) {
+            dataStream = this.dataSource.connect(this);
         }
         else if (this.dataSource instanceof Observable) {
             dataStream = this.dataSource;

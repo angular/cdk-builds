@@ -1611,7 +1611,7 @@ var CdkVirtualForOf = /** @class */ (function () {
         function (value) {
             this._cdkVirtualForOf = value;
             /** @type {?} */
-            var ds = value instanceof collections.DataSource ? value :
+            var ds = collections.isDataSource(value) ? value :
                 // Slice the value if its an NgIterable to ensure we're working with an array.
                 new collections.ArrayDataSource(value instanceof rxjs.Observable ? value : Array.prototype.slice.call(value || []));
             this._dataSourceChanges.next(ds);
