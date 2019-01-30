@@ -2258,7 +2258,14 @@ var CdkTable = /** @class */ (function () {
     function (rows, rowDef) {
         var _this = this;
         /** @type {?} */
-        var columnDefs = Array.from(rowDef.columns || []).map(function (c) { return (/** @type {?} */ (_this._columnDefsByName.get(c))); });
+        var columnDefs = Array.from(rowDef.columns || []).map(function (columnName) {
+            /** @type {?} */
+            var columnDef = _this._columnDefsByName.get(columnName);
+            if (!columnDef) {
+                throw getTableUnknownColumnError(columnName);
+            }
+            return (/** @type {?} */ (columnDef));
+        });
         /** @type {?} */
         var stickyStartStates = columnDefs.map(function (columnDef) { return columnDef.sticky; });
         /** @type {?} */

@@ -1670,7 +1670,14 @@ class CdkTable {
      */
     _addStickyColumnStyles(rows, rowDef) {
         /** @type {?} */
-        const columnDefs = Array.from(rowDef.columns || []).map(c => (/** @type {?} */ (this._columnDefsByName.get(c))));
+        const columnDefs = Array.from(rowDef.columns || []).map(columnName => {
+            /** @type {?} */
+            const columnDef = this._columnDefsByName.get(columnName);
+            if (!columnDef) {
+                throw getTableUnknownColumnError(columnName);
+            }
+            return (/** @type {?} */ (columnDef));
+        });
         /** @type {?} */
         const stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
         /** @type {?} */
