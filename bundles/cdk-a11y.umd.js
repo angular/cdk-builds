@@ -2449,10 +2449,24 @@ var FocusMonitor = /** @class */ (function () {
         }
         // Create monitored element info.
         /** @type {?} */
+        var subject = new rxjs.Subject();
+        /** @type {?} */
         var info = {
             unlisten: function () { },
             checkChildren: checkChildren,
-            subject: new rxjs.Subject()
+            subject: subject,
+            // Note that we want the observable to emit inside the NgZone, however we don't want to
+            // trigger change detection if nobody has subscribed to it. We do so by creating the
+            // observable manually.
+            observable: new rxjs.Observable(function (observer) {
+                /** @type {?} */
+                var subscription = subject.subscribe(function (origin) {
+                    _this._ngZone.run(function () { return observer.next(origin); });
+                });
+                return function () {
+                    subscription.unsubscribe();
+                };
+            })
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
@@ -2470,7 +2484,7 @@ var FocusMonitor = /** @class */ (function () {
             nativeElement.removeEventListener('focus', focusListener, true);
             nativeElement.removeEventListener('blur', blurListener, true);
         };
-        return info.subject.asObservable();
+        return info.observable;
     };
     /**
      * @param {?} element
@@ -2698,7 +2712,7 @@ var FocusMonitor = /** @class */ (function () {
             }
         }
         this._setClasses(element, origin);
-        this._emitOrigin(elementInfo.subject, origin);
+        elementInfo.subject.next(origin);
         this._lastFocusOrigin = origin;
     };
     /**
@@ -2728,22 +2742,7 @@ var FocusMonitor = /** @class */ (function () {
             return;
         }
         this._setClasses(element);
-        this._emitOrigin(elementInfo.subject, null);
-    };
-    /**
-     * @private
-     * @param {?} subject
-     * @param {?} origin
-     * @return {?}
-     */
-    FocusMonitor.prototype._emitOrigin = /**
-     * @private
-     * @param {?} subject
-     * @param {?} origin
-     * @return {?}
-     */
-    function (subject, origin) {
-        this._ngZone.run(function () { return subject.next(origin); });
+        elementInfo.subject.next(null);
     };
     /**
      * @private

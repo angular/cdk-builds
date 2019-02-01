@@ -7,7 +7,7 @@
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
-import { Subject, Subscription, of } from 'rxjs';
+import { Subject, Subscription, Observable, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { __extends } from 'tslib';
@@ -2424,10 +2424,24 @@ var FocusMonitor = /** @class */ (function () {
         }
         // Create monitored element info.
         /** @type {?} */
+        var subject = new Subject();
+        /** @type {?} */
         var info = {
             unlisten: function () { },
             checkChildren: checkChildren,
-            subject: new Subject()
+            subject: subject,
+            // Note that we want the observable to emit inside the NgZone, however we don't want to
+            // trigger change detection if nobody has subscribed to it. We do so by creating the
+            // observable manually.
+            observable: new Observable(function (observer) {
+                /** @type {?} */
+                var subscription = subject.subscribe(function (origin) {
+                    _this._ngZone.run(function () { return observer.next(origin); });
+                });
+                return function () {
+                    subscription.unsubscribe();
+                };
+            })
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
@@ -2445,7 +2459,7 @@ var FocusMonitor = /** @class */ (function () {
             nativeElement.removeEventListener('focus', focusListener, true);
             nativeElement.removeEventListener('blur', blurListener, true);
         };
-        return info.subject.asObservable();
+        return info.observable;
     };
     /**
      * @param {?} element
@@ -2673,7 +2687,7 @@ var FocusMonitor = /** @class */ (function () {
             }
         }
         this._setClasses(element, origin);
-        this._emitOrigin(elementInfo.subject, origin);
+        elementInfo.subject.next(origin);
         this._lastFocusOrigin = origin;
     };
     /**
@@ -2703,22 +2717,7 @@ var FocusMonitor = /** @class */ (function () {
             return;
         }
         this._setClasses(element);
-        this._emitOrigin(elementInfo.subject, null);
-    };
-    /**
-     * @private
-     * @param {?} subject
-     * @param {?} origin
-     * @return {?}
-     */
-    FocusMonitor.prototype._emitOrigin = /**
-     * @private
-     * @param {?} subject
-     * @param {?} origin
-     * @return {?}
-     */
-    function (subject, origin) {
-        this._ngZone.run(function () { return subject.next(origin); });
+        elementInfo.subject.next(null);
     };
     /**
      * @private
