@@ -2455,13 +2455,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // If the overlay fits completely within the bounds of the viewport, push it from whichever
         // direction is goes off-screen. Otherwise, push the top-left corner such that its in the
         // viewport and allow for the trailing end of the overlay to go out of bounds.
-        if (overlay.width < viewport.width) {
+        if (overlay.width <= viewport.width) {
             pushX = overflowLeft || -overflowRight;
         }
         else {
             pushX = start.x < this._viewportMargin ? (viewport.left - scrollPosition.left) - start.x : 0;
         }
-        if (overlay.height < viewport.height) {
+        if (overlay.height <= viewport.height) {
             pushY = overflowTop || -overflowBottom;
         }
         else {

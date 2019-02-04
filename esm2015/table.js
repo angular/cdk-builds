@@ -7,7 +7,7 @@
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, Optional, ViewChild, Inject, NgModule } from '@angular/core';
-import { DataSource } from '@angular/cdk/collections';
+import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
@@ -987,10 +987,15 @@ FooterRowOutlet.ctorParameters = () => [
  * \@docs-private
  * @type {?}
  */
-const CDK_TABLE_TEMPLATE = `
+const CDK_TABLE_TEMPLATE = 
+// Note that according to MDN, the `caption` element has to be projected as the **first** element
+// in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
+`
+  <ng-content select="caption"></ng-content>
   <ng-container headerRowOutlet></ng-container>
   <ng-container rowOutlet></ng-container>
-  <ng-container footerRowOutlet></ng-container>`;
+  <ng-container footerRowOutlet></ng-container>
+`;
 /**
  * A data table that can render a header row, data rows, and a footer row.
  * Uses the dataSource input to determine the data to be rendered. The data can be provided either
@@ -1221,7 +1226,7 @@ class CdkTable {
         this._cachedRenderRowsMap.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
-        if (this.dataSource instanceof DataSource) {
+        if (isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
     }
@@ -1579,7 +1584,7 @@ class CdkTable {
      */
     _switchDataSource(dataSource) {
         this._data = [];
-        if (this.dataSource instanceof DataSource) {
+        if (isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
         // Stop listening for data from the previous data source.
@@ -1607,12 +1612,8 @@ class CdkTable {
         }
         /** @type {?} */
         let dataStream;
-        // Check if the datasource is a DataSource object by observing if it has a connect function.
-        // Cannot check this.dataSource['connect'] due to potential property renaming, nor can it
-        // checked as an instanceof DataSource<T> since the table should allow for data sources
-        // that did not explicitly extend DataSource<T>.
-        if (((/** @type {?} */ (this.dataSource))).connect instanceof Function) {
-            dataStream = ((/** @type {?} */ (this.dataSource))).connect(this);
+        if (isDataSource(this.dataSource)) {
+            dataStream = this.dataSource.connect(this);
         }
         else if (this.dataSource instanceof Observable) {
             dataStream = this.dataSource;
@@ -1669,7 +1670,14 @@ class CdkTable {
      */
     _addStickyColumnStyles(rows, rowDef) {
         /** @type {?} */
-        const columnDefs = Array.from(rowDef.columns || []).map(c => (/** @type {?} */ (this._columnDefsByName.get(c))));
+        const columnDefs = Array.from(rowDef.columns || []).map(columnName => {
+            /** @type {?} */
+            const columnDef = this._columnDefsByName.get(columnName);
+            if (!columnDef) {
+                throw getTableUnknownColumnError(columnName);
+            }
+            return (/** @type {?} */ (columnDef));
+        });
         /** @type {?} */
         const stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
         /** @type {?} */

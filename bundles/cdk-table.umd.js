@@ -1261,7 +1261,10 @@ var FooterRowOutlet = /** @class */ (function () {
  * \@docs-private
  * @type {?}
  */
-var CDK_TABLE_TEMPLATE = "\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>";
+var CDK_TABLE_TEMPLATE = 
+// Note that according to MDN, the `caption` element has to be projected as the **first** element
+// in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
+"\n  <ng-content select=\"caption\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
 /**
  * Class used to conveniently type the embedded view ref for rows with a context.
  * \@docs-private
@@ -1556,7 +1559,7 @@ var CdkTable = /** @class */ (function () {
         this._cachedRenderRowsMap.clear();
         this._onDestroy.next();
         this._onDestroy.complete();
-        if (this.dataSource instanceof collections.DataSource) {
+        if (collections.isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
     };
@@ -2131,7 +2134,7 @@ var CdkTable = /** @class */ (function () {
      */
     function (dataSource) {
         this._data = [];
-        if (this.dataSource instanceof collections.DataSource) {
+        if (collections.isDataSource(this.dataSource)) {
             this.dataSource.disconnect(this);
         }
         // Stop listening for data from the previous data source.
@@ -2166,12 +2169,8 @@ var CdkTable = /** @class */ (function () {
         }
         /** @type {?} */
         var dataStream;
-        // Check if the datasource is a DataSource object by observing if it has a connect function.
-        // Cannot check this.dataSource['connect'] due to potential property renaming, nor can it
-        // checked as an instanceof DataSource<T> since the table should allow for data sources
-        // that did not explicitly extend DataSource<T>.
-        if (((/** @type {?} */ (this.dataSource))).connect instanceof Function) {
-            dataStream = ((/** @type {?} */ (this.dataSource))).connect(this);
+        if (collections.isDataSource(this.dataSource)) {
+            dataStream = this.dataSource.connect(this);
         }
         else if (this.dataSource instanceof rxjs.Observable) {
             dataStream = this.dataSource;
@@ -2259,7 +2258,14 @@ var CdkTable = /** @class */ (function () {
     function (rows, rowDef) {
         var _this = this;
         /** @type {?} */
-        var columnDefs = Array.from(rowDef.columns || []).map(function (c) { return (/** @type {?} */ (_this._columnDefsByName.get(c))); });
+        var columnDefs = Array.from(rowDef.columns || []).map(function (columnName) {
+            /** @type {?} */
+            var columnDef = _this._columnDefsByName.get(columnName);
+            if (!columnDef) {
+                throw getTableUnknownColumnError(columnName);
+            }
+            return (/** @type {?} */ (columnDef));
+        });
         /** @type {?} */
         var stickyStartStates = columnDefs.map(function (columnDef) { return columnDef.sticky; });
         /** @type {?} */

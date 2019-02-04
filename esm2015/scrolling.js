@@ -11,7 +11,7 @@ import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } fr
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
-import { ArrayDataSource, DataSource } from '@angular/cdk/collections';
+import { ArrayDataSource, isDataSource } from '@angular/cdk/collections';
 
 /**
  * @fileoverview added by tsickle
@@ -1183,7 +1183,7 @@ class CdkVirtualForOf {
     set cdkVirtualForOf(value) {
         this._cdkVirtualForOf = value;
         /** @type {?} */
-        const ds = value instanceof DataSource ? value :
+        const ds = isDataSource(value) ? value :
             // Slice the value if its an NgIterable to ensure we're working with an array.
             new ArrayDataSource(value instanceof Observable ? value : Array.prototype.slice.call(value || []));
         this._dataSourceChanges.next(ds);

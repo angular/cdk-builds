@@ -349,19 +349,21 @@ var CdkStepper = /** @class */ (function () {
          * @return {?}
          */
         function (index) {
+            /** @type {?} */
+            var newIndex = coercion.coerceNumberProperty(index);
             if (this.steps) {
                 // Ensure that the index can't be out of bounds.
-                if (index < 0 || index > this.steps.length - 1) {
+                if (newIndex < 0 || newIndex > this.steps.length - 1) {
                     throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                 }
-                if (this._selectedIndex != index &&
-                    !this._anyControlsInvalidOrPending(index) &&
-                    (index >= this._selectedIndex || this.steps.toArray()[index].editable)) {
+                if (this._selectedIndex != newIndex &&
+                    !this._anyControlsInvalidOrPending(newIndex) &&
+                    (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                     this._updateSelectedItemIndex(index);
                 }
             }
             else {
-                this._selectedIndex = index;
+                this._selectedIndex = newIndex;
             }
         },
         enumerable: true,

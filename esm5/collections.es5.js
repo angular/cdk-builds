@@ -27,6 +27,17 @@ DataSource = /** @class */ (function () {
     }
     return DataSource;
 }());
+/**
+ * Checks whether an object is a data source.
+ * @param {?} value
+ * @return {?}
+ */
+function isDataSource(value) {
+    // Check if the value is a DataSource by observing if it has a connect function. Cannot
+    // be checked as an `instanceof DataSource` since people could create their own sources
+    // that match the interface, but don't extend DataSource.
+    return value && typeof value.connect === 'function';
+}
 
 /**
  * @fileoverview added by tsickle
@@ -506,5 +517,5 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };
+export { UniqueSelectionDispatcher, ArrayDataSource, isDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };
 //# sourceMappingURL=collections.es5.js.map

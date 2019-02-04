@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { SelectionModel } from '@angular/cdk/collections';
+import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { __extends } from 'tslib';
 import { Observable, BehaviorSubject, of, Subject } from 'rxjs';
 import { take, filter, takeUntil } from 'rxjs/operators';
@@ -624,10 +624,8 @@ var CdkTree = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var dataStream;
-        // Cannot use `instanceof DataSource` since the data source could be a literal with
-        // `connect` function and may not extends DataSource.
-        if (typeof ((/** @type {?} */ (this._dataSource))).connect === 'function') {
-            dataStream = ((/** @type {?} */ (this._dataSource))).connect(this);
+        if (isDataSource(this._dataSource)) {
+            dataStream = this._dataSource.connect(this);
         }
         else if (this._dataSource instanceof Observable) {
             dataStream = this._dataSource;

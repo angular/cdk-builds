@@ -649,10 +649,8 @@ var CdkTree = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var dataStream;
-        // Cannot use `instanceof DataSource` since the data source could be a literal with
-        // `connect` function and may not extends DataSource.
-        if (typeof ((/** @type {?} */ (this._dataSource))).connect === 'function') {
-            dataStream = ((/** @type {?} */ (this._dataSource))).connect(this);
+        if (collections.isDataSource(this._dataSource)) {
+            dataStream = this._dataSource.connect(this);
         }
         else if (this._dataSource instanceof rxjs.Observable) {
             dataStream = this._dataSource;
