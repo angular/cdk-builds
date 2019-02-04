@@ -7,7 +7,7 @@
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
-import { Subject, Subscription, Observable, of } from 'rxjs';
+import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
@@ -1829,32 +1829,18 @@ class FocusMonitor {
         }
         // Create monitored element info.
         /** @type {?} */
-        const subject = new Subject();
-        /** @type {?} */
-        const info = {
+        let info = {
             unlisten: () => { },
-            checkChildren,
-            subject,
-            // Note that we want the observable to emit inside the NgZone, however we don't want to
-            // trigger change detection if nobody has subscribed to it. We do so by creating the
-            // observable manually.
-            observable: new Observable((observer) => {
-                /** @type {?} */
-                const subscription = subject.subscribe(origin => {
-                    this._ngZone.run(() => observer.next(origin));
-                });
-                return () => {
-                    subscription.unsubscribe();
-                };
-            })
+            checkChildren: checkChildren,
+            subject: new Subject()
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
         // Start listening. We need to listen in capture phase since focus events don't bubble.
         /** @type {?} */
-        const focusListener = (event) => this._onFocus(event, nativeElement);
+        let focusListener = (event) => this._onFocus(event, nativeElement);
         /** @type {?} */
-        const blurListener = (event) => this._onBlur(event, nativeElement);
+        let blurListener = (event) => this._onBlur(event, nativeElement);
         this._ngZone.runOutsideAngular(() => {
             nativeElement.addEventListener('focus', focusListener, true);
             nativeElement.addEventListener('blur', blurListener, true);
@@ -1864,7 +1850,7 @@ class FocusMonitor {
             nativeElement.removeEventListener('focus', focusListener, true);
             nativeElement.removeEventListener('blur', blurListener, true);
         };
-        return info.observable;
+        return info.subject.asObservable();
     }
     /**
      * @param {?} element
@@ -2025,7 +2011,7 @@ class FocusMonitor {
             }
         }
         this._setClasses(element, origin);
-        elementInfo.subject.next(origin);
+        this._emitOrigin(elementInfo.subject, origin);
         this._lastFocusOrigin = origin;
     }
     /**
@@ -2044,7 +2030,16 @@ class FocusMonitor {
             return;
         }
         this._setClasses(element);
-        elementInfo.subject.next(null);
+        this._emitOrigin(elementInfo.subject, null);
+    }
+    /**
+     * @private
+     * @param {?} subject
+     * @param {?} origin
+     * @return {?}
+     */
+    _emitOrigin(subject, origin) {
+        this._ngZone.run(() => subject.next(origin));
     }
     /**
      * @private
