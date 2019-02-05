@@ -14,6 +14,7 @@ import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatche
 import { OverlayConfig } from './overlay-config';
 import { OverlayReference } from './overlay-reference';
 import { PositionStrategy } from './position/position-strategy';
+import { ScrollStrategy } from './scroll';
 /** An object where all of its properties cannot be written. */
 export declare type ImmutableObject<T> = {
     readonly [P in keyof T]: T[P];
@@ -36,6 +37,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _attachments;
     private _detachments;
     private _positionStrategy;
+    private _scrollStrategy;
     private _locationChanges;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
@@ -96,6 +98,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
      * Returns the layout direction of the overlay panel.
      */
     getDirection(): Direction;
+    /** Switches to a new scroll strategy. */
+    updateScrollStrategy(strategy: ScrollStrategy): void;
     /** Updates the text direction of the overlay panel. */
     private _updateElementDirection;
     /** Updates the size of the overlay element based on the overlay config. */
@@ -118,6 +122,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _toggleClasses;
     /** Detaches the overlay content next time the zone stabilizes. */
     private _detachContentWhenStable;
+    /** Disposes of a scroll strategy. */
+    private _disposeScrollStrategy;
 }
 /** Size properties for an overlay. */
 export interface OverlaySizeConfig {

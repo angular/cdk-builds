@@ -236,6 +236,16 @@ CloseScrollStrategy = /** @class */ (function () {
             this._scrollSubscription = null;
         }
     };
+    /**
+     * @return {?}
+     */
+    CloseScrollStrategy.prototype.detach = /**
+     * @return {?}
+     */
+    function () {
+        this.disable();
+        this._overlayRef = (/** @type {?} */ (null));
+    };
     return CloseScrollStrategy;
 }());
 
@@ -416,6 +426,16 @@ RepositionScrollStrategy = /** @class */ (function () {
             this._scrollSubscription.unsubscribe();
             this._scrollSubscription = null;
         }
+    };
+    /**
+     * @return {?}
+     */
+    RepositionScrollStrategy.prototype.detach = /**
+     * @return {?}
+     */
+    function () {
+        this.disable();
+        this._overlayRef = (/** @type {?} */ (null));
     };
     return RepositionScrollStrategy;
 }());
@@ -934,7 +954,8 @@ OverlayRef = /** @class */ (function () {
          */
         this._keydownEventSubscriptions = 0;
         if (_config.scrollStrategy) {
-            _config.scrollStrategy.attach(this);
+            this._scrollStrategy = _config.scrollStrategy;
+            this._scrollStrategy.attach(this);
         }
         this._positionStrategy = _config.positionStrategy;
     }
@@ -1015,8 +1036,8 @@ OverlayRef = /** @class */ (function () {
         this._updateStackingOrder();
         this._updateElementSize();
         this._updateElementDirection();
-        if (this._config.scrollStrategy) {
-            this._config.scrollStrategy.enable();
+        if (this._scrollStrategy) {
+            this._scrollStrategy.enable();
         }
         // Update the position once the zone is stable so that the overlay will be fully rendered
         // before attempting to position it, as the position may depend on the size of the rendered
@@ -1073,8 +1094,8 @@ OverlayRef = /** @class */ (function () {
         if (this._positionStrategy && this._positionStrategy.detach) {
             this._positionStrategy.detach();
         }
-        if (this._config.scrollStrategy) {
-            this._config.scrollStrategy.disable();
+        if (this._scrollStrategy) {
+            this._scrollStrategy.disable();
         }
         /** @type {?} */
         var detachmentResult = this._portalOutlet.detach();
@@ -1104,9 +1125,7 @@ OverlayRef = /** @class */ (function () {
         if (this._positionStrategy) {
             this._positionStrategy.dispose();
         }
-        if (this._config.scrollStrategy) {
-            this._config.scrollStrategy.disable();
-        }
+        this._disposeScrollStrategy();
         this.detachBackdrop();
         this._locationChanges.unsubscribe();
         this._keyboardDispatcher.remove(this);
@@ -1314,6 +1333,28 @@ OverlayRef = /** @class */ (function () {
             return 'ltr';
         }
         return typeof direction === 'string' ? direction : direction.value;
+    };
+    /** Switches to a new scroll strategy. */
+    /**
+     * Switches to a new scroll strategy.
+     * @param {?} strategy
+     * @return {?}
+     */
+    OverlayRef.prototype.updateScrollStrategy = /**
+     * Switches to a new scroll strategy.
+     * @param {?} strategy
+     * @return {?}
+     */
+    function (strategy) {
+        if (strategy === this._scrollStrategy) {
+            return;
+        }
+        this._disposeScrollStrategy();
+        this._scrollStrategy = strategy;
+        if (this.hasAttached()) {
+            strategy.attach(this);
+            strategy.enable();
+        }
     };
     /** Updates the text direction of the overlay panel. */
     /**
@@ -1547,6 +1588,27 @@ OverlayRef = /** @class */ (function () {
                 }
             });
         });
+    };
+    /** Disposes of a scroll strategy. */
+    /**
+     * Disposes of a scroll strategy.
+     * @private
+     * @return {?}
+     */
+    OverlayRef.prototype._disposeScrollStrategy = /**
+     * Disposes of a scroll strategy.
+     * @private
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var scrollStrategy = this._scrollStrategy;
+        if (scrollStrategy) {
+            scrollStrategy.disable();
+            if (scrollStrategy.detach) {
+                scrollStrategy.detach();
+            }
+        }
     };
     return OverlayRef;
 }());

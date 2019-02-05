@@ -34,6 +34,7 @@ export declare class CloseScrollStrategy implements ScrollStrategy {
     enable(): void;
     /** Disables the closing the attached overlay on scroll. */
     disable(): void;
+    detach(): void;
     /** Detaches the overlay ref and disables the scroll strategy. */
     private _detach;
 }

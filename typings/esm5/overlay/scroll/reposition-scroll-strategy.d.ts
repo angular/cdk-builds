@@ -35,4 +35,5 @@ export declare class RepositionScrollStrategy implements ScrollStrategy {
     enable(): void;
     /** Disables repositioning of the attached overlay on scroll. */
     disable(): void;
+    detach(): void;
 }
