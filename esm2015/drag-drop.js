@@ -2255,20 +2255,22 @@ class CdkDrag {
      * @param {?} config
      * @param {?} _dir
      * @param {?=} dragDrop
+     * @param {?=} _changeDetectorRef
      */
     constructor(element, dropContainer, _document, _ngZone, _viewContainerRef, viewportRuler, dragDropRegistry, config, _dir, 
     /**
-     * @deprecated `viewportRuler` and `dragDropRegistry` parameters
+     * @deprecated `viewportRuler`, `dragDropRegistry` and `_changeDetectorRef` parameters
      * to be removed. Also `dragDrop` parameter to be made required.
      * @breaking-change 8.0.0.
      */
-    dragDrop) {
+    dragDrop, _changeDetectorRef) {
         this.element = element;
         this.dropContainer = dropContainer;
         this._document = _document;
         this._ngZone = _ngZone;
         this._viewContainerRef = _viewContainerRef;
         this._dir = _dir;
+        this._changeDetectorRef = _changeDetectorRef;
         this._destroyed = new Subject();
         this._disabled = false;
         /**
@@ -2320,7 +2322,7 @@ class CdkDrag {
         }
         this._dragRef.data = this;
         this._syncInputs(this._dragRef);
-        this._proxyEvents(this._dragRef);
+        this._handleEvents(this._dragRef);
     }
     /**
      * Whether starting to drag this element is disabled.
@@ -2478,21 +2480,32 @@ class CdkDrag {
         });
     }
     /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
+     * Handles the events from the underlying `DragRef`.
      * @private
      * @param {?} ref
      * @return {?}
      */
-    _proxyEvents(ref) {
+    _handleEvents(ref) {
         ref.started.subscribe(() => {
             this.started.emit({ source: this });
+            // Since all of these events run outside of change detection,
+            // we need to ensure that everything is marked correctly.
+            if (this._changeDetectorRef) {
+                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
+                this._changeDetectorRef.markForCheck();
+            }
         });
         ref.released.subscribe(() => {
             this.released.emit({ source: this });
         });
         ref.ended.subscribe(() => {
             this.ended.emit({ source: this });
+            // Since all of these events run outside of change detection,
+            // we need to ensure that everything is marked correctly.
+            if (this._changeDetectorRef) {
+                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
+                this._changeDetectorRef.markForCheck();
+            }
         });
         ref.entered.subscribe(event => {
             this.entered.emit({
@@ -2541,7 +2554,8 @@ CdkDrag.ctorParameters = () => [
     { type: DragDropRegistry },
     { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_CONFIG,] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
-    { type: DragDrop }
+    { type: DragDrop },
+    { type: ChangeDetectorRef }
 ];
 CdkDrag.propDecorators = {
     _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
