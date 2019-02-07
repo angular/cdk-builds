@@ -2524,6 +2524,7 @@ CdkDrag.decorators = [
                 exportAs: 'cdkDrag',
                 host: {
                     'class': 'cdk-drag',
+                    '[class.cdk-drag-disabled]': 'disabled',
                     '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
                 },
                 providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
@@ -2935,6 +2936,7 @@ CdkDropList.decorators = [
                 host: {
                     'class': 'cdk-drop-list',
                     '[id]': 'id',
+                    '[class.cdk-drop-list-disabled]': 'disabled',
                     '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
                     '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
                 }
