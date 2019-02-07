@@ -1117,8 +1117,8 @@ var CdkTreeNodePadding = /** @class */ (function () {
         this.indentUnits = 'px';
         this._indent = 40;
         this._setPadding();
-        if (this._dir) {
-            this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
+        if (_dir) {
+            _dir.change.pipe(takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
         }
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {
@@ -1208,10 +1208,15 @@ var CdkTreeNodePadding = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
+        var element = this._element.nativeElement;
+        /** @type {?} */
         var padding = this._paddingIndent();
         /** @type {?} */
         var paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
-        this._renderer.setStyle(this._element.nativeElement, paddingProp, padding);
+        /** @type {?} */
+        var resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
+        this._renderer.setStyle(element, paddingProp, padding);
+        this._renderer.setStyle(element, resetProp, '');
     };
     CdkTreeNodePadding.decorators = [
         { type: Directive, args: [{
