@@ -7,7 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DragDropRegistry } from '../drag-drop-registry';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
@@ -32,6 +32,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _ngZone;
     private _viewContainerRef;
     private _dir;
+    private _changeDetectorRef?;
     private _destroyed;
     /** Reference to the underlying drag instance. */
     _dragRef: DragRef<CdkDrag<T>>;
@@ -83,11 +84,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Droppable container that the draggable is a part of. */
     dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, viewportRuler: ViewportRuler, dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, config: DragRefConfig, _dir: Directionality, 
     /**
-     * @deprecated `viewportRuler` and `dragDropRegistry` parameters
+     * @deprecated `viewportRuler`, `dragDropRegistry` and `_changeDetectorRef` parameters
      * to be removed. Also `dragDrop` parameter to be made required.
      * @breaking-change 8.0.0.
      */
-    dragDrop?: DragDrop);
+    dragDrop?: DragDrop, _changeDetectorRef?: ChangeDetectorRef | undefined);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -106,9 +107,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _getBoundaryElement;
     /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
     private _syncInputs;
-    /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
-     */
-    private _proxyEvents;
+    /** Handles the events from the underlying `DragRef`. */
+    private _handleEvents;
 }

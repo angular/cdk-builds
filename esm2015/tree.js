@@ -876,8 +876,8 @@ class CdkTreeNodePadding {
         this.indentUnits = 'px';
         this._indent = 40;
         this._setPadding();
-        if (this._dir) {
-            this._dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding());
+        if (_dir) {
+            _dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding());
         }
     }
     /**
@@ -943,10 +943,15 @@ class CdkTreeNodePadding {
      */
     _setPadding() {
         /** @type {?} */
+        const element = this._element.nativeElement;
+        /** @type {?} */
         const padding = this._paddingIndent();
         /** @type {?} */
         const paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
-        this._renderer.setStyle(this._element.nativeElement, paddingProp, padding);
+        /** @type {?} */
+        const resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
+        this._renderer.setStyle(element, paddingProp, padding);
+        this._renderer.setStyle(element, resetProp, '');
     }
 }
 CdkTreeNodePadding.decorators = [

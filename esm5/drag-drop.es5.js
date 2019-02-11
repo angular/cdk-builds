@@ -2854,11 +2854,11 @@ function CDK_DRAG_CONFIG_FACTORY() {
 var CdkDrag = /** @class */ (function () {
     function CdkDrag(element, dropContainer, _document, _ngZone, _viewContainerRef, viewportRuler, dragDropRegistry, config, _dir, 
     /**
-     * @deprecated `viewportRuler` and `dragDropRegistry` parameters
+     * @deprecated `viewportRuler`, `dragDropRegistry` and `_changeDetectorRef` parameters
      * to be removed. Also `dragDrop` parameter to be made required.
      * @breaking-change 8.0.0.
      */
-    dragDrop) {
+    dragDrop, _changeDetectorRef) {
         var _this = this;
         this.element = element;
         this.dropContainer = dropContainer;
@@ -2866,6 +2866,7 @@ var CdkDrag = /** @class */ (function () {
         this._ngZone = _ngZone;
         this._viewContainerRef = _viewContainerRef;
         this._dir = _dir;
+        this._changeDetectorRef = _changeDetectorRef;
         this._destroyed = new Subject();
         this._disabled = false;
         /**
@@ -2917,7 +2918,7 @@ var CdkDrag = /** @class */ (function () {
         }
         this._dragRef.data = this;
         this._syncInputs(this._dragRef);
-        this._proxyEvents(this._dragRef);
+        this._handleEvents(this._dragRef);
     }
     Object.defineProperty(CdkDrag.prototype, "disabled", {
         /** Whether starting to drag this element is disabled. */
@@ -3129,20 +3130,15 @@ var CdkDrag = /** @class */ (function () {
             }
         });
     };
+    /** Handles the events from the underlying `DragRef`. */
     /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
-     */
-    /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
+     * Handles the events from the underlying `DragRef`.
      * @private
      * @param {?} ref
      * @return {?}
      */
-    CdkDrag.prototype._proxyEvents = /**
-     * Proxies the events from a DragRef to events that
-     * match the interfaces of the CdkDrag outputs.
+    CdkDrag.prototype._handleEvents = /**
+     * Handles the events from the underlying `DragRef`.
      * @private
      * @param {?} ref
      * @return {?}
@@ -3151,12 +3147,24 @@ var CdkDrag = /** @class */ (function () {
         var _this = this;
         ref.started.subscribe(function () {
             _this.started.emit({ source: _this });
+            // Since all of these events run outside of change detection,
+            // we need to ensure that everything is marked correctly.
+            if (_this._changeDetectorRef) {
+                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
+                _this._changeDetectorRef.markForCheck();
+            }
         });
         ref.released.subscribe(function () {
             _this.released.emit({ source: _this });
         });
         ref.ended.subscribe(function () {
             _this.ended.emit({ source: _this });
+            // Since all of these events run outside of change detection,
+            // we need to ensure that everything is marked correctly.
+            if (_this._changeDetectorRef) {
+                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
+                _this._changeDetectorRef.markForCheck();
+            }
         });
         ref.entered.subscribe(function (event) {
             _this.entered.emit({
@@ -3187,6 +3195,7 @@ var CdkDrag = /** @class */ (function () {
                     exportAs: 'cdkDrag',
                     host: {
                         'class': 'cdk-drag',
+                        '[class.cdk-drag-disabled]': 'disabled',
                         '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
                     },
                     providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
@@ -3203,7 +3212,8 @@ var CdkDrag = /** @class */ (function () {
         { type: DragDropRegistry },
         { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_CONFIG,] }] },
         { type: Directionality, decorators: [{ type: Optional }] },
-        { type: DragDrop }
+        { type: DragDrop },
+        { type: ChangeDetectorRef }
     ]; };
     CdkDrag.propDecorators = {
         _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
@@ -3722,6 +3732,7 @@ var CdkDropList = /** @class */ (function () {
                     host: {
                         'class': 'cdk-drop-list',
                         '[id]': 'id',
+                        '[class.cdk-drop-list-disabled]': 'disabled',
                         '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
                         '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
                     }
