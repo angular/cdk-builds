@@ -1671,7 +1671,7 @@ DropListRef = /** @class */ (function () {
      */
     function (items) {
         var _this = this;
-        (/** @type {?} */ (this))._draggables = items.slice();
+        (/** @type {?} */ (this))._draggables = items;
         items.forEach(function (item) { return item._withDropContainer((/** @type {?} */ (_this))); });
         return (/** @type {?} */ (this));
     };

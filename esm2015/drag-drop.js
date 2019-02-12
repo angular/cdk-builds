@@ -1356,7 +1356,7 @@ class DropListRef {
      * @return {THIS}
      */
     withItems(items) {
-        (/** @type {?} */ (this))._draggables = items.slice();
+        (/** @type {?} */ (this))._draggables = items;
         items.forEach(item => item._withDropContainer((/** @type {?} */ (this))));
         return (/** @type {?} */ (this));
     }
