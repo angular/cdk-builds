@@ -242,23 +242,21 @@ var BreakpointObserver = /** @class */ (function () {
         }
         /** @type {?} */
         var mql = this.mediaMatcher.matchMedia(query);
-        // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
-        // TypeScript 3.1 (the type is unavailable before then).
-        /** @type {?} */
-        var queryListener;
         // Create callback for match changes and add it is as a listener.
         /** @type {?} */
-        var queryObservable = rxjs.fromEventPattern(
-        // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
-        // back into the zone because matchMedia is only included in Zone.js by loading the
-        // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
-        // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
-        // patches it.
-        function (listener) {
-            queryListener = function (e) { return _this.zone.run(function () { return listener(e); }); };
-            mql.addListener(queryListener);
-        }, function () { return mql.removeListener(queryListener); })
-            .pipe(operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }), operators.takeUntil(this._destroySubject));
+        var queryObservable = new rxjs.Observable(function (observer) {
+            // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
+            // back into the zone because matchMedia is only included in Zone.js by loading the
+            // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
+            // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
+            // patches it.
+            /** @type {?} */
+            var handler = function (e) { return _this.zone.run(function () { return observer.next(e); }); };
+            mql.addListener(handler);
+            return function () {
+                mql.removeListener(handler);
+            };
+        }).pipe(operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }), operators.takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         var output = { observable: queryObservable, mql: mql };

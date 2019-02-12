@@ -7,7 +7,7 @@
  */
 import { NgModule, Injectable, NgZone, defineInjectable, inject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { asapScheduler, combineLatest, fromEventPattern, Subject } from 'rxjs';
+import { asapScheduler, combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
@@ -194,23 +194,21 @@ class BreakpointObserver {
         }
         /** @type {?} */
         const mql = this.mediaMatcher.matchMedia(query);
-        // TODO(jelbourn): change this `any` to `MediaQueryListEvent` once Google has upgraded to
-        // TypeScript 3.1 (the type is unavailable before then).
-        /** @type {?} */
-        let queryListener;
         // Create callback for match changes and add it is as a listener.
         /** @type {?} */
-        const queryObservable = fromEventPattern(
-        // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
-        // back into the zone because matchMedia is only included in Zone.js by loading the
-        // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
-        // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
-        // patches it.
-        (listener) => {
-            queryListener = (e) => this.zone.run(() => listener(e));
-            mql.addListener(queryListener);
-        }, () => mql.removeListener(queryListener))
-            .pipe(startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })), takeUntil(this._destroySubject));
+        const queryObservable = new Observable((observer) => {
+            // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
+            // back into the zone because matchMedia is only included in Zone.js by loading the
+            // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
+            // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
+            // patches it.
+            /** @type {?} */
+            const handler = (e) => this.zone.run(() => observer.next(e));
+            mql.addListener(handler);
+            return () => {
+                mql.removeListener(handler);
+            };
+        }).pipe(startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })), takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         const output = { observable: queryObservable, mql };
