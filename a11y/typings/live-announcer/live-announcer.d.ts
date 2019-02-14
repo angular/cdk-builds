@@ -7,14 +7,14 @@
  */
 import { ContentObserver } from '@angular/cdk/observers';
 import { ElementRef, NgZone, OnDestroy, Provider } from '@angular/core';
-/** Possible politeness levels. */
-export declare type AriaLivePoliteness = 'off' | 'polite' | 'assertive';
+import { AriaLivePoliteness, LiveAnnouncerDefaultOptions } from './live-announcer-tokens';
 export declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
+    private _defaultOptions?;
     private _liveElement;
     private _document;
     private _previousTimeout?;
-    constructor(elementToken: any, _ngZone: NgZone, _document: any);
+    constructor(elementToken: any, _ngZone: NgZone, _document: any, _defaultOptions?: LiveAnnouncerDefaultOptions | undefined);
     /**
      * Announces a message to screenreaders.
      * @param message Message to be announced to the screenreader.

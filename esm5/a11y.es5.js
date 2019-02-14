@@ -2052,8 +2052,6 @@ var CdkTrapFocus = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-// The token for the live announcer element is defined in a separate file from LiveAnnouncer
-// as a workaround for https://github.com/angular/angular/issues/22559
 /** @type {?} */
 var LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
@@ -2066,14 +2064,20 @@ var LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
 function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
     return null;
 }
+/**
+ * Injection token that can be used to configure the default options for the LiveAnnouncer.
+ * @type {?}
+ */
+var LIVE_ANNOUNCER_DEFAULT_OPTIONS = new InjectionToken('LIVE_ANNOUNCER_DEFAULT_OPTIONS');
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LiveAnnouncer = /** @class */ (function () {
-    function LiveAnnouncer(elementToken, _ngZone, _document) {
+    function LiveAnnouncer(elementToken, _ngZone, _document, _defaultOptions) {
         this._ngZone = _ngZone;
+        this._defaultOptions = _defaultOptions;
         // We inject the live element and document as `any` because the constructor signature cannot
         // reference browser globals (HTMLElement, Document) on non-browser environments, since having
         // a class decorator causes TypeScript to preserve the constructor signature types.
@@ -2097,6 +2101,8 @@ var LiveAnnouncer = /** @class */ (function () {
             args[_i - 1] = arguments[_i];
         }
         /** @type {?} */
+        var defaultOptions = this._defaultOptions;
+        /** @type {?} */
         var politeness;
         /** @type {?} */
         var duration;
@@ -2108,8 +2114,15 @@ var LiveAnnouncer = /** @class */ (function () {
         }
         this.clear();
         clearTimeout(this._previousTimeout);
+        if (!politeness) {
+            politeness =
+                (defaultOptions && defaultOptions.politeness) ? defaultOptions.politeness : 'polite';
+        }
+        if (duration == null && defaultOptions) {
+            duration = defaultOptions.duration;
+        }
         // TODO: ensure changing the politeness works on all environments we support.
-        this._liveElement.setAttribute('aria-live', (/** @type {?} */ (politeness)) || 'polite');
+        this._liveElement.setAttribute('aria-live', politeness);
         // This 100ms timeout is necessary for some browser + screen-reader combinations:
         // - Both JAWS and NVDA over IE11 will not announce anything without a non-zero timeout.
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
@@ -2196,9 +2209,10 @@ var LiveAnnouncer = /** @class */ (function () {
     LiveAnnouncer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
         { type: NgZone },
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(NgZone), inject(DOCUMENT)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(NgZone), inject(DOCUMENT), inject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
@@ -2883,5 +2897,5 @@ var A11yModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ARIA_DESCRIBER_PROVIDER_FACTORY, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_PROVIDER_FACTORY, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, FOCUS_MONITOR_PROVIDER_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { ARIA_DESCRIBER_PROVIDER_FACTORY, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_PROVIDER_FACTORY, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, FOCUS_MONITOR_PROVIDER_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.es5.js.map
