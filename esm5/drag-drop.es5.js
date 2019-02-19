@@ -3030,7 +3030,7 @@ var CdkDrag = /** @class */ (function () {
      */
     function (changes) {
         /** @type {?} */
-        var rootSelectorChange = changes.rootElementSelector;
+        var rootSelectorChange = changes['rootElementSelector'];
         // We don't have to react to the first change since it's being
         // handled in `ngAfterViewInit` where it needs to be deferred.
         if (rootSelectorChange && !rootSelectorChange.firstChange) {
