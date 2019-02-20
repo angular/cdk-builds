@@ -21,6 +21,11 @@ const path_1 = require("path");
 const get_project_1 = require("./get-project");
 const schematic_options_1 = require("./schematic-options");
 const version_agnostic_typescript_1 = require("./version-agnostic-typescript");
+/**
+ * List of style extensions which are CSS compatible. All supported CLI style extensions can be
+ * found here: angular/angular-cli/master/packages/schematics/angular/ng-new/schema.json#L118-L122
+ */
+const supportedCssExtensions = ['css', 'scss', 'less'];
 function readIntoSourceFile(host, modulePath) {
     const text = host.read(modulePath);
     if (text === null) {
@@ -135,6 +140,13 @@ function buildComponent(options, additionalFiles = {}) {
         options.selector = options.selector || buildSelector(options, project.prefix);
         validation_1.validateName(options.name);
         validation_1.validateHtmlSelector(options.selector);
+        // In case the specified style extension is not part of the supported CSS supersets,
+        // we generate the stylesheets with the "css" extension. This ensures that we don't
+        // accidentally generate invalid stylesheets (e.g. drag-drop-comp.styl) which will
+        // break the Angular CLI project. See: https://github.com/angular/material2/issues/15164
+        if (!supportedCssExtensions.includes(options.styleext)) {
+            options.styleext = 'css';
+        }
         // Object that will be used as context for the EJS templates.
         const baseTemplateContext = Object.assign({}, core_1.strings, { 'if-flat': (s) => options.flat ? '' : s }, options);
         // Key-value object that includes the specified additional files with their loaded content.
