@@ -134,8 +134,10 @@ var Dir = /** @class */ (function () {
         function (value) {
             /** @type {?} */
             var old = this._dir;
+            /** @type {?} */
+            var normalizedValue = value ? value.toLowerCase() : value;
             this._rawDir = value;
-            this._dir = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
+            this._dir = (normalizedValue === 'ltr' || normalizedValue === 'rtl') ? normalizedValue : 'ltr';
             if (old !== this._dir && this._isInitialized) {
                 this.change.emit(this._dir);
             }

@@ -1381,9 +1381,19 @@ class CdkTable {
     updateStickyHeaderRowStyles() {
         /** @type {?} */
         const headerRows = this._getRenderedRows(this._headerRowOutlet);
-        this._stickyStyler.clearStickyPositioning(headerRows, ['top']);
+        /** @type {?} */
+        const tableElement = (/** @type {?} */ (this._elementRef.nativeElement));
+        // Hide the thead element if there are no header rows. This is necessary to satisfy
+        // overzealous a11y checkers that fail because the `rowgroup` element does not contain
+        // required child `row`.
+        /** @type {?} */
+        const thead = tableElement.querySelector('thead');
+        if (thead) {
+            thead.style.display = headerRows.length ? '' : 'none';
+        }
         /** @type {?} */
         const stickyStates = this._headerRowDefs.map(def => def.sticky);
+        this._stickyStyler.clearStickyPositioning(headerRows, ['top']);
         this._stickyStyler.stickRows(headerRows, stickyStates, 'top');
         // Reset the dirty state of the sticky input change since it has been used.
         this._headerRowDefs.forEach(def => def.resetStickyChanged());
@@ -1399,9 +1409,19 @@ class CdkTable {
     updateStickyFooterRowStyles() {
         /** @type {?} */
         const footerRows = this._getRenderedRows(this._footerRowOutlet);
-        this._stickyStyler.clearStickyPositioning(footerRows, ['bottom']);
+        /** @type {?} */
+        const tableElement = (/** @type {?} */ (this._elementRef.nativeElement));
+        // Hide the tfoot element if there are no footer rows. This is necessary to satisfy
+        // overzealous a11y checkers that fail because the `rowgroup` element does not contain
+        // required child `row`.
+        /** @type {?} */
+        const tfoot = tableElement.querySelector('tfoot');
+        if (tfoot) {
+            tfoot.style.display = footerRows.length ? '' : 'none';
+        }
         /** @type {?} */
         const stickyStates = this._footerRowDefs.map(def => def.sticky);
+        this._stickyStyler.clearStickyPositioning(footerRows, ['bottom']);
         this._stickyStyler.stickRows(footerRows, stickyStates, 'bottom');
         this._stickyStyler.updateStickyFooterContainer(this._elementRef.nativeElement, stickyStates);
         // Reset the dirty state of the sticky input change since it has been used.
@@ -1832,6 +1852,7 @@ class CdkTable {
         for (const section of sections) {
             /** @type {?} */
             const element = documentRef.createElement(section.tag);
+            element.setAttribute('role', 'rowgroup');
             element.appendChild(section.outlet.elementRef.nativeElement);
             documentFragment.appendChild(element);
         }
