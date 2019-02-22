@@ -3209,7 +3209,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         var _this = this;
         if (this._pane) {
             coercion.coerceArray(cssClasses).forEach(function (cssClass) {
-                if (_this._appliedPanelClasses.indexOf(cssClass) === -1) {
+                if (cssClass !== '' && _this._appliedPanelClasses.indexOf(cssClass) === -1) {
                     _this._appliedPanelClasses.push(cssClass);
                     _this._pane.classList.add(cssClass);
                 }
@@ -3230,7 +3230,9 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
     function () {
         var _this = this;
         if (this._pane) {
-            this._appliedPanelClasses.forEach(function (cssClass) { return _this._pane.classList.remove(cssClass); });
+            this._appliedPanelClasses.forEach(function (cssClass) {
+                _this._pane.classList.remove(cssClass);
+            });
             this._appliedPanelClasses = [];
         }
     };
