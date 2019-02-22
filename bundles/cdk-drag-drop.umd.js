@@ -1442,6 +1442,10 @@ DropListRef = /** @class */ (function () {
          */
         this.disabled = false;
         /**
+         * Whether sorting items within the list is disabled.
+         */
+        this.sortingDisabled = true;
+        /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
          */
@@ -1571,20 +1575,33 @@ DropListRef = /** @class */ (function () {
     function (item, pointerX, pointerY) {
         this.entered.next({ item: item, container: this });
         this.start();
-        // We use the coordinates of where the item entered the drop
-        // zone to figure out at which index it should be inserted.
+        // If sorting is disabled, we want the item to return to its starting
+        // position if the user is returning it to its initial container.
         /** @type {?} */
-        var newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+        var newIndex = this.sortingDisabled ? this._draggables.indexOf(item) : -1;
+        if (newIndex === -1) {
+            // We use the coordinates of where the item entered the drop
+            // zone to figure out at which index it should be inserted.
+            newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+        }
         /** @type {?} */
-        var currentIndex = this._activeDraggables.indexOf(item);
+        var activeDraggables = this._activeDraggables;
         /** @type {?} */
-        var newPositionReference = this._activeDraggables[newIndex];
+        var currentIndex = activeDraggables.indexOf(item);
         /** @type {?} */
         var placeholder = item.getPlaceholderElement();
+        /** @type {?} */
+        var newPositionReference = activeDraggables[newIndex];
+        // If the item at the new position is the same as the item that is being dragged,
+        // it means that we're trying to restore the item to its initial position. In this
+        // case we should use the next item from the list as the reference.
+        if (newPositionReference === item) {
+            newPositionReference = activeDraggables[newIndex + 1];
+        }
         // Since the item may be in the `activeDraggables` already (e.g. if the user dragged it
         // into another container and back again), we have to ensure that it isn't duplicated.
         if (currentIndex > -1) {
-            this._activeDraggables.splice(currentIndex, 1);
+            activeDraggables.splice(currentIndex, 1);
         }
         // Don't use items that are being dragged as a reference, because
         // their element has been moved down to the bottom of the body.
@@ -1592,11 +1609,11 @@ DropListRef = /** @class */ (function () {
             /** @type {?} */
             var element = newPositionReference.getRootElement();
             (/** @type {?} */ (element.parentElement)).insertBefore(placeholder, element);
-            this._activeDraggables.splice(newIndex, 0, item);
+            activeDraggables.splice(newIndex, 0, item);
         }
         else {
             this.element.appendChild(placeholder);
-            this._activeDraggables.push(item);
+            activeDraggables.push(item);
         }
         // The transform needs to be cleared so it doesn't throw off the measurements.
         placeholder.style.transform = '';
@@ -1816,8 +1833,8 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (item, pointerX, pointerY, pointerDelta) {
-        // Don't sort the item if it's out of range.
-        if (!this._isPointerNearDropContainer(pointerX, pointerY)) {
+        // Don't sort the item if sorting is disabled or it's out of range.
+        if (this.sortingDisabled || !this._isPointerNearDropContainer(pointerX, pointerY)) {
             return;
         }
         /** @type {?} */
@@ -3373,6 +3390,7 @@ var CdkDropList = /** @class */ (function () {
          */
         this.id = "cdk-drop-list-" + _uniqueIdCounter$1++;
         this._disabled = false;
+        this._sortingDisabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -3428,6 +3446,23 @@ var CdkDropList = /** @class */ (function () {
          */
         function (value) {
             this._disabled = coercion.coerceBooleanProperty(value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(CdkDropList.prototype, "sortingDisabled", {
+        /** Whether starting a dragging sequence from this container is disabled. */
+        get: /**
+         * Whether starting a dragging sequence from this container is disabled.
+         * @return {?}
+         */
+        function () { return this._sortingDisabled; },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._sortingDisabled = coercion.coerceBooleanProperty(value);
         },
         enumerable: true,
         configurable: true
@@ -3671,6 +3706,7 @@ var CdkDropList = /** @class */ (function () {
                 });
             }
             ref.lockAxis = _this.lockAxis;
+            ref.sortingDisabled = _this.sortingDisabled;
             ref
                 .connectedTo(siblings.filter(function (drop) { return drop && drop !== _this; }).map(function (list) { return list._dropListRef; }))
                 .withOrientation(_this.orientation);
@@ -3772,6 +3808,7 @@ var CdkDropList = /** @class */ (function () {
         id: [{ type: core.Input }],
         lockAxis: [{ type: core.Input, args: ['cdkDropListLockAxis',] }],
         disabled: [{ type: core.Input, args: ['cdkDropListDisabled',] }],
+        sortingDisabled: [{ type: core.Input, args: ['cdkDropListSortingDisabled',] }],
         enterPredicate: [{ type: core.Input, args: ['cdkDropListEnterPredicate',] }],
         dropped: [{ type: core.Output, args: ['cdkDropListDropped',] }],
         entered: [{ type: core.Output, args: ['cdkDropListEntered',] }],

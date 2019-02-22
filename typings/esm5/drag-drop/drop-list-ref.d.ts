@@ -34,6 +34,8 @@ export declare class DropListRef<T = any> {
     id: string;
     /** Whether starting a dragging sequence from this container is disabled. */
     disabled: boolean;
+    /** Whether sorting items within the list is disabled. */
+    sortingDisabled: boolean;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
     /**

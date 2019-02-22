@@ -57,6 +57,9 @@ export declare class CdkDropList<T = any> implements CdkDropListContainer, After
     /** Whether starting a dragging sequence from this container is disabled. */
     disabled: boolean;
     private _disabled;
+    /** Whether starting a dragging sequence from this container is disabled. */
+    sortingDisabled: boolean;
+    private _sortingDisabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
