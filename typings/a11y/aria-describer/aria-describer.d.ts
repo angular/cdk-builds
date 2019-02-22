@@ -68,6 +68,8 @@ export declare class AriaDescriber implements OnDestroy {
     private _isElementDescribedByMessage;
     /** Determines whether a message can be described on a particular element. */
     private _canBeDescribed;
+    /** Checks whether a node is an Element node. */
+    private _isElementNode;
 }
 /** @docs-private @deprecated @breaking-change 8.0.0 */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;

@@ -141,7 +141,7 @@ class AriaDescriber {
      * @return {?}
      */
     removeDescription(hostElement, message) {
-        if (!this._canBeDescribed(hostElement, message)) {
+        if (!this._isElementNode(hostElement)) {
             return;
         }
         if (this._isElementDescribedByMessage(hostElement, message)) {
@@ -307,8 +307,25 @@ class AriaDescriber {
      * @return {?}
      */
     _canBeDescribed(element, message) {
-        return element.nodeType === this._document.ELEMENT_NODE && message != null &&
-            !!`${message}`.trim();
+        if (!this._isElementNode(element)) {
+            return false;
+        }
+        /** @type {?} */
+        const trimmedMessage = message == null ? '' : `${message}`.trim();
+        /** @type {?} */
+        const ariaLabel = element.getAttribute('aria-label');
+        // We shouldn't set descriptions if they're exactly the same as the `aria-label` of the element,
+        // because screen readers will end up reading out the same text twice in a row.
+        return trimmedMessage ? (!ariaLabel || ariaLabel.trim() !== trimmedMessage) : false;
+    }
+    /**
+     * Checks whether a node is an Element node.
+     * @private
+     * @param {?} element
+     * @return {?}
+     */
+    _isElementNode(element) {
+        return element.nodeType === this._document.ELEMENT_NODE;
     }
 }
 AriaDescriber.decorators = [
