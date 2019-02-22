@@ -773,7 +773,7 @@ DragRef = /** @class */ (function () {
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
             element.style.display = 'none';
             this._document.body.appendChild((/** @type {?} */ (element.parentNode)).replaceChild(placeholder, element));
-            this._document.body.appendChild(preview);
+            getPreviewInsertionPoint(this._document).appendChild(preview);
             this._dropContainer.start();
         }
     };
@@ -1297,8 +1297,13 @@ function getTransform(x, y) {
 function deepCloneNode(node) {
     /** @type {?} */
     var clone = (/** @type {?} */ (node.cloneNode(true)));
+    /** @type {?} */
+    var descendantsWithId = clone.querySelectorAll('[id]');
     // Remove the `id` to avoid having multiple elements with the same id on the page.
     clone.removeAttribute('id');
+    for (var i = 0; i < descendantsWithId.length; i++) {
+        descendantsWithId[i].removeAttribute('id');
+    }
     return clone;
 }
 /**
@@ -1328,6 +1333,21 @@ function removeElement(element) {
  */
 function isTouchEvent(event) {
     return event.type.startsWith('touch');
+}
+/**
+ * Gets the element into which the drag preview should be inserted.
+ * @param {?} documentRef
+ * @return {?}
+ */
+function getPreviewInsertionPoint(documentRef) {
+    // We can't use the body if the user is in fullscreen mode,
+    // because the preview will render under the fullscreen element.
+    // TODO(crisbeto): dedupe this with the `FullscreenOverlayContainer` eventually.
+    return documentRef.fullscreenElement ||
+        documentRef.webkitFullscreenElement ||
+        documentRef.mozFullScreenElement ||
+        documentRef.msFullscreenElement ||
+        documentRef.body;
 }
 
 /**
