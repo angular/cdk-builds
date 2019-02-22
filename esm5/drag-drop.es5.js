@@ -197,6 +197,11 @@ DragRef = /** @class */ (function () {
          * Layout direction of the item.
          */
         this._direction = 'ltr';
+        /**
+         * Amount of milliseconds to wait after the user has put their
+         * pointer down before starting to drag the element.
+         */
+        this.dragStartDelay = 0;
         this._disabled = false;
         /**
          * Emits as the drag sequence is being prepared.
@@ -271,11 +276,13 @@ DragRef = /** @class */ (function () {
                 var distanceX = Math.abs(pointerPosition.x - _this._pickupPositionOnPage.x);
                 /** @type {?} */
                 var distanceY = Math.abs(pointerPosition.y - _this._pickupPositionOnPage.y);
+                /** @type {?} */
+                var isOverThreshold = distanceX + distanceY >= _this._config.dragStartThreshold;
                 // Only start dragging after the user has moved more than the minimum distance in either
                 // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
-                if (distanceX + distanceY >= _this._config.dragStartThreshold) {
+                if (isOverThreshold && (Date.now() >= _this._dragStartTime + (_this.dragStartDelay || 0))) {
                     _this._hasStartedDragging = true;
                     _this._ngZone.run(function () { return _this._startDragSequence(event); });
                 }
@@ -851,6 +858,7 @@ DragRef = /** @class */ (function () {
         var pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
         this._pointerDirectionDelta = { x: 0, y: 0 };
         this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
+        this._dragStartTime = Date.now();
         this._dragDropRegistry.startDragging(this, event);
     };
     /** Cleans up the DOM artifacts that were added to facilitate the element being dragged. */
@@ -2868,6 +2876,11 @@ var CdkDrag = /** @class */ (function () {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
         this._destroyed = new Subject();
+        /**
+         * Amount of milliseconds to wait after the user has put their
+         * pointer down before starting to drag the element.
+         */
+        this.dragStartDelay = 0;
         this._disabled = false;
         /**
          * Emits when the user starts dragging the item.
@@ -3120,6 +3133,7 @@ var CdkDrag = /** @class */ (function () {
                 } : null;
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
+                ref.dragStartDelay = _this.dragStartDelay;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())
                     .withPlaceholderTemplate(placeholder)
@@ -3223,6 +3237,7 @@ var CdkDrag = /** @class */ (function () {
         lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
         rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
         boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
+        dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
         disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
         started: [{ type: Output, args: ['cdkDragStarted',] }],
         released: [{ type: Output, args: ['cdkDragReleased',] }],

@@ -117,6 +117,8 @@ export declare class DragRef<T = any> {
      * mouse event for each touch event, after a certain time.
      */
     private _lastTouchEventTime;
+    /** Time at which the last dragging sequence was started. */
+    private _dragStartTime;
     /** Cached reference to the boundary element. */
     private _boundaryElement;
     /** Whether the native dragging interactions have been enabled on the root element. */
@@ -139,6 +141,11 @@ export declare class DragRef<T = any> {
     private _direction;
     /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
+    /**
+     * Amount of milliseconds to wait after the user has put their
+     * pointer down before starting to drag the element.
+     */
+    dragStartDelay: number;
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;

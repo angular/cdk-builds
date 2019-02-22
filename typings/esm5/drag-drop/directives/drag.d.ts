@@ -58,6 +58,11 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * element has been found.
      */
     boundaryElementSelector: string;
+    /**
+     * Amount of milliseconds to wait after the user has put their
+     * pointer down before starting to drag the element.
+     */
+    dragStartDelay: number;
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
