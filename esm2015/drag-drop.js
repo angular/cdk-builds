@@ -2928,6 +2928,7 @@ class CdkDropList {
                     }
                 });
             }
+            ref.disabled = this.disabled;
             ref.lockAxis = this.lockAxis;
             ref.sortingDisabled = this.sortingDisabled;
             ref

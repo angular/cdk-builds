@@ -3708,6 +3708,7 @@ var CdkDropList = /** @class */ (function () {
                     }
                 });
             }
+            ref.disabled = _this.disabled;
             ref.lockAxis = _this.lockAxis;
             ref.sortingDisabled = _this.sortingDisabled;
             ref
