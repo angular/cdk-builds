@@ -43,7 +43,7 @@ function resolveIdentifierOfExpression(expression) {
         return expression;
     }
     else if (ts.isPropertyAccessExpression(expression)) {
-        return resolveIdentifierOfExpression(expression.expression);
+        return expression.name;
     }
     return null;
 }
