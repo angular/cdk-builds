@@ -1346,12 +1346,11 @@ class CdkVirtualForOf {
             if (record.previousIndex == null) { // Item added.
                 // Item added.
                 /** @type {?} */
-                const view = this._getViewForNewItem();
-                this._viewContainerRef.insert(view, (/** @type {?} */ (currentIndex)));
+                const view = this._insertViewForNewItem((/** @type {?} */ (currentIndex)));
                 view.context.$implicit = record.item;
             }
             else if (currentIndex == null) { // Item removed.
-                this._cacheView((/** @type {?} */ (this._viewContainerRef.detach((/** @type {?} */ (adjustedPreviousIndex))))));
+                this._cacheView(this._detachView((/** @type {?} */ (adjustedPreviousIndex))));
             }
             else { // Item moved.
                 // Item moved.
@@ -1405,21 +1404,13 @@ class CdkVirtualForOf {
         }
     }
     /**
-     * Get a view for a new item, either from the cache or by creating a new one.
+     * Inserts a view for a new item, either from the cache or by creating a new one.
      * @private
+     * @param {?} index
      * @return {?}
      */
-    _getViewForNewItem() {
-        return this._templateCache.pop() || this._viewContainerRef.createEmbeddedView(this._template, {
-            $implicit: (/** @type {?} */ (null)),
-            cdkVirtualForOf: this._cdkVirtualForOf,
-            index: -1,
-            count: -1,
-            first: false,
-            last: false,
-            odd: false,
-            even: false
-        });
+    _insertViewForNewItem(index) {
+        return this._insertViewFromCache(index) || this._createEmbeddedViewAt(index);
     }
     /**
      * Update the computed properties on the `CdkVirtualForOfContext`.
@@ -1432,6 +1423,52 @@ class CdkVirtualForOf {
         context.last = context.index === context.count - 1;
         context.even = context.index % 2 === 0;
         context.odd = !context.even;
+    }
+    /**
+     * Creates a new embedded view and moves it to the given index
+     * @private
+     * @param {?} index
+     * @return {?}
+     */
+    _createEmbeddedViewAt(index) {
+        /** @type {?} */
+        const view = this._viewContainerRef.createEmbeddedView(this._template, {
+            $implicit: (/** @type {?} */ (null)),
+            cdkVirtualForOf: this._cdkVirtualForOf,
+            index: -1,
+            count: -1,
+            first: false,
+            last: false,
+            odd: false,
+            even: false
+        });
+        if (index < this._viewContainerRef.length) {
+            this._viewContainerRef.move(view, index);
+        }
+        return view;
+    }
+    /**
+     * Inserts a recycled view from the cache at the given index.
+     * @private
+     * @param {?} index
+     * @return {?}
+     */
+    _insertViewFromCache(index) {
+        /** @type {?} */
+        const cachedView = this._templateCache.pop();
+        if (cachedView) {
+            this._viewContainerRef.insert(cachedView, index);
+        }
+        return cachedView || null;
+    }
+    /**
+     * Detaches the embedded view at the given index.
+     * @private
+     * @param {?} index
+     * @return {?}
+     */
+    _detachView(index) {
+        return (/** @type {?} */ (this._viewContainerRef.detach(index)));
     }
 }
 CdkVirtualForOf.decorators = [

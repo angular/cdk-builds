@@ -107,8 +107,14 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     private _applyChanges;
     /** Cache the given detached view. */
     private _cacheView;
-    /** Get a view for a new item, either from the cache or by creating a new one. */
-    private _getViewForNewItem;
+    /** Inserts a view for a new item, either from the cache or by creating a new one. */
+    private _insertViewForNewItem;
     /** Update the computed properties on the `CdkVirtualForOfContext`. */
     private _updateComputedContextProperties;
+    /** Creates a new embedded view and moves it to the given index */
+    private _createEmbeddedViewAt;
+    /** Inserts a recycled view from the cache at the given index. */
+    private _insertViewFromCache;
+    /** Detaches the embedded view at the given index. */
+    private _detachView;
 }
