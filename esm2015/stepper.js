@@ -11,7 +11,6 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { END, ENTER, HOME, SPACE, hasModifierKey } from '@angular/cdk/keycodes';
 import { DOCUMENT, CommonModule } from '@angular/common';
-import '@angular/forms';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
