@@ -8,7 +8,6 @@
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { AfterViewInit, ChangeDetectorRef, EventEmitter, ElementRef, OnChanges, OnDestroy, QueryList, TemplateRef, InjectionToken } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
 import { CdkStepLabel } from './step-label';
 import { Subject } from 'rxjs';
 /**
@@ -70,7 +69,12 @@ export declare class CdkStep implements OnChanges {
     /** Template for step content. */
     content: TemplateRef<any>;
     /** The top level abstract control of the step. */
-    stepControl: AbstractControl;
+    stepControl: {
+        valid: boolean;
+        invalid: boolean;
+        pending: boolean;
+        reset: () => void;
+    };
     /** Whether user has seen the expanded step content or not. */
     interacted: boolean;
     /** Plain text label of the step. */
