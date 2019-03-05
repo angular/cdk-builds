@@ -941,6 +941,13 @@ function rangesEqual(r1, r2) {
     return r1.start == r2.start && r1.end == r2.end;
 }
 /**
+ * Scheduler to be used for scroll events. Needs to fall back to
+ * something that doesn't rely on requestAnimationFrame on environments
+ * that don't support it (e.g. server-side rendering).
+ * @type {?}
+ */
+var SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? rxjs.animationFrameScheduler : rxjs.asapScheduler;
+/**
  * A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`.
  */
 var CdkVirtualScrollViewport = /** @class */ (function (_super) {
@@ -1044,7 +1051,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
             // Collect multiple events into one until the next animation frame. This way if
             // there are multiple scroll events in the same frame we only need to recheck
             // our layout once.
-            operators.auditTime(0, rxjs.animationFrameScheduler))
+            operators.auditTime(0, SCROLL_SCHEDULER))
                 .subscribe(function () { return _this._scrollStrategy.onContentScrolled(); });
             _this._markChangeDetectionNeeded();
         }); });
