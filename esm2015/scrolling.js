@@ -7,7 +7,7 @@
  */
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, defineInjectable, inject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { Subject, fromEvent, of, Observable, animationFrameScheduler, merge } from 'rxjs';
+import { Subject, fromEvent, of, Observable, animationFrameScheduler, asapScheduler, merge } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -672,6 +672,13 @@ function rangesEqual(r1, r2) {
     return r1.start == r2.start && r1.end == r2.end;
 }
 /**
+ * Scheduler to be used for scroll events. Needs to fall back to
+ * something that doesn't rely on requestAnimationFrame on environments
+ * that don't support it (e.g. server-side rendering).
+ * @type {?}
+ */
+const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
+/**
  * A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`.
  */
 class CdkVirtualScrollViewport extends CdkScrollable {
@@ -773,7 +780,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
             // Collect multiple events into one until the next animation frame. This way if
             // there are multiple scroll events in the same frame we only need to recheck
             // our layout once.
-            auditTime(0, animationFrameScheduler))
+            auditTime(0, SCROLL_SCHEDULER))
                 .subscribe(() => this._scrollStrategy.onContentScrolled());
             this._markChangeDetectionNeeded();
         }));
