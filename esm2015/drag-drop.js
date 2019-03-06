@@ -943,12 +943,14 @@ class DragRef {
         /** @type {?} */
         const point = this._getPointerPositionOnPage(event);
         /** @type {?} */
+        const constrainedPoint = this.constrainPosition ? this.constrainPosition(point) : point;
+        /** @type {?} */
         const dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
-            point.y = this._pickupPositionOnPage.y;
+            constrainedPoint.y = this._pickupPositionOnPage.y;
         }
         else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
-            point.x = this._pickupPositionOnPage.x;
+            constrainedPoint.x = this._pickupPositionOnPage.x;
         }
         if (this._boundaryRect) {
             const { x: pickupX, y: pickupY } = this._pickupPositionInElement;
@@ -964,10 +966,10 @@ class DragRef {
             const minX = boundaryRect.left + pickupX;
             /** @type {?} */
             const maxX = boundaryRect.right - (previewRect.width - pickupX);
-            point.x = clamp(point.x, minX, maxX);
-            point.y = clamp(point.y, minY, maxY);
+            constrainedPoint.x = clamp(constrainedPoint.x, minX, maxX);
+            constrainedPoint.y = clamp(constrainedPoint.y, minY, maxY);
         }
-        return point;
+        return constrainedPoint;
     }
     /**
      * Updates the current drag delta, based on the user's current pointer position on the page.
@@ -2520,6 +2522,7 @@ class CdkDrag {
                 ref.disabled = this.disabled;
                 ref.lockAxis = this.lockAxis;
                 ref.dragStartDelay = this.dragStartDelay;
+                ref.constrainPosition = this.constrainPosition;
                 ref
                     .withBoundaryElement(this._getBoundaryElement())
                     .withPlaceholderTemplate(placeholder)
@@ -2618,6 +2621,7 @@ CdkDrag.propDecorators = {
     boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
     dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
     disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
+    constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
     started: [{ type: Output, args: ['cdkDragStarted',] }],
     released: [{ type: Output, args: ['cdkDragReleased',] }],
     ended: [{ type: Output, args: ['cdkDragEnded',] }],

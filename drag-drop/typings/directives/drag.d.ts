@@ -14,7 +14,7 @@ import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDra
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
-import { DragRef, DragRefConfig } from '../drag-ref';
+import { DragRef, DragRefConfig, Point } from '../drag-ref';
 import { DropListRef } from '../drop-list-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
@@ -66,6 +66,13 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
+    /**
+     * Function that can be used to customize the logic of how the position of the drag item
+     * is limited while it's being dragged. Gets called with a point containing the current position
+     * of the user's pointer on the page and should return a point describing where the item should
+     * be rendered.
+     */
+    constrainPosition?: (point: Point) => Point;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user has released a drag item, before any animations have started. */

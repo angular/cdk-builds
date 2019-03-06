@@ -200,6 +200,13 @@ export declare class DragRef<T = any> {
     }>;
     /** Arbitrary data that can be attached to the drag item. */
     data: T;
+    /**
+     * Function that can be used to customize the logic of how the position of the drag item
+     * is limited while it's being dragged. Gets called with a point containing the current position
+     * of the user's pointer on the page and should return a point describing where the item should
+     * be rendered.
+     */
+    constrainPosition?: (point: Point) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
@@ -306,5 +313,10 @@ export declare class DragRef<T = any> {
     private _toggleNativeDragInteractions;
     /** Removes the manually-added event listeners from the root element. */
     private _removeRootElementListeners;
+}
+/** Point on the page or within an element. */
+export interface Point {
+    x: number;
+    y: number;
 }
 export {};

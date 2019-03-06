@@ -1170,12 +1170,14 @@ DragRef = /** @class */ (function () {
         /** @type {?} */
         var point = this._getPointerPositionOnPage(event);
         /** @type {?} */
+        var constrainedPoint = this.constrainPosition ? this.constrainPosition(point) : point;
+        /** @type {?} */
         var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
-            point.y = this._pickupPositionOnPage.y;
+            constrainedPoint.y = this._pickupPositionOnPage.y;
         }
         else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
-            point.x = this._pickupPositionOnPage.x;
+            constrainedPoint.x = this._pickupPositionOnPage.x;
         }
         if (this._boundaryRect) {
             var _a = this._pickupPositionInElement, pickupX = _a.x, pickupY = _a.y;
@@ -1191,10 +1193,10 @@ DragRef = /** @class */ (function () {
             var minX = boundaryRect.left + pickupX;
             /** @type {?} */
             var maxX = boundaryRect.right - (previewRect.width - pickupX);
-            point.x = clamp(point.x, minX, maxX);
-            point.y = clamp(point.y, minY, maxY);
+            constrainedPoint.x = clamp(constrainedPoint.x, minX, maxX);
+            constrainedPoint.y = clamp(constrainedPoint.y, minY, maxY);
         }
-        return point;
+        return constrainedPoint;
     };
     /** Updates the current drag delta, based on the user's current pointer position on the page. */
     /**
@@ -3168,6 +3170,7 @@ var CdkDrag = /** @class */ (function () {
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
                 ref.dragStartDelay = _this.dragStartDelay;
+                ref.constrainPosition = _this.constrainPosition;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())
                     .withPlaceholderTemplate(placeholder)
@@ -3273,6 +3276,7 @@ var CdkDrag = /** @class */ (function () {
         boundaryElementSelector: [{ type: core.Input, args: ['cdkDragBoundary',] }],
         dragStartDelay: [{ type: core.Input, args: ['cdkDragStartDelay',] }],
         disabled: [{ type: core.Input, args: ['cdkDragDisabled',] }],
+        constrainPosition: [{ type: core.Input, args: ['cdkDragConstrainPosition',] }],
         started: [{ type: core.Output, args: ['cdkDragStarted',] }],
         released: [{ type: core.Output, args: ['cdkDragReleased',] }],
         ended: [{ type: core.Output, args: ['cdkDragEnded',] }],
