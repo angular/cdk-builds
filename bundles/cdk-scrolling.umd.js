@@ -1508,7 +1508,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
     CdkVirtualScrollViewport.propDecorators = {
         orientation: [{ type: core.Input }],
         scrolledIndexChange: [{ type: core.Output }],
-        _contentWrapper: [{ type: core.ViewChild, args: ['contentWrapper',] }]
+        _contentWrapper: [{ type: core.ViewChild, args: ['contentWrapper', { static: true },] }]
     };
     return CdkVirtualScrollViewport;
 }(CdkScrollable));

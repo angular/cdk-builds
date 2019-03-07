@@ -591,7 +591,7 @@ CdkTree.propDecorators = {
     dataSource: [{ type: Input }],
     treeControl: [{ type: Input }],
     trackBy: [{ type: Input }],
-    _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet,] }],
+    _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
     _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef,] }]
 };
 /**

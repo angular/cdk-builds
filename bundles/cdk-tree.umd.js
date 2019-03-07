@@ -815,7 +815,7 @@ var CdkTree = /** @class */ (function () {
         dataSource: [{ type: core.Input }],
         treeControl: [{ type: core.Input }],
         trackBy: [{ type: core.Input }],
-        _nodeOutlet: [{ type: core.ViewChild, args: [CdkTreeNodeOutlet,] }],
+        _nodeOutlet: [{ type: core.ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
         _nodeDefs: [{ type: core.ContentChildren, args: [CdkTreeNodeDef,] }]
     };
     return CdkTree;

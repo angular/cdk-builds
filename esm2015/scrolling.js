@@ -1081,7 +1081,7 @@ CdkVirtualScrollViewport.ctorParameters = () => [
 CdkVirtualScrollViewport.propDecorators = {
     orientation: [{ type: Input }],
     scrolledIndexChange: [{ type: Output }],
-    _contentWrapper: [{ type: ViewChild, args: ['contentWrapper',] }]
+    _contentWrapper: [{ type: ViewChild, args: ['contentWrapper', { static: true },] }]
 };
 
 /**
