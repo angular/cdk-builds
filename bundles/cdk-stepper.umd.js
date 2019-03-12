@@ -784,11 +784,35 @@ var CdkStepperNext = /** @class */ (function () {
          */
         this.type = 'submit';
     }
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    CdkStepperNext.prototype._handleClick = 
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    function () {
+        this._stepper.next();
+    };
     CdkStepperNext.decorators = [
         { type: core.Directive, args: [{
                     selector: 'button[cdkStepperNext]',
                     host: {
-                        '(click)': '_stepper.next()',
                         '[type]': 'type',
                     }
                 },] },
@@ -798,7 +822,8 @@ var CdkStepperNext = /** @class */ (function () {
         { type: CdkStepper }
     ]; };
     CdkStepperNext.propDecorators = {
-        type: [{ type: core.Input }]
+        type: [{ type: core.Input }],
+        _handleClick: [{ type: core.HostListener, args: ['click',] }]
     };
     return CdkStepperNext;
 }());
@@ -813,11 +838,35 @@ var CdkStepperPrevious = /** @class */ (function () {
          */
         this.type = 'button';
     }
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    CdkStepperPrevious.prototype._handleClick = 
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    function () {
+        this._stepper.previous();
+    };
     CdkStepperPrevious.decorators = [
         { type: core.Directive, args: [{
                     selector: 'button[cdkStepperPrevious]',
                     host: {
-                        '(click)': '_stepper.previous()',
                         '[type]': 'type',
                     }
                 },] },
@@ -827,7 +876,8 @@ var CdkStepperPrevious = /** @class */ (function () {
         { type: CdkStepper }
     ]; };
     CdkStepperPrevious.propDecorators = {
-        type: [{ type: core.Input }]
+        type: [{ type: core.Input }],
+        _handleClick: [{ type: core.HostListener, args: ['click',] }]
     };
     return CdkStepperPrevious;
 }());

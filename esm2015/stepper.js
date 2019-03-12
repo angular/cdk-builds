@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, NgModule } from '@angular/core';
+import { Directive, TemplateRef, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, HostListener, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
@@ -629,12 +629,22 @@ class CdkStepperNext {
          */
         this.type = 'submit';
     }
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    _handleClick() {
+        this._stepper.next();
+    }
 }
 CdkStepperNext.decorators = [
     { type: Directive, args: [{
                 selector: 'button[cdkStepperNext]',
                 host: {
-                    '(click)': '_stepper.next()',
                     '[type]': 'type',
                 }
             },] },
@@ -644,7 +654,8 @@ CdkStepperNext.ctorParameters = () => [
     { type: CdkStepper }
 ];
 CdkStepperNext.propDecorators = {
-    type: [{ type: Input }]
+    type: [{ type: Input }],
+    _handleClick: [{ type: HostListener, args: ['click',] }]
 };
 /**
  * Button that moves to the previous step in a stepper workflow.
@@ -660,12 +671,22 @@ class CdkStepperPrevious {
          */
         this.type = 'button';
     }
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritte.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
+     * @return {?}
+     */
+    _handleClick() {
+        this._stepper.previous();
+    }
 }
 CdkStepperPrevious.decorators = [
     { type: Directive, args: [{
                 selector: 'button[cdkStepperPrevious]',
                 host: {
-                    '(click)': '_stepper.previous()',
                     '[type]': 'type',
                 }
             },] },
@@ -675,7 +696,8 @@ CdkStepperPrevious.ctorParameters = () => [
     { type: CdkStepper }
 ];
 CdkStepperPrevious.propDecorators = {
-    type: [{ type: Input }]
+    type: [{ type: Input }],
+    _handleClick: [{ type: HostListener, args: ['click',] }]
 };
 
 /**

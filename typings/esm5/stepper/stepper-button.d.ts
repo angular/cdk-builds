@@ -12,6 +12,7 @@ export declare class CdkStepperNext {
     /** Type of the next button. Defaults to "submit" if not specified. */
     type: string;
     constructor(_stepper: CdkStepper);
+    _handleClick(): void;
 }
 /** Button that moves to the previous step in a stepper workflow. */
 export declare class CdkStepperPrevious {
@@ -19,4 +20,5 @@ export declare class CdkStepperPrevious {
     /** Type of the previous button. Defaults to "button" if not specified. */
     type: string;
     constructor(_stepper: CdkStepper);
+    _handleClick(): void;
 }
