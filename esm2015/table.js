@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, isDevMode, Optional, ViewChild, Inject, NgModule } from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, Inject, isDevMode, Optional, ViewChild, NgModule } from '@angular/core';
+import { Directionality } from '@angular/cdk/bidi';
 import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
+import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Directionality } from '@angular/cdk/bidi';
-import { Platform } from '@angular/cdk/platform';
 
 /**
  * @fileoverview added by tsickle
@@ -320,7 +320,7 @@ class BaseRowDef {
      * @param {?} template
      * @param {?} _differs
      */
-    constructor(/** @docs-private */ template, _differs) {
+    constructor(template, _differs) {
         this.template = template;
         this._differs = _differs;
     }
@@ -523,7 +523,9 @@ CdkHeaderRow.decorators = [
                     'class': 'cdk-header-row',
                     'role': 'row',
                 },
-                changeDetection: ChangeDetectionStrategy.OnPush,
+                // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default,
                 encapsulation: ViewEncapsulation.None,
             },] },
 ];
@@ -539,7 +541,9 @@ CdkFooterRow.decorators = [
                     'class': 'cdk-footer-row',
                     'role': 'row',
                 },
-                changeDetection: ChangeDetectionStrategy.OnPush,
+                // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default,
                 encapsulation: ViewEncapsulation.None,
             },] },
 ];
@@ -555,69 +559,12 @@ CdkRow.decorators = [
                     'class': 'cdk-row',
                     'role': 'row',
                 },
-                changeDetection: ChangeDetectionStrategy.OnPush,
+                // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default,
                 encapsulation: ViewEncapsulation.None,
             },] },
 ];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * Returns an error to be thrown when attempting to find an unexisting column.
- * \@docs-private
- * @param {?} id Id whose lookup failed.
- * @return {?}
- */
-function getTableUnknownColumnError(id) {
-    return Error(`Could not find column with id "${id}".`);
-}
-/**
- * Returns an error to be thrown when two column definitions have the same name.
- * \@docs-private
- * @param {?} name
- * @return {?}
- */
-function getTableDuplicateColumnNameError(name) {
-    return Error(`Duplicate column definition name provided: "${name}".`);
-}
-/**
- * Returns an error to be thrown when there are multiple rows that are missing a when function.
- * \@docs-private
- * @return {?}
- */
-function getTableMultipleDefaultRowDefsError() {
-    return Error(`There can only be one default row without a when predicate function.`);
-}
-/**
- * Returns an error to be thrown when there are no matching row defs for a particular set of data.
- * \@docs-private
- * @param {?} data
- * @return {?}
- */
-function getTableMissingMatchingRowDefError(data) {
-    return Error(`Could not find a matching row definition for the` +
-        `provided row data: ${JSON.stringify(data)}`);
-}
-/**
- * Returns an error to be thrown when there is no row definitions present in the content.
- * \@docs-private
- * @return {?}
- */
-function getTableMissingRowDefsError() {
-    return Error('Missing definitions for header, footer, and row; ' +
-        'cannot determine which columns should be rendered.');
-}
-/**
- * Returns an error to be thrown when the data source does not match the compatible types.
- * \@docs-private
- * @return {?}
- */
-function getTableUnknownDataSourceError() {
-    return Error(`Provided data source did not match an array, Observable, or DataSource`);
-}
 
 /**
  * @fileoverview added by tsickle
@@ -915,6 +862,65 @@ class StickyStyler {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * Returns an error to be thrown when attempting to find an unexisting column.
+ * \@docs-private
+ * @param {?} id Id whose lookup failed.
+ * @return {?}
+ */
+function getTableUnknownColumnError(id) {
+    return Error(`Could not find column with id "${id}".`);
+}
+/**
+ * Returns an error to be thrown when two column definitions have the same name.
+ * \@docs-private
+ * @param {?} name
+ * @return {?}
+ */
+function getTableDuplicateColumnNameError(name) {
+    return Error(`Duplicate column definition name provided: "${name}".`);
+}
+/**
+ * Returns an error to be thrown when there are multiple rows that are missing a when function.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMultipleDefaultRowDefsError() {
+    return Error(`There can only be one default row without a when predicate function.`);
+}
+/**
+ * Returns an error to be thrown when there are no matching row defs for a particular set of data.
+ * \@docs-private
+ * @param {?} data
+ * @return {?}
+ */
+function getTableMissingMatchingRowDefError(data) {
+    return Error(`Could not find a matching row definition for the` +
+        `provided row data: ${JSON.stringify(data)}`);
+}
+/**
+ * Returns an error to be thrown when there is no row definitions present in the content.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableMissingRowDefsError() {
+    return Error('Missing definitions for header, footer, and row; ' +
+        'cannot determine which columns should be rendered.');
+}
+/**
+ * Returns an error to be thrown when the data source does not match the compatible types.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableUnknownDataSourceError() {
+    return Error(`Provided data source did not match an array, Observable, or DataSource`);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * \@docs-private
@@ -988,8 +994,8 @@ FooterRowOutlet.ctorParameters = () => [
  * @type {?}
  */
 const CDK_TABLE_TEMPLATE = 
-// Note that according to MDN, the `caption` element has to be projected as the **first** element
-// in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
+// Note that according to MDN, the `caption` element has to be projected as the **first**
+// element in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
 `
   <ng-content select="caption"></ng-content>
   <ng-container headerRowOutlet></ng-container>
@@ -1109,15 +1115,16 @@ class CdkTable {
      * Accepts a function that takes two parameters, `index` and `item`.
      * @return {?}
      */
-    get trackBy() { return this._trackByFn; }
+    get trackBy() {
+        return this._trackByFn;
+    }
     /**
      * @param {?} fn
      * @return {?}
      */
     set trackBy(fn) {
-        if (isDevMode() &&
-            fn != null && typeof fn !== 'function' &&
-            (/** @type {?} */ (console)) && (/** @type {?} */ (console.warn))) {
+        if (isDevMode() && fn != null && typeof fn !== 'function' && (/** @type {?} */ (console)) &&
+            (/** @type {?} */ (console.warn))) {
             console.warn(`trackBy must be a function, but received ${JSON.stringify(fn)}.`);
         }
         this._trackByFn = fn;
@@ -1143,7 +1150,9 @@ class CdkTable {
      * subscriptions registered during the connect process).
      * @return {?}
      */
-    get dataSource() { return this._dataSource; }
+    get dataSource() {
+        return this._dataSource;
+    }
     /**
      * @param {?} dataSource
      * @return {?}
@@ -1160,7 +1169,9 @@ class CdkTable {
      * defined in the table, or otherwise the default row which does not have a when predicate.
      * @return {?}
      */
-    get multiTemplateDataRows() { return this._multiTemplateDataRows; }
+    get multiTemplateDataRows() {
+        return this._multiTemplateDataRows;
+    }
     /**
      * @param {?} v
      * @return {?}
@@ -1562,8 +1573,7 @@ class CdkTable {
             mergeQueryListAndSet(this._contentHeaderRowDefs, this._customHeaderRowDefs);
         this._footerRowDefs =
             mergeQueryListAndSet(this._contentFooterRowDefs, this._customFooterRowDefs);
-        this._rowDefs =
-            mergeQueryListAndSet(this._contentRowDefs, this._customRowDefs);
+        this._rowDefs = mergeQueryListAndSet(this._contentRowDefs, this._customRowDefs);
         // After all row definitions are determined, find the row definition to be considered default.
         /** @type {?} */
         const defaultRowDefs = this._rowDefs.filter(def => !def.when);
@@ -1644,9 +1654,7 @@ class CdkTable {
         if (dataStream === undefined) {
             throw getTableUnknownDataSourceError();
         }
-        this._renderChangeSubscription = dataStream
-            .pipe(takeUntil(this._onDestroy))
-            .subscribe(data => {
+        this._renderChangeSubscription = dataStream.pipe(takeUntil(this._onDestroy)).subscribe(data => {
             this._data = data || [];
             this.renderRows();
         });
@@ -1926,7 +1934,11 @@ CdkTable.decorators = [
                     'class': 'cdk-table',
                 },
                 encapsulation: ViewEncapsulation.None,
-                changeDetection: ChangeDetectionStrategy.OnPush,
+                // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
+                // The view for `MatTable` consists entirely of templates declared in other views. As they are
+                // declared elsewhere, they are checked when their declaration points are checked.
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default,
             },] },
 ];
 /** @nocollapse */

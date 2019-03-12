@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { Directionality } from '@angular/cdk/bidi';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { Platform } from '@angular/cdk/platform';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
-import { Directionality } from '@angular/cdk/bidi';
-import { Platform } from '@angular/cdk/platform';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;

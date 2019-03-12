@@ -18,13 +18,14 @@ export declare const CDK_ROW_TEMPLATE = "<ng-container cdkCellOutlet></ng-contai
  * for changes and notifying the table.
  */
 export declare abstract class BaseRowDef implements OnChanges {
-    template: TemplateRef<any>;
+    /** @docs-private */ template: TemplateRef<any>;
     protected _differs: IterableDiffers;
     /** The columns to be displayed on this row. */
     columns: Iterable<string>;
     /** Differ used to check if any changes were made to the columns. */
     protected _columnsDiffer: IterableDiffer<any>;
-    constructor(/** @docs-private */ template: TemplateRef<any>, _differs: IterableDiffers);
+    constructor(
+    /** @docs-private */ template: TemplateRef<any>, _differs: IterableDiffers);
     ngOnChanges(changes: SimpleChanges): void;
     /**
      * Returns the difference between the current columns and the columns from the last diff, or null
