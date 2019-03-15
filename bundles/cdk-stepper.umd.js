@@ -277,7 +277,7 @@ var CdkStep = /** @class */ (function () {
     ]; };
     CdkStep.propDecorators = {
         stepLabel: [{ type: core.ContentChild, args: [CdkStepLabel,] }],
-        content: [{ type: core.ViewChild, args: [core.TemplateRef,] }],
+        content: [{ type: core.ViewChild, args: [core.TemplateRef, { static: true },] }],
         stepControl: [{ type: core.Input }],
         label: [{ type: core.Input }],
         errorMessage: [{ type: core.Input }],
