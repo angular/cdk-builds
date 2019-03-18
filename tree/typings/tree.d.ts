@@ -96,6 +96,8 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     static mostRecentTreeNode: CdkTreeNode<any> | null;
     /** Subject that emits when the component has been destroyed. */
     protected _destroyed: Subject<void>;
+    /** Emits when the node's data has changed. */
+    _dataChanges: Subject<void>;
     /** The tree node's data. */
     data: T;
     protected _data: T;

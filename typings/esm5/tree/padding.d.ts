@@ -18,6 +18,8 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     private _renderer;
     private _element;
     private _dir;
+    /** Current padding value applied to the element. Used to avoid unnecessarily hitting the DOM. */
+    private _currentPadding;
     /** Subject that emits when the component has been destroyed. */
     private _destroyed;
     /** CSS units used for the indentation value. */
@@ -35,5 +37,5 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     ngOnDestroy(): void;
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
-    _setPadding(): void;
+    _setPadding(forceChange?: boolean): void;
 }
