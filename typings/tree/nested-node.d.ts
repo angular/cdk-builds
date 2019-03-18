@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { AfterContentInit, ElementRef, IterableDiffers, OnDestroy, QueryList } from '@angular/core';
-import { CdkTree, CdkTreeNode } from './tree';
 import { CdkTreeNodeOutlet } from './outlet';
+import { CdkTree, CdkTreeNode } from './tree';
 /**
  * Nested node is a child of `<cdk-tree>`. It works with nested tree.
  * By using `cdk-nested-tree-node` component in tree node template, children of the parent node will
@@ -46,4 +46,6 @@ export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements Afte
     protected updateChildrenNodes(children?: T[]): void;
     /** Clear the children dataNodes. */
     protected _clear(): void;
+    /** Gets the outlet for the current node. */
+    private _getNodeOutlet;
 }

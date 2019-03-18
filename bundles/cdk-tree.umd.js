@@ -380,6 +380,39 @@ NestedTreeControl = /** @class */ (function (_super) {
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Injection token used to provide a `CdkTreeNode` to its outlet.
+ * Used primarily to avoid circular imports.
+ * \@docs-private
+ * @type {?}
+ */
+var CDK_TREE_NODE_OUTLET_NODE = new core.InjectionToken('CDK_TREE_NODE_OUTLET_NODE');
+/**
+ * Outlet for nested CdkNode. Put `[cdkTreeNodeOutlet]` on a tag to place children dataNodes
+ * inside the outlet.
+ */
+var CdkTreeNodeOutlet = /** @class */ (function () {
+    function CdkTreeNodeOutlet(viewContainer, _node) {
+        this.viewContainer = viewContainer;
+        this._node = _node;
+    }
+    CdkTreeNodeOutlet.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkTreeNodeOutlet]'
+                },] },
+    ];
+    /** @nocollapse */
+    CdkTreeNodeOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TREE_NODE_OUTLET_NODE,] }, { type: core.Optional }] }
+    ]; };
+    return CdkTreeNodeOutlet;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
  * Context provided to the tree node component.
  * @template T
  */
@@ -416,30 +449,6 @@ var CdkTreeNodeDef = /** @class */ (function () {
         { type: core.TemplateRef }
     ]; };
     return CdkTreeNodeDef;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Outlet for nested CdkNode. Put `[cdkTreeNodeOutlet]` on a tag to place children dataNodes
- * inside the outlet.
- */
-var CdkTreeNodeOutlet = /** @class */ (function () {
-    function CdkTreeNodeOutlet(viewContainer) {
-        this.viewContainer = viewContainer;
-    }
-    CdkTreeNodeOutlet.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkTreeNodeOutlet]'
-                },] },
-    ];
-    /** @nocollapse */
-    CdkTreeNodeOutlet.ctorParameters = function () { return [
-        { type: core.ViewContainerRef }
-    ]; };
-    return CdkTreeNodeOutlet;
 }());
 
 /**
@@ -803,7 +812,11 @@ var CdkTree = /** @class */ (function () {
                         'role': 'tree',
                     },
                     encapsulation: core.ViewEncapsulation.None,
-                    changeDetection: core.ChangeDetectionStrategy.OnPush
+                    // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
+                    // The view for `CdkTree` consists entirely of templates declared in other views. As they are
+                    // declared elsewhere, they are checked when their declaration points are checked.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default
                 },] },
     ];
     /** @nocollapse */
@@ -833,6 +846,10 @@ var CdkTreeNode = /** @class */ (function () {
          */
         this._destroyed = new rxjs.Subject();
         /**
+         * Emits when the node's data has changed.
+         */
+        this._dataChanges = new rxjs.Subject();
+        /**
          * The role of the node should be 'group' if it's an internal node,
          * and 'treeitem' if it's a leaf node.
          */
@@ -851,8 +868,11 @@ var CdkTreeNode = /** @class */ (function () {
          * @return {?}
          */
         function (value) {
-            this._data = value;
-            this._setRoleFromData();
+            if (value !== this._data) {
+                this._data = value;
+                this._setRoleFromData();
+                this._dataChanges.next();
+            }
         },
         enumerable: true,
         configurable: true
@@ -889,6 +909,7 @@ var CdkTreeNode = /** @class */ (function () {
         if (CdkTreeNode.mostRecentTreeNode === this) {
             CdkTreeNode.mostRecentTreeNode = null;
         }
+        this._dataChanges.complete();
         this._destroyed.next();
         this._destroyed.complete();
     };
@@ -1056,12 +1077,14 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      * @return {?}
      */
     function (children) {
+        /** @type {?} */
+        var outlet = this._getNodeOutlet();
         if (children) {
             this._children = children;
         }
-        if (this.nodeOutlet.length && this._children) {
+        if (outlet && this._children) {
             /** @type {?} */
-            var viewContainer = this.nodeOutlet.first.viewContainer;
+            var viewContainer = outlet.viewContainer;
             this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);
         }
         else {
@@ -1081,9 +1104,32 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
      * @return {?}
      */
     function () {
-        if (this.nodeOutlet && this.nodeOutlet.first) {
-            this.nodeOutlet.first.viewContainer.clear();
+        /** @type {?} */
+        var outlet = this._getNodeOutlet();
+        if (outlet) {
+            outlet.viewContainer.clear();
             this._dataDiffer.diff([]);
+        }
+    };
+    /** Gets the outlet for the current node. */
+    /**
+     * Gets the outlet for the current node.
+     * @private
+     * @return {?}
+     */
+    CdkNestedTreeNode.prototype._getNodeOutlet = /**
+     * Gets the outlet for the current node.
+     * @private
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        /** @type {?} */
+        var outlets = this.nodeOutlet;
+        if (outlets) {
+            // Note that since we use `descendants: true` on the query, we have to ensure
+            // that we don't pick up the outlet of a child node by accident.
+            return outlets.find(function (outlet) { return !outlet._node || outlet._node === _this; });
         }
     };
     CdkNestedTreeNode.decorators = [
@@ -1095,7 +1141,10 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
                         '[attr.role]': 'role',
                         'class': 'cdk-tree-node cdk-nested-tree-node',
                     },
-                    providers: [{ provide: CdkTreeNode, useExisting: CdkNestedTreeNode }]
+                    providers: [
+                        { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
+                        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
+                    ]
                 },] },
     ];
     /** @nocollapse */
@@ -1105,7 +1154,11 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         { type: core.IterableDiffers }
     ]; };
     CdkNestedTreeNode.propDecorators = {
-        nodeOutlet: [{ type: core.ContentChildren, args: [CdkTreeNodeOutlet,] }]
+        nodeOutlet: [{ type: core.ContentChildren, args: [CdkTreeNodeOutlet, {
+                        // We need to use `descendants: true`, because Ivy will no longer match
+                        // indirect descendants if it's left as false.
+                        descendants: true
+                    },] }]
     };
     return CdkNestedTreeNode;
 }(CdkTreeNode));
@@ -1143,8 +1196,12 @@ var CdkTreeNodePadding = /** @class */ (function () {
         this._indent = 40;
         this._setPadding();
         if (_dir) {
-            _dir.change.pipe(operators.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(); });
+            _dir.change.pipe(operators.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(true); });
         }
+        // In Ivy the indentation binding might be set before the tree node's data has been added,
+        // which means that we'll miss the first render. We have to subscribe to changes in the
+        // data to ensure that everything is up to date.
+        _treeNode._dataChanges.subscribe(function () { return _this._setPadding(); });
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {
         /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
@@ -1226,22 +1283,28 @@ var CdkTreeNodePadding = /** @class */ (function () {
         return level ? "" + level * this._indent + this.indentUnits : null;
     };
     /**
+     * @param {?=} forceChange
      * @return {?}
      */
     CdkTreeNodePadding.prototype._setPadding = /**
+     * @param {?=} forceChange
      * @return {?}
      */
-    function () {
-        /** @type {?} */
-        var element = this._element.nativeElement;
+    function (forceChange) {
+        if (forceChange === void 0) { forceChange = false; }
         /** @type {?} */
         var padding = this._paddingIndent();
-        /** @type {?} */
-        var paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
-        /** @type {?} */
-        var resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
-        this._renderer.setStyle(element, paddingProp, padding);
-        this._renderer.setStyle(element, resetProp, '');
+        if (padding !== this._currentPadding || forceChange) {
+            /** @type {?} */
+            var element = this._element.nativeElement;
+            /** @type {?} */
+            var paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
+            /** @type {?} */
+            var resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
+            this._renderer.setStyle(element, paddingProp, padding);
+            this._renderer.setStyle(element, resetProp, null);
+            this._currentPadding = padding;
+        }
     };
     CdkTreeNodePadding.decorators = [
         { type: core.Directive, args: [{
@@ -1292,11 +1355,27 @@ var CdkTreeNodeToggle = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritten.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritten.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
     /**
      * @param {?} event
      * @return {?}
      */
-    CdkTreeNodeToggle.prototype._toggle = /**
+    CdkTreeNodeToggle.prototype._toggle = 
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritten.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    /**
      * @param {?} event
      * @return {?}
      */
@@ -1307,12 +1386,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
         event.stopPropagation();
     };
     CdkTreeNodeToggle.decorators = [
-        { type: core.Directive, args: [{
-                    selector: '[cdkTreeNodeToggle]',
-                    host: {
-                        '(click)': '_toggle($event)',
-                    }
-                },] },
+        { type: core.Directive, args: [{ selector: '[cdkTreeNodeToggle]' },] },
     ];
     /** @nocollapse */
     CdkTreeNodeToggle.ctorParameters = function () { return [
@@ -1320,7 +1394,8 @@ var CdkTreeNodeToggle = /** @class */ (function () {
         { type: CdkTreeNode }
     ]; };
     CdkTreeNodeToggle.propDecorators = {
-        recursive: [{ type: core.Input, args: ['cdkTreeNodeToggleRecursive',] }]
+        recursive: [{ type: core.Input, args: ['cdkTreeNodeToggleRecursive',] }],
+        _toggle: [{ type: core.HostListener, args: ['click', ['$event'],] }]
     };
     return CdkTreeNodeToggle;
 }());
@@ -1360,6 +1435,7 @@ exports.CdkNestedTreeNode = CdkNestedTreeNode;
 exports.CdkTreeNodeOutletContext = CdkTreeNodeOutletContext;
 exports.CdkTreeNodeDef = CdkTreeNodeDef;
 exports.CdkTreeNodePadding = CdkTreeNodePadding;
+exports.CDK_TREE_NODE_OUTLET_NODE = CDK_TREE_NODE_OUTLET_NODE;
 exports.CdkTreeNodeOutlet = CdkTreeNodeOutlet;
 exports.CdkTree = CdkTree;
 exports.CdkTreeNode = CdkTreeNode;
