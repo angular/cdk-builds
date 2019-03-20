@@ -3169,7 +3169,7 @@ var CdkDrag = /** @class */ (function () {
                 } : null;
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
-                ref.dragStartDelay = _this.dragStartDelay;
+                ref.dragStartDelay = coercion.coerceNumberProperty(_this.dragStartDelay);
                 ref.constrainPosition = _this.constrainPosition;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())
