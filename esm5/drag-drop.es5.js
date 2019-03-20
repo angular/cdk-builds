@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
-import { coerceBooleanProperty, coerceElement, coerceArray } from '@angular/cdk/coercion';
+import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
 import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, TemplateRef, defineInjectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -3172,7 +3172,7 @@ var CdkDrag = /** @class */ (function () {
                 } : null;
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
-                ref.dragStartDelay = _this.dragStartDelay;
+                ref.dragStartDelay = coerceNumberProperty(_this.dragStartDelay);
                 ref.constrainPosition = _this.constrainPosition;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())
