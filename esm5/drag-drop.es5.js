@@ -3769,6 +3769,7 @@ var CdkDropList = /** @class */ (function () {
                 container: _this,
                 item: event.item.data
             });
+            _this._changeDetectorRef.markForCheck();
         });
         ref.sorted.subscribe(function (event) {
             _this.sorted.emit({

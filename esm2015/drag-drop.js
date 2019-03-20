@@ -2981,6 +2981,7 @@ class CdkDropList {
                 container: this,
                 item: event.item.data
             });
+            this._changeDetectorRef.markForCheck();
         });
         ref.sorted.subscribe(event => {
             this.sorted.emit({
