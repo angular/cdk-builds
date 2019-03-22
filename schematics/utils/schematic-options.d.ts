@@ -14,8 +14,8 @@ import { WorkspaceProject } from '@angular-devkit/core/src/workspace';
  * "--inlineStyle", "--skipTests" and "--inlineTemplate" options to the "component" schematic.
  */
 export declare function getDefaultComponentOptions(project: WorkspaceProject): {
-    styleext: string | null;
-    inlineStyle: boolean | null;
-    inlineTemplate: boolean | null;
-    spec: boolean | null;
+    style: string;
+    inlineStyle: boolean;
+    inlineTemplate: boolean;
+    skipTests: boolean;
 };

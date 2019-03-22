@@ -18,11 +18,18 @@ function getDefaultComponentOptions(project) {
     // Note: Not all options which are available when running "ng new" will be stored in the
     // workspace config. List of options which will be available in the configuration:
     // angular/angular-cli/blob/master/packages/schematics/angular/application/index.ts#L109-L131
+    let skipTests = getDefaultComponentOption(project, ['skipTests'], null);
+    // In case "skipTests" is not set explicitly, also look for the "spec" option. The "spec"
+    // option has been deprecated but can be still used in older Angular CLI projects.
+    // See: https://github.com/angular/angular-cli/commit/a12a4e02a4689b5bdbc6e740c0d9865afb55671a
+    if (skipTests === null) {
+        skipTests = !getDefaultComponentOption(project, ['spec'], true);
+    }
     return {
-        styleext: getDefaultComponentOption(project, 'styleext', 'css'),
-        inlineStyle: getDefaultComponentOption(project, 'inlineStyle', false),
-        inlineTemplate: getDefaultComponentOption(project, 'inlineTemplate', false),
-        spec: getDefaultComponentOption(project, 'spec', true),
+        style: getDefaultComponentOption(project, ['style', 'styleext'], 'css'),
+        inlineStyle: getDefaultComponentOption(project, ['inlineStyle'], false),
+        inlineTemplate: getDefaultComponentOption(project, ['inlineTemplate'], false),
+        skipTests: skipTests,
     };
 }
 exports.getDefaultComponentOptions = getDefaultComponentOptions;
@@ -31,11 +38,13 @@ exports.getDefaultComponentOptions = getDefaultComponentOptions;
  * by looking at the stored schematic options for `@schematics/angular:component` in the
  * CLI workspace configuration.
  */
-function getDefaultComponentOption(project, optionName, fallbackValue) {
-    if (project.schematics &&
-        project.schematics['@schematics/angular:component'] &&
-        project.schematics['@schematics/angular:component'][optionName] != null) {
-        return project.schematics['@schematics/angular:component'][optionName];
+function getDefaultComponentOption(project, optionNames, fallbackValue) {
+    for (let optionName of optionNames) {
+        if (project.schematics &&
+            project.schematics['@schematics/angular:component'] &&
+            project.schematics['@schematics/angular:component'][optionName] != null) {
+            return project.schematics['@schematics/angular:component'][optionName];
+        }
     }
     return fallbackValue;
 }

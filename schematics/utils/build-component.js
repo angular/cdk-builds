@@ -46,7 +46,10 @@ function addDeclarationToNgModule(options) {
             + '.component';
         const relativePath = find_module_1.buildRelativePath(modulePath, componentPath);
         const classifiedName = core_1.strings.classify(`${options.name}Component`);
-        const declarationChanges = ast_utils_1.addDeclarationToModule(source, modulePath, classifiedName, relativePath);
+        const declarationChanges = ast_utils_1.addDeclarationToModule(
+        // TODO: TypeScript version mismatch due to @schematics/angular using a different version
+        // than Material. Cast to any to avoid the type assignment failure.
+        source, modulePath, classifiedName, relativePath);
         const declarationRecorder = host.beginUpdate(modulePath);
         for (const change of declarationChanges) {
             if (change instanceof change_1.InsertChange) {
@@ -58,7 +61,10 @@ function addDeclarationToNgModule(options) {
             // Need to refresh the AST because we overwrote the file in the host.
             source = readIntoSourceFile(host, modulePath);
             const exportRecorder = host.beginUpdate(modulePath);
-            const exportChanges = ast_utils_1.addExportToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
+            const exportChanges = ast_utils_1.addExportToModule(
+            // TODO: TypeScript version mismatch due to @schematics/angular using a different version
+            // than Material. Cast to any to avoid the type assignment failure.
+            source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of exportChanges) {
                 if (change instanceof change_1.InsertChange) {
                     exportRecorder.insertLeft(change.pos, change.toAdd);
@@ -70,7 +76,10 @@ function addDeclarationToNgModule(options) {
             // Need to refresh the AST because we overwrote the file in the host.
             source = readIntoSourceFile(host, modulePath);
             const entryComponentRecorder = host.beginUpdate(modulePath);
-            const entryComponentChanges = ast_utils_1.addEntryComponentToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
+            const entryComponentChanges = ast_utils_1.addEntryComponentToModule(
+            // TODO: TypeScript version mismatch due to @schematics/angular using a different version
+            // than Material. Cast to any to avoid the type assignment failure.
+            source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of entryComponentChanges) {
                 if (change instanceof change_1.InsertChange) {
                     entryComponentRecorder.insertLeft(change.pos, change.toAdd);
@@ -144,8 +153,10 @@ function buildComponent(options, additionalFiles = {}) {
         // we generate the stylesheets with the "css" extension. This ensures that we don't
         // accidentally generate invalid stylesheets (e.g. drag-drop-comp.styl) which will
         // break the Angular CLI project. See: https://github.com/angular/material2/issues/15164
-        if (!supportedCssExtensions.includes(options.styleext)) {
-            options.styleext = 'css';
+        if (!supportedCssExtensions.includes(options.style)) {
+            // TODO: Cast is necessary as we can't use the Style enum which has been introduced
+            // within CLI v7.3.0-rc.0. This would break the schematic for older CLI versions.
+            options.style = 'css';
         }
         // Object that will be used as context for the EJS templates.
         const baseTemplateContext = Object.assign({}, core_1.strings, { 'if-flat': (s) => options.flat ? '' : s }, options);
@@ -160,8 +171,8 @@ function buildComponent(options, additionalFiles = {}) {
             }
         }
         const templateSource = schematics_1.apply(schematics_1.url(schematicFilesUrl), [
-            options.spec ? schematics_1.noop() : schematics_1.filter(path => !path.endsWith('.spec.ts')),
-            options.inlineStyle ? schematics_1.filter(path => !path.endsWith('.__styleext__')) : schematics_1.noop(),
+            options.skipTests ? schematics_1.filter(path => !path.endsWith('.spec.ts')) : schematics_1.noop(),
+            options.inlineStyle ? schematics_1.filter(path => !path.endsWith('.__style__')) : schematics_1.noop(),
             options.inlineTemplate ? schematics_1.filter(path => !path.endsWith('.html')) : schematics_1.noop(),
             // Treat the template options as any, because the type definition for the template options
             // is made unnecessarily explicit. Every type of object can be used in the EJS template.
