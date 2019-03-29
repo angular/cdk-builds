@@ -2812,7 +2812,7 @@ class CdkDropList {
         this._disabled = coerceBooleanProperty(value);
     }
     /**
-     * Whether starting a dragging sequence from this container is disabled.
+     * Whether sorting within this drop list is disabled.
      * @return {?}
      */
     get sortingDisabled() { return this._sortingDisabled; }

@@ -3475,9 +3475,9 @@ var CdkDropList = /** @class */ (function () {
         configurable: true
     });
     Object.defineProperty(CdkDropList.prototype, "sortingDisabled", {
-        /** Whether starting a dragging sequence from this container is disabled. */
+        /** Whether sorting within this drop list is disabled. */
         get: /**
-         * Whether starting a dragging sequence from this container is disabled.
+         * Whether sorting within this drop list is disabled.
          * @return {?}
          */
         function () { return this._sortingDisabled; },
