@@ -7,6 +7,7 @@
  */
 import { ProgramAwareRuleWalker, RuleFailure, Rules } from 'tslint';
 import * as ts from 'typescript';
+import { PropertyNameUpgradeData } from '../../data';
 /**
  * Rule that walks through every property access expression and updates properties that have
  * been changed in favor of a new name.
@@ -16,6 +17,6 @@ export declare class Rule extends Rules.TypedRule {
 }
 export declare class Walker extends ProgramAwareRuleWalker {
     /** Change data that upgrades to the specified target version. */
-    data: import("../../data/property-names").PropertyNameUpgradeData[];
+    data: PropertyNameUpgradeData[];
     visitPropertyAccessExpression(node: ts.PropertyAccessExpression): void;
 }

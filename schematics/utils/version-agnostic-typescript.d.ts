@@ -21,4 +21,4 @@ import typescript = require('typescript');
  * `@schematics/angular` package which might have a different TypeScript version installed.
  */
 declare let ts: typeof typescript;
-export { ts };
+export { ts, typescript };

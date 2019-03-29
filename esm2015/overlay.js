@@ -1603,11 +1603,14 @@ class FlexibleConnectedPositionStrategy {
      * Sets the list of Scrollable containers that host the origin element so that
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
+     * @template THIS
+     * @this {THIS}
      * @param {?} scrollables
-     * @return {?}
+     * @return {THIS}
      */
     withScrollableContainers(scrollables) {
-        this.scrollables = scrollables;
+        (/** @type {?} */ (this)).scrollables = scrollables;
+        return (/** @type {?} */ (this));
     }
     /**
      * Adds new preferred positions.

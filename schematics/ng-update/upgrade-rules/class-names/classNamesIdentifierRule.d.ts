@@ -7,6 +7,7 @@
  */
 import { RuleFailure, Rules, RuleWalker } from 'tslint';
 import * as ts from 'typescript';
+import { ClassNameUpgradeData } from '../../data';
 /**
  * Rule that walks through every identifier that is part of Angular Material or thr CDK
  * and replaces the outdated name with the new one if specified in the upgrade data.
@@ -16,7 +17,7 @@ export declare class Rule extends Rules.AbstractRule {
 }
 export declare class Walker extends RuleWalker {
     /** Change data that upgrades to the specified target version. */
-    data: import("../../data/class-names").ClassNameUpgradeData[];
+    data: ClassNameUpgradeData[];
     /**
      * List of identifier names that have been imported from `@angular/material` or `@angular/cdk`
      * in the current source file and therefore can be considered trusted.

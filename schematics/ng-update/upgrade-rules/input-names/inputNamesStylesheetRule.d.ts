@@ -7,6 +7,7 @@
  */
 import { IOptions, RuleFailure, Rules } from 'tslint';
 import * as ts from 'typescript';
+import { InputNameUpgradeData } from '../../data';
 import { ExternalResource } from '../../tslint/component-file';
 import { ComponentWalker } from '../../tslint/component-walker';
 /**
@@ -23,7 +24,7 @@ export declare class Rule extends Rules.AbstractRule {
 }
 export declare class Walker extends ComponentWalker {
     /** Change data that upgrades to the specified target version. */
-    data: import("../../data/input-names").InputNameUpgradeData[];
+    data: InputNameUpgradeData[];
     constructor(sourceFile: ts.SourceFile, options: IOptions);
     visitInlineStylesheet(node: ts.StringLiteralLike): void;
     visitExternalStylesheet(node: ExternalResource): void;

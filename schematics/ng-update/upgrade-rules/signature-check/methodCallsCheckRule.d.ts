@@ -7,6 +7,7 @@
  */
 import { ProgramAwareRuleWalker, RuleFailure, Rules } from 'tslint';
 import * as ts from 'typescript';
+import { MethodCallUpgradeData } from '../../data';
 /**
  * Rule that visits every TypeScript method call expression and checks if the argument count
  * is invalid and needs to be *manually* updated.
@@ -16,7 +17,7 @@ export declare class Rule extends Rules.TypedRule {
 }
 export declare class Walker extends ProgramAwareRuleWalker {
     /** Change data that upgrades to the specified target version. */
-    data: import("../../data/method-call-checks").MethodCallUpgradeData[];
+    data: MethodCallUpgradeData[];
     visitCallExpression(node: ts.CallExpression): void;
     private _checkPropertyAccessMethodCall;
 }

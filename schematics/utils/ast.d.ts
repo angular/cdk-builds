@@ -8,8 +8,9 @@
 import { WorkspaceProject } from '@angular-devkit/core/src/workspace';
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ComponentOptions } from '@schematics/angular/component/schema';
+import { typescript } from './version-agnostic-typescript';
 /** Reads file given path and returns TypeScript source file. */
-export declare function getSourceFile(host: Tree, path: string): import("typescript").SourceFile;
+export declare function getSourceFile(host: Tree, path: string): typescript.SourceFile;
 /** Import and add module to root app module. */
 export declare function addModuleImportToRootModule(host: Tree, moduleName: string, src: string, project: WorkspaceProject): void;
 /**

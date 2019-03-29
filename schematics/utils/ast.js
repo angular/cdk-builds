@@ -21,8 +21,7 @@ function getSourceFile(host, path) {
     if (!buffer) {
         throw new schematics_1.SchematicsException(`Could not find file for path: ${path}`);
     }
-    const content = buffer.toString();
-    return version_agnostic_typescript_1.ts.createSourceFile(path, content, version_agnostic_typescript_1.ts.ScriptTarget.Latest, true);
+    return version_agnostic_typescript_1.ts.createSourceFile(path, buffer.toString(), version_agnostic_typescript_1.ts.ScriptTarget.Latest, true);
 }
 exports.getSourceFile = getSourceFile;
 /** Import and add module to root app module. */
