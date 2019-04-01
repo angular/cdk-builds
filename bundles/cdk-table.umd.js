@@ -1379,6 +1379,8 @@ var CdkTable = /** @class */ (function () {
         /**
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
+         *
+         * \@docs-private
          */
         this.viewChange = new rxjs.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
