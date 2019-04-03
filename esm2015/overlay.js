@@ -1304,8 +1304,8 @@ class FlexibleConnectedPositionStrategy {
      * @param {?} connectedTo
      * @param {?} _viewportRuler
      * @param {?} _document
-     * @param {?=} _platform
-     * @param {?=} _overlayContainer
+     * @param {?} _platform
+     * @param {?} _overlayContainer
      */
     constructor(connectedTo, _viewportRuler, _document, _platform, _overlayContainer) {
         this._viewportRuler = _viewportRuler;
@@ -1436,8 +1436,7 @@ class FlexibleConnectedPositionStrategy {
      */
     apply() {
         // We shouldn't do anything if the strategy was disposed or we're on the server.
-        // @breaking-change 8.0.0 Remove `_platform` null check once it's guaranteed to be defined.
-        if (this._isDisposed || (this._platform && !this._platform.isBrowser)) {
+        if (this._isDisposed || !this._platform.isBrowser) {
             return;
         }
         // If the position has been applied already (e.g. when the overlay was opened) and the
@@ -2239,12 +2238,8 @@ class FlexibleConnectedPositionStrategy {
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
-        // @breaking-change 8.0.0 Currently the `_overlayContainer` is optional in order to avoid a
-        // breaking change. The null check here can be removed once the `_overlayContainer` becomes
-        // a required parameter.
         /** @type {?} */
-        let virtualKeyboardOffset = this._overlayContainer ?
-            this._overlayContainer.getContainerElement().getBoundingClientRect().top : 0;
+        let virtualKeyboardOffset = this._overlayContainer.getContainerElement().getBoundingClientRect().top;
         // Normally this would be zero, however when the overlay is attached to an input (e.g. in an
         // autocomplete), mobile browsers will shift everything in order to put the input in the middle
         // of the screen and to make space for the virtual keyboard. We need to account for this offset,
@@ -2508,11 +2503,10 @@ class ConnectedPositionStrategy {
      * @param {?} connectedTo
      * @param {?} viewportRuler
      * @param {?} document
-     * @param {?=} platform
+     * @param {?} platform
+     * @param {?} overlayContainer
      */
-    constructor(originPos, overlayPos, connectedTo, viewportRuler, document, 
-    // @breaking-change 8.0.0 `platform` parameter to be made required.
-    platform) {
+    constructor(originPos, overlayPos, connectedTo, viewportRuler, document, platform, overlayContainer) {
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -2521,11 +2515,10 @@ class ConnectedPositionStrategy {
         // the extra logic, we create an instance of the positioning strategy that has some
         // defaults that make it behave as the old position strategy and to which we'll
         // proxy all of the API calls.
-        this._positionStrategy =
-            new FlexibleConnectedPositionStrategy(connectedTo, viewportRuler, document, platform)
-                .withFlexibleDimensions(false)
-                .withPush(false)
-                .withViewportMargin(0);
+        this._positionStrategy = new FlexibleConnectedPositionStrategy(connectedTo, viewportRuler, document, platform, overlayContainer)
+            .withFlexibleDimensions(false)
+            .withPush(false)
+            .withViewportMargin(0);
         this.withFallbackPosition(originPos, overlayPos);
     }
     /**
@@ -2941,8 +2934,8 @@ class OverlayPositionBuilder {
     /**
      * @param {?} _viewportRuler
      * @param {?} _document
-     * @param {?=} _platform
-     * @param {?=} _overlayContainer
+     * @param {?} _platform
+     * @param {?} _overlayContainer
      */
     constructor(_viewportRuler, _document, _platform, _overlayContainer) {
         this._viewportRuler = _viewportRuler;
@@ -2967,7 +2960,7 @@ class OverlayPositionBuilder {
      * @return {?}
      */
     connectedTo(elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document);
+        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     }
     /**
      * Creates a flexible position strategy.
@@ -2985,10 +2978,10 @@ OverlayPositionBuilder.decorators = [
 OverlayPositionBuilder.ctorParameters = () => [
     { type: ViewportRuler },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform, decorators: [{ type: Optional }] },
-    { type: OverlayContainer, decorators: [{ type: Optional }] }
+    { type: Platform },
+    { type: OverlayContainer }
 ];
-/** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(inject(ViewportRuler), inject(DOCUMENT), inject(Platform, 8), inject(OverlayContainer, 8)); }, token: OverlayPositionBuilder, providedIn: "root" });
+/** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = defineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(inject(ViewportRuler), inject(DOCUMENT), inject(Platform), inject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

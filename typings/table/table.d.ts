@@ -89,7 +89,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _changeDetectorRef: ChangeDetectorRef;
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
-    private _platform?;
+    private _platform;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
@@ -248,13 +248,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentHeaderRowDefs: QueryList<CdkHeaderRowDef>;
     /** Set of footer row definitions that were provided to the table as content children. */
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, 
-    /**
-     * @deprecated
-     * @breaking-change 8.0.0 `_document` and `_platform` to
-     *    be made into a required parameters.
-     */
-    _document?: any, _platform?: Platform | undefined);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;

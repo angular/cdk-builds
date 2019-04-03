@@ -6,16 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directionality } from '@angular/cdk/bidi';
-import { ViewportRuler } from '@angular/cdk/scrolling';
 import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DragDropRegistry } from '../drag-drop-registry';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
 import { DragRef, DragRefConfig, Point } from '../drag-ref';
-import { DropListRef } from '../drop-list-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
 /** Injection token that can be used to configure the behavior of `CdkDrag`. */
@@ -32,7 +29,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _ngZone;
     private _viewContainerRef;
     private _dir;
-    private _changeDetectorRef?;
+    private _changeDetectorRef;
     private _destroyed;
     /** Reference to the underlying drag instance. */
     _dragRef: DragRef<CdkDrag<T>>;
@@ -102,13 +99,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, viewportRuler: ViewportRuler, dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, config: DragRefConfig, _dir: Directionality, 
-    /**
-     * @deprecated `viewportRuler`, `dragDropRegistry` and `_changeDetectorRef` parameters
-     * to be removed. Also `dragDrop` parameter to be made required.
-     * @breaking-change 8.0.0.
-     */
-    dragDrop?: DragDrop, _changeDetectorRef?: ChangeDetectorRef | undefined);
+    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragRefConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.

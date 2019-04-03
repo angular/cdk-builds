@@ -5,14 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { Platform } from '@angular/cdk/platform';
 import { CdkScrollable, ViewportRuler } from '@angular/cdk/scrolling';
 import { ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
+import { OverlayContainer } from '../overlay-container';
+import { OverlayReference } from '../overlay-reference';
 import { ConnectedOverlayPositionChange, ConnectionPositionPair, OriginConnectionPosition, OverlayConnectionPosition } from './connected-position';
 import { FlexibleConnectedPositionStrategy } from './flexible-connected-position-strategy';
 import { PositionStrategy } from './position-strategy';
-import { Platform } from '@angular/cdk/platform';
-import { OverlayReference } from '../overlay-reference';
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative to some origin element. The relative position is defined in terms of
@@ -37,7 +38,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     _preferredPositions: ConnectionPositionPair[];
     /** Emits an event when the connection point changes. */
     readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
-    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef<HTMLElement>, viewportRuler: ViewportRuler, document: Document, platform?: Platform);
+    constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef<HTMLElement>, viewportRuler: ViewportRuler, document: Document, platform: Platform, overlayContainer: OverlayContainer);
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
     /** Attach this position strategy to an overlay. */

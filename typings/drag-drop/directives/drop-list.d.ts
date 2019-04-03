@@ -8,12 +8,10 @@
 import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef, AfterContentInit } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
-import { DragDropRegistry } from '../drag-drop-registry';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from '../drag-events';
 import { CdkDropListContainer } from '../drop-list-container';
 import { CdkDropListGroup } from './drop-list-group';
 import { DropListRef } from '../drop-list-ref';
-import { DragRef } from '../drag-ref';
 import { DragDrop } from '../drag-drop';
 /**
  * Internal compile-time-only representation of a `CdkDropList`.
@@ -80,13 +78,7 @@ export declare class CdkDropList<T = any> implements CdkDropListContainer, After
     sorted: EventEmitter<CdkDragSortEvent<T>>;
     constructor(
     /** Element that the drop list is attached to. */
-    element: ElementRef<HTMLElement>, dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, _document?: any, 
-    /**
-     * @deprecated `dragDropRegistry` and `_document` parameters to be removed.
-     * Also `dragDrop` parameter to be made required.
-     * @breaking-change 8.0.0.
-     */
-    dragDrop?: DragDrop);
+    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /** Starts dragging an item. */

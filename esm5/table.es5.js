@@ -1274,13 +1274,7 @@ RowViewRef = /** @class */ (function (_super) {
  * @template T
  */
 var CdkTable = /** @class */ (function () {
-    function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, 
-    /**
-     * @deprecated
-     * @breaking-change 8.0.0 `_document` and `_platform` to
-     *    be made into a required parameters.
-     */
-    _document, _platform) {
+    function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -2487,11 +2481,8 @@ var CdkTable = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        // @breaking-change 8.0.0 remove the `|| document` once the `_document` is a required param.
         /** @type {?} */
-        var documentRef = this._document || document;
-        /** @type {?} */
-        var documentFragment = documentRef.createDocumentFragment();
+        var documentFragment = this._document.createDocumentFragment();
         /** @type {?} */
         var sections = [
             { tag: 'thead', outlet: this._headerRowOutlet },
@@ -2501,7 +2492,7 @@ var CdkTable = /** @class */ (function () {
         for (var _a = 0, sections_1 = sections; _a < sections_1.length; _a++) {
             var section = sections_1[_a];
             /** @type {?} */
-            var element = documentRef.createElement(section.tag);
+            var element = this._document.createElement(section.tag);
             element.setAttribute('role', 'rowgroup');
             element.appendChild(section.outlet.elementRef.nativeElement);
             documentFragment.appendChild(element);
@@ -2594,9 +2585,7 @@ var CdkTable = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, 
-        // @breaking-change 8.0.0 remove the null check for `this._platform`.
-        this.stickyCssClass, direction, this._platform ? this._platform.isBrowser : true);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._platform.isBrowser);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(function (value) {

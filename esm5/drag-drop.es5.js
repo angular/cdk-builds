@@ -2962,13 +2962,7 @@ function CDK_DRAG_CONFIG_FACTORY() {
  * @template T
  */
 var CdkDrag = /** @class */ (function () {
-    function CdkDrag(element, dropContainer, _document, _ngZone, _viewContainerRef, viewportRuler, dragDropRegistry, config, _dir, 
-    /**
-     * @deprecated `viewportRuler`, `dragDropRegistry` and `_changeDetectorRef` parameters
-     * to be removed. Also `dragDrop` parameter to be made required.
-     * @breaking-change 8.0.0.
-     */
-    dragDrop, _changeDetectorRef) {
+    function CdkDrag(element, dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef) {
         var _this = this;
         this.element = element;
         this.dropContainer = dropContainer;
@@ -3024,13 +3018,7 @@ var CdkDrag = /** @class */ (function () {
                 subscription.unsubscribe();
             };
         });
-        // @breaking-change 8.0.0 Remove null check once the paramter is made required.
-        if (dragDrop) {
-            this._dragRef = dragDrop.createDrag(element, config);
-        }
-        else {
-            this._dragRef = new DragRef(element, config, _document, _ngZone, viewportRuler, dragDropRegistry);
-        }
+        this._dragRef = dragDrop.createDrag(element, config);
         this._dragRef.data = this;
         this._syncInputs(this._dragRef);
         this._handleEvents(this._dragRef);
@@ -3289,10 +3277,7 @@ var CdkDrag = /** @class */ (function () {
             _this.started.emit({ source: _this });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
-            if (_this._changeDetectorRef) {
-                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
-                _this._changeDetectorRef.markForCheck();
-            }
+            _this._changeDetectorRef.markForCheck();
         });
         ref.released.subscribe(function () {
             _this.released.emit({ source: _this });
@@ -3301,10 +3286,7 @@ var CdkDrag = /** @class */ (function () {
             _this.ended.emit({ source: _this });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
-            if (_this._changeDetectorRef) {
-                // @breaking-change 8.0.0 Remove null check for _changeDetectorRef
-                _this._changeDetectorRef.markForCheck();
-            }
+            _this._changeDetectorRef.markForCheck();
         });
         ref.entered.subscribe(function (event) {
             _this.entered.emit({
@@ -3348,8 +3330,6 @@ var CdkDrag = /** @class */ (function () {
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: NgZone },
         { type: ViewContainerRef },
-        { type: ViewportRuler },
-        { type: DragDropRegistry },
         { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_CONFIG,] }] },
         { type: Directionality, decorators: [{ type: Optional }] },
         { type: DragDrop },
@@ -3472,13 +3452,7 @@ var ɵ0 = undefined;
  * @template T
  */
 var CdkDropList = /** @class */ (function () {
-    function CdkDropList(element, dragDropRegistry, _changeDetectorRef, _dir, _group, _document, 
-    /**
-     * @deprecated `dragDropRegistry` and `_document` parameters to be removed.
-     * Also `dragDrop` parameter to be made required.
-     * @breaking-change 8.0.0.
-     */
-    dragDrop) {
+    function CdkDropList(element, dragDrop, _changeDetectorRef, _dir, _group) {
         var _this = this;
         this.element = element;
         this._changeDetectorRef = _changeDetectorRef;
@@ -3527,13 +3501,7 @@ var CdkDropList = /** @class */ (function () {
          * Emits as the user is swapping items while actively dragging.
          */
         this.sorted = new EventEmitter();
-        // @breaking-change 8.0.0 Remove null check once `dragDrop` parameter is made required.
-        if (dragDrop) {
-            this._dropListRef = dragDrop.createDropList(element);
-        }
-        else {
-            this._dropListRef = new DropListRef(element, dragDropRegistry, _document || document);
-        }
+        this._dropListRef = dragDrop.createDropList(element);
         this._dropListRef.data = this;
         this._dropListRef.enterPredicate = function (drag, drop) {
             return _this.enterPredicate(drag.data, drop.data);
@@ -3905,12 +3873,10 @@ var CdkDropList = /** @class */ (function () {
     /** @nocollapse */
     CdkDropList.ctorParameters = function () { return [
         { type: ElementRef },
-        { type: DragDropRegistry },
+        { type: DragDrop },
         { type: ChangeDetectorRef },
         { type: Directionality, decorators: [{ type: Optional }] },
-        { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] },
-        { type: DragDrop }
+        { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
         _draggables: [{ type: ContentChildren, args: [forwardRef(function () { return CdkDrag; }), {

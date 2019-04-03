@@ -25,8 +25,8 @@ export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | HTMLE
 export declare class FlexibleConnectedPositionStrategy implements PositionStrategy {
     private _viewportRuler;
     private _document;
-    private _platform?;
-    private _overlayContainer?;
+    private _platform;
+    private _overlayContainer;
     /** The overlay to which this strategy is attached. */
     private _overlayRef;
     /** Whether we're performing the very first positioning of the overlay. */
@@ -88,7 +88,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
     readonly positions: ConnectionPositionPair[];
-    constructor(connectedTo: FlexibleConnectedPositionStrategyOrigin, _viewportRuler: ViewportRuler, _document: Document, _platform?: Platform | undefined, _overlayContainer?: OverlayContainer | undefined);
+    constructor(connectedTo: FlexibleConnectedPositionStrategyOrigin, _viewportRuler: ViewportRuler, _document: Document, _platform: Platform, _overlayContainer: OverlayContainer);
     /** Attaches this position strategy to an overlay. */
     attach(overlayRef: OverlayReference): void;
     /**
