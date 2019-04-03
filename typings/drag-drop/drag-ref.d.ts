@@ -257,6 +257,15 @@ export declare class DragRef<T = any> {
     withDirection(direction: Direction): this;
     /** Sets the container that the item is part of. */
     _withDropContainer(container: DropListRef): void;
+    /**
+     * Gets the current position in pixels the draggable outside of a drop container.
+     */
+    getFreeDragPosition(): Readonly<Point>;
+    /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @param value New position to be set.
+     */
+    setFreeDragPosition(value: Point): this;
     /** Unsubscribes from the global subscriptions. */
     private _removeSubscriptions;
     /** Destroys the preview element and its ViewRef. */
@@ -313,6 +322,12 @@ export declare class DragRef<T = any> {
     private _toggleNativeDragInteractions;
     /** Removes the manually-added event listeners from the root element. */
     private _removeRootElementListeners;
+    /**
+     * Applies a `transform` to the root element, taking into account any existing transforms on it.
+     * @param x New transform value along the X axis.
+     * @param y New transform value along the Y axis.
+     */
+    private _applyRootElementTransform;
 }
 /** Point on the page or within an element. */
 export interface Point {

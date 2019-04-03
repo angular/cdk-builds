@@ -308,13 +308,7 @@ DragRef = /** @class */ (function () {
                     constrainedPointerPosition.x - _this._pickupPositionOnPage.x + _this._passiveTransform.x;
                 activeTransform.y =
                     constrainedPointerPosition.y - _this._pickupPositionOnPage.y + _this._passiveTransform.y;
-                /** @type {?} */
-                var transform = getTransform(activeTransform.x, activeTransform.y);
-                // Preserve the previous `transform` value, if there was one. Note that we apply our own
-                // transform before the user's, because things like rotation can affect which direction
-                // the element will be translated towards.
-                _this._rootElement.style.transform = _this._initialTransform ?
-                    transform + ' ' + _this._initialTransform : transform;
+                _this._applyRootElementTransform(activeTransform.x, activeTransform.y);
                 // Apply transform as attribute if dragging and svg element to work for IE
                 if (typeof SVGElement !== 'undefined' && _this._rootElement instanceof SVGElement) {
                     /** @type {?} */
@@ -681,6 +675,47 @@ DragRef = /** @class */ (function () {
     function (container) {
         this._dropContainer = container;
     };
+    /**
+     * Gets the current position in pixels the draggable outside of a drop container.
+     */
+    /**
+     * Gets the current position in pixels the draggable outside of a drop container.
+     * @return {?}
+     */
+    DragRef.prototype.getFreeDragPosition = /**
+     * Gets the current position in pixels the draggable outside of a drop container.
+     * @return {?}
+     */
+    function () {
+        return { x: this._passiveTransform.x, y: this._passiveTransform.y };
+    };
+    /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @param value New position to be set.
+     */
+    /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} value New position to be set.
+     * @return {THIS}
+     */
+    DragRef.prototype.setFreeDragPosition = /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} value New position to be set.
+     * @return {THIS}
+     */
+    function (value) {
+        (/** @type {?} */ (this))._activeTransform = { x: 0, y: 0 };
+        (/** @type {?} */ (this))._passiveTransform.x = value.x;
+        (/** @type {?} */ (this))._passiveTransform.y = value.y;
+        if (!(/** @type {?} */ (this))._dropContainer) {
+            (/** @type {?} */ (this))._applyRootElementTransform(value.x, value.y);
+        }
+        return (/** @type {?} */ (this));
+    };
     /** Unsubscribes from the global subscriptions. */
     /**
      * Unsubscribes from the global subscriptions.
@@ -824,11 +859,6 @@ DragRef = /** @class */ (function () {
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
         if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
             return;
-        }
-        // Cache the previous transform amount only after the first drag sequence, because
-        // we don't want our own transforms to stack on top of each other.
-        if (this._initialTransform == null) {
-            this._initialTransform = this._rootElement.style.transform || '';
         }
         // If we've got handles, we need to disable the tap highlight on the entire root element,
         // otherwise iOS will still add it, even though all the drag interactions on the handle
@@ -1274,6 +1304,39 @@ DragRef = /** @class */ (function () {
     function (element) {
         element.removeEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
         element.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+    };
+    /**
+     * Applies a `transform` to the root element, taking into account any existing transforms on it.
+     * @param x New transform value along the X axis.
+     * @param y New transform value along the Y axis.
+     */
+    /**
+     * Applies a `transform` to the root element, taking into account any existing transforms on it.
+     * @private
+     * @param {?} x New transform value along the X axis.
+     * @param {?} y New transform value along the Y axis.
+     * @return {?}
+     */
+    DragRef.prototype._applyRootElementTransform = /**
+     * Applies a `transform` to the root element, taking into account any existing transforms on it.
+     * @private
+     * @param {?} x New transform value along the X axis.
+     * @param {?} y New transform value along the Y axis.
+     * @return {?}
+     */
+    function (x, y) {
+        /** @type {?} */
+        var transform = getTransform(x, y);
+        // Cache the previous transform amount only after the first drag sequence, because
+        // we don't want our own transforms to stack on top of each other.
+        if (this._initialTransform == null) {
+            this._initialTransform = this._rootElement.style.transform || '';
+        }
+        // Preserve the previous `transform` value, if there was one. Note that we apply our own
+        // transform before the user's, because things like rotation can affect which direction
+        // the element will be translated towards.
+        this._rootElement.style.transform = this._initialTransform ?
+            transform + ' ' + this._initialTransform : transform;
     };
     return DragRef;
 }());
@@ -3031,6 +3094,20 @@ var CdkDrag = /** @class */ (function () {
         this._dragRef.reset();
     };
     /**
+     * Gets the pixel coordinates of the draggable outside of a drop container.
+     */
+    /**
+     * Gets the pixel coordinates of the draggable outside of a drop container.
+     * @return {?}
+     */
+    CdkDrag.prototype.getFreeDragPosition = /**
+     * Gets the pixel coordinates of the draggable outside of a drop container.
+     * @return {?}
+     */
+    function () {
+        return this._dragRef.getFreeDragPosition();
+    };
+    /**
      * @return {?}
      */
     CdkDrag.prototype.ngAfterViewInit = /**
@@ -3067,6 +3144,9 @@ var CdkDrag = /** @class */ (function () {
                 var handle = handleInstance.element.nativeElement;
                 handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
             });
+            if (_this.freeDragPosition) {
+                _this._dragRef.setFreeDragPosition(_this.freeDragPosition);
+            }
         });
     };
     /**
@@ -3080,10 +3160,16 @@ var CdkDrag = /** @class */ (function () {
     function (changes) {
         /** @type {?} */
         var rootSelectorChange = changes['rootElementSelector'];
+        /** @type {?} */
+        var positionChange = changes['positionChange'];
         // We don't have to react to the first change since it's being
         // handled in `ngAfterViewInit` where it needs to be deferred.
         if (rootSelectorChange && !rootSelectorChange.firstChange) {
             this._updateRootElement();
+        }
+        // Skip the first change since it's being handled in `ngAfterViewInit`.
+        if (positionChange && !positionChange.firstChange && this.freeDragPosition) {
+            this._dragRef.setFreeDragPosition(this.freeDragPosition);
         }
     };
     /**
@@ -3275,6 +3361,7 @@ var CdkDrag = /** @class */ (function () {
         rootElementSelector: [{ type: core.Input, args: ['cdkDragRootElement',] }],
         boundaryElementSelector: [{ type: core.Input, args: ['cdkDragBoundary',] }],
         dragStartDelay: [{ type: core.Input, args: ['cdkDragStartDelay',] }],
+        freeDragPosition: [{ type: core.Input, args: ['cdkDragFreeDragPosition',] }],
         disabled: [{ type: core.Input, args: ['cdkDragDisabled',] }],
         constrainPosition: [{ type: core.Input, args: ['cdkDragConstrainPosition',] }],
         started: [{ type: core.Output, args: ['cdkDragStarted',] }],

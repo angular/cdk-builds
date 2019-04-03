@@ -313,13 +313,7 @@ class DragRef {
                     constrainedPointerPosition.x - this._pickupPositionOnPage.x + this._passiveTransform.x;
                 activeTransform.y =
                     constrainedPointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
-                /** @type {?} */
-                const transform = getTransform(activeTransform.x, activeTransform.y);
-                // Preserve the previous `transform` value, if there was one. Note that we apply our own
-                // transform before the user's, because things like rotation can affect which direction
-                // the element will be translated towards.
-                this._rootElement.style.transform = this._initialTransform ?
-                    transform + ' ' + this._initialTransform : transform;
+                this._applyRootElementTransform(activeTransform.x, activeTransform.y);
                 // Apply transform as attribute if dragging and svg element to work for IE
                 if (typeof SVGElement !== 'undefined' && this._rootElement instanceof SVGElement) {
                     /** @type {?} */
@@ -567,6 +561,29 @@ class DragRef {
         this._dropContainer = container;
     }
     /**
+     * Gets the current position in pixels the draggable outside of a drop container.
+     * @return {?}
+     */
+    getFreeDragPosition() {
+        return { x: this._passiveTransform.x, y: this._passiveTransform.y };
+    }
+    /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} value New position to be set.
+     * @return {THIS}
+     */
+    setFreeDragPosition(value) {
+        (/** @type {?} */ (this))._activeTransform = { x: 0, y: 0 };
+        (/** @type {?} */ (this))._passiveTransform.x = value.x;
+        (/** @type {?} */ (this))._passiveTransform.y = value.y;
+        if (!(/** @type {?} */ (this))._dropContainer) {
+            (/** @type {?} */ (this))._applyRootElementTransform(value.x, value.y);
+        }
+        return (/** @type {?} */ (this));
+    }
+    /**
      * Unsubscribes from the global subscriptions.
      * @private
      * @return {?}
@@ -670,11 +687,6 @@ class DragRef {
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
         if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
             return;
-        }
-        // Cache the previous transform amount only after the first drag sequence, because
-        // we don't want our own transforms to stack on top of each other.
-        if (this._initialTransform == null) {
-            this._initialTransform = this._rootElement.style.transform || '';
         }
         // If we've got handles, we need to disable the tap highlight on the entire root element,
         // otherwise iOS will still add it, even though all the drag interactions on the handle
@@ -1027,6 +1039,27 @@ class DragRef {
     _removeRootElementListeners(element) {
         element.removeEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
         element.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+    }
+    /**
+     * Applies a `transform` to the root element, taking into account any existing transforms on it.
+     * @private
+     * @param {?} x New transform value along the X axis.
+     * @param {?} y New transform value along the Y axis.
+     * @return {?}
+     */
+    _applyRootElementTransform(x, y) {
+        /** @type {?} */
+        const transform = getTransform(x, y);
+        // Cache the previous transform amount only after the first drag sequence, because
+        // we don't want our own transforms to stack on top of each other.
+        if (this._initialTransform == null) {
+            this._initialTransform = this._rootElement.style.transform || '';
+        }
+        // Preserve the previous `transform` value, if there was one. Note that we apply our own
+        // transform before the user's, because things like rotation can affect which direction
+        // the element will be translated towards.
+        this._rootElement.style.transform = this._initialTransform ?
+            transform + ' ' + this._initialTransform : transform;
     }
 }
 /**
@@ -2414,6 +2447,13 @@ class CdkDrag {
         this._dragRef.reset();
     }
     /**
+     * Gets the pixel coordinates of the draggable outside of a drop container.
+     * @return {?}
+     */
+    getFreeDragPosition() {
+        return this._dragRef.getFreeDragPosition();
+    }
+    /**
      * @return {?}
      */
     ngAfterViewInit() {
@@ -2446,6 +2486,9 @@ class CdkDrag {
                 const handle = handleInstance.element.nativeElement;
                 handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
             });
+            if (this.freeDragPosition) {
+                this._dragRef.setFreeDragPosition(this.freeDragPosition);
+            }
         });
     }
     /**
@@ -2455,10 +2498,16 @@ class CdkDrag {
     ngOnChanges(changes) {
         /** @type {?} */
         const rootSelectorChange = changes['rootElementSelector'];
+        /** @type {?} */
+        const positionChange = changes['positionChange'];
         // We don't have to react to the first change since it's being
         // handled in `ngAfterViewInit` where it needs to be deferred.
         if (rootSelectorChange && !rootSelectorChange.firstChange) {
             this._updateRootElement();
+        }
+        // Skip the first change since it's being handled in `ngAfterViewInit`.
+        if (positionChange && !positionChange.firstChange && this.freeDragPosition) {
+            this._dragRef.setFreeDragPosition(this.freeDragPosition);
         }
     }
     /**
@@ -2620,6 +2669,7 @@ CdkDrag.propDecorators = {
     rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
     boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
     dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
+    freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
     disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
     constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
     started: [{ type: Output, args: ['cdkDragStarted',] }],

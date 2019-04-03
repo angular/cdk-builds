@@ -63,6 +63,14 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * pointer down before starting to drag the element.
      */
     dragStartDelay: number;
+    /**
+     * Sets the position of a `CdkDrag` that is outside of a drop container.
+     * Can be used to restore the element's position for a returning user.
+     */
+    freeDragPosition: {
+        x: number;
+        y: number;
+    };
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
@@ -110,6 +118,13 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     getRootElement(): HTMLElement;
     /** Resets a standalone drag item to its initial position. */
     reset(): void;
+    /**
+     * Gets the pixel coordinates of the draggable outside of a drop container.
+     */
+    getFreeDragPosition(): {
+        readonly x: number;
+        readonly y: number;
+    };
     ngAfterViewInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
