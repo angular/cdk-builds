@@ -120,7 +120,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * on reposition we can evaluate if it or the overlay has been clipped or outside view. Every
      * Scrollable must be an ancestor element of the strategy's origin element.
      */
-    withScrollableContainers(scrollables: CdkScrollable[]): void;
+    withScrollableContainers(scrollables: CdkScrollable[]): this;
     /**
      * Adds new preferred positions.
      * @param positions List of positions options for this overlay.
