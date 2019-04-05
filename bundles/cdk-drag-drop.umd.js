@@ -3334,8 +3334,8 @@ var CdkDrag = /** @class */ (function () {
     ]; };
     CdkDrag.propDecorators = {
         _handles: [{ type: core.ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
-        _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview,] }],
-        _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder,] }],
+        _previewTemplate: [{ type: core.ContentChild, args: [CdkDragPreview, { static: false },] }],
+        _placeholderTemplate: [{ type: core.ContentChild, args: [CdkDragPlaceholder, { static: false },] }],
         data: [{ type: core.Input, args: ['cdkDragData',] }],
         lockAxis: [{ type: core.Input, args: ['cdkDragLockAxis',] }],
         rootElementSelector: [{ type: core.Input, args: ['cdkDragRootElement',] }],

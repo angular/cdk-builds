@@ -240,9 +240,9 @@ var CdkColumnDef = /** @class */ (function (_super) {
     CdkColumnDef.propDecorators = {
         name: [{ type: Input, args: ['cdkColumnDef',] }],
         stickyEnd: [{ type: Input, args: ['stickyEnd',] }],
-        cell: [{ type: ContentChild, args: [CdkCellDef,] }],
-        headerCell: [{ type: ContentChild, args: [CdkHeaderCellDef,] }],
-        footerCell: [{ type: ContentChild, args: [CdkFooterCellDef,] }]
+        cell: [{ type: ContentChild, args: [CdkCellDef, { static: false },] }],
+        headerCell: [{ type: ContentChild, args: [CdkHeaderCellDef, { static: false },] }],
+        footerCell: [{ type: ContentChild, args: [CdkFooterCellDef, { static: false },] }]
     };
     return CdkColumnDef;
 }(_CdkColumnDefBase));

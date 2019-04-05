@@ -279,7 +279,7 @@ var CdkStep = /** @class */ (function () {
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
     ]; };
     CdkStep.propDecorators = {
-        stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
+        stepLabel: [{ type: ContentChild, args: [CdkStepLabel, { static: false },] }],
         content: [{ type: ViewChild, args: [TemplateRef, { static: true },] }],
         stepControl: [{ type: Input }],
         label: [{ type: Input }],
