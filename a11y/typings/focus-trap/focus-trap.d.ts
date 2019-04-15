@@ -22,8 +22,8 @@ export declare class FocusTrap {
     private _startAnchor;
     private _endAnchor;
     private _hasAttached;
-    private _startAnchorListener;
-    private _endAnchorListener;
+    protected startAnchorListener: () => boolean;
+    protected endAnchorListener: () => boolean;
     /** Whether the focus trap is active. */
     enabled: boolean;
     private _enabled;

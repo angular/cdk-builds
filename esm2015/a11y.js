@@ -1094,8 +1094,8 @@ class FocusTrap {
         this._document = _document;
         this._hasAttached = false;
         // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
-        this._startAnchorListener = () => this.focusLastTabbableElement();
-        this._endAnchorListener = () => this.focusFirstTabbableElement();
+        this.startAnchorListener = () => this.focusLastTabbableElement();
+        this.endAnchorListener = () => this.focusFirstTabbableElement();
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1127,13 +1127,13 @@ class FocusTrap {
         /** @type {?} */
         const endAnchor = this._endAnchor;
         if (startAnchor) {
-            startAnchor.removeEventListener('focus', this._startAnchorListener);
+            startAnchor.removeEventListener('focus', this.startAnchorListener);
             if (startAnchor.parentNode) {
                 startAnchor.parentNode.removeChild(startAnchor);
             }
         }
         if (endAnchor) {
-            endAnchor.removeEventListener('focus', this._endAnchorListener);
+            endAnchor.removeEventListener('focus', this.endAnchorListener);
             if (endAnchor.parentNode) {
                 endAnchor.parentNode.removeChild(endAnchor);
             }
@@ -1154,11 +1154,11 @@ class FocusTrap {
         this._ngZone.runOutsideAngular(() => {
             if (!this._startAnchor) {
                 this._startAnchor = this._createAnchor();
-                (/** @type {?} */ (this._startAnchor)).addEventListener('focus', this._startAnchorListener);
+                (/** @type {?} */ (this._startAnchor)).addEventListener('focus', this.startAnchorListener);
             }
             if (!this._endAnchor) {
                 this._endAnchor = this._createAnchor();
-                (/** @type {?} */ (this._endAnchor)).addEventListener('focus', this._endAnchorListener);
+                (/** @type {?} */ (this._endAnchor)).addEventListener('focus', this.endAnchorListener);
             }
         });
         if (this._element.parentNode) {
