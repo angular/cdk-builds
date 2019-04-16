@@ -1761,7 +1761,7 @@ const LIVE_ANNOUNCER_PROVIDER = {
 const TOUCH_BUFFER_MS = 650;
 /**
  * Event listener options that enable capturing and also
- * mark the the listener as passive if the browser supports it.
+ * mark the listener as passive if the browser supports it.
  * @type {?}
  */
 const captureEventListenerOptions = normalizePassiveListenerOptions({
