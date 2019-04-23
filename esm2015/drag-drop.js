@@ -2485,7 +2485,7 @@ class CdkDrag {
         /** @type {?} */
         const rootSelectorChange = changes['rootElementSelector'];
         /** @type {?} */
-        const positionChange = changes['positionChange'];
+        const positionChange = changes['freeDragPosition'];
         // We don't have to react to the first change since it's being
         // handled in `ngAfterViewInit` where it needs to be deferred.
         if (rootSelectorChange && !rootSelectorChange.firstChange) {
