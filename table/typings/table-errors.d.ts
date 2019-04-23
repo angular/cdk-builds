@@ -36,3 +36,8 @@ export declare function getTableMissingRowDefsError(): Error;
  * @docs-private
  */
 export declare function getTableUnknownDataSourceError(): Error;
+/**
+ * Returns an error to be thrown when the text column cannot find a parent table to inject.
+ * @docs-private
+ */
+export declare function getTableTextColumnMissingParentTableError(): Error;

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, Inject, isDevMode, Optional, ViewChild, NgModule } from '@angular/core';
+import { ContentChild, Directive, ElementRef, Input, TemplateRef, ChangeDetectionStrategy, Component, IterableDiffers, ViewContainerRef, ViewEncapsulation, Attribute, ChangeDetectorRef, ContentChildren, Inject, isDevMode, Optional, ViewChild, InjectionToken, NgModule } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
@@ -158,7 +158,9 @@ class CdkColumnDef extends _CdkColumnDefBase {
      * Unique name for this column.
      * @return {?}
      */
-    get name() { return this._name; }
+    get name() {
+        return this._name;
+    }
     /**
      * @param {?} name
      * @return {?}
@@ -178,7 +180,9 @@ class CdkColumnDef extends _CdkColumnDefBase {
      * has been changed.
      * @return {?}
      */
-    get stickyEnd() { return this._stickyEnd; }
+    get stickyEnd() {
+        return this._stickyEnd;
+    }
     /**
      * @param {?} v
      * @return {?}
@@ -194,10 +198,7 @@ CdkColumnDef.decorators = [
     { type: Directive, args: [{
                 selector: '[cdkColumnDef]',
                 inputs: ['sticky'],
-                providers: [{
-                        provide: 'MAT_SORT_HEADER_COLUMN_DEF',
-                        useExisting: CdkColumnDef
-                    }],
+                providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
             },] },
 ];
 CdkColumnDef.propDecorators = {
@@ -915,6 +916,14 @@ function getTableMissingRowDefsError() {
  */
 function getTableUnknownDataSourceError() {
     return Error(`Provided data source did not match an array, Observable, or DataSource`);
+}
+/**
+ * Returns an error to be thrown when the text column cannot find a parent table to inject.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableTextColumnMissingParentTableError() {
+    return Error(`Text column could not find a parent table for registration.`);
 }
 
 /**
@@ -1969,6 +1978,134 @@ function mergeQueryListAndSet(queryList, set) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * Injection token that can be used to specify the text column options.
+ * @type {?}
+ */
+const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
+/**
+ * Column that simply shows text content for the header and row cells. Assumes that the table
+ * is using the native table implementation (`<table>`).
+ *
+ * By default, the name of this column will be the header text and data property accessor.
+ * The header text can be overridden with the `headerText` input. Cell values can be overridden with
+ * the `dataAccessor` input. Change the text justification to the start or end using the `justify`
+ * input.
+ * @template T
+ */
+class CdkTextColumn {
+    /**
+     * @param {?} table
+     * @param {?} options
+     */
+    constructor(table, options) {
+        this.table = table;
+        this.options = options;
+        /**
+         * Alignment of the cell values.
+         */
+        this.justify = 'start';
+        this.options = options || {};
+    }
+    /**
+     * Column name that should be used to reference this column.
+     * @return {?}
+     */
+    get name() {
+        return this._name;
+    }
+    /**
+     * @param {?} name
+     * @return {?}
+     */
+    set name(name) {
+        this._name = name;
+        this.columnDef.name = name;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        if (this.headerText === undefined) {
+            this.headerText = this._createDefaultHeaderText();
+        }
+        if (!this.dataAccessor) {
+            this.dataAccessor =
+                this.options.defaultDataAccessor || ((data, name) => ((/** @type {?} */ (data)))[name]);
+        }
+        if (this.table) {
+            // Provide the cell and headerCell directly to the table with the static `ViewChild` query,
+            // since the columnDef will not pick up its content by the time the table finishes checking
+            // its content and initializing the rows.
+            this.columnDef.cell = this.cell;
+            this.columnDef.headerCell = this.headerCell;
+            this.table.addColumnDef(this.columnDef);
+        }
+        else {
+            throw getTableTextColumnMissingParentTableError();
+        }
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        if (this.table) {
+            this.table.removeColumnDef(this.columnDef);
+        }
+    }
+    /**
+     * Creates a default header text. Use the options' header text transformation function if one
+     * has been provided. Otherwise simply capitalize the column name.
+     * @return {?}
+     */
+    _createDefaultHeaderText() {
+        if (this.options && this.options.defaultHeaderTextTransform) {
+            return this.options.defaultHeaderTextTransform(this.name);
+        }
+        return this.name[0].toUpperCase() + this.name.slice(1);
+    }
+}
+CdkTextColumn.decorators = [
+    { type: Component, args: [{selector: 'cdk-text-column',
+                template: `
+    <ng-container cdkColumnDef>
+      <th cdk-header-cell *cdkHeaderCellDef [style.text-align]="justify">
+        {{headerText}}
+      </th>
+      <td cdk-cell *cdkCellDef="let data" [style.text-align]="justify">
+        {{dataAccessor(data, name)}}
+      </td>
+    </ng-container>
+  `,
+                encapsulation: ViewEncapsulation.None,
+                // Change detection is intentionally not set to OnPush. This component's template will be provided
+                // to the table to be inserted into its view. This is problematic when change detection runs since
+                // the bindings in this template will be evaluated _after_ the table's view is evaluated, which
+                // mean's the template in the table's view will not have the updated value (and in fact will cause
+                // an ExpressionChangedAfterItHasBeenCheckedError).
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default,
+            },] },
+];
+/** @nocollapse */
+CdkTextColumn.ctorParameters = () => [
+    { type: CdkTable, decorators: [{ type: Optional }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [TEXT_COLUMN_OPTIONS,] }] }
+];
+CdkTextColumn.propDecorators = {
+    name: [{ type: Input }],
+    headerText: [{ type: Input }],
+    dataAccessor: [{ type: Input }],
+    justify: [{ type: Input }],
+    columnDef: [{ type: ViewChild, args: [CdkColumnDef, { static: true },] }],
+    cell: [{ type: ViewChild, args: [CdkCellDef, { static: true },] }],
+    headerCell: [{ type: ViewChild, args: [CdkHeaderCellDef, { static: true },] }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 /** @type {?} */
 const EXPORTED_DECLARATIONS = [
     CdkTable,
@@ -1989,6 +2126,7 @@ const EXPORTED_DECLARATIONS = [
     DataRowOutlet,
     HeaderRowOutlet,
     FooterRowOutlet,
+    CdkTextColumn,
 ];
 class CdkTableModule {
 }
@@ -2010,5 +2148,5 @@ CdkTableModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDefBase, _CdkColumnDefBase, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDefBase, _CdkHeaderRowDefBase, CdkHeaderRowDef, CdkFooterRowDefBase, _CdkFooterRowDefBase, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule, STICKY_DIRECTIONS, StickyStyler, mixinHasStickyInput };
+export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, CDK_TABLE_TEMPLATE, CdkTable, CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDefBase, _CdkColumnDefBase, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell, CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDefBase, _CdkHeaderRowDefBase, CdkHeaderRowDef, CdkFooterRowDefBase, _CdkFooterRowDefBase, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkTableModule, STICKY_DIRECTIONS, StickyStyler, mixinHasStickyInput, TEXT_COLUMN_OPTIONS, CdkTextColumn };
 //# sourceMappingURL=table.js.map
