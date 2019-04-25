@@ -36,9 +36,9 @@ export declare class CdkFooterCellDef implements CellDef {
     constructor(/** @docs-private */ template: TemplateRef<any>);
 }
 /** @docs-private */
-export declare class CdkColumnDefBase {
+declare class CdkColumnDefBase {
 }
-export declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
+declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
 /**
  * Column definition for the CDK table.
  * Defines a set of cells available for a table column.
@@ -83,3 +83,4 @@ export declare class CdkFooterCell extends BaseCdkCell {
 export declare class CdkCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
 }
+export {};

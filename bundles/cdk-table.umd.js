@@ -179,7 +179,7 @@ var CdkFooterCellDef = /** @class */ (function () {
 /**
  * \@docs-private
  */
-var   
+var 
 // Boilerplate for applying mixins to CdkColumnDef.
 /**
  * \@docs-private
@@ -446,7 +446,7 @@ BaseRowDef = /** @class */ (function () {
 /**
  * \@docs-private
  */
-var   
+var 
 // Boilerplate for applying mixins to CdkHeaderRowDef.
 /**
  * \@docs-private
@@ -504,7 +504,7 @@ var CdkHeaderRowDef = /** @class */ (function (_super) {
 /**
  * \@docs-private
  */
-var   
+var 
 // Boilerplate for applying mixins to CdkFooterRowDef.
 /**
  * \@docs-private
@@ -2860,8 +2860,6 @@ exports.CdkTable = CdkTable;
 exports.CdkCellDef = CdkCellDef;
 exports.CdkHeaderCellDef = CdkHeaderCellDef;
 exports.CdkFooterCellDef = CdkFooterCellDef;
-exports.CdkColumnDefBase = CdkColumnDefBase;
-exports._CdkColumnDefBase = _CdkColumnDefBase;
 exports.CdkColumnDef = CdkColumnDef;
 exports.BaseCdkCell = BaseCdkCell;
 exports.CdkHeaderCell = CdkHeaderCell;
@@ -2869,11 +2867,7 @@ exports.CdkFooterCell = CdkFooterCell;
 exports.CdkCell = CdkCell;
 exports.CDK_ROW_TEMPLATE = CDK_ROW_TEMPLATE;
 exports.BaseRowDef = BaseRowDef;
-exports.CdkHeaderRowDefBase = CdkHeaderRowDefBase;
-exports._CdkHeaderRowDefBase = _CdkHeaderRowDefBase;
 exports.CdkHeaderRowDef = CdkHeaderRowDef;
-exports.CdkFooterRowDefBase = CdkFooterRowDefBase;
-exports._CdkFooterRowDefBase = _CdkFooterRowDefBase;
 exports.CdkFooterRowDef = CdkFooterRowDef;
 exports.CdkRowDef = CdkRowDef;
 exports.CdkCellOutlet = CdkCellOutlet;

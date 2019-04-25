@@ -36,9 +36,9 @@ export declare abstract class BaseRowDef implements OnChanges {
     extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
 }
 /** @docs-private */
-export declare class CdkHeaderRowDefBase extends BaseRowDef {
+declare class CdkHeaderRowDefBase extends BaseRowDef {
 }
-export declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
+declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
 /**
  * Header row definition for the CDK table.
  * Captures the header row's template and other header properties such as the columns to display.
@@ -48,9 +48,9 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
     ngOnChanges(changes: SimpleChanges): void;
 }
 /** @docs-private */
-export declare class CdkFooterRowDefBase extends BaseRowDef {
+declare class CdkFooterRowDefBase extends BaseRowDef {
 }
-export declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
+declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 /**
  * Footer row definition for the CDK table.
  * Captures the footer row's template and other footer properties such as the columns to display.
@@ -144,3 +144,4 @@ export declare class CdkFooterRow {
 /** Data row template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkRow {
 }
+export {};
