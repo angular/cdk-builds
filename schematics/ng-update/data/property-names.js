@@ -11,7 +11,7 @@ const target_version_1 = require("../target-version");
 exports.propertyNames = {
     [target_version_1.TargetVersion.V7]: [
         {
-            pr: 'https://github.com/angular/material2/pull/8286',
+            pr: 'https://github.com/angular/components/pull/8286',
             changes: [
                 {
                     replace: 'onChange',
@@ -23,7 +23,7 @@ exports.propertyNames = {
             ]
         },
         {
-            pr: 'https://github.com/angular/material2/pull/12927',
+            pr: 'https://github.com/angular/components/pull/12927',
             changes: [
                 {
                     replace: 'flexibleDiemsions',
@@ -37,7 +37,7 @@ exports.propertyNames = {
     ],
     [target_version_1.TargetVersion.V6]: [
         {
-            pr: 'https://github.com/angular/material2/pull/10161',
+            pr: 'https://github.com/angular/components/pull/10161',
             changes: [
                 {
                     replace: '_deprecatedOrigin',
@@ -126,7 +126,7 @@ exports.propertyNames = {
             ]
         },
         {
-            pr: 'https://github.com/angular/material2/pull/10257',
+            pr: 'https://github.com/angular/components/pull/10257',
             changes: [
                 {
                     replace: '_deprecatedPortal',

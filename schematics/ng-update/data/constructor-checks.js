@@ -16,7 +16,7 @@ const target_version_1 = require("../target-version");
 exports.constructorChecks = {
     [target_version_1.TargetVersion.V8]: [
         {
-            pr: 'https://github.com/angular/material2/pull/15647',
+            pr: 'https://github.com/angular/components/pull/15647',
             changes: [
                 'CdkDrag', 'CdkDropList', 'ConnectedPositionStrategy', 'FlexibleConnectedPositionStrategy',
                 'OverlayPositionBuilder', 'CdkTable'

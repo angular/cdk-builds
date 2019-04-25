@@ -11,7 +11,7 @@ const target_version_1 = require("../target-version");
 exports.methodCallChecks = {
     [target_version_1.TargetVersion.V6]: [
         {
-            pr: 'https://github.com/angular/material2/pull/10325',
+            pr: 'https://github.com/angular/components/pull/10325',
             changes: [
                 {
                     className: 'FocusMonitor',

@@ -11,7 +11,7 @@ const target_version_1 = require("../target-version");
 exports.inputNames = {
     [target_version_1.TargetVersion.V6]: [
         {
-            pr: 'https://github.com/angular/material2/pull/10161',
+            pr: 'https://github.com/angular/components/pull/10161',
             changes: [
                 {
                     replace: 'origin',

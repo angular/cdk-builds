@@ -31,7 +31,7 @@ class Rule extends tslint_1.Rules.TypedRule {
     applyWithProgram(sourceFile, program) {
         // Note that the data for this rule is not distinguished based on the target version because
         // we don't keep track of the new signature and don't want to update incrementally.
-        // See: https://github.com/angular/material2/pull/12970#issuecomment-418337566
+        // See: https://github.com/angular/components/pull/12970#issuecomment-418337566
         const data = upgrade_data_1.getAllChanges(this.getOptions().ruleArguments[1].constructorChecks);
         return this.applyWithFunction(sourceFile, visitSourceFile, data, program);
     }
