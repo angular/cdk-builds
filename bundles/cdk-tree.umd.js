@@ -42,7 +42,7 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
@@ -186,7 +186,7 @@ BaseTreeControl = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
@@ -272,7 +272,7 @@ FlatTreeControl = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
@@ -315,9 +315,14 @@ NestedTreeControl = /** @class */ (function (_super) {
         var _a;
         this.expansionModel.clear();
         /** @type {?} */
-        var allNodes = this.dataNodes.reduce(function (accumulator, dataNode) {
+        var allNodes = this.dataNodes.reduce((/**
+         * @param {?} accumulator
+         * @param {?} dataNode
+         * @return {?}
+         */
+        function (accumulator, dataNode) {
             return accumulator.concat(_this.getDescendants(dataNode), [dataNode]);
-        }, []);
+        }), []);
         (_a = this.expansionModel).select.apply(_a, allNodes);
     };
     /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
@@ -359,12 +364,24 @@ NestedTreeControl = /** @class */ (function (_super) {
         /** @type {?} */
         var childrenNodes = this.getChildren(dataNode);
         if (Array.isArray(childrenNodes)) {
-            childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
+            childrenNodes.forEach((/**
+             * @param {?} child
+             * @return {?}
+             */
+            function (child) { return _this._getDescendants(descendants, child); }));
         }
         else if (childrenNodes instanceof rxjs.Observable) {
-            childrenNodes.pipe(operators.take(1), operators.filter(Boolean)).subscribe(function (children) {
-                children.forEach(function (child) { return _this._getDescendants(descendants, child); });
-            });
+            childrenNodes.pipe(operators.take(1), operators.filter(Boolean)).subscribe((/**
+             * @param {?} children
+             * @return {?}
+             */
+            function (children) {
+                children.forEach((/**
+                 * @param {?} child
+                 * @return {?}
+                 */
+                function (child) { return _this._getDescendants(descendants, child); }));
+            }));
         }
     };
     return NestedTreeControl;
@@ -372,12 +389,12 @@ NestedTreeControl = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token used to provide a `CdkTreeNode` to its outlet.
@@ -410,7 +427,7 @@ var CdkTreeNodeOutlet = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Context provided to the tree node component.
@@ -453,7 +470,7 @@ var CdkTreeNodeDef = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -499,7 +516,7 @@ function getTreeControlFunctionsMissingError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
@@ -589,7 +606,11 @@ var CdkTree = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var defaultNodeDefs = this._nodeDefs.filter(function (def) { return !def.when; });
+        var defaultNodeDefs = this._nodeDefs.filter((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return !def.when; }));
         if (defaultNodeDefs.length > 1) {
             throw getTreeMultipleDefaultNodeDefsError();
         }
@@ -669,7 +690,11 @@ var CdkTree = /** @class */ (function () {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy))
-                .subscribe(function (data) { return _this.renderNodeChanges(data); });
+                .subscribe((/**
+             * @param {?} data
+             * @return {?}
+             */
+            function (data) { return _this.renderNodeChanges(data); }));
         }
         else {
             throw getTreeNoValidDataSourceError();
@@ -701,7 +726,13 @@ var CdkTree = /** @class */ (function () {
         if (!changes) {
             return;
         }
-        changes.forEachOperation(function (item, adjustedPreviousIndex, currentIndex) {
+        changes.forEachOperation((/**
+         * @param {?} item
+         * @param {?} adjustedPreviousIndex
+         * @param {?} currentIndex
+         * @return {?}
+         */
+        function (item, adjustedPreviousIndex, currentIndex) {
             if (item.previousIndex == null) {
                 _this.insertNode(data[(/** @type {?} */ (currentIndex))], (/** @type {?} */ (currentIndex)), viewContainer, parentData);
             }
@@ -714,7 +745,7 @@ var CdkTree = /** @class */ (function () {
                 var view = viewContainer.get((/** @type {?} */ (adjustedPreviousIndex)));
                 viewContainer.move((/** @type {?} */ (view)), currentIndex);
             }
-        });
+        }));
         this._changeDetectorRef.detectChanges();
     };
     /**
@@ -746,7 +777,11 @@ var CdkTree = /** @class */ (function () {
             return this._nodeDefs.first;
         }
         /** @type {?} */
-        var nodeDef = this._nodeDefs.find(function (def) { return def.when && def.when(i, data); }) || this._defaultNodeDef;
+        var nodeDef = this._nodeDefs.find((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.when && def.when(i, data); })) || this._defaultNodeDef;
         if (!nodeDef) {
             throw getTreeMissingMatchingNodeDefError();
         }
@@ -949,7 +984,11 @@ var CdkTreeNode = /** @class */ (function () {
             }
             else if (childrenNodes instanceof rxjs.Observable) {
                 childrenNodes.pipe(operators.takeUntil(this._destroyed))
-                    .subscribe(function (children) { return _this._setRoleFromChildren(children); });
+                    .subscribe((/**
+                 * @param {?} children
+                 * @return {?}
+                 */
+                function (children) { return _this._setRoleFromChildren(children); }));
             }
         }
     };
@@ -996,7 +1035,7 @@ var CdkTreeNode = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Nested node is a child of `<cdk-tree>`. It works with nested tree.
@@ -1048,10 +1087,17 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         }
         else if (childrenNodes instanceof rxjs.Observable) {
             childrenNodes.pipe(operators.takeUntil(this._destroyed))
-                .subscribe(function (result) { return _this.updateChildrenNodes(result); });
+                .subscribe((/**
+             * @param {?} result
+             * @return {?}
+             */
+            function (result) { return _this.updateChildrenNodes(result); }));
         }
         this.nodeOutlet.changes.pipe(operators.takeUntil(this._destroyed))
-            .subscribe(function () { return _this.updateChildrenNodes(); });
+            .subscribe((/**
+         * @return {?}
+         */
+        function () { return _this.updateChildrenNodes(); }));
     };
     /**
      * @return {?}
@@ -1129,7 +1175,11 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         if (outlets) {
             // Note that since we use `descendants: true` on the query, we have to ensure
             // that we don't pick up the outlet of a child node by accident.
-            return outlets.find(function (outlet) { return !outlet._node || outlet._node === _this; });
+            return outlets.find((/**
+             * @param {?} outlet
+             * @return {?}
+             */
+            function (outlet) { return !outlet._node || outlet._node === _this; }));
         }
     };
     CdkNestedTreeNode.decorators = [
@@ -1165,7 +1215,7 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Regex used to split a string on its CSS units.
@@ -1196,12 +1246,18 @@ var CdkTreeNodePadding = /** @class */ (function () {
         this._indent = 40;
         this._setPadding();
         if (_dir) {
-            _dir.change.pipe(operators.takeUntil(this._destroyed)).subscribe(function () { return _this._setPadding(true); });
+            _dir.change.pipe(operators.takeUntil(this._destroyed)).subscribe((/**
+             * @return {?}
+             */
+            function () { return _this._setPadding(true); }));
         }
         // In Ivy the indentation binding might be set before the tree node's data has been added,
         // which means that we'll miss the first render. We have to subscribe to changes in the
         // data to ensure that everything is up to date.
-        _treeNode._dataChanges.subscribe(function () { return _this._setPadding(); });
+        _treeNode._dataChanges.subscribe((/**
+         * @return {?}
+         */
+        function () { return _this._setPadding(); }));
     }
     Object.defineProperty(CdkTreeNodePadding.prototype, "level", {
         /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
@@ -1328,7 +1384,7 @@ var CdkTreeNodePadding = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Node toggle to expand/collapse the node.
@@ -1402,7 +1458,7 @@ var CdkTreeNodeToggle = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var EXPORTED_DECLARATIONS = [

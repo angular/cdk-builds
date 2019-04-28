@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Options to pass to the animationstart listener.
@@ -56,30 +56,46 @@ var AutofillMonitor = /** @class */ (function () {
         /** @type {?} */
         var cssClass = 'cdk-text-field-autofilled';
         /** @type {?} */
-        var listener = (/** @type {?} */ ((function (event) {
+        var listener = (/** @type {?} */ (((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
             if (event.animationName === 'cdk-text-field-autofill-start' &&
                 !element.classList.contains(cssClass)) {
                 element.classList.add(cssClass);
-                _this._ngZone.run(function () { return result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true }); });
+                _this._ngZone.run((/**
+                 * @return {?}
+                 */
+                function () { return result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true }); }));
             }
             else if (event.animationName === 'cdk-text-field-autofill-end' &&
                 element.classList.contains(cssClass)) {
                 element.classList.remove(cssClass);
-                _this._ngZone.run(function () { return result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false }); });
+                _this._ngZone.run((/**
+                 * @return {?}
+                 */
+                function () { return result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false }); }));
             }
-        })));
-        this._ngZone.runOutsideAngular(function () {
+        }))));
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             element.addEventListener('animationstart', listener, listenerOptions);
             element.classList.add('cdk-text-field-autofill-monitored');
-        });
+        }));
         this._monitoredElements.set(element, {
             subject: result,
-            unlisten: function () {
+            unlisten: (/**
+             * @return {?}
+             */
+            function () {
                 element.removeEventListener('animationstart', listener, listenerOptions);
-            }
+            })
         });
         return result.asObservable();
     };
@@ -112,7 +128,12 @@ var AutofillMonitor = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._monitoredElements.forEach(function (_info, element) { return _this.stopMonitoring(element); });
+        this._monitoredElements.forEach((/**
+         * @param {?} _info
+         * @param {?} element
+         * @return {?}
+         */
+        function (_info, element) { return _this.stopMonitoring(element); }));
     };
     AutofillMonitor.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
@@ -122,7 +143,7 @@ var AutofillMonitor = /** @class */ (function () {
         { type: platform.Platform },
         { type: core.NgZone }
     ]; };
-    /** @nocollapse */ AutofillMonitor.ngInjectableDef = core.defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(core.inject(platform.Platform), core.inject(core.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+    /** @nocollapse */ AutofillMonitor.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(core.ɵɵinject(platform.Platform), core.ɵɵinject(core.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     return AutofillMonitor;
 }());
 /**
@@ -147,7 +168,11 @@ var CdkAutofill = /** @class */ (function () {
         var _this = this;
         this._autofillMonitor
             .monitor(this._elementRef)
-            .subscribe(function (event) { return _this.cdkAutofill.emit(event); });
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) { return _this.cdkAutofill.emit(event); }));
     };
     /**
      * @return {?}
@@ -176,7 +201,7 @@ var CdkAutofill = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive to automatically resize a textarea to fit its content.
@@ -300,11 +325,17 @@ var CdkTextareaAutosize = /** @class */ (function () {
             // Remember the height which we started with in case autosizing is disabled
             this._initialHeight = this._textareaElement.style.height;
             this.resizeToFitContent();
-            this._ngZone.runOutsideAngular(function () {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            function () {
                 rxjs.fromEvent(window, 'resize')
                     .pipe(operators.auditTime(16), operators.takeUntil(_this._destroyed))
-                    .subscribe(function () { return _this.resizeToFitContent(true); });
-            });
+                    .subscribe((/**
+                 * @return {?}
+                 */
+                function () { return _this.resizeToFitContent(true); }));
+            }));
         }
     };
     /**
@@ -439,14 +470,23 @@ var CdkTextareaAutosize = /** @class */ (function () {
         textarea.style.height = height + "px";
         textarea.classList.remove('cdk-textarea-autosize-measuring');
         textarea.placeholder = placeholderText;
-        this._ngZone.runOutsideAngular(function () {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             if (typeof requestAnimationFrame !== 'undefined') {
-                requestAnimationFrame(function () { return _this._scrollToCaretPosition(textarea); });
+                requestAnimationFrame((/**
+                 * @return {?}
+                 */
+                function () { return _this._scrollToCaretPosition(textarea); }));
             }
             else {
-                setTimeout(function () { return _this._scrollToCaretPosition(textarea); });
+                setTimeout((/**
+                 * @return {?}
+                 */
+                function () { return _this._scrollToCaretPosition(textarea); }));
             }
-        });
+        }));
         this._previousValue = value;
         this._previousMinRows = this._minRows;
     };
@@ -540,7 +580,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var TextFieldModule = /** @class */ (function () {
     function TextFieldModule() {

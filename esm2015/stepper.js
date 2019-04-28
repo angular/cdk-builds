@@ -16,7 +16,7 @@ import { startWith, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepLabel {
     /**
@@ -38,7 +38,7 @@ CdkStepLabel.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepHeader {
     /**
@@ -70,7 +70,7 @@ CdkStepHeader.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each stepper component.
@@ -232,7 +232,10 @@ CdkStep.decorators = [
 ];
 /** @nocollapse */
 CdkStep.ctorParameters = () => [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] },
+    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef((/**
+                     * @return {?}
+                     */
+                    () => CdkStepper)),] }] },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
 ];
 CdkStep.propDecorators = {
@@ -345,13 +348,20 @@ class CdkStepper {
             .withVerticalOrientation(this._orientation === 'vertical');
         (this._dir ? (/** @type {?} */ (this._dir.change)) : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
-            .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
+            .subscribe((/**
+         * @param {?} direction
+         * @return {?}
+         */
+        direction => this._keyManager.withHorizontalOrientation(direction)));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
-        this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
+        this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe((/**
+         * @return {?}
+         */
+        () => {
             if (!this.selected) {
                 this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
             }
-        });
+        }));
     }
     /**
      * @return {?}
@@ -380,7 +390,11 @@ class CdkStepper {
      */
     reset() {
         this._updateSelectedItemIndex(0);
-        this.steps.forEach(step => step.reset());
+        this.steps.forEach((/**
+         * @param {?} step
+         * @return {?}
+         */
+        step => step.reset()));
         this._stateChanged();
     }
     /**
@@ -554,7 +568,11 @@ class CdkStepper {
         const steps = this.steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
-            return steps.slice(0, index).some(step => {
+            return steps.slice(0, index).some((/**
+             * @param {?} step
+             * @return {?}
+             */
+            step => {
                 /** @type {?} */
                 const control = step.stepControl;
                 /** @type {?} */
@@ -562,7 +580,7 @@ class CdkStepper {
                     (control.invalid || control.pending || !step.interacted) :
                     !step.completed;
                 return isIncomplete && !step.optional;
-            });
+            }));
         }
         return false;
     }
@@ -613,7 +631,7 @@ CdkStepper.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Button that moves to the next step in a stepper workflow.
@@ -702,7 +720,7 @@ CdkStepperPrevious.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkStepperModule {
 }
@@ -730,12 +748,12 @@ CdkStepperModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { StepperSelectionEvent, STEP_STATE, STEPPER_GLOBAL_OPTIONS, MAT_STEPPER_GLOBAL_OPTIONS, CdkStep, CdkStepper, CdkStepLabel, CdkStepperNext, CdkStepperPrevious, CdkStepperModule, CdkStepHeader };

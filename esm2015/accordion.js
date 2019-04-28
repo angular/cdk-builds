@@ -12,7 +12,7 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each accordion.
@@ -98,7 +98,7 @@ CdkAccordion.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each accordion item.
@@ -151,14 +151,22 @@ class CdkAccordionItem {
         /**
          * Unregister function for _expansionDispatcher.
          */
-        this._removeUniqueSelectionListener = () => { };
+        this._removeUniqueSelectionListener = (/**
+         * @return {?}
+         */
+        () => { });
         this._removeUniqueSelectionListener =
-            _expansionDispatcher.listen((id, accordionId) => {
+            _expansionDispatcher.listen((/**
+             * @param {?} id
+             * @param {?} accordionId
+             * @return {?}
+             */
+            (id, accordionId) => {
                 if (this.accordion && !this.accordion.multi &&
                     this.accordion.id === accordionId && this.id !== id) {
                     this.expanded = false;
                 }
-            });
+            }));
         // When an accordion item is hosted in an accordion, subscribe to open/close events.
         if (this.accordion) {
             this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
@@ -251,12 +259,16 @@ class CdkAccordionItem {
      * @return {?}
      */
     _subscribeToOpenCloseAllActions() {
-        return this.accordion._openCloseAllActions.subscribe(expanded => {
+        return this.accordion._openCloseAllActions.subscribe((/**
+         * @param {?} expanded
+         * @return {?}
+         */
+        expanded => {
             // Only change expanded state if item is enabled
             if (!this.disabled) {
                 this.expanded = expanded;
             }
-        });
+        }));
     }
 }
 CdkAccordionItem.decorators = [
@@ -287,7 +299,7 @@ CdkAccordionItem.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkAccordionModule {
 }
@@ -300,12 +312,12 @@ CdkAccordionModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { CdkAccordionItem, CdkAccordion, CdkAccordionModule };

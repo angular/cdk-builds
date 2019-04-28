@@ -6,14 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
-import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, defineInjectable, inject } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Options to pass to the animationstart listener.
@@ -55,30 +55,46 @@ class AutofillMonitor {
         /** @type {?} */
         const cssClass = 'cdk-text-field-autofilled';
         /** @type {?} */
-        const listener = (/** @type {?} */ (((event) => {
+        const listener = (/** @type {?} */ (((/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
             // Animation events fire on initial element render, we check for the presence of the autofill
             // CSS class to make sure this is a real change in state, not just the initial render before
             // we fire off events.
             if (event.animationName === 'cdk-text-field-autofill-start' &&
                 !element.classList.contains(cssClass)) {
                 element.classList.add(cssClass);
-                this._ngZone.run(() => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true }));
+                this._ngZone.run((/**
+                 * @return {?}
+                 */
+                () => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true })));
             }
             else if (event.animationName === 'cdk-text-field-autofill-end' &&
                 element.classList.contains(cssClass)) {
                 element.classList.remove(cssClass);
-                this._ngZone.run(() => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false }));
+                this._ngZone.run((/**
+                 * @return {?}
+                 */
+                () => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false })));
             }
-        })));
-        this._ngZone.runOutsideAngular(() => {
+        }))));
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             element.addEventListener('animationstart', listener, listenerOptions);
             element.classList.add('cdk-text-field-autofill-monitored');
-        });
+        }));
         this._monitoredElements.set(element, {
             subject: result,
-            unlisten: () => {
+            unlisten: (/**
+             * @return {?}
+             */
+            () => {
                 element.removeEventListener('animationstart', listener, listenerOptions);
-            }
+            })
         });
         return result.asObservable();
     }
@@ -103,7 +119,12 @@ class AutofillMonitor {
      * @return {?}
      */
     ngOnDestroy() {
-        this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
+        this._monitoredElements.forEach((/**
+         * @param {?} _info
+         * @param {?} element
+         * @return {?}
+         */
+        (_info, element) => this.stopMonitoring(element)));
     }
 }
 AutofillMonitor.decorators = [
@@ -114,7 +135,7 @@ AutofillMonitor.ctorParameters = () => [
     { type: Platform },
     { type: NgZone }
 ];
-/** @nocollapse */ AutofillMonitor.ngInjectableDef = defineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(inject(Platform), inject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+/** @nocollapse */ AutofillMonitor.ngInjectableDef = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
 /**
  * A directive that can be used to monitor the autofill state of an input.
  */
@@ -137,7 +158,11 @@ class CdkAutofill {
     ngOnInit() {
         this._autofillMonitor
             .monitor(this._elementRef)
-            .subscribe(event => this.cdkAutofill.emit(event));
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => this.cdkAutofill.emit(event)));
     }
     /**
      * @return {?}
@@ -162,7 +187,7 @@ CdkAutofill.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive to automatically resize a textarea to fit its content.
@@ -262,11 +287,17 @@ class CdkTextareaAutosize {
             // Remember the height which we started with in case autosizing is disabled
             this._initialHeight = this._textareaElement.style.height;
             this.resizeToFitContent();
-            this._ngZone.runOutsideAngular(() => {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            () => {
                 fromEvent(window, 'resize')
                     .pipe(auditTime(16), takeUntil(this._destroyed))
-                    .subscribe(() => this.resizeToFitContent(true));
-            });
+                    .subscribe((/**
+                 * @return {?}
+                 */
+                () => this.resizeToFitContent(true)));
+            }));
         }
     }
     /**
@@ -366,14 +397,23 @@ class CdkTextareaAutosize {
         textarea.style.height = `${height}px`;
         textarea.classList.remove('cdk-textarea-autosize-measuring');
         textarea.placeholder = placeholderText;
-        this._ngZone.runOutsideAngular(() => {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             if (typeof requestAnimationFrame !== 'undefined') {
-                requestAnimationFrame(() => this._scrollToCaretPosition(textarea));
+                requestAnimationFrame((/**
+                 * @return {?}
+                 */
+                () => this._scrollToCaretPosition(textarea)));
             }
             else {
-                setTimeout(() => this._scrollToCaretPosition(textarea));
+                setTimeout((/**
+                 * @return {?}
+                 */
+                () => this._scrollToCaretPosition(textarea)));
             }
-        });
+        }));
         this._previousValue = value;
         this._previousMinRows = this._minRows;
     }
@@ -443,7 +483,7 @@ CdkTextareaAutosize.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class TextFieldModule {
 }
@@ -457,12 +497,12 @@ TextFieldModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { AutofillMonitor, CdkAutofill, CdkTextareaAutosize, TextFieldModule };

@@ -8,7 +8,7 @@
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
-import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, TemplateRef, defineInjectable, inject } from '@angular/core';
+import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Directionality } from '@angular/cdk/bidi';
@@ -16,7 +16,7 @@ import { startWith, take, map, takeUntil, switchMap, tap } from 'rxjs/operators'
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.
@@ -56,7 +56,7 @@ function toggleNativeDragInteractions(element, enable) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -81,7 +81,11 @@ function getTransformTransitionDurationInMs(element) {
     /** @type {?} */
     var transitionedProperties = parseCssPropertyValue(computedStyle, 'transition-property');
     /** @type {?} */
-    var property = transitionedProperties.find(function (prop) { return prop === 'transform' || prop === 'all'; });
+    var property = transitionedProperties.find((/**
+     * @param {?} prop
+     * @return {?}
+     */
+    function (prop) { return prop === 'transform' || prop === 'all'; }));
     // If there's no transition for `all` or `transform`, we shouldn't do anything.
     if (!property) {
         return 0;
@@ -106,12 +110,16 @@ function getTransformTransitionDurationInMs(element) {
 function parseCssPropertyValue(computedStyle, name) {
     /** @type {?} */
     var value = computedStyle.getPropertyValue(name);
-    return value.split(',').map(function (part) { return part.trim(); });
+    return value.split(',').map((/**
+     * @param {?} part
+     * @return {?}
+     */
+    function (part) { return part.trim(); }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Options that can be used to bind a passive event listener.
@@ -235,28 +243,43 @@ DragRef = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = new Observable(function (observer) {
+        this.moved = new Observable((/**
+         * @param {?} observer
+         * @return {?}
+         */
+        function (observer) {
             /** @type {?} */
             var subscription = _this._moveEvents.subscribe(observer);
             _this._moveEventSubscriptions++;
-            return function () {
+            return (/**
+             * @return {?}
+             */
+            function () {
                 subscription.unsubscribe();
                 _this._moveEventSubscriptions--;
-            };
-        });
+            });
+        }));
         /**
          * Handler for the `mousedown`/`touchstart` events.
          */
-        this._pointerDown = function (event) {
+        this._pointerDown = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.beforeStarted.next();
             // Delegate the event based on whether it started from a handle or the element itself.
             if (_this._handles.length) {
                 /** @type {?} */
-                var targetHandle = _this._handles.find(function (handle) {
+                var targetHandle = _this._handles.find((/**
+                 * @param {?} handle
+                 * @return {?}
+                 */
+                function (handle) {
                     /** @type {?} */
                     var target = event.target;
                     return !!target && (target === handle || handle.contains((/** @type {?} */ (target))));
-                });
+                }));
                 if (targetHandle && !_this._disabledHandles.has(targetHandle) && !_this.disabled) {
                     _this._initializeDragSequence(targetHandle, event);
                 }
@@ -264,11 +287,15 @@ DragRef = /** @class */ (function () {
             else if (!_this.disabled) {
                 _this._initializeDragSequence(_this._rootElement, event);
             }
-        };
+        });
         /**
          * Handler that is invoked when the user moves their pointer after they've initiated a drag.
          */
-        this._pointerMove = function (event) {
+        this._pointerMove = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             if (!_this._hasStartedDragging) {
                 /** @type {?} */
                 var pointerPosition = _this._getPointerPositionOnPage(event);
@@ -284,7 +311,10 @@ DragRef = /** @class */ (function () {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold && (Date.now() >= _this._dragStartTime + (_this.dragStartDelay || 0))) {
                     _this._hasStartedDragging = true;
-                    _this._ngZone.run(function () { return _this._startDragSequence(event); });
+                    _this._ngZone.run((/**
+                     * @return {?}
+                     */
+                    function () { return _this._startDragSequence(event); }));
                 }
                 return;
             }
@@ -323,20 +353,27 @@ DragRef = /** @class */ (function () {
             // want to fire it if the consumer opted into it. Also we have to
             // re-enter the zone because we run all of the events on the outside.
             if (_this._moveEventSubscriptions > 0) {
-                _this._ngZone.run(function () {
+                _this._ngZone.run((/**
+                 * @return {?}
+                 */
+                function () {
                     _this._moveEvents.next({
                         source: _this,
                         pointerPosition: constrainedPointerPosition,
                         event: event,
                         delta: _this._pointerDirectionDelta
                     });
-                });
+                }));
             }
-        };
+        });
         /**
          * Handler that is invoked when the user lifts their pointer up, after initiating a drag.
          */
-        this._pointerUp = function (event) {
+        this._pointerUp = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             // Note that here we use `isDragging` from the service, rather than from `this`.
             // The difference is that the one from the service reflects whether a dragging sequence
             // has been initiated, whereas the one on `this` includes whether the user has passed
@@ -359,15 +396,21 @@ DragRef = /** @class */ (function () {
                 // to the new passive transform.
                 _this._passiveTransform.x = _this._activeTransform.x;
                 _this._passiveTransform.y = _this._activeTransform.y;
-                _this._ngZone.run(function () { return _this.ended.next({ source: _this }); });
+                _this._ngZone.run((/**
+                 * @return {?}
+                 */
+                function () { return _this.ended.next({ source: _this }); }));
                 _this._dragDropRegistry.stopDragging(_this);
                 return;
             }
-            _this._animatePreviewToPlaceholder().then(function () {
+            _this._animatePreviewToPlaceholder().then((/**
+             * @return {?}
+             */
+            function () {
                 _this._cleanupDragArtifacts(event);
                 _this._dragDropRegistry.stopDragging(_this);
-            });
-        };
+            }));
+        });
         this.withRootElement(element);
         _dragDropRegistry.registerDragItem(this);
     }
@@ -440,8 +483,16 @@ DragRef = /** @class */ (function () {
      * @return {THIS}
      */
     function (handles) {
-        (/** @type {?} */ (this))._handles = handles.map(function (handle) { return coerceElement(handle); });
-        (/** @type {?} */ (this))._handles.forEach(function (handle) { return toggleNativeDragInteractions(handle, false); });
+        (/** @type {?} */ (this))._handles = handles.map((/**
+         * @param {?} handle
+         * @return {?}
+         */
+        function (handle) { return coerceElement(handle); }));
+        (/** @type {?} */ (this))._handles.forEach((/**
+         * @param {?} handle
+         * @return {?}
+         */
+        function (handle) { return toggleNativeDragInteractions(handle, false); }));
         (/** @type {?} */ (this))._toggleNativeDragInteractions();
         return (/** @type {?} */ (this));
     };
@@ -921,7 +972,10 @@ DragRef = /** @class */ (function () {
         this._destroyPlaceholder();
         this._boundaryRect = this._previewRect = undefined;
         // Re-enter the NgZone since we bound `document` events on the outside.
-        this._ngZone.run(function () {
+        this._ngZone.run((/**
+         * @return {?}
+         */
+        function () {
             /** @type {?} */
             var container = (/** @type {?} */ (_this._dropContainer));
             /** @type {?} */
@@ -940,7 +994,7 @@ DragRef = /** @class */ (function () {
             });
             container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer);
             _this._dropContainer = _this._initialContainer;
-        });
+        }));
     };
     /**
      * Updates the item's position in its drop container, or moves it
@@ -976,7 +1030,10 @@ DragRef = /** @class */ (function () {
             newContainer = this._initialContainer;
         }
         if (newContainer && newContainer !== this._dropContainer) {
-            this._ngZone.run(function () {
+            this._ngZone.run((/**
+             * @return {?}
+             */
+            function () {
                 // Notify the old container that the item has left.
                 _this.exited.next({ item: _this, container: (/** @type {?} */ (_this._dropContainer)) });
                 (/** @type {?} */ (_this._dropContainer)).exit(_this);
@@ -984,7 +1041,7 @@ DragRef = /** @class */ (function () {
                 _this.entered.next({ item: _this, container: (/** @type {?} */ (newContainer)) });
                 _this._dropContainer = (/** @type {?} */ (newContainer));
                 _this._dropContainer.enter(_this, x, y);
-            });
+            }));
         }
         (/** @type {?} */ (this._dropContainer))._sortItem(this, x, y, this._pointerDirectionDelta);
         this._preview.style.transform =
@@ -1080,24 +1137,35 @@ DragRef = /** @class */ (function () {
         if (duration === 0) {
             return Promise.resolve();
         }
-        return this._ngZone.runOutsideAngular(function () {
-            return new Promise(function (resolve) {
+        return this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
+            return new Promise((/**
+             * @param {?} resolve
+             * @return {?}
+             */
+            function (resolve) {
                 /** @type {?} */
-                var handler = (/** @type {?} */ ((function (event) {
+                var handler = (/** @type {?} */ (((/**
+                 * @param {?} event
+                 * @return {?}
+                 */
+                function (event) {
                     if (!event || (event.target === _this._preview && event.propertyName === 'transform')) {
                         _this._preview.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
                     }
-                })));
+                }))));
                 // If a transition is short enough, the browser might not fire the `transitionend` event.
                 // Since we know how long it's supposed to take, add a timeout with a 50% buffer that'll
                 // fire if the transition hasn't completed when it was supposed to.
                 /** @type {?} */
                 var timeout = setTimeout((/** @type {?} */ (handler)), duration * 1.5);
                 _this._preview.addEventListener('transitionend', handler);
-            });
-        });
+            }));
+        }));
     };
     /** Creates an element that will be shown instead of the current element while dragging. */
     /**
@@ -1417,7 +1485,7 @@ function getPreviewInsertionPoint(documentRef) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -1493,7 +1561,7 @@ function clamp$1(value, max) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Counter used to generate unique ids for drop refs.
@@ -1537,7 +1605,10 @@ DropListRef = /** @class */ (function () {
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
          */
-        this.enterPredicate = function () { return true; };
+        this.enterPredicate = (/**
+         * @return {?}
+         */
+        function () { return true; });
         /**
          * Emits right before dragging has started.
          */
@@ -1638,7 +1709,11 @@ DropListRef = /** @class */ (function () {
         this._activeDraggables = this._draggables.slice();
         this._cacheOwnPosition();
         this._cacheItemPositions();
-        this._siblings.forEach(function (sibling) { return sibling._startReceiving(_this); });
+        this._siblings.forEach((/**
+         * @param {?} sibling
+         * @return {?}
+         */
+        function (sibling) { return sibling._startReceiving(_this); }));
     };
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -1785,7 +1860,11 @@ DropListRef = /** @class */ (function () {
     function (items) {
         var _this = this;
         (/** @type {?} */ (this))._draggables = items;
-        items.forEach(function (item) { return item._withDropContainer((/** @type {?} */ (_this))); });
+        items.forEach((/**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) { return item._withDropContainer((/** @type {?} */ (_this))); }));
         return (/** @type {?} */ (this));
     };
     /** Sets the layout direction of the drop list. */
@@ -1878,7 +1957,11 @@ DropListRef = /** @class */ (function () {
         /** @type {?} */
         var items = this._orientation === 'horizontal' && this._direction === 'rtl' ?
             this._itemPositions.slice().reverse() : this._itemPositions;
-        return findIndex(items, function (currentItem) { return currentItem.drag === item; });
+        return findIndex(items, (/**
+         * @param {?} currentItem
+         * @return {?}
+         */
+        function (currentItem) { return currentItem.drag === item; }));
     };
     /**
      * Whether the list is able to receive the item that
@@ -1935,7 +2018,11 @@ DropListRef = /** @class */ (function () {
         /** @type {?} */
         var isHorizontal = this._orientation === 'horizontal';
         /** @type {?} */
-        var currentIndex = findIndex(siblings, function (currentItem) { return currentItem.drag === item; });
+        var currentIndex = findIndex(siblings, (/**
+         * @param {?} currentItem
+         * @return {?}
+         */
+        function (currentItem) { return currentItem.drag === item; }));
         /** @type {?} */
         var siblingAtNewPosition = siblings[newIndex];
         /** @type {?} */
@@ -1964,7 +2051,12 @@ DropListRef = /** @class */ (function () {
             container: this,
             item: item
         });
-        siblings.forEach(function (sibling, index) {
+        siblings.forEach((/**
+         * @param {?} sibling
+         * @param {?} index
+         * @return {?}
+         */
+        function (sibling, index) {
             // Don't do anything if the position hasn't changed.
             if (oldOrder[index] === sibling) {
                 return;
@@ -1992,7 +2084,7 @@ DropListRef = /** @class */ (function () {
                 elementToOffset.style.transform = "translate3d(0, " + Math.round(sibling.offset) + "px, 0)";
                 adjustClientRect(sibling.clientRect, offset, 0);
             }
-        });
+        }));
     };
     /** Caches the position of the drop list. */
     /**
@@ -2023,7 +2115,11 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this._orientation === 'horizontal';
-        this._itemPositions = this._activeDraggables.map(function (drag) {
+        this._itemPositions = this._activeDraggables.map((/**
+         * @param {?} drag
+         * @return {?}
+         */
+        function (drag) {
             /** @type {?} */
             var elementToMeasure = _this._dragDropRegistry.isDragging(drag) ?
                 // If the element is being dragged, we have to measure the
@@ -2048,10 +2144,15 @@ DropListRef = /** @class */ (function () {
                     height: clientRect.height
                 }
             };
-        }).sort(function (a, b) {
+        })).sort((/**
+         * @param {?} a
+         * @param {?} b
+         * @return {?}
+         */
+        function (a, b) {
             return isHorizontal ? a.clientRect.left - b.clientRect.left :
                 a.clientRect.top - b.clientRect.top;
-        });
+        }));
     };
     /** Resets the container to its initial state. */
     /**
@@ -2068,8 +2169,16 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         this._isDragging = false;
         // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
-        this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });
+        this._activeDraggables.forEach((/**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) { return item.getRootElement().style.transform = ''; }));
+        this._siblings.forEach((/**
+         * @param {?} sibling
+         * @return {?}
+         */
+        function (sibling) { return sibling._stopReceiving(_this); }));
         this._activeDraggables = [];
         this._itemPositions = [];
         this._previousSwap.drag = null;
@@ -2216,7 +2325,13 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var isHorizontal = this._orientation === 'horizontal';
-        return findIndex(this._itemPositions, function (_a, _, array) {
+        return findIndex(this._itemPositions, (/**
+         * @param {?} __0
+         * @param {?} _
+         * @param {?} array
+         * @return {?}
+         */
+        function (_a, _, array) {
             var drag = _a.drag, clientRect = _a.clientRect;
             if (drag === item) {
                 // If there's only one item left in the container, it must be
@@ -2237,7 +2352,7 @@ DropListRef = /** @class */ (function () {
                 // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
-        });
+        }));
     };
     /**
      * Checks whether the user's pointer is positioned over the container.
@@ -2283,7 +2398,11 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (item, x, y) {
-        return this._siblings.find(function (sibling) { return sibling._canReceive(item, x, y); });
+        return this._siblings.find((/**
+         * @param {?} sibling
+         * @return {?}
+         */
+        function (sibling) { return sibling._canReceive(item, x, y); }));
     };
     /**
      * Checks whether the drop list can receive the passed-in item.
@@ -2408,7 +2527,7 @@ function isInsideClientRect(clientRect, x, y) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Event options that can be used to bind an active, capturing event.
@@ -2461,11 +2580,15 @@ var DragDropRegistry = /** @class */ (function () {
          * Event listener that will prevent the default browser action while the user is dragging.
          * @param event Event whose default action should be prevented.
          */
-        this._preventDefaultWhileDragging = function (event) {
+        this._preventDefaultWhileDragging = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             if (_this._activeDragInstances.size) {
                 event.preventDefault();
             }
-        };
+        });
         this._document = _document;
     }
     /** Adds a drop container to the registry. */
@@ -2505,11 +2628,14 @@ var DragDropRegistry = /** @class */ (function () {
         // won't preventDefault on a dynamically-added `touchmove` listener.
         // See https://bugs.webkit.org/show_bug.cgi?id=184250.
         if (this._dragInstances.size === 1) {
-            this._ngZone.runOutsideAngular(function () {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            function () {
                 // The event handler has to be explicitly active,
                 // because newer browsers make it passive by default.
                 _this._document.addEventListener('touchmove', _this._preventDefaultWhileDragging, activeCapturingEventOptions);
-            });
+            }));
         }
     };
     /** Removes a drop container from the registry. */
@@ -2576,11 +2702,19 @@ var DragDropRegistry = /** @class */ (function () {
             // use `preventDefault` to prevent the page from scrolling while the user is dragging.
             this._globalListeners
                 .set(moveEvent, {
-                handler: function (e) { return _this.pointerMove.next((/** @type {?} */ (e))); },
+                handler: (/**
+                 * @param {?} e
+                 * @return {?}
+                 */
+                function (e) { return _this.pointerMove.next((/** @type {?} */ (e))); }),
                 options: activeCapturingEventOptions
             })
                 .set(upEvent, {
-                handler: function (e) { return _this.pointerUp.next((/** @type {?} */ (e))); },
+                handler: (/**
+                 * @param {?} e
+                 * @return {?}
+                 */
+                function (e) { return _this.pointerUp.next((/** @type {?} */ (e))); }),
                 options: true
             })
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
@@ -2599,11 +2733,19 @@ var DragDropRegistry = /** @class */ (function () {
                     options: activeCapturingEventOptions
                 });
             }
-            this._ngZone.runOutsideAngular(function () {
-                _this._globalListeners.forEach(function (config, name) {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            function () {
+                _this._globalListeners.forEach((/**
+                 * @param {?} config
+                 * @param {?} name
+                 * @return {?}
+                 */
+                function (config, name) {
                     _this._document.addEventListener(name, config.handler, config.options);
-                });
-            });
+                }));
+            }));
         }
     };
     /** Stops dragging a drag item instance. */
@@ -2657,7 +2799,11 @@ var DragDropRegistry = /** @class */ (function () {
      * @return {?}
      */
     function (id) {
-        return Array.from(this._dropInstances).find(function (instance) { return instance.id === id; });
+        return Array.from(this._dropInstances).find((/**
+         * @param {?} instance
+         * @return {?}
+         */
+        function (instance) { return instance.id === id; }));
     };
     /**
      * @return {?}
@@ -2667,8 +2813,16 @@ var DragDropRegistry = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._dragInstances.forEach(function (instance) { return _this.removeDragItem(instance); });
-        this._dropInstances.forEach(function (instance) { return _this.removeDropContainer(instance); });
+        this._dragInstances.forEach((/**
+         * @param {?} instance
+         * @return {?}
+         */
+        function (instance) { return _this.removeDragItem(instance); }));
+        this._dropInstances.forEach((/**
+         * @param {?} instance
+         * @return {?}
+         */
+        function (instance) { return _this.removeDropContainer(instance); }));
         this._clearGlobalListeners();
         this.pointerMove.complete();
         this.pointerUp.complete();
@@ -2686,9 +2840,14 @@ var DragDropRegistry = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._globalListeners.forEach(function (config, name) {
+        this._globalListeners.forEach((/**
+         * @param {?} config
+         * @param {?} name
+         * @return {?}
+         */
+        function (config, name) {
             _this._document.removeEventListener(name, config.handler, config.options);
-        });
+        }));
         this._globalListeners.clear();
     };
     DragDropRegistry.decorators = [
@@ -2699,13 +2858,13 @@ var DragDropRegistry = /** @class */ (function () {
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ DragDropRegistry.ngInjectableDef = defineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(inject(NgZone), inject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    /** @nocollapse */ DragDropRegistry.ngInjectableDef = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
 }());
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Default configuration to be used when creating a `DragRef`.
@@ -2777,13 +2936,13 @@ var DragDrop = /** @class */ (function () {
         { type: ViewportRuler },
         { type: DragDropRegistry }
     ]; };
-    /** @nocollapse */ DragDrop.ngInjectableDef = defineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(inject(DOCUMENT), inject(NgZone), inject(ViewportRuler), inject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    /** @nocollapse */ DragDrop.ngInjectableDef = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     return DragDrop;
 }());
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
@@ -2802,12 +2961,12 @@ var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
@@ -2820,7 +2979,7 @@ var CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Handle that can be used to drag and CdkDrag instance.
@@ -2884,7 +3043,7 @@ var CdkDragHandle = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Element that will be used as a template for the placeholder of a CdkDrag when
@@ -2912,7 +3071,7 @@ var CdkDragPlaceholder = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Element that will be used as a template for the preview
@@ -2940,7 +3099,7 @@ var CdkDragPreview = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token that can be used to configure the behavior of `CdkDrag`.
@@ -3006,18 +3165,29 @@ var CdkDrag = /** @class */ (function () {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = new Observable(function (observer) {
+        this.moved = new Observable((/**
+         * @param {?} observer
+         * @return {?}
+         */
+        function (observer) {
             /** @type {?} */
-            var subscription = _this._dragRef.moved.pipe(map(function (movedEvent) { return ({
+            var subscription = _this._dragRef.moved.pipe(map((/**
+             * @param {?} movedEvent
+             * @return {?}
+             */
+            function (movedEvent) { return ({
                 source: _this,
                 pointerPosition: movedEvent.pointerPosition,
                 event: movedEvent.event,
                 delta: movedEvent.delta
-            }); })).subscribe(observer);
-            return function () {
+            }); }))).subscribe(observer);
+            return (/**
+             * @return {?}
+             */
+            function () {
                 subscription.unsubscribe();
-            };
-        });
+            });
+        }));
         this._dragRef = dragDrop.createDrag(element, config);
         this._dragRef.data = this;
         this._syncInputs(this._dragRef);
@@ -3112,33 +3282,60 @@ var CdkDrag = /** @class */ (function () {
         // their original DOM position and then they get transferred to the portal.
         this._ngZone.onStable.asObservable()
             .pipe(take(1), takeUntil(this._destroyed))
-            .subscribe(function () {
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this._updateRootElement();
             // Listen for any newly-added handles.
             _this._handles.changes.pipe(startWith(_this._handles), 
             // Sync the new handles with the DragRef.
-            tap(function (handles) {
+            tap((/**
+             * @param {?} handles
+             * @return {?}
+             */
+            function (handles) {
                 /** @type {?} */
                 var childHandleElements = handles
-                    .filter(function (handle) { return handle._parentDrag === _this; })
-                    .map(function (handle) { return handle.element; });
+                    .filter((/**
+                 * @param {?} handle
+                 * @return {?}
+                 */
+                function (handle) { return handle._parentDrag === _this; }))
+                    .map((/**
+                 * @param {?} handle
+                 * @return {?}
+                 */
+                function (handle) { return handle.element; }));
                 _this._dragRef.withHandles(childHandleElements);
-            }), 
+            })), 
             // Listen if the state of any of the handles changes.
-            switchMap(function (handles) {
-                return merge.apply(void 0, handles.map(function (item) { return item._stateChanges; }));
-            }), takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
+            switchMap((/**
+             * @param {?} handles
+             * @return {?}
+             */
+            function (handles) {
+                return merge.apply(void 0, handles.map((/**
+                 * @param {?} item
+                 * @return {?}
+                 */
+                function (item) { return item._stateChanges; })));
+            })), takeUntil(_this._destroyed)).subscribe((/**
+             * @param {?} handleInstance
+             * @return {?}
+             */
+            function (handleInstance) {
                 // Enabled/disable the handle that changed in the DragRef.
                 /** @type {?} */
                 var dragRef = _this._dragRef;
                 /** @type {?} */
                 var handle = handleInstance.element.nativeElement;
                 handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
-            });
+            }));
             if (_this.freeDragPosition) {
                 _this._dragRef.setFreeDragPosition(_this.freeDragPosition);
             }
-        });
+        }));
     };
     /**
      * @param {?} changes
@@ -3228,7 +3425,10 @@ var CdkDrag = /** @class */ (function () {
      */
     function (ref) {
         var _this = this;
-        ref.beforeStarted.subscribe(function () {
+        ref.beforeStarted.subscribe((/**
+         * @return {?}
+         */
+        function () {
             if (!ref.isDragging()) {
                 /** @type {?} */
                 var dir = _this._dir;
@@ -3256,7 +3456,7 @@ var CdkDrag = /** @class */ (function () {
                     ref.withDirection(dir.value);
                 }
             }
-        });
+        }));
     };
     /** Handles the events from the underlying `DragRef`. */
     /**
@@ -3273,34 +3473,55 @@ var CdkDrag = /** @class */ (function () {
      */
     function (ref) {
         var _this = this;
-        ref.started.subscribe(function () {
+        ref.started.subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this.started.emit({ source: _this });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             _this._changeDetectorRef.markForCheck();
-        });
-        ref.released.subscribe(function () {
+        }));
+        ref.released.subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this.released.emit({ source: _this });
-        });
-        ref.ended.subscribe(function () {
+        }));
+        ref.ended.subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this.ended.emit({ source: _this });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             _this._changeDetectorRef.markForCheck();
-        });
-        ref.entered.subscribe(function (event) {
+        }));
+        ref.entered.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.entered.emit({
                 container: event.container.data,
                 item: _this
             });
-        });
-        ref.exited.subscribe(function (event) {
+        }));
+        ref.exited.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.exited.emit({
                 container: event.container.data,
                 item: _this
             });
-        });
-        ref.dropped.subscribe(function (event) {
+        }));
+        ref.dropped.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.dropped.emit({
                 previousIndex: event.previousIndex,
                 currentIndex: event.currentIndex,
@@ -3309,7 +3530,7 @@ var CdkDrag = /** @class */ (function () {
                 isPointerOverContainer: event.isPointerOverContainer,
                 item: _this
             });
-        });
+        }));
     };
     CdkDrag.decorators = [
         { type: Directive, args: [{
@@ -3379,7 +3600,7 @@ function getClosestMatchingAncestor(element, selector) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
@@ -3436,7 +3657,7 @@ var CdkDropListGroup = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Counter used to generate unique ids for drop zones.
@@ -3483,7 +3704,10 @@ var CdkDropList = /** @class */ (function () {
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
          */
-        this.enterPredicate = function () { return true; };
+        this.enterPredicate = (/**
+         * @return {?}
+         */
+        function () { return true; });
         /**
          * Emits when the user drops an item inside the container.
          */
@@ -3503,9 +3727,14 @@ var CdkDropList = /** @class */ (function () {
         this.sorted = new EventEmitter();
         this._dropListRef = dragDrop.createDropList(element);
         this._dropListRef.data = this;
-        this._dropListRef.enterPredicate = function (drag, drop) {
+        this._dropListRef.enterPredicate = (/**
+         * @param {?} drag
+         * @param {?} drop
+         * @return {?}
+         */
+        function (drag, drop) {
             return _this.enterPredicate(drag.data, drop.data);
-        };
+        });
         this._syncInputs(this._dropListRef);
         this._handleEvents(this._dropListRef);
         CdkDropList._dropLists.push(this);
@@ -3559,9 +3788,17 @@ var CdkDropList = /** @class */ (function () {
         var _this = this;
         this._draggables.changes
             .pipe(startWith(this._draggables), takeUntil(this._destroyed))
-            .subscribe(function (items) {
-            _this._dropListRef.withItems(items.map(function (drag) { return drag._dragRef; }));
-        });
+            .subscribe((/**
+         * @param {?} items
+         * @return {?}
+         */
+        function (items) {
+            _this._dropListRef.withItems(items.map((/**
+             * @param {?} drag
+             * @return {?}
+             */
+            function (drag) { return drag._dragRef; })));
+        }));
     };
     /**
      * @return {?}
@@ -3772,28 +4009,55 @@ var CdkDropList = /** @class */ (function () {
         if (this._dir) {
             this._dir.change
                 .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
-                .subscribe(function (value) { return ref.withDirection(value); });
+                .subscribe((/**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) { return ref.withDirection(value); }));
         }
-        ref.beforeStarted.subscribe(function () {
+        ref.beforeStarted.subscribe((/**
+         * @return {?}
+         */
+        function () {
             /** @type {?} */
-            var siblings = coerceArray(_this.connectedTo).map(function (drop) {
+            var siblings = coerceArray(_this.connectedTo).map((/**
+             * @param {?} drop
+             * @return {?}
+             */
+            function (drop) {
                 return typeof drop === 'string' ?
-                    (/** @type {?} */ (CdkDropList._dropLists.find(function (list) { return list.id === drop; }))) : drop;
-            });
+                    (/** @type {?} */ (CdkDropList._dropLists.find((/**
+                     * @param {?} list
+                     * @return {?}
+                     */
+                    function (list) { return list.id === drop; })))) : drop;
+            }));
             if (_this._group) {
-                _this._group._items.forEach(function (drop) {
+                _this._group._items.forEach((/**
+                 * @param {?} drop
+                 * @return {?}
+                 */
+                function (drop) {
                     if (siblings.indexOf(drop) === -1) {
                         siblings.push(drop);
                     }
-                });
+                }));
             }
             ref.disabled = _this.disabled;
             ref.lockAxis = _this.lockAxis;
             ref.sortingDisabled = _this.sortingDisabled;
             ref
-                .connectedTo(siblings.filter(function (drop) { return drop && drop !== _this; }).map(function (list) { return list._dropListRef; }))
+                .connectedTo(siblings.filter((/**
+             * @param {?} drop
+             * @return {?}
+             */
+            function (drop) { return drop && drop !== _this; })).map((/**
+             * @param {?} list
+             * @return {?}
+             */
+            function (list) { return list._dropListRef; })))
                 .withOrientation(_this.orientation);
-        });
+        }));
     };
     /** Handles events from the underlying DropListRef. */
     /**
@@ -3810,31 +4074,50 @@ var CdkDropList = /** @class */ (function () {
      */
     function (ref) {
         var _this = this;
-        ref.beforeStarted.subscribe(function () {
+        ref.beforeStarted.subscribe((/**
+         * @return {?}
+         */
+        function () {
             _this._changeDetectorRef.markForCheck();
-        });
-        ref.entered.subscribe(function (event) {
+        }));
+        ref.entered.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.entered.emit({
                 container: _this,
                 item: event.item.data
             });
-        });
-        ref.exited.subscribe(function (event) {
+        }));
+        ref.exited.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.exited.emit({
                 container: _this,
                 item: event.item.data
             });
             _this._changeDetectorRef.markForCheck();
-        });
-        ref.sorted.subscribe(function (event) {
+        }));
+        ref.sorted.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.sorted.emit({
                 previousIndex: event.previousIndex,
                 currentIndex: event.currentIndex,
                 container: _this,
                 item: event.item.data
             });
-        });
-        ref.dropped.subscribe(function (event) {
+        }));
+        ref.dropped.subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             _this.dropped.emit({
                 previousIndex: event.previousIndex,
                 currentIndex: event.currentIndex,
@@ -3846,7 +4129,7 @@ var CdkDropList = /** @class */ (function () {
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.
             _this._changeDetectorRef.markForCheck();
-        });
+        }));
     };
     /**
      * Keeps track of the drop lists that are currently on the page.
@@ -3879,7 +4162,10 @@ var CdkDropList = /** @class */ (function () {
         { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
-        _draggables: [{ type: ContentChildren, args: [forwardRef(function () { return CdkDrag; }), {
+        _draggables: [{ type: ContentChildren, args: [forwardRef((/**
+                     * @return {?}
+                     */
+                    function () { return CdkDrag; })), {
                         // Explicitly set to false since some of the logic below makes assumptions about it.
                         // The `.withItems` call below should be updated if we ever need to switch this to `true`.
                         descendants: false
@@ -3902,7 +4188,7 @@ var CdkDropList = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var DragDropModule = /** @class */ (function () {
     function DragDropModule() {
@@ -3935,12 +4221,12 @@ var DragDropModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { DragDrop, DragRef, DropListRef, CdkDropList, CDK_DROP_LIST, CDK_DROP_LIST_CONTAINER, moveItemInArray, transferArrayItem, copyArrayItem, DragDropModule, DragDropRegistry, CdkDropListGroup, CDK_DRAG_CONFIG_FACTORY, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, CdkDragPreview, CdkDragPlaceholder, CDK_DRAG_PARENT as ɵb };

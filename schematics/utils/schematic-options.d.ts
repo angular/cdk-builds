@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { WorkspaceProject } from '@angular-devkit/core/src/workspace';
+import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 /**
  * Returns the default options for the `@schematics/angular:component` schematic which would
  * have been specified at project initialization (ng new or ng init).

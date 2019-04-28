@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
@@ -105,7 +105,7 @@ class BaseTreeControl {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
@@ -160,7 +160,7 @@ class FlatTreeControl extends BaseTreeControl {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type.
@@ -185,7 +185,12 @@ class NestedTreeControl extends BaseTreeControl {
     expandAll() {
         this.expansionModel.clear();
         /** @type {?} */
-        const allNodes = this.dataNodes.reduce((accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode], []);
+        const allNodes = this.dataNodes.reduce((/**
+         * @param {?} accumulator
+         * @param {?} dataNode
+         * @return {?}
+         */
+        (accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode]), []);
         this.expansionModel.select(...allNodes);
     }
     /**
@@ -212,24 +217,36 @@ class NestedTreeControl extends BaseTreeControl {
         /** @type {?} */
         const childrenNodes = this.getChildren(dataNode);
         if (Array.isArray(childrenNodes)) {
-            childrenNodes.forEach((child) => this._getDescendants(descendants, child));
+            childrenNodes.forEach((/**
+             * @param {?} child
+             * @return {?}
+             */
+            (child) => this._getDescendants(descendants, child)));
         }
         else if (childrenNodes instanceof Observable) {
-            childrenNodes.pipe(take(1), filter(Boolean)).subscribe(children => {
-                children.forEach((child) => this._getDescendants(descendants, child));
-            });
+            childrenNodes.pipe(take(1), filter(Boolean)).subscribe((/**
+             * @param {?} children
+             * @return {?}
+             */
+            children => {
+                children.forEach((/**
+                 * @param {?} child
+                 * @return {?}
+                 */
+                (child) => this._getDescendants(descendants, child)));
+            }));
         }
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token used to provide a `CdkTreeNode` to its outlet.
@@ -265,7 +282,7 @@ CdkTreeNodeOutlet.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Context provided to the tree node component.
@@ -308,7 +325,7 @@ CdkTreeNodeDef.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -354,7 +371,7 @@ function getTreeControlFunctionsMissingError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
@@ -430,7 +447,11 @@ class CdkTree {
      */
     ngAfterContentChecked() {
         /** @type {?} */
-        const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
+        const defaultNodeDefs = this._nodeDefs.filter((/**
+         * @param {?} def
+         * @return {?}
+         */
+        def => !def.when));
         if (defaultNodeDefs.length > 1) {
             throw getTreeMultipleDefaultNodeDefsError();
         }
@@ -485,7 +506,11 @@ class CdkTree {
         }
         if (dataStream) {
             this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
-                .subscribe(data => this.renderNodeChanges(data));
+                .subscribe((/**
+             * @param {?} data
+             * @return {?}
+             */
+            data => this.renderNodeChanges(data)));
         }
         else {
             throw getTreeNoValidDataSourceError();
@@ -505,7 +530,13 @@ class CdkTree {
         if (!changes) {
             return;
         }
-        changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
+        changes.forEachOperation((/**
+         * @param {?} item
+         * @param {?} adjustedPreviousIndex
+         * @param {?} currentIndex
+         * @return {?}
+         */
+        (item, adjustedPreviousIndex, currentIndex) => {
             if (item.previousIndex == null) {
                 this.insertNode(data[(/** @type {?} */ (currentIndex))], (/** @type {?} */ (currentIndex)), viewContainer, parentData);
             }
@@ -518,7 +549,7 @@ class CdkTree {
                 const view = viewContainer.get((/** @type {?} */ (adjustedPreviousIndex)));
                 viewContainer.move((/** @type {?} */ (view)), currentIndex);
             }
-        });
+        }));
         this._changeDetectorRef.detectChanges();
     }
     /**
@@ -535,7 +566,11 @@ class CdkTree {
             return this._nodeDefs.first;
         }
         /** @type {?} */
-        const nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
+        const nodeDef = this._nodeDefs.find((/**
+         * @param {?} def
+         * @return {?}
+         */
+        def => def.when && def.when(i, data))) || this._defaultNodeDef;
         if (!nodeDef) {
             throw getTreeMissingMatchingNodeDefError();
         }
@@ -702,7 +737,11 @@ class CdkTreeNode {
             }
             else if (childrenNodes instanceof Observable) {
                 childrenNodes.pipe(takeUntil(this._destroyed))
-                    .subscribe(children => this._setRoleFromChildren(children));
+                    .subscribe((/**
+                 * @param {?} children
+                 * @return {?}
+                 */
+                children => this._setRoleFromChildren(children)));
             }
         }
     }
@@ -743,7 +782,7 @@ CdkTreeNode.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Nested node is a child of `<cdk-tree>`. It works with nested tree.
@@ -794,10 +833,17 @@ class CdkNestedTreeNode extends CdkTreeNode {
         }
         else if (childrenNodes instanceof Observable) {
             childrenNodes.pipe(takeUntil(this._destroyed))
-                .subscribe(result => this.updateChildrenNodes(result));
+                .subscribe((/**
+             * @param {?} result
+             * @return {?}
+             */
+            result => this.updateChildrenNodes(result)));
         }
         this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
-            .subscribe(() => this.updateChildrenNodes());
+            .subscribe((/**
+         * @return {?}
+         */
+        () => this.updateChildrenNodes()));
     }
     /**
      * @return {?}
@@ -852,7 +898,11 @@ class CdkNestedTreeNode extends CdkTreeNode {
         if (outlets) {
             // Note that since we use `descendants: true` on the query, we have to ensure
             // that we don't pick up the outlet of a child node by accident.
-            return outlets.find(outlet => !outlet._node || outlet._node === this);
+            return outlets.find((/**
+             * @param {?} outlet
+             * @return {?}
+             */
+            outlet => !outlet._node || outlet._node === this));
         }
     }
 }
@@ -887,7 +937,7 @@ CdkNestedTreeNode.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Regex used to split a string on its CSS units.
@@ -924,12 +974,18 @@ class CdkTreeNodePadding {
         this._indent = 40;
         this._setPadding();
         if (_dir) {
-            _dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding(true));
+            _dir.change.pipe(takeUntil(this._destroyed)).subscribe((/**
+             * @return {?}
+             */
+            () => this._setPadding(true)));
         }
         // In Ivy the indentation binding might be set before the tree node's data has been added,
         // which means that we'll miss the first render. We have to subscribe to changes in the
         // data to ensure that everything is up to date.
-        _treeNode._dataChanges.subscribe(() => this._setPadding());
+        _treeNode._dataChanges.subscribe((/**
+         * @return {?}
+         */
+        () => this._setPadding()));
     }
     /**
      * The level of depth of the tree node. The padding will be `level * indent` pixels.
@@ -1029,7 +1085,7 @@ CdkTreeNodePadding.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Node toggle to expand/collapse the node.
@@ -1086,7 +1142,7 @@ CdkTreeNodeToggle.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const EXPORTED_DECLARATIONS = [
@@ -1111,12 +1167,12 @@ CdkTreeModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { BaseTreeControl, FlatTreeControl, NestedTreeControl, CdkNestedTreeNode, CdkTreeNodeOutletContext, CdkTreeNodeDef, CdkTreeNodePadding, CDK_TREE_NODE_OUTLET_NODE, CdkTreeNodeOutlet, CdkTree, CdkTreeNode, getTreeNoValidDataSourceError, getTreeMultipleDefaultNodeDefsError, getTreeMissingMatchingNodeDefError, getTreeControlMissingError, getTreeControlFunctionsMissingError, CdkTreeModule, CdkTreeNodeToggle };

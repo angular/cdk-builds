@@ -6,11 +6,11 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Observable, of, Subject } from 'rxjs';
-import { Injectable, defineInjectable } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -33,7 +33,7 @@ function isDataSource(value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * DataSource wrapper for a native array.
@@ -61,12 +61,12 @@ class ArrayDataSource extends DataSource {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to be used to power selecting one or more options from a list.
@@ -105,7 +105,11 @@ class SelectionModel {
         this.onChange = this.changed;
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
-                initiallySelectedValues.forEach(value => this._markSelected(value));
+                initiallySelectedValues.forEach((/**
+                 * @param {?} value
+                 * @return {?}
+                 */
+                value => this._markSelected(value)));
             }
             else {
                 this._markSelected(initiallySelectedValues[0]);
@@ -131,7 +135,11 @@ class SelectionModel {
      */
     select(...values) {
         this._verifyValueAssignment(values);
-        values.forEach(value => this._markSelected(value));
+        values.forEach((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => this._markSelected(value)));
         this._emitChangeEvent();
     }
     /**
@@ -141,7 +149,11 @@ class SelectionModel {
      */
     deselect(...values) {
         this._verifyValueAssignment(values);
-        values.forEach(value => this._unmarkSelected(value));
+        values.forEach((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => this._unmarkSelected(value)));
         this._emitChangeEvent();
     }
     /**
@@ -255,7 +267,11 @@ class SelectionModel {
      */
     _unmarkAll() {
         if (!this.isEmpty()) {
-            this._selection.forEach(value => this._unmarkSelected(value));
+            this._selection.forEach((/**
+             * @param {?} value
+             * @return {?}
+             */
+            value => this._unmarkSelected(value)));
         }
     }
     /**
@@ -283,7 +299,7 @@ function getMultipleValuesInSingleSelectionError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to coordinate unique selection based on name.
@@ -316,11 +332,18 @@ class UniqueSelectionDispatcher {
      */
     listen(listener) {
         this._listeners.push(listener);
-        return () => {
-            this._listeners = this._listeners.filter((registered) => {
+        return (/**
+         * @return {?}
+         */
+        () => {
+            this._listeners = this._listeners.filter((/**
+             * @param {?} registered
+             * @return {?}
+             */
+            (registered) => {
                 return listener !== registered;
-            });
-        };
+            }));
+        });
     }
     /**
      * @return {?}
@@ -332,21 +355,21 @@ class UniqueSelectionDispatcher {
 UniqueSelectionDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = defineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+/** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { UniqueSelectionDispatcher, ArrayDataSource, isDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel };

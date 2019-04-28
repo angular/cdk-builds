@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModule, Injectable, NgZone, defineInjectable, inject } from '@angular/core';
+import { NgModule, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { asapScheduler, combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { coerceArray } from '@angular/cdk/coercion';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LayoutModule {
 }
@@ -23,7 +23,7 @@ LayoutModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Global registry for all dynamically-created, injected media queries.
@@ -72,7 +72,7 @@ MediaMatcher.decorators = [
 MediaMatcher.ctorParameters = () => [
     { type: Platform }
 ];
-/** @nocollapse */ MediaMatcher.ngInjectableDef = defineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(inject(Platform)); }, token: MediaMatcher, providedIn: "root" });
+/** @nocollapse */ MediaMatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when
  * there is at least one CSS selector for the respective media query.
@@ -110,14 +110,20 @@ function noopMatchMedia(query) {
     return (/** @type {?} */ ({
         matches: query === 'all' || query === '',
         media: query,
-        addListener: () => { },
-        removeListener: () => { }
+        addListener: (/**
+         * @return {?}
+         */
+        () => { }),
+        removeListener: (/**
+         * @return {?}
+         */
+        () => { })
     }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Utility for checking the matching state of \@media queries.
@@ -155,7 +161,11 @@ class BreakpointObserver {
     isMatched(value) {
         /** @type {?} */
         const queries = splitQueries(coerceArray(value));
-        return queries.some(mediaQuery => this._registerQuery(mediaQuery).mql.matches);
+        return queries.some((/**
+         * @param {?} mediaQuery
+         * @return {?}
+         */
+        mediaQuery => this._registerQuery(mediaQuery).mql.matches));
     }
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
@@ -167,19 +177,31 @@ class BreakpointObserver {
         /** @type {?} */
         const queries = splitQueries(coerceArray(value));
         /** @type {?} */
-        const observables = queries.map(query => this._registerQuery(query).observable);
-        return combineLatest(observables).pipe(debounceTime(0, asapScheduler), map((breakpointStates) => {
+        const observables = queries.map((/**
+         * @param {?} query
+         * @return {?}
+         */
+        query => this._registerQuery(query).observable));
+        return combineLatest(observables).pipe(debounceTime(0, asapScheduler), map((/**
+         * @param {?} breakpointStates
+         * @return {?}
+         */
+        (breakpointStates) => {
             /** @type {?} */
             const response = {
                 matches: false,
                 breakpoints: {},
             };
-            breakpointStates.forEach((state) => {
+            breakpointStates.forEach((/**
+             * @param {?} state
+             * @return {?}
+             */
+            (state) => {
                 response.matches = response.matches || state.matches;
                 response.breakpoints[state.query] = state.matches;
-            });
+            }));
             return response;
-        }));
+        })));
     }
     /**
      * Registers a specific query to be listened for.
@@ -196,19 +218,37 @@ class BreakpointObserver {
         const mql = this.mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
         /** @type {?} */
-        const queryObservable = new Observable((observer) => {
+        const queryObservable = new Observable((/**
+         * @param {?} observer
+         * @return {?}
+         */
+        (observer) => {
             // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
             // back into the zone because matchMedia is only included in Zone.js by loading the
             // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
             // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
             // patches it.
             /** @type {?} */
-            const handler = (e) => this.zone.run(() => observer.next(e));
+            const handler = (/**
+             * @param {?} e
+             * @return {?}
+             */
+            (e) => this.zone.run((/**
+             * @return {?}
+             */
+            () => observer.next(e))));
             mql.addListener(handler);
-            return () => {
+            return (/**
+             * @return {?}
+             */
+            () => {
                 mql.removeListener(handler);
-            };
-        }).pipe(startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })), takeUntil(this._destroySubject));
+            });
+        })).pipe(startWith(mql), map((/**
+         * @param {?} nextMql
+         * @return {?}
+         */
+        (nextMql) => ({ query, matches: nextMql.matches }))), takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         /** @type {?} */
         const output = { observable: queryObservable, mql };
@@ -224,7 +264,7 @@ BreakpointObserver.ctorParameters = () => [
     { type: MediaMatcher },
     { type: NgZone }
 ];
-/** @nocollapse */ BreakpointObserver.ngInjectableDef = defineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(inject(MediaMatcher), inject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+/** @nocollapse */ BreakpointObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
 /**
  * Split each query string into separate query strings if two queries are provided as comma
  * separated.
@@ -232,14 +272,27 @@ BreakpointObserver.ctorParameters = () => [
  * @return {?}
  */
 function splitQueries(queries) {
-    return queries.map((query) => query.split(','))
-        .reduce((a1, a2) => a1.concat(a2))
-        .map(query => query.trim());
+    return queries.map((/**
+     * @param {?} query
+     * @return {?}
+     */
+    (query) => query.split(',')))
+        .reduce((/**
+     * @param {?} a1
+     * @param {?} a2
+     * @return {?}
+     */
+    (a1, a2) => a1.concat(a2)))
+        .map((/**
+     * @param {?} query
+     * @return {?}
+     */
+    query => query.trim()));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // PascalCase is being used as Breakpoints is used like an enum.
 // tslint:disable-next-line:variable-name
@@ -273,12 +326,12 @@ const Breakpoints = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { LayoutModule, BreakpointObserver, Breakpoints, MediaMatcher };

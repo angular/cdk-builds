@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each accordion.
@@ -127,7 +127,7 @@ var CdkAccordion = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each accordion item.
@@ -176,14 +176,22 @@ var CdkAccordionItem = /** @class */ (function () {
         /**
          * Unregister function for _expansionDispatcher.
          */
-        this._removeUniqueSelectionListener = function () { };
+        this._removeUniqueSelectionListener = (/**
+         * @return {?}
+         */
+        function () { });
         this._removeUniqueSelectionListener =
-            _expansionDispatcher.listen(function (id, accordionId) {
+            _expansionDispatcher.listen((/**
+             * @param {?} id
+             * @param {?} accordionId
+             * @return {?}
+             */
+            function (id, accordionId) {
                 if (_this.accordion && !_this.accordion.multi &&
                     _this.accordion.id === accordionId && _this.id !== id) {
                     _this.expanded = false;
                 }
-            });
+            }));
         // When an accordion item is hosted in an accordion, subscribe to open/close events.
         if (this.accordion) {
             this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
@@ -311,12 +319,16 @@ var CdkAccordionItem = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        return this.accordion._openCloseAllActions.subscribe(function (expanded) {
+        return this.accordion._openCloseAllActions.subscribe((/**
+         * @param {?} expanded
+         * @return {?}
+         */
+        function (expanded) {
             // Only change expanded state if item is enabled
             if (!_this.disabled) {
                 _this.expanded = expanded;
             }
-        });
+        }));
     };
     CdkAccordionItem.decorators = [
         { type: core.Directive, args: [{
@@ -348,7 +360,7 @@ var CdkAccordionItem = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkAccordionModule = /** @class */ (function () {
     function CdkAccordionModule() {

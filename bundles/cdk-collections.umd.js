@@ -42,7 +42,7 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -72,7 +72,7 @@ function isDataSource(value) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * DataSource wrapper for a native array.
@@ -110,12 +110,12 @@ ArrayDataSource = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to be used to power selecting one or more options from a list.
@@ -127,9 +127,9 @@ var   /**
  */
 SelectionModel = /** @class */ (function () {
     function SelectionModel(_multiple, initiallySelectedValues, _emitChanges) {
+        var _this = this;
         if (_multiple === void 0) { _multiple = false; }
         if (_emitChanges === void 0) { _emitChanges = true; }
-        var _this = this;
         this._multiple = _multiple;
         this._emitChanges = _emitChanges;
         /**
@@ -156,7 +156,11 @@ SelectionModel = /** @class */ (function () {
         this.onChange = this.changed;
         if (initiallySelectedValues && initiallySelectedValues.length) {
             if (_multiple) {
-                initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });
+                initiallySelectedValues.forEach((/**
+                 * @param {?} value
+                 * @return {?}
+                 */
+                function (value) { return _this._markSelected(value); }));
             }
             else {
                 this._markSelected(initiallySelectedValues[0]);
@@ -200,7 +204,11 @@ SelectionModel = /** @class */ (function () {
             values[_i] = arguments[_i];
         }
         this._verifyValueAssignment(values);
-        values.forEach(function (value) { return _this._markSelected(value); });
+        values.forEach((/**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) { return _this._markSelected(value); }));
         this._emitChangeEvent();
     };
     /**
@@ -223,7 +231,11 @@ SelectionModel = /** @class */ (function () {
             values[_i] = arguments[_i];
         }
         this._verifyValueAssignment(values);
-        values.forEach(function (value) { return _this._unmarkSelected(value); });
+        values.forEach((/**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) { return _this._unmarkSelected(value); }));
         this._emitChangeEvent();
     };
     /**
@@ -416,7 +428,11 @@ SelectionModel = /** @class */ (function () {
     function () {
         var _this = this;
         if (!this.isEmpty()) {
-            this._selection.forEach(function (value) { return _this._unmarkSelected(value); });
+            this._selection.forEach((/**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) { return _this._unmarkSelected(value); }));
         }
     };
     /**
@@ -456,7 +472,7 @@ function getMultipleValuesInSingleSelectionError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class to coordinate unique selection based on name.
@@ -511,11 +527,18 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
     function (listener) {
         var _this = this;
         this._listeners.push(listener);
-        return function () {
-            _this._listeners = _this._listeners.filter(function (registered) {
+        return (/**
+         * @return {?}
+         */
+        function () {
+            _this._listeners = _this._listeners.filter((/**
+             * @param {?} registered
+             * @return {?}
+             */
+            function (registered) {
                 return listener !== registered;
-            });
-        };
+            }));
+        });
     };
     /**
      * @return {?}
@@ -529,7 +552,7 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
     UniqueSelectionDispatcher.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
-    /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = core.defineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+    /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
     return UniqueSelectionDispatcher;
 }());
 

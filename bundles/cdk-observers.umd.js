@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -36,7 +36,7 @@ var MutationObserverFactory = /** @class */ (function () {
     MutationObserverFactory.decorators = [
         { type: core.Injectable, args: [{ providedIn: 'root' },] },
     ];
-    /** @nocollapse */ MutationObserverFactory.ngInjectableDef = core.defineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    /** @nocollapse */ MutationObserverFactory.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 }());
 /**
@@ -58,7 +58,12 @@ var ContentObserver = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._observedElements.forEach(function (_, element) { return _this._cleanupObserver(element); });
+        this._observedElements.forEach((/**
+         * @param {?} _
+         * @param {?} element
+         * @return {?}
+         */
+        function (_, element) { return _this._cleanupObserver(element); }));
     };
     /**
      * @param {?} elementOrRef
@@ -72,16 +77,23 @@ var ContentObserver = /** @class */ (function () {
         var _this = this;
         /** @type {?} */
         var element = coercion.coerceElement(elementOrRef);
-        return new rxjs.Observable(function (observer) {
+        return new rxjs.Observable((/**
+         * @param {?} observer
+         * @return {?}
+         */
+        function (observer) {
             /** @type {?} */
             var stream = _this._observeElement(element);
             /** @type {?} */
             var subscription = stream.subscribe(observer);
-            return function () {
+            return (/**
+             * @return {?}
+             */
+            function () {
                 subscription.unsubscribe();
                 _this._unobserveElement(element);
-            };
-        });
+            });
+        }));
     };
     /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
@@ -106,7 +118,11 @@ var ContentObserver = /** @class */ (function () {
             /** @type {?} */
             var stream_1 = new rxjs.Subject();
             /** @type {?} */
-            var observer = this._mutationObserverFactory.create(function (mutations) { return stream_1.next(mutations); });
+            var observer = this._mutationObserverFactory.create((/**
+             * @param {?} mutations
+             * @return {?}
+             */
+            function (mutations) { return stream_1.next(mutations); }));
             if (observer) {
                 observer.observe(element, {
                     characterData: true,
@@ -177,7 +193,7 @@ var ContentObserver = /** @class */ (function () {
     ContentObserver.ctorParameters = function () { return [
         { type: MutationObserverFactory }
     ]; };
-    /** @nocollapse */ ContentObserver.ngInjectableDef = core.defineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(core.inject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    /** @nocollapse */ ContentObserver.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(core.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     return ContentObserver;
 }());
 /**
@@ -273,10 +289,13 @@ var CdkObserveContent = /** @class */ (function () {
         // Consider brining it back inside the zone next time we're making breaking changes.
         // Bringing it back inside can cause things like infinite change detection loops and changed
         // after checked errors if people's code isn't handling it properly.
-        this._ngZone.runOutsideAngular(function () {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             _this._currentSubscription =
                 (_this.debounce ? stream.pipe(operators.debounceTime(_this.debounce)) : stream).subscribe(_this.event);
-        });
+        }));
     };
     /**
      * @private

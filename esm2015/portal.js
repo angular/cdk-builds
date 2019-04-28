@@ -9,7 +9,7 @@ import { ComponentFactoryResolver, Directive, EventEmitter, NgModule, Output, Te
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -64,7 +64,7 @@ function throwNoPortalAttachedError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A `Portal` is something that you want to render somewhere else.
@@ -269,7 +269,7 @@ class BasePortalOutlet {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
@@ -308,15 +308,21 @@ class DomPortalOutlet extends BasePortalOutlet {
         // and then manually attach the view to the application.
         if (portal.viewContainerRef) {
             componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector);
-            this.setDisposeFn(() => componentRef.destroy());
+            this.setDisposeFn((/**
+             * @return {?}
+             */
+            () => componentRef.destroy()));
         }
         else {
             componentRef = componentFactory.create(portal.injector || this._defaultInjector);
             this._appRef.attachView(componentRef.hostView);
-            this.setDisposeFn(() => {
+            this.setDisposeFn((/**
+             * @return {?}
+             */
+            () => {
                 this._appRef.detachView(componentRef.hostView);
                 componentRef.destroy();
-            });
+            }));
         }
         // At this point the component has been instantiated, so we move it to the location in the DOM
         // where we want it to be rendered.
@@ -339,14 +345,21 @@ class DomPortalOutlet extends BasePortalOutlet {
         // But for the DomPortalOutlet the view can be added everywhere in the DOM
         // (e.g Overlay Container) To move the view to the specified host element. We just
         // re-append the existing root nodes.
-        viewRef.rootNodes.forEach(rootNode => this.outletElement.appendChild(rootNode));
-        this.setDisposeFn((() => {
+        viewRef.rootNodes.forEach((/**
+         * @param {?} rootNode
+         * @return {?}
+         */
+        rootNode => this.outletElement.appendChild(rootNode)));
+        this.setDisposeFn(((/**
+         * @return {?}
+         */
+        () => {
             /** @type {?} */
             let index = viewContainer.indexOf(viewRef);
             if (index !== -1) {
                 viewContainer.remove(index);
             }
-        }));
+        })));
         // TODO(jelbourn): Return locals from view.
         return viewRef;
     }
@@ -373,7 +386,7 @@ class DomPortalOutlet extends BasePortalOutlet {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
@@ -493,7 +506,10 @@ class CdkPortalOutlet extends BasePortalOutlet {
         const componentFactory = resolver.resolveComponentFactory(portal.component);
         /** @type {?} */
         const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
-        super.setDisposeFn(() => ref.destroy());
+        super.setDisposeFn((/**
+         * @return {?}
+         */
+        () => ref.destroy()));
         this._attachedPortal = portal;
         this._attachedRef = ref;
         this.attached.emit(ref);
@@ -509,7 +525,10 @@ class CdkPortalOutlet extends BasePortalOutlet {
         portal.setAttachedHost(this);
         /** @type {?} */
         const viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
-        super.setDisposeFn(() => this._viewContainerRef.clear());
+        super.setDisposeFn((/**
+         * @return {?}
+         */
+        () => this._viewContainerRef.clear()));
         this._attachedPortal = portal;
         this._attachedRef = viewRef;
         this.attached.emit(viewRef);
@@ -542,7 +561,7 @@ PortalModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -576,12 +595,12 @@ class PortalInjector {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { DomPortalOutlet as DomPortalHost, CdkPortalOutlet as PortalHostDirective, CdkPortal as TemplatePortalDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, CdkPortal, CdkPortalOutlet, PortalModule, PortalInjector };

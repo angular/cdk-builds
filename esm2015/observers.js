@@ -6,13 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { coerceBooleanProperty, coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output, defineInjectable, inject } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
@@ -30,7 +30,7 @@ class MutationObserverFactory {
 MutationObserverFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */ MutationObserverFactory.ngInjectableDef = defineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+/** @nocollapse */ MutationObserverFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
 /**
  * An injectable service that allows watching elements for changes to their content.
  */
@@ -49,7 +49,12 @@ class ContentObserver {
      * @return {?}
      */
     ngOnDestroy() {
-        this._observedElements.forEach((_, element) => this._cleanupObserver(element));
+        this._observedElements.forEach((/**
+         * @param {?} _
+         * @param {?} element
+         * @return {?}
+         */
+        (_, element) => this._cleanupObserver(element)));
     }
     /**
      * @param {?} elementOrRef
@@ -58,16 +63,23 @@ class ContentObserver {
     observe(elementOrRef) {
         /** @type {?} */
         const element = coerceElement(elementOrRef);
-        return new Observable((observer) => {
+        return new Observable((/**
+         * @param {?} observer
+         * @return {?}
+         */
+        (observer) => {
             /** @type {?} */
             const stream = this._observeElement(element);
             /** @type {?} */
             const subscription = stream.subscribe(observer);
-            return () => {
+            return (/**
+             * @return {?}
+             */
+            () => {
                 subscription.unsubscribe();
                 this._unobserveElement(element);
-            };
-        });
+            });
+        }));
     }
     /**
      * Observes the given element by using the existing MutationObserver if available, or creating a
@@ -81,7 +93,11 @@ class ContentObserver {
             /** @type {?} */
             const stream = new Subject();
             /** @type {?} */
-            const observer = this._mutationObserverFactory.create(mutations => stream.next(mutations));
+            const observer = this._mutationObserverFactory.create((/**
+             * @param {?} mutations
+             * @return {?}
+             */
+            mutations => stream.next(mutations)));
             if (observer) {
                 observer.observe(element, {
                     characterData: true,
@@ -135,7 +151,7 @@ ContentObserver.decorators = [
 ContentObserver.ctorParameters = () => [
     { type: MutationObserverFactory }
 ];
-/** @nocollapse */ ContentObserver.ngInjectableDef = defineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(inject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+/** @nocollapse */ ContentObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
@@ -210,10 +226,13 @@ class CdkObserveContent {
         // Consider brining it back inside the zone next time we're making breaking changes.
         // Bringing it back inside can cause things like infinite change detection loops and changed
         // after checked errors if people's code isn't handling it properly.
-        this._ngZone.runOutsideAngular(() => {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             this._currentSubscription =
                 (this.debounce ? stream.pipe(debounceTime(this.debounce)) : stream).subscribe(this.event);
-        });
+        }));
     }
     /**
      * @private
@@ -254,12 +273,12 @@ ObserversModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { MutationObserverFactory, ContentObserver, CdkObserveContent, ObserversModule };

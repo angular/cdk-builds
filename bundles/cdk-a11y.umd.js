@@ -42,7 +42,7 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -61,7 +61,11 @@ var ID_DELIMINATOR = ' ';
 function addAriaReferencedId(el, attr, id) {
     /** @type {?} */
     var ids = getAriaReferenceIds(el, attr);
-    if (ids.some(function (existingId) { return existingId.trim() == id.trim(); })) {
+    if (ids.some((/**
+     * @param {?} existingId
+     * @return {?}
+     */
+    function (existingId) { return existingId.trim() == id.trim(); }))) {
         return;
     }
     ids.push(id.trim());
@@ -79,7 +83,11 @@ function removeAriaReferencedId(el, attr, id) {
     /** @type {?} */
     var ids = getAriaReferenceIds(el, attr);
     /** @type {?} */
-    var filteredIds = ids.filter(function (val) { return val != id.trim(); });
+    var filteredIds = ids.filter((/**
+     * @param {?} val
+     * @return {?}
+     */
+    function (val) { return val != id.trim(); }));
     el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
 }
 /**
@@ -96,7 +104,7 @@ function getAriaReferenceIds(el, attr) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * ID used for the body container where all messages are appended.
@@ -333,7 +341,11 @@ var AriaDescriber = /** @class */ (function () {
         // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
         /** @type {?} */
         var originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-            .filter(function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; });
+            .filter((/**
+         * @param {?} id
+         * @return {?}
+         */
+        function (id) { return id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0; }));
         element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
     };
     /**
@@ -466,7 +478,7 @@ var AriaDescriber = /** @class */ (function () {
     AriaDescriber.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ AriaDescriber.ngInjectableDef = core.defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.inject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+    /** @nocollapse */ AriaDescriber.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.ɵɵinject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
 }());
 /**
@@ -494,7 +506,7 @@ var ARIA_DESCRIBER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
@@ -521,7 +533,11 @@ ListKeyManager = /** @class */ (function () {
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
          */
-        this._skipPredicateFn = function (item) { return item.disabled; };
+        this._skipPredicateFn = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) { return item.disabled; });
         // Buffer for the letters that the user has pressed when the typeahead option is turned on.
         this._pressedLetters = [];
         /**
@@ -537,7 +553,11 @@ ListKeyManager = /** @class */ (function () {
         // not have access to a QueryList of the items they want to manage (e.g. when the
         // items aren't being collected via `ViewChildren` or `ContentChildren`).
         if (_items instanceof core.QueryList) {
-            _items.changes.subscribe(function (newItems) {
+            _items.changes.subscribe((/**
+             * @param {?} newItems
+             * @return {?}
+             */
+            function (newItems) {
                 if (_this._activeItem) {
                     /** @type {?} */
                     var itemArray = newItems.toArray();
@@ -547,7 +567,7 @@ ListKeyManager = /** @class */ (function () {
                         _this._activeItemIndex = newIndex;
                     }
                 }
-            });
+            }));
         }
     }
     /**
@@ -694,14 +714,32 @@ ListKeyManager = /** @class */ (function () {
     function (debounceInterval) {
         var _this = this;
         if (debounceInterval === void 0) { debounceInterval = 200; }
-        if ((/** @type {?} */ (this))._items.length && (/** @type {?} */ (this))._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
+        if ((/** @type {?} */ (this))._items.length && (/** @type {?} */ (this))._items.some((/**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) { return typeof item.getLabel !== 'function'; }))) {
             throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
         }
         (/** @type {?} */ (this))._typeaheadSubscription.unsubscribe();
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        (/** @type {?} */ (this))._typeaheadSubscription = (/** @type {?} */ (this))._letterKeyStream.pipe(operators.tap(function (keyCode) { return (/** @type {?} */ (_this))._pressedLetters.push(keyCode); }), operators.debounceTime(debounceInterval), operators.filter(function () { return (/** @type {?} */ (_this))._pressedLetters.length > 0; }), operators.map(function () { return (/** @type {?} */ (_this))._pressedLetters.join(''); })).subscribe(function (inputString) {
+        (/** @type {?} */ (this))._typeaheadSubscription = (/** @type {?} */ (this))._letterKeyStream.pipe(operators.tap((/**
+         * @param {?} keyCode
+         * @return {?}
+         */
+        function (keyCode) { return (/** @type {?} */ (_this))._pressedLetters.push(keyCode); })), operators.debounceTime(debounceInterval), operators.filter((/**
+         * @return {?}
+         */
+        function () { return (/** @type {?} */ (_this))._pressedLetters.length > 0; })), operators.map((/**
+         * @return {?}
+         */
+        function () { return (/** @type {?} */ (_this))._pressedLetters.join(''); }))).subscribe((/**
+         * @param {?} inputString
+         * @return {?}
+         */
+        function (inputString) {
             /** @type {?} */
             var items = (/** @type {?} */ (_this))._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
@@ -718,7 +756,7 @@ ListKeyManager = /** @class */ (function () {
                 }
             }
             (/** @type {?} */ (_this))._pressedLetters = [];
-        });
+        }));
         return (/** @type {?} */ (this));
     };
     /**
@@ -758,9 +796,13 @@ ListKeyManager = /** @class */ (function () {
         /** @type {?} */
         var modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'];
         /** @type {?} */
-        var isModifierAllowed = modifiers.every(function (modifier) {
+        var isModifierAllowed = modifiers.every((/**
+         * @param {?} modifier
+         * @return {?}
+         */
+        function (modifier) {
             return !event[modifier] || _this._allowedModifierKeys.indexOf(modifier) > -1;
-        });
+        }));
         switch (keyCode) {
             case keycodes.TAB:
                 this.tabOut.next();
@@ -1069,7 +1111,7 @@ ListKeyManager = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -1104,7 +1146,7 @@ ActiveDescendantKeyManager = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -1160,7 +1202,7 @@ FocusKeyManager = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
@@ -1341,7 +1383,7 @@ var InteractivityChecker = /** @class */ (function () {
     InteractivityChecker.ctorParameters = function () { return [
         { type: platform.Platform }
     ]; };
-    /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.defineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.inject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
+    /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.ɵɵinject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
 }());
 /**
@@ -1490,7 +1532,7 @@ function getWindow(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -1508,16 +1550,22 @@ var   /**
  */
 FocusTrap = /** @class */ (function () {
     function FocusTrap(_element, _checker, _ngZone, _document, deferAnchors) {
-        if (deferAnchors === void 0) { deferAnchors = false; }
         var _this = this;
+        if (deferAnchors === void 0) { deferAnchors = false; }
         this._element = _element;
         this._checker = _checker;
         this._ngZone = _ngZone;
         this._document = _document;
         this._hasAttached = false;
         // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
-        this.startAnchorListener = function () { return _this.focusLastTabbableElement(); };
-        this.endAnchorListener = function () { return _this.focusFirstTabbableElement(); };
+        this.startAnchorListener = (/**
+         * @return {?}
+         */
+        function () { return _this.focusLastTabbableElement(); });
+        this.endAnchorListener = (/**
+         * @return {?}
+         */
+        function () { return _this.focusFirstTabbableElement(); });
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1596,7 +1644,10 @@ FocusTrap = /** @class */ (function () {
         if (this._hasAttached) {
             return true;
         }
-        this._ngZone.runOutsideAngular(function () {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             if (!_this._startAnchor) {
                 _this._startAnchor = _this._createAnchor();
                 (/** @type {?} */ (_this._startAnchor)).addEventListener('focus', _this.startAnchorListener);
@@ -1605,7 +1656,7 @@ FocusTrap = /** @class */ (function () {
                 _this._endAnchor = _this._createAnchor();
                 (/** @type {?} */ (_this._endAnchor)).addEventListener('focus', _this.endAnchorListener);
             }
-        });
+        }));
         if (this._element.parentNode) {
             this._element.parentNode.insertBefore((/** @type {?} */ (this._startAnchor)), this._element);
             this._element.parentNode.insertBefore((/** @type {?} */ (this._endAnchor)), this._element.nextSibling);
@@ -1633,9 +1684,16 @@ FocusTrap = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        return new Promise(function (resolve) {
-            _this._executeOnStable(function () { return resolve(_this.focusInitialElement()); });
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        function (resolve) {
+            _this._executeOnStable((/**
+             * @return {?}
+             */
+            function () { return resolve(_this.focusInitialElement()); }));
+        }));
     };
     /**
      * Waits for the zone to stabilize, then focuses
@@ -1657,9 +1715,16 @@ FocusTrap = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        return new Promise(function (resolve) {
-            _this._executeOnStable(function () { return resolve(_this.focusFirstTabbableElement()); });
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        function (resolve) {
+            _this._executeOnStable((/**
+             * @return {?}
+             */
+            function () { return resolve(_this.focusFirstTabbableElement()); }));
+        }));
     };
     /**
      * Waits for the zone to stabilize, then focuses
@@ -1681,9 +1746,16 @@ FocusTrap = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        return new Promise(function (resolve) {
-            _this._executeOnStable(function () { return resolve(_this.focusLastTabbableElement()); });
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        function (resolve) {
+            _this._executeOnStable((/**
+             * @return {?}
+             */
+            function () { return resolve(_this.focusLastTabbableElement()); }));
+        }));
     };
     /**
      * Get the specified boundary element of the trapped region.
@@ -1988,7 +2060,7 @@ var FocusTrapFactory = /** @class */ (function () {
         { type: core.NgZone },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.inject(InteractivityChecker), core.inject(core.NgZone), core.inject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.ɵɵinject(InteractivityChecker), core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
 }());
 /**
@@ -2099,7 +2171,7 @@ var CdkTrapFocus = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var LIVE_ANNOUNCER_ELEMENT_TOKEN = new core.InjectionToken('liveAnnouncerElement', {
@@ -2121,7 +2193,7 @@ var LIVE_ANNOUNCER_DEFAULT_OPTIONS = new core.InjectionToken('LIVE_ANNOUNCER_DEF
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LiveAnnouncer = /** @class */ (function () {
     function LiveAnnouncer(elementToken, _ngZone, _document, _defaultOptions) {
@@ -2177,18 +2249,31 @@ var LiveAnnouncer = /** @class */ (function () {
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
-        return this._ngZone.runOutsideAngular(function () {
-            return new Promise(function (resolve) {
+        return this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
+            return new Promise((/**
+             * @param {?} resolve
+             * @return {?}
+             */
+            function (resolve) {
                 clearTimeout(_this._previousTimeout);
-                _this._previousTimeout = setTimeout(function () {
+                _this._previousTimeout = setTimeout((/**
+                 * @return {?}
+                 */
+                function () {
                     _this._liveElement.textContent = message;
                     resolve();
                     if (typeof duration === 'number') {
-                        _this._previousTimeout = setTimeout(function () { return _this.clear(); }, duration);
+                        _this._previousTimeout = setTimeout((/**
+                         * @return {?}
+                         */
+                        function () { return _this.clear(); }), duration);
                     }
-                }, 100);
-            });
-        });
+                }), 100);
+            }));
+        }));
     };
     /**
      * Clears the current text from the announcer element. Can be used to prevent
@@ -2261,7 +2346,7 @@ var LiveAnnouncer = /** @class */ (function () {
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.inject(core.NgZone), core.inject(common.DOCUMENT), core.inject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT), core.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
@@ -2297,10 +2382,16 @@ var CdkAriaLive = /** @class */ (function () {
                 }
             }
             else if (!this._subscription) {
-                this._subscription = this._ngZone.runOutsideAngular(function () {
+                this._subscription = this._ngZone.runOutsideAngular((/**
+                 * @return {?}
+                 */
+                function () {
                     return _this._contentObserver
                         .observe(_this._elementRef)
-                        .subscribe(function () {
+                        .subscribe((/**
+                     * @return {?}
+                     */
+                    function () {
                         // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
                         /** @type {?} */
                         var elementText = _this._elementRef.nativeElement.textContent;
@@ -2310,8 +2401,8 @@ var CdkAriaLive = /** @class */ (function () {
                             _this._liveAnnouncer.announce(elementText, _this._politeness);
                             _this._previousAnnouncedText = elementText;
                         }
-                    });
-                });
+                    }));
+                }));
             }
         },
         enumerable: true,
@@ -2375,7 +2466,7 @@ var LIVE_ANNOUNCER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
@@ -2418,27 +2509,37 @@ var FocusMonitor = /** @class */ (function () {
          * Event listener for `keydown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentKeydownListener = function () {
+        this._documentKeydownListener = (/**
+         * @return {?}
+         */
+        function () {
             // On keydown record the origin and clear any touch event that may be in progress.
             _this._lastTouchTarget = null;
             _this._setOriginForCurrentEventQueue('keyboard');
-        };
+        });
         /**
          * Event listener for `mousedown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentMousedownListener = function () {
+        this._documentMousedownListener = (/**
+         * @return {?}
+         */
+        function () {
             // On mousedown record the origin only if there is not touch
             // target, since a mousedown can happen as a result of a touch event.
             if (!_this._lastTouchTarget) {
                 _this._setOriginForCurrentEventQueue('mouse');
             }
-        };
+        });
         /**
          * Event listener for `touchstart` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentTouchstartListener = function (event) {
+        this._documentTouchstartListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
             // When the touchstart event fires the focus event is not yet in the event queue. This means
             // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
             // see if a focus happens.
@@ -2446,18 +2547,27 @@ var FocusMonitor = /** @class */ (function () {
                 clearTimeout(_this._touchTimeoutId);
             }
             _this._lastTouchTarget = event.target;
-            _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
-        };
+            _this._touchTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            function () { return _this._lastTouchTarget = null; }), TOUCH_BUFFER_MS);
+        });
         /**
          * Event listener for `focus` events on the window.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._windowFocusListener = function () {
+        this._windowFocusListener = (/**
+         * @return {?}
+         */
+        function () {
             // Make a note of when the window regains focus, so we can
             // restore the origin info for the focused element.
             _this._windowFocused = true;
-            _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
-        };
+            _this._windowFocusTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            function () { return _this._windowFocused = false; }));
+        });
     }
     /**
      * @param {?} element
@@ -2488,7 +2598,10 @@ var FocusMonitor = /** @class */ (function () {
         // Create monitored element info.
         /** @type {?} */
         var info = {
-            unlisten: function () { },
+            unlisten: (/**
+             * @return {?}
+             */
+            function () { }),
             checkChildren: checkChildren,
             subject: new rxjs.Subject()
         };
@@ -2496,18 +2609,32 @@ var FocusMonitor = /** @class */ (function () {
         this._incrementMonitoredElementCount();
         // Start listening. We need to listen in capture phase since focus events don't bubble.
         /** @type {?} */
-        var focusListener = function (event) { return _this._onFocus(event, nativeElement); };
+        var focusListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) { return _this._onFocus(event, nativeElement); });
         /** @type {?} */
-        var blurListener = function (event) { return _this._onBlur(event, nativeElement); };
-        this._ngZone.runOutsideAngular(function () {
+        var blurListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) { return _this._onBlur(event, nativeElement); });
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             nativeElement.addEventListener('focus', focusListener, true);
             nativeElement.addEventListener('blur', blurListener, true);
-        });
+        }));
         // Create an unlisten function for later.
-        info.unlisten = function () {
+        info.unlisten = (/**
+         * @return {?}
+         */
+        function () {
             nativeElement.removeEventListener('focus', focusListener, true);
             nativeElement.removeEventListener('blur', blurListener, true);
-        };
+        });
         return info.subject.asObservable();
     };
     /**
@@ -2561,7 +2688,12 @@ var FocusMonitor = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        this._elementInfo.forEach(function (_info, element) { return _this.stopMonitoring(element); });
+        this._elementInfo.forEach((/**
+         * @param {?} _info
+         * @param {?} element
+         * @return {?}
+         */
+        function (_info, element) { return _this.stopMonitoring(element); }));
     };
     /**
      * @private
@@ -2633,13 +2765,19 @@ var FocusMonitor = /** @class */ (function () {
      */
     function (origin) {
         var _this = this;
-        this._ngZone.runOutsideAngular(function () {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () {
             _this._origin = origin;
             // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
             // tick after the interaction event fired. To ensure the focus origin is always correct,
             // the focus origin will be determined at the beginning of the next tick.
-            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
-        });
+            _this._originTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            function () { return _this._origin = null; }), 1);
+        }));
     };
     /**
      * Checks whether the given focus event was caused by a touchstart event.
@@ -2781,7 +2919,10 @@ var FocusMonitor = /** @class */ (function () {
      * @return {?}
      */
     function (subject, origin) {
-        this._ngZone.run(function () { return subject.next(origin); });
+        this._ngZone.run((/**
+         * @return {?}
+         */
+        function () { return subject.next(origin); }));
     };
     /**
      * @private
@@ -2797,12 +2938,15 @@ var FocusMonitor = /** @class */ (function () {
         if (++this._monitoredElementCount == 1 && this._platform.isBrowser) {
             // Note: we listen to events in the capture phase so we
             // can detect them even if the user stops propagation.
-            this._ngZone.runOutsideAngular(function () {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            function () {
                 document.addEventListener('keydown', _this._documentKeydownListener, captureEventListenerOptions);
                 document.addEventListener('mousedown', _this._documentMousedownListener, captureEventListenerOptions);
                 document.addEventListener('touchstart', _this._documentTouchstartListener, captureEventListenerOptions);
                 window.addEventListener('focus', _this._windowFocusListener);
-            });
+            }));
         }
     };
     /**
@@ -2834,7 +2978,7 @@ var FocusMonitor = /** @class */ (function () {
         { type: core.NgZone },
         { type: platform.Platform }
     ]; };
-    /** @nocollapse */ FocusMonitor.ngInjectableDef = core.defineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.inject(core.NgZone), core.inject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
+    /** @nocollapse */ FocusMonitor.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.ɵɵinject(core.NgZone), core.ɵɵinject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 /**
@@ -2853,7 +2997,11 @@ var CdkMonitorFocus = /** @class */ (function () {
         this._focusMonitor = _focusMonitor;
         this.cdkFocusChange = new core.EventEmitter();
         this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
-            .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
+            .subscribe((/**
+         * @param {?} origin
+         * @return {?}
+         */
+        function (origin) { return _this.cdkFocusChange.emit(origin); }));
     }
     /**
      * @return {?}
@@ -2903,7 +3051,7 @@ var FOCUS_MONITOR_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -2921,7 +3069,7 @@ function isFakeMousedownFromScreenReader(event) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var A11yModule = /** @class */ (function () {
     function A11yModule() {

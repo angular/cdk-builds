@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, defineInjectable, inject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -16,7 +16,7 @@ import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -35,7 +35,11 @@ const ID_DELIMINATOR = ' ';
 function addAriaReferencedId(el, attr, id) {
     /** @type {?} */
     const ids = getAriaReferenceIds(el, attr);
-    if (ids.some(existingId => existingId.trim() == id.trim())) {
+    if (ids.some((/**
+     * @param {?} existingId
+     * @return {?}
+     */
+    existingId => existingId.trim() == id.trim()))) {
         return;
     }
     ids.push(id.trim());
@@ -53,7 +57,11 @@ function removeAriaReferencedId(el, attr, id) {
     /** @type {?} */
     const ids = getAriaReferenceIds(el, attr);
     /** @type {?} */
-    const filteredIds = ids.filter(val => val != id.trim());
+    const filteredIds = ids.filter((/**
+     * @param {?} val
+     * @return {?}
+     */
+    val => val != id.trim()));
     el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
 }
 /**
@@ -70,7 +78,7 @@ function getAriaReferenceIds(el, attr) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * ID used for the body container where all messages are appended.
@@ -248,7 +256,11 @@ class AriaDescriber {
         // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
         /** @type {?} */
         const originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-            .filter(id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0);
+            .filter((/**
+         * @param {?} id
+         * @return {?}
+         */
+        id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0));
         element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
     }
     /**
@@ -335,7 +347,7 @@ AriaDescriber.decorators = [
 AriaDescriber.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ AriaDescriber.ngInjectableDef = defineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(inject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+/** @nocollapse */ AriaDescriber.ngInjectableDef = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
@@ -361,7 +373,7 @@ const ARIA_DESCRIBER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
@@ -385,7 +397,11 @@ class ListKeyManager {
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
          */
-        this._skipPredicateFn = (item) => item.disabled;
+        this._skipPredicateFn = (/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => item.disabled);
         // Buffer for the letters that the user has pressed when the typeahead option is turned on.
         this._pressedLetters = [];
         /**
@@ -401,7 +417,11 @@ class ListKeyManager {
         // not have access to a QueryList of the items they want to manage (e.g. when the
         // items aren't being collected via `ViewChildren` or `ContentChildren`).
         if (_items instanceof QueryList) {
-            _items.changes.subscribe((newItems) => {
+            _items.changes.subscribe((/**
+             * @param {?} newItems
+             * @return {?}
+             */
+            (newItems) => {
                 if (this._activeItem) {
                     /** @type {?} */
                     const itemArray = newItems.toArray();
@@ -411,7 +431,7 @@ class ListKeyManager {
                         this._activeItemIndex = newIndex;
                     }
                 }
-            });
+            }));
         }
     }
     /**
@@ -481,14 +501,32 @@ class ListKeyManager {
      * @return {THIS}
      */
     withTypeAhead(debounceInterval = 200) {
-        if ((/** @type {?} */ (this))._items.length && (/** @type {?} */ (this))._items.some(item => typeof item.getLabel !== 'function')) {
+        if ((/** @type {?} */ (this))._items.length && (/** @type {?} */ (this))._items.some((/**
+         * @param {?} item
+         * @return {?}
+         */
+        item => typeof item.getLabel !== 'function'))) {
             throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
         }
         (/** @type {?} */ (this))._typeaheadSubscription.unsubscribe();
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        (/** @type {?} */ (this))._typeaheadSubscription = (/** @type {?} */ (this))._letterKeyStream.pipe(tap(keyCode => (/** @type {?} */ (this))._pressedLetters.push(keyCode)), debounceTime(debounceInterval), filter(() => (/** @type {?} */ (this))._pressedLetters.length > 0), map(() => (/** @type {?} */ (this))._pressedLetters.join(''))).subscribe(inputString => {
+        (/** @type {?} */ (this))._typeaheadSubscription = (/** @type {?} */ (this))._letterKeyStream.pipe(tap((/**
+         * @param {?} keyCode
+         * @return {?}
+         */
+        keyCode => (/** @type {?} */ (this))._pressedLetters.push(keyCode))), debounceTime(debounceInterval), filter((/**
+         * @return {?}
+         */
+        () => (/** @type {?} */ (this))._pressedLetters.length > 0)), map((/**
+         * @return {?}
+         */
+        () => (/** @type {?} */ (this))._pressedLetters.join('')))).subscribe((/**
+         * @param {?} inputString
+         * @return {?}
+         */
+        inputString => {
             /** @type {?} */
             const items = (/** @type {?} */ (this))._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
@@ -505,7 +543,7 @@ class ListKeyManager {
                 }
             }
             (/** @type {?} */ (this))._pressedLetters = [];
-        });
+        }));
         return (/** @type {?} */ (this));
     }
     /**
@@ -531,9 +569,13 @@ class ListKeyManager {
         /** @type {?} */
         const modifiers = ['altKey', 'ctrlKey', 'metaKey', 'shiftKey'];
         /** @type {?} */
-        const isModifierAllowed = modifiers.every(modifier => {
+        const isModifierAllowed = modifiers.every((/**
+         * @param {?} modifier
+         * @return {?}
+         */
+        modifier => {
             return !event[modifier] || this._allowedModifierKeys.indexOf(modifier) > -1;
-        });
+        }));
         switch (keyCode) {
             case TAB:
                 this.tabOut.next();
@@ -735,7 +777,7 @@ class ListKeyManager {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -758,7 +800,7 @@ class ActiveDescendantKeyManager extends ListKeyManager {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -793,7 +835,7 @@ class FocusKeyManager extends ListKeyManager {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
@@ -923,7 +965,7 @@ InteractivityChecker.decorators = [
 InteractivityChecker.ctorParameters = () => [
     { type: Platform }
 ];
-/** @nocollapse */ InteractivityChecker.ngInjectableDef = defineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(inject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
+/** @nocollapse */ InteractivityChecker.ngInjectableDef = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
 /**
  * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
  * the frameElement property is being accessed from a different host address, this property
@@ -1070,7 +1112,7 @@ function getWindow(node) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -1094,8 +1136,14 @@ class FocusTrap {
         this._document = _document;
         this._hasAttached = false;
         // Event listeners for the anchors. Need to be regular functions so that we can unbind them later.
-        this.startAnchorListener = () => this.focusLastTabbableElement();
-        this.endAnchorListener = () => this.focusFirstTabbableElement();
+        this.startAnchorListener = (/**
+         * @return {?}
+         */
+        () => this.focusLastTabbableElement());
+        this.endAnchorListener = (/**
+         * @return {?}
+         */
+        () => this.focusFirstTabbableElement());
         this._enabled = true;
         if (!deferAnchors) {
             this.attachAnchors();
@@ -1151,7 +1199,10 @@ class FocusTrap {
         if (this._hasAttached) {
             return true;
         }
-        this._ngZone.runOutsideAngular(() => {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             if (!this._startAnchor) {
                 this._startAnchor = this._createAnchor();
                 (/** @type {?} */ (this._startAnchor)).addEventListener('focus', this.startAnchorListener);
@@ -1160,7 +1211,7 @@ class FocusTrap {
                 this._endAnchor = this._createAnchor();
                 (/** @type {?} */ (this._endAnchor)).addEventListener('focus', this.endAnchorListener);
             }
-        });
+        }));
         if (this._element.parentNode) {
             this._element.parentNode.insertBefore((/** @type {?} */ (this._startAnchor)), this._element);
             this._element.parentNode.insertBefore((/** @type {?} */ (this._endAnchor)), this._element.nextSibling);
@@ -1175,9 +1226,16 @@ class FocusTrap {
      * on whether focus was moved successfuly.
      */
     focusInitialElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusInitialElement()));
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        resolve => {
+            this._executeOnStable((/**
+             * @return {?}
+             */
+            () => resolve(this.focusInitialElement())));
+        }));
     }
     /**
      * Waits for the zone to stabilize, then focuses
@@ -1186,9 +1244,16 @@ class FocusTrap {
      * on whether focus was moved successfuly.
      */
     focusFirstTabbableElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusFirstTabbableElement()));
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        resolve => {
+            this._executeOnStable((/**
+             * @return {?}
+             */
+            () => resolve(this.focusFirstTabbableElement())));
+        }));
     }
     /**
      * Waits for the zone to stabilize, then focuses
@@ -1197,9 +1262,16 @@ class FocusTrap {
      * on whether focus was moved successfuly.
      */
     focusLastTabbableElementWhenReady() {
-        return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusLastTabbableElement()));
-        });
+        return new Promise((/**
+         * @param {?} resolve
+         * @return {?}
+         */
+        resolve => {
+            this._executeOnStable((/**
+             * @return {?}
+             */
+            () => resolve(this.focusLastTabbableElement())));
+        }));
     }
     /**
      * Get the specified boundary element of the trapped region.
@@ -1413,7 +1485,7 @@ FocusTrapFactory.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ FocusTrapFactory.ngInjectableDef = defineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(inject(InteractivityChecker), inject(NgZone), inject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+/** @nocollapse */ FocusTrapFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
 /**
  * Directive for trapping focus within a region.
  */
@@ -1504,7 +1576,7 @@ CdkTrapFocus.propDecorators = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
@@ -1526,7 +1598,7 @@ const LIVE_ANNOUNCER_DEFAULT_OPTIONS = new InjectionToken('LIVE_ANNOUNCER_DEFAUL
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LiveAnnouncer {
     /**
@@ -1578,18 +1650,31 @@ class LiveAnnouncer {
         // - With Chrome and IE11 with NVDA or JAWS, a repeated (identical) message won't be read a
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
-        return this._ngZone.runOutsideAngular(() => {
-            return new Promise(resolve => {
+        return this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
+            return new Promise((/**
+             * @param {?} resolve
+             * @return {?}
+             */
+            resolve => {
                 clearTimeout(this._previousTimeout);
-                this._previousTimeout = setTimeout(() => {
+                this._previousTimeout = setTimeout((/**
+                 * @return {?}
+                 */
+                () => {
                     this._liveElement.textContent = message;
                     resolve();
                     if (typeof duration === 'number') {
-                        this._previousTimeout = setTimeout(() => this.clear(), duration);
+                        this._previousTimeout = setTimeout((/**
+                         * @return {?}
+                         */
+                        () => this.clear()), duration);
                     }
-                }, 100);
-            });
-        });
+                }), 100);
+            }));
+        }));
     }
     /**
      * Clears the current text from the announcer element. Can be used to prevent
@@ -1645,7 +1730,7 @@ LiveAnnouncer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
 ];
-/** @nocollapse */ LiveAnnouncer.ngInjectableDef = defineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(inject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), inject(NgZone), inject(DOCUMENT), inject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+/** @nocollapse */ LiveAnnouncer.ngInjectableDef = ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), ɵɵinject(NgZone), ɵɵinject(DOCUMENT), ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
  * with a wider range of browsers and screen readers.
@@ -1682,10 +1767,16 @@ class CdkAriaLive {
             }
         }
         else if (!this._subscription) {
-            this._subscription = this._ngZone.runOutsideAngular(() => {
+            this._subscription = this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            () => {
                 return this._contentObserver
                     .observe(this._elementRef)
-                    .subscribe(() => {
+                    .subscribe((/**
+                 * @return {?}
+                 */
+                () => {
                     // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
                     /** @type {?} */
                     const elementText = this._elementRef.nativeElement.textContent;
@@ -1695,8 +1786,8 @@ class CdkAriaLive {
                         this._liveAnnouncer.announce(elementText, this._politeness);
                         this._previousAnnouncedText = elementText;
                     }
-                });
-            });
+                }));
+            }));
         }
     }
     /**
@@ -1753,7 +1844,7 @@ const LIVE_ANNOUNCER_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
@@ -1799,27 +1890,37 @@ class FocusMonitor {
          * Event listener for `keydown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentKeydownListener = () => {
+        this._documentKeydownListener = (/**
+         * @return {?}
+         */
+        () => {
             // On keydown record the origin and clear any touch event that may be in progress.
             this._lastTouchTarget = null;
             this._setOriginForCurrentEventQueue('keyboard');
-        };
+        });
         /**
          * Event listener for `mousedown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentMousedownListener = () => {
+        this._documentMousedownListener = (/**
+         * @return {?}
+         */
+        () => {
             // On mousedown record the origin only if there is not touch
             // target, since a mousedown can happen as a result of a touch event.
             if (!this._lastTouchTarget) {
                 this._setOriginForCurrentEventQueue('mouse');
             }
-        };
+        });
         /**
          * Event listener for `touchstart` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentTouchstartListener = (event) => {
+        this._documentTouchstartListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
             // When the touchstart event fires the focus event is not yet in the event queue. This means
             // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
             // see if a focus happens.
@@ -1827,18 +1928,27 @@ class FocusMonitor {
                 clearTimeout(this._touchTimeoutId);
             }
             this._lastTouchTarget = event.target;
-            this._touchTimeoutId = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
-        };
+            this._touchTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            () => this._lastTouchTarget = null), TOUCH_BUFFER_MS);
+        });
         /**
          * Event listener for `focus` events on the window.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._windowFocusListener = () => {
+        this._windowFocusListener = (/**
+         * @return {?}
+         */
+        () => {
             // Make a note of when the window regains focus, so we can
             // restore the origin info for the focused element.
             this._windowFocused = true;
-            this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false);
-        };
+            this._windowFocusTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            () => this._windowFocused = false));
+        });
     }
     /**
      * @param {?} element
@@ -1862,7 +1972,10 @@ class FocusMonitor {
         // Create monitored element info.
         /** @type {?} */
         let info = {
-            unlisten: () => { },
+            unlisten: (/**
+             * @return {?}
+             */
+            () => { }),
             checkChildren: checkChildren,
             subject: new Subject()
         };
@@ -1870,18 +1983,32 @@ class FocusMonitor {
         this._incrementMonitoredElementCount();
         // Start listening. We need to listen in capture phase since focus events don't bubble.
         /** @type {?} */
-        let focusListener = (event) => this._onFocus(event, nativeElement);
+        let focusListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => this._onFocus(event, nativeElement));
         /** @type {?} */
-        let blurListener = (event) => this._onBlur(event, nativeElement);
-        this._ngZone.runOutsideAngular(() => {
+        let blurListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => this._onBlur(event, nativeElement));
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             nativeElement.addEventListener('focus', focusListener, true);
             nativeElement.addEventListener('blur', blurListener, true);
-        });
+        }));
         // Create an unlisten function for later.
-        info.unlisten = () => {
+        info.unlisten = (/**
+         * @return {?}
+         */
+        () => {
             nativeElement.removeEventListener('focus', focusListener, true);
             nativeElement.removeEventListener('blur', blurListener, true);
-        };
+        });
         return info.subject.asObservable();
     }
     /**
@@ -1921,7 +2048,12 @@ class FocusMonitor {
      * @return {?}
      */
     ngOnDestroy() {
-        this._elementInfo.forEach((_info, element) => this.stopMonitoring(element));
+        this._elementInfo.forEach((/**
+         * @param {?} _info
+         * @param {?} element
+         * @return {?}
+         */
+        (_info, element) => this.stopMonitoring(element)));
     }
     /**
      * @private
@@ -1963,13 +2095,19 @@ class FocusMonitor {
      * @return {?}
      */
     _setOriginForCurrentEventQueue(origin) {
-        this._ngZone.runOutsideAngular(() => {
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
             this._origin = origin;
             // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
             // tick after the interaction event fired. To ensure the focus origin is always correct,
             // the focus origin will be determined at the beginning of the next tick.
-            this._originTimeoutId = setTimeout(() => this._origin = null, 1);
-        });
+            this._originTimeoutId = setTimeout((/**
+             * @return {?}
+             */
+            () => this._origin = null), 1);
+        }));
     }
     /**
      * Checks whether the given focus event was caused by a touchstart event.
@@ -2071,7 +2209,10 @@ class FocusMonitor {
      * @return {?}
      */
     _emitOrigin(subject, origin) {
-        this._ngZone.run(() => subject.next(origin));
+        this._ngZone.run((/**
+         * @return {?}
+         */
+        () => subject.next(origin)));
     }
     /**
      * @private
@@ -2082,12 +2223,15 @@ class FocusMonitor {
         if (++this._monitoredElementCount == 1 && this._platform.isBrowser) {
             // Note: we listen to events in the capture phase so we
             // can detect them even if the user stops propagation.
-            this._ngZone.runOutsideAngular(() => {
+            this._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            () => {
                 document.addEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
                 document.addEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
                 document.addEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
                 window.addEventListener('focus', this._windowFocusListener);
-            });
+            }));
         }
     }
     /**
@@ -2116,7 +2260,7 @@ FocusMonitor.ctorParameters = () => [
     { type: NgZone },
     { type: Platform }
 ];
-/** @nocollapse */ FocusMonitor.ngInjectableDef = defineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(inject(NgZone), inject(Platform)); }, token: FocusMonitor, providedIn: "root" });
+/** @nocollapse */ FocusMonitor.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.
@@ -2136,7 +2280,11 @@ class CdkMonitorFocus {
         this._focusMonitor = _focusMonitor;
         this.cdkFocusChange = new EventEmitter();
         this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
-            .subscribe(origin => this.cdkFocusChange.emit(origin));
+            .subscribe((/**
+         * @param {?} origin
+         * @return {?}
+         */
+        origin => this.cdkFocusChange.emit(origin)));
     }
     /**
      * @return {?}
@@ -2182,7 +2330,7 @@ const FOCUS_MONITOR_PROVIDER = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -2200,7 +2348,7 @@ function isFakeMousedownFromScreenReader(event) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class A11yModule {
 }
@@ -2214,12 +2362,12 @@ A11yModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 export { ARIA_DESCRIBER_PROVIDER_FACTORY, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_PROVIDER_FACTORY, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, FOCUS_MONITOR_PROVIDER_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };

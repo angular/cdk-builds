@@ -13,7 +13,7 @@
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepLabel = /** @class */ (function () {
     function CdkStepLabel(/** @docs-private */ template) {
@@ -33,7 +33,7 @@ var CdkStepLabel = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepHeader = /** @class */ (function () {
     function CdkStepHeader(_elementRef) {
@@ -68,7 +68,7 @@ var CdkStepHeader = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Used to generate unique ID for each stepper component.
@@ -272,7 +272,10 @@ var CdkStep = /** @class */ (function () {
     ];
     /** @nocollapse */
     CdkStep.ctorParameters = function () { return [
-        { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef(function () { return CdkStepper; }),] }] },
+        { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef((/**
+                         * @return {?}
+                         */
+                        function () { return CdkStepper; })),] }] },
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
     ]; };
     CdkStep.propDecorators = {
@@ -405,13 +408,20 @@ var CdkStepper = /** @class */ (function () {
             .withVerticalOrientation(this._orientation === 'vertical');
         (this._dir ? (/** @type {?} */ (this._dir.change)) : rxjs.of())
             .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
-            .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
+            .subscribe((/**
+         * @param {?} direction
+         * @return {?}
+         */
+        function (direction) { return _this._keyManager.withHorizontalOrientation(direction); }));
         this._keyManager.updateActiveItemIndex(this._selectedIndex);
-        this.steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
+        this.steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe((/**
+         * @return {?}
+         */
+        function () {
             if (!_this.selected) {
                 _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
             }
-        });
+        }));
     };
     /**
      * @return {?}
@@ -458,7 +468,11 @@ var CdkStepper = /** @class */ (function () {
      */
     function () {
         this._updateSelectedItemIndex(0);
-        this.steps.forEach(function (step) { return step.reset(); });
+        this.steps.forEach((/**
+         * @param {?} step
+         * @return {?}
+         */
+        function (step) { return step.reset(); }));
         this._stateChanged();
     };
     /** Returns a unique id for each step label element. */
@@ -701,7 +715,11 @@ var CdkStepper = /** @class */ (function () {
         var steps = this.steps.toArray();
         steps[this._selectedIndex].interacted = true;
         if (this._linear && index >= 0) {
-            return steps.slice(0, index).some(function (step) {
+            return steps.slice(0, index).some((/**
+             * @param {?} step
+             * @return {?}
+             */
+            function (step) {
                 /** @type {?} */
                 var control = step.stepControl;
                 /** @type {?} */
@@ -709,7 +727,7 @@ var CdkStepper = /** @class */ (function () {
                     (control.invalid || control.pending || !step.interacted) :
                     !step.completed;
                 return isIncomplete && !step.optional;
-            });
+            }));
         }
         return false;
     };
@@ -771,7 +789,7 @@ var CdkStepper = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Button that moves to the next step in a stepper workflow.
@@ -884,7 +902,7 @@ var CdkStepperPrevious = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CdkStepperModule = /** @class */ (function () {
     function CdkStepperModule() {

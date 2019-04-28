@@ -42,7 +42,7 @@ function __extends(d, b) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Mixin to provide a directive with a function that checks if the sticky input has been
@@ -122,7 +122,7 @@ function mixinHasStickyInput(base) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Cell definition for a CDK table.
@@ -360,7 +360,7 @@ var CdkCell = /** @class */ (function (_super) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
@@ -689,7 +689,7 @@ var CdkRow = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -790,7 +790,15 @@ StickyStyler = /** @class */ (function () {
      */
     function (rows, stickyStartStates, stickyEndStates) {
         /** @type {?} */
-        var hasStickyColumns = stickyStartStates.some(function (state) { return state; }) || stickyEndStates.some(function (state) { return state; });
+        var hasStickyColumns = stickyStartStates.some((/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) { return state; })) || stickyEndStates.some((/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) { return state; }));
         if (!rows.length || !hasStickyColumns || !this._isBrowser) {
             return;
         }
@@ -921,7 +929,11 @@ StickyStyler = /** @class */ (function () {
         }
         /** @type {?} */
         var tfoot = (/** @type {?} */ (tableElement.querySelector('tfoot')));
-        if (stickyStates.some(function (state) { return !state; })) {
+        if (stickyStates.some((/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) { return !state; }))) {
             this._removeStickyStyle(tfoot, ['bottom']);
         }
         else {
@@ -958,7 +970,11 @@ StickyStyler = /** @class */ (function () {
         // If the element no longer has any more sticky directions, remove sticky positioning and
         // the sticky CSS class.
         /** @type {?} */
-        var hasDirection = STICKY_DIRECTIONS.some(function (dir) { return !!element.style[dir]; });
+        var hasDirection = STICKY_DIRECTIONS.some((/**
+         * @param {?} dir
+         * @return {?}
+         */
+        function (dir) { return !!element.style[dir]; }));
         if (!hasDirection) {
             element.style.position = '';
             element.classList.remove(this.stickCellCss);
@@ -1144,7 +1160,7 @@ StickyStyler = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
@@ -1211,7 +1227,7 @@ function getTableTextColumnMissingParentTableError() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
@@ -1525,9 +1541,14 @@ var CdkTable = /** @class */ (function () {
         // Set up the trackBy function so that it uses the `RenderRow` as its identity by default. If
         // the user has provided a custom trackBy, return the result of that function as evaluated
         // with the values of the `RenderRow`'s data and index.
-        this._dataDiffer = this._differs.find([]).create(function (_i, dataRow) {
+        this._dataDiffer = this._differs.find([]).create((/**
+         * @param {?} _i
+         * @param {?} dataRow
+         * @return {?}
+         */
+        function (_i, dataRow) {
             return _this.trackBy ? _this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
-        });
+        }));
     };
     /**
      * @return {?}
@@ -1621,7 +1642,13 @@ var CdkTable = /** @class */ (function () {
         }
         /** @type {?} */
         var viewContainer = this._rowOutlet.viewContainer;
-        changes.forEachOperation(function (record, prevIndex, currentIndex) {
+        changes.forEachOperation((/**
+         * @param {?} record
+         * @param {?} prevIndex
+         * @param {?} currentIndex
+         * @return {?}
+         */
+        function (record, prevIndex, currentIndex) {
             if (record.previousIndex == null) {
                 _this._insertRow(record.item, (/** @type {?} */ (currentIndex)));
             }
@@ -1633,16 +1660,20 @@ var CdkTable = /** @class */ (function () {
                 var view = (/** @type {?} */ (viewContainer.get((/** @type {?} */ (prevIndex)))));
                 viewContainer.move((/** @type {?} */ (view)), currentIndex);
             }
-        });
+        }));
         // Update the meta context of a row's context data (index, count, first, last, ...)
         this._updateRowIndexContext();
         // Update rows that did not get added/removed/moved but may have had their identity changed,
         // e.g. if trackBy matched data on some property but the actual data reference changed.
-        changes.forEachIdentityChange(function (record) {
+        changes.forEachIdentityChange((/**
+         * @param {?} record
+         * @return {?}
+         */
+        function (record) {
             /** @type {?} */
             var rowView = (/** @type {?} */ (viewContainer.get((/** @type {?} */ (record.currentIndex)))));
             rowView.context.$implicit = record.item.data;
-        });
+        }));
         this.updateStickyColumnStyles();
     };
     /**
@@ -1862,11 +1893,19 @@ var CdkTable = /** @class */ (function () {
             thead.style.display = headerRows.length ? '' : 'none';
         }
         /** @type {?} */
-        var stickyStates = this._headerRowDefs.map(function (def) { return def.sticky; });
+        var stickyStates = this._headerRowDefs.map((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.sticky; }));
         this._stickyStyler.clearStickyPositioning(headerRows, ['top']);
         this._stickyStyler.stickRows(headerRows, stickyStates, 'top');
         // Reset the dirty state of the sticky input change since it has been used.
-        this._headerRowDefs.forEach(function (def) { return def.resetStickyChanged(); });
+        this._headerRowDefs.forEach((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.resetStickyChanged(); }));
     };
     /**
      * Updates the footer sticky styles. First resets all applied styles with respect to the cells
@@ -1905,12 +1944,20 @@ var CdkTable = /** @class */ (function () {
             tfoot.style.display = footerRows.length ? '' : 'none';
         }
         /** @type {?} */
-        var stickyStates = this._footerRowDefs.map(function (def) { return def.sticky; });
+        var stickyStates = this._footerRowDefs.map((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.sticky; }));
         this._stickyStyler.clearStickyPositioning(footerRows, ['bottom']);
         this._stickyStyler.stickRows(footerRows, stickyStates, 'bottom');
         this._stickyStyler.updateStickyFooterContainer(this._elementRef.nativeElement, stickyStates);
         // Reset the dirty state of the sticky input change since it has been used.
-        this._footerRowDefs.forEach(function (def) { return def.resetStickyChanged(); });
+        this._footerRowDefs.forEach((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.resetStickyChanged(); }));
     };
     /**
      * Updates the column sticky styles. First resets all applied styles with respect to the cells
@@ -1947,11 +1994,20 @@ var CdkTable = /** @class */ (function () {
         // sticky columns span across all table sections (header, data, footer)
         this._stickyStyler.clearStickyPositioning(headerRows.concat(dataRows, footerRows), ['left', 'right']);
         // Update the sticky styles for each header row depending on the def's sticky state
-        headerRows.forEach(function (headerRow, i) {
+        headerRows.forEach((/**
+         * @param {?} headerRow
+         * @param {?} i
+         * @return {?}
+         */
+        function (headerRow, i) {
             _this._addStickyColumnStyles([headerRow], _this._headerRowDefs[i]);
-        });
+        }));
         // Update the sticky styles for each data row depending on its def's sticky state
-        this._rowDefs.forEach(function (rowDef) {
+        this._rowDefs.forEach((/**
+         * @param {?} rowDef
+         * @return {?}
+         */
+        function (rowDef) {
             // Collect all the rows rendered with this row definition.
             /** @type {?} */
             var rows = [];
@@ -1961,13 +2017,22 @@ var CdkTable = /** @class */ (function () {
                 }
             }
             _this._addStickyColumnStyles(rows, rowDef);
-        });
+        }));
         // Update the sticky styles for each footer row depending on the def's sticky state
-        footerRows.forEach(function (footerRow, i) {
+        footerRows.forEach((/**
+         * @param {?} footerRow
+         * @param {?} i
+         * @return {?}
+         */
+        function (footerRow, i) {
             _this._addStickyColumnStyles([footerRow], _this._footerRowDefs[i]);
-        });
+        }));
         // Reset the dirty state of the sticky input change since it has been used.
-        Array.from(this._columnDefsByName.values()).forEach(function (def) { return def.resetStickyChanged(); });
+        Array.from(this._columnDefsByName.values()).forEach((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return def.resetStickyChanged(); }));
     };
     /**
      * Get the list of RenderRow objects to render according to the current list of data and defined
@@ -2050,7 +2115,11 @@ var CdkTable = /** @class */ (function () {
     function (data, dataIndex, cache) {
         /** @type {?} */
         var rowDefs = this._getRowDefs(data, dataIndex);
-        return rowDefs.map(function (rowDef) {
+        return rowDefs.map((/**
+         * @param {?} rowDef
+         * @return {?}
+         */
+        function (rowDef) {
             /** @type {?} */
             var cachedRenderRows = (cache && cache.has(rowDef)) ? (/** @type {?} */ (cache.get(rowDef))) : [];
             if (cachedRenderRows.length) {
@@ -2062,7 +2131,7 @@ var CdkTable = /** @class */ (function () {
             else {
                 return { data: data, rowDef: rowDef, dataIndex: dataIndex };
             }
-        });
+        }));
     };
     /** Update the map containing the content's column definitions. */
     /**
@@ -2080,12 +2149,16 @@ var CdkTable = /** @class */ (function () {
         this._columnDefsByName.clear();
         /** @type {?} */
         var columnDefs = mergeQueryListAndSet(this._contentColumnDefs, this._customColumnDefs);
-        columnDefs.forEach(function (columnDef) {
+        columnDefs.forEach((/**
+         * @param {?} columnDef
+         * @return {?}
+         */
+        function (columnDef) {
             if (_this._columnDefsByName.has(columnDef.name)) {
                 throw getTableDuplicateColumnNameError(columnDef.name);
             }
             _this._columnDefsByName.set(columnDef.name, columnDef);
-        });
+        }));
     };
     /** Update the list of all available row definitions that can be used. */
     /**
@@ -2106,7 +2179,11 @@ var CdkTable = /** @class */ (function () {
         this._rowDefs = mergeQueryListAndSet(this._contentRowDefs, this._customRowDefs);
         // After all row definitions are determined, find the row definition to be considered default.
         /** @type {?} */
-        var defaultRowDefs = this._rowDefs.filter(function (def) { return !def.when; });
+        var defaultRowDefs = this._rowDefs.filter((/**
+         * @param {?} def
+         * @return {?}
+         */
+        function (def) { return !def.when; }));
         if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
             throw getTableMultipleDefaultRowDefsError();
         }
@@ -2133,7 +2210,12 @@ var CdkTable = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var columnsDiffReducer = function (acc, def) { return acc || !!def.getColumnsDiff(); };
+        var columnsDiffReducer = (/**
+         * @param {?} acc
+         * @param {?} def
+         * @return {?}
+         */
+        function (acc, def) { return acc || !!def.getColumnsDiff(); });
         // Force re-render data rows if the list of column definitions have changed.
         if (this._rowDefs.reduce(columnsDiffReducer, false)) {
             this._forceRenderDataRows();
@@ -2216,10 +2298,14 @@ var CdkTable = /** @class */ (function () {
         if (dataStream === undefined) {
             throw getTableUnknownDataSourceError();
         }
-        this._renderChangeSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy)).subscribe(function (data) {
+        this._renderChangeSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy)).subscribe((/**
+         * @param {?} data
+         * @return {?}
+         */
+        function (data) {
             _this._data = data || [];
             _this.renderRows();
-        });
+        }));
     };
     /**
      * Clears any existing content in the header row outlet and creates a new embedded view
@@ -2243,7 +2329,12 @@ var CdkTable = /** @class */ (function () {
         if (this._headerRowOutlet.viewContainer.length > 0) {
             this._headerRowOutlet.viewContainer.clear();
         }
-        this._headerRowDefs.forEach(function (def, i) { return _this._renderRow(_this._headerRowOutlet, def, i); });
+        this._headerRowDefs.forEach((/**
+         * @param {?} def
+         * @param {?} i
+         * @return {?}
+         */
+        function (def, i) { return _this._renderRow(_this._headerRowOutlet, def, i); }));
         this.updateStickyHeaderRowStyles();
         this.updateStickyColumnStyles();
     };
@@ -2269,7 +2360,12 @@ var CdkTable = /** @class */ (function () {
         if (this._footerRowOutlet.viewContainer.length > 0) {
             this._footerRowOutlet.viewContainer.clear();
         }
-        this._footerRowDefs.forEach(function (def, i) { return _this._renderRow(_this._footerRowOutlet, def, i); });
+        this._footerRowDefs.forEach((/**
+         * @param {?} def
+         * @param {?} i
+         * @return {?}
+         */
+        function (def, i) { return _this._renderRow(_this._footerRowOutlet, def, i); }));
         this.updateStickyFooterRowStyles();
         this.updateStickyColumnStyles();
     };
@@ -2291,18 +2387,30 @@ var CdkTable = /** @class */ (function () {
     function (rows, rowDef) {
         var _this = this;
         /** @type {?} */
-        var columnDefs = Array.from(rowDef.columns || []).map(function (columnName) {
+        var columnDefs = Array.from(rowDef.columns || []).map((/**
+         * @param {?} columnName
+         * @return {?}
+         */
+        function (columnName) {
             /** @type {?} */
             var columnDef = _this._columnDefsByName.get(columnName);
             if (!columnDef) {
                 throw getTableUnknownColumnError(columnName);
             }
             return (/** @type {?} */ (columnDef));
-        });
+        }));
         /** @type {?} */
-        var stickyStartStates = columnDefs.map(function (columnDef) { return columnDef.sticky; });
+        var stickyStartStates = columnDefs.map((/**
+         * @param {?} columnDef
+         * @return {?}
+         */
+        function (columnDef) { return columnDef.sticky; }));
         /** @type {?} */
-        var stickyEndStates = columnDefs.map(function (columnDef) { return columnDef.stickyEnd; });
+        var stickyEndStates = columnDefs.map((/**
+         * @param {?} columnDef
+         * @return {?}
+         */
+        function (columnDef) { return columnDef.stickyEnd; }));
         this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates);
     };
     /** Gets the list of rows that have been rendered in the row outlet. */
@@ -2357,11 +2465,19 @@ var CdkTable = /** @class */ (function () {
         /** @type {?} */
         var rowDefs = [];
         if (this.multiTemplateDataRows) {
-            rowDefs = this._rowDefs.filter(function (def) { return !def.when || def.when(dataIndex, data); });
+            rowDefs = this._rowDefs.filter((/**
+             * @param {?} def
+             * @return {?}
+             */
+            function (def) { return !def.when || def.when(dataIndex, data); }));
         }
         else {
             /** @type {?} */
-            var rowDef = this._rowDefs.find(function (def) { return def.when && def.when(dataIndex, data); }) || this._defaultRowDef;
+            var rowDef = this._rowDefs.find((/**
+             * @param {?} def
+             * @return {?}
+             */
+            function (def) { return def.when && def.when(dataIndex, data); })) || this._defaultRowDef;
             if (rowDef) {
                 rowDefs.push(rowDef);
             }
@@ -2493,14 +2609,18 @@ var CdkTable = /** @class */ (function () {
         if (!rowDef || !rowDef.columns) {
             return [];
         }
-        return Array.from(rowDef.columns, function (columnId) {
+        return Array.from(rowDef.columns, (/**
+         * @param {?} columnId
+         * @return {?}
+         */
+        function (columnId) {
             /** @type {?} */
             var column = _this._columnDefsByName.get(columnId);
             if (!column) {
                 throw getTableUnknownColumnError(columnId);
             }
             return rowDef.extractCellTemplate(column);
-        });
+        }));
     };
     /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
     /**
@@ -2579,9 +2699,14 @@ var CdkTable = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
-        var stickyCheckReducer = function (acc, d) {
+        var stickyCheckReducer = (/**
+         * @param {?} acc
+         * @param {?} d
+         * @return {?}
+         */
+        function (acc, d) {
             return acc || d.hasStickyChanged();
-        };
+        });
         // Note that the check needs to occur for every definition since it notifies the definition
         // that it can reset its dirty state. Using another operator like `some` may short-circuit
         // remaining definitions and leave them in an unchecked state.
@@ -2621,10 +2746,14 @@ var CdkTable = /** @class */ (function () {
         this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._platform.isBrowser);
         (this._dir ? this._dir.change : rxjs.of())
             .pipe(operators.takeUntil(this._onDestroy))
-            .subscribe(function (value) {
+            .subscribe((/**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
             _this._stickyStyler.direction = value;
             _this.updateStickyColumnStyles();
-        });
+        }));
     };
     CdkTable.decorators = [
         { type: core.Component, args: [{selector: 'cdk-table, table[cdk-table]',
@@ -2678,7 +2807,7 @@ function mergeQueryListAndSet(queryList, set) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Injection token that can be used to specify the text column options.
@@ -2737,7 +2866,12 @@ var CdkTextColumn = /** @class */ (function () {
         }
         if (!this.dataAccessor) {
             this.dataAccessor =
-                this.options.defaultDataAccessor || (function (data, name) { return ((/** @type {?} */ (data)))[name]; });
+                this.options.defaultDataAccessor || ((/**
+                 * @param {?} data
+                 * @param {?} name
+                 * @return {?}
+                 */
+                function (data, name) { return ((/** @type {?} */ (data)))[name]; }));
         }
         if (this.table) {
             // Provide the cell and headerCell directly to the table with the static `ViewChild` query,
@@ -2814,7 +2948,7 @@ var CdkTextColumn = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var EXPORTED_DECLARATIONS = [
