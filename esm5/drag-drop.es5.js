@@ -1019,8 +1019,7 @@ DragRef = /** @class */ (function () {
         var x = _a.x, y = _a.y;
         // Drop container that draggable has been moved into.
         /** @type {?} */
-        var newContainer = (/** @type {?} */ (this._dropContainer))._getSiblingContainerFromPosition(this, x, y) ||
-            this._initialContainer._getSiblingContainerFromPosition(this, x, y);
+        var newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left it's
         // initial container, check whether the it's over the initial container. This handles the
         // case where two containers are connected one way and the user tries to undo dragging an
