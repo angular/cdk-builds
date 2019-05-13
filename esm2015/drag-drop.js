@@ -1409,7 +1409,9 @@ class DropListRef {
     start() {
         this.beforeStarted.next();
         this._isDragging = true;
-        this._cacheItems();
+        this._activeDraggables = this._draggables.slice();
+        this._cacheOwnPosition();
+        this._cacheItemPositions();
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}
@@ -1515,9 +1517,6 @@ class DropListRef {
          * @return {?}
          */
         item => item._withDropContainer((/** @type {?} */ (this)))));
-        if ((/** @type {?} */ (this)).isDragging()) {
-            (/** @type {?} */ (this))._cacheItems();
-        }
         return (/** @type {?} */ (this));
     }
     /**
@@ -1863,16 +1862,6 @@ class DropListRef {
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         }));
-    }
-    /**
-     * Caches the current items in the list and their positions.
-     * @private
-     * @return {?}
-     */
-    _cacheItems() {
-        this._activeDraggables = this._draggables.slice();
-        this._cacheItemPositions();
-        this._cacheOwnPosition();
     }
     /**
      * Checks whether the user's pointer is positioned over the container.
