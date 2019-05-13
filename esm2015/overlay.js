@@ -1452,32 +1452,13 @@ class FlexibleConnectedPositionStrategy {
          */
         this._offsetY = 0;
         /**
-         * Amount of subscribers to the `positionChanges` stream.
-         */
-        this._positionChangeSubscriptions = 0;
-        /**
          * Keeps track of the CSS classes that the position strategy has applied on the overlay panel.
          */
         this._appliedPanelClasses = [];
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = new Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        (observer) => {
-            /** @type {?} */
-            const subscription = this._positionChanges.subscribe(observer);
-            this._positionChangeSubscriptions++;
-            return (/**
-             * @return {?}
-             */
-            () => {
-                subscription.unsubscribe();
-                this._positionChangeSubscriptions--;
-            });
-        }));
+        this.positionChanges = this._positionChanges.asObservable();
         this.setOrigin(connectedTo);
     }
     /**
@@ -2053,7 +2034,7 @@ class FlexibleConnectedPositionStrategy {
         // Notify that the position has been changed along with its change properties.
         // We only emit if we've got any subscriptions, because the scroll visibility
         // calculcations can be somewhat expensive.
-        if (this._positionChangeSubscriptions > 0) {
+        if (this._positionChanges.observers.length) {
             /** @type {?} */
             const scrollableViewProperties = this._getScrollVisibility();
             /** @type {?} */

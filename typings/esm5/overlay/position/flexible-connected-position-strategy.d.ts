@@ -78,8 +78,6 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _offsetY;
     /** Selector to be used when finding the elements on which to set the transform origin. */
     private _transformOriginSelector;
-    /** Amount of subscribers to the `positionChanges` stream. */
-    private _positionChangeSubscriptions;
     /** Keeps track of the CSS classes that the position strategy has applied on the overlay panel. */
     private _appliedPanelClasses;
     /** Amount by which the overlay was pushed in each axis during the last time it was positioned. */

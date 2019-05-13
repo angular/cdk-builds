@@ -1760,7 +1760,6 @@ var   /**
  */
 FlexibleConnectedPositionStrategy = /** @class */ (function () {
     function FlexibleConnectedPositionStrategy(connectedTo, _viewportRuler, _document, _platform, _overlayContainer) {
-        var _this = this;
         this._viewportRuler = _viewportRuler;
         this._document = _document;
         this._platform = _platform;
@@ -1818,32 +1817,13 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
          */
         this._offsetY = 0;
         /**
-         * Amount of subscribers to the `positionChanges` stream.
-         */
-        this._positionChangeSubscriptions = 0;
-        /**
          * Keeps track of the CSS classes that the position strategy has applied on the overlay panel.
          */
         this._appliedPanelClasses = [];
         /**
          * Observable sequence of position changes.
          */
-        this.positionChanges = new rxjs.Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        function (observer) {
-            /** @type {?} */
-            var subscription = _this._positionChanges.subscribe(observer);
-            _this._positionChangeSubscriptions++;
-            return (/**
-             * @return {?}
-             */
-            function () {
-                subscription.unsubscribe();
-                _this._positionChangeSubscriptions--;
-            });
-        }));
+        this.positionChanges = this._positionChanges.asObservable();
         this.setOrigin(connectedTo);
     }
     Object.defineProperty(FlexibleConnectedPositionStrategy.prototype, "positions", {
@@ -2700,7 +2680,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // Notify that the position has been changed along with its change properties.
         // We only emit if we've got any subscriptions, because the scroll visibility
         // calculcations can be somewhat expensive.
-        if (this._positionChangeSubscriptions > 0) {
+        if (this._positionChanges.observers.length) {
             /** @type {?} */
             var scrollableViewProperties = this._getScrollVisibility();
             /** @type {?} */
