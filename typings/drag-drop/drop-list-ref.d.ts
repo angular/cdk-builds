@@ -51,6 +51,7 @@ export declare class DropListRef<T = any> {
     entered: Subject<{
         item: DragRef;
         container: DropListRef<any>;
+        currentIndex: number;
     }>;
     /**
      * Emits when the user removes an item from the container
@@ -206,6 +207,8 @@ export declare class DropListRef<T = any> {
      * @param delta Direction in which the user is moving their pointer.
      */
     private _getItemIndexFromPointerPosition;
+    /** Caches the current items in the list and their positions. */
+    private _cacheItems;
     /**
      * Checks whether the user's pointer is positioned over the container.
      * @param x Pointer position along the X axis.

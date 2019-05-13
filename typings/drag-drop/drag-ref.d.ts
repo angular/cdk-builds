@@ -167,6 +167,7 @@ export declare class DragRef<T = any> {
     entered: Subject<{
         container: DropListRef;
         item: DragRef<any>;
+        currentIndex: number;
     }>;
     /** Emits when the user removes the item its container by dragging it into another container. */
     exited: Subject<{

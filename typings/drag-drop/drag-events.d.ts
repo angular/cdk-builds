@@ -28,6 +28,8 @@ export interface CdkDragEnter<T = any, I = T> {
     container: CdkDropList<T>;
     /** Item that was removed from the container. */
     item: CdkDrag<I>;
+    /** Index at which the item has entered the container. */
+    currentIndex: number;
 }
 /**
  * Event emitted when the user removes an item from a

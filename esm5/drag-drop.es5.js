@@ -1038,9 +1038,13 @@ DragRef = /** @class */ (function () {
                 _this.exited.next({ item: _this, container: (/** @type {?} */ (_this._dropContainer)) });
                 (/** @type {?} */ (_this._dropContainer)).exit(_this);
                 // Notify the new container that the item has entered.
-                _this.entered.next({ item: _this, container: (/** @type {?} */ (newContainer)) });
                 _this._dropContainer = (/** @type {?} */ (newContainer));
                 _this._dropContainer.enter(_this, x, y);
+                _this.entered.next({
+                    item: _this,
+                    container: (/** @type {?} */ (newContainer)),
+                    currentIndex: (/** @type {?} */ (newContainer)).getItemIndex(_this)
+                });
             }));
         }
         (/** @type {?} */ (this._dropContainer))._sortItem(this, x, y, this._pointerDirectionDelta);
@@ -1706,9 +1710,7 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         this.beforeStarted.next();
         this._isDragging = true;
-        this._activeDraggables = this._draggables.slice();
-        this._cacheOwnPosition();
-        this._cacheItemPositions();
+        this._cacheItems();
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}
@@ -1736,7 +1738,6 @@ DropListRef = /** @class */ (function () {
      * @return {?}
      */
     function (item, pointerX, pointerY) {
-        this.entered.next({ item: item, container: this });
         this.start();
         // If sorting is disabled, we want the item to return to its starting
         // position if the user is returning it to its initial container.
@@ -1783,6 +1784,7 @@ DropListRef = /** @class */ (function () {
         // Note that the positions were already cached when we called `start` above,
         // but we need to refresh them since the amount of items has changed.
         this._cacheItemPositions();
+        this.entered.next({ item: item, container: this, currentIndex: this.getItemIndex(item) });
     };
     /**
      * Removes an item from the container after it was dragged into another container by the user.
@@ -1865,6 +1867,9 @@ DropListRef = /** @class */ (function () {
          * @return {?}
          */
         function (item) { return item._withDropContainer((/** @type {?} */ (_this))); }));
+        if ((/** @type {?} */ (this)).isDragging()) {
+            (/** @type {?} */ (this))._cacheItems();
+        }
         return (/** @type {?} */ (this));
     };
     /** Sets the layout direction of the drop list. */
@@ -2353,6 +2358,22 @@ DropListRef = /** @class */ (function () {
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         }));
+    };
+    /** Caches the current items in the list and their positions. */
+    /**
+     * Caches the current items in the list and their positions.
+     * @private
+     * @return {?}
+     */
+    DropListRef.prototype._cacheItems = /**
+     * Caches the current items in the list and their positions.
+     * @private
+     * @return {?}
+     */
+    function () {
+        this._activeDraggables = this._draggables.slice();
+        this._cacheItemPositions();
+        this._cacheOwnPosition();
     };
     /**
      * Checks whether the user's pointer is positioned over the container.
@@ -3504,7 +3525,8 @@ var CdkDrag = /** @class */ (function () {
         function (event) {
             _this.entered.emit({
                 container: event.container.data,
-                item: _this
+                item: _this,
+                currentIndex: event.currentIndex
             });
         }));
         ref.exited.subscribe((/**
@@ -4087,7 +4109,8 @@ var CdkDropList = /** @class */ (function () {
         function (event) {
             _this.entered.emit({
                 container: _this,
-                item: event.item.data
+                item: event.item.data,
+                currentIndex: event.currentIndex
             });
         }));
         ref.exited.subscribe((/**

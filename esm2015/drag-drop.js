@@ -842,9 +842,13 @@ class DragRef {
                 this.exited.next({ item: this, container: (/** @type {?} */ (this._dropContainer)) });
                 (/** @type {?} */ (this._dropContainer)).exit(this);
                 // Notify the new container that the item has entered.
-                this.entered.next({ item: this, container: (/** @type {?} */ (newContainer)) });
                 this._dropContainer = (/** @type {?} */ (newContainer));
                 this._dropContainer.enter(this, x, y);
+                this.entered.next({
+                    item: this,
+                    container: (/** @type {?} */ (newContainer)),
+                    currentIndex: (/** @type {?} */ (newContainer)).getItemIndex(this)
+                });
             }));
         }
         (/** @type {?} */ (this._dropContainer))._sortItem(this, x, y, this._pointerDirectionDelta);
@@ -1409,9 +1413,7 @@ class DropListRef {
     start() {
         this.beforeStarted.next();
         this._isDragging = true;
-        this._activeDraggables = this._draggables.slice();
-        this._cacheOwnPosition();
-        this._cacheItemPositions();
+        this._cacheItems();
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}
@@ -1426,7 +1428,6 @@ class DropListRef {
      * @return {?}
      */
     enter(item, pointerX, pointerY) {
-        this.entered.next({ item, container: this });
         this.start();
         // If sorting is disabled, we want the item to return to its starting
         // position if the user is returning it to its initial container.
@@ -1473,6 +1474,7 @@ class DropListRef {
         // Note that the positions were already cached when we called `start` above,
         // but we need to refresh them since the amount of items has changed.
         this._cacheItemPositions();
+        this.entered.next({ item, container: this, currentIndex: this.getItemIndex(item) });
     }
     /**
      * Removes an item from the container after it was dragged into another container by the user.
@@ -1517,6 +1519,9 @@ class DropListRef {
          * @return {?}
          */
         item => item._withDropContainer((/** @type {?} */ (this)))));
+        if ((/** @type {?} */ (this)).isDragging()) {
+            (/** @type {?} */ (this))._cacheItems();
+        }
         return (/** @type {?} */ (this));
     }
     /**
@@ -1862,6 +1867,16 @@ class DropListRef {
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         }));
+    }
+    /**
+     * Caches the current items in the list and their positions.
+     * @private
+     * @return {?}
+     */
+    _cacheItems() {
+        this._activeDraggables = this._draggables.slice();
+        this._cacheItemPositions();
+        this._cacheOwnPosition();
     }
     /**
      * Checks whether the user's pointer is positioned over the container.
@@ -2806,7 +2821,8 @@ class CdkDrag {
         event => {
             this.entered.emit({
                 container: event.container.data,
-                item: this
+                item: this,
+                currentIndex: event.currentIndex
             });
         }));
         ref.exited.subscribe((/**
@@ -3258,7 +3274,8 @@ class CdkDropList {
         event => {
             this.entered.emit({
                 container: this,
-                item: event.item.data
+                item: event.item.data,
+                currentIndex: event.currentIndex
             });
         }));
         ref.exited.subscribe((/**
