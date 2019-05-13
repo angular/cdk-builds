@@ -52,7 +52,7 @@ export declare class ComponentPortal<T> extends Portal<ComponentRef<T>> {
 /**
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
  */
-export declare class TemplatePortal<C = any> extends Portal<C> {
+export declare class TemplatePortal<C = any> extends Portal<EmbeddedViewRef<C>> {
     /** The embedded template that will be used to instantiate an embedded View in the host. */
     templateRef: TemplateRef<C>;
     /** Reference to the ViewContainer into which the template will be stamped out. */
@@ -66,7 +66,7 @@ export declare class TemplatePortal<C = any> extends Portal<C> {
      * When a context is provided it will override the `context` property of the `TemplatePortal`
      * instance.
      */
-    attach(host: PortalOutlet, context?: C | undefined): C;
+    attach(host: PortalOutlet, context?: C | undefined): EmbeddedViewRef<C>;
     detach(): void;
 }
 /** A `PortalOutlet` is an space that can contain a single `Portal`. */
