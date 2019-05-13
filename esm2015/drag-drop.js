@@ -175,11 +175,6 @@ class DragRef {
          */
         this._moveEvents = new Subject();
         /**
-         * Amount of subscriptions to the move event. Used to avoid
-         * hitting the zone if the consumer didn't subscribe to it.
-         */
-        this._moveEventSubscriptions = 0;
-        /**
          * Subscription to pointer movement events.
          */
         this._pointerMoveSubscription = Subscription.EMPTY;
@@ -245,22 +240,7 @@ class DragRef {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = new Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        (observer) => {
-            /** @type {?} */
-            const subscription = this._moveEvents.subscribe(observer);
-            this._moveEventSubscriptions++;
-            return (/**
-             * @return {?}
-             */
-            () => {
-                subscription.unsubscribe();
-                this._moveEventSubscriptions--;
-            });
-        }));
+        this.moved = this._moveEvents.asObservable();
         /**
          * Handler for the `mousedown`/`touchstart` events.
          */
@@ -354,7 +334,7 @@ class DragRef {
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
             // re-enter the zone because we run all of the events on the outside.
-            if (this._moveEventSubscriptions > 0) {
+            if (this._moveEvents.observers.length) {
                 this._ngZone.run((/**
                  * @return {?}
                  */

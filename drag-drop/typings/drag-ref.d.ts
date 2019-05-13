@@ -88,11 +88,6 @@ export declare class DragRef<T = any> {
     private _scrollPosition;
     /** Emits when the item is being moved. */
     private _moveEvents;
-    /**
-     * Amount of subscriptions to the move event. Used to avoid
-     * hitting the zone if the consumer didn't subscribe to it.
-     */
-    private _moveEventSubscriptions;
     /** Keeps track of the direction in which the user is dragging along each axis. */
     private _pointerDirectionDelta;
     /** Pointer position at which the last change in the delta occurred. */
