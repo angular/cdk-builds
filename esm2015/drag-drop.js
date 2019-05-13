@@ -343,6 +343,7 @@ class DragRef {
                         source: this,
                         pointerPosition: constrainedPointerPosition,
                         event,
+                        distance: this._getDragDistance(constrainedPointerPosition),
                         delta: this._pointerDirectionDelta
                     });
                 }));
@@ -381,7 +382,12 @@ class DragRef {
                 this._ngZone.run((/**
                  * @return {?}
                  */
-                () => this.ended.next({ source: this })));
+                () => {
+                    this.ended.next({
+                        source: this,
+                        distance: this._getDragDistance(this._getPointerPositionOnPage(event))
+                    });
+                }));
                 this._dragDropRegistry.stopDragging(this);
                 return;
             }
@@ -777,19 +783,23 @@ class DragRef {
             const container = (/** @type {?} */ (this._dropContainer));
             /** @type {?} */
             const currentIndex = container.getItemIndex(this);
-            const { x, y } = this._getPointerPositionOnPage(event);
             /** @type {?} */
-            const isPointerOverContainer = container._isOverContainer(x, y);
-            this.ended.next({ source: this });
+            const pointerPosition = this._getPointerPositionOnPage(event);
+            /** @type {?} */
+            const distance = this._getDragDistance(this._getPointerPositionOnPage(event));
+            /** @type {?} */
+            const isPointerOverContainer = container._isOverContainer(pointerPosition.x, pointerPosition.y);
+            this.ended.next({ source: this, distance });
             this.dropped.next({
                 item: this,
                 currentIndex,
                 previousIndex: this._initialContainer.getItemIndex(this),
                 container: container,
                 previousContainer: this._initialContainer,
-                isPointerOverContainer
+                isPointerOverContainer,
+                distance
             });
-            container.drop(this, currentIndex, this._initialContainer, isPointerOverContainer);
+            container.drop(this, currentIndex, this._initialContainer, isPointerOverContainer, distance);
             this._dropContainer = this._initialContainer;
         }));
     }
@@ -1111,6 +1121,20 @@ class DragRef {
         // the element will be translated towards.
         this._rootElement.style.transform = this._initialTransform ?
             transform + ' ' + this._initialTransform : transform;
+    }
+    /**
+     * Gets the distance that the user has dragged during the current drag sequence.
+     * @private
+     * @param {?} currentPosition Current position of the user's pointer.
+     * @return {?}
+     */
+    _getDragDistance(currentPosition) {
+        /** @type {?} */
+        const pickupPosition = this._pickupPositionOnPage;
+        if (pickupPosition) {
+            return { x: currentPosition.x - pickupPosition.x, y: currentPosition.y - pickupPosition.y };
+        }
+        return { x: 0, y: 0 };
     }
 }
 /**
@@ -1481,14 +1505,16 @@ class DropListRef {
     }
     /**
      * Drops an item into this container.
+     * \@breaking-change 9.0.0 `distance` parameter to become required.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     * @param {?=} distance Distance the user has dragged since the start of the dragging sequence.
      * @return {?}
      */
-    drop(item, currentIndex, previousContainer, isPointerOverContainer) {
+    drop(item, currentIndex, previousContainer, isPointerOverContainer, distance = { x: 0, y: 0 }) {
         this._reset();
         this.dropped.next({
             item,
@@ -1496,7 +1522,8 @@ class DropListRef {
             previousIndex: previousContainer.getItemIndex(item),
             container: this,
             previousContainer,
-            isPointerOverContainer
+            isPointerOverContainer,
+            distance
         });
     }
     /**
@@ -2562,7 +2589,8 @@ class CdkDrag {
                 source: this,
                 pointerPosition: movedEvent.pointerPosition,
                 event: movedEvent.event,
-                delta: movedEvent.delta
+                delta: movedEvent.delta,
+                distance: movedEvent.distance
             })))).subscribe(observer);
             return (/**
              * @return {?}
@@ -2831,10 +2859,11 @@ class CdkDrag {
             this.released.emit({ source: this });
         }));
         ref.ended.subscribe((/**
+         * @param {?} event
          * @return {?}
          */
-        () => {
-            this.ended.emit({ source: this });
+        event => {
+            this.ended.emit({ source: this, distance: event.distance });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             this._changeDetectorRef.markForCheck();
@@ -2871,7 +2900,8 @@ class CdkDrag {
                 previousContainer: event.previousContainer.data,
                 container: event.container.data,
                 isPointerOverContainer: event.isPointerOverContainer,
-                item: this
+                item: this,
+                distance: event.distance
             });
         }));
     }
@@ -3337,7 +3367,8 @@ class CdkDropList {
                 previousContainer: event.previousContainer.data,
                 container: event.container.data,
                 item: event.item.data,
-                isPointerOverContainer: event.isPointerOverContainer
+                isPointerOverContainer: event.isPointerOverContainer,
+                distance: event.distance
             });
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.

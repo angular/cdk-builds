@@ -9,7 +9,7 @@ import { ElementRef } from '@angular/core';
 import { DragDropRegistry } from './drag-drop-registry';
 import { Direction } from '@angular/cdk/bidi';
 import { Subject } from 'rxjs';
-import { DragRefInternal as DragRef } from './drag-ref';
+import { DragRefInternal as DragRef, Point } from './drag-ref';
 /**
  * Internal compile-time-only representation of a `DropListRef`.
  * Used to avoid circular import issues between the `DropListRef` and the `DragRef`.
@@ -69,6 +69,7 @@ export declare class DropListRef<T = any> {
         container: DropListRef<any>;
         previousContainer: DropListRef<any>;
         isPointerOverContainer: boolean;
+        distance: Point;
     }>;
     /** Emits as the user is swapping items while actively dragging. */
     sorted: Subject<{
@@ -132,8 +133,10 @@ export declare class DropListRef<T = any> {
      * @param previousContainer Container from which the item got dragged in.
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     * @param distance Distance the user has dragged since the start of the dragging sequence.
+     * @breaking-change 9.0.0 `distance` parameter to become required.
      */
-    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean): void;
+    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance?: Point): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.

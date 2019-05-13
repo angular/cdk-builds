@@ -157,6 +157,7 @@ export declare class DragRef<T = any> {
     /** Emits when the user stops dragging an item in the container. */
     ended: Subject<{
         source: DragRef<any>;
+        distance: Point;
     }>;
     /** Emits when the user has moved the item into a new container. */
     entered: Subject<{
@@ -176,6 +177,7 @@ export declare class DragRef<T = any> {
         item: DragRef<any>;
         container: DropListRef;
         previousContainer: DropListRef;
+        distance: Point;
         isPointerOverContainer: boolean;
     }>;
     /**
@@ -189,6 +191,7 @@ export declare class DragRef<T = any> {
             y: number;
         };
         event: MouseEvent | TouchEvent;
+        distance: Point;
         delta: {
             x: -1 | 0 | 1;
             y: -1 | 0 | 1;
@@ -324,6 +327,11 @@ export declare class DragRef<T = any> {
      * @param y New transform value along the Y axis.
      */
     private _applyRootElementTransform;
+    /**
+     * Gets the distance that the user has dragged during the current drag sequence.
+     * @param currentPosition Current position of the user's pointer.
+     */
+    private _getDragDistance;
 }
 /** Point on the page or within an element. */
 export interface Point {

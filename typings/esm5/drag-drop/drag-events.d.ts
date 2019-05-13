@@ -21,6 +21,11 @@ export interface CdkDragRelease<T = any> {
 export interface CdkDragEnd<T = any> {
     /** Draggable that emitted the event. */
     source: CdkDrag<T>;
+    /** Distance in pixels that the user has dragged since the drag sequence started. */
+    distance: {
+        x: number;
+        y: number;
+    };
 }
 /** Event emitted when the user moves an item into a new drop container. */
 export interface CdkDragEnter<T = any, I = T> {
@@ -55,6 +60,11 @@ export interface CdkDragDrop<T, O = T> {
     previousContainer: CdkDropList<O>;
     /** Whether the user's pointer was over the container when the item was dropped. */
     isPointerOverContainer: boolean;
+    /** Distance in pixels that the user has dragged since the drag sequence started. */
+    distance: {
+        x: number;
+        y: number;
+    };
 }
 /** Event emitted as the user is dragging a draggable item. */
 export interface CdkDragMove<T = any> {
@@ -67,6 +77,11 @@ export interface CdkDragMove<T = any> {
     };
     /** Native event that is causing the dragging. */
     event: MouseEvent | TouchEvent;
+    /** Distance in pixels that the user has dragged since the drag sequence started. */
+    distance: {
+        x: number;
+        y: number;
+    };
     /**
      * Indicates the direction in which the user is dragging the element along each axis.
      * `1` means that the position is increasing (e.g. the user is moving to the right or downwards),

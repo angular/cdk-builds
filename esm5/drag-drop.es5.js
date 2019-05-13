@@ -341,6 +341,7 @@ DragRef = /** @class */ (function () {
                         source: _this,
                         pointerPosition: constrainedPointerPosition,
                         event: event,
+                        distance: _this._getDragDistance(constrainedPointerPosition),
                         delta: _this._pointerDirectionDelta
                     });
                 }));
@@ -379,7 +380,12 @@ DragRef = /** @class */ (function () {
                 _this._ngZone.run((/**
                  * @return {?}
                  */
-                function () { return _this.ended.next({ source: _this }); }));
+                function () {
+                    _this.ended.next({
+                        source: _this,
+                        distance: _this._getDragDistance(_this._getPointerPositionOnPage(event))
+                    });
+                }));
                 _this._dragDropRegistry.stopDragging(_this);
                 return;
             }
@@ -960,19 +966,23 @@ DragRef = /** @class */ (function () {
             var container = (/** @type {?} */ (_this._dropContainer));
             /** @type {?} */
             var currentIndex = container.getItemIndex(_this);
-            var _a = _this._getPointerPositionOnPage(event), x = _a.x, y = _a.y;
             /** @type {?} */
-            var isPointerOverContainer = container._isOverContainer(x, y);
-            _this.ended.next({ source: _this });
+            var pointerPosition = _this._getPointerPositionOnPage(event);
+            /** @type {?} */
+            var distance = _this._getDragDistance(_this._getPointerPositionOnPage(event));
+            /** @type {?} */
+            var isPointerOverContainer = container._isOverContainer(pointerPosition.x, pointerPosition.y);
+            _this.ended.next({ source: _this, distance: distance });
             _this.dropped.next({
                 item: _this,
                 currentIndex: currentIndex,
                 previousIndex: _this._initialContainer.getItemIndex(_this),
                 container: container,
                 previousContainer: _this._initialContainer,
-                isPointerOverContainer: isPointerOverContainer
+                isPointerOverContainer: isPointerOverContainer,
+                distance: distance
             });
-            container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer);
+            container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer, distance);
             _this._dropContainer = _this._initialContainer;
         }));
     };
@@ -1392,6 +1402,30 @@ DragRef = /** @class */ (function () {
         this._rootElement.style.transform = this._initialTransform ?
             transform + ' ' + this._initialTransform : transform;
     };
+    /**
+     * Gets the distance that the user has dragged during the current drag sequence.
+     * @param currentPosition Current position of the user's pointer.
+     */
+    /**
+     * Gets the distance that the user has dragged during the current drag sequence.
+     * @private
+     * @param {?} currentPosition Current position of the user's pointer.
+     * @return {?}
+     */
+    DragRef.prototype._getDragDistance = /**
+     * Gets the distance that the user has dragged during the current drag sequence.
+     * @private
+     * @param {?} currentPosition Current position of the user's pointer.
+     * @return {?}
+     */
+    function (currentPosition) {
+        /** @type {?} */
+        var pickupPosition = this._pickupPositionOnPage;
+        if (pickupPosition) {
+            return { x: currentPosition.x - pickupPosition.x, y: currentPosition.y - pickupPosition.y };
+        }
+        return { x: 0, y: 0 };
+    };
     return DragRef;
 }());
 /**
@@ -1805,26 +1839,33 @@ DropListRef = /** @class */ (function () {
      * @param previousContainer Container from which the item got dragged in.
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     * @param distance Distance the user has dragged since the start of the dragging sequence.
+     * @breaking-change 9.0.0 `distance` parameter to become required.
      */
     /**
      * Drops an item into this container.
+     * \@breaking-change 9.0.0 `distance` parameter to become required.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     * @param {?=} distance Distance the user has dragged since the start of the dragging sequence.
      * @return {?}
      */
     DropListRef.prototype.drop = /**
      * Drops an item into this container.
+     * \@breaking-change 9.0.0 `distance` parameter to become required.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     * @param {?=} distance Distance the user has dragged since the start of the dragging sequence.
      * @return {?}
      */
-    function (item, currentIndex, previousContainer, isPointerOverContainer) {
+    function (item, currentIndex, previousContainer, isPointerOverContainer, distance) {
+        if (distance === void 0) { distance = { x: 0, y: 0 }; }
         this._reset();
         this.dropped.next({
             item: item,
@@ -1832,7 +1873,8 @@ DropListRef = /** @class */ (function () {
             previousIndex: previousContainer.getItemIndex(item),
             container: this,
             previousContainer: previousContainer,
-            isPointerOverContainer: isPointerOverContainer
+            isPointerOverContainer: isPointerOverContainer,
+            distance: distance
         });
     };
     /**
@@ -3196,7 +3238,8 @@ var CdkDrag = /** @class */ (function () {
                 source: _this,
                 pointerPosition: movedEvent.pointerPosition,
                 event: movedEvent.event,
-                delta: movedEvent.delta
+                delta: movedEvent.delta,
+                distance: movedEvent.distance
             }); }))).subscribe(observer);
             return (/**
              * @return {?}
@@ -3546,10 +3589,11 @@ var CdkDrag = /** @class */ (function () {
             _this.released.emit({ source: _this });
         }));
         ref.ended.subscribe((/**
+         * @param {?} event
          * @return {?}
          */
-        function () {
-            _this.ended.emit({ source: _this });
+        function (event) {
+            _this.ended.emit({ source: _this, distance: event.distance });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             _this._changeDetectorRef.markForCheck();
@@ -3586,7 +3630,8 @@ var CdkDrag = /** @class */ (function () {
                 previousContainer: event.previousContainer.data,
                 container: event.container.data,
                 isPointerOverContainer: event.isPointerOverContainer,
-                item: _this
+                item: _this,
+                distance: event.distance
             });
         }));
     };
@@ -4183,7 +4228,8 @@ var CdkDropList = /** @class */ (function () {
                 previousContainer: event.previousContainer.data,
                 container: event.container.data,
                 item: event.item.data,
-                isPointerOverContainer: event.isPointerOverContainer
+                isPointerOverContainer: event.isPointerOverContainer,
+                distance: event.distance
             });
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.
