@@ -50,18 +50,9 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      */
     rootElementSelector: string;
     /**
-     * Node or selector that will be used to determine the element to which the draggable's
-     * position will be constrained. If a string is passed in, it'll be used as a selector that
-     * will be matched starting from the element's parent and going up the DOM until a match
-     * has been found.
-     */
-    boundaryElement: string | ElementRef<HTMLElement> | HTMLElement;
-    /**
      * Selector that will be used to determine the element to which the draggable's position will
      * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-     * element has been found
-     * @deprecated Use `boundaryElement` instead.
-     * @breaking-change 9.0.0
+     * element has been found.
      */
     boundaryElementSelector: string;
     /**
@@ -130,7 +121,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     ngOnDestroy(): void;
     /** Syncs the root element with the `DragRef`. */
     private _updateRootElement;
-    /** Gets the boundary element, based on the `boundaryElement` value. */
+    /** Gets the boundary element, based on the `boundaryElementSelector`. */
     private _getBoundaryElement;
     /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
     private _syncInputs;

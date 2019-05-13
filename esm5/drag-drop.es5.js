@@ -8,7 +8,7 @@
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
-import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, isDevMode, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Directionality } from '@angular/cdk/bidi';
@@ -1436,25 +1436,10 @@ function deepCloneNode(node) {
     var clone = (/** @type {?} */ (node.cloneNode(true)));
     /** @type {?} */
     var descendantsWithId = clone.querySelectorAll('[id]');
-    /** @type {?} */
-    var descendantCanvases = node.querySelectorAll('canvas');
     // Remove the `id` to avoid having multiple elements with the same id on the page.
     clone.removeAttribute('id');
     for (var i = 0; i < descendantsWithId.length; i++) {
         descendantsWithId[i].removeAttribute('id');
-    }
-    // `cloneNode` won't transfer the content of `canvas` elements so we have to do it ourselves.
-    // We match up the cloned canvas to their sources using their index in the DOM.
-    if (descendantCanvases.length) {
-        /** @type {?} */
-        var cloneCanvases = clone.querySelectorAll('canvas');
-        for (var i = 0; i < descendantCanvases.length; i++) {
-            /** @type {?} */
-            var correspondingCloneContext = cloneCanvases[i].getContext('2d');
-            if (correspondingCloneContext) {
-                correspondingCloneContext.drawImage(descendantCanvases[i], 0, 0);
-            }
-        }
     }
     return clone;
 }
@@ -3229,35 +3214,6 @@ var CdkDrag = /** @class */ (function () {
         this._syncInputs(this._dragRef);
         this._handleEvents(this._dragRef);
     }
-    Object.defineProperty(CdkDrag.prototype, "boundaryElementSelector", {
-        /**
-         * Selector that will be used to determine the element to which the draggable's position will
-         * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-         * element has been found
-         * @deprecated Use `boundaryElement` instead.
-         * @breaking-change 9.0.0
-         */
-        get: /**
-         * Selector that will be used to determine the element to which the draggable's position will
-         * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-         * element has been found
-         * @deprecated Use `boundaryElement` instead.
-         * \@breaking-change 9.0.0
-         * @return {?}
-         */
-        function () {
-            return typeof this.boundaryElement === 'string' ? this.boundaryElement : (/** @type {?} */ (undefined));
-        },
-        set: /**
-         * @param {?} selector
-         * @return {?}
-         */
-        function (selector) {
-            this.boundaryElement = selector;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(CdkDrag.prototype, "disabled", {
         /** Whether starting to drag this element is disabled. */
         get: /**
@@ -3459,32 +3415,21 @@ var CdkDrag = /** @class */ (function () {
         }
         this._dragRef.withRootElement(rootElement || element);
     };
-    /** Gets the boundary element, based on the `boundaryElement` value. */
+    /** Gets the boundary element, based on the `boundaryElementSelector`. */
     /**
-     * Gets the boundary element, based on the `boundaryElement` value.
+     * Gets the boundary element, based on the `boundaryElementSelector`.
      * @private
      * @return {?}
      */
     CdkDrag.prototype._getBoundaryElement = /**
-     * Gets the boundary element, based on the `boundaryElement` value.
+     * Gets the boundary element, based on the `boundaryElementSelector`.
      * @private
      * @return {?}
      */
     function () {
         /** @type {?} */
-        var boundary = this.boundaryElement;
-        if (!boundary) {
-            return null;
-        }
-        if (typeof boundary === 'string') {
-            return getClosestMatchingAncestor(this.element.nativeElement, boundary);
-        }
-        /** @type {?} */
-        var element = coerceElement(boundary);
-        if (isDevMode() && !element.contains(this.element.nativeElement)) {
-            throw Error('Draggable element is not inside of the node passed into cdkDragBoundary.');
-        }
-        return element;
+        var selector = this.boundaryElementSelector;
+        return selector ? getClosestMatchingAncestor(this.element.nativeElement, selector) : null;
     };
     /** Syncs the inputs of the CdkDrag with the options of the underlying DragRef. */
     /**
@@ -3640,7 +3585,7 @@ var CdkDrag = /** @class */ (function () {
         data: [{ type: Input, args: ['cdkDragData',] }],
         lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
         rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
-        boundaryElement: [{ type: Input, args: ['cdkDragBoundary',] }],
+        boundaryElementSelector: [{ type: Input, args: ['cdkDragBoundary',] }],
         dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
         freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
         disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
