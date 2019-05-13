@@ -1854,6 +1854,7 @@ var CdkVirtualForOf = /** @class */ (function () {
      */
     function () {
         this._viewport.detach();
+        this._dataSourceChanges.next();
         this._dataSourceChanges.complete();
         this.viewChange.complete();
         this._destroyed.next();
@@ -1904,7 +1905,7 @@ var CdkVirtualForOf = /** @class */ (function () {
             oldDs.disconnect(this);
         }
         this._needsUpdate = true;
-        return newDs.connect(this);
+        return newDs ? newDs.connect(this) : rxjs.of();
     };
     /** Update the `CdkVirtualForOfContext` for all views. */
     /**

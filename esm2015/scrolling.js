@@ -1390,6 +1390,7 @@ class CdkVirtualForOf {
      */
     ngOnDestroy() {
         this._viewport.detach();
+        this._dataSourceChanges.next();
         this._dataSourceChanges.complete();
         this.viewChange.complete();
         this._destroyed.next();
@@ -1425,7 +1426,7 @@ class CdkVirtualForOf {
             oldDs.disconnect(this);
         }
         this._needsUpdate = true;
-        return newDs.connect(this);
+        return newDs ? newDs.connect(this) : of();
     }
     /**
      * Update the `CdkVirtualForOfContext` for all views.

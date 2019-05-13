@@ -4735,7 +4735,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
             overlayX: currentPosition.overlayX,
             overlayY: currentPosition.overlayY,
             offsetX: currentPosition.offsetX || _this.offsetX,
-            offsetY: currentPosition.offsetY || _this.offsetY
+            offsetY: currentPosition.offsetY || _this.offsetY,
+            panelClass: currentPosition.panelClass || undefined,
         }); }));
         return positionStrategy
             .setOrigin(this.origin.elementRef)
