@@ -30,8 +30,8 @@ export declare const TEXT_COLUMN_OPTIONS: InjectionToken<TextColumnOptions<any>>
  * input.
  */
 export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
-    private table;
-    private options;
+    private _table;
+    private _options;
     /** Column name that should be used to reference this column. */
     name: string;
     _name: string;
@@ -67,7 +67,7 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
      * @docs-private
      */
     headerCell: CdkHeaderCellDef;
-    constructor(table: CdkTable<T>, options: TextColumnOptions<T>);
+    constructor(_table: CdkTable<T>, _options: TextColumnOptions<T>);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**

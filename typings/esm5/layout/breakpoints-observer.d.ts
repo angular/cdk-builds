@@ -22,13 +22,13 @@ export interface BreakpointState {
 }
 /** Utility for checking the matching state of @media queries. */
 export declare class BreakpointObserver implements OnDestroy {
-    private mediaMatcher;
-    private zone;
+    private _mediaMatcher;
+    private _zone;
     /**  A map of all media queries currently being listened for. */
     private _queries;
     /** A subject for all other observables to takeUntil based on. */
     private _destroySubject;
-    constructor(mediaMatcher: MediaMatcher, zone: NgZone);
+    constructor(_mediaMatcher: MediaMatcher, _zone: NgZone);
     /** Completes the active subject, signalling to all other observables to complete. */
     ngOnDestroy(): void;
     /**

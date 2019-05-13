@@ -40,11 +40,11 @@ let mediaQueryStyleNode;
  */
 class MediaMatcher {
     /**
-     * @param {?} platform
+     * @param {?} _platform
      */
-    constructor(platform) {
-        this.platform = platform;
-        this._matchMedia = this.platform.isBrowser && window.matchMedia ?
+    constructor(_platform) {
+        this._platform = _platform;
+        this._matchMedia = this._platform.isBrowser && window.matchMedia ?
             // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
             // call it from a different scope.
             window.matchMedia.bind(window) :
@@ -59,7 +59,7 @@ class MediaMatcher {
      * @return {?}
      */
     matchMedia(query) {
-        if (this.platform.WEBKIT) {
+        if (this._platform.WEBKIT) {
             createEmptyStyleRule(query);
         }
         return this._matchMedia(query);
@@ -130,12 +130,12 @@ function noopMatchMedia(query) {
  */
 class BreakpointObserver {
     /**
-     * @param {?} mediaMatcher
-     * @param {?} zone
+     * @param {?} _mediaMatcher
+     * @param {?} _zone
      */
-    constructor(mediaMatcher, zone) {
-        this.mediaMatcher = mediaMatcher;
-        this.zone = zone;
+    constructor(_mediaMatcher, _zone) {
+        this._mediaMatcher = _mediaMatcher;
+        this._zone = _zone;
         /**
          * A map of all media queries currently being listened for.
          */
@@ -215,7 +215,7 @@ class BreakpointObserver {
             return (/** @type {?} */ (this._queries.get(query)));
         }
         /** @type {?} */
-        const mql = this.mediaMatcher.matchMedia(query);
+        const mql = this._mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
         /** @type {?} */
         const queryObservable = new Observable((/**
@@ -233,7 +233,7 @@ class BreakpointObserver {
              * @param {?} e
              * @return {?}
              */
-            (e) => this.zone.run((/**
+            (e) => this._zone.run((/**
              * @return {?}
              */
             () => observer.next(e))));

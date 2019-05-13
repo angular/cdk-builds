@@ -42,9 +42,9 @@ var mediaQueryStyleNode;
  * A utility for calling matchMedia queries.
  */
 var MediaMatcher = /** @class */ (function () {
-    function MediaMatcher(platform$$1) {
-        this.platform = platform$$1;
-        this._matchMedia = this.platform.isBrowser && window.matchMedia ?
+    function MediaMatcher(_platform) {
+        this._platform = _platform;
+        this._matchMedia = this._platform.isBrowser && window.matchMedia ?
             // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
             // call it from a different scope.
             window.matchMedia.bind(window) :
@@ -73,7 +73,7 @@ var MediaMatcher = /** @class */ (function () {
      * @return {?}
      */
     function (query) {
-        if (this.platform.WEBKIT) {
+        if (this._platform.WEBKIT) {
             createEmptyStyleRule(query);
         }
         return this._matchMedia(query);
@@ -144,9 +144,9 @@ function noopMatchMedia(query) {
  * Utility for checking the matching state of \@media queries.
  */
 var BreakpointObserver = /** @class */ (function () {
-    function BreakpointObserver(mediaMatcher, zone) {
-        this.mediaMatcher = mediaMatcher;
-        this.zone = zone;
+    function BreakpointObserver(_mediaMatcher, _zone) {
+        this._mediaMatcher = _mediaMatcher;
+        this._zone = _zone;
         /**
          * A map of all media queries currently being listened for.
          */
@@ -263,7 +263,7 @@ var BreakpointObserver = /** @class */ (function () {
             return (/** @type {?} */ (this._queries.get(query)));
         }
         /** @type {?} */
-        var mql = this.mediaMatcher.matchMedia(query);
+        var mql = this._mediaMatcher.matchMedia(query);
         // Create callback for match changes and add it is as a listener.
         /** @type {?} */
         var queryObservable = new rxjs.Observable((/**
@@ -281,7 +281,7 @@ var BreakpointObserver = /** @class */ (function () {
              * @param {?} e
              * @return {?}
              */
-            function (e) { return _this.zone.run((/**
+            function (e) { return _this._zone.run((/**
              * @return {?}
              */
             function () { return observer.next(e); })); });

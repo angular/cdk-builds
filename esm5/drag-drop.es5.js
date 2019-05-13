@@ -1706,9 +1706,7 @@ DropListRef = /** @class */ (function () {
         var _this = this;
         this.beforeStarted.next();
         this._isDragging = true;
-        this._activeDraggables = this._draggables.slice();
-        this._cacheOwnPosition();
-        this._cacheItemPositions();
+        this._cacheItems();
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}
@@ -1865,6 +1863,9 @@ DropListRef = /** @class */ (function () {
          * @return {?}
          */
         function (item) { return item._withDropContainer((/** @type {?} */ (_this))); }));
+        if ((/** @type {?} */ (this)).isDragging()) {
+            (/** @type {?} */ (this))._cacheItems();
+        }
         return (/** @type {?} */ (this));
     };
     /** Sets the layout direction of the drop list. */
@@ -2353,6 +2354,22 @@ DropListRef = /** @class */ (function () {
                 pointerX >= Math.floor(clientRect.left) && pointerX <= Math.floor(clientRect.right) :
                 pointerY >= Math.floor(clientRect.top) && pointerY <= Math.floor(clientRect.bottom);
         }));
+    };
+    /** Caches the current items in the list and their positions. */
+    /**
+     * Caches the current items in the list and their positions.
+     * @private
+     * @return {?}
+     */
+    DropListRef.prototype._cacheItems = /**
+     * Caches the current items in the list and their positions.
+     * @private
+     * @return {?}
+     */
+    function () {
+        this._activeDraggables = this._draggables.slice();
+        this._cacheItemPositions();
+        this._cacheOwnPosition();
     };
     /**
      * Checks whether the user's pointer is positioned over the container.

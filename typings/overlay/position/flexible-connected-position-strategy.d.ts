@@ -52,7 +52,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /** Amount of space that must be maintained between the overlay and the edge of the viewport. */
     private _viewportMargin;
     /** The Scrollable containers used to check scrollable view properties on position change. */
-    private scrollables;
+    private _scrollables;
     /** Ordered list of preferred positions, from most to least desirable. */
     _preferredPositions: ConnectionPositionPair[];
     /** The origin element against which the overlay will be positioned. */

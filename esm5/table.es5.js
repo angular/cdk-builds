@@ -684,18 +684,18 @@ var  /**
  */
 StickyStyler = /** @class */ (function () {
     /**
-     * @param isNativeHtmlTable Whether the sticky logic should be based on a table
+     * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
      *     that uses the native `<table>` element.
-     * @param stickCellCss The CSS class that will be applied to every row/cell that has
+     * @param _stickCellCss The CSS class that will be applied to every row/cell that has
      *     sticky positioning applied.
      * @param direction The directionality context of the table (ltr/rtl); affects column positioning
      *     by reversing left/right positions.
      * @param _isBrowser Whether the table is currently being rendered on the server or the client.
      */
-    function StickyStyler(isNativeHtmlTable, stickCellCss, direction, _isBrowser) {
+    function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, _isBrowser) {
         if (_isBrowser === void 0) { _isBrowser = true; }
-        this.isNativeHtmlTable = isNativeHtmlTable;
-        this.stickCellCss = stickCellCss;
+        this._isNativeHtmlTable = _isNativeHtmlTable;
+        this._stickCellCss = _stickCellCss;
         this.direction = direction;
         this._isBrowser = _isBrowser;
     }
@@ -856,7 +856,7 @@ StickyStyler = /** @class */ (function () {
             }
             /** @type {?} */
             var row = rows[rowIndex];
-            if (this.isNativeHtmlTable) {
+            if (this._isNativeHtmlTable) {
                 for (var j = 0; j < row.children.length; j++) {
                     /** @type {?} */
                     var cell = (/** @type {?} */ (row.children[j]));
@@ -900,7 +900,7 @@ StickyStyler = /** @class */ (function () {
      * @return {?}
      */
     function (tableElement, stickyStates) {
-        if (!this.isNativeHtmlTable) {
+        if (!this._isNativeHtmlTable) {
             return;
         }
         /** @type {?} */
@@ -953,7 +953,7 @@ StickyStyler = /** @class */ (function () {
         function (dir) { return !!element.style[dir]; }));
         if (!hasDirection) {
             element.style.position = '';
-            element.classList.remove(this.stickCellCss);
+            element.classList.remove(this._stickCellCss);
         }
     };
     /**
@@ -980,7 +980,7 @@ StickyStyler = /** @class */ (function () {
      * @return {?}
      */
     function (element, dir, dirValue) {
-        element.classList.add(this.stickCellCss);
+        element.classList.add(this._stickCellCss);
         element.style[dir] = dirValue + "px";
         element.style.cssText += 'position: -webkit-sticky; position: sticky; ';
         element.style.zIndex = this._getCalculatedZIndex(element);
@@ -2801,14 +2801,14 @@ var TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
  * @template T
  */
 var CdkTextColumn = /** @class */ (function () {
-    function CdkTextColumn(table, options) {
-        this.table = table;
-        this.options = options;
+    function CdkTextColumn(_table, _options) {
+        this._table = _table;
+        this._options = _options;
         /**
          * Alignment of the cell values.
          */
         this.justify = 'start';
-        this.options = options || {};
+        this._options = _options || {};
     }
     Object.defineProperty(CdkTextColumn.prototype, "name", {
         /** Column name that should be used to reference this column. */
@@ -2842,20 +2842,20 @@ var CdkTextColumn = /** @class */ (function () {
         }
         if (!this.dataAccessor) {
             this.dataAccessor =
-                this.options.defaultDataAccessor || ((/**
+                this._options.defaultDataAccessor || ((/**
                  * @param {?} data
                  * @param {?} name
                  * @return {?}
                  */
                 function (data, name) { return ((/** @type {?} */ (data)))[name]; }));
         }
-        if (this.table) {
+        if (this._table) {
             // Provide the cell and headerCell directly to the table with the static `ViewChild` query,
             // since the columnDef will not pick up its content by the time the table finishes checking
             // its content and initializing the rows.
             this.columnDef.cell = this.cell;
             this.columnDef.headerCell = this.headerCell;
-            this.table.addColumnDef(this.columnDef);
+            this._table.addColumnDef(this.columnDef);
         }
         else {
             throw getTableTextColumnMissingParentTableError();
@@ -2868,8 +2868,8 @@ var CdkTextColumn = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this.table) {
-            this.table.removeColumnDef(this.columnDef);
+        if (this._table) {
+            this._table.removeColumnDef(this.columnDef);
         }
     };
     /**
@@ -2887,8 +2887,8 @@ var CdkTextColumn = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this.options && this.options.defaultHeaderTextTransform) {
-            return this.options.defaultHeaderTextTransform(this.name);
+        if (this._options && this._options.defaultHeaderTextTransform) {
+            return this._options.defaultHeaderTextTransform(this.name);
         }
         return this.name[0].toUpperCase() + this.name.slice(1);
     };

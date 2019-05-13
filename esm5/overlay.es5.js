@@ -1763,7 +1763,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         /**
          * The Scrollable containers used to check scrollable view properties on position change.
          */
-        this.scrollables = [];
+        this._scrollables = [];
         /**
          * Ordered list of preferred positions, from most to least desirable.
          */
@@ -2114,7 +2114,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
      * @return {THIS}
      */
     function (scrollables) {
-        (/** @type {?} */ (this)).scrollables = scrollables;
+        (/** @type {?} */ (this))._scrollables = scrollables;
         return (/** @type {?} */ (this));
     };
     /**
@@ -3115,7 +3115,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
         // every time, we should be able to use the scrollTop of the containers if the size of those
         // containers hasn't changed.
         /** @type {?} */
-        var scrollContainerBounds = this.scrollables.map((/**
+        var scrollContainerBounds = this._scrollables.map((/**
          * @param {?} scrollable
          * @return {?}
          */
