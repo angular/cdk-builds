@@ -1155,10 +1155,25 @@ function deepCloneNode(node) {
     const clone = (/** @type {?} */ (node.cloneNode(true)));
     /** @type {?} */
     const descendantsWithId = clone.querySelectorAll('[id]');
+    /** @type {?} */
+    const descendantCanvases = node.querySelectorAll('canvas');
     // Remove the `id` to avoid having multiple elements with the same id on the page.
     clone.removeAttribute('id');
     for (let i = 0; i < descendantsWithId.length; i++) {
         descendantsWithId[i].removeAttribute('id');
+    }
+    // `cloneNode` won't transfer the content of `canvas` elements so we have to do it ourselves.
+    // We match up the cloned canvas to their sources using their index in the DOM.
+    if (descendantCanvases.length) {
+        /** @type {?} */
+        const cloneCanvases = clone.querySelectorAll('canvas');
+        for (let i = 0; i < descendantCanvases.length; i++) {
+            /** @type {?} */
+            const correspondingCloneContext = cloneCanvases[i].getContext('2d');
+            if (correspondingCloneContext) {
+                correspondingCloneContext.drawImage(descendantCanvases[i], 0, 0);
+            }
+        }
     }
     return clone;
 }
