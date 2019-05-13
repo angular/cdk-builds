@@ -25,7 +25,7 @@ export declare class DropListRef<T = any> {
     private _dragDropRegistry;
     private _document;
     /** Element that the drop list is attached to. */
-    readonly element: HTMLElement;
+    element: HTMLElement | ElementRef<HTMLElement>;
     /**
      * Unique ID for the drop list.
      * @deprecated No longer being used. To be removed.

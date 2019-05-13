@@ -763,7 +763,7 @@ class DragRef {
             (/** @type {?} */ (this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
         }
         else {
-            this._initialContainer.element.appendChild(this._rootElement);
+            coerceElement(this._initialContainer.element).appendChild(this._rootElement);
         }
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -1460,7 +1460,7 @@ class DropListRef {
             activeDraggables.splice(newIndex, 0, item);
         }
         else {
-            this.element.appendChild(placeholder);
+            coerceElement(this.element).appendChild(placeholder);
             activeDraggables.push(item);
         }
         // The transform needs to be cleared so it doesn't throw off the measurements.
@@ -1678,7 +1678,7 @@ class DropListRef {
      * @return {?}
      */
     _cacheOwnPosition() {
-        this._clientRect = this.element.getBoundingClientRect();
+        this._clientRect = coerceElement(this.element).getBoundingClientRect();
     }
     /**
      * Refreshes the position cache of the items and sibling containers.
@@ -1908,19 +1908,21 @@ class DropListRef {
             return false;
         }
         /** @type {?} */
-        const elementFromPoint = this._document.elementFromPoint(x, y);
+        const elementFromPoint = (/** @type {?} */ (this._document.elementFromPoint(x, y)));
         // If there's no element at the pointer position, then
         // the client rect is probably scrolled out of the view.
         if (!elementFromPoint) {
             return false;
         }
+        /** @type {?} */
+        const nativeElement = coerceElement(this.element);
         // The `ClientRect`, that we're using to find the container over which the user is
         // hovering, doesn't give us any information on whether the element has been scrolled
         // out of the view or whether it's overlapping with other containers. This means that
         // we could end up transferring the item into a container that's invisible or is positioned
         // below another one. We use the result from `elementFromPoint` to get the top-most element
         // at the pointer position and to find whether it's one of the intersecting drop containers.
-        return elementFromPoint === this.element || this.element.contains(elementFromPoint);
+        return elementFromPoint === nativeElement || nativeElement.contains(elementFromPoint);
     }
     /**
      * Called by one of the connected drop lists when a dragging sequence has started.
