@@ -2849,7 +2849,9 @@ var CdkTextColumn = /** @class */ (function () {
          */
         function (name) {
             this._name = name;
-            this.columnDef.name = name;
+            // With Ivy, inputs can be initialized before static query results are
+            // available. In that case, we defer the synchronization until "ngOnInit" fires.
+            this._syncColumnDefName();
         },
         enumerable: true,
         configurable: true
@@ -2861,6 +2863,7 @@ var CdkTextColumn = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        this._syncColumnDefName();
         if (this.headerText === undefined) {
             this.headerText = this._createDefaultHeaderText();
         }
@@ -2915,6 +2918,22 @@ var CdkTextColumn = /** @class */ (function () {
             return this._options.defaultHeaderTextTransform(this.name);
         }
         return this.name[0].toUpperCase() + this.name.slice(1);
+    };
+    /** Synchronizes the column definition name with the text column name. */
+    /**
+     * Synchronizes the column definition name with the text column name.
+     * @private
+     * @return {?}
+     */
+    CdkTextColumn.prototype._syncColumnDefName = /**
+     * Synchronizes the column definition name with the text column name.
+     * @private
+     * @return {?}
+     */
+    function () {
+        if (this.columnDef) {
+            this.columnDef.name = this.name;
+        }
     };
     CdkTextColumn.decorators = [
         { type: core.Component, args: [{selector: 'cdk-text-column',

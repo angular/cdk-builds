@@ -75,4 +75,6 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
      * has been provided. Otherwise simply capitalize the column name.
      */
     _createDefaultHeaderText(): string;
+    /** Synchronizes the column definition name with the text column name. */
+    private _syncColumnDefName;
 }
