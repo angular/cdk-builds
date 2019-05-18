@@ -91,7 +91,7 @@ var Directionality = /** @class */ (function () {
     Directionality.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [DIR_DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ Directionality.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(core.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+    /** @nocollapse */ Directionality.ngInjectableDef = core.ΔdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(core.Δinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
     return Directionality;
 }());
 

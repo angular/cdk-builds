@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModule, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { NgModule, Injectable, NgZone, ΔdefineInjectable, Δinject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { asapScheduler, combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
@@ -85,7 +85,7 @@ var MediaMatcher = /** @class */ (function () {
     MediaMatcher.ctorParameters = function () { return [
         { type: Platform }
     ]; };
-    /** @nocollapse */ MediaMatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
+    /** @nocollapse */ MediaMatcher.ngInjectableDef = ΔdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(Δinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
     return MediaMatcher;
 }());
 /**
@@ -311,7 +311,7 @@ var BreakpointObserver = /** @class */ (function () {
         { type: MediaMatcher },
         { type: NgZone }
     ]; };
-    /** @nocollapse */ BreakpointObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    /** @nocollapse */ BreakpointObserver.ngInjectableDef = ΔdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(Δinject(MediaMatcher), Δinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
 }());
 /**

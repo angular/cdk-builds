@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, ΔdefineInjectable, Δinject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -347,7 +347,7 @@ AriaDescriber.decorators = [
 AriaDescriber.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ AriaDescriber.ngInjectableDef = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+/** @nocollapse */ AriaDescriber.ngInjectableDef = ΔdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(Δinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
@@ -965,7 +965,7 @@ InteractivityChecker.decorators = [
 InteractivityChecker.ctorParameters = () => [
     { type: Platform }
 ];
-/** @nocollapse */ InteractivityChecker.ngInjectableDef = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
+/** @nocollapse */ InteractivityChecker.ngInjectableDef = ΔdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(Δinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
 /**
  * Returns the frame element from a window object. Since browsers like MS Edge throw errors if
  * the frameElement property is being accessed from a different host address, this property
@@ -1485,7 +1485,7 @@ FocusTrapFactory.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ FocusTrapFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+/** @nocollapse */ FocusTrapFactory.ngInjectableDef = ΔdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(Δinject(InteractivityChecker), Δinject(NgZone), Δinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
 /**
  * Directive for trapping focus within a region.
  */
@@ -1730,7 +1730,7 @@ LiveAnnouncer.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
 ];
-/** @nocollapse */ LiveAnnouncer.ngInjectableDef = ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), ɵɵinject(NgZone), ɵɵinject(DOCUMENT), ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+/** @nocollapse */ LiveAnnouncer.ngInjectableDef = ΔdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(Δinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), Δinject(NgZone), Δinject(DOCUMENT), Δinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
  * with a wider range of browsers and screen readers.
@@ -2260,7 +2260,7 @@ FocusMonitor.ctorParameters = () => [
     { type: NgZone },
     { type: Platform }
 ];
-/** @nocollapse */ FocusMonitor.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
+/** @nocollapse */ FocusMonitor.ngInjectableDef = ΔdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(Δinject(NgZone), Δinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.

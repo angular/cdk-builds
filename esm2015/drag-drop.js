@@ -8,7 +8,7 @@
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subscription, Subject, Observable, merge } from 'rxjs';
-import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, isDevMode, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, isDevMode, TemplateRef, ΔdefineInjectable, Δinject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Directionality } from '@angular/cdk/bidi';
@@ -2279,7 +2279,7 @@ DragDropRegistry.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ DragDropRegistry.ngInjectableDef = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+/** @nocollapse */ DragDropRegistry.ngInjectableDef = ΔdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(Δinject(NgZone), Δinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
@@ -2339,7 +2339,7 @@ DragDrop.ctorParameters = () => [
     { type: ViewportRuler },
     { type: DragDropRegistry }
 ];
-/** @nocollapse */ DragDrop.ngInjectableDef = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+/** @nocollapse */ DragDrop.ngInjectableDef = ΔdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(Δinject(DOCUMENT), Δinject(NgZone), Δinject(ViewportRuler), Δinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

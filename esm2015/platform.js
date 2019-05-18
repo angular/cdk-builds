@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Inject, Injectable, Optional, PLATFORM_ID, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID, NgModule, ΔdefineInjectable, Δinject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 /**
@@ -101,7 +101,7 @@ Platform.decorators = [
 Platform.ctorParameters = () => [
     { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] }] }
 ];
-/** @nocollapse */ Platform.ngInjectableDef = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+/** @nocollapse */ Platform.ngInjectableDef = ΔdefineInjectable({ factory: function Platform_Factory() { return new Platform(Δinject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

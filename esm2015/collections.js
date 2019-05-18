@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Observable, of, Subject } from 'rxjs';
-import { Injectable, ɵɵdefineInjectable } from '@angular/core';
+import { Injectable, ΔdefineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -355,7 +355,7 @@ class UniqueSelectionDispatcher {
 UniqueSelectionDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+/** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = ΔdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle

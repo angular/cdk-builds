@@ -9,7 +9,7 @@ import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angula
 import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
 export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
-import { Inject, Injectable, NgZone, Optional, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { Inject, Injectable, NgZone, Optional, NgModule, SkipSelf, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef, Directive, EventEmitter, InjectionToken, Input, Output, TemplateRef, ViewContainerRef, ΔdefineInjectable, Δinject } from '@angular/core';
 import { __assign, __extends } from 'tslib';
 import { Observable, Subject, merge, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -524,7 +524,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = ΔdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(Δinject(ScrollDispatcher), Δinject(ViewportRuler), Δinject(NgZone), Δinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
 }());
 
@@ -821,7 +821,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = ΔdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(Δinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
 }());
 /**
@@ -927,7 +927,7 @@ var OverlayContainer = /** @class */ (function () {
     OverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ OverlayContainer.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+    /** @nocollapse */ OverlayContainer.ngInjectableDef = ΔdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(Δinject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
 }());
 /**
@@ -4164,7 +4164,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
         { type: Platform },
         { type: OverlayContainer }
     ]; };
-    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = ΔdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(Δinject(ViewportRuler), Δinject(DOCUMENT), Δinject(Platform), Δinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
 
@@ -5039,7 +5039,7 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     FullscreenOverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    /** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = ΔdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(Δinject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

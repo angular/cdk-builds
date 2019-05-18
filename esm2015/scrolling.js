@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, SkipSelf, ElementRef, NgModule, IterableDiffers, TemplateRef, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Output, ViewChild, ViewEncapsulation, ΔdefineInjectable, Δinject } from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, fromEvent, of, Observable, animationFrameScheduler, asapScheduler, merge } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, shareReplay, switchMap } from 'rxjs/operators';
@@ -476,7 +476,7 @@ ScrollDispatcher.ctorParameters = () => [
     { type: NgZone },
     { type: Platform }
 ];
-/** @nocollapse */ ScrollDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+/** @nocollapse */ ScrollDispatcher.ngInjectableDef = ΔdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(Δinject(NgZone), Δinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentDispatcher
@@ -1789,7 +1789,7 @@ ViewportRuler.ctorParameters = () => [
     { type: Platform },
     { type: NgZone }
 ];
-/** @nocollapse */ ViewportRuler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
+/** @nocollapse */ ViewportRuler.ngInjectableDef = ΔdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(Δinject(Platform), Δinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
 /**
  * \@docs-private \@deprecated \@breaking-change 8.0.0
  * @param {?} parentRuler

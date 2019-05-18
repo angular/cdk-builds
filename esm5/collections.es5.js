@@ -7,7 +7,7 @@
  */
 import { __extends } from 'tslib';
 import { Observable, of, Subject } from 'rxjs';
-import { Injectable, ɵɵdefineInjectable } from '@angular/core';
+import { Injectable, ΔdefineInjectable } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -521,7 +521,7 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
     UniqueSelectionDispatcher.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] },
     ];
-    /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+    /** @nocollapse */ UniqueSelectionDispatcher.ngInjectableDef = ΔdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
     return UniqueSelectionDispatcher;
 }());
 

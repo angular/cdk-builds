@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgModule, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { NgModule, Injectable, NgZone, ΔdefineInjectable, Δinject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { asapScheduler, combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
@@ -72,7 +72,7 @@ MediaMatcher.decorators = [
 MediaMatcher.ctorParameters = () => [
     { type: Platform }
 ];
-/** @nocollapse */ MediaMatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
+/** @nocollapse */ MediaMatcher.ngInjectableDef = ΔdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(Δinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
 /**
  * For Webkit engines that only trigger the MediaQueryListListener when
  * there is at least one CSS selector for the respective media query.
@@ -264,7 +264,7 @@ BreakpointObserver.ctorParameters = () => [
     { type: MediaMatcher },
     { type: NgZone }
 ];
-/** @nocollapse */ BreakpointObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+/** @nocollapse */ BreakpointObserver.ngInjectableDef = ΔdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(Δinject(MediaMatcher), Δinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
 /**
  * Split each query string into separate query strings if two queries are provided as comma
  * separated.
