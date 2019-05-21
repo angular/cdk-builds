@@ -1199,7 +1199,9 @@ class CdkTable {
      */
     set multiTemplateDataRows(v) {
         this._multiTemplateDataRows = coerceBooleanProperty(v);
-        if (this._rowOutlet.viewContainer.length) {
+        // In Ivy if this value is set via a static attribute (e.g. <table multiTemplateDataRows>),
+        // this setter will be invoked before the row outlet has been defined hence the null check.
+        if (this._rowOutlet && this._rowOutlet.viewContainer.length) {
             this._forceRenderDataRows();
         }
     }
