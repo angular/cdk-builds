@@ -890,20 +890,20 @@
         "signature": "a37fd08da1b34b4d7003e79631f50a0205a61226fee2beb5bef81a71902cfa46"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts": {
-        "version": "dd34db3fb9be7fb3d474070a6d9b912cc204271687e1425d6ddbdb0512f78eb9",
-        "signature": "dd34db3fb9be7fb3d474070a6d9b912cc204271687e1425d6ddbdb0512f78eb9"
+        "version": "361b32a0db970638cde6648c4f06d79cfca7706d6a73acd59ecb0abd978eef67",
+        "signature": "361b32a0db970638cde6648c4f06d79cfca7706d6a73acd59ecb0abd978eef67"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts": {
-        "version": "d63f46bebe8f8089950f9a9eb0755cce3ad9887285c6abd7bdf556beee8b3e97",
-        "signature": "d63f46bebe8f8089950f9a9eb0755cce3ad9887285c6abd7bdf556beee8b3e97"
+        "version": "d608adfa6fba486383b814a3f3b597817be20e55f13d7a34a2ac3a3926d40adf",
+        "signature": "d608adfa6fba486383b814a3f3b597817be20e55f13d7a34a2ac3a3926d40adf"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts": {
         "version": "78c4cea948fd307a09aa017a9b05f601dc5560166f9cb562353237d9d0480c43",
         "signature": "78c4cea948fd307a09aa017a9b05f601dc5560166f9cb562353237d9d0480c43"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts": {
-        "version": "6b081ccb656855db88b49f8a434bc7cf61aa6f9f67822e527329b7f84d61ee97",
-        "signature": "6b081ccb656855db88b49f8a434bc7cf61aa6f9f67822e527329b7f84d61ee97"
+        "version": "682ff18019a3e574d04f233543d0c83f7566a667b64dd49475e95f7b8d7056c5",
+        "signature": "682ff18019a3e574d04f233543d0c83f7566a667b64dd49475e95f7b8d7056c5"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts": {
         "version": "65d4fbe40d30e01a230d41bf49d44d69b75e4895ca07aedde6b15c812a60916d",
@@ -966,8 +966,8 @@
         "signature": "9f34570701f561709ffe7c3b4d8b46612524eae40b7a35671596677f5ad22fcd"
       },
       "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts": {
-        "version": "68a2d45905c5b3e60ddb220750381f73987e908797237bddc76e420fe179dfcc",
-        "signature": "68a2d45905c5b3e60ddb220750381f73987e908797237bddc76e420fe179dfcc"
+        "version": "780c1d3215b8359686fa0e84cb5a0f376b2175f5a5ee0cf9a679b5a904b3ef3a",
+        "signature": "780c1d3215b8359686fa0e84cb5a0f376b2175f5a5ee0cf9a679b5a904b3ef3a"
       },
       "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts": {
         "version": "c31a6806095fa2a0ff15e2274fc5a3823cc7ec50fe265244b06f76768790dfb2",
@@ -978,8 +978,8 @@
         "signature": "574b0f3c9c97978dfaf21d3c60d54f6f4735ebad6c29f8d526ea5d71505c2e81"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts": {
-        "version": "e6d67ff57b8e1d8cc1df2e2d4d3f4804194fd7ef74f79011c81a4c602f1cda06",
-        "signature": "e6d67ff57b8e1d8cc1df2e2d4d3f4804194fd7ef74f79011c81a4c602f1cda06"
+        "version": "81639ac013f1e31267b729d0f25f737b3348324fc7814394f826c5f72eec434f",
+        "signature": "81639ac013f1e31267b729d0f25f737b3348324fc7814394f826c5f72eec434f"
       },
       "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts": {
         "version": "5369af45989a6f87e2da43c116bceb19b58fa492456a7a7b49044d6ca90fea60",
