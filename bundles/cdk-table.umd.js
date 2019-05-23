@@ -1224,6 +1224,14 @@ function getTableUnknownDataSourceError() {
 function getTableTextColumnMissingParentTableError() {
     return Error("Text column could not find a parent table for registration.");
 }
+/**
+ * Returns an error to be thrown when a table text column doesn't have a name.
+ * \@docs-private
+ * @return {?}
+ */
+function getTableTextColumnMissingNameError() {
+    return Error("Table text column must have a name.");
+}
 
 /**
  * @fileoverview added by tsickle
@@ -2916,10 +2924,15 @@ var CdkTextColumn = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this._options && this._options.defaultHeaderTextTransform) {
-            return this._options.defaultHeaderTextTransform(this.name);
+        /** @type {?} */
+        var name = this.name;
+        if (core.isDevMode() && !name) {
+            throw getTableTextColumnMissingNameError();
         }
-        return this.name[0].toUpperCase() + this.name.slice(1);
+        if (this._options && this._options.defaultHeaderTextTransform) {
+            return this._options.defaultHeaderTextTransform(name);
+        }
+        return name[0].toUpperCase() + name.slice(1);
     };
     /** Synchronizes the column definition name with the text column name. */
     /**

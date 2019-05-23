@@ -41,3 +41,8 @@ export declare function getTableUnknownDataSourceError(): Error;
  * @docs-private
  */
 export declare function getTableTextColumnMissingParentTableError(): Error;
+/**
+ * Returns an error to be thrown when a table text column doesn't have a name.
+ * @docs-private
+ */
+export declare function getTableTextColumnMissingNameError(): Error;
