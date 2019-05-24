@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { coerceBooleanProperty, coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
-import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output, ΔdefineInjectable, Δinject } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, Input, NgModule, NgZone, Output, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -30,7 +30,7 @@ class MutationObserverFactory {
 MutationObserverFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] },
 ];
-/** @nocollapse */ MutationObserverFactory.ngInjectableDef = ΔdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+/** @nocollapse */ MutationObserverFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
 /**
  * An injectable service that allows watching elements for changes to their content.
  */
@@ -151,7 +151,7 @@ ContentObserver.decorators = [
 ContentObserver.ctorParameters = () => [
     { type: MutationObserverFactory }
 ];
-/** @nocollapse */ ContentObserver.ngInjectableDef = ΔdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(Δinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+/** @nocollapse */ ContentObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.

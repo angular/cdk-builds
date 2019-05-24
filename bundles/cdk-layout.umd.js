@@ -85,7 +85,7 @@ var MediaMatcher = /** @class */ (function () {
     MediaMatcher.ctorParameters = function () { return [
         { type: platform.Platform }
     ]; };
-    /** @nocollapse */ MediaMatcher.ngInjectableDef = core.ΔdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(core.Δinject(platform.Platform)); }, token: MediaMatcher, providedIn: "root" });
+    /** @nocollapse */ MediaMatcher.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(core.ɵɵinject(platform.Platform)); }, token: MediaMatcher, providedIn: "root" });
     return MediaMatcher;
 }());
 /**
@@ -311,7 +311,7 @@ var BreakpointObserver = /** @class */ (function () {
         { type: MediaMatcher },
         { type: core.NgZone }
     ]; };
-    /** @nocollapse */ BreakpointObserver.ngInjectableDef = core.ΔdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(core.Δinject(MediaMatcher), core.Δinject(core.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    /** @nocollapse */ BreakpointObserver.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(core.ɵɵinject(MediaMatcher), core.ɵɵinject(core.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
 }());
 /**

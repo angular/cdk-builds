@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT } from '@angular/common';
-import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Directive, Output, Input, NgModule, ΔdefineInjectable, Δinject } from '@angular/core';
+import { inject, InjectionToken, EventEmitter, Inject, Injectable, Optional, Directive, Output, Input, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -88,7 +88,7 @@ var Directionality = /** @class */ (function () {
     Directionality.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ Directionality.ngInjectableDef = ΔdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(Δinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+    /** @nocollapse */ Directionality.ngInjectableDef = ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
     return Directionality;
 }());
 

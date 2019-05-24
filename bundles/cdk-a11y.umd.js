@@ -478,7 +478,7 @@ var AriaDescriber = /** @class */ (function () {
     AriaDescriber.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ AriaDescriber.ngInjectableDef = core.ΔdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.Δinject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+    /** @nocollapse */ AriaDescriber.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(core.ɵɵinject(common.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
 }());
 /**
@@ -1383,7 +1383,7 @@ var InteractivityChecker = /** @class */ (function () {
     InteractivityChecker.ctorParameters = function () { return [
         { type: platform.Platform }
     ]; };
-    /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.ΔdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.Δinject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
+    /** @nocollapse */ InteractivityChecker.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(core.ɵɵinject(platform.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
 }());
 /**
@@ -2060,7 +2060,7 @@ var FocusTrapFactory = /** @class */ (function () {
         { type: core.NgZone },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.ΔdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.Δinject(InteractivityChecker), core.Δinject(core.NgZone), core.Δinject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(core.ɵɵinject(InteractivityChecker), core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
 }());
 /**
@@ -2346,7 +2346,7 @@ var LiveAnnouncer = /** @class */ (function () {
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.ΔdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.Δinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.Δinject(core.NgZone), core.Δinject(common.DOCUMENT), core.Δinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(core.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT), core.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
@@ -2978,7 +2978,7 @@ var FocusMonitor = /** @class */ (function () {
         { type: core.NgZone },
         { type: platform.Platform }
     ]; };
-    /** @nocollapse */ FocusMonitor.ngInjectableDef = core.ΔdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.Δinject(core.NgZone), core.Δinject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
+    /** @nocollapse */ FocusMonitor.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(core.ɵɵinject(core.NgZone), core.ɵɵinject(platform.Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 /**

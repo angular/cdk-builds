@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, ΔdefineInjectable, Δinject } from '@angular/core';
+import { Inject, Injectable, Optional, SkipSelf, QueryList, Directive, ElementRef, Input, NgZone, isDevMode, InjectionToken, EventEmitter, Output, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, A, Z, ZERO, NINE, hasModifierKey } from '@angular/cdk/keycodes';
 import { debounceTime, filter, map, tap, take } from 'rxjs/operators';
@@ -453,7 +453,7 @@ var AriaDescriber = /** @class */ (function () {
     AriaDescriber.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ AriaDescriber.ngInjectableDef = ΔdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(Δinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+    /** @nocollapse */ AriaDescriber.ngInjectableDef = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     return AriaDescriber;
 }());
 /**
@@ -1358,7 +1358,7 @@ var InteractivityChecker = /** @class */ (function () {
     InteractivityChecker.ctorParameters = function () { return [
         { type: Platform }
     ]; };
-    /** @nocollapse */ InteractivityChecker.ngInjectableDef = ΔdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(Δinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
+    /** @nocollapse */ InteractivityChecker.ngInjectableDef = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
 }());
 /**
@@ -2035,7 +2035,7 @@ var FocusTrapFactory = /** @class */ (function () {
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = ΔdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(Δinject(InteractivityChecker), Δinject(NgZone), Δinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+    /** @nocollapse */ FocusTrapFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     return FocusTrapFactory;
 }());
 /**
@@ -2321,7 +2321,7 @@ var LiveAnnouncer = /** @class */ (function () {
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
     ]; };
-    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = ΔdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(Δinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), Δinject(NgZone), Δinject(DOCUMENT), Δinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+    /** @nocollapse */ LiveAnnouncer.ngInjectableDef = ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), ɵɵinject(NgZone), ɵɵinject(DOCUMENT), ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
     return LiveAnnouncer;
 }());
 /**
@@ -2953,7 +2953,7 @@ var FocusMonitor = /** @class */ (function () {
         { type: NgZone },
         { type: Platform }
     ]; };
-    /** @nocollapse */ FocusMonitor.ngInjectableDef = ΔdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(Δinject(NgZone), Δinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
+    /** @nocollapse */ FocusMonitor.ngInjectableDef = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 /**

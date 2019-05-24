@@ -2914,7 +2914,7 @@ var DragDropRegistry = /** @class */ (function () {
         { type: core.NgZone },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.ΔdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.Δinject(core.NgZone), core.Δinject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    /** @nocollapse */ DragDropRegistry.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
 }());
 
@@ -2992,7 +2992,7 @@ var DragDrop = /** @class */ (function () {
         { type: scrolling.ViewportRuler },
         { type: DragDropRegistry }
     ]; };
-    /** @nocollapse */ DragDrop.ngInjectableDef = core.ΔdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(core.Δinject(common.DOCUMENT), core.Δinject(core.NgZone), core.Δinject(scrolling.ViewportRuler), core.Δinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    /** @nocollapse */ DragDrop.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(core.ɵɵinject(common.DOCUMENT), core.ɵɵinject(core.NgZone), core.ɵɵinject(scrolling.ViewportRuler), core.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     return DragDrop;
 }());
 

@@ -557,7 +557,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: core.NgZone },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = core.ΔdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(core.Δinject(scrolling.ScrollDispatcher), core.Δinject(scrolling.ViewportRuler), core.Δinject(core.NgZone), core.Δinject(common.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    /** @nocollapse */ ScrollStrategyOptions.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(core.ɵɵinject(scrolling.ScrollDispatcher), core.ɵɵinject(scrolling.ViewportRuler), core.ɵɵinject(core.NgZone), core.ɵɵinject(common.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
 }());
 
@@ -854,7 +854,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = core.ΔdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(core.Δinject(common.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    /** @nocollapse */ OverlayKeyboardDispatcher.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(core.ɵɵinject(common.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
 }());
 /**
@@ -960,7 +960,7 @@ var OverlayContainer = /** @class */ (function () {
     OverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ OverlayContainer.ngInjectableDef = core.ΔdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(core.Δinject(common.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+    /** @nocollapse */ OverlayContainer.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(core.ɵɵinject(common.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
 }());
 /**
@@ -4197,7 +4197,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
         { type: platform.Platform },
         { type: OverlayContainer }
     ]; };
-    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.ΔdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.Δinject(scrolling.ViewportRuler), core.Δinject(common.DOCUMENT), core.Δinject(platform.Platform), core.Δinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    /** @nocollapse */ OverlayPositionBuilder.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(core.ɵɵinject(scrolling.ViewportRuler), core.ɵɵinject(common.DOCUMENT), core.ɵɵinject(platform.Platform), core.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
 
@@ -5072,7 +5072,7 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     FullscreenOverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
     ]; };
-    /** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = core.ΔdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(core.Δinject(common.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    /** @nocollapse */ FullscreenOverlayContainer.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(core.ɵɵinject(common.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

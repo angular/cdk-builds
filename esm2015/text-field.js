@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
-import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, ΔdefineInjectable, Δinject } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, Input, NgModule, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -135,7 +135,7 @@ AutofillMonitor.ctorParameters = () => [
     { type: Platform },
     { type: NgZone }
 ];
-/** @nocollapse */ AutofillMonitor.ngInjectableDef = ΔdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(Δinject(Platform), Δinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+/** @nocollapse */ AutofillMonitor.ngInjectableDef = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
 /**
  * A directive that can be used to monitor the autofill state of an input.
  */
