@@ -690,7 +690,7 @@ var ScrollDispatcher = /** @class */ (function () {
     return ScrollDispatcher;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-312b6f4
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -700,7 +700,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$
     return parentDispatcher || new ScrollDispatcher(ngZone, platform$$1);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-312b6f4
  * @type {?}
  */
 var SCROLL_DISPATCHER_PROVIDER = {
@@ -2179,7 +2179,7 @@ var ScrollingModule = /** @class */ (function () {
 }());
 /**
  * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * \@breaking-change 8.0.0 delete this alias
+ * \@breaking-change 8.0.0-312b6f4 delete this alias
  */
 var ScrollDispatchModule = /** @class */ (function () {
     function ScrollDispatchModule() {
@@ -2365,7 +2365,7 @@ var ViewportRuler = /** @class */ (function () {
     return ViewportRuler;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-312b6f4
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -2375,7 +2375,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform$$1, ngZone) {
     return parentRuler || new ViewportRuler(platform$$1, ngZone);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-312b6f4
  * @type {?}
  */
 var VIEWPORT_RULER_PROVIDER = {
