@@ -482,7 +482,7 @@ var AriaDescriber = /** @class */ (function () {
     return AriaDescriber;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @param {?} parentDispatcher
  * @param {?} _document
  * @return {?}
@@ -491,7 +491,7 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @type {?}
  */
 var ARIA_DESCRIBER_PROVIDER = {
@@ -953,19 +953,19 @@ ListKeyManager = /** @class */ (function () {
      * Allows setting of the activeItemIndex without any other effects.
      * @param index The new activeItemIndex.
      * @deprecated Use `updateActiveItem` instead.
-     * @breaking-change 8.0.0-2adf629
+     * @breaking-change 8.0.0-09427f5
      */
     /**
      * Allows setting of the activeItemIndex without any other effects.
      * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 8.0.0-2adf629
+     * \@breaking-change 8.0.0-09427f5
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
     ListKeyManager.prototype.updateActiveItemIndex = /**
      * Allows setting of the activeItemIndex without any other effects.
      * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 8.0.0-2adf629
+     * \@breaking-change 8.0.0-09427f5
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
@@ -1781,16 +1781,16 @@ FocusTrap = /** @class */ (function () {
             ("[cdkFocusRegion" + bound + "], ") +
             ("[cdk-focus-" + bound + "]"))));
         for (var i = 0; i < markers.length; i++) {
-            // @breaking-change 8.0.0-2adf629
+            // @breaking-change 8.0.0-09427f5
             if (markers[i].hasAttribute("cdk-focus-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-" + bound + "', " +
                     ("use 'cdkFocusRegion" + bound + "' instead. The deprecated ") +
-                    "attribute will be removed in 8.0.0-2adf629.", markers[i]);
+                    "attribute will be removed in 8.0.0-09427f5.", markers[i]);
             }
             else if (markers[i].hasAttribute("cdk-focus-region-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-region-" + bound + "', " +
                     ("use 'cdkFocusRegion" + bound + "' instead. The deprecated attribute ") +
-                    "will be removed in 8.0.0-2adf629.", markers[i]);
+                    "will be removed in 8.0.0-09427f5.", markers[i]);
             }
         }
         if (bound == 'start') {
@@ -1817,11 +1817,11 @@ FocusTrap = /** @class */ (function () {
         var redirectToElement = (/** @type {?} */ (this._element.querySelector("[cdk-focus-initial], " +
             "[cdkFocusInitial]")));
         if (redirectToElement) {
-            // @breaking-change 8.0.0-2adf629
+            // @breaking-change 8.0.0-09427f5
             if (redirectToElement.hasAttribute("cdk-focus-initial")) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-initial', " +
                     "use 'cdkFocusInitial' instead. The deprecated attribute " +
-                    "will be removed in 8.0.0-2adf629", redirectToElement);
+                    "will be removed in 8.0.0-09427f5", redirectToElement);
             }
             // Warn the consumer if the element they've pointed to
             // isn't focusable, when not in production mode.
@@ -2438,7 +2438,7 @@ var CdkAriaLive = /** @class */ (function () {
     return CdkAriaLive;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @param {?} parentAnnouncer
  * @param {?} liveElement
  * @param {?} _document
@@ -2449,7 +2449,7 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document
     return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @type {?}
  */
 var LIVE_ANNOUNCER_PROVIDER = {
@@ -3029,7 +3029,7 @@ var CdkMonitorFocus = /** @class */ (function () {
     return CdkMonitorFocus;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -3039,7 +3039,7 @@ function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform$$1) {
     return parentDispatcher || new FocusMonitor(ngZone, platform$$1);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-2adf629
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-09427f5
  * @type {?}
  */
 var FOCUS_MONITOR_PROVIDER = {

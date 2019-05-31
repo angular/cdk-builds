@@ -269,7 +269,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * @breaking-change 8.0.0-2adf629
+     * @breaking-change 8.0.0-09427f5
      */
     setHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
     /**
@@ -278,7 +278,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * @breaking-change 8.0.0-2adf629
+     * @breaking-change 8.0.0-09427f5
      */
     setFooterRowDef(footerRowDef: CdkFooterRowDef): void;
     /** Adds a column definition that was not included as part of the content children. */
