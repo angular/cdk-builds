@@ -33,7 +33,7 @@ catch (_a) {
  */
 class Platform {
     /**
-     * \@breaking-change 8.0.0-b261afa remove optional decorator
+     * \@breaking-change 8.0.0-2b07377 remove optional decorator
      * @param {?=} _platformId
      */
     constructor(_platformId) {
