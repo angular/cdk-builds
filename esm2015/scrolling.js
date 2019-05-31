@@ -478,7 +478,7 @@ ScrollDispatcher.ctorParameters = () => [
 ];
 /** @nocollapse */ ScrollDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-612a738
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-b261afa
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -488,7 +488,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) 
     return parentDispatcher || new ScrollDispatcher(ngZone, platform);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-612a738
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-b261afa
  * @type {?}
  */
 const SCROLL_DISPATCHER_PROVIDER = {
@@ -1640,7 +1640,7 @@ ScrollingModule.decorators = [
 ];
 /**
  * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * \@breaking-change 8.0.0-612a738 delete this alias
+ * \@breaking-change 8.0.0-b261afa delete this alias
  */
 class ScrollDispatchModule {
 }
@@ -1791,7 +1791,7 @@ ViewportRuler.ctorParameters = () => [
 ];
 /** @nocollapse */ ViewportRuler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-612a738
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-b261afa
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -1801,7 +1801,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
     return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-612a738
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-b261afa
  * @type {?}
  */
 const VIEWPORT_RULER_PROVIDER = {
