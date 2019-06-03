@@ -35,7 +35,7 @@ export declare class Platform {
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
     /**
-     * @breaking-change 8.0.0-09427f5 remove optional decorator
+     * @breaking-change 8.0.0-778fc34 remove optional decorator
      */
     constructor(_platformId?: Object | undefined);
 }
