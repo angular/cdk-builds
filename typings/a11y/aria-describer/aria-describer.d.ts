@@ -71,9 +71,9 @@ export declare class AriaDescriber implements OnDestroy {
     /** Checks whether a node is an Element node. */
     private _isElementNode;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-8ba2f22 */
+/** @docs-private @deprecated @breaking-change 8.0.0-ab76eaa */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
-/** @docs-private @deprecated @breaking-change 8.0.0-8ba2f22 */
+/** @docs-private @deprecated @breaking-change 8.0.0-ab76eaa */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
     deps: (Optional[] | InjectionToken<any>)[];

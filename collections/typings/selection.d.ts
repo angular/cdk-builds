@@ -27,7 +27,7 @@ export declare class SelectionModel<T> {
     /**
      * Event emitted when the value has changed.
      * @deprecated Use `changed` instead.
-     * @breaking-change 8.0.0-8ba2f22 To be changed to `changed`
+     * @breaking-change 8.0.0-ab76eaa To be changed to `changed`
      */
     onChange: Subject<SelectionChange<T>>;
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
