@@ -25,9 +25,9 @@ export declare class OverlayContainer implements OnDestroy {
      */
     protected _createContainer(): void;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-15038e3 */
+/** @docs-private @deprecated @breaking-change 8.0.0-3b1ae05 */
 export declare function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer: OverlayContainer, _document: any): OverlayContainer;
-/** @docs-private @deprecated @breaking-change 8.0.0-15038e3 */
+/** @docs-private @deprecated @breaking-change 8.0.0-3b1ae05 */
 export declare const OVERLAY_CONTAINER_PROVIDER: {
     provide: typeof OverlayContainer;
     deps: (Optional[] | InjectionToken<any>)[];

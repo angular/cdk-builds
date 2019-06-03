@@ -740,6 +740,9 @@ class DragRef {
         this._toggleNativeDragInteractions();
         this._hasStartedDragging = this._hasMoved = false;
         this._initialContainer = (/** @type {?} */ (this._dropContainer));
+        // Avoid multiple subscriptions and memory leaks when multi touch
+        // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
+        this._removeSubscriptions();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
@@ -1336,7 +1339,7 @@ class DropListRef {
         /**
          * Unique ID for the drop list.
          * @deprecated No longer being used. To be removed.
-         * \@breaking-change 8.0.0-15038e3
+         * \@breaking-change 8.0.0-3b1ae05
          */
         this.id = `cdk-drop-list-ref-${_uniqueIdCounter++}`;
         /**
@@ -2149,6 +2152,10 @@ class DragDropRegistry {
      * @return {?}
      */
     startDragging(drag, event) {
+        // Do not process the same drag twice to avoid memory leaks and redundant listeners
+        if (this._activeDragInstances.has(drag)) {
+            return;
+        }
         this._activeDragInstances.add(drag);
         if (this._activeDragInstances.size === 1) {
             /** @type {?} */
@@ -2230,7 +2237,7 @@ class DragDropRegistry {
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-15038e3
+     * \@breaking-change 8.0.0-3b1ae05
      * @param {?} id
      * @return {?}
      */
@@ -2360,7 +2367,7 @@ const CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0-15038e3
+ * \@breaking-change 8.0.0-3b1ae05
  * @type {?}
  */
 const CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
@@ -3033,7 +3040,7 @@ CdkDropListGroup.propDecorators = {
  */
 let _uniqueIdCounter$1 = 0;
 const ɵ0 = undefined;
-// @breaking-change 8.0.0-15038e3 `CdkDropList` implements `CdkDropListContainer` for backwards
+// @breaking-change 8.0.0-3b1ae05 `CdkDropList` implements `CdkDropListContainer` for backwards
 // compatiblity. The implements clause, as well as all the methods that it enforces can
 // be removed when `CdkDropListContainer` is deleted.
 /**
