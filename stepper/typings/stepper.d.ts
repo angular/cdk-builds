@@ -42,7 +42,7 @@ export declare const STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
 /**
  * InjectionToken that can be used to specify the global stepper options.
  * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
- * @breaking-change 8.0.0-461d539.
+ * @breaking-change 8.0.0-6b2a390.
  */
 export declare const MAT_STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
 /** Configurable options for stepper. */
@@ -99,7 +99,7 @@ export declare class CdkStep implements OnChanges {
     hasError: boolean;
     private _customError;
     private _getDefaultError;
-    /** @breaking-change 8.0.0-461d539 remove the `?` after `stepperOptions` */
+    /** @breaking-change 8.0.0-6b2a390 remove the `?` after `stepperOptions` */
     constructor(_stepper: CdkStepper, stepperOptions?: StepperOptions);
     /** Selects this step component. */
     select(): void;
@@ -116,7 +116,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     /** Used for managing keyboard focus. */
     private _keyManager;
     /**
-     * @breaking-change 8.0.0-461d539 Remove `| undefined` once the `_document`
+     * @breaking-change 8.0.0-6b2a390 Remove `| undefined` once the `_document`
      * constructor param is required.
      */
     private _document;
@@ -131,7 +131,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.
-     * @breaking-change 8.0.0-461d539
+     * @breaking-change 8.0.0-6b2a390
      */
     _stepHeader: QueryList<FocusableOption>;
     /** Whether the validity of previous steps should be checked or not. */
