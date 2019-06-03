@@ -9,7 +9,7 @@ export declare class ScrollingModule {
 }
 /**
  * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * @breaking-change 8.0.0-ab76eaa delete this alias
+ * @breaking-change 8.0.0-461d539 delete this alias
  */
 export declare class ScrollDispatchModule {
 }
