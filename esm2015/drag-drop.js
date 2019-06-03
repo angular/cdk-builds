@@ -292,11 +292,16 @@ class DragRef {
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold && (Date.now() >= this._dragStartTime + (this.dragStartDelay || 0))) {
-                    this._hasStartedDragging = true;
-                    this._ngZone.run((/**
-                     * @return {?}
-                     */
-                    () => this._startDragSequence(event)));
+                    // Prevent other drag sequences from starting while something in the container is still
+                    // being dragged. This can happen while we're waiting for the drop animation to finish
+                    // and can cause errors, because some elements might still be moving around.
+                    if (!this._dropContainer || !this._dropContainer.isDragging()) {
+                        this._hasStartedDragging = true;
+                        this._ngZone.run((/**
+                         * @return {?}
+                         */
+                        () => this._startDragSequence(event)));
+                    }
                 }
                 return;
             }
@@ -1331,7 +1336,7 @@ class DropListRef {
         /**
          * Unique ID for the drop list.
          * @deprecated No longer being used. To be removed.
-         * \@breaking-change 8.0.0-6b2a390
+         * \@breaking-change 8.0.0-15038e3
          */
         this.id = `cdk-drop-list-ref-${_uniqueIdCounter++}`;
         /**
@@ -2225,7 +2230,7 @@ class DragDropRegistry {
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-6b2a390
+     * \@breaking-change 8.0.0-15038e3
      * @param {?} id
      * @return {?}
      */
@@ -2355,7 +2360,7 @@ const CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0-6b2a390
+ * \@breaking-change 8.0.0-15038e3
  * @type {?}
  */
 const CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
@@ -3028,7 +3033,7 @@ CdkDropListGroup.propDecorators = {
  */
 let _uniqueIdCounter$1 = 0;
 const ɵ0 = undefined;
-// @breaking-change 8.0.0-6b2a390 `CdkDropList` implements `CdkDropListContainer` for backwards
+// @breaking-change 8.0.0-15038e3 `CdkDropList` implements `CdkDropListContainer` for backwards
 // compatiblity. The implements clause, as well as all the methods that it enforces can
 // be removed when `CdkDropListContainer` is deleted.
 /**
