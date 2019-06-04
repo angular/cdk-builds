@@ -46,9 +46,9 @@ export declare class ViewportRuler implements OnDestroy {
     /** Updates the cached viewport size. */
     private _updateViewportSize;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-aadfc88 */
+/** @docs-private @deprecated @breaking-change 8.0.0-5a3e206 */
 export declare function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler: ViewportRuler, platform: Platform, ngZone: NgZone): ViewportRuler;
-/** @docs-private @deprecated @breaking-change 8.0.0-aadfc88 */
+/** @docs-private @deprecated @breaking-change 8.0.0-5a3e206 */
 export declare const VIEWPORT_RULER_PROVIDER: {
     provide: typeof ViewportRuler;
     deps: (Optional[] | typeof NgZone | typeof Platform)[];

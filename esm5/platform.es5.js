@@ -33,7 +33,7 @@ catch (_a) {
  */
 var Platform = /** @class */ (function () {
     /**
-     * @breaking-change 8.0.0-aadfc88 remove optional decorator
+     * @breaking-change 8.0.0-5a3e206 remove optional decorator
      */
     function Platform(_platformId) {
         this._platformId = _platformId;

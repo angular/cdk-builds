@@ -57,7 +57,7 @@ export declare class DragDropRegistry<I, C extends {
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0-aadfc88
+     * @breaking-change 8.0.0-5a3e206
      */
     getDropContainer(id: string): C | undefined;
     ngOnDestroy(): void;

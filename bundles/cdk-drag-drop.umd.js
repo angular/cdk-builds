@@ -912,6 +912,9 @@ DragRef = /** @class */ (function () {
         this._toggleNativeDragInteractions();
         this._hasStartedDragging = this._hasMoved = false;
         this._initialContainer = (/** @type {?} */ (this._dropContainer));
+        // Avoid multiple subscriptions and memory leaks when multi touch
+        // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
+        this._removeSubscriptions();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
         this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
@@ -1624,7 +1627,7 @@ DropListRef = /** @class */ (function () {
         /**
          * Unique ID for the drop list.
          * @deprecated No longer being used. To be removed.
-         * \@breaking-change 8.0.0-aadfc88
+         * \@breaking-change 8.0.0-5a3e206
          */
         this.id = "cdk-drop-list-ref-" + _uniqueIdCounter++;
         /**
@@ -2750,6 +2753,10 @@ var DragDropRegistry = /** @class */ (function () {
      */
     function (drag, event) {
         var _this = this;
+        // Do not process the same drag twice to avoid memory leaks and redundant listeners
+        if (this._activeDragInstances.has(drag)) {
+            return;
+        }
         this._activeDragInstances.add(drag);
         if (this._activeDragInstances.size === 1) {
             /** @type {?} */
@@ -2843,19 +2850,19 @@ var DragDropRegistry = /** @class */ (function () {
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0-aadfc88
+     * @breaking-change 8.0.0-5a3e206
      */
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-aadfc88
+     * \@breaking-change 8.0.0-5a3e206
      * @param {?} id
      * @return {?}
      */
     DragDropRegistry.prototype.getDropContainer = /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-aadfc88
+     * \@breaking-change 8.0.0-5a3e206
      * @param {?} id
      * @return {?}
      */
@@ -3015,7 +3022,7 @@ var CDK_DROP_LIST = new core.InjectionToken('CDK_DROP_LIST');
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0-aadfc88
+ * \@breaking-change 8.0.0-5a3e206
  * @type {?}
  */
 var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
@@ -3770,7 +3777,7 @@ var CdkDropListGroup = /** @class */ (function () {
  */
 var _uniqueIdCounter$1 = 0;
 var ɵ0 = undefined;
-// @breaking-change 8.0.0-aadfc88 `CdkDropList` implements `CdkDropListContainer` for backwards
+// @breaking-change 8.0.0-5a3e206 `CdkDropList` implements `CdkDropListContainer` for backwards
 // compatiblity. The implements clause, as well as all the methods that it enforces can
 // be removed when `CdkDropListContainer` is deleted.
 /**
