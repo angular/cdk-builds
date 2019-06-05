@@ -1668,7 +1668,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * @breaking-change 8.0.0-8ecfc72
+     * @breaking-change 8.0.0-57b9902
      */
     /**
      * Sets the header row definition to be used. Overrides the header row definition gathered by
@@ -1676,7 +1676,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@breaking-change 8.0.0-8ecfc72
+     * \@breaking-change 8.0.0-57b9902
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1686,7 +1686,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@breaking-change 8.0.0-8ecfc72
+     * \@breaking-change 8.0.0-57b9902
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1700,7 +1700,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * @docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * @breaking-change 8.0.0-8ecfc72
+     * @breaking-change 8.0.0-57b9902
      */
     /**
      * Sets the footer row definition to be used. Overrides the footer row definition gathered by
@@ -1708,7 +1708,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@breaking-change 8.0.0-8ecfc72
+     * \@breaking-change 8.0.0-57b9902
      * @param {?} footerRowDef
      * @return {?}
      */
@@ -1718,7 +1718,7 @@ var CdkTable = /** @class */ (function () {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@breaking-change 8.0.0-8ecfc72
+     * \@breaking-change 8.0.0-57b9902
      * @param {?} footerRowDef
      * @return {?}
      */
