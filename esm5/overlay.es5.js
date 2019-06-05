@@ -16,7 +16,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
-import { ESCAPE } from '@angular/cdk/keycodes';
+import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
 /**
  * @fileoverview added by tsickle
@@ -825,7 +825,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     return OverlayKeyboardDispatcher;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-e7b7b30
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-7baac27
  * @param {?} dispatcher
  * @param {?} _document
  * @return {?}
@@ -834,7 +834,7 @@ function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
     return dispatcher || new OverlayKeyboardDispatcher(_document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-e7b7b30
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-7baac27
  * @type {?}
  */
 var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
@@ -931,7 +931,7 @@ var OverlayContainer = /** @class */ (function () {
     return OverlayContainer;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-e7b7b30
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-7baac27
  * @param {?} parentContainer
  * @param {?} _document
  * @return {?}
@@ -940,7 +940,7 @@ function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
     return parentContainer || new OverlayContainer(_document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-e7b7b30
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-7baac27
  * @type {?}
  */
 var OVERLAY_CONTAINER_PROVIDER = {
@@ -1118,7 +1118,7 @@ OverlayRef = /** @class */ (function () {
         this._attachments.next();
         // Track this overlay by the keyboard dispatcher
         this._keyboardDispatcher.add(this);
-        // @breaking-change 8.0.0-e7b7b30 remove the null check for `_location`
+        // @breaking-change 8.0.0-7baac27 remove the null check for `_location`
         // once the constructor parameter is made required.
         if (this._config.disposeOnNavigation && this._location) {
             this._locationChanges = this._location.subscribe((/**
@@ -3359,7 +3359,7 @@ function extendStyles(dest, source) {
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * \@breaking-change 8.0.0-e7b7b30
+ * \@breaking-change 8.0.0-7baac27
  */
 var  /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
@@ -3368,7 +3368,7 @@ var  /**
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * \@breaking-change 8.0.0-e7b7b30
+ * \@breaking-change 8.0.0-7baac27
  */
 ConnectedPositionStrategy = /** @class */ (function () {
     function ConnectedPositionStrategy(originPos, overlayPos, connectedTo, viewportRuler, document, platform, overlayContainer) {
@@ -3868,12 +3868,12 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay width and clears any previously set width.
      * @param value New width for the overlay
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * @breaking-change 8.0.0-e7b7b30
+     * @breaking-change 8.0.0-7baac27
      */
     /**
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @template THIS
      * @this {THIS}
      * @param {?=} value New width for the overlay
@@ -3882,7 +3882,7 @@ GlobalPositionStrategy = /** @class */ (function () {
     GlobalPositionStrategy.prototype.width = /**
      * Sets the overlay width and clears any previously set width.
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @template THIS
      * @this {THIS}
      * @param {?=} value New width for the overlay
@@ -3902,12 +3902,12 @@ GlobalPositionStrategy = /** @class */ (function () {
      * Sets the overlay height and clears any previously set height.
      * @param value New height for the overlay
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * @breaking-change 8.0.0-e7b7b30
+     * @breaking-change 8.0.0-7baac27
      */
     /**
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @template THIS
      * @this {THIS}
      * @param {?=} value New height for the overlay
@@ -3916,7 +3916,7 @@ GlobalPositionStrategy = /** @class */ (function () {
     GlobalPositionStrategy.prototype.height = /**
      * Sets the overlay height and clears any previously set height.
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @template THIS
      * @this {THIS}
      * @param {?=} value New height for the overlay
@@ -4114,12 +4114,12 @@ var OverlayPositionBuilder = /** @class */ (function () {
      * @param originPos
      * @param overlayPos
      * @deprecated Use `flexibleConnectedTo` instead.
-     * @breaking-change 8.0.0-e7b7b30
+     * @breaking-change 8.0.0-7baac27
      */
     /**
      * Creates a relative position strategy.
      * @deprecated Use `flexibleConnectedTo` instead.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @param {?} elementRef
      * @param {?} originPos
      * @param {?} overlayPos
@@ -4128,7 +4128,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
     OverlayPositionBuilder.prototype.connectedTo = /**
      * Creates a relative position strategy.
      * @deprecated Use `flexibleConnectedTo` instead.
-     * \@breaking-change 8.0.0-e7b7b30
+     * \@breaking-change 8.0.0-7baac27
      * @param {?} elementRef
      * @param {?} originPos
      * @param {?} overlayPos
@@ -4643,7 +4643,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
          */
         function (event) {
             _this.overlayKeydown.next(event);
-            if (event.keyCode === ESCAPE) {
+            if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
+                event.preventDefault();
                 _this._detachOverlay();
             }
         }));
@@ -4889,7 +4890,7 @@ var OverlayModule = /** @class */ (function () {
 }());
 /**
  * @deprecated Use `OverlayModule` instead.
- * \@breaking-change 8.0.0-e7b7b30
+ * \@breaking-change 8.0.0-7baac27
  * \@docs-private
  * @type {?}
  */

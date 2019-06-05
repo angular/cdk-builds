@@ -22,7 +22,7 @@ export * from './directives/drag-placeholder';
 import { DragRefConfig } from './drag-ref';
 /**
  * @deprecated Use `DragRefConfig` instead.
- * @breaking-change 8.0.0-e7b7b30
+ * @breaking-change 8.0.0-7baac27
  */
 export interface CdkDragConfig extends DragRefConfig {
 }

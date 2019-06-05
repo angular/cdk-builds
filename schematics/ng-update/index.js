@@ -31,7 +31,7 @@ function updateToV7() {
     return upgrade_rules_1.createUpgradeRule(target_version_1.TargetVersion.V7, tslintUpgradeConfig);
 }
 exports.updateToV7 = updateToV7;
-/** Entry point for the migration schematics with target of Angular Material 8.0.0-e7b7b30 */
+/** Entry point for the migration schematics with target of Angular Material 8.0.0-7baac27 */
 function updateToV8() {
     return upgrade_rules_1.createUpgradeRule(target_version_1.TargetVersion.V8, tslintUpgradeConfig);
 }
