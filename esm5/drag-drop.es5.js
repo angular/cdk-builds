@@ -1630,7 +1630,7 @@ DropListRef = /** @class */ (function () {
         /**
          * Unique ID for the drop list.
          * @deprecated No longer being used. To be removed.
-         * \@breaking-change 8.0.0-57b9902
+         * \@breaking-change 8.0.0-e7b7b30
          */
         this.id = "cdk-drop-list-ref-" + _uniqueIdCounter++;
         /**
@@ -2853,19 +2853,19 @@ var DragDropRegistry = /** @class */ (function () {
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0-57b9902
+     * @breaking-change 8.0.0-e7b7b30
      */
     /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-57b9902
+     * \@breaking-change 8.0.0-e7b7b30
      * @param {?} id
      * @return {?}
      */
     DragDropRegistry.prototype.getDropContainer = /**
      * Gets a drop container by its id.
      * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0-57b9902
+     * \@breaking-change 8.0.0-e7b7b30
      * @param {?} id
      * @return {?}
      */
@@ -3025,7 +3025,7 @@ var CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0-57b9902
+ * \@breaking-change 8.0.0-e7b7b30
  * @type {?}
  */
 var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
@@ -3780,7 +3780,7 @@ var CdkDropListGroup = /** @class */ (function () {
  */
 var _uniqueIdCounter$1 = 0;
 var ɵ0 = undefined;
-// @breaking-change 8.0.0-57b9902 `CdkDropList` implements `CdkDropListContainer` for backwards
+// @breaking-change 8.0.0-e7b7b30 `CdkDropList` implements `CdkDropListContainer` for backwards
 // compatiblity. The implements clause, as well as all the methods that it enforces can
 // be removed when `CdkDropListContainer` is deleted.
 /**
