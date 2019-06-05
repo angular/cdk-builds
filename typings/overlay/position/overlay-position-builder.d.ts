@@ -30,7 +30,7 @@ export declare class OverlayPositionBuilder {
      * @param originPos
      * @param overlayPos
      * @deprecated Use `flexibleConnectedTo` instead.
-     * @breaking-change 8.0.0-2d93c6d
+     * @breaking-change 8.0.0-8ecfc72
      */
     connectedTo(elementRef: ElementRef, originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition): ConnectedPositionStrategy;
     /**

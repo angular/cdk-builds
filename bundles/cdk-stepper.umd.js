@@ -104,12 +104,12 @@ var STEPPER_GLOBAL_OPTIONS = new core.InjectionToken('STEPPER_GLOBAL_OPTIONS');
 /**
  * InjectionToken that can be used to specify the global stepper options.
  * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
- * \@breaking-change 8.0.0-2d93c6d.
+ * \@breaking-change 8.0.0-8ecfc72.
  * @type {?}
  */
 var MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 var CdkStep = /** @class */ (function () {
-    /** @breaking-change 8.0.0-2d93c6d remove the `?` after `stepperOptions` */
+    /** @breaking-change 8.0.0-8ecfc72 remove the `?` after `stepperOptions` */
     function CdkStep(_stepper, stepperOptions) {
         this._stepper = _stepper;
         /**
@@ -379,7 +379,7 @@ var CdkStepper = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            // @breaking-change 8.0.0-2d93c6d Change return type to `CdkStep | undefined`.
+            // @breaking-change 8.0.0-8ecfc72 Change return type to `CdkStep | undefined`.
             return this.steps ? this.steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
         },
         set: /**
