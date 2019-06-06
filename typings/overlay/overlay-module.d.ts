@@ -10,7 +10,7 @@ export declare class OverlayModule {
 }
 /**
  * @deprecated Use `OverlayModule` instead.
- * @breaking-change 8.0.0-70aee92
+ * @breaking-change 8.0.0-f7ce721
  * @docs-private
  */
 export declare const OVERLAY_PROVIDERS: Provider[];

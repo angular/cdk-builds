@@ -55,7 +55,9 @@ function getWorkspaceConfigGracefully(tree) {
         return null;
     }
     try {
-        return JSON.parse(configBuffer.toString());
+        // Parse the workspace file as JSON5 which is also supported for CLI
+        // workspace configurations.
+        return core_1.parseJson(configBuffer.toString(), core_1.JsonParseMode.Json5);
     }
     catch (_a) {
         return null;
