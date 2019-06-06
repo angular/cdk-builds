@@ -69,9 +69,9 @@ export declare class ScrollDispatcher implements OnDestroy {
     /** Cleans up the global scroll listener. */
     private _removeGlobalListener;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-ffad004 */
+/** @docs-private @deprecated @breaking-change 8.0.0-70aee92 */
 export declare function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher: ScrollDispatcher, ngZone: NgZone, platform: Platform): ScrollDispatcher;
-/** @docs-private @deprecated @breaking-change 8.0.0-ffad004 */
+/** @docs-private @deprecated @breaking-change 8.0.0-70aee92 */
 export declare const SCROLL_DISPATCHER_PROVIDER: {
     provide: typeof ScrollDispatcher;
     deps: (Optional[] | typeof NgZone | typeof Platform)[];
