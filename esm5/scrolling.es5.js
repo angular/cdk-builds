@@ -664,7 +664,7 @@ var ScrollDispatcher = /** @class */ (function () {
     return ScrollDispatcher;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8daaf4d
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -674,7 +674,7 @@ function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) 
     return parentDispatcher || new ScrollDispatcher(ngZone, platform);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8daaf4d
  * @type {?}
  */
 var SCROLL_DISPATCHER_PROVIDER = {
@@ -2049,8 +2049,11 @@ var CdkVirtualForOf = /** @class */ (function () {
      * @return {?}
      */
     function (index) {
-        /** @type {?} */
-        var view = this._viewContainerRef.createEmbeddedView(this._template, {
+        // Note that it's important that we insert the item directly at the proper index,
+        // rather than inserting it and the moving it in place, because if there's a directive
+        // on the same node that injects the `ViewContainerRef`, Angular will insert another
+        // comment node which can throw off the move when it's being repeated for all items.
+        return this._viewContainerRef.createEmbeddedView(this._template, {
             $implicit: (/** @type {?} */ (null)),
             cdkVirtualForOf: this._cdkVirtualForOf,
             index: -1,
@@ -2059,11 +2062,7 @@ var CdkVirtualForOf = /** @class */ (function () {
             last: false,
             odd: false,
             even: false
-        });
-        if (index < this._viewContainerRef.length) {
-            this._viewContainerRef.move(view, index);
-        }
-        return view;
+        }, index);
     };
     /** Inserts a recycled view from the cache at the given index. */
     /**
@@ -2153,7 +2152,7 @@ var ScrollingModule = /** @class */ (function () {
 }());
 /**
  * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * \@breaking-change 8.0.0-8c4f25f delete this alias
+ * \@breaking-change 8.0.0-8daaf4d delete this alias
  */
 var ScrollDispatchModule = /** @class */ (function () {
     function ScrollDispatchModule() {
@@ -2339,7 +2338,7 @@ var ViewportRuler = /** @class */ (function () {
     return ViewportRuler;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8daaf4d
  * @param {?} parentRuler
  * @param {?} platform
  * @param {?} ngZone
@@ -2349,7 +2348,7 @@ function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
     return parentRuler || new ViewportRuler(platform, ngZone);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8daaf4d
  * @type {?}
  */
 var VIEWPORT_RULER_PROVIDER = {

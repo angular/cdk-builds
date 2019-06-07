@@ -1337,7 +1337,7 @@ class CdkTable {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * \@breaking-change 8.0.0-8c4f25f
+     * \@breaking-change 8.0.0-8daaf4d
      * @param {?} headerRowDef
      * @return {?}
      */
@@ -1351,7 +1351,7 @@ class CdkTable {
      * table's content is checked.
      * \@docs-private
      * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * \@breaking-change 8.0.0-8c4f25f
+     * \@breaking-change 8.0.0-8daaf4d
      * @param {?} footerRowDef
      * @return {?}
      */
