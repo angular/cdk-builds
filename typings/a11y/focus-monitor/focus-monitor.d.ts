@@ -153,9 +153,9 @@ export declare class CdkMonitorFocus implements OnDestroy {
     constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
     ngOnDestroy(): void;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-f7ce721 */
+/** @docs-private @deprecated @breaking-change 8.0.0-f6903da */
 export declare function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher: FocusMonitor, ngZone: NgZone, platform: Platform): FocusMonitor;
-/** @docs-private @deprecated @breaking-change 8.0.0-f7ce721 */
+/** @docs-private @deprecated @breaking-change 8.0.0-f6903da */
 export declare const FOCUS_MONITOR_PROVIDER: {
     provide: typeof FocusMonitor;
     deps: (Optional[] | typeof NgZone | typeof Platform)[];

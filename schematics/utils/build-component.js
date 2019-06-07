@@ -171,12 +171,12 @@ function buildComponent(options, additionalFiles = {}) {
             }
         }
         const templateSource = schematics_1.apply(schematics_1.url(schematicFilesUrl), [
-            options.skipTests ? schematics_1.filter(path => !path.endsWith('.spec.ts')) : schematics_1.noop(),
-            options.inlineStyle ? schematics_1.filter(path => !path.endsWith('.__style__')) : schematics_1.noop(),
-            options.inlineTemplate ? schematics_1.filter(path => !path.endsWith('.html')) : schematics_1.noop(),
+            options.skipTests ? schematics_1.filter(path => !path.endsWith('.spec.ts.template')) : schematics_1.noop(),
+            options.inlineStyle ? schematics_1.filter(path => !path.endsWith('.__style__.template')) : schematics_1.noop(),
+            options.inlineTemplate ? schematics_1.filter(path => !path.endsWith('.html.template')) : schematics_1.noop(),
             // Treat the template options as any, because the type definition for the template options
             // is made unnecessarily explicit. Every type of object can be used in the EJS template.
-            schematics_1.template(Object.assign({ indentTextContent, resolvedFiles }, baseTemplateContext)),
+            schematics_1.applyTemplates(Object.assign({ indentTextContent, resolvedFiles }, baseTemplateContext)),
             // TODO(devversion): figure out why we cannot just remove the first parameter
             // See for example: angular-cli#schematics/angular/component/index.ts#L160
             schematics_1.move(null, parsedPath.path),

@@ -13,8 +13,8 @@ const utils_1 = require("../../utils");
 function default_1(options) {
     return schematics_1.chain([
         utils_1.buildComponent(Object.assign({}, options), {
-            template: './__path__/__name@dasherize@if-flat__/__name@dasherize__.component.html',
-            stylesheet: './__path__/__name@dasherize@if-flat__/__name@dasherize__.component.__style__',
+            template: './__path__/__name@dasherize@if-flat__/__name@dasherize__.component.html.template',
+            stylesheet: './__path__/__name@dasherize@if-flat__/__name@dasherize__.component.__style__.template',
         }),
         options.skipImport ? schematics_1.noop() : addDragDropModulesToModule(options)
     ]);

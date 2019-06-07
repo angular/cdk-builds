@@ -29,7 +29,7 @@ export declare class DropListRef<T = any> {
     /**
      * Unique ID for the drop list.
      * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0-f7ce721
+     * @breaking-change 8.0.0-f6903da
      */
     id: string;
     /** Whether starting a dragging sequence from this container is disabled. */
