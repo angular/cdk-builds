@@ -51,14 +51,14 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
      * Sets the overlay width and clears any previously set width.
      * @param value New width for the overlay
      * @deprecated Pass the `width` through the `OverlayConfig`.
-     * @breaking-change 8.0.0-f6903da
+     * @breaking-change 8.0.0-8c4f25f
      */
     width(value?: string): this;
     /**
      * Sets the overlay height and clears any previously set height.
      * @param value New height for the overlay
      * @deprecated Pass the `height` through the `OverlayConfig`.
-     * @breaking-change 8.0.0-f6903da
+     * @breaking-change 8.0.0-8c4f25f
      */
     height(value?: string): this;
     /**

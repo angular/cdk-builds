@@ -151,7 +151,7 @@ SelectionModel = /** @class */ (function () {
         /**
          * Event emitted when the value has changed.
          * @deprecated Use `changed` instead.
-         * \@breaking-change 8.0.0-f6903da To be changed to `changed`
+         * \@breaking-change 8.0.0-8c4f25f To be changed to `changed`
          */
         this.onChange = this.changed;
         if (initiallySelectedValues && initiallySelectedValues.length) {

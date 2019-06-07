@@ -26,7 +26,6 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
  * content.
- * @docs-private
  */
 export declare class AriaDescriber implements OnDestroy {
     private _document;
@@ -36,9 +35,9 @@ export declare class AriaDescriber implements OnDestroy {
      * the message. If the same message has already been registered, then it will reuse the created
      * message element.
      */
-    describe(hostElement: Element, message: string): void;
+    describe(hostElement: Element, message: string | HTMLElement): void;
     /** Removes the host element's aria-describedby reference to the message element. */
-    removeDescription(hostElement: Element, message: string): void;
+    removeDescription(hostElement: Element, message: string | HTMLElement): void;
     /** Unregisters all created message elements and removes the message container. */
     ngOnDestroy(): void;
     /**
@@ -46,6 +45,8 @@ export declare class AriaDescriber implements OnDestroy {
      * as its content and adds it to the message registry.
      */
     private _createMessageElement;
+    /** Assigns a unique ID to an element, if it doesn't have one already. */
+    private _setMessageId;
     /** Deletes the message element from the global messages container. */
     private _deleteMessageElement;
     /** Creates the global container for all aria-describedby messages. */
@@ -71,9 +72,9 @@ export declare class AriaDescriber implements OnDestroy {
     /** Checks whether a node is an Element node. */
     private _isElementNode;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-f6903da */
+/** @docs-private @deprecated @breaking-change 8.0.0-8c4f25f */
 export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
-/** @docs-private @deprecated @breaking-change 8.0.0-f6903da */
+/** @docs-private @deprecated @breaking-change 8.0.0-8c4f25f */
 export declare const ARIA_DESCRIBER_PROVIDER: {
     provide: typeof AriaDescriber;
     deps: (Optional[] | InjectionToken<any>)[];

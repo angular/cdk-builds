@@ -115,7 +115,6 @@ var messagesContainer = null;
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
  * content.
- * \@docs-private
  */
 var AriaDescriber = /** @class */ (function () {
     function AriaDescriber(_document) {
@@ -146,7 +145,12 @@ var AriaDescriber = /** @class */ (function () {
         if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
-        if (!messageRegistry.has(message)) {
+        if (typeof message !== 'string') {
+            // We need to ensure that the element has an ID.
+            this._setMessageId(message);
+            messageRegistry.set(message, { messageElement: message, referenceCount: 0 });
+        }
+        else if (!messageRegistry.has(message)) {
             this._createMessageElement(message);
         }
         if (!this._isElementDescribedByMessage(hostElement, message)) {
@@ -173,10 +177,14 @@ var AriaDescriber = /** @class */ (function () {
         if (this._isElementDescribedByMessage(hostElement, message)) {
             this._removeMessageReference(hostElement, message);
         }
-        /** @type {?} */
-        var registeredMessage = messageRegistry.get(message);
-        if (registeredMessage && registeredMessage.referenceCount === 0) {
-            this._deleteMessageElement(message);
+        // If the message is a string, it means that it's one that we created for the
+        // consumer so we can remove it safely, otherwise we should leave it in place.
+        if (typeof message === 'string') {
+            /** @type {?} */
+            var registeredMessage = messageRegistry.get(message);
+            if (registeredMessage && registeredMessage.referenceCount === 0) {
+                this._deleteMessageElement(message);
+            }
         }
         if (messagesContainer && messagesContainer.childNodes.length === 0) {
             this._deleteMessagesContainer();
@@ -224,11 +232,29 @@ var AriaDescriber = /** @class */ (function () {
     function (message) {
         /** @type {?} */
         var messageElement = this._document.createElement('div');
-        messageElement.setAttribute('id', CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++);
-        messageElement.appendChild((/** @type {?} */ (this._document.createTextNode(message))));
+        this._setMessageId(messageElement);
+        messageElement.textContent = message;
         this._createMessagesContainer();
         (/** @type {?} */ (messagesContainer)).appendChild(messageElement);
         messageRegistry.set(message, { messageElement: messageElement, referenceCount: 0 });
+    };
+    /** Assigns a unique ID to an element, if it doesn't have one already. */
+    /**
+     * Assigns a unique ID to an element, if it doesn't have one already.
+     * @private
+     * @param {?} element
+     * @return {?}
+     */
+    AriaDescriber.prototype._setMessageId = /**
+     * Assigns a unique ID to an element, if it doesn't have one already.
+     * @private
+     * @param {?} element
+     * @return {?}
+     */
+    function (element) {
+        if (!element.id) {
+            element.id = CDK_DESCRIBEDBY_ID_PREFIX + "-" + nextId++;
+        }
     };
     /** Deletes the message element from the global messages container. */
     /**
@@ -422,12 +448,18 @@ var AriaDescriber = /** @class */ (function () {
         if (!this._isElementNode(element)) {
             return false;
         }
+        if (message && typeof message === 'object') {
+            // We'd have to make some assumptions about the description element's text, if the consumer
+            // passed in an element. Assume that if an element is passed in, the consumer has verified
+            // that it can be used as a description.
+            return true;
+        }
         /** @type {?} */
         var trimmedMessage = message == null ? '' : ("" + message).trim();
         /** @type {?} */
         var ariaLabel = element.getAttribute('aria-label');
-        // We shouldn't set descriptions if they're exactly the same as the `aria-label` of the element,
-        // because screen readers will end up reading out the same text twice in a row.
+        // We shouldn't set descriptions if they're exactly the same as the `aria-label` of the
+        // element, because screen readers will end up reading out the same text twice in a row.
         return trimmedMessage ? (!ariaLabel || ariaLabel.trim() !== trimmedMessage) : false;
     };
     /** Checks whether a node is an Element node. */
@@ -457,7 +489,7 @@ var AriaDescriber = /** @class */ (function () {
     return AriaDescriber;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @param {?} parentDispatcher
  * @param {?} _document
  * @return {?}
@@ -466,7 +498,7 @@ function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
     return parentDispatcher || new AriaDescriber(_document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @type {?}
  */
 var ARIA_DESCRIBER_PROVIDER = {
@@ -928,19 +960,19 @@ ListKeyManager = /** @class */ (function () {
      * Allows setting of the activeItemIndex without any other effects.
      * @param index The new activeItemIndex.
      * @deprecated Use `updateActiveItem` instead.
-     * @breaking-change 8.0.0-f6903da
+     * @breaking-change 8.0.0-8c4f25f
      */
     /**
      * Allows setting of the activeItemIndex without any other effects.
      * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 8.0.0-f6903da
+     * \@breaking-change 8.0.0-8c4f25f
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
     ListKeyManager.prototype.updateActiveItemIndex = /**
      * Allows setting of the activeItemIndex without any other effects.
      * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 8.0.0-f6903da
+     * \@breaking-change 8.0.0-8c4f25f
      * @param {?} index The new activeItemIndex.
      * @return {?}
      */
@@ -1756,16 +1788,16 @@ FocusTrap = /** @class */ (function () {
             ("[cdkFocusRegion" + bound + "], ") +
             ("[cdk-focus-" + bound + "]"))));
         for (var i = 0; i < markers.length; i++) {
-            // @breaking-change 8.0.0-f6903da
+            // @breaking-change 8.0.0-8c4f25f
             if (markers[i].hasAttribute("cdk-focus-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-" + bound + "', " +
                     ("use 'cdkFocusRegion" + bound + "' instead. The deprecated ") +
-                    "attribute will be removed in 8.0.0-f6903da.", markers[i]);
+                    "attribute will be removed in 8.0.0-8c4f25f.", markers[i]);
             }
             else if (markers[i].hasAttribute("cdk-focus-region-" + bound)) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-region-" + bound + "', " +
                     ("use 'cdkFocusRegion" + bound + "' instead. The deprecated attribute ") +
-                    "will be removed in 8.0.0-f6903da.", markers[i]);
+                    "will be removed in 8.0.0-8c4f25f.", markers[i]);
             }
         }
         if (bound == 'start') {
@@ -1792,11 +1824,11 @@ FocusTrap = /** @class */ (function () {
         var redirectToElement = (/** @type {?} */ (this._element.querySelector("[cdk-focus-initial], " +
             "[cdkFocusInitial]")));
         if (redirectToElement) {
-            // @breaking-change 8.0.0-f6903da
+            // @breaking-change 8.0.0-8c4f25f
             if (redirectToElement.hasAttribute("cdk-focus-initial")) {
                 console.warn("Found use of deprecated attribute 'cdk-focus-initial', " +
                     "use 'cdkFocusInitial' instead. The deprecated attribute " +
-                    "will be removed in 8.0.0-f6903da", redirectToElement);
+                    "will be removed in 8.0.0-8c4f25f", redirectToElement);
             }
             // Warn the consumer if the element they've pointed to
             // isn't focusable, when not in production mode.
@@ -2413,7 +2445,7 @@ var CdkAriaLive = /** @class */ (function () {
     return CdkAriaLive;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @param {?} parentAnnouncer
  * @param {?} liveElement
  * @param {?} _document
@@ -2424,7 +2456,7 @@ function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document
     return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @type {?}
  */
 var LIVE_ANNOUNCER_PROVIDER = {
@@ -3004,7 +3036,7 @@ var CdkMonitorFocus = /** @class */ (function () {
     return CdkMonitorFocus;
 }());
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @param {?} parentDispatcher
  * @param {?} ngZone
  * @param {?} platform
@@ -3014,7 +3046,7 @@ function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
     return parentDispatcher || new FocusMonitor(ngZone, platform);
 }
 /**
- * \@docs-private \@deprecated \@breaking-change 8.0.0-f6903da
+ * \@docs-private \@deprecated \@breaking-change 8.0.0-8c4f25f
  * @type {?}
  */
 var FOCUS_MONITOR_PROVIDER = {
