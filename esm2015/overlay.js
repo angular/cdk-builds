@@ -2135,8 +2135,8 @@ class FlexibleConnectedPositionStrategy {
         /** @type {?} */
         let right;
         if (isBoundedByLeftViewportEdge) {
-            right = viewport.right - origin.x + this._viewportMargin;
-            width = origin.x - viewport.left;
+            right = viewport.width - origin.x + this._viewportMargin;
+            width = origin.x - this._viewportMargin;
         }
         else if (isBoundedByRightViewportEdge) {
             left = origin.x;
