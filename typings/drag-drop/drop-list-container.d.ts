@@ -12,7 +12,7 @@ import { CdkDrag } from './directives/drag';
  * circular imports between `CdkDrag` and `CdkDropList`, however now we're using the
  * `CdkDropListInternal` interface to achieve the same result, without having to maintain
  * this large of an interface.
- * @breaking-change 8.0.0-98b880b
+ * @breaking-change 8.0.0-4a934c6
  */
 export interface CdkDropListContainer<T = any> {
     /** DOM node that corresponds to the drop container. */
@@ -72,6 +72,6 @@ export declare const CDK_DROP_LIST: InjectionToken<CdkDropListContainer<any>>;
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  * @deprecated Use `CDK_DROP_LIST` instead.
- * @breaking-change 8.0.0-98b880b
+ * @breaking-change 8.0.0-4a934c6
  */
 export declare const CDK_DROP_LIST_CONTAINER: InjectionToken<CdkDropListContainer<any>>;

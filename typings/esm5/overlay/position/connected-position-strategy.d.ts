@@ -21,7 +21,7 @@ import { PositionStrategy } from './position-strategy';
  * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
  * of the overlay.
  * @deprecated Use `FlexibleConnectedPositionStrategy` instead.
- * @breaking-change 8.0.0-98b880b
+ * @breaking-change 8.0.0-4a934c6
  */
 export declare class ConnectedPositionStrategy implements PositionStrategy {
     /**
