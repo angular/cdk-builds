@@ -100,7 +100,7 @@ class SelectionModel {
         /**
          * Event emitted when the value has changed.
          * @deprecated Use `changed` instead.
-         * \@breaking-change 8.0.0-4a934c6 To be changed to `changed`
+         * \@breaking-change 8.0.0-2b37515 To be changed to `changed`
          */
         this.onChange = this.changed;
         if (initiallySelectedValues && initiallySelectedValues.length) {

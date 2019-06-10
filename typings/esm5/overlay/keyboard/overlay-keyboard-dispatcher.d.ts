@@ -28,9 +28,9 @@ export declare class OverlayKeyboardDispatcher implements OnDestroy {
     /** Keyboard event listener that will be attached to the body. */
     private _keydownListener;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0-4a934c6 */
+/** @docs-private @deprecated @breaking-change 8.0.0-2b37515 */
 export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;
-/** @docs-private @deprecated @breaking-change 8.0.0-4a934c6 */
+/** @docs-private @deprecated @breaking-change 8.0.0-2b37515 */
 export declare const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER: {
     provide: typeof OverlayKeyboardDispatcher;
     deps: (Optional[] | InjectionToken<any>)[];
