@@ -14,7 +14,7 @@ import { ConnectedPosition } from './position/flexible-connected-position-strate
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
 export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
-/** @docs-private @deprecated @breaking-change 8.0.0-2b37515 */
+/** @docs-private @deprecated @breaking-change 8.0.0 */
 export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY(overlay: Overlay): () => ScrollStrategy;
 /**
  * Directive applied to an element to make it usable as an origin for an Overlay using a
