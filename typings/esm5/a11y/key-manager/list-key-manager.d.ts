@@ -118,7 +118,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * Allows setting of the activeItemIndex without any other effects.
      * @param index The new activeItemIndex.
      * @deprecated Use `updateActiveItem` instead.
-     * @breaking-change 8.0.0-2b37515
+     * @breaking-change 8.0.0-ee01689
      */
     updateActiveItemIndex(index: number): void;
     /**
