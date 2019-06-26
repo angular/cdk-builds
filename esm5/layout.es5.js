@@ -7,8 +7,8 @@
  */
 import { NgModule, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { combineLatest, concat, Observable, Subject } from 'rxjs';
-import { debounceTime, map, skip, startWith, take, takeUntil } from 'rxjs/operators';
+import { asapScheduler, combineLatest, Observable, Subject } from 'rxjs';
+import { debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
 /**
@@ -222,11 +222,7 @@ var BreakpointObserver = /** @class */ (function () {
          * @return {?}
          */
         function (query) { return _this._registerQuery(query).observable; }));
-        /** @type {?} */
-        var stateObservable = combineLatest(observables);
-        // Emit the first state immediately, and then debounce the subsequent emissions.
-        stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
-        return stateObservable.pipe(map((/**
+        return combineLatest(observables).pipe(debounceTime(0, asapScheduler), map((/**
          * @param {?} breakpointStates
          * @return {?}
          */

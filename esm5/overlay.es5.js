@@ -981,11 +981,6 @@ OverlayRef = /** @class */ (function () {
         this._attachments = new Subject();
         this._detachments = new Subject();
         this._locationChanges = Subscription.EMPTY;
-        this._backdropClickHandler = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        function (event) { return _this._backdropClick.next(event); });
         this._keydownEventsObservable = new Observable((/**
          * @param {?} observer
          * @return {?}
@@ -1495,7 +1490,11 @@ OverlayRef = /** @class */ (function () {
         (/** @type {?} */ (this._host.parentElement)).insertBefore(this._backdropElement, this._host);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
         // action desired when such a click occurs (usually closing the overlay).
-        this._backdropElement.addEventListener('click', this._backdropClickHandler);
+        this._backdropElement.addEventListener('click', (/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) { return _this._backdropClick.next(event); }));
         // Add class to fade-in the backdrop after one frame.
         if (typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular((/**
@@ -1570,12 +1569,8 @@ OverlayRef = /** @class */ (function () {
          */
         function () {
             // It may not be attached to anything in certain cases (e.g. unit tests).
-            if (backdropToDetach) {
-                backdropToDetach.removeEventListener('click', _this._backdropClickHandler);
-                backdropToDetach.removeEventListener('transitionend', finishDetach);
-                if (backdropToDetach.parentNode) {
-                    backdropToDetach.parentNode.removeChild(backdropToDetach);
-                }
+            if (backdropToDetach && backdropToDetach.parentNode) {
+                backdropToDetach.parentNode.removeChild(backdropToDetach);
             }
             // It is possible that a new portal has been attached to this overlay since we started
             // removing the backdrop. If that is the case, only clear the backdrop reference if it
