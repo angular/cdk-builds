@@ -39,6 +39,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _positionStrategy;
     private _scrollStrategy;
     private _locationChanges;
+    private _backdropClickHandler;
     /**
      * Reference to the parent of the `_host` at the time it was detached. Used to restore
      * the `_host` to its original position in the DOM when it gets re-attached.
