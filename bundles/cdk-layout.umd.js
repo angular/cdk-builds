@@ -222,7 +222,11 @@ var BreakpointObserver = /** @class */ (function () {
          * @return {?}
          */
         function (query) { return _this._registerQuery(query).observable; }));
-        return rxjs.combineLatest(observables).pipe(operators.debounceTime(0, rxjs.asapScheduler), operators.map((/**
+        /** @type {?} */
+        var stateObservable = rxjs.combineLatest(observables);
+        // Emit the first state immediately, and then debounce the subsequent emissions.
+        stateObservable = rxjs.concat(stateObservable.pipe(operators.take(1)), stateObservable.pipe(operators.skip(1), operators.debounceTime(0)));
+        return stateObservable.pipe(operators.map((/**
          * @param {?} breakpointStates
          * @return {?}
          */
