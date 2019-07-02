@@ -1214,7 +1214,10 @@ function removeElement(element) {
  * @return {?}
  */
 function isTouchEvent(event) {
-    return event.type.startsWith('touch');
+    // This function is called for every pixel that the user has dragged so we need it to be
+    // as fast as possible. Since we only bind mouse events and touch events, we can assume
+    // that if the event's name starts with `t`, it's a touch event.
+    return event.type[0] === 't';
 }
 /**
  * Gets the element into which the drag preview should be inserted.

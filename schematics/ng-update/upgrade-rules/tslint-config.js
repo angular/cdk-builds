@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const glob_1 = require("glob");
+const path_1 = require("path");
 /**
  * List of upgrade rules that will be always enabled because the upgrade data for these rules
  * can be swapped out dynamically.
@@ -45,7 +45,18 @@ const baseUpgradeRules = [
     'method-calls-check',
 ];
 /** List of absolute paths that refer to directories that contain the upgrade rules. */
-const ruleDirectories = glob_1.sync('./**/', { cwd: __dirname, absolute: true });
+const ruleDirectories = [
+    'attribute-selectors/',
+    'class-inheritance/',
+    'class-names/',
+    'css-selectors/',
+    'element-selectors/',
+    'input-names/',
+    'misc-checks/',
+    'output-names/',
+    'property-names/',
+    'signature-check/',
+].map(relativePath => path_1.join(__dirname, relativePath));
 /**
  * Creates a TSLint configuration object that can be passed to the schematic `TSLintFixTask`.
  * Each rule will have the specified target version as option which can be used to swap out
