@@ -290,7 +290,13 @@ DragRef = /** @class */ (function () {
                 // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
-                if (isOverThreshold && (Date.now() >= _this._dragStartTime + (_this.dragStartDelay || 0))) {
+                if (isOverThreshold) {
+                    /** @type {?} */
+                    var isDelayElapsed = Date.now() >= _this._dragStartTime + (_this.dragStartDelay || 0);
+                    if (!isDelayElapsed) {
+                        _this._endDragSequence(event);
+                        return;
+                    }
                     // Prevent other drag sequences from starting while something in the container is still
                     // being dragged. This can happen while we're waiting for the drop animation to finish
                     // and can cause errors, because some elements might still be moving around.
@@ -361,50 +367,7 @@ DragRef = /** @class */ (function () {
          * @return {?}
          */
         function (event) {
-            // Note that here we use `isDragging` from the service, rather than from `this`.
-            // The difference is that the one from the service reflects whether a dragging sequence
-            // has been initiated, whereas the one on `this` includes whether the user has passed
-            // the minimum dragging threshold.
-            if (!_this._dragDropRegistry.isDragging(_this)) {
-                return;
-            }
-            _this._removeSubscriptions();
-            _this._dragDropRegistry.stopDragging(_this);
-            if (_this._handles) {
-                _this._rootElement.style.webkitTapHighlightColor = _this._rootElementTapHighlight;
-            }
-            if (!_this._hasStartedDragging) {
-                return;
-            }
-            _this.released.next({ source: _this });
-            if (_this._dropContainer) {
-                // Stop scrolling immediately, instead of waiting for the animation to finish.
-                _this._dropContainer._stopScrolling();
-                _this._animatePreviewToPlaceholder().then((/**
-                 * @return {?}
-                 */
-                function () {
-                    _this._cleanupDragArtifacts(event);
-                    _this._dragDropRegistry.stopDragging(_this);
-                }));
-            }
-            else {
-                // Convert the active transform into a passive one. This means that next time
-                // the user starts dragging the item, its position will be calculated relatively
-                // to the new passive transform.
-                _this._passiveTransform.x = _this._activeTransform.x;
-                _this._passiveTransform.y = _this._activeTransform.y;
-                _this._ngZone.run((/**
-                 * @return {?}
-                 */
-                function () {
-                    _this.ended.next({
-                        source: _this,
-                        distance: _this._getDragDistance(_this._getPointerPositionOnPage(event))
-                    });
-                }));
-                _this._dragDropRegistry.stopDragging(_this);
-            }
+            _this._endDragSequence(event);
         });
         this.withRootElement(element);
         _dragDropRegistry.registerDragItem(this);
@@ -736,7 +699,9 @@ DragRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        return { x: this._passiveTransform.x, y: this._passiveTransform.y };
+        /** @type {?} */
+        var position = this.isDragging() ? this._activeTransform : this._passiveTransform;
+        return { x: position.x, y: position.y };
     };
     /**
      * Sets the current position in pixels the draggable outside of a drop container.
@@ -837,6 +802,69 @@ DragRef = /** @class */ (function () {
         }
         this._placeholder = this._placeholderRef = (/** @type {?} */ (null));
     };
+    /**
+     * Clears subscriptions and stops the dragging sequence.
+     * @param event Browser event object that ended the sequence.
+     */
+    /**
+     * Clears subscriptions and stops the dragging sequence.
+     * @private
+     * @param {?} event Browser event object that ended the sequence.
+     * @return {?}
+     */
+    DragRef.prototype._endDragSequence = /**
+     * Clears subscriptions and stops the dragging sequence.
+     * @private
+     * @param {?} event Browser event object that ended the sequence.
+     * @return {?}
+     */
+    function (event) {
+        var _this = this;
+        // Note that here we use `isDragging` from the service, rather than from `this`.
+        // The difference is that the one from the service reflects whether a dragging sequence
+        // has been initiated, whereas the one on `this` includes whether the user has passed
+        // the minimum dragging threshold.
+        if (!this._dragDropRegistry.isDragging(this)) {
+            return;
+        }
+        this._removeSubscriptions();
+        this._dragDropRegistry.stopDragging(this);
+        if (this._handles) {
+            this._rootElement.style.webkitTapHighlightColor = this._rootElementTapHighlight;
+        }
+        if (!this._hasStartedDragging) {
+            return;
+        }
+        this.released.next({ source: this });
+        if (this._dropContainer) {
+            // Stop scrolling immediately, instead of waiting for the animation to finish.
+            this._dropContainer._stopScrolling();
+            this._animatePreviewToPlaceholder().then((/**
+             * @return {?}
+             */
+            function () {
+                _this._cleanupDragArtifacts(event);
+                _this._dragDropRegistry.stopDragging(_this);
+            }));
+        }
+        else {
+            // Convert the active transform into a passive one. This means that next time
+            // the user starts dragging the item, its position will be calculated relatively
+            // to the new passive transform.
+            this._passiveTransform.x = this._activeTransform.x;
+            this._passiveTransform.y = this._activeTransform.y;
+            this._ngZone.run((/**
+             * @return {?}
+             */
+            function () {
+                _this.ended.next({
+                    source: _this,
+                    distance: _this._getDragDistance(_this._getPointerPositionOnPage(event))
+                });
+            }));
+            this._dragDropRegistry.stopDragging(this);
+        }
+    };
     /** Starts the dragging sequence. */
     /**
      * Starts the dragging sequence.
@@ -856,6 +884,7 @@ DragRef = /** @class */ (function () {
         if (isTouchEvent(event)) {
             this._lastTouchEventTime = Date.now();
         }
+        this._toggleNativeDragInteractions();
         if (this._dropContainer) {
             /** @type {?} */
             var element = this._rootElement;
@@ -934,7 +963,6 @@ DragRef = /** @class */ (function () {
             this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor;
             rootElement.style.webkitTapHighlightColor = 'transparent';
         }
-        this._toggleNativeDragInteractions();
         this._hasStartedDragging = this._hasMoved = false;
         this._initialContainer = (/** @type {?} */ (this._dropContainer));
         // Avoid multiple subscriptions and memory leaks when multi touch
@@ -1300,7 +1328,7 @@ DragRef = /** @class */ (function () {
         /** @type {?} */
         var point = this._getPointerPositionOnPage(event);
         /** @type {?} */
-        var constrainedPoint = this.constrainPosition ? this.constrainPosition(point) : point;
+        var constrainedPoint = this.constrainPosition ? this.constrainPosition(point, this) : point;
         /** @type {?} */
         var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
@@ -1382,7 +1410,7 @@ DragRef = /** @class */ (function () {
             return;
         }
         /** @type {?} */
-        var shouldEnable = this.disabled || this._handles.length > 0;
+        var shouldEnable = this._handles.length > 0 || !this.isDragging();
         if (shouldEnable !== this._nativeInteractionsEnabled) {
             this._nativeInteractionsEnabled = shouldEnable;
             toggleNativeDragInteractions(this._rootElement, shouldEnable);

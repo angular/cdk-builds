@@ -207,7 +207,7 @@ export declare class DragRef<T = any> {
      * of the user's pointer on the page and should return a point describing where the item should
      * be rendered.
      */
-    constrainPosition?: (point: Point) => Point;
+    constrainPosition?: (point: Point, dragRef: DragRef) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
@@ -281,6 +281,11 @@ export declare class DragRef<T = any> {
     private _pointerMove;
     /** Handler that is invoked when the user lifts their pointer up, after initiating a drag. */
     private _pointerUp;
+    /**
+     * Clears subscriptions and stops the dragging sequence.
+     * @param event Browser event object that ended the sequence.
+     */
+    private _endDragSequence;
     /** Starts the dragging sequence. */
     private _startDragSequence;
     /**
