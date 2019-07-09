@@ -614,7 +614,9 @@ class DragRef {
      * @return {?}
      */
     getFreeDragPosition() {
-        return { x: this._passiveTransform.x, y: this._passiveTransform.y };
+        /** @type {?} */
+        const position = this.isDragging() ? this._activeTransform : this._passiveTransform;
+        return { x: position.x, y: position.y };
     }
     /**
      * Sets the current position in pixels the draggable outside of a drop container.
