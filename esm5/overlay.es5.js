@@ -545,7 +545,6 @@ var  /**
  */
 OverlayConfig = /** @class */ (function () {
     function OverlayConfig(config) {
-        var _this = this;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
          */
@@ -569,17 +568,20 @@ OverlayConfig = /** @class */ (function () {
          */
         this.disposeOnNavigation = false;
         if (config) {
-            Object.keys(config).forEach((/**
-             * @param {?} k
-             * @return {?}
-             */
-            function (k) {
-                /** @type {?} */
-                var key = (/** @type {?} */ (k));
-                if (typeof config[key] !== 'undefined') {
-                    _this[key] = config[key];
+            /** @type {?} */
+            var configKeys = (/** @type {?} */ (Object.keys(config)));
+            for (var _i = 0, configKeys_1 = configKeys; _i < configKeys_1.length; _i++) {
+                var key = configKeys_1[_i];
+                if (config[key] !== undefined) {
+                    // TypeScript, as of version 3.5, sees the left-hand-side of this expression
+                    // as "I don't know *which* key this is, so the only valid value is the intersection
+                    // of all the posible values." In this case, that happens to be `undefined`. TypeScript
+                    // is not smart enough to see that the right-hand-side is actually an access of the same
+                    // exact type with the same exact key, meaning that the value type must be identical.
+                    // So we use `any` to work around this.
+                    this[key] = (/** @type {?} */ (config[key]));
                 }
-            }));
+            }
         }
     }
     return OverlayConfig;
