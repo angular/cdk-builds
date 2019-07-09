@@ -342,8 +342,8 @@
         "signature": "db1679c54ffbe70fb93442fb73df7478a64ead6c0c859e9d40249cbdd6c3e529"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/json/schema/interface.d.ts": {
-        "version": "6fd101edb09197f4cf65aefaa1fb485b98dc4446fce60ec03014288.0.2-2654bd1b650187",
-        "signature": "6fd101edb09197f4cf65aefaa1fb485b98dc4446fce60ec03014288.0.2-2654bd1b650187"
+        "version": "6fd101edb09197f4cf65aefaa1fb485b98dc4446fce60ec03014288.0.2-0a4b5180d50187",
+        "signature": "6fd101edb09197f4cf65aefaa1fb485b98dc4446fce60ec03014288.0.2-0a4b5180d50187"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/json/schema/pointer.d.ts": {
         "version": "b8253076410bc11bfbd8aff865d9332efa50486e9dd709313da456d68f9c8d18",
@@ -382,8 +382,8 @@
         "signature": "fb097de3478d43e6780c1dc4f52f9b3c97b792a17ff9b4d51d7ac6b404b5e595"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/utils/literals.d.ts": {
-        "version": "aed78.0.2-2654bd1b66ce954d0b2f3467a90633eff4813478bc70e14eff478e48e8e70b46",
-        "signature": "aed78.0.2-2654bd1b66ce954d0b2f3467a90633eff4813478bc70e14eff478e48e8e70b46"
+        "version": "aed78.0.2-0a4b5180d6ce954d0b2f3467a90633eff4813478bc70e14eff478e48e8e70b46",
+        "signature": "aed78.0.2-0a4b5180d6ce954d0b2f3467a90633eff4813478bc70e14eff478e48e8e70b46"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/virtual-fs/path.d.ts": {
         "version": "49f431cddbe32fc0942e07ae0fa5911d3652cca1f2ff8858dbb1a5a01843dcfc",
@@ -791,11 +791,11 @@
       },
       "/home/circleci/ng/src/cdk/schematics/utils/ast.ts": {
         "version": "42572bcab470aa9d105fa4f4ed3018b9770ac9f1d5fb11127361a31366640c2c",
-        "signature": "e047cd8f0085e8bbe8.0.2-2654bd1b610d4765f0197952c66107af76f50c1ff0d0af6e545"
+        "signature": "e047cd8f0085e8bbe8.0.2-0a4b5180d10d4765f0197952c66107af76f50c1ff0d0af6e545"
       },
       "/home/circleci/ng/src/cdk/schematics/utils/ast/ng-module-imports.ts": {
         "version": "1ae536a57a6913464ea0f63418b79311856467e3fd1441c95c42ef065c4950f4",
-        "signature": "7ec19ce557fcd7db29f840d55f47b137a34a7fb8bc3260016b9a8.0.2-2654bd1b617941df"
+        "signature": "7ec19ce557fcd7db29f840d55f47b137a34a7fb8bc3260016b9a8.0.2-0a4b5180d17941df"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/schematics/tools/description.d.ts": {
         "version": "b24e224e6b06176b24e460e332c2adb0b5fb347545d87bdaf11e0adc9e22dd5a",
@@ -881,249 +881,93 @@
         "version": "be7ef3e97084859970c00d45e64889322f98a6b1dc63df1c247bd74e95788013",
         "signature": "c3e09b01208410e59d2be93e56c23b3a4a3f6625f2d2f421744da9931ce84656"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts": {
-        "version": "61e74eb373c620875bb90aa6425e83a78838ac2982b56e28459d260b66609c13",
-        "signature": "e405ec6ecf5d4fd8a9b04e6eb302045e87e368c2610b8d484d010193fe5e36cf"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts": {
+        "version": "21c283440c548b0fe5b7ba7e3cfff3ba7f18b8342c847ae0c10b7a29e60a28ee",
+        "signature": "b7728d844b708b2598aa4f2a26324e008fe62b9b8028dc8287d0b9237a28417e"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts": {
-        "version": "a37fd08da1b34b4d7003e79631f50a0205a61226fee2beb5bef81a71902cfa46",
-        "signature": "a37fd08da1b34b4d7003e79631f50a0205a61226fee2beb5bef81a71902cfa46"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/decorators.ts": {
+        "version": "564ce69cfdfbcc3a2824fb5bf8b4eff2199a045643b8eb17bf8.0.2-0a4b5180d704473669",
+        "signature": "d9215b851c65be92b1f6c1543cf79083a7f02a94e59986adba565f007db6daf4"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts": {
-        "version": "361b32a0db970638cde6648c4f06d79cfca7706d6a73acd59ecb0abd978eef67",
-        "signature": "361b32a0db970638cde6648c4f06d79cfca7706d6a73acd59ecb0abd978eef67"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/functions.ts": {
+        "version": "1f4f35e94c5ebb8.0.2-0a4b5180dce52701ef4c008846758da4518ef56fcf0084c16e188e",
+        "signature": "325d263d51d110daf7560e9777e58f471bf3cb11edb8dd04f2e6be366eb5658b"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts": {
-        "version": "d608adfa6fba486383b814a3f3b597817be20e55f13d7a34a2ac3a3926d40adf",
-        "signature": "d608adfa6fba486383b814a3f3b597817be20e55f13d7a34a2ac3a3926d40adf"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts": {
+        "version": "1d35e68ed528766582efa626e6656f1139352283e1dee170f083e1845c3ad21b",
+        "signature": "82f324ee491d51cdee65338a028debcf5e1c41a9627adc98b697aaba3caf4246"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts": {
-        "version": "78c4cea948fd307a09aa017a9b05f601dc5560166f9cb562353237d9d0480c43",
-        "signature": "78c4cea948fd307a09aa017a9b05f601dc5560166f9cb562353237d9d0480c43"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/property-name.ts": {
+        "version": "7a14343682aaa469e8aa2bd720145192473a56675a52dcfeb5f8d9ffb82f439c",
+        "signature": "02dc661c2ec548bcdd20043d909e85d734d2496156cbd2efd75fbf248228c992"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts": {
-        "version": "682ff18019a3e574d04f233543d0c83f7566a667b64dd49475e95f7b8d7056c5",
-        "signature": "682ff18019a3e574d04f233543d0c83f7566a667b64dd49475e95f7b8d7056c5"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts": {
+        "version": "d35a17ca11bff91c9fd858d268d74b3309669a330c4aca821466d597d8143f42",
+        "signature": "aeb0e2efdea713b14e859446797ddf5944f0ee9aec2df1f07abb076e46673442"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts": {
-        "version": "65d4fbe40d30e01a230d41bf49d44d69b75e4895ca07aedde6b15c812a60916d",
-        "signature": "65d4fbe40d30e01a230d41bf49d44d69b75e4895ca07aedde6b15c812a60916d"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts": {
+        "version": "99d481c582812e386fcdac8da989645d2056f24c89c93e40bf12e13ccf2a5f09",
+        "signature": "02af3cd2c04639f68b7b34606f595417d8ebcd3135e856ad71606b1db1032cd6"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts": {
-        "version": "63df934ff4e61472be885417264225a221a9548b5e52e847cc56657766c5f1ed",
-        "signature": "63df934ff4e61472be885417264225a221a9548b5e52e847cc56657766c5f1ed"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts": {
+        "version": "560c42d53d0c8908db42d0e8a6085942225883179343dc4124b043b7d550a945",
+        "signature": "04ed79557c50f4a1641cc8639b86d0521b976f43d2a5dd06412ac588cd3b9c38"
       },
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts": {
-        "version": "02fdedab5a3a8c53144228df36eeba76f46b7b403118db28dcd319646b8fe6ca",
-        "signature": "02fdedab5a3a8c53144228df36eeba76f46b7b403118db28dcd319646b8fe6ca"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts": {
-        "version": "2fb5da44e588512cf805ee7e466699b0c2d4514757ba3a2dbf4a487d7562b3c2",
-        "signature": "2fb5da44e588512cf805ee7e466699b0c2d4514757ba3a2dbf4a487d7562b3c2"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts": {
-        "version": "4a4f916fb2b9bdddfee14821c15b2dcdb0ff70fde37c1fd159e9122a63da9042",
-        "signature": "4a4f916fb2b9bdddfee14821c15b2dcdb0ff70fde37c1fd159e9122a63da9042"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts": {
-        "version": "87526303738e4edeb08c38cc3750dc874e54111dd8c6f4816a9df00d3b5dc7ea",
-        "signature": "87526303738e4edeb08c38cc3750dc874e54111dd8c6f4816a9df00d3b5dc7ea"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts": {
-        "version": "3a43fa1f2b440d233560ff371920ccd14c1ab29ad5074fa5a1e4616c4a51b6e7",
-        "signature": "3a43fa1f2b440d233560ff371920ccd14c1ab29ad5074fa5a1e4616c4a51b6e7"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts": {
-        "version": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e",
-        "signature": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts": {
-        "version": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e",
-        "signature": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts": {
-        "version": "43f7bc619e86d96191873c2c9494cfc88c9e7252b0b8a451f702d77739690d29",
-        "signature": "43f7bc619e86d96191873c2c9494cfc88c9e7252b0b8a451f702d77739690d29"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts": {
-        "version": "744408cd7dc1bf1e1dbc770aac0e50c142a702316c0359a9cc7ae1fa6aafc90d",
-        "signature": "744408cd7dc1bf1e1dbc770aac0e50c142a702316c0359a9cc7ae1fa6aafc90d"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts": {
-        "version": "e13acbdd9813434ab367bcc954092541175da09e603b5bd1cd671a5818dca96e",
-        "signature": "e13acbdd9813434ab367bcc954092541175da09e603b5bd1cd671a5818dca96e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts": {
-        "version": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e",
-        "signature": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts": {
-        "version": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e",
-        "signature": "00eb294c52e2b41644a3d86e2191f609ea6185968130376045eb47a69669de2e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts": {
-        "version": "9f34570701f561709ffe7c3b4d8b46612524eae40b7a35671596677f5ad22fcd",
-        "signature": "9f34570701f561709ffe7c3b4d8b46612524eae40b7a35671596677f5ad22fcd"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts": {
-        "version": "780c1d3215b8359686fa0e84cb5a0f376b2175f5a5ee0cf9a679b5a904b3ef3a",
-        "signature": "780c1d3215b8359686fa0e84cb5a0f376b2175f5a5ee0cf9a679b5a904b3ef3a"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts": {
-        "version": "c31a6806095fa2a0ff15e2274fc5a3823cc7ec50fe265244b06f76768790dfb2",
-        "signature": "c31a6806095fa2a0ff15e2274fc5a3823cc7ec50fe265244b06f76768790dfb2"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts": {
-        "version": "574b0f3c9c97978dfaf21d3c60d54f6f4735ebad6c29f8d526ea5d71505c2e81",
-        "signature": "574b0f3c9c97978dfaf21d3c60d54f6f4735ebad6c29f8d526ea5d71505c2e81"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts": {
-        "version": "81639ac013f1e31267b729d0f25f737b3348324fc7814394f826c5f72eec434f",
-        "signature": "81639ac013f1e31267b729d0f25f737b3348324fc7814394f826c5f72eec434f"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts": {
-        "version": "5369af45989a6f87e2da43c116bceb19b58fa492456a7a7b49044d6ca90fea60",
-        "signature": "5369af45989a6f87e2da43c116bceb19b58fa492456a7a7b49044d6ca90fea60"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts": {
-        "version": "cd44b752f67662e754920ff7da1906e1f8421f1afbac70c80360bed74e62c481",
-        "signature": "cd44b752f67662e754920ff7da1906e1f8421f1afbac70c80360bed74e62c481"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts": {
-        "version": "53aaa9de3f13af71c05000d02013744798b1cb1f7abb6afee5936eef7b40de4e",
-        "signature": "53aaa9de3f13af71c05000d02013744798b1cb1f7abb6afee5936eef7b40de4e"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/runner.d.ts": {
-        "version": "22c0ca099a0bcbe55772fd3506dc237152aa514e068f07ba6cc337cb0bb13f31",
-        "signature": "22c0ca099a0bcbe55772fd3506dc237152aa514e068f07ba6cc337cb0bb13f31"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/verify/lintError.d.ts": {
-        "version": "28ac68ecf33f7d1d02639f51b13662ce756119cf09c46694146ad7d50d4c91d6",
-        "signature": "28ac68ecf33f7d1d02639f51b13662ce756119cf09c46694146ad7d50d4c91d6"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/test.d.ts": {
-        "version": "82dbc3f62003d918765a113b0249f6cdb6afdb1e4432a1ce7c4ffb609a73902f",
-        "signature": "82dbc3f62003d918765a113b0249f6cdb6afdb1e4432a1ce7c4ffb609a73902f"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts": {
-        "version": "85780f544d13ab3cc6c5f7d850446c3a8b329fcb14712ad22b448e99f58ff9be",
-        "signature": "85780f544d13ab3cc6c5f7d850446c3a8b329fcb14712ad22b448e99f58ff9be"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts": {
-        "version": "9d5742fe3f5aff0314e4acf98f4ab91511727afdb15d87e86beff1c1537dcdb1",
-        "signature": "9d5742fe3f5aff0314e4acf98f4ab91511727afdb15d87e86beff1c1537dcdb1"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts": {
-        "version": "a9e95b5704917009178a1bfef3bb6dcead2d5982f96d8de93d78eb1d55dfcf16",
-        "signature": "a9e95b5704917009178a1bfef3bb6dcead2d5982f96d8de93d78eb1d55dfcf16"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts": {
-        "version": "e2175e8956be6be66af258546ada6dea78d7575042780f8a3cdae8df388dd88f",
-        "signature": "e2175e8956be6be66af258546ada6dea78d7575042780f8a3cdae8df388dd88f"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts": {
-        "version": "5b93f01cc0b506546233d420c85376a26520b16473910df1c3e196df302c70fb",
-        "signature": "5b93f01cc0b506546233d420c85376a26520b16473910df1c3e196df302c70fb"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts": {
-        "version": "6273dd597ec315aee91189b3edbd271f2834f984543351d945df99a99ee73f97",
-        "signature": "6273dd597ec315aee91189b3edbd271f2834f984543351d945df99a99ee73f97"
-      },
-      "/home/circleci/ng/node_modules/tslint/lib/index.d.ts": {
-        "version": "04a7a83d4fddcc85027defe7e56d3712d4dc51fa9a11f34c3dfe7bf5cdcbef0b",
-        "signature": "04a7a83d4fddcc85027defe7e56d3712d4dc51fa9a11f34c3dfe7bf5cdcbef0b"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts": {
+        "version": "88e35cd497a6e4df4eb67d2a1c870a7eac7d45663d80dec07d68e28d9cae1b91",
+        "signature": "52c885272c68ea853146a9b7e3922408ab2321692c2a8fc1003bed3d19d4d816"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts": {
-        "version": "751dc3617c60c15dc1461c57d610449767c4f76447b6be16ceb884c4a5cb31c6",
-        "signature": "e0101bc49676287a8b0054518d2142c74ea31efc32f664b2c64fe211ccf2badb"
+        "version": "efdf5979aa0b37ab018c5fd5dd49a371d16c7d31d1db561a73585c613960da9b",
+        "signature": "7e02c7abdc73f8135dd63929df7af2edcee3a3e86633fc2b16764e3c32726c04"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/class-names.ts": {
-        "version": "9aef25170f57413ed1117c41acf94e7bad6dde13a31cdd2f551b84d7f0fc5928",
-        "signature": "df42cf085890d7460dacf2194b59f53fd670b6004c228e86fe022601637f6019"
+        "version": "9e971186963526e2d68575b3bd5589c6ecf155c6c0691abbcbfd098798012646",
+        "signature": "733bf832e68cecb0139d03fe8f4d50885eda098fdac23e382c99a0bee746e5ad"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/constructor-checks.ts": {
-        "version": "b349d79b836e79bd18f9b84bbf8be005d1757be7ff3758f676f427aed573f2c1",
-        "signature": "e47ad3a2b60f383e7d6b7bf8a9bfe7af3a472c24b95ad6d578415d856a619ed2"
+        "version": "8f1bc20ab3594ece88e7bf69d0cff69d708aef90083b6bf6baebbf30981fa589",
+        "signature": "1453bf6e5315148c4a7c8def4dc802da79abb2732ce61f4bcc1c44044d915611"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts": {
-        "version": "d0184610b4475293a1859a3871b7ff2cac1f356b12e601b26d06a1054e8a9aeb",
-        "signature": "ae36ff886c696a150586f2b6d560ef7cdbf62b12c8ad47ec23657b9493375d7c"
+        "version": "5b1abf845517852e350439b8951f8f5cd4ddbd630d4a1685768be33ab514c407",
+        "signature": "4b985946b58629fad6d7d27a6c927b7edb2126990c12f5d19e9f135133caf59a"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts": {
-        "version": "bfb53bcb1614eac88b8b102b255a9186418b154e61e5ee004af7b7821ff899f5",
-        "signature": "2e03e3a645c67b4b57566db81d42756ca8a77ec5ebf712b77b2cba80ec22938b"
+        "version": "0e44d40377a3820d807ec72eff1936699e4060b1a7d3bfaac4b013ccf4254b34",
+        "signature": "e4f7ffb81a9a11996a82f3c4acef39bde221d0179d909e05b80329f2a99c71f4"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/input-names.ts": {
-        "version": "c39c35474db7001d35854fc99dd7fe3c06e4f1aa21c1a3f2d015fe3f2f427175",
-        "signature": "446feec5a7853c37cc525b71df7dccfe72bdd1c7ceeb251fa11edc9b8e9a64e6"
+        "version": "6ba7d1f88eecd2a03ff912da0369625e9b91346e8b9822736000ec71510fb06a",
+        "signature": "7c0f7c08d36a4bc7604d9a181cf9d0e362d12f083edac0bfbcf28bb5c3c0bc9e"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/method-call-checks.ts": {
-        "version": "9b81f9abd9551ff65d6ad176c044cc0eff615d017d8eb778d437a25c4b22c931",
-        "signature": "fc6b0ea3070e561a016c8237b53a7113d250272c9861a6f3dce15192a8c03f6d"
+        "version": "987ed25f8cbe0fe3fd26853b087c5031e35836143352dee5f46b04d9e543cbeb",
+        "signature": "3bb1cb1ea1def995bef699804455de33f04a1edc0e22727adaddb2615fef162d"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/output-names.ts": {
-        "version": "ff230801baef5519b85d6bb87001a7cbb2964304a4d37d07e8f44453a04af7d5",
-        "signature": "f995ab66bb6b588.0.2-2654bd1b6b59b0468d5282154fd44218eb8159990660844f12f4aa"
+        "version": "0fc06dcb6dfa929b04e3679272cf3a26ea42fd9d7a07c759fedf18fdec0b6468",
+        "signature": "f9725dfa82d0dc9805e71c1d3daea78e4884d0c1983a0b467f3e91cb2afde51f"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts": {
-        "version": "77cc451317b368a5e771ea3dd7e237304675b03eb42c3db46667b6a6db03a5a7",
-        "signature": "c9bdb9bc2e341cf8af80f2f5ce5db60d19ca4918373a369c608889d9af658824"
+        "version": "493943e1dd67af344660f272dc5988d5ad8c08c569a0591d00ec911712d8b0a0",
+        "signature": "0ab0f7ca9db06162e6c95c9f4f29fb2014db4e9827b722142bf22019c9c86cc2"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts": {
         "version": "84ed0d64381ddf97367551aab19851475a685c10cc88e5032b96715e2da45d2d",
         "signature": "18d9ac9bfb216869d774e7cb81a3e02c7e9aa45a9104801d051dd1dd09172472"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts": {
-        "version": "77b881182903506e64970b033fe904bb0faf9eb224a4eed11f2ae7730cf5c581",
-        "signature": "27edd5d54a1a5c82c1e2afd674cec2ab5ccbc8ada2cae79b9e37569442aa4eb6"
+        "version": "cca9af2aae22ace79226d8fe63dcb6ff997fc1c921c9cfebc08669c47500d07b",
+        "signature": "ad9255f1fc260925648.0.2-0a4b5180d3c13911895741298eed384542129a1cd52e248907"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts": {
-        "version": "146a762ee0bddb7d1d0c9e5b9141fdda3a16235a5dde4056988e46c1964e55d9",
+        "version": "7b92de09f631d81df7c8026ac33b80bb4578c574b78b49d4a539bcd823f6ad3f",
         "signature": "f9d7ae354837c0c9cf39a861d29cc5af3c61548a66d5c5809c24654e10f394ee"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts": {
         "version": "91493e2095cbeefe9efec409ed36e049b66be2fafe108b0554ce48fe22ddb937",
         "signature": "97a5ca9e34d4826ae756a59224120d01e8ff278e603fafe74e562cdeea498e76"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts": {
-        "version": "6ff0c84e690d53633c40fd1eca9de79cc4644a6fee5e6cf81304fc15aaadd936",
-        "signature": "6ff0c84e690d53633c40fd1eca9de79cc4644a6fee5e6cf81304fc15aaadd936"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts": {
-        "version": "351838166077d49487a1b5433090b6938f21377ef9ed58fc2d2ae5ae08116987",
-        "signature": "351838166077d49487a1b5433090b6938f21377ef9ed58fc2d2ae5ae08116987"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts": {
-        "version": "f969243a03cf1c3d8fdc8d425a25efb27c0f197e17079755ffcebd24580b86fd",
-        "signature": "f969243a03cf1c3d8fdc8d425a25efb27c0f197e17079755ffcebd24580b86fd"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/options.d.ts": {
-        "version": "5b79ac9e25a2f40ddd24db3e6088caf20c883287c21d8809edf7dbead65d6db2",
-        "signature": "5b79ac9e25a2f40ddd24db3e6088caf20c883287c21d8809edf7dbead65d6db2"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts": {
-        "version": "62f4ad555b4db210954b140ef737bfead95ea7ed96f90507eb02a8e2ace4524e",
-        "signature": "62f4ad555b4db210954b140ef737bfead95ea7ed96f90507eb02a8e2ace4524e"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/options.d.ts": {
-        "version": "61acaeb19e1c9e1bc0c64e2210e7f9710c2de87ef7b9fd0d115d77aa3f4ba76c",
-        "signature": "61acaeb19e1c9e1bc0c64e2210e7f9710c2de87ef7b9fd0d115d77aa3f4ba76c"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts": {
-        "version": "17a74695df91fba000adb118701fd97139176bde7e9843eb891c5891a167ab9c",
-        "signature": "17a74695df91fba000adb118701fd97139176bde7e9843eb891c5891a167ab9c"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts": {
-        "version": "02ccd2cbd5205fad0be770a5404500767484b2d7f69d7415276824fe8423bd40",
-        "signature": "02ccd2cbd5205fad0be770a5404500767484b2d7f69d7415276824fe8423bd40"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts": {
-        "version": "0dfffe60f04212c6fda3c0560fac1e6e5f8b517754e9fcdfa769ad050aa333a6",
-        "signature": "0dfffe60f04212c6fda3c0560fac1e6e5f8b517754e9fcdfa769ad050aa333a6"
-      },
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/index.d.ts": {
-        "version": "91901cb27c92395db448291a8762f348cc9c98664e18eef82e2f3588631ac7ce",
-        "signature": "91901cb27c92395db448291a8762f348cc9c98664e18eef82e2f3588631ac7ce"
       },
       "/home/circleci/ng/node_modules/@types/events/index.d.ts": {
         "version": "acc248b90a16d95f2c53b598927967497ed4da2a7e6c9fc6006c5ed9dee25fd7",
@@ -1137,53 +981,97 @@
         "version": "5dc82d5ba2a1f3d8e32d7de551d59b51cd8c0d8dff22e5e77eb56e5e5aeb73ac",
         "signature": "5dc82d5ba2a1f3d8e32d7de551d59b51cd8c0d8dff22e5e77eb56e5e5aeb73ac"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/project-tsconfig-paths.ts": {
-        "version": "9ce6d87ad11a4f3fa1349f645d0f608e8acd57051dfd280964f94f4ea3134d2f",
-        "signature": "87a5dafc0ce0fa083ed93cbbae320a24172acef2fe533b9cd9d0d5137489ab4a"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/parse-tsconfig.ts": {
+        "version": "eb911b710e62c8fe6342fd827995b67c83d4bebec6061bcc7da8722fc35c51a2",
+        "signature": "056cdf1dc60c15955aac3afc7f51f11d0ac91c55ff72ae9e4b079d95ceb6f271"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts": {
-        "version": "4df2b0e12f92e6f27bc6fb1f238fc35b9257568523edc16887de150668b89831",
-        "signature": "3aee44c48c767ce68577ea61175fcc46f243bd0347b00afa64bce6b3d0ffa076"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts": {
+        "version": "2d4358550bca18def5ceb2c63831e4f95027160205835f1bb1f57d17ea935077",
+        "signature": "c326ea89c3cda5dceb7f32da313f475fae9de3379f74cfa5d713a250f8d615aa"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": {
-        "version": "1397207f726b74174970b532da275cac31145fae000ea791604a2907771b144e",
-        "signature": "ced4652ffce01ae96c3d5e56d5edb4f7f23ff37ef83305364c245986b2749c48"
+      "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts": {
+        "version": "ee9ccd4a18e0a1198ba4978e34ef3023b00620e7c776dcb99a86fe448d342d46",
+        "signature": "bc9940d3aa98262ebfe1f6459ba58490b5d91d3d26c746527cd3e9fea94377a9"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts": {
         "version": "c61411f2c43d8027b4c8e67c6b64172905bebfd9e7ce1a0bf4526b1ffdee2541",
         "signature": "25f96f53e79f36813cbcd322c0579b20529ee90ad0c7a166275f5e162778eeeb"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts": {
-        "version": "705454fba1bb47240effc2d7d60fa6b072911165d5dcc2f6aea2796814b7b67a",
-        "signature": "327c649ea6df695e6e8ef572d49d1c0fc45b1ffce88703bf7a322f981c00e5dc"
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts": {
+        "version": "86926aec34cee39d076ea3903b19a4a21fe952f7a1448a068440b074abce4da6",
+        "signature": "938c220f83253830657d1f23b652fbd17f47d06aaa81a162399168f49b634fdd"
       },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts": {
-        "version": "73e0090fa9a9576f8582e14cf37868fafa962ff124cfb11c11d8a1468aeb131d",
-        "signature": "7046cf8f98c97bbc7d7246f02f2dd9b21fdda35dbd8a2fa32e9dcc327e535624"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts": {
-        "version": "06bef7acc0e9647815b5f2f6f5c2aa7413e80935aa1144595a663516241d9e26",
-        "signature": "b3f0d327029e3c48b6d01cac147ebcb322163302967964a6dd90f670fd3835c6"
+      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts": {
+        "version": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60",
+        "signature": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts": {
-        "version": "6c91a8ac50ace383bcb64e2835236d16385262c9b8c9ea318a6fab103ab70fb0",
+        "version": "8aa70d5562ff00dea17ed6e1e7763fd2424cfdeee639896ff684f82bf393b072",
         "signature": "f8157406f5e2152fc0b9275197229694323ba2a4afab96202eef6f63f10a1657"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts": {
+        "version": "01334a677357e3a2018f3181d02068c2590eb8203b448df5914f787a6baaa079",
+        "signature": "1c2ea768309640cb4521eadb0733c4993818471aa86b6a250b47792122d55ac2"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts": {
         "version": "65e9973331be93431ab21cef14942b7d94663a108e9c04d643ba12f3dfd19492",
         "signature": "426b6be1f5f7164024e72e018d58850702b919cba92036c73a739a2658773414"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts": {
-        "version": "be62c3887e3ea6d5c8a22492c893026b2f25aa39c0560c97695e359ff2973462",
+        "version": "86b683bcb52c18878207383108311b19085a4f204c263f2add34d8b8a99cb4b9",
         "signature": "8ac27fa2ffdec634a983635b39b3cad68a1524788911af5e62cd37237c7cfa69"
       },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names-rule.ts": {
+        "version": "3f0be13cc90ab39ab4953dff5349de585169764f054651c79cb53df1d6cb3f11",
+        "signature": "40b212783a06279127908a1a4250abc68de8e6907c79da4b3d2ab7e88728905d"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule.ts": {
+        "version": "15b75089f32eefc098613197875e34e5412a7aa24c8bb8a70d65807859b0f5db",
+        "signature": "8210d63acb4f60bf309167ac9091522b1d81a1fb32ced9fa6115738395a3c86a"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors-rule.ts": {
+        "version": "bd2181859f3b5aaca7a5ec94519e202ce701bc8027b18452fae0f2b7189ed547",
+        "signature": "f8824a213b0fba995e01b2fdcb3c7e54d5f4d9b58dd074dbac04a8d17fccc12b"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors-rule.ts": {
+        "version": "f8e7f9a154ae10105b02e5d82e6b891eb4dd331ff273d35c70a763701775d1f8",
+        "signature": "7c8d8113bb621240982cf9b0e77df6973368911e75789a078016afdf8ecc98a5"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": {
+        "version": "a8db11732084efea450b0ec1eddf3b084d52ee4a7ad40ea0d56469ef93beba0a",
+        "signature": "30ab6fafbd373628f5abe90a8db24afa28d92d61bb9996a7d0da56a0b38d581c"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts": {
+        "version": "1e3c4d6d00919cf82037ea96876df3c18cd8a4ac0bb7c14fb3c4b9a758439e24",
+        "signature": "fd5b5d7a6d65cbf78197f38db7aea9bde19b193c4b803807cd21704469e29844"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": {
+        "version": "364ff69e6c882e5eea96acd96ebc613d11b2459256a6d39782c28e806fd9a69c",
+        "signature": "1edd5065cc6c0485854f09ad2de3df20788cf47eccb46b9074089a24df483953"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts": {
+        "version": "b9d6d880dc5b76c3cdca8eb9017bc995ec4aa77a48e5843e62d82c33aba71d2b",
+        "signature": "39f0fd6e5afd7706e6c7bae43ece8e38b22c5660b3875b9269c126e31bf49f8e"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names-rule.ts": {
+        "version": "e02739899d9806882c55576e42ab022b229e1070fc2557219e777fb062c4ec8e",
+        "signature": "df0764b93d5bf0613512105cb775d9e5f87cc22ec8a907d53b7dba942aa2de5d"
+      },
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": {
+        "version": "ea724dde73ccc23a0d21c04c5af4ca16b04d340144039d55b723f6c7fb7c01ef",
+        "signature": "15f2027040c1cad945ae51842e8032482c6d37905440ea94b8c6c8dccebb4f51"
+      },
       "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": {
-        "version": "2553c8178d048b3f8faf303643a48d6ab9eb2f420b8170c305d180239145af2d",
-        "signature": "adb1406f2d08f7f1cd14ada222979f424d2430ccc91c0910027ab283b4f154b5"
+        "version": "b5c4ce49904eb6a93fd2d36ff12ed8127492e35de27c328d905c25750e18af8e",
+        "signature": "79436f65e605750e03d1422829b22191170817a713731d35da3f6dac63e220b8"
+      },
+      "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts": {
+        "version": "a0e50ada305c1e6e55f042872f964dc089fe3c79419cfc44298f1b3c4cf70141",
+        "signature": "b66f278184a69e0ed8f6c47ef7905928f49f5962cd1a7e0a9d811b217544b0c9"
       },
       "/home/circleci/ng/src/cdk/schematics/index.ts": {
-        "version": "7d4681742b088aebb6f23526c96a7c9f60c7902a0ff0c6145e8cdc717971f219",
-        "signature": "b14028805c0bd323636135eaf7672cf9393ed26c1e212ed2b51c2e71d4c053ed"
+        "version": "f148f3ec974bbfff982fcad20244e034f277455941833a8fb473fbce094879de",
+        "signature": "f4b49db4df2fc7fe5eaaa49b9e9c2d88b50d78465f80fbde33867349df7417c8"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-add/package-config.ts": {
         "version": "91ab4b87bd048e3f07c334ef906f65acf981475068b0ab544e6b23c248763129",
@@ -1205,85 +1093,9 @@
         "version": "89ff501303adb6d05ce6f881ee476ce6f9bb05fff0e706c9af90fd05306e59e7",
         "signature": "8161cf5de9db6ff1d5d5d700cc0f928d4e90452991dff3e38b7515d126f37d4d"
       },
-      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts": {
-        "version": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60",
-        "signature": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60"
-      },
       "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": {
-        "version": "b698ed024389b8a3c63371625c66c1f105dccd0303b0831136cf62c9f30095bf",
-        "signature": "bd15793c451f387a153ce4e746c41f955a2fa0382aa39dc25ca1552bb853e8f4"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStringLiteralRule.ts": {
-        "version": "e93904ae0dcf5d1ca14454ee7491a46885b1278b717f7860fe91e6d4408bcea1",
-        "signature": "0cea2c5e6c2bd1c2bad0aea0aacc3c0853da54a6e5c8554e8829392664544354"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStylesheetRule.ts": {
-        "version": "2c463a313cee413036f83da13587321260fd900bd4644d0dab469a7256e4f04a",
-        "signature": "94315d7a932610850b9438ceaf9161fe21cc8d83019a15ae7bb04798e33ecb5a"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsTemplateRule.ts": {
-        "version": "d394ccf43775612bf65f3e33276bb3d7c4892d1ebc800dd6ba1b919381cf1aab",
-        "signature": "64f1e7b5816307101df0c9a5ece291929d5ff984695f6b7f7cd76f3fda5e8293"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance/classInheritanceCheckRule.ts": {
-        "version": "2062dd9a104c699f8aadb928156c7cb475ba5bb1f42e6fb3dfa4acdeffe818fb",
-        "signature": "5f64083a6350404c1c27ea26be68c8493a0aeb3fcfae46e86e55e0c825223df8"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names/classNamesIdentifierRule.ts": {
-        "version": "b5e669c13f7a583095fd7a0b55260b3026706ec7d12d0a08b69825e9c26e54f3",
-        "signature": "329388b8f24c0dc41d8b36235dbbfc537a4c845ccb56f943a3ffd02d9a5a7a9e"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStringLiteralRule.ts": {
-        "version": "dd4fe1194a15da1dfbc0a2f3012b779688f7a77f6e00f9be2a6a8b32af643dac",
-        "signature": "69c640f8b726dfd6f288c21ea8d561d352eb065af75165b2d184b794d1230312"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStylesheetRule.ts": {
-        "version": "a6a1688f2c15beae50a60a06a490b6d3f0f7e4032807fd27f96922aa335c4f02",
-        "signature": "6e368508999454074c52ec778378e9dd9a036920758f59781746bceb8981bf80"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsTemplateRule.ts": {
-        "version": "7b67599d35b82919217899c88aa3565f895cb8cbea815e3b7017a3371bf29c0e",
-        "signature": "677c15a78a45a931b38c598b1a071f7a7c5589c556701b7e1e9d895ce3005a73"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStringLiteralRule.ts": {
-        "version": "e5e35ca00aaf146289ad750d0ef4b3a91b4d92a629e0b50c94b7d1687e696db0",
-        "signature": "ee134bdd3da37cea0aef6352002fc65d940b5d972e4fa317fe493fec5fa964b6"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStylesheetRule.ts": {
-        "version": "2815ecfb8052271c97d56887f523bd8adc32dd6bc2a0cabb969377681cbf880f",
-        "signature": "a261bc189efdf58e61d11b9d82c73287dab91f40721a473f79721f6ae77b0256"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsTemplateRule.ts": {
-        "version": "8c9fb39dbc7563f1f41e0681eaa9df924c936bf705d6207871a6e09de03f611e",
-        "signature": "2c6af3b0c6319928b28b0af277f35be4cc7ae3636c69d90740191d28b03cd8d9"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesStylesheetRule.ts": {
-        "version": "613050149eb174f6ae75a5e50b303a7b656c100ab9a143f3153aa9925a022ad6",
-        "signature": "ffa6599ec1af92982a65a63198043de5bcf47250f021c6bbad780d7d4a2d4b1b"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesTemplateRule.ts": {
-        "version": "14a198a5d375a8f3d4d4d7ebea645956c687e5dcfac7a4b1df7296531eb48d72",
-        "signature": "9a120c36e43ff083e942399736973711f598dadd4e3f0808ef91bd9a337d2e62"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-checks/checkTemplateMiscRule.ts": {
-        "version": "a09262ef9c84123aef8cd32fd82c8981b31ec7de16441fea407dd518f3ea52d1",
-        "signature": "97616c2fc56a0de6fbfa37a43d9ef9138e902c9cbfe135e60eec819108e96fd8"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names/outputNamesTemplateRule.ts": {
-        "version": "ac9e2cf59d4bbc3ced6421cdc3a80c8ccee916824aa19b87c231462db27ea854",
-        "signature": "f7626513653419f30bfb939209280f91fca81231d525c6d899be3af925b12b5b"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names/propertyNamesAccessRule.ts": {
-        "version": "75298b031084f8b0c8fe8813f48dee69f11374a5de188d2852a602b85a77a321",
-        "signature": "449f1c1c206b5332ed37557a0fe4e5e7e1749d5be9c7ab72592aafee7f85ec18"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/constructorSignatureCheckRule.ts": {
-        "version": "66f5b28a26a0fa938fc184844dddbdc9bbb31187341eba377cc6d6fa4c7c157a",
-        "signature": "94b3754c22e5e1817424ab7abf9fc9e5443c3f95c4046b984349f343fec24ff4"
-      },
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/methodCallsCheckRule.ts": {
-        "version": "a3364e8b3ca6f1c80a603dcdad10a235ef47214fa99853d55374308742e07ceb",
-        "signature": "2e9e58eb85429ac62a0fbc497d6704f26fb6027cadf08c4454dee34adeca108e"
+        "version": "298a2d61aa9b79f77055bf5245d284e5c7a4a1ddfb43bbeef86574f0c296c614",
+        "signature": "b357c1b60c47802e86748b116f19ea312dd58dddd804322e08423a7060692929"
       },
       "/home/circleci/ng/node_modules/@types/jasmine/index.d.ts": {
         "version": "7b1c22c9dc5276eb53932533f7a0e16c259145bd2680c78ea995288755f9c231",
@@ -2221,220 +2033,73 @@
         "/home/circleci/ng/src/cdk/schematics/utils/schematic-options.ts",
         "/home/circleci/ng/src/cdk/schematics/utils/version-agnostic-typescript.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/decorators.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/functions.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/property-name.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts": [
+        "/home/circleci/ng/node_modules/@types/node/index.d.ts",
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/decorators.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/functions.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/property-name.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/test.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/runner.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/verify/lintError.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/@types/node/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/test.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/class-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/constructor-checks.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/input-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/method-call-checks.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/output-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts",
@@ -2448,10 +2113,9 @@
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts": [
         "/home/circleci/ng/node_modules/@types/parse5/index.d.ts"
@@ -2459,77 +2123,50 @@
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts"
       ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/index.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts"
-      ],
       "/home/circleci/ng/node_modules/@types/glob/index.d.ts": [
         "/home/circleci/ng/node_modules/@types/node/index.d.ts",
         "/home/circleci/ng/node_modules/@types/minimatch/index.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/project-tsconfig-paths.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/parse-tsconfig.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts": [
-        "/home/circleci/ng/node_modules/@types/node/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/index.d.ts",
         "/home/circleci/ng/node_modules/@types/glob/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/project-tsconfig-paths.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts"
+        "/home/circleci/ng/node_modules/@types/node/index.d.ts",
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/parse-tsconfig.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts",
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
+        "/home/circleci/ng/node_modules/@schematics/angular/utility/workspace-models.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts": [
-        "/home/circleci/ng/node_modules/@types/node/index.d.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts"
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts": [
+        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
@@ -2538,25 +2175,111 @@
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts"
       ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names-rule.ts"
+      ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts"
       ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts"
+      ],
       "/home/circleci/ng/src/cdk/schematics/index.ts": [
         "/home/circleci/ng/src/cdk/schematics/utils/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts"
+        "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-add/package-config.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
@@ -2576,170 +2299,9 @@
       "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
         "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStringLiteralRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance/classInheritanceCheckRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names/classNamesIdentifierRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStringLiteralRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStringLiteralRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-checks/checkTemplateMiscRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names/outputNamesTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names/propertyNamesAccessRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/constructorSignatureCheckRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/constructor-checks.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/methodCallsCheckRule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts"
       ]
     },
     "exportedModulesMap": {
@@ -2841,7 +2403,40 @@
       ],
       "/home/circleci/ng/src/cdk/schematics/index.ts": [
         "/home/circleci/ng/src/cdk/schematics/utils/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts"
+        "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": [
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/node_modules/@angular-devkit/schematics/tools/file-system-engine-host.d.ts": [
         "/home/circleci/ng/node_modules/rxjs/index.d.ts",
@@ -2908,179 +2503,91 @@
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/formats/index.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/workflow/index.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
-      ],
       "/home/circleci/ng/src/cdk/schematics/ng-add/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-add/package-config.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts",
+      "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/project-tsconfig-paths.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts"
       ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/index.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts"
       ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/options.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts"
       ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/methodCallsCheckRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/constructorSignatureCheckRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names/propertyNamesAccessRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names/outputNamesTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names-rule.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesTemplateRule.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsTemplateRule.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors-rule.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names-rule.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStylesheetRule.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStringLiteralRule.ts": [
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts",
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsTemplateRule.ts": [
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStringLiteralRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names/classNamesIdentifierRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance/classInheritanceCheckRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsTemplateRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStylesheetRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStringLiteralRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts",
@@ -3094,28 +2601,35 @@
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/output-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/method-call-checks.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/input-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/element-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/css-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/constructor-checks.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/class-names.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts",
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/utils/html-head-element.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
@@ -3276,9 +2790,6 @@
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/exception/exception.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/utils/index.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/virtual-fs/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts"
       ],
       "/home/circleci/ng/node_modules/@schematics/angular/utility/parse-name.d.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/core/src/index.d.ts"
@@ -3845,12 +3356,6 @@
         "/home/circleci/ng/node_modules/@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript.d.ts",
         "/home/circleci/ng/node_modules/@schematics/angular/utility/change.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-checks/checkTemplateMiscRule.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts"
-      ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
@@ -3860,202 +3365,31 @@
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
-      ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/parse-tsconfig.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/test.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/property-name.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts"
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/functions.ts": [
+        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/decorators.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
+        "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts"
       ],
-      "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/@types/node/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts": [
-        "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts": [
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts": [
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts": [
         "/home/circleci/ng/node_modules/@types/parse5/index.d.ts"
-      ],
-      "/home/circleci/ng/node_modules/tslint/lib/test.d.ts": [
-        "/home/circleci/ng/node_modules/tslint/lib/runner.d.ts",
-        "/home/circleci/ng/node_modules/tslint/lib/verify/lintError.d.ts"
       ],
       "/home/circleci/ng/node_modules/@types/glob/index.d.ts": [
         "/home/circleci/ng/node_modules/@types/node/index.d.ts",
@@ -4283,44 +3617,15 @@
       "/home/circleci/ng/src/cdk/schematics/utils/html-head-element.ts",
       "/home/circleci/ng/src/cdk/schematics/utils/project-style-file.ts",
       "/home/circleci/ng/src/cdk/schematics/utils/index.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/target-version.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/syntaxWalker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walkContext.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/walker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/ruleWalker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/scopeAwareRuleWalker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/blockScopeAwareRuleWalker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/programAwareRuleWalker.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/walker/index.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/rule.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/configuration.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/formatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/formatter/abstractFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/jsonFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/pmdFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/proseFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/verboseFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/stylishFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/fileslistFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/codeFrameFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/tapFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/junitFormatter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters/index.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatters.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/abstractRule.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/typedRule.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/rule/optionallyTypedRule.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/rules.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/runner.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/verify/lintError.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/test.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/utils.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/linter.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/enableDisableRules.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/formatterLoader.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/ruleLoader.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/language/utils.d.ts",
-      "/home/circleci/ng/node_modules/tslint/lib/index.d.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/imports.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/decorators.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/functions.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/line-mappings.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/property-name.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/version-changes.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/attribute-selectors.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/class-names.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/constructor-checks.ts",
@@ -4334,56 +3639,38 @@
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/options.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/install-task.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/node-package/link-task.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/options.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/repo-init/init-task.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/options.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/run-schematic/task.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/options.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/tslint-fix/task.d.ts",
-      "/home/circleci/ng/node_modules/@angular-devkit/schematics/tasks/index.d.ts",
       "/home/circleci/ng/node_modules/@types/events/index.d.ts",
       "/home/circleci/ng/node_modules/@types/minimatch/index.d.ts",
       "/home/circleci/ng/node_modules/@types/glob/index.d.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/project-tsconfig-paths.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/tslint-config.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/utils/parse-tsconfig.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+      "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-file.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/external-failure-walker.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/tslint/component-walker.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts",
+      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names-rule.ts",
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts",
+      "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts",
       "/home/circleci/ng/src/cdk/schematics/index.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-add/package-config.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-add/index.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-add/schema.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-generate/drag-drop/schema.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-generate/drag-drop/index.ts",
-      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStringLiteralRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsStylesheetRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors/attributeSelectorsTemplateRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance/classInheritanceCheckRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-names/classNamesIdentifierRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStringLiteralRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsStylesheetRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/css-selectors/cssSelectorsTemplateRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStringLiteralRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsStylesheetRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/element-selectors/elementSelectorsTemplateRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesStylesheetRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names/inputNamesTemplateRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-checks/checkTemplateMiscRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names/outputNamesTemplateRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/property-names/propertyNamesAccessRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/constructorSignatureCheckRule.ts",
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/signature-check/methodCallsCheckRule.ts",
       "/home/circleci/ng/node_modules/@types/jasmine/index.d.ts"
     ]
   },

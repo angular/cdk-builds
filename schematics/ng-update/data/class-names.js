@@ -7,39 +7,23 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const target_version_1 = require("../target-version");
+const target_version_1 = require("../../update-tool/target-version");
 exports.classNames = {
     [target_version_1.TargetVersion.V6]: [
         {
             pr: 'https://github.com/angular/components/pull/10161',
             changes: [
-                {
-                    replace: 'ConnectedOverlayDirective',
-                    replaceWith: 'CdkConnectedOverlay'
-                },
-                {
-                    replace: 'OverlayOrigin',
-                    replaceWith: 'CdkOverlayOrigin'
-                }
+                { replace: 'ConnectedOverlayDirective', replaceWith: 'CdkConnectedOverlay' },
+                { replace: 'OverlayOrigin', replaceWith: 'CdkOverlayOrigin' }
             ]
         },
         {
             pr: 'https://github.com/angular/components/pull/10267',
-            changes: [
-                {
-                    replace: 'ObserveContent',
-                    replaceWith: 'CdkObserveContent'
-                }
-            ]
+            changes: [{ replace: 'ObserveContent', replaceWith: 'CdkObserveContent' }]
         },
         {
             pr: 'https://github.com/angular/components/pull/10325',
-            changes: [
-                {
-                    replace: 'FocusTrapDirective',
-                    replaceWith: 'CdkTrapFocus'
-                }
-            ]
+            changes: [{ replace: 'FocusTrapDirective', replaceWith: 'CdkTrapFocus' }]
         }
     ]
 };
