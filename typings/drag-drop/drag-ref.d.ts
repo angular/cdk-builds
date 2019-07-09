@@ -106,6 +106,8 @@ export declare class DragRef<T = any> {
     private _pointerMoveSubscription;
     /** Subscription to the event that is dispatched when the user lifts their pointer. */
     private _pointerUpSubscription;
+    /** Subscription to the viewport being scrolled. */
+    private _scrollSubscription;
     /**
      * Time at which the last touch event occurred. Used to avoid firing the same
      * events multiple times on touch devices where the browser will fire a fake
@@ -265,6 +267,8 @@ export declare class DragRef<T = any> {
      * @param value New position to be set.
      */
     setFreeDragPosition(value: Point): this;
+    /** Updates the item's sort order based on the last-known pointer position. */
+    _sortFromLastPointerPosition(): void;
     /** Unsubscribes from the global subscriptions. */
     private _removeSubscriptions;
     /** Destroys the preview element and its ViewRef. */
