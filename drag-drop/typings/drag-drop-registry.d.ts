@@ -35,8 +35,6 @@ export declare class DragDropRegistry<I, C extends {
      * while the user is dragging a drag item instance.
      */
     readonly pointerUp: Subject<TouchEvent | MouseEvent>;
-    /** Emits when the viewport has been scrolled while the user is dragging an item. */
-    readonly scroll: Subject<Event>;
     constructor(_ngZone: NgZone, _document: any);
     /** Adds a drop container to the registry. */
     registerDropContainer(drop: C): void;
