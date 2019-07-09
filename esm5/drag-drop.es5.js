@@ -739,9 +739,7 @@ DragRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        /** @type {?} */
-        var position = this.isDragging() ? this._activeTransform : this._passiveTransform;
-        return { x: position.x, y: position.y };
+        return { x: this._passiveTransform.x, y: this._passiveTransform.y };
     };
     /**
      * Sets the current position in pixels the draggable outside of a drop container.
@@ -1305,7 +1303,7 @@ DragRef = /** @class */ (function () {
         /** @type {?} */
         var point = this._getPointerPositionOnPage(event);
         /** @type {?} */
-        var constrainedPoint = this.constrainPosition ? this.constrainPosition(point, this) : point;
+        var constrainedPoint = this.constrainPosition ? this.constrainPosition(point) : point;
         /** @type {?} */
         var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {

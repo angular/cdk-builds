@@ -207,7 +207,7 @@ export declare class DragRef<T = any> {
      * of the user's pointer on the page and should return a point describing where the item should
      * be rendered.
      */
-    constrainPosition?: (point: Point, dragRef: DragRef) => Point;
+    constrainPosition?: (point: Point) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
