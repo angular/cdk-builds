@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const __1 = require("../..");
+const angular_1 = require("../html-parsing/angular");
 const migration_rule_1 = require("../../update-tool/migration-rule");
 const literal_1 = require("../typescript/literal");
 const upgrade_data_1 = require("../upgrade-data");
@@ -40,10 +40,10 @@ class InputNamesRule extends migration_rule_1.MigrationRule {
             const whitelist = name.whitelist;
             const relativeOffsets = [];
             if (whitelist.attributes) {
-                relativeOffsets.push(...__1.findInputsOnElementWithAttr(template.content, name.replace, whitelist.attributes));
+                relativeOffsets.push(...angular_1.findInputsOnElementWithAttr(template.content, name.replace, whitelist.attributes));
             }
             if (whitelist.elements) {
-                relativeOffsets.push(...__1.findInputsOnElementWithTag(template.content, name.replace, whitelist.elements));
+                relativeOffsets.push(...angular_1.findInputsOnElementWithTag(template.content, name.replace, whitelist.elements));
             }
             relativeOffsets.map(offset => template.start + offset)
                 .forEach(start => this._replaceInputName(template.filePath, start, name.replace.length, name.replaceWith));
