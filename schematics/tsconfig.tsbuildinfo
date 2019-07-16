@@ -542,8 +542,8 @@
         "signature": "3eee9c001f3da2109f2d5b1c8ba02d272cdd727eed36b371c7724ea2a36fbf0d"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/utils/index.d.ts": {
-        "version": "b720f7d7ee71680572d3b632182960f1eb816a5e6c263138.1.0-af3e977d6a4c8df814456",
-        "signature": "b720f7d7ee71680572d3b632182960f1eb816a5e6c263138.1.0-af3e977d6a4c8df814456"
+        "version": "b720f7d7ee71680572d3b632182960f1eb816a5e6c263138.1.0-5d731d316a4c8df814456",
+        "signature": "b720f7d7ee71680572d3b632182960f1eb816a5e6c263138.1.0-5d731d316a4c8df814456"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/experimental/jobs/api.d.ts": {
         "version": "64dcd9a52db9b69acec04e2bdaadfc0205547db0e020359e6dac72a67cd32191",
@@ -586,8 +586,8 @@
         "signature": "e792ad2a44e3a0aa0b3111c930fa2723c0a56130825f240ee053c875f6a4a5a1"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/terminal/text.d.ts": {
-        "version": "3fafbc2690eed3ffbd7e32d44d6cc1aef4f65bb6a868a80381a81502488.1.0-af3e977d61",
-        "signature": "3fafbc2690eed3ffbd7e32d44d6cc1aef4f65bb6a868a80381a81502488.1.0-af3e977d61"
+        "version": "3fafbc2690eed3ffbd7e32d44d6cc1aef4f65bb6a868a80381a81502488.1.0-5d731d3161",
+        "signature": "3fafbc2690eed3ffbd7e32d44d6cc1aef4f65bb6a868a80381a81502488.1.0-5d731d3161"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/terminal/caps.d.ts": {
         "version": "b5b775c328f137134b0a042070fd360e50b8655d31439b766d2e07147f3160a5",
@@ -955,7 +955,7 @@
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts": {
         "version": "84ed0d64381ddf97367551aab19851475a685c10cc88e5032b96715e2da45d2d",
-        "signature": "18d9ac9bfb216869d774e7cb81a3e02c7e9aa45a91048.1.0-af3e977d651dd1dd09172472"
+        "signature": "18d9ac9bfb216869d774e7cb81a3e02c7e9aa45a91048.1.0-5d731d31651dd1dd09172472"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts": {
         "version": "cca9af2aae22ace79226d8fe63dcb6ff997fc1c921c9cfebc08669c47500d07b",
@@ -1038,7 +1038,7 @@
         "signature": "7c8d8113bb621240982cf9b0e77df6973368911e75789a078016afdf8ecc98a5"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": {
-        "version": "a8db11732084efea450b0ec1eddf3b084d52ee4a7ad40ea0d56469ef93beba0a",
+        "version": "d2b2dbf59ce3e1902b6af21381247efd25956180e5a568aea3089d54b136a08d",
         "signature": "30ab6fafbd373628f5abe90a8db24afa28d92d61bb9996a7d0da56a0b38d581c"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts": {
@@ -1046,7 +1046,7 @@
         "signature": "fd5b5d7a6d65cbf78197f38db7aea9bde19b193c4b803807cd21704469e29844"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": {
-        "version": "364ff69e6c882e5eea96acd96ebc613d11b2459256a6d39782c28e806fd9a69c",
+        "version": "07d3923cd1d85505762456ae2e33db46749bd8ead6cad0af38f8ceb15f7297d0",
         "signature": "1edd5065cc6c0485854f09ad2de3df20788cf47eccb46b9074089a24df483953"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/output-names-rule.ts": {
@@ -2206,7 +2206,7 @@
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": [
-        "/home/circleci/ng/src/cdk/schematics/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
@@ -2220,7 +2220,7 @@
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": [
-        "/home/circleci/ng/src/cdk/schematics/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
@@ -2406,38 +2406,6 @@
         "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/public-api.ts"
       ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": [
-        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
-        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
-        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
-        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
-        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts"
-      ],
-      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": [
-        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
-        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
-        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
-        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
-      ],
       "/home/circleci/ng/node_modules/@angular-devkit/schematics/tools/file-system-engine-host.d.ts": [
         "/home/circleci/ng/node_modules/rxjs/index.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
@@ -2503,11 +2471,32 @@
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/formats/index.d.ts",
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/workflow/index.d.ts"
       ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
+      ],
       "/home/circleci/ng/src/cdk/schematics/ng-add/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-add/package-config.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
+        "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/public-api.ts": [
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/angular.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/html-parsing/elements.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/module-specifiers.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts"
@@ -2550,9 +2539,20 @@
         "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/misc-template-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/method-call-arguments-rule.ts": [
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
+        "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
+      ],
+      "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/input-names-rule.ts": [
+        "/home/circleci/ng/src/cdk/schematics/ng-update/data/index.ts",
+        "/home/circleci/ng/src/cdk/schematics/update-tool/component-resource-collector.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts"
       ],
