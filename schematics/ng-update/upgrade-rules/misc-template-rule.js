@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const target_version_1 = require("../../update-tool/target-version");
+const __1 = require("../..");
 const migration_rule_1 = require("../../update-tool/migration-rule");
 const literal_1 = require("../typescript/literal");
 /**
@@ -19,7 +19,7 @@ class MiscTemplateRule extends migration_rule_1.MigrationRule {
         super(...arguments);
         // Only enable this rule if the migration targets version 6. The rule
         // currently only includes migrations for V6 deprecations.
-        this.ruleEnabled = this.targetVersion === target_version_1.TargetVersion.V6;
+        this.ruleEnabled = this.targetVersion === __1.TargetVersion.V6;
     }
     visitTemplate(template) {
         // Migration for https://github.com/angular/components/pull/10325 (v6)
