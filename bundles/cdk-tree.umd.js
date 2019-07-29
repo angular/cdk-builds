@@ -1273,7 +1273,10 @@ var CdkTreeNodePadding = /** @class */ (function () {
          * @return {?}
          */
         function (value) {
-            this._level = coercion.coerceNumberProperty(value);
+            // Set to null as the fallback value so that _setPadding can fall back to the node level if the
+            // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
+            // they set 0 explicitly.
+            this._level = (/** @type {?} */ (coercion.coerceNumberProperty(value, null)));
             this._setPadding();
         },
         enumerable: true,
@@ -1337,8 +1340,8 @@ var CdkTreeNodePadding = /** @class */ (function () {
             ? this._tree.treeControl.getLevel(this._treeNode.data)
             : null;
         /** @type {?} */
-        var level = this._level || nodeLevel;
-        return level ? "" + level * this._indent + this.indentUnits : null;
+        var level = this._level == null ? nodeLevel : this._level;
+        return typeof level === 'number' ? "" + level * this._indent + this.indentUnits : null;
     };
     /**
      * @param {?=} forceChange

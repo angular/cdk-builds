@@ -894,8 +894,8 @@ var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
  * Container inside which all overlays will render.
  */
 var OverlayContainer = /** @class */ (function () {
-    function OverlayContainer(_document) {
-        this._document = _document;
+    function OverlayContainer(document) {
+        this._document = document;
     }
     /**
      * @return {?}
@@ -950,8 +950,16 @@ var OverlayContainer = /** @class */ (function () {
      */
     function () {
         /** @type {?} */
+        var containerClass = 'cdk-overlay-container';
+        /** @type {?} */
+        var previousContainers = this._document.getElementsByClassName(containerClass);
+        // Remove any old containers. This can happen when transitioning from the server to the client.
+        for (var i = 0; i < previousContainers.length; i++) {
+            (/** @type {?} */ (previousContainers[i].parentNode)).removeChild(previousContainers[i]);
+        }
+        /** @type {?} */
         var container = this._document.createElement('div');
-        container.classList.add('cdk-overlay-container');
+        container.classList.add(containerClass);
         this._document.body.appendChild(container);
         this._containerElement = container;
     };
@@ -5037,16 +5045,18 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
      */
     function () {
         if (!this._fullScreenEventName) {
-            if (this._document.fullscreenEnabled) {
+            /** @type {?} */
+            var _document = (/** @type {?} */ (this._document));
+            if (_document.fullscreenEnabled) {
                 this._fullScreenEventName = 'fullscreenchange';
             }
-            else if (this._document.webkitFullscreenEnabled) {
+            else if (_document.webkitFullscreenEnabled) {
                 this._fullScreenEventName = 'webkitfullscreenchange';
             }
-            else if (((/** @type {?} */ (this._document))).mozFullScreenEnabled) {
+            else if (_document.mozFullScreenEnabled) {
                 this._fullScreenEventName = 'mozfullscreenchange';
             }
-            else if (((/** @type {?} */ (this._document))).msFullscreenEnabled) {
+            else if (_document.msFullscreenEnabled) {
                 this._fullScreenEventName = 'MSFullscreenChange';
             }
         }
@@ -5067,10 +5077,12 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
      * @return {?}
      */
     function () {
-        return this._document.fullscreenElement ||
-            this._document.webkitFullscreenElement ||
-            ((/** @type {?} */ (this._document))).mozFullScreenElement ||
-            ((/** @type {?} */ (this._document))).msFullscreenElement ||
+        /** @type {?} */
+        var _document = (/** @type {?} */ (this._document));
+        return _document.fullscreenElement ||
+            _document.webkitFullscreenElement ||
+            _document.mozFullScreenElement ||
+            _document.msFullscreenElement ||
             null;
     };
     FullscreenOverlayContainer.decorators = [
