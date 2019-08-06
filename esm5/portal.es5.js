@@ -363,23 +363,6 @@ BasePortalOutlet = /** @class */ (function () {
     };
     return BasePortalOutlet;
 }());
-/**
- * @deprecated Use `BasePortalOutlet` instead.
- * \@breaking-change 9.0.0
- * @abstract
- */
-var  /**
- * @deprecated Use `BasePortalOutlet` instead.
- * \@breaking-change 9.0.0
- * @abstract
- */
-BasePortalHost = /** @class */ (function (_super) {
-    __extends(BasePortalHost, _super);
-    function BasePortalHost() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return BasePortalHost;
-}(BasePortalOutlet));
 
 /**
  * @fileoverview added by tsickle
@@ -536,21 +519,6 @@ DomPortalOutlet = /** @class */ (function (_super) {
     };
     return DomPortalOutlet;
 }(BasePortalOutlet));
-/**
- * @deprecated Use `DomPortalOutlet` instead.
- * \@breaking-change 9.0.0
- */
-var  /**
- * @deprecated Use `DomPortalOutlet` instead.
- * \@breaking-change 9.0.0
- */
-DomPortalHost = /** @class */ (function (_super) {
-    __extends(DomPortalHost, _super);
-    function DomPortalHost() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return DomPortalHost;
-}(DomPortalOutlet));
 
 /**
  * @fileoverview added by tsickle
@@ -578,23 +546,6 @@ var CdkPortal = /** @class */ (function (_super) {
     ]; };
     return CdkPortal;
 }(TemplatePortal));
-/**
- * @deprecated Use `CdkPortal` instead.
- * \@breaking-change 9.0.0
- */
-var TemplatePortalDirective = /** @class */ (function (_super) {
-    __extends(TemplatePortalDirective, _super);
-    function TemplatePortalDirective() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    TemplatePortalDirective.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdk-portal], [cdkPortal], [portal]',
-                    exportAs: 'cdkPortal',
-                },] },
-    ];
-    return TemplatePortalDirective;
-}(CdkPortal));
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
@@ -773,31 +724,13 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     };
     return CdkPortalOutlet;
 }(BasePortalOutlet));
-/**
- * @deprecated Use `CdkPortalOutlet` instead.
- * \@breaking-change 9.0.0
- */
-var PortalHostDirective = /** @class */ (function (_super) {
-    __extends(PortalHostDirective, _super);
-    function PortalHostDirective() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    PortalHostDirective.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
-                    exportAs: 'cdkPortalOutlet, cdkPortalHost',
-                    inputs: ['portal: cdkPortalOutlet']
-                },] },
-    ];
-    return PortalHostDirective;
-}(CdkPortalOutlet));
 var PortalModule = /** @class */ (function () {
     function PortalModule() {
     }
     PortalModule.decorators = [
         { type: NgModule, args: [{
-                    exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-                    declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                    exports: [CdkPortal, CdkPortalOutlet],
+                    declarations: [CdkPortal, CdkPortalOutlet],
                 },] },
     ];
     return PortalModule;
@@ -854,5 +787,5 @@ PortalInjector = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, BasePortalHost, DomPortalOutlet, DomPortalHost, CdkPortal, TemplatePortalDirective, CdkPortalOutlet, PortalHostDirective, PortalModule, PortalInjector };
+export { DomPortalOutlet as DomPortalHost, CdkPortalOutlet as PortalHostDirective, CdkPortal as TemplatePortalDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, CdkPortal, CdkPortalOutlet, PortalModule, PortalInjector };
 //# sourceMappingURL=portal.es5.js.map

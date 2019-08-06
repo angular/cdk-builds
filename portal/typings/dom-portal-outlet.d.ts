@@ -39,9 +39,3 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
     /** Gets the root HTMLElement for an instantiated component. */
     private _getComponentRootNode;
 }
-/**
- * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare class DomPortalHost extends DomPortalOutlet {
-}

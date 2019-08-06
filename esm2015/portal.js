@@ -266,13 +266,6 @@ class BasePortalOutlet {
         }
     }
 }
-/**
- * @deprecated Use `BasePortalOutlet` instead.
- * \@breaking-change 9.0.0
- * @abstract
- */
-class BasePortalHost extends BasePortalOutlet {
-}
 
 /**
  * @fileoverview added by tsickle
@@ -390,12 +383,6 @@ class DomPortalOutlet extends BasePortalOutlet {
         return (/** @type {?} */ (((/** @type {?} */ (componentRef.hostView))).rootNodes[0]));
     }
 }
-/**
- * @deprecated Use `DomPortalOutlet` instead.
- * \@breaking-change 9.0.0
- */
-class DomPortalHost extends DomPortalOutlet {
-}
 
 /**
  * @fileoverview added by tsickle
@@ -424,18 +411,6 @@ CdkPortal.decorators = [
 CdkPortal.ctorParameters = () => [
     { type: TemplateRef },
     { type: ViewContainerRef }
-];
-/**
- * @deprecated Use `CdkPortal` instead.
- * \@breaking-change 9.0.0
- */
-class TemplatePortalDirective extends CdkPortal {
-}
-TemplatePortalDirective.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-portal], [cdkPortal], [portal]',
-                exportAs: 'cdkPortal',
-            },] },
 ];
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
@@ -575,25 +550,12 @@ CdkPortalOutlet.ctorParameters = () => [
 CdkPortalOutlet.propDecorators = {
     attached: [{ type: Output }]
 };
-/**
- * @deprecated Use `CdkPortalOutlet` instead.
- * \@breaking-change 9.0.0
- */
-class PortalHostDirective extends CdkPortalOutlet {
-}
-PortalHostDirective.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
-                exportAs: 'cdkPortalOutlet, cdkPortalHost',
-                inputs: ['portal: cdkPortalOutlet']
-            },] },
-];
 class PortalModule {
 }
 PortalModule.decorators = [
     { type: NgModule, args: [{
-                exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-                declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                exports: [CdkPortal, CdkPortalOutlet],
+                declarations: [CdkPortal, CdkPortalOutlet],
             },] },
 ];
 
@@ -641,5 +603,5 @@ class PortalInjector {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, BasePortalHost, DomPortalOutlet, DomPortalHost, CdkPortal, TemplatePortalDirective, CdkPortalOutlet, PortalHostDirective, PortalModule, PortalInjector };
+export { DomPortalOutlet as DomPortalHost, CdkPortalOutlet as PortalHostDirective, CdkPortal as TemplatePortalDirective, BasePortalOutlet as BasePortalHost, Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, DomPortalOutlet, CdkPortal, CdkPortalOutlet, PortalModule, PortalInjector };
 //# sourceMappingURL=portal.js.map

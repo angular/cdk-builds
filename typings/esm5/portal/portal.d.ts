@@ -81,11 +81,6 @@ export interface PortalOutlet {
     hasAttached(): boolean;
 }
 /**
- * @deprecated Use `PortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare type PortalHost = PortalOutlet;
-/**
  * Partial implementation of PortalOutlet that handles attaching
  * ComponentPortal and TemplatePortal.
  */
@@ -110,10 +105,4 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
     /** @docs-private */
     setDisposeFn(fn: () => void): void;
     private _invokeDisposeFn;
-}
-/**
- * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare abstract class BasePortalHost extends BasePortalOutlet {
 }

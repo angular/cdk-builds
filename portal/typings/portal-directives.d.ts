@@ -15,12 +15,6 @@ export declare class CdkPortal extends TemplatePortal {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
 }
 /**
- * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0
- */
-export declare class TemplatePortalDirective extends CdkPortal {
-}
-/**
  * Possible attached references to the CdkPortalOutlet.
  */
 export declare type CdkPortalOutletAttachedRef = ComponentRef<any> | EmbeddedViewRef<any> | null;
@@ -60,12 +54,6 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
      * @returns Reference to the created embedded view.
      */
     attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
-}
-/**
- * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0
- */
-export declare class PortalHostDirective extends CdkPortalOutlet {
 }
 export declare class PortalModule {
 }
