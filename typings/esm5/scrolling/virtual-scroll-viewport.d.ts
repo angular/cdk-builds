@@ -24,6 +24,7 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _renderedRangeSubject;
     /** The direction the viewport scrolls. */
     orientation: 'horizontal' | 'vertical';
+    private _orientation;
     /** Emits when the index of the first element visible in the viewport changes. */
     scrolledIndexChange: Observable<number>;
     /** The element that wraps the rendered content. */
@@ -31,14 +32,13 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     /** A stream that emits whenever the rendered range changes. */
     renderedRangeStream: Observable<ListRange>;
     /**
-     * The transform used to scale the spacer to the same size as all content, including content that
-     * is not currently rendered.
-     */
-    _totalContentSizeTransform: string;
-    /**
      * The total size of all content (in pixels), including content that is not currently rendered.
      */
     private _totalContentSize;
+    /** A string representing the `style.width` property value to be used for the spacer element. */
+    _totalContentWidth: string;
+    /** A string representing the `style.height` property value to be used for the spacer element. */
+    _totalContentHeight: string;
     /**
      * The CSS transform applied to the rendered subset of items so that they appear within the bounds
      * of the visible viewport.
@@ -127,4 +127,6 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _markChangeDetectionNeeded;
     /** Run change detection. */
     private _doChangeDetection;
+    /** Calculates the `style.width` and `style.height` for the spacer element. */
+    private _calculateSpacerSize;
 }
