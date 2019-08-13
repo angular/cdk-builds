@@ -46,10 +46,7 @@ function addDeclarationToNgModule(options) {
             + '.component';
         const relativePath = find_module_1.buildRelativePath(modulePath, componentPath);
         const classifiedName = core_1.strings.classify(`${options.name}Component`);
-        const declarationChanges = ast_utils_1.addDeclarationToModule(
-        // TODO: TypeScript version mismatch due to @schematics/angular using a different version
-        // than Material. Cast to any to avoid the type assignment failure.
-        source, modulePath, classifiedName, relativePath);
+        const declarationChanges = ast_utils_1.addDeclarationToModule(source, modulePath, classifiedName, relativePath);
         const declarationRecorder = host.beginUpdate(modulePath);
         for (const change of declarationChanges) {
             if (change instanceof change_1.InsertChange) {
@@ -61,10 +58,7 @@ function addDeclarationToNgModule(options) {
             // Need to refresh the AST because we overwrote the file in the host.
             source = readIntoSourceFile(host, modulePath);
             const exportRecorder = host.beginUpdate(modulePath);
-            const exportChanges = ast_utils_1.addExportToModule(
-            // TODO: TypeScript version mismatch due to @schematics/angular using a different version
-            // than Material. Cast to any to avoid the type assignment failure.
-            source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
+            const exportChanges = ast_utils_1.addExportToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of exportChanges) {
                 if (change instanceof change_1.InsertChange) {
                     exportRecorder.insertLeft(change.pos, change.toAdd);
@@ -76,10 +70,7 @@ function addDeclarationToNgModule(options) {
             // Need to refresh the AST because we overwrote the file in the host.
             source = readIntoSourceFile(host, modulePath);
             const entryComponentRecorder = host.beginUpdate(modulePath);
-            const entryComponentChanges = ast_utils_1.addEntryComponentToModule(
-            // TODO: TypeScript version mismatch due to @schematics/angular using a different version
-            // than Material. Cast to any to avoid the type assignment failure.
-            source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
+            const entryComponentChanges = ast_utils_1.addEntryComponentToModule(source, modulePath, core_1.strings.classify(`${options.name}Component`), relativePath);
             for (const change of entryComponentChanges) {
                 if (change instanceof change_1.InsertChange) {
                     entryComponentRecorder.insertLeft(change.pos, change.toAdd);

@@ -28,6 +28,7 @@ exports.cdkUpgradeData = {
  * resolves the specified data portion that is specifically tied to the target version.
  */
 function getVersionUpgradeData(r, dataName) {
+    // Note that below we need to cast to `unknown` first TS doesn't infer the type of T correctly.
     return version_changes_1.getChangesForTarget(r.targetVersion, r.upgradeData[dataName]);
 }
 exports.getVersionUpgradeData = getVersionUpgradeData;
