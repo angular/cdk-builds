@@ -1174,15 +1174,13 @@ var CdkNestedTreeNode = /** @class */ (function (_super) {
         var _this = this;
         /** @type {?} */
         var outlets = this.nodeOutlet;
-        if (outlets) {
-            // Note that since we use `descendants: true` on the query, we have to ensure
-            // that we don't pick up the outlet of a child node by accident.
-            return outlets.find((/**
-             * @param {?} outlet
-             * @return {?}
-             */
-            function (outlet) { return !outlet._node || outlet._node === _this; }));
-        }
+        // Note that since we use `descendants: true` on the query, we have to ensure
+        // that we don't pick up the outlet of a child node by accident.
+        return outlets && outlets.find((/**
+         * @param {?} outlet
+         * @return {?}
+         */
+        function (outlet) { return !outlet._node || outlet._node === _this; }));
     };
     CdkNestedTreeNode.decorators = [
         { type: core.Directive, args: [{

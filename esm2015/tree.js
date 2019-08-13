@@ -896,15 +896,13 @@ class CdkNestedTreeNode extends CdkTreeNode {
     _getNodeOutlet() {
         /** @type {?} */
         const outlets = this.nodeOutlet;
-        if (outlets) {
-            // Note that since we use `descendants: true` on the query, we have to ensure
-            // that we don't pick up the outlet of a child node by accident.
-            return outlets.find((/**
-             * @param {?} outlet
-             * @return {?}
-             */
-            outlet => !outlet._node || outlet._node === this));
-        }
+        // Note that since we use `descendants: true` on the query, we have to ensure
+        // that we don't pick up the outlet of a child node by accident.
+        return outlets && outlets.find((/**
+         * @param {?} outlet
+         * @return {?}
+         */
+        outlet => !outlet._node || outlet._node === this));
     }
 }
 CdkNestedTreeNode.decorators = [
