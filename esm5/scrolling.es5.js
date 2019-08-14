@@ -979,10 +979,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
          * Emits when the rendered range changes.
          */
         _this._renderedRangeSubject = new Subject();
-        /**
-         * The direction the viewport scrolls.
-         */
-        _this.orientation = 'vertical';
+        _this._orientation = 'vertical';
         // Note: we don't use the typical EventEmitter here because we need to subscribe to the scroll
         // strategy lazily (i.e. only if the user is actually listening to the events). We do this because
         // depending on how the strategy calculates the scrolled index, it may come at a cost to
@@ -1014,14 +1011,17 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
          */
         _this.renderedRangeStream = _this._renderedRangeSubject.asObservable();
         /**
-         * The transform used to scale the spacer to the same size as all content, including content that
-         * is not currently rendered.
-         */
-        _this._totalContentSizeTransform = '';
-        /**
          * The total size of all content (in pixels), including content that is not currently rendered.
          */
         _this._totalContentSize = 0;
+        /**
+         * A string representing the `style.width` property value to be used for the spacer element.
+         */
+        _this._totalContentWidth = '';
+        /**
+         * A string representing the `style.height` property value to be used for the spacer element.
+         */
+        _this._totalContentHeight = '';
         /**
          * The currently rendered range of indices.
          */
@@ -1056,6 +1056,28 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
         }
         return _this;
     }
+    Object.defineProperty(CdkVirtualScrollViewport.prototype, "orientation", {
+        /** The direction the viewport scrolls. */
+        get: /**
+         * The direction the viewport scrolls.
+         * @return {?}
+         */
+        function () {
+            return this._orientation;
+        },
+        set: /**
+         * @param {?} orientation
+         * @return {?}
+         */
+        function (orientation) {
+            if (this._orientation !== orientation) {
+                this._orientation = orientation;
+                this._calculateSpacerSize();
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
@@ -1227,9 +1249,7 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
     function (size) {
         if (this._totalContentSize !== size) {
             this._totalContentSize = size;
-            /** @type {?} */
-            var axis = this.orientation == 'horizontal' ? 'X' : 'Y';
-            this._totalContentSizeTransform = "scale" + axis + "(" + this._totalContentSize + ")";
+            this._calculateSpacerSize();
             this._markChangeDetectionNeeded();
         }
     };
@@ -1538,9 +1558,26 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
             fn();
         }
     };
+    /** Calculates the `style.width` and `style.height` for the spacer element. */
+    /**
+     * Calculates the `style.width` and `style.height` for the spacer element.
+     * @private
+     * @return {?}
+     */
+    CdkVirtualScrollViewport.prototype._calculateSpacerSize = /**
+     * Calculates the `style.width` and `style.height` for the spacer element.
+     * @private
+     * @return {?}
+     */
+    function () {
+        this._totalContentHeight =
+            this.orientation === 'horizontal' ? '' : this._totalContentSize + "px";
+        this._totalContentWidth =
+            this.orientation === 'horizontal' ? this._totalContentSize + "px" : '';
+    };
     CdkVirtualScrollViewport.decorators = [
         { type: Component, args: [{selector: 'cdk-virtual-scroll-viewport',
-                    template: "<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\"><ng-content></ng-content></div><div class=\"cdk-virtual-scroll-spacer\" [style.transform]=\"_totalContentSizeTransform\"></div>",
+                    template: "<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\"><ng-content></ng-content></div><div class=\"cdk-virtual-scroll-spacer\" [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>",
                     styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:0}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:0}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"],
                     host: {
                         'class': 'cdk-virtual-scroll-viewport',

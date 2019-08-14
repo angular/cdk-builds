@@ -2580,6 +2580,7 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
                 (minWidth != null && minWidth <= availableWidth);
             return verticalFit && horizontalFit;
         }
+        return false;
     };
     /**
      * Gets the point at which the overlay can be "pushed" on-screen. If the overlay is larger than
