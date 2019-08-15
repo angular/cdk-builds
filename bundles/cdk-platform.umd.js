@@ -318,6 +318,26 @@ function getRtlScrollAxisType() {
     return rtlScrollAxisType;
 }
 
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/** @type {?} */
+var shadowDomIsSupported;
+/**
+ * Checks whether the user's browser support Shadow DOM.
+ * @return {?}
+ */
+function _supportsShadowDom() {
+    if (shadowDomIsSupported == null) {
+        /** @type {?} */
+        var head = typeof document !== 'undefined' ? document.head : null;
+        shadowDomIsSupported = !!(head && (((/** @type {?} */ (head))).createShadowRoot || head.attachShadow));
+    }
+    return shadowDomIsSupported;
+}
+
 exports.Platform = Platform;
 exports.PlatformModule = PlatformModule;
 exports.getSupportedInputTypes = getSupportedInputTypes;
@@ -326,6 +346,7 @@ exports.normalizePassiveListenerOptions = normalizePassiveListenerOptions;
 exports.supportsScrollBehavior = supportsScrollBehavior;
 exports.getRtlScrollAxisType = getRtlScrollAxisType;
 exports.RtlScrollAxisType = RtlScrollAxisType;
+exports._supportsShadowDom = _supportsShadowDom;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

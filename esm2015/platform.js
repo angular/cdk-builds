@@ -317,10 +317,30 @@ function getRtlScrollAxisType() {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
+/** @type {?} */
+let shadowDomIsSupported;
+/**
+ * Checks whether the user's browser support Shadow DOM.
+ * @return {?}
+ */
+function _supportsShadowDom() {
+    if (shadowDomIsSupported == null) {
+        /** @type {?} */
+        const head = typeof document !== 'undefined' ? document.head : null;
+        shadowDomIsSupported = !!(head && (((/** @type {?} */ (head))).createShadowRoot || head.attachShadow));
+    }
+    return shadowDomIsSupported;
+}
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, normalizePassiveListenerOptions, supportsScrollBehavior, getRtlScrollAxisType, RtlScrollAxisType };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, normalizePassiveListenerOptions, supportsScrollBehavior, getRtlScrollAxisType, RtlScrollAxisType, _supportsShadowDom };
 //# sourceMappingURL=platform.js.map
