@@ -27,15 +27,23 @@ const schematics_1 = require("@angular-devkit/schematics");
 let ts;
 exports.ts = ts;
 try {
-    exports.ts = ts = require('@schematics/angular/node_modules/typescript');
+    exports.ts = ts = require('@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript');
 }
 catch (_a) {
+    // Fallback for CLI versions before v8.0.0. The TypeScript dependency has been dropped in
+    // CLI version v8.0.0 but older CLI versions can still run the latest generation schematics.
+    // See: https://github.com/angular/angular-cli/commit/bf1c069f73c8e3d4f0e8d584cbfb47c408.1.3-6275b49ae0b
     try {
-        exports.ts = ts = require('typescript');
+        exports.ts = ts = require('@schematics/angular/node_modules/typescript');
     }
     catch (_b) {
-        throw new schematics_1.SchematicsException('Error: Could not find a TypeScript version for the ' +
-            'schematics. Please report an issue on the Angular Material repository.');
+        try {
+            exports.ts = ts = require('typescript');
+        }
+        catch (_c) {
+            throw new schematics_1.SchematicsException('Error: Could not find a TypeScript version for the ' +
+                'schematics. Please report an issue on the Angular Material repository.');
+        }
     }
 }
 //# sourceMappingURL=version-agnostic-typescript.js.map
