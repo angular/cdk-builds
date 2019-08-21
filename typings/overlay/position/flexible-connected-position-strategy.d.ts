@@ -14,7 +14,10 @@ import { OverlayReference } from '../overlay-reference';
 import { Platform } from '@angular/cdk/platform';
 import { OverlayContainer } from '../overlay-container';
 /** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */
-export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | HTMLElement | Point;
+export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | HTMLElement | Point & {
+    width?: number;
+    height?: number;
+};
 /**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of

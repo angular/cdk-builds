@@ -2572,14 +2572,18 @@ class FlexibleConnectedPositionStrategy {
         if (origin instanceof HTMLElement) {
             return origin.getBoundingClientRect();
         }
+        /** @type {?} */
+        const width = origin.width || 0;
+        /** @type {?} */
+        const height = origin.height || 0;
         // If the origin is a point, return a client rect as if it was a 0x0 element at the point.
         return {
             top: origin.y,
-            bottom: origin.y,
+            bottom: origin.y + height,
             left: origin.x,
-            right: origin.x,
-            height: 0,
-            width: 0
+            right: origin.x + width,
+            height,
+            width
         };
     }
 }
