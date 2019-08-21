@@ -1455,9 +1455,6 @@ OverlayRef = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (!this._pane) {
-            return;
-        }
         /** @type {?} */
         var style = this._pane.style;
         style.width = coerceCssPixelValue(this._config.width);

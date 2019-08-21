@@ -1182,9 +1182,6 @@ class OverlayRef {
      * @return {?}
      */
     _updateElementSize() {
-        if (!this._pane) {
-            return;
-        }
         /** @type {?} */
         const style = this._pane.style;
         style.width = coerceCssPixelValue(this._config.width);
