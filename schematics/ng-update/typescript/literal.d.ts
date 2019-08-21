@@ -13,6 +13,6 @@ export declare function findAllSubstringIndices(input: string, search: string): 
  * literal. Note that we cannot use `ts.isStringLiteralLike()` because if developers update
  * an outdated project, their TypeScript version is not automatically being updated
  * and therefore could throw because the function is not available yet.
- * https://github.com/Microsoft/TypeScript/commit/8.1.3-11620482443dc8762475a5e92c9f80b5c5725bd81796
+ * https://github.com/Microsoft/TypeScript/commit/8.1.3-1b7dc893543dc8762475a5e92c9f80b5c5725bd81796
  */
 export declare function isStringLiteralLike(node: ts.Node): node is (ts.StringLiteral | ts.NoSubstitutionTemplateLiteral);
