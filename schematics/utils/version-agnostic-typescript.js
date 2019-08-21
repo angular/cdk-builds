@@ -32,7 +32,7 @@ try {
 catch (_a) {
     // Fallback for CLI versions before v8.0.0. The TypeScript dependency has been dropped in
     // CLI version v8.0.0 but older CLI versions can still run the latest generation schematics.
-    // See: https://github.com/angular/angular-cli/commit/bf1c069f73c8e3d4f0e8d584cbfb47c408.1.3-b98a3bd6c0b
+    // See: https://github.com/angular/angular-cli/commit/bf1c069f73c8e3d4f0e8d584cbfb47c408.1.3-dc2c700c60b
     try {
         exports.ts = ts = require('@schematics/angular/node_modules/typescript');
     }
