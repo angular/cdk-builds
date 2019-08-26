@@ -395,6 +395,23 @@ BasePortalOutlet = /** @class */ (function () {
     };
     return BasePortalOutlet;
 }());
+/**
+ * @deprecated Use `BasePortalOutlet` instead.
+ * \@breaking-change 9.0.0
+ * @abstract
+ */
+var   /**
+ * @deprecated Use `BasePortalOutlet` instead.
+ * \@breaking-change 9.0.0
+ * @abstract
+ */
+BasePortalHost = /** @class */ (function (_super) {
+    __extends(BasePortalHost, _super);
+    function BasePortalHost() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return BasePortalHost;
+}(BasePortalOutlet));
 
 /**
  * @fileoverview added by tsickle
@@ -551,6 +568,21 @@ DomPortalOutlet = /** @class */ (function (_super) {
     };
     return DomPortalOutlet;
 }(BasePortalOutlet));
+/**
+ * @deprecated Use `DomPortalOutlet` instead.
+ * \@breaking-change 9.0.0
+ */
+var   /**
+ * @deprecated Use `DomPortalOutlet` instead.
+ * \@breaking-change 9.0.0
+ */
+DomPortalHost = /** @class */ (function (_super) {
+    __extends(DomPortalHost, _super);
+    function DomPortalHost() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return DomPortalHost;
+}(DomPortalOutlet));
 
 /**
  * @fileoverview added by tsickle
@@ -567,7 +599,7 @@ var CdkPortal = /** @class */ (function (_super) {
     }
     CdkPortal.decorators = [
         { type: core.Directive, args: [{
-                    selector: '[cdk-portal], [cdkPortal], [portal]',
+                    selector: '[cdkPortal]',
                     exportAs: 'cdkPortal',
                 },] },
     ];
@@ -578,6 +610,27 @@ var CdkPortal = /** @class */ (function (_super) {
     ]; };
     return CdkPortal;
 }(TemplatePortal));
+/**
+ * @deprecated Use `CdkPortal` instead.
+ * \@breaking-change 9.0.0
+ */
+var TemplatePortalDirective = /** @class */ (function (_super) {
+    __extends(TemplatePortalDirective, _super);
+    function TemplatePortalDirective() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TemplatePortalDirective.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdk-portal], [portal]',
+                    exportAs: 'cdkPortal',
+                    providers: [{
+                            provide: CdkPortal,
+                            useExisting: TemplatePortalDirective
+                        }]
+                },] },
+    ];
+    return TemplatePortalDirective;
+}(CdkPortal));
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
@@ -741,8 +794,8 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     };
     CdkPortalOutlet.decorators = [
         { type: core.Directive, args: [{
-                    selector: '[cdkPortalOutlet], [cdkPortalHost], [portalHost]',
-                    exportAs: 'cdkPortalOutlet, cdkPortalHost',
+                    selector: '[cdkPortalOutlet]',
+                    exportAs: 'cdkPortalOutlet',
                     inputs: ['portal: cdkPortalOutlet']
                 },] },
     ];
@@ -756,13 +809,35 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     };
     return CdkPortalOutlet;
 }(BasePortalOutlet));
+/**
+ * @deprecated Use `CdkPortalOutlet` instead.
+ * \@breaking-change 9.0.0
+ */
+var PortalHostDirective = /** @class */ (function (_super) {
+    __extends(PortalHostDirective, _super);
+    function PortalHostDirective() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PortalHostDirective.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalHost',
+                    inputs: ['portal: cdkPortalHost'],
+                    providers: [{
+                            provide: CdkPortalOutlet,
+                            useExisting: PortalHostDirective
+                        }]
+                },] },
+    ];
+    return PortalHostDirective;
+}(CdkPortalOutlet));
 var PortalModule = /** @class */ (function () {
     function PortalModule() {
     }
     PortalModule.decorators = [
         { type: core.NgModule, args: [{
-                    exports: [CdkPortal, CdkPortalOutlet],
-                    declarations: [CdkPortal, CdkPortalOutlet],
+                    exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                    declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
                 },] },
     ];
     return PortalModule;
@@ -809,17 +884,17 @@ PortalInjector = /** @class */ (function () {
     return PortalInjector;
 }());
 
-exports.DomPortalHost = DomPortalOutlet;
-exports.PortalHostDirective = CdkPortalOutlet;
-exports.TemplatePortalDirective = CdkPortal;
-exports.BasePortalHost = BasePortalOutlet;
 exports.Portal = Portal;
 exports.ComponentPortal = ComponentPortal;
 exports.TemplatePortal = TemplatePortal;
 exports.BasePortalOutlet = BasePortalOutlet;
+exports.BasePortalHost = BasePortalHost;
 exports.DomPortalOutlet = DomPortalOutlet;
+exports.DomPortalHost = DomPortalHost;
 exports.CdkPortal = CdkPortal;
+exports.TemplatePortalDirective = TemplatePortalDirective;
 exports.CdkPortalOutlet = CdkPortalOutlet;
+exports.PortalHostDirective = PortalHostDirective;
 exports.PortalModule = PortalModule;
 exports.PortalInjector = PortalInjector;
 
