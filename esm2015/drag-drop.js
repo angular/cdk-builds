@@ -1598,17 +1598,7 @@ class DropListRef {
         }
         // @breaking-change 9.0.0 Remove check for _viewportRuler once it's marked as a required param.
         if (this._viewportRuler) {
-            this._viewportScrollPosition = this._viewportRuler.getViewportScrollPosition();
-            this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe((/**
-             * @return {?}
-             */
-            () => {
-                if (this.isDragging()) {
-                    /** @type {?} */
-                    const newPosition = (/** @type {?} */ (this._viewportRuler)).getViewportScrollPosition();
-                    this._updateAfterScroll(this._viewportScrollPosition, newPosition.top, newPosition.left, this._clientRect);
-                }
-            }));
+            this._listenToScrollEvents();
         }
     }
     /**
@@ -2244,6 +2234,7 @@ class DropListRef {
         if (!activeSiblings.has(sibling)) {
             activeSiblings.add(sibling);
             this._cacheOwnPosition();
+            this._listenToScrollEvents();
         }
     }
     /**
@@ -2253,6 +2244,29 @@ class DropListRef {
      */
     _stopReceiving(sibling) {
         this._activeSiblings.delete(sibling);
+        this._viewportScrollSubscription.unsubscribe();
+    }
+    /**
+     * Starts listening to scroll events on the viewport.
+     * Used for updating the internal state of the list.
+     * @private
+     * @return {?}
+     */
+    _listenToScrollEvents() {
+        this._viewportScrollPosition = (/** @type {?} */ (this._viewportRuler)).getViewportScrollPosition();
+        this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe((/**
+         * @return {?}
+         */
+        () => {
+            if (this.isDragging()) {
+                /** @type {?} */
+                const newPosition = (/** @type {?} */ (this._viewportRuler)).getViewportScrollPosition();
+                this._updateAfterScroll(this._viewportScrollPosition, newPosition.top, newPosition.left, this._clientRect);
+            }
+            else if (this.isReceiving()) {
+                this._cacheOwnPosition();
+            }
+        }));
     }
 }
 /**

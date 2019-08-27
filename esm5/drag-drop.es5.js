@@ -1921,17 +1921,7 @@ DropListRef = /** @class */ (function () {
         }
         // @breaking-change 9.0.0 Remove check for _viewportRuler once it's marked as a required param.
         if (this._viewportRuler) {
-            this._viewportScrollPosition = this._viewportRuler.getViewportScrollPosition();
-            this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe((/**
-             * @return {?}
-             */
-            function () {
-                if (_this.isDragging()) {
-                    /** @type {?} */
-                    var newPosition = (/** @type {?} */ (_this._viewportRuler)).getViewportScrollPosition();
-                    _this._updateAfterScroll(_this._viewportScrollPosition, newPosition.top, newPosition.left, _this._clientRect);
-                }
-            }));
+            this._listenToScrollEvents();
         }
     };
     /**
@@ -2867,6 +2857,7 @@ DropListRef = /** @class */ (function () {
         if (!activeSiblings.has(sibling)) {
             activeSiblings.add(sibling);
             this._cacheOwnPosition();
+            this._listenToScrollEvents();
         }
     };
     /**
@@ -2885,6 +2876,40 @@ DropListRef = /** @class */ (function () {
      */
     function (sibling) {
         this._activeSiblings.delete(sibling);
+        this._viewportScrollSubscription.unsubscribe();
+    };
+    /**
+     * Starts listening to scroll events on the viewport.
+     * Used for updating the internal state of the list.
+     */
+    /**
+     * Starts listening to scroll events on the viewport.
+     * Used for updating the internal state of the list.
+     * @private
+     * @return {?}
+     */
+    DropListRef.prototype._listenToScrollEvents = /**
+     * Starts listening to scroll events on the viewport.
+     * Used for updating the internal state of the list.
+     * @private
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this._viewportScrollPosition = (/** @type {?} */ (this._viewportRuler)).getViewportScrollPosition();
+        this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe((/**
+         * @return {?}
+         */
+        function () {
+            if (_this.isDragging()) {
+                /** @type {?} */
+                var newPosition = (/** @type {?} */ (_this._viewportRuler)).getViewportScrollPosition();
+                _this._updateAfterScroll(_this._viewportScrollPosition, newPosition.top, newPosition.left, _this._clientRect);
+            }
+            else if (_this.isReceiving()) {
+                _this._cacheOwnPosition();
+            }
+        }));
     };
     return DropListRef;
 }());

@@ -299,4 +299,9 @@ export declare class DropListRef<T = any> {
      * @param sibling Sibling whose dragging has stopped.
      */
     _stopReceiving(sibling: DropListRef): void;
+    /**
+     * Starts listening to scroll events on the viewport.
+     * Used for updating the internal state of the list.
+     */
+    private _listenToScrollEvents;
 }
