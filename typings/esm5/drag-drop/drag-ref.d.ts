@@ -341,6 +341,8 @@ export declare class DragRef<T = any> {
      * @param currentPosition Current position of the user's pointer.
      */
     private _getDragDistance;
+    /** Cleans up any cached element dimensions that we don't need after dragging has stopped. */
+    private _cleanupCachedDimensions;
 }
 /** Point on the page or within an element. */
 export interface Point {

@@ -844,6 +844,7 @@ DragRef = /** @class */ (function () {
              */
             function () {
                 _this._cleanupDragArtifacts(event);
+                _this._cleanupCachedDimensions();
                 _this._dragDropRegistry.stopDragging(_this);
             }));
         }
@@ -862,6 +863,7 @@ DragRef = /** @class */ (function () {
                     distance: _this._getDragDistance(_this._getPointerPositionOnPage(event))
                 });
             }));
+            this._cleanupCachedDimensions();
             this._dragDropRegistry.stopDragging(this);
         }
     };
@@ -1489,6 +1491,20 @@ DragRef = /** @class */ (function () {
             return { x: currentPosition.x - pickupPosition.x, y: currentPosition.y - pickupPosition.y };
         }
         return { x: 0, y: 0 };
+    };
+    /** Cleans up any cached element dimensions that we don't need after dragging has stopped. */
+    /**
+     * Cleans up any cached element dimensions that we don't need after dragging has stopped.
+     * @private
+     * @return {?}
+     */
+    DragRef.prototype._cleanupCachedDimensions = /**
+     * Cleans up any cached element dimensions that we don't need after dragging has stopped.
+     * @private
+     * @return {?}
+     */
+    function () {
+        this._boundaryRect = this._previewRect = undefined;
     };
     return DragRef;
 }());

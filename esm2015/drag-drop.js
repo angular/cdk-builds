@@ -677,6 +677,7 @@ class DragRef {
              */
             () => {
                 this._cleanupDragArtifacts(event);
+                this._cleanupCachedDimensions();
                 this._dragDropRegistry.stopDragging(this);
             }));
         }
@@ -695,6 +696,7 @@ class DragRef {
                     distance: this._getDragDistance(this._getPointerPositionOnPage(event))
                 });
             }));
+            this._cleanupCachedDimensions();
             this._dragDropRegistry.stopDragging(this);
         }
     }
@@ -1185,6 +1187,14 @@ class DragRef {
             return { x: currentPosition.x - pickupPosition.x, y: currentPosition.y - pickupPosition.y };
         }
         return { x: 0, y: 0 };
+    }
+    /**
+     * Cleans up any cached element dimensions that we don't need after dragging has stopped.
+     * @private
+     * @return {?}
+     */
+    _cleanupCachedDimensions() {
+        this._boundaryRect = this._previewRect = undefined;
     }
 }
 /**
