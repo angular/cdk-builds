@@ -418,7 +418,7 @@ class CdkTextareaAutosize {
         this._previousMinRows = this._minRows;
     }
     /**
-     * Resets the textarea to it's original size
+     * Resets the textarea to its original size
      * @return {?}
      */
     reset() {

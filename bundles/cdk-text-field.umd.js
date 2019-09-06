@@ -491,14 +491,14 @@ var CdkTextareaAutosize = /** @class */ (function () {
         this._previousMinRows = this._minRows;
     };
     /**
-     * Resets the textarea to it's original size
+     * Resets the textarea to its original size
      */
     /**
-     * Resets the textarea to it's original size
+     * Resets the textarea to its original size
      * @return {?}
      */
     CdkTextareaAutosize.prototype.reset = /**
-     * Resets the textarea to it's original size
+     * Resets the textarea to its original size
      * @return {?}
      */
     function () {

@@ -57,7 +57,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      */
     resizeToFitContent(force?: boolean): void;
     /**
-     * Resets the textarea to it's original size
+     * Resets the textarea to its original size
      */
     reset(): void;
     _noopInputHandler(): void;
