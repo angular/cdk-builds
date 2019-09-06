@@ -3128,16 +3128,16 @@ FlexibleConnectedPositionStrategy = /** @class */ (function () {
             isOverlayOutsideView: isElementScrolledOutsideView(overlayBounds, scrollContainerBounds),
         };
     };
-    /** Subtracts the amount that an element is overflowing on an axis from it's length. */
+    /** Subtracts the amount that an element is overflowing on an axis from its length. */
     /**
-     * Subtracts the amount that an element is overflowing on an axis from it's length.
+     * Subtracts the amount that an element is overflowing on an axis from its length.
      * @private
      * @param {?} length
      * @param {...?} overflows
      * @return {?}
      */
     FlexibleConnectedPositionStrategy.prototype._subtractOverflows = /**
-     * Subtracts the amount that an element is overflowing on an axis from it's length.
+     * Subtracts the amount that an element is overflowing on an axis from its length.
      * @private
      * @param {?} length
      * @param {...?} overflows

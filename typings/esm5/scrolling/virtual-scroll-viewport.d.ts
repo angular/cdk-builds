@@ -13,7 +13,7 @@ import { ScrollDispatcher } from './scroll-dispatcher';
 import { CdkScrollable } from './scrollable';
 import { CdkVirtualForOf } from './virtual-for-of';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
-/** A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`. */
+/** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
     private _changeDetectorRef;

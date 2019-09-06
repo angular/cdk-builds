@@ -988,7 +988,7 @@ function rangesEqual(r1, r2) {
  */
 var SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? rxjs.animationFrameScheduler : rxjs.asapScheduler;
 /**
- * A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`.
+ * A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`.
  */
 var CdkVirtualScrollViewport = /** @class */ (function (_super) {
     __extends(CdkVirtualScrollViewport, _super);

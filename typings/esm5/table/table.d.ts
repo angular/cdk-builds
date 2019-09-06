@@ -129,25 +129,25 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /**
      * Column definitions that were defined outside of the direct content children of the table.
      * These will be defined when, e.g., creating a wrapper around the cdkTable that has
-     * column definitions as *it's* content child.
+     * column definitions as *its* content child.
      */
     private _customColumnDefs;
     /**
      * Data row definitions that were defined outside of the direct content children of the table.
      * These will be defined when, e.g., creating a wrapper around the cdkTable that has
-     * built-in data rows as *it's* content child.
+     * built-in data rows as *its* content child.
      */
     private _customRowDefs;
     /**
      * Header row definitions that were defined outside of the direct content children of the table.
      * These will be defined when, e.g., creating a wrapper around the cdkTable that has
-     * built-in header rows as *it's* content child.
+     * built-in header rows as *its* content child.
      */
     private _customHeaderRowDefs;
     /**
      * Footer row definitions that were defined outside of the direct content children of the table.
      * These will be defined when, e.g., creating a wrapper around the cdkTable that has a
-     * built-in footer row as *it's* content child.
+     * built-in footer row as *its* content child.
      */
     private _customFooterRowDefs;
     /**

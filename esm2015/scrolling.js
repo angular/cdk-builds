@@ -719,7 +719,7 @@ function rangesEqual(r1, r2) {
  */
 const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
 /**
- * A viewport that virtualizes it's scrolling with the help of `CdkVirtualForOf`.
+ * A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`.
  */
 class CdkVirtualScrollViewport extends CdkScrollable {
     /**

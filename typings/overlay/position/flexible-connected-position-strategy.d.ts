@@ -240,7 +240,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * or completely outside the view of any of the strategy's scrollables.
      */
     private _getScrollVisibility;
-    /** Subtracts the amount that an element is overflowing on an axis from it's length. */
+    /** Subtracts the amount that an element is overflowing on an axis from its length. */
     private _subtractOverflows;
     /** Narrows the given viewport rect by the current _viewportMargin. */
     private _getNarrowedViewportRect;
