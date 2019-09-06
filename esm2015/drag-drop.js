@@ -187,10 +187,6 @@ class DragRef {
          */
         this._scrollSubscription = Subscription.EMPTY;
         /**
-         * Subscription to the viewport being resized.
-         */
-        this._resizeSubscription = Subscription.EMPTY;
-        /**
          * Cached reference to the boundary element.
          */
         this._boundaryElement = null;
@@ -490,15 +486,6 @@ class DragRef {
      */
     withBoundaryElement(boundaryElement) {
         (/** @type {?} */ (this))._boundaryElement = boundaryElement ? coerceElement(boundaryElement) : null;
-        (/** @type {?} */ (this))._resizeSubscription.unsubscribe();
-        if (boundaryElement) {
-            (/** @type {?} */ (this))._resizeSubscription = (/** @type {?} */ (this))._viewportRuler
-                .change(10)
-                .subscribe((/**
-             * @return {?}
-             */
-            () => (/** @type {?} */ (this))._containInsideBoundaryOnResize()));
-        }
         return (/** @type {?} */ (this));
     }
     /**
@@ -1208,59 +1195,6 @@ class DragRef {
      */
     _cleanupCachedDimensions() {
         this._boundaryRect = this._previewRect = undefined;
-    }
-    /**
-     * Checks whether the element is still inside its boundary after the viewport has been resized.
-     * If not, the position is adjusted so that the element fits again.
-     * @private
-     * @return {?}
-     */
-    _containInsideBoundaryOnResize() {
-        let { x, y } = this._passiveTransform;
-        if ((x === 0 && y === 0) || this.isDragging() || !this._boundaryElement) {
-            return;
-        }
-        /** @type {?} */
-        const boundaryRect = this._boundaryElement.getBoundingClientRect();
-        /** @type {?} */
-        const elementRect = this._rootElement.getBoundingClientRect();
-        /** @type {?} */
-        const leftOverflow = boundaryRect.left - elementRect.left;
-        /** @type {?} */
-        const rightOverflow = elementRect.right - boundaryRect.right;
-        /** @type {?} */
-        const topOverflow = boundaryRect.top - elementRect.top;
-        /** @type {?} */
-        const bottomOverflow = elementRect.bottom - boundaryRect.bottom;
-        // If the element has become wider than the boundary, we can't
-        // do much to make it fit so we just anchor it to the left.
-        if (boundaryRect.width > elementRect.width) {
-            if (leftOverflow > 0) {
-                x += leftOverflow;
-            }
-            if (rightOverflow > 0) {
-                x -= rightOverflow;
-            }
-        }
-        else {
-            x = 0;
-        }
-        // If the element has become taller than the boundary, we can't
-        // do much to make it fit so we just anchor it to the top.
-        if (boundaryRect.height > elementRect.height) {
-            if (topOverflow > 0) {
-                y += topOverflow;
-            }
-            if (bottomOverflow > 0) {
-                y -= bottomOverflow;
-            }
-        }
-        else {
-            y = 0;
-        }
-        if (x !== this._passiveTransform.x || y !== this._passiveTransform.y) {
-            this.setFreeDragPosition({ y, x });
-        }
     }
 }
 /**

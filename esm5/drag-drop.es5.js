@@ -185,10 +185,6 @@ DragRef = /** @class */ (function () {
          */
         this._scrollSubscription = Subscription.EMPTY;
         /**
-         * Subscription to the viewport being resized.
-         */
-        this._resizeSubscription = Subscription.EMPTY;
-        /**
          * Cached reference to the boundary element.
          */
         this._boundaryElement = null;
@@ -560,17 +556,7 @@ DragRef = /** @class */ (function () {
      * @return {THIS}
      */
     function (boundaryElement) {
-        var _this = this;
         (/** @type {?} */ (this))._boundaryElement = boundaryElement ? coerceElement(boundaryElement) : null;
-        (/** @type {?} */ (this))._resizeSubscription.unsubscribe();
-        if (boundaryElement) {
-            (/** @type {?} */ (this))._resizeSubscription = (/** @type {?} */ (this))._viewportRuler
-                .change(10)
-                .subscribe((/**
-             * @return {?}
-             */
-            function () { return (/** @type {?} */ (_this))._containInsideBoundaryOnResize(); }));
-        }
         return (/** @type {?} */ (this));
     };
     /** Removes the dragging functionality from the DOM element. */
@@ -1522,69 +1508,6 @@ DragRef = /** @class */ (function () {
      */
     function () {
         this._boundaryRect = this._previewRect = undefined;
-    };
-    /**
-     * Checks whether the element is still inside its boundary after the viewport has been resized.
-     * If not, the position is adjusted so that the element fits again.
-     */
-    /**
-     * Checks whether the element is still inside its boundary after the viewport has been resized.
-     * If not, the position is adjusted so that the element fits again.
-     * @private
-     * @return {?}
-     */
-    DragRef.prototype._containInsideBoundaryOnResize = /**
-     * Checks whether the element is still inside its boundary after the viewport has been resized.
-     * If not, the position is adjusted so that the element fits again.
-     * @private
-     * @return {?}
-     */
-    function () {
-        var _a = this._passiveTransform, x = _a.x, y = _a.y;
-        if ((x === 0 && y === 0) || this.isDragging() || !this._boundaryElement) {
-            return;
-        }
-        /** @type {?} */
-        var boundaryRect = this._boundaryElement.getBoundingClientRect();
-        /** @type {?} */
-        var elementRect = this._rootElement.getBoundingClientRect();
-        /** @type {?} */
-        var leftOverflow = boundaryRect.left - elementRect.left;
-        /** @type {?} */
-        var rightOverflow = elementRect.right - boundaryRect.right;
-        /** @type {?} */
-        var topOverflow = boundaryRect.top - elementRect.top;
-        /** @type {?} */
-        var bottomOverflow = elementRect.bottom - boundaryRect.bottom;
-        // If the element has become wider than the boundary, we can't
-        // do much to make it fit so we just anchor it to the left.
-        if (boundaryRect.width > elementRect.width) {
-            if (leftOverflow > 0) {
-                x += leftOverflow;
-            }
-            if (rightOverflow > 0) {
-                x -= rightOverflow;
-            }
-        }
-        else {
-            x = 0;
-        }
-        // If the element has become taller than the boundary, we can't
-        // do much to make it fit so we just anchor it to the top.
-        if (boundaryRect.height > elementRect.height) {
-            if (topOverflow > 0) {
-                y += topOverflow;
-            }
-            if (bottomOverflow > 0) {
-                y -= bottomOverflow;
-            }
-        }
-        else {
-            y = 0;
-        }
-        if (x !== this._passiveTransform.x || y !== this._passiveTransform.y) {
-            this.setFreeDragPosition({ y: y, x: x });
-        }
     };
     return DragRef;
 }());

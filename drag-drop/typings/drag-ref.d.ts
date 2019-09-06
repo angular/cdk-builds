@@ -108,8 +108,6 @@ export declare class DragRef<T = any> {
     private _pointerUpSubscription;
     /** Subscription to the viewport being scrolled. */
     private _scrollSubscription;
-    /** Subscription to the viewport being resized. */
-    private _resizeSubscription;
     /**
      * Time at which the last touch event occurred. Used to avoid firing the same
      * events multiple times on touch devices where the browser will fire a fake
@@ -345,11 +343,6 @@ export declare class DragRef<T = any> {
     private _getDragDistance;
     /** Cleans up any cached element dimensions that we don't need after dragging has stopped. */
     private _cleanupCachedDimensions;
-    /**
-     * Checks whether the element is still inside its boundary after the viewport has been resized.
-     * If not, the position is adjusted so that the element fits again.
-     */
-    private _containInsideBoundaryOnResize;
 }
 /** Point on the page or within an element. */
 export interface Point {
