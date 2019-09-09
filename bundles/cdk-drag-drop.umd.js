@@ -1939,9 +1939,10 @@ DropListRef = /** @class */ (function () {
                 }
             }));
         });
+        /** @type {?} */
+        var nativeNode = this.element = coercion.coerceElement(element);
+        this._shadowRoot = getShadowRoot(nativeNode) || _document;
         _dragDropRegistry.registerDropContainer(this);
-        this._document = _document;
-        this.element = element instanceof core.ElementRef ? element.nativeElement : element;
     }
     /** Removes the drop list functionality from the DOM element. */
     /**
@@ -2908,7 +2909,7 @@ DropListRef = /** @class */ (function () {
             return false;
         }
         /** @type {?} */
-        var elementFromPoint = (/** @type {?} */ (this._document.elementFromPoint(x, y)));
+        var elementFromPoint = (/** @type {?} */ (this._shadowRoot.elementFromPoint(x, y)));
         // If there's no element at the pointer position, then
         // the client rect is probably scrolled out of the view.
         if (!elementFromPoint) {
@@ -3174,6 +3175,21 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
         }
     }
     return [verticalScrollDirection, horizontalScrollDirection];
+}
+/**
+ * Gets the shadow root of an element, if any.
+ * @param {?} element
+ * @return {?}
+ */
+function getShadowRoot(element) {
+    if (platform._supportsShadowDom()) {
+        /** @type {?} */
+        var rootNode = element.getRootNode ? element.getRootNode() : null;
+        if (rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+    }
+    return null;
 }
 
 /**

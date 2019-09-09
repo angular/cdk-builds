@@ -30,7 +30,6 @@ export declare class DropListRef<T = any> {
      */
     private _ngZone?;
     private _viewportRuler?;
-    private _document;
     /** Element that the drop list is attached to. */
     element: HTMLElement | ElementRef<HTMLElement>;
     /**
@@ -133,6 +132,8 @@ export declare class DropListRef<T = any> {
     private _scrollNode;
     /** Used to signal to the current auto-scroll sequence when to stop. */
     private _stopScrollTimers;
+    /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
+    private _shadowRoot;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, 
     /**
      * @deprecated _ngZone and _viewportRuler parameters to be made required.

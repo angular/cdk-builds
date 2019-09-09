@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions, _supportsShadowDom } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subscription, Subject, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
 import { startWith, takeUntil, take, map, switchMap, tap } from 'rxjs/operators';
-import { ElementRef, Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, isDevMode, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { Injectable, NgZone, Inject, InjectionToken, NgModule, ContentChildren, ElementRef, EventEmitter, forwardRef, Input, Output, Optional, Directive, ChangeDetectorRef, SkipSelf, ContentChild, ViewContainerRef, isDevMode, TemplateRef, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler } from '@angular/cdk/scrolling';
 import { Directionality } from '@angular/cdk/bidi';
@@ -1942,9 +1942,10 @@ DropListRef = /** @class */ (function () {
                 }
             }));
         });
+        /** @type {?} */
+        var nativeNode = this.element = coerceElement(element);
+        this._shadowRoot = getShadowRoot(nativeNode) || _document;
         _dragDropRegistry.registerDropContainer(this);
-        this._document = _document;
-        this.element = element instanceof ElementRef ? element.nativeElement : element;
     }
     /** Removes the drop list functionality from the DOM element. */
     /**
@@ -2911,7 +2912,7 @@ DropListRef = /** @class */ (function () {
             return false;
         }
         /** @type {?} */
-        var elementFromPoint = (/** @type {?} */ (this._document.elementFromPoint(x, y)));
+        var elementFromPoint = (/** @type {?} */ (this._shadowRoot.elementFromPoint(x, y)));
         // If there's no element at the pointer position, then
         // the client rect is probably scrolled out of the view.
         if (!elementFromPoint) {
@@ -3177,6 +3178,21 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
         }
     }
     return [verticalScrollDirection, horizontalScrollDirection];
+}
+/**
+ * Gets the shadow root of an element, if any.
+ * @param {?} element
+ * @return {?}
+ */
+function getShadowRoot(element) {
+    if (_supportsShadowDom()) {
+        /** @type {?} */
+        var rootNode = element.getRootNode ? element.getRootNode() : null;
+        if (rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+    }
+    return null;
 }
 
 /**
