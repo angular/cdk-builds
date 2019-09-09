@@ -1807,7 +1807,7 @@ DropListRef = /** @class */ (function () {
         /**
          * Whether sorting items within the list is disabled.
          */
-        this.sortingDisabled = true;
+        this.sortingDisabled = false;
         /**
          * Whether auto-scrolling the view when the user
          * moves their pointer close to the edges is disabled.
