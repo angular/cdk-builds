@@ -1146,7 +1146,7 @@ DragRef = /** @class */ (function () {
         if (previewTemplate) {
             /** @type {?} */
             var viewRef = (/** @type {?} */ (previewConfig)).viewContainer.createEmbeddedView(previewTemplate, (/** @type {?} */ (previewConfig)).context);
-            preview = viewRef.rootNodes[0];
+            preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
             preview.style.transform =
                 getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
@@ -1262,7 +1262,7 @@ DragRef = /** @class */ (function () {
         var placeholder;
         if (placeholderTemplate) {
             this._placeholderRef = (/** @type {?} */ (placeholderConfig)).viewContainer.createEmbeddedView(placeholderTemplate, (/** @type {?} */ (placeholderConfig)).context);
-            placeholder = this._placeholderRef.rootNodes[0];
+            placeholder = getRootNode(this._placeholderRef, this._document);
         }
         else {
             placeholder = deepCloneNode(this._rootElement);
@@ -1675,6 +1675,24 @@ function getPreviewInsertionPoint(documentRef) {
         documentRef.mozFullScreenElement ||
         documentRef.msFullscreenElement ||
         documentRef.body;
+}
+/**
+ * Gets the root HTML element of an embedded view.
+ * If the root is not an HTML element it gets wrapped in one.
+ * @param {?} viewRef
+ * @param {?} _document
+ * @return {?}
+ */
+function getRootNode(viewRef, _document) {
+    /** @type {?} */
+    var rootNode = viewRef.rootNodes[0];
+    if (rootNode.nodeType !== _document.ELEMENT_NODE) {
+        /** @type {?} */
+        var wrapper = _document.createElement('div');
+        wrapper.appendChild(rootNode);
+        return wrapper;
+    }
+    return (/** @type {?} */ (rootNode));
 }
 
 /**
