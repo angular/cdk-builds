@@ -1486,7 +1486,7 @@ class DropListRef {
         /**
          * Whether sorting items within the list is disabled.
          */
-        this.sortingDisabled = false;
+        this.sortingDisabled = true;
         /**
          * Whether auto-scrolling the view when the user
          * moves their pointer close to the edges is disabled.
