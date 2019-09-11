@@ -5,6 +5,373 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { __awaiter, __generator } from 'tslib';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Base class for component harnesses that all component harness authors should extend. This base
+ * component harness provides the basic ability to locate element and sub-component harness. It
+ * should be inherited when defining user's own harness.
+ * @abstract
+ */
+var  /**
+ * Base class for component harnesses that all component harness authors should extend. This base
+ * component harness provides the basic ability to locate element and sub-component harness. It
+ * should be inherited when defining user's own harness.
+ * @abstract
+ */
+ComponentHarness = /** @class */ (function () {
+    function ComponentHarness(locatorFactory) {
+        this.locatorFactory = locatorFactory;
+    }
+    /** Gets a `Promise` for the `TestElement` representing the host element of the component. */
+    /**
+     * Gets a `Promise` for the `TestElement` representing the host element of the component.
+     * @return {?}
+     */
+    ComponentHarness.prototype.host = /**
+     * Gets a `Promise` for the `TestElement` representing the host element of the component.
+     * @return {?}
+     */
+    function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.locatorFactory.rootElement];
+            });
+        });
+    };
+    /**
+     * Gets a `LocatorFactory` for the document root element. This factory can be used to create
+     * locators for elements that a component creates outside of its own root element. (e.g. by
+     * appending to document.body).
+     */
+    /**
+     * Gets a `LocatorFactory` for the document root element. This factory can be used to create
+     * locators for elements that a component creates outside of its own root element. (e.g. by
+     * appending to document.body).
+     * @protected
+     * @return {?}
+     */
+    ComponentHarness.prototype.documentRootLocatorFactory = /**
+     * Gets a `LocatorFactory` for the document root element. This factory can be used to create
+     * locators for elements that a component creates outside of its own root element. (e.g. by
+     * appending to document.body).
+     * @protected
+     * @return {?}
+     */
+    function () {
+        return this.locatorFactory.documentRootLocatorFactory();
+    };
+    /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    ComponentHarness.prototype.locatorFor = /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        return this.locatorFactory.locatorFor(arg);
+    };
+    /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    ComponentHarness.prototype.locatorForOptional = /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        return this.locatorFactory.locatorForOptional(arg);
+    };
+    /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    ComponentHarness.prototype.locatorForAll = /**
+     * @protected
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        return this.locatorFactory.locatorForAll(arg);
+    };
+    return ComponentHarness;
+}());
+/**
+ * A class used to associate a ComponentHarness class with predicates functions that can be used to
+ * filter instances of the class.
+ * @template T
+ */
+var  /**
+ * A class used to associate a ComponentHarness class with predicates functions that can be used to
+ * filter instances of the class.
+ * @template T
+ */
+HarnessPredicate = /** @class */ (function () {
+    function HarnessPredicate(harnessType, options) {
+        this.harnessType = harnessType;
+        this._predicates = [];
+        this._descriptions = [];
+        this._addBaseOptions(options);
+    }
+    /**
+     * Checks if a string matches the given pattern.
+     * @param s The string to check, or a Promise for the string to check.
+     * @param pattern The pattern the string is expected to match. If `pattern` is a string, `s` is
+     *   expected to match exactly. If `pattern` is a regex, a partial match is allowed.
+     * @return A Promise that resolves to whether the string matches the pattern.
+     */
+    /**
+     * Checks if a string matches the given pattern.
+     * @param {?} s The string to check, or a Promise for the string to check.
+     * @param {?} pattern The pattern the string is expected to match. If `pattern` is a string, `s` is
+     *   expected to match exactly. If `pattern` is a regex, a partial match is allowed.
+     * @return {?} A Promise that resolves to whether the string matches the pattern.
+     */
+    HarnessPredicate.stringMatches = /**
+     * Checks if a string matches the given pattern.
+     * @param {?} s The string to check, or a Promise for the string to check.
+     * @param {?} pattern The pattern the string is expected to match. If `pattern` is a string, `s` is
+     *   expected to match exactly. If `pattern` is a regex, a partial match is allowed.
+     * @return {?} A Promise that resolves to whether the string matches the pattern.
+     */
+    function (s, pattern) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, s];
+                    case 1:
+                        s = _a.sent();
+                        return [2 /*return*/, typeof pattern === 'string' ? s === pattern : pattern.test(s)];
+                }
+            });
+        });
+    };
+    /**
+     * Adds a predicate function to be run against candidate harnesses.
+     * @param description A description of this predicate that may be used in error messages.
+     * @param predicate An async predicate function.
+     * @return this (for method chaining).
+     */
+    /**
+     * Adds a predicate function to be run against candidate harnesses.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} description A description of this predicate that may be used in error messages.
+     * @param {?} predicate An async predicate function.
+     * @return {THIS}
+     */
+    HarnessPredicate.prototype.add = /**
+     * Adds a predicate function to be run against candidate harnesses.
+     * @template THIS
+     * @this {THIS}
+     * @param {?} description A description of this predicate that may be used in error messages.
+     * @param {?} predicate An async predicate function.
+     * @return {THIS}
+     */
+    function (description, predicate) {
+        (/** @type {?} */ (this))._descriptions.push(description);
+        (/** @type {?} */ (this))._predicates.push(predicate);
+        return (/** @type {?} */ (this));
+    };
+    /**
+     * Adds a predicate function that depends on an option value to be run against candidate
+     * harnesses. If the option value is undefined, the predicate will be ignored.
+     * @param name The name of the option (may be used in error messages).
+     * @param option The option value.
+     * @param predicate The predicate function to run if the option value is not undefined.
+     * @return this (for method chaining).
+     */
+    /**
+     * Adds a predicate function that depends on an option value to be run against candidate
+     * harnesses. If the option value is undefined, the predicate will be ignored.
+     * @template THIS,O
+     * @this {THIS}
+     * @param {?} name The name of the option (may be used in error messages).
+     * @param {?} option The option value.
+     * @param {?} predicate The predicate function to run if the option value is not undefined.
+     * @return {THIS}
+     */
+    HarnessPredicate.prototype.addOption = /**
+     * Adds a predicate function that depends on an option value to be run against candidate
+     * harnesses. If the option value is undefined, the predicate will be ignored.
+     * @template THIS,O
+     * @this {THIS}
+     * @param {?} name The name of the option (may be used in error messages).
+     * @param {?} option The option value.
+     * @param {?} predicate The predicate function to run if the option value is not undefined.
+     * @return {THIS}
+     */
+    function (name, option, predicate) {
+        // Add quotes around strings to differentiate them from other values
+        /** @type {?} */
+        var value = typeof option === 'string' ? "\"" + option + "\"" : "" + option;
+        if (option !== undefined) {
+            (/** @type {?} */ (this)).add(name + " = " + value, (/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return predicate(item, option); }));
+        }
+        return (/** @type {?} */ (this));
+    };
+    /**
+     * Filters a list of harnesses on this predicate.
+     * @param harnesses The list of harnesses to filter.
+     * @return A list of harnesses that satisfy this predicate.
+     */
+    /**
+     * Filters a list of harnesses on this predicate.
+     * @param {?} harnesses The list of harnesses to filter.
+     * @return {?} A list of harnesses that satisfy this predicate.
+     */
+    HarnessPredicate.prototype.filter = /**
+     * Filters a list of harnesses on this predicate.
+     * @param {?} harnesses The list of harnesses to filter.
+     * @return {?} A list of harnesses that satisfy this predicate.
+     */
+    function (harnesses) {
+        return __awaiter(this, void 0, void 0, function () {
+            var results;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.all(harnesses.map((/**
+                         * @param {?} h
+                         * @return {?}
+                         */
+                        function (h) { return _this.evaluate(h); })))];
+                    case 1:
+                        results = _a.sent();
+                        return [2 /*return*/, harnesses.filter((/**
+                             * @param {?} _
+                             * @param {?} i
+                             * @return {?}
+                             */
+                            function (_, i) { return results[i]; }))];
+                }
+            });
+        });
+    };
+    /**
+     * Evaluates whether the given harness satisfies this predicate.
+     * @param harness The harness to check
+     * @return A promise that resolves to true if the harness satisfies this predicate,
+     *   and resolves to false otherwise.
+     */
+    /**
+     * Evaluates whether the given harness satisfies this predicate.
+     * @param {?} harness The harness to check
+     * @return {?} A promise that resolves to true if the harness satisfies this predicate,
+     *   and resolves to false otherwise.
+     */
+    HarnessPredicate.prototype.evaluate = /**
+     * Evaluates whether the given harness satisfies this predicate.
+     * @param {?} harness The harness to check
+     * @return {?} A promise that resolves to true if the harness satisfies this predicate,
+     *   and resolves to false otherwise.
+     */
+    function (harness) {
+        return __awaiter(this, void 0, void 0, function () {
+            var results;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, Promise.all(this._predicates.map((/**
+                         * @param {?} p
+                         * @return {?}
+                         */
+                        function (p) { return p(harness); })))];
+                    case 1:
+                        results = _a.sent();
+                        return [2 /*return*/, results.reduce((/**
+                             * @param {?} combined
+                             * @param {?} current
+                             * @return {?}
+                             */
+                            function (combined, current) { return combined && current; }), true)];
+                }
+            });
+        });
+    };
+    /** Gets a description of this predicate for use in error messages. */
+    /**
+     * Gets a description of this predicate for use in error messages.
+     * @return {?}
+     */
+    HarnessPredicate.prototype.getDescription = /**
+     * Gets a description of this predicate for use in error messages.
+     * @return {?}
+     */
+    function () {
+        return this._descriptions.join(', ');
+    };
+    /** Gets the selector used to find candidate elements. */
+    /**
+     * Gets the selector used to find candidate elements.
+     * @return {?}
+     */
+    HarnessPredicate.prototype.getSelector = /**
+     * Gets the selector used to find candidate elements.
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        return this._ancestor.split(',')
+            .map((/**
+         * @param {?} part
+         * @return {?}
+         */
+        function (part) { return (part.trim() + " " + _this.harnessType.hostSelector).trim(); }))
+            .join(',');
+    };
+    /** Adds base options common to all harness types. */
+    /**
+     * Adds base options common to all harness types.
+     * @private
+     * @param {?} options
+     * @return {?}
+     */
+    HarnessPredicate.prototype._addBaseOptions = /**
+     * Adds base options common to all harness types.
+     * @private
+     * @param {?} options
+     * @return {?}
+     */
+    function (options) {
+        var _this = this;
+        this._ancestor = options.ancestor || '';
+        if (this._ancestor) {
+            this._descriptions.push("has ancestor matching selector \"" + this._ancestor + "\"");
+        }
+        /** @type {?} */
+        var selector = options.selector;
+        if (selector !== undefined) {
+            this.add("host matches selector \"" + selector + "\"", (/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, item.host()];
+                        case 1: return [2 /*return*/, (_a.sent()).matchesSelector(selector)];
+                    }
+                });
+            }); }));
+        }
+    };
+    return HarnessPredicate;
+}());
+
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
@@ -300,6 +667,422 @@ function triggerBlur(element) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Base harness environment class that can be extended to allow `ComponentHarness`es to be used in
+ * different test environments (e.g. testbed, protractor, etc.). This class implements the
+ * functionality of both a `HarnessLoader` and `LocatorFactory`. This class is generic on the raw
+ * element type, `E`, used by the particular test environment.
+ * @abstract
+ * @template E
+ */
+var  /**
+ * Base harness environment class that can be extended to allow `ComponentHarness`es to be used in
+ * different test environments (e.g. testbed, protractor, etc.). This class implements the
+ * functionality of both a `HarnessLoader` and `LocatorFactory`. This class is generic on the raw
+ * element type, `E`, used by the particular test environment.
+ * @abstract
+ * @template E
+ */
+HarnessEnvironment = /** @class */ (function () {
+    function HarnessEnvironment(rawRootElement) {
+        this.rawRootElement = rawRootElement;
+        this.rootElement = this.createTestElement(rawRootElement);
+    }
+    // Implemented as part of the `LocatorFactory` interface.
+    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.documentRootLocatorFactory = 
+    // Implemented as part of the `LocatorFactory` interface.
+    /**
+     * @return {?}
+     */
+    function () {
+        return this.createEnvironment(this.getDocumentRoot());
+    };
+    /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.locatorFor = /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        var _this = this;
+        return (/**
+         * @return {?}
+         */
+        function () { return __awaiter(_this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(typeof arg === 'string')) return [3 /*break*/, 2];
+                        _a = this.createTestElement;
+                        return [4 /*yield*/, this._assertElementFound(arg)];
+                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                    case 2: return [2 /*return*/, this._assertHarnessFound(arg)];
+                }
+            });
+        }); });
+    };
+    /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.locatorForOptional = /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        var _this = this;
+        return (/**
+         * @return {?}
+         */
+        function () { return __awaiter(_this, void 0, void 0, function () {
+            var element, candidates;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(typeof arg === 'string')) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.getAllRawElements(arg)];
+                    case 1:
+                        element = (_a.sent())[0];
+                        return [2 /*return*/, element ? this.createTestElement(element) : null];
+                    case 2: return [4 /*yield*/, this._getAllHarnesses(arg)];
+                    case 3:
+                        candidates = _a.sent();
+                        return [2 /*return*/, candidates[0] || null];
+                }
+            });
+        }); });
+    };
+    /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.locatorForAll = /**
+     * @template T
+     * @param {?} arg
+     * @return {?}
+     */
+    function (arg) {
+        var _this = this;
+        return (/**
+         * @return {?}
+         */
+        function () { return __awaiter(_this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!(typeof arg === 'string')) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.getAllRawElements(arg)];
+                    case 1: return [2 /*return*/, (_a.sent()).map((/**
+                         * @param {?} e
+                         * @return {?}
+                         */
+                        function (e) { return _this.createTestElement(e); }))];
+                    case 2: return [2 /*return*/, this._getAllHarnesses(arg)];
+                }
+            });
+        }); });
+    };
+    // Implemented as part of the `HarnessLoader` interface.
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.getHarness = 
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    function (harnessType) {
+        return this.locatorFor(harnessType)();
+    };
+    // Implemented as part of the `HarnessLoader` interface.
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.getAllHarnesses = 
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    function (harnessType) {
+        return this.locatorForAll(harnessType)();
+    };
+    // Implemented as part of the `HarnessLoader` interface.
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @param {?} selector
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.getChildLoader = 
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @param {?} selector
+     * @return {?}
+     */
+    function (selector) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = this.createEnvironment;
+                        return [4 /*yield*/, this._assertElementFound(selector)];
+                    case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                }
+            });
+        });
+    };
+    // Implemented as part of the `HarnessLoader` interface.
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @param {?} selector
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.getAllChildLoaders = 
+    // Implemented as part of the `HarnessLoader` interface.
+    /**
+     * @param {?} selector
+     * @return {?}
+     */
+    function (selector) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
+                    case 1: return [2 /*return*/, (_a.sent()).map((/**
+                         * @param {?} e
+                         * @return {?}
+                         */
+                        function (e) { return _this.createEnvironment(e); }))];
+                }
+            });
+        });
+    };
+    /** Creates a `ComponentHarness` for the given harness type with the given raw host element. */
+    /**
+     * Creates a `ComponentHarness` for the given harness type with the given raw host element.
+     * @protected
+     * @template T
+     * @param {?} harnessType
+     * @param {?} element
+     * @return {?}
+     */
+    HarnessEnvironment.prototype.createComponentHarness = /**
+     * Creates a `ComponentHarness` for the given harness type with the given raw host element.
+     * @protected
+     * @template T
+     * @param {?} harnessType
+     * @param {?} element
+     * @return {?}
+     */
+    function (harnessType, element) {
+        return new harnessType(this.createEnvironment(element));
+    };
+    /**
+     * @private
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    HarnessEnvironment.prototype._getAllHarnesses = /**
+     * @private
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    function (harnessType) {
+        return __awaiter(this, void 0, void 0, function () {
+            var harnessPredicate, elements;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        harnessPredicate = harnessType instanceof HarnessPredicate ?
+                            harnessType : new HarnessPredicate(harnessType, {});
+                        return [4 /*yield*/, this.getAllRawElements(harnessPredicate.getSelector())];
+                    case 1:
+                        elements = _a.sent();
+                        return [2 /*return*/, harnessPredicate.filter(elements.map((/**
+                             * @param {?} element
+                             * @return {?}
+                             */
+                            function (element) { return _this.createComponentHarness(harnessPredicate.harnessType, element); })))];
+                }
+            });
+        });
+    };
+    /**
+     * @private
+     * @param {?} selector
+     * @return {?}
+     */
+    HarnessEnvironment.prototype._assertElementFound = /**
+     * @private
+     * @param {?} selector
+     * @return {?}
+     */
+    function (selector) {
+        return __awaiter(this, void 0, void 0, function () {
+            var element;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
+                    case 1:
+                        element = (_a.sent())[0];
+                        if (!element) {
+                            throw Error("Expected to find element matching selector: \"" + selector + "\", but none was found");
+                        }
+                        return [2 /*return*/, element];
+                }
+            });
+        });
+    };
+    /**
+     * @private
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    HarnessEnvironment.prototype._assertHarnessFound = /**
+     * @private
+     * @template T
+     * @param {?} harnessType
+     * @return {?}
+     */
+    function (harnessType) {
+        return __awaiter(this, void 0, void 0, function () {
+            var harness;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this._getAllHarnesses(harnessType)];
+                    case 1:
+                        harness = (_a.sent())[0];
+                        if (!harness) {
+                            throw _getErrorForMissingHarness(harnessType);
+                        }
+                        return [2 /*return*/, harness];
+                }
+            });
+        });
+    };
+    return HarnessEnvironment;
+}());
+/**
+ * @template T
+ * @param {?} harnessType
+ * @return {?}
+ */
+function _getErrorForMissingHarness(harnessType) {
+    /** @type {?} */
+    var harnessPredicate = harnessType instanceof HarnessPredicate ? harnessType : new HarnessPredicate(harnessType, {});
+    var _a = harnessPredicate.harnessType, name = _a.name, hostSelector = _a.hostSelector;
+    /** @type {?} */
+    var restrictions = harnessPredicate.getDescription();
+    /** @type {?} */
+    var message = "Expected to find element for " + name + " matching selector: \"" + hostSelector + "\"";
+    if (restrictions) {
+        message += " (with restrictions: " + restrictions + ")";
+    }
+    message += ', but none was found';
+    return Error(message);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/** @enum {number} */
+var TestKey = {
+    BACKSPACE: 0,
+    TAB: 1,
+    ENTER: 2,
+    SHIFT: 3,
+    CONTROL: 4,
+    ALT: 5,
+    ESCAPE: 6,
+    PAGE_UP: 7,
+    PAGE_DOWN: 8,
+    END: 9,
+    HOME: 10,
+    LEFT_ARROW: 11,
+    UP_ARROW: 12,
+    RIGHT_ARROW: 13,
+    DOWN_ARROW: 14,
+    INSERT: 15,
+    DELETE: 16,
+    F1: 17,
+    F2: 18,
+    F3: 19,
+    F4: 20,
+    F5: 21,
+    F6: 22,
+    F7: 23,
+    F8: 24,
+    F9: 25,
+    F10: 26,
+    F11: 27,
+    F12: 28,
+    META: 29,
+};
+TestKey[TestKey.BACKSPACE] = 'BACKSPACE';
+TestKey[TestKey.TAB] = 'TAB';
+TestKey[TestKey.ENTER] = 'ENTER';
+TestKey[TestKey.SHIFT] = 'SHIFT';
+TestKey[TestKey.CONTROL] = 'CONTROL';
+TestKey[TestKey.ALT] = 'ALT';
+TestKey[TestKey.ESCAPE] = 'ESCAPE';
+TestKey[TestKey.PAGE_UP] = 'PAGE_UP';
+TestKey[TestKey.PAGE_DOWN] = 'PAGE_DOWN';
+TestKey[TestKey.END] = 'END';
+TestKey[TestKey.HOME] = 'HOME';
+TestKey[TestKey.LEFT_ARROW] = 'LEFT_ARROW';
+TestKey[TestKey.UP_ARROW] = 'UP_ARROW';
+TestKey[TestKey.RIGHT_ARROW] = 'RIGHT_ARROW';
+TestKey[TestKey.DOWN_ARROW] = 'DOWN_ARROW';
+TestKey[TestKey.INSERT] = 'INSERT';
+TestKey[TestKey.DELETE] = 'DELETE';
+TestKey[TestKey.F1] = 'F1';
+TestKey[TestKey.F2] = 'F2';
+TestKey[TestKey.F3] = 'F3';
+TestKey[TestKey.F4] = 'F4';
+TestKey[TestKey.F5] = 'F5';
+TestKey[TestKey.F6] = 'F6';
+TestKey[TestKey.F7] = 'F7';
+TestKey[TestKey.F8] = 'F8';
+TestKey[TestKey.F9] = 'F9';
+TestKey[TestKey.F10] = 'F10';
+TestKey[TestKey.F11] = 'F11';
+TestKey[TestKey.F12] = 'F12';
+TestKey[TestKey.META] = 'META';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
  * Checks whether the given Element is a text input element.
  * \@docs-private
  * @param {?} element
@@ -385,5 +1168,5 @@ function clearElement(element) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { dispatchEvent, dispatchFakeEvent, dispatchKeyboardEvent, dispatchMouseEvent, dispatchTouchEvent, createMouseEvent, createTouchEvent, createKeyboardEvent, createFakeEvent, isTextInput, typeInElement, clearElement, patchElementFocus, triggerFocus, triggerBlur };
+export { ComponentHarness, HarnessPredicate, dispatchEvent, dispatchFakeEvent, dispatchKeyboardEvent, dispatchMouseEvent, dispatchTouchEvent, patchElementFocus, triggerFocus, triggerBlur, createMouseEvent, createTouchEvent, createKeyboardEvent, createFakeEvent, HarnessEnvironment, TestKey, isTextInput, typeInElement, clearElement };
 //# sourceMappingURL=testing.es5.js.map
