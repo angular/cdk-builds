@@ -13,6 +13,7 @@ var TargetVersion;
     TargetVersion["V6"] = "version 6";
     TargetVersion["V7"] = "version 7";
     TargetVersion["V8"] = "version 8";
+    TargetVersion["V9"] = "version 9";
 })(TargetVersion = exports.TargetVersion || (exports.TargetVersion = {}));
 /**
  * Returns all versions that are supported by "ng update". The versions are determined
