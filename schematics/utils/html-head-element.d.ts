@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/utils/html-head-element" />
 import { Tree } from '@angular-devkit/schematics';
 import { DefaultTreeElement } from 'parse5';
 /** Appends the given element HTML fragment to the `<head>` element of the specified HTML file. */

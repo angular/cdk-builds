@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/coercion",
-  "typings": "../coercion.d.ts",
   "main": "../bundles/cdk-coercion.umd.js",
-  "module": "../esm5/coercion.es5.js",
-  "es2015": "../esm2015/coercion.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/coercion.js",
+  "fesm2015": "../fesm2015/coercion.js",
+  "esm5": "../esm5/coercion/index.js",
+  "esm2015": "../esm2015/coercion/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/coercion.js",
+  "es2015": "../fesm2015/coercion.js"
 }

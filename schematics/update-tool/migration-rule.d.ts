@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/update-tool/migration-rule" />
 import { UpdateRecorder } from '@angular-devkit/schematics';
 import * as ts from 'typescript';
 import { ResolvedResource } from './component-resource-collector';

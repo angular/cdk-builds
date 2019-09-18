@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/observers",
-  "typings": "../observers.d.ts",
   "main": "../bundles/cdk-observers.umd.js",
-  "module": "../esm5/observers.es5.js",
-  "es2015": "../esm2015/observers.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/observers.js",
+  "fesm2015": "../fesm2015/observers.js",
+  "esm5": "../esm5/observers/index.js",
+  "esm2015": "../esm2015/observers/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/observers.js",
+  "es2015": "../fesm2015/observers.js"
 }

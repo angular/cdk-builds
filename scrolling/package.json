@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/scrolling",
-  "typings": "../scrolling.d.ts",
   "main": "../bundles/cdk-scrolling.umd.js",
-  "module": "../esm5/scrolling.es5.js",
-  "es2015": "../esm2015/scrolling.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/scrolling.js",
+  "fesm2015": "../fesm2015/scrolling.js",
+  "esm5": "../esm5/scrolling/index.js",
+  "esm2015": "../esm2015/scrolling/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/scrolling.js",
+  "es2015": "../fesm2015/scrolling.js"
 }

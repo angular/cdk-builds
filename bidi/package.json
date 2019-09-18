@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/bidi",
-  "typings": "../bidi.d.ts",
   "main": "../bundles/cdk-bidi.umd.js",
-  "module": "../esm5/bidi.es5.js",
-  "es2015": "../esm2015/bidi.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/bidi.js",
+  "fesm2015": "../fesm2015/bidi.js",
+  "esm5": "../esm5/bidi/index.js",
+  "esm2015": "../esm2015/bidi/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/bidi.js",
+  "es2015": "../fesm2015/bidi.js"
 }

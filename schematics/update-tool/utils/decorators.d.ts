@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/update-tool/utils/decorators" />
 import * as ts from 'typescript';
 import { Import } from './imports';
 export declare type CallExpressionDecorator = ts.Decorator & {

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/update-tool/utils/property-name" />
 import * as ts from 'typescript';
 /** Type that describes a property name with an obtainable text. */
 declare type PropertyNameWithText = Exclude<ts.PropertyName, ts.ComputedPropertyName>;

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/ng-add/index" />
 import { Rule } from '@angular-devkit/schematics';
 /** Name of the Angular CDK version that is shipped together with the schematics. */
 export declare const cdkVersion: string | null;

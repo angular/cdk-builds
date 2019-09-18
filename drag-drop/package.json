@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/drag-drop",
-  "typings": "../drag-drop.d.ts",
   "main": "../bundles/cdk-drag-drop.umd.js",
-  "module": "../esm5/drag-drop.es5.js",
-  "es2015": "../esm2015/drag-drop.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/drag-drop.js",
+  "fesm2015": "../fesm2015/drag-drop.js",
+  "esm5": "../esm5/drag-drop/index.js",
+  "esm2015": "../esm2015/drag-drop/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/drag-drop.js",
+  "es2015": "../fesm2015/drag-drop.js"
 }

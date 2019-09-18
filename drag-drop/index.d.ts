@@ -1,8 +1,6 @@
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
+ * Generated bundle index. Do not edit.
  */
-export * from './typings/index';
+export * from './public-api';
+export { CdkDropListInternal as ɵangular_material_src_cdk_drag_drop_drag_drop_a } from './directives/drop-list';
+export { CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_b } from './drag-parent';

@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/layout",
-  "typings": "../layout.d.ts",
   "main": "../bundles/cdk-layout.umd.js",
-  "module": "../esm5/layout.es5.js",
-  "es2015": "../esm2015/layout.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/layout.js",
+  "fesm2015": "../fesm2015/layout.js",
+  "esm5": "../esm5/layout/index.js",
+  "esm2015": "../esm2015/layout/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/layout.js",
+  "es2015": "../fesm2015/layout.js"
 }

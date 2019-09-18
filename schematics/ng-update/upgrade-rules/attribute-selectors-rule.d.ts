@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule" />
 import * as ts from 'typescript';
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
 import { MigrationRule } from '../../update-tool/migration-rule';

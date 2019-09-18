@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/overlay",
-  "typings": "../overlay.d.ts",
   "main": "../bundles/cdk-overlay.umd.js",
-  "module": "../esm5/overlay.es5.js",
-  "es2015": "../esm2015/overlay.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/overlay.js",
+  "fesm2015": "../fesm2015/overlay.js",
+  "esm5": "../esm5/overlay/index.js",
+  "esm2015": "../esm2015/overlay/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/overlay.js",
+  "es2015": "../fesm2015/overlay.js"
 }

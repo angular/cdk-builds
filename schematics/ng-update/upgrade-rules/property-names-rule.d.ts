@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/property-names-rule" />
 import * as ts from 'typescript';
 import { MigrationRule } from '../../update-tool/migration-rule';
 import { PropertyNameUpgradeData } from '../data';

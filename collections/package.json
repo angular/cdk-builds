@@ -1,8 +1,11 @@
 {
   "name": "@angular/cdk/collections",
-  "typings": "../collections.d.ts",
   "main": "../bundles/cdk-collections.umd.js",
-  "module": "../esm5/collections.es5.js",
-  "es2015": "../esm2015/collections.js",
-  "sideEffects": false
+  "fesm5": "../fesm5/collections.js",
+  "fesm2015": "../fesm2015/collections.js",
+  "esm5": "../esm5/collections/index.js",
+  "esm2015": "../esm2015/collections/index.js",
+  "typings": "./index.d.ts",
+  "module": "../fesm5/collections.js",
+  "es2015": "../fesm2015/collections.js"
 }
