@@ -63,7 +63,12 @@ function removeAriaReferencedId(el, attr, id) {
      * @return {?}
      */
     function (val) { return val != id.trim(); }));
-    el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+    if (filteredIds.length) {
+        el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+    }
+    else {
+        el.removeAttribute(attr);
+    }
 }
 /**
  * Gets the list of IDs referenced by the given ARIA attribute on an element.
