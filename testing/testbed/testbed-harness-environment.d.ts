@@ -13,6 +13,7 @@ import { TestElement } from '../test-element';
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _fixture;
+    private _destroyed;
     protected constructor(rawRootElement: Element, _fixture: ComponentFixture<unknown>);
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
     static loader(fixture: ComponentFixture<unknown>): HarnessLoader;
