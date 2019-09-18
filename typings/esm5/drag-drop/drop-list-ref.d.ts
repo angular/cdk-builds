@@ -24,20 +24,10 @@ export interface DropListRefInternal extends DropListRef {
  */
 export declare class DropListRef<T = any> {
     private _dragDropRegistry;
-    /**
-     * @deprecated _ngZone and _viewportRuler parameters to be made required.
-     * @breaking-change 9.0.0
-     */
-    private _ngZone?;
-    private _viewportRuler?;
+    private _ngZone;
+    private _viewportRuler;
     /** Element that the drop list is attached to. */
     element: HTMLElement | ElementRef<HTMLElement>;
-    /**
-     * Unique ID for the drop list.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0
-     */
-    id: string;
     /** Whether starting a dragging sequence from this container is disabled. */
     disabled: boolean;
     /** Whether sorting items within the list is disabled. */
@@ -134,12 +124,7 @@ export declare class DropListRef<T = any> {
     private _stopScrollTimers;
     /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
     private _shadowRoot;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, 
-    /**
-     * @deprecated _ngZone and _viewportRuler parameters to be made required.
-     * @breaking-change 9.0.0
-     */
-    _ngZone?: NgZone | undefined, _viewportRuler?: ViewportRuler | undefined);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
     /** Whether an item from this list is currently being dragged. */
@@ -166,9 +151,8 @@ export declare class DropListRef<T = any> {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
-     * @breaking-change 9.0.0 `distance` parameter to become required.
      */
-    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance?: Point): void;
+    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.

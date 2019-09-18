@@ -15,6 +15,11 @@ import { CdkDragPreview } from './drag-preview';
 import { DragRef, DragRefConfig, Point } from '../drag-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
+/**
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
+ * Used for avoiding circular imports.
+ */
+export declare const CDK_DROP_LIST: InjectionToken<CdkDropList>;
 /** Injection token that can be used to configure the behavior of `CdkDrag`. */
 export declare const CDK_DRAG_CONFIG: InjectionToken<DragRefConfig>;
 /** @docs-private */
@@ -56,14 +61,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * has been found.
      */
     boundaryElement: string | ElementRef<HTMLElement> | HTMLElement;
-    /**
-     * Selector that will be used to determine the element to which the draggable's position will
-     * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-     * element has been found
-     * @deprecated Use `boundaryElement` instead.
-     * @breaking-change 9.0.0
-     */
-    boundaryElementSelector: string;
     /**
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.

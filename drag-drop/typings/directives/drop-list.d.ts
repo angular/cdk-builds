@@ -9,7 +9,6 @@ import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef, Afte
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from '../drag-events';
-import { CdkDropListContainer } from '../drop-list-container';
 import { CdkDropListGroup } from './drop-list-group';
 import { DropListRef } from '../drop-list-ref';
 import { DragDrop } from '../drag-drop';
@@ -21,7 +20,7 @@ import { DragDrop } from '../drag-drop';
 export interface CdkDropListInternal extends CdkDropList {
 }
 /** Container that wraps a set of draggable items. */
-export declare class CdkDropList<T = any> implements CdkDropListContainer, AfterContentInit, OnDestroy {
+export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy {
     /** Element that the drop list is attached to. */
     element: ElementRef<HTMLElement>;
     private _changeDetectorRef;
@@ -83,7 +82,11 @@ export declare class CdkDropList<T = any> implements CdkDropListContainer, After
     element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
-    /** Starts dragging an item. */
+    /**
+     * Starts dragging an item.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
+     */
     start(): void;
     /**
      * Drops an item into this container.
@@ -92,50 +95,34 @@ export declare class CdkDropList<T = any> implements CdkDropListContainer, After
      * @param previousContainer Container from which the item got dragged in.
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     *
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
-    drop(item: CdkDrag, currentIndex: number, previousContainer: Partial<CdkDropListContainer>, isPointerOverContainer: boolean): void;
+    drop(item: CdkDrag, currentIndex: number, previousContainer: CdkDropList, isPointerOverContainer: boolean): void;
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     enter(item: CdkDrag, pointerX: number, pointerY: number): void;
     /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param item Item that was dragged out.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     exit(item: CdkDrag): void;
     /**
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     getItemIndex(item: CdkDrag): number;
-    /**
-     * Sorts an item inside the container based on its position.
-     * @param item Item to be sorted.
-     * @param pointerX Position of the item along the X axis.
-     * @param pointerY Position of the item along the Y axis.
-     * @param pointerDelta Direction in which the pointer is moving along each axis.
-     */
-    _sortItem(item: CdkDrag, pointerX: number, pointerY: number, pointerDelta: {
-        x: number;
-        y: number;
-    }): void;
-    /**
-     * Figures out whether an item should be moved into a sibling
-     * drop container, based on its current position.
-     * @param item Drag item that is being moved.
-     * @param x Position of the item along the X axis.
-     * @param y Position of the item along the Y axis.
-     */
-    _getSiblingContainerFromPosition(item: CdkDrag, x: number, y: number): CdkDropListContainer | null;
-    /**
-     * Checks whether the user's pointer is positioned over the container.
-     * @param x Pointer position along the X axis.
-     * @param y Pointer position along the Y axis.
-     */
-    _isOverContainer(x: number, y: number): boolean;
     /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
     private _syncInputs;
     /** Handles events from the underlying DropListRef. */

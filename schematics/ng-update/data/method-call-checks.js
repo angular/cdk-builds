@@ -9,6 +9,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const target_version_1 = require("../../update-tool/target-version");
 exports.methodCallChecks = {
+    [target_version_1.TargetVersion.V9]: [{
+            pr: 'https://github.com/angular/components/pull/17084',
+            changes: [{
+                    className: 'DropListRef',
+                    method: 'drop',
+                    invalidArgCounts: [{ count: 4, message: 'The "distance" parameter is required' }]
+                }]
+        }],
+    [target_version_1.TargetVersion.V8]: [],
+    [target_version_1.TargetVersion.V7]: [],
     [target_version_1.TargetVersion.V6]: [{
             pr: 'https://github.com/angular/components/pull/10325',
             changes: [{

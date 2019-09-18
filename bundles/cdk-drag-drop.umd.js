@@ -1776,11 +1776,6 @@ function clamp$1(value, max) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
- * Counter used to generate unique ids for drop refs.
- * @type {?}
- */
-var _uniqueIdCounter = 0;
-/**
  * Proximity, as a ratio to width/height, at which a
  * dragged item will affect the drop container.
  * @type {?}
@@ -1814,12 +1809,6 @@ DropListRef = /** @class */ (function () {
         this._dragDropRegistry = _dragDropRegistry;
         this._ngZone = _ngZone;
         this._viewportRuler = _viewportRuler;
-        /**
-         * Unique ID for the drop list.
-         * @deprecated No longer being used. To be removed.
-         * \@breaking-change 8.0.0
-         */
-        this.id = "cdk-drop-list-ref-" + _uniqueIdCounter++;
         /**
          * Whether starting a dragging sequence from this container is disabled.
          */
@@ -2020,20 +2009,11 @@ DropListRef = /** @class */ (function () {
          */
         function (sibling) { return sibling._startReceiving(_this); }));
         this._removeListeners();
-        // @breaking-change 9.0.0 Remove check for _ngZone once it's marked as a required param.
-        if (this._ngZone) {
-            this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            function () { return element.addEventListener('scroll', _this._handleScroll); }));
-        }
-        else {
-            element.addEventListener('scroll', this._handleScroll);
-        }
-        // @breaking-change 9.0.0 Remove check for _viewportRuler once it's marked as a required param.
-        if (this._viewportRuler) {
-            this._listenToScrollEvents();
-        }
+        this._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        function () { return element.addEventListener('scroll', _this._handleScroll); }));
+        this._listenToScrollEvents();
     };
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -2130,32 +2110,28 @@ DropListRef = /** @class */ (function () {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
-     * @breaking-change 9.0.0 `distance` parameter to become required.
      */
     /**
      * Drops an item into this container.
-     * \@breaking-change 9.0.0 `distance` parameter to become required.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
-     * @param {?=} distance Distance the user has dragged since the start of the dragging sequence.
+     * @param {?} distance Distance the user has dragged since the start of the dragging sequence.
      * @return {?}
      */
     DropListRef.prototype.drop = /**
      * Drops an item into this container.
-     * \@breaking-change 9.0.0 `distance` parameter to become required.
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
-     * @param {?=} distance Distance the user has dragged since the start of the dragging sequence.
+     * @param {?} distance Distance the user has dragged since the start of the dragging sequence.
      * @return {?}
      */
     function (item, currentIndex, previousContainer, isPointerOverContainer, distance) {
-        if (distance === void 0) { distance = { x: 0, y: 0 }; }
         this._reset();
         this.dropped.next({
             item: item,
@@ -2457,9 +2433,8 @@ DropListRef = /** @class */ (function () {
                 scrollNode = element;
             }
         }
-        // @breaking-change 9.0.0 Remove null check for _viewportRuler once it's a required parameter.
         // Otherwise check if we can start scrolling the viewport.
-        if (this._viewportRuler && !verticalScrollDirection && !horizontalScrollDirection) {
+        if (!verticalScrollDirection && !horizontalScrollDirection) {
             var _b = this._viewportRuler.getViewportSize(), width = _b.width, height = _b.height;
             /** @type {?} */
             var clientRect = { width: width, height: height, top: 0, right: width, bottom: height, left: 0 };
@@ -2474,13 +2449,7 @@ DropListRef = /** @class */ (function () {
             this._horizontalScrollDirection = horizontalScrollDirection;
             this._scrollNode = scrollNode;
             if ((verticalScrollDirection || horizontalScrollDirection) && scrollNode) {
-                // @breaking-change 9.0.0 Remove null check for `_ngZone` once it is made required.
-                if (this._ngZone) {
-                    this._ngZone.runOutsideAngular(this._startScrollInterval);
-                }
-                else {
-                    this._startScrollInterval();
-                }
+                this._ngZone.runOutsideAngular(this._startScrollInterval);
             }
             else {
                 this._stopScrolling();
@@ -3295,9 +3264,6 @@ var DragDropRegistry = /** @class */ (function () {
      */
     function (drop) {
         if (!this._dropInstances.has(drop)) {
-            if (this.getDropContainer(drop.id)) {
-                throw Error("Drop instance with id \"" + drop.id + "\" has already been registered.");
-            }
             this._dropInstances.add(drop);
         }
     };
@@ -3317,7 +3283,7 @@ var DragDropRegistry = /** @class */ (function () {
         this._dragInstances.add(drag);
         // The `touchmove` event gets bound once, ahead of time, because WebKit
         // won't preventDefault on a dynamically-added `touchmove` listener.
-        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-fb390fbc8.
+        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-c1776e14c.
         if (this._dragInstances.size === 1) {
             this._ngZone.runOutsideAngular((/**
              * @return {?}
@@ -3474,32 +3440,6 @@ var DragDropRegistry = /** @class */ (function () {
         return this._activeDragInstances.has(drag);
     };
     /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0
-     */
-    /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0
-     * @param {?} id
-     * @return {?}
-     */
-    DragDropRegistry.prototype.getDropContainer = /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 8.0.0
-     * @param {?} id
-     * @return {?}
-     */
-    function (id) {
-        return Array.from(this._dropInstances).find((/**
-         * @param {?} instance
-         * @return {?}
-         */
-        function (instance) { return instance.id === id; }));
-    };
-    /**
      * @return {?}
      */
     DragDropRegistry.prototype.ngOnDestroy = /**
@@ -3633,25 +3573,6 @@ var DragDrop = /** @class */ (function () {
     /** @nocollapse */ DragDrop.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(core.ɵɵinject(common.DOCUMENT), core.ɵɵinject(core.NgZone), core.ɵɵinject(scrolling.ViewportRuler), core.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     return DragDrop;
 }());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Injection token that is used to provide a CdkDropList instance to CdkDrag.
- * Used for avoiding circular imports.
- * @type {?}
- */
-var CDK_DROP_LIST = new core.InjectionToken('CDK_DROP_LIST');
-/**
- * Injection token that is used to provide a CdkDropList instance to CdkDrag.
- * Used for avoiding circular imports.
- * @deprecated Use `CDK_DROP_LIST` instead.
- * \@breaking-change 8.0.0
- * @type {?}
- */
-var CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST;
 
 /**
  * @fileoverview added by tsickle
@@ -3796,6 +3717,12 @@ var CdkDragPreview = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Injection token that is used to provide a CdkDropList instance to CdkDrag.
+ * Used for avoiding circular imports.
+ * @type {?}
+ */
+var CDK_DROP_LIST = new core.InjectionToken('CDK_DROP_LIST');
+/**
  * Injection token that can be used to configure the behavior of `CdkDrag`.
  * @type {?}
  */
@@ -3888,35 +3815,6 @@ var CdkDrag = /** @class */ (function () {
         this._syncInputs(this._dragRef);
         this._handleEvents(this._dragRef);
     }
-    Object.defineProperty(CdkDrag.prototype, "boundaryElementSelector", {
-        /**
-         * Selector that will be used to determine the element to which the draggable's position will
-         * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-         * element has been found
-         * @deprecated Use `boundaryElement` instead.
-         * @breaking-change 9.0.0
-         */
-        get: /**
-         * Selector that will be used to determine the element to which the draggable's position will
-         * be constrained. Matching starts from the element's parent and goes up the DOM until a matching
-         * element has been found
-         * @deprecated Use `boundaryElement` instead.
-         * \@breaking-change 9.0.0
-         * @return {?}
-         */
-        function () {
-            return typeof this.boundaryElement === 'string' ? this.boundaryElement : (/** @type {?} */ (undefined));
-        },
-        set: /**
-         * @param {?} selector
-         * @return {?}
-         */
-        function (selector) {
-            this.boundaryElement = selector;
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(CdkDrag.prototype, "disabled", {
         /** Whether starting to drag this element is disabled. */
         get: /**
@@ -4401,11 +4299,8 @@ var CdkDropListGroup = /** @class */ (function () {
  * Counter used to generate unique ids for drop zones.
  * @type {?}
  */
-var _uniqueIdCounter$1 = 0;
+var _uniqueIdCounter = 0;
 var ɵ0 = undefined;
-// @breaking-change 8.0.0 `CdkDropList` implements `CdkDropListContainer` for backwards
-// compatiblity. The implements clause, as well as all the methods that it enforces can
-// be removed when `CdkDropListContainer` is deleted.
 /**
  * Container that wraps a set of draggable items.
  * @template T
@@ -4435,7 +4330,7 @@ var CdkDropList = /** @class */ (function () {
          * Unique ID for the drop zone. Can be used as a reference
          * in the `connectedTo` of another `CdkDropList`.
          */
-        this.id = "cdk-drop-list-" + _uniqueIdCounter$1++;
+        this.id = "cdk-drop-list-" + _uniqueIdCounter++;
         this._disabled = false;
         this._sortingDisabled = false;
         /**
@@ -4561,13 +4456,21 @@ var CdkDropList = /** @class */ (function () {
         this._destroyed.next();
         this._destroyed.complete();
     };
-    /** Starts dragging an item. */
     /**
      * Starts dragging an item.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
+     */
+    /**
+     * Starts dragging an item.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @return {?}
      */
     CdkDropList.prototype.start = /**
      * Starts dragging an item.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @return {?}
      */
     function () {
@@ -4580,36 +4483,49 @@ var CdkDropList = /** @class */ (function () {
      * @param previousContainer Container from which the item got dragged in.
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     *
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     /**
      * Drops an item into this container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     *
      * @return {?}
      */
     CdkDropList.prototype.drop = /**
      * Drops an item into this container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item being dropped into the container.
      * @param {?} currentIndex Index at which the item should be inserted.
      * @param {?} previousContainer Container from which the item got dragged in.
      * @param {?} isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
+     *
      * @return {?}
      */
     function (item, currentIndex, previousContainer, isPointerOverContainer) {
-        this._dropListRef.drop(item._dragRef, currentIndex, ((/** @type {?} */ (previousContainer)))._dropListRef, isPointerOverContainer);
+        this._dropListRef.drop(item._dragRef, currentIndex, previousContainer._dropListRef, isPointerOverContainer, { x: 0, y: 0 });
     };
     /**
      * Emits an event to indicate that the user moved an item into the container.
      * @param item Item that was moved into the container.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     /**
      * Emits an event to indicate that the user moved an item into the container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item that was moved into the container.
      * @param {?} pointerX Position of the item along the X axis.
      * @param {?} pointerY Position of the item along the Y axis.
@@ -4617,6 +4533,8 @@ var CdkDropList = /** @class */ (function () {
      */
     CdkDropList.prototype.enter = /**
      * Emits an event to indicate that the user moved an item into the container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item that was moved into the container.
      * @param {?} pointerX Position of the item along the X axis.
      * @param {?} pointerY Position of the item along the Y axis.
@@ -4628,14 +4546,20 @@ var CdkDropList = /** @class */ (function () {
     /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param item Item that was dragged out.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     /**
      * Removes an item from the container after it was dragged into another container by the user.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item that was dragged out.
      * @return {?}
      */
     CdkDropList.prototype.exit = /**
      * Removes an item from the container after it was dragged into another container by the user.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item that was dragged out.
      * @return {?}
      */
@@ -4645,93 +4569,25 @@ var CdkDropList = /** @class */ (function () {
     /**
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 10.0.0
      */
     /**
      * Figures out the index of an item in the container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item whose index should be determined.
      * @return {?}
      */
     CdkDropList.prototype.getItemIndex = /**
      * Figures out the index of an item in the container.
+     * @deprecated No longer being used. To be removed.
+     * \@breaking-change 10.0.0
      * @param {?} item Item whose index should be determined.
      * @return {?}
      */
     function (item) {
         return this._dropListRef.getItemIndex(item._dragRef);
-    };
-    /**
-     * Sorts an item inside the container based on its position.
-     * @param item Item to be sorted.
-     * @param pointerX Position of the item along the X axis.
-     * @param pointerY Position of the item along the Y axis.
-     * @param pointerDelta Direction in which the pointer is moving along each axis.
-     */
-    /**
-     * Sorts an item inside the container based on its position.
-     * @param {?} item Item to be sorted.
-     * @param {?} pointerX Position of the item along the X axis.
-     * @param {?} pointerY Position of the item along the Y axis.
-     * @param {?} pointerDelta Direction in which the pointer is moving along each axis.
-     * @return {?}
-     */
-    CdkDropList.prototype._sortItem = /**
-     * Sorts an item inside the container based on its position.
-     * @param {?} item Item to be sorted.
-     * @param {?} pointerX Position of the item along the X axis.
-     * @param {?} pointerY Position of the item along the Y axis.
-     * @param {?} pointerDelta Direction in which the pointer is moving along each axis.
-     * @return {?}
-     */
-    function (item, pointerX, pointerY, pointerDelta) {
-        return this._dropListRef._sortItem(item._dragRef, pointerX, pointerY, pointerDelta);
-    };
-    /**
-     * Figures out whether an item should be moved into a sibling
-     * drop container, based on its current position.
-     * @param item Drag item that is being moved.
-     * @param x Position of the item along the X axis.
-     * @param y Position of the item along the Y axis.
-     */
-    /**
-     * Figures out whether an item should be moved into a sibling
-     * drop container, based on its current position.
-     * @param {?} item Drag item that is being moved.
-     * @param {?} x Position of the item along the X axis.
-     * @param {?} y Position of the item along the Y axis.
-     * @return {?}
-     */
-    CdkDropList.prototype._getSiblingContainerFromPosition = /**
-     * Figures out whether an item should be moved into a sibling
-     * drop container, based on its current position.
-     * @param {?} item Drag item that is being moved.
-     * @param {?} x Position of the item along the X axis.
-     * @param {?} y Position of the item along the Y axis.
-     * @return {?}
-     */
-    function (item, x, y) {
-        /** @type {?} */
-        var result = this._dropListRef._getSiblingContainerFromPosition(item._dragRef, x, y);
-        return result ? result.data : null;
-    };
-    /**
-     * Checks whether the user's pointer is positioned over the container.
-     * @param x Pointer position along the X axis.
-     * @param y Pointer position along the Y axis.
-     */
-    /**
-     * Checks whether the user's pointer is positioned over the container.
-     * @param {?} x Pointer position along the X axis.
-     * @param {?} y Pointer position along the Y axis.
-     * @return {?}
-     */
-    CdkDropList.prototype._isOverContainer = /**
-     * Checks whether the user's pointer is positioned over the container.
-     * @param {?} x Pointer position along the X axis.
-     * @param {?} y Pointer position along the Y axis.
-     * @return {?}
-     */
-    function (x, y) {
-        return this._dropListRef._isOverContainer(x, y);
     };
     /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
     /**
@@ -4887,7 +4743,7 @@ var CdkDropList = /** @class */ (function () {
                     providers: [
                         // Prevent child drop lists from picking up the same group as their parent.
                         { provide: CdkDropListGroup, useValue: ɵ0 },
-                        { provide: CDK_DROP_LIST_CONTAINER, useExisting: CdkDropList },
+                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
                     ],
                     host: {
                         'class': 'cdk-drop-list',
@@ -4907,10 +4763,7 @@ var CdkDropList = /** @class */ (function () {
         { type: CdkDropListGroup, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
-        _draggables: [{ type: core.ContentChildren, args: [core.forwardRef((/**
-                     * @return {?}
-                     */
-                    function () { return CdkDrag; })), {
+        _draggables: [{ type: core.ContentChildren, args: [CdkDrag, {
                         // Explicitly set to false since some of the logic below makes assumptions about it.
                         // The `.withItems` call below should be updated if we ever need to switch this to `true`.
                         descendants: false
@@ -4969,8 +4822,6 @@ exports.DragDrop = DragDrop;
 exports.DragRef = DragRef;
 exports.DropListRef = DropListRef;
 exports.CdkDropList = CdkDropList;
-exports.CDK_DROP_LIST = CDK_DROP_LIST;
-exports.CDK_DROP_LIST_CONTAINER = CDK_DROP_LIST_CONTAINER;
 exports.moveItemInArray = moveItemInArray;
 exports.transferArrayItem = transferArrayItem;
 exports.copyArrayItem = copyArrayItem;
@@ -4978,6 +4829,7 @@ exports.DragDropModule = DragDropModule;
 exports.DragDropRegistry = DragDropRegistry;
 exports.CdkDropListGroup = CdkDropListGroup;
 exports.CDK_DRAG_CONFIG_FACTORY = CDK_DRAG_CONFIG_FACTORY;
+exports.CDK_DROP_LIST = CDK_DROP_LIST;
 exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
 exports.CdkDrag = CdkDrag;
 exports.CdkDragHandle = CdkDragHandle;

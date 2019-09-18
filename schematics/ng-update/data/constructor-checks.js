@@ -14,6 +14,10 @@ const target_version_1 = require("../../update-tool/target-version");
  * automatically through type checking.
  */
 exports.constructorChecks = {
+    [target_version_1.TargetVersion.V9]: [{
+            pr: 'https://github.com/angular/components/pull/17084',
+            changes: ['DropListRef']
+        }],
     [target_version_1.TargetVersion.V8]: [{
             pr: 'https://github.com/angular/components/pull/15647',
             changes: [

@@ -9,6 +9,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const target_version_1 = require("../../update-tool/target-version");
 exports.classNames = {
+    [target_version_1.TargetVersion.V9]: [{
+            pr: 'https://github.com/angular/components/pull/17084',
+            changes: [
+                { replace: 'CDK_DROP_LIST_CONTAINER', replaceWith: 'CDK_DROP_LIST' },
+                { replace: 'CdkDragConfig', replaceWith: 'DragRefConfig' }
+            ]
+        }],
+    [target_version_1.TargetVersion.V8]: [],
+    [target_version_1.TargetVersion.V7]: [],
     [target_version_1.TargetVersion.V6]: [
         {
             pr: 'https://github.com/angular/components/pull/10161',

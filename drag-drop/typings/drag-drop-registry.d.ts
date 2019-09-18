@@ -12,9 +12,7 @@ import { Subject } from 'rxjs';
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-export declare class DragDropRegistry<I, C extends {
-    id: string;
-}> implements OnDestroy {
+export declare class DragDropRegistry<I, C> implements OnDestroy {
     private _ngZone;
     private _document;
     /** Registered drop container instances. */
@@ -56,12 +54,6 @@ export declare class DragDropRegistry<I, C extends {
     stopDragging(drag: I): void;
     /** Gets whether a drag item instance is currently being dragged. */
     isDragging(drag: I): boolean;
-    /**
-     * Gets a drop container by its id.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 8.0.0
-     */
-    getDropContainer(id: string): C | undefined;
     ngOnDestroy(): void;
     /**
      * Event listener that will prevent the default browser action while the user is dragging.

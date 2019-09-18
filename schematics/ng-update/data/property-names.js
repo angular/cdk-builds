@@ -9,6 +9,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const target_version_1 = require("../../update-tool/target-version");
 exports.propertyNames = {
+    [target_version_1.TargetVersion.V9]: [{
+            pr: 'https://github.com/angular/components/pull/17084',
+            changes: [{
+                    replace: 'boundaryElementSelector',
+                    replaceWith: 'boundaryElement',
+                    whitelist: { classes: ['CdkDrag'] }
+                }]
+        }],
+    [target_version_1.TargetVersion.V8]: [],
     [target_version_1.TargetVersion.V7]: [
         {
             pr: 'https://github.com/angular/components/pull/8286',
