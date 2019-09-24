@@ -3279,7 +3279,7 @@ class DragDropRegistry {
         this._dragInstances.add(drag);
         // The `touchmove` event gets bound once, ahead of time, because WebKit
         // won't preventDefault on a dynamically-added `touchmove` listener.
-        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-7b07e4d2c.
+        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-7cd78ffc5.
         if (this._dragInstances.size === 1) {
             this._ngZone.runOutsideAngular((/**
              * @return {?}
