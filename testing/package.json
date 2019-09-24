@@ -1,0 +1,8 @@
+{
+  "name": "@angular/cdk/testing",
+  "typings": "../testing.d.ts",
+  "main": "../bundles/cdk-testing.umd.js",
+  "module": "../esm5/testing.es5.js",
+  "es2015": "../esm2015/testing.js",
+  "sideEffects": false
+}
