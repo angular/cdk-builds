@@ -3279,7 +3279,7 @@ class DragDropRegistry {
         this._dragInstances.add(drag);
         // The `touchmove` event gets bound once, ahead of time, because WebKit
         // won't preventDefault on a dynamically-added `touchmove` listener.
-        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-f797cac91.
+        // See https://bugs.webkit.org/show_bug.cgi?id=18.2.0-2c1c30a25.
         if (this._dragInstances.size === 1) {
             this._ngZone.runOutsideAngular((/**
              * @return {?}
@@ -3355,7 +3355,10 @@ class DragDropRegistry {
                  * @param {?} e
                  * @return {?}
                  */
-                (e) => this.scroll.next(e))
+                (e) => this.scroll.next(e)),
+                // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
+                // the document. See https://github.com/angular/components/issues/17144.
+                options: true
             })
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
                 // on Safari so we need to prevent the selection event as well. Alternatively this can
