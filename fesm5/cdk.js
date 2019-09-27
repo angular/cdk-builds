@@ -8,7 +8,7 @@ import { Version } from '@angular/core';
  * found in the LICENSE file at https://angular.io/license
  */
 /** Current version of the Angular Component Development Kit. */
-var VERSION = new Version('8.2.0-1c307c80a-1c307c8');
+var VERSION = new Version('8.2.0-da14f16af-da14f16');
 
 /**
  * @license
@@ -19,7 +19,11 @@ var VERSION = new Version('8.2.0-1c307c80a-1c307c8');
  */
 
 /**
- * Generated bundle index. Do not edit.
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 export { VERSION };
