@@ -178,8 +178,8 @@
         "signature": "202a1217e87bdacf7e4a3ff8f260e050cfcbcae5fc7d9d2e7c7ab50eba185a55"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/node_modules/rxjs/internal/scheduler/VirtualTimeScheduler.d.ts": {
-        "version": "f0e27097e14d12fe313369ec7b35535dec5e6e101fb8.2.1-a5d2ed88d392d069dd54e7d10",
-        "signature": "f0e27097e14d12fe313369ec7b35535dec5e6e101fb8.2.1-a5d2ed88d392d069dd54e7d10"
+        "version": "f0e27097e14d12fe313369ec7b35535dec5e6e101fb8.2.1-d4d958e47392d069dd54e7d10",
+        "signature": "f0e27097e14d12fe313369ec7b35535dec5e6e101fb8.2.1-d4d958e47392d069dd54e7d10"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/node_modules/rxjs/internal/Notification.d.ts": {
         "version": "d0fac7ab0c45061560368424a886789e9d75ea8d34e1a83bddc8e88f330a6bc8",
@@ -394,8 +394,8 @@
         "signature": "73cf9e6ff777e00358b353950f84783ccff4f3c2135bac9d3549cef2afd4df50"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/virtual-fs/host/resolver.d.ts": {
-        "version": "cf9c8.2.1-a5d2ed88ddb60a348e1d690e958d483f5524b6e5f3959084db5d9756b0d8509d",
-        "signature": "cf9c8.2.1-a5d2ed88ddb60a348e1d690e958d483f5524b6e5f3959084db5d9756b0d8509d"
+        "version": "cf9c8.2.1-d4d958e47db60a348e1d690e958d483f5524b6e5f3959084db5d9756b0d8509d",
+        "signature": "cf9c8.2.1-d4d958e47db60a348e1d690e958d483f5524b6e5f3959084db5d9756b0d8509d"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/core/src/virtual-fs/host/alias.d.ts": {
         "version": "9ea024e2da375bb67f76d34b6a037041f99f5706ef968b8b78ce352621debd55",
@@ -710,8 +710,8 @@
         "signature": "e119e46edba1169e95d3aeaf5ab4bcc35b8cec33b2dcc53d09cdd11b34667588"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/sink/host.d.ts": {
-        "version": "b4e983e9b26be15cce48b95aa2e00d8.2.1-a5d2ed88d7096e4bef67810f1d14a597403727",
-        "signature": "b4e983e9b26be15cce48b95aa2e00d8.2.1-a5d2ed88d7096e4bef67810f1d14a597403727"
+        "version": "b4e983e9b26be15cce48b95aa2e00d8.2.1-d4d958e477096e4bef67810f1d14a597403727",
+        "signature": "b4e983e9b26be15cce48b95aa2e00d8.2.1-d4d958e477096e4bef67810f1d14a597403727"
       },
       "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/sink/dryrun.d.ts": {
         "version": "e76afa3a8666824fdaad23cf6cadfafbc26aee3830eb0bbc8cfb85c447ffdae2",
@@ -1005,16 +1005,16 @@
         "version": "86926aec34cee39d076ea3903b19a4a21fe952f7a1448a068440b074abce4da6",
         "signature": "938c220f83253830657d1f23b652fbd17f47d06aaa81a162399168f49b634fdd"
       },
-      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts": {
-        "version": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60",
-        "signature": "b5a754d9b2c6492e14d422384cb0fb0874f9795dbc213d3000cc5ea010c70d60"
+      "/home/circleci/ng/node_modules/chalk/types/index.d.ts": {
+        "version": "091f417275a51ab3c47b949723e9e8a193012157ecc64a96e2d7b1505e82f395",
+        "signature": "091f417275a51ab3c47b949723e9e8a193012157ecc64a96e2d7b1505e82f395"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts": {
         "version": "8aa70d5562ff00dea17ed6e1e7763fd2424cfdeee639896ff684f82bf393b072",
         "signature": "f8157406f5e2152fc0b9275197229694323ba2a4afab96202eef6f63f10a1657"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts": {
-        "version": "01334a677357e3a2018f3181d02068c2590eb8203b448df5914f787a6baaa079",
+        "version": "7ca0aa862b6e333b232a55323d20c6d18e5883ac445ca0d5e62e29265a40c72a",
         "signature": "1c2ea768309640cb4521eadb0733c4993818471aa86b6a250b47792122d55ac2"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts": {
@@ -1098,7 +1098,7 @@
         "signature": "8161cf5de9db6ff1d5d5d700cc0f928d4e90452991dff3e38b7515d126f37d4d"
       },
       "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": {
-        "version": "298a2d61aa9b79f77055bf5245d284e5c7a4a1ddfb43bbeef86574f0c296c614",
+        "version": "e815d1b27a2099728f100403881a32e0799b2960d9de4ce1f0016441925a4ca3",
         "signature": "b357c1b60c47802e86748b116f19ea312dd58dddd804322e08423a7060692929"
       },
       "/home/circleci/ng/node_modules/@types/jasmine/ts3.1/index.d.ts": {
@@ -2221,7 +2221,7 @@
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts"
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts": [
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
+        "/home/circleci/ng/node_modules/chalk/types/index.d.ts",
         "/home/circleci/ng/node_modules/typescript/lib/typescript.d.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/migration-rule.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/data/property-names.ts",
@@ -2358,7 +2358,7 @@
       ],
       "/home/circleci/ng/src/cdk/schematics/ng-update/index.ts": [
         "/home/circleci/ng/node_modules/@angular-devkit/schematics/src/index.d.ts",
-        "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
+        "/home/circleci/ng/node_modules/chalk/types/index.d.ts",
         "/home/circleci/ng/src/cdk/schematics/update-tool/target-version.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-data.ts",
         "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/index.ts"
@@ -3763,7 +3763,7 @@
       "/home/circleci/ng/src/cdk/schematics/utils/project-tsconfig-paths.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/literal.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/attribute-selectors-rule.ts",
-      "/home/circleci/ng/node_modules/@types/chalk/index.d.ts",
+      "/home/circleci/ng/node_modules/chalk/types/index.d.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/base-types.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/upgrade-rules/class-inheritance-rule.ts",
       "/home/circleci/ng/src/cdk/schematics/ng-update/typescript/imports.ts",

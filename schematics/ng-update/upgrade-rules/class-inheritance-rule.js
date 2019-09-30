@@ -46,9 +46,9 @@ class ClassInheritanceRule extends migration_rule_1.MigrationRule {
         baseTypes.forEach(typeName => {
             const data = this.propertyNames.get(typeName);
             if (data) {
-                this.createFailureAtNode(node, `Found class "${chalk_1.bold(className)}" which extends class ` +
-                    `"${chalk_1.bold(typeName)}". Please note that the base class property ` +
-                    `"${chalk_1.red(data.replace)}" has changed to "${chalk_1.green(data.replaceWith)}". ` +
+                this.createFailureAtNode(node, `Found class "${chalk_1.default.bold(className)}" which extends class ` +
+                    `"${chalk_1.default.bold(typeName)}". Please note that the base class property ` +
+                    `"${chalk_1.default.red(data.replace)}" has changed to "${chalk_1.default.green(data.replaceWith)}". ` +
                     `You may need to update your class as well.`);
             }
         });
