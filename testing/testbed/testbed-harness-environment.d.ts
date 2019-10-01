@@ -6,9 +6,9 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /// <amd-module name="@angular/cdk/testing/testbed/testbed-harness-environment" />
+import { HarnessEnvironment } from '@angular/cdk/testing';
 import { ComponentFixture } from '@angular/core/testing';
 import { ComponentHarness, ComponentHarnessConstructor, HarnessLoader } from '../component-harness';
-import { HarnessEnvironment } from '../harness-environment';
 import { TestElement } from '../test-element';
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
@@ -29,9 +29,9 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
      * of the fixture.
      */
     static harnessForFixture<T extends ComponentHarness>(fixture: ComponentFixture<unknown>, harnessType: ComponentHarnessConstructor<T>): Promise<T>;
+    forceStabilize(): Promise<void>;
     protected getDocumentRoot(): Element;
     protected createTestElement(element: Element): TestElement;
     protected createEnvironment(element: Element): HarnessEnvironment<Element>;
     protected getAllRawElements(selector: string): Promise<Element[]>;
-    private _stabilize;
 }

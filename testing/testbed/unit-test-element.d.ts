@@ -28,5 +28,4 @@ export declare class UnitTestElement implements TestElement {
     getDimensions(): Promise<ElementDimensions>;
     getProperty(name: string): Promise<any>;
     matchesSelector(selector: string): Promise<boolean>;
-    forceStabilize(): Promise<void>;
 }

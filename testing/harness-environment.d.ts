@@ -31,6 +31,7 @@ export declare abstract class HarnessEnvironment<E> implements HarnessLoader, Lo
     getAllChildLoaders(selector: string): Promise<HarnessLoader[]>;
     /** Creates a `ComponentHarness` for the given harness type with the given raw host element. */
     protected createComponentHarness<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T>, element: E): T;
+    abstract forceStabilize(): Promise<void>;
     /** Gets the root element for the document. */
     protected abstract getDocumentRoot(): E;
     /** Creates a `TestElement` from a raw element. */

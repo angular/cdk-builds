@@ -122,6 +122,12 @@ export interface LocatorFactory {
      *     type, and returns a list of `ComponentHarness`es.
      */
     locatorForAll<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T[]>;
+    /**
+     * Flushes change detection and async tasks.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
+    forceStabilize(): Promise<void>;
 }
 /**
  * Base class for component harnesses that all component harness authors should extend. This base
@@ -198,6 +204,12 @@ export declare abstract class ComponentHarness {
      *     type, and returns a list of `ComponentHarness`es.
      */
     protected locatorForAll<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T[]>;
+    /**
+     * Flushes change detection and async tasks.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
+    protected forceStabilize(): Promise<void>;
 }
 /** Constructor for a ComponentHarness subclass. */
 export interface ComponentHarnessConstructor<T extends ComponentHarness> {
