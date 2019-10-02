@@ -1728,7 +1728,10 @@ class OverlayRef {
          */
         cssClass => {
             // We can't do a spread here, because IE doesn't support setting multiple classes.
-            isAdd ? classList.add(cssClass) : classList.remove(cssClass);
+            // Also trying to add an empty string to a DOMTokenList will throw.
+            if (cssClass) {
+                isAdd ? classList.add(cssClass) : classList.remove(cssClass);
+            }
         }));
     }
     /**
