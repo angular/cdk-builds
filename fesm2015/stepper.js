@@ -2,39 +2,10 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER, HOME, END } from '@angular/cdk/keycodes';
-import { Directive, TemplateRef, ElementRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { DOCUMENT, CommonModule } from '@angular/common';
+import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class CdkStepLabel {
-    /**
-     * @param {?} template
-     */
-    constructor(/** @docs-private */ template) {
-        this.template = template;
-    }
-}
-CdkStepLabel.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepLabel]',
-            },] }
-];
-/** @nocollapse */
-CdkStepLabel.ctorParameters = () => [
-    { type: TemplateRef }
-];
-if (false) {
-    /**
-     * \@docs-private
-     * @type {?}
-     */
-    CdkStepLabel.prototype.template;
-}
 
 /**
  * @fileoverview added by tsickle
@@ -73,6 +44,35 @@ if (false) {
      * @protected
      */
     CdkStepHeader.prototype._elementRef;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class CdkStepLabel {
+    /**
+     * @param {?} template
+     */
+    constructor(/** @docs-private */ template) {
+        this.template = template;
+    }
+}
+CdkStepLabel.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkStepLabel]',
+            },] }
+];
+/** @nocollapse */
+CdkStepLabel.ctorParameters = () => [
+    { type: TemplateRef }
+];
+if (false) {
+    /**
+     * \@docs-private
+     * @type {?}
+     */
+    CdkStepLabel.prototype.template;
 }
 
 /**
@@ -167,7 +167,7 @@ class CdkStep {
         this.interacted = false;
         this._editable = true;
         this._optional = false;
-        this._customCompleted = null;
+        this._completedOverride = null;
         this._customError = null;
         this._stepperOptions = stepperOptions ? stepperOptions : {};
         this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
@@ -177,7 +177,9 @@ class CdkStep {
      * Whether the user can return to this step once it has been marked as completed.
      * @return {?}
      */
-    get editable() { return this._editable; }
+    get editable() {
+        return this._editable;
+    }
     /**
      * @param {?} value
      * @return {?}
@@ -189,7 +191,9 @@ class CdkStep {
      * Whether the completion of step is optional.
      * @return {?}
      */
-    get optional() { return this._optional; }
+    get optional() {
+        return this._optional;
+    }
     /**
      * @param {?} value
      * @return {?}
@@ -202,14 +206,14 @@ class CdkStep {
      * @return {?}
      */
     get completed() {
-        return this._customCompleted == null ? this._getDefaultCompleted() : this._customCompleted;
+        return this._completedOverride == null ? this._getDefaultCompleted() : this._completedOverride;
     }
     /**
      * @param {?} value
      * @return {?}
      */
     set completed(value) {
-        this._customCompleted = coerceBooleanProperty(value);
+        this._completedOverride = coerceBooleanProperty(value);
     }
     /**
      * @private
@@ -252,8 +256,8 @@ class CdkStep {
      */
     reset() {
         this.interacted = false;
-        if (this._customCompleted != null) {
-            this._customCompleted = false;
+        if (this._completedOverride != null) {
+            this._completedOverride = false;
         }
         if (this._customError != null) {
             this._customError = false;
@@ -369,11 +373,8 @@ if (false) {
      * @private
      */
     CdkStep.prototype._optional;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkStep.prototype._customCompleted;
+    /** @type {?} */
+    CdkStep.prototype._completedOverride;
     /**
      * @type {?}
      * @private
@@ -421,17 +422,23 @@ class CdkStepper {
      * Whether the validity of previous steps should be checked or not.
      * @return {?}
      */
-    get linear() { return this._linear; }
+    get linear() {
+        return this._linear;
+    }
     /**
      * @param {?} value
      * @return {?}
      */
-    set linear(value) { this._linear = coerceBooleanProperty(value); }
+    set linear(value) {
+        this._linear = coerceBooleanProperty(value);
+    }
     /**
      * The index of the selected step.
      * @return {?}
      */
-    get selectedIndex() { return this._selectedIndex; }
+    get selectedIndex() {
+        return this._selectedIndex;
+    }
     /**
      * @param {?} index
      * @return {?}
@@ -444,8 +451,7 @@ class CdkStepper {
             if (newIndex < 0 || newIndex > this.steps.length - 1) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
-            if (this._selectedIndex != newIndex &&
-                !this._anyControlsInvalidOrPending(newIndex) &&
+            if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                 (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                 this._updateSelectedItemIndex(index);
             }
@@ -479,7 +485,7 @@ class CdkStepper {
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
-        (this._dir ? (/** @type {?} */ (this._dir.change)) : of())
+        (this._dir ? ((/** @type {?} */ (this._dir.change))) : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe((/**
          * @param {?} direction
@@ -580,9 +586,8 @@ class CdkStepper {
         const step = this.steps.toArray()[index];
         /** @type {?} */
         const isCurrentStep = this._isCurrentStep(index);
-        return step._displayDefaultIndicatorType
-            ? this._getDefaultIndicatorLogic(step, isCurrentStep)
-            : this._getGuidelineLogic(step, isCurrentStep, state);
+        return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
+            this._getGuidelineLogic(step, isCurrentStep, state);
     }
     /**
      * @private
@@ -709,10 +714,8 @@ class CdkStepper {
                 /** @type {?} */
                 const control = step.stepControl;
                 /** @type {?} */
-                const isIncomplete = control ?
-                    (control.invalid || control.pending || !step.interacted) :
-                    !step.completed;
-                return isIncomplete && !step.optional;
+                const isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
+                return isIncomplete && !step.optional && !step._completedOverride;
             }));
         }
         return false;

@@ -1,31 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/core'), require('@angular/common'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/core', '@angular/common', 'rxjs', 'rxjs/operators'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}), global.ng.cdk.a11y, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.keycodes, global.ng.core, global.ng.common, global.rxjs, global.rxjs.operators));
-}(this, function (exports, a11y, bidi, coercion, keycodes, core, common, rxjs, operators) { 'use strict';
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    var CdkStepLabel = /** @class */ (function () {
-        function CdkStepLabel(/** @docs-private */ template) {
-            this.template = template;
-        }
-        CdkStepLabel.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[cdkStepLabel]',
-                    },] }
-        ];
-        /** @nocollapse */
-        CdkStepLabel.ctorParameters = function () { return [
-            { type: core.TemplateRef }
-        ]; };
-        return CdkStepLabel;
-    }());
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}), global.ng.cdk.a11y, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.keycodes, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
+}(this, function (exports, a11y, bidi, coercion, keycodes, common, core, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -55,6 +32,29 @@
             { type: core.ElementRef }
         ]; };
         return CdkStepHeader;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    var CdkStepLabel = /** @class */ (function () {
+        function CdkStepLabel(/** @docs-private */ template) {
+            this.template = template;
+        }
+        CdkStepLabel.decorators = [
+            { type: core.Directive, args: [{
+                        selector: '[cdkStepLabel]',
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkStepLabel.ctorParameters = function () { return [
+            { type: core.TemplateRef }
+        ]; };
+        return CdkStepLabel;
     }());
 
     /**
@@ -95,7 +95,7 @@
             this.interacted = false;
             this._editable = true;
             this._optional = false;
-            this._customCompleted = null;
+            this._completedOverride = null;
             this._customError = null;
             this._stepperOptions = stepperOptions ? stepperOptions : {};
             this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
@@ -103,7 +103,9 @@
         }
         Object.defineProperty(CdkStep.prototype, "editable", {
             /** Whether the user can return to this step once it has been marked as completed. */
-            get: function () { return this._editable; },
+            get: function () {
+                return this._editable;
+            },
             set: function (value) {
                 this._editable = coercion.coerceBooleanProperty(value);
             },
@@ -112,7 +114,9 @@
         });
         Object.defineProperty(CdkStep.prototype, "optional", {
             /** Whether the completion of step is optional. */
-            get: function () { return this._optional; },
+            get: function () {
+                return this._optional;
+            },
             set: function (value) {
                 this._optional = coercion.coerceBooleanProperty(value);
             },
@@ -122,10 +126,10 @@
         Object.defineProperty(CdkStep.prototype, "completed", {
             /** Whether step is marked as completed. */
             get: function () {
-                return this._customCompleted == null ? this._getDefaultCompleted() : this._customCompleted;
+                return this._completedOverride == null ? this._getDefaultCompleted() : this._completedOverride;
             },
             set: function (value) {
-                this._customCompleted = coercion.coerceBooleanProperty(value);
+                this._completedOverride = coercion.coerceBooleanProperty(value);
             },
             enumerable: true,
             configurable: true
@@ -154,8 +158,8 @@
         /** Resets the step to its initial state. Note that this includes resetting form data. */
         CdkStep.prototype.reset = function () {
             this.interacted = false;
-            if (this._customCompleted != null) {
-                this._customCompleted = false;
+            if (this._completedOverride != null) {
+                this._completedOverride = false;
             }
             if (this._customError != null) {
                 this._customError = false;
@@ -227,14 +231,20 @@
         });
         Object.defineProperty(CdkStepper.prototype, "linear", {
             /** Whether the validity of previous steps should be checked or not. */
-            get: function () { return this._linear; },
-            set: function (value) { this._linear = coercion.coerceBooleanProperty(value); },
+            get: function () {
+                return this._linear;
+            },
+            set: function (value) {
+                this._linear = coercion.coerceBooleanProperty(value);
+            },
             enumerable: true,
             configurable: true
         });
         Object.defineProperty(CdkStepper.prototype, "selectedIndex", {
             /** The index of the selected step. */
-            get: function () { return this._selectedIndex; },
+            get: function () {
+                return this._selectedIndex;
+            },
             set: function (index) {
                 var newIndex = coercion.coerceNumberProperty(index);
                 if (this.steps) {
@@ -242,8 +252,7 @@
                     if (newIndex < 0 || newIndex > this.steps.length - 1) {
                         throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                     }
-                    if (this._selectedIndex != newIndex &&
-                        !this._anyControlsInvalidOrPending(newIndex) &&
+                    if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                         (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                         this._updateSelectedItemIndex(index);
                     }
@@ -331,9 +340,8 @@
             if (state === void 0) { state = STEP_STATE.NUMBER; }
             var step = this.steps.toArray()[index];
             var isCurrentStep = this._isCurrentStep(index);
-            return step._displayDefaultIndicatorType
-                ? this._getDefaultIndicatorLogic(step, isCurrentStep)
-                : this._getGuidelineLogic(step, isCurrentStep, state);
+            return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
+                this._getGuidelineLogic(step, isCurrentStep, state);
         };
         CdkStepper.prototype._getDefaultIndicatorLogic = function (step, isCurrentStep) {
             if (step._showError && step.hasError && !isCurrentStep) {
@@ -415,10 +423,8 @@
             if (this._linear && index >= 0) {
                 return steps.slice(0, index).some(function (step) {
                     var control = step.stepControl;
-                    var isIncomplete = control ?
-                        (control.invalid || control.pending || !step.interacted) :
-                        !step.completed;
-                    return isIncomplete && !step.optional;
+                    var isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
+                    return isIncomplete && !step.optional && !step._completedOverride;
                 });
             }
             return false;
