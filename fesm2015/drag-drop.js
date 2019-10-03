@@ -40,7 +40,7 @@ if (false) {
 function extendStyles(dest, source) {
     for (let key in source) {
         if (source.hasOwnProperty(key)) {
-            dest[(/** @type {?} */ (key))] = source[(/** @type {?} */ (key))];
+            dest[key] = (/** @type {?} */ (source[key]));
         }
     }
     return dest;
