@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/testing/protractor/protractor-element" />
 import { ModifierKeys } from '@angular/cdk/testing';
 import { ElementFinder } from 'protractor';
 import { ElementDimensions } from '../element-dimensions';

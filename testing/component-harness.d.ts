@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/testing/component-harness" />
 import { TestElement } from './test-element';
 /** An async function that returns a promise when called. */
 export declare type AsyncFactoryFn<T> = () => Promise<T>;

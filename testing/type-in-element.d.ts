@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/testing/type-in-element" />
 import { ModifierKeys } from './event-objects';
 /**
  * Checks whether the given Element is a text input element.

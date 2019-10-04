@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/testing/protractor/protractor-harness-environment" />
 import { HarnessEnvironment } from '@angular/cdk/testing';
 import { ElementFinder } from 'protractor';
 import { HarnessLoader } from '../component-harness';

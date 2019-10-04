@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/testing/harness-environment" />
 import { AsyncFactoryFn, ComponentHarness, ComponentHarnessConstructor, HarnessLoader, HarnessPredicate, LocatorFactory } from './component-harness';
 import { TestElement } from './test-element';
 /**
