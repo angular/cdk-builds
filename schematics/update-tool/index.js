@@ -77,7 +77,11 @@ function runMigrationRules(tree, logger, tsconfigPath, targetVersion, ruleTypes,
         .filter(filePath => !resourceCollector.resolvedStylesheets.some(s => s.filePath === filePath))
         .forEach(filePath => {
         const stylesheet = resourceCollector.resolveExternalStylesheet(filePath, null);
-        rules.forEach(r => r.visitStylesheet(stylesheet));
+        const relativePath = getProjectRelativePath(filePath);
+        // do not visit stylesheets which have been referenced from a component.
+        if (!analyzedFiles.has(relativePath)) {
+            rules.forEach(r => r.visitStylesheet(stylesheet));
+        }
     });
     // Commit all recorded updates in the update recorder. We need to perform the
     // replacements per source file in order to ensure that offsets in the TypeScript
@@ -88,14 +92,14 @@ function runMigrationRules(tree, logger, tsconfigPath, targetVersion, ruleTypes,
     // In case there are rule failures, print these to the CLI logger as warnings.
     if (ruleFailures.length) {
         ruleFailures.forEach(({ filePath, message, position }) => {
-            const normalizedFilePath = core_1.normalize(path_1.relative(basePath, filePath));
+            const normalizedFilePath = core_1.normalize(getProjectRelativePath(filePath));
             const lineAndCharacter = `${position.line + 1}:${position.character + 1}`;
             logger.warn(`${normalizedFilePath}@${lineAndCharacter} - ${message}`);
         });
     }
     return !!ruleFailures.length;
     function getUpdateRecorder(filePath) {
-        const treeFilePath = path_1.relative(basePath, filePath);
+        const treeFilePath = getProjectRelativePath(filePath);
         if (updateRecorderCache.has(treeFilePath)) {
             return updateRecorderCache.get(treeFilePath);
         }
@@ -108,9 +112,9 @@ function runMigrationRules(tree, logger, tsconfigPath, targetVersion, ruleTypes,
         ts.forEachChild(node, _visitTypeScriptNode);
         resourceCollector.visitNode(node);
     }
-    /** Gets the specified path relative to the project root. */
+    /** Gets the specified path relative to the project root in POSIX format. */
     function getProjectRelativePath(filePath) {
-        return path_1.relative(basePath, filePath);
+        return path_1.relative(basePath, filePath).replace(/\\/g, '/');
     }
 }
 exports.runMigrationRules = runMigrationRules;

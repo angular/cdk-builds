@@ -5,34 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Directive, TemplateRef, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, Input, Optional, Output, ViewChild, ViewEncapsulation, InjectionToken, HostListener, NgModule } from '@angular/core';
+import { Directive, ElementRef, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, Inject, InjectionToken, Input, Optional, Output, ViewChild, ViewEncapsulation, HostListener, NgModule } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { END, ENTER, HOME, SPACE, hasModifierKey } from '@angular/cdk/keycodes';
+import { END, ENTER, hasModifierKey, HOME, SPACE } from '@angular/cdk/keycodes';
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Subject, of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var CdkStepLabel = /** @class */ (function () {
-    function CdkStepLabel(/** @docs-private */ template) {
-        this.template = template;
-    }
-    CdkStepLabel.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkStepLabel]',
-                },] },
-    ];
-    /** @nocollapse */
-    CdkStepLabel.ctorParameters = function () { return [
-        { type: TemplateRef }
-    ]; };
-    return CdkStepLabel;
-}());
 
 /**
  * @fileoverview added by tsickle
@@ -67,6 +47,26 @@ var CdkStepHeader = /** @class */ (function () {
         { type: ElementRef }
     ]; };
     return CdkStepHeader;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var CdkStepLabel = /** @class */ (function () {
+    function CdkStepLabel(/** @docs-private */ template) {
+        this.template = template;
+    }
+    CdkStepLabel.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] },
+    ];
+    /** @nocollapse */
+    CdkStepLabel.ctorParameters = function () { return [
+        { type: TemplateRef }
+    ]; };
+    return CdkStepLabel;
 }());
 
 /**
@@ -121,7 +121,7 @@ var CdkStep = /** @class */ (function () {
         this.interacted = false;
         this._editable = true;
         this._optional = false;
-        this._customCompleted = null;
+        this._completedOverride = null;
         this._customError = null;
         this._stepperOptions = stepperOptions ? stepperOptions : {};
         this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
@@ -133,7 +133,9 @@ var CdkStep = /** @class */ (function () {
          * Whether the user can return to this step once it has been marked as completed.
          * @return {?}
          */
-        function () { return this._editable; },
+        function () {
+            return this._editable;
+        },
         set: /**
          * @param {?} value
          * @return {?}
@@ -150,7 +152,9 @@ var CdkStep = /** @class */ (function () {
          * Whether the completion of step is optional.
          * @return {?}
          */
-        function () { return this._optional; },
+        function () {
+            return this._optional;
+        },
         set: /**
          * @param {?} value
          * @return {?}
@@ -168,14 +172,14 @@ var CdkStep = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this._customCompleted == null ? this._getDefaultCompleted() : this._customCompleted;
+            return this._completedOverride == null ? this._getDefaultCompleted() : this._completedOverride;
         },
         set: /**
          * @param {?} value
          * @return {?}
          */
         function (value) {
-            this._customCompleted = coerceBooleanProperty(value);
+            this._completedOverride = coerceBooleanProperty(value);
         },
         enumerable: true,
         configurable: true
@@ -244,8 +248,8 @@ var CdkStep = /** @class */ (function () {
      */
     function () {
         this.interacted = false;
-        if (this._customCompleted != null) {
-            this._customCompleted = false;
+        if (this._completedOverride != null) {
+            this._completedOverride = false;
         }
         if (this._customError != null) {
             this._customError = false;
@@ -334,12 +338,16 @@ var CdkStepper = /** @class */ (function () {
          * Whether the validity of previous steps should be checked or not.
          * @return {?}
          */
-        function () { return this._linear; },
+        function () {
+            return this._linear;
+        },
         set: /**
          * @param {?} value
          * @return {?}
          */
-        function (value) { this._linear = coerceBooleanProperty(value); },
+        function (value) {
+            this._linear = coerceBooleanProperty(value);
+        },
         enumerable: true,
         configurable: true
     });
@@ -349,7 +357,9 @@ var CdkStepper = /** @class */ (function () {
          * The index of the selected step.
          * @return {?}
          */
-        function () { return this._selectedIndex; },
+        function () {
+            return this._selectedIndex;
+        },
         set: /**
          * @param {?} index
          * @return {?}
@@ -362,8 +372,7 @@ var CdkStepper = /** @class */ (function () {
                 if (newIndex < 0 || newIndex > this.steps.length - 1) {
                     throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                 }
-                if (this._selectedIndex != newIndex &&
-                    !this._anyControlsInvalidOrPending(newIndex) &&
+                if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                     (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                     this._updateSelectedItemIndex(index);
                 }
@@ -409,7 +418,7 @@ var CdkStepper = /** @class */ (function () {
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
             .withVerticalOrientation(this._orientation === 'vertical');
-        (this._dir ? (/** @type {?} */ (this._dir.change)) : of())
+        (this._dir ? ((/** @type {?} */ (this._dir.change))) : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe((/**
          * @param {?} direction
@@ -559,9 +568,8 @@ var CdkStepper = /** @class */ (function () {
         var step = this.steps.toArray()[index];
         /** @type {?} */
         var isCurrentStep = this._isCurrentStep(index);
-        return step._displayDefaultIndicatorType
-            ? this._getDefaultIndicatorLogic(step, isCurrentStep)
-            : this._getGuidelineLogic(step, isCurrentStep, state);
+        return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
+            this._getGuidelineLogic(step, isCurrentStep, state);
     };
     /**
      * @private
@@ -726,10 +734,8 @@ var CdkStepper = /** @class */ (function () {
                 /** @type {?} */
                 var control = step.stepControl;
                 /** @type {?} */
-                var isIncomplete = control ?
-                    (control.invalid || control.pending || !step.interacted) :
-                    !step.completed;
-                return isIncomplete && !step.optional;
+                var isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
+                return isIncomplete && !step.optional && !step._completedOverride;
             }));
         }
         return false;

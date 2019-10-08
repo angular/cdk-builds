@@ -69,7 +69,8 @@ function createTouchEvent(type, pageX, pageY) {
     var event = document.createEvent('UIEvent');
     /** @type {?} */
     var touchDetails = { pageX: pageX, pageY: pageY };
-    event.initUIEvent(type, true, true, window, 0);
+    // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
+    ((/** @type {?} */ (event))).initUIEvent(type, true, true, window, 0);
     // Most of the browsers don't have a "initTouchEvent" method that can be used to define
     // the touch details.
     Object.defineProperties(event, {

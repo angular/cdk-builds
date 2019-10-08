@@ -7,9 +7,9 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
-import { AfterViewInit, ChangeDetectorRef, EventEmitter, ElementRef, OnChanges, OnDestroy, QueryList, TemplateRef, InjectionToken } from '@angular/core';
-import { CdkStepLabel } from './step-label';
+import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { CdkStepLabel } from './step-label';
 /**
  * Position state of the content of each step in stepper that is used for transitioning
  * the content into correct position upon step selection change.
@@ -93,7 +93,7 @@ export declare class CdkStep implements OnChanges {
     private _optional;
     /** Whether step is marked as completed. */
     completed: boolean;
-    private _customCompleted;
+    _completedOverride: boolean | null;
     private _getDefaultCompleted;
     /** Whether step has an error. */
     hasError: boolean;

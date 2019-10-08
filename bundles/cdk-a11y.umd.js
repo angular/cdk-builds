@@ -2583,7 +2583,10 @@ var FocusMonitor = /** @class */ (function () {
             if (_this._touchTimeoutId != null) {
                 clearTimeout(_this._touchTimeoutId);
             }
-            _this._lastTouchTarget = event.target;
+            // Since this listener is bound on the `document` level, any events coming from the shadow DOM
+            // will have their `target` set to the shadow root. If available, use `composedPath` to
+            // figure out the event target.
+            _this._lastTouchTarget = event.composedPath ? event.composedPath()[0] : event.target;
             _this._touchTimeoutId = setTimeout((/**
              * @return {?}
              */

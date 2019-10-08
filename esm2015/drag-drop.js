@@ -28,7 +28,7 @@ import { Directionality } from '@angular/cdk/bidi';
 function extendStyles(dest, source) {
     for (let key in source) {
         if (source.hasOwnProperty(key)) {
-            dest[(/** @type {?} */ (key))] = source[(/** @type {?} */ (key))];
+            dest[key] = (/** @type {?} */ (source[key]));
         }
     }
     return dest;
@@ -675,6 +675,7 @@ class DragRef {
         }
         this._removeSubscriptions();
         this._dragDropRegistry.stopDragging(this);
+        this._toggleNativeDragInteractions();
         if (this._handles) {
             this._rootElement.style.webkitTapHighlightColor = this._rootElementTapHighlight;
         }
