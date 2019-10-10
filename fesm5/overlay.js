@@ -810,7 +810,7 @@ var OverlayRef = /** @class */ (function () {
         this._detachments.next();
         // Remove this overlay from keyboard dispatcher tracking.
         this._keyboardDispatcher.remove(this);
-        // Keeping the host element in DOM the can cause scroll jank, because it still gets
+        // Keeping the host element in the DOM can cause scroll jank, because it still gets
         // rendered, even though it's transparent and unclickable which is why we remove it.
         this._detachContentWhenStable();
         // Stop listening for location changes.
