@@ -1665,7 +1665,7 @@ var DropListRef = /** @class */ (function () {
      * @param y Position of the item along the Y axis.
      */
     DropListRef.prototype._canReceive = function (item, x, y) {
-        if (!this.enterPredicate(item, this) || !isInsideClientRect(this._clientRect, x, y)) {
+        if (!isInsideClientRect(this._clientRect, x, y) || !this.enterPredicate(item, this)) {
             return false;
         }
         var elementFromPoint = this._shadowRoot.elementFromPoint(x, y);

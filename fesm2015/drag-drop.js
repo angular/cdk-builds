@@ -2728,7 +2728,7 @@ class DropListRef {
      * @return {?}
      */
     _canReceive(item, x, y) {
-        if (!this.enterPredicate(item, this) || !isInsideClientRect(this._clientRect, x, y)) {
+        if (!isInsideClientRect(this._clientRect, x, y) || !this.enterPredicate(item, this)) {
             return false;
         }
         /** @type {?} */
