@@ -195,7 +195,7 @@ var DragRef = /** @class */ (function () {
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold) {
-                    var isDelayElapsed = Date.now() >= _this._dragStartTime + (_this.dragStartDelay || 0);
+                    var isDelayElapsed = Date.now() >= _this._dragStartTime + _this._getDragStartDelay(event);
                     if (!isDelayElapsed) {
                         _this._endDragSequence(event);
                         return;
@@ -925,6 +925,17 @@ var DragRef = /** @class */ (function () {
         if (x !== this._passiveTransform.x || y !== this._passiveTransform.y) {
             this.setFreeDragPosition({ y: y, x: x });
         }
+    };
+    /** Gets the drag start delay, based on the event type. */
+    DragRef.prototype._getDragStartDelay = function (event) {
+        var value = this.dragStartDelay;
+        if (typeof value === 'number') {
+            return value;
+        }
+        else if (isTouchEvent(event)) {
+            return value.touch;
+        }
+        return value ? value.mouse : 0;
     };
     return DragRef;
 }());
@@ -2430,6 +2441,7 @@ var CdkDrag = /** @class */ (function () {
         ref.beforeStarted.subscribe(function () {
             if (!ref.isDragging()) {
                 var dir = _this._dir;
+                var dragStartDelay = _this.dragStartDelay;
                 var placeholder = _this._placeholderTemplate ? {
                     template: _this._placeholderTemplate.templateRef,
                     context: _this._placeholderTemplate.data,
@@ -2442,7 +2454,8 @@ var CdkDrag = /** @class */ (function () {
                 } : null;
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
-                ref.dragStartDelay = coerceNumberProperty(_this.dragStartDelay);
+                ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
+                    dragStartDelay : coerceNumberProperty(dragStartDelay);
                 ref.constrainPosition = _this.constrainPosition;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())

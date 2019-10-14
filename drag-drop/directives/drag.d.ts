@@ -65,7 +65,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.
      */
-    dragStartDelay: number;
+    dragStartDelay: number | {
+        touch: number;
+        mouse: number;
+    };
     /**
      * Sets the position of a `CdkDrag` that is outside of a drop container.
      * Can be used to restore the element's position for a returning user.

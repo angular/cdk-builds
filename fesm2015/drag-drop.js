@@ -359,7 +359,7 @@ class DragRef {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold) {
                     /** @type {?} */
-                    const isDelayElapsed = Date.now() >= this._dragStartTime + (this.dragStartDelay || 0);
+                    const isDelayElapsed = Date.now() >= this._dragStartTime + this._getDragStartDelay(event);
                     if (!isDelayElapsed) {
                         this._endDragSequence(event);
                         return;
@@ -1322,6 +1322,23 @@ class DragRef {
         if (x !== this._passiveTransform.x || y !== this._passiveTransform.y) {
             this.setFreeDragPosition({ y, x });
         }
+    }
+    /**
+     * Gets the drag start delay, based on the event type.
+     * @private
+     * @param {?} event
+     * @return {?}
+     */
+    _getDragStartDelay(event) {
+        /** @type {?} */
+        const value = this.dragStartDelay;
+        if (typeof value === 'number') {
+            return value;
+        }
+        else if (isTouchEvent(event)) {
+            return value.touch;
+        }
+        return value ? value.mouse : 0;
     }
 }
 if (false) {
@@ -4266,6 +4283,8 @@ class CdkDrag {
                 /** @type {?} */
                 const dir = this._dir;
                 /** @type {?} */
+                const dragStartDelay = this.dragStartDelay;
+                /** @type {?} */
                 const placeholder = this._placeholderTemplate ? {
                     template: this._placeholderTemplate.templateRef,
                     context: this._placeholderTemplate.data,
@@ -4279,7 +4298,8 @@ class CdkDrag {
                 } : null;
                 ref.disabled = this.disabled;
                 ref.lockAxis = this.lockAxis;
-                ref.dragStartDelay = coerceNumberProperty(this.dragStartDelay);
+                ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
+                    dragStartDelay : coerceNumberProperty(dragStartDelay);
                 ref.constrainPosition = this.constrainPosition;
                 ref
                     .withBoundaryElement(this._getBoundaryElement())

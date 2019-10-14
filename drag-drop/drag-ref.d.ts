@@ -144,7 +144,10 @@ export declare class DragRef<T = any> {
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.
      */
-    dragStartDelay: number;
+    dragStartDelay: number | {
+        touch: number;
+        mouse: number;
+    };
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;
@@ -350,6 +353,8 @@ export declare class DragRef<T = any> {
      * If not, the position is adjusted so that the element fits again.
      */
     private _containInsideBoundaryOnResize;
+    /** Gets the drag start delay, based on the event type. */
+    private _getDragStartDelay;
 }
 /** Point on the page or within an element. */
 export interface Point {
