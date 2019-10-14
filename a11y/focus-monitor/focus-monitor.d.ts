@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { ElementRef, EventEmitter, NgZone, OnDestroy, Optional } from '@angular/core';
+import { ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 export declare const TOUCH_BUFFER_MS = 650;
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
@@ -153,11 +153,3 @@ export declare class CdkMonitorFocus implements OnDestroy {
     constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
     ngOnDestroy(): void;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher: FocusMonitor, ngZone: NgZone, platform: Platform): FocusMonitor;
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare const FOCUS_MONITOR_PROVIDER: {
-    provide: typeof FocusMonitor;
-    deps: (Optional[] | typeof NgZone | typeof Platform)[];
-    useFactory: typeof FOCUS_MONITOR_PROVIDER_FACTORY;
-};

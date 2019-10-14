@@ -248,20 +248,6 @@
         AriaDescriber.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
         return AriaDescriber;
     }());
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
-        return parentDispatcher || new AriaDescriber(_document);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var ARIA_DESCRIBER_PROVIDER = {
-        // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
-        provide: AriaDescriber,
-        deps: [
-            [new i0.Optional(), new i0.SkipSelf(), AriaDescriber],
-            i2.DOCUMENT
-        ],
-        useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -502,15 +488,6 @@
             // Explicitly check for `null` and `undefined` because other falsy values are valid.
             this._activeItem = activeItem == null ? null : activeItem;
             this._activeItemIndex = index;
-        };
-        /**
-         * Allows setting of the activeItemIndex without any other effects.
-         * @param index The new activeItemIndex.
-         * @deprecated Use `updateActiveItem` instead.
-         * @breaking-change 8.0.0
-         */
-        ListKeyManager.prototype.updateActiveItemIndex = function (index) {
-            this.updateActiveItem(index);
         };
         /**
          * This method sets the active item, given a list of items and the delta between the
@@ -1406,22 +1383,6 @@
         };
         return CdkAriaLive;
     }());
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document, ngZone) {
-        return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var LIVE_ANNOUNCER_PROVIDER = {
-        // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
-        provide: LiveAnnouncer,
-        deps: [
-            [new i0.Optional(), new i0.SkipSelf(), LiveAnnouncer],
-            [new i0.Optional(), new i0.Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
-            i2.DOCUMENT,
-            i0.NgZone,
-        ],
-        useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -1759,17 +1720,6 @@
         };
         return CdkMonitorFocus;
     }());
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-        return parentDispatcher || new FocusMonitor(ngZone, platform);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var FOCUS_MONITOR_PROVIDER = {
-        // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
-        provide: FocusMonitor,
-        deps: [[new i0.Optional(), new i0.SkipSelf(), FocusMonitor], i0.NgZone, i1.Platform],
-        useFactory: FOCUS_MONITOR_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -1825,8 +1775,6 @@
     exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
     exports.CDK_DESCRIBEDBY_HOST_ATTRIBUTE = CDK_DESCRIBEDBY_HOST_ATTRIBUTE;
     exports.AriaDescriber = AriaDescriber;
-    exports.ARIA_DESCRIBER_PROVIDER_FACTORY = ARIA_DESCRIBER_PROVIDER_FACTORY;
-    exports.ARIA_DESCRIBER_PROVIDER = ARIA_DESCRIBER_PROVIDER;
     exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
     exports.FocusKeyManager = FocusKeyManager;
     exports.ListKeyManager = ListKeyManager;
@@ -1836,16 +1784,12 @@
     exports.InteractivityChecker = InteractivityChecker;
     exports.LiveAnnouncer = LiveAnnouncer;
     exports.CdkAriaLive = CdkAriaLive;
-    exports.LIVE_ANNOUNCER_PROVIDER_FACTORY = LIVE_ANNOUNCER_PROVIDER_FACTORY;
-    exports.LIVE_ANNOUNCER_PROVIDER = LIVE_ANNOUNCER_PROVIDER;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY = LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY;
     exports.LIVE_ANNOUNCER_DEFAULT_OPTIONS = LIVE_ANNOUNCER_DEFAULT_OPTIONS;
     exports.TOUCH_BUFFER_MS = TOUCH_BUFFER_MS;
     exports.FocusMonitor = FocusMonitor;
     exports.CdkMonitorFocus = CdkMonitorFocus;
-    exports.FOCUS_MONITOR_PROVIDER_FACTORY = FOCUS_MONITOR_PROVIDER_FACTORY;
-    exports.FOCUS_MONITOR_PROVIDER = FOCUS_MONITOR_PROVIDER;
     exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
     exports.A11yModule = A11yModule;
 

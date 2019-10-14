@@ -290,7 +290,7 @@ var CdkStepper = /** @class */ (function () {
         (this._dir ? this._dir.change : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
-        this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._keyManager.updateActiveItem(this._selectedIndex);
         this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe(function () {
             if (!_this.selected) {
                 _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
@@ -395,7 +395,7 @@ var CdkStepper = /** @class */ (function () {
         // (e.g. checking whether focus is inside the active step), because we don't have a
         // reference to the elements that are rendering out the content.
         this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
-            this._keyManager.updateActiveItemIndex(newIndex);
+            this._keyManager.updateActiveItem(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     };

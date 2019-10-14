@@ -492,7 +492,7 @@ class CdkStepper {
          * @return {?}
          */
         direction => this._keyManager.withHorizontalOrientation(direction)));
-        this._keyManager.updateActiveItemIndex(this._selectedIndex);
+        this._keyManager.updateActiveItem(this._selectedIndex);
         this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe((/**
          * @return {?}
          */
@@ -664,7 +664,7 @@ class CdkStepper {
         // (e.g. checking whether focus is inside the active step), because we don't have a
         // reference to the elements that are rendering out the content.
         this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
-            this._keyManager.updateActiveItemIndex(newIndex);
+            this._keyManager.updateActiveItem(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     }

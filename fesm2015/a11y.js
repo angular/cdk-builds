@@ -1,5 +1,5 @@
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, EventEmitter, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { TAB, DOWN_ARROW, UP_ARROW, RIGHT_ARROW, LEFT_ARROW, hasModifierKey, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
@@ -402,28 +402,6 @@ if (false) {
      */
     AriaDescriber.prototype._document;
 }
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentDispatcher
- * @param {?} _document
- * @return {?}
- */
-function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher, _document) {
-    return parentDispatcher || new AriaDescriber(_document);
-}
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @type {?}
- */
-const ARIA_DESCRIBER_PROVIDER = {
-    // If there is already an AriaDescriber available, use that. Otherwise, provide a new one.
-    provide: AriaDescriber,
-    deps: [
-        [new Optional(), new SkipSelf(), AriaDescriber],
-        (/** @type {?} */ (DOCUMENT))
-    ],
-    useFactory: ARIA_DESCRIBER_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -758,16 +736,6 @@ class ListKeyManager {
         // Explicitly check for `null` and `undefined` because other falsy values are valid.
         this._activeItem = activeItem == null ? null : activeItem;
         this._activeItemIndex = index;
-    }
-    /**
-     * Allows setting of the activeItemIndex without any other effects.
-     * @deprecated Use `updateActiveItem` instead.
-     * \@breaking-change 8.0.0
-     * @param {?} index The new activeItemIndex.
-     * @return {?}
-     */
-    updateActiveItemIndex(index) {
-        this.updateActiveItem(index);
     }
     /**
      * This method sets the active item, given a list of items and the delta between the
@@ -2187,32 +2155,6 @@ if (false) {
      */
     CdkAriaLive.prototype._ngZone;
 }
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentAnnouncer
- * @param {?} liveElement
- * @param {?} _document
- * @param {?} ngZone
- * @return {?}
- */
-function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer, liveElement, _document, ngZone) {
-    return parentAnnouncer || new LiveAnnouncer(liveElement, ngZone, _document);
-}
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @type {?}
- */
-const LIVE_ANNOUNCER_PROVIDER = {
-    // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
-    provide: LiveAnnouncer,
-    deps: [
-        [new Optional(), new SkipSelf(), LiveAnnouncer],
-        [new Optional(), new Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)],
-        DOCUMENT,
-        NgZone,
-    ],
-    useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2808,26 +2750,6 @@ if (false) {
      */
     CdkMonitorFocus.prototype._focusMonitor;
 }
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentDispatcher
- * @param {?} ngZone
- * @param {?} platform
- * @return {?}
- */
-function FOCUS_MONITOR_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-    return parentDispatcher || new FocusMonitor(ngZone, platform);
-}
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @type {?}
- */
-const FOCUS_MONITOR_PROVIDER = {
-    // If there is already a FocusMonitor available, use that. Otherwise, provide a new one.
-    provide: FocusMonitor,
-    deps: [[new Optional(), new SkipSelf(), FocusMonitor], NgZone, Platform],
-    useFactory: FOCUS_MONITOR_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2876,5 +2798,5 @@ A11yModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { ARIA_DESCRIBER_PROVIDER_FACTORY, MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ARIA_DESCRIBER_PROVIDER, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LIVE_ANNOUNCER_PROVIDER_FACTORY, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_PROVIDER, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, FOCUS_MONITOR_PROVIDER_FACTORY, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, FOCUS_MONITOR_PROVIDER, isFakeMousedownFromScreenReader, A11yModule };
+export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, isFakeMousedownFromScreenReader, A11yModule };
 //# sourceMappingURL=a11y.js.map

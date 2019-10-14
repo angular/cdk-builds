@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, OnDestroy, Optional } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 /**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the `aria-describedby`.
@@ -72,11 +72,3 @@ export declare class AriaDescriber implements OnDestroy {
     /** Checks whether a node is an Element node. */
     private _isElementNode;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare function ARIA_DESCRIBER_PROVIDER_FACTORY(parentDispatcher: AriaDescriber, _document: any): AriaDescriber;
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare const ARIA_DESCRIBER_PROVIDER: {
-    provide: typeof AriaDescriber;
-    deps: (Optional[] | InjectionToken<any>)[];
-    useFactory: typeof ARIA_DESCRIBER_PROVIDER_FACTORY;
-};

@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ContentObserver } from '@angular/cdk/observers';
-import { ElementRef, NgZone, OnDestroy, Provider } from '@angular/core';
+import { ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { AriaLivePoliteness, LiveAnnouncerDefaultOptions } from './live-announcer-tokens';
 export declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
@@ -73,7 +73,3 @@ export declare class CdkAriaLive implements OnDestroy {
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentAnnouncer: LiveAnnouncer, liveElement: any, _document: any, ngZone: NgZone): LiveAnnouncer;
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare const LIVE_ANNOUNCER_PROVIDER: Provider;
