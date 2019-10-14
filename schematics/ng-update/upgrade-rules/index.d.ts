@@ -7,13 +7,12 @@
  */
 /// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/index" />
 import { Rule } from '@angular-devkit/schematics';
-import { Constructor } from '../../update-tool';
-import { MigrationRule } from '../../update-tool/migration-rule';
+import { MigrationRuleType } from '../../update-tool';
 import { TargetVersion } from '../../update-tool/target-version';
 import { RuleUpgradeData } from '../upgrade-data';
 /** List of migration rules which run for the CDK update. */
-export declare const cdkMigrationRules: Constructor<MigrationRule<RuleUpgradeData>>[];
-declare type NullableMigrationRule = Constructor<MigrationRule<RuleUpgradeData | null>>;
+export declare const cdkMigrationRules: MigrationRuleType<RuleUpgradeData>[];
+declare type NullableMigrationRule = MigrationRuleType<RuleUpgradeData | null>;
 /**
  * Creates a Angular schematic rule that runs the upgrade for the
  * specified target version.

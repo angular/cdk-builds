@@ -9,3 +9,5 @@
 export * from './utils';
 export * from './ng-update/public-api';
 export * from './update-tool/public-api';
+import * as parse5 from 'parse5';
+export { parse5 };
