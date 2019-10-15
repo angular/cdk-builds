@@ -134,7 +134,7 @@ export interface LocatorFactory {
  * should be inherited when defining user's own harness.
  */
 export declare abstract class ComponentHarness {
-    private readonly locatorFactory;
+    protected readonly locatorFactory: LocatorFactory;
     constructor(locatorFactory: LocatorFactory);
     /** Gets a `Promise` for the `TestElement` representing the host element of the component. */
     host(): Promise<TestElement>;
