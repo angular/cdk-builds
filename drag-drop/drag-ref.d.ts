@@ -39,7 +39,6 @@ interface DragHelperTemplate<T = any> {
 }
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
- * @docs-private
  */
 export declare class DragRef<T = any> {
     private _config;

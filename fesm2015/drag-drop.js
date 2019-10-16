@@ -199,7 +199,6 @@ if (false) {
 }
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
- * \@docs-private
  * @template T
  */
 class DragRef {
@@ -1949,7 +1948,6 @@ const AutoScrollHorizontalDirection = {
 function DropListRefInternal() { }
 /**
  * Reference to a drop list. Used to manipulate or dispose of the container.
- * \@docs-private
  * @template T
  */
 class DropListRef {

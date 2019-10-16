@@ -98,7 +98,6 @@
     var MOUSE_EVENT_IGNORE_TIME = 800;
     /**
      * Reference to a draggable item. Used to manipulate or dispose of the item.
-     * @docs-private
      */
     var DragRef = /** @class */ (function () {
         function DragRef(element, _config, _document, _ngZone, _viewportRuler, _dragDropRegistry) {
@@ -1097,7 +1096,6 @@
     var AUTO_SCROLL_STEP = 2;
     /**
      * Reference to a drop list. Used to manipulate or dispose of the container.
-     * @docs-private
      */
     var DropListRef = /** @class */ (function () {
         function DropListRef(element, _dragDropRegistry, _document, _ngZone, _viewportRuler) {
