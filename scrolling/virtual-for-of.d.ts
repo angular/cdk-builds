@@ -46,8 +46,8 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     /** Subject that emits when a new DataSource instance is given. */
     private _dataSourceChanges;
     /** The DataSource to display. */
-    cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T>;
-    _cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T>;
+    cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
+    _cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
     /**
      * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
      * the item and produces a value to be used as the item's identity when tracking changes.

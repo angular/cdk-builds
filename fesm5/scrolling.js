@@ -1198,6 +1198,8 @@ var CdkVirtualForOf = /** @class */ (function () {
         // comment node which can throw off the move when it's being repeated for all items.
         return this._viewContainerRef.createEmbeddedView(this._template, {
             $implicit: null,
+            // It's guaranteed that the iterable is not "undefined" or "null" because we only
+            // generate views for elements if the "cdkVirtualForOf" iterable has elements.
             cdkVirtualForOf: this._cdkVirtualForOf,
             index: -1,
             count: -1,
