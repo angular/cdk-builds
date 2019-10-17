@@ -24,6 +24,9 @@ export declare abstract class HarnessEnvironment<E> implements HarnessLoader, Lo
     locatorForOptional<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T | null>;
     locatorForAll(selector: string): AsyncFactoryFn<TestElement[]>;
     locatorForAll<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T[]>;
+    harnessLoaderFor(selector: string): Promise<HarnessLoader>;
+    harnessLoaderForOptional(selector: string): Promise<HarnessLoader | null>;
+    harnessLoaderForAll(selector: string): Promise<HarnessLoader[]>;
     getHarness<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): Promise<T>;
     getAllHarnesses<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): Promise<T[]>;
     getChildLoader(selector: string): Promise<HarnessLoader>;

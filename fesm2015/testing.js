@@ -374,6 +374,26 @@ class HarnessEnvironment {
             }
         });
     }
+    // Implemented as part of the `LocatorFactory` interface.
+    harnessLoaderFor(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.createEnvironment(yield this._assertElementFound(selector));
+        });
+    }
+    // Implemented as part of the `LocatorFactory` interface.
+    harnessLoaderForOptional(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const elements = yield this.getAllRawElements(selector);
+            return elements[0] ? this.createEnvironment(elements[0]) : null;
+        });
+    }
+    // Implemented as part of the `LocatorFactory` interface.
+    harnessLoaderForAll(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const elements = yield this.getAllRawElements(selector);
+            return elements.map(element => this.createEnvironment(element));
+        });
+    }
     // Implemented as part of the `HarnessLoader` interface.
     getHarness(harnessType) {
         return this.locatorFor(harnessType)();

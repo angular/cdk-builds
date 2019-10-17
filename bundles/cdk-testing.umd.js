@@ -446,6 +446,49 @@
                 });
             }); };
         };
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.harnessLoaderFor = function (selector) {
+            return tslib_1.__awaiter(this, void 0, void 0, function () {
+                var _a;
+                return tslib_1.__generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _a = this.createEnvironment;
+                            return [4 /*yield*/, this._assertElementFound(selector)];
+                        case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
+                    }
+                });
+            });
+        };
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.harnessLoaderForOptional = function (selector) {
+            return tslib_1.__awaiter(this, void 0, void 0, function () {
+                var elements;
+                return tslib_1.__generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
+                        case 1:
+                            elements = _a.sent();
+                            return [2 /*return*/, elements[0] ? this.createEnvironment(elements[0]) : null];
+                    }
+                });
+            });
+        };
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.harnessLoaderForAll = function (selector) {
+            return tslib_1.__awaiter(this, void 0, void 0, function () {
+                var elements;
+                var _this = this;
+                return tslib_1.__generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
+                        case 1:
+                            elements = _a.sent();
+                            return [2 /*return*/, elements.map(function (element) { return _this.createEnvironment(element); })];
+                    }
+                });
+            });
+        };
         // Implemented as part of the `HarnessLoader` interface.
         HarnessEnvironment.prototype.getHarness = function (harnessType) {
             return this.locatorFor(harnessType)();
