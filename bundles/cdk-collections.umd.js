@@ -71,12 +71,6 @@
             this._selectedToEmit = [];
             /** Event emitted when the value has changed. */
             this.changed = new rxjs.Subject();
-            /**
-             * Event emitted when the value has changed.
-             * @deprecated Use `changed` instead.
-             * @breaking-change 8.0.0 To be changed to `changed`
-             */
-            this.onChange = this.changed;
             if (initiallySelectedValues && initiallySelectedValues.length) {
                 if (_multiple) {
                     initiallySelectedValues.forEach(function (value) { return _this._markSelected(value); });

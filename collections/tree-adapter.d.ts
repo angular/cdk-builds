@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { SelectionModel } from './selection';
+import { SelectionModel } from './selection-model';
 /**
  * Interface for a class that can flatten hierarchical structured data and re-expand the flattened
  * data back into its original structure. Should be used in conjunction with the cdk-tree.
