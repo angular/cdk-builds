@@ -15,7 +15,7 @@ import { LineAndCharacter } from './utils/line-mappings';
 export interface MigrationFailure {
     filePath: string;
     message: string;
-    position: LineAndCharacter;
+    position?: LineAndCharacter;
 }
 export declare class MigrationRule<T> {
     /** TypeScript program for the migration. */
