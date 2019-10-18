@@ -2731,7 +2731,12 @@ var CdkDropList = /** @class */ (function () {
         this._draggables.changes
             .pipe(startWith(this._draggables), takeUntil(this._destroyed))
             .subscribe(function (items) {
-            _this._dropListRef.withItems(items.map(function (drag) { return drag._dragRef; }));
+            _this._dropListRef.withItems(items.reduce(function (filteredItems, drag) {
+                if (drag.dropContainer === _this) {
+                    filteredItems.push(drag._dragRef);
+                }
+                return filteredItems;
+            }, []));
         });
     };
     CdkDropList.prototype.ngOnDestroy = function () {
@@ -2898,11 +2903,7 @@ var CdkDropList = /** @class */ (function () {
         { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
     ]; };
     CdkDropList.propDecorators = {
-        _draggables: [{ type: ContentChildren, args: [CdkDrag, {
-                        // Explicitly set to false since some of the logic below makes assumptions about it.
-                        // The `.withItems` call below should be updated if we ever need to switch this to `true`.
-                        descendants: false
-                    },] }],
+        _draggables: [{ type: ContentChildren, args: [CdkDrag, { descendants: true },] }],
         connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
         data: [{ type: Input, args: ['cdkDropListData',] }],
         orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
