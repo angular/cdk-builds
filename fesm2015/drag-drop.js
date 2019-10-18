@@ -978,6 +978,8 @@ class DragRef {
         /** @type {?} */
         const previewConfig = this._previewTemplate;
         /** @type {?} */
+        const previewClass = this.previewClass;
+        /** @type {?} */
         const previewTemplate = previewConfig ? previewConfig.template : null;
         /** @type {?} */
         let preview;
@@ -1003,7 +1005,7 @@ class DragRef {
             // It's important that we disable the pointer events on the preview, because
             // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
             pointerEvents: 'none',
-            // We have to reset the margin, because can throw off positioning relative to the viewport.
+            // We have to reset the margin, because it can throw off positioning relative to the viewport.
             margin: '0',
             position: 'fixed',
             top: '0',
@@ -1013,6 +1015,18 @@ class DragRef {
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._direction);
+        if (previewClass) {
+            if (Array.isArray(previewClass)) {
+                previewClass.forEach((/**
+                 * @param {?} className
+                 * @return {?}
+                 */
+                className => preview.classList.add(className)));
+            }
+            else {
+                preview.classList.add(previewClass);
+            }
+        }
         return preview;
     }
     /**
@@ -1572,6 +1586,11 @@ if (false) {
      * @type {?}
      */
     DragRef.prototype.dragStartDelay;
+    /**
+     * Class to be added to the preview element.
+     * @type {?}
+     */
+    DragRef.prototype.previewClass;
     /**
      * @type {?}
      * @private
@@ -4323,6 +4342,7 @@ class CdkDrag {
                 ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
                     dragStartDelay : coerceNumberProperty(dragStartDelay);
                 ref.constrainPosition = this.constrainPosition;
+                ref.previewClass = this.previewClass;
                 ref
                     .withBoundaryElement(this._getBoundaryElement())
                     .withPlaceholderTemplate(placeholder)
@@ -4439,6 +4459,7 @@ CdkDrag.propDecorators = {
     freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
     disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
     constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
+    previewClass: [{ type: Input, args: ['cdkDragPreviewClass',] }],
     started: [{ type: Output, args: ['cdkDragStarted',] }],
     released: [{ type: Output, args: ['cdkDragReleased',] }],
     ended: [{ type: Output, args: ['cdkDragEnded',] }],
@@ -4523,6 +4544,11 @@ if (false) {
      * @type {?}
      */
     CdkDrag.prototype.constrainPosition;
+    /**
+     * Class to be added to the preview element.
+     * @type {?}
+     */
+    CdkDrag.prototype.previewClass;
     /**
      * Emits when the user starts dragging the item.
      * @type {?}

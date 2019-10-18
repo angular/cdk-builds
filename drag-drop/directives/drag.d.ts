@@ -87,6 +87,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * be rendered.
      */
     constrainPosition?: (point: Point, dragRef: DragRef) => Point;
+    /** Class to be added to the preview element. */
+    previewClass: string | string[];
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user has released a drag item, before any animations have started. */

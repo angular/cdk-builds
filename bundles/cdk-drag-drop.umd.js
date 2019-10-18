@@ -668,6 +668,7 @@
          */
         DragRef.prototype._createPreviewElement = function () {
             var previewConfig = this._previewTemplate;
+            var previewClass = this.previewClass;
             var previewTemplate = previewConfig ? previewConfig.template : null;
             var preview;
             if (previewTemplate) {
@@ -689,7 +690,7 @@
                 // It's important that we disable the pointer events on the preview, because
                 // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
                 pointerEvents: 'none',
-                // We have to reset the margin, because can throw off positioning relative to the viewport.
+                // We have to reset the margin, because it can throw off positioning relative to the viewport.
                 margin: '0',
                 position: 'fixed',
                 top: '0',
@@ -699,6 +700,14 @@
             toggleNativeDragInteractions(preview, false);
             preview.classList.add('cdk-drag-preview');
             preview.setAttribute('dir', this._direction);
+            if (previewClass) {
+                if (Array.isArray(previewClass)) {
+                    previewClass.forEach(function (className) { return preview.classList.add(className); });
+                }
+                else {
+                    preview.classList.add(previewClass);
+                }
+            }
             return preview;
         };
         /**
@@ -2466,6 +2475,7 @@
                     ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
                         dragStartDelay : coercion.coerceNumberProperty(dragStartDelay);
                     ref.constrainPosition = _this.constrainPosition;
+                    ref.previewClass = _this.previewClass;
                     ref
                         .withBoundaryElement(_this._getBoundaryElement())
                         .withPlaceholderTemplate(placeholder)
@@ -2555,6 +2565,7 @@
             freeDragPosition: [{ type: i0.Input, args: ['cdkDragFreeDragPosition',] }],
             disabled: [{ type: i0.Input, args: ['cdkDragDisabled',] }],
             constrainPosition: [{ type: i0.Input, args: ['cdkDragConstrainPosition',] }],
+            previewClass: [{ type: i0.Input, args: ['cdkDragPreviewClass',] }],
             started: [{ type: i0.Output, args: ['cdkDragStarted',] }],
             released: [{ type: i0.Output, args: ['cdkDragReleased',] }],
             ended: [{ type: i0.Output, args: ['cdkDragEnded',] }],

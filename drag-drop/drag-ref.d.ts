@@ -147,6 +147,8 @@ export declare class DragRef<T = any> {
         touch: number;
         mouse: number;
     };
+    /** Class to be added to the preview element. */
+    previewClass: string | string[] | undefined;
     /** Whether starting to drag this element is disabled. */
     disabled: boolean;
     private _disabled;

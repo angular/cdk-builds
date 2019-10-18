@@ -672,6 +672,7 @@ var DragRef = /** @class */ (function () {
      */
     DragRef.prototype._createPreviewElement = function () {
         var previewConfig = this._previewTemplate;
+        var previewClass = this.previewClass;
         var previewTemplate = previewConfig ? previewConfig.template : null;
         var preview;
         if (previewTemplate) {
@@ -693,7 +694,7 @@ var DragRef = /** @class */ (function () {
             // It's important that we disable the pointer events on the preview, because
             // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
             pointerEvents: 'none',
-            // We have to reset the margin, because can throw off positioning relative to the viewport.
+            // We have to reset the margin, because it can throw off positioning relative to the viewport.
             margin: '0',
             position: 'fixed',
             top: '0',
@@ -703,6 +704,14 @@ var DragRef = /** @class */ (function () {
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._direction);
+        if (previewClass) {
+            if (Array.isArray(previewClass)) {
+                previewClass.forEach(function (className) { return preview.classList.add(className); });
+            }
+            else {
+                preview.classList.add(previewClass);
+            }
+        }
         return preview;
     };
     /**
@@ -2470,6 +2479,7 @@ var CdkDrag = /** @class */ (function () {
                 ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
                     dragStartDelay : coerceNumberProperty(dragStartDelay);
                 ref.constrainPosition = _this.constrainPosition;
+                ref.previewClass = _this.previewClass;
                 ref
                     .withBoundaryElement(_this._getBoundaryElement())
                     .withPlaceholderTemplate(placeholder)
@@ -2559,6 +2569,7 @@ var CdkDrag = /** @class */ (function () {
         freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
         disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
         constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
+        previewClass: [{ type: Input, args: ['cdkDragPreviewClass',] }],
         started: [{ type: Output, args: ['cdkDragStarted',] }],
         released: [{ type: Output, args: ['cdkDragReleased',] }],
         ended: [{ type: Output, args: ['cdkDragEnded',] }],
