@@ -2058,6 +2058,10 @@ class DropListRef {
          */
         this._stopScrollTimers = new Subject();
         /**
+         * Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly.
+         */
+        this._cachedShadowRoot = null;
+        /**
          * Handles the container being scrolled. Has to be an arrow function to preserve the context.
          */
         this._handleScroll = (/**
@@ -2101,9 +2105,8 @@ class DropListRef {
                 }
             }));
         });
-        /** @type {?} */
-        const nativeNode = this.element = coerceElement(element);
-        this._shadowRoot = getShadowRoot(nativeNode) || _document;
+        this.element = coerceElement(element);
+        this._document = _document;
         _dragDropRegistry.registerDropContainer(this);
     }
     /**
@@ -2747,7 +2750,7 @@ class DropListRef {
             return false;
         }
         /** @type {?} */
-        const elementFromPoint = (/** @type {?} */ (this._shadowRoot.elementFromPoint(x, y)));
+        const elementFromPoint = (/** @type {?} */ (this._getShadowRoot().elementFromPoint(x, y)));
         // If there's no element at the pointer position, then
         // the client rect is probably scrolled out of the view.
         if (!elementFromPoint) {
@@ -2807,6 +2810,20 @@ class DropListRef {
                 this._cacheOwnPosition();
             }
         }));
+    }
+    /**
+     * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
+     * than saving it in property directly on init, because we want to resolve it as late as possible
+     * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
+     * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
+     * @private
+     * @return {?}
+     */
+    _getShadowRoot() {
+        if (!this._cachedShadowRoot) {
+            this._cachedShadowRoot = getShadowRoot(coerceElement(this.element)) || this._document;
+        }
+        return this._cachedShadowRoot;
     }
 }
 if (false) {
@@ -2983,7 +3000,13 @@ if (false) {
      * @type {?}
      * @private
      */
-    DropListRef.prototype._shadowRoot;
+    DropListRef.prototype._cachedShadowRoot;
+    /**
+     * Reference to the document.
+     * @type {?}
+     * @private
+     */
+    DropListRef.prototype._document;
     /**
      * Handles the container being scrolled. Has to be an arrow function to preserve the context.
      * @type {?}

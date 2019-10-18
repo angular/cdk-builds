@@ -122,7 +122,9 @@ export declare class DropListRef<T = any> {
     /** Used to signal to the current auto-scroll sequence when to stop. */
     private _stopScrollTimers;
     /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
-    private _shadowRoot;
+    private _cachedShadowRoot;
+    /** Reference to the document. */
+    private _document;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
@@ -288,4 +290,11 @@ export declare class DropListRef<T = any> {
      * Used for updating the internal state of the list.
      */
     private _listenToScrollEvents;
+    /**
+     * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
+     * than saving it in property directly on init, because we want to resolve it as late as possible
+     * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
+     * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
+     */
+    private _getShadowRoot;
 }

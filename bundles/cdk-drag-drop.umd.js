@@ -1161,6 +1161,8 @@
             this._horizontalScrollDirection = 0 /* NONE */;
             /** Used to signal to the current auto-scroll sequence when to stop. */
             this._stopScrollTimers = new rxjs.Subject();
+            /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
+            this._cachedShadowRoot = null;
             /** Handles the container being scrolled. Has to be an arrow function to preserve the context. */
             this._handleScroll = function () {
                 if (!_this.isDragging()) {
@@ -1190,8 +1192,8 @@
                     }
                 });
             };
-            var nativeNode = this.element = coercion.coerceElement(element);
-            this._shadowRoot = getShadowRoot(nativeNode) || _document;
+            this.element = coercion.coerceElement(element);
+            this._document = _document;
             _dragDropRegistry.registerDropContainer(this);
         }
         /** Removes the drop list functionality from the DOM element. */
@@ -1673,7 +1675,7 @@
             if (!isInsideClientRect(this._clientRect, x, y) || !this.enterPredicate(item, this)) {
                 return false;
             }
-            var elementFromPoint = this._shadowRoot.elementFromPoint(x, y);
+            var elementFromPoint = this._getShadowRoot().elementFromPoint(x, y);
             // If there's no element at the pointer position, then
             // the client rect is probably scrolled out of the view.
             if (!elementFromPoint) {
@@ -1724,6 +1726,18 @@
                     _this._cacheOwnPosition();
                 }
             });
+        };
+        /**
+         * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
+         * than saving it in property directly on init, because we want to resolve it as late as possible
+         * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
+         * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
+         */
+        DropListRef.prototype._getShadowRoot = function () {
+            if (!this._cachedShadowRoot) {
+                this._cachedShadowRoot = getShadowRoot(coercion.coerceElement(this.element)) || this._document;
+            }
+            return this._cachedShadowRoot;
         };
         return DropListRef;
     }());
