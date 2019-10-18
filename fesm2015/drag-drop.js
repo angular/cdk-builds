@@ -4839,17 +4839,11 @@ class CdkDropList {
          * @return {?}
          */
         (items) => {
-            this._dropListRef.withItems(items.reduce((/**
-             * @param {?} filteredItems
+            this._dropListRef.withItems(items.map((/**
              * @param {?} drag
              * @return {?}
              */
-            (filteredItems, drag) => {
-                if (drag.dropContainer === this) {
-                    filteredItems.push(drag._dragRef);
-                }
-                return filteredItems;
-            }), (/** @type {?} */ ([]))));
+            drag => drag._dragRef)));
         }));
     }
     /**
@@ -5083,7 +5077,11 @@ CdkDropList.ctorParameters = () => [
     { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] }
 ];
 CdkDropList.propDecorators = {
-    _draggables: [{ type: ContentChildren, args: [CdkDrag, { descendants: true },] }],
+    _draggables: [{ type: ContentChildren, args: [CdkDrag, {
+                    // Explicitly set to false since some of the logic below makes assumptions about it.
+                    // The `.withItems` call below should be updated if we ever need to switch this to `true`.
+                    descendants: false
+                },] }],
     connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
     data: [{ type: Input, args: ['cdkDropListData',] }],
     orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
