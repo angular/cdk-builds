@@ -13,6 +13,8 @@ import { TestElement } from '../test-element';
 export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _fixture;
     private _destroyed;
+    /** Observable that emits whenever the test task state changes. */
+    private _taskState;
     protected constructor(rawRootElement: Element, _fixture: ComponentFixture<unknown>);
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
     static loader(fixture: ComponentFixture<unknown>): HarnessLoader;
@@ -29,6 +31,7 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
      */
     static harnessForFixture<T extends ComponentHarness>(fixture: ComponentFixture<unknown>, harnessType: ComponentHarnessConstructor<T>): Promise<T>;
     forceStabilize(): Promise<void>;
+    waitForTasksOutsideAngular(): Promise<void>;
     protected getDocumentRoot(): Element;
     protected createTestElement(element: Element): TestElement;
     protected createEnvironment(element: Element): HarnessEnvironment<Element>;

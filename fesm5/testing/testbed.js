@@ -1,6 +1,91 @@
 import { __awaiter, __generator, __spread, __extends } from 'tslib';
 import { triggerBlur, isTextInput, clearElement, dispatchMouseEvent, triggerFocus, typeInElement, HarnessEnvironment } from '@angular/cdk/testing';
+import { flush } from '@angular/core/testing';
+import { takeWhile } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 import { BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META } from '@angular/cdk/keycodes';
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Unique symbol that is used to patch a property to a proxy zone. */
+var stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
+/**
+ * Interceptor that can be set up in a `ProxyZone` instance. The interceptor
+ * will keep track of the task state and emit whenever the state changes.
+ *
+ * This serves as a workaround for https://github.com/angular/angular/issues/32896.
+ */
+var TaskStateZoneInterceptor = /** @class */ (function () {
+    function TaskStateZoneInterceptor(_lastState) {
+        this._lastState = _lastState;
+        /** Subject that can be used to emit a new state change. */
+        this._stateSubject = new BehaviorSubject(this._lastState ? this._getTaskStateFromInternalZoneState(this._lastState) : { stable: true });
+        /** Public observable that emits whenever the task state changes. */
+        this.state = this._stateSubject.asObservable();
+    }
+    /** This will be called whenever the task state changes in the intercepted zone. */
+    TaskStateZoneInterceptor.prototype.onHasTask = function (delegate, current, target, hasTaskState) {
+        if (current === target) {
+            this._stateSubject.next(this._getTaskStateFromInternalZoneState(hasTaskState));
+        }
+    };
+    /** Gets the task state from the internal ZoneJS task state. */
+    TaskStateZoneInterceptor.prototype._getTaskStateFromInternalZoneState = function (state) {
+        return { stable: !state.macroTask && !state.microTask };
+    };
+    /**
+     * Sets up the custom task state Zone interceptor in the  `ProxyZone`. Throws if
+     * no `ProxyZone` could be found.
+     * @returns an observable that emits whenever the task state changes.
+     */
+    TaskStateZoneInterceptor.setup = function () {
+        if (Zone === undefined) {
+            throw Error('Could not find ZoneJS. For test harnesses running in TestBed, ' +
+                'ZoneJS needs to be installed.');
+        }
+        // tslint:disable-next-line:variable-name
+        var ProxyZoneSpec = Zone['ProxyZoneSpec'];
+        // If there is no "ProxyZoneSpec" installed, we throw an error and recommend
+        // setting up the proxy zone by pulling in the testing bundle.
+        if (!ProxyZoneSpec) {
+            throw Error('ProxyZoneSpec is needed for the test harnesses but could not be found. ' +
+                'Please make sure that your environment includes zone.js/dist/zone-testing.js');
+        }
+        // Ensure that there is a proxy zone instance set up, and get
+        // a reference to the instance if present.
+        var zoneSpec = ProxyZoneSpec.assertPresent();
+        // If there already is a delegate registered in the proxy zone, and it
+        // is type of the custom task state interceptor, we just use that state
+        // observable. This allows us to only intercept Zone once per test
+        // (similar to how `fakeAsync` or `async` work).
+        if (zoneSpec[stateObservableSymbol]) {
+            return zoneSpec[stateObservableSymbol];
+        }
+        // Since we intercept on environment creation and the fixture has been
+        // created before, we might have missed tasks scheduled before. Fortunately
+        // the proxy zone keeps track of the previous task state, so we can just pass
+        // this as initial state to the task zone interceptor.
+        var interceptor = new TaskStateZoneInterceptor(zoneSpec.lastTaskState);
+        var zoneSpecOnHasTask = zoneSpec.onHasTask;
+        // We setup the task state interceptor in the `ProxyZone`. Note that we cannot register
+        // the interceptor as a new proxy zone delegate because it would mean that other zone
+        // delegates (e.g. `FakeAsyncTestZone` or `AsyncTestZone`) can accidentally overwrite/disable
+        // our interceptor. Since we just intend to monitor the task state of the proxy zone, it is
+        // sufficient to just patch the proxy zone. This also avoids that we interfere with the task
+        // queue scheduling logic.
+        zoneSpec.onHasTask = function () {
+            zoneSpecOnHasTask.apply(zoneSpec, arguments);
+            interceptor.onHasTask.apply(interceptor, arguments);
+        };
+        return zoneSpec[stateObservableSymbol] = interceptor.state;
+    };
+    return TaskStateZoneInterceptor;
+}());
 
 /**
  * @license
@@ -315,6 +400,7 @@ var TestbedHarnessEnvironment = /** @class */ (function (_super) {
         var _this = _super.call(this, rawRootElement) || this;
         _this._fixture = _fixture;
         _this._destroyed = false;
+        _this._taskState = TaskStateZoneInterceptor.setup();
         _fixture.componentRef.onDestroy(function () { return _this._destroyed = true; });
         return _this;
     }
@@ -361,6 +447,36 @@ var TestbedHarnessEnvironment = /** @class */ (function (_super) {
                         this._fixture.detectChanges();
                         return [4 /*yield*/, this._fixture.whenStable()];
                     case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    TestbedHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        // If we run in the fake async zone, we run "flush" to run any scheduled tasks. This
+                        // ensures that the harnesses behave inside of the FakeAsyncTestZone similar to the
+                        // "AsyncTestZone" and the root zone (i.e. neither fakeAsync or async). Note that we
+                        // cannot just rely on the task state observable to become stable because the state will
+                        // never change. This is because the task queue will be only drained if the fake async
+                        // zone is being flushed.
+                        if (Zone.current.get('FakeAsyncTestZoneSpec')) {
+                            flush();
+                        }
+                        // Wait until the task queue has been drained and the zone is stable. Note that
+                        // we cannot rely on "fixture.whenStable" since it does not catch tasks scheduled
+                        // outside of the Angular zone. For test harnesses, we want to ensure that the
+                        // app is fully stabilized and therefore need to use our own zone interceptor.
+                        return [4 /*yield*/, this._taskState.pipe(takeWhile(function (state) { return !state.stable; })).toPromise()];
+                    case 1:
+                        // Wait until the task queue has been drained and the zone is stable. Note that
+                        // we cannot rely on "fixture.whenStable" since it does not catch tasks scheduled
+                        // outside of the Angular zone. For test harnesses, we want to ensure that the
+                        // app is fully stabilized and therefore need to use our own zone interceptor.
                         _a.sent();
                         return [2 /*return*/];
                 }

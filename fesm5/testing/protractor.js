@@ -282,6 +282,13 @@ var ProtractorHarnessEnvironment = /** @class */ (function (_super) {
             return [2 /*return*/];
         }); });
     };
+    ProtractorHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
+            });
+        });
+    };
     ProtractorHarnessEnvironment.prototype.getDocumentRoot = function () {
         return element(by.css('body'));
     };

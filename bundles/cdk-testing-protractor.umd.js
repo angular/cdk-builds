@@ -284,6 +284,13 @@
                 return [2 /*return*/];
             }); });
         };
+        ProtractorHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
+            return tslib_1.__awaiter(this, void 0, void 0, function () {
+                return tslib_1.__generator(this, function (_a) {
+                    return [2 /*return*/];
+                });
+            });
+        };
         ProtractorHarnessEnvironment.prototype.getDocumentRoot = function () {
             return protractor.element(protractor.by.css('body'));
         };

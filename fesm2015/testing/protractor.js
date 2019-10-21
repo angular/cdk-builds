@@ -223,6 +223,12 @@ class ProtractorHarnessEnvironment extends HarnessEnvironment {
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
+    waitForTasksOutsideAngular() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // TODO: figure out how we can do this for the protractor environment.
+            // https://github.com/angular/components/issues/17412
+        });
+    }
     getDocumentRoot() {
         return element(by.css('body'));
     }

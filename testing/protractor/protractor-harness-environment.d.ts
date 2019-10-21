@@ -15,6 +15,7 @@ export declare class ProtractorHarnessEnvironment extends HarnessEnvironment<Ele
     /** Creates a `HarnessLoader` rooted at the document root. */
     static loader(): HarnessLoader;
     forceStabilize(): Promise<void>;
+    waitForTasksOutsideAngular(): Promise<void>;
     protected getDocumentRoot(): ElementFinder;
     protected createTestElement(element: ElementFinder): TestElement;
     protected createEnvironment(element: ElementFinder): HarnessEnvironment<ElementFinder>;
