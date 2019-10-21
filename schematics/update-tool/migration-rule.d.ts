@@ -17,6 +17,10 @@ export interface MigrationFailure {
     message: string;
     position?: LineAndCharacter;
 }
+export declare type PostMigrationAction = void | {
+    /** Whether the package manager should run upon migration completion. */
+    runPackageManager: boolean;
+};
 export declare class MigrationRule<T> {
     /** TypeScript program for the migration. */
     program: ts.Program;
@@ -91,5 +95,5 @@ export declare class MigrationRule<T> {
      * migration result of all individual targets. e.g. removing HammerJS if it
      * is not needed in any project target.
      */
-    static globalPostMigration(tree: Tree, context: SchematicContext): void;
+    static globalPostMigration(tree: Tree, context: SchematicContext): PostMigrationAction;
 }
