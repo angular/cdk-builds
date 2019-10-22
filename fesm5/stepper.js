@@ -216,6 +216,11 @@ var CdkStepper = /** @class */ (function () {
         this._elementRef = _elementRef;
         /** Emits when the component is destroyed. */
         this._destroyed = new Subject();
+        /**
+         * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
+         * https://github.com/angular/angular/issues/29842.
+         */
+        this._stepsArray = [];
         this._linear = false;
         this._selectedIndex = 0;
         /** Event emitted when the selected step has changed. */
@@ -282,7 +287,7 @@ var CdkStepper = /** @class */ (function () {
     CdkStepper.prototype.ngAfterViewInit = function () {
         var _this = this;
         // Note that while the step headers are content children by default, any components that
-        // extend this one might have them as view chidren. We initialize the keyboard handling in
+        // extend this one might have them as view children. We initialize the keyboard handling in
         // AfterViewInit so we're guaranteed for both view and content children to be defined.
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()

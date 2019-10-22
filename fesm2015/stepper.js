@@ -401,6 +401,11 @@ class CdkStepper {
          * Emits when the component is destroyed.
          */
         this._destroyed = new Subject();
+        /**
+         * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
+         * https://github.com/angular/angular/issues/29842.
+         */
+        this._stepsArray = [];
         this._linear = false;
         this._selectedIndex = 0;
         /**
@@ -480,7 +485,7 @@ class CdkStepper {
      */
     ngAfterViewInit() {
         // Note that while the step headers are content children by default, any components that
-        // extend this one might have them as view chidren. We initialize the keyboard handling in
+        // extend this one might have them as view children. We initialize the keyboard handling in
         // AfterViewInit so we're guaranteed for both view and content children to be defined.
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
@@ -792,6 +797,12 @@ if (false) {
      */
     CdkStepper.prototype._steps;
     /**
+     * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
+     * https://github.com/angular/angular/issues/29842.
+     * @type {?}
+     */
+    CdkStepper.prototype._stepsArray;
+    /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.
      * \@breaking-change 8.0.0
@@ -840,187 +851,177 @@ if (false) {
     CdkStepper.prototype._elementRef;
 }
 /**
- * Simplified representation of a FormControl from \@angular/forms.
+ * Simplified representation of an "AbstractControl" from \@angular/forms.
  * Used to avoid having to bring in \@angular/forms for a single optional interface.
  * \@docs-private
  * @record
  */
-function FormControlLike() { }
+function AbstractControlLike() { }
 if (false) {
     /** @type {?} */
-    FormControlLike.prototype.asyncValidator;
+    AbstractControlLike.prototype.asyncValidator;
     /** @type {?} */
-    FormControlLike.prototype.dirty;
+    AbstractControlLike.prototype.dirty;
     /** @type {?} */
-    FormControlLike.prototype.disabled;
+    AbstractControlLike.prototype.disabled;
     /** @type {?} */
-    FormControlLike.prototype.enabled;
+    AbstractControlLike.prototype.enabled;
     /** @type {?} */
-    FormControlLike.prototype.errors;
+    AbstractControlLike.prototype.errors;
     /** @type {?} */
-    FormControlLike.prototype.invalid;
+    AbstractControlLike.prototype.invalid;
     /** @type {?} */
-    FormControlLike.prototype.parent;
+    AbstractControlLike.prototype.parent;
     /** @type {?} */
-    FormControlLike.prototype.pending;
+    AbstractControlLike.prototype.pending;
     /** @type {?} */
-    FormControlLike.prototype.pristine;
+    AbstractControlLike.prototype.pristine;
     /** @type {?} */
-    FormControlLike.prototype.root;
+    AbstractControlLike.prototype.root;
     /** @type {?} */
-    FormControlLike.prototype.status;
+    AbstractControlLike.prototype.status;
     /** @type {?} */
-    FormControlLike.prototype.statusChanges;
+    AbstractControlLike.prototype.statusChanges;
     /** @type {?} */
-    FormControlLike.prototype.touched;
+    AbstractControlLike.prototype.touched;
     /** @type {?} */
-    FormControlLike.prototype.untouched;
+    AbstractControlLike.prototype.untouched;
     /** @type {?} */
-    FormControlLike.prototype.updateOn;
+    AbstractControlLike.prototype.updateOn;
     /** @type {?} */
-    FormControlLike.prototype.valid;
+    AbstractControlLike.prototype.valid;
     /** @type {?} */
-    FormControlLike.prototype.validator;
+    AbstractControlLike.prototype.validator;
     /** @type {?} */
-    FormControlLike.prototype.value;
+    AbstractControlLike.prototype.value;
     /** @type {?} */
-    FormControlLike.prototype.valueChanges;
+    AbstractControlLike.prototype.valueChanges;
     /**
      * @return {?}
      */
-    FormControlLike.prototype.clearAsyncValidators = function () { };
+    AbstractControlLike.prototype.clearAsyncValidators = function () { };
     /**
      * @return {?}
      */
-    FormControlLike.prototype.clearValidators = function () { };
-    /**
-     * @param {?=} opts
-     * @return {?}
-     */
-    FormControlLike.prototype.disable = function (opts) { };
+    AbstractControlLike.prototype.clearValidators = function () { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.enable = function (opts) { };
+    AbstractControlLike.prototype.disable = function (opts) { };
+    /**
+     * @param {?=} opts
+     * @return {?}
+     */
+    AbstractControlLike.prototype.enable = function (opts) { };
     /**
      * @param {?} path
      * @return {?}
      */
-    FormControlLike.prototype.get = function (path) { };
+    AbstractControlLike.prototype.get = function (path) { };
     /**
      * @param {?} errorCode
      * @param {?=} path
      * @return {?}
      */
-    FormControlLike.prototype.getError = function (errorCode, path) { };
+    AbstractControlLike.prototype.getError = function (errorCode, path) { };
     /**
      * @param {?} errorCode
      * @param {?=} path
      * @return {?}
      */
-    FormControlLike.prototype.hasError = function (errorCode, path) { };
+    AbstractControlLike.prototype.hasError = function (errorCode, path) { };
     /**
      * @return {?}
      */
-    FormControlLike.prototype.markAllAsTouched = function () { };
-    /**
-     * @param {?=} opts
-     * @return {?}
-     */
-    FormControlLike.prototype.markAsDirty = function (opts) { };
+    AbstractControlLike.prototype.markAllAsTouched = function () { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.markAsPending = function (opts) { };
+    AbstractControlLike.prototype.markAsDirty = function (opts) { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.markAsPristine = function (opts) { };
+    AbstractControlLike.prototype.markAsPending = function (opts) { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.markAsTouched = function (opts) { };
+    AbstractControlLike.prototype.markAsPristine = function (opts) { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.markAsUntouched = function (opts) { };
+    AbstractControlLike.prototype.markAsTouched = function (opts) { };
+    /**
+     * @param {?=} opts
+     * @return {?}
+     */
+    AbstractControlLike.prototype.markAsUntouched = function (opts) { };
     /**
      * @param {?} value
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.patchValue = function (value, options) { };
+    AbstractControlLike.prototype.patchValue = function (value, options) { };
     /**
      * @param {?=} value
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.reset = function (value, options) { };
+    AbstractControlLike.prototype.reset = function (value, options) { };
     /**
      * @param {?} newValidator
      * @return {?}
      */
-    FormControlLike.prototype.setAsyncValidators = function (newValidator) { };
+    AbstractControlLike.prototype.setAsyncValidators = function (newValidator) { };
     /**
      * @param {?} errors
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.setErrors = function (errors, opts) { };
+    AbstractControlLike.prototype.setErrors = function (errors, opts) { };
     /**
      * @param {?} parent
      * @return {?}
      */
-    FormControlLike.prototype.setParent = function (parent) { };
+    AbstractControlLike.prototype.setParent = function (parent) { };
     /**
      * @param {?} newValidator
      * @return {?}
      */
-    FormControlLike.prototype.setValidators = function (newValidator) { };
+    AbstractControlLike.prototype.setValidators = function (newValidator) { };
     /**
      * @param {?} value
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.setValue = function (value, options) { };
+    AbstractControlLike.prototype.setValue = function (value, options) { };
     /**
      * @param {?=} opts
      * @return {?}
      */
-    FormControlLike.prototype.updateValueAndValidity = function (opts) { };
+    AbstractControlLike.prototype.updateValueAndValidity = function (opts) { };
     /**
      * @param {?} value
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.patchValue = function (value, options) { };
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-    FormControlLike.prototype.registerOnChange = function (fn) { };
-    /**
-     * @param {?} fn
-     * @return {?}
-     */
-    FormControlLike.prototype.registerOnDisabledChange = function (fn) { };
+    AbstractControlLike.prototype.patchValue = function (value, options) { };
     /**
      * @param {?=} formState
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.reset = function (formState, options) { };
+    AbstractControlLike.prototype.reset = function (formState, options) { };
     /**
      * @param {?} value
      * @param {?=} options
      * @return {?}
      */
-    FormControlLike.prototype.setValue = function (value, options) { };
+    AbstractControlLike.prototype.setValue = function (value, options) { };
 }
 
 /**
