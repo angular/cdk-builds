@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementDimensions } from './element-dimensions';
-import { ModifierKeys } from './event-objects';
+import { ModifierKeys } from './fake-events';
 /** An enum of non-text keys that can be used with the `sendKeys` method. */
 export declare enum TestKey {
     BACKSPACE = 0,
