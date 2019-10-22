@@ -2930,7 +2930,6 @@
         Overlay,
         OverlayPositionBuilder,
         OVERLAY_KEYBOARD_DISPATCHER_PROVIDER,
-        i1.VIEWPORT_RULER_PROVIDER,
         OVERLAY_CONTAINER_PROVIDER,
         CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
     ];
@@ -3031,7 +3030,6 @@
      */
 
     exports.ViewportRuler = i1.ViewportRuler;
-    exports.VIEWPORT_RULER_PROVIDER = i1.VIEWPORT_RULER_PROVIDER;
     exports.CdkScrollable = i1.CdkScrollable;
     exports.ScrollDispatcher = i1.ScrollDispatcher;
     exports.ɵangular_material_src_cdk_overlay_overlay_g = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;

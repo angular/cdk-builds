@@ -350,17 +350,6 @@
         ScrollDispatcher.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
         return ScrollDispatcher;
     }());
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-        return parentDispatcher || new ScrollDispatcher(ngZone, platform);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var SCROLL_DISPATCHER_PROVIDER = {
-        // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
-        provide: ScrollDispatcher,
-        deps: [[new i0.Optional(), new i0.SkipSelf(), ScrollDispatcher], i0.NgZone, i1.Platform],
-        useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -1270,21 +1259,6 @@
         ];
         return ScrollingModule;
     }());
-    /**
-     * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
-     * @breaking-change 8.0.0 delete this alias
-     */
-    var ScrollDispatchModule = /** @class */ (function () {
-        function ScrollDispatchModule() {
-        }
-        ScrollDispatchModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        imports: [ScrollingModule],
-                        exports: [ScrollingModule],
-                    },] }
-        ];
-        return ScrollDispatchModule;
-    }());
 
     /**
      * @license
@@ -1395,17 +1369,6 @@
         ViewportRuler.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
         return ViewportRuler;
     }());
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
-        return parentRuler || new ViewportRuler(platform, ngZone);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var VIEWPORT_RULER_PROVIDER = {
-        // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
-        provide: ViewportRuler,
-        deps: [[new i0.Optional(), new i0.SkipSelf(), ViewportRuler], i1.Platform, i0.NgZone],
-        useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -1424,15 +1387,10 @@
     exports.CdkFixedSizeVirtualScroll = CdkFixedSizeVirtualScroll;
     exports.DEFAULT_SCROLL_TIME = DEFAULT_SCROLL_TIME;
     exports.ScrollDispatcher = ScrollDispatcher;
-    exports.SCROLL_DISPATCHER_PROVIDER_FACTORY = SCROLL_DISPATCHER_PROVIDER_FACTORY;
-    exports.SCROLL_DISPATCHER_PROVIDER = SCROLL_DISPATCHER_PROVIDER;
     exports.CdkScrollable = CdkScrollable;
     exports.ScrollingModule = ScrollingModule;
-    exports.ScrollDispatchModule = ScrollDispatchModule;
     exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;
     exports.ViewportRuler = ViewportRuler;
-    exports.VIEWPORT_RULER_PROVIDER_FACTORY = VIEWPORT_RULER_PROVIDER_FACTORY;
-    exports.VIEWPORT_RULER_PROVIDER = VIEWPORT_RULER_PROVIDER;
     exports.CdkVirtualForOf = CdkVirtualForOf;
     exports.VIRTUAL_SCROLL_STRATEGY = VIRTUAL_SCROLL_STRATEGY;
     exports.CdkVirtualScrollViewport = CdkVirtualScrollViewport;

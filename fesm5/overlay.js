@@ -1,6 +1,6 @@
 import { __values, __assign, __extends } from 'tslib';
-import { ScrollDispatcher, ViewportRuler, ScrollingModule, VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';
-export { ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
+export { ViewportRuler, CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
 import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -2937,7 +2937,6 @@ var OVERLAY_PROVIDERS = [
     Overlay,
     OverlayPositionBuilder,
     OVERLAY_KEYBOARD_DISPATCHER_PROVIDER,
-    VIEWPORT_RULER_PROVIDER,
     OVERLAY_CONTAINER_PROVIDER,
     CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];

@@ -1,5 +1,5 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, ElementRef, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, merge } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
@@ -353,17 +353,6 @@ var ScrollDispatcher = /** @class */ (function () {
     ScrollDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
     return ScrollDispatcher;
 }());
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-    return parentDispatcher || new ScrollDispatcher(ngZone, platform);
-}
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-var SCROLL_DISPATCHER_PROVIDER = {
-    // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
-    provide: ScrollDispatcher,
-    deps: [[new Optional(), new SkipSelf(), ScrollDispatcher], NgZone, Platform],
-    useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
-};
 
 /**
  * @license
@@ -1273,21 +1262,6 @@ var ScrollingModule = /** @class */ (function () {
     ];
     return ScrollingModule;
 }());
-/**
- * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * @breaking-change 8.0.0 delete this alias
- */
-var ScrollDispatchModule = /** @class */ (function () {
-    function ScrollDispatchModule() {
-    }
-    ScrollDispatchModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [ScrollingModule],
-                    exports: [ScrollingModule],
-                },] }
-    ];
-    return ScrollDispatchModule;
-}());
 
 /**
  * @license
@@ -1398,17 +1372,6 @@ var ViewportRuler = /** @class */ (function () {
     ViewportRuler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
-    return parentRuler || new ViewportRuler(platform, ngZone);
-}
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-var VIEWPORT_RULER_PROVIDER = {
-    // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
-    provide: ViewportRuler,
-    deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone],
-    useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
-};
 
 /**
  * @license
@@ -1422,5 +1385,5 @@ var VIEWPORT_RULER_PROVIDER = {
  * Generated bundle index. Do not edit.
  */
 
-export { FixedSizeVirtualScrollStrategy, _fixedSizeVirtualScrollStrategyFactory, CdkFixedSizeVirtualScroll, DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER_FACTORY, SCROLL_DISPATCHER_PROVIDER, CdkScrollable, ScrollingModule, ScrollDispatchModule, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER_FACTORY, VIEWPORT_RULER_PROVIDER, CdkVirtualForOf, VIRTUAL_SCROLL_STRATEGY, CdkVirtualScrollViewport };
+export { FixedSizeVirtualScrollStrategy, _fixedSizeVirtualScrollStrategyFactory, CdkFixedSizeVirtualScroll, DEFAULT_SCROLL_TIME, ScrollDispatcher, CdkScrollable, ScrollingModule, DEFAULT_RESIZE_TIME, ViewportRuler, CdkVirtualForOf, VIRTUAL_SCROLL_STRATEGY, CdkVirtualScrollViewport };
 //# sourceMappingURL=scrolling.js.map

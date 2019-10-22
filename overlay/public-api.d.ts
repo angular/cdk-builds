@@ -22,4 +22,3 @@ export { PositionStrategy } from './position/position-strategy';
 export { GlobalPositionStrategy } from './position/global-position-strategy';
 export { ConnectedPositionStrategy } from './position/connected-position-strategy';
 export { ConnectedPosition, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, } from './position/flexible-connected-position-strategy';
-export { VIEWPORT_RULER_PROVIDER } from '@angular/cdk/scrolling';

@@ -1,5 +1,5 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, NgModule } from '@angular/core';
+import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, ElementRef, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, merge } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
@@ -604,26 +604,6 @@ if (false) {
      */
     ScrollDispatcher.prototype._platform;
 }
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentDispatcher
- * @param {?} ngZone
- * @param {?} platform
- * @return {?}
- */
-function SCROLL_DISPATCHER_PROVIDER_FACTORY(parentDispatcher, ngZone, platform) {
-    return parentDispatcher || new ScrollDispatcher(ngZone, platform);
-}
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @type {?}
- */
-const SCROLL_DISPATCHER_PROVIDER = {
-    // If there is already a ScrollDispatcher available, use that. Otherwise, provide a new one.
-    provide: ScrollDispatcher,
-    deps: [[new Optional(), new SkipSelf(), ScrollDispatcher], NgZone, Platform],
-    useFactory: SCROLL_DISPATCHER_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2042,18 +2022,6 @@ ScrollingModule.decorators = [
                 ],
             },] }
 ];
-/**
- * @deprecated ScrollDispatchModule has been renamed to ScrollingModule.
- * \@breaking-change 8.0.0 delete this alias
- */
-class ScrollDispatchModule {
-}
-ScrollDispatchModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [ScrollingModule],
-                exports: [ScrollingModule],
-            },] }
-];
 
 /**
  * @fileoverview added by tsickle
@@ -2230,26 +2198,6 @@ if (false) {
      */
     ViewportRuler.prototype._platform;
 }
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @param {?} parentRuler
- * @param {?} platform
- * @param {?} ngZone
- * @return {?}
- */
-function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, platform, ngZone) {
-    return parentRuler || new ViewportRuler(platform, ngZone);
-}
-/**
- * \@docs-private \@deprecated \@breaking-change 8.0.0
- * @type {?}
- */
-const VIEWPORT_RULER_PROVIDER = {
-    // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
-    provide: ViewportRuler,
-    deps: [[new Optional(), new SkipSelf(), ViewportRuler], Platform, NgZone],
-    useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
-};
 
 /**
  * @fileoverview added by tsickle
@@ -2260,5 +2208,5 @@ const VIEWPORT_RULER_PROVIDER = {
  * Generated bundle index. Do not edit.
  */
 
-export { _fixedSizeVirtualScrollStrategyFactory, FixedSizeVirtualScrollStrategy, CdkFixedSizeVirtualScroll, SCROLL_DISPATCHER_PROVIDER_FACTORY, DEFAULT_SCROLL_TIME, ScrollDispatcher, SCROLL_DISPATCHER_PROVIDER, CdkScrollable, ScrollingModule, ScrollDispatchModule, VIEWPORT_RULER_PROVIDER_FACTORY, DEFAULT_RESIZE_TIME, ViewportRuler, VIEWPORT_RULER_PROVIDER, CdkVirtualForOf, VIRTUAL_SCROLL_STRATEGY, CdkVirtualScrollViewport };
+export { _fixedSizeVirtualScrollStrategyFactory, FixedSizeVirtualScrollStrategy, CdkFixedSizeVirtualScroll, DEFAULT_SCROLL_TIME, ScrollDispatcher, CdkScrollable, ScrollingModule, DEFAULT_RESIZE_TIME, ViewportRuler, CdkVirtualForOf, VIRTUAL_SCROLL_STRATEGY, CdkVirtualScrollViewport };
 //# sourceMappingURL=scrolling.js.map
