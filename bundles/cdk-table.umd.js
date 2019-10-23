@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', 'tslib', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.tslib, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, function (exports, tslib_1, bidi, coercion, collections, platform, common, core, rxjs, operators) { 'use strict';
+}(this, function (exports, tslib, bidi, coercion, collections, platform, common, core, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -19,13 +19,13 @@
      */
     function mixinHasStickyInput(base) {
         return /** @class */ (function (_super) {
-            tslib_1.__extends(class_1, _super);
+            tslib.__extends(class_1, _super);
             function class_1() {
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
-                var _this = _super.apply(this, tslib_1.__spread(args)) || this;
+                var _this = _super.apply(this, tslib.__spread(args)) || this;
                 _this._sticky = false;
                 /** Whether the sticky input has changed since it was last checked. */
                 _this._hasStickyChanged = false;
@@ -127,7 +127,7 @@
      * Defines a set of cells available for a table column.
      */
     var CdkColumnDef = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkColumnDef, _super);
+        tslib.__extends(CdkColumnDef, _super);
         function CdkColumnDef() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this._stickyEnd = false;
@@ -193,7 +193,7 @@
     }());
     /** Header cell template container that adds the right classes and role. */
     var CdkHeaderCell = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkHeaderCell, _super);
+        tslib.__extends(CdkHeaderCell, _super);
         function CdkHeaderCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
@@ -215,7 +215,7 @@
     }(BaseCdkCell));
     /** Footer cell template container that adds the right classes and role. */
     var CdkFooterCell = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkFooterCell, _super);
+        tslib.__extends(CdkFooterCell, _super);
         function CdkFooterCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
@@ -237,7 +237,7 @@
     }(BaseCdkCell));
     /** Cell template container that adds the right classes and role. */
     var CdkCell = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkCell, _super);
+        tslib.__extends(CdkCell, _super);
         function CdkCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
@@ -313,7 +313,7 @@
     // Boilerplate for applying mixins to CdkHeaderRowDef.
     /** @docs-private */
     var CdkHeaderRowDefBase = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkHeaderRowDefBase, _super);
+        tslib.__extends(CdkHeaderRowDefBase, _super);
         function CdkHeaderRowDefBase() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -325,7 +325,7 @@
      * Captures the header row's template and other header properties such as the columns to display.
      */
     var CdkHeaderRowDef = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkHeaderRowDef, _super);
+        tslib.__extends(CdkHeaderRowDef, _super);
         function CdkHeaderRowDef(template, _differs) {
             return _super.call(this, template, _differs) || this;
         }
@@ -350,7 +350,7 @@
     // Boilerplate for applying mixins to CdkFooterRowDef.
     /** @docs-private */
     var CdkFooterRowDefBase = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkFooterRowDefBase, _super);
+        tslib.__extends(CdkFooterRowDefBase, _super);
         function CdkFooterRowDefBase() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -362,7 +362,7 @@
      * Captures the footer row's template and other footer properties such as the columns to display.
      */
     var CdkFooterRowDef = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkFooterRowDef, _super);
+        tslib.__extends(CdkFooterRowDef, _super);
         function CdkFooterRowDef(template, _differs) {
             return _super.call(this, template, _differs) || this;
         }
@@ -390,7 +390,7 @@
      * a when predicate that describes when this row should be used.
      */
     var CdkRowDef = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkRowDef, _super);
+        tslib.__extends(CdkRowDef, _super);
         // TODO(andrewseguin): Add an input for providing a switch function to determine
         //   if this template should be used.
         function CdkRowDef(template, _differs) {
@@ -548,7 +548,7 @@
         StickyStyler.prototype.clearStickyPositioning = function (rows, stickyDirections) {
             var e_1, _a;
             try {
-                for (var rows_1 = tslib_1.__values(rows), rows_1_1 = rows_1.next(); !rows_1_1.done; rows_1_1 = rows_1.next()) {
+                for (var rows_1 = tslib.__values(rows), rows_1_1 = rows_1.next(); !rows_1_1.done; rows_1_1 = rows_1.next()) {
                     var row = rows_1_1.value;
                     // If the row isn't an element (e.g. if it's an `ng-container`),
                     // it won't have inline styles or `children` so we skip it.
@@ -592,7 +592,7 @@
             var endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
             var isRtl = this.direction === 'rtl';
             try {
-                for (var rows_2 = tslib_1.__values(rows), rows_2_1 = rows_2.next(); !rows_2_1.done; rows_2_1 = rows_2.next()) {
+                for (var rows_2 = tslib.__values(rows), rows_2_1 = rows_2.next(); !rows_2_1.done; rows_2_1 = rows_2.next()) {
                     var row = rows_2_1.value;
                     for (var i = 0; i < numCells; i++) {
                         var cell = row.children[i];
@@ -682,7 +682,7 @@
         StickyStyler.prototype._removeStickyStyle = function (element, stickyDirections) {
             var e_3, _a;
             try {
-                for (var stickyDirections_1 = tslib_1.__values(stickyDirections), stickyDirections_1_1 = stickyDirections_1.next(); !stickyDirections_1_1.done; stickyDirections_1_1 = stickyDirections_1.next()) {
+                for (var stickyDirections_1 = tslib.__values(stickyDirections), stickyDirections_1_1 = stickyDirections_1.next(); !stickyDirections_1_1.done; stickyDirections_1_1 = stickyDirections_1.next()) {
                     var dir = stickyDirections_1_1.value;
                     element.style[dir] = '';
                 }
@@ -735,8 +735,11 @@
             };
             var zIndex = 0;
             try {
-                for (var STICKY_DIRECTIONS_1 = tslib_1.__values(STICKY_DIRECTIONS), STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next(); !STICKY_DIRECTIONS_1_1.done; STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next()) {
-                    var dir = STICKY_DIRECTIONS_1_1.value;
+                // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
+                // loses the array generic type in the `for of`. But we *also* have to use `Array` because
+                // typescript won't iterate over an `Iterable` unless you compile with `--downlevelIteration`
+                for (var _b = tslib.__values(STICKY_DIRECTIONS), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var dir = _c.value;
                     if (element.style[dir]) {
                         zIndex += zIndexIncrements[dir];
                     }
@@ -745,7 +748,7 @@
             catch (e_4_1) { e_4 = { error: e_4_1 }; }
             finally {
                 try {
-                    if (STICKY_DIRECTIONS_1_1 && !STICKY_DIRECTIONS_1_1.done && (_a = STICKY_DIRECTIONS_1.return)) _a.call(STICKY_DIRECTIONS_1);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_4) throw e_4.error; }
             }
@@ -941,7 +944,7 @@
      * @docs-private
      */
     var RowViewRef = /** @class */ (function (_super) {
-        tslib_1.__extends(RowViewRef, _super);
+        tslib.__extends(RowViewRef, _super);
         function RowViewRef() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -1322,7 +1325,7 @@
             var footerRows = this._getRenderedRows(this._footerRowOutlet);
             // Clear the left and right positioning from all columns in the table across all rows since
             // sticky columns span across all table sections (header, data, footer)
-            this._stickyStyler.clearStickyPositioning(tslib_1.__spread(headerRows, dataRows, footerRows), ['left', 'right']);
+            this._stickyStyler.clearStickyPositioning(tslib.__spread(headerRows, dataRows, footerRows), ['left', 'right']);
             // Update the sticky styles for each header row depending on the def's sticky state
             headerRows.forEach(function (headerRow, i) {
                 _this._addStickyColumnStyles([headerRow], _this._headerRowDefs[i]);
@@ -1586,7 +1589,7 @@
             // TODO(andrewseguin): enforce that one outlet was instantiated from createEmbeddedView
             outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
             try {
-                for (var _b = tslib_1.__values(this._getCellTemplates(rowDef)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                for (var _b = tslib.__values(this._getCellTemplates(rowDef)), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var cellTemplate = _c.value;
                     if (CdkCellOutlet.mostRecentCellOutlet) {
                         CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cellTemplate, context);
@@ -1649,7 +1652,7 @@
                 { tag: 'tfoot', outlet: this._footerRowOutlet },
             ];
             try {
-                for (var sections_1 = tslib_1.__values(sections), sections_1_1 = sections_1.next(); !sections_1_1.done; sections_1_1 = sections_1.next()) {
+                for (var sections_1 = tslib.__values(sections), sections_1_1 = sections_1.next(); !sections_1_1.done; sections_1_1 = sections_1.next()) {
                     var section = sections_1_1.value;
                     var element = this._document.createElement(section.tag);
                     element.setAttribute('role', 'rowgroup');

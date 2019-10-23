@@ -128,7 +128,7 @@ var InteractivityChecker = /** @class */ (function () {
     InteractivityChecker.ctorParameters = function () { return [
         { type: Platform }
     ]; };
-    InteractivityChecker.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
+    InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
 }());
 export { InteractivityChecker };

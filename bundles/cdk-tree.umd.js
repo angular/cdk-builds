@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', 'tslib', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.tslib, global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.a11y, global.ng.common));
-}(this, function (exports, tslib_1, collections, rxjs, operators, core, bidi, coercion, a11y, common) { 'use strict';
+}(this, function (exports, tslib, collections, rxjs, operators, core, bidi, coercion, a11y, common) { 'use strict';
 
     /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
     var BaseTreeControl = /** @class */ (function () {
@@ -40,15 +40,15 @@
         BaseTreeControl.prototype.expandDescendants = function (dataNode) {
             var _a;
             var toBeProcessed = [dataNode];
-            toBeProcessed.push.apply(toBeProcessed, tslib_1.__spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).select.apply(_a, tslib_1.__spread(toBeProcessed));
+            toBeProcessed.push.apply(toBeProcessed, tslib.__spread(this.getDescendants(dataNode)));
+            (_a = this.expansionModel).select.apply(_a, tslib.__spread(toBeProcessed));
         };
         /** Collapses a subtree rooted at given data node recursively. */
         BaseTreeControl.prototype.collapseDescendants = function (dataNode) {
             var _a;
             var toBeProcessed = [dataNode];
-            toBeProcessed.push.apply(toBeProcessed, tslib_1.__spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).deselect.apply(_a, tslib_1.__spread(toBeProcessed));
+            toBeProcessed.push.apply(toBeProcessed, tslib.__spread(this.getDescendants(dataNode)));
+            (_a = this.expansionModel).deselect.apply(_a, tslib.__spread(toBeProcessed));
         };
         return BaseTreeControl;
     }());
@@ -62,7 +62,7 @@
      */
     /** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */
     var FlatTreeControl = /** @class */ (function (_super) {
-        tslib_1.__extends(FlatTreeControl, _super);
+        tslib.__extends(FlatTreeControl, _super);
         /** Construct with flat tree data node functions getLevel and isExpandable. */
         function FlatTreeControl(getLevel, isExpandable) {
             var _this = _super.call(this) || this;
@@ -98,14 +98,14 @@
          */
         FlatTreeControl.prototype.expandAll = function () {
             var _a;
-            (_a = this.expansionModel).select.apply(_a, tslib_1.__spread(this.dataNodes));
+            (_a = this.expansionModel).select.apply(_a, tslib.__spread(this.dataNodes));
         };
         return FlatTreeControl;
     }(BaseTreeControl));
 
     /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
     var NestedTreeControl = /** @class */ (function (_super) {
-        tslib_1.__extends(NestedTreeControl, _super);
+        tslib.__extends(NestedTreeControl, _super);
         /** Construct with nested tree function getChildren. */
         function NestedTreeControl(getChildren) {
             var _this = _super.call(this) || this;
@@ -123,9 +123,9 @@
             var _this = this;
             this.expansionModel.clear();
             var allNodes = this.dataNodes.reduce(function (accumulator, dataNode) {
-                return tslib_1.__spread(accumulator, _this.getDescendants(dataNode), [dataNode]);
+                return tslib.__spread(accumulator, _this.getDescendants(dataNode), [dataNode]);
             }, []);
-            (_a = this.expansionModel).select.apply(_a, tslib_1.__spread(allNodes));
+            (_a = this.expansionModel).select.apply(_a, tslib.__spread(allNodes));
         };
         /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
         NestedTreeControl.prototype.getDescendants = function (dataNode) {
@@ -149,7 +149,7 @@
                     .subscribe(function (children) {
                     var e_1, _a;
                     try {
-                        for (var children_1 = tslib_1.__values(children), children_1_1 = children_1.next(); !children_1_1.done; children_1_1 = children_1.next()) {
+                        for (var children_1 = tslib.__values(children), children_1_1 = children_1.next(); !children_1_1.done; children_1_1 = children_1.next()) {
                             var child = children_1_1.value;
                             _this._getDescendants(descendants, child);
                         }
@@ -624,7 +624,7 @@
      *   ```
      */
     var CdkNestedTreeNode = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkNestedTreeNode, _super);
+        tslib.__extends(CdkNestedTreeNode, _super);
         function CdkNestedTreeNode(_elementRef, _tree, _differs) {
             var _this = _super.call(this, _elementRef, _tree) || this;
             _this._elementRef = _elementRef;

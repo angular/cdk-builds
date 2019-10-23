@@ -110,7 +110,7 @@ var ViewportRuler = /** @class */ (function () {
         { type: Platform },
         { type: NgZone }
     ]; };
-    ViewportRuler.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+    ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
 export { ViewportRuler };

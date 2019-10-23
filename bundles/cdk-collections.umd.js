@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('rxjs'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/collections', ['exports', 'tslib', 'rxjs', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.collections = {}), global.tslib, global.rxjs, global.ng.core));
-}(this, function (exports, tslib_1, rxjs, i0) { 'use strict';
+}(this, function (exports, tslib, rxjs, i0) { 'use strict';
 
     /**
      * @license
@@ -33,7 +33,7 @@
      */
     /** DataSource wrapper for a native array. */
     var ArrayDataSource = /** @class */ (function (_super) {
-        tslib_1.__extends(ArrayDataSource, _super);
+        tslib.__extends(ArrayDataSource, _super);
         function ArrayDataSource(_data) {
             var _this = _super.call(this) || this;
             _this._data = _data;
@@ -247,7 +247,7 @@
         UniqueSelectionDispatcher.prototype.notify = function (id, name) {
             var e_1, _a;
             try {
-                for (var _b = tslib_1.__values(this._listeners), _c = _b.next(); !_c.done; _c = _b.next()) {
+                for (var _b = tslib.__values(this._listeners), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var listener = _c.value;
                     listener(id, name);
                 }
@@ -279,7 +279,7 @@
         UniqueSelectionDispatcher.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        UniqueSelectionDispatcher.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+        UniqueSelectionDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
         return UniqueSelectionDispatcher;
     }());
 

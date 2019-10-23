@@ -350,7 +350,7 @@ var ScrollDispatcher = /** @class */ (function () {
         { type: NgZone },
         { type: Platform }
     ]; };
-    ScrollDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+    ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
     return ScrollDispatcher;
 }());
 
@@ -1369,7 +1369,7 @@ var ViewportRuler = /** @class */ (function () {
         { type: Platform },
         { type: NgZone }
     ]; };
-    ViewportRuler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
+    ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
 

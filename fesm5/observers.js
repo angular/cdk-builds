@@ -23,7 +23,7 @@ var MutationObserverFactory = /** @class */ (function () {
     MutationObserverFactory.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    MutationObserverFactory.ngInjectableDef = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 }());
 /** An injectable service that allows watching elements for changes to their content. */
@@ -101,7 +101,7 @@ var ContentObserver = /** @class */ (function () {
     ContentObserver.ctorParameters = function () { return [
         { type: MutationObserverFactory }
     ]; };
-    ContentObserver.ngInjectableDef = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     return ContentObserver;
 }());
 /**

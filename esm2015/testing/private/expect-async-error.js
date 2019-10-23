@@ -5,13 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 /**
  * Expects the asynchronous function to throw an error that matches
  * the specified expectation.
  */
 export function expectAsyncError(fn, expectation) {
-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+    return __awaiter(this, void 0, void 0, function* () {
         let error = null;
         try {
             yield fn();

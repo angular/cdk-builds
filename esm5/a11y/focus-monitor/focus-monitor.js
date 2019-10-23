@@ -300,7 +300,7 @@ var FocusMonitor = /** @class */ (function () {
         { type: NgZone },
         { type: Platform }
     ]; };
-    FocusMonitor.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: FocusMonitor, providedIn: "root" });
+    FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 export { FocusMonitor };

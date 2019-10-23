@@ -740,8 +740,11 @@ var StickyStyler = /** @class */ (function () {
         };
         var zIndex = 0;
         try {
-            for (var STICKY_DIRECTIONS_1 = __values(STICKY_DIRECTIONS), STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next(); !STICKY_DIRECTIONS_1_1.done; STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next()) {
-                var dir = STICKY_DIRECTIONS_1_1.value;
+            // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
+            // loses the array generic type in the `for of`. But we *also* have to use `Array` because
+            // typescript won't iterate over an `Iterable` unless you compile with `--downlevelIteration`
+            for (var _b = __values(STICKY_DIRECTIONS), _c = _b.next(); !_c.done; _c = _b.next()) {
+                var dir = _c.value;
                 if (element.style[dir]) {
                     zIndex += zIndexIncrements[dir];
                 }
@@ -750,7 +753,7 @@ var StickyStyler = /** @class */ (function () {
         catch (e_4_1) { e_4 = { error: e_4_1 }; }
         finally {
             try {
-                if (STICKY_DIRECTIONS_1_1 && !STICKY_DIRECTIONS_1_1.done && (_a = STICKY_DIRECTIONS_1.return)) _a.call(STICKY_DIRECTIONS_1);
+                if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
             }
             finally { if (e_4) throw e_4.error; }
         }

@@ -8,3 +8,4 @@
 export * from './clipboard';
 export * from './clipboard-module';
 export * from './copy-to-clipboard';
+export * from './pending-copy';

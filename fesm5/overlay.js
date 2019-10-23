@@ -328,7 +328,7 @@ var ScrollStrategyOptions = /** @class */ (function () {
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    ScrollStrategyOptions.ngInjectableDef = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
 }());
 
@@ -366,6 +366,9 @@ var OverlayConfig = /** @class */ (function () {
          */
         this.disposeOnNavigation = false;
         if (config) {
+            // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
+            // loses the array generic type in the `for of`. But we *also* have to use `Array` because
+            // typescript won't iterate over an `Iterable` unless you compile with `--downlevelIteration`
             var configKeys = Object.keys(config);
             try {
                 for (var configKeys_1 = __values(configKeys), configKeys_1_1 = configKeys_1.next(); !configKeys_1_1.done; configKeys_1_1 = configKeys_1.next()) {
@@ -565,7 +568,7 @@ var OverlayKeyboardDispatcher = /** @class */ (function () {
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    OverlayKeyboardDispatcher.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
 }());
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -638,7 +641,7 @@ var OverlayContainer = /** @class */ (function () {
     OverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    OverlayContainer.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+    OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
 }());
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -887,12 +890,12 @@ var OverlayRef = /** @class */ (function () {
     };
     /** Update the size properties of the overlay. */
     OverlayRef.prototype.updateSize = function (sizeConfig) {
-        this._config = __assign({}, this._config, sizeConfig);
+        this._config = __assign(__assign({}, this._config), sizeConfig);
         this._updateElementSize();
     };
     /** Sets the LTR/RTL direction for the overlay. */
     OverlayRef.prototype.setDirection = function (dir) {
-        this._config = __assign({}, this._config, { direction: dir });
+        this._config = __assign(__assign({}, this._config), { direction: dir });
         this._updateElementDirection();
     };
     /** Add a CSS class or an array of classes to the overlay pane. */
@@ -2440,7 +2443,7 @@ var OverlayPositionBuilder = /** @class */ (function () {
         { type: Platform },
         { type: OverlayContainer }
     ]; };
-    OverlayPositionBuilder.ngInjectableDef = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 }());
 
@@ -3020,7 +3023,7 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     FullscreenOverlayContainer.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    FullscreenOverlayContainer.ngInjectableDef = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

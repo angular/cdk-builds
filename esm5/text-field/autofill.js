@@ -86,7 +86,7 @@ var AutofillMonitor = /** @class */ (function () {
         { type: Platform },
         { type: NgZone }
     ]; };
-    AutofillMonitor.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+    AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     return AutofillMonitor;
 }());
 export { AutofillMonitor };

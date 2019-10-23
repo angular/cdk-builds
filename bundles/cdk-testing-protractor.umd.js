@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('protractor'), require('@angular/cdk/testing')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/protractor', ['exports', 'tslib', 'protractor', '@angular/cdk/testing'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.tslib, global.protractor, global.ng.cdk.testing));
-}(this, function (exports, tslib_1, protractor, testing) { 'use strict';
+}(this, function (exports, tslib, protractor, testing) { 'use strict';
 
     /**
      * @license
@@ -115,15 +115,15 @@
             this.element = element;
         }
         ProtractorElement.prototype.blur = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript('arguments[0].blur()', this.element)];
                 });
             });
         };
         ProtractorElement.prototype.clear = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.element.clear()];
                 });
             });
@@ -131,9 +131,9 @@
         ProtractorElement.prototype.click = function (relativeX, relativeY) {
             if (relativeX === void 0) { relativeX = 0; }
             if (relativeY === void 0) { relativeY = 0; }
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a, _b;
-                return tslib_1.__generator(this, function (_c) {
+                return tslib.__generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
                             _b = (_a = protractor.browser.actions()).mouseMove;
@@ -149,23 +149,23 @@
             });
         };
         ProtractorElement.prototype.focus = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript('arguments[0].focus()', this.element)];
                 });
             });
         };
         ProtractorElement.prototype.getCssValue = function (property) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.element.getCssValue(property)];
                 });
             });
         };
         ProtractorElement.prototype.hover = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a, _b;
-                return tslib_1.__generator(this, function (_c) {
+                return tslib.__generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
                             _b = (_a = protractor.browser.actions()).mouseMove;
@@ -181,10 +181,10 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 modifiersAndKeys[_i] = arguments[_i];
             }
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var first, modifiers, rest, modifierKeys, keys;
                 var _a;
-                return tslib_1.__generator(this, function (_b) {
+                return tslib.__generator(this, function (_b) {
                     first = modifiersAndKeys[0];
                     if (typeof first !== 'string' && typeof first !== 'number') {
                         modifiers = first;
@@ -197,29 +197,29 @@
                     modifierKeys = toProtractorModifierKeys(modifiers);
                     keys = rest.map(function (k) { return typeof k === 'string' ? k.split('') : [keyMap[k]]; })
                         .reduce(function (arr, k) { return arr.concat(k); }, [])
-                        .map(function (k) { return protractor.Key.chord.apply(protractor.Key, tslib_1.__spread(modifierKeys, [k])); });
-                    return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, tslib_1.__spread(keys))];
+                        .map(function (k) { return protractor.Key.chord.apply(protractor.Key, tslib.__spread(modifierKeys, [k])); });
+                    return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, tslib.__spread(keys))];
                 });
             });
         };
         ProtractorElement.prototype.text = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.element.getText()];
                 });
             });
         };
         ProtractorElement.prototype.getAttribute = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript("return arguments[0].getAttribute(arguments[1])", this.element, name)];
                 });
             });
         };
         ProtractorElement.prototype.hasClass = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var classes;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.getAttribute('class')];
                         case 1:
@@ -230,9 +230,9 @@
             });
         };
         ProtractorElement.prototype.getDimensions = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a, width, height, _b, left, top;
-                return tslib_1.__generator(this, function (_c) {
+                return tslib.__generator(this, function (_c) {
                     switch (_c.label) {
                         case 0: return [4 /*yield*/, this.element.getSize()];
                         case 1:
@@ -246,15 +246,15 @@
             });
         };
         ProtractorElement.prototype.getProperty = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript("return arguments[0][arguments[1]]", this.element, name)];
                 });
             });
         };
         ProtractorElement.prototype.matchesSelector = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript("\n          return (Element.prototype.matches ||\n                  Element.prototype.msMatchesSelector).call(arguments[0], arguments[1])\n          ", this.element, selector)];
                 });
             });
@@ -271,7 +271,7 @@
      */
     /** A `HarnessEnvironment` implementation for Protractor. */
     var ProtractorHarnessEnvironment = /** @class */ (function (_super) {
-        tslib_1.__extends(ProtractorHarnessEnvironment, _super);
+        tslib.__extends(ProtractorHarnessEnvironment, _super);
         function ProtractorHarnessEnvironment(rawRootElement) {
             return _super.call(this, rawRootElement) || this;
         }
@@ -280,13 +280,13 @@
             return new ProtractorHarnessEnvironment(protractor.element(protractor.by.css('body')));
         };
         ProtractorHarnessEnvironment.prototype.forceStabilize = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () { return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () { return tslib.__generator(this, function (_a) {
                 return [2 /*return*/];
             }); });
         };
         ProtractorHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/];
                 });
             });
@@ -301,9 +301,9 @@
             return new ProtractorHarnessEnvironment(element);
         };
         ProtractorHarnessEnvironment.prototype.getAllRawElements = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var elementFinderArray, length, elements, i;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             elementFinderArray = this.rawRootElement.all(protractor.by.css(selector));

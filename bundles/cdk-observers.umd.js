@@ -24,7 +24,7 @@
         MutationObserverFactory.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        MutationObserverFactory.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+        MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
         return MutationObserverFactory;
     }());
     /** An injectable service that allows watching elements for changes to their content. */
@@ -102,7 +102,7 @@
         ContentObserver.ctorParameters = function () { return [
             { type: MutationObserverFactory }
         ]; };
-        ContentObserver.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+        ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
         return ContentObserver;
     }());
     /**

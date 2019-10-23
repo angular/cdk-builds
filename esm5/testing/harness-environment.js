@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter, __generator } from "tslib";
 import { HarnessPredicate } from './component-harness';
 /**
  * Base harness environment class that can be extended to allow `ComponentHarness`es to be used in
@@ -24,9 +24,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     HarnessEnvironment.prototype.locatorFor = function (arg) {
         var _this = this;
-        return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return function () { return __awaiter(_this, void 0, void 0, function () {
             var _a;
-            return tslib_1.__generator(this, function (_b) {
+            return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -40,9 +40,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     HarnessEnvironment.prototype.locatorForOptional = function (arg) {
         var _this = this;
-        return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return function () { return __awaiter(_this, void 0, void 0, function () {
             var element, candidates;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -60,9 +60,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     HarnessEnvironment.prototype.locatorForAll = function (arg) {
         var _this = this;
-        return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -75,9 +75,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     // Implemented as part of the `LocatorFactory` interface.
     HarnessEnvironment.prototype.harnessLoaderFor = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var _a;
-            return tslib_1.__generator(this, function (_b) {
+            return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = this.createEnvironment;
@@ -89,9 +89,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     // Implemented as part of the `LocatorFactory` interface.
     HarnessEnvironment.prototype.harnessLoaderForOptional = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var elements;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                     case 1:
@@ -103,10 +103,10 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     // Implemented as part of the `LocatorFactory` interface.
     HarnessEnvironment.prototype.harnessLoaderForAll = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var elements;
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                     case 1:
@@ -126,9 +126,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     // Implemented as part of the `HarnessLoader` interface.
     HarnessEnvironment.prototype.getChildLoader = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var _a;
-            return tslib_1.__generator(this, function (_b) {
+            return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = this.createEnvironment;
@@ -140,9 +140,9 @@ var HarnessEnvironment = /** @class */ (function () {
     };
     // Implemented as part of the `HarnessLoader` interface.
     HarnessEnvironment.prototype.getAllChildLoaders = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                     case 1: return [2 /*return*/, (_a.sent()).map(function (e) { return _this.createEnvironment(e); })];
@@ -155,10 +155,10 @@ var HarnessEnvironment = /** @class */ (function () {
         return new harnessType(this.createEnvironment(element));
     };
     HarnessEnvironment.prototype._getAllHarnesses = function (harnessType) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var harnessPredicate, elements;
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         harnessPredicate = harnessType instanceof HarnessPredicate ?
@@ -172,9 +172,9 @@ var HarnessEnvironment = /** @class */ (function () {
         });
     };
     HarnessEnvironment.prototype._assertElementFound = function (selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var element;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                     case 1:
@@ -188,9 +188,9 @@ var HarnessEnvironment = /** @class */ (function () {
         });
     };
     HarnessEnvironment.prototype._assertHarnessFound = function (harnessType) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var harness;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this._getAllHarnesses(harnessType)];
                     case 1:

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 import { browser, Key } from 'protractor';
 import { TestKey } from '../test-element';
 /** Maps the `TestKey` constants to Protractor's `Key` constants. */
@@ -64,17 +64,17 @@ export class ProtractorElement {
         this.element = element;
     }
     blur() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript('arguments[0].blur()', this.element);
         });
     }
     clear() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.element.clear();
         });
     }
     click(relativeX = 0, relativeY = 0) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield browser.actions()
                 .mouseMove(yield this.element.getWebElement(), { x: relativeX, y: relativeY })
                 .click()
@@ -82,24 +82,24 @@ export class ProtractorElement {
         });
     }
     focus() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript('arguments[0].focus()', this.element);
         });
     }
     getCssValue(property) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.element.getCssValue(property);
         });
     }
     hover() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.actions()
                 .mouseMove(yield this.element.getWebElement())
                 .perform();
         });
     }
     sendKeys(...modifiersAndKeys) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const first = modifiersAndKeys[0];
             let modifiers;
             let rest;
@@ -119,35 +119,35 @@ export class ProtractorElement {
         });
     }
     text() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.element.getText();
         });
     }
     getAttribute(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(`return arguments[0].getAttribute(arguments[1])`, this.element, name);
         });
     }
     hasClass(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const classes = (yield this.getAttribute('class')) || '';
             return new Set(classes.split(/\s+/).filter(c => c)).has(name);
         });
     }
     getDimensions() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const { width, height } = yield this.element.getSize();
             const { x: left, y: top } = yield this.element.getLocation();
             return { width, height, left, top };
         });
     }
     getProperty(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(`return arguments[0][arguments[1]]`, this.element, name);
         });
     }
     matchesSelector(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(`
           return (Element.prototype.matches ||
                   Element.prototype.msMatchesSelector).call(arguments[0], arguments[1])

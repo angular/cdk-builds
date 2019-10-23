@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', 'tslib', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/keycodes'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.tslib, global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.keycodes));
-}(this, function (exports, tslib_1, i1, i1$1, i0, coercion, bidi, portal, rxjs, operators, i3, keycodes) { 'use strict';
+}(this, function (exports, tslib, i1, i1$1, i0, coercion, bidi, portal, rxjs, operators, i3, keycodes) { 'use strict';
 
     /**
      * @license
@@ -321,7 +321,7 @@
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        ScrollStrategyOptions.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+        ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
         return ScrollStrategyOptions;
     }());
 
@@ -359,9 +359,12 @@
              */
             this.disposeOnNavigation = false;
             if (config) {
+                // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
+                // loses the array generic type in the `for of`. But we *also* have to use `Array` because
+                // typescript won't iterate over an `Iterable` unless you compile with `--downlevelIteration`
                 var configKeys = Object.keys(config);
                 try {
-                    for (var configKeys_1 = tslib_1.__values(configKeys), configKeys_1_1 = configKeys_1.next(); !configKeys_1_1.done; configKeys_1_1 = configKeys_1.next()) {
+                    for (var configKeys_1 = tslib.__values(configKeys), configKeys_1_1 = configKeys_1.next(); !configKeys_1_1.done; configKeys_1_1 = configKeys_1.next()) {
                         var key = configKeys_1_1.value;
                         if (config[key] !== undefined) {
                             // TypeScript, as of version 3.5, sees the left-hand-side of this expression
@@ -558,7 +561,7 @@
         OverlayKeyboardDispatcher.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        OverlayKeyboardDispatcher.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+        OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
         return OverlayKeyboardDispatcher;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -631,7 +634,7 @@
         OverlayContainer.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        OverlayContainer.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+        OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
         return OverlayContainer;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -880,12 +883,12 @@
         };
         /** Update the size properties of the overlay. */
         OverlayRef.prototype.updateSize = function (sizeConfig) {
-            this._config = tslib_1.__assign({}, this._config, sizeConfig);
+            this._config = tslib.__assign(tslib.__assign({}, this._config), sizeConfig);
             this._updateElementSize();
         };
         /** Sets the LTR/RTL direction for the overlay. */
         OverlayRef.prototype.setDirection = function (dir) {
-            this._config = tslib_1.__assign({}, this._config, { direction: dir });
+            this._config = tslib.__assign(tslib.__assign({}, this._config), { direction: dir });
             this._updateElementDirection();
         };
         /** Add a CSS class or an array of classes to the overlay pane. */
@@ -1210,7 +1213,7 @@
             try {
                 // Go through each of the preferred positions looking for a good fit.
                 // If a good fit is found, it will be applied immediately.
-                for (var _c = tslib_1.__values(this._preferredPositions), _d = _c.next(); !_d.done; _d = _c.next()) {
+                for (var _c = tslib.__values(this._preferredPositions), _d = _c.next(); !_d.done; _d = _c.next()) {
                     var pos = _d.value;
                     // Get the exact (x, y) coordinate for the point-of-origin on the origin element.
                     var originPoint = this._getOriginPoint(originRect, pos);
@@ -1260,7 +1263,7 @@
                 var bestFit = null;
                 var bestScore = -1;
                 try {
-                    for (var flexibleFits_1 = tslib_1.__values(flexibleFits), flexibleFits_1_1 = flexibleFits_1.next(); !flexibleFits_1_1.done; flexibleFits_1_1 = flexibleFits_1.next()) {
+                    for (var flexibleFits_1 = tslib.__values(flexibleFits), flexibleFits_1_1 = flexibleFits_1.next(); !flexibleFits_1_1.done; flexibleFits_1_1 = flexibleFits_1.next()) {
                         var fit = flexibleFits_1_1.value;
                         var score = fit.boundingBoxRect.width * fit.boundingBoxRect.height * (fit.position.weight || 1);
                         if (score > bestScore) {
@@ -2433,7 +2436,7 @@
             { type: i3.Platform },
             { type: OverlayContainer }
         ]; };
-        OverlayPositionBuilder.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i3.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+        OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i3.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
         return OverlayPositionBuilder;
     }());
 
@@ -2942,7 +2945,7 @@
      * Should be provided in the root component.
      */
     var FullscreenOverlayContainer = /** @class */ (function (_super) {
-        tslib_1.__extends(FullscreenOverlayContainer, _super);
+        tslib.__extends(FullscreenOverlayContainer, _super);
         function FullscreenOverlayContainer(_document) {
             return _super.call(this, _document) || this;
         }
@@ -3013,7 +3016,7 @@
         FullscreenOverlayContainer.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        FullscreenOverlayContainer.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+        FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
         return FullscreenOverlayContainer;
     }(OverlayContainer));
 

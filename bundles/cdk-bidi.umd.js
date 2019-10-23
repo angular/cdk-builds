@@ -73,7 +73,7 @@
         Directionality.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [DIR_DOCUMENT,] }] }
         ]; };
-        Directionality.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+        Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
         return Directionality;
     }());
 

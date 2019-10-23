@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('tslib'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/observers')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'tslib', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/observers'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11Y = {}), global.ng.common, global.ng.core, global.tslib, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.observers));
-}(this, function (exports, i2, i0, tslib_1, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
+}(this, function (exports, i2, i0, tslib, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
 
     /**
      * @license
@@ -245,7 +245,7 @@
         AriaDescriber.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        AriaDescriber.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+        AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
         return AriaDescriber;
     }());
 
@@ -554,7 +554,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     var ActiveDescendantKeyManager = /** @class */ (function (_super) {
-        tslib_1.__extends(ActiveDescendantKeyManager, _super);
+        tslib.__extends(ActiveDescendantKeyManager, _super);
         function ActiveDescendantKeyManager() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -578,7 +578,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     var FocusKeyManager = /** @class */ (function (_super) {
-        tslib_1.__extends(FocusKeyManager, _super);
+        tslib.__extends(FocusKeyManager, _super);
         function FocusKeyManager() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this._origin = 'program';
@@ -727,7 +727,7 @@
         InteractivityChecker.ctorParameters = function () { return [
             { type: i1.Platform }
         ]; };
-        InteractivityChecker.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
+        InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
         return InteractivityChecker;
     }());
     /**
@@ -1128,7 +1128,7 @@
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        FocusTrapFactory.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+        FocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
         return FocusTrapFactory;
     }());
     /** Directive for trapping focus within a region. */
@@ -1240,7 +1240,7 @@
                 duration = args[0];
             }
             else {
-                _a = tslib_1.__read(args, 2), politeness = _a[0], duration = _a[1];
+                _a = tslib.__read(args, 2), politeness = _a[0], duration = _a[1];
             }
             this.clear();
             clearTimeout(this._previousTimeout);
@@ -1313,7 +1313,7 @@
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
         ]; };
-        LiveAnnouncer.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+        LiveAnnouncer.ɵprov = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
         return LiveAnnouncer;
     }());
     /**
@@ -1680,7 +1680,7 @@
             { type: i0.NgZone },
             { type: i1.Platform }
         ]; };
-        FocusMonitor.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: FocusMonitor, providedIn: "root" });
+        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: FocusMonitor, providedIn: "root" });
         return FocusMonitor;
     }());
     /**

@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('tslib'), require('@angular/cdk/bidi')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', 'tslib', '@angular/cdk/bidi'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.tslib, global.ng.cdk.bidi));
-}(this, function (exports, i0, i1, i2, platform, coercion, rxjs, operators, tslib_1, bidi) { 'use strict';
+}(this, function (exports, i0, i1, i2, platform, coercion, rxjs, operators, tslib, bidi) { 'use strict';
 
     /**
      * @license
@@ -1455,7 +1455,7 @@
             // Check whether we should start scrolling the container.
             if (this._isPointerNearDropContainer(pointerX, pointerY)) {
                 var element = coercion.coerceElement(this.element);
-                _a = tslib_1.__read(getElementScrollDirections(element, this._clientRect, pointerX, pointerY), 2), verticalScrollDirection = _a[0], horizontalScrollDirection = _a[1];
+                _a = tslib.__read(getElementScrollDirections(element, this._clientRect, pointerX, pointerY), 2), verticalScrollDirection = _a[0], horizontalScrollDirection = _a[1];
                 if (verticalScrollDirection || horizontalScrollDirection) {
                     scrollNode = element;
                 }
@@ -2087,7 +2087,7 @@
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        DragDropRegistry.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+        DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
         return DragDropRegistry;
     }());
 
@@ -2139,7 +2139,7 @@
             { type: i2.ViewportRuler },
             { type: DragDropRegistry }
         ]; };
-        DragDrop.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
         return DragDrop;
     }());
 
@@ -2397,7 +2397,7 @@
                 }), 
                 // Listen if the state of any of the handles changes.
                 operators.switchMap(function (handles) {
-                    return rxjs.merge.apply(void 0, tslib_1.__spread(handles.map(function (item) { return item._stateChanges; })));
+                    return rxjs.merge.apply(void 0, tslib.__spread(handles.map(function (item) { return item._stateChanges; })));
                 }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
                     // Enabled/disable the handle that changed in the DragRef.
                     var dragRef = _this._dragRef;

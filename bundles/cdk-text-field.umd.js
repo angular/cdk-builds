@@ -86,7 +86,7 @@
             { type: i1.Platform },
             { type: i0.NgZone }
         ]; };
-        AutofillMonitor.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
         return AutofillMonitor;
     }());
     /** A directive that can be used to monitor the autofill state of an input. */

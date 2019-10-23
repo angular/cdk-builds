@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter, __generator } from "tslib";
 /**
  * Base class for component harnesses that all component harness authors should extend. This base
  * component harness provides the basic ability to locate element and sub-component harness. It
@@ -17,8 +17,8 @@ var ComponentHarness = /** @class */ (function () {
     }
     /** Gets a `Promise` for the `TestElement` representing the host element of the component. */
     ComponentHarness.prototype.host = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
                 return [2 /*return*/, this.locatorFactory.rootElement];
             });
         });
@@ -46,8 +46,8 @@ var ComponentHarness = /** @class */ (function () {
      * cases where it is needed to fully flush animation events.
      */
     ComponentHarness.prototype.forceStabilize = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
                 return [2 /*return*/, this.locatorFactory.forceStabilize()];
             });
         });
@@ -57,8 +57,8 @@ var ComponentHarness = /** @class */ (function () {
      * authors to wait for async tasks outside of the Angular zone.
      */
     ComponentHarness.prototype.waitForTasksOutsideAngular = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
                 return [2 /*return*/, this.locatorFactory.waitForTasksOutsideAngular()];
             });
         });
@@ -85,8 +85,8 @@ var HarnessPredicate = /** @class */ (function () {
      * @return A Promise that resolves to whether the string matches the pattern.
      */
     HarnessPredicate.stringMatches = function (s, pattern) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, s];
                     case 1:
@@ -129,10 +129,10 @@ var HarnessPredicate = /** @class */ (function () {
      * @return A list of harnesses that satisfy this predicate.
      */
     HarnessPredicate.prototype.filter = function (harnesses) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var results;
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, Promise.all(harnesses.map(function (h) { return _this.evaluate(h); }))];
                     case 1:
@@ -149,9 +149,9 @@ var HarnessPredicate = /** @class */ (function () {
      *   and resolves to false otherwise.
      */
     HarnessPredicate.prototype.evaluate = function (harness) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, void 0, function () {
             var results;
-            return tslib_1.__generator(this, function (_a) {
+            return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, Promise.all(this._predicates.map(function (p) { return p(harness); }))];
                     case 1:
@@ -181,8 +181,8 @@ var HarnessPredicate = /** @class */ (function () {
         }
         var selector = options.selector;
         if (selector !== undefined) {
-            this.add("host matches selector \"" + selector + "\"", function (item) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            this.add("host matches selector \"" + selector + "\"", function (item) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, item.host()];
                         case 1: return [2 /*return*/, (_a.sent()).matchesSelector(selector)];

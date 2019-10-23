@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing', ['exports', 'tslib'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {}), global.tslib));
-}(this, function (exports, tslib_1) { 'use strict';
+}(this, function (exports, tslib) { 'use strict';
 
     /**
      * @license
@@ -22,8 +22,8 @@
         }
         /** Gets a `Promise` for the `TestElement` representing the host element of the component. */
         ComponentHarness.prototype.host = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.locatorFactory.rootElement];
                 });
             });
@@ -51,8 +51,8 @@
          * cases where it is needed to fully flush animation events.
          */
         ComponentHarness.prototype.forceStabilize = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.locatorFactory.forceStabilize()];
                 });
             });
@@ -62,8 +62,8 @@
          * authors to wait for async tasks outside of the Angular zone.
          */
         ComponentHarness.prototype.waitForTasksOutsideAngular = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     return [2 /*return*/, this.locatorFactory.waitForTasksOutsideAngular()];
                 });
             });
@@ -89,8 +89,8 @@
          * @return A Promise that resolves to whether the string matches the pattern.
          */
         HarnessPredicate.stringMatches = function (s, pattern) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, s];
                         case 1:
@@ -133,10 +133,10 @@
          * @return A list of harnesses that satisfy this predicate.
          */
         HarnessPredicate.prototype.filter = function (harnesses) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var results;
                 var _this = this;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, Promise.all(harnesses.map(function (h) { return _this.evaluate(h); }))];
                         case 1:
@@ -153,9 +153,9 @@
          *   and resolves to false otherwise.
          */
         HarnessPredicate.prototype.evaluate = function (harness) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var results;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, Promise.all(this._predicates.map(function (p) { return p(harness); }))];
                         case 1:
@@ -185,8 +185,8 @@
             }
             var selector = options.selector;
             if (selector !== undefined) {
-                this.add("host matches selector \"" + selector + "\"", function (item) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
-                    return tslib_1.__generator(this, function (_a) {
+                this.add("host matches selector \"" + selector + "\"", function (item) { return tslib.__awaiter(_this, void 0, void 0, function () {
+                    return tslib.__generator(this, function (_a) {
                         switch (_a.label) {
                             case 0: return [4 /*yield*/, item.host()];
                             case 1: return [2 /*return*/, (_a.sent()).matchesSelector(selector)];
@@ -222,9 +222,9 @@
         };
         HarnessEnvironment.prototype.locatorFor = function (arg) {
             var _this = this;
-            return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
                 var _a;
-                return tslib_1.__generator(this, function (_b) {
+                return tslib.__generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -238,9 +238,9 @@
         };
         HarnessEnvironment.prototype.locatorForOptional = function (arg) {
             var _this = this;
-            return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
                 var element, candidates;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -258,9 +258,9 @@
         };
         HarnessEnvironment.prototype.locatorForAll = function (arg) {
             var _this = this;
-            return function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
                 var _this = this;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             if (!(typeof arg === 'string')) return [3 /*break*/, 2];
@@ -273,9 +273,9 @@
         };
         // Implemented as part of the `LocatorFactory` interface.
         HarnessEnvironment.prototype.harnessLoaderFor = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a;
-                return tslib_1.__generator(this, function (_b) {
+                return tslib.__generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             _a = this.createEnvironment;
@@ -287,9 +287,9 @@
         };
         // Implemented as part of the `LocatorFactory` interface.
         HarnessEnvironment.prototype.harnessLoaderForOptional = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var elements;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                         case 1:
@@ -301,10 +301,10 @@
         };
         // Implemented as part of the `LocatorFactory` interface.
         HarnessEnvironment.prototype.harnessLoaderForAll = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var elements;
                 var _this = this;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                         case 1:
@@ -324,9 +324,9 @@
         };
         // Implemented as part of the `HarnessLoader` interface.
         HarnessEnvironment.prototype.getChildLoader = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a;
-                return tslib_1.__generator(this, function (_b) {
+                return tslib.__generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             _a = this.createEnvironment;
@@ -338,9 +338,9 @@
         };
         // Implemented as part of the `HarnessLoader` interface.
         HarnessEnvironment.prototype.getAllChildLoaders = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _this = this;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                         case 1: return [2 /*return*/, (_a.sent()).map(function (e) { return _this.createEnvironment(e); })];
@@ -353,10 +353,10 @@
             return new harnessType(this.createEnvironment(element));
         };
         HarnessEnvironment.prototype._getAllHarnesses = function (harnessType) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var harnessPredicate, elements;
                 var _this = this;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             harnessPredicate = harnessType instanceof HarnessPredicate ?
@@ -370,9 +370,9 @@
             });
         };
         HarnessEnvironment.prototype._assertElementFound = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var element;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
                         case 1:
@@ -386,9 +386,9 @@
             });
         };
         HarnessEnvironment.prototype._assertHarnessFound = function (harnessType) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var harness;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._getAllHarnesses(harnessType)];
                         case 1:

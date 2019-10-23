@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 import { HarnessPredicate } from './component-harness';
 /**
  * Base harness environment class that can be extended to allow `ComponentHarness`es to be used in
@@ -23,7 +23,7 @@ export class HarnessEnvironment {
         return this.createEnvironment(this.getDocumentRoot());
     }
     locatorFor(arg) {
-        return () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return () => __awaiter(this, void 0, void 0, function* () {
             if (typeof arg === 'string') {
                 return this.createTestElement(yield this._assertElementFound(arg));
             }
@@ -33,7 +33,7 @@ export class HarnessEnvironment {
         });
     }
     locatorForOptional(arg) {
-        return () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return () => __awaiter(this, void 0, void 0, function* () {
             if (typeof arg === 'string') {
                 const element = (yield this.getAllRawElements(arg))[0];
                 return element ? this.createTestElement(element) : null;
@@ -45,7 +45,7 @@ export class HarnessEnvironment {
         });
     }
     locatorForAll(arg) {
-        return () => tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return () => __awaiter(this, void 0, void 0, function* () {
             if (typeof arg === 'string') {
                 return (yield this.getAllRawElements(arg)).map(e => this.createTestElement(e));
             }
@@ -56,20 +56,20 @@ export class HarnessEnvironment {
     }
     // Implemented as part of the `LocatorFactory` interface.
     harnessLoaderFor(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.createEnvironment(yield this._assertElementFound(selector));
         });
     }
     // Implemented as part of the `LocatorFactory` interface.
     harnessLoaderForOptional(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const elements = yield this.getAllRawElements(selector);
             return elements[0] ? this.createEnvironment(elements[0]) : null;
         });
     }
     // Implemented as part of the `LocatorFactory` interface.
     harnessLoaderForAll(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const elements = yield this.getAllRawElements(selector);
             return elements.map(element => this.createEnvironment(element));
         });
@@ -84,13 +84,13 @@ export class HarnessEnvironment {
     }
     // Implemented as part of the `HarnessLoader` interface.
     getChildLoader(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.createEnvironment(yield this._assertElementFound(selector));
         });
     }
     // Implemented as part of the `HarnessLoader` interface.
     getAllChildLoaders(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return (yield this.getAllRawElements(selector)).map(e => this.createEnvironment(e));
         });
     }
@@ -99,7 +99,7 @@ export class HarnessEnvironment {
         return new harnessType(this.createEnvironment(element));
     }
     _getAllHarnesses(harnessType) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const harnessPredicate = harnessType instanceof HarnessPredicate ?
                 harnessType : new HarnessPredicate(harnessType, {});
             const elements = yield this.getAllRawElements(harnessPredicate.getSelector());
@@ -107,7 +107,7 @@ export class HarnessEnvironment {
         });
     }
     _assertElementFound(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const element = (yield this.getAllRawElements(selector))[0];
             if (!element) {
                 throw Error(`Expected to find element matching selector: "${selector}", but none was found`);
@@ -116,7 +116,7 @@ export class HarnessEnvironment {
         });
     }
     _assertHarnessFound(harnessType) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const harness = (yield this._getAllHarnesses(harnessType))[0];
             if (!harness) {
                 throw _getErrorForMissingHarness(harnessType);

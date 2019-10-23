@@ -23,7 +23,7 @@ var MutationObserverFactory = /** @class */ (function () {
     MutationObserverFactory.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    MutationObserverFactory.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 }());
 export { MutationObserverFactory };
@@ -102,7 +102,7 @@ var ContentObserver = /** @class */ (function () {
     ContentObserver.ctorParameters = function () { return [
         { type: MutationObserverFactory }
     ]; };
-    ContentObserver.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     return ContentObserver;
 }());
 export { ContentObserver };

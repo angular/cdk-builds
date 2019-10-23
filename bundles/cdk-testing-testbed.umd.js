@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/testing'), require('@angular/core/testing'), require('rxjs/operators'), require('rxjs'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/testbed', ['exports', 'tslib', '@angular/cdk/testing', '@angular/core/testing', 'rxjs/operators', 'rxjs', '@angular/cdk/keycodes'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.testbed = {}), global.tslib, global.ng.cdk.testing, global.ng.core.testing, global.rxjs.operators, global.rxjs, global.ng.cdk.keycodes));
-}(this, function (exports, tslib_1, testing, testing$1, operators, rxjs, keyCodes) { 'use strict';
+}(this, function (exports, tslib, testing, testing$1, operators, rxjs, keyCodes) { 'use strict';
 
     /**
      * @license
@@ -357,7 +357,7 @@
             .reduce(function (arr, k) { return arr.concat(k); }, []);
         triggerFocus(element);
         try {
-            for (var keys_1 = tslib_1.__values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
+            for (var keys_1 = tslib.__values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
                 var key = keys_1_1.value;
                 dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, element, modifiers);
                 dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, element, modifiers);
@@ -442,8 +442,8 @@
             this._stabilize = _stabilize;
         }
         UnitTestElement.prototype.blur = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -458,8 +458,8 @@
             });
         };
         UnitTestElement.prototype.clear = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -479,9 +479,9 @@
         UnitTestElement.prototype.click = function (relativeX, relativeY) {
             if (relativeX === void 0) { relativeX = 0; }
             if (relativeY === void 0) { relativeY = 0; }
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var _a, left, top, clientX, clientY;
-                return tslib_1.__generator(this, function (_b) {
+                return tslib.__generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -501,8 +501,8 @@
             });
         };
         UnitTestElement.prototype.focus = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -517,8 +517,8 @@
             });
         };
         UnitTestElement.prototype.getCssValue = function (property) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -531,8 +531,8 @@
             });
         };
         UnitTestElement.prototype.hover = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -551,15 +551,15 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 modifiersAndKeys[_i] = arguments[_i];
             }
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var args;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();
                             args = modifiersAndKeys.map(function (k) { return typeof k === 'number' ? keyMap[k] : k; });
-                            typeInElement.apply(void 0, tslib_1.__spread([this.element], args));
+                            typeInElement.apply(void 0, tslib.__spread([this.element], args));
                             return [4 /*yield*/, this._stabilize()];
                         case 2:
                             _a.sent();
@@ -569,8 +569,8 @@
             });
         };
         UnitTestElement.prototype.text = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -581,8 +581,8 @@
             });
         };
         UnitTestElement.prototype.getAttribute = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -593,8 +593,8 @@
             });
         };
         UnitTestElement.prototype.hasClass = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -605,8 +605,8 @@
             });
         };
         UnitTestElement.prototype.getDimensions = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -617,8 +617,8 @@
             });
         };
         UnitTestElement.prototype.getProperty = function (name) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -629,9 +629,9 @@
             });
         };
         UnitTestElement.prototype.matchesSelector = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var elementPrototype;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
@@ -655,7 +655,7 @@
      */
     /** A `HarnessEnvironment` implementation for Angular's Testbed. */
     var TestbedHarnessEnvironment = /** @class */ (function (_super) {
-        tslib_1.__extends(TestbedHarnessEnvironment, _super);
+        tslib.__extends(TestbedHarnessEnvironment, _super);
         function TestbedHarnessEnvironment(rawRootElement, _fixture) {
             var _this = _super.call(this, rawRootElement) || this;
             _this._fixture = _fixture;
@@ -682,9 +682,9 @@
          * of the fixture.
          */
         TestbedHarnessEnvironment.harnessForFixture = function (fixture, harnessType) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
                 var environment;
-                return tslib_1.__generator(this, function (_a) {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
@@ -697,8 +697,8 @@
             });
         };
         TestbedHarnessEnvironment.prototype.forceStabilize = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             if (this._destroyed) {
@@ -714,8 +714,8 @@
             });
         };
         TestbedHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
                             // If we run in the fake async zone, we run "flush" to run any scheduled tasks. This
@@ -754,8 +754,8 @@
             return new TestbedHarnessEnvironment(element, this._fixture);
         };
         TestbedHarnessEnvironment.prototype.getAllRawElements = function (selector) {
-            return tslib_1.__awaiter(this, void 0, void 0, function () {
-                return tslib_1.__generator(this, function (_a) {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this.forceStabilize()];
                         case 1:

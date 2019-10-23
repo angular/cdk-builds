@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/portal', ['exports', 'tslib', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.portal = {}), global.tslib, global.ng.core));
-}(this, function (exports, tslib_1, core) { 'use strict';
+}(this, function (exports, tslib, core) { 'use strict';
 
     /**
      * @license
@@ -112,7 +112,7 @@
      * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
      */
     var ComponentPortal = /** @class */ (function (_super) {
-        tslib_1.__extends(ComponentPortal, _super);
+        tslib.__extends(ComponentPortal, _super);
         function ComponentPortal(component, viewContainerRef, injector, componentFactoryResolver) {
             var _this = _super.call(this) || this;
             _this.component = component;
@@ -127,7 +127,7 @@
      * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
      */
     var TemplatePortal = /** @class */ (function (_super) {
-        tslib_1.__extends(TemplatePortal, _super);
+        tslib.__extends(TemplatePortal, _super);
         function TemplatePortal(template, viewContainerRef, context) {
             var _this = _super.call(this) || this;
             _this.templateRef = template;
@@ -225,7 +225,7 @@
      * @breaking-change 9.0.0
      */
     var BasePortalHost = /** @class */ (function (_super) {
-        tslib_1.__extends(BasePortalHost, _super);
+        tslib.__extends(BasePortalHost, _super);
         function BasePortalHost() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -244,7 +244,7 @@
      * application context.
      */
     var DomPortalOutlet = /** @class */ (function (_super) {
-        tslib_1.__extends(DomPortalOutlet, _super);
+        tslib.__extends(DomPortalOutlet, _super);
         function DomPortalOutlet(
         /** Element into which the content is projected. */
         outletElement, _componentFactoryResolver, _appRef, _defaultInjector) {
@@ -330,7 +330,7 @@
      * @breaking-change 9.0.0
      */
     var DomPortalHost = /** @class */ (function (_super) {
-        tslib_1.__extends(DomPortalHost, _super);
+        tslib.__extends(DomPortalHost, _super);
         function DomPortalHost() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -349,7 +349,7 @@
      * the directive instance itself can be attached to a host, enabling declarative use of portals.
      */
     var CdkPortal = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkPortal, _super);
+        tslib.__extends(CdkPortal, _super);
         function CdkPortal(templateRef, viewContainerRef) {
             return _super.call(this, templateRef, viewContainerRef) || this;
         }
@@ -371,7 +371,7 @@
      * @breaking-change 9.0.0
      */
     var TemplatePortalDirective = /** @class */ (function (_super) {
-        tslib_1.__extends(TemplatePortalDirective, _super);
+        tslib.__extends(TemplatePortalDirective, _super);
         function TemplatePortalDirective() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
@@ -395,7 +395,7 @@
      * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
      */
     var CdkPortalOutlet = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkPortalOutlet, _super);
+        tslib.__extends(CdkPortalOutlet, _super);
         function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef) {
             var _this = _super.call(this) || this;
             _this._componentFactoryResolver = _componentFactoryResolver;
@@ -505,7 +505,7 @@
      * @breaking-change 9.0.0
      */
     var PortalHostDirective = /** @class */ (function (_super) {
-        tslib_1.__extends(PortalHostDirective, _super);
+        tslib.__extends(PortalHostDirective, _super);
         function PortalHostDirective() {
             return _super !== null && _super.apply(this, arguments) || this;
         }

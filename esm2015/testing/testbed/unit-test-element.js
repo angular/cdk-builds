@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 import * as keyCodes from '@angular/cdk/keycodes';
 import { TestKey } from '../test-element';
 import { dispatchMouseEvent, triggerBlur, triggerFocus, isTextInput, clearElement, typeInElement, } from '../fake-events';
@@ -49,14 +49,14 @@ export class UnitTestElement {
         this._stabilize = _stabilize;
     }
     blur() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             triggerBlur(this.element);
             yield this._stabilize();
         });
     }
     clear() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             if (!isTextInput(this.element)) {
                 throw Error('Attempting to clear an invalid element');
@@ -66,7 +66,7 @@ export class UnitTestElement {
         });
     }
     click(relativeX = 0, relativeY = 0) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             const { left, top } = this.element.getBoundingClientRect();
             // Round the computed click position as decimal pixels are not
@@ -80,14 +80,14 @@ export class UnitTestElement {
         });
     }
     focus() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             triggerFocus(this.element);
             yield this._stabilize();
         });
     }
     getCssValue(property) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             // TODO(mmalerba): Consider adding value normalization if we run into common cases where its
             //  needed.
@@ -95,14 +95,14 @@ export class UnitTestElement {
         });
     }
     hover() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             dispatchMouseEvent(this.element, 'mouseenter');
             yield this._stabilize();
         });
     }
     sendKeys(...modifiersAndKeys) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             const args = modifiersAndKeys.map(k => typeof k === 'number' ? keyMap[k] : k);
             typeInElement(this.element, ...args);
@@ -110,37 +110,37 @@ export class UnitTestElement {
         });
     }
     text() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return (this.element.textContent || '').trim();
         });
     }
     getAttribute(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.getAttribute(name);
         });
     }
     hasClass(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.classList.contains(name);
         });
     }
     getDimensions() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.getBoundingClientRect();
         });
     }
     getProperty(name) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element[name];
         });
     }
     matchesSelector(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             const elementPrototype = Element.prototype;
             return (elementPrototype['matches'] || elementPrototype['msMatchesSelector'])

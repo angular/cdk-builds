@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('tslib'), require('@angular/cdk/collections')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', 'tslib', '@angular/cdk/collections'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.bidi, global.tslib, global.ng.cdk.collections));
-}(this, function (exports, coercion, i0, rxjs, operators, i1, bidi, tslib_1, collections) { 'use strict';
+}(this, function (exports, coercion, i0, rxjs, operators, i1, bidi, tslib, collections) { 'use strict';
 
     /**
      * @license
@@ -347,7 +347,7 @@
             { type: i0.NgZone },
             { type: i1.Platform }
         ]; };
-        ScrollDispatcher.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
         return ScrollDispatcher;
     }());
 
@@ -540,7 +540,7 @@
     var SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? rxjs.animationFrameScheduler : rxjs.asapScheduler;
     /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
     var CdkVirtualScrollViewport = /** @class */ (function (_super) {
-        tslib_1.__extends(CdkVirtualScrollViewport, _super);
+        tslib.__extends(CdkVirtualScrollViewport, _super);
         function CdkVirtualScrollViewport(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher) {
             var _this = _super.call(this, elementRef, scrollDispatcher, ngZone, dir) || this;
             _this.elementRef = elementRef;
@@ -836,7 +836,7 @@
             var runAfterChangeDetection = this._runAfterChangeDetection;
             this._runAfterChangeDetection = [];
             try {
-                for (var runAfterChangeDetection_1 = tslib_1.__values(runAfterChangeDetection), runAfterChangeDetection_1_1 = runAfterChangeDetection_1.next(); !runAfterChangeDetection_1_1.done; runAfterChangeDetection_1_1 = runAfterChangeDetection_1.next()) {
+                for (var runAfterChangeDetection_1 = tslib.__values(runAfterChangeDetection), runAfterChangeDetection_1_1 = runAfterChangeDetection_1.next(); !runAfterChangeDetection_1_1.done; runAfterChangeDetection_1_1 = runAfterChangeDetection_1.next()) {
                     var fn = runAfterChangeDetection_1_1.value;
                     fn();
                 }
@@ -947,7 +947,7 @@
             // new one, passing back a stream of data changes which we run through `switchMap` to give
             // us a data stream that emits the latest data from whatever the current `DataSource` is.
             operators.switchMap(function (_a) {
-                var _b = tslib_1.__read(_a, 2), prev = _b[0], cur = _b[1];
+                var _b = tslib.__read(_a, 2), prev = _b[0], cur = _b[1];
                 return _this._changeDataSource(prev, cur);
             }), 
             // Replay the last emitted data when someone subscribes.
@@ -1070,7 +1070,7 @@
             this._destroyed.next();
             this._destroyed.complete();
             try {
-                for (var _b = tslib_1.__values(this._templateCache), _c = _b.next(); !_c.done; _c = _b.next()) {
+                for (var _b = tslib.__values(this._templateCache), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var view = _c.value;
                     view.destroy();
                 }
@@ -1366,7 +1366,7 @@
             { type: i1.Platform },
             { type: i0.NgZone }
         ]; };
-        ViewportRuler.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
         return ViewportRuler;
     }());
 

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 /**
  * Base class for component harnesses that all component harness authors should extend. This base
  * component harness provides the basic ability to locate element and sub-component harness. It
@@ -17,7 +17,7 @@ export class ComponentHarness {
     }
     /** Gets a `Promise` for the `TestElement` representing the host element of the component. */
     host() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.locatorFactory.rootElement;
         });
     }
@@ -44,7 +44,7 @@ export class ComponentHarness {
      * cases where it is needed to fully flush animation events.
      */
     forceStabilize() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.locatorFactory.forceStabilize();
         });
     }
@@ -53,7 +53,7 @@ export class ComponentHarness {
      * authors to wait for async tasks outside of the Angular zone.
      */
     waitForTasksOutsideAngular() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             return this.locatorFactory.waitForTasksOutsideAngular();
         });
     }
@@ -77,7 +77,7 @@ export class HarnessPredicate {
      * @return A Promise that resolves to whether the string matches the pattern.
      */
     static stringMatches(s, pattern) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             s = yield s;
             return typeof pattern === 'string' ? s === pattern : pattern.test(s);
         });
@@ -115,7 +115,7 @@ export class HarnessPredicate {
      * @return A list of harnesses that satisfy this predicate.
      */
     filter(harnesses) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const results = yield Promise.all(harnesses.map(h => this.evaluate(h)));
             return harnesses.filter((_, i) => results[i]);
         });
@@ -127,7 +127,7 @@ export class HarnessPredicate {
      *   and resolves to false otherwise.
      */
     evaluate(harness) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const results = yield Promise.all(this._predicates.map(p => p(harness)));
             return results.reduce((combined, current) => combined && current, true);
         });
@@ -150,7 +150,7 @@ export class HarnessPredicate {
         }
         const selector = options.selector;
         if (selector !== undefined) {
-            this.add(`host matches selector "${selector}"`, (item) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+            this.add(`host matches selector "${selector}"`, (item) => __awaiter(this, void 0, void 0, function* () {
                 return (yield item.host()).matchesSelector(selector);
             }));
         }

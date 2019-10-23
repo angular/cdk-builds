@@ -9,51 +9,6 @@ import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Dir
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * A service for copying text to the clipboard.
- *
- * Example usage:
- *
- * clipboard.copy("copy this text");
- */
-var Clipboard = /** @class */ (function () {
-    function Clipboard(document) {
-        this._document = document;
-    }
-    /**
-     * Copies the provided text into the user's clipboard.
-     *
-     * @param text The string to copy.
-     * @returns Whether the operation was successful.
-     */
-    Clipboard.prototype.copy = function (text) {
-        var pendingCopy = this.beginCopy(text);
-        var successful = pendingCopy.copy();
-        pendingCopy.destroy();
-        return successful;
-    };
-    /**
-     * Prepares a string to be copied later. This is useful for large strings
-     * which take too long to successfully render and be copied in the same tick.
-     *
-     * The caller must call `destroy` on the returned `PendingCopy`.
-     *
-     * @param text The string to copy.
-     * @returns the pending copy operation.
-     */
-    Clipboard.prototype.beginCopy = function (text) {
-        return new PendingCopy(text, this._document);
-    };
-    Clipboard.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    Clipboard.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-    ]; };
-    Clipboard.ngInjectableDef = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
-    return Clipboard;
-}());
-/**
  * A pending copy-to-clipboard operation.
  *
  * The implementation of copying text to the clipboard modifies the DOM and
@@ -112,6 +67,59 @@ var PendingCopy = /** @class */ (function () {
         }
     };
     return PendingCopy;
+}());
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * A service for copying text to the clipboard.
+ *
+ * Example usage:
+ *
+ * clipboard.copy("copy this text");
+ */
+var Clipboard = /** @class */ (function () {
+    function Clipboard(document) {
+        this._document = document;
+    }
+    /**
+     * Copies the provided text into the user's clipboard.
+     *
+     * @param text The string to copy.
+     * @returns Whether the operation was successful.
+     */
+    Clipboard.prototype.copy = function (text) {
+        var pendingCopy = this.beginCopy(text);
+        var successful = pendingCopy.copy();
+        pendingCopy.destroy();
+        return successful;
+    };
+    /**
+     * Prepares a string to be copied later. This is useful for large strings
+     * which take too long to successfully render and be copied in the same tick.
+     *
+     * The caller must call `destroy` on the returned `PendingCopy`.
+     *
+     * @param text The string to copy.
+     * @returns the pending copy operation.
+     */
+    Clipboard.prototype.beginCopy = function (text) {
+        return new PendingCopy(text, this._document);
+    };
+    Clipboard.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    Clipboard.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ]; };
+    Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+    return Clipboard;
 }());
 
 /**
@@ -195,5 +203,5 @@ var ClipboardModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { Clipboard, PendingCopy, ClipboardModule, CdkCopyToClipboard };
+export { Clipboard, ClipboardModule, CdkCopyToClipboard, PendingCopy };
 //# sourceMappingURL=clipboard.js.map

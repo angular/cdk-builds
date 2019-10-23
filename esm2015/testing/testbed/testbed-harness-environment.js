@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import * as tslib_1 from "tslib";
+import { __awaiter } from "tslib";
 import { HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
@@ -38,14 +38,14 @@ export class TestbedHarnessEnvironment extends HarnessEnvironment {
      * of the fixture.
      */
     static harnessForFixture(fixture, harnessType) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             const environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
             yield environment.forceStabilize();
             return environment.createComponentHarness(harnessType, fixture.nativeElement);
         });
     }
     forceStabilize() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             if (this._destroyed) {
                 throw Error('Harness is attempting to use a fixture that has already been destroyed.');
             }
@@ -54,7 +54,7 @@ export class TestbedHarnessEnvironment extends HarnessEnvironment {
         });
     }
     waitForTasksOutsideAngular() {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             // If we run in the fake async zone, we run "flush" to run any scheduled tasks. This
             // ensures that the harnesses behave inside of the FakeAsyncTestZone similar to the
             // "AsyncTestZone" and the root zone (i.e. neither fakeAsync or async). Note that we
@@ -81,7 +81,7 @@ export class TestbedHarnessEnvironment extends HarnessEnvironment {
         return new TestbedHarnessEnvironment(element, this._fixture);
     }
     getAllRawElements(selector) {
-        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        return __awaiter(this, void 0, void 0, function* () {
             yield this.forceStabilize();
             return Array.from(this.rawRootElement.querySelectorAll(selector));
         });
