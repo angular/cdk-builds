@@ -177,9 +177,9 @@
         CdkColumnDef.propDecorators = {
             name: [{ type: core.Input, args: ['cdkColumnDef',] }],
             stickyEnd: [{ type: core.Input, args: ['stickyEnd',] }],
-            cell: [{ type: core.ContentChild, args: [CdkCellDef, { static: false },] }],
-            headerCell: [{ type: core.ContentChild, args: [CdkHeaderCellDef, { static: false },] }],
-            footerCell: [{ type: core.ContentChild, args: [CdkFooterCellDef, { static: false },] }]
+            cell: [{ type: core.ContentChild, args: [CdkCellDef,] }],
+            headerCell: [{ type: core.ContentChild, args: [CdkHeaderCellDef,] }],
+            footerCell: [{ type: core.ContentChild, args: [CdkFooterCellDef,] }]
         };
         return CdkColumnDef;
     }(_CdkColumnDefBase));
