@@ -2435,10 +2435,14 @@ CdkTable.propDecorators = {
     _rowOutlet: [{ type: ViewChild, args: [DataRowOutlet, { static: true },] }],
     _headerRowOutlet: [{ type: ViewChild, args: [HeaderRowOutlet, { static: true },] }],
     _footerRowOutlet: [{ type: ViewChild, args: [FooterRowOutlet, { static: true },] }],
-    _contentColumnDefs: [{ type: ContentChildren, args: [CdkColumnDef,] }],
-    _contentRowDefs: [{ type: ContentChildren, args: [CdkRowDef,] }],
-    _contentHeaderRowDefs: [{ type: ContentChildren, args: [CdkHeaderRowDef,] }],
-    _contentFooterRowDefs: [{ type: ContentChildren, args: [CdkFooterRowDef,] }]
+    _contentColumnDefs: [{ type: ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
+    _contentRowDefs: [{ type: ContentChildren, args: [CdkRowDef, { descendants: true },] }],
+    _contentHeaderRowDefs: [{ type: ContentChildren, args: [CdkHeaderRowDef, {
+                    descendants: true
+                },] }],
+    _contentFooterRowDefs: [{ type: ContentChildren, args: [CdkFooterRowDef, {
+                    descendants: true
+                },] }]
 };
 if (false) {
     /**

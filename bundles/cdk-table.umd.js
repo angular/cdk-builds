@@ -1753,10 +1753,14 @@
             _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
             _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
             _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],
-            _contentColumnDefs: [{ type: core.ContentChildren, args: [CdkColumnDef,] }],
-            _contentRowDefs: [{ type: core.ContentChildren, args: [CdkRowDef,] }],
-            _contentHeaderRowDefs: [{ type: core.ContentChildren, args: [CdkHeaderRowDef,] }],
-            _contentFooterRowDefs: [{ type: core.ContentChildren, args: [CdkFooterRowDef,] }]
+            _contentColumnDefs: [{ type: core.ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
+            _contentRowDefs: [{ type: core.ContentChildren, args: [CdkRowDef, { descendants: true },] }],
+            _contentHeaderRowDefs: [{ type: core.ContentChildren, args: [CdkHeaderRowDef, {
+                            descendants: true
+                        },] }],
+            _contentFooterRowDefs: [{ type: core.ContentChildren, args: [CdkFooterRowDef, {
+                            descendants: true
+                        },] }]
         };
         return CdkTable;
     }());
