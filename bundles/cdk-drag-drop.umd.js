@@ -2669,7 +2669,8 @@
              */
             this.id = "cdk-drop-list-" + _uniqueIdCounter++;
             this._disabled = false;
-            this._sortingDisabled = false;
+            /** Whether sorting within this drop list is disabled. */
+            this.sortingDisabled = false;
             /**
              * Function that is used to determine whether an item
              * is allowed to be moved into a drop container.
@@ -2709,15 +2710,6 @@
             },
             set: function (value) {
                 this._disabled = coercion.coerceBooleanProperty(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(CdkDropList.prototype, "sortingDisabled", {
-            /** Whether sorting within this drop list is disabled. */
-            get: function () { return this._sortingDisabled; },
-            set: function (value) {
-                this._sortingDisabled = coercion.coerceBooleanProperty(value);
             },
             enumerable: true,
             configurable: true
@@ -2820,8 +2812,8 @@
                 }
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
-                ref.sortingDisabled = _this.sortingDisabled;
-                ref.autoScrollDisabled = _this.autoScrollDisabled;
+                ref.sortingDisabled = coercion.coerceBooleanProperty(_this.sortingDisabled);
+                ref.autoScrollDisabled = coercion.coerceBooleanProperty(_this.autoScrollDisabled);
                 ref
                     .connectedTo(siblings.filter(function (drop) { return drop && drop !== _this; }).map(function (list) { return list._dropListRef; }))
                     .withOrientation(_this.orientation);

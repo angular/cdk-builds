@@ -56,7 +56,6 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _disabled;
     /** Whether sorting within this drop list is disabled. */
     sortingDisabled: boolean;
-    private _sortingDisabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.

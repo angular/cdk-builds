@@ -4755,7 +4755,10 @@ class CdkDropList {
          */
         this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
         this._disabled = false;
-        this._sortingDisabled = false;
+        /**
+         * Whether sorting within this drop list is disabled.
+         */
+        this.sortingDisabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -4815,18 +4818,6 @@ class CdkDropList {
      */
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether sorting within this drop list is disabled.
-     * @return {?}
-     */
-    get sortingDisabled() { return this._sortingDisabled; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set sortingDisabled(value) {
-        this._sortingDisabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
@@ -4970,8 +4961,8 @@ class CdkDropList {
             }
             ref.disabled = this.disabled;
             ref.lockAxis = this.lockAxis;
-            ref.sortingDisabled = this.sortingDisabled;
-            ref.autoScrollDisabled = this.autoScrollDisabled;
+            ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
+            ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
             ref
                 .connectedTo(siblings.filter((/**
              * @param {?} drop
@@ -5155,10 +5146,10 @@ if (false) {
      */
     CdkDropList.prototype._disabled;
     /**
+     * Whether sorting within this drop list is disabled.
      * @type {?}
-     * @private
      */
-    CdkDropList.prototype._sortingDisabled;
+    CdkDropList.prototype.sortingDisabled;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
