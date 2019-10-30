@@ -463,8 +463,8 @@ var CdkStepper = /** @class */ (function () {
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
     CdkStepper.propDecorators = {
-        _steps: [{ type: ContentChildren, args: [CdkStep,] }],
-        _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader,] }],
+        _steps: [{ type: ContentChildren, args: [CdkStep, { descendants: true },] }],
+        _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader, { descendants: true },] }],
         linear: [{ type: Input }],
         selectedIndex: [{ type: Input }],
         selected: [{ type: Input }],

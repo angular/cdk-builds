@@ -460,8 +460,8 @@
             { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] }
         ]; };
         CdkStepper.propDecorators = {
-            _steps: [{ type: core.ContentChildren, args: [CdkStep,] }],
-            _stepHeader: [{ type: core.ContentChildren, args: [CdkStepHeader,] }],
+            _steps: [{ type: core.ContentChildren, args: [CdkStep, { descendants: true },] }],
+            _stepHeader: [{ type: core.ContentChildren, args: [CdkStepHeader, { descendants: true },] }],
             linear: [{ type: core.Input }],
             selectedIndex: [{ type: core.Input }],
             selected: [{ type: core.Input }],
