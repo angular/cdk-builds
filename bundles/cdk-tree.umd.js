@@ -489,7 +489,11 @@
             treeControl: [{ type: core.Input }],
             trackBy: [{ type: core.Input }],
             _nodeOutlet: [{ type: core.ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
-            _nodeDefs: [{ type: core.ContentChildren, args: [CdkTreeNodeDef,] }]
+            _nodeDefs: [{ type: core.ContentChildren, args: [CdkTreeNodeDef, {
+                            // We need to use `descendants: true`, because Ivy will no longer match
+                            // indirect descendants if it's left as false.
+                            descendants: true
+                        },] }]
         };
         return CdkTree;
     }());

@@ -493,7 +493,11 @@ var CdkTree = /** @class */ (function () {
         treeControl: [{ type: Input }],
         trackBy: [{ type: Input }],
         _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
-        _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef,] }]
+        _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef, {
+                        // We need to use `descendants: true`, because Ivy will no longer match
+                        // indirect descendants if it's left as false.
+                        descendants: true
+                    },] }]
     };
     return CdkTree;
 }());
