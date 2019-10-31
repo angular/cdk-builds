@@ -89,6 +89,8 @@ CdkAccordion.propDecorators = {
     multi: [{ type: Input }]
 };
 if (false) {
+    /** @type {?} */
+    CdkAccordion.ngAcceptInputType_multi;
     /**
      * Emits when the state of the accordion changes
      * @type {?}
@@ -312,6 +314,10 @@ CdkAccordionItem.propDecorators = {
     disabled: [{ type: Input }]
 };
 if (false) {
+    /** @type {?} */
+    CdkAccordionItem.ngAcceptInputType_expanded;
+    /** @type {?} */
+    CdkAccordionItem.ngAcceptInputType_disabled;
     /**
      * Subscription to openAll/closeAll events.
      * @type {?}

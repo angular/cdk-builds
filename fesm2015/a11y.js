@@ -1800,6 +1800,10 @@ CdkTrapFocus.propDecorators = {
     autoCapture: [{ type: Input, args: ['cdkTrapFocusAutoCapture',] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkTrapFocus.ngAcceptInputType_enabled;
+    /** @type {?} */
+    CdkTrapFocus.ngAcceptInputType_autoCapture;
     /**
      * @type {?}
      * @private

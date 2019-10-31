@@ -138,4 +138,5 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _syncInputs;
     /** Handles the events from the underlying `DragRef`. */
     private _handleEvents;
+    static ngAcceptInputType_disabled: boolean | string;
 }

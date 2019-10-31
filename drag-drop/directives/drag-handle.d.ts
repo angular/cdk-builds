@@ -19,4 +19,5 @@ export declare class CdkDragHandle implements OnDestroy {
     private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;
+    static ngAcceptInputType_disabled: boolean | string;
 }

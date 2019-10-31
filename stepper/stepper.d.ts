@@ -106,6 +106,10 @@ export declare class CdkStep implements OnChanges {
     /** Resets the step to its initial state. Note that this includes resetting form data. */
     reset(): void;
     ngOnChanges(): void;
+    static ngAcceptInputType_editable: boolean | string;
+    static ngAcceptInputType_hasError: boolean | string;
+    static ngAcceptInputType_optional: boolean | string;
+    static ngAcceptInputType_completed: boolean | string;
 }
 export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _dir;
@@ -182,6 +186,12 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _layoutDirection;
     /** Checks whether the stepper contains the focused element. */
     private _containsFocus;
+    static ngAcceptInputType_editable: boolean | string;
+    static ngAcceptInputType_optional: boolean | string;
+    static ngAcceptInputType_completed: boolean | string;
+    static ngAcceptInputType_hasError: boolean | string;
+    static ngAcceptInputType_linear: boolean | string;
+    static ngAcceptInputType_selectedIndex: number | string;
 }
 /**
  * Simplified representation of an "AbstractControl" from @angular/forms.

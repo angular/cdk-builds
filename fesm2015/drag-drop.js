@@ -3925,6 +3925,8 @@ CdkDragHandle.propDecorators = {
     disabled: [{ type: Input, args: ['cdkDragHandleDisabled',] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkDragHandle.ngAcceptInputType_disabled;
     /**
      * Closest parent draggable instance.
      * @type {?}
@@ -4469,6 +4471,8 @@ CdkDrag.propDecorators = {
     moved: [{ type: Output, args: ['cdkDragMoved',] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkDrag.ngAcceptInputType_disabled;
     /**
      * @type {?}
      * @private
@@ -4689,6 +4693,8 @@ CdkDropListGroup.propDecorators = {
     disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkDropListGroup.ngAcceptInputType_disabled;
     /**
      * Drop lists registered inside the group.
      * @type {?}
@@ -5096,6 +5102,12 @@ if (false) {
      * @private
      */
     CdkDropList._dropLists;
+    /** @type {?} */
+    CdkDropList.ngAcceptInputType_disabled;
+    /** @type {?} */
+    CdkDropList.ngAcceptInputType_sortingDisabled;
+    /** @type {?} */
+    CdkDropList.ngAcceptInputType_autoScrollDisabled;
     /**
      * Emits when the list has been destroyed.
      * @type {?}

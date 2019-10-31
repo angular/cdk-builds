@@ -268,6 +268,10 @@ CdkObserveContent.propDecorators = {
     debounce: [{ type: Input }]
 };
 if (false) {
+    /** @type {?} */
+    CdkObserveContent.ngAcceptInputType_disabled;
+    /** @type {?} */
+    CdkObserveContent.ngAcceptInputType_debounce;
     /**
      * Event emitted for each change in the element's content.
      * @type {?}

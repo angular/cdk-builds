@@ -4670,6 +4670,16 @@ CdkConnectedOverlay.propDecorators = {
     overlayKeydown: [{ type: Output }]
 };
 if (false) {
+    /** @type {?} */
+    CdkConnectedOverlay.ngAcceptInputType_hasBackdrop;
+    /** @type {?} */
+    CdkConnectedOverlay.ngAcceptInputType_lockPosition;
+    /** @type {?} */
+    CdkConnectedOverlay.ngAcceptInputType_flexibleDimensions;
+    /** @type {?} */
+    CdkConnectedOverlay.ngAcceptInputType_growAfterOpen;
+    /** @type {?} */
+    CdkConnectedOverlay.ngAcceptInputType_push;
     /**
      * @type {?}
      * @private

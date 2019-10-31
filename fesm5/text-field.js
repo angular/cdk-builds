@@ -1,6 +1,6 @@
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
 import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Input, NgModule } from '@angular/core';
-import { coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 
@@ -149,7 +149,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         /** Minimum amount of rows in the textarea. */
         get: function () { return this._minRows; },
         set: function (value) {
-            this._minRows = value;
+            this._minRows = coerceNumberProperty(value);
             this._setMinHeight();
         },
         enumerable: true,
@@ -159,7 +159,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
         /** Maximum amount of rows in the textarea. */
         get: function () { return this._maxRows; },
         set: function (value) {
-            this._maxRows = value;
+            this._maxRows = coerceNumberProperty(value);
             this._setMaxHeight();
         },
         enumerable: true,

@@ -17,4 +17,5 @@ export declare class CdkTreeNodeToggle<T> {
     protected _recursive: boolean;
     constructor(_tree: CdkTree<T>, _treeNode: CdkTreeNode<T>);
     _toggle(event: Event): void;
+    static ngAcceptInputType_recursive: boolean | string;
 }

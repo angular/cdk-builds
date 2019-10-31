@@ -67,4 +67,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      * in order for it to scroll to the proper position.
      */
     private _scrollToCaretPosition;
+    static ngAcceptInputType_minRows: number | string;
+    static ngAcceptInputType_maxRows: number | string;
+    static ngAcceptInputType_enabled: boolean | string;
 }

@@ -718,6 +718,8 @@ CdkPortalOutlet.propDecorators = {
     attached: [{ type: Output }]
 };
 if (false) {
+    /** @type {?} */
+    CdkPortalOutlet.ngAcceptInputType_portal;
     /**
      * Whether the portal component is initialized.
      * @type {?}

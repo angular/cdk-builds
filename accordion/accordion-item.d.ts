@@ -50,4 +50,6 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** Sets the expanded state of the accordion item to true. */
     open(): void;
     private _subscribeToOpenCloseAllActions;
+    static ngAcceptInputType_expanded: boolean | string;
+    static ngAcceptInputType_disabled: boolean | string;
 }

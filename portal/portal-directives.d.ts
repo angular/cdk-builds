@@ -60,6 +60,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
      * @returns Reference to the created embedded view.
      */
     attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
+    static ngAcceptInputType_portal: Portal<any> | null | undefined | '';
 }
 /**
  * @deprecated Use `CdkPortalOutlet` instead.

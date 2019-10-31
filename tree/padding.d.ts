@@ -38,4 +38,5 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
     _setPadding(forceChange?: boolean): void;
+    static ngAcceptInputType_level: number | string;
 }

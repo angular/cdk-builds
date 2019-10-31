@@ -308,6 +308,14 @@ CdkStep.propDecorators = {
     hasError: [{ type: Input }]
 };
 if (false) {
+    /** @type {?} */
+    CdkStep.ngAcceptInputType_editable;
+    /** @type {?} */
+    CdkStep.ngAcceptInputType_hasError;
+    /** @type {?} */
+    CdkStep.ngAcceptInputType_optional;
+    /** @type {?} */
+    CdkStep.ngAcceptInputType_completed;
     /**
      * @type {?}
      * @private
@@ -770,6 +778,18 @@ CdkStepper.propDecorators = {
     selectionChange: [{ type: Output }]
 };
 if (false) {
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_editable;
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_optional;
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_completed;
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_hasError;
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_linear;
+    /** @type {?} */
+    CdkStepper.ngAcceptInputType_selectedIndex;
     /**
      * Emits when the component is destroyed.
      * @type {?}

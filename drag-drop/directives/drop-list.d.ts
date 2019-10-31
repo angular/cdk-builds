@@ -126,4 +126,7 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _syncInputs;
     /** Handles events from the underlying DropListRef. */
     private _handleEvents;
+    static ngAcceptInputType_disabled: boolean | string;
+    static ngAcceptInputType_sortingDisabled: boolean | string;
+    static ngAcceptInputType_autoScrollDisabled: boolean | string;
 }

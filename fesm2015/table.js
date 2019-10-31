@@ -263,6 +263,10 @@ CdkColumnDef.propDecorators = {
 };
 if (false) {
     /** @type {?} */
+    CdkColumnDef.ngAcceptInputType_sticky;
+    /** @type {?} */
+    CdkColumnDef.ngAcceptInputType_stickyEnd;
+    /** @type {?} */
     CdkColumnDef.prototype._name;
     /** @type {?} */
     CdkColumnDef.prototype._stickyEnd;
@@ -509,6 +513,10 @@ CdkHeaderRowDef.ctorParameters = () => [
     { type: TemplateRef },
     { type: IterableDiffers }
 ];
+if (false) {
+    /** @type {?} */
+    CdkHeaderRowDef.ngAcceptInputType_sticky;
+}
 // Boilerplate for applying mixins to CdkFooterRowDef.
 /**
  * \@docs-private
@@ -550,6 +558,10 @@ CdkFooterRowDef.ctorParameters = () => [
     { type: TemplateRef },
     { type: IterableDiffers }
 ];
+if (false) {
+    /** @type {?} */
+    CdkFooterRowDef.ngAcceptInputType_sticky;
+}
 /**
  * Data row definition for the CDK table.
  * Captures the header row's template and other row properties such as the columns to display and
@@ -2445,6 +2457,8 @@ CdkTable.propDecorators = {
                 },] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkTable.ngAcceptInputType_multiTemplateDataRows;
     /**
      * @type {?}
      * @private

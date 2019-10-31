@@ -149,7 +149,7 @@
             /** Minimum amount of rows in the textarea. */
             get: function () { return this._minRows; },
             set: function (value) {
-                this._minRows = value;
+                this._minRows = coercion.coerceNumberProperty(value);
                 this._setMinHeight();
             },
             enumerable: true,
@@ -159,7 +159,7 @@
             /** Maximum amount of rows in the textarea. */
             get: function () { return this._maxRows; },
             set: function (value) {
-                this._maxRows = value;
+                this._maxRows = coercion.coerceNumberProperty(value);
                 this._setMaxHeight();
             },
             enumerable: true,

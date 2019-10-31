@@ -87,4 +87,7 @@ export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     /** The scroll strategy used by this directive. */
     _scrollStrategy: FixedSizeVirtualScrollStrategy;
     ngOnChanges(): void;
+    static ngAcceptInputType_itemSize: string | number;
+    static ngAcceptInputType_minBufferPx: string | number;
+    static ngAcceptInputType_maxBufferPx: string | number;
 }

@@ -338,6 +338,12 @@ CdkFixedSizeVirtualScroll.propDecorators = {
 };
 if (false) {
     /** @type {?} */
+    CdkFixedSizeVirtualScroll.ngAcceptInputType_itemSize;
+    /** @type {?} */
+    CdkFixedSizeVirtualScroll.ngAcceptInputType_minBufferPx;
+    /** @type {?} */
+    CdkFixedSizeVirtualScroll.ngAcceptInputType_maxBufferPx;
+    /** @type {?} */
     CdkFixedSizeVirtualScroll.prototype._itemSize;
     /** @type {?} */
     CdkFixedSizeVirtualScroll.prototype._minBufferPx;

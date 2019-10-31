@@ -1423,6 +1423,8 @@ CdkTreeNodePadding.propDecorators = {
     indent: [{ type: Input, args: ['cdkTreeNodePaddingIndent',] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkTreeNodePadding.ngAcceptInputType_level;
     /**
      * Current padding value applied to the element. Used to avoid unnecessarily hitting the DOM.
      * @type {?}
@@ -1528,6 +1530,8 @@ CdkTreeNodeToggle.propDecorators = {
     _toggle: [{ type: HostListener, args: ['click', ['$event'],] }]
 };
 if (false) {
+    /** @type {?} */
+    CdkTreeNodeToggle.ngAcceptInputType_recursive;
     /**
      * @type {?}
      * @protected

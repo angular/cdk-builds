@@ -134,4 +134,6 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoChec
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;
+    static ngAcceptInputType_enabled: boolean | string;
+    static ngAcceptInputType_autoCapture: boolean | string;
 }
