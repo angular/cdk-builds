@@ -448,7 +448,6 @@
         }
         CdkHeaderRow.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-header-row, tr[cdk-header-row]',
                         template: CDK_ROW_TEMPLATE,
                         host: {
@@ -469,7 +468,6 @@
         }
         CdkFooterRow.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-footer-row, tr[cdk-footer-row]',
                         template: CDK_ROW_TEMPLATE,
                         host: {
@@ -490,7 +488,6 @@
         }
         CdkRow.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-row, tr[cdk-row]',
                         template: CDK_ROW_TEMPLATE,
                         host: {
@@ -1721,7 +1718,6 @@
         };
         CdkTable.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-table, table[cdk-table]',
                         exportAs: 'cdkTable',
                         template: CDK_TABLE_TEMPLATE,
@@ -1857,7 +1853,6 @@
         };
         CdkTextColumn.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-text-column',
                         template: "\n    <ng-container cdkColumnDef>\n      <th cdk-header-cell *cdkHeaderCellDef [style.text-align]=\"justify\">\n        {{headerText}}\n      </th>\n      <td cdk-cell *cdkCellDef=\"let data\" [style.text-align]=\"justify\">\n        {{dataAccessor(data, name)}}\n      </td>\n    </ng-container>\n  ",
                         encapsulation: core.ViewEncapsulation.None,

@@ -1310,7 +1310,6 @@ class CdkVirtualScrollViewport extends CdkScrollable {
 }
 CdkVirtualScrollViewport.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-virtual-scroll-viewport',
                 template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n",
                 host: {

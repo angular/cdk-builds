@@ -463,7 +463,6 @@
         };
         CdkTree.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-tree',
                         exportAs: 'cdkTree',
                         template: "<ng-container cdkTreeNodeOutlet></ng-container>",

@@ -175,7 +175,6 @@
         };
         CdkStep.decorators = [
             { type: core.Component, args: [{
-                        moduleId: module.id,
                         selector: 'cdk-step',
                         exportAs: 'cdkStep',
                         template: '<ng-template><ng-content></ng-content></ng-template>',

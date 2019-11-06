@@ -761,7 +761,6 @@ class CdkHeaderRow {
 }
 CdkHeaderRow.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-header-row, tr[cdk-header-row]',
                 template: CDK_ROW_TEMPLATE,
                 host: {
@@ -781,7 +780,6 @@ class CdkFooterRow {
 }
 CdkFooterRow.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-footer-row, tr[cdk-footer-row]',
                 template: CDK_ROW_TEMPLATE,
                 host: {
@@ -801,7 +799,6 @@ class CdkRow {
 }
 CdkRow.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-row, tr[cdk-row]',
                 template: CDK_ROW_TEMPLATE,
                 host: {
@@ -2415,7 +2412,6 @@ class CdkTable {
 }
 CdkTable.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-table, table[cdk-table]',
                 exportAs: 'cdkTable',
                 template: CDK_TABLE_TEMPLATE,
@@ -2832,7 +2828,6 @@ class CdkTextColumn {
 }
 CdkTextColumn.decorators = [
     { type: Component, args: [{
-                moduleId: module.id,
                 selector: 'cdk-text-column',
                 template: `
     <ng-container cdkColumnDef>

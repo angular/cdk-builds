@@ -467,7 +467,6 @@ var CdkTree = /** @class */ (function () {
     };
     CdkTree.decorators = [
         { type: Component, args: [{
-                    moduleId: module.id,
                     selector: 'cdk-tree',
                     exportAs: 'cdkTree',
                     template: "<ng-container cdkTreeNodeOutlet></ng-container>",
