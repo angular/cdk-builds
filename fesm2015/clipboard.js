@@ -106,10 +106,6 @@ if (false) {
  */
 /**
  * A service for copying text to the clipboard.
- *
- * Example usage:
- *
- * clipboard.copy("copy this text");
  */
 class Clipboard {
     /**
@@ -168,10 +164,6 @@ if (false) {
 /**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
- *
- * Example usage:
- *
- * `<button copyToClipboard="Content to be copied">Copy me!</button>`
  */
 class CdkCopyToClipboard {
     /**

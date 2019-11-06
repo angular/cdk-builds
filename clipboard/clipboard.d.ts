@@ -8,10 +8,6 @@
 import { PendingCopy } from './pending-copy';
 /**
  * A service for copying text to the clipboard.
- *
- * Example usage:
- *
- * clipboard.copy("copy this text");
  */
 export declare class Clipboard {
     private readonly _document;

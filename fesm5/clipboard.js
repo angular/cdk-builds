@@ -78,10 +78,6 @@ var PendingCopy = /** @class */ (function () {
  */
 /**
  * A service for copying text to the clipboard.
- *
- * Example usage:
- *
- * clipboard.copy("copy this text");
  */
 var Clipboard = /** @class */ (function () {
     function Clipboard(document) {
@@ -132,10 +128,6 @@ var Clipboard = /** @class */ (function () {
 /**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
- *
- * Example usage:
- *
- * `<button copyToClipboard="Content to be copied">Copy me!</button>`
  */
 var CdkCopyToClipboard = /** @class */ (function () {
     function CdkCopyToClipboard(_clipboard) {
