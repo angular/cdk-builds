@@ -2536,7 +2536,7 @@ var Overlay = /** @class */ (function () {
         if (!this._appRef) {
             this._appRef = this._injector.get(ApplicationRef);
         }
-        return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector);
+        return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
     };
     Overlay.decorators = [
         { type: Injectable }

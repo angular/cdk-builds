@@ -1,4 +1,5 @@
-import { Directive, TemplateRef, ViewContainerRef, EventEmitter, ComponentFactoryResolver, Output, NgModule } from '@angular/core';
+import { ElementRef, Directive, TemplateRef, ViewContainerRef, EventEmitter, ComponentFactoryResolver, Inject, Output, NgModule } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -236,6 +237,28 @@ if (false) {
     TemplatePortal.prototype.context;
 }
 /**
+ * A `DomPortal` is a portal whose DOM element will be taken from its current position
+ * in the DOM and moved into a portal outlet, when it is attached. On detach, the content
+ * will be restored to its original position.
+ * @template T
+ */
+class DomPortal extends Portal {
+    /**
+     * @param {?} element
+     */
+    constructor(element) {
+        super();
+        this.element = element instanceof ElementRef ? element.nativeElement : element;
+    }
+}
+if (false) {
+    /**
+     * DOM node hosting the portal's content.
+     * @type {?}
+     */
+    DomPortal.prototype.element;
+}
+/**
  * A `PortalOutlet` is an space that can contain a single `Portal`.
  * @record
  */
@@ -274,6 +297,8 @@ class BasePortalOutlet {
          * Whether this host has already been permanently disposed.
          */
         this._isDisposed = false;
+        // @breaking-change 10.0.0 `attachDomPortal` to become a required abstract method.
+        this.attachDomPortal = null;
     }
     /**
      * Whether this host has an attached portal.
@@ -304,6 +329,11 @@ class BasePortalOutlet {
         else if (portal instanceof TemplatePortal) {
             this._attachedPortal = portal;
             return this.attachTemplatePortal(portal);
+            // @breaking-change 10.0.0 remove null check for `this.attachDomPortal`.
+        }
+        else if (this.attachDomPortal && portal instanceof DomPortal) {
+            this._attachedPortal = portal;
+            return this.attachDomPortal(portal);
         }
         throwUnknownPortalTypeError();
     }
@@ -367,6 +397,8 @@ if (false) {
      * @private
      */
     BasePortalOutlet.prototype._isDisposed;
+    /** @type {?} */
+    BasePortalOutlet.prototype.attachDomPortal;
     /**
      * @abstract
      * @template T
@@ -404,13 +436,52 @@ class DomPortalOutlet extends BasePortalOutlet {
      * @param {?} _componentFactoryResolver
      * @param {?} _appRef
      * @param {?} _defaultInjector
+     * @param {?=} _document
      */
-    constructor(outletElement, _componentFactoryResolver, _appRef, _defaultInjector) {
+    constructor(outletElement, _componentFactoryResolver, _appRef, _defaultInjector, 
+    /**
+     * @deprecated `_document` Parameter to be made required.
+     * @breaking-change 10.0.0
+     */
+    _document) {
         super();
         this.outletElement = outletElement;
         this._componentFactoryResolver = _componentFactoryResolver;
         this._appRef = _appRef;
         this._defaultInjector = _defaultInjector;
+        /**
+         * Attaches a DOM portal by transferring its content into the outlet.
+         * @param portal Portal to be attached.
+         * @deprecated To be turned into a method.
+         * \@breaking-change 10.0.0
+         */
+        this.attachDomPortal = (/**
+         * @param {?} portal
+         * @return {?}
+         */
+        (portal) => {
+            // @breaking-change 10.0.0 Remove check and error once the
+            // `_document` constructor parameter is required.
+            if (!this._document) {
+                throw Error('Cannot attach DOM portal without _document constructor parameter');
+            }
+            // Anchor used to save the element's previous position so
+            // that we can restore it when the portal is detached.
+            /** @type {?} */
+            let anchorNode = this._document.createComment('dom-portal');
+            /** @type {?} */
+            let element = portal.element;
+            (/** @type {?} */ (element.parentNode)).insertBefore(anchorNode, element);
+            this.outletElement.appendChild(element);
+            super.setDisposeFn((/**
+             * @return {?}
+             */
+            () => {
+                // We can't use `replaceWith` here because IE doesn't support it.
+                (/** @type {?} */ (anchorNode.parentNode)).replaceChild(element, anchorNode);
+            }));
+        });
+        this._document = _document;
     }
     /**
      * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
@@ -508,6 +579,19 @@ class DomPortalOutlet extends BasePortalOutlet {
 }
 if (false) {
     /**
+     * @type {?}
+     * @private
+     */
+    DomPortalOutlet.prototype._document;
+    /**
+     * Attaches a DOM portal by transferring its content into the outlet.
+     * \@param portal Portal to be attached.
+     * @deprecated To be turned into a method.
+     * \@breaking-change 10.0.0
+     * @type {?}
+     */
+    DomPortalOutlet.prototype.attachDomPortal;
+    /**
      * Element into which the content is projected.
      * @type {?}
      */
@@ -590,8 +674,14 @@ class CdkPortalOutlet extends BasePortalOutlet {
     /**
      * @param {?} _componentFactoryResolver
      * @param {?} _viewContainerRef
+     * @param {?=} _document
      */
-    constructor(_componentFactoryResolver, _viewContainerRef) {
+    constructor(_componentFactoryResolver, _viewContainerRef, 
+    /**
+     * @deprecated `_document` parameter to be made required.
+     * @breaking-change 9.0.0
+     */
+    _document) {
         super();
         this._componentFactoryResolver = _componentFactoryResolver;
         this._viewContainerRef = _viewContainerRef;
@@ -603,6 +693,44 @@ class CdkPortalOutlet extends BasePortalOutlet {
          * Emits when a portal is attached to the outlet.
          */
         this.attached = new EventEmitter();
+        /**
+         * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
+         * @param portal Portal to be attached.
+         * @deprecated To be turned into a method.
+         * \@breaking-change 10.0.0
+         */
+        this.attachDomPortal = (/**
+         * @param {?} portal
+         * @return {?}
+         */
+        (portal) => {
+            // @breaking-change 9.0.0 Remove check and error once the
+            // `_document` constructor parameter is required.
+            if (!this._document) {
+                throw Error('Cannot attach DOM portal without _document constructor parameter');
+            }
+            // Anchor used to save the element's previous position so
+            // that we can restore it when the portal is detached.
+            /** @type {?} */
+            let anchorNode = this._document.createComment('dom-portal');
+            /** @type {?} */
+            let element = portal.element;
+            /** @type {?} */
+            const nativeElement = this._viewContainerRef.element.nativeElement;
+            /** @type {?} */
+            const rootNode = nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
+                nativeElement : (/** @type {?} */ (nativeElement.parentNode));
+            portal.setAttachedHost(this);
+            (/** @type {?} */ (element.parentNode)).insertBefore(anchorNode, element);
+            rootNode.appendChild(element);
+            super.setDisposeFn((/**
+             * @return {?}
+             */
+            () => {
+                (/** @type {?} */ (anchorNode.parentNode)).replaceChild(element, anchorNode);
+            }));
+        });
+        this._document = _document;
     }
     /**
      * Portal associated with the Portal outlet.
@@ -683,7 +811,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
         return ref;
     }
     /**
-     * Attach the given TemplatePortal to this PortlHost as an embedded View.
+     * Attach the given TemplatePortal to this PortalHost as an embedded View.
      * @template C
      * @param {?} portal Portal to be attached.
      * @return {?} Reference to the created embedded view.
@@ -712,7 +840,8 @@ CdkPortalOutlet.decorators = [
 /** @nocollapse */
 CdkPortalOutlet.ctorParameters = () => [
     { type: ComponentFactoryResolver },
-    { type: ViewContainerRef }
+    { type: ViewContainerRef },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 CdkPortalOutlet.propDecorators = {
     attached: [{ type: Output }]
@@ -720,6 +849,11 @@ CdkPortalOutlet.propDecorators = {
 if (false) {
     /** @type {?} */
     CdkPortalOutlet.ngAcceptInputType_portal;
+    /**
+     * @type {?}
+     * @private
+     */
+    CdkPortalOutlet.prototype._document;
     /**
      * Whether the portal component is initialized.
      * @type {?}
@@ -737,6 +871,14 @@ if (false) {
      * @type {?}
      */
     CdkPortalOutlet.prototype.attached;
+    /**
+     * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
+     * \@param portal Portal to be attached.
+     * @deprecated To be turned into a method.
+     * \@breaking-change 10.0.0
+     * @type {?}
+     */
+    CdkPortalOutlet.prototype.attachDomPortal;
     /**
      * @type {?}
      * @private
@@ -835,5 +977,5 @@ if (false) {
  * Generated bundle index. Do not edit.
  */
 
-export { Portal, ComponentPortal, TemplatePortal, BasePortalOutlet, BasePortalHost, DomPortalOutlet, DomPortalHost, CdkPortal, TemplatePortalDirective, CdkPortalOutlet, PortalHostDirective, PortalModule, PortalInjector };
+export { Portal, ComponentPortal, TemplatePortal, DomPortal, BasePortalOutlet, BasePortalHost, DomPortalOutlet, DomPortalHost, CdkPortal, TemplatePortalDirective, CdkPortalOutlet, PortalHostDirective, PortalModule, PortalInjector };
 //# sourceMappingURL=portal.js.map

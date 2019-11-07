@@ -69,6 +69,16 @@ export declare class TemplatePortal<C = any> extends Portal<EmbeddedViewRef<C>> 
     attach(host: PortalOutlet, context?: C | undefined): EmbeddedViewRef<C>;
     detach(): void;
 }
+/**
+ * A `DomPortal` is a portal whose DOM element will be taken from its current position
+ * in the DOM and moved into a portal outlet, when it is attached. On detach, the content
+ * will be restored to its original position.
+ */
+export declare class DomPortal<T = HTMLElement> extends Portal<T> {
+    /** DOM node hosting the portal's content. */
+    readonly element: T;
+    constructor(element: T | ElementRef<T>);
+}
 /** A `PortalOutlet` is an space that can contain a single `Portal`. */
 export interface PortalOutlet {
     /** Attaches a portal to this outlet. */
@@ -103,6 +113,7 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
     attach(portal: any): any;
     abstract attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     abstract attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C>;
+    readonly attachDomPortal: null | ((portal: DomPortal) => any);
     /** Detaches a previously attached portal. */
     detach(): void;
     /** Permanently dispose of this portal host. */
