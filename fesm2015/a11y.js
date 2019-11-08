@@ -2783,7 +2783,135 @@ function isFakeMousedownFromScreenReader(event) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/** @enum {number} */
+const HighContrastMode = {
+    NONE: 0,
+    BLACK_ON_WHITE: 1,
+    WHITE_ON_BLACK: 2,
+};
+/**
+ * CSS class applied to the document body when in black-on-white high-contrast mode.
+ * @type {?}
+ */
+const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
+/**
+ * CSS class applied to the document body when in white-on-black high-contrast mode.
+ * @type {?}
+ */
+const WHITE_ON_BLACK_CSS_CLASS = 'cdk-high-contrast-white-on-black';
+/**
+ * CSS class applied to the document body when in high-contrast mode.
+ * @type {?}
+ */
+const HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = 'cdk-high-contrast-active';
+/**
+ * Service to determine whether the browser is currently in a high-constrast-mode environment.
+ *
+ * Microsoft Windows supports an accessibility feature called "High Contrast Mode". This mode
+ * changes the appearance of all applications, including web applications, to dramatically increase
+ * contrast.
+ *
+ * IE, Edge, and Firefox currently support this mode. Chrome does not support Windows High Contrast
+ * Mode. This service does not detect high-contrast mode as added by the Chrome "High Contrast"
+ * browser extension.
+ */
+class HighContrastModeDetector {
+    /**
+     * @param {?} _platform
+     * @param {?} document
+     */
+    constructor(_platform, document) {
+        this._platform = _platform;
+        this._document = document;
+    }
+    /**
+     * Gets the current high-constrast-mode for the page.
+     * @return {?}
+     */
+    getHighContrastMode() {
+        if (!this._platform.isBrowser) {
+            return 0 /* NONE */;
+        }
+        // Create a test element with an arbitrary background-color that is neither black nor
+        // white; high-contrast mode will coerce the color to either black or white. Also ensure that
+        // appending the test element to the DOM does not affect layout by absolutely positioning it
+        /** @type {?} */
+        const testElement = this._document.createElement('div');
+        testElement.style.backgroundColor = 'rgb(1,2,3)';
+        testElement.style.position = 'absolute';
+        this._document.body.appendChild(testElement);
+        // Get the computed style for the background color, collapsing spaces to normalize between
+        // browsers. Once we get this color, we no longer need the test element. Access the `window`
+        // via the document so we can fake it in tests.
+        /** @type {?} */
+        const documentWindow = (/** @type {?} */ (this._document.defaultView));
+        /** @type {?} */
+        const computedColor = (documentWindow.getComputedStyle(testElement).backgroundColor || '').replace(/ /g, '');
+        this._document.body.removeChild(testElement);
+        switch (computedColor) {
+            case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
+            case 'rgb(255,255,255)': return 1 /* BLACK_ON_WHITE */;
+        }
+        return 0 /* NONE */;
+    }
+    /**
+     * Applies CSS classes indicating high-contrast mode to document body (browser-only).
+     * @return {?}
+     */
+    _applyBodyHighContrastModeCssClasses() {
+        if (this._platform.isBrowser && this._document.body) {
+            /** @type {?} */
+            const bodyClasses = this._document.body.classList;
+            // IE11 doesn't support `classList` operations with multiple arguments
+            bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+            bodyClasses.remove(BLACK_ON_WHITE_CSS_CLASS);
+            bodyClasses.remove(WHITE_ON_BLACK_CSS_CLASS);
+            /** @type {?} */
+            const mode = this.getHighContrastMode();
+            if (mode === 1 /* BLACK_ON_WHITE */) {
+                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+                bodyClasses.add(BLACK_ON_WHITE_CSS_CLASS);
+            }
+            else if (mode === 2 /* WHITE_ON_BLACK */) {
+                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+                bodyClasses.add(WHITE_ON_BLACK_CSS_CLASS);
+            }
+        }
+    }
+}
+HighContrastModeDetector.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */
+HighContrastModeDetector.ctorParameters = () => [
+    { type: Platform },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+];
+/** @nocollapse */ HighContrastModeDetector.ɵprov = ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(ɵɵinject(Platform), ɵɵinject(DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    HighContrastModeDetector.prototype._document;
+    /**
+     * @type {?}
+     * @private
+     */
+    HighContrastModeDetector.prototype._platform;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class A11yModule {
+    /**
+     * @param {?} highContrastModeDetector
+     */
+    constructor(highContrastModeDetector) {
+        highContrastModeDetector._applyBodyHighContrastModeCssClasses();
+    }
 }
 A11yModule.decorators = [
     { type: NgModule, args: [{
@@ -2791,6 +2919,10 @@ A11yModule.decorators = [
                 declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
             },] }
+];
+/** @nocollapse */
+A11yModule.ctorParameters = () => [
+    { type: HighContrastModeDetector }
 ];
 
 /**
@@ -2802,5 +2934,5 @@ A11yModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader };
 //# sourceMappingURL=a11y.js.map

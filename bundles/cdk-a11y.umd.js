@@ -1746,8 +1746,93 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /** CSS class applied to the document body when in black-on-white high-contrast mode. */
+    var BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
+    /** CSS class applied to the document body when in white-on-black high-contrast mode. */
+    var WHITE_ON_BLACK_CSS_CLASS = 'cdk-high-contrast-white-on-black';
+    /** CSS class applied to the document body when in high-contrast mode. */
+    var HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = 'cdk-high-contrast-active';
+    /**
+     * Service to determine whether the browser is currently in a high-constrast-mode environment.
+     *
+     * Microsoft Windows supports an accessibility feature called "High Contrast Mode". This mode
+     * changes the appearance of all applications, including web applications, to dramatically increase
+     * contrast.
+     *
+     * IE, Edge, and Firefox currently support this mode. Chrome does not support Windows High Contrast
+     * Mode. This service does not detect high-contrast mode as added by the Chrome "High Contrast"
+     * browser extension.
+     */
+    var HighContrastModeDetector = /** @class */ (function () {
+        function HighContrastModeDetector(_platform, document) {
+            this._platform = _platform;
+            this._document = document;
+        }
+        /** Gets the current high-constrast-mode for the page. */
+        HighContrastModeDetector.prototype.getHighContrastMode = function () {
+            if (!this._platform.isBrowser) {
+                return 0 /* NONE */;
+            }
+            // Create a test element with an arbitrary background-color that is neither black nor
+            // white; high-contrast mode will coerce the color to either black or white. Also ensure that
+            // appending the test element to the DOM does not affect layout by absolutely positioning it
+            var testElement = this._document.createElement('div');
+            testElement.style.backgroundColor = 'rgb(1,2,3)';
+            testElement.style.position = 'absolute';
+            this._document.body.appendChild(testElement);
+            // Get the computed style for the background color, collapsing spaces to normalize between
+            // browsers. Once we get this color, we no longer need the test element. Access the `window`
+            // via the document so we can fake it in tests.
+            var documentWindow = this._document.defaultView;
+            var computedColor = (documentWindow.getComputedStyle(testElement).backgroundColor || '').replace(/ /g, '');
+            this._document.body.removeChild(testElement);
+            switch (computedColor) {
+                case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
+                case 'rgb(255,255,255)': return 1 /* BLACK_ON_WHITE */;
+            }
+            return 0 /* NONE */;
+        };
+        /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
+        HighContrastModeDetector.prototype._applyBodyHighContrastModeCssClasses = function () {
+            if (this._platform.isBrowser && this._document.body) {
+                var bodyClasses = this._document.body.classList;
+                // IE11 doesn't support `classList` operations with multiple arguments
+                bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+                bodyClasses.remove(BLACK_ON_WHITE_CSS_CLASS);
+                bodyClasses.remove(WHITE_ON_BLACK_CSS_CLASS);
+                var mode = this.getHighContrastMode();
+                if (mode === 1 /* BLACK_ON_WHITE */) {
+                    bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+                    bodyClasses.add(BLACK_ON_WHITE_CSS_CLASS);
+                }
+                else if (mode === 2 /* WHITE_ON_BLACK */) {
+                    bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
+                    bodyClasses.add(WHITE_ON_BLACK_CSS_CLASS);
+                }
+            }
+        };
+        HighContrastModeDetector.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        HighContrastModeDetector.ctorParameters = function () { return [
+            { type: i1.Platform },
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
+        ]; };
+        HighContrastModeDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
+        return HighContrastModeDetector;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     var A11yModule = /** @class */ (function () {
-        function A11yModule() {
+        function A11yModule(highContrastModeDetector) {
+            highContrastModeDetector._applyBodyHighContrastModeCssClasses();
         }
         A11yModule.decorators = [
             { type: i0.NgModule, args: [{
@@ -1756,6 +1841,10 @@
                         exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     },] }
         ];
+        /** @nocollapse */
+        A11yModule.ctorParameters = function () { return [
+            { type: HighContrastModeDetector }
+        ]; };
         return A11yModule;
     }());
 
@@ -1783,6 +1872,7 @@
     exports.FocusMonitor = FocusMonitor;
     exports.FocusTrap = FocusTrap;
     exports.FocusTrapFactory = FocusTrapFactory;
+    exports.HighContrastModeDetector = HighContrastModeDetector;
     exports.InteractivityChecker = InteractivityChecker;
     exports.LIVE_ANNOUNCER_DEFAULT_OPTIONS = LIVE_ANNOUNCER_DEFAULT_OPTIONS;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
