@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/testing'), require('@angular/core/testing'), require('rxjs/operators'), require('rxjs'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/testbed', ['exports', 'tslib', '@angular/cdk/testing', '@angular/core/testing', 'rxjs/operators', 'rxjs', '@angular/cdk/keycodes'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.testbed = {}), global.tslib, global.ng.cdk.testing, global.ng.core.testing, global.rxjs.operators, global.rxjs, global.ng.cdk.keycodes));
-}(this, function (exports, tslib, testing, testing$1, operators, rxjs, keyCodes) { 'use strict';
+}(this, (function (exports, tslib, testing, testing$1, operators, rxjs, keyCodes) { 'use strict';
 
     /**
      * @license
@@ -789,5 +789,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-testing-testbed.umd.js.map

@@ -654,5 +654,5 @@ var PortalInjector = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { Portal, ComponentPortal, TemplatePortal, DomPortal, BasePortalOutlet, BasePortalHost, DomPortalOutlet, DomPortalHost, CdkPortal, TemplatePortalDirective, CdkPortalOutlet, PortalHostDirective, PortalModule, PortalInjector };
+export { BasePortalHost, BasePortalOutlet, CdkPortal, CdkPortalOutlet, ComponentPortal, DomPortal, DomPortalHost, DomPortalOutlet, Portal, PortalHostDirective, PortalInjector, PortalModule, TemplatePortal, TemplatePortalDirective };
 //# sourceMappingURL=portal.js.map

@@ -92,5 +92,5 @@ function coerceElement(elementOrRef) {
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { coerceBooleanProperty, coerceNumberProperty, _isNumberValue, coerceArray, coerceCssPixelValue, coerceElement };
+export { _isNumberValue, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceNumberProperty };
 //# sourceMappingURL=coercion.js.map

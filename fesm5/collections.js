@@ -293,5 +293,5 @@ var UniqueSelectionDispatcher = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { UniqueSelectionDispatcher, ArrayDataSource, DataSource, isDataSource, SelectionModel, getMultipleValuesInSingleSelectionError };
+export { ArrayDataSource, DataSource, SelectionModel, UniqueSelectionDispatcher, getMultipleValuesInSingleSelectionError, isDataSource };
 //# sourceMappingURL=collections.js.map

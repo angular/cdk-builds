@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/coercion', ['exports', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.coercion = {}), global.ng.core));
-}(this, function (exports, core) { 'use strict';
+}(this, (function (exports, core) { 'use strict';
 
     /**
      * @license
@@ -96,14 +96,14 @@
      * found in the LICENSE file at https://angular.io/license
      */
 
-    exports.coerceBooleanProperty = coerceBooleanProperty;
-    exports.coerceNumberProperty = coerceNumberProperty;
     exports._isNumberValue = _isNumberValue;
     exports.coerceArray = coerceArray;
+    exports.coerceBooleanProperty = coerceBooleanProperty;
     exports.coerceCssPixelValue = coerceCssPixelValue;
     exports.coerceElement = coerceElement;
+    exports.coerceNumberProperty = coerceNumberProperty;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-coercion.umd.js.map

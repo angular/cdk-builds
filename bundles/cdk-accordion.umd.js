@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('@angular/cdk/coercion'), require('rxjs')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/collections', '@angular/cdk/coercion', 'rxjs'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}), global.ng.core, global.ng.cdk.collections, global.ng.cdk.coercion, global.rxjs));
-}(this, function (exports, core, collections, coercion, rxjs) { 'use strict';
+}(this, (function (exports, core, collections, coercion, rxjs) { 'use strict';
 
     /**
      * @license
@@ -247,11 +247,11 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.CdkAccordionItem = CdkAccordionItem;
     exports.CdkAccordion = CdkAccordion;
+    exports.CdkAccordionItem = CdkAccordionItem;
     exports.CdkAccordionModule = CdkAccordionModule;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-accordion.umd.js.map

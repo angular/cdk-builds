@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/platform', ['exports', '@angular/core', '@angular/common'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}), global.ng.core, global.ng.common));
-}(this, function (exports, i0, common) { 'use strict';
+}(this, (function (exports, i0, common) { 'use strict';
 
     /**
      * @license
@@ -299,14 +299,14 @@
 
     exports.Platform = Platform;
     exports.PlatformModule = PlatformModule;
-    exports.getSupportedInputTypes = getSupportedInputTypes;
-    exports.supportsPassiveEventListeners = supportsPassiveEventListeners;
-    exports.normalizePassiveListenerOptions = normalizePassiveListenerOptions;
-    exports.supportsScrollBehavior = supportsScrollBehavior;
-    exports.getRtlScrollAxisType = getRtlScrollAxisType;
     exports._supportsShadowDom = _supportsShadowDom;
+    exports.getRtlScrollAxisType = getRtlScrollAxisType;
+    exports.getSupportedInputTypes = getSupportedInputTypes;
+    exports.normalizePassiveListenerOptions = normalizePassiveListenerOptions;
+    exports.supportsPassiveEventListeners = supportsPassiveEventListeners;
+    exports.supportsScrollBehavior = supportsScrollBehavior;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-platform.umd.js.map

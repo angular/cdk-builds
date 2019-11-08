@@ -327,5 +327,5 @@ ObserversModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { MutationObserverFactory, ContentObserver, CdkObserveContent, ObserversModule };
+export { CdkObserveContent, ContentObserver, MutationObserverFactory, ObserversModule };
 //# sourceMappingURL=observers.js.map

@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}), global.ng.core, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.coercion));
-}(this, function (exports, i0, i1, rxjs, operators, coercion) { 'use strict';
+}(this, (function (exports, i0, i1, rxjs, operators, coercion) { 'use strict';
 
     /**
      * @license
@@ -244,12 +244,12 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.LayoutModule = LayoutModule;
     exports.BreakpointObserver = BreakpointObserver;
     exports.Breakpoints = Breakpoints;
+    exports.LayoutModule = LayoutModule;
     exports.MediaMatcher = MediaMatcher;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-layout.umd.js.map

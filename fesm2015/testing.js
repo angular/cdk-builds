@@ -358,5 +358,5 @@ var TestKey;
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { ComponentHarness, HarnessPredicate, HarnessEnvironment, TestKey };
+export { ComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey };
 //# sourceMappingURL=testing.js.map

@@ -1,7 +1,7 @@
 import { DOCUMENT, CommonModule } from '@angular/common';
 import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
-import { TAB, DOWN_ARROW, UP_ARROW, RIGHT_ARROW, LEFT_ARROW, hasModifierKey, A, Z, ZERO, NINE } from '@angular/cdk/keycodes';
+import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
@@ -2802,5 +2802,5 @@ A11yModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { MESSAGES_CONTAINER_ID, CDK_DESCRIBEDBY_ID_PREFIX, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, AriaDescriber, ActiveDescendantKeyManager, FocusKeyManager, ListKeyManager, FocusTrap, FocusTrapFactory, CdkTrapFocus, InteractivityChecker, LiveAnnouncer, CdkAriaLive, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, TOUCH_BUFFER_MS, FocusMonitor, CdkMonitorFocus, isFakeMousedownFromScreenReader, A11yModule };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader };
 //# sourceMappingURL=a11y.js.map

@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('protractor'), require('@angular/cdk/testing')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/protractor', ['exports', 'tslib', 'protractor', '@angular/cdk/testing'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.tslib, global.protractor, global.ng.cdk.testing));
-}(this, function (exports, tslib, protractor, testing) { 'use strict';
+}(this, (function (exports, tslib, protractor, testing) { 'use strict';
 
     /**
      * @license
@@ -343,5 +343,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-testing-protractor.umd.js.map

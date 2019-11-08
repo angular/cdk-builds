@@ -5255,5 +5255,5 @@ DragDropModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_b, DragDrop, DragRef, DropListRef, moveItemInArray, transferArrayItem, copyArrayItem, DragDropModule, DragDropRegistry, CdkDropList, CdkDropListGroup, CDK_DRAG_CONFIG_FACTORY, CDK_DROP_LIST, CDK_DRAG_CONFIG, CdkDrag, CdkDragHandle, CdkDragPreview, CdkDragPlaceholder };
+export { CDK_DRAG_CONFIG, CDK_DRAG_CONFIG_FACTORY, CDK_DROP_LIST, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem, CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_b };
 //# sourceMappingURL=drag-drop.js.map

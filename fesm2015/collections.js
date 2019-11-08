@@ -525,5 +525,5 @@ if (false) {
  * Generated bundle index. Do not edit.
  */
 
-export { ArrayDataSource, isDataSource, DataSource, getMultipleValuesInSingleSelectionError, SelectionModel, UniqueSelectionDispatcher };
+export { ArrayDataSource, DataSource, SelectionModel, UniqueSelectionDispatcher, getMultipleValuesInSingleSelectionError, isDataSource };
 //# sourceMappingURL=collections.js.map

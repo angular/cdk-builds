@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing', ['exports', 'tslib'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {}), global.tslib));
-}(this, function (exports, tslib) { 'use strict';
+}(this, (function (exports, tslib) { 'use strict';
 
     /**
      * @license
@@ -472,10 +472,10 @@
      */
 
     exports.ComponentHarness = ComponentHarness;
-    exports.HarnessPredicate = HarnessPredicate;
     exports.HarnessEnvironment = HarnessEnvironment;
+    exports.HarnessPredicate = HarnessPredicate;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-testing.umd.js.map

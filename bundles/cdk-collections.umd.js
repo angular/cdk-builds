@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('rxjs'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/collections', ['exports', 'tslib', 'rxjs', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.collections = {}), global.tslib, global.rxjs, global.ng.core));
-}(this, function (exports, tslib, rxjs, i0) { 'use strict';
+}(this, (function (exports, tslib, rxjs, i0) { 'use strict';
 
     /**
      * @license
@@ -295,14 +295,14 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
     exports.ArrayDataSource = ArrayDataSource;
     exports.DataSource = DataSource;
-    exports.isDataSource = isDataSource;
     exports.SelectionModel = SelectionModel;
+    exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
     exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
+    exports.isDataSource = isDataSource;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-collections.umd.js.map

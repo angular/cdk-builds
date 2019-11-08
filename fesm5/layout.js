@@ -244,5 +244,5 @@ var Breakpoints = {
  * Generated bundle index. Do not edit.
  */
 
-export { LayoutModule, BreakpointObserver, Breakpoints, MediaMatcher };
+export { BreakpointObserver, Breakpoints, LayoutModule, MediaMatcher };
 //# sourceMappingURL=layout.js.map

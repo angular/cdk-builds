@@ -247,5 +247,5 @@ ClipboardModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { Clipboard, ClipboardModule, CdkCopyToClipboard, PendingCopy };
+export { CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
 //# sourceMappingURL=clipboard.js.map

@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('tslib'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/observers')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'tslib', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/observers'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11Y = {}), global.ng.common, global.ng.core, global.tslib, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.observers));
-}(this, function (exports, i2, i0, tslib, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
+}(this, (function (exports, i2, i0, tslib, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
 
     /**
      * @license
@@ -1771,29 +1771,29 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.MESSAGES_CONTAINER_ID = MESSAGES_CONTAINER_ID;
-    exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
-    exports.CDK_DESCRIBEDBY_HOST_ATTRIBUTE = CDK_DESCRIBEDBY_HOST_ATTRIBUTE;
-    exports.AriaDescriber = AriaDescriber;
+    exports.A11yModule = A11yModule;
     exports.ActiveDescendantKeyManager = ActiveDescendantKeyManager;
+    exports.AriaDescriber = AriaDescriber;
+    exports.CDK_DESCRIBEDBY_HOST_ATTRIBUTE = CDK_DESCRIBEDBY_HOST_ATTRIBUTE;
+    exports.CDK_DESCRIBEDBY_ID_PREFIX = CDK_DESCRIBEDBY_ID_PREFIX;
+    exports.CdkAriaLive = CdkAriaLive;
+    exports.CdkMonitorFocus = CdkMonitorFocus;
+    exports.CdkTrapFocus = CdkTrapFocus;
     exports.FocusKeyManager = FocusKeyManager;
-    exports.ListKeyManager = ListKeyManager;
+    exports.FocusMonitor = FocusMonitor;
     exports.FocusTrap = FocusTrap;
     exports.FocusTrapFactory = FocusTrapFactory;
-    exports.CdkTrapFocus = CdkTrapFocus;
     exports.InteractivityChecker = InteractivityChecker;
-    exports.LiveAnnouncer = LiveAnnouncer;
-    exports.CdkAriaLive = CdkAriaLive;
+    exports.LIVE_ANNOUNCER_DEFAULT_OPTIONS = LIVE_ANNOUNCER_DEFAULT_OPTIONS;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY = LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY;
-    exports.LIVE_ANNOUNCER_DEFAULT_OPTIONS = LIVE_ANNOUNCER_DEFAULT_OPTIONS;
+    exports.ListKeyManager = ListKeyManager;
+    exports.LiveAnnouncer = LiveAnnouncer;
+    exports.MESSAGES_CONTAINER_ID = MESSAGES_CONTAINER_ID;
     exports.TOUCH_BUFFER_MS = TOUCH_BUFFER_MS;
-    exports.FocusMonitor = FocusMonitor;
-    exports.CdkMonitorFocus = CdkMonitorFocus;
     exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
-    exports.A11yModule = A11yModule;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-a11y.umd.js.map

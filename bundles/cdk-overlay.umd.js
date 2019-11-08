@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', 'tslib', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/keycodes'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.tslib, global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.keycodes));
-}(this, function (exports, tslib, i1, i1$1, i0, coercion, bidi, portal, rxjs, operators, i3, keycodes) { 'use strict';
+}(this, (function (exports, tslib, i1, i1$1, i0, coercion, bidi, portal, rxjs, operators, i3, keycodes) { 'use strict';
 
     /**
      * @license
@@ -3032,42 +3032,57 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ViewportRuler = i1.ViewportRuler;
-    exports.CdkScrollable = i1.CdkScrollable;
-    exports.ScrollDispatcher = i1.ScrollDispatcher;
-    exports.ɵangular_material_src_cdk_overlay_overlay_g = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_f = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_b = OVERLAY_CONTAINER_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_a = OVERLAY_CONTAINER_PROVIDER_FACTORY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_c = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_e = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_d = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
-    exports.Overlay = Overlay;
-    exports.OverlayContainer = OverlayContainer;
-    exports.CdkOverlayOrigin = CdkOverlayOrigin;
-    exports.CdkConnectedOverlay = CdkConnectedOverlay;
-    exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
-    exports.OverlayRef = OverlayRef;
-    exports.OverlayKeyboardDispatcher = OverlayKeyboardDispatcher;
-    exports.OverlayPositionBuilder = OverlayPositionBuilder;
-    exports.GlobalPositionStrategy = GlobalPositionStrategy;
-    exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
-    exports.FlexibleConnectedPositionStrategy = FlexibleConnectedPositionStrategy;
-    exports.OverlayConfig = OverlayConfig;
-    exports.ConnectionPositionPair = ConnectionPositionPair;
-    exports.ScrollingVisibility = ScrollingVisibility;
-    exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
-    exports.validateVerticalPosition = validateVerticalPosition;
-    exports.validateHorizontalPosition = validateHorizontalPosition;
-    exports.ScrollStrategyOptions = ScrollStrategyOptions;
-    exports.RepositionScrollStrategy = RepositionScrollStrategy;
-    exports.CloseScrollStrategy = CloseScrollStrategy;
-    exports.NoopScrollStrategy = NoopScrollStrategy;
+    Object.defineProperty(exports, 'CdkScrollable', {
+        enumerable: true,
+        get: function () {
+            return i1.CdkScrollable;
+        }
+    });
+    Object.defineProperty(exports, 'ScrollDispatcher', {
+        enumerable: true,
+        get: function () {
+            return i1.ScrollDispatcher;
+        }
+    });
+    Object.defineProperty(exports, 'ViewportRuler', {
+        enumerable: true,
+        get: function () {
+            return i1.ViewportRuler;
+        }
+    });
     exports.BlockScrollStrategy = BlockScrollStrategy;
-    exports.OverlayModule = OverlayModule;
+    exports.CdkConnectedOverlay = CdkConnectedOverlay;
+    exports.CdkOverlayOrigin = CdkOverlayOrigin;
+    exports.CloseScrollStrategy = CloseScrollStrategy;
+    exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
+    exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
+    exports.ConnectionPositionPair = ConnectionPositionPair;
+    exports.FlexibleConnectedPositionStrategy = FlexibleConnectedPositionStrategy;
+    exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
+    exports.GlobalPositionStrategy = GlobalPositionStrategy;
+    exports.NoopScrollStrategy = NoopScrollStrategy;
     exports.OVERLAY_PROVIDERS = OVERLAY_PROVIDERS;
+    exports.Overlay = Overlay;
+    exports.OverlayConfig = OverlayConfig;
+    exports.OverlayContainer = OverlayContainer;
+    exports.OverlayKeyboardDispatcher = OverlayKeyboardDispatcher;
+    exports.OverlayModule = OverlayModule;
+    exports.OverlayPositionBuilder = OverlayPositionBuilder;
+    exports.OverlayRef = OverlayRef;
+    exports.RepositionScrollStrategy = RepositionScrollStrategy;
+    exports.ScrollStrategyOptions = ScrollStrategyOptions;
+    exports.ScrollingVisibility = ScrollingVisibility;
+    exports.validateHorizontalPosition = validateHorizontalPosition;
+    exports.validateVerticalPosition = validateVerticalPosition;
+    exports.ɵangular_material_src_cdk_overlay_overlay_a = OVERLAY_CONTAINER_PROVIDER_FACTORY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_b = OVERLAY_CONTAINER_PROVIDER;
+    exports.ɵangular_material_src_cdk_overlay_overlay_c = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_d = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_e = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
+    exports.ɵangular_material_src_cdk_overlay_overlay_f = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_g = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-overlay.umd.js.map

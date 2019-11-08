@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/text-field', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}), global.ng.cdk.platform, global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators));
-}(this, function (exports, i1, i0, coercion, rxjs, operators) { 'use strict';
+}(this, (function (exports, i1, i0, coercion, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -401,5 +401,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-text-field.umd.js.map

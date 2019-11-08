@@ -170,5 +170,5 @@ var BidiModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { DIR_DOCUMENT_FACTORY as ɵangular_material_src_cdk_bidi_bidi_a, Directionality, DIR_DOCUMENT, Dir, BidiModule };
+export { BidiModule, DIR_DOCUMENT, Dir, Directionality, DIR_DOCUMENT_FACTORY as ɵangular_material_src_cdk_bidi_bidi_a };
 //# sourceMappingURL=bidi.js.map

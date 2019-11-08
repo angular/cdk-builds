@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', 'tslib', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.tslib, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, function (exports, tslib, bidi, coercion, collections, platform, common, core, rxjs, operators) { 'use strict';
+}(this, (function (exports, tslib, bidi, coercion, collections, platform, common, core, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -1935,37 +1935,42 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.DataSource = collections.DataSource;
-    exports.DataRowOutlet = DataRowOutlet;
-    exports.HeaderRowOutlet = HeaderRowOutlet;
-    exports.FooterRowOutlet = FooterRowOutlet;
-    exports.CDK_TABLE_TEMPLATE = CDK_TABLE_TEMPLATE;
-    exports.CdkTable = CdkTable;
-    exports.CdkCellDef = CdkCellDef;
-    exports.CdkHeaderCellDef = CdkHeaderCellDef;
-    exports.CdkFooterCellDef = CdkFooterCellDef;
-    exports.CdkColumnDef = CdkColumnDef;
+    Object.defineProperty(exports, 'DataSource', {
+        enumerable: true,
+        get: function () {
+            return collections.DataSource;
+        }
+    });
     exports.BaseCdkCell = BaseCdkCell;
-    exports.CdkHeaderCell = CdkHeaderCell;
-    exports.CdkFooterCell = CdkFooterCell;
-    exports.CdkCell = CdkCell;
-    exports.CDK_ROW_TEMPLATE = CDK_ROW_TEMPLATE;
     exports.BaseRowDef = BaseRowDef;
-    exports.CdkHeaderRowDef = CdkHeaderRowDef;
-    exports.CdkFooterRowDef = CdkFooterRowDef;
-    exports.CdkRowDef = CdkRowDef;
+    exports.CDK_ROW_TEMPLATE = CDK_ROW_TEMPLATE;
+    exports.CDK_TABLE_TEMPLATE = CDK_TABLE_TEMPLATE;
+    exports.CdkCell = CdkCell;
+    exports.CdkCellDef = CdkCellDef;
     exports.CdkCellOutlet = CdkCellOutlet;
-    exports.CdkHeaderRow = CdkHeaderRow;
+    exports.CdkColumnDef = CdkColumnDef;
+    exports.CdkFooterCell = CdkFooterCell;
+    exports.CdkFooterCellDef = CdkFooterCellDef;
     exports.CdkFooterRow = CdkFooterRow;
+    exports.CdkFooterRowDef = CdkFooterRowDef;
+    exports.CdkHeaderCell = CdkHeaderCell;
+    exports.CdkHeaderCellDef = CdkHeaderCellDef;
+    exports.CdkHeaderRow = CdkHeaderRow;
+    exports.CdkHeaderRowDef = CdkHeaderRowDef;
     exports.CdkRow = CdkRow;
+    exports.CdkRowDef = CdkRowDef;
+    exports.CdkTable = CdkTable;
     exports.CdkTableModule = CdkTableModule;
+    exports.CdkTextColumn = CdkTextColumn;
+    exports.DataRowOutlet = DataRowOutlet;
+    exports.FooterRowOutlet = FooterRowOutlet;
+    exports.HeaderRowOutlet = HeaderRowOutlet;
     exports.STICKY_DIRECTIONS = STICKY_DIRECTIONS;
     exports.StickyStyler = StickyStyler;
-    exports.mixinHasStickyInput = mixinHasStickyInput;
     exports.TEXT_COLUMN_OPTIONS = TEXT_COLUMN_OPTIONS;
-    exports.CdkTextColumn = CdkTextColumn;
+    exports.mixinHasStickyInput = mixinHasStickyInput;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-table.umd.js.map

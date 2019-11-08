@@ -296,5 +296,5 @@ function _supportsShadowDom() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, getSupportedInputTypes, supportsPassiveEventListeners, normalizePassiveListenerOptions, RtlScrollAxisType, supportsScrollBehavior, getRtlScrollAxisType, _supportsShadowDom };
+export { Platform, PlatformModule, RtlScrollAxisType, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

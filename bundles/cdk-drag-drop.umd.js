@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('tslib'), require('@angular/cdk/bidi')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', 'tslib', '@angular/cdk/bidi'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.tslib, global.ng.cdk.bidi));
-}(this, function (exports, i0, i1, i2, platform, coercion, rxjs, operators, tslib, bidi) { 'use strict';
+}(this, (function (exports, i0, i1, i2, platform, coercion, rxjs, operators, tslib, bidi) { 'use strict';
 
     /**
      * @license
@@ -2957,26 +2957,26 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ɵangular_material_src_cdk_drag_drop_drag_drop_b = CDK_DRAG_PARENT;
-    exports.DragDrop = DragDrop;
-    exports.DragRef = DragRef;
-    exports.DropListRef = DropListRef;
-    exports.CdkDropList = CdkDropList;
-    exports.moveItemInArray = moveItemInArray;
-    exports.transferArrayItem = transferArrayItem;
-    exports.copyArrayItem = copyArrayItem;
-    exports.DragDropModule = DragDropModule;
-    exports.DragDropRegistry = DragDropRegistry;
-    exports.CdkDropListGroup = CdkDropListGroup;
-    exports.CDK_DROP_LIST = CDK_DROP_LIST;
     exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
     exports.CDK_DRAG_CONFIG_FACTORY = CDK_DRAG_CONFIG_FACTORY;
+    exports.CDK_DROP_LIST = CDK_DROP_LIST;
     exports.CdkDrag = CdkDrag;
     exports.CdkDragHandle = CdkDragHandle;
-    exports.CdkDragPreview = CdkDragPreview;
     exports.CdkDragPlaceholder = CdkDragPlaceholder;
+    exports.CdkDragPreview = CdkDragPreview;
+    exports.CdkDropList = CdkDropList;
+    exports.CdkDropListGroup = CdkDropListGroup;
+    exports.DragDrop = DragDrop;
+    exports.DragDropModule = DragDropModule;
+    exports.DragDropRegistry = DragDropRegistry;
+    exports.DragRef = DragRef;
+    exports.DropListRef = DropListRef;
+    exports.copyArrayItem = copyArrayItem;
+    exports.moveItemInArray = moveItemInArray;
+    exports.transferArrayItem = transferArrayItem;
+    exports.ɵangular_material_src_cdk_drag_drop_drag_drop_b = CDK_DRAG_PARENT;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-drag-drop.umd.js.map

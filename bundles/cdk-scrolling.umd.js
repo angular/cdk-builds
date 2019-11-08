@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('tslib'), require('@angular/cdk/collections')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', 'tslib', '@angular/cdk/collections'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.bidi, global.tslib, global.ng.cdk.collections));
-}(this, function (exports, coercion, i0, rxjs, operators, i1, bidi, tslib, collections) { 'use strict';
+}(this, (function (exports, coercion, i0, rxjs, operators, i1, bidi, tslib, collections) { 'use strict';
 
     /**
      * @license
@@ -1381,20 +1381,20 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.FixedSizeVirtualScrollStrategy = FixedSizeVirtualScrollStrategy;
-    exports._fixedSizeVirtualScrollStrategyFactory = _fixedSizeVirtualScrollStrategyFactory;
     exports.CdkFixedSizeVirtualScroll = CdkFixedSizeVirtualScroll;
-    exports.DEFAULT_SCROLL_TIME = DEFAULT_SCROLL_TIME;
-    exports.ScrollDispatcher = ScrollDispatcher;
     exports.CdkScrollable = CdkScrollable;
-    exports.ScrollingModule = ScrollingModule;
-    exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;
-    exports.ViewportRuler = ViewportRuler;
     exports.CdkVirtualForOf = CdkVirtualForOf;
-    exports.VIRTUAL_SCROLL_STRATEGY = VIRTUAL_SCROLL_STRATEGY;
     exports.CdkVirtualScrollViewport = CdkVirtualScrollViewport;
+    exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;
+    exports.DEFAULT_SCROLL_TIME = DEFAULT_SCROLL_TIME;
+    exports.FixedSizeVirtualScrollStrategy = FixedSizeVirtualScrollStrategy;
+    exports.ScrollDispatcher = ScrollDispatcher;
+    exports.ScrollingModule = ScrollingModule;
+    exports.VIRTUAL_SCROLL_STRATEGY = VIRTUAL_SCROLL_STRATEGY;
+    exports.ViewportRuler = ViewportRuler;
+    exports._fixedSizeVirtualScrollStrategyFactory = _fixedSizeVirtualScrollStrategyFactory;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-scrolling.umd.js.map

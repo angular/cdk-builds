@@ -1384,5 +1384,5 @@ var ViewportRuler = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { FixedSizeVirtualScrollStrategy, _fixedSizeVirtualScrollStrategyFactory, CdkFixedSizeVirtualScroll, DEFAULT_SCROLL_TIME, ScrollDispatcher, CdkScrollable, ScrollingModule, DEFAULT_RESIZE_TIME, ViewportRuler, CdkVirtualForOf, VIRTUAL_SCROLL_STRATEGY, CdkVirtualScrollViewport };
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.js.map

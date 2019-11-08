@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/core'), require('@angular/common')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/portal', ['exports', 'tslib', '@angular/core', '@angular/common'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.portal = {}), global.tslib, global.ng.core, global.ng.common));
-}(this, function (exports, tslib, core, common) { 'use strict';
+}(this, (function (exports, tslib, core, common) { 'use strict';
 
     /**
      * @license
@@ -656,22 +656,22 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.Portal = Portal;
-    exports.ComponentPortal = ComponentPortal;
-    exports.TemplatePortal = TemplatePortal;
-    exports.DomPortal = DomPortal;
-    exports.BasePortalOutlet = BasePortalOutlet;
     exports.BasePortalHost = BasePortalHost;
-    exports.DomPortalOutlet = DomPortalOutlet;
-    exports.DomPortalHost = DomPortalHost;
+    exports.BasePortalOutlet = BasePortalOutlet;
     exports.CdkPortal = CdkPortal;
-    exports.TemplatePortalDirective = TemplatePortalDirective;
     exports.CdkPortalOutlet = CdkPortalOutlet;
+    exports.ComponentPortal = ComponentPortal;
+    exports.DomPortal = DomPortal;
+    exports.DomPortalHost = DomPortalHost;
+    exports.DomPortalOutlet = DomPortalOutlet;
+    exports.Portal = Portal;
     exports.PortalHostDirective = PortalHostDirective;
-    exports.PortalModule = PortalModule;
     exports.PortalInjector = PortalInjector;
+    exports.PortalModule = PortalModule;
+    exports.TemplatePortal = TemplatePortal;
+    exports.TemplatePortalDirective = TemplatePortalDirective;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-portal.umd.js.map

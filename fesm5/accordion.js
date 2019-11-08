@@ -246,5 +246,5 @@ var CdkAccordionModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { CdkAccordionItem, CdkAccordion, CdkAccordionModule };
+export { CdkAccordion, CdkAccordionItem, CdkAccordionModule };
 //# sourceMappingURL=accordion.js.map

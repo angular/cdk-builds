@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/observers', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.observers = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, function (exports, coercion, i0, rxjs, operators) { 'use strict';
+}(this, (function (exports, coercion, i0, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -212,12 +212,12 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.MutationObserverFactory = MutationObserverFactory;
-    exports.ContentObserver = ContentObserver;
     exports.CdkObserveContent = CdkObserveContent;
+    exports.ContentObserver = ContentObserver;
+    exports.MutationObserverFactory = MutationObserverFactory;
     exports.ObserversModule = ObserversModule;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-observers.umd.js.map

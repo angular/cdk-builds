@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/bidi', ['exports', '@angular/core', '@angular/common'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.bidi = {}), global.ng.core, global.ng.common));
-}(this, function (exports, i0, common) { 'use strict';
+}(this, (function (exports, i0, common) { 'use strict';
 
     /**
      * @license
@@ -173,13 +173,13 @@
      * Generated bundle index. Do not edit.
      */
 
-    exports.ɵangular_material_src_cdk_bidi_bidi_a = DIR_DOCUMENT_FACTORY;
-    exports.Directionality = Directionality;
+    exports.BidiModule = BidiModule;
     exports.DIR_DOCUMENT = DIR_DOCUMENT;
     exports.Dir = Dir;
-    exports.BidiModule = BidiModule;
+    exports.Directionality = Directionality;
+    exports.ɵangular_material_src_cdk_bidi_bidi_a = DIR_DOCUMENT_FACTORY;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-bidi.umd.js.map

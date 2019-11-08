@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/clipboard', ['exports', '@angular/common', '@angular/core'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.clipboard = {}), global.ng.common, global.ng.core));
-}(this, function (exports, i1, i0) { 'use strict';
+}(this, (function (exports, i1, i0) { 'use strict';
 
     /**
      * @license
@@ -198,12 +198,12 @@
      * Generated bundle index. Do not edit.
      */
 
+    exports.CdkCopyToClipboard = CdkCopyToClipboard;
     exports.Clipboard = Clipboard;
     exports.ClipboardModule = ClipboardModule;
-    exports.CdkCopyToClipboard = CdkCopyToClipboard;
     exports.PendingCopy = PendingCopy;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=cdk-clipboard.umd.js.map
