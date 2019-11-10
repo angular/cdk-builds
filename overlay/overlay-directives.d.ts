@@ -111,11 +111,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
-    static ngAcceptInputType_hasBackdrop: boolean | string;
-    static ngAcceptInputType_lockPosition: boolean | string;
-    static ngAcceptInputType_flexibleDimensions: boolean | string;
-    static ngAcceptInputType_growAfterOpen: boolean | string;
-    static ngAcceptInputType_push: boolean | string;
+    static ngAcceptInputType_hasBackdrop: boolean | string | null | undefined;
+    static ngAcceptInputType_lockPosition: boolean | string | null | undefined;
+    static ngAcceptInputType_flexibleDimensions: boolean | string | null | undefined;
+    static ngAcceptInputType_growAfterOpen: boolean | string | null | undefined;
+    static ngAcceptInputType_push: boolean | string | null | undefined;
 }
 /** @docs-private */
 export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;

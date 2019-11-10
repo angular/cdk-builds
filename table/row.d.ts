@@ -46,7 +46,7 @@ declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
 export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: boolean | string;
+    static ngAcceptInputType_sticky: boolean | string | null | undefined;
 }
 /** @docs-private */
 declare class CdkFooterRowDefBase extends BaseRowDef {
@@ -59,7 +59,7 @@ declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: boolean | string;
+    static ngAcceptInputType_sticky: boolean | string | null | undefined;
 }
 /**
  * Data row definition for the CDK table.

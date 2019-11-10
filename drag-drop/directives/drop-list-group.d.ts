@@ -19,5 +19,5 @@ export declare class CdkDropListGroup<T> implements OnDestroy {
     disabled: boolean;
     private _disabled;
     ngOnDestroy(): void;
-    static ngAcceptInputType_disabled: boolean | string;
+    static ngAcceptInputType_disabled: boolean | string | null | undefined;
 }

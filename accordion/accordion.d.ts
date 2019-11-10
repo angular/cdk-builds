@@ -27,5 +27,5 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     private _openCloseAll;
-    static ngAcceptInputType_multi: boolean | string;
+    static ngAcceptInputType_multi: boolean | string | null | undefined;
 }

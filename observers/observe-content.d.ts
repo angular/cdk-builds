@@ -69,8 +69,8 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     ngOnDestroy(): void;
     private _subscribe;
     private _unsubscribe;
-    static ngAcceptInputType_disabled: boolean | string;
-    static ngAcceptInputType_debounce: boolean | string;
+    static ngAcceptInputType_disabled: boolean | string | null | undefined;
+    static ngAcceptInputType_debounce: boolean | string | null | undefined;
 }
 export declare class ObserversModule {
 }
