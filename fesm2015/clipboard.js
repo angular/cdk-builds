@@ -180,6 +180,13 @@ class CdkCopyToClipboard {
          * emitted value indicates whether copying was successful.
          */
         this.copied = new EventEmitter();
+        /**
+         * Emits when some text is copied to the clipboard. The
+         * emitted value indicates whether copying was successful.
+         * @deprecated Use `cdkCopyToClipboardCopied` instead.
+         * \@breaking-change 10.0.0
+         */
+        this._deprecatedCopied = this.copied;
     }
     /**
      * Copies the current text to the clipboard.
@@ -203,7 +210,8 @@ CdkCopyToClipboard.ctorParameters = () => [
 ];
 CdkCopyToClipboard.propDecorators = {
     text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
-    copied: [{ type: Output }]
+    copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }],
+    _deprecatedCopied: [{ type: Output, args: ['copied',] }]
 };
 if (false) {
     /**
@@ -217,6 +225,14 @@ if (false) {
      * @type {?}
      */
     CdkCopyToClipboard.prototype.copied;
+    /**
+     * Emits when some text is copied to the clipboard. The
+     * emitted value indicates whether copying was successful.
+     * @deprecated Use `cdkCopyToClipboardCopied` instead.
+     * \@breaking-change 10.0.0
+     * @type {?}
+     */
+    CdkCopyToClipboard.prototype._deprecatedCopied;
     /**
      * @type {?}
      * @private
