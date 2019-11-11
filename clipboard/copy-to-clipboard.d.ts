@@ -20,13 +20,6 @@ export declare class CdkCopyToClipboard {
      * emitted value indicates whether copying was successful.
      */
     copied: EventEmitter<boolean>;
-    /**
-     * Emits when some text is copied to the clipboard. The
-     * emitted value indicates whether copying was successful.
-     * @deprecated Use `cdkCopyToClipboardCopied` instead.
-     * @breaking-change 10.0.0
-     */
-    _deprecatedCopied: EventEmitter<boolean>;
     constructor(_clipboard: Clipboard);
     /** Copies the current text to the clipboard. */
     copy(): void;

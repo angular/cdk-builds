@@ -142,13 +142,6 @@
              * emitted value indicates whether copying was successful.
              */
             this.copied = new i0.EventEmitter();
-            /**
-             * Emits when some text is copied to the clipboard. The
-             * emitted value indicates whether copying was successful.
-             * @deprecated Use `cdkCopyToClipboardCopied` instead.
-             * @breaking-change 10.0.0
-             */
-            this._deprecatedCopied = this.copied;
         }
         /** Copies the current text to the clipboard. */
         CdkCopyToClipboard.prototype.copy = function () {
@@ -168,8 +161,7 @@
         ]; };
         CdkCopyToClipboard.propDecorators = {
             text: [{ type: i0.Input, args: ['cdkCopyToClipboard',] }],
-            copied: [{ type: i0.Output, args: ['cdkCopyToClipboardCopied',] }],
-            _deprecatedCopied: [{ type: i0.Output, args: ['copied',] }]
+            copied: [{ type: i0.Output }]
         };
         return CdkCopyToClipboard;
     }());
