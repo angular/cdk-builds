@@ -1727,7 +1727,7 @@
             var styles = {};
             if (this._hasExactPosition()) {
                 styles.top = styles.left = '0';
-                styles.bottom = styles.right = '';
+                styles.bottom = styles.right = styles.maxHeight = styles.maxWidth = '';
                 styles.width = styles.height = '100%';
             }
             else {
@@ -1789,7 +1789,10 @@
         /** Sets positioning styles to the overlay element. */
         FlexibleConnectedPositionStrategy.prototype._setOverlayElementStyles = function (originPoint, position) {
             var styles = {};
-            if (this._hasExactPosition()) {
+            var hasExactPosition = this._hasExactPosition();
+            var hasFlexibleDimensions = this._hasFlexibleDimensions;
+            var config = this._overlayRef.getConfig();
+            if (hasExactPosition) {
                 var scrollPosition = this._viewportRuler.getViewportScrollPosition();
                 extendStyles(styles, this._getExactOverlayY(position, originPoint, scrollPosition));
                 extendStyles(styles, this._getExactOverlayX(position, originPoint, scrollPosition));
@@ -1815,11 +1818,23 @@
             // If a maxWidth or maxHeight is specified on the overlay, we remove them. We do this because
             // we need these values to both be set to "100%" for the automatic flexible sizing to work.
             // The maxHeight and maxWidth are set on the boundingBox in order to enforce the constraint.
-            if (this._hasFlexibleDimensions && this._overlayRef.getConfig().maxHeight) {
-                styles.maxHeight = '';
+            // Note that this doesn't apply when we have an exact position, in which case we do want to
+            // apply them because they'll be cleared from the bounding box.
+            if (config.maxHeight) {
+                if (hasExactPosition) {
+                    styles.maxHeight = coercion.coerceCssPixelValue(config.maxHeight);
+                }
+                else if (hasFlexibleDimensions) {
+                    styles.maxHeight = '';
+                }
             }
-            if (this._hasFlexibleDimensions && this._overlayRef.getConfig().maxWidth) {
-                styles.maxWidth = '';
+            if (config.maxWidth) {
+                if (hasExactPosition) {
+                    styles.maxWidth = coercion.coerceCssPixelValue(config.maxWidth);
+                }
+                else if (hasFlexibleDimensions) {
+                    styles.maxWidth = '';
+                }
             }
             extendStyles(this._pane.style, styles);
         };
