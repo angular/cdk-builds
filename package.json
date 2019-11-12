@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "9.0.0-rc.1-sha-5822051dd",
+  "version": "9.0.0-rc.1-sha-3a10c2cfe",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "fesm5": "./fesm5/cdk.js",
@@ -38,5 +38,8 @@
   "ng-update": {
     "migrations": "./schematics/migration.json"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "publishConfig": {
+    "registry": "https://wombat-dressing-room.appspot.com"
+  }
 }
