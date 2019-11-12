@@ -1,5 +1,5 @@
 import { DOCUMENT, CommonModule } from '@angular/common';
-import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
 
 /**
  * @fileoverview added by tsickle
@@ -162,19 +162,44 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Object that can be used to configure the default options for `CdkCopyToClipboard`.
+ * @record
+ */
+function CdkCopyToClipboardConfig() { }
+if (false) {
+    /**
+     * Default number of attempts to make when copying text to the clipboard.
+     * @type {?|undefined}
+     */
+    CdkCopyToClipboardConfig.prototype.attempts;
+}
+/**
+ * Injection token that can be used to provide the default options to `CdkCopyToClipboard`.
+ * @type {?}
+ */
+const CKD_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CKD_COPY_TO_CLIPBOARD_CONFIG');
+/**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
  */
 class CdkCopyToClipboard {
     /**
      * @param {?} _clipboard
+     * @param {?=} _ngZone
+     * @param {?=} config
      */
-    constructor(_clipboard) {
+    constructor(_clipboard, _ngZone, config) {
         this._clipboard = _clipboard;
+        this._ngZone = _ngZone;
         /**
          * Content to be copied.
          */
         this.text = '';
+        /**
+         * How many times to attempt to copy the text. This may be necessary for longer text, because
+         * the browser needs time to fill an intermediate textarea element and copy the content.
+         */
+        this.attempts = 1;
         /**
          * Emits when some text is copied to the clipboard. The
          * emitted value indicates whether copying was successful.
@@ -187,13 +212,50 @@ class CdkCopyToClipboard {
          * \@breaking-change 10.0.0
          */
         this._deprecatedCopied = this.copied;
+        if (config && config.attempts != null) {
+            this.attempts = config.attempts;
+        }
     }
     /**
      * Copies the current text to the clipboard.
+     * @param {?=} attempts
      * @return {?}
      */
-    copy() {
-        this.copied.emit(this._clipboard.copy(this.text));
+    copy(attempts = this.attempts) {
+        if (attempts > 1) {
+            /** @type {?} */
+            let remainingAttempts = attempts;
+            /** @type {?} */
+            const pending = this._clipboard.beginCopy(this.text);
+            /** @type {?} */
+            const attempt = (/**
+             * @return {?}
+             */
+            () => {
+                /** @type {?} */
+                const successful = pending.copy();
+                if (!successful && --remainingAttempts) {
+                    // @breaking-change 10.0.0 Remove null check for `_ngZone`.
+                    if (this._ngZone) {
+                        this._ngZone.runOutsideAngular((/**
+                         * @return {?}
+                         */
+                        () => setTimeout(attempt)));
+                    }
+                    else {
+                        setTimeout(attempt);
+                    }
+                }
+                else {
+                    pending.destroy();
+                    this.copied.emit(successful);
+                }
+            });
+            attempt();
+        }
+        else {
+            this.copied.emit(this._clipboard.copy(this.text));
+        }
     }
 }
 CdkCopyToClipboard.decorators = [
@@ -206,10 +268,13 @@ CdkCopyToClipboard.decorators = [
 ];
 /** @nocollapse */
 CdkCopyToClipboard.ctorParameters = () => [
-    { type: Clipboard }
+    { type: Clipboard },
+    { type: NgZone },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
 ];
 CdkCopyToClipboard.propDecorators = {
     text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
+    attempts: [{ type: Input, args: ['cdkCopyToClipboardAttempts',] }],
     copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }],
     _deprecatedCopied: [{ type: Output, args: ['copied',] }]
 };
@@ -219,6 +284,12 @@ if (false) {
      * @type {?}
      */
     CdkCopyToClipboard.prototype.text;
+    /**
+     * How many times to attempt to copy the text. This may be necessary for longer text, because
+     * the browser needs time to fill an intermediate textarea element and copy the content.
+     * @type {?}
+     */
+    CdkCopyToClipboard.prototype.attempts;
     /**
      * Emits when some text is copied to the clipboard. The
      * emitted value indicates whether copying was successful.
@@ -238,6 +309,13 @@ if (false) {
      * @private
      */
     CdkCopyToClipboard.prototype._clipboard;
+    /**
+     * @deprecated _ngZone parameter to become required.
+     * \@breaking-change 10.0.0
+     * @type {?}
+     * @private
+     */
+    CdkCopyToClipboard.prototype._ngZone;
 }
 
 /**
@@ -263,5 +341,5 @@ ClipboardModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
+export { CKD_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
 //# sourceMappingURL=clipboard.js.map
