@@ -30,14 +30,92 @@ class ComponentHarness {
     documentRootLocatorFactory() {
         return this.locatorFactory.documentRootLocatorFactory();
     }
-    locatorFor(arg) {
-        return this.locatorFactory.locatorFor(arg);
+    /**
+     * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+     * or element under the host element of this `ComponentHarness`.
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for the
+     *   first element or harness matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If no matches are found, the
+     *   `Promise` rejects. The type that the `Promise` resolves to is a union of all result types for
+     *   each query.
+     *
+     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+     * `DivHarness.hostSelector === 'div'`:
+     * - `await ch.locatorFor(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
+     * - `await ch.locatorFor('div', DivHarness)()` gets a `TestElement` instance for `#d1`
+     * - `await ch.locatorFor('span')()` throws because the `Promise` rejects.
+     */
+    locatorFor(...queries) {
+        return this.locatorFactory.locatorFor(...queries);
     }
-    locatorForOptional(arg) {
-        return this.locatorFactory.locatorForOptional(arg);
+    /**
+     * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+     * or element under the host element of this `ComponentHarness`.
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for the
+     *   first element or harness matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If no matches are found, the
+     *   `Promise` is resolved with `null`. The type that the `Promise` resolves to is a union of all
+     *   result types for each query or null.
+     *
+     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+     * `DivHarness.hostSelector === 'div'`:
+     * - `await ch.locatorForOptional(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
+     * - `await ch.locatorForOptional('div', DivHarness)()` gets a `TestElement` instance for `#d1`
+     * - `await ch.locatorForOptional('span')()` gets `null`.
+     */
+    locatorForOptional(...queries) {
+        return this.locatorFactory.locatorForOptional(...queries);
     }
-    locatorForAll(arg) {
-        return this.locatorFactory.locatorForAll(arg);
+    /**
+     * Creates an asynchronous locator function that can be used to find `ComponentHarness` instances
+     * or elements under the host element of this `ComponentHarness`.
+     * @param queries A list of queries specifying which harnesses and elements to search for:
+     *   - A `string` searches for elements matching the CSS selector specified by the string.
+     *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+     *     given class.
+     *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+     *     predicate.
+     * @return An asynchronous locator function that searches for and returns a `Promise` for all
+     *   elements and harnesses matching the given search criteria. Matches are ordered first by
+     *   order in the DOM, and second by order in the queries list. If an element matches more than
+     *   one `ComponentHarness` class, the locator gets an instance of each for the same element. If
+     *   an element matches multiple `string` selectors, only one `TestElement` instance is returned
+     *   for that element. The type that the `Promise` resolves to is an array where each element is
+     *   the union of all result types for each query.
+     *
+     * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+     * `DivHarness.hostSelector === 'div'` and `IdIsD1Harness.hostSelector === '#d1'`:
+     * - `await ch.locatorForAll(DivHarness, 'div')()` gets `[
+     *     DivHarness, // for #d1
+     *     TestElement, // for #d1
+     *     DivHarness, // for #d2
+     *     TestElement // for #d2
+     *   ]`
+     * - `await ch.locatorForAll('div', '#d1')()` gets `[
+     *     TestElement, // for #d1
+     *     TestElement // for #d2
+     *   ]`
+     * - `await ch.locatorForAll(DivHarness, IdIsD1Harness)()` gets `[
+     *     DivHarness, // for #d1
+     *     IdIsD1Harness, // for #d1
+     *     DivHarness // for #d2
+     *   ]`
+     * - `await ch.locatorForAll('span')()` gets `[]`.
+     */
+    locatorForAll(...queries) {
+        return this.locatorFactory.locatorForAll(...queries);
     }
     /**
      * Flushes change detection and async tasks in the Angular zone.
@@ -103,10 +181,8 @@ class HarnessPredicate {
      * @return this (for method chaining).
      */
     addOption(name, option, predicate) {
-        // Add quotes around strings to differentiate them from other values
-        const value = typeof option === 'string' ? `"${option}"` : `${option}`;
         if (option !== undefined) {
-            this.add(`${name} = ${value}`, item => predicate(item, option));
+            this.add(`${name} = ${_valueAsString(option)}`, item => predicate(item, option));
         }
         return this;
     }
@@ -157,6 +233,22 @@ class HarnessPredicate {
         }
     }
 }
+/** Represent a value as a string for the purpose of logging. */
+function _valueAsString(value) {
+    if (value === undefined) {
+        return 'undefined';
+    }
+    // `JSON.stringify` doesn't handle RegExp properly, so we need a custom replacer.
+    try {
+        return JSON.stringify(value, (_, v) => v instanceof RegExp ? `/${v.toString()}/` :
+            typeof v === 'string' ? v.replace('/\//g', '\\/') : v).replace(/"\/\//g, '\\/').replace(/\/\/"/g, '\\/').replace(/\\\//g, '/');
+    }
+    catch (_a) {
+        // `JSON.stringify` will throw if the object is cyclical,
+        // in this case the best we can do is report the value as `{...}`.
+        return '{...}';
+    }
+}
 
 /**
  * @license
@@ -180,42 +272,22 @@ class HarnessEnvironment {
     documentRootLocatorFactory() {
         return this.createEnvironment(this.getDocumentRoot());
     }
-    locatorFor(arg) {
-        return () => __awaiter(this, void 0, void 0, function* () {
-            if (typeof arg === 'string') {
-                return this.createTestElement(yield this._assertElementFound(arg));
-            }
-            else {
-                return this._assertHarnessFound(arg);
-            }
-        });
+    // Implemented as part of the `LocatorFactory` interface.
+    locatorFor(...queries) {
+        return () => _assertResultFound(this._getAllHarnessesAndTestElements(queries), _getDescriptionForLocatorForQueries(queries));
     }
-    locatorForOptional(arg) {
-        return () => __awaiter(this, void 0, void 0, function* () {
-            if (typeof arg === 'string') {
-                const element = (yield this.getAllRawElements(arg))[0];
-                return element ? this.createTestElement(element) : null;
-            }
-            else {
-                const candidates = yield this._getAllHarnesses(arg);
-                return candidates[0] || null;
-            }
-        });
+    // Implemented as part of the `LocatorFactory` interface.
+    locatorForOptional(...queries) {
+        return () => __awaiter(this, void 0, void 0, function* () { return (yield this._getAllHarnessesAndTestElements(queries))[0] || null; });
     }
-    locatorForAll(arg) {
-        return () => __awaiter(this, void 0, void 0, function* () {
-            if (typeof arg === 'string') {
-                return (yield this.getAllRawElements(arg)).map(e => this.createTestElement(e));
-            }
-            else {
-                return this._getAllHarnesses(arg);
-            }
-        });
+    // Implemented as part of the `LocatorFactory` interface.
+    locatorForAll(...queries) {
+        return () => this._getAllHarnessesAndTestElements(queries);
     }
     // Implemented as part of the `LocatorFactory` interface.
     harnessLoaderFor(selector) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.createEnvironment(yield this._assertElementFound(selector));
+            return this.createEnvironment(yield _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)]));
         });
     }
     // Implemented as part of the `LocatorFactory` interface.
@@ -233,17 +305,17 @@ class HarnessEnvironment {
         });
     }
     // Implemented as part of the `HarnessLoader` interface.
-    getHarness(harnessType) {
-        return this.locatorFor(harnessType)();
+    getHarness(query) {
+        return this.locatorFor(query)();
     }
     // Implemented as part of the `HarnessLoader` interface.
-    getAllHarnesses(harnessType) {
-        return this.locatorForAll(harnessType)();
+    getAllHarnesses(query) {
+        return this.locatorForAll(query)();
     }
     // Implemented as part of the `HarnessLoader` interface.
     getChildLoader(selector) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.createEnvironment(yield this._assertElementFound(selector));
+            return this.createEnvironment(yield _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)]));
         });
     }
     // Implemented as part of the `HarnessLoader` interface.
@@ -256,43 +328,136 @@ class HarnessEnvironment {
     createComponentHarness(harnessType, element) {
         return new harnessType(this.createEnvironment(element));
     }
-    _getAllHarnesses(harnessType) {
+    /**
+     * Matches the given raw elements with the given list of element and harness queries to produce a
+     * list of matched harnesses and test elements.
+     */
+    _getAllHarnessesAndTestElements(queries) {
         return __awaiter(this, void 0, void 0, function* () {
-            const harnessPredicate = harnessType instanceof HarnessPredicate ?
-                harnessType : new HarnessPredicate(harnessType, {});
-            const elements = yield this.getAllRawElements(harnessPredicate.getSelector());
-            return harnessPredicate.filter(elements.map(element => this.createComponentHarness(harnessPredicate.harnessType, element)));
+            const { allQueries, harnessQueries, elementQueries, harnessTypes } = _parseQueries(queries);
+            // Combine all of the queries into one large comma-delimited selector and use it to get all raw
+            // elements matching any of the individual queries.
+            const rawElements = yield this.getAllRawElements([...elementQueries, ...harnessQueries.map(predicate => predicate.getSelector())].join(','));
+            // If every query is searching for the same harness subclass, we know every result corresponds
+            // to an instance of that subclass. Likewise, if every query is for a `TestElement`, we know
+            // every result corresponds to a `TestElement`. Otherwise we need to verify which result was
+            // found by which selector so it can be matched to the appropriate instance.
+            const skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
+                harnessQueries.length === 0;
+            const perElementMatches = yield Promise.all(rawElements.map((rawElement) => __awaiter(this, void 0, void 0, function* () {
+                const testElement = this.createTestElement(rawElement);
+                const allResultsForElement = yield Promise.all(
+                // For each query, get `null` if it doesn't match, or a `TestElement` or
+                // `ComponentHarness` as appropriate if it does match. This gives us everything that
+                // matches the current raw element, but it may contain duplicate entries (e.g. multiple
+                // `TestElement` or multiple `ComponentHarness` of the same type.
+                allQueries.map(query => this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck)));
+                return _removeDuplicateQueryResults(allResultsForElement);
+            })));
+            return [].concat(...perElementMatches);
         });
     }
-    _assertElementFound(selector) {
+    /**
+     * Check whether the given query matches the given element, if it does return the matched
+     * `TestElement` or `ComponentHarness`, if it does not, return null. In cases where the caller
+     * knows for sure that the query matches the element's selector, `skipSelectorCheck` can be used
+     * to skip verification and optimize performance.
+     */
+    _getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck = false) {
         return __awaiter(this, void 0, void 0, function* () {
-            const element = (yield this.getAllRawElements(selector))[0];
-            if (!element) {
-                throw Error(`Expected to find element matching selector: "${selector}", but none was found`);
+            if (typeof query === 'string') {
+                return ((skipSelectorCheck || (yield testElement.matchesSelector(query))) ? testElement : null);
             }
-            return element;
-        });
-    }
-    _assertHarnessFound(harnessType) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const harness = (yield this._getAllHarnesses(harnessType))[0];
-            if (!harness) {
-                throw _getErrorForMissingHarness(harnessType);
+            if (skipSelectorCheck || (yield testElement.matchesSelector(query.getSelector()))) {
+                const harness = this.createComponentHarness(query.harnessType, rawElement);
+                return (yield query.evaluate(harness)) ? harness : null;
             }
-            return harness;
+            return null;
         });
     }
 }
-function _getErrorForMissingHarness(harnessType) {
-    const harnessPredicate = harnessType instanceof HarnessPredicate ? harnessType : new HarnessPredicate(harnessType, {});
-    const { name, hostSelector } = harnessPredicate.harnessType;
-    let restrictions = harnessPredicate.getDescription();
-    let message = `Expected to find element for ${name} matching selector: "${hostSelector}"`;
-    if (restrictions) {
-        message += ` (with restrictions: ${restrictions})`;
+/**
+ * Parses a list of queries in the format accepted by the `locatorFor*` methods into an easier to
+ * work with format.
+ */
+function _parseQueries(queries) {
+    const allQueries = [];
+    const harnessQueries = [];
+    const elementQueries = [];
+    const harnessTypes = new Set();
+    for (const query of queries) {
+        if (typeof query === 'string') {
+            allQueries.push(query);
+            elementQueries.push(query);
+        }
+        else {
+            const predicate = query instanceof HarnessPredicate ? query : new HarnessPredicate(query, {});
+            allQueries.push(predicate);
+            harnessQueries.push(predicate);
+            harnessTypes.add(predicate.harnessType);
+        }
     }
-    message += ', but none was found';
-    return Error(message);
+    return { allQueries, harnessQueries, elementQueries, harnessTypes };
+}
+/**
+ * Removes duplicate query results for a particular element. (e.g. multiple `TestElement`
+ * instances or multiple instances of the same `ComponentHarness` class.
+ */
+function _removeDuplicateQueryResults(results) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let testElementMatched = false;
+        let matchedHarnessTypes = new Set();
+        const dedupedMatches = [];
+        for (const result of results) {
+            if (!result) {
+                continue;
+            }
+            if (result instanceof ComponentHarness) {
+                if (!matchedHarnessTypes.has(result.constructor)) {
+                    matchedHarnessTypes.add(result.constructor);
+                    dedupedMatches.push(result);
+                }
+            }
+            else if (!testElementMatched) {
+                testElementMatched = true;
+                dedupedMatches.push(result);
+            }
+        }
+        return dedupedMatches;
+    });
+}
+/** Verifies that there is at least one result in an array. */
+function _assertResultFound(results, queryDescriptions) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = (yield results)[0];
+        if (result == undefined) {
+            throw Error(`Failed to find element matching one of the following queries:\n` +
+                queryDescriptions.map(desc => `(${desc})`).join(',\n'));
+        }
+        return result;
+    });
+}
+/** Gets a list of description strings from a list of queries. */
+function _getDescriptionForLocatorForQueries(queries) {
+    return queries.map(query => typeof query === 'string' ?
+        _getDescriptionForTestElementQuery(query) : _getDescriptionForComponentHarnessQuery(query));
+}
+/** Gets a description string for a `ComponentHarness` query. */
+function _getDescriptionForComponentHarnessQuery(query) {
+    const harnessPredicate = query instanceof HarnessPredicate ? query : new HarnessPredicate(query, {});
+    const { name, hostSelector } = harnessPredicate.harnessType;
+    const description = `${name} with host element matching selector: "${hostSelector}"`;
+    const constraints = harnessPredicate.getDescription();
+    return description + (constraints ?
+        ` satisfying the constraints: ${harnessPredicate.getDescription()}` : '');
+}
+/** Gets a description string for a `TestElement` query. */
+function _getDescriptionForTestElementQuery(selector) {
+    return `TestElement for element matching selector: "${selector}"`;
+}
+/** Gets a description string for a `HarnessLoader` query. */
+function _getDescriptionForHarnessLoaderQuery(selector) {
+    return `HarnessLoader for element matching selector: "${selector}"`;
 }
 
 /**

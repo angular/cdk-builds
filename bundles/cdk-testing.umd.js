@@ -36,14 +36,107 @@
         ComponentHarness.prototype.documentRootLocatorFactory = function () {
             return this.locatorFactory.documentRootLocatorFactory();
         };
-        ComponentHarness.prototype.locatorFor = function (arg) {
-            return this.locatorFactory.locatorFor(arg);
+        /**
+         * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+         * or element under the host element of this `ComponentHarness`.
+         * @param queries A list of queries specifying which harnesses and elements to search for:
+         *   - A `string` searches for elements matching the CSS selector specified by the string.
+         *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+         *     given class.
+         *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+         *     predicate.
+         * @return An asynchronous locator function that searches for and returns a `Promise` for the
+         *   first element or harness matching the given search criteria. Matches are ordered first by
+         *   order in the DOM, and second by order in the queries list. If no matches are found, the
+         *   `Promise` rejects. The type that the `Promise` resolves to is a union of all result types for
+         *   each query.
+         *
+         * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+         * `DivHarness.hostSelector === 'div'`:
+         * - `await ch.locatorFor(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
+         * - `await ch.locatorFor('div', DivHarness)()` gets a `TestElement` instance for `#d1`
+         * - `await ch.locatorFor('span')()` throws because the `Promise` rejects.
+         */
+        ComponentHarness.prototype.locatorFor = function () {
+            var _a;
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return (_a = this.locatorFactory).locatorFor.apply(_a, tslib.__spread(queries));
         };
-        ComponentHarness.prototype.locatorForOptional = function (arg) {
-            return this.locatorFactory.locatorForOptional(arg);
+        /**
+         * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
+         * or element under the host element of this `ComponentHarness`.
+         * @param queries A list of queries specifying which harnesses and elements to search for:
+         *   - A `string` searches for elements matching the CSS selector specified by the string.
+         *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+         *     given class.
+         *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+         *     predicate.
+         * @return An asynchronous locator function that searches for and returns a `Promise` for the
+         *   first element or harness matching the given search criteria. Matches are ordered first by
+         *   order in the DOM, and second by order in the queries list. If no matches are found, the
+         *   `Promise` is resolved with `null`. The type that the `Promise` resolves to is a union of all
+         *   result types for each query or null.
+         *
+         * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+         * `DivHarness.hostSelector === 'div'`:
+         * - `await ch.locatorForOptional(DivHarness, 'div')()` gets a `DivHarness` instance for `#d1`
+         * - `await ch.locatorForOptional('div', DivHarness)()` gets a `TestElement` instance for `#d1`
+         * - `await ch.locatorForOptional('span')()` gets `null`.
+         */
+        ComponentHarness.prototype.locatorForOptional = function () {
+            var _a;
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return (_a = this.locatorFactory).locatorForOptional.apply(_a, tslib.__spread(queries));
         };
-        ComponentHarness.prototype.locatorForAll = function (arg) {
-            return this.locatorFactory.locatorForAll(arg);
+        /**
+         * Creates an asynchronous locator function that can be used to find `ComponentHarness` instances
+         * or elements under the host element of this `ComponentHarness`.
+         * @param queries A list of queries specifying which harnesses and elements to search for:
+         *   - A `string` searches for elements matching the CSS selector specified by the string.
+         *   - A `ComponentHarness` constructor searches for `ComponentHarness` instances matching the
+         *     given class.
+         *   - A `HarnessPredicate` searches for `ComponentHarness` instances matching the given
+         *     predicate.
+         * @return An asynchronous locator function that searches for and returns a `Promise` for all
+         *   elements and harnesses matching the given search criteria. Matches are ordered first by
+         *   order in the DOM, and second by order in the queries list. If an element matches more than
+         *   one `ComponentHarness` class, the locator gets an instance of each for the same element. If
+         *   an element matches multiple `string` selectors, only one `TestElement` instance is returned
+         *   for that element. The type that the `Promise` resolves to is an array where each element is
+         *   the union of all result types for each query.
+         *
+         * e.g. Given the following DOM: `<div id="d1" /><div id="d2" />`, and assuming
+         * `DivHarness.hostSelector === 'div'` and `IdIsD1Harness.hostSelector === '#d1'`:
+         * - `await ch.locatorForAll(DivHarness, 'div')()` gets `[
+         *     DivHarness, // for #d1
+         *     TestElement, // for #d1
+         *     DivHarness, // for #d2
+         *     TestElement // for #d2
+         *   ]`
+         * - `await ch.locatorForAll('div', '#d1')()` gets `[
+         *     TestElement, // for #d1
+         *     TestElement // for #d2
+         *   ]`
+         * - `await ch.locatorForAll(DivHarness, IdIsD1Harness)()` gets `[
+         *     DivHarness, // for #d1
+         *     IdIsD1Harness, // for #d1
+         *     DivHarness // for #d2
+         *   ]`
+         * - `await ch.locatorForAll('span')()` gets `[]`.
+         */
+        ComponentHarness.prototype.locatorForAll = function () {
+            var _a;
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return (_a = this.locatorFactory).locatorForAll.apply(_a, tslib.__spread(queries));
         };
         /**
          * Flushes change detection and async tasks in the Angular zone.
@@ -120,10 +213,8 @@
          * @return this (for method chaining).
          */
         HarnessPredicate.prototype.addOption = function (name, option, predicate) {
-            // Add quotes around strings to differentiate them from other values
-            var value = typeof option === 'string' ? "\"" + option + "\"" : "" + option;
             if (option !== undefined) {
-                this.add(name + " = " + value, function (item) { return predicate(item, option); });
+                this.add(name + " = " + _valueAsString(option), function (item) { return predicate(item, option); });
             }
             return this;
         };
@@ -197,6 +288,24 @@
         };
         return HarnessPredicate;
     }());
+    /** Represent a value as a string for the purpose of logging. */
+    function _valueAsString(value) {
+        if (value === undefined) {
+            return 'undefined';
+        }
+        // `JSON.stringify` doesn't handle RegExp properly, so we need a custom replacer.
+        try {
+            return JSON.stringify(value, function (_, v) {
+                return v instanceof RegExp ? "/" + v.toString() + "/" :
+                    typeof v === 'string' ? v.replace('/\//g', '\\/') : v;
+            }).replace(/"\/\//g, '\\/').replace(/\/\/"/g, '\\/').replace(/\\\//g, '/');
+        }
+        catch (_a) {
+            // `JSON.stringify` will throw if the object is cyclical,
+            // in this case the best we can do is report the value as `{...}`.
+            return '{...}';
+        }
+    }
 
     /**
      * @license
@@ -220,56 +329,37 @@
         HarnessEnvironment.prototype.documentRootLocatorFactory = function () {
             return this.createEnvironment(this.getDocumentRoot());
         };
-        HarnessEnvironment.prototype.locatorFor = function (arg) {
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.locatorFor = function () {
             var _this = this;
-            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
-                var _a;
-                return tslib.__generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            if (!(typeof arg === 'string')) return [3 /*break*/, 2];
-                            _a = this.createTestElement;
-                            return [4 /*yield*/, this._assertElementFound(arg)];
-                        case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
-                        case 2: return [2 /*return*/, this._assertHarnessFound(arg)];
-                    }
-                });
-            }); };
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return function () { return _assertResultFound(_this._getAllHarnessesAndTestElements(queries), _getDescriptionForLocatorForQueries(queries)); };
         };
-        HarnessEnvironment.prototype.locatorForOptional = function (arg) {
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.locatorForOptional = function () {
             var _this = this;
-            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
-                var element, candidates;
-                return tslib.__generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(typeof arg === 'string')) return [3 /*break*/, 2];
-                            return [4 /*yield*/, this.getAllRawElements(arg)];
-                        case 1:
-                            element = (_a.sent())[0];
-                            return [2 /*return*/, element ? this.createTestElement(element) : null];
-                        case 2: return [4 /*yield*/, this._getAllHarnesses(arg)];
-                        case 3:
-                            candidates = _a.sent();
-                            return [2 /*return*/, candidates[0] || null];
-                    }
-                });
-            }); };
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return function () { return tslib.__awaiter(_this, void 0, void 0, function () { return tslib.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this._getAllHarnessesAndTestElements(queries)];
+                    case 1: return [2 /*return*/, (_a.sent())[0] || null];
+                }
+            }); }); };
         };
-        HarnessEnvironment.prototype.locatorForAll = function (arg) {
+        // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.locatorForAll = function () {
             var _this = this;
-            return function () { return tslib.__awaiter(_this, void 0, void 0, function () {
-                var _this = this;
-                return tslib.__generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!(typeof arg === 'string')) return [3 /*break*/, 2];
-                            return [4 /*yield*/, this.getAllRawElements(arg)];
-                        case 1: return [2 /*return*/, (_a.sent()).map(function (e) { return _this.createTestElement(e); })];
-                        case 2: return [2 /*return*/, this._getAllHarnesses(arg)];
-                    }
-                });
-            }); };
+            var queries = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                queries[_i] = arguments[_i];
+            }
+            return function () { return _this._getAllHarnessesAndTestElements(queries); };
         };
         // Implemented as part of the `LocatorFactory` interface.
         HarnessEnvironment.prototype.harnessLoaderFor = function (selector) {
@@ -279,7 +369,7 @@
                     switch (_b.label) {
                         case 0:
                             _a = this.createEnvironment;
-                            return [4 /*yield*/, this._assertElementFound(selector)];
+                            return [4 /*yield*/, _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)])];
                         case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
                     }
                 });
@@ -315,12 +405,12 @@
             });
         };
         // Implemented as part of the `HarnessLoader` interface.
-        HarnessEnvironment.prototype.getHarness = function (harnessType) {
-            return this.locatorFor(harnessType)();
+        HarnessEnvironment.prototype.getHarness = function (query) {
+            return this.locatorFor(query)();
         };
         // Implemented as part of the `HarnessLoader` interface.
-        HarnessEnvironment.prototype.getAllHarnesses = function (harnessType) {
-            return this.locatorForAll(harnessType)();
+        HarnessEnvironment.prototype.getAllHarnesses = function (query) {
+            return this.locatorForAll(query)();
         };
         // Implemented as part of the `HarnessLoader` interface.
         HarnessEnvironment.prototype.getChildLoader = function (selector) {
@@ -330,7 +420,7 @@
                     switch (_b.label) {
                         case 0:
                             _a = this.createEnvironment;
-                            return [4 /*yield*/, this._assertElementFound(selector)];
+                            return [4 /*yield*/, _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)])];
                         case 1: return [2 /*return*/, _a.apply(this, [_b.sent()])];
                     }
                 });
@@ -352,67 +442,206 @@
         HarnessEnvironment.prototype.createComponentHarness = function (harnessType, element) {
             return new harnessType(this.createEnvironment(element));
         };
-        HarnessEnvironment.prototype._getAllHarnesses = function (harnessType) {
+        /**
+         * Matches the given raw elements with the given list of element and harness queries to produce a
+         * list of matched harnesses and test elements.
+         */
+        HarnessEnvironment.prototype._getAllHarnessesAndTestElements = function (queries) {
             return tslib.__awaiter(this, void 0, void 0, function () {
-                var harnessPredicate, elements;
+                var _a, allQueries, harnessQueries, elementQueries, harnessTypes, rawElements, skipSelectorCheck, perElementMatches;
+                var _b;
                 var _this = this;
-                return tslib.__generator(this, function (_a) {
-                    switch (_a.label) {
+                return tslib.__generator(this, function (_c) {
+                    switch (_c.label) {
                         case 0:
-                            harnessPredicate = harnessType instanceof HarnessPredicate ?
-                                harnessType : new HarnessPredicate(harnessType, {});
-                            return [4 /*yield*/, this.getAllRawElements(harnessPredicate.getSelector())];
+                            _a = _parseQueries(queries), allQueries = _a.allQueries, harnessQueries = _a.harnessQueries, elementQueries = _a.elementQueries, harnessTypes = _a.harnessTypes;
+                            return [4 /*yield*/, this.getAllRawElements(tslib.__spread(elementQueries, harnessQueries.map(function (predicate) { return predicate.getSelector(); })).join(','))];
                         case 1:
-                            elements = _a.sent();
-                            return [2 /*return*/, harnessPredicate.filter(elements.map(function (element) { return _this.createComponentHarness(harnessPredicate.harnessType, element); }))];
+                            rawElements = _c.sent();
+                            skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
+                                harnessQueries.length === 0;
+                            return [4 /*yield*/, Promise.all(rawElements.map(function (rawElement) { return tslib.__awaiter(_this, void 0, void 0, function () {
+                                    var testElement, allResultsForElement;
+                                    var _this = this;
+                                    return tslib.__generator(this, function (_a) {
+                                        switch (_a.label) {
+                                            case 0:
+                                                testElement = this.createTestElement(rawElement);
+                                                return [4 /*yield*/, Promise.all(
+                                                    // For each query, get `null` if it doesn't match, or a `TestElement` or
+                                                    // `ComponentHarness` as appropriate if it does match. This gives us everything that
+                                                    // matches the current raw element, but it may contain duplicate entries (e.g. multiple
+                                                    // `TestElement` or multiple `ComponentHarness` of the same type.
+                                                    allQueries.map(function (query) {
+                                                        return _this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck);
+                                                    }))];
+                                            case 1:
+                                                allResultsForElement = _a.sent();
+                                                return [2 /*return*/, _removeDuplicateQueryResults(allResultsForElement)];
+                                        }
+                                    });
+                                }); }))];
+                        case 2:
+                            perElementMatches = _c.sent();
+                            return [2 /*return*/, (_b = []).concat.apply(_b, tslib.__spread(perElementMatches))];
                     }
                 });
             });
         };
-        HarnessEnvironment.prototype._assertElementFound = function (selector) {
+        /**
+         * Check whether the given query matches the given element, if it does return the matched
+         * `TestElement` or `ComponentHarness`, if it does not, return null. In cases where the caller
+         * knows for sure that the query matches the element's selector, `skipSelectorCheck` can be used
+         * to skip verification and optimize performance.
+         */
+        HarnessEnvironment.prototype._getQueryResultForElement = function (query, rawElement, testElement, skipSelectorCheck) {
+            if (skipSelectorCheck === void 0) { skipSelectorCheck = false; }
             return tslib.__awaiter(this, void 0, void 0, function () {
-                var element;
-                return tslib.__generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.getAllRawElements(selector)];
+                var _a, _b, harness;
+                return tslib.__generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            if (!(typeof query === 'string')) return [3 /*break*/, 3];
+                            _a = skipSelectorCheck;
+                            if (_a) return [3 /*break*/, 2];
+                            return [4 /*yield*/, testElement.matchesSelector(query)];
                         case 1:
-                            element = (_a.sent())[0];
-                            if (!element) {
-                                throw Error("Expected to find element matching selector: \"" + selector + "\", but none was found");
-                            }
-                            return [2 /*return*/, element];
-                    }
-                });
-            });
-        };
-        HarnessEnvironment.prototype._assertHarnessFound = function (harnessType) {
-            return tslib.__awaiter(this, void 0, void 0, function () {
-                var harness;
-                return tslib.__generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this._getAllHarnesses(harnessType)];
-                        case 1:
-                            harness = (_a.sent())[0];
-                            if (!harness) {
-                                throw _getErrorForMissingHarness(harnessType);
-                            }
-                            return [2 /*return*/, harness];
+                            _a = (_c.sent());
+                            _c.label = 2;
+                        case 2: return [2 /*return*/, ((_a) ? testElement : null)];
+                        case 3:
+                            _b = skipSelectorCheck;
+                            if (_b) return [3 /*break*/, 5];
+                            return [4 /*yield*/, testElement.matchesSelector(query.getSelector())];
+                        case 4:
+                            _b = (_c.sent());
+                            _c.label = 5;
+                        case 5:
+                            if (!_b) return [3 /*break*/, 7];
+                            harness = this.createComponentHarness(query.harnessType, rawElement);
+                            return [4 /*yield*/, query.evaluate(harness)];
+                        case 6: return [2 /*return*/, (_c.sent()) ? harness : null];
+                        case 7: return [2 /*return*/, null];
                     }
                 });
             });
         };
         return HarnessEnvironment;
     }());
-    function _getErrorForMissingHarness(harnessType) {
-        var harnessPredicate = harnessType instanceof HarnessPredicate ? harnessType : new HarnessPredicate(harnessType, {});
-        var _a = harnessPredicate.harnessType, name = _a.name, hostSelector = _a.hostSelector;
-        var restrictions = harnessPredicate.getDescription();
-        var message = "Expected to find element for " + name + " matching selector: \"" + hostSelector + "\"";
-        if (restrictions) {
-            message += " (with restrictions: " + restrictions + ")";
+    /**
+     * Parses a list of queries in the format accepted by the `locatorFor*` methods into an easier to
+     * work with format.
+     */
+    function _parseQueries(queries) {
+        var e_1, _a;
+        var allQueries = [];
+        var harnessQueries = [];
+        var elementQueries = [];
+        var harnessTypes = new Set();
+        try {
+            for (var queries_1 = tslib.__values(queries), queries_1_1 = queries_1.next(); !queries_1_1.done; queries_1_1 = queries_1.next()) {
+                var query = queries_1_1.value;
+                if (typeof query === 'string') {
+                    allQueries.push(query);
+                    elementQueries.push(query);
+                }
+                else {
+                    var predicate = query instanceof HarnessPredicate ? query : new HarnessPredicate(query, {});
+                    allQueries.push(predicate);
+                    harnessQueries.push(predicate);
+                    harnessTypes.add(predicate.harnessType);
+                }
+            }
         }
-        message += ', but none was found';
-        return Error(message);
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (queries_1_1 && !queries_1_1.done && (_a = queries_1.return)) _a.call(queries_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        return { allQueries: allQueries, harnessQueries: harnessQueries, elementQueries: elementQueries, harnessTypes: harnessTypes };
+    }
+    /**
+     * Removes duplicate query results for a particular element. (e.g. multiple `TestElement`
+     * instances or multiple instances of the same `ComponentHarness` class.
+     */
+    function _removeDuplicateQueryResults(results) {
+        return tslib.__awaiter(this, void 0, void 0, function () {
+            var testElementMatched, matchedHarnessTypes, dedupedMatches, results_1, results_1_1, result;
+            var e_2, _a;
+            return tslib.__generator(this, function (_b) {
+                testElementMatched = false;
+                matchedHarnessTypes = new Set();
+                dedupedMatches = [];
+                try {
+                    for (results_1 = tslib.__values(results), results_1_1 = results_1.next(); !results_1_1.done; results_1_1 = results_1.next()) {
+                        result = results_1_1.value;
+                        if (!result) {
+                            continue;
+                        }
+                        if (result instanceof ComponentHarness) {
+                            if (!matchedHarnessTypes.has(result.constructor)) {
+                                matchedHarnessTypes.add(result.constructor);
+                                dedupedMatches.push(result);
+                            }
+                        }
+                        else if (!testElementMatched) {
+                            testElementMatched = true;
+                            dedupedMatches.push(result);
+                        }
+                    }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (results_1_1 && !results_1_1.done && (_a = results_1.return)) _a.call(results_1);
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
+                return [2 /*return*/, dedupedMatches];
+            });
+        });
+    }
+    /** Verifies that there is at least one result in an array. */
+    function _assertResultFound(results, queryDescriptions) {
+        return tslib.__awaiter(this, void 0, void 0, function () {
+            var result;
+            return tslib.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, results];
+                    case 1:
+                        result = (_a.sent())[0];
+                        if (result == undefined) {
+                            throw Error("Failed to find element matching one of the following queries:\n" +
+                                queryDescriptions.map(function (desc) { return "(" + desc + ")"; }).join(',\n'));
+                        }
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    }
+    /** Gets a list of description strings from a list of queries. */
+    function _getDescriptionForLocatorForQueries(queries) {
+        return queries.map(function (query) { return typeof query === 'string' ?
+            _getDescriptionForTestElementQuery(query) : _getDescriptionForComponentHarnessQuery(query); });
+    }
+    /** Gets a description string for a `ComponentHarness` query. */
+    function _getDescriptionForComponentHarnessQuery(query) {
+        var harnessPredicate = query instanceof HarnessPredicate ? query : new HarnessPredicate(query, {});
+        var _a = harnessPredicate.harnessType, name = _a.name, hostSelector = _a.hostSelector;
+        var description = name + " with host element matching selector: \"" + hostSelector + "\"";
+        var constraints = harnessPredicate.getDescription();
+        return description + (constraints ?
+            " satisfying the constraints: " + harnessPredicate.getDescription() : '');
+    }
+    /** Gets a description string for a `TestElement` query. */
+    function _getDescriptionForTestElementQuery(selector) {
+        return "TestElement for element matching selector: \"" + selector + "\"";
+    }
+    /** Gets a description string for a `HarnessLoader` query. */
+    function _getDescriptionForHarnessLoaderQuery(selector) {
+        return "HarnessLoader for element matching selector: \"" + selector + "\"";
     }
 
     /**

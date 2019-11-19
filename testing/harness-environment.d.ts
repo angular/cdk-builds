@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AsyncFactoryFn, ComponentHarness, ComponentHarnessConstructor, HarnessLoader, HarnessPredicate, LocatorFactory } from './component-harness';
+import { AsyncFactoryFn, ComponentHarness, ComponentHarnessConstructor, HarnessLoader, HarnessQuery, LocatorFactory, LocatorFnResult } from './component-harness';
 import { TestElement } from './test-element';
 /**
  * Base harness environment class that can be extended to allow `ComponentHarness`es to be used in
@@ -18,17 +18,14 @@ export declare abstract class HarnessEnvironment<E> implements HarnessLoader, Lo
     rootElement: TestElement;
     protected constructor(rawRootElement: E);
     documentRootLocatorFactory(): LocatorFactory;
-    locatorFor(selector: string): AsyncFactoryFn<TestElement>;
-    locatorFor<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T>;
-    locatorForOptional(selector: string): AsyncFactoryFn<TestElement | null>;
-    locatorForOptional<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T | null>;
-    locatorForAll(selector: string): AsyncFactoryFn<TestElement[]>;
-    locatorForAll<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): AsyncFactoryFn<T[]>;
+    locatorFor<T extends (HarnessQuery<any> | string)[]>(...queries: T): AsyncFactoryFn<LocatorFnResult<T>>;
+    locatorForOptional<T extends (HarnessQuery<any> | string)[]>(...queries: T): AsyncFactoryFn<LocatorFnResult<T> | null>;
+    locatorForAll<T extends (HarnessQuery<any> | string)[]>(...queries: T): AsyncFactoryFn<LocatorFnResult<T>[]>;
     harnessLoaderFor(selector: string): Promise<HarnessLoader>;
     harnessLoaderForOptional(selector: string): Promise<HarnessLoader | null>;
     harnessLoaderForAll(selector: string): Promise<HarnessLoader[]>;
-    getHarness<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): Promise<T>;
-    getAllHarnesses<T extends ComponentHarness>(harnessType: ComponentHarnessConstructor<T> | HarnessPredicate<T>): Promise<T[]>;
+    getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
+    getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
     getChildLoader(selector: string): Promise<HarnessLoader>;
     getAllChildLoaders(selector: string): Promise<HarnessLoader[]>;
     /** Creates a `ComponentHarness` for the given harness type with the given raw host element. */
@@ -45,7 +42,16 @@ export declare abstract class HarnessEnvironment<E> implements HarnessLoader, Lo
      * Gets a list of all elements matching the given selector under this environment's root element.
      */
     protected abstract getAllRawElements(selector: string): Promise<E[]>;
-    private _getAllHarnesses;
-    private _assertElementFound;
-    private _assertHarnessFound;
+    /**
+     * Matches the given raw elements with the given list of element and harness queries to produce a
+     * list of matched harnesses and test elements.
+     */
+    private _getAllHarnessesAndTestElements;
+    /**
+     * Check whether the given query matches the given element, if it does return the matched
+     * `TestElement` or `ComponentHarness`, if it does not, return null. In cases where the caller
+     * knows for sure that the query matches the element's selector, `skipSelectorCheck` can be used
+     * to skip verification and optimize performance.
+     */
+    private _getQueryResultForElement;
 }

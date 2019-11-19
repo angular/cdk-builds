@@ -9,4 +9,4 @@
  * Expects the asynchronous function to throw an error that matches
  * the specified expectation.
  */
-export declare function expectAsyncError(fn: () => Promise<any>, expectation: RegExp): Promise<void>;
+export declare function expectAsyncError(fn: () => Promise<any>, expectation: RegExp | string): Promise<void>;
