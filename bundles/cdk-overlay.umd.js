@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/keycodes')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', 'tslib', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/keycodes'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.tslib, global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.keycodes));
-}(this, (function (exports, tslib, i1, i1$1, i0, coercion, bidi, portal, rxjs, operators, i3, keycodes) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/keycodes')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', 'tslib', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/keycodes'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.tslib, global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.bidi, global.ng.cdk.portal, global.ng.cdk.keycodes));
+}(this, (function (exports, tslib, scrolling, i1, i0, coercion, platform, rxjs, operators, bidi, portal, keycodes) { 'use strict';
 
     /**
      * @license
@@ -282,6 +282,350 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    // Whether the current platform supports the V8 Break Iterator. The V8 check
+    // is necessary to detect all Blink based browsers.
+    var hasV8BreakIterator;
+    // We need a try/catch around the reference to `Intl`, because accessing it in some cases can
+    // cause IE to throw. These cases are tied to particular versions of Windows and can happen if
+    // the consumer is providing a polyfilled `Map`. See:
+    // https://github.com/Microsoft/ChakraCore/issues/3189
+    // https://github.com/angular/components/issues/15687
+    try {
+        hasV8BreakIterator = (typeof Intl !== 'undefined' && Intl.v8BreakIterator);
+    }
+    catch (_a) {
+        hasV8BreakIterator = false;
+    }
+    /**
+     * Service to detect the current platform by comparing the userAgent strings and
+     * checking browser-specific global properties.
+     */
+    var Platform = /** @class */ (function () {
+        /**
+         * @breaking-change 8.0.0 remove optional decorator
+         */
+        function Platform(_platformId) {
+            this._platformId = _platformId;
+            // We want to use the Angular platform check because if the Document is shimmed
+            // without the navigator, the following checks will fail. This is preferred because
+            // sometimes the Document may be shimmed without the user's knowledge or intention
+            /** Whether the Angular application is being rendered in the browser. */
+            this.isBrowser = this._platformId ?
+                i1.isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
+            /** Whether the current browser is Microsoft Edge. */
+            this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+            /** Whether the current rendering engine is Microsoft Trident. */
+            this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+            // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+            /** Whether the current rendering engine is Blink. */
+            this.BLINK = this.isBrowser && (!!(window.chrome || hasV8BreakIterator) &&
+                typeof CSS !== 'undefined' && !this.EDGE && !this.TRIDENT);
+            // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+            // ensure that Webkit runs standalone and is not used as another engine's base.
+            /** Whether the current rendering engine is WebKit. */
+            this.WEBKIT = this.isBrowser &&
+                /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
+            /** Whether the current platform is Apple iOS. */
+            this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+                !('MSStream' in window);
+            // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+            // them self as Gecko-like browsers and modify the userAgent's according to that.
+            // Since we only cover one explicit Firefox case, we can simply check for Firefox
+            // instead of having an unstable check for Gecko.
+            /** Whether the current browser is Firefox. */
+            this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+            /** Whether the current platform is Android. */
+            // Trident on mobile adds the android platform to the userAgent to trick detections.
+            this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+            // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+            // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+            // Safari browser should also use Webkit as its layout engine.
+            /** Whether the current browser is Safari. */
+            this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+        }
+        Platform.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        Platform.ctorParameters = function () { return [
+            { type: Object, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
+        ]; };
+        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+        return Platform;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /** Time in ms to throttle the scrolling events by default. */
+    var DEFAULT_SCROLL_TIME = 20;
+    /**
+     * Service contained all registered Scrollable references and emits an event when any one of the
+     * Scrollable references emit a scrolled event.
+     */
+    var ScrollDispatcher = /** @class */ (function () {
+        function ScrollDispatcher(_ngZone, _platform) {
+            this._ngZone = _ngZone;
+            this._platform = _platform;
+            /** Subject for notifying that a registered scrollable reference element has been scrolled. */
+            this._scrolled = new rxjs.Subject();
+            /** Keeps track of the global `scroll` and `resize` subscriptions. */
+            this._globalSubscription = null;
+            /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
+            this._scrolledCount = 0;
+            /**
+             * Map of all the scrollable references that are registered with the service and their
+             * scroll event subscriptions.
+             */
+            this.scrollContainers = new Map();
+        }
+        /**
+         * Registers a scrollable instance with the service and listens for its scrolled events. When the
+         * scrollable is scrolled, the service emits the event to its scrolled observable.
+         * @param scrollable Scrollable instance to be registered.
+         */
+        ScrollDispatcher.prototype.register = function (scrollable) {
+            var _this = this;
+            if (!this.scrollContainers.has(scrollable)) {
+                this.scrollContainers.set(scrollable, scrollable.elementScrolled()
+                    .subscribe(function () { return _this._scrolled.next(scrollable); }));
+            }
+        };
+        /**
+         * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
+         * @param scrollable Scrollable instance to be deregistered.
+         */
+        ScrollDispatcher.prototype.deregister = function (scrollable) {
+            var scrollableReference = this.scrollContainers.get(scrollable);
+            if (scrollableReference) {
+                scrollableReference.unsubscribe();
+                this.scrollContainers.delete(scrollable);
+            }
+        };
+        /**
+         * Returns an observable that emits an event whenever any of the registered Scrollable
+         * references (or window, document, or body) fire a scrolled event. Can provide a time in ms
+         * to override the default "throttle" time.
+         *
+         * **Note:** in order to avoid hitting change detection for every scroll event,
+         * all of the events emitted from this stream will be run outside the Angular zone.
+         * If you need to update any data bindings as a result of a scroll event, you have
+         * to run the callback using `NgZone.run`.
+         */
+        ScrollDispatcher.prototype.scrolled = function (auditTimeInMs) {
+            var _this = this;
+            if (auditTimeInMs === void 0) { auditTimeInMs = DEFAULT_SCROLL_TIME; }
+            if (!this._platform.isBrowser) {
+                return rxjs.of();
+            }
+            return new rxjs.Observable(function (observer) {
+                if (!_this._globalSubscription) {
+                    _this._addGlobalListener();
+                }
+                // In the case of a 0ms delay, use an observable without auditTime
+                // since it does add a perceptible delay in processing overhead.
+                var subscription = auditTimeInMs > 0 ?
+                    _this._scrolled.pipe(operators.auditTime(auditTimeInMs)).subscribe(observer) :
+                    _this._scrolled.subscribe(observer);
+                _this._scrolledCount++;
+                return function () {
+                    subscription.unsubscribe();
+                    _this._scrolledCount--;
+                    if (!_this._scrolledCount) {
+                        _this._removeGlobalListener();
+                    }
+                };
+            });
+        };
+        ScrollDispatcher.prototype.ngOnDestroy = function () {
+            var _this = this;
+            this._removeGlobalListener();
+            this.scrollContainers.forEach(function (_, container) { return _this.deregister(container); });
+            this._scrolled.complete();
+        };
+        /**
+         * Returns an observable that emits whenever any of the
+         * scrollable ancestors of an element are scrolled.
+         * @param elementRef Element whose ancestors to listen for.
+         * @param auditTimeInMs Time to throttle the scroll events.
+         */
+        ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
+            var ancestors = this.getAncestorScrollContainers(elementRef);
+            return this.scrolled(auditTimeInMs).pipe(operators.filter(function (target) {
+                return !target || ancestors.indexOf(target) > -1;
+            }));
+        };
+        /** Returns all registered Scrollables that contain the provided element. */
+        ScrollDispatcher.prototype.getAncestorScrollContainers = function (elementRef) {
+            var _this = this;
+            var scrollingContainers = [];
+            this.scrollContainers.forEach(function (_subscription, scrollable) {
+                if (_this._scrollableContainsElement(scrollable, elementRef)) {
+                    scrollingContainers.push(scrollable);
+                }
+            });
+            return scrollingContainers;
+        };
+        /** Returns true if the element is contained within the provided Scrollable. */
+        ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
+            var element = elementRef.nativeElement;
+            var scrollableElement = scrollable.getElementRef().nativeElement;
+            // Traverse through the element parents until we reach null, checking if any of the elements
+            // are the scrollable's element.
+            do {
+                if (element == scrollableElement) {
+                    return true;
+                }
+            } while (element = element.parentElement);
+            return false;
+        };
+        /** Sets up the global scroll listeners. */
+        ScrollDispatcher.prototype._addGlobalListener = function () {
+            var _this = this;
+            this._globalSubscription = this._ngZone.runOutsideAngular(function () {
+                return rxjs.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
+            });
+        };
+        /** Cleans up the global scroll listener. */
+        ScrollDispatcher.prototype._removeGlobalListener = function () {
+            if (this._globalSubscription) {
+                this._globalSubscription.unsubscribe();
+                this._globalSubscription = null;
+            }
+        };
+        ScrollDispatcher.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        ScrollDispatcher.ctorParameters = function () { return [
+            { type: i0.NgZone },
+            { type: platform.Platform }
+        ]; };
+        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+        return ScrollDispatcher;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /** Time in ms to throttle the resize events by default. */
+    var DEFAULT_RESIZE_TIME = 20;
+    /**
+     * Simple utility for getting the bounds of the browser viewport.
+     * @docs-private
+     */
+    var ViewportRuler = /** @class */ (function () {
+        function ViewportRuler(_platform, ngZone) {
+            var _this = this;
+            this._platform = _platform;
+            ngZone.runOutsideAngular(function () {
+                _this._change = _platform.isBrowser ?
+                    rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange')) :
+                    rxjs.of();
+                // Note that we need to do the subscription inside `runOutsideAngular`
+                // since subscribing is what causes the event listener to be added.
+                _this._invalidateCache = _this.change().subscribe(function () { return _this._updateViewportSize(); });
+            });
+        }
+        ViewportRuler.prototype.ngOnDestroy = function () {
+            this._invalidateCache.unsubscribe();
+        };
+        /** Returns the viewport's width and height. */
+        ViewportRuler.prototype.getViewportSize = function () {
+            if (!this._viewportSize) {
+                this._updateViewportSize();
+            }
+            var output = { width: this._viewportSize.width, height: this._viewportSize.height };
+            // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
+            if (!this._platform.isBrowser) {
+                this._viewportSize = null;
+            }
+            return output;
+        };
+        /** Gets a ClientRect for the viewport's bounds. */
+        ViewportRuler.prototype.getViewportRect = function () {
+            // Use the document element's bounding rect rather than the window scroll properties
+            // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
+            // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
+            // conceptual viewports. Under most circumstances these viewports are equivalent, but they
+            // can disagree when the page is pinch-zoomed (on devices that support touch).
+            // See https://bugs.chromium.org/p/chromium/issues/detail?id=489206#c4
+            // We use the documentElement instead of the body because, by default (without a css reset)
+            // browsers typically give the document body an 8px margin, which is not included in
+            // getBoundingClientRect().
+            var scrollPosition = this.getViewportScrollPosition();
+            var _a = this.getViewportSize(), width = _a.width, height = _a.height;
+            return {
+                top: scrollPosition.top,
+                left: scrollPosition.left,
+                bottom: scrollPosition.top + height,
+                right: scrollPosition.left + width,
+                height: height,
+                width: width,
+            };
+        };
+        /** Gets the (top, left) scroll position of the viewport. */
+        ViewportRuler.prototype.getViewportScrollPosition = function () {
+            // While we can get a reference to the fake document
+            // during SSR, it doesn't have getBoundingClientRect.
+            if (!this._platform.isBrowser) {
+                return { top: 0, left: 0 };
+            }
+            // The top-left-corner of the viewport is determined by the scroll position of the document
+            // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
+            // whether `document.body` or `document.documentElement` is the scrolled element, so reading
+            // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
+            // `document.documentElement` works consistently, where the `top` and `left` values will
+            // equal negative the scroll position.
+            var documentElement = document.documentElement;
+            var documentRect = documentElement.getBoundingClientRect();
+            var top = -documentRect.top || document.body.scrollTop || window.scrollY ||
+                documentElement.scrollTop || 0;
+            var left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
+                documentElement.scrollLeft || 0;
+            return { top: top, left: left };
+        };
+        /**
+         * Returns a stream that emits whenever the size of the viewport changes.
+         * @param throttleTime Time in milliseconds to throttle the stream.
+         */
+        ViewportRuler.prototype.change = function (throttleTime) {
+            if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
+            return throttleTime > 0 ? this._change.pipe(operators.auditTime(throttleTime)) : this._change;
+        };
+        /** Updates the cached viewport size. */
+        ViewportRuler.prototype._updateViewportSize = function () {
+            this._viewportSize = this._platform.isBrowser ?
+                { width: window.innerWidth, height: window.innerHeight } :
+                { width: 0, height: 0 };
+        };
+        ViewportRuler.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        ViewportRuler.ctorParameters = function () { return [
+            { type: platform.Platform },
+            { type: i0.NgZone }
+        ]; };
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+        return ViewportRuler;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /**
      * Options for how an overlay will handle scrolling.
      *
@@ -316,12 +660,12 @@
         ];
         /** @nocollapse */
         ScrollStrategyOptions.ctorParameters = function () { return [
-            { type: i1.ScrollDispatcher },
-            { type: i1.ViewportRuler },
+            { type: scrolling.ScrollDispatcher },
+            { type: scrolling.ViewportRuler },
             { type: i0.NgZone },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+        ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(ScrollDispatcher), i0.ɵɵinject(ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
         return ScrollStrategyOptions;
     }());
 
@@ -559,9 +903,9 @@
         ];
         /** @nocollapse */
         OverlayKeyboardDispatcher.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+        OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
         return OverlayKeyboardDispatcher;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -577,7 +921,7 @@
             [new i0.Optional(), new i0.SkipSelf(), OverlayKeyboardDispatcher],
             // Coerce to `InjectionToken` so that the `deps` match the "shape"
             // of the type expected by Angular
-            i1$1.DOCUMENT
+            i1.DOCUMENT
         ],
         useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
     };
@@ -632,9 +976,9 @@
         ];
         /** @nocollapse */
         OverlayContainer.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+        OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1.DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
         return OverlayContainer;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -647,7 +991,7 @@
         provide: OverlayContainer,
         deps: [
             [new i0.Optional(), new i0.SkipSelf(), OverlayContainer],
-            i1$1.DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
+            i1.DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
         ],
         useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
     };
@@ -2446,12 +2790,12 @@
         ];
         /** @nocollapse */
         OverlayPositionBuilder.ctorParameters = function () { return [
-            { type: i1.ViewportRuler },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
-            { type: i3.Platform },
+            { type: scrolling.ViewportRuler },
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
+            { type: platform.Platform },
             { type: OverlayContainer }
         ]; };
-        OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i3.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+        OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(ViewportRuler), i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
         return OverlayPositionBuilder;
     }());
 
@@ -2558,9 +2902,9 @@
             { type: OverlayKeyboardDispatcher },
             { type: i0.Injector },
             { type: i0.NgZone },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
             { type: bidi.Directionality },
-            { type: i1$1.Location, decorators: [{ type: i0.Optional }] }
+            { type: i1.Location, decorators: [{ type: i0.Optional }] }
         ]; };
         return Overlay;
     }());
@@ -2928,8 +3272,8 @@
         }
         OverlayModule.decorators = [
             { type: i0.NgModule, args: [{
-                        imports: [bidi.BidiModule, portal.PortalModule, i1.ScrollingModule],
-                        exports: [CdkConnectedOverlay, CdkOverlayOrigin, i1.ScrollingModule],
+                        imports: [bidi.BidiModule, portal.PortalModule, scrolling.ScrollingModule],
+                        exports: [CdkConnectedOverlay, CdkOverlayOrigin, scrolling.ScrollingModule],
                         declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
                         providers: [
                             Overlay,
@@ -3029,9 +3373,9 @@
         ];
         /** @nocollapse */
         FullscreenOverlayContainer.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+        FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1.DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
         return FullscreenOverlayContainer;
     }(OverlayContainer));
 
@@ -3050,19 +3394,19 @@
     Object.defineProperty(exports, 'CdkScrollable', {
         enumerable: true,
         get: function () {
-            return i1.CdkScrollable;
+            return scrolling.CdkScrollable;
         }
     });
     Object.defineProperty(exports, 'ScrollDispatcher', {
         enumerable: true,
         get: function () {
-            return i1.ScrollDispatcher;
+            return scrolling.ScrollDispatcher;
         }
     });
     Object.defineProperty(exports, 'ViewportRuler', {
         enumerable: true,
         get: function () {
-            return i1.ViewportRuler;
+            return scrolling.ViewportRuler;
         }
     });
     exports.BlockScrollStrategy = BlockScrollStrategy;

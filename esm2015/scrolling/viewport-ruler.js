@@ -14,7 +14,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { merge, of as observableOf, fromEvent } from 'rxjs';
 import { auditTime } from 'rxjs/operators';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform";
+import * as i1 from "@angular/cdk/platform/platform";
 /**
  * Time in ms to throttle the resize events by default.
  * @type {?}

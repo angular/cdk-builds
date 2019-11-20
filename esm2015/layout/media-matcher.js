@@ -12,7 +12,7 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform";
+import * as i1 from "@angular/cdk/platform/platform";
 /**
  * Global registry for all dynamically-created, injected media queries.
  * @type {?}

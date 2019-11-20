@@ -2,7 +2,7 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('tslib'), require('@angular/cdk/bidi')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', 'tslib', '@angular/cdk/bidi'], factory) :
     (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.tslib, global.ng.cdk.bidi));
-}(this, (function (exports, i0, i1, i2, platform, coercion, rxjs, operators, tslib, bidi) { 'use strict';
+}(this, (function (exports, i0, i1, scrolling, platform, coercion, rxjs, operators, tslib, bidi) { 'use strict';
 
     /**
      * @license
@@ -2098,6 +2098,195 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    // Whether the current platform supports the V8 Break Iterator. The V8 check
+    // is necessary to detect all Blink based browsers.
+    var hasV8BreakIterator;
+    // We need a try/catch around the reference to `Intl`, because accessing it in some cases can
+    // cause IE to throw. These cases are tied to particular versions of Windows and can happen if
+    // the consumer is providing a polyfilled `Map`. See:
+    // https://github.com/Microsoft/ChakraCore/issues/3189
+    // https://github.com/angular/components/issues/15687
+    try {
+        hasV8BreakIterator = (typeof Intl !== 'undefined' && Intl.v8BreakIterator);
+    }
+    catch (_a) {
+        hasV8BreakIterator = false;
+    }
+    /**
+     * Service to detect the current platform by comparing the userAgent strings and
+     * checking browser-specific global properties.
+     */
+    var Platform = /** @class */ (function () {
+        /**
+         * @breaking-change 8.0.0 remove optional decorator
+         */
+        function Platform(_platformId) {
+            this._platformId = _platformId;
+            // We want to use the Angular platform check because if the Document is shimmed
+            // without the navigator, the following checks will fail. This is preferred because
+            // sometimes the Document may be shimmed without the user's knowledge or intention
+            /** Whether the Angular application is being rendered in the browser. */
+            this.isBrowser = this._platformId ?
+                i1.isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
+            /** Whether the current browser is Microsoft Edge. */
+            this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+            /** Whether the current rendering engine is Microsoft Trident. */
+            this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+            // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+            /** Whether the current rendering engine is Blink. */
+            this.BLINK = this.isBrowser && (!!(window.chrome || hasV8BreakIterator) &&
+                typeof CSS !== 'undefined' && !this.EDGE && !this.TRIDENT);
+            // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+            // ensure that Webkit runs standalone and is not used as another engine's base.
+            /** Whether the current rendering engine is WebKit. */
+            this.WEBKIT = this.isBrowser &&
+                /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
+            /** Whether the current platform is Apple iOS. */
+            this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+                !('MSStream' in window);
+            // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+            // them self as Gecko-like browsers and modify the userAgent's according to that.
+            // Since we only cover one explicit Firefox case, we can simply check for Firefox
+            // instead of having an unstable check for Gecko.
+            /** Whether the current browser is Firefox. */
+            this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+            /** Whether the current platform is Android. */
+            // Trident on mobile adds the android platform to the userAgent to trick detections.
+            this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+            // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+            // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+            // Safari browser should also use Webkit as its layout engine.
+            /** Whether the current browser is Safari. */
+            this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+        }
+        Platform.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        Platform.ctorParameters = function () { return [
+            { type: Object, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
+        ]; };
+        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+        return Platform;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /** Time in ms to throttle the resize events by default. */
+    var DEFAULT_RESIZE_TIME = 20;
+    /**
+     * Simple utility for getting the bounds of the browser viewport.
+     * @docs-private
+     */
+    var ViewportRuler = /** @class */ (function () {
+        function ViewportRuler(_platform, ngZone) {
+            var _this = this;
+            this._platform = _platform;
+            ngZone.runOutsideAngular(function () {
+                _this._change = _platform.isBrowser ?
+                    rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange')) :
+                    rxjs.of();
+                // Note that we need to do the subscription inside `runOutsideAngular`
+                // since subscribing is what causes the event listener to be added.
+                _this._invalidateCache = _this.change().subscribe(function () { return _this._updateViewportSize(); });
+            });
+        }
+        ViewportRuler.prototype.ngOnDestroy = function () {
+            this._invalidateCache.unsubscribe();
+        };
+        /** Returns the viewport's width and height. */
+        ViewportRuler.prototype.getViewportSize = function () {
+            if (!this._viewportSize) {
+                this._updateViewportSize();
+            }
+            var output = { width: this._viewportSize.width, height: this._viewportSize.height };
+            // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
+            if (!this._platform.isBrowser) {
+                this._viewportSize = null;
+            }
+            return output;
+        };
+        /** Gets a ClientRect for the viewport's bounds. */
+        ViewportRuler.prototype.getViewportRect = function () {
+            // Use the document element's bounding rect rather than the window scroll properties
+            // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
+            // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
+            // conceptual viewports. Under most circumstances these viewports are equivalent, but they
+            // can disagree when the page is pinch-zoomed (on devices that support touch).
+            // See https://bugs.chromium.org/p/chromium/issues/detail?id=489206#c4
+            // We use the documentElement instead of the body because, by default (without a css reset)
+            // browsers typically give the document body an 8px margin, which is not included in
+            // getBoundingClientRect().
+            var scrollPosition = this.getViewportScrollPosition();
+            var _a = this.getViewportSize(), width = _a.width, height = _a.height;
+            return {
+                top: scrollPosition.top,
+                left: scrollPosition.left,
+                bottom: scrollPosition.top + height,
+                right: scrollPosition.left + width,
+                height: height,
+                width: width,
+            };
+        };
+        /** Gets the (top, left) scroll position of the viewport. */
+        ViewportRuler.prototype.getViewportScrollPosition = function () {
+            // While we can get a reference to the fake document
+            // during SSR, it doesn't have getBoundingClientRect.
+            if (!this._platform.isBrowser) {
+                return { top: 0, left: 0 };
+            }
+            // The top-left-corner of the viewport is determined by the scroll position of the document
+            // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
+            // whether `document.body` or `document.documentElement` is the scrolled element, so reading
+            // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
+            // `document.documentElement` works consistently, where the `top` and `left` values will
+            // equal negative the scroll position.
+            var documentElement = document.documentElement;
+            var documentRect = documentElement.getBoundingClientRect();
+            var top = -documentRect.top || document.body.scrollTop || window.scrollY ||
+                documentElement.scrollTop || 0;
+            var left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
+                documentElement.scrollLeft || 0;
+            return { top: top, left: left };
+        };
+        /**
+         * Returns a stream that emits whenever the size of the viewport changes.
+         * @param throttleTime Time in milliseconds to throttle the stream.
+         */
+        ViewportRuler.prototype.change = function (throttleTime) {
+            if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
+            return throttleTime > 0 ? this._change.pipe(operators.auditTime(throttleTime)) : this._change;
+        };
+        /** Updates the cached viewport size. */
+        ViewportRuler.prototype._updateViewportSize = function () {
+            this._viewportSize = this._platform.isBrowser ?
+                { width: window.innerWidth, height: window.innerHeight } :
+                { width: 0, height: 0 };
+        };
+        ViewportRuler.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        ViewportRuler.ctorParameters = function () { return [
+            { type: platform.Platform },
+            { type: i0.NgZone }
+        ]; };
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+        return ViewportRuler;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /** Default configuration to be used when creating a `DragRef`. */
     var DEFAULT_CONFIG = {
         dragStartThreshold: 5,
@@ -2136,10 +2325,10 @@
         DragDrop.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
             { type: i0.NgZone },
-            { type: i2.ViewportRuler },
+            { type: scrolling.ViewportRuler },
             { type: DragDropRegistry }
         ]; };
-        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
         return DragDrop;
     }());
 

@@ -1,8 +1,87 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/text-field', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}), global.ng.cdk.platform, global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators));
-}(this, (function (exports, i1, i0, coercion, rxjs, operators) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('@angular/common'), require('rxjs/operators')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/text-field', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', '@angular/common', 'rxjs/operators'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}), global.ng.cdk.platform, global.ng.core, global.ng.cdk.coercion, global.rxjs, global.ng.common, global.rxjs.operators));
+}(this, (function (exports, platform, i0, coercion, rxjs, common, operators) { 'use strict';
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    // Whether the current platform supports the V8 Break Iterator. The V8 check
+    // is necessary to detect all Blink based browsers.
+    var hasV8BreakIterator;
+    // We need a try/catch around the reference to `Intl`, because accessing it in some cases can
+    // cause IE to throw. These cases are tied to particular versions of Windows and can happen if
+    // the consumer is providing a polyfilled `Map`. See:
+    // https://github.com/Microsoft/ChakraCore/issues/3189
+    // https://github.com/angular/components/issues/15687
+    try {
+        hasV8BreakIterator = (typeof Intl !== 'undefined' && Intl.v8BreakIterator);
+    }
+    catch (_a) {
+        hasV8BreakIterator = false;
+    }
+    /**
+     * Service to detect the current platform by comparing the userAgent strings and
+     * checking browser-specific global properties.
+     */
+    var Platform = /** @class */ (function () {
+        /**
+         * @breaking-change 8.0.0 remove optional decorator
+         */
+        function Platform(_platformId) {
+            this._platformId = _platformId;
+            // We want to use the Angular platform check because if the Document is shimmed
+            // without the navigator, the following checks will fail. This is preferred because
+            // sometimes the Document may be shimmed without the user's knowledge or intention
+            /** Whether the Angular application is being rendered in the browser. */
+            this.isBrowser = this._platformId ?
+                common.isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
+            /** Whether the current browser is Microsoft Edge. */
+            this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
+            /** Whether the current rendering engine is Microsoft Trident. */
+            this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
+            // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
+            /** Whether the current rendering engine is Blink. */
+            this.BLINK = this.isBrowser && (!!(window.chrome || hasV8BreakIterator) &&
+                typeof CSS !== 'undefined' && !this.EDGE && !this.TRIDENT);
+            // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
+            // ensure that Webkit runs standalone and is not used as another engine's base.
+            /** Whether the current rendering engine is WebKit. */
+            this.WEBKIT = this.isBrowser &&
+                /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
+            /** Whether the current platform is Apple iOS. */
+            this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+                !('MSStream' in window);
+            // It's difficult to detect the plain Gecko engine, because most of the browsers identify
+            // them self as Gecko-like browsers and modify the userAgent's according to that.
+            // Since we only cover one explicit Firefox case, we can simply check for Firefox
+            // instead of having an unstable check for Gecko.
+            /** Whether the current browser is Firefox. */
+            this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
+            /** Whether the current platform is Android. */
+            // Trident on mobile adds the android platform to the userAgent to trick detections.
+            this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
+            // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
+            // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
+            // Safari browser should also use Webkit as its layout engine.
+            /** Whether the current browser is Safari. */
+            this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
+        }
+        Platform.decorators = [
+            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        Platform.ctorParameters = function () { return [
+            { type: Object, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
+        ]; };
+        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+        return Platform;
+    }());
 
     /**
      * @license
@@ -12,7 +91,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /** Options to pass to the animationstart listener. */
-    var listenerOptions = i1.normalizePassiveListenerOptions({ passive: true });
+    var listenerOptions = platform.normalizePassiveListenerOptions({ passive: true });
     /**
      * An injectable service that can be used to monitor the autofill state of an input.
      * Based on the following blog post:
@@ -83,10 +162,10 @@
         ];
         /** @nocollapse */
         AutofillMonitor.ctorParameters = function () { return [
-            { type: i1.Platform },
+            { type: platform.Platform },
             { type: i0.NgZone }
         ]; };
-        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
         return AutofillMonitor;
     }());
     /** A directive that can be used to monitor the autofill state of an input. */
@@ -351,7 +430,7 @@
         /** @nocollapse */
         CdkTextareaAutosize.ctorParameters = function () { return [
             { type: i0.ElementRef },
-            { type: i1.Platform },
+            { type: platform.Platform },
             { type: i0.NgZone }
         ]; };
         CdkTextareaAutosize.propDecorators = {
@@ -375,7 +454,7 @@
         TextFieldModule.decorators = [
             { type: i0.NgModule, args: [{
                         declarations: [CdkAutofill, CdkTextareaAutosize],
-                        imports: [i1.PlatformModule],
+                        imports: [platform.PlatformModule],
                         exports: [CdkAutofill, CdkTextareaAutosize],
                     },] }
         ];

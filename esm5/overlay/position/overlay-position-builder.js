@@ -14,9 +14,9 @@ import { ConnectedPositionStrategy } from './connected-position-strategy';
 import { FlexibleConnectedPositionStrategy, } from './flexible-connected-position-strategy';
 import { GlobalPositionStrategy } from './global-position-strategy';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/scrolling";
+import * as i1 from "@angular/cdk/scrolling/viewport-ruler";
 import * as i2 from "@angular/common";
-import * as i3 from "@angular/cdk/platform";
+import * as i3 from "@angular/cdk/platform/platform";
 import * as i4 from "angular_material/src/cdk/overlay/overlay-container";
 /** Builder for overlay position strategy. */
 var OverlayPositionBuilder = /** @class */ (function () {

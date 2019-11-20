@@ -14,7 +14,7 @@ import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, } from
 import { coerceElement } from '@angular/cdk/coercion';
 import { EMPTY, Subject } from 'rxjs';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform";
+import * as i1 from "@angular/cdk/platform/platform";
 /**
  * Options to pass to the animationstart listener.
  * @type {?}

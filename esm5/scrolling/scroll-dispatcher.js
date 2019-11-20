@@ -10,7 +10,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { fromEvent, of as observableOf, Subject, Observable } from 'rxjs';
 import { auditTime, filter } from 'rxjs/operators';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform";
+import * as i1 from "@angular/cdk/platform/platform";
 /** Time in ms to throttle the scrolling events by default. */
 export var DEFAULT_SCROLL_TIME = 20;
 /**

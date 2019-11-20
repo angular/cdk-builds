@@ -12,7 +12,7 @@
 import { Platform } from '@angular/cdk/platform';
 import { Injectable } from '@angular/core';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform";
+import * as i1 from "@angular/cdk/platform/platform";
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
 // supported.
