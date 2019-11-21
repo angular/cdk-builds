@@ -17,7 +17,7 @@ import { DropListRef } from './drop-list-ref';
 import { DragDropRegistry } from './drag-drop-registry';
 import * as i0 from "@angular/core";
 import * as i1 from "@angular/common";
-import * as i2 from "@angular/cdk/scrolling/viewport-ruler";
+import * as i2 from "@angular/cdk/scrolling";
 import * as i3 from "angular_material/src/cdk/drag-drop/drag-drop-registry";
 /**
  * Default configuration to be used when creating a `DragRef`.

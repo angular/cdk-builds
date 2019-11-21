@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/cdk/bidi'), require('tslib'), require('@angular/cdk/collections')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/common', '@angular/cdk/bidi', 'tslib', '@angular/cdk/collections'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.common, global.ng.cdk.bidi, global.tslib, global.ng.cdk.collections));
-}(this, (function (exports, coercion, i0, rxjs, operators, platform, common, bidi, tslib, collections) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('tslib'), require('@angular/cdk/collections')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', 'tslib', '@angular/cdk/collections'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.bidi, global.tslib, global.ng.cdk.collections));
+}(this, (function (exports, coercion, i0, rxjs, operators, i1, bidi, tslib, collections) { 'use strict';
 
     /**
      * @license
@@ -203,85 +203,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    // Whether the current platform supports the V8 Break Iterator. The V8 check
-    // is necessary to detect all Blink based browsers.
-    var hasV8BreakIterator;
-    // We need a try/catch around the reference to `Intl`, because accessing it in some cases can
-    // cause IE to throw. These cases are tied to particular versions of Windows and can happen if
-    // the consumer is providing a polyfilled `Map`. See:
-    // https://github.com/Microsoft/ChakraCore/issues/3189
-    // https://github.com/angular/components/issues/15687
-    try {
-        hasV8BreakIterator = (typeof Intl !== 'undefined' && Intl.v8BreakIterator);
-    }
-    catch (_a) {
-        hasV8BreakIterator = false;
-    }
-    /**
-     * Service to detect the current platform by comparing the userAgent strings and
-     * checking browser-specific global properties.
-     */
-    var Platform = /** @class */ (function () {
-        /**
-         * @breaking-change 8.0.0 remove optional decorator
-         */
-        function Platform(_platformId) {
-            this._platformId = _platformId;
-            // We want to use the Angular platform check because if the Document is shimmed
-            // without the navigator, the following checks will fail. This is preferred because
-            // sometimes the Document may be shimmed without the user's knowledge or intention
-            /** Whether the Angular application is being rendered in the browser. */
-            this.isBrowser = this._platformId ?
-                common.isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
-            /** Whether the current browser is Microsoft Edge. */
-            this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
-            /** Whether the current rendering engine is Microsoft Trident. */
-            this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
-            // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
-            /** Whether the current rendering engine is Blink. */
-            this.BLINK = this.isBrowser && (!!(window.chrome || hasV8BreakIterator) &&
-                typeof CSS !== 'undefined' && !this.EDGE && !this.TRIDENT);
-            // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
-            // ensure that Webkit runs standalone and is not used as another engine's base.
-            /** Whether the current rendering engine is WebKit. */
-            this.WEBKIT = this.isBrowser &&
-                /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
-            /** Whether the current platform is Apple iOS. */
-            this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-                !('MSStream' in window);
-            // It's difficult to detect the plain Gecko engine, because most of the browsers identify
-            // them self as Gecko-like browsers and modify the userAgent's according to that.
-            // Since we only cover one explicit Firefox case, we can simply check for Firefox
-            // instead of having an unstable check for Gecko.
-            /** Whether the current browser is Firefox. */
-            this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
-            /** Whether the current platform is Android. */
-            // Trident on mobile adds the android platform to the userAgent to trick detections.
-            this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
-            // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
-            // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
-            // Safari browser should also use Webkit as its layout engine.
-            /** Whether the current browser is Safari. */
-            this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
-        }
-        Platform.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        /** @nocollapse */
-        Platform.ctorParameters = function () { return [
-            { type: Object, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
-        ]; };
-        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
-        return Platform;
-    }());
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /** Time in ms to throttle the scrolling events by default. */
     var DEFAULT_SCROLL_TIME = 20;
     /**
@@ -424,9 +345,9 @@
         /** @nocollapse */
         ScrollDispatcher.ctorParameters = function () { return [
             { type: i0.NgZone },
-            { type: platform.Platform }
+            { type: i1.Platform }
         ]; };
-        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
         return ScrollDispatcher;
     }());
 
@@ -493,15 +414,15 @@
                     el.scrollHeight - el.clientHeight - options.bottom;
             }
             // Rewrite the right offset as a left offset.
-            if (isRtl && platform.getRtlScrollAxisType() != platform.RtlScrollAxisType.NORMAL) {
+            if (isRtl && i1.getRtlScrollAxisType() != i1.RtlScrollAxisType.NORMAL) {
                 if (options.left != null) {
                     options.right =
                         el.scrollWidth - el.clientWidth - options.left;
                 }
-                if (platform.getRtlScrollAxisType() == platform.RtlScrollAxisType.INVERTED) {
+                if (i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.INVERTED) {
                     options.left = options.right;
                 }
-                else if (platform.getRtlScrollAxisType() == platform.RtlScrollAxisType.NEGATED) {
+                else if (i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.NEGATED) {
                     options.left = options.right ? -options.right : options.right;
                 }
             }
@@ -515,7 +436,7 @@
         };
         CdkScrollable.prototype._applyScrollToOptions = function (options) {
             var el = this.elementRef.nativeElement;
-            if (platform.supportsScrollBehavior()) {
+            if (i1.supportsScrollBehavior()) {
                 el.scrollTo(options);
             }
             else {
@@ -554,7 +475,7 @@
             else if (from == 'end') {
                 from = isRtl ? LEFT : RIGHT;
             }
-            if (isRtl && platform.getRtlScrollAxisType() == platform.RtlScrollAxisType.INVERTED) {
+            if (isRtl && i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.INVERTED) {
                 // For INVERTED, scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and
                 // 0 when scrolled all the way right.
                 if (from == LEFT) {
@@ -564,7 +485,7 @@
                     return el.scrollLeft;
                 }
             }
-            else if (isRtl && platform.getRtlScrollAxisType() == platform.RtlScrollAxisType.NEGATED) {
+            else if (isRtl && i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.NEGATED) {
                 // For NEGATED, scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and
                 // 0 when scrolled all the way right.
                 if (from == LEFT) {
@@ -1319,7 +1240,7 @@
         }
         ScrollingModule.decorators = [
             { type: i0.NgModule, args: [{
-                        imports: [bidi.BidiModule, platform.PlatformModule],
+                        imports: [bidi.BidiModule, i1.PlatformModule],
                         exports: [
                             bidi.BidiModule,
                             CdkFixedSizeVirtualScroll,
@@ -1441,10 +1362,10 @@
         ];
         /** @nocollapse */
         ViewportRuler.ctorParameters = function () { return [
-            { type: platform.Platform },
+            { type: i1.Platform },
             { type: i0.NgZone }
         ]; };
-        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
         return ViewportRuler;
     }());
 

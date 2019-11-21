@@ -14,7 +14,7 @@ import { Directive, ElementRef, EventEmitter, Injectable, NgZone, Output, } from
 import { of as observableOf, Subject } from 'rxjs';
 import { coerceElement } from '@angular/cdk/coercion';
 import * as i0 from "@angular/core";
-import * as i1 from "@angular/cdk/platform/platform";
+import * as i1 from "@angular/cdk/platform";
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
 /** @type {?} */

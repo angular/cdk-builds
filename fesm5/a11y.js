@@ -1,11 +1,11 @@
-import { DOCUMENT, isPlatformBrowser, CommonModule } from '@angular/common';
-import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, Optional, PLATFORM_ID, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, EventEmitter, Output, NgModule } from '@angular/core';
+import { DOCUMENT, CommonModule } from '@angular/common';
+import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { __extends, __read } from 'tslib';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
-import { Platform as Platform$1, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
+import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -612,85 +612,6 @@ var FocusKeyManager = /** @class */ (function (_super) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// Whether the current platform supports the V8 Break Iterator. The V8 check
-// is necessary to detect all Blink based browsers.
-var hasV8BreakIterator;
-// We need a try/catch around the reference to `Intl`, because accessing it in some cases can
-// cause IE to throw. These cases are tied to particular versions of Windows and can happen if
-// the consumer is providing a polyfilled `Map`. See:
-// https://github.com/Microsoft/ChakraCore/issues/3189
-// https://github.com/angular/components/issues/15687
-try {
-    hasV8BreakIterator = (typeof Intl !== 'undefined' && Intl.v8BreakIterator);
-}
-catch (_a) {
-    hasV8BreakIterator = false;
-}
-/**
- * Service to detect the current platform by comparing the userAgent strings and
- * checking browser-specific global properties.
- */
-var Platform = /** @class */ (function () {
-    /**
-     * @breaking-change 8.0.0 remove optional decorator
-     */
-    function Platform(_platformId) {
-        this._platformId = _platformId;
-        // We want to use the Angular platform check because if the Document is shimmed
-        // without the navigator, the following checks will fail. This is preferred because
-        // sometimes the Document may be shimmed without the user's knowledge or intention
-        /** Whether the Angular application is being rendered in the browser. */
-        this.isBrowser = this._platformId ?
-            isPlatformBrowser(this._platformId) : typeof document === 'object' && !!document;
-        /** Whether the current browser is Microsoft Edge. */
-        this.EDGE = this.isBrowser && /(edge)/i.test(navigator.userAgent);
-        /** Whether the current rendering engine is Microsoft Trident. */
-        this.TRIDENT = this.isBrowser && /(msie|trident)/i.test(navigator.userAgent);
-        // EdgeHTML and Trident mock Blink specific things and need to be excluded from this check.
-        /** Whether the current rendering engine is Blink. */
-        this.BLINK = this.isBrowser && (!!(window.chrome || hasV8BreakIterator) &&
-            typeof CSS !== 'undefined' && !this.EDGE && !this.TRIDENT);
-        // Webkit is part of the userAgent in EdgeHTML, Blink and Trident. Therefore we need to
-        // ensure that Webkit runs standalone and is not used as another engine's base.
-        /** Whether the current rendering engine is WebKit. */
-        this.WEBKIT = this.isBrowser &&
-            /AppleWebKit/i.test(navigator.userAgent) && !this.BLINK && !this.EDGE && !this.TRIDENT;
-        /** Whether the current platform is Apple iOS. */
-        this.IOS = this.isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-            !('MSStream' in window);
-        // It's difficult to detect the plain Gecko engine, because most of the browsers identify
-        // them self as Gecko-like browsers and modify the userAgent's according to that.
-        // Since we only cover one explicit Firefox case, we can simply check for Firefox
-        // instead of having an unstable check for Gecko.
-        /** Whether the current browser is Firefox. */
-        this.FIREFOX = this.isBrowser && /(firefox|minefield)/i.test(navigator.userAgent);
-        /** Whether the current platform is Android. */
-        // Trident on mobile adds the android platform to the userAgent to trick detections.
-        this.ANDROID = this.isBrowser && /android/i.test(navigator.userAgent) && !this.TRIDENT;
-        // Safari browsers will include the Safari keyword in their userAgent. Some browsers may fake
-        // this and just place the Safari keyword in the userAgent. To be more safe about Safari every
-        // Safari browser should also use Webkit as its layout engine.
-        /** Whether the current browser is Safari. */
-        this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
-    }
-    Platform.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    Platform.ctorParameters = function () { return [
-        { type: Object, decorators: [{ type: Optional }, { type: Inject, args: [PLATFORM_ID,] }] }
-    ]; };
-    Platform.ɵprov = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
-    return Platform;
-}());
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
 // supported.
@@ -808,7 +729,7 @@ var InteractivityChecker = /** @class */ (function () {
     ];
     /** @nocollapse */
     InteractivityChecker.ctorParameters = function () { return [
-        { type: Platform$1 }
+        { type: Platform }
     ]; };
     InteractivityChecker.ɵprov = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
     return InteractivityChecker;
@@ -1761,7 +1682,7 @@ var FocusMonitor = /** @class */ (function () {
     /** @nocollapse */
     FocusMonitor.ctorParameters = function () { return [
         { type: NgZone },
-        { type: Platform$1 }
+        { type: Platform }
     ]; };
     FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
@@ -1899,7 +1820,7 @@ var HighContrastModeDetector = /** @class */ (function () {
     ];
     /** @nocollapse */
     HighContrastModeDetector.ctorParameters = function () { return [
-        { type: Platform$1 },
+        { type: Platform },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ]; };
     HighContrastModeDetector.ɵprov = ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(ɵɵinject(Platform), ɵɵinject(DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
