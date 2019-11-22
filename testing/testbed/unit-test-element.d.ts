@@ -5,9 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { TestElement, TestKey } from '../test-element';
-import { ElementDimensions } from '../element-dimensions';
-import { ModifierKeys } from '../fake-events';
+import { ElementDimensions, ModifierKeys, TestElement, TestKey } from '@angular/cdk/testing';
 /** A `TestElement` implementation for unit tests. */
 export declare class UnitTestElement implements TestElement {
     readonly element: Element;

@@ -5,10 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { ElementDimensions, ModifierKeys, TestElement, TestKey } from '@angular/cdk/testing';
 import { ElementFinder } from 'protractor';
-import { ElementDimensions } from '../element-dimensions';
-import { TestElement, TestKey } from '../test-element';
-import { ModifierKeys } from '../fake-events';
 /** A `TestElement` implementation for Protractor. */
 export declare class ProtractorElement implements TestElement {
     readonly element: ElementFinder;

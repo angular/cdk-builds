@@ -6,7 +6,13 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementDimensions } from './element-dimensions';
-import { ModifierKeys } from './fake-events';
+/** Modifier keys that may be held while typing. */
+export interface ModifierKeys {
+    control?: boolean;
+    alt?: boolean;
+    shift?: boolean;
+    meta?: boolean;
+}
 /** An enum of non-text keys that can be used with the `sendKeys` method. */
 export declare enum TestKey {
     BACKSPACE = 0,

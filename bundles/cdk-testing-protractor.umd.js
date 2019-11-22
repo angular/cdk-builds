@@ -1,55 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('protractor'), require('@angular/cdk/testing')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/testing/protractor', ['exports', 'tslib', 'protractor', '@angular/cdk/testing'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.tslib, global.protractor, global.ng.cdk.testing));
-}(this, (function (exports, tslib, protractor, testing) { 'use strict';
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /** An enum of non-text keys that can be used with the `sendKeys` method. */
-    // NOTE: This is a separate enum from `@angular/cdk/keycodes` because we don't necessarily want to
-    // support every possible keyCode. We also can't rely on Protractor's `Key` because we don't want a
-    // dependency on any particular testing framework here. Instead we'll just maintain this supported
-    // list of keys and let individual concrete `HarnessEnvironment` classes map them to whatever key
-    // representation is used in its respective testing framework.
-    var TestKey;
-    (function (TestKey) {
-        TestKey[TestKey["BACKSPACE"] = 0] = "BACKSPACE";
-        TestKey[TestKey["TAB"] = 1] = "TAB";
-        TestKey[TestKey["ENTER"] = 2] = "ENTER";
-        TestKey[TestKey["SHIFT"] = 3] = "SHIFT";
-        TestKey[TestKey["CONTROL"] = 4] = "CONTROL";
-        TestKey[TestKey["ALT"] = 5] = "ALT";
-        TestKey[TestKey["ESCAPE"] = 6] = "ESCAPE";
-        TestKey[TestKey["PAGE_UP"] = 7] = "PAGE_UP";
-        TestKey[TestKey["PAGE_DOWN"] = 8] = "PAGE_DOWN";
-        TestKey[TestKey["END"] = 9] = "END";
-        TestKey[TestKey["HOME"] = 10] = "HOME";
-        TestKey[TestKey["LEFT_ARROW"] = 11] = "LEFT_ARROW";
-        TestKey[TestKey["UP_ARROW"] = 12] = "UP_ARROW";
-        TestKey[TestKey["RIGHT_ARROW"] = 13] = "RIGHT_ARROW";
-        TestKey[TestKey["DOWN_ARROW"] = 14] = "DOWN_ARROW";
-        TestKey[TestKey["INSERT"] = 15] = "INSERT";
-        TestKey[TestKey["DELETE"] = 16] = "DELETE";
-        TestKey[TestKey["F1"] = 17] = "F1";
-        TestKey[TestKey["F2"] = 18] = "F2";
-        TestKey[TestKey["F3"] = 19] = "F3";
-        TestKey[TestKey["F4"] = 20] = "F4";
-        TestKey[TestKey["F5"] = 21] = "F5";
-        TestKey[TestKey["F6"] = 22] = "F6";
-        TestKey[TestKey["F7"] = 23] = "F7";
-        TestKey[TestKey["F8"] = 24] = "F8";
-        TestKey[TestKey["F9"] = 25] = "F9";
-        TestKey[TestKey["F10"] = 26] = "F10";
-        TestKey[TestKey["F11"] = 27] = "F11";
-        TestKey[TestKey["F12"] = 28] = "F12";
-        TestKey[TestKey["META"] = 29] = "META";
-    })(TestKey || (TestKey = {}));
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/testing'), require('protractor')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/testing/protractor', ['exports', 'tslib', '@angular/cdk/testing', 'protractor'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.tslib, global.ng.cdk.testing, global.protractor));
+}(this, (function (exports, tslib, testing, protractor) { 'use strict';
 
     /**
      * @license
@@ -61,36 +14,36 @@
     var _a;
     /** Maps the `TestKey` constants to Protractor's `Key` constants. */
     var keyMap = (_a = {},
-        _a[TestKey.BACKSPACE] = protractor.Key.BACK_SPACE,
-        _a[TestKey.TAB] = protractor.Key.TAB,
-        _a[TestKey.ENTER] = protractor.Key.ENTER,
-        _a[TestKey.SHIFT] = protractor.Key.SHIFT,
-        _a[TestKey.CONTROL] = protractor.Key.CONTROL,
-        _a[TestKey.ALT] = protractor.Key.ALT,
-        _a[TestKey.ESCAPE] = protractor.Key.ESCAPE,
-        _a[TestKey.PAGE_UP] = protractor.Key.PAGE_UP,
-        _a[TestKey.PAGE_DOWN] = protractor.Key.PAGE_DOWN,
-        _a[TestKey.END] = protractor.Key.END,
-        _a[TestKey.HOME] = protractor.Key.HOME,
-        _a[TestKey.LEFT_ARROW] = protractor.Key.ARROW_LEFT,
-        _a[TestKey.UP_ARROW] = protractor.Key.ARROW_UP,
-        _a[TestKey.RIGHT_ARROW] = protractor.Key.ARROW_RIGHT,
-        _a[TestKey.DOWN_ARROW] = protractor.Key.ARROW_DOWN,
-        _a[TestKey.INSERT] = protractor.Key.INSERT,
-        _a[TestKey.DELETE] = protractor.Key.DELETE,
-        _a[TestKey.F1] = protractor.Key.F1,
-        _a[TestKey.F2] = protractor.Key.F2,
-        _a[TestKey.F3] = protractor.Key.F3,
-        _a[TestKey.F4] = protractor.Key.F4,
-        _a[TestKey.F5] = protractor.Key.F5,
-        _a[TestKey.F6] = protractor.Key.F6,
-        _a[TestKey.F7] = protractor.Key.F7,
-        _a[TestKey.F8] = protractor.Key.F8,
-        _a[TestKey.F9] = protractor.Key.F9,
-        _a[TestKey.F10] = protractor.Key.F10,
-        _a[TestKey.F11] = protractor.Key.F11,
-        _a[TestKey.F12] = protractor.Key.F12,
-        _a[TestKey.META] = protractor.Key.META,
+        _a[testing.TestKey.BACKSPACE] = protractor.Key.BACK_SPACE,
+        _a[testing.TestKey.TAB] = protractor.Key.TAB,
+        _a[testing.TestKey.ENTER] = protractor.Key.ENTER,
+        _a[testing.TestKey.SHIFT] = protractor.Key.SHIFT,
+        _a[testing.TestKey.CONTROL] = protractor.Key.CONTROL,
+        _a[testing.TestKey.ALT] = protractor.Key.ALT,
+        _a[testing.TestKey.ESCAPE] = protractor.Key.ESCAPE,
+        _a[testing.TestKey.PAGE_UP] = protractor.Key.PAGE_UP,
+        _a[testing.TestKey.PAGE_DOWN] = protractor.Key.PAGE_DOWN,
+        _a[testing.TestKey.END] = protractor.Key.END,
+        _a[testing.TestKey.HOME] = protractor.Key.HOME,
+        _a[testing.TestKey.LEFT_ARROW] = protractor.Key.ARROW_LEFT,
+        _a[testing.TestKey.UP_ARROW] = protractor.Key.ARROW_UP,
+        _a[testing.TestKey.RIGHT_ARROW] = protractor.Key.ARROW_RIGHT,
+        _a[testing.TestKey.DOWN_ARROW] = protractor.Key.ARROW_DOWN,
+        _a[testing.TestKey.INSERT] = protractor.Key.INSERT,
+        _a[testing.TestKey.DELETE] = protractor.Key.DELETE,
+        _a[testing.TestKey.F1] = protractor.Key.F1,
+        _a[testing.TestKey.F2] = protractor.Key.F2,
+        _a[testing.TestKey.F3] = protractor.Key.F3,
+        _a[testing.TestKey.F4] = protractor.Key.F4,
+        _a[testing.TestKey.F5] = protractor.Key.F5,
+        _a[testing.TestKey.F6] = protractor.Key.F6,
+        _a[testing.TestKey.F7] = protractor.Key.F7,
+        _a[testing.TestKey.F8] = protractor.Key.F8,
+        _a[testing.TestKey.F9] = protractor.Key.F9,
+        _a[testing.TestKey.F10] = protractor.Key.F10,
+        _a[testing.TestKey.F11] = protractor.Key.F11,
+        _a[testing.TestKey.F12] = protractor.Key.F12,
+        _a[testing.TestKey.META] = protractor.Key.META,
         _a);
     /** Converts a `ModifierKeys` object to a list of Protractor `Key`s. */
     function toProtractorModifierKeys(modifiers) {

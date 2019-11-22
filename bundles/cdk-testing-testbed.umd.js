@@ -93,53 +93,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    /** An enum of non-text keys that can be used with the `sendKeys` method. */
-    // NOTE: This is a separate enum from `@angular/cdk/keycodes` because we don't necessarily want to
-    // support every possible keyCode. We also can't rely on Protractor's `Key` because we don't want a
-    // dependency on any particular testing framework here. Instead we'll just maintain this supported
-    // list of keys and let individual concrete `HarnessEnvironment` classes map them to whatever key
-    // representation is used in its respective testing framework.
-    var TestKey;
-    (function (TestKey) {
-        TestKey[TestKey["BACKSPACE"] = 0] = "BACKSPACE";
-        TestKey[TestKey["TAB"] = 1] = "TAB";
-        TestKey[TestKey["ENTER"] = 2] = "ENTER";
-        TestKey[TestKey["SHIFT"] = 3] = "SHIFT";
-        TestKey[TestKey["CONTROL"] = 4] = "CONTROL";
-        TestKey[TestKey["ALT"] = 5] = "ALT";
-        TestKey[TestKey["ESCAPE"] = 6] = "ESCAPE";
-        TestKey[TestKey["PAGE_UP"] = 7] = "PAGE_UP";
-        TestKey[TestKey["PAGE_DOWN"] = 8] = "PAGE_DOWN";
-        TestKey[TestKey["END"] = 9] = "END";
-        TestKey[TestKey["HOME"] = 10] = "HOME";
-        TestKey[TestKey["LEFT_ARROW"] = 11] = "LEFT_ARROW";
-        TestKey[TestKey["UP_ARROW"] = 12] = "UP_ARROW";
-        TestKey[TestKey["RIGHT_ARROW"] = 13] = "RIGHT_ARROW";
-        TestKey[TestKey["DOWN_ARROW"] = 14] = "DOWN_ARROW";
-        TestKey[TestKey["INSERT"] = 15] = "INSERT";
-        TestKey[TestKey["DELETE"] = 16] = "DELETE";
-        TestKey[TestKey["F1"] = 17] = "F1";
-        TestKey[TestKey["F2"] = 18] = "F2";
-        TestKey[TestKey["F3"] = 19] = "F3";
-        TestKey[TestKey["F4"] = 20] = "F4";
-        TestKey[TestKey["F5"] = 21] = "F5";
-        TestKey[TestKey["F6"] = 22] = "F6";
-        TestKey[TestKey["F7"] = 23] = "F7";
-        TestKey[TestKey["F8"] = 24] = "F8";
-        TestKey[TestKey["F9"] = 25] = "F9";
-        TestKey[TestKey["F10"] = 26] = "F10";
-        TestKey[TestKey["F11"] = 27] = "F11";
-        TestKey[TestKey["F12"] = 28] = "F12";
-        TestKey[TestKey["META"] = 29] = "META";
-    })(TestKey || (TestKey = {}));
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * Creates a browser MouseEvent with the specified options.
      * @docs-private
@@ -404,36 +357,36 @@
     var _a;
     /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
     var keyMap = (_a = {},
-        _a[TestKey.BACKSPACE] = { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
-        _a[TestKey.TAB] = { keyCode: keyCodes.TAB, key: 'Tab' },
-        _a[TestKey.ENTER] = { keyCode: keyCodes.ENTER, key: 'Enter' },
-        _a[TestKey.SHIFT] = { keyCode: keyCodes.SHIFT, key: 'Shift' },
-        _a[TestKey.CONTROL] = { keyCode: keyCodes.CONTROL, key: 'Control' },
-        _a[TestKey.ALT] = { keyCode: keyCodes.ALT, key: 'Alt' },
-        _a[TestKey.ESCAPE] = { keyCode: keyCodes.ESCAPE, key: 'Escape' },
-        _a[TestKey.PAGE_UP] = { keyCode: keyCodes.PAGE_UP, key: 'PageUp' },
-        _a[TestKey.PAGE_DOWN] = { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown' },
-        _a[TestKey.END] = { keyCode: keyCodes.END, key: 'End' },
-        _a[TestKey.HOME] = { keyCode: keyCodes.HOME, key: 'Home' },
-        _a[TestKey.LEFT_ARROW] = { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft' },
-        _a[TestKey.UP_ARROW] = { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp' },
-        _a[TestKey.RIGHT_ARROW] = { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight' },
-        _a[TestKey.DOWN_ARROW] = { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown' },
-        _a[TestKey.INSERT] = { keyCode: keyCodes.INSERT, key: 'Insert' },
-        _a[TestKey.DELETE] = { keyCode: keyCodes.DELETE, key: 'Delete' },
-        _a[TestKey.F1] = { keyCode: keyCodes.F1, key: 'F1' },
-        _a[TestKey.F2] = { keyCode: keyCodes.F2, key: 'F2' },
-        _a[TestKey.F3] = { keyCode: keyCodes.F3, key: 'F3' },
-        _a[TestKey.F4] = { keyCode: keyCodes.F4, key: 'F4' },
-        _a[TestKey.F5] = { keyCode: keyCodes.F5, key: 'F5' },
-        _a[TestKey.F6] = { keyCode: keyCodes.F6, key: 'F6' },
-        _a[TestKey.F7] = { keyCode: keyCodes.F7, key: 'F7' },
-        _a[TestKey.F8] = { keyCode: keyCodes.F8, key: 'F8' },
-        _a[TestKey.F9] = { keyCode: keyCodes.F9, key: 'F9' },
-        _a[TestKey.F10] = { keyCode: keyCodes.F10, key: 'F10' },
-        _a[TestKey.F11] = { keyCode: keyCodes.F11, key: 'F11' },
-        _a[TestKey.F12] = { keyCode: keyCodes.F12, key: 'F12' },
-        _a[TestKey.META] = { keyCode: keyCodes.META, key: 'Meta' },
+        _a[testing.TestKey.BACKSPACE] = { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
+        _a[testing.TestKey.TAB] = { keyCode: keyCodes.TAB, key: 'Tab' },
+        _a[testing.TestKey.ENTER] = { keyCode: keyCodes.ENTER, key: 'Enter' },
+        _a[testing.TestKey.SHIFT] = { keyCode: keyCodes.SHIFT, key: 'Shift' },
+        _a[testing.TestKey.CONTROL] = { keyCode: keyCodes.CONTROL, key: 'Control' },
+        _a[testing.TestKey.ALT] = { keyCode: keyCodes.ALT, key: 'Alt' },
+        _a[testing.TestKey.ESCAPE] = { keyCode: keyCodes.ESCAPE, key: 'Escape' },
+        _a[testing.TestKey.PAGE_UP] = { keyCode: keyCodes.PAGE_UP, key: 'PageUp' },
+        _a[testing.TestKey.PAGE_DOWN] = { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown' },
+        _a[testing.TestKey.END] = { keyCode: keyCodes.END, key: 'End' },
+        _a[testing.TestKey.HOME] = { keyCode: keyCodes.HOME, key: 'Home' },
+        _a[testing.TestKey.LEFT_ARROW] = { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft' },
+        _a[testing.TestKey.UP_ARROW] = { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp' },
+        _a[testing.TestKey.RIGHT_ARROW] = { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight' },
+        _a[testing.TestKey.DOWN_ARROW] = { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown' },
+        _a[testing.TestKey.INSERT] = { keyCode: keyCodes.INSERT, key: 'Insert' },
+        _a[testing.TestKey.DELETE] = { keyCode: keyCodes.DELETE, key: 'Delete' },
+        _a[testing.TestKey.F1] = { keyCode: keyCodes.F1, key: 'F1' },
+        _a[testing.TestKey.F2] = { keyCode: keyCodes.F2, key: 'F2' },
+        _a[testing.TestKey.F3] = { keyCode: keyCodes.F3, key: 'F3' },
+        _a[testing.TestKey.F4] = { keyCode: keyCodes.F4, key: 'F4' },
+        _a[testing.TestKey.F5] = { keyCode: keyCodes.F5, key: 'F5' },
+        _a[testing.TestKey.F6] = { keyCode: keyCodes.F6, key: 'F6' },
+        _a[testing.TestKey.F7] = { keyCode: keyCodes.F7, key: 'F7' },
+        _a[testing.TestKey.F8] = { keyCode: keyCodes.F8, key: 'F8' },
+        _a[testing.TestKey.F9] = { keyCode: keyCodes.F9, key: 'F9' },
+        _a[testing.TestKey.F10] = { keyCode: keyCodes.F10, key: 'F10' },
+        _a[testing.TestKey.F11] = { keyCode: keyCodes.F11, key: 'F11' },
+        _a[testing.TestKey.F12] = { keyCode: keyCodes.F12, key: 'F12' },
+        _a[testing.TestKey.META] = { keyCode: keyCodes.META, key: 'Meta' },
         _a);
     /** A `TestElement` implementation for unit tests. */
     var UnitTestElement = /** @class */ (function () {

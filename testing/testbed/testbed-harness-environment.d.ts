@@ -5,10 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { HarnessEnvironment } from '@angular/cdk/testing';
+import { ComponentHarness, ComponentHarnessConstructor, HarnessEnvironment, HarnessLoader, TestElement } from '@angular/cdk/testing';
 import { ComponentFixture } from '@angular/core/testing';
-import { ComponentHarness, ComponentHarnessConstructor, HarnessLoader } from '../component-harness';
-import { TestElement } from '../test-element';
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Element> {
     private _fixture;
