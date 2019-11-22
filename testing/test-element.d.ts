@@ -53,7 +53,7 @@ export declare enum TestKey {
 export interface TestElement {
     /** Blur the element. */
     blur(): Promise<void>;
-    /** Clear the element's input (for input elements only). */
+    /** Clear the element's input (for input and textarea elements only). */
     clear(): Promise<void>;
     /**
      * Click the element.
