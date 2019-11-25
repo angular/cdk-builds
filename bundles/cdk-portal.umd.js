@@ -475,12 +475,9 @@
                 // that we can restore it when the portal is detached.
                 var anchorNode = _this._document.createComment('dom-portal');
                 var element = portal.element;
-                var nativeElement = _this._viewContainerRef.element.nativeElement;
-                var rootNode = nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
-                    nativeElement : nativeElement.parentNode;
                 portal.setAttachedHost(_this);
                 element.parentNode.insertBefore(anchorNode, element);
-                rootNode.appendChild(element);
+                _this._getRootNode().appendChild(element);
                 _super.prototype.setDisposeFn.call(_this, function () {
                     anchorNode.parentNode.replaceChild(element, anchorNode);
                 });
@@ -544,6 +541,12 @@
             var resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
             var componentFactory = resolver.resolveComponentFactory(portal.component);
             var ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
+            // If we're using a view container that's different from the injected one (e.g. when the portal
+            // specifies its own) we need to move the component into the outlet, otherwise it'll be rendered
+            // inside of the alternate view container.
+            if (viewContainerRef !== this._viewContainerRef) {
+                this._getRootNode().appendChild(ref.hostView.rootNodes[0]);
+            }
             _super.prototype.setDisposeFn.call(this, function () { return ref.destroy(); });
             this._attachedPortal = portal;
             this._attachedRef = ref;
@@ -564,6 +567,14 @@
             this._attachedRef = viewRef;
             this.attached.emit(viewRef);
             return viewRef;
+        };
+        /** Gets the root node of the portal outlet. */
+        CdkPortalOutlet.prototype._getRootNode = function () {
+            var nativeElement = this._viewContainerRef.element.nativeElement;
+            // The directive could be set on a template which will result in a comment
+            // node being the root. Use the comment's parent node if that is the case.
+            return (nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
+                nativeElement : nativeElement.parentNode);
         };
         CdkPortalOutlet.decorators = [
             { type: core.Directive, args: [{
