@@ -123,7 +123,7 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
      */
     getItemIndex(item: CdkDrag): number;
     /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
-    private _syncInputs;
+    private _setupInputSyncSubscription;
     /** Handles events from the underlying DropListRef. */
     private _handleEvents;
     static ngAcceptInputType_disabled: boolean | string | null | undefined;

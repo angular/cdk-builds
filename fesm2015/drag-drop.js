@@ -4804,7 +4804,7 @@ class CdkDropList {
         (drag, drop) => {
             return this.enterPredicate(drag.data, drop.data);
         });
-        this._syncInputs(this._dropListRef);
+        this._setupInputSyncSubscription(this._dropListRef);
         this._handleEvents(this._dropListRef);
         CdkDropList._dropLists.push(this);
         if (_group) {
@@ -4823,7 +4823,11 @@ class CdkDropList {
      * @return {?}
      */
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        // Usually we sync the directive and ref state right before dragging starts, in order to have
+        // a single point of failure and to avoid having to use setters for everything. `disabled` is
+        // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
+        // the user in a disabled state, so we also need to sync it as it's being set.
+        this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
     }
     /**
      * @return {?}
@@ -4927,7 +4931,7 @@ class CdkDropList {
      * @param {?} ref
      * @return {?}
      */
-    _syncInputs(ref) {
+    _setupInputSyncSubscription(ref) {
         if (this._dir) {
             this._dir.change
                 .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
