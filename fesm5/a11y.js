@@ -363,7 +363,7 @@ var ListKeyManager = /** @class */ (function () {
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(tap(function (keyCode) { return _this._pressedLetters.push(keyCode); }), debounceTime(debounceInterval), filter(function () { return _this._pressedLetters.length > 0; }), map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
+        this._typeaheadSubscription = this._letterKeyStream.pipe(tap(function (letter) { return _this._pressedLetters.push(letter); }), debounceTime(debounceInterval), filter(function () { return _this._pressedLetters.length > 0; }), map(function () { return _this._pressedLetters.join(''); })).subscribe(function (inputString) {
             var items = _this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -468,6 +468,10 @@ var ListKeyManager = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    /** Gets whether the user is currently typing into the manager using the typeahead feature. */
+    ListKeyManager.prototype.isTyping = function () {
+        return this._pressedLetters.length > 0;
+    };
     /** Sets the active item to the first enabled item in the list. */
     ListKeyManager.prototype.setFirstItemActive = function () {
         this._setActiveItemByIndex(0, 1);

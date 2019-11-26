@@ -562,10 +562,10 @@ class ListKeyManager {
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
         (/** @type {?} */ (this))._typeaheadSubscription = (/** @type {?} */ (this))._letterKeyStream.pipe(tap((/**
-         * @param {?} keyCode
+         * @param {?} letter
          * @return {?}
          */
-        keyCode => (/** @type {?} */ (this))._pressedLetters.push(keyCode))), debounceTime(debounceInterval), filter((/**
+        letter => (/** @type {?} */ (this))._pressedLetters.push(letter))), debounceTime(debounceInterval), filter((/**
          * @return {?}
          */
         () => (/** @type {?} */ (this))._pressedLetters.length > 0)), map((/**
@@ -692,6 +692,13 @@ class ListKeyManager {
      */
     get activeItem() {
         return this._activeItem;
+    }
+    /**
+     * Gets whether the user is currently typing into the manager using the typeahead feature.
+     * @return {?}
+     */
+    isTyping() {
+        return this._pressedLetters.length > 0;
     }
     /**
      * Sets the active item to the first enabled item in the list.

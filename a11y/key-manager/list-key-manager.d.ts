@@ -96,6 +96,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     readonly activeItemIndex: number | null;
     /** The active item. */
     readonly activeItem: T | null;
+    /** Gets whether the user is currently typing into the manager using the typeahead feature. */
+    isTyping(): boolean;
     /** Sets the active item to the first enabled item in the list. */
     setFirstItemActive(): void;
     /** Sets the active item to the last enabled item in the list. */

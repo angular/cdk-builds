@@ -1299,6 +1299,12 @@ class DragRef {
         const boundaryRect = this._boundaryElement.getBoundingClientRect();
         /** @type {?} */
         const elementRect = this._rootElement.getBoundingClientRect();
+        // It's possible that the element got hidden away after dragging (e.g. by switching to a
+        // different tab). Don't do anything in this case so we don't clear the user's position.
+        if ((boundaryRect.width === 0 && boundaryRect.height === 0) ||
+            (elementRect.width === 0 && elementRect.height === 0)) {
+            return;
+        }
         /** @type {?} */
         const leftOverflow = boundaryRect.left - elementRect.left;
         /** @type {?} */
