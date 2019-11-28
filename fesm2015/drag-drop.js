@@ -9,6 +9,7 @@ import { Directionality } from '@angular/cdk/bidi';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-styling.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -68,6 +69,7 @@ function toggleNativeDragInteractions(element, enable) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/transition-duration.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -137,6 +139,7 @@ function parseCssPropertyValue(computedStyle, name) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-ref.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1821,6 +1824,7 @@ function getRootNode(viewRef, _document) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1903,6 +1907,7 @@ function clamp$1(value, max) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drop-list-ref.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3254,6 +3259,7 @@ function getShadowRoot(element) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-drop-registry.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3574,6 +3580,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-drop.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3656,6 +3663,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-events.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3861,6 +3869,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-parent.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3874,6 +3883,7 @@ const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drag-handle.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3954,6 +3964,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drag-placeholder.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3993,6 +4004,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drag-preview.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -4032,6 +4044,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drag.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -4653,6 +4666,7 @@ function getClosestMatchingAncestor(element, selector) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drop-list-group.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -4715,6 +4729,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/directives/drop-list.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -5228,6 +5243,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/drag-drop-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DragDropModule {
@@ -5258,6 +5274,7 @@ DragDropModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

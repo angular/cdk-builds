@@ -6,6 +6,7 @@ import { auditTime, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/text-field/autofill.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -214,6 +215,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/text-field/autosize.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -583,6 +585,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/text-field/text-field-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class TextFieldModule {
@@ -597,6 +600,7 @@ TextFieldModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/text-field/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

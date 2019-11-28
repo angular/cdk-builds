@@ -1,5 +1,6 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/keycodes/keycodes.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -257,6 +258,7 @@ const MAC_META = 224;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/keycodes/modifiers.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -285,6 +287,7 @@ function hasModifierKey(event, ...modifiers) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/keycodes/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

@@ -5,6 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/accordion/accordion.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -115,6 +116,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/accordion/accordion-item.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -383,6 +385,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/accordion/accordion-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CdkAccordionModule {
@@ -396,6 +399,7 @@ CdkAccordionModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/accordion/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

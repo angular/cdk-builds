@@ -6,6 +6,7 @@ import { coerceArray } from '@angular/cdk/coercion';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/layout/layout-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LayoutModule {
@@ -16,6 +17,7 @@ LayoutModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/layout/media-matcher.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -129,6 +131,7 @@ function noopMatchMedia(query) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/layout/breakpoints-observer.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -371,6 +374,7 @@ function splitQueries(queries) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/layout/breakpoints.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // PascalCase is being used as Breakpoints is used like an enum.
@@ -405,6 +409,7 @@ const Breakpoints = {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/layout/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

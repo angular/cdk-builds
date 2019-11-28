@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/portal-errors.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -64,6 +65,7 @@ function throwNoPortalAttachedError() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/portal.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -424,6 +426,7 @@ class BasePortalHost extends BasePortalOutlet {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/dom-portal-outlet.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -621,6 +624,7 @@ class DomPortalHost extends DomPortalOutlet {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/portal-directives.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -932,6 +936,7 @@ PortalModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/portal-injector.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -984,6 +989,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/portal/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

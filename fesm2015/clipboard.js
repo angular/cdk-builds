@@ -3,6 +3,7 @@ import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, E
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/clipboard/pending-copy.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -102,6 +103,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/clipboard/clipboard.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -159,6 +161,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/clipboard/copy-to-clipboard.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -320,6 +323,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/clipboard/clipboard-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ClipboardModule {
@@ -334,6 +338,7 @@ ClipboardModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/clipboard/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

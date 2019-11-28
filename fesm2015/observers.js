@@ -5,6 +5,7 @@ import { debounceTime } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/observers/observe-content.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -320,6 +321,7 @@ ObserversModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/observers/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

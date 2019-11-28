@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/platform.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // Whether the current platform supports the V8 Break Iterator. The V8 check
@@ -150,6 +151,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/platform-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class PlatformModule {
@@ -160,6 +162,7 @@ PlatformModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/features/input-types.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -236,6 +239,7 @@ function getSupportedInputTypes() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/features/passive-listeners.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -284,6 +288,7 @@ function normalizePassiveListenerOptions(options) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/features/scrolling.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -377,6 +382,7 @@ function getRtlScrollAxisType() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/features/shadow-dom.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -403,6 +409,7 @@ function _supportsShadowDom() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/platform/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

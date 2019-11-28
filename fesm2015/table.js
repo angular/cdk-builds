@@ -10,6 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/can-stick.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -101,6 +102,7 @@ function mixinHasStickyInput(base) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/cell.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -388,6 +390,7 @@ CdkCell.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/row.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -814,6 +817,7 @@ CdkRow.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/sticky-styler.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1150,6 +1154,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/table-errors.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1231,6 +1236,7 @@ function getTableTextColumnMissingNameError() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/table.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2695,6 +2701,7 @@ function mergeQueryListAndSet(queryList, set) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/text-column.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2922,6 +2929,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/table-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -2958,6 +2966,7 @@ CdkTableModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/table/public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
