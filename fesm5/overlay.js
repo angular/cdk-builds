@@ -2830,7 +2830,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
             .withPush(this.push)
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
-            .withLockedPosition(this.lockPosition);
+            .withLockedPosition(this.lockPosition)
+            .withTransformOriginOn(this.transformOriginSelector);
     };
     /** Returns the position strategy of the overlay to be set on the overlay config */
     CdkConnectedOverlay.prototype._createPositionStrategy = function () {
@@ -2899,6 +2900,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
         viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
         scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
         open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
+        transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
         hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
         lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
         flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],

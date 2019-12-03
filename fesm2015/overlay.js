@@ -4606,7 +4606,8 @@ class CdkConnectedOverlay {
             .withPush(this.push)
             .withGrowAfterOpen(this.growAfterOpen)
             .withViewportMargin(this.viewportMargin)
-            .withLockedPosition(this.lockPosition);
+            .withLockedPosition(this.lockPosition)
+            .withTransformOriginOn(this.transformOriginSelector);
     }
     /**
      * Returns the position strategy of the overlay to be set on the overlay config
@@ -4695,6 +4696,7 @@ CdkConnectedOverlay.propDecorators = {
     viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
     scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
     open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
+    transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
     hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
     lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
     flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
@@ -4832,6 +4834,11 @@ if (false) {
      * @type {?}
      */
     CdkConnectedOverlay.prototype.open;
+    /**
+     * CSS selector which to set the transform origin.
+     * @type {?}
+     */
+    CdkConnectedOverlay.prototype.transformOriginSelector;
     /**
      * Event emitted when the backdrop is clicked.
      * @type {?}
