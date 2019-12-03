@@ -289,15 +289,20 @@ var DomPortalOutlet = /** @class */ (function (_super) {
             if (!_this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
             }
+            var element = portal.element;
+            if (!element.parentNode) {
+                throw Error('DOM portal content must be attached to a parent node.');
+            }
             // Anchor used to save the element's previous position so
             // that we can restore it when the portal is detached.
             var anchorNode = _this._document.createComment('dom-portal');
-            var element = portal.element;
             element.parentNode.insertBefore(anchorNode, element);
             _this.outletElement.appendChild(element);
             _super.prototype.setDisposeFn.call(_this, function () {
                 // We can't use `replaceWith` here because IE doesn't support it.
-                anchorNode.parentNode.replaceChild(element, anchorNode);
+                if (anchorNode.parentNode) {
+                    anchorNode.parentNode.replaceChild(element, anchorNode);
+                }
             });
         };
         _this._document = _document;
@@ -469,15 +474,20 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
             if (!_this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
             }
+            var element = portal.element;
+            if (!element.parentNode) {
+                throw Error('DOM portal content must be attached to a parent node.');
+            }
             // Anchor used to save the element's previous position so
             // that we can restore it when the portal is detached.
             var anchorNode = _this._document.createComment('dom-portal');
-            var element = portal.element;
             portal.setAttachedHost(_this);
             element.parentNode.insertBefore(anchorNode, element);
             _this._getRootNode().appendChild(element);
             _super.prototype.setDisposeFn.call(_this, function () {
-                anchorNode.parentNode.replaceChild(element, anchorNode);
+                if (anchorNode.parentNode) {
+                    anchorNode.parentNode.replaceChild(element, anchorNode);
+                }
             });
         };
         _this._document = _document;
