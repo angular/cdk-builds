@@ -149,16 +149,24 @@ class HarnessPredicate {
         this._addBaseOptions(options);
     }
     /**
-     * Checks if a string matches the given pattern.
-     * @param s The string to check, or a Promise for the string to check.
-     * @param pattern The pattern the string is expected to match. If `pattern` is a string, `s` is
-     *   expected to match exactly. If `pattern` is a regex, a partial match is allowed.
-     * @return A Promise that resolves to whether the string matches the pattern.
+     * Checks if the specified nullable string value matches the given pattern.
+     * @param value The nullable string value to check, or a Promise resolving to the
+     *   nullable string value.
+     * @param pattern The pattern the value is expected to match. If `pattern` is a string,
+     *   `value` is expected to match exactly. If `pattern` is a regex, a partial match is
+     *   allowed. If `pattern` is `null`, the value is expected to be `null`.
+     * @return A Promise that resolves to whether the value matches the pattern.
      */
-    static stringMatches(s, pattern) {
+    static stringMatches(value, pattern) {
         return __awaiter(this, void 0, void 0, function* () {
-            s = yield s;
-            return typeof pattern === 'string' ? s === pattern : pattern.test(s);
+            value = yield value;
+            if (pattern === null) {
+                return value === null;
+            }
+            else if (value === null) {
+                return false;
+            }
+            return typeof pattern === 'string' ? value === pattern : pattern.test(value);
         });
     }
     /**

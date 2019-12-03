@@ -344,13 +344,15 @@ export declare class HarnessPredicate<T extends ComponentHarness> {
     private _ancestor;
     constructor(harnessType: ComponentHarnessConstructor<T>, options: BaseHarnessFilters);
     /**
-     * Checks if a string matches the given pattern.
-     * @param s The string to check, or a Promise for the string to check.
-     * @param pattern The pattern the string is expected to match. If `pattern` is a string, `s` is
-     *   expected to match exactly. If `pattern` is a regex, a partial match is allowed.
-     * @return A Promise that resolves to whether the string matches the pattern.
+     * Checks if the specified nullable string value matches the given pattern.
+     * @param value The nullable string value to check, or a Promise resolving to the
+     *   nullable string value.
+     * @param pattern The pattern the value is expected to match. If `pattern` is a string,
+     *   `value` is expected to match exactly. If `pattern` is a regex, a partial match is
+     *   allowed. If `pattern` is `null`, the value is expected to be `null`.
+     * @return A Promise that resolves to whether the value matches the pattern.
      */
-    static stringMatches(s: string | Promise<string>, pattern: string | RegExp): Promise<boolean>;
+    static stringMatches(value: string | null | Promise<string | null>, pattern: string | RegExp | null): Promise<boolean>;
     /**
      * Adds a predicate function to be run against candidate harnesses.
      * @param description A description of this predicate that may be used in error messages.
