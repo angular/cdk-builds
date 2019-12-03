@@ -130,11 +130,6 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
      * @breaking-change 9.0.0 remove this property
      */
     _steps: QueryList<CdkStep>;
-    /**
-     * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
-     * https://github.com/angular/angular/issues/29842.
-     */
-    _stepsArray: CdkStep[];
     /** The list of step components that the stepper is holding. */
     readonly steps: QueryList<CdkStep>;
     /**

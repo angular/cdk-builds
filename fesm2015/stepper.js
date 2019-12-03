@@ -411,11 +411,6 @@ class CdkStepper {
          * Emits when the component is destroyed.
          */
         this._destroyed = new Subject();
-        /**
-         * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
-         * https://github.com/angular/angular/issues/29842.
-         */
-        this._stepsArray = [];
         this._linear = false;
         this._selectedIndex = 0;
         /**
@@ -818,12 +813,6 @@ if (false) {
      * @type {?}
      */
     CdkStepper.prototype._steps;
-    /**
-     * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
-     * https://github.com/angular/angular/issues/29842.
-     * @type {?}
-     */
-    CdkStepper.prototype._stepsArray;
     /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.

@@ -212,11 +212,6 @@
             this._elementRef = _elementRef;
             /** Emits when the component is destroyed. */
             this._destroyed = new rxjs.Subject();
-            /**
-             * We need to store the steps in an Iterable due to strict template type checking with *ngFor and
-             * https://github.com/angular/angular/issues/29842.
-             */
-            this._stepsArray = [];
             this._linear = false;
             this._selectedIndex = 0;
             /** Event emitted when the selected step has changed. */
