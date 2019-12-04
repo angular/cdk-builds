@@ -10,7 +10,7 @@ import { ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleC
 import { Overlay } from './overlay';
 import { OverlayRef } from './overlay-ref';
 import { ConnectedOverlayPositionChange } from './position/connected-position';
-import { ConnectedPosition } from './position/flexible-connected-position-strategy';
+import { ConnectedPosition, FlexibleConnectedPositionStrategy } from './position/flexible-connected-position-strategy';
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
 export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
@@ -50,6 +50,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     origin: CdkOverlayOrigin;
     /** Registered connected position pairs. */
     positions: ConnectedPosition[];
+    /**
+     * This input overrides the positions input if specified. It lets users pass
+     * in arbitrary positioning strategies.
+     */
+    positionStrategy: FlexibleConnectedPositionStrategy;
     /** The offset in pixels for the overlay connection point on the x-axis */
     offsetX: number;
     /** The offset in pixels for the overlay connection point on the y-axis */

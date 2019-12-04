@@ -4550,7 +4550,8 @@ class CdkConnectedOverlay {
      */
     _buildConfig() {
         /** @type {?} */
-        const positionStrategy = this._position = this._createPositionStrategy();
+        const positionStrategy = this._position =
+            this.positionStrategy || this._createPositionStrategy();
         /** @type {?} */
         const overlayConfig = new OverlayConfig({
             direction: this._dir,
@@ -4685,6 +4686,7 @@ CdkConnectedOverlay.ctorParameters = () => [
 CdkConnectedOverlay.propDecorators = {
     origin: [{ type: Input, args: ['cdkConnectedOverlayOrigin',] }],
     positions: [{ type: Input, args: ['cdkConnectedOverlayPositions',] }],
+    positionStrategy: [{ type: Input, args: ['cdkConnectedOverlayPositionStrategy',] }],
     offsetX: [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] }],
     offsetY: [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] }],
     width: [{ type: Input, args: ['cdkConnectedOverlayWidth',] }],
@@ -4789,6 +4791,12 @@ if (false) {
      * @type {?}
      */
     CdkConnectedOverlay.prototype.positions;
+    /**
+     * This input overrides the positions input if specified. It lets users pass
+     * in arbitrary positioning strategies.
+     * @type {?}
+     */
+    CdkConnectedOverlay.prototype.positionStrategy;
     /**
      * The width of the overlay panel.
      * @type {?}

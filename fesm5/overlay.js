@@ -2784,7 +2784,8 @@ var CdkConnectedOverlay = /** @class */ (function () {
     };
     /** Builds the overlay config based on the directive's inputs */
     CdkConnectedOverlay.prototype._buildConfig = function () {
-        var positionStrategy = this._position = this._createPositionStrategy();
+        var positionStrategy = this._position =
+            this.positionStrategy || this._createPositionStrategy();
         var overlayConfig = new OverlayConfig({
             direction: this._dir,
             positionStrategy: positionStrategy,
@@ -2889,6 +2890,7 @@ var CdkConnectedOverlay = /** @class */ (function () {
     CdkConnectedOverlay.propDecorators = {
         origin: [{ type: Input, args: ['cdkConnectedOverlayOrigin',] }],
         positions: [{ type: Input, args: ['cdkConnectedOverlayPositions',] }],
+        positionStrategy: [{ type: Input, args: ['cdkConnectedOverlayPositionStrategy',] }],
         offsetX: [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] }],
         offsetY: [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] }],
         width: [{ type: Input, args: ['cdkConnectedOverlayWidth',] }],
