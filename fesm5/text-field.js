@@ -1,5 +1,5 @@
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Input, NgModule } from '@angular/core';
+import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Input, HostListener, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -315,6 +315,10 @@ var CdkTextareaAutosize = /** @class */ (function () {
         }
         this._textareaElement.style.height = this._initialHeight;
     };
+    // In Ivy the `host` metadata will be merged, whereas in ViewEngine it is overridden. In order
+    // to avoid double event listeners, we need to use `HostListener`. Once Ivy is the default, we
+    // can move this back into `host`.
+    // tslint:disable:no-host-decorator-in-concrete
     CdkTextareaAutosize.prototype._noopInputHandler = function () {
         // no-op handler that ensures we're running change detection on input events.
     };
@@ -344,7 +348,6 @@ var CdkTextareaAutosize = /** @class */ (function () {
                         // Textarea elements that have the directive applied should have a single row by default.
                         // Browsers normally show two rows by default and therefore this limits the minRows binding.
                         'rows': '1',
-                        '(input)': '_noopInputHandler()',
                     },
                 },] }
     ];
@@ -357,7 +360,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
     CdkTextareaAutosize.propDecorators = {
         minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],
         maxRows: [{ type: Input, args: ['cdkAutosizeMaxRows',] }],
-        enabled: [{ type: Input, args: ['cdkTextareaAutosize',] }]
+        enabled: [{ type: Input, args: ['cdkTextareaAutosize',] }],
+        _noopInputHandler: [{ type: HostListener, args: ['input',] }]
     };
     return CdkTextareaAutosize;
 }());

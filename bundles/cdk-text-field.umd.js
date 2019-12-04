@@ -315,6 +315,10 @@
             }
             this._textareaElement.style.height = this._initialHeight;
         };
+        // In Ivy the `host` metadata will be merged, whereas in ViewEngine it is overridden. In order
+        // to avoid double event listeners, we need to use `HostListener`. Once Ivy is the default, we
+        // can move this back into `host`.
+        // tslint:disable:no-host-decorator-in-concrete
         CdkTextareaAutosize.prototype._noopInputHandler = function () {
             // no-op handler that ensures we're running change detection on input events.
         };
@@ -344,7 +348,6 @@
                             // Textarea elements that have the directive applied should have a single row by default.
                             // Browsers normally show two rows by default and therefore this limits the minRows binding.
                             'rows': '1',
-                            '(input)': '_noopInputHandler()',
                         },
                     },] }
         ];
@@ -357,7 +360,8 @@
         CdkTextareaAutosize.propDecorators = {
             minRows: [{ type: i0.Input, args: ['cdkAutosizeMinRows',] }],
             maxRows: [{ type: i0.Input, args: ['cdkAutosizeMaxRows',] }],
-            enabled: [{ type: i0.Input, args: ['cdkTextareaAutosize',] }]
+            enabled: [{ type: i0.Input, args: ['cdkTextareaAutosize',] }],
+            _noopInputHandler: [{ type: i0.HostListener, args: ['input',] }]
         };
         return CdkTextareaAutosize;
     }());
