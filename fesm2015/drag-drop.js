@@ -3730,7 +3730,7 @@ if (false) {
      */
     CdkDragEnter.prototype.container;
     /**
-     * Item that was removed from the container.
+     * Item that was moved into the container.
      * @type {?}
      */
     CdkDragEnter.prototype.item;
