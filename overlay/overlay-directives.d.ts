@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Direction, Directionality } from '@angular/cdk/bidi';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Overlay } from './overlay';
 import { OverlayRef } from './overlay-ref';
@@ -118,11 +119,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
-    static ngAcceptInputType_hasBackdrop: boolean | string | null | undefined;
-    static ngAcceptInputType_lockPosition: boolean | string | null | undefined;
-    static ngAcceptInputType_flexibleDimensions: boolean | string | null | undefined;
-    static ngAcceptInputType_growAfterOpen: boolean | string | null | undefined;
-    static ngAcceptInputType_push: boolean | string | null | undefined;
+    static ngAcceptInputType_hasBackdrop: BooleanInput;
+    static ngAcceptInputType_lockPosition: BooleanInput;
+    static ngAcceptInputType_flexibleDimensions: BooleanInput;
+    static ngAcceptInputType_growAfterOpen: BooleanInput;
+    static ngAcceptInputType_push: BooleanInput;
 }
 /** @docs-private */
 export declare function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay: Overlay): () => RepositionScrollStrategy;

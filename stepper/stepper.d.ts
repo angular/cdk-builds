@@ -7,6 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
+import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CdkStepLabel } from './step-label';
@@ -106,10 +107,10 @@ export declare class CdkStep implements OnChanges {
     /** Resets the step to its initial state. Note that this includes resetting form data. */
     reset(): void;
     ngOnChanges(): void;
-    static ngAcceptInputType_editable: boolean | string | null | undefined;
-    static ngAcceptInputType_hasError: boolean | string | null | undefined;
-    static ngAcceptInputType_optional: boolean | string | null | undefined;
-    static ngAcceptInputType_completed: boolean | string | null | undefined;
+    static ngAcceptInputType_editable: BooleanInput;
+    static ngAcceptInputType_hasError: BooleanInput;
+    static ngAcceptInputType_optional: BooleanInput;
+    static ngAcceptInputType_completed: BooleanInput;
 }
 export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _dir;
@@ -181,12 +182,12 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     private _layoutDirection;
     /** Checks whether the stepper contains the focused element. */
     private _containsFocus;
-    static ngAcceptInputType_editable: boolean | string | null | undefined;
-    static ngAcceptInputType_optional: boolean | string | null | undefined;
-    static ngAcceptInputType_completed: boolean | string | null | undefined;
-    static ngAcceptInputType_hasError: boolean | string | null | undefined;
-    static ngAcceptInputType_linear: boolean | string | null | undefined;
-    static ngAcceptInputType_selectedIndex: number | string | null | undefined;
+    static ngAcceptInputType_editable: BooleanInput;
+    static ngAcceptInputType_optional: BooleanInput;
+    static ngAcceptInputType_completed: BooleanInput;
+    static ngAcceptInputType_hasError: BooleanInput;
+    static ngAcceptInputType_linear: BooleanInput;
+    static ngAcceptInputType_selectedIndex: NumberInput;
 }
 /**
  * Simplified representation of an "AbstractControl" from @angular/forms.

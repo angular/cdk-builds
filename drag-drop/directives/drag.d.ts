@@ -7,6 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
 import { CdkDragHandle } from './drag-handle';
@@ -138,5 +139,5 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _syncInputs;
     /** Handles the events from the underlying `DragRef`. */
     private _handleEvents;
-    static ngAcceptInputType_disabled: boolean | string | null | undefined;
+    static ngAcceptInputType_disabled: BooleanInput;
 }

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { ElementRef, AfterViewInit, DoCheck, OnDestroy, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 /** Directive to automatically resize a textarea to fit its content. */
@@ -67,7 +68,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      * in order for it to scroll to the proper position.
      */
     private _scrollToCaretPosition;
-    static ngAcceptInputType_minRows: number | string | null | undefined;
-    static ngAcceptInputType_maxRows: number | string | null | undefined;
-    static ngAcceptInputType_enabled: boolean | string | null | undefined;
+    static ngAcceptInputType_minRows: NumberInput;
+    static ngAcceptInputType_maxRows: NumberInput;
+    static ngAcceptInputType_enabled: BooleanInput;
 }

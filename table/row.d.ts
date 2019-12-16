@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput } from '@angular/cdk/coercion';
 import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CanStick, CanStickCtor } from './can-stick';
 import { CdkCellDef, CdkColumnDef } from './cell';
@@ -46,7 +47,7 @@ declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
 export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: boolean | string | null | undefined;
+    static ngAcceptInputType_sticky: BooleanInput;
 }
 /** @docs-private */
 declare class CdkFooterRowDefBase extends BaseRowDef {
@@ -59,7 +60,7 @@ declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements CanStick, OnChanges {
     constructor(template: TemplateRef<any>, _differs: IterableDiffers);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: boolean | string | null | undefined;
+    static ngAcceptInputType_sticky: BooleanInput;
 }
 /**
  * Data row definition for the CDK table.

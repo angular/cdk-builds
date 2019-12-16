@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directionality } from '@angular/cdk/bidi';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
@@ -410,6 +411,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * stickiness when directionality changes.
      */
     private _setupStickyStyler;
-    static ngAcceptInputType_multiTemplateDataRows: boolean | string | null | undefined;
+    static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
 }
 export {};

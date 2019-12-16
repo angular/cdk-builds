@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef, AfterContentInit } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { CdkDrag } from './drag';
@@ -126,7 +127,7 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _setupInputSyncSubscription;
     /** Handles events from the underlying DropListRef. */
     private _handleEvents;
-    static ngAcceptInputType_disabled: boolean | string | null | undefined;
-    static ngAcceptInputType_sortingDisabled: boolean | string | null | undefined;
-    static ngAcceptInputType_autoScrollDisabled: boolean | string | null | undefined;
+    static ngAcceptInputType_disabled: BooleanInput;
+    static ngAcceptInputType_sortingDisabled: BooleanInput;
+    static ngAcceptInputType_autoScrollDisabled: BooleanInput;
 }

@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput } from '@angular/cdk/coercion';
 import { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
 /**
@@ -27,5 +28,5 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     private _openCloseAll;
-    static ngAcceptInputType_multi: boolean | string | null | undefined;
+    static ngAcceptInputType_multi: BooleanInput;
 }

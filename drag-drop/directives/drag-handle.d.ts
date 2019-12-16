@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ElementRef, OnDestroy } from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { Subject } from 'rxjs';
 /** Handle that can be used to drag and CdkDrag instance. */
 export declare class CdkDragHandle implements OnDestroy {
@@ -19,5 +20,5 @@ export declare class CdkDragHandle implements OnDestroy {
     private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;
-    static ngAcceptInputType_disabled: boolean | string | null | undefined;
+    static ngAcceptInputType_disabled: BooleanInput;
 }

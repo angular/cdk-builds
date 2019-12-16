@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, TemplateRef } from '@angular/core';
 import { CanStick, CanStickCtor } from './can-stick';
 /** Base interface for a cell definition. Captures a column's cell template definition. */
@@ -66,8 +67,8 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      * do not match are replaced by the '-' character.
      */
     cssClassFriendlyName: string;
-    static ngAcceptInputType_sticky: boolean | string | null | undefined;
-    static ngAcceptInputType_stickyEnd: boolean | string | null | undefined;
+    static ngAcceptInputType_sticky: BooleanInput;
+    static ngAcceptInputType_stickyEnd: BooleanInput;
 }
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
 export declare class BaseCdkCell {

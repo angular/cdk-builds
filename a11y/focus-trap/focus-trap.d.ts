@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { BooleanInput } from '@angular/cdk/coercion';
 import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
@@ -134,6 +135,6 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoChec
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;
-    static ngAcceptInputType_enabled: boolean | string | null | undefined;
-    static ngAcceptInputType_autoCapture: boolean | string | null | undefined;
+    static ngAcceptInputType_enabled: BooleanInput;
+    static ngAcceptInputType_autoCapture: BooleanInput;
 }

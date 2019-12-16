@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { NumberInput } from '@angular/cdk/coercion';
 import { OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
@@ -87,7 +88,7 @@ export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     /** The scroll strategy used by this directive. */
     _scrollStrategy: FixedSizeVirtualScrollStrategy;
     ngOnChanges(): void;
-    static ngAcceptInputType_itemSize: string | number | null | undefined;
-    static ngAcceptInputType_minBufferPx: string | number | null | undefined;
-    static ngAcceptInputType_maxBufferPx: string | number | null | undefined;
+    static ngAcceptInputType_itemSize: NumberInput;
+    static ngAcceptInputType_minBufferPx: NumberInput;
+    static ngAcceptInputType_maxBufferPx: NumberInput;
 }
