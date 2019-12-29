@@ -13,6 +13,7 @@ import { ScrollDispatcher } from './scroll-dispatcher';
 import { CdkScrollable } from './scrollable';
 import { CdkVirtualForOf } from './virtual-for-of';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
+import { ViewportRuler } from './viewport-ruler';
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
@@ -63,7 +64,14 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _isChangeDetectionPending;
     /** A list of functions to run after the next change detection cycle. */
     private _runAfterChangeDetection;
-    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher);
+    /** Subscription to changes in the viewport size. */
+    private _viewportChanges;
+    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher, 
+    /**
+     * @deprecated `viewportRuler` parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    viewportRuler?: ViewportRuler);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Attaches a `CdkVirtualForOf` to this viewport. */

@@ -1,6 +1,6 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, ElementRef, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
-import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, merge } from 'rxjs';
+import { Subject, of, Observable, fromEvent, merge, animationFrameScheduler, asapScheduler, Subscription } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
@@ -849,6 +849,183 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/scrolling/viewport-ruler.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Time in ms to throttle the resize events by default.
+ * @type {?}
+ */
+const DEFAULT_RESIZE_TIME = 20;
+/**
+ * Object that holds the scroll position of the viewport in each direction.
+ * @record
+ */
+function ViewportScrollPosition() { }
+if (false) {
+    /** @type {?} */
+    ViewportScrollPosition.prototype.top;
+    /** @type {?} */
+    ViewportScrollPosition.prototype.left;
+}
+/**
+ * Simple utility for getting the bounds of the browser viewport.
+ * \@docs-private
+ */
+class ViewportRuler {
+    /**
+     * @param {?} _platform
+     * @param {?} ngZone
+     */
+    constructor(_platform, ngZone) {
+        this._platform = _platform;
+        ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
+            this._change = _platform.isBrowser ?
+                merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
+                of();
+            // Note that we need to do the subscription inside `runOutsideAngular`
+            // since subscribing is what causes the event listener to be added.
+            this._invalidateCache = this.change().subscribe((/**
+             * @return {?}
+             */
+            () => this._updateViewportSize()));
+        }));
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this._invalidateCache.unsubscribe();
+    }
+    /**
+     * Returns the viewport's width and height.
+     * @return {?}
+     */
+    getViewportSize() {
+        if (!this._viewportSize) {
+            this._updateViewportSize();
+        }
+        /** @type {?} */
+        const output = { width: this._viewportSize.width, height: this._viewportSize.height };
+        // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
+        if (!this._platform.isBrowser) {
+            this._viewportSize = (/** @type {?} */ (null));
+        }
+        return output;
+    }
+    /**
+     * Gets a ClientRect for the viewport's bounds.
+     * @return {?}
+     */
+    getViewportRect() {
+        // Use the document element's bounding rect rather than the window scroll properties
+        // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
+        // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
+        // conceptual viewports. Under most circumstances these viewports are equivalent, but they
+        // can disagree when the page is pinch-zoomed (on devices that support touch).
+        // See https://bugs.chromium.org/p/chromium/issues/detail?id=489206#c4
+        // We use the documentElement instead of the body because, by default (without a css reset)
+        // browsers typically give the document body an 8px margin, which is not included in
+        // getBoundingClientRect().
+        /** @type {?} */
+        const scrollPosition = this.getViewportScrollPosition();
+        const { width, height } = this.getViewportSize();
+        return {
+            top: scrollPosition.top,
+            left: scrollPosition.left,
+            bottom: scrollPosition.top + height,
+            right: scrollPosition.left + width,
+            height,
+            width,
+        };
+    }
+    /**
+     * Gets the (top, left) scroll position of the viewport.
+     * @return {?}
+     */
+    getViewportScrollPosition() {
+        // While we can get a reference to the fake document
+        // during SSR, it doesn't have getBoundingClientRect.
+        if (!this._platform.isBrowser) {
+            return { top: 0, left: 0 };
+        }
+        // The top-left-corner of the viewport is determined by the scroll position of the document
+        // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
+        // whether `document.body` or `document.documentElement` is the scrolled element, so reading
+        // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
+        // `document.documentElement` works consistently, where the `top` and `left` values will
+        // equal negative the scroll position.
+        /** @type {?} */
+        const documentElement = (/** @type {?} */ (document.documentElement));
+        /** @type {?} */
+        const documentRect = documentElement.getBoundingClientRect();
+        /** @type {?} */
+        const top = -documentRect.top || document.body.scrollTop || window.scrollY ||
+            documentElement.scrollTop || 0;
+        /** @type {?} */
+        const left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
+            documentElement.scrollLeft || 0;
+        return { top, left };
+    }
+    /**
+     * Returns a stream that emits whenever the size of the viewport changes.
+     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
+     * @return {?}
+     */
+    change(throttleTime = DEFAULT_RESIZE_TIME) {
+        return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
+    }
+    /**
+     * Updates the cached viewport size.
+     * @private
+     * @return {?}
+     */
+    _updateViewportSize() {
+        this._viewportSize = this._platform.isBrowser ?
+            { width: window.innerWidth, height: window.innerHeight } :
+            { width: 0, height: 0 };
+    }
+}
+ViewportRuler.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */
+ViewportRuler.ctorParameters = () => [
+    { type: Platform },
+    { type: NgZone }
+];
+/** @nocollapse */ ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
+if (false) {
+    /**
+     * Cached viewport dimensions.
+     * @type {?}
+     * @private
+     */
+    ViewportRuler.prototype._viewportSize;
+    /**
+     * Stream of viewport change events.
+     * @type {?}
+     * @private
+     */
+    ViewportRuler.prototype._change;
+    /**
+     * Subscription to streams that invalidate the cached viewport dimensions.
+     * @type {?}
+     * @private
+     */
+    ViewportRuler.prototype._invalidateCache;
+    /**
+     * @type {?}
+     * @private
+     */
+    ViewportRuler.prototype._platform;
+}
+
+/**
+ * @fileoverview added by tsickle
  * Generated from: src/cdk/scrolling/virtual-scroll-viewport.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -879,8 +1056,14 @@ class CdkVirtualScrollViewport extends CdkScrollable {
      * @param {?} _scrollStrategy
      * @param {?} dir
      * @param {?} scrollDispatcher
+     * @param {?=} viewportRuler
      */
-    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher) {
+    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, 
+    /**
+     * @deprecated `viewportRuler` parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    viewportRuler) {
         super(elementRef, scrollDispatcher, ngZone, dir);
         this.elementRef = elementRef;
         this._changeDetectorRef = _changeDetectorRef;
@@ -961,8 +1144,21 @@ class CdkVirtualScrollViewport extends CdkScrollable {
          * A list of functions to run after the next change detection cycle.
          */
         this._runAfterChangeDetection = [];
+        /**
+         * Subscription to changes in the viewport size.
+         */
+        this._viewportChanges = Subscription.EMPTY;
         if (!_scrollStrategy) {
             throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
+        }
+        // @breaking-change 11.0.0 Remove null check for `viewportRuler`.
+        if (viewportRuler) {
+            this._viewportChanges = viewportRuler.change().subscribe((/**
+             * @return {?}
+             */
+            () => {
+                this.checkViewportSize();
+            }));
         }
     }
     /**
@@ -1024,6 +1220,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         // Complete all subjects
         this._renderedRangeSubject.complete();
         this._detachedSubject.complete();
+        this._viewportChanges.unsubscribe();
         super.ngOnDestroy();
     }
     /**
@@ -1338,7 +1535,8 @@ CdkVirtualScrollViewport.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [VIRTUAL_SCROLL_STRATEGY,] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
-    { type: ScrollDispatcher }
+    { type: ScrollDispatcher },
+    { type: ViewportRuler, decorators: [{ type: Optional }] }
 ];
 CdkVirtualScrollViewport.propDecorators = {
     orientation: [{ type: Input }],
@@ -1450,6 +1648,12 @@ if (false) {
      * @private
      */
     CdkVirtualScrollViewport.prototype._runAfterChangeDetection;
+    /**
+     * Subscription to changes in the viewport size.
+     * @type {?}
+     * @private
+     */
+    CdkVirtualScrollViewport.prototype._viewportChanges;
     /** @type {?} */
     CdkVirtualScrollViewport.prototype.elementRef;
     /**
@@ -2034,183 +2238,6 @@ ScrollingModule.decorators = [
                 ],
             },] }
 ];
-
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/viewport-ruler.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Time in ms to throttle the resize events by default.
- * @type {?}
- */
-const DEFAULT_RESIZE_TIME = 20;
-/**
- * Object that holds the scroll position of the viewport in each direction.
- * @record
- */
-function ViewportScrollPosition() { }
-if (false) {
-    /** @type {?} */
-    ViewportScrollPosition.prototype.top;
-    /** @type {?} */
-    ViewportScrollPosition.prototype.left;
-}
-/**
- * Simple utility for getting the bounds of the browser viewport.
- * \@docs-private
- */
-class ViewportRuler {
-    /**
-     * @param {?} _platform
-     * @param {?} ngZone
-     */
-    constructor(_platform, ngZone) {
-        this._platform = _platform;
-        ngZone.runOutsideAngular((/**
-         * @return {?}
-         */
-        () => {
-            this._change = _platform.isBrowser ?
-                merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
-                of();
-            // Note that we need to do the subscription inside `runOutsideAngular`
-            // since subscribing is what causes the event listener to be added.
-            this._invalidateCache = this.change().subscribe((/**
-             * @return {?}
-             */
-            () => this._updateViewportSize()));
-        }));
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._invalidateCache.unsubscribe();
-    }
-    /**
-     * Returns the viewport's width and height.
-     * @return {?}
-     */
-    getViewportSize() {
-        if (!this._viewportSize) {
-            this._updateViewportSize();
-        }
-        /** @type {?} */
-        const output = { width: this._viewportSize.width, height: this._viewportSize.height };
-        // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
-        if (!this._platform.isBrowser) {
-            this._viewportSize = (/** @type {?} */ (null));
-        }
-        return output;
-    }
-    /**
-     * Gets a ClientRect for the viewport's bounds.
-     * @return {?}
-     */
-    getViewportRect() {
-        // Use the document element's bounding rect rather than the window scroll properties
-        // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
-        // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
-        // conceptual viewports. Under most circumstances these viewports are equivalent, but they
-        // can disagree when the page is pinch-zoomed (on devices that support touch).
-        // See https://bugs.chromium.org/p/chromium/issues/detail?id=489206#c4
-        // We use the documentElement instead of the body because, by default (without a css reset)
-        // browsers typically give the document body an 8px margin, which is not included in
-        // getBoundingClientRect().
-        /** @type {?} */
-        const scrollPosition = this.getViewportScrollPosition();
-        const { width, height } = this.getViewportSize();
-        return {
-            top: scrollPosition.top,
-            left: scrollPosition.left,
-            bottom: scrollPosition.top + height,
-            right: scrollPosition.left + width,
-            height,
-            width,
-        };
-    }
-    /**
-     * Gets the (top, left) scroll position of the viewport.
-     * @return {?}
-     */
-    getViewportScrollPosition() {
-        // While we can get a reference to the fake document
-        // during SSR, it doesn't have getBoundingClientRect.
-        if (!this._platform.isBrowser) {
-            return { top: 0, left: 0 };
-        }
-        // The top-left-corner of the viewport is determined by the scroll position of the document
-        // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
-        // whether `document.body` or `document.documentElement` is the scrolled element, so reading
-        // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
-        // `document.documentElement` works consistently, where the `top` and `left` values will
-        // equal negative the scroll position.
-        /** @type {?} */
-        const documentElement = (/** @type {?} */ (document.documentElement));
-        /** @type {?} */
-        const documentRect = documentElement.getBoundingClientRect();
-        /** @type {?} */
-        const top = -documentRect.top || document.body.scrollTop || window.scrollY ||
-            documentElement.scrollTop || 0;
-        /** @type {?} */
-        const left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
-            documentElement.scrollLeft || 0;
-        return { top, left };
-    }
-    /**
-     * Returns a stream that emits whenever the size of the viewport changes.
-     * @param {?=} throttleTime Time in milliseconds to throttle the stream.
-     * @return {?}
-     */
-    change(throttleTime = DEFAULT_RESIZE_TIME) {
-        return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
-    }
-    /**
-     * Updates the cached viewport size.
-     * @private
-     * @return {?}
-     */
-    _updateViewportSize() {
-        this._viewportSize = this._platform.isBrowser ?
-            { width: window.innerWidth, height: window.innerHeight } :
-            { width: 0, height: 0 };
-    }
-}
-ViewportRuler.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-ViewportRuler.ctorParameters = () => [
-    { type: Platform },
-    { type: NgZone }
-];
-/** @nocollapse */ ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
-if (false) {
-    /**
-     * Cached viewport dimensions.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._viewportSize;
-    /**
-     * Stream of viewport change events.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._change;
-    /**
-     * Subscription to streams that invalidate the cached viewport dimensions.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._invalidateCache;
-    /**
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._platform;
-}
 
 /**
  * @fileoverview added by tsickle
