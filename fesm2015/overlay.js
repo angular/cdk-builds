@@ -3449,17 +3449,17 @@ if (false) {
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.
- * @param {?} dest
+ * @param {?} destination
  * @param {?} source
  * @return {?}
  */
-function extendStyles(dest, source) {
+function extendStyles(destination, source) {
     for (let key in source) {
         if (source.hasOwnProperty(key)) {
-            dest[key] = source[key];
+            destination[key] = source[key];
         }
     }
-    return dest;
+    return destination;
 }
 
 /**

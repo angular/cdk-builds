@@ -2024,13 +2024,13 @@
         return FlexibleConnectedPositionStrategy;
     }());
     /** Shallow-extends a stylesheet object with another stylesheet object. */
-    function extendStyles(dest, source) {
+    function extendStyles(destination, source) {
         for (var key in source) {
             if (source.hasOwnProperty(key)) {
-                dest[key] = source[key];
+                destination[key] = source[key];
             }
         }
-        return dest;
+        return destination;
     }
 
     /**
