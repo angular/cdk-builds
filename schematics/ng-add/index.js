@@ -31,7 +31,7 @@
             // In order to align the CDK version with other Angular dependencies that are setup
             // by "@schematics/angular", we use tilde instead of caret. This is default for Angular
             // dependencies in new CLI projects.
-            package_config_1.addPackageToPackageJson(host, '@angular/cdk', `~9.0.0-rc.7-sha-1d9033e97`);
+            package_config_1.addPackageToPackageJson(host, '@angular/cdk', `~9.0.0-rc.7-sha-d550e4ef9`);
             // Add a task to run the package manager. This is necessary because we updated the
             // workspace "package.json" file and we want lock files to reflect the new version range.
             context.addTask(new tasks_1.NodePackageInstallTask());
