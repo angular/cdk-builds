@@ -59,10 +59,12 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
      * Whether observing content is disabled. This option can be used
      * to disconnect the underlying MutationObserver until it is needed.
      */
-    disabled: any;
+    get disabled(): any;
+    set disabled(value: any);
     private _disabled;
     /** Debounce interval for emitting the changes. */
-    debounce: number;
+    get debounce(): number;
+    set debounce(value: number);
     private _debounce;
     private _currentSubscription;
     constructor(_contentObserver: ContentObserver, _elementRef: ElementRef<HTMLElement>, _ngZone: NgZone);

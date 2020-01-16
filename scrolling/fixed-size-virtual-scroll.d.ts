@@ -72,18 +72,21 @@ export declare function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir: Cdk
 /** A virtual scroll strategy that supports fixed-size items. */
 export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     /** The size of the items in the list (in pixels). */
-    itemSize: number;
+    get itemSize(): number;
+    set itemSize(value: number);
     _itemSize: number;
     /**
      * The minimum amount of buffer rendered beyond the viewport (in pixels).
      * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
      */
-    minBufferPx: number;
+    get minBufferPx(): number;
+    set minBufferPx(value: number);
     _minBufferPx: number;
     /**
      * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
      */
-    maxBufferPx: number;
+    get maxBufferPx(): number;
+    set maxBufferPx(value: number);
     _maxBufferPx: number;
     /** The scroll strategy used by this directive. */
     _scrollStrategy: FixedSizeVirtualScrollStrategy;

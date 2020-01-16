@@ -19,7 +19,8 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     /** A readonly id value to use for unique selection coordination. */
     readonly id: string;
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
-    multi: boolean;
+    get multi(): boolean;
+    set multi(multi: boolean);
     private _multi;
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll(): void;

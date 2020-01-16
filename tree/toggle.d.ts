@@ -14,7 +14,8 @@ export declare class CdkTreeNodeToggle<T> {
     protected _tree: CdkTree<T>;
     protected _treeNode: CdkTreeNode<T>;
     /** Whether expand/collapse the node recursively. */
-    recursive: boolean;
+    get recursive(): boolean;
+    set recursive(value: boolean);
     protected _recursive: boolean;
     constructor(_tree: CdkTree<T>, _treeNode: CdkTreeNode<T>);
     _toggle(event: Event): void;

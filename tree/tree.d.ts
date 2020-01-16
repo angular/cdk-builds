@@ -34,7 +34,8 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
      * stream of view window (what dataNodes are currently on screen).
      * Data source can be an observable of data array, or a data array to render.
      */
-    dataSource: DataSource<T> | Observable<T[]> | T[];
+    get dataSource(): DataSource<T> | Observable<T[]> | T[];
+    set dataSource(dataSource: DataSource<T> | Observable<T[]> | T[]);
     private _dataSource;
     /** The tree controller */
     treeControl: TreeControl<T>;
@@ -99,10 +100,11 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     /** Emits when the node's data has changed. */
     _dataChanges: Subject<void>;
     /** The tree node's data. */
-    data: T;
+    get data(): T;
+    set data(value: T);
     protected _data: T;
-    readonly isExpanded: boolean;
-    readonly level: number;
+    get isExpanded(): boolean;
+    get level(): number;
     /**
      * The role of the node should be 'group' if it's an internal node,
      * and 'treeitem' if it's a leaf node.

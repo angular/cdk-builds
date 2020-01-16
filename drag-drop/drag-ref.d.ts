@@ -150,7 +150,8 @@ export declare class DragRef<T = any> {
     /** Class to be added to the preview element. */
     previewClass: string | string[] | undefined;
     /** Whether starting to drag this element is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     private _disabled;
     /** Emits as the drag sequence is being prepared. */
     beforeStarted: Subject<void>;

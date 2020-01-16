@@ -33,7 +33,8 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
     private _table;
     private _options;
     /** Column name that should be used to reference this column. */
-    name: string;
+    get name(): string;
+    set name(name: string);
     _name: string;
     /**
      * Text label that should be used for the column header. If this property is not

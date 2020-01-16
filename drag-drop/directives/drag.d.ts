@@ -79,7 +79,8 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
         y: number;
     };
     /** Whether starting to drag this element is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     private _disabled;
     /**
      * Function that can be used to customize the logic of how the position of the drag item

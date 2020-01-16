@@ -93,9 +93,9 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      */
     onKeydown(event: KeyboardEvent): void;
     /** Index of the currently active item. */
-    readonly activeItemIndex: number | null;
+    get activeItemIndex(): number | null;
     /** The active item. */
-    readonly activeItem: T | null;
+    get activeItem(): T | null;
     /** Gets whether the user is currently typing into the manager using the typeahead feature. */
     isTyping(): boolean;
     /** Sets the active item to the first enabled item in the list. */

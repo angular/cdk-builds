@@ -46,11 +46,12 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
      */
     _document?: any);
     /** Portal associated with the Portal outlet. */
-    portal: Portal<any> | null;
+    get portal(): Portal<any> | null;
+    set portal(portal: Portal<any> | null);
     /** Emits when a portal is attached to the outlet. */
     attached: EventEmitter<CdkPortalOutletAttachedRef>;
     /** Component or view reference that is attached to the portal. */
-    readonly attachedRef: CdkPortalOutletAttachedRef;
+    get attachedRef(): CdkPortalOutletAttachedRef;
     ngOnInit(): void;
     ngOnDestroy(): void;
     /**

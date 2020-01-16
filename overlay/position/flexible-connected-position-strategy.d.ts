@@ -88,7 +88,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /** Observable sequence of position changes. */
     positionChanges: Observable<ConnectedOverlayPositionChange>;
     /** Ordered list of preferred positions, from most to least desirable. */
-    readonly positions: ConnectionPositionPair[];
+    get positions(): ConnectionPositionPair[];
     constructor(connectedTo: FlexibleConnectedPositionStrategyOrigin, _viewportRuler: ViewportRuler, _document: Document, _platform: Platform, _overlayContainer: OverlayContainer);
     /** Attaches this position strategy to an overlay. */
     attach(overlayRef: OverlayReference): void;

@@ -21,7 +21,7 @@ export declare abstract class Portal<T> {
     /** Detach this portal from its host */
     detach(): void;
     /** Whether this portal is attached to a host. */
-    readonly isAttached: boolean;
+    get isAttached(): boolean;
     /**
      * Sets the PortalOutlet reference without performing `attach()`. This is used directly by
      * the PortalOutlet when it is performing an `attach()` or `detach()`.
@@ -60,7 +60,7 @@ export declare class TemplatePortal<C = any> extends Portal<EmbeddedViewRef<C>> 
     /** Contextual data to be passed in to the embedded view. */
     context: C | undefined;
     constructor(template: TemplateRef<C>, viewContainerRef: ViewContainerRef, context?: C);
-    readonly origin: ElementRef;
+    get origin(): ElementRef;
     /**
      * Attach the portal to the provided `PortalOutlet`.
      * When a context is provided it will override the `context` property of the `TemplatePortal`

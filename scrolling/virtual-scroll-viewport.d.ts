@@ -24,7 +24,8 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     /** Emits when the rendered range changes. */
     private _renderedRangeSubject;
     /** The direction the viewport scrolls. */
-    orientation: 'horizontal' | 'vertical';
+    get orientation(): 'horizontal' | 'vertical';
+    set orientation(orientation: 'horizontal' | 'vertical');
     private _orientation;
     /** Emits when the index of the first element visible in the viewport changes. */
     scrolledIndexChange: Observable<number>;

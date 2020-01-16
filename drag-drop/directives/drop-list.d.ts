@@ -53,7 +53,8 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     /** Locks the position of the draggable elements inside the container along the specified axis. */
     lockAxis: 'x' | 'y';
     /** Whether starting a dragging sequence from this container is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     private _disabled;
     /** Whether sorting within this drop list is disabled. */
     sortingDisabled: boolean;
