@@ -409,8 +409,12 @@ var CdkScrollable = /** @class */ (function () {
         var el = this.elementRef.nativeElement;
         var isRtl = this.dir && this.dir.value == 'rtl';
         // Rewrite start & end offsets as right or left offsets.
-        options.left = options.left == null ? (isRtl ? options.end : options.start) : options.left;
-        options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
+        if (options.left == null) {
+            options.left = isRtl ? options.end : options.start;
+        }
+        if (options.right == null) {
+            options.right = isRtl ? options.start : options.end;
+        }
         // Rewrite the bottom offset as a top offset.
         if (options.bottom != null) {
             options.top =
@@ -902,7 +906,9 @@ var CdkVirtualScrollViewport = /** @class */ (function (_super) {
      *     in horizontal mode.
      */
     CdkVirtualScrollViewport.prototype.measureScrollOffset = function (from) {
-        return _super.prototype.measureScrollOffset.call(this, from ? from : this.orientation === 'horizontal' ? 'start' : 'top');
+        return from ?
+            _super.prototype.measureScrollOffset.call(this, from) :
+            _super.prototype.measureScrollOffset.call(this, this.orientation === 'horizontal' ? 'start' : 'top');
     };
     /** Measure the combined size of all of the rendered items. */
     CdkVirtualScrollViewport.prototype.measureRenderedContentSize = function () {
@@ -1108,10 +1114,13 @@ var CdkVirtualForOf = /** @class */ (function () {
         },
         set: function (value) {
             this._cdkVirtualForOf = value;
-            var ds = isDataSource(value) ? value :
+            if (isDataSource(value)) {
+                this._dataSourceChanges.next(value);
+            }
+            else {
                 // Slice the value if its an NgIterable to ensure we're working with an array.
-                new ArrayDataSource(value instanceof Observable ? value : Array.prototype.slice.call(value || []));
-            this._dataSourceChanges.next(ds);
+                this._dataSourceChanges.next(new ArrayDataSource(value instanceof Observable ? value : Array.prototype.slice.call(value || [])));
+            }
         },
         enumerable: true,
         configurable: true

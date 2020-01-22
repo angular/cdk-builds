@@ -300,8 +300,10 @@ function _valueAsString(value) {
     // `JSON.stringify` doesn't handle RegExp properly, so we need a custom replacer.
     try {
         return JSON.stringify(value, function (_, v) {
-            return v instanceof RegExp ? "/" + v.toString() + "/" :
-                typeof v === 'string' ? v.replace('/\//g', '\\/') : v;
+            if (v instanceof RegExp) {
+                return "/" + v.toString() + "/";
+            }
+            return typeof v === 'string' ? v.replace('/\//g', '\\/') : v;
         }).replace(/"\/\//g, '\\/').replace(/\/\/"/g, '\\/').replace(/\\\//g, '/');
     }
     catch (_a) {

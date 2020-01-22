@@ -153,9 +153,20 @@
         else {
             // `initKeyboardEvent` expects to receive modifiers as a whitespace-delimited string
             // See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyboardEvent
-            var modifiersStr = (modifiers.control ? 'Control ' : '' + modifiers.alt ? 'Alt ' : '' +
-                modifiers.shift ? 'Shift ' : '' + modifiers.meta ? 'Meta' : '').trim();
-            event.initKeyboardEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* char */ key, /* key */ 0, /* location */ modifiersStr, /* modifiersList */ false /* repeat */);
+            var modifiersList = '';
+            if (modifiers.control) {
+                modifiersList += 'Control ';
+            }
+            if (modifiers.alt) {
+                modifiersList += 'Alt ';
+            }
+            if (modifiers.shift) {
+                modifiersList += 'Shift ';
+            }
+            if (modifiers.meta) {
+                modifiersList += 'Meta ';
+            }
+            event.initKeyboardEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* char */ key, /* key */ 0, /* location */ modifiersList.trim(), /* modifiersList */ false /* repeat */);
         }
         // Webkit Browsers don't set the keyCode when calling the init function.
         // See related bug https://bugs.webkit.org/show_bug.cgi?id=16735

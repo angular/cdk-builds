@@ -690,8 +690,12 @@ class CdkScrollable {
         /** @type {?} */
         const isRtl = this.dir && this.dir.value == 'rtl';
         // Rewrite start & end offsets as right or left offsets.
-        options.left = options.left == null ? (isRtl ? options.end : options.start) : options.left;
-        options.right = options.right == null ? (isRtl ? options.start : options.end) : options.right;
+        if (options.left == null) {
+            options.left = isRtl ? options.end : options.start;
+        }
+        if (options.right == null) {
+            options.right = isRtl ? options.start : options.end;
+        }
         // Rewrite the bottom offset as a top offset.
         if (options.bottom != null) {
             ((/** @type {?} */ (options))).top =
@@ -1404,7 +1408,9 @@ class CdkVirtualScrollViewport extends CdkScrollable {
      * @return {?}
      */
     measureScrollOffset(from) {
-        return super.measureScrollOffset(from ? from : this.orientation === 'horizontal' ? 'start' : 'top');
+        return from ?
+            super.measureScrollOffset(from) :
+            super.measureScrollOffset(this.orientation === 'horizontal' ? 'start' : 'top');
     }
     /**
      * Measure the combined size of all of the rendered items.
@@ -1789,11 +1795,13 @@ class CdkVirtualForOf {
      */
     set cdkVirtualForOf(value) {
         this._cdkVirtualForOf = value;
-        /** @type {?} */
-        const ds = isDataSource(value) ? value :
+        if (isDataSource(value)) {
+            this._dataSourceChanges.next(value);
+        }
+        else {
             // Slice the value if its an NgIterable to ensure we're working with an array.
-            new ArrayDataSource(value instanceof Observable ? value : Array.prototype.slice.call(value || []));
-        this._dataSourceChanges.next(ds);
+            this._dataSourceChanges.next(new ArrayDataSource(value instanceof Observable ? value : Array.prototype.slice.call(value || [])));
+        }
     }
     /**
      * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
