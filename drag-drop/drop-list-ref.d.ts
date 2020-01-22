@@ -84,10 +84,8 @@ export declare class DropListRef<T = any> {
     private _isDragging;
     /** Cache of the dimensions of all the items inside the container. */
     private _itemPositions;
-    /** Keeps track of the container's scroll position. */
-    private _scrollPosition;
-    /** Keeps track of the scroll position of the viewport. */
-    private _viewportScrollPosition;
+    /** Cached positions of the scrollable parent elements. */
+    private _parentPositions;
     /** Cached `ClientRect` of the drop list. */
     private _clientRect;
     /**
@@ -125,6 +123,8 @@ export declare class DropListRef<T = any> {
     private _cachedShadowRoot;
     /** Reference to the document. */
     private _document;
+    /** Elements that can be scrolled while the user is dragging. */
+    private _scrollableElements;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
@@ -173,6 +173,11 @@ export declare class DropListRef<T = any> {
      */
     withOrientation(orientation: 'vertical' | 'horizontal'): this;
     /**
+     * Sets which parent elements are can be scrolled while the user is dragging.
+     * @param elements Elements that can be scrolled.
+     */
+    withScrollableParents(elements: HTMLElement[]): this;
+    /**
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.
      */
@@ -202,8 +207,8 @@ export declare class DropListRef<T = any> {
     _startScrollingIfNecessary(pointerX: number, pointerY: number): void;
     /** Stops any currently-running auto-scroll sequences. */
     _stopScrolling(): void;
-    /** Caches the position of the drop list. */
-    private _cacheOwnPosition;
+    /** Caches the positions of the configured scrollable parents. */
+    private _cacheParentPositions;
     /** Refreshes the position cache of the items and sibling containers. */
     private _cacheItemPositions;
     /** Resets the container to its initial state. */
@@ -215,12 +220,6 @@ export declare class DropListRef<T = any> {
      * @param delta Direction in which the user is moving.
      */
     private _getSiblingOffsetPx;
-    /**
-     * Checks whether the pointer coordinates are close to the drop container.
-     * @param pointerX Coordinates along the X axis.
-     * @param pointerY Coordinates along the Y axis.
-     */
-    private _isPointerNearDropContainer;
     /**
      * Gets the offset in pixels by which the item that is being dragged should be moved.
      * @param currentPosition Current position of the item.
@@ -240,18 +239,11 @@ export declare class DropListRef<T = any> {
     private _cacheItems;
     /**
      * Updates the internal state of the container after a scroll event has happened.
-     * @param scrollPosition Object that is keeping track of the scroll position.
+     * @param scrolledParent Element that was scrolled.
      * @param newTop New top scroll position.
      * @param newLeft New left scroll position.
-     * @param extraClientRect Extra `ClientRect` object that should be updated, in addition to the
-     *  ones of the drag items. Useful when the viewport has been scrolled and we also need to update
-     *  the `ClientRect` of the list.
      */
     private _updateAfterScroll;
-    /** Handles the container being scrolled. Has to be an arrow function to preserve the context. */
-    private _handleScroll;
-    /** Removes the event listeners associated with this drop list. */
-    private _removeListeners;
     /** Starts the interval that'll auto-scroll the element. */
     private _startScrollInterval;
     /**

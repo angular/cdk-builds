@@ -162,6 +162,8 @@
              * @breaking-change 10.0.0
              */
             this._deprecatedCopied = this.copied;
+            /** Copies that are currently being attempted. */
+            this._pending = new Set();
             if (config && config.attempts != null) {
                 this.attempts = config.attempts;
             }
@@ -173,18 +175,22 @@
             if (attempts > 1) {
                 var remainingAttempts_1 = attempts;
                 var pending_1 = this._clipboard.beginCopy(this.text);
+                this._pending.add(pending_1);
                 var attempt_1 = function () {
                     var successful = pending_1.copy();
-                    if (!successful && --remainingAttempts_1) {
+                    if (!successful && --remainingAttempts_1 && !_this._destroyed) {
                         // @breaking-change 10.0.0 Remove null check for `_ngZone`.
                         if (_this._ngZone) {
-                            _this._ngZone.runOutsideAngular(function () { return setTimeout(attempt_1); });
+                            _this._currentTimeout = _this._ngZone.runOutsideAngular(function () { return setTimeout(attempt_1, 1); });
                         }
                         else {
-                            setTimeout(attempt_1);
+                            // We use 1 for the timeout since it's more predictable when flushing in unit tests.
+                            _this._currentTimeout = setTimeout(attempt_1, 1);
                         }
                     }
                     else {
+                        _this._currentTimeout = null;
+                        _this._pending.delete(pending_1);
                         pending_1.destroy();
                         _this.copied.emit(successful);
                     }
@@ -194,6 +200,14 @@
             else {
                 this.copied.emit(this._clipboard.copy(this.text));
             }
+        };
+        CdkCopyToClipboard.prototype.ngOnDestroy = function () {
+            if (this._currentTimeout) {
+                clearTimeout(this._currentTimeout);
+            }
+            this._pending.forEach(function (copy) { return copy.destroy(); });
+            this._pending.clear();
+            this._destroyed = true;
         };
         CdkCopyToClipboard.decorators = [
             { type: i0.Directive, args: [{

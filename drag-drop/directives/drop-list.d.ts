@@ -8,6 +8,7 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef, AfterContentInit } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { CdkDrag } from './drag';
 import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from '../drag-events';
 import { CdkDropListGroup } from './drop-list-group';
@@ -27,6 +28,11 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _changeDetectorRef;
     private _dir?;
     private _group?;
+    /**
+     * @deprecated _scrollDispatcher parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    private _scrollDispatcher?;
     /** Emits when the list has been destroyed. */
     private _destroyed;
     /** Keeps track of the drop lists that are currently on the page. */
@@ -80,7 +86,12 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     sorted: EventEmitter<CdkDragSortEvent<T>>;
     constructor(
     /** Element that the drop list is attached to. */
-    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined);
+    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, 
+    /**
+     * @deprecated _scrollDispatcher parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    _scrollDispatcher?: ScrollDispatcher | undefined);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**

@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { EventEmitter, NgZone, InjectionToken } from '@angular/core';
+import { EventEmitter, NgZone, InjectionToken, OnDestroy } from '@angular/core';
 import { Clipboard } from './clipboard';
 /** Object that can be used to configure the default options for `CdkCopyToClipboard`. */
 export interface CdkCopyToClipboardConfig {
@@ -18,7 +18,7 @@ export declare const CKD_COPY_TO_CLIPBOARD_CONFIG: InjectionToken<CdkCopyToClipb
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
  */
-export declare class CdkCopyToClipboard {
+export declare class CdkCopyToClipboard implements OnDestroy {
     private _clipboard;
     /**
      * @deprecated _ngZone parameter to become required.
@@ -44,6 +44,12 @@ export declare class CdkCopyToClipboard {
      * @breaking-change 10.0.0
      */
     _deprecatedCopied: EventEmitter<boolean>;
+    /** Copies that are currently being attempted. */
+    private _pending;
+    /** Whether the directive has been destroyed. */
+    private _destroyed;
+    /** Timeout for the current copy attempt. */
+    private _currentTimeout;
     constructor(_clipboard: Clipboard, 
     /**
      * @deprecated _ngZone parameter to become required.
@@ -52,4 +58,5 @@ export declare class CdkCopyToClipboard {
     _ngZone?: NgZone | undefined, config?: CdkCopyToClipboardConfig);
     /** Copies the current text to the clipboard. */
     copy(attempts?: number): void;
+    ngOnDestroy(): void;
 }
