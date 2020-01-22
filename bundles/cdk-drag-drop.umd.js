@@ -180,6 +180,9 @@
             };
             /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
             this._pointerMove = function (event) {
+                // Prevent the default action as early as possible in order to block
+                // native actions like dragging the selected text or images with the mouse.
+                event.preventDefault();
                 if (!_this._hasStartedDragging) {
                     var pointerPosition = _this._getPointerPositionOnPage(event);
                     var distanceX = Math.abs(pointerPosition.x - _this._pickupPositionOnPage.x);
@@ -215,7 +218,6 @@
                 }
                 var constrainedPointerPosition = _this._getConstrainedPointerPosition(event);
                 _this._hasMoved = true;
-                event.preventDefault();
                 _this._updatePointerDirectionDelta(constrainedPointerPosition);
                 if (_this._dropContainer) {
                     _this._updateActiveDropContainer(constrainedPointerPosition);
