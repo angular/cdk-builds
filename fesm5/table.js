@@ -6,7 +6,7 @@ export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import { Directive, TemplateRef, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, Optional, Inject, ViewChild, ContentChildren, InjectionToken, NgModule } from '@angular/core';
-import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
+import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 /**
@@ -1481,7 +1481,7 @@ var CdkTable = /** @class */ (function () {
         if (isDataSource(this.dataSource)) {
             dataStream = this.dataSource.connect(this);
         }
-        else if (this.dataSource instanceof Observable) {
+        else if (isObservable(this.dataSource)) {
             dataStream = this.dataSource;
         }
         else if (Array.isArray(this.dataSource)) {

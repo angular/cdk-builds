@@ -1,5 +1,5 @@
 import { SelectionModel, isDataSource } from '@angular/cdk/collections';
-import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
+import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
 import { take, filter, takeUntil } from 'rxjs/operators';
 import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, IterableDiffers, ChangeDetectorRef, Input, ViewChild, ContentChildren, ElementRef, Renderer2, HostListener, NgModule } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
@@ -265,7 +265,7 @@ class NestedTreeControl extends BaseTreeControl {
              */
             (child) => this._getDescendants(descendants, child)));
         }
-        else if (childrenNodes instanceof Observable) {
+        else if (isObservable(childrenNodes)) {
             // TypeScript as of version 3.5 doesn't seem to treat `Boolean` like a function that
             // returns a `boolean` specifically in the context of `filter`, so we manually clarify that.
             childrenNodes.pipe(take(1), filter((/** @type {?} */ (Boolean))))
@@ -691,7 +691,7 @@ class CdkTree {
         if (isDataSource(this._dataSource)) {
             dataStream = this._dataSource.connect(this);
         }
-        else if (this._dataSource instanceof Observable) {
+        else if (isObservable(this._dataSource)) {
             dataStream = this._dataSource;
         }
         else if (Array.isArray(this._dataSource)) {
@@ -1006,7 +1006,7 @@ class CdkTreeNode {
             if (Array.isArray(childrenNodes)) {
                 this._setRoleFromChildren((/** @type {?} */ (childrenNodes)));
             }
-            else if (childrenNodes instanceof Observable) {
+            else if (isObservable(childrenNodes)) {
                 childrenNodes.pipe(takeUntil(this._destroyed))
                     .subscribe((/**
                  * @param {?} children
@@ -1128,7 +1128,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
         if (Array.isArray(childrenNodes)) {
             this.updateChildrenNodes((/** @type {?} */ (childrenNodes)));
         }
-        else if (childrenNodes instanceof Observable) {
+        else if (isObservable(childrenNodes)) {
             childrenNodes.pipe(takeUntil(this._destroyed))
                 .subscribe((/**
              * @param {?} result

@@ -1,5 +1,5 @@
 import { __extends, __values } from 'tslib';
-import { Observable, of, Subject } from 'rxjs';
+import { isObservable, of, Subject } from 'rxjs';
 import { Injectable, ɵɵdefineInjectable } from '@angular/core';
 
 /**
@@ -38,7 +38,7 @@ var ArrayDataSource = /** @class */ (function (_super) {
         return _this;
     }
     ArrayDataSource.prototype.connect = function () {
-        return this._data instanceof Observable ? this._data : of(this._data);
+        return isObservable(this._data) ? this._data : of(this._data);
     };
     ArrayDataSource.prototype.disconnect = function () { };
     return ArrayDataSource;

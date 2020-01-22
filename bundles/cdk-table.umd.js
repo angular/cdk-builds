@@ -1476,7 +1476,7 @@
             if (collections.isDataSource(this.dataSource)) {
                 dataStream = this.dataSource.connect(this);
             }
-            else if (this.dataSource instanceof rxjs.Observable) {
+            else if (rxjs.isObservable(this.dataSource)) {
                 dataStream = this.dataSource;
             }
             else if (Array.isArray(this.dataSource)) {

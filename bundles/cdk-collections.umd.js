@@ -40,7 +40,7 @@
             return _this;
         }
         ArrayDataSource.prototype.connect = function () {
-            return this._data instanceof rxjs.Observable ? this._data : rxjs.of(this._data);
+            return rxjs.isObservable(this._data) ? this._data : rxjs.of(this._data);
         };
         ArrayDataSource.prototype.disconnect = function () { };
         return ArrayDataSource;

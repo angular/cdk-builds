@@ -142,7 +142,7 @@
             if (Array.isArray(childrenNodes)) {
                 childrenNodes.forEach(function (child) { return _this._getDescendants(descendants, child); });
             }
-            else if (childrenNodes instanceof rxjs.Observable) {
+            else if (rxjs.isObservable(childrenNodes)) {
                 // TypeScript as of version 3.5 doesn't seem to treat `Boolean` like a function that
                 // returns a `boolean` specifically in the context of `filter`, so we manually clarify that.
                 childrenNodes.pipe(operators.take(1), operators.filter(Boolean))
@@ -377,7 +377,7 @@
             if (collections.isDataSource(this._dataSource)) {
                 dataStream = this._dataSource.connect(this);
             }
-            else if (this._dataSource instanceof rxjs.Observable) {
+            else if (rxjs.isObservable(this._dataSource)) {
                 dataStream = this._dataSource;
             }
             else if (Array.isArray(this._dataSource)) {
@@ -568,7 +568,7 @@
                 if (Array.isArray(childrenNodes)) {
                     this._setRoleFromChildren(childrenNodes);
                 }
-                else if (childrenNodes instanceof rxjs.Observable) {
+                else if (rxjs.isObservable(childrenNodes)) {
                     childrenNodes.pipe(operators.takeUntil(this._destroyed))
                         .subscribe(function (children) { return _this._setRoleFromChildren(children); });
                 }
@@ -630,7 +630,7 @@
             if (Array.isArray(childrenNodes)) {
                 this.updateChildrenNodes(childrenNodes);
             }
-            else if (childrenNodes instanceof rxjs.Observable) {
+            else if (rxjs.isObservable(childrenNodes)) {
                 childrenNodes.pipe(operators.takeUntil(this._destroyed))
                     .subscribe(function (result) { return _this.updateChildrenNodes(result); });
             }

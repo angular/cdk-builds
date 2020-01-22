@@ -1,4 +1,4 @@
-import { Observable, of, Subject } from 'rxjs';
+import { isObservable, of, Subject } from 'rxjs';
 import { Injectable, ɵɵdefineInjectable } from '@angular/core';
 
 /**
@@ -74,7 +74,7 @@ class ArrayDataSource extends DataSource {
      * @return {?}
      */
     connect() {
-        return this._data instanceof Observable ? this._data : of(this._data);
+        return isObservable(this._data) ? this._data : of(this._data);
     }
     /**
      * @return {?}
