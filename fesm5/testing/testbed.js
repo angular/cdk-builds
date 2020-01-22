@@ -1,4 +1,4 @@
-import { __values, __awaiter, __generator, __spread, __extends } from 'tslib';
+import { __spread, __values, __awaiter, __generator, __extends } from 'tslib';
 import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
@@ -71,7 +71,7 @@ var TaskStateZoneInterceptor = /** @class */ (function () {
         // the proxy zone keeps track of the previous task state, so we can just pass
         // this as initial state to the task zone interceptor.
         var interceptor = new TaskStateZoneInterceptor(zoneSpec.lastTaskState);
-        var zoneSpecOnHasTask = zoneSpec.onHasTask;
+        var zoneSpecOnHasTask = zoneSpec.onHasTask.bind(zoneSpec);
         // We setup the task state interceptor in the `ProxyZone`. Note that we cannot register
         // the interceptor as a new proxy zone delegate because it would mean that other zone
         // delegates (e.g. `FakeAsyncTestZone` or `AsyncTestZone`) can accidentally overwrite/disable
@@ -79,8 +79,12 @@ var TaskStateZoneInterceptor = /** @class */ (function () {
         // sufficient to just patch the proxy zone. This also avoids that we interfere with the task
         // queue scheduling logic.
         zoneSpec.onHasTask = function () {
-            zoneSpecOnHasTask.apply(zoneSpec, arguments);
-            interceptor.onHasTask.apply(interceptor, arguments);
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            zoneSpecOnHasTask.apply(void 0, __spread(args));
+            interceptor.onHasTask.apply(interceptor, __spread(args));
         };
         return zoneSpec[stateObservableSymbol] = interceptor.state;
     };
@@ -103,7 +107,7 @@ function createMouseEvent(type, x, y, button) {
     if (y === void 0) { y = 0; }
     if (button === void 0) { button = 0; }
     var event = document.createEvent('MouseEvent');
-    var originalPreventDefault = event.preventDefault;
+    var originalPreventDefault = event.preventDefault.bind(event);
     event.initMouseEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* detail */ x, /* screenX */ y, /* screenY */ x, /* clientX */ y, /* clientY */ false, /* ctrlKey */ false, /* altKey */ false, /* shiftKey */ false, /* metaKey */ button, /* button */ null /* relatedTarget */);
     // `initMouseEvent` doesn't allow us to pass the `buttons` and
     // defaults it to 0 which looks like a fake event.
@@ -111,7 +115,7 @@ function createMouseEvent(type, x, y, button) {
     // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
     event.preventDefault = function () {
         Object.defineProperty(event, 'defaultPrevented', { get: function () { return true; } });
-        return originalPreventDefault.apply(this, arguments);
+        return originalPreventDefault();
     };
     return event;
 }

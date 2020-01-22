@@ -71,16 +71,16 @@ class TaskStateZoneInterceptor {
         // the proxy zone keeps track of the previous task state, so we can just pass
         // this as initial state to the task zone interceptor.
         const interceptor = new TaskStateZoneInterceptor(zoneSpec.lastTaskState);
-        const zoneSpecOnHasTask = zoneSpec.onHasTask;
+        const zoneSpecOnHasTask = zoneSpec.onHasTask.bind(zoneSpec);
         // We setup the task state interceptor in the `ProxyZone`. Note that we cannot register
         // the interceptor as a new proxy zone delegate because it would mean that other zone
         // delegates (e.g. `FakeAsyncTestZone` or `AsyncTestZone`) can accidentally overwrite/disable
         // our interceptor. Since we just intend to monitor the task state of the proxy zone, it is
         // sufficient to just patch the proxy zone. This also avoids that we interfere with the task
         // queue scheduling logic.
-        zoneSpec.onHasTask = function () {
-            zoneSpecOnHasTask.apply(zoneSpec, arguments);
-            interceptor.onHasTask.apply(interceptor, arguments);
+        zoneSpec.onHasTask = function (...args) {
+            zoneSpecOnHasTask(...args);
+            interceptor.onHasTask(...args);
         };
         return zoneSpec[stateObservableSymbol] = interceptor.state;
     }
@@ -99,7 +99,7 @@ class TaskStateZoneInterceptor {
  */
 function createMouseEvent(type, x = 0, y = 0, button = 0) {
     const event = document.createEvent('MouseEvent');
-    const originalPreventDefault = event.preventDefault;
+    const originalPreventDefault = event.preventDefault.bind(event);
     event.initMouseEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* detail */ x, /* screenX */ y, /* screenY */ x, /* clientX */ y, /* clientY */ false, /* ctrlKey */ false, /* altKey */ false, /* shiftKey */ false, /* metaKey */ button, /* button */ null /* relatedTarget */);
     // `initMouseEvent` doesn't allow us to pass the `buttons` and
     // defaults it to 0 which looks like a fake event.
@@ -107,7 +107,7 @@ function createMouseEvent(type, x = 0, y = 0, button = 0) {
     // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
     event.preventDefault = function () {
         Object.defineProperty(event, 'defaultPrevented', { get: () => true });
-        return originalPreventDefault.apply(this, arguments);
+        return originalPreventDefault();
     };
     return event;
 }
