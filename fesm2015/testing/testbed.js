@@ -473,6 +473,12 @@ class UnitTestElement {
                 .call(this.element, selector);
         });
     }
+    isFocused() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return document.activeElement === this.element;
+        });
+    }
 }
 
 /**

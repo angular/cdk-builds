@@ -210,6 +210,13 @@ var ProtractorElement = /** @class */ (function () {
             });
         });
     };
+    ProtractorElement.prototype.isFocused = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this.element.equals(browser.driver.switchTo().activeElement())];
+            });
+        });
+    };
     return ProtractorElement;
 }());
 

@@ -89,4 +89,6 @@ export interface TestElement {
     getProperty(name: string): Promise<any>;
     /** Checks whether this element matches the given selector. */
     matchesSelector(selector: string): Promise<boolean>;
+    /** Checks whether the element is focused. */
+    isFocused(): Promise<boolean>;
 }

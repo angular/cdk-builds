@@ -25,4 +25,5 @@ export declare class ProtractorElement implements TestElement {
     getDimensions(): Promise<ElementDimensions>;
     getProperty(name: string): Promise<any>;
     matchesSelector(selector: string): Promise<boolean>;
+    isFocused(): Promise<boolean>;
 }

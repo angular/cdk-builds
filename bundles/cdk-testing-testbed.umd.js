@@ -607,6 +607,18 @@
                 });
             });
         };
+        UnitTestElement.prototype.isFocused = function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/, document.activeElement === this.element];
+                    }
+                });
+            });
+        };
         return UnitTestElement;
     }());
 

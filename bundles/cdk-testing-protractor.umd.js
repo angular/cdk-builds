@@ -212,6 +212,13 @@
                 });
             });
         };
+        ProtractorElement.prototype.isFocused = function () {
+            return tslib.__awaiter(this, void 0, void 0, function () {
+                return tslib.__generator(this, function (_a) {
+                    return [2 /*return*/, this.element.equals(protractor.browser.driver.switchTo().activeElement())];
+                });
+            });
+        };
         return ProtractorElement;
     }());
 
