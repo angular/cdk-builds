@@ -346,6 +346,9 @@ class DragRef {
          * @return {?}
          */
         (event) => {
+            // Prevent the default action as early as possible in order to block
+            // native actions like dragging the selected text or images with the mouse.
+            event.preventDefault();
             if (!this._hasStartedDragging) {
                 /** @type {?} */
                 const pointerPosition = this._getPointerPositionOnPage(event);
@@ -390,7 +393,6 @@ class DragRef {
             /** @type {?} */
             const constrainedPointerPosition = this._getConstrainedPointerPosition(event);
             this._hasMoved = true;
-            event.preventDefault();
             this._updatePointerDirectionDelta(constrainedPointerPosition);
             if (this._dropContainer) {
                 this._updateActiveDropContainer(constrainedPointerPosition);
