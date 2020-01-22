@@ -1,4 +1,4 @@
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
 
 /**
@@ -331,7 +331,6 @@ class ClipboardModule {
 ClipboardModule.decorators = [
     { type: NgModule, args: [{
                 declarations: [CdkCopyToClipboard],
-                imports: [CommonModule],
                 exports: [CdkCopyToClipboard],
             },] }
 ];

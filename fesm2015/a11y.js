@@ -1,4 +1,4 @@
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
@@ -2935,7 +2935,7 @@ class A11yModule {
 }
 A11yModule.decorators = [
     { type: NgModule, args: [{
-                imports: [CommonModule, PlatformModule, ObserversModule],
+                imports: [PlatformModule, ObserversModule],
                 declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
             },] }

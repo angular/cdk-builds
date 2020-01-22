@@ -1840,7 +1840,7 @@
         }
         A11yModule.decorators = [
             { type: i0.NgModule, args: [{
-                        imports: [i2.CommonModule, i1.PlatformModule, observers.ObserversModule],
+                        imports: [i1.PlatformModule, observers.ObserversModule],
                         declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                         exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     },] }

@@ -550,7 +550,7 @@
         }
         CdkStepperModule.decorators = [
             { type: core.NgModule, args: [{
-                        imports: [bidi.BidiModule, common.CommonModule],
+                        imports: [bidi.BidiModule],
                         exports: [
                             CdkStep,
                             CdkStepper,

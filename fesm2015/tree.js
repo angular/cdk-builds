@@ -5,7 +5,6 @@ import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, Template
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -1563,7 +1562,6 @@ class CdkTreeModule {
 }
 CdkTreeModule.decorators = [
     { type: NgModule, args: [{
-                imports: [CommonModule],
                 exports: EXPORTED_DECLARATIONS,
                 declarations: EXPORTED_DECLARATIONS,
                 providers: [FocusMonitor, CdkTreeNodeDef]

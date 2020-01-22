@@ -6,7 +6,6 @@ import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, Template
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { CommonModule } from '@angular/common';
 
 /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
 var BaseTreeControl = /** @class */ (function () {
@@ -890,7 +889,6 @@ var CdkTreeModule = /** @class */ (function () {
     }
     CdkTreeModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [CommonModule],
                     exports: EXPORTED_DECLARATIONS,
                     declarations: EXPORTED_DECLARATIONS,
                     providers: [FocusMonitor, CdkTreeNodeDef]

@@ -2,7 +2,7 @@ import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER, HOME, END } from '@angular/cdk/keycodes';
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -553,7 +553,7 @@ var CdkStepperModule = /** @class */ (function () {
     }
     CdkStepperModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [BidiModule, CommonModule],
+                    imports: [BidiModule],
                     exports: [
                         CdkStep,
                         CdkStepper,

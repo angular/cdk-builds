@@ -3,7 +3,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Directive, TemplateRef, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, Optional, Inject, ViewChild, ContentChildren, InjectionToken, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, Observable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -2958,7 +2958,6 @@ class CdkTableModule {
 }
 CdkTableModule.decorators = [
     { type: NgModule, args: [{
-                imports: [CommonModule],
                 exports: EXPORTED_DECLARATIONS,
                 declarations: EXPORTED_DECLARATIONS
             },] }

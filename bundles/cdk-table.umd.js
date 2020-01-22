@@ -1915,7 +1915,6 @@
         }
         CdkTableModule.decorators = [
             { type: core.NgModule, args: [{
-                        imports: [common.CommonModule],
                         exports: EXPORTED_DECLARATIONS,
                         declarations: EXPORTED_DECLARATIONS
                     },] }

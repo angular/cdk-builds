@@ -231,7 +231,6 @@
         ClipboardModule.decorators = [
             { type: i0.NgModule, args: [{
                         declarations: [CdkCopyToClipboard],
-                        imports: [i1.CommonModule],
                         exports: [CdkCopyToClipboard],
                     },] }
         ];

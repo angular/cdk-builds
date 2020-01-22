@@ -1,4 +1,4 @@
-import { DOCUMENT, CommonModule } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { __extends, __read } from 'tslib';
 import { Subject, Subscription, of } from 'rxjs';
@@ -1844,7 +1844,7 @@ var A11yModule = /** @class */ (function () {
     }
     A11yModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [CommonModule, PlatformModule, ObserversModule],
+                    imports: [PlatformModule, ObserversModule],
                     declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 },] }

@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('@angular/common')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', 'tslib', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y', '@angular/common'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.tslib, global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.a11y, global.ng.common));
-}(this, (function (exports, tslib, collections, rxjs, operators, core, bidi, coercion, a11y, common) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('tslib'), require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', 'tslib', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.tslib, global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.a11y));
+}(this, (function (exports, tslib, collections, rxjs, operators, core, bidi, coercion, a11y) { 'use strict';
 
     /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
     var BaseTreeControl = /** @class */ (function () {
@@ -886,7 +886,6 @@
         }
         CdkTreeModule.decorators = [
             { type: core.NgModule, args: [{
-                        imports: [common.CommonModule],
                         exports: EXPORTED_DECLARATIONS,
                         declarations: EXPORTED_DECLARATIONS,
                         providers: [a11y.FocusMonitor, CdkTreeNodeDef]
