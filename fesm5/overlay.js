@@ -1849,7 +1849,7 @@ var FlexibleConnectedPositionStrategy = /** @class */ (function () {
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayY = function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the
         // preferred position has changed since the last `apply`.
-        var styles = { top: null, bottom: null };
+        var styles = { top: '', bottom: '' };
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
@@ -1877,7 +1877,7 @@ var FlexibleConnectedPositionStrategy = /** @class */ (function () {
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayX = function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
-        var styles = { left: null, right: null };
+        var styles = { left: '', right: '' };
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);

@@ -199,8 +199,6 @@
             var _this = this;
             if (this._platform.isBrowser) {
                 // Remember the height which we started with in case autosizing is disabled
-                // TODO: as any works around `height` being nullable in TS3.6, but non-null in 3.7.
-                // Remove once on TS3.7.
                 this._initialHeight = this._textareaElement.style.height;
                 this.resizeToFitContent();
                 this._ngZone.runOutsideAngular(function () {
@@ -312,11 +310,9 @@
         CdkTextareaAutosize.prototype.reset = function () {
             // Do not try to change the textarea, if the initialHeight has not been determined yet
             // This might potentially remove styles when reset() is called before ngAfterViewInit
-            if (this._initialHeight === undefined) {
-                return;
+            if (this._initialHeight !== undefined) {
+                this._textareaElement.style.height = this._initialHeight;
             }
-            // TODO: "as any" inserted for migration to TS3.7.
-            this._textareaElement.style.height = this._initialHeight;
         };
         // In Ivy the `host` metadata will be merged, whereas in ViewEngine it is overridden. In order
         // to avoid double event listeners, we need to use `HostListener`. Once Ivy is the default, we

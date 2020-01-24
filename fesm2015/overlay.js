@@ -2891,7 +2891,7 @@ class FlexibleConnectedPositionStrategy {
         // Reset any existing styles. This is necessary in case the
         // preferred position has changed since the last `apply`.
         /** @type {?} */
-        let styles = (/** @type {?} */ ({ top: null, bottom: null }));
+        let styles = (/** @type {?} */ ({ top: '', bottom: '' }));
         /** @type {?} */
         let overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
@@ -2930,7 +2930,7 @@ class FlexibleConnectedPositionStrategy {
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
         /** @type {?} */
-        let styles = (/** @type {?} */ ({ left: null, right: null }));
+        let styles = (/** @type {?} */ ({ left: '', right: '' }));
         /** @type {?} */
         let overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
