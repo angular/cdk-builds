@@ -2323,19 +2323,31 @@ var CdkDragPreview = /** @class */ (function () {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
+ * Injection token that can be used to configure the
+ * behavior of the drag&drop-related components.
+ */
+var CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
+/**
+ * @deprecated No longer being used. To be removed.
+ * @breaking-change 10.0.0
+ * @docs-private
+ */
+function CDK_DRAG_CONFIG_FACTORY() {
+    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  */
 var CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
-/** Injection token that can be used to configure the behavior of `CdkDrag`. */
-var CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG', {
-    providedIn: 'root',
-    factory: CDK_DRAG_CONFIG_FACTORY
-});
-/** @docs-private */
-function CDK_DRAG_CONFIG_FACTORY() {
-    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
-}
 /** Element that can be moved inside a CdkDropList container. */
 var CdkDrag = /** @class */ (function () {
     function CdkDrag(
@@ -2352,12 +2364,6 @@ var CdkDrag = /** @class */ (function () {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
         this._destroyed = new Subject();
-        /**
-         * Amount of milliseconds to wait after the user has put their
-         * pointer down before starting to drag the element.
-         */
-        this.dragStartDelay = 0;
-        this._disabled = false;
         /** Emits when the user starts dragging the item. */
         this.started = new EventEmitter();
         /** Emits when the user has released a drag item, before any animations have started. */
@@ -2386,8 +2392,16 @@ var CdkDrag = /** @class */ (function () {
                 subscription.unsubscribe();
             };
         });
-        this._dragRef = dragDrop.createDrag(element, config);
+        this._dragRef = dragDrop.createDrag(element, {
+            dragStartThreshold: config && config.dragStartThreshold != null ?
+                config.dragStartThreshold : 5,
+            pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
+                config.pointerDirectionChangeThreshold : 5
+        });
         this._dragRef.data = this;
+        if (config) {
+            this._assignDefaults(config);
+        }
         this._syncInputs(this._dragRef);
         this._handleEvents(this._dragRef);
     }
@@ -2577,6 +2591,27 @@ var CdkDrag = /** @class */ (function () {
             });
         });
     };
+    /** Assigns the default input values based on a provided config object. */
+    CdkDrag.prototype._assignDefaults = function (config) {
+        var lockAxis = config.lockAxis, dragStartDelay = config.dragStartDelay, constrainPosition = config.constrainPosition, previewClass = config.previewClass, boundaryElement = config.boundaryElement, draggingDisabled = config.draggingDisabled, rootElementSelector = config.rootElementSelector;
+        this.disabled = draggingDisabled == null ? false : draggingDisabled;
+        this.dragStartDelay = dragStartDelay || 0;
+        if (lockAxis) {
+            this.lockAxis = lockAxis;
+        }
+        if (constrainPosition) {
+            this.constrainPosition = constrainPosition;
+        }
+        if (previewClass) {
+            this.previewClass = previewClass;
+        }
+        if (boundaryElement) {
+            this.boundaryElement = boundaryElement;
+        }
+        if (rootElementSelector) {
+            this.rootElementSelector = rootElementSelector;
+        }
+    };
     CdkDrag.decorators = [
         { type: Directive, args: [{
                     selector: '[cdkDrag]',
@@ -2596,7 +2631,7 @@ var CdkDrag = /** @class */ (function () {
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: NgZone },
         { type: ViewContainerRef },
-        { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_CONFIG,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] },
         { type: Directionality, decorators: [{ type: Optional }] },
         { type: DragDrop },
         { type: ChangeDetectorRef }
@@ -2700,7 +2735,7 @@ var CdkDropList = /** @class */ (function () {
      * @deprecated _scrollDispatcher parameter to become required.
      * @breaking-change 11.0.0
      */
-    _scrollDispatcher) {
+    _scrollDispatcher, config) {
         var _this = this;
         this.element = element;
         this._changeDetectorRef = _changeDetectorRef;
@@ -2715,23 +2750,16 @@ var CdkDropList = /** @class */ (function () {
          * or their unique IDs.
          */
         this.connectedTo = [];
-        /** Direction in which the list is oriented. */
-        this.orientation = 'vertical';
         /**
          * Unique ID for the drop zone. Can be used as a reference
          * in the `connectedTo` of another `CdkDropList`.
          */
         this.id = "cdk-drop-list-" + _uniqueIdCounter++;
-        this._disabled = false;
-        /** Whether sorting within this drop list is disabled. */
-        this.sortingDisabled = false;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
          */
         this.enterPredicate = function () { return true; };
-        /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-        this.autoScrollDisabled = false;
         /** Emits when the user drops an item inside the container. */
         this.dropped = new EventEmitter();
         /**
@@ -2747,6 +2775,9 @@ var CdkDropList = /** @class */ (function () {
         this.sorted = new EventEmitter();
         this._dropListRef = dragDrop.createDropList(element);
         this._dropListRef.data = this;
+        if (config) {
+            this._assignDefaults(config);
+        }
         this._dropListRef.enterPredicate = function (drag, drop) {
             return _this.enterPredicate(drag.data, drop.data);
         };
@@ -2927,6 +2958,17 @@ var CdkDropList = /** @class */ (function () {
             _this._changeDetectorRef.markForCheck();
         });
     };
+    /** Assigns the default input values based on a provided config object. */
+    CdkDropList.prototype._assignDefaults = function (config) {
+        var lockAxis = config.lockAxis, draggingDisabled = config.draggingDisabled, sortingDisabled = config.sortingDisabled, listAutoScrollDisabled = config.listAutoScrollDisabled, listOrientation = config.listOrientation;
+        this.disabled = draggingDisabled == null ? false : draggingDisabled;
+        this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
+        this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
+        this.orientation = listOrientation || 'vertical';
+        if (lockAxis) {
+            this.lockAxis = lockAxis;
+        }
+    };
     /** Keeps track of the drop lists that are currently on the page. */
     CdkDropList._dropLists = [];
     CdkDropList.decorators = [
@@ -2954,7 +2996,8 @@ var CdkDropList = /** @class */ (function () {
         { type: ChangeDetectorRef },
         { type: Directionality, decorators: [{ type: Optional }] },
         { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
-        { type: ScrollDispatcher }
+        { type: ScrollDispatcher },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] }
     ]; };
     CdkDropList.propDecorators = {
         _draggables: [{ type: ContentChildren, args: [CdkDrag, { descendants: true },] }],

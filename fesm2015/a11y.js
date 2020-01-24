@@ -1291,6 +1291,9 @@ function getWindow(node) {
  * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
+ *
+ * @deprecated Use `ConfigurableFocusTrap` instead.
+ * \@breaking-change for 11.0.0 Remove this class.
  */
 class FocusTrap {
     /**
@@ -1608,6 +1611,18 @@ class FocusTrap {
         isEnabled ? anchor.setAttribute('tabindex', '0') : anchor.removeAttribute('tabindex');
     }
     /**
+     * Toggles the`tabindex` of both anchors to either trap Tab focus or allow it to escape.
+     * @protected
+     * @param {?} enabled
+     * @return {?}
+     */
+    toggleAnchors(enabled) {
+        if (this._startAnchor && this._endAnchor) {
+            this._toggleAnchorTabIndex(enabled, this._startAnchor);
+            this._toggleAnchorTabIndex(enabled, this._endAnchor);
+        }
+    }
+    /**
      * Executes a function when the zone is stable.
      * @private
      * @param {?} fn
@@ -1650,32 +1665,25 @@ if (false) {
     FocusTrap.prototype.endAnchorListener;
     /**
      * @type {?}
-     * @private
+     * @protected
      */
     FocusTrap.prototype._enabled;
-    /**
-     * @type {?}
-     * @private
-     */
+    /** @type {?} */
     FocusTrap.prototype._element;
     /**
      * @type {?}
      * @private
      */
     FocusTrap.prototype._checker;
-    /**
-     * @type {?}
-     * @private
-     */
+    /** @type {?} */
     FocusTrap.prototype._ngZone;
-    /**
-     * @type {?}
-     * @private
-     */
+    /** @type {?} */
     FocusTrap.prototype._document;
 }
 /**
  * Factory that allows easy instantiation of focus traps.
+ * @deprecated Use `ConfigurableFocusTrapFactory` instead.
+ * \@breaking-change for 11.0.0 Remove this class.
  */
 class FocusTrapFactory {
     /**
@@ -1849,6 +1857,455 @@ if (false) {
      * @private
      */
     CdkTrapFocus.prototype._focusTrapFactory;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/configurable-focus-trap.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Class that allows for trapping focus within a DOM element.
+ *
+ * This class uses a strategy pattern that determines how it traps focus.
+ * See FocusTrapInertStrategy.
+ */
+class ConfigurableFocusTrap extends FocusTrap {
+    /**
+     * @param {?} _element
+     * @param {?} _checker
+     * @param {?} _ngZone
+     * @param {?} _document
+     * @param {?} _focusTrapManager
+     * @param {?} _inertStrategy
+     * @param {?} config
+     */
+    constructor(_element, _checker, _ngZone, _document, _focusTrapManager, _inertStrategy, config) {
+        super(_element, _checker, _ngZone, _document, config.defer);
+        this._focusTrapManager = _focusTrapManager;
+        this._inertStrategy = _inertStrategy;
+        this._focusTrapManager.register(this);
+    }
+    /**
+     * Whether the FocusTrap is enabled.
+     * @return {?}
+     */
+    get enabled() { return this._enabled; }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set enabled(value) {
+        this._enabled = value;
+        if (this._enabled) {
+            this._focusTrapManager.register(this);
+        }
+        else {
+            this._focusTrapManager.deregister(this);
+        }
+    }
+    /**
+     * Notifies the FocusTrapManager that this FocusTrap will be destroyed.
+     * @return {?}
+     */
+    destroy() {
+        this._focusTrapManager.deregister(this);
+        super.destroy();
+    }
+    /**
+     * \@docs-private Implemented as part of ManagedFocusTrap.
+     * @return {?}
+     */
+    _enable() {
+        this._inertStrategy.preventFocus(this);
+        this.toggleAnchors(true);
+    }
+    /**
+     * \@docs-private Implemented as part of ManagedFocusTrap.
+     * @return {?}
+     */
+    _disable() {
+        this._inertStrategy.allowFocus(this);
+        this.toggleAnchors(false);
+    }
+}
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrap.prototype._focusTrapManager;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrap.prototype._inertStrategy;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/polyfill.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * IE 11 compatible closest implementation that is able to start from non-Element Nodes.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function closest(element, selector) {
+    if (!(element instanceof Node)) {
+        return null;
+    }
+    /** @type {?} */
+    let curr = element;
+    while (curr != null && !(curr instanceof Element)) {
+        curr = curr.parentNode;
+    }
+    return curr && (/** @type {?} */ ((hasNativeClosest ?
+        curr.closest(selector) : polyfillClosest(curr, selector))));
+}
+/**
+ * Polyfill for browsers without Element.closest.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function polyfillClosest(element, selector) {
+    /** @type {?} */
+    let curr = element;
+    while (curr != null && !(curr instanceof Element && matches(curr, selector))) {
+        curr = curr.parentNode;
+    }
+    return (/** @type {?} */ ((curr || null)));
+}
+/** @type {?} */
+const hasNativeClosest = typeof Element != 'undefined' && !!Element.prototype.closest;
+/**
+ * IE 11 compatible matches implementation.
+ * @param {?} element
+ * @param {?} selector
+ * @return {?}
+ */
+function matches(element, selector) {
+    return element.matches ?
+        element.matches(selector) :
+        ((/** @type {?} */ (element)))['msMatchesSelector'](selector);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/event-listener-inert-strategy.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Lightweight FocusTrapInertStrategy that adds a document focus event
+ * listener to redirect focus back inside the FocusTrap.
+ */
+class EventListenerFocusTrapInertStrategy {
+    constructor() {
+        /**
+         * Focus event handler.
+         */
+        this._listener = null;
+    }
+    /**
+     * Adds a document event listener that keeps focus inside the FocusTrap.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    preventFocus(focusTrap) {
+        // Ensure there's only one listener per document
+        if (this._listener) {
+            focusTrap._document.removeEventListener('focus', (/** @type {?} */ (this._listener)), true);
+        }
+        this._listener = (/**
+         * @param {?} e
+         * @return {?}
+         */
+        (e) => this._trapFocus(focusTrap, e));
+        focusTrap._ngZone.runOutsideAngular((/**
+         * @return {?}
+         */
+        () => {
+            focusTrap._document.addEventListener('focus', (/** @type {?} */ (this._listener)), true);
+        }));
+    }
+    /**
+     * Removes the event listener added in preventFocus.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    allowFocus(focusTrap) {
+        if (!this._listener) {
+            return;
+        }
+        focusTrap._document.removeEventListener('focus', (/** @type {?} */ (this._listener)), true);
+        this._listener = null;
+    }
+    /**
+     * Refocuses the first element in the FocusTrap if the focus event target was outside
+     * the FocusTrap.
+     *
+     * This is an event listener callback. The event listener is added in runOutsideAngular,
+     * so all this code runs outside Angular as well.
+     * @private
+     * @param {?} focusTrap
+     * @param {?} event
+     * @return {?}
+     */
+    _trapFocus(focusTrap, event) {
+        /** @type {?} */
+        const target = (/** @type {?} */ (event.target));
+        // Don't refocus if target was in an overlay, because the overlay might be associated
+        // with an element inside the FocusTrap, ex. mat-select.
+        if (!focusTrap._element.contains(target) &&
+            closest(target, 'div.cdk-overlay-pane') === null) {
+            // Some legacy FocusTrap usages have logic that focuses some element on the page
+            // just before FocusTrap is destroyed. For backwards compatibility, wait
+            // to be sure FocusTrap is still enabled before refocusing.
+            setTimeout((/**
+             * @return {?}
+             */
+            () => {
+                if (focusTrap.enabled) {
+                    focusTrap.focusFirstTabbableElement();
+                }
+            }));
+        }
+    }
+}
+if (false) {
+    /**
+     * Focus event handler.
+     * @type {?}
+     * @private
+     */
+    EventListenerFocusTrapInertStrategy.prototype._listener;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/configurable-focus-trap-config.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @template D
+ */
+class ConfigurableFocusTrapConfig {
+    constructor() {
+        this.defer = false;
+    }
+}
+if (false) {
+    /** @type {?} */
+    ConfigurableFocusTrapConfig.prototype.defer;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/focus-trap-inert-strategy.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * The injection token used to specify the inert strategy.
+ * @type {?}
+ */
+const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
+/**
+ * A strategy that dictates how FocusTrap should prevent elements
+ * outside of the FocusTrap from being focused.
+ * @record
+ */
+function FocusTrapInertStrategy() { }
+if (false) {
+    /**
+     * Makes all elements outside focusTrap unfocusable.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    FocusTrapInertStrategy.prototype.preventFocus = function (focusTrap) { };
+    /**
+     * Reverts elements made unfocusable by preventFocus to their previous state.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    FocusTrapInertStrategy.prototype.allowFocus = function (focusTrap) { };
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/focus-trap-manager.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * A FocusTrap managed by FocusTrapManager.
+ * Implemented by ConfigurableFocusTrap to avoid circular dependency.
+ * @record
+ */
+function ManagedFocusTrap() { }
+if (false) {
+    /**
+     * @return {?}
+     */
+    ManagedFocusTrap.prototype._enable = function () { };
+    /**
+     * @return {?}
+     */
+    ManagedFocusTrap.prototype._disable = function () { };
+    /**
+     * @return {?}
+     */
+    ManagedFocusTrap.prototype.focusInitialElementWhenReady = function () { };
+}
+/**
+ * Injectable that ensures only the most recently enabled FocusTrap is active.
+ */
+class FocusTrapManager {
+    constructor() {
+        // A stack of the FocusTraps on the page. Only the FocusTrap at the
+        // top of the stack is active.
+        this._focusTrapStack = [];
+    }
+    /**
+     * Disables the FocusTrap at the top of the stack, and then pushes
+     * the new FocusTrap onto the stack.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    register(focusTrap) {
+        // Dedupe focusTraps that register multiple times.
+        this._focusTrapStack = this._focusTrapStack.filter((/**
+         * @param {?} ft
+         * @return {?}
+         */
+        (ft) => ft !== focusTrap));
+        /** @type {?} */
+        let stack = this._focusTrapStack;
+        if (stack.length) {
+            stack[stack.length - 1]._disable();
+        }
+        stack.push(focusTrap);
+        focusTrap._enable();
+    }
+    /**
+     * Removes the FocusTrap from the stack, and activates the
+     * FocusTrap that is the new top of the stack.
+     * @param {?} focusTrap
+     * @return {?}
+     */
+    deregister(focusTrap) {
+        focusTrap._disable();
+        /** @type {?} */
+        const stack = this._focusTrapStack;
+        /** @type {?} */
+        const i = stack.indexOf(focusTrap);
+        if (i !== -1) {
+            stack.splice(i, 1);
+            if (stack.length) {
+                stack[stack.length - 1]._enable();
+            }
+        }
+    }
+}
+FocusTrapManager.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */ FocusTrapManager.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    FocusTrapManager.prototype._focusTrapStack;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/focus-trap/configurable-focus-trap-factory.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Factory that allows easy instantiation of configurable focus traps.
+ */
+class ConfigurableFocusTrapFactory {
+    /**
+     * @param {?} _checker
+     * @param {?} _ngZone
+     * @param {?} _focusTrapManager
+     * @param {?} _document
+     * @param {?=} _inertStrategy
+     */
+    constructor(_checker, _ngZone, _focusTrapManager, _document, _inertStrategy) {
+        this._checker = _checker;
+        this._ngZone = _ngZone;
+        this._focusTrapManager = _focusTrapManager;
+        this._document = _document;
+        // TODO split up the strategies into different modules, similar to DateAdapter.
+        this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
+    }
+    /**
+     * Creates a focus-trapped region around the given element.
+     * @param {?} element The element around which focus will be trapped.
+     * @param {?=} config
+     * @return {?} The created focus trap instance.
+     */
+    create(element, config = new ConfigurableFocusTrapConfig()) {
+        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, config);
+    }
+}
+ConfigurableFocusTrapFactory.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */
+ConfigurableFocusTrapFactory.ctorParameters = () => [
+    { type: InteractivityChecker },
+    { type: NgZone },
+    { type: FocusTrapManager },
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_TRAP_INERT_STRATEGY,] }] }
+];
+/** @nocollapse */ ConfigurableFocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(FocusTrapManager), ɵɵinject(DOCUMENT), ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrapFactory.prototype._document;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrapFactory.prototype._inertStrategy;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrapFactory.prototype._checker;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrapFactory.prototype._ngZone;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigurableFocusTrapFactory.prototype._focusTrapManager;
 }
 
 /**
@@ -2955,5 +3412,5 @@ A11yModule.ctorParameters = () => [
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
 //# sourceMappingURL=a11y.js.map

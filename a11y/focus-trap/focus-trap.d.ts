@@ -14,12 +14,15 @@ import { InteractivityChecker } from '../interactivity-checker/interactivity-che
  * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
+ *
+ * @deprecated Use `ConfigurableFocusTrap` instead.
+ * @breaking-change for 11.0.0 Remove this class.
  */
 export declare class FocusTrap {
-    private _element;
+    readonly _element: HTMLElement;
     private _checker;
-    private _ngZone;
-    private _document;
+    readonly _ngZone: NgZone;
+    readonly _document: Document;
     private _startAnchor;
     private _endAnchor;
     private _hasAttached;
@@ -28,7 +31,7 @@ export declare class FocusTrap {
     /** Whether the focus trap is active. */
     get enabled(): boolean;
     set enabled(value: boolean);
-    private _enabled;
+    protected _enabled: boolean;
     constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean);
     /** Destroys the focus trap by cleaning up the anchors. */
     destroy(): void;
@@ -97,10 +100,19 @@ export declare class FocusTrap {
      * @param anchor Anchor on which to toggle the tabindex.
      */
     private _toggleAnchorTabIndex;
+    /**
+     * Toggles the`tabindex` of both anchors to either trap Tab focus or allow it to escape.
+     * @param enabled: Whether the anchors should trap Tab.
+     */
+    protected toggleAnchors(enabled: boolean): void;
     /** Executes a function when the zone is stable. */
     private _executeOnStable;
 }
-/** Factory that allows easy instantiation of focus traps. */
+/**
+ * Factory that allows easy instantiation of focus traps.
+ * @deprecated Use `ConfigurableFocusTrapFactory` instead.
+ * @breaking-change for 11.0.0 Remove this class.
+ */
 export declare class FocusTrapFactory {
     private _checker;
     private _ngZone;

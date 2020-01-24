@@ -848,6 +848,9 @@ function getWindow(node) {
  * This class currently uses a relatively simple approach to focus trapping.
  * It assumes that the tab order is the same as DOM order, which is not necessarily true.
  * Things like `tabIndex > 0`, flex `order`, and shadow roots can cause to two to misalign.
+ *
+ * @deprecated Use `ConfigurableFocusTrap` instead.
+ * @breaking-change for 11.0.0 Remove this class.
  */
 var FocusTrap = /** @class */ (function () {
     function FocusTrap(_element, _checker, _ngZone, _document, deferAnchors) {
@@ -1098,6 +1101,16 @@ var FocusTrap = /** @class */ (function () {
         // element has a tabindex, the user might still hit it when navigating with the arrow keys.
         isEnabled ? anchor.setAttribute('tabindex', '0') : anchor.removeAttribute('tabindex');
     };
+    /**
+     * Toggles the`tabindex` of both anchors to either trap Tab focus or allow it to escape.
+     * @param enabled: Whether the anchors should trap Tab.
+     */
+    FocusTrap.prototype.toggleAnchors = function (enabled) {
+        if (this._startAnchor && this._endAnchor) {
+            this._toggleAnchorTabIndex(enabled, this._startAnchor);
+            this._toggleAnchorTabIndex(enabled, this._endAnchor);
+        }
+    };
     /** Executes a function when the zone is stable. */
     FocusTrap.prototype._executeOnStable = function (fn) {
         if (this._ngZone.isStable) {
@@ -1109,7 +1122,11 @@ var FocusTrap = /** @class */ (function () {
     };
     return FocusTrap;
 }());
-/** Factory that allows easy instantiation of focus traps. */
+/**
+ * Factory that allows easy instantiation of focus traps.
+ * @deprecated Use `ConfigurableFocusTrapFactory` instead.
+ * @breaking-change for 11.0.0 Remove this class.
+ */
 var FocusTrapFactory = /** @class */ (function () {
     function FocusTrapFactory(_checker, _ngZone, _document) {
         this._checker = _checker;
@@ -1204,6 +1221,275 @@ var CdkTrapFocus = /** @class */ (function () {
         autoCapture: [{ type: Input, args: ['cdkTrapFocusAutoCapture',] }]
     };
     return CdkTrapFocus;
+}());
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Class that allows for trapping focus within a DOM element.
+ *
+ * This class uses a strategy pattern that determines how it traps focus.
+ * See FocusTrapInertStrategy.
+ */
+var ConfigurableFocusTrap = /** @class */ (function (_super) {
+    __extends(ConfigurableFocusTrap, _super);
+    function ConfigurableFocusTrap(_element, _checker, _ngZone, _document, _focusTrapManager, _inertStrategy, config) {
+        var _this = _super.call(this, _element, _checker, _ngZone, _document, config.defer) || this;
+        _this._focusTrapManager = _focusTrapManager;
+        _this._inertStrategy = _inertStrategy;
+        _this._focusTrapManager.register(_this);
+        return _this;
+    }
+    Object.defineProperty(ConfigurableFocusTrap.prototype, "enabled", {
+        /** Whether the FocusTrap is enabled. */
+        get: function () { return this._enabled; },
+        set: function (value) {
+            this._enabled = value;
+            if (this._enabled) {
+                this._focusTrapManager.register(this);
+            }
+            else {
+                this._focusTrapManager.deregister(this);
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /** Notifies the FocusTrapManager that this FocusTrap will be destroyed. */
+    ConfigurableFocusTrap.prototype.destroy = function () {
+        this._focusTrapManager.deregister(this);
+        _super.prototype.destroy.call(this);
+    };
+    /** @docs-private Implemented as part of ManagedFocusTrap. */
+    ConfigurableFocusTrap.prototype._enable = function () {
+        this._inertStrategy.preventFocus(this);
+        this.toggleAnchors(true);
+    };
+    /** @docs-private Implemented as part of ManagedFocusTrap. */
+    ConfigurableFocusTrap.prototype._disable = function () {
+        this._inertStrategy.allowFocus(this);
+        this.toggleAnchors(false);
+    };
+    return ConfigurableFocusTrap;
+}(FocusTrap));
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** IE 11 compatible closest implementation that is able to start from non-Element Nodes. */
+function closest(element, selector) {
+    if (!(element instanceof Node)) {
+        return null;
+    }
+    var curr = element;
+    while (curr != null && !(curr instanceof Element)) {
+        curr = curr.parentNode;
+    }
+    return curr && (hasNativeClosest ?
+        curr.closest(selector) : polyfillClosest(curr, selector));
+}
+/** Polyfill for browsers without Element.closest. */
+function polyfillClosest(element, selector) {
+    var curr = element;
+    while (curr != null && !(curr instanceof Element && matches(curr, selector))) {
+        curr = curr.parentNode;
+    }
+    return (curr || null);
+}
+var hasNativeClosest = typeof Element != 'undefined' && !!Element.prototype.closest;
+/** IE 11 compatible matches implementation. */
+function matches(element, selector) {
+    return element.matches ?
+        element.matches(selector) :
+        element['msMatchesSelector'](selector);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Lightweight FocusTrapInertStrategy that adds a document focus event
+ * listener to redirect focus back inside the FocusTrap.
+ */
+var EventListenerFocusTrapInertStrategy = /** @class */ (function () {
+    function EventListenerFocusTrapInertStrategy() {
+        /** Focus event handler. */
+        this._listener = null;
+    }
+    /** Adds a document event listener that keeps focus inside the FocusTrap. */
+    EventListenerFocusTrapInertStrategy.prototype.preventFocus = function (focusTrap) {
+        var _this = this;
+        // Ensure there's only one listener per document
+        if (this._listener) {
+            focusTrap._document.removeEventListener('focus', this._listener, true);
+        }
+        this._listener = function (e) { return _this._trapFocus(focusTrap, e); };
+        focusTrap._ngZone.runOutsideAngular(function () {
+            focusTrap._document.addEventListener('focus', _this._listener, true);
+        });
+    };
+    /** Removes the event listener added in preventFocus. */
+    EventListenerFocusTrapInertStrategy.prototype.allowFocus = function (focusTrap) {
+        if (!this._listener) {
+            return;
+        }
+        focusTrap._document.removeEventListener('focus', this._listener, true);
+        this._listener = null;
+    };
+    /**
+     * Refocuses the first element in the FocusTrap if the focus event target was outside
+     * the FocusTrap.
+     *
+     * This is an event listener callback. The event listener is added in runOutsideAngular,
+     * so all this code runs outside Angular as well.
+     */
+    EventListenerFocusTrapInertStrategy.prototype._trapFocus = function (focusTrap, event) {
+        var target = event.target;
+        // Don't refocus if target was in an overlay, because the overlay might be associated
+        // with an element inside the FocusTrap, ex. mat-select.
+        if (!focusTrap._element.contains(target) &&
+            closest(target, 'div.cdk-overlay-pane') === null) {
+            // Some legacy FocusTrap usages have logic that focuses some element on the page
+            // just before FocusTrap is destroyed. For backwards compatibility, wait
+            // to be sure FocusTrap is still enabled before refocusing.
+            setTimeout(function () {
+                if (focusTrap.enabled) {
+                    focusTrap.focusFirstTabbableElement();
+                }
+            });
+        }
+    };
+    return EventListenerFocusTrapInertStrategy;
+}());
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var ConfigurableFocusTrapConfig = /** @class */ (function () {
+    function ConfigurableFocusTrapConfig() {
+        this.defer = false;
+    }
+    return ConfigurableFocusTrapConfig;
+}());
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** The injection token used to specify the inert strategy. */
+var FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Injectable that ensures only the most recently enabled FocusTrap is active. */
+var FocusTrapManager = /** @class */ (function () {
+    function FocusTrapManager() {
+        // A stack of the FocusTraps on the page. Only the FocusTrap at the
+        // top of the stack is active.
+        this._focusTrapStack = [];
+    }
+    /**
+     * Disables the FocusTrap at the top of the stack, and then pushes
+     * the new FocusTrap onto the stack.
+     */
+    FocusTrapManager.prototype.register = function (focusTrap) {
+        // Dedupe focusTraps that register multiple times.
+        this._focusTrapStack = this._focusTrapStack.filter(function (ft) { return ft !== focusTrap; });
+        var stack = this._focusTrapStack;
+        if (stack.length) {
+            stack[stack.length - 1]._disable();
+        }
+        stack.push(focusTrap);
+        focusTrap._enable();
+    };
+    /**
+     * Removes the FocusTrap from the stack, and activates the
+     * FocusTrap that is the new top of the stack.
+     */
+    FocusTrapManager.prototype.deregister = function (focusTrap) {
+        focusTrap._disable();
+        var stack = this._focusTrapStack;
+        var i = stack.indexOf(focusTrap);
+        if (i !== -1) {
+            stack.splice(i, 1);
+            if (stack.length) {
+                stack[stack.length - 1]._enable();
+            }
+        }
+    };
+    FocusTrapManager.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    FocusTrapManager.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
+    return FocusTrapManager;
+}());
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Factory that allows easy instantiation of configurable focus traps. */
+var ConfigurableFocusTrapFactory = /** @class */ (function () {
+    function ConfigurableFocusTrapFactory(_checker, _ngZone, _focusTrapManager, _document, _inertStrategy) {
+        this._checker = _checker;
+        this._ngZone = _ngZone;
+        this._focusTrapManager = _focusTrapManager;
+        this._document = _document;
+        // TODO split up the strategies into different modules, similar to DateAdapter.
+        this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
+    }
+    /**
+     * Creates a focus-trapped region around the given element.
+     * @param element The element around which focus will be trapped.
+     * @param deferCaptureElements Defers the creation of focus-capturing elements to be done
+     *     manually by the user.
+     * @returns The created focus trap instance.
+     */
+    ConfigurableFocusTrapFactory.prototype.create = function (element, config) {
+        if (config === void 0) { config = new ConfigurableFocusTrapConfig(); }
+        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, config);
+    };
+    ConfigurableFocusTrapFactory.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    ConfigurableFocusTrapFactory.ctorParameters = function () { return [
+        { type: InteractivityChecker },
+        { type: NgZone },
+        { type: FocusTrapManager },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_TRAP_INERT_STRATEGY,] }] }
+    ]; };
+    ConfigurableFocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(FocusTrapManager), ɵɵinject(DOCUMENT), ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
+    return ConfigurableFocusTrapFactory;
 }());
 
 /**
@@ -1868,5 +2154,5 @@ var A11yModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
 //# sourceMappingURL=a11y.js.map

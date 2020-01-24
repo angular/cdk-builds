@@ -14,6 +14,7 @@ import { CdkDragDrop, CdkDragEnter, CdkDragExit, CdkDragSortEvent } from '../dra
 import { CdkDropListGroup } from './drop-list-group';
 import { DropListRef } from '../drop-list-ref';
 import { DragDrop } from '../drag-drop';
+import { DropListOrientation, DragAxis, DragDropConfig } from './config';
 /**
  * Internal compile-time-only representation of a `CdkDropList`.
  * Used to avoid circular import issues between the `CdkDropList` and the `CdkDrag`.
@@ -50,14 +51,14 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     /** Arbitrary data to attach to this container. */
     data: T;
     /** Direction in which the list is oriented. */
-    orientation: 'horizontal' | 'vertical';
+    orientation: DropListOrientation;
     /**
      * Unique ID for the drop zone. Can be used as a reference
      * in the `connectedTo` of another `CdkDropList`.
      */
     id: string;
     /** Locks the position of the draggable elements inside the container along the specified axis. */
-    lockAxis: 'x' | 'y';
+    lockAxis: DragAxis;
     /** Whether starting a dragging sequence from this container is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);
@@ -91,7 +92,7 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
      * @deprecated _scrollDispatcher parameter to become required.
      * @breaking-change 11.0.0
      */
-    _scrollDispatcher?: ScrollDispatcher | undefined);
+    _scrollDispatcher?: ScrollDispatcher | undefined, config?: DragDropConfig);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -139,6 +140,8 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _setupInputSyncSubscription;
     /** Handles events from the underlying DropListRef. */
     private _handleEvents;
+    /** Assigns the default input values based on a provided config object. */
+    private _assignDefaults;
     static ngAcceptInputType_disabled: BooleanInput;
     static ngAcceptInputType_sortingDisabled: BooleanInput;
     static ngAcceptInputType_autoScrollDisabled: BooleanInput;
