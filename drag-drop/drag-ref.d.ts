@@ -37,11 +37,6 @@ interface DragHelperTemplate<T = any> {
     viewContainer: ViewContainerRef;
     context: T;
 }
-/** Point on the page or within an element. */
-export interface Point {
-    x: number;
-    y: number;
-}
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  */
@@ -362,5 +357,10 @@ export declare class DragRef<T = any> {
     private _containInsideBoundaryOnResize;
     /** Gets the drag start delay, based on the event type. */
     private _getDragStartDelay;
+}
+/** Point on the page or within an element. */
+export interface Point {
+    x: number;
+    y: number;
 }
 export {};
