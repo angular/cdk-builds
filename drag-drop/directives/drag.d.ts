@@ -13,18 +13,15 @@ import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDra
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
-import { DragRef, DragRefConfig, Point } from '../drag-ref';
+import { DragRef, Point } from '../drag-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
+import { DragDropConfig, DragStartDelay, DragAxis } from './config';
 /**
  * Injection token that is used to provide a CdkDropList instance to CdkDrag.
  * Used for avoiding circular imports.
  */
 export declare const CDK_DROP_LIST: InjectionToken<CdkDropList>;
-/** Injection token that can be used to configure the behavior of `CdkDrag`. */
-export declare const CDK_DRAG_CONFIG: InjectionToken<DragRefConfig>;
-/** @docs-private */
-export declare function CDK_DRAG_CONFIG_FACTORY(): DragRefConfig;
 /** Element that can be moved inside a CdkDropList container. */
 export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Element that the draggable is attached to. */
@@ -48,7 +45,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Arbitrary data to attach to this drag instance. */
     data: T;
     /** Locks the position of the dragged element along the specified axis. */
-    lockAxis: 'x' | 'y';
+    lockAxis: DragAxis;
     /**
      * Selector that will be used to determine the root draggable element, starting from
      * the `cdkDrag` element and going up the DOM. Passing an alternate root element is useful
@@ -66,10 +63,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * Amount of milliseconds to wait after the user has put their
      * pointer down before starting to drag the element.
      */
-    dragStartDelay: number | {
-        touch: number;
-        mouse: number;
-    };
+    dragStartDelay: DragStartDelay;
     /**
      * Sets the position of a `CdkDrag` that is outside of a drop container.
      * Can be used to restore the element's position for a returning user.
@@ -112,7 +106,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragRefConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef);
+    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -140,5 +134,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _syncInputs;
     /** Handles the events from the underlying `DragRef`. */
     private _handleEvents;
+    /** Assigns the default input values based on a provided config object. */
+    private _assignDefaults;
     static ngAcceptInputType_disabled: BooleanInput;
 }
