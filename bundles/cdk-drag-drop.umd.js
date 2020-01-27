@@ -2460,7 +2460,9 @@
                 }), 
                 // Listen if the state of any of the handles changes.
                 operators.switchMap(function (handles) {
-                    return rxjs.merge.apply(void 0, tslib.__spread(handles.map(function (item) { return item._stateChanges; })));
+                    return rxjs.merge.apply(void 0, tslib.__spread(handles.map(function (item) {
+                        return item._stateChanges.pipe(operators.startWith(item));
+                    })));
                 }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
                     // Enabled/disable the handle that changed in the DragRef.
                     var dragRef = _this._dragRef;

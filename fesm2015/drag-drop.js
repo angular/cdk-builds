@@ -4333,7 +4333,9 @@ class CdkDrag {
                  * @param {?} item
                  * @return {?}
                  */
-                item => item._stateChanges)))));
+                item => {
+                    return item._stateChanges.pipe(startWith(item));
+                })))));
             })), takeUntil(this._destroyed)).subscribe((/**
              * @param {?} handleInstance
              * @return {?}

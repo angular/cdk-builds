@@ -2464,7 +2464,9 @@ var CdkDrag = /** @class */ (function () {
             }), 
             // Listen if the state of any of the handles changes.
             switchMap(function (handles) {
-                return merge.apply(void 0, __spread(handles.map(function (item) { return item._stateChanges; })));
+                return merge.apply(void 0, __spread(handles.map(function (item) {
+                    return item._stateChanges.pipe(startWith(item));
+                })));
             }), takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
                 // Enabled/disable the handle that changed in the DragRef.
                 var dragRef = _this._dragRef;
