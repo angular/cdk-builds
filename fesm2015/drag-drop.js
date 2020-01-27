@@ -2155,8 +2155,15 @@ class DropListRef {
      * @return {?}
      */
     start() {
+        /** @type {?} */
+        const styles = coerceElement(this.element).style;
         this.beforeStarted.next();
         this._isDragging = true;
+        // We need to disable scroll snapping while the user is dragging, because it breaks automatic
+        // scrolling. The browser seems to round the value based on the snapping points which means
+        // that we can't increment/decrement the scroll position.
+        this._initialScrollSnap = styles.msScrollSnapType || ((/** @type {?} */ (styles))).scrollSnapType || '';
+        ((/** @type {?} */ (styles))).scrollSnapType = styles.msScrollSnapType = 'none';
         this._cacheItems();
         this._siblings.forEach((/**
          * @param {?} sibling
@@ -2574,6 +2581,9 @@ class DropListRef {
      */
     _reset() {
         this._isDragging = false;
+        /** @type {?} */
+        const styles = coerceElement(this.element).style;
+        ((/** @type {?} */ (styles))).scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach((/**
          * @param {?} item
@@ -3063,6 +3073,12 @@ if (false) {
      * @private
      */
     DropListRef.prototype._scrollableElements;
+    /**
+     * Initial value for the element's `scroll-snap-type` style.
+     * @type {?}
+     * @private
+     */
+    DropListRef.prototype._initialScrollSnap;
     /**
      * Starts the interval that'll auto-scroll the element.
      * @type {?}

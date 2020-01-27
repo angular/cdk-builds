@@ -1227,8 +1227,14 @@
         /** Starts dragging an item. */
         DropListRef.prototype.start = function () {
             var _this = this;
+            var styles = coercion.coerceElement(this.element).style;
             this.beforeStarted.next();
             this._isDragging = true;
+            // We need to disable scroll snapping while the user is dragging, because it breaks automatic
+            // scrolling. The browser seems to round the value based on the snapping points which means
+            // that we can't increment/decrement the scroll position.
+            this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
+            styles.scrollSnapType = styles.msScrollSnapType = 'none';
             this._cacheItems();
             this._siblings.forEach(function (sibling) { return sibling._startReceiving(_this); });
             this._viewportScrollSubscription.unsubscribe();
@@ -1544,6 +1550,8 @@
         DropListRef.prototype._reset = function () {
             var _this = this;
             this._isDragging = false;
+            var styles = coercion.coerceElement(this.element).style;
+            styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
             // TODO(crisbeto): may have to wait for the animations to finish.
             this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
             this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });

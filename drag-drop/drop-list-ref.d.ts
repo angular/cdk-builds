@@ -125,6 +125,8 @@ export declare class DropListRef<T = any> {
     private _document;
     /** Elements that can be scrolled while the user is dragging. */
     private _scrollableElements;
+    /** Initial value for the element's `scroll-snap-type` style. */
+    private _initialScrollSnap;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
