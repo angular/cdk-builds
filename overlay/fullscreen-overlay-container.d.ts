@@ -7,6 +7,7 @@
  */
 import { OnDestroy } from '@angular/core';
 import { OverlayContainer } from './overlay-container';
+import { Platform } from '@angular/cdk/platform';
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
  * Fullscreen mode
@@ -17,7 +18,12 @@ import { OverlayContainer } from './overlay-container';
 export declare class FullscreenOverlayContainer extends OverlayContainer implements OnDestroy {
     private _fullScreenEventName;
     private _fullScreenListener;
-    constructor(_document: any);
+    constructor(_document: any, 
+    /**
+     * @deprecated `platform` parameter to become required.
+     * @breaking-change 10.0.0
+     */
+    platform?: Platform);
     ngOnDestroy(): void;
     protected _createContainer(): void;
     private _adjustParentForFullscreenChange;

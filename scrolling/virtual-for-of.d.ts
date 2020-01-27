@@ -46,16 +46,18 @@ export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, On
     /** Subject that emits when a new DataSource instance is given. */
     private _dataSourceChanges;
     /** The DataSource to display. */
-    cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
+    get cdkVirtualForOf(): DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
+    set cdkVirtualForOf(value: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined);
     _cdkVirtualForOf: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
     /**
      * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
      * the item and produces a value to be used as the item's identity when tracking changes.
      */
-    cdkVirtualForTrackBy: TrackByFunction<T> | undefined;
+    get cdkVirtualForTrackBy(): TrackByFunction<T> | undefined;
+    set cdkVirtualForTrackBy(fn: TrackByFunction<T> | undefined);
     private _cdkVirtualForTrackBy;
     /** The template used to stamp out new elements. */
-    cdkVirtualForTemplate: TemplateRef<CdkVirtualForOfContext<T>>;
+    set cdkVirtualForTemplate(value: TemplateRef<CdkVirtualForOfContext<T>>);
     /**
      * The size of the cache used to store templates that are not being used for re-use later.
      * Setting the cache size to `0` will disable caching. Defaults to 20 templates.

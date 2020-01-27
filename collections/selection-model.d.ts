@@ -21,7 +21,7 @@ export declare class SelectionModel<T> {
     /** Cache for the array value of the selected items. */
     private _selected;
     /** Selected values. */
-    readonly selected: T[];
+    get selected(): T[];
     /** Event emitted when the value has changed. */
     changed: Subject<SelectionChange<T>>;
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);

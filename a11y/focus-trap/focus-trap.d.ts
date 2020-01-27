@@ -26,7 +26,8 @@ export declare class FocusTrap {
     protected startAnchorListener: () => boolean;
     protected endAnchorListener: () => boolean;
     /** Whether the focus trap is active. */
-    enabled: boolean;
+    get enabled(): boolean;
+    set enabled(value: boolean);
     private _enabled;
     constructor(_element: HTMLElement, _checker: InteractivityChecker, _ngZone: NgZone, _document: Document, deferAnchors?: boolean);
     /** Destroys the focus trap by cleaning up the anchors. */
@@ -124,12 +125,14 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoChec
     /** Previously focused element to restore focus to upon destroy when using autoCapture. */
     private _previouslyFocusedElement;
     /** Whether the focus trap is active. */
-    enabled: boolean;
+    get enabled(): boolean;
+    set enabled(value: boolean);
     /**
      * Whether the directive should automatially move focus into the trapped region upon
      * initialization and return focus to the previous activeElement upon destruction.
      */
-    autoCapture: boolean;
+    get autoCapture(): boolean;
+    set autoCapture(value: boolean);
     private _autoCapture;
     constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, _document: any);
     ngOnDestroy(): void;

@@ -52,15 +52,15 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     _keydownEventSubscriptions: number;
     constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined);
     /** The overlay's HTML element */
-    readonly overlayElement: HTMLElement;
+    get overlayElement(): HTMLElement;
     /** The overlay's backdrop HTML element. */
-    readonly backdropElement: HTMLElement | null;
+    get backdropElement(): HTMLElement | null;
     /**
      * Wrapper around the panel element. Can be used for advanced
      * positioning where a wrapper with specific styling is
      * required around the overlay pane.
      */
-    readonly hostElement: HTMLElement;
+    get hostElement(): HTMLElement;
     attach<T>(portal: ComponentPortal<T>): ComponentRef<T>;
     attach<T>(portal: TemplatePortal<T>): EmbeddedViewRef<T>;
     attach(portal: any): any;

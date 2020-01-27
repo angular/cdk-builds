@@ -16,7 +16,8 @@ export declare class CdkDragHandle implements OnDestroy {
     /** Emits when the state of the handle has changed. */
     _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
     private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;

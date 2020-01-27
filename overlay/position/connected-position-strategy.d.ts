@@ -33,14 +33,14 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     private _overlayRef;
     private _direction;
     /** Whether the we're dealing with an RTL context */
-    readonly _isRtl: boolean;
+    get _isRtl(): boolean;
     /** Ordered list of preferred positions, from most to least desirable. */
     _preferredPositions: ConnectionPositionPair[];
     /** Emits an event when the connection point changes. */
-    readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
+    get onPositionChange(): Observable<ConnectedOverlayPositionChange>;
     constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef<HTMLElement>, viewportRuler: ViewportRuler, document: Document, platform: Platform, overlayContainer: OverlayContainer);
     /** Ordered list of preferred positions, from most to least desirable. */
-    readonly positions: ConnectionPositionPair[];
+    get positions(): ConnectionPositionPair[];
     /** Attach this position strategy to an overlay. */
     attach(overlayRef: OverlayReference): void;
     /** Disposes all resources used by the position strategy. */

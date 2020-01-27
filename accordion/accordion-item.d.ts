@@ -34,10 +34,12 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** The unique AccordionItem id. */
     readonly id: string;
     /** Whether the AccordionItem is expanded. */
-    expanded: any;
+    get expanded(): any;
+    set expanded(expanded: any);
     private _expanded;
     /** Whether the AccordionItem is disabled. */
-    disabled: any;
+    get disabled(): any;
+    set disabled(disabled: any);
     private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;

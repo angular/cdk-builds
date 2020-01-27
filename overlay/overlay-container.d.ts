@@ -6,11 +6,22 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, OnDestroy, Optional } from '@angular/core';
+import { Platform } from '@angular/cdk/platform';
 /** Container inside which all overlays will render. */
 export declare class OverlayContainer implements OnDestroy {
+    /**
+     * @deprecated `platform` parameter to become required.
+     * @breaking-change 10.0.0
+     */
+    protected _platform?: Platform | undefined;
     protected _containerElement: HTMLElement;
     protected _document: Document;
-    constructor(document: any);
+    constructor(document: any, 
+    /**
+     * @deprecated `platform` parameter to become required.
+     * @breaking-change 10.0.0
+     */
+    _platform?: Platform | undefined);
     ngOnDestroy(): void;
     /**
      * This method returns the overlay container element. It will lazily

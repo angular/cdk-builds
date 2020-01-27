@@ -6,9 +6,9 @@ import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, Optional,
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
+import { Platform } from '@angular/cdk/platform';
 import { Subject, Subscription, Observable, merge } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { Platform } from '@angular/cdk/platform';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
 /**
@@ -596,14 +596,27 @@ var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Whether we're in a testing environment.
+ * TODO(crisbeto): remove this once we have an overlay testing module.
+ */
+var isTestEnvironment = typeof window !== 'undefined' && !!window &&
+    !!(window.__karma__ || window.jasmine);
 /** Container inside which all overlays will render. */
 var OverlayContainer = /** @class */ (function () {
-    function OverlayContainer(document) {
+    function OverlayContainer(document, 
+    /**
+     * @deprecated `platform` parameter to become required.
+     * @breaking-change 10.0.0
+     */
+    _platform) {
+        this._platform = _platform;
         this._document = document;
     }
     OverlayContainer.prototype.ngOnDestroy = function () {
-        if (this._containerElement && this._containerElement.parentNode) {
-            this._containerElement.parentNode.removeChild(this._containerElement);
+        var container = this._containerElement;
+        if (container && container.parentNode) {
+            container.parentNode.removeChild(container);
         }
     };
     /**
@@ -623,14 +636,35 @@ var OverlayContainer = /** @class */ (function () {
      * with the 'cdk-overlay-container' class on the document body.
      */
     OverlayContainer.prototype._createContainer = function () {
+        // @breaking-change 10.0.0 Remove null check for `_platform`.
+        var isBrowser = this._platform ? this._platform.isBrowser : typeof window !== 'undefined';
         var containerClass = 'cdk-overlay-container';
-        var previousContainers = this._document.getElementsByClassName(containerClass);
-        // Remove any old containers. This can happen when transitioning from the server to the client.
-        for (var i = 0; i < previousContainers.length; i++) {
-            previousContainers[i].parentNode.removeChild(previousContainers[i]);
+        if (isBrowser || isTestEnvironment) {
+            var oppositePlatformContainers = this._document.querySelectorAll("." + containerClass + "[platform=\"server\"], " +
+                ("." + containerClass + "[platform=\"test\"]"));
+            // Remove any old containers from the opposite platform.
+            // This can happen when transitioning from the server to the client.
+            for (var i = 0; i < oppositePlatformContainers.length; i++) {
+                oppositePlatformContainers[i].parentNode.removeChild(oppositePlatformContainers[i]);
+            }
         }
         var container = this._document.createElement('div');
         container.classList.add(containerClass);
+        // A long time ago we kept adding new overlay containers whenever a new app was instantiated,
+        // but at some point we added logic which clears the duplicate ones in order to avoid leaks.
+        // The new logic was a little too aggressive since it was breaking some legitimate use cases.
+        // To mitigate the problem we made it so that only containers from a different platform are
+        // cleared, but the side-effect was that people started depending on the overly-aggressive
+        // logic to clean up their tests for them. Until we can introduce an overlay-specific testing
+        // module which does the cleanup, we try to detect that we're in a test environment and we
+        // always clear the container. See #17006.
+        // TODO(crisbeto): remove the test environment check once we have an overlay testing module.
+        if (isTestEnvironment) {
+            container.setAttribute('platform', 'test');
+        }
+        else if (!isBrowser) {
+            container.setAttribute('platform', 'server');
+        }
         this._document.body.appendChild(container);
         this._containerElement = container;
     };
@@ -639,9 +673,10 @@ var OverlayContainer = /** @class */ (function () {
     ];
     /** @nocollapse */
     OverlayContainer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
     ]; };
-    OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT)); }, token: OverlayContainer, providedIn: "root" });
+    OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
 }());
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -1849,7 +1884,7 @@ var FlexibleConnectedPositionStrategy = /** @class */ (function () {
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayY = function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the
         // preferred position has changed since the last `apply`.
-        var styles = { top: null, bottom: null };
+        var styles = { top: '', bottom: '' };
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
@@ -1877,7 +1912,7 @@ var FlexibleConnectedPositionStrategy = /** @class */ (function () {
     FlexibleConnectedPositionStrategy.prototype._getExactOverlayX = function (position, originPoint, scrollPosition) {
         // Reset any existing styles. This is necessary in case the preferred position has
         // changed since the last `apply`.
-        var styles = { left: null, right: null };
+        var styles = { left: '', right: '' };
         var overlayPoint = this._getOverlayPoint(originPoint, this._overlayRect, position);
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
@@ -2977,8 +3012,13 @@ var OVERLAY_PROVIDERS = [
  */
 var FullscreenOverlayContainer = /** @class */ (function (_super) {
     __extends(FullscreenOverlayContainer, _super);
-    function FullscreenOverlayContainer(_document) {
-        return _super.call(this, _document) || this;
+    function FullscreenOverlayContainer(_document, 
+    /**
+     * @deprecated `platform` parameter to become required.
+     * @breaking-change 10.0.0
+     */
+    platform) {
+        return _super.call(this, _document, platform) || this;
     }
     FullscreenOverlayContainer.prototype.ngOnDestroy = function () {
         _super.prototype.ngOnDestroy.call(this);
@@ -3045,9 +3085,10 @@ var FullscreenOverlayContainer = /** @class */ (function (_super) {
     ];
     /** @nocollapse */
     FullscreenOverlayContainer.ctorParameters = function () { return [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
     ]; };
-    FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 }(OverlayContainer));
 

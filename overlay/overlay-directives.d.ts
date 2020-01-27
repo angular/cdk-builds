@@ -57,9 +57,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
      */
     positionStrategy: FlexibleConnectedPositionStrategy;
     /** The offset in pixels for the overlay connection point on the x-axis */
-    offsetX: number;
+    get offsetX(): number;
+    set offsetX(offsetX: number);
     /** The offset in pixels for the overlay connection point on the y-axis */
-    offsetY: number;
+    get offsetY(): number;
+    set offsetY(offsetY: number);
     /** The width of the overlay panel. */
     width: number | string;
     /** The height of the overlay panel. */
@@ -81,15 +83,20 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** CSS selector which to set the transform origin. */
     transformOriginSelector: string;
     /** Whether or not the overlay should attach a backdrop. */
-    hasBackdrop: any;
+    get hasBackdrop(): any;
+    set hasBackdrop(value: any);
     /** Whether or not the overlay should be locked when scrolling. */
-    lockPosition: any;
+    get lockPosition(): any;
+    set lockPosition(value: any);
     /** Whether the overlay's width and height can be constrained to fit within the viewport. */
-    flexibleDimensions: boolean;
+    get flexibleDimensions(): boolean;
+    set flexibleDimensions(value: boolean);
     /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
-    growAfterOpen: boolean;
+    get growAfterOpen(): boolean;
+    set growAfterOpen(value: boolean);
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
-    push: boolean;
+    get push(): boolean;
+    set push(value: boolean);
     /** Event emitted when the backdrop is clicked. */
     backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
@@ -102,9 +109,9 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     overlayKeydown: EventEmitter<KeyboardEvent>;
     constructor(_overlay: Overlay, templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef, scrollStrategyFactory: any, _dir: Directionality);
     /** The associated overlay reference. */
-    readonly overlayRef: OverlayRef;
+    get overlayRef(): OverlayRef;
     /** The element's layout direction. */
-    readonly dir: Direction;
+    get dir(): Direction;
     ngOnDestroy(): void;
     ngOnChanges(changes: SimpleChanges): void;
     /** Creates an overlay */

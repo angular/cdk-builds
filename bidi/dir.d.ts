@@ -23,9 +23,10 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     /** Event emitted when the direction changes. */
     change: EventEmitter<Direction>;
     /** @docs-private */
-    dir: Direction;
+    get dir(): Direction;
+    set dir(value: Direction);
     /** Current layout direction of the element. */
-    readonly value: Direction;
+    get value(): Direction;
     /** Initialize once default value has been set. */
     ngAfterContentInit(): void;
     ngOnDestroy(): void;

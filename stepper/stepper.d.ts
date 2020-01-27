@@ -87,17 +87,21 @@ export declare class CdkStep implements OnChanges {
     /** State of the step. */
     state: StepState;
     /** Whether the user can return to this step once it has been marked as completed. */
-    editable: boolean;
+    get editable(): boolean;
+    set editable(value: boolean);
     private _editable;
     /** Whether the completion of step is optional. */
-    optional: boolean;
+    get optional(): boolean;
+    set optional(value: boolean);
     private _optional;
     /** Whether step is marked as completed. */
-    completed: boolean;
+    get completed(): boolean;
+    set completed(value: boolean);
     _completedOverride: boolean | null;
     private _getDefaultCompleted;
     /** Whether step has an error. */
-    hasError: boolean;
+    get hasError(): boolean;
+    set hasError(value: boolean);
     private _customError;
     private _getDefaultError;
     /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
@@ -132,7 +136,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
      */
     _steps: QueryList<CdkStep>;
     /** The list of step components that the stepper is holding. */
-    readonly steps: QueryList<CdkStep>;
+    get steps(): QueryList<CdkStep>;
     /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.
@@ -140,13 +144,16 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
      */
     _stepHeader: QueryList<FocusableOption>;
     /** Whether the validity of previous steps should be checked or not. */
-    linear: boolean;
+    get linear(): boolean;
+    set linear(value: boolean);
     private _linear;
     /** The index of the selected step. */
-    selectedIndex: number;
+    get selectedIndex(): number;
+    set selectedIndex(index: number);
     private _selectedIndex;
     /** The step that is selected. */
-    selected: CdkStep;
+    get selected(): CdkStep;
+    set selected(step: CdkStep);
     /** Event emitted when the selected step has changed. */
     selectionChange: EventEmitter<StepperSelectionEvent>;
     /** Used to track unique ID for each stepper component. */

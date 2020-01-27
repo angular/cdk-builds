@@ -46,14 +46,16 @@ declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
  */
 export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick {
     /** Unique name for this column. */
-    name: string;
+    get name(): string;
+    set name(name: string);
     _name: string;
     /**
      * Whether this column should be sticky positioned on the end of the row. Should make sure
      * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
      * has been changed.
      */
-    stickyEnd: boolean;
+    get stickyEnd(): boolean;
+    set stickyEnd(v: boolean);
     _stickyEnd: boolean;
     /** @docs-private */
     cell: CdkCellDef;

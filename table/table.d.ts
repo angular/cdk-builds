@@ -193,7 +193,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * relative to the function to know if a row should be added/removed/moved.
      * Accepts a function that takes two parameters, `index` and `item`.
      */
-    trackBy: TrackByFunction<T>;
+    get trackBy(): TrackByFunction<T>;
+    set trackBy(fn: TrackByFunction<T>);
     private _trackByFn;
     /**
      * The table's source of data, which can be provided in three ways (in order of complexity):
@@ -215,7 +216,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table will call the DataSource's `disconnect` function (may be useful for cleaning up any
      * subscriptions registered during the connect process).
      */
-    dataSource: CdkTableDataSourceInput<T>;
+    get dataSource(): CdkTableDataSourceInput<T>;
+    set dataSource(dataSource: CdkTableDataSourceInput<T>);
     private _dataSource;
     /**
      * Whether to allow multiple rows per data object by evaluating which rows evaluate their 'when'
@@ -223,7 +225,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * dataobject will render the first row that evaluates its when predicate to true, in the order
      * defined in the table, or otherwise the default row which does not have a when predicate.
      */
-    multiTemplateDataRows: boolean;
+    get multiTemplateDataRows(): boolean;
+    set multiTemplateDataRows(v: boolean);
     _multiTemplateDataRows: boolean;
     /**
      * Stream containing the latest information on what rows are being displayed on screen.

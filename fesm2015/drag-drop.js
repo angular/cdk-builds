@@ -574,8 +574,9 @@ class DragRef {
         if (this.isDragging()) {
             // Since we move out the element to the end of the body while it's being
             // dragged, we have to make sure that it's removed if it gets destroyed.
-            removeElement(this._rootElement);
+            removeNode(this._rootElement);
         }
+        removeNode(this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
         this._dragDropRegistry.removeDragItem(this);
@@ -593,7 +594,7 @@ class DragRef {
         this._dropContainer = undefined;
         this._resizeSubscription.unsubscribe();
         this._boundaryElement = this._rootElement = this._placeholderTemplate =
-            this._previewTemplate = this._nextSibling = (/** @type {?} */ (null));
+            this._previewTemplate = this._anchor = (/** @type {?} */ (null));
     }
     /**
      * Checks whether the element is currently being dragged.
@@ -701,7 +702,7 @@ class DragRef {
      */
     _destroyPreview() {
         if (this._preview) {
-            removeElement(this._preview);
+            removeNode(this._preview);
         }
         if (this._previewRef) {
             this._previewRef.destroy();
@@ -715,7 +716,7 @@ class DragRef {
      */
     _destroyPlaceholder() {
         if (this._placeholder) {
-            removeElement(this._placeholder);
+            removeNode(this._placeholder);
         }
         if (this._placeholderRef) {
             this._placeholderRef.destroy();
@@ -793,18 +794,21 @@ class DragRef {
         if (this._dropContainer) {
             /** @type {?} */
             const element = this._rootElement;
-            // Grab the `nextSibling` before the preview and placeholder
-            // have been created so we don't get the preview by accident.
-            this._nextSibling = element.nextSibling;
+            /** @type {?} */
+            const parent = (/** @type {?} */ (element.parentNode));
             /** @type {?} */
             const preview = this._preview = this._createPreviewElement();
             /** @type {?} */
             const placeholder = this._placeholder = this._createPlaceholderElement();
+            /** @type {?} */
+            const anchor = this._anchor = this._anchor || this._document.createComment('');
+            // Insert an anchor node so that we can restore the element's position in the DOM.
+            parent.insertBefore(anchor, element);
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
             element.style.display = 'none';
-            this._document.body.appendChild((/** @type {?} */ (element.parentNode)).replaceChild(placeholder, element));
+            this._document.body.appendChild(parent.replaceChild(placeholder, element));
             getPreviewInsertionPoint(this._document).appendChild(preview);
             this._dropContainer.start();
         }
@@ -893,12 +897,7 @@ class DragRef {
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
         // while moving the existing elements in all other cases.
         this._rootElement.style.display = '';
-        if (this._nextSibling) {
-            (/** @type {?} */ (this._nextSibling.parentNode)).insertBefore(this._rootElement, this._nextSibling);
-        }
-        else {
-            coerceElement(this._initialContainer.element).appendChild(this._rootElement);
-        }
+        (/** @type {?} */ (this._anchor.parentNode)).replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
         this._boundaryRect = this._previewRect = undefined;
@@ -1404,12 +1403,12 @@ if (false) {
      */
     DragRef.prototype._pickupPositionOnPage;
     /**
-     * Reference to the element that comes after the draggable in the DOM, at the time
-     * it was picked up. Used for restoring its initial position when it's dropped.
+     * Anchor node used to save the place in the DOM where the element was
+     * picked up so that it can be restored at the end of the drag sequence.
      * @type {?}
      * @private
      */
-    DragRef.prototype._nextSibling;
+    DragRef.prototype._anchor;
     /**
      * CSS `transform` applied to the element when it isn't being dragged. We need a
      * passive transform in order for the dragged element to retain its new position
@@ -1770,13 +1769,13 @@ function clamp(value, min, max) {
     return Math.max(min, Math.min(max, value));
 }
 /**
- * Helper to remove an element from the DOM and to do all the necessary null checks.
- * @param {?} element Element to be removed.
+ * Helper to remove a node from the DOM and to do all the necessary null checks.
+ * @param {?} node Node to be removed.
  * @return {?}
  */
-function removeElement(element) {
-    if (element && element.parentNode) {
-        element.parentNode.removeChild(element);
+function removeNode(node) {
+    if (node && node.parentNode) {
+        node.parentNode.removeChild(node);
     }
 }
 /**
@@ -4249,7 +4248,9 @@ class CdkDrag {
                  * @param {?} item
                  * @return {?}
                  */
-                item => item._stateChanges)))));
+                item => {
+                    return item._stateChanges.pipe(startWith(item));
+                })))));
             })), takeUntil(this._destroyed)).subscribe((/**
              * @param {?} handleInstance
              * @return {?}
