@@ -6,7 +6,6 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Observable } from 'rxjs';
-import { HasTaskState, Zone, ZoneDelegate } from './zone-types';
 /** Current state of the intercepted zone. */
 export interface TaskState {
     /** Whether the zone is stable (i.e. no microtasks and macrotasks). */
