@@ -346,8 +346,9 @@
             if (this.isDragging()) {
                 // Since we move out the element to the end of the body while it's being
                 // dragged, we have to make sure that it's removed if it gets destroyed.
-                removeElement(this._rootElement);
+                removeNode(this._rootElement);
             }
+            removeNode(this._anchor);
             this._destroyPreview();
             this._destroyPlaceholder();
             this._dragDropRegistry.removeDragItem(this);
@@ -365,7 +366,7 @@
             this._dropContainer = undefined;
             this._resizeSubscription.unsubscribe();
             this._boundaryElement = this._rootElement = this._placeholderTemplate =
-                this._previewTemplate = this._nextSibling = null;
+                this._previewTemplate = this._anchor = null;
         };
         /** Checks whether the element is currently being dragged. */
         DragRef.prototype.isDragging = function () {
@@ -438,7 +439,7 @@
         /** Destroys the preview element and its ViewRef. */
         DragRef.prototype._destroyPreview = function () {
             if (this._preview) {
-                removeElement(this._preview);
+                removeNode(this._preview);
             }
             if (this._previewRef) {
                 this._previewRef.destroy();
@@ -448,7 +449,7 @@
         /** Destroys the placeholder element and its ViewRef. */
         DragRef.prototype._destroyPlaceholder = function () {
             if (this._placeholder) {
-                removeElement(this._placeholder);
+                removeNode(this._placeholder);
             }
             if (this._placeholderRef) {
                 this._placeholderRef.destroy();
@@ -513,16 +514,17 @@
             this._toggleNativeDragInteractions();
             if (this._dropContainer) {
                 var element = this._rootElement;
-                // Grab the `nextSibling` before the preview and placeholder
-                // have been created so we don't get the preview by accident.
-                this._nextSibling = element.nextSibling;
+                var parent_1 = element.parentNode;
                 var preview = this._preview = this._createPreviewElement();
                 var placeholder = this._placeholder = this._createPlaceholderElement();
+                var anchor = this._anchor = this._anchor || this._document.createComment('');
+                // Insert an anchor node so that we can restore the element's position in the DOM.
+                parent_1.insertBefore(anchor, element);
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 element.style.display = 'none';
-                this._document.body.appendChild(element.parentNode.replaceChild(placeholder, element));
+                this._document.body.appendChild(parent_1.replaceChild(placeholder, element));
                 getPreviewInsertionPoint(this._document).appendChild(preview);
                 this._dropContainer.start();
             }
@@ -597,12 +599,7 @@
             // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
             // while moving the existing elements in all other cases.
             this._rootElement.style.display = '';
-            if (this._nextSibling) {
-                this._nextSibling.parentNode.insertBefore(this._rootElement, this._nextSibling);
-            }
-            else {
-                coercion.coerceElement(this._initialContainer.element).appendChild(this._rootElement);
-            }
+            this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
             this._destroyPreview();
             this._destroyPlaceholder();
             this._boundaryRect = this._previewRect = undefined;
@@ -990,12 +987,12 @@
         return Math.max(min, Math.min(max, value));
     }
     /**
-     * Helper to remove an element from the DOM and to do all the necessary null checks.
-     * @param element Element to be removed.
+     * Helper to remove a node from the DOM and to do all the necessary null checks.
+     * @param node Node to be removed.
      */
-    function removeElement(element) {
-        if (element && element.parentNode) {
-            element.parentNode.removeChild(element);
+    function removeNode(node) {
+        if (node && node.parentNode) {
+            node.parentNode.removeChild(node);
         }
     }
     /** Determines whether an event is a touch event. */

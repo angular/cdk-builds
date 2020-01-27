@@ -64,10 +64,10 @@ export declare class DragRef<T = any> {
     /** Coordinates on the page at which the user picked up the element. */
     private _pickupPositionOnPage;
     /**
-     * Reference to the element that comes after the draggable in the DOM, at the time
-     * it was picked up. Used for restoring its initial position when it's dropped.
+     * Anchor node used to save the place in the DOM where the element was
+     * picked up so that it can be restored at the end of the drag sequence.
      */
-    private _nextSibling;
+    private _anchor;
     /**
      * CSS `transform` applied to the element when it isn't being dragged. We need a
      * passive transform in order for the dragged element to retain its new position
