@@ -34,7 +34,7 @@ var CdkPortal = /** @class */ (function (_super) {
 export { CdkPortal };
 /**
  * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0-sha-9cfc66d5e
+ * @breaking-change 9.0.0-sha-b24b9e31c
  */
 var TemplatePortalDirective = /** @class */ (function (_super) {
     __extends(TemplatePortalDirective, _super);
@@ -66,7 +66,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef, 
     /**
      * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0-sha-9cfc66d5e
+     * @breaking-change 9.0.0-sha-b24b9e31c
      */
     _document) {
         var _this = _super.call(this) || this;
@@ -83,7 +83,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
          * @breaking-change 10.0.0
          */
         _this.attachDomPortal = function (portal) {
-            // @breaking-change 9.0.0-sha-9cfc66d5e Remove check and error once the
+            // @breaking-change 9.0.0-sha-b24b9e31c Remove check and error once the
             // `_document` constructor parameter is required.
             if (!_this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
@@ -219,7 +219,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
 export { CdkPortalOutlet };
 /**
  * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-9cfc66d5e
+ * @breaking-change 9.0.0-sha-b24b9e31c
  */
 var PortalHostDirective = /** @class */ (function (_super) {
     __extends(PortalHostDirective, _super);
