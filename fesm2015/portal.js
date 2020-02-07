@@ -418,7 +418,7 @@ if (false) {
 }
 /**
  * @deprecated Use `BasePortalOutlet` instead.
- * \@breaking-change 9.0.0-sha-474c83888
+ * \@breaking-change 9.0.0-sha-59fce287a
  * @abstract
  */
 class BasePortalHost extends BasePortalOutlet {
@@ -622,7 +622,7 @@ if (false) {
 }
 /**
  * @deprecated Use `DomPortalOutlet` instead.
- * \@breaking-change 9.0.0-sha-474c83888
+ * \@breaking-change 9.0.0-sha-59fce287a
  */
 class DomPortalHost extends DomPortalOutlet {
 }
@@ -658,7 +658,7 @@ CdkPortal.ctorParameters = () => [
 ];
 /**
  * @deprecated Use `CdkPortal` instead.
- * \@breaking-change 9.0.0-sha-474c83888
+ * \@breaking-change 9.0.0-sha-59fce287a
  */
 class TemplatePortalDirective extends CdkPortal {
 }
@@ -688,7 +688,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
     constructor(_componentFactoryResolver, _viewContainerRef, 
     /**
      * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0-sha-474c83888
+     * @breaking-change 9.0.0-sha-59fce287a
      */
     _document) {
         super();
@@ -713,7 +713,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
          * @return {?}
          */
         (portal) => {
-            // @breaking-change 9.0.0-sha-474c83888 Remove check and error once the
+            // @breaking-change 9.0.0-sha-59fce287a Remove check and error once the
             // `_document` constructor parameter is required.
             if (!this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
@@ -920,7 +920,7 @@ if (false) {
 }
 /**
  * @deprecated Use `CdkPortalOutlet` instead.
- * \@breaking-change 9.0.0-sha-474c83888
+ * \@breaking-change 9.0.0-sha-59fce287a
  */
 class PortalHostDirective extends CdkPortalOutlet {
 }
