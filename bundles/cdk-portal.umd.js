@@ -243,7 +243,7 @@
     }());
     /**
      * @deprecated Use `BasePortalOutlet` instead.
-     * @breaking-change 9.0.0-sha-2497e50fb
+     * @breaking-change 9.0.0-sha-f2f78a0f1
      */
     var BasePortalHost = /** @class */ (function (_super) {
         tslib.__extends(BasePortalHost, _super);
@@ -382,7 +382,7 @@
     }(BasePortalOutlet));
     /**
      * @deprecated Use `DomPortalOutlet` instead.
-     * @breaking-change 9.0.0-sha-2497e50fb
+     * @breaking-change 9.0.0-sha-f2f78a0f1
      */
     var DomPortalHost = /** @class */ (function (_super) {
         tslib.__extends(DomPortalHost, _super);
@@ -423,7 +423,7 @@
     }(TemplatePortal));
     /**
      * @deprecated Use `CdkPortal` instead.
-     * @breaking-change 9.0.0-sha-2497e50fb
+     * @breaking-change 9.0.0-sha-f2f78a0f1
      */
     var TemplatePortalDirective = /** @class */ (function (_super) {
         tslib.__extends(TemplatePortalDirective, _super);
@@ -454,7 +454,7 @@
         function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef, 
         /**
          * @deprecated `_document` parameter to be made required.
-         * @breaking-change 9.0.0-sha-2497e50fb
+         * @breaking-change 9.0.0-sha-f2f78a0f1
          */
         _document) {
             var _this = _super.call(this) || this;
@@ -471,7 +471,7 @@
              * @breaking-change 10.0.0
              */
             _this.attachDomPortal = function (portal) {
-                // @breaking-change 9.0.0-sha-2497e50fb Remove check and error once the
+                // @breaking-change 9.0.0-sha-f2f78a0f1 Remove check and error once the
                 // `_document` constructor parameter is required.
                 if (!_this._document) {
                     throw Error('Cannot attach DOM portal without _document constructor parameter');
@@ -606,7 +606,7 @@
     }(BasePortalOutlet));
     /**
      * @deprecated Use `CdkPortalOutlet` instead.
-     * @breaking-change 9.0.0-sha-2497e50fb
+     * @breaking-change 9.0.0-sha-f2f78a0f1
      */
     var PortalHostDirective = /** @class */ (function (_super) {
         tslib.__extends(PortalHostDirective, _super);
