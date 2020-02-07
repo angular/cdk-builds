@@ -747,7 +747,7 @@ if (false) {
     /**
      * The list of step components that the stepper is holding.
      * @deprecated use `steps` instead
-     * \@breaking-change 9.0.0-sha-f2f78a0f1 remove this property
+     * \@breaking-change 9.0.0-sha-a58c72591 remove this property
      * @type {?}
      */
     CdkStepper.prototype._steps;
