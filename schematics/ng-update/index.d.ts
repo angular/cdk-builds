@@ -13,5 +13,5 @@ export declare function updateToV6(): Rule;
 export declare function updateToV7(): Rule;
 /** Entry point for the migration schematics with target of Angular CDK 8.0.0 */
 export declare function updateToV8(): Rule;
-/** Entry point for the migration schematics with target of Angular CDK 9.0.0-sha-fc910613c */
+/** Entry point for the migration schematics with target of Angular CDK 9.0.0-sha-ed77ec9ca */
 export declare function updateToV9(): Rule;
