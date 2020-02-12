@@ -130,7 +130,7 @@ var DomPortalOutlet = /** @class */ (function (_super) {
 export { DomPortalOutlet };
 /**
  * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-9c137720f
+ * @breaking-change 9.0.0-sha-048fdb2ff
  */
 var DomPortalHost = /** @class */ (function (_super) {
     __extends(DomPortalHost, _super);

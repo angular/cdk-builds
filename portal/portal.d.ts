@@ -92,7 +92,7 @@ export interface PortalOutlet {
 }
 /**
  * @deprecated Use `PortalOutlet` instead.
- * @breaking-change 9.0.0-sha-9c137720f
+ * @breaking-change 9.0.0-sha-048fdb2ff
  */
 export declare type PortalHost = PortalOutlet;
 /**
@@ -124,7 +124,7 @@ export declare abstract class BasePortalOutlet implements PortalOutlet {
 }
 /**
  * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0-sha-9c137720f
+ * @breaking-change 9.0.0-sha-048fdb2ff
  */
 export declare abstract class BasePortalHost extends BasePortalOutlet {
 }
