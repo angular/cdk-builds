@@ -16,7 +16,7 @@ export declare class CdkPortal extends TemplatePortal {
 }
 /**
  * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0-sha-fd1593df1
+ * @breaking-change 9.0.0-sha-9c137720f
  */
 export declare class TemplatePortalDirective extends CdkPortal {
 }
@@ -42,7 +42,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     constructor(_componentFactoryResolver: ComponentFactoryResolver, _viewContainerRef: ViewContainerRef, 
     /**
      * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0-sha-fd1593df1
+     * @breaking-change 9.0.0-sha-9c137720f
      */
     _document?: any);
     /** Portal associated with the Portal outlet. */
@@ -80,7 +80,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
 }
 /**
  * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-fd1593df1
+ * @breaking-change 9.0.0-sha-9c137720f
  */
 export declare class PortalHostDirective extends CdkPortalOutlet {
 }
