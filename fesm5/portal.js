@@ -241,7 +241,7 @@ var BasePortalOutlet = /** @class */ (function () {
 }());
 /**
  * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0-sha-fdae14ad5
+ * @breaking-change 9.0.0-sha-e902a4f8e
  */
 var BasePortalHost = /** @class */ (function (_super) {
     __extends(BasePortalHost, _super);
@@ -380,7 +380,7 @@ var DomPortalOutlet = /** @class */ (function (_super) {
 }(BasePortalOutlet));
 /**
  * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-fdae14ad5
+ * @breaking-change 9.0.0-sha-e902a4f8e
  */
 var DomPortalHost = /** @class */ (function (_super) {
     __extends(DomPortalHost, _super);
@@ -421,7 +421,7 @@ var CdkPortal = /** @class */ (function (_super) {
 }(TemplatePortal));
 /**
  * @deprecated Use `CdkPortal` instead.
- * @breaking-change 9.0.0-sha-fdae14ad5
+ * @breaking-change 9.0.0-sha-e902a4f8e
  */
 var TemplatePortalDirective = /** @class */ (function (_super) {
     __extends(TemplatePortalDirective, _super);
@@ -452,7 +452,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
     function CdkPortalOutlet(_componentFactoryResolver, _viewContainerRef, 
     /**
      * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0-sha-fdae14ad5
+     * @breaking-change 9.0.0-sha-e902a4f8e
      */
     _document) {
         var _this = _super.call(this) || this;
@@ -469,7 +469,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
          * @breaking-change 10.0.0
          */
         _this.attachDomPortal = function (portal) {
-            // @breaking-change 9.0.0-sha-fdae14ad5 Remove check and error once the
+            // @breaking-change 9.0.0-sha-e902a4f8e Remove check and error once the
             // `_document` constructor parameter is required.
             if (!_this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
@@ -604,7 +604,7 @@ var CdkPortalOutlet = /** @class */ (function (_super) {
 }(BasePortalOutlet));
 /**
  * @deprecated Use `CdkPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-fdae14ad5
+ * @breaking-change 9.0.0-sha-e902a4f8e
  */
 var PortalHostDirective = /** @class */ (function (_super) {
     __extends(PortalHostDirective, _super);

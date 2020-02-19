@@ -132,7 +132,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     /**
      * The list of step components that the stepper is holding.
      * @deprecated use `steps` instead
-     * @breaking-change 9.0.0-sha-fdae14ad5 remove this property
+     * @breaking-change 9.0.0-sha-e902a4f8e remove this property
      */
     _steps: QueryList<CdkStep>;
     /** The list of step components that the stepper is holding. */
