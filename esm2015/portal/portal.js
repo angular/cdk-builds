@@ -362,7 +362,7 @@ if (false) {
 }
 /**
  * @deprecated Use `BasePortalOutlet` instead.
- * \@breaking-change 9.0.0-sha-c07adea6d
+ * \@breaking-change 9.0.0-sha-0590af6b1
  * @abstract
  */
 export class BasePortalHost extends BasePortalOutlet {
