@@ -428,7 +428,7 @@
     exports.addExportToModule = addExportToModule;
     /**
      * Custom function to insert an entryComponent into NgModule. It also imports it.
-     * @deprecated - Since version 9.0.0-sha-a0aee924f with Ivy, entryComponents is no longer necessary.
+     * @deprecated - Since version 9.0.0-sha-fdae14ad5 with Ivy, entryComponents is no longer necessary.
      */
     function addEntryComponentToModule(source, modulePath, classifiedName, importPath) {
         return addSymbolToNgModuleMetadata(source, modulePath, 'entryComponents', classifiedName, importPath);

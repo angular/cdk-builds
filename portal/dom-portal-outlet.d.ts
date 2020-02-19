@@ -54,7 +54,7 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
 }
 /**
  * @deprecated Use `DomPortalOutlet` instead.
- * @breaking-change 9.0.0-sha-a0aee924f
+ * @breaking-change 9.0.0-sha-fdae14ad5
  */
 export declare class DomPortalHost extends DomPortalOutlet {
 }
