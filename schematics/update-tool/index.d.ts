@@ -8,12 +8,13 @@
 /// <amd-module name="@angular/cdk/schematics/update-tool" />
 import { logging } from '@angular-devkit/core';
 import { Tree } from '@angular-devkit/schematics';
+import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import { MigrationRule } from './migration-rule';
 import { TargetVersion } from './target-version';
 export declare type Constructor<T> = (new (...args: any[]) => T);
 export declare type MigrationRuleType<T> = Constructor<MigrationRule<T>> & {
     [m in keyof typeof MigrationRule]: (typeof MigrationRule)[m];
 };
-export declare function runMigrationRules<T>(tree: Tree, logger: logging.LoggerApi, tsconfigPath: string, isTestTarget: boolean, targetVersion: TargetVersion, ruleTypes: MigrationRuleType<T>[], upgradeData: T, analyzedFiles: Set<string>): {
+export declare function runMigrationRules<T>(project: WorkspaceProject, tree: Tree, logger: logging.LoggerApi, tsconfigPath: string, isTestTarget: boolean, targetVersion: TargetVersion, ruleTypes: MigrationRuleType<T>[], upgradeData: T, analyzedFiles: Set<string>): {
     hasFailures: boolean;
 };

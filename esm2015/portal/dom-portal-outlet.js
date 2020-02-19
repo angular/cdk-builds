@@ -204,7 +204,7 @@ if (false) {
 }
 /**
  * @deprecated Use `DomPortalOutlet` instead.
- * \@breaking-change 9.0.0-sha-d8b726d3c
+ * \@breaking-change 9.0.0-sha-c07adea6d
  */
 export class DomPortalHost extends DomPortalOutlet {
 }

@@ -8,6 +8,7 @@
 /// <amd-module name="@angular/cdk/schematics/update-tool/migration-rule" />
 import { logging } from '@angular-devkit/core';
 import { SchematicContext, Tree, UpdateRecorder } from '@angular-devkit/schematics';
+import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import * as ts from 'typescript';
 import { ResolvedResource } from './component-resource-collector';
 import { TargetVersion } from './target-version';
@@ -22,6 +23,8 @@ export declare type PostMigrationAction = void | {
     runPackageManager: boolean;
 };
 export declare class MigrationRule<T> {
+    /** Workspace project the migration rule runs against. */
+    project: WorkspaceProject;
     /** TypeScript program for the migration. */
     program: ts.Program;
     /** TypeChecker instance for the analysis program. */
@@ -47,6 +50,8 @@ export declare class MigrationRule<T> {
     /** Whether the migration rule is enabled or not. */
     ruleEnabled: boolean;
     constructor(
+    /** Workspace project the migration rule runs against. */
+    project: WorkspaceProject, 
     /** TypeScript program for the migration. */
     program: ts.Program, 
     /** TypeChecker instance for the analysis program. */

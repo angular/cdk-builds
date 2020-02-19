@@ -194,7 +194,7 @@ var BasePortalOutlet = /** @class */ (function () {
 export { BasePortalOutlet };
 /**
  * @deprecated Use `BasePortalOutlet` instead.
- * @breaking-change 9.0.0-sha-d8b726d3c
+ * @breaking-change 9.0.0-sha-c07adea6d
  */
 var BasePortalHost = /** @class */ (function (_super) {
     __extends(BasePortalHost, _super);
