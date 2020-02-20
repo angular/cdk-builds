@@ -1354,15 +1354,16 @@
          */
         EventListenerFocusTrapInertStrategy.prototype._trapFocus = function (focusTrap, event) {
             var target = event.target;
+            var focusTrapRoot = focusTrap._element;
             // Don't refocus if target was in an overlay, because the overlay might be associated
             // with an element inside the FocusTrap, ex. mat-select.
-            if (!focusTrap._element.contains(target) &&
-                closest(target, 'div.cdk-overlay-pane') === null) {
+            if (!focusTrapRoot.contains(target) && closest(target, 'div.cdk-overlay-pane') === null) {
                 // Some legacy FocusTrap usages have logic that focuses some element on the page
                 // just before FocusTrap is destroyed. For backwards compatibility, wait
                 // to be sure FocusTrap is still enabled before refocusing.
                 setTimeout(function () {
-                    if (focusTrap.enabled) {
+                    // Check whether focus wasn't put back into the focus trap while the timeout was pending.
+                    if (focusTrap.enabled && !focusTrapRoot.contains(focusTrap._document.activeElement)) {
                         focusTrap.focusFirstTabbableElement();
                     }
                 });
