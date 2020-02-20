@@ -88,6 +88,8 @@ export declare class DragRef<T = any> {
     private _hasMoved;
     /** Drop container in which the DragRef resided when dragging began. */
     private _initialContainer;
+    /** Index at which the item started in its initial container. */
+    private _initialIndex;
     /** Cached scroll position on the page when the element was picked up. */
     private _scrollPosition;
     /** Emits when the item is being moved. */
@@ -228,6 +230,11 @@ export declare class DragRef<T = any> {
     getPlaceholderElement(): HTMLElement;
     /** Returns the root draggable element. */
     getRootElement(): HTMLElement;
+    /**
+     * Gets the currently-visible element that represents the drag item.
+     * While dragging this is the placeholder, otherwise it's the root element.
+     */
+    getVisibleElement(): HTMLElement;
     /** Registers the handles that can be used to drag the element. */
     withHandles(handles: (HTMLElement | ElementRef<HTMLElement>)[]): this;
     /**

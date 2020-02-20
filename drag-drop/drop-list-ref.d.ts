@@ -139,8 +139,10 @@ export declare class DropListRef<T = any> {
      * @param item Item that was moved into the container.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
+     * @param index Index at which the item entered. If omitted, the container will try to figure it
+     *   out automatically.
      */
-    enter(item: DragRef, pointerX: number, pointerY: number): void;
+    enter(item: DragRef, pointerX: number, pointerY: number, index?: number): void;
     /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param item Item that was dragged out.
@@ -154,8 +156,11 @@ export declare class DropListRef<T = any> {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
+     * @param previousIndex Index of the item when dragging started.
+     *
+     * @breaking-change 11.0.0 `previousIndex` parameter to become required.
      */
-    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point): void;
+    drop(item: DragRef, currentIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, previousIndex?: number): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.

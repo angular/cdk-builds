@@ -283,6 +283,13 @@
         DragRef.prototype.getRootElement = function () {
             return this._rootElement;
         };
+        /**
+         * Gets the currently-visible element that represents the drag item.
+         * While dragging this is the placeholder, otherwise it's the root element.
+         */
+        DragRef.prototype.getVisibleElement = function () {
+            return this.isDragging() ? this.getPlaceholderElement() : this.getRootElement();
+        };
         /** Registers the handles that can be used to drag the element. */
         DragRef.prototype.withHandles = function (handles) {
             this._handles = handles.map(function (handle) { return coercion.coerceElement(handle); });
@@ -527,6 +534,11 @@
                 this._document.body.appendChild(parent_1.replaceChild(placeholder, element));
                 getPreviewInsertionPoint(this._document).appendChild(preview);
                 this._dropContainer.start();
+                this._initialContainer = this._dropContainer;
+                this._initialIndex = this._dropContainer.getItemIndex(this);
+            }
+            else {
+                this._initialContainer = this._initialIndex = undefined;
             }
         };
         /**
@@ -568,7 +580,6 @@
                 rootElement.style.webkitTapHighlightColor = 'transparent';
             }
             this._hasStartedDragging = this._hasMoved = false;
-            this._initialContainer = this._dropContainer;
             // Avoid multiple subscriptions and memory leaks when multi touch
             // (isDragging check above isn't enough because of possible temporal and/or dimensional delays)
             this._removeSubscriptions();
@@ -614,13 +625,13 @@
                 _this.dropped.next({
                     item: _this,
                     currentIndex: currentIndex,
-                    previousIndex: _this._initialContainer.getItemIndex(_this),
+                    previousIndex: _this._initialIndex,
                     container: container,
                     previousContainer: _this._initialContainer,
                     isPointerOverContainer: isPointerOverContainer,
                     distance: distance
                 });
-                container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer, distance);
+                container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer, distance, _this._initialIndex);
                 _this._dropContainer = _this._initialContainer;
             });
         };
@@ -648,7 +659,10 @@
                     _this._dropContainer.exit(_this);
                     // Notify the new container that the item has entered.
                     _this._dropContainer = newContainer;
-                    _this._dropContainer.enter(_this, x, y);
+                    _this._dropContainer.enter(_this, x, y, 
+                    // If we're re-entering the initial container,
+                    // put item the into its starting index to begin with.
+                    newContainer === _this._initialContainer ? _this._initialIndex : undefined);
                     _this.entered.next({
                         item: _this,
                         container: newContainer,
@@ -1242,16 +1256,24 @@
          * @param item Item that was moved into the container.
          * @param pointerX Position of the item along the X axis.
          * @param pointerY Position of the item along the Y axis.
+         * @param index Index at which the item entered. If omitted, the container will try to figure it
+         *   out automatically.
          */
-        DropListRef.prototype.enter = function (item, pointerX, pointerY) {
+        DropListRef.prototype.enter = function (item, pointerX, pointerY, index) {
             this.start();
             // If sorting is disabled, we want the item to return to its starting
             // position if the user is returning it to its initial container.
-            var newIndex = this.sortingDisabled ? this._draggables.indexOf(item) : -1;
-            if (newIndex === -1) {
-                // We use the coordinates of where the item entered the drop
-                // zone to figure out at which index it should be inserted.
-                newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+            var newIndex;
+            if (index == null) {
+                newIndex = this.sortingDisabled ? this._draggables.indexOf(item) : -1;
+                if (newIndex === -1) {
+                    // We use the coordinates of where the item entered the drop
+                    // zone to figure out at which index it should be inserted.
+                    newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
+                }
+            }
+            else {
+                newIndex = index;
             }
             var activeDraggables = this._activeDraggables;
             var currentIndex = activeDraggables.indexOf(item);
@@ -1302,13 +1324,19 @@
          * @param isPointerOverContainer Whether the user's pointer was over the
          *    container when the item was dropped.
          * @param distance Distance the user has dragged since the start of the dragging sequence.
+         * @param previousIndex Index of the item when dragging started.
+         *
+         * @breaking-change 11.0.0 `previousIndex` parameter to become required.
          */
-        DropListRef.prototype.drop = function (item, currentIndex, previousContainer, isPointerOverContainer, distance) {
+        DropListRef.prototype.drop = function (item, currentIndex, previousContainer, isPointerOverContainer, distance, previousIndex) {
             this._reset();
-            this.dropped.next({
-                item: item,
+            // @breaking-change 11.0.0 Remove this fallback logic once `previousIndex` is a required param.
+            if (previousIndex == null) {
+                previousIndex = previousContainer.getItemIndex(item);
+            }
+            this.dropped.next({ item: item,
                 currentIndex: currentIndex,
-                previousIndex: previousContainer.getItemIndex(item),
+                previousIndex: previousIndex,
                 container: this,
                 previousContainer: previousContainer,
                 isPointerOverContainer: isPointerOverContainer,
@@ -1529,14 +1557,9 @@
         };
         /** Refreshes the position cache of the items and sibling containers. */
         DropListRef.prototype._cacheItemPositions = function () {
-            var _this = this;
             var isHorizontal = this._orientation === 'horizontal';
             this._itemPositions = this._activeDraggables.map(function (drag) {
-                var elementToMeasure = _this._dragDropRegistry.isDragging(drag) ?
-                    // If the element is being dragged, we have to measure the
-                    // placeholder, because the element is hidden.
-                    drag.getPlaceholderElement() :
-                    drag.getRootElement();
+                var elementToMeasure = drag.getVisibleElement();
                 return { drag: drag, offset: 0, clientRect: getMutableClientRect(elementToMeasure) };
             }).sort(function (a, b) {
                 return isHorizontal ? a.clientRect.left - b.clientRect.left :
@@ -2412,6 +2435,7 @@
             // assigning the drop container both from here and the list.
             if (dropContainer) {
                 this._dragRef._withDropContainer(dropContainer._dropListRef);
+                dropContainer.addItem(this);
             }
             this._syncInputs(this._dragRef);
             this._handleEvents(this._dragRef);
@@ -2498,6 +2522,9 @@
             }
         };
         CdkDrag.prototype.ngOnDestroy = function () {
+            if (this.dropContainer) {
+                this.dropContainer.removeItem(this);
+            }
             this._destroyed.next();
             this._destroyed.complete();
             this._dragRef.dispose();
@@ -2786,6 +2813,14 @@
             this.exited = new i0.EventEmitter();
             /** Emits as the user is swapping items while actively dragging. */
             this.sorted = new i0.EventEmitter();
+            /**
+             * Keeps track of the items that are registered with this container. Historically we used to
+             * do this with a `ContentChildren` query, however queries don't handle transplanted views very
+             * well which means that we can't handle cases like dragging the headers of a `mat-table`
+             * correctly. What we do instead is to have the items register themselves with the container
+             * and then we sort them based on their position in the DOM.
+             */
+            this._unsortedItems = new Set();
             this._dropListRef = dragDrop.createDropList(element);
             this._dropListRef.data = this;
             if (config) {
@@ -2817,7 +2852,6 @@
             configurable: true
         });
         CdkDropList.prototype.ngAfterContentInit = function () {
-            var _this = this;
             // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
             if (this._scrollDispatcher) {
                 var scrollableParents = this._scrollDispatcher
@@ -2825,15 +2859,29 @@
                     .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
                 this._dropListRef.withScrollableParents(scrollableParents);
             }
-            this._draggables.changes
-                .pipe(operators.startWith(this._draggables), operators.takeUntil(this._destroyed))
-                .subscribe(function (items) {
-                _this._dropListRef.withItems(items.reduce(function (filteredItems, drag) {
-                    if (drag.dropContainer === _this) {
-                        filteredItems.push(drag._dragRef);
-                    }
-                    return filteredItems;
-                }, []));
+        };
+        /** Registers an items with the drop list. */
+        CdkDropList.prototype.addItem = function (item) {
+            this._unsortedItems.add(item);
+            if (this._dropListRef.isDragging()) {
+                this._syncItemsWithRef();
+            }
+        };
+        /** Removes an item from the drop list. */
+        CdkDropList.prototype.removeItem = function (item) {
+            this._unsortedItems.delete(item);
+            if (this._dropListRef.isDragging()) {
+                this._syncItemsWithRef();
+            }
+        };
+        /** Gets the registered items in the list, sorted by their position in the DOM. */
+        CdkDropList.prototype.getSortedItems = function () {
+            return Array.from(this._unsortedItems).sort(function (a, b) {
+                var documentPosition = a._dragRef.getVisibleElement().compareDocumentPosition(b._dragRef.getVisibleElement());
+                // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
+                // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+                // tslint:disable-next-line:no-bitwise
+                return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
             });
         };
         CdkDropList.prototype.ngOnDestroy = function () {
@@ -2844,6 +2892,7 @@
             if (this._group) {
                 this._group._items.delete(this);
             }
+            this._unsortedItems.clear();
             this._dropListRef.dispose();
             this._destroyed.next();
             this._destroyed.complete();
@@ -2932,6 +2981,7 @@
         CdkDropList.prototype._handleEvents = function (ref) {
             var _this = this;
             ref.beforeStarted.subscribe(function () {
+                _this._syncItemsWithRef();
                 _this._changeDetectorRef.markForCheck();
             });
             ref.entered.subscribe(function (event) {
@@ -2982,6 +3032,10 @@
                 this.lockAxis = lockAxis;
             }
         };
+        /** Syncs up the registered drag items with underlying drop list ref. */
+        CdkDropList.prototype._syncItemsWithRef = function () {
+            this._dropListRef.withItems(this.getSortedItems().map(function (item) { return item._dragRef; }));
+        };
         /** Keeps track of the drop lists that are currently on the page. */
         CdkDropList._dropLists = [];
         CdkDropList.decorators = [
@@ -3013,7 +3067,6 @@
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] }
         ]; };
         CdkDropList.propDecorators = {
-            _draggables: [{ type: i0.ContentChildren, args: [CdkDrag, { descendants: true },] }],
             connectedTo: [{ type: i0.Input, args: ['cdkDropListConnectedTo',] }],
             data: [{ type: i0.Input, args: ['cdkDropListData',] }],
             orientation: [{ type: i0.Input, args: ['cdkDropListOrientation',] }],

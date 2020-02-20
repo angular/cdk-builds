@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { BooleanInput } from '@angular/cdk/coercion';
-import { ElementRef, EventEmitter, OnDestroy, QueryList, ChangeDetectorRef, AfterContentInit } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, AfterContentInit } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { CdkDrag } from './drag';
@@ -40,8 +40,6 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private static _dropLists;
     /** Reference to the underlying drop list instance. */
     _dropListRef: DropListRef<CdkDropList<T>>;
-    /** Draggable items in the container. */
-    _draggables: QueryList<CdkDrag>;
     /**
      * Other draggable containers that this container is connected to and into which the
      * container's items can be transferred. Can either be references to other drop containers,
@@ -85,6 +83,14 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     exited: EventEmitter<CdkDragExit<T>>;
     /** Emits as the user is swapping items while actively dragging. */
     sorted: EventEmitter<CdkDragSortEvent<T>>;
+    /**
+     * Keeps track of the items that are registered with this container. Historically we used to
+     * do this with a `ContentChildren` query, however queries don't handle transplanted views very
+     * well which means that we can't handle cases like dragging the headers of a `mat-table`
+     * correctly. What we do instead is to have the items register themselves with the container
+     * and then we sort them based on their position in the DOM.
+     */
+    private _unsortedItems;
     constructor(
     /** Element that the drop list is attached to. */
     element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, 
@@ -94,6 +100,12 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
      */
     _scrollDispatcher?: ScrollDispatcher | undefined, config?: DragDropConfig);
     ngAfterContentInit(): void;
+    /** Registers an items with the drop list. */
+    addItem(item: CdkDrag): void;
+    /** Removes an item from the drop list. */
+    removeItem(item: CdkDrag): void;
+    /** Gets the registered items in the list, sorted by their position in the DOM. */
+    getSortedItems(): CdkDrag[];
     ngOnDestroy(): void;
     /**
      * Starts dragging an item.
@@ -142,6 +154,8 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _handleEvents;
     /** Assigns the default input values based on a provided config object. */
     private _assignDefaults;
+    /** Syncs up the registered drag items with underlying drop list ref. */
+    private _syncItemsWithRef;
     static ngAcceptInputType_disabled: BooleanInput;
     static ngAcceptInputType_sortingDisabled: BooleanInput;
     static ngAcceptInputType_autoScrollDisabled: BooleanInput;
