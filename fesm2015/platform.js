@@ -316,9 +316,6 @@ const RtlScrollAxisType = {
      */
     INVERTED: 2,
 };
-RtlScrollAxisType[RtlScrollAxisType.NORMAL] = 'NORMAL';
-RtlScrollAxisType[RtlScrollAxisType.NEGATED] = 'NEGATED';
-RtlScrollAxisType[RtlScrollAxisType.INVERTED] = 'INVERTED';
 /**
  * Cached result of the way the browser handles the horizontal scroll axis in RTL mode.
  * @type {?}
@@ -339,9 +336,9 @@ function supportsScrollBehavior() {
 function getRtlScrollAxisType() {
     // We can't check unless we're on the browser. Just assume 'normal' if we're not.
     if (typeof document !== 'object' || !document) {
-        return RtlScrollAxisType.NORMAL;
+        return 0 /* NORMAL */;
     }
-    if (!rtlScrollAxisType) {
+    if (rtlScrollAxisType == null) {
         // Create a 1px wide scrolling container and a 2px wide content element.
         /** @type {?} */
         const scrollContainer = document.createElement('div');
@@ -362,7 +359,7 @@ function getRtlScrollAxisType() {
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
         document.body.appendChild(scrollContainer);
-        rtlScrollAxisType = RtlScrollAxisType.NORMAL;
+        rtlScrollAxisType = 0 /* NORMAL */;
         // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
         // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
         // dealing with one of the other two types of browsers.
@@ -373,7 +370,7 @@ function getRtlScrollAxisType() {
             // return 0 when we read it again.
             scrollContainer.scrollLeft = 1;
             rtlScrollAxisType =
-                scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
+                scrollContainer.scrollLeft === 0 ? 1 /* NEGATED */ : 2 /* INVERTED */;
         }
         (/** @type {?} */ (scrollContainer.parentNode)).removeChild(scrollContainer);
     }
@@ -417,5 +414,5 @@ function _supportsShadowDom() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, RtlScrollAxisType, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

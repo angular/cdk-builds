@@ -663,6 +663,7 @@ function _getDescriptionForHarnessLoaderQuery(selector) {
 // dependency on any particular testing framework here. Instead we'll just maintain this supported
 // list of keys and let individual concrete `HarnessEnvironment` classes map them to whatever key
 // representation is used in its respective testing framework.
+// tslint:disable-next-line:prefer-const-enum Seems like this causes some issues with System.js
 var TestKey;
 (function (TestKey) {
     TestKey[TestKey["BACKSPACE"] = 0] = "BACKSPACE";

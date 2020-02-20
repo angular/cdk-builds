@@ -198,25 +198,6 @@ function normalizePassiveListenerOptions(options) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** The possible ways the browser may handle the horizontal scroll axis in RTL languages. */
-var RtlScrollAxisType;
-(function (RtlScrollAxisType) {
-    /**
-     * scrollLeft is 0 when scrolled all the way left and (scrollWidth - clientWidth) when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["NORMAL"] = 0] = "NORMAL";
-    /**
-     * scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["NEGATED"] = 1] = "NEGATED";
-    /**
-     * scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and 0 when scrolled
-     * all the way right.
-     */
-    RtlScrollAxisType[RtlScrollAxisType["INVERTED"] = 2] = "INVERTED";
-})(RtlScrollAxisType || (RtlScrollAxisType = {}));
 /** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
 var rtlScrollAxisType;
 /** Check whether the browser supports scroll behaviors. */
@@ -230,9 +211,9 @@ function supportsScrollBehavior() {
 function getRtlScrollAxisType() {
     // We can't check unless we're on the browser. Just assume 'normal' if we're not.
     if (typeof document !== 'object' || !document) {
-        return RtlScrollAxisType.NORMAL;
+        return 0 /* NORMAL */;
     }
-    if (!rtlScrollAxisType) {
+    if (rtlScrollAxisType == null) {
         // Create a 1px wide scrolling container and a 2px wide content element.
         var scrollContainer = document.createElement('div');
         var containerStyle = scrollContainer.style;
@@ -249,7 +230,7 @@ function getRtlScrollAxisType() {
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
         document.body.appendChild(scrollContainer);
-        rtlScrollAxisType = RtlScrollAxisType.NORMAL;
+        rtlScrollAxisType = 0 /* NORMAL */;
         // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
         // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
         // dealing with one of the other two types of browsers.
@@ -260,7 +241,7 @@ function getRtlScrollAxisType() {
             // return 0 when we read it again.
             scrollContainer.scrollLeft = 1;
             rtlScrollAxisType =
-                scrollContainer.scrollLeft === 0 ? RtlScrollAxisType.NEGATED : RtlScrollAxisType.INVERTED;
+                scrollContainer.scrollLeft === 0 ? 1 /* NEGATED */ : 2 /* INVERTED */;
         }
         scrollContainer.parentNode.removeChild(scrollContainer);
     }
@@ -296,5 +277,5 @@ function _supportsShadowDom() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, RtlScrollAxisType, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map
