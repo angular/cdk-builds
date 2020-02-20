@@ -1983,6 +1983,11 @@ if (false) {
  */
 const boundingBoxClass = 'cdk-overlay-connected-position-bounding-box';
 /**
+ * Regex used to split a string on its CSS units.
+ * @type {?}
+ */
+const cssUnitPattern = /([A-Za-z%]+)$/;
+/**
  * A strategy for positioning overlays. Using this strategy, an overlay is given an
  * implicit position relative some origin element. The relative position is defined in terms of
  * a point on the origin element that is connected to a point on the overlay element. For example,
@@ -2546,9 +2551,9 @@ class FlexibleConnectedPositionStrategy {
             /** @type {?} */
             const availableWidth = viewport.right - point.x;
             /** @type {?} */
-            const minHeight = this._overlayRef.getConfig().minHeight;
+            const minHeight = getPixelValue(this._overlayRef.getConfig().minHeight);
             /** @type {?} */
-            const minWidth = this._overlayRef.getConfig().minWidth;
+            const minWidth = getPixelValue(this._overlayRef.getConfig().minWidth);
             /** @type {?} */
             const verticalFit = fit.fitsInViewportVertically ||
                 (minHeight != null && minHeight <= availableHeight);
@@ -3501,6 +3506,19 @@ function extendStyles(destination, source) {
         }
     }
     return destination;
+}
+/**
+ * Extracts the pixel value as a number from a value, if it's a number
+ * or a CSS pixel string (e.g. `1337px`). Otherwise returns null.
+ * @param {?} input
+ * @return {?}
+ */
+function getPixelValue(input) {
+    if (typeof input !== 'number' && input != null) {
+        const [value, units] = input.split(cssUnitPattern);
+        return (!units || units === 'px') ? parseFloat(value) : null;
+    }
+    return input || null;
 }
 
 /**

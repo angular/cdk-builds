@@ -1126,6 +1126,8 @@
     // TODO: doesn't handle both flexible width and height when it has to scroll along both axis.
     /** Class to be added to the overlay bounding box. */
     var boundingBoxClass = 'cdk-overlay-connected-position-bounding-box';
+    /** Regex used to split a string on its CSS units. */
+    var cssUnitPattern = /([A-Za-z%]+)$/;
     /**
      * A strategy for positioning overlays. Using this strategy, an overlay is given an
      * implicit position relative some origin element. The relative position is defined in terms of
@@ -1572,8 +1574,8 @@
             if (this._hasFlexibleDimensions) {
                 var availableHeight = viewport.bottom - point.y;
                 var availableWidth = viewport.right - point.x;
-                var minHeight = this._overlayRef.getConfig().minHeight;
-                var minWidth = this._overlayRef.getConfig().minWidth;
+                var minHeight = getPixelValue(this._overlayRef.getConfig().minHeight);
+                var minWidth = getPixelValue(this._overlayRef.getConfig().minWidth);
                 var verticalFit = fit.fitsInViewportVertically ||
                     (minHeight != null && minHeight <= availableHeight);
                 var horizontalFit = fit.fitsInViewportHorizontally ||
@@ -2066,6 +2068,17 @@
             }
         }
         return destination;
+    }
+    /**
+     * Extracts the pixel value as a number from a value, if it's a number
+     * or a CSS pixel string (e.g. `1337px`). Otherwise returns null.
+     */
+    function getPixelValue(input) {
+        if (typeof input !== 'number' && input != null) {
+            var _a = tslib.__read(input.split(cssUnitPattern), 2), value = _a[0], units = _a[1];
+            return (!units || units === 'px') ? parseFloat(value) : null;
+        }
+        return input || null;
     }
 
     /**
