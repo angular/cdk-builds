@@ -11,15 +11,25 @@
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @template D
+ * Configuration for creating a ConfigurableFocusTrap.
  */
 export class ConfigurableFocusTrapConfig {
     constructor() {
+        /**
+         * Whether to defer the creation of FocusTrap elements to be
+         * done manually by the user. Default is to create them
+         * automatically.
+         */
         this.defer = false;
     }
 }
 if (false) {
-    /** @type {?} */
+    /**
+     * Whether to defer the creation of FocusTrap elements to be
+     * done manually by the user. Default is to create them
+     * automatically.
+     * @type {?}
+     */
     ConfigurableFocusTrapConfig.prototype.defer;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlndXJhYmxlLWZvY3VzLXRyYXAtY29uZmlnLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9hMTF5L2ZvY3VzLXRyYXAvY29uZmlndXJhYmxlLWZvY3VzLXRyYXAtY29uZmlnLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQVFDLE1BQU0sT0FBTywyQkFBMkI7SUFBeEM7UUFDQyxVQUFLLEdBQVksS0FBSyxDQUFDO0lBQ3hCLENBQUM7Q0FBQTs7O0lBREEsNENBQXVCIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbiBleHBvcnQgY2xhc3MgQ29uZmlndXJhYmxlRm9jdXNUcmFwQ29uZmlnPEQgPSBhbnk+IHtcbiAgZGVmZXI6IGJvb2xlYW4gPSBmYWxzZTtcbiB9XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29uZmlndXJhYmxlLWZvY3VzLXRyYXAtY29uZmlnLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9hMTF5L2ZvY3VzLXRyYXAvY29uZmlndXJhYmxlLWZvY3VzLXRyYXAtY29uZmlnLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQVdBLE1BQU0sT0FBTywyQkFBMkI7SUFBeEM7Ozs7OztRQU1FLFVBQUssR0FBWSxLQUFLLENBQUM7SUFDekIsQ0FBQztDQUFBOzs7Ozs7OztJQURDLDRDQUF1QiIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG4vKipcbiAqIENvbmZpZ3VyYXRpb24gZm9yIGNyZWF0aW5nIGEgQ29uZmlndXJhYmxlRm9jdXNUcmFwLlxuICovXG5leHBvcnQgY2xhc3MgQ29uZmlndXJhYmxlRm9jdXNUcmFwQ29uZmlnIHtcbiAgLyoqXG4gICAqIFdoZXRoZXIgdG8gZGVmZXIgdGhlIGNyZWF0aW9uIG9mIEZvY3VzVHJhcCBlbGVtZW50cyB0byBiZVxuICAgKiBkb25lIG1hbnVhbGx5IGJ5IHRoZSB1c2VyLiBEZWZhdWx0IGlzIHRvIGNyZWF0ZSB0aGVtXG4gICAqIGF1dG9tYXRpY2FsbHkuXG4gICAqL1xuICBkZWZlcjogYm9vbGVhbiA9IGZhbHNlO1xufVxuIl19

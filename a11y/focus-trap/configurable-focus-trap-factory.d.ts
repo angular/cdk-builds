@@ -22,9 +22,13 @@ export declare class ConfigurableFocusTrapFactory {
     /**
      * Creates a focus-trapped region around the given element.
      * @param element The element around which focus will be trapped.
-     * @param deferCaptureElements Defers the creation of focus-capturing elements to be done
-     *     manually by the user.
+     * @param config The focus trap configuration.
      * @returns The created focus trap instance.
      */
     create(element: HTMLElement, config?: ConfigurableFocusTrapConfig): ConfigurableFocusTrap;
+    /**
+     * @deprecated Pass a config object instead of the `deferCaptureElements` flag.
+     * @breaking-change 11.0.0
+     */
+    create(element: HTMLElement, deferCaptureElements: boolean): ConfigurableFocusTrap;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "9.0.1-sha-74b344106",
+  "version": "9.0.1-sha-afb3f9a1c",
   "description": "Angular Material Component Development Kit",
   "main": "./bundles/cdk.umd.js",
   "fesm5": "./fesm5/cdk.js",

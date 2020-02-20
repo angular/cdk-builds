@@ -1379,8 +1379,16 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * Configuration for creating a ConfigurableFocusTrap.
+     */
     var ConfigurableFocusTrapConfig = /** @class */ (function () {
         function ConfigurableFocusTrapConfig() {
+            /**
+             * Whether to defer the creation of FocusTrap elements to be
+             * done manually by the user. Default is to create them
+             * automatically.
+             */
             this.defer = false;
         }
         return ConfigurableFocusTrapConfig;
@@ -1463,16 +1471,17 @@
             // TODO split up the strategies into different modules, similar to DateAdapter.
             this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
         }
-        /**
-         * Creates a focus-trapped region around the given element.
-         * @param element The element around which focus will be trapped.
-         * @param deferCaptureElements Defers the creation of focus-capturing elements to be done
-         *     manually by the user.
-         * @returns The created focus trap instance.
-         */
         ConfigurableFocusTrapFactory.prototype.create = function (element, config) {
             if (config === void 0) { config = new ConfigurableFocusTrapConfig(); }
-            return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, config);
+            var configObject;
+            if (typeof config === 'boolean') {
+                configObject = new ConfigurableFocusTrapConfig();
+                configObject.defer = config;
+            }
+            else {
+                configObject = config;
+            }
+            return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
         };
         ConfigurableFocusTrapFactory.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }

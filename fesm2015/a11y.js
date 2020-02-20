@@ -2106,15 +2106,25 @@ if (false) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * @template D
+ * Configuration for creating a ConfigurableFocusTrap.
  */
 class ConfigurableFocusTrapConfig {
     constructor() {
+        /**
+         * Whether to defer the creation of FocusTrap elements to be
+         * done manually by the user. Default is to create them
+         * automatically.
+         */
         this.defer = false;
     }
 }
 if (false) {
-    /** @type {?} */
+    /**
+     * Whether to defer the creation of FocusTrap elements to be
+     * done manually by the user. Default is to create them
+     * automatically.
+     * @type {?}
+     */
     ConfigurableFocusTrapConfig.prototype.defer;
 }
 
@@ -2261,13 +2271,21 @@ class ConfigurableFocusTrapFactory {
         this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
     }
     /**
-     * Creates a focus-trapped region around the given element.
-     * @param {?} element The element around which focus will be trapped.
+     * @param {?} element
      * @param {?=} config
-     * @return {?} The created focus trap instance.
+     * @return {?}
      */
     create(element, config = new ConfigurableFocusTrapConfig()) {
-        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, config);
+        /** @type {?} */
+        let configObject;
+        if (typeof config === 'boolean') {
+            configObject = new ConfigurableFocusTrapConfig();
+            configObject.defer = config;
+        }
+        else {
+            configObject = config;
+        }
+        return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
     }
 }
 ConfigurableFocusTrapFactory.decorators = [
