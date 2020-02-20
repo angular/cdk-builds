@@ -37,6 +37,10 @@ interface DragHelperTemplate<T = any> {
     viewContainer: ViewContainerRef;
     context: T;
 }
+/** Template that can be used to create a drag preview element. */
+interface DragPreviewTemplate<T = any> extends DragHelperTemplate<T> {
+    matchSize?: boolean;
+}
 /** Point on the page or within an element. */
 export interface Point {
     x: number;
@@ -241,7 +245,7 @@ export declare class DragRef<T = any> {
      * Registers the template that should be used for the drag preview.
      * @param template Template that from which to stamp out the preview.
      */
-    withPreviewTemplate(template: DragHelperTemplate | null): this;
+    withPreviewTemplate(template: DragPreviewTemplate | null): this;
     /**
      * Registers the template that should be used for the drag placeholder.
      * @param template Template that from which to stamp out the placeholder.

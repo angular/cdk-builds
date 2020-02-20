@@ -418,15 +418,15 @@
                     el.scrollHeight - el.clientHeight - options.bottom;
             }
             // Rewrite the right offset as a left offset.
-            if (isRtl && i1.getRtlScrollAxisType() != i1.RtlScrollAxisType.NORMAL) {
+            if (isRtl && i1.getRtlScrollAxisType() != 0 /* NORMAL */) {
                 if (options.left != null) {
                     options.right =
                         el.scrollWidth - el.clientWidth - options.left;
                 }
-                if (i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.INVERTED) {
+                if (i1.getRtlScrollAxisType() == 2 /* INVERTED */) {
                     options.left = options.right;
                 }
-                else if (i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.NEGATED) {
+                else if (i1.getRtlScrollAxisType() == 1 /* NEGATED */) {
                     options.left = options.right ? -options.right : options.right;
                 }
             }
@@ -479,7 +479,7 @@
             else if (from == 'end') {
                 from = isRtl ? LEFT : RIGHT;
             }
-            if (isRtl && i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.INVERTED) {
+            if (isRtl && i1.getRtlScrollAxisType() == 2 /* INVERTED */) {
                 // For INVERTED, scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and
                 // 0 when scrolled all the way right.
                 if (from == LEFT) {
@@ -489,7 +489,7 @@
                     return el.scrollLeft;
                 }
             }
-            else if (isRtl && i1.getRtlScrollAxisType() == i1.RtlScrollAxisType.NEGATED) {
+            else if (isRtl && i1.getRtlScrollAxisType() == 1 /* NEGATED */) {
                 // For NEGATED, scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and
                 // 0 when scrolled all the way right.
                 if (from == LEFT) {

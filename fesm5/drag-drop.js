@@ -595,10 +595,12 @@ var DragRef = /** @class */ (function () {
         if (this._boundaryElement) {
             this._boundaryRect = this._boundaryElement.getBoundingClientRect();
         }
-        // If we have a custom preview template, the element won't be visible anyway so we avoid the
-        // extra `getBoundingClientRect` calls and just move the preview next to the cursor.
-        this._pickupPositionInElement = this._previewTemplate && this._previewTemplate.template ?
-            { x: 0, y: 0 } :
+        // If we have a custom preview we can't know ahead of time how large it'll be so we position
+        // it next to the cursor. The exception is when the consumer has opted into making the preview
+        // the same size as the root element, in which case we do know the size.
+        var previewTemplate = this._previewTemplate;
+        this._pickupPositionInElement = previewTemplate && previewTemplate.template &&
+            !previewTemplate.matchSize ? { x: 0, y: 0 } :
             this._getPointerPositionInElement(referenceElement, event);
         var pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
         this._pointerDirectionDelta = { x: 0, y: 0 };
@@ -692,16 +694,18 @@ var DragRef = /** @class */ (function () {
             var viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
             preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
-            preview.style.transform =
-                getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+            if (previewConfig.matchSize) {
+                matchElementSize(preview, this._rootElement);
+            }
+            else {
+                preview.style.transform =
+                    getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+            }
         }
         else {
             var element = this._rootElement;
-            var elementRect = element.getBoundingClientRect();
             preview = deepCloneNode(element);
-            preview.style.width = elementRect.width + "px";
-            preview.style.height = elementRect.height + "px";
-            preview.style.transform = getTransform(elementRect.left, elementRect.top);
+            matchElementSize(preview, element);
         }
         extendStyles(preview.style, {
             // It's important that we disable the pointer events on the preview, because
@@ -1043,6 +1047,17 @@ function getRootNode(viewRef, _document) {
         return wrapper;
     }
     return rootNode;
+}
+/**
+ * Matches the target element's size to the source's size.
+ * @param target Element that needs to be resized.
+ * @param source Element whose size needs to be matched.
+ */
+function matchElementSize(target, source) {
+    var sourceRect = source.getBoundingClientRect();
+    target.style.width = sourceRect.width + "px";
+    target.style.height = sourceRect.height + "px";
+    target.style.transform = getTransform(sourceRect.left, sourceRect.top);
 }
 
 /**
@@ -2327,7 +2342,15 @@ var CdkDragPlaceholder = /** @class */ (function () {
 var CdkDragPreview = /** @class */ (function () {
     function CdkDragPreview(templateRef) {
         this.templateRef = templateRef;
+        this._matchSize = false;
     }
+    Object.defineProperty(CdkDragPreview.prototype, "matchSize", {
+        /** Whether the preview should preserve the same size as the item that is being dragged. */
+        get: function () { return this._matchSize; },
+        set: function (value) { this._matchSize = coerceBooleanProperty(value); },
+        enumerable: true,
+        configurable: true
+    });
     CdkDragPreview.decorators = [
         { type: Directive, args: [{
                     selector: 'ng-template[cdkDragPreview]'
@@ -2338,7 +2361,8 @@ var CdkDragPreview = /** @class */ (function () {
         { type: TemplateRef }
     ]; };
     CdkDragPreview.propDecorators = {
-        data: [{ type: Input }]
+        data: [{ type: Input }],
+        matchSize: [{ type: Input }]
     };
     return CdkDragPreview;
 }());
@@ -2574,6 +2598,7 @@ var CdkDrag = /** @class */ (function () {
                 var preview = _this._previewTemplate ? {
                     template: _this._previewTemplate.templateRef,
                     context: _this._previewTemplate.data,
+                    matchSize: _this._previewTemplate.matchSize,
                     viewContainer: _this._viewContainerRef
                 } : null;
                 ref.disabled = _this.disabled;

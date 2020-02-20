@@ -2,7 +2,7 @@ import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, ElementRef, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, merge, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
-import { Platform, getRtlScrollAxisType, RtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
+import { Platform, getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { isDataSource, ArrayDataSource } from '@angular/cdk/collections';
 
@@ -702,15 +702,15 @@ class CdkScrollable {
                 el.scrollHeight - el.clientHeight - options.bottom;
         }
         // Rewrite the right offset as a left offset.
-        if (isRtl && getRtlScrollAxisType() != RtlScrollAxisType.NORMAL) {
+        if (isRtl && getRtlScrollAxisType() != 0 /* NORMAL */) {
             if (options.left != null) {
                 ((/** @type {?} */ (options))).right =
                     el.scrollWidth - el.clientWidth - options.left;
             }
-            if (getRtlScrollAxisType() == RtlScrollAxisType.INVERTED) {
+            if (getRtlScrollAxisType() == 2 /* INVERTED */) {
                 options.left = options.right;
             }
-            else if (getRtlScrollAxisType() == RtlScrollAxisType.NEGATED) {
+            else if (getRtlScrollAxisType() == 1 /* NEGATED */) {
                 options.left = options.right ? -options.right : options.right;
             }
         }
@@ -774,7 +774,7 @@ class CdkScrollable {
         else if (from == 'end') {
             from = isRtl ? LEFT : RIGHT;
         }
-        if (isRtl && getRtlScrollAxisType() == RtlScrollAxisType.INVERTED) {
+        if (isRtl && getRtlScrollAxisType() == 2 /* INVERTED */) {
             // For INVERTED, scrollLeft is (scrollWidth - clientWidth) when scrolled all the way left and
             // 0 when scrolled all the way right.
             if (from == LEFT) {
@@ -784,7 +784,7 @@ class CdkScrollable {
                 return el.scrollLeft;
             }
         }
-        else if (isRtl && getRtlScrollAxisType() == RtlScrollAxisType.NEGATED) {
+        else if (isRtl && getRtlScrollAxisType() == 1 /* NEGATED */) {
             // For NEGATED, scrollLeft is -(scrollWidth - clientWidth) when scrolled all the way left and
             // 0 when scrolled all the way right.
             if (from == LEFT) {
