@@ -150,7 +150,9 @@
                     modifierKeys = toProtractorModifierKeys(modifiers);
                     keys = rest.map(function (k) { return typeof k === 'string' ? k.split('') : [keyMap[k]]; })
                         .reduce(function (arr, k) { return arr.concat(k); }, [])
-                        .map(function (k) { return protractor.Key.chord.apply(protractor.Key, tslib.__spread(modifierKeys, [k])); });
+                        // Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
+                        // so avoid it if no modifier keys are required.
+                        .map(function (k) { return modifierKeys.length > 0 ? protractor.Key.chord.apply(protractor.Key, tslib.__spread(modifierKeys, [k])) : k; });
                     return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, tslib.__spread(keys))];
                 });
             });
