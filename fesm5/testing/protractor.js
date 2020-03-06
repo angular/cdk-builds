@@ -148,7 +148,9 @@ var ProtractorElement = /** @class */ (function () {
                 modifierKeys = toProtractorModifierKeys(modifiers);
                 keys = rest.map(function (k) { return typeof k === 'string' ? k.split('') : [keyMap[k]]; })
                     .reduce(function (arr, k) { return arr.concat(k); }, [])
-                    .map(function (k) { return Key.chord.apply(Key, __spread(modifierKeys, [k])); });
+                    // Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
+                    // so avoid it if no modifier keys are required.
+                    .map(function (k) { return modifierKeys.length > 0 ? Key.chord.apply(Key, __spread(modifierKeys, [k])) : k; });
                 return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, __spread(keys))];
             });
         });
