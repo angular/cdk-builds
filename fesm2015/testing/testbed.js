@@ -488,25 +488,31 @@ class UnitTestElement {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** The default environment options. */
+const defaultEnvironmentOptions = {
+    queryFn: (selector, root) => root.querySelectorAll(selector)
+};
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 class TestbedHarnessEnvironment extends HarnessEnvironment {
-    constructor(rawRootElement, _fixture) {
+    constructor(rawRootElement, _fixture, options) {
         super(rawRootElement);
         this._fixture = _fixture;
+        /** Whether the environment has been destroyed. */
         this._destroyed = false;
+        this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
         this._taskState = TaskStateZoneInterceptor.setup();
         _fixture.componentRef.onDestroy(() => this._destroyed = true);
     }
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
-    static loader(fixture) {
-        return new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
+    static loader(fixture, options) {
+        return new TestbedHarnessEnvironment(fixture.nativeElement, fixture, options);
     }
     /**
      * Creates a `HarnessLoader` at the document root. This can be used if harnesses are
      * located outside of a fixture (e.g. overlays appended to the document body).
      */
-    static documentRootLoader(fixture) {
-        return new TestbedHarnessEnvironment(document.body, fixture);
+    static documentRootLoader(fixture, options) {
+        return new TestbedHarnessEnvironment(document.body, fixture, options);
     }
     /**
      * Creates an instance of the given harness type, using the fixture's root element as the
@@ -514,9 +520,9 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
      * of a fixture, as components do not have the correct selector when they are created as the root
      * of the fixture.
      */
-    static harnessForFixture(fixture, harnessType) {
+    static harnessForFixture(fixture, harnessType, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
+            const environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture, options);
             yield environment.forceStabilize();
             return environment.createComponentHarness(harnessType, fixture.nativeElement);
         });
@@ -555,12 +561,12 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         return new UnitTestElement(element, () => this.forceStabilize());
     }
     createEnvironment(element) {
-        return new TestbedHarnessEnvironment(element, this._fixture);
+        return new TestbedHarnessEnvironment(element, this._fixture, this._options);
     }
     getAllRawElements(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.forceStabilize();
-            return Array.from(this.rawRootElement.querySelectorAll(selector));
+            return Array.from(this._options.queryFn(selector, this.rawRootElement));
         });
     }
 }

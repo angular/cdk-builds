@@ -1,6 +1,6 @@
-import { __awaiter, __generator, __spread, __extends } from 'tslib';
+import { __awaiter, __generator, __spread, __extends, __assign } from 'tslib';
 import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
-import { Key, browser, element, by } from 'protractor';
+import { Key, browser, by, element } from 'protractor';
 
 /**
  * @license
@@ -229,15 +229,21 @@ var ProtractorElement = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** The default environment options. */
+var defaultEnvironmentOptions = {
+    queryFn: function (selector, root) { return root.all(by.css(selector)); }
+};
 /** A `HarnessEnvironment` implementation for Protractor. */
 var ProtractorHarnessEnvironment = /** @class */ (function (_super) {
     __extends(ProtractorHarnessEnvironment, _super);
-    function ProtractorHarnessEnvironment(rawRootElement) {
-        return _super.call(this, rawRootElement) || this;
+    function ProtractorHarnessEnvironment(rawRootElement, options) {
+        var _this = _super.call(this, rawRootElement) || this;
+        _this._options = __assign(__assign({}, defaultEnvironmentOptions), options);
+        return _this;
     }
     /** Creates a `HarnessLoader` rooted at the document root. */
-    ProtractorHarnessEnvironment.loader = function () {
-        return new ProtractorHarnessEnvironment(element(by.css('body')));
+    ProtractorHarnessEnvironment.loader = function (options) {
+        return new ProtractorHarnessEnvironment(element(by.css('body')), options);
     };
     ProtractorHarnessEnvironment.prototype.forceStabilize = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
@@ -258,21 +264,21 @@ var ProtractorHarnessEnvironment = /** @class */ (function (_super) {
         return new ProtractorElement(element);
     };
     ProtractorHarnessEnvironment.prototype.createEnvironment = function (element) {
-        return new ProtractorHarnessEnvironment(element);
+        return new ProtractorHarnessEnvironment(element, this._options);
     };
     ProtractorHarnessEnvironment.prototype.getAllRawElements = function (selector) {
         return __awaiter(this, void 0, void 0, function () {
-            var elementFinderArray, length, elements, i;
+            var elementArrayFinder, length, elements, i;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        elementFinderArray = this.rawRootElement.all(by.css(selector));
-                        return [4 /*yield*/, elementFinderArray.count()];
+                        elementArrayFinder = this._options.queryFn(selector, this.rawRootElement);
+                        return [4 /*yield*/, elementArrayFinder.count()];
                     case 1:
                         length = _a.sent();
                         elements = [];
                         for (i = 0; i < length; i++) {
-                            elements.push(elementFinderArray.get(i));
+                            elements.push(elementArrayFinder.get(i));
                         }
                         return [2 /*return*/, elements];
                 }

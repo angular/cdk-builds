@@ -1,6 +1,6 @@
 import { __awaiter } from 'tslib';
 import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
-import { Key, browser, element, by } from 'protractor';
+import { Key, browser, by, element } from 'protractor';
 
 /**
  * @license
@@ -171,14 +171,19 @@ class ProtractorElement {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** The default environment options. */
+const defaultEnvironmentOptions = {
+    queryFn: (selector, root) => root.all(by.css(selector))
+};
 /** A `HarnessEnvironment` implementation for Protractor. */
 class ProtractorHarnessEnvironment extends HarnessEnvironment {
-    constructor(rawRootElement) {
+    constructor(rawRootElement, options) {
         super(rawRootElement);
+        this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
     }
     /** Creates a `HarnessLoader` rooted at the document root. */
-    static loader() {
-        return new ProtractorHarnessEnvironment(element(by.css('body')));
+    static loader(options) {
+        return new ProtractorHarnessEnvironment(element(by.css('body')), options);
     }
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () { });
@@ -196,15 +201,15 @@ class ProtractorHarnessEnvironment extends HarnessEnvironment {
         return new ProtractorElement(element);
     }
     createEnvironment(element) {
-        return new ProtractorHarnessEnvironment(element);
+        return new ProtractorHarnessEnvironment(element, this._options);
     }
     getAllRawElements(selector) {
         return __awaiter(this, void 0, void 0, function* () {
-            const elementFinderArray = this.rawRootElement.all(by.css(selector));
-            const length = yield elementFinderArray.count();
+            const elementArrayFinder = this._options.queryFn(selector, this.rawRootElement);
+            const length = yield elementArrayFinder.count();
             const elements = [];
             for (let i = 0; i < length; i++) {
-                elements.push(elementFinderArray.get(i));
+                elements.push(elementArrayFinder.get(i));
             }
             return elements;
         });

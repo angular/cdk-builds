@@ -1,4 +1,4 @@
-import { __spread, __values, __awaiter, __generator, __extends } from 'tslib';
+import { __spread, __values, __awaiter, __generator, __extends, __assign } from 'tslib';
 import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
@@ -634,27 +634,33 @@ var UnitTestElement = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** The default environment options. */
+var defaultEnvironmentOptions = {
+    queryFn: function (selector, root) { return root.querySelectorAll(selector); }
+};
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 var TestbedHarnessEnvironment = /** @class */ (function (_super) {
     __extends(TestbedHarnessEnvironment, _super);
-    function TestbedHarnessEnvironment(rawRootElement, _fixture) {
+    function TestbedHarnessEnvironment(rawRootElement, _fixture, options) {
         var _this = _super.call(this, rawRootElement) || this;
         _this._fixture = _fixture;
+        /** Whether the environment has been destroyed. */
         _this._destroyed = false;
+        _this._options = __assign(__assign({}, defaultEnvironmentOptions), options);
         _this._taskState = TaskStateZoneInterceptor.setup();
         _fixture.componentRef.onDestroy(function () { return _this._destroyed = true; });
         return _this;
     }
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
-    TestbedHarnessEnvironment.loader = function (fixture) {
-        return new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
+    TestbedHarnessEnvironment.loader = function (fixture, options) {
+        return new TestbedHarnessEnvironment(fixture.nativeElement, fixture, options);
     };
     /**
      * Creates a `HarnessLoader` at the document root. This can be used if harnesses are
      * located outside of a fixture (e.g. overlays appended to the document body).
      */
-    TestbedHarnessEnvironment.documentRootLoader = function (fixture) {
-        return new TestbedHarnessEnvironment(document.body, fixture);
+    TestbedHarnessEnvironment.documentRootLoader = function (fixture, options) {
+        return new TestbedHarnessEnvironment(document.body, fixture, options);
     };
     /**
      * Creates an instance of the given harness type, using the fixture's root element as the
@@ -662,13 +668,13 @@ var TestbedHarnessEnvironment = /** @class */ (function (_super) {
      * of a fixture, as components do not have the correct selector when they are created as the root
      * of the fixture.
      */
-    TestbedHarnessEnvironment.harnessForFixture = function (fixture, harnessType) {
+    TestbedHarnessEnvironment.harnessForFixture = function (fixture, harnessType, options) {
         return __awaiter(this, void 0, void 0, function () {
             var environment;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture);
+                        environment = new TestbedHarnessEnvironment(fixture.nativeElement, fixture, options);
                         return [4 /*yield*/, environment.forceStabilize()];
                     case 1:
                         _a.sent();
@@ -732,7 +738,7 @@ var TestbedHarnessEnvironment = /** @class */ (function (_super) {
         return new UnitTestElement(element, function () { return _this.forceStabilize(); });
     };
     TestbedHarnessEnvironment.prototype.createEnvironment = function (element) {
-        return new TestbedHarnessEnvironment(element, this._fixture);
+        return new TestbedHarnessEnvironment(element, this._fixture, this._options);
     };
     TestbedHarnessEnvironment.prototype.getAllRawElements = function (selector) {
         return __awaiter(this, void 0, void 0, function () {
@@ -741,7 +747,7 @@ var TestbedHarnessEnvironment = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, this.forceStabilize()];
                     case 1:
                         _a.sent();
-                        return [2 /*return*/, Array.from(this.rawRootElement.querySelectorAll(selector))];
+                        return [2 /*return*/, Array.from(this._options.queryFn(selector, this.rawRootElement))];
                 }
             });
         });

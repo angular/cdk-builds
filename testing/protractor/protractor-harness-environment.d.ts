@@ -6,12 +6,19 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { HarnessEnvironment, HarnessLoader, TestElement } from '@angular/cdk/testing';
-import { ElementFinder } from 'protractor';
+import { ElementArrayFinder, ElementFinder } from 'protractor';
+/** Options to configure the environment. */
+export interface ProtractorHarnessEnvironmentOptions {
+    /** The query function used to find DOM elements. */
+    queryFn: (selector: string, root: ElementFinder) => ElementArrayFinder;
+}
 /** A `HarnessEnvironment` implementation for Protractor. */
 export declare class ProtractorHarnessEnvironment extends HarnessEnvironment<ElementFinder> {
-    protected constructor(rawRootElement: ElementFinder);
+    /** The options for this environment. */
+    private _options;
+    protected constructor(rawRootElement: ElementFinder, options?: ProtractorHarnessEnvironmentOptions);
     /** Creates a `HarnessLoader` rooted at the document root. */
-    static loader(): HarnessLoader;
+    static loader(options?: ProtractorHarnessEnvironmentOptions): HarnessLoader;
     forceStabilize(): Promise<void>;
     waitForTasksOutsideAngular(): Promise<void>;
     protected getDocumentRoot(): ElementFinder;
