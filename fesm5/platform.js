@@ -264,6 +264,16 @@ function _supportsShadowDom() {
     }
     return shadowDomIsSupported;
 }
+/** Gets the shadow root of an element, if supported and the element is inside the Shadow DOM. */
+function _getShadowRoot(element) {
+    if (_supportsShadowDom()) {
+        var rootNode = element.getRootNode ? element.getRootNode() : null;
+        if (rootNode instanceof ShadowRoot) {
+            return rootNode;
+        }
+    }
+    return null;
+}
 
 /**
  * @license
@@ -277,5 +287,5 @@ function _supportsShadowDom() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

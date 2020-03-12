@@ -2016,7 +2016,8 @@
          */
         DropListRef.prototype._getShadowRoot = function () {
             if (!this._cachedShadowRoot) {
-                this._cachedShadowRoot = getShadowRoot(coercion.coerceElement(this.element)) || this._document;
+                var shadowRoot = platform._getShadowRoot(coercion.coerceElement(this.element));
+                this._cachedShadowRoot = shadowRoot || this._document;
             }
             return this._cachedShadowRoot;
         };
@@ -2187,16 +2188,6 @@
             }
         }
         return [verticalScrollDirection, horizontalScrollDirection];
-    }
-    /** Gets the shadow root of an element, if any. */
-    function getShadowRoot(element) {
-        if (platform._supportsShadowDom()) {
-            var rootNode = element.getRootNode ? element.getRootNode() : null;
-            if (rootNode instanceof ShadowRoot) {
-                return rootNode;
-            }
-        }
-        return null;
     }
 
     /**
