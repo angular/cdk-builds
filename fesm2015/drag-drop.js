@@ -995,10 +995,10 @@ class DragRef {
                 (/** @type {?} */ (this._dropContainer)).exit(this);
                 // Notify the new container that the item has entered.
                 this._dropContainer = (/** @type {?} */ (newContainer));
-                this._dropContainer.enter(this, x, y, 
-                // If we're re-entering the initial container,
-                // put item the into its starting index to begin with.
-                newContainer === this._initialContainer ? this._initialIndex : undefined);
+                this._dropContainer.enter(this, x, y, newContainer === this._initialContainer &&
+                    // If we're re-entering the initial container and sorting is disabled,
+                    // put item the into its starting index to begin with.
+                    newContainer.sortingDisabled ? this._initialIndex : undefined);
                 this.entered.next({
                     item: this,
                     container: (/** @type {?} */ (newContainer)),
@@ -1029,6 +1029,7 @@ class DragRef {
         if (previewTemplate) {
             /** @type {?} */
             const viewRef = (/** @type {?} */ (previewConfig)).viewContainer.createEmbeddedView(previewTemplate, (/** @type {?} */ (previewConfig)).context);
+            viewRef.detectChanges();
             preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
             if ((/** @type {?} */ (previewConfig)).matchSize) {
@@ -1142,6 +1143,7 @@ class DragRef {
         let placeholder;
         if (placeholderTemplate) {
             this._placeholderRef = (/** @type {?} */ (placeholderConfig)).viewContainer.createEmbeddedView(placeholderTemplate, (/** @type {?} */ (placeholderConfig)).context);
+            this._placeholderRef.detectChanges();
             placeholder = getRootNode(this._placeholderRef, this._document);
         }
         else {

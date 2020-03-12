@@ -661,10 +661,10 @@
                     _this._dropContainer.exit(_this);
                     // Notify the new container that the item has entered.
                     _this._dropContainer = newContainer;
-                    _this._dropContainer.enter(_this, x, y, 
-                    // If we're re-entering the initial container,
-                    // put item the into its starting index to begin with.
-                    newContainer === _this._initialContainer ? _this._initialIndex : undefined);
+                    _this._dropContainer.enter(_this, x, y, newContainer === _this._initialContainer &&
+                        // If we're re-entering the initial container and sorting is disabled,
+                        // put item the into its starting index to begin with.
+                        newContainer.sortingDisabled ? _this._initialIndex : undefined);
                     _this.entered.next({
                         item: _this,
                         container: newContainer,
@@ -688,6 +688,7 @@
             var preview;
             if (previewTemplate) {
                 var viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
+                viewRef.detectChanges();
                 preview = getRootNode(viewRef, this._document);
                 this._previewRef = viewRef;
                 if (previewConfig.matchSize) {
@@ -774,6 +775,7 @@
             var placeholder;
             if (placeholderTemplate) {
                 this._placeholderRef = placeholderConfig.viewContainer.createEmbeddedView(placeholderTemplate, placeholderConfig.context);
+                this._placeholderRef.detectChanges();
                 placeholder = getRootNode(this._placeholderRef, this._document);
             }
             else {
