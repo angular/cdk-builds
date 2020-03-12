@@ -3180,7 +3180,8 @@ class FlexibleConnectedPositionStrategy {
         if (origin instanceof ElementRef) {
             return origin.nativeElement.getBoundingClientRect();
         }
-        if (origin instanceof HTMLElement) {
+        // Check for Element so SVG elements are also supported.
+        if (origin instanceof Element) {
             return origin.getBoundingClientRect();
         }
         /** @type {?} */

@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('@angular/cdk/collections')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/cdk/bidi', '@angular/cdk/collections'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.cdk.bidi, global.ng.cdk.collections));
-}(this, (function (exports, coercion, i0, rxjs, operators, i1, bidi, collections) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/cdk/bidi'), require('@angular/cdk/collections')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/common', '@angular/cdk/bidi', '@angular/cdk/collections'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.common, global.ng.cdk.bidi, global.ng.cdk.collections));
+}(this, (function (exports, coercion, i0, rxjs, operators, i1, i2, bidi, collections) { 'use strict';
 
     /**
      * @license
@@ -210,7 +210,9 @@
      * Scrollable references emit a scrolled event.
      */
     var ScrollDispatcher = /** @class */ (function () {
-        function ScrollDispatcher(_ngZone, _platform) {
+        function ScrollDispatcher(_ngZone, _platform, 
+        /** @breaking-change 11.0.0 make document required */
+        document) {
             this._ngZone = _ngZone;
             this._platform = _platform;
             /** Subject for notifying that a registered scrollable reference element has been scrolled. */
@@ -224,6 +226,7 @@
              * scroll event subscriptions.
              */
             this.scrollContainers = new Map();
+            this._document = document;
         }
         /**
          * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -312,6 +315,15 @@
             });
             return scrollingContainers;
         };
+        /** Access injected document if available or fallback to global document reference */
+        ScrollDispatcher.prototype._getDocument = function () {
+            return this._document || document;
+        };
+        /** Use defaultView of injected document if available or fallback to global window reference */
+        ScrollDispatcher.prototype._getWindow = function () {
+            var doc = this._getDocument();
+            return doc.defaultView || window;
+        };
         /** Returns true if the element is contained within the provided Scrollable. */
         ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
             var element = elementRef.nativeElement;
@@ -329,6 +341,7 @@
         ScrollDispatcher.prototype._addGlobalListener = function () {
             var _this = this;
             this._globalSubscription = this._ngZone.runOutsideAngular(function () {
+                var window = _this._getWindow();
                 return rxjs.fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
             });
         };
@@ -345,9 +358,10 @@
         /** @nocollapse */
         ScrollDispatcher.ctorParameters = function () { return [
             { type: i0.NgZone },
-            { type: i1.Platform }
+            { type: i1.Platform },
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
         return ScrollDispatcher;
     }());
 
@@ -736,10 +750,14 @@
      * @docs-private
      */
     var ViewportRuler = /** @class */ (function () {
-        function ViewportRuler(_platform, ngZone) {
+        function ViewportRuler(_platform, ngZone, 
+        /** @breaking-change 11.0.0 make document required */
+        document) {
             var _this = this;
             this._platform = _platform;
+            this._document = document;
             ngZone.runOutsideAngular(function () {
+                var window = _this._getWindow();
                 _this._change = _platform.isBrowser ?
                     rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange')) :
                     rxjs.of();
@@ -798,6 +816,8 @@
             // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
             // `document.documentElement` works consistently, where the `top` and `left` values will
             // equal negative the scroll position.
+            var document = this._getDocument();
+            var window = this._getWindow();
             var documentElement = document.documentElement;
             var documentRect = documentElement.getBoundingClientRect();
             var top = -documentRect.top || document.body.scrollTop || window.scrollY ||
@@ -814,8 +834,18 @@
             if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
             return throttleTime > 0 ? this._change.pipe(operators.auditTime(throttleTime)) : this._change;
         };
+        /** Access injected document if available or fallback to global document reference */
+        ViewportRuler.prototype._getDocument = function () {
+            return this._document || document;
+        };
+        /** Use defaultView of injected document if available or fallback to global window reference */
+        ViewportRuler.prototype._getWindow = function () {
+            var doc = this._getDocument();
+            return doc.defaultView || window;
+        };
         /** Updates the cached viewport size. */
         ViewportRuler.prototype._updateViewportSize = function () {
+            var window = this._getWindow();
             this._viewportSize = this._platform.isBrowser ?
                 { width: window.innerWidth, height: window.innerHeight } :
                 { width: 0, height: 0 };
@@ -826,9 +856,10 @@
         /** @nocollapse */
         ViewportRuler.ctorParameters = function () { return [
             { type: i1.Platform },
-            { type: i0.NgZone }
+            { type: i0.NgZone },
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: ViewportRuler, providedIn: "root" });
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
         return ViewportRuler;
     }());
 

@@ -1901,7 +1901,9 @@
     });
     /** Monitors mouse and keyboard events to determine the cause of focus events. */
     var FocusMonitor = /** @class */ (function () {
-        function FocusMonitor(_ngZone, _platform) {
+        function FocusMonitor(_ngZone, _platform, 
+        /** @breaking-change 11.0.0 make document required */
+        document) {
             var _this = this;
             this._ngZone = _ngZone;
             this._platform = _platform;
@@ -1960,6 +1962,7 @@
                 _this._windowFocused = true;
                 _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
             };
+            this._document = document;
         }
         FocusMonitor.prototype.monitor = function (element, checkChildren) {
             var _this = this;
@@ -2020,6 +2023,15 @@
         FocusMonitor.prototype.ngOnDestroy = function () {
             var _this = this;
             this._elementInfo.forEach(function (_info, element) { return _this.stopMonitoring(element); });
+        };
+        /** Access injected document if available or fallback to global document reference */
+        FocusMonitor.prototype._getDocument = function () {
+            return this._document || document;
+        };
+        /** Use defaultView of injected document if available or fallback to global window reference */
+        FocusMonitor.prototype._getWindow = function () {
+            var doc = this._getDocument();
+            return doc.defaultView || window;
         };
         FocusMonitor.prototype._toggleClass = function (element, className, shouldSet) {
             if (shouldSet) {
@@ -2149,6 +2161,8 @@
                 // Note: we listen to events in the capture phase so we
                 // can detect them even if the user stops propagation.
                 this._ngZone.runOutsideAngular(function () {
+                    var document = _this._getDocument();
+                    var window = _this._getWindow();
                     document.addEventListener('keydown', _this._documentKeydownListener, captureEventListenerOptions);
                     document.addEventListener('mousedown', _this._documentMousedownListener, captureEventListenerOptions);
                     document.addEventListener('touchstart', _this._documentTouchstartListener, captureEventListenerOptions);
@@ -2159,10 +2173,12 @@
         FocusMonitor.prototype._decrementMonitoredElementCount = function () {
             // Unregister global listeners when last element is unmonitored.
             if (!--this._monitoredElementCount) {
-                document.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
-                document.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
-                document.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
-                window.removeEventListener('focus', this._windowFocusListener);
+                var document_1 = this._getDocument();
+                var window_1 = this._getWindow();
+                document_1.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
+                document_1.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
+                document_1.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
+                window_1.removeEventListener('focus', this._windowFocusListener);
                 // Clear timeouts for all potentially pending timeouts to prevent the leaks.
                 clearTimeout(this._windowFocusTimeoutId);
                 clearTimeout(this._touchTimeoutId);
@@ -2175,9 +2191,10 @@
         /** @nocollapse */
         FocusMonitor.ctorParameters = function () { return [
             { type: i0.NgZone },
-            { type: i1.Platform }
+            { type: i1.Platform },
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform)); }, token: FocusMonitor, providedIn: "root" });
+        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: FocusMonitor, providedIn: "root" });
         return FocusMonitor;
     }());
     /**

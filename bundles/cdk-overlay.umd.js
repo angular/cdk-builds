@@ -2240,7 +2240,8 @@
             if (origin instanceof i0.ElementRef) {
                 return origin.nativeElement.getBoundingClientRect();
             }
-            if (origin instanceof HTMLElement) {
+            // Check for Element so SVG elements are also supported.
+            if (origin instanceof Element) {
                 return origin.getBoundingClientRect();
             }
             var width = origin.width || 0;
