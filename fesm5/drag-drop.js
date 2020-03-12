@@ -665,10 +665,10 @@ var DragRef = /** @class */ (function () {
                 _this._dropContainer.exit(_this);
                 // Notify the new container that the item has entered.
                 _this._dropContainer = newContainer;
-                _this._dropContainer.enter(_this, x, y, 
-                // If we're re-entering the initial container,
-                // put item the into its starting index to begin with.
-                newContainer === _this._initialContainer ? _this._initialIndex : undefined);
+                _this._dropContainer.enter(_this, x, y, newContainer === _this._initialContainer &&
+                    // If we're re-entering the initial container and sorting is disabled,
+                    // put item the into its starting index to begin with.
+                    newContainer.sortingDisabled ? _this._initialIndex : undefined);
                 _this.entered.next({
                     item: _this,
                     container: newContainer,
@@ -692,6 +692,7 @@ var DragRef = /** @class */ (function () {
         var preview;
         if (previewTemplate) {
             var viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
+            viewRef.detectChanges();
             preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
             if (previewConfig.matchSize) {
@@ -778,6 +779,7 @@ var DragRef = /** @class */ (function () {
         var placeholder;
         if (placeholderTemplate) {
             this._placeholderRef = placeholderConfig.viewContainer.createEmbeddedView(placeholderTemplate, placeholderConfig.context);
+            this._placeholderRef.detectChanges();
             placeholder = getRootNode(this._placeholderRef, this._document);
         }
         else {
@@ -1692,13 +1694,17 @@ var DropListRef = /** @class */ (function () {
      */
     DropListRef.prototype._updateAfterScroll = function (scrolledParent, newTop, newLeft) {
         var _this = this;
+        // Used when figuring out whether an element is inside the scroll parent. If the scrolled
+        // parent is the `document`, we use the `documentElement`, because IE doesn't support `contains`
+        // on the `document`.
+        var scrolledParentNode = scrolledParent === this._document ? scrolledParent.documentElement : scrolledParent;
         var scrollPosition = this._parentPositions.get(scrolledParent).scrollPosition;
         var topDifference = scrollPosition.top - newTop;
         var leftDifference = scrollPosition.left - newLeft;
         // Go through and update the cached positions of the scroll
         // parents that are inside the element that was scrolled.
         this._parentPositions.forEach(function (position, node) {
-            if (position.clientRect && scrolledParent !== node && scrolledParent.contains(node)) {
+            if (position.clientRect && scrolledParent !== node && scrolledParentNode.contains(node)) {
                 adjustClientRect(position.clientRect, topDifference, leftDifference);
             }
         });
