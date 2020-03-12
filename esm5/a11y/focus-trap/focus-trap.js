@@ -11,7 +11,7 @@ import { Directive, ElementRef, Inject, Injectable, Input, NgZone, isDevMode, } 
 import { take } from 'rxjs/operators';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 import * as i0 from "@angular/core";
-import * as i1 from "angular_material/src/cdk/a11y/interactivity-checker/interactivity-checker";
+import * as i1 from "../interactivity-checker/interactivity-checker";
 import * as i2 from "@angular/common";
 /**
  * Class that allows for trapping focus within a DOM element.

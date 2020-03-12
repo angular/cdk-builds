@@ -8,7 +8,7 @@
 import { EventEmitter, Inject, Injectable, Optional } from '@angular/core';
 import { DIR_DOCUMENT } from './dir-document-token';
 import * as i0 from "@angular/core";
-import * as i1 from "angular_material/src/cdk/bidi/dir-document-token";
+import * as i1 from "./dir-document-token";
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.

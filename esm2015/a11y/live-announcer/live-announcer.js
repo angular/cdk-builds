@@ -15,7 +15,7 @@ import { DOCUMENT } from '@angular/common';
 import { Directive, ElementRef, Inject, Injectable, Input, NgZone, Optional, } from '@angular/core';
 import { LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_DEFAULT_OPTIONS, } from './live-announcer-tokens';
 import * as i0 from "@angular/core";
-import * as i1 from "angular_material/src/cdk/a11y/live-announcer/live-announcer-tokens";
+import * as i1 from "./live-announcer-tokens";
 import * as i2 from "@angular/common";
 export class LiveAnnouncer {
     /**
