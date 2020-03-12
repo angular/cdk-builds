@@ -58,11 +58,11 @@ class PendingCopy {
         try { // Older browsers could throw if copy is not supported.
             if (textarea) {
                 /** @type {?} */
-                const currentFocus = this._document.activeElement;
+                const currentFocus = (/** @type {?} */ (this._document.activeElement));
                 textarea.select();
                 textarea.setSelectionRange(0, textarea.value.length);
                 successful = this._document.execCommand('copy');
-                if (currentFocus && currentFocus instanceof HTMLElement) {
+                if (currentFocus) {
                     currentFocus.focus();
                 }
             }
