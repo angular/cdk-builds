@@ -1694,13 +1694,17 @@ var DropListRef = /** @class */ (function () {
      */
     DropListRef.prototype._updateAfterScroll = function (scrolledParent, newTop, newLeft) {
         var _this = this;
+        // Used when figuring out whether an element is inside the scroll parent. If the scrolled
+        // parent is the `document`, we use the `documentElement`, because IE doesn't support `contains`
+        // on the `document`.
+        var scrolledParentNode = scrolledParent === this._document ? scrolledParent.documentElement : scrolledParent;
         var scrollPosition = this._parentPositions.get(scrolledParent).scrollPosition;
         var topDifference = scrollPosition.top - newTop;
         var leftDifference = scrollPosition.left - newLeft;
         // Go through and update the cached positions of the scroll
         // parents that are inside the element that was scrolled.
         this._parentPositions.forEach(function (position, node) {
-            if (position.clientRect && scrolledParent !== node && scrolledParent.contains(node)) {
+            if (position.clientRect && scrolledParent !== node && scrolledParentNode.contains(node)) {
                 adjustClientRect(position.clientRect, topDifference, leftDifference);
             }
         });

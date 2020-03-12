@@ -2777,6 +2777,11 @@ class DropListRef {
      * @return {?}
      */
     _updateAfterScroll(scrolledParent, newTop, newLeft) {
+        // Used when figuring out whether an element is inside the scroll parent. If the scrolled
+        // parent is the `document`, we use the `documentElement`, because IE doesn't support `contains`
+        // on the `document`.
+        /** @type {?} */
+        const scrolledParentNode = scrolledParent === this._document ? scrolledParent.documentElement : scrolledParent;
         /** @type {?} */
         const scrollPosition = (/** @type {?} */ (this._parentPositions.get(scrolledParent))).scrollPosition;
         /** @type {?} */
@@ -2791,7 +2796,7 @@ class DropListRef {
          * @return {?}
          */
         (position, node) => {
-            if (position.clientRect && scrolledParent !== node && scrolledParent.contains(node)) {
+            if (position.clientRect && scrolledParent !== node && scrolledParentNode.contains(node)) {
                 adjustClientRect(position.clientRect, topDifference, leftDifference);
             }
         }));

@@ -1,8 +1,9 @@
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Input, HostListener, NgModule } from '@angular/core';
+import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 /**
  * @fileoverview added by tsickle
@@ -226,8 +227,11 @@ class CdkTextareaAutosize {
      * @param {?} _elementRef
      * @param {?} _platform
      * @param {?} _ngZone
+     * @param {?=} document
      */
-    constructor(_elementRef, _platform, _ngZone) {
+    constructor(_elementRef, _platform, _ngZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
         this._elementRef = _elementRef;
         this._platform = _platform;
         this._ngZone = _ngZone;
@@ -239,6 +243,7 @@ class CdkTextareaAutosize {
          * does not have the same problem because it does not affect the textarea's scrollHeight.
          */
         this._previousMinRows = -1;
+        this._document = document;
         this._textareaElement = (/** @type {?} */ (this._elementRef.nativeElement));
     }
     /**
@@ -320,6 +325,8 @@ class CdkTextareaAutosize {
              * @return {?}
              */
             () => {
+                /** @type {?} */
+                const window = this._getWindow();
                 fromEvent(window, 'resize')
                     .pipe(auditTime(16), takeUntil(this._destroyed))
                     .subscribe((/**
@@ -468,6 +475,24 @@ class CdkTextareaAutosize {
         // no-op handler that ensures we're running change detection on input events.
     }
     /**
+     * Access injected document if available or fallback to global document reference
+     * @private
+     * @return {?}
+     */
+    _getDocument() {
+        return this._document || document;
+    }
+    /**
+     * Use defaultView of injected document if available or fallback to global window reference
+     * @private
+     * @return {?}
+     */
+    _getWindow() {
+        /** @type {?} */
+        const doc = this._getDocument();
+        return doc.defaultView || window;
+    }
+    /**
      * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
      * prevent it from scrolling to the caret position. We need to re-set the selection
      * in order for it to scroll to the proper position.
@@ -477,6 +502,8 @@ class CdkTextareaAutosize {
      */
     _scrollToCaretPosition(textarea) {
         const { selectionStart, selectionEnd } = textarea;
+        /** @type {?} */
+        const document = this._getDocument();
         // IE will throw an "Unspecified error" if we try to set the selection range after the
         // element has been removed from the DOM. Assert that the directive hasn't been destroyed
         // between the time we requested the animation frame and when it was executed.
@@ -504,7 +531,8 @@ CdkTextareaAutosize.decorators = [
 CdkTextareaAutosize.ctorParameters = () => [
     { type: ElementRef },
     { type: Platform },
-    { type: NgZone }
+    { type: NgZone },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
 ];
 CdkTextareaAutosize.propDecorators = {
     minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],
@@ -569,6 +597,12 @@ if (false) {
      * @private
      */
     CdkTextareaAutosize.prototype._cachedLineHeight;
+    /**
+     * Used to reference correct document/window
+     * @type {?}
+     * @protected
+     */
+    CdkTextareaAutosize.prototype._document;
     /**
      * @type {?}
      * @private

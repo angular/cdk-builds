@@ -2691,8 +2691,11 @@ class FocusMonitor {
     /**
      * @param {?} _ngZone
      * @param {?} _platform
+     * @param {?=} document
      */
-    constructor(_ngZone, _platform) {
+    constructor(_ngZone, _platform, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
         this._ngZone = _ngZone;
         this._platform = _platform;
         /**
@@ -2777,6 +2780,7 @@ class FocusMonitor {
              */
             () => this._windowFocused = false));
         });
+        this._document = document;
     }
     /**
      * @param {?} element
@@ -2882,6 +2886,24 @@ class FocusMonitor {
          * @return {?}
          */
         (_info, element) => this.stopMonitoring(element)));
+    }
+    /**
+     * Access injected document if available or fallback to global document reference
+     * @private
+     * @return {?}
+     */
+    _getDocument() {
+        return this._document || document;
+    }
+    /**
+     * Use defaultView of injected document if available or fallback to global window reference
+     * @private
+     * @return {?}
+     */
+    _getWindow() {
+        /** @type {?} */
+        const doc = this._getDocument();
+        return doc.defaultView || window;
     }
     /**
      * @private
@@ -3055,6 +3077,10 @@ class FocusMonitor {
              * @return {?}
              */
             () => {
+                /** @type {?} */
+                const document = this._getDocument();
+                /** @type {?} */
+                const window = this._getWindow();
                 document.addEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
                 document.addEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
                 document.addEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
@@ -3069,6 +3095,10 @@ class FocusMonitor {
     _decrementMonitoredElementCount() {
         // Unregister global listeners when last element is unmonitored.
         if (!--this._monitoredElementCount) {
+            /** @type {?} */
+            const document = this._getDocument();
+            /** @type {?} */
+            const window = this._getWindow();
             document.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
             document.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
             document.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
@@ -3086,9 +3116,10 @@ FocusMonitor.decorators = [
 /** @nocollapse */
 FocusMonitor.ctorParameters = () => [
     { type: NgZone },
-    { type: Platform }
+    { type: Platform },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
 ];
-/** @nocollapse */ FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: FocusMonitor, providedIn: "root" });
+/** @nocollapse */ FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: FocusMonitor, providedIn: "root" });
 if (false) {
     /**
      * The focus origin that the next focus event is a result of.
@@ -3172,6 +3203,12 @@ if (false) {
      * @private
      */
     FocusMonitor.prototype._windowFocusListener;
+    /**
+     * Used to reference correct document/window
+     * @type {?}
+     * @protected
+     */
+    FocusMonitor.prototype._document;
     /**
      * @type {?}
      * @private

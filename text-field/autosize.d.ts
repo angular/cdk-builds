@@ -38,7 +38,11 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     set enabled(value: boolean);
     /** Cached height of a textarea with a single row. */
     private _cachedLineHeight;
-    constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone);
+    /** Used to reference correct document/window */
+    protected _document?: Document;
+    constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document?: any);
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight(): void;
     /** Sets the maximum height of the textarea as determined by maxRows. */
@@ -65,6 +69,10 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      */
     reset(): void;
     _noopInputHandler(): void;
+    /** Access injected document if available or fallback to global document reference */
+    private _getDocument;
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    private _getWindow;
     /**
      * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
      * prevent it from scrolling to the caret position. We need to re-set the selection

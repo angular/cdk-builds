@@ -1,8 +1,9 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, ElementRef, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Inject, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
+import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, Inject, ɵɵdefineInjectable, ɵɵinject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, merge, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
+import { DOCUMENT } from '@angular/common';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { __extends, __values, __read } from 'tslib';
 import { isDataSource, ArrayDataSource } from '@angular/cdk/collections';
@@ -213,7 +214,9 @@ var DEFAULT_SCROLL_TIME = 20;
  * Scrollable references emit a scrolled event.
  */
 var ScrollDispatcher = /** @class */ (function () {
-    function ScrollDispatcher(_ngZone, _platform) {
+    function ScrollDispatcher(_ngZone, _platform, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
         this._ngZone = _ngZone;
         this._platform = _platform;
         /** Subject for notifying that a registered scrollable reference element has been scrolled. */
@@ -227,6 +230,7 @@ var ScrollDispatcher = /** @class */ (function () {
          * scroll event subscriptions.
          */
         this.scrollContainers = new Map();
+        this._document = document;
     }
     /**
      * Registers a scrollable instance with the service and listens for its scrolled events. When the
@@ -315,6 +319,15 @@ var ScrollDispatcher = /** @class */ (function () {
         });
         return scrollingContainers;
     };
+    /** Access injected document if available or fallback to global document reference */
+    ScrollDispatcher.prototype._getDocument = function () {
+        return this._document || document;
+    };
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    ScrollDispatcher.prototype._getWindow = function () {
+        var doc = this._getDocument();
+        return doc.defaultView || window;
+    };
     /** Returns true if the element is contained within the provided Scrollable. */
     ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
         var element = elementRef.nativeElement;
@@ -332,6 +345,7 @@ var ScrollDispatcher = /** @class */ (function () {
     ScrollDispatcher.prototype._addGlobalListener = function () {
         var _this = this;
         this._globalSubscription = this._ngZone.runOutsideAngular(function () {
+            var window = _this._getWindow();
             return fromEvent(window.document, 'scroll').subscribe(function () { return _this._scrolled.next(); });
         });
     };
@@ -348,9 +362,10 @@ var ScrollDispatcher = /** @class */ (function () {
     /** @nocollapse */
     ScrollDispatcher.ctorParameters = function () { return [
         { type: NgZone },
-        { type: Platform }
+        { type: Platform },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform)); }, token: ScrollDispatcher, providedIn: "root" });
+    ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
     return ScrollDispatcher;
 }());
 
@@ -542,10 +557,14 @@ var DEFAULT_RESIZE_TIME = 20;
  * @docs-private
  */
 var ViewportRuler = /** @class */ (function () {
-    function ViewportRuler(_platform, ngZone) {
+    function ViewportRuler(_platform, ngZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
         var _this = this;
         this._platform = _platform;
+        this._document = document;
         ngZone.runOutsideAngular(function () {
+            var window = _this._getWindow();
             _this._change = _platform.isBrowser ?
                 merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
                 of();
@@ -604,6 +623,8 @@ var ViewportRuler = /** @class */ (function () {
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
+        var document = this._getDocument();
+        var window = this._getWindow();
         var documentElement = document.documentElement;
         var documentRect = documentElement.getBoundingClientRect();
         var top = -documentRect.top || document.body.scrollTop || window.scrollY ||
@@ -620,8 +641,18 @@ var ViewportRuler = /** @class */ (function () {
         if (throttleTime === void 0) { throttleTime = DEFAULT_RESIZE_TIME; }
         return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
     };
+    /** Access injected document if available or fallback to global document reference */
+    ViewportRuler.prototype._getDocument = function () {
+        return this._document || document;
+    };
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    ViewportRuler.prototype._getWindow = function () {
+        var doc = this._getDocument();
+        return doc.defaultView || window;
+    };
     /** Updates the cached viewport size. */
     ViewportRuler.prototype._updateViewportSize = function () {
+        var window = this._getWindow();
         this._viewportSize = this._platform.isBrowser ?
             { width: window.innerWidth, height: window.innerHeight } :
             { width: 0, height: 0 };
@@ -632,9 +663,10 @@ var ViewportRuler = /** @class */ (function () {
     /** @nocollapse */
     ViewportRuler.ctorParameters = function () { return [
         { type: Platform },
-        { type: NgZone }
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
     ]; };
-    ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: ViewportRuler, providedIn: "root" });
+    ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone), ɵɵinject(DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
     return ViewportRuler;
 }());
 

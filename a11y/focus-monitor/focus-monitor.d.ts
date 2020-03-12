@@ -60,7 +60,11 @@ export declare class FocusMonitor implements OnDestroy {
      * Needs to be an arrow function in order to preserve the context when it gets bound.
      */
     private _windowFocusListener;
-    constructor(_ngZone: NgZone, _platform: Platform);
+    /** Used to reference correct document/window */
+    protected _document?: Document;
+    constructor(_ngZone: NgZone, _platform: Platform, 
+    /** @breaking-change 11.0.0 make document required */
+    document?: any);
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
@@ -102,6 +106,10 @@ export declare class FocusMonitor implements OnDestroy {
      */
     focusVia(element: ElementRef<HTMLElement>, origin: FocusOrigin, options?: FocusOptions): void;
     ngOnDestroy(): void;
+    /** Access injected document if available or fallback to global document reference */
+    private _getDocument;
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    private _getWindow;
     private _toggleClass;
     /**
      * Sets the focus classes on the element based on the given focus origin.

@@ -1,8 +1,9 @@
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Input, HostListener, NgModule } from '@angular/core';
+import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
+import { DOCUMENT } from '@angular/common';
 
 /**
  * @license
@@ -131,7 +132,9 @@ var CdkAutofill = /** @class */ (function () {
  */
 /** Directive to automatically resize a textarea to fit its content. */
 var CdkTextareaAutosize = /** @class */ (function () {
-    function CdkTextareaAutosize(_elementRef, _platform, _ngZone) {
+    function CdkTextareaAutosize(_elementRef, _platform, _ngZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
         this._elementRef = _elementRef;
         this._platform = _platform;
         this._ngZone = _ngZone;
@@ -143,6 +146,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
          * does not have the same problem because it does not affect the textarea's scrollHeight.
          */
         this._previousMinRows = -1;
+        this._document = document;
         this._textareaElement = this._elementRef.nativeElement;
     }
     Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
@@ -202,6 +206,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
             this._initialHeight = this._textareaElement.style.height;
             this.resizeToFitContent();
             this._ngZone.runOutsideAngular(function () {
+                var window = _this._getWindow();
                 fromEvent(window, 'resize')
                     .pipe(auditTime(16), takeUntil(_this._destroyed))
                     .subscribe(function () { return _this.resizeToFitContent(true); });
@@ -321,6 +326,15 @@ var CdkTextareaAutosize = /** @class */ (function () {
     CdkTextareaAutosize.prototype._noopInputHandler = function () {
         // no-op handler that ensures we're running change detection on input events.
     };
+    /** Access injected document if available or fallback to global document reference */
+    CdkTextareaAutosize.prototype._getDocument = function () {
+        return this._document || document;
+    };
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    CdkTextareaAutosize.prototype._getWindow = function () {
+        var doc = this._getDocument();
+        return doc.defaultView || window;
+    };
     /**
      * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
      * prevent it from scrolling to the caret position. We need to re-set the selection
@@ -328,6 +342,7 @@ var CdkTextareaAutosize = /** @class */ (function () {
      */
     CdkTextareaAutosize.prototype._scrollToCaretPosition = function (textarea) {
         var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
+        var document = this._getDocument();
         // IE will throw an "Unspecified error" if we try to set the selection range after the
         // element has been removed from the DOM. Assert that the directive hasn't been destroyed
         // between the time we requested the animation frame and when it was executed.
@@ -354,7 +369,8 @@ var CdkTextareaAutosize = /** @class */ (function () {
     CdkTextareaAutosize.ctorParameters = function () { return [
         { type: ElementRef },
         { type: Platform },
-        { type: NgZone }
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
     ]; };
     CdkTextareaAutosize.propDecorators = {
         minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],

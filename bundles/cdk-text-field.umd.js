@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/text-field', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}), global.ng.cdk.platform, global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators));
-}(this, (function (exports, i1, i0, coercion, rxjs, operators) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/platform'), require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('@angular/common')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/text-field', ['exports', '@angular/cdk/platform', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', '@angular/common'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.textField = {}), global.ng.cdk.platform, global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.common));
+}(this, (function (exports, i1, i0, coercion, rxjs, operators, common) { 'use strict';
 
     /**
      * @license
@@ -131,7 +131,9 @@
      */
     /** Directive to automatically resize a textarea to fit its content. */
     var CdkTextareaAutosize = /** @class */ (function () {
-        function CdkTextareaAutosize(_elementRef, _platform, _ngZone) {
+        function CdkTextareaAutosize(_elementRef, _platform, _ngZone, 
+        /** @breaking-change 11.0.0 make document required */
+        document) {
             this._elementRef = _elementRef;
             this._platform = _platform;
             this._ngZone = _ngZone;
@@ -143,6 +145,7 @@
              * does not have the same problem because it does not affect the textarea's scrollHeight.
              */
             this._previousMinRows = -1;
+            this._document = document;
             this._textareaElement = this._elementRef.nativeElement;
         }
         Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
@@ -202,6 +205,7 @@
                 this._initialHeight = this._textareaElement.style.height;
                 this.resizeToFitContent();
                 this._ngZone.runOutsideAngular(function () {
+                    var window = _this._getWindow();
                     rxjs.fromEvent(window, 'resize')
                         .pipe(operators.auditTime(16), operators.takeUntil(_this._destroyed))
                         .subscribe(function () { return _this.resizeToFitContent(true); });
@@ -321,6 +325,15 @@
         CdkTextareaAutosize.prototype._noopInputHandler = function () {
             // no-op handler that ensures we're running change detection on input events.
         };
+        /** Access injected document if available or fallback to global document reference */
+        CdkTextareaAutosize.prototype._getDocument = function () {
+            return this._document || document;
+        };
+        /** Use defaultView of injected document if available or fallback to global window reference */
+        CdkTextareaAutosize.prototype._getWindow = function () {
+            var doc = this._getDocument();
+            return doc.defaultView || window;
+        };
         /**
          * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
          * prevent it from scrolling to the caret position. We need to re-set the selection
@@ -328,6 +341,7 @@
          */
         CdkTextareaAutosize.prototype._scrollToCaretPosition = function (textarea) {
             var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
+            var document = this._getDocument();
             // IE will throw an "Unspecified error" if we try to set the selection range after the
             // element has been removed from the DOM. Assert that the directive hasn't been destroyed
             // between the time we requested the animation frame and when it was executed.
@@ -354,7 +368,8 @@
         CdkTextareaAutosize.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: i1.Platform },
-            { type: i0.NgZone }
+            { type: i0.NgZone },
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [common.DOCUMENT,] }] }
         ]; };
         CdkTextareaAutosize.propDecorators = {
             minRows: [{ type: i0.Input, args: ['cdkAutosizeMinRows',] }],

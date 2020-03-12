@@ -18,7 +18,11 @@ export declare const DEFAULT_SCROLL_TIME = 20;
 export declare class ScrollDispatcher implements OnDestroy {
     private _ngZone;
     private _platform;
-    constructor(_ngZone: NgZone, _platform: Platform);
+    /** Used to reference correct document/window */
+    protected _document?: Document;
+    constructor(_ngZone: NgZone, _platform: Platform, 
+    /** @breaking-change 11.0.0 make document required */
+    document?: any);
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
     private _scrolled;
     /** Keeps track of the global `scroll` and `resize` subscriptions. */
@@ -62,6 +66,10 @@ export declare class ScrollDispatcher implements OnDestroy {
     ancestorScrolled(elementRef: ElementRef, auditTimeInMs?: number): Observable<CdkScrollable | void>;
     /** Returns all registered Scrollables that contain the provided element. */
     getAncestorScrollContainers(elementRef: ElementRef): CdkScrollable[];
+    /** Access injected document if available or fallback to global document reference */
+    private _getDocument;
+    /** Use defaultView of injected document if available or fallback to global window reference */
+    private _getWindow;
     /** Returns true if the element is contained within the provided Scrollable. */
     private _scrollableContainsElement;
     /** Sets up the global scroll listeners. */
