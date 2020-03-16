@@ -12,7 +12,7 @@
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	/** Current version of the Angular Component Development Kit. */
-	var VERSION = new core.Version('9.1.2-sha-8a02aa1f2');
+	var VERSION = new core.Version('9.1.2-sha-ea41441c8');
 
 	/**
 	 * @license
