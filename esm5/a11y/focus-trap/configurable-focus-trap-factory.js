@@ -14,10 +14,10 @@ import { FOCUS_TRAP_INERT_STRATEGY } from './focus-trap-inert-strategy';
 import { EventListenerFocusTrapInertStrategy } from './event-listener-inert-strategy';
 import { FocusTrapManager } from './focus-trap-manager';
 import * as i0 from "@angular/core";
-import * as i1 from "angular_material/src/cdk/a11y/interactivity-checker/interactivity-checker";
-import * as i2 from "angular_material/src/cdk/a11y/focus-trap/focus-trap-manager";
+import * as i1 from "../interactivity-checker/interactivity-checker";
+import * as i2 from "./focus-trap-manager";
 import * as i3 from "@angular/common";
-import * as i4 from "angular_material/src/cdk/a11y/focus-trap/focus-trap-inert-strategy";
+import * as i4 from "./focus-trap-inert-strategy";
 /** Factory that allows easy instantiation of configurable focus traps. */
 var ConfigurableFocusTrapFactory = /** @class */ (function () {
     function ConfigurableFocusTrapFactory(_checker, _ngZone, _focusTrapManager, _document, _inertStrategy) {

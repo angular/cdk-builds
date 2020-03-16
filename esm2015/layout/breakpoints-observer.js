@@ -16,7 +16,7 @@ import { combineLatest, concat, Observable, Subject } from 'rxjs';
 import { debounceTime, map, skip, startWith, take, takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 import * as i0 from "@angular/core";
-import * as i1 from "angular_material/src/cdk/layout/media-matcher";
+import * as i1 from "./media-matcher";
 /**
  * The current state of a layout breakpoint.
  * @record
