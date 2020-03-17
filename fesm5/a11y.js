@@ -1698,6 +1698,8 @@ var CdkAriaLive = /** @class */ (function () {
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
 var TOUCH_BUFFER_MS = 650;
+/** InjectionToken for FocusMonitorOptions. */
+var FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-default-options');
 /**
  * Event listener options that enable capturing and also
  * mark the listener as passive if the browser supports it.
@@ -1710,7 +1712,7 @@ var captureEventListenerOptions = normalizePassiveListenerOptions({
 var FocusMonitor = /** @class */ (function () {
     function FocusMonitor(_ngZone, _platform, 
     /** @breaking-change 11.0.0 make document required */
-    document) {
+    document, options) {
         var _this = this;
         this._ngZone = _ngZone;
         this._platform = _platform;
@@ -1770,6 +1772,7 @@ var FocusMonitor = /** @class */ (function () {
             _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
         };
         this._document = document;
+        this._detectionMode = (options === null || options === void 0 ? void 0 : options.detectionMode) || 0 /* IMMEDIATE */;
     }
     FocusMonitor.prototype.monitor = function (element, checkChildren) {
         var _this = this;
@@ -1865,16 +1868,19 @@ var FocusMonitor = /** @class */ (function () {
     };
     /**
      * Sets the origin and schedules an async function to clear it at the end of the event queue.
+     * If the detection mode is 'eventual', the origin is never cleared.
      * @param origin The origin to set.
      */
     FocusMonitor.prototype._setOriginForCurrentEventQueue = function (origin) {
         var _this = this;
         this._ngZone.runOutsideAngular(function () {
             _this._origin = origin;
-            // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
-            // tick after the interaction event fired. To ensure the focus origin is always correct,
-            // the focus origin will be determined at the beginning of the next tick.
-            _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
+            if (_this._detectionMode === 0 /* IMMEDIATE */) {
+                // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
+                // tick after the interaction event fired. To ensure the focus origin is always correct,
+                // the focus origin will be determined at the beginning of the next tick.
+                _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
+            }
         });
     };
     /**
@@ -1999,9 +2005,10 @@ var FocusMonitor = /** @class */ (function () {
     FocusMonitor.ctorParameters = function () { return [
         { type: NgZone },
         { type: Platform },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_MONITOR_DEFAULT_OPTIONS,] }] }
     ]; };
-    FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: FocusMonitor, providedIn: "root" });
+    FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
 /**
@@ -2181,5 +2188,5 @@ var A11yModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
 //# sourceMappingURL=a11y.js.map

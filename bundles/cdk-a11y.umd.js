@@ -1891,6 +1891,8 @@
     // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
     // that a value of around 650ms seems appropriate.
     var TOUCH_BUFFER_MS = 650;
+    /** InjectionToken for FocusMonitorOptions. */
+    var FOCUS_MONITOR_DEFAULT_OPTIONS = new i0.InjectionToken('cdk-focus-monitor-default-options');
     /**
      * Event listener options that enable capturing and also
      * mark the listener as passive if the browser supports it.
@@ -1903,7 +1905,7 @@
     var FocusMonitor = /** @class */ (function () {
         function FocusMonitor(_ngZone, _platform, 
         /** @breaking-change 11.0.0 make document required */
-        document) {
+        document, options) {
             var _this = this;
             this._ngZone = _ngZone;
             this._platform = _platform;
@@ -1963,6 +1965,7 @@
                 _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
             };
             this._document = document;
+            this._detectionMode = (options === null || options === void 0 ? void 0 : options.detectionMode) || 0 /* IMMEDIATE */;
         }
         FocusMonitor.prototype.monitor = function (element, checkChildren) {
             var _this = this;
@@ -2058,16 +2061,19 @@
         };
         /**
          * Sets the origin and schedules an async function to clear it at the end of the event queue.
+         * If the detection mode is 'eventual', the origin is never cleared.
          * @param origin The origin to set.
          */
         FocusMonitor.prototype._setOriginForCurrentEventQueue = function (origin) {
             var _this = this;
             this._ngZone.runOutsideAngular(function () {
                 _this._origin = origin;
-                // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
-                // tick after the interaction event fired. To ensure the focus origin is always correct,
-                // the focus origin will be determined at the beginning of the next tick.
-                _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
+                if (_this._detectionMode === 0 /* IMMEDIATE */) {
+                    // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
+                    // tick after the interaction event fired. To ensure the focus origin is always correct,
+                    // the focus origin will be determined at the beginning of the next tick.
+                    _this._originTimeoutId = setTimeout(function () { return _this._origin = null; }, 1);
+                }
             });
         };
         /**
@@ -2192,9 +2198,10 @@
         FocusMonitor.ctorParameters = function () { return [
             { type: i0.NgZone },
             { type: i1.Platform },
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] },
+            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [FOCUS_MONITOR_DEFAULT_OPTIONS,] }] }
         ]; };
-        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: FocusMonitor, providedIn: "root" });
+        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
         return FocusMonitor;
     }());
     /**
@@ -2385,6 +2392,7 @@
     exports.ConfigurableFocusTrap = ConfigurableFocusTrap;
     exports.ConfigurableFocusTrapFactory = ConfigurableFocusTrapFactory;
     exports.EventListenerFocusTrapInertStrategy = EventListenerFocusTrapInertStrategy;
+    exports.FOCUS_MONITOR_DEFAULT_OPTIONS = FOCUS_MONITOR_DEFAULT_OPTIONS;
     exports.FOCUS_TRAP_INERT_STRATEGY = FOCUS_TRAP_INERT_STRATEGY;
     exports.FocusKeyManager = FocusKeyManager;
     exports.FocusMonitor = FocusMonitor;

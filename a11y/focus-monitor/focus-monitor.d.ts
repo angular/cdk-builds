@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
-import { ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
+import { ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 export declare const TOUCH_BUFFER_MS = 650;
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
@@ -18,6 +18,26 @@ export interface FocusOptions {
     /** Whether the browser should scroll to the element when it is focused. */
     preventScroll?: boolean;
 }
+/** Detection mode used for attributing the origin of a focus event. */
+export declare const enum FocusMonitorDetectionMode {
+    /**
+     * Any mousedown, keydown, or touchstart event that happened in the previous
+     * tick or the current tick will be used to assign a focus event's origin (to
+     * either mouse, keyboard, or touch). This is the default option.
+     */
+    IMMEDIATE = 0,
+    /**
+     * A focus event's origin is always attributed to the last corresponding
+     * mousedown, keydown, or touchstart event, no matter how long ago it occured.
+     */
+    EVENTUAL = 1
+}
+/** Injectable service-level options for FocusMonitor. */
+export interface FocusMonitorOptions {
+    detectionMode?: FocusMonitorDetectionMode;
+}
+/** InjectionToken for FocusMonitorOptions. */
+export declare const FOCUS_MONITOR_DEFAULT_OPTIONS: InjectionToken<FocusMonitorOptions>;
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
 export declare class FocusMonitor implements OnDestroy {
     private _ngZone;
@@ -40,6 +60,11 @@ export declare class FocusMonitor implements OnDestroy {
     private _elementInfo;
     /** The number of elements currently being monitored. */
     private _monitoredElementCount;
+    /**
+     * The specified detection mode, used for attributing the origin of a focus
+     * event.
+     */
+    private readonly _detectionMode;
     /**
      * Event listener for `keydown` events on the document.
      * Needs to be an arrow function in order to preserve the context when it gets bound.
@@ -64,7 +89,7 @@ export declare class FocusMonitor implements OnDestroy {
     protected _document?: Document;
     constructor(_ngZone: NgZone, _platform: Platform, 
     /** @breaking-change 11.0.0 make document required */
-    document?: any);
+    document: any | null, options: FocusMonitorOptions | null);
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
@@ -119,6 +144,7 @@ export declare class FocusMonitor implements OnDestroy {
     private _setClasses;
     /**
      * Sets the origin and schedules an async function to clear it at the end of the event queue.
+     * If the detection mode is 'eventual', the origin is never cleared.
      * @param origin The origin to set.
      */
     private _setOriginForCurrentEventQueue;
