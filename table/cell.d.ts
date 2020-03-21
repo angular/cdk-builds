@@ -45,6 +45,7 @@ declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
  * Defines a set of cells available for a table column.
  */
 export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick {
+    _table?: any;
     /** Unique name for this column. */
     get name(): string;
     set name(name: string);
@@ -69,6 +70,7 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      * do not match are replaced by the '-' character.
      */
     cssClassFriendlyName: string;
+    constructor(_table?: any);
     static ngAcceptInputType_sticky: BooleanInput;
     static ngAcceptInputType_stickyEnd: BooleanInput;
 }

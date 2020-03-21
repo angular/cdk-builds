@@ -45,7 +45,8 @@ declare const _CdkHeaderRowDefBase: CanStickCtor & typeof CdkHeaderRowDefBase;
  * Captures the header row's template and other header properties such as the columns to display.
  */
 export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements CanStick, OnChanges {
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers);
+    _table?: any;
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ngAcceptInputType_sticky: BooleanInput;
 }
@@ -58,7 +59,8 @@ declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
 export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements CanStick, OnChanges {
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers);
+    _table?: any;
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ngAcceptInputType_sticky: BooleanInput;
 }
@@ -68,6 +70,7 @@ export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements Can
  * a when predicate that describes when this row should be used.
  */
 export declare class CdkRowDef<T> extends BaseRowDef {
+    _table?: any;
     /**
      * Function that should return true if this row template should be used for the provided index
      * and row data. If left undefined, this row will be considered the default row template to use
@@ -75,7 +78,7 @@ export declare class CdkRowDef<T> extends BaseRowDef {
      * For every row, there must be at least one when function that passes or an undefined to default.
      */
     when: (index: number, rowData: T) => boolean;
-    constructor(template: TemplateRef<any>, _differs: IterableDiffers);
+    constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
 }
 /** Context provided to the row cells when `multiTemplateDataRows` is false */
 export interface CdkCellOutletRowContext<T> {

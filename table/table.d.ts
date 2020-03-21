@@ -414,6 +414,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * stickiness when directionality changes.
      */
     private _setupStickyStyler;
+    /** Filters definitions that belong to this table from a QueryList. */
+    private _getOwnDefs;
     static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
 }
 export {};

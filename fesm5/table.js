@@ -5,7 +5,7 @@ import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
-import { Directive, TemplateRef, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, Optional, Inject, ViewChild, ContentChildren, InjectionToken, NgModule } from '@angular/core';
+import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -60,6 +60,21 @@ function mixinHasStickyInput(base) {
         return class_1;
     }(base));
 }
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Used to provide a table to some of the sub-components without causing a circular dependency.
+ * @docs-private
+ */
+var CDK_TABLE = new InjectionToken('CDK_TABLE');
+/** Injection token that can be used to specify the text column options. */
+var TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
 
 /**
  * @license
@@ -133,8 +148,9 @@ var _CdkColumnDefBase = mixinHasStickyInput(CdkColumnDefBase);
  */
 var CdkColumnDef = /** @class */ (function (_super) {
     __extends(CdkColumnDef, _super);
-    function CdkColumnDef() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function CdkColumnDef(_table) {
+        var _this = _super.call(this) || this;
+        _this._table = _table;
         _this._stickyEnd = false;
         return _this;
     }
@@ -146,11 +162,10 @@ var CdkColumnDef = /** @class */ (function (_super) {
         set: function (name) {
             // If the directive is set without a name (updated programatically), then this setter will
             // trigger with an empty string and should not overwrite the programatically set value.
-            if (!name) {
-                return;
+            if (name) {
+                this._name = name;
+                this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
             }
-            this._name = name;
-            this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
         },
         enumerable: true,
         configurable: true
@@ -179,6 +194,10 @@ var CdkColumnDef = /** @class */ (function (_super) {
                     providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
                 },] }
     ];
+    /** @nocollapse */
+    CdkColumnDef.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
+    ]; };
     CdkColumnDef.propDecorators = {
         name: [{ type: Input, args: ['cdkColumnDef',] }],
         stickyEnd: [{ type: Input, args: ['stickyEnd',] }],
@@ -331,8 +350,10 @@ var _CdkHeaderRowDefBase = mixinHasStickyInput(CdkHeaderRowDefBase);
  */
 var CdkHeaderRowDef = /** @class */ (function (_super) {
     __extends(CdkHeaderRowDef, _super);
-    function CdkHeaderRowDef(template, _differs) {
-        return _super.call(this, template, _differs) || this;
+    function CdkHeaderRowDef(template, _differs, _table) {
+        var _this = _super.call(this, template, _differs) || this;
+        _this._table = _table;
+        return _this;
     }
     // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
     // Explicitly define it so that the method is called as part of the Angular lifecycle.
@@ -348,7 +369,8 @@ var CdkHeaderRowDef = /** @class */ (function (_super) {
     /** @nocollapse */
     CdkHeaderRowDef.ctorParameters = function () { return [
         { type: TemplateRef },
-        { type: IterableDiffers }
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
     ]; };
     return CdkHeaderRowDef;
 }(_CdkHeaderRowDefBase));
@@ -368,8 +390,10 @@ var _CdkFooterRowDefBase = mixinHasStickyInput(CdkFooterRowDefBase);
  */
 var CdkFooterRowDef = /** @class */ (function (_super) {
     __extends(CdkFooterRowDef, _super);
-    function CdkFooterRowDef(template, _differs) {
-        return _super.call(this, template, _differs) || this;
+    function CdkFooterRowDef(template, _differs, _table) {
+        var _this = _super.call(this, template, _differs) || this;
+        _this._table = _table;
+        return _this;
     }
     // Prerender fails to recognize that ngOnChanges in a part of this class through inheritance.
     // Explicitly define it so that the method is called as part of the Angular lifecycle.
@@ -385,7 +409,8 @@ var CdkFooterRowDef = /** @class */ (function (_super) {
     /** @nocollapse */
     CdkFooterRowDef.ctorParameters = function () { return [
         { type: TemplateRef },
-        { type: IterableDiffers }
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
     ]; };
     return CdkFooterRowDef;
 }(_CdkFooterRowDefBase));
@@ -398,8 +423,10 @@ var CdkRowDef = /** @class */ (function (_super) {
     __extends(CdkRowDef, _super);
     // TODO(andrewseguin): Add an input for providing a switch function to determine
     //   if this template should be used.
-    function CdkRowDef(template, _differs) {
-        return _super.call(this, template, _differs) || this;
+    function CdkRowDef(template, _differs, _table) {
+        var _this = _super.call(this, template, _differs) || this;
+        _this._table = _table;
+        return _this;
     }
     CdkRowDef.decorators = [
         { type: Directive, args: [{
@@ -410,7 +437,8 @@ var CdkRowDef = /** @class */ (function (_super) {
     /** @nocollapse */
     CdkRowDef.ctorParameters = function () { return [
         { type: TemplateRef },
-        { type: IterableDiffers }
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
     ]; };
     return CdkRowDef;
 }(BaseRowDef));
@@ -1406,7 +1434,7 @@ var CdkTable = /** @class */ (function () {
     CdkTable.prototype._cacheColumnDefs = function () {
         var _this = this;
         this._columnDefsByName.clear();
-        var columnDefs = mergeQueryListAndSet(this._contentColumnDefs, this._customColumnDefs);
+        var columnDefs = mergeArrayAndSet(this._getOwnDefs(this._contentColumnDefs), this._customColumnDefs);
         columnDefs.forEach(function (columnDef) {
             if (_this._columnDefsByName.has(columnDef.name)) {
                 throw getTableDuplicateColumnNameError(columnDef.name);
@@ -1416,11 +1444,9 @@ var CdkTable = /** @class */ (function () {
     };
     /** Update the list of all available row definitions that can be used. */
     CdkTable.prototype._cacheRowDefs = function () {
-        this._headerRowDefs =
-            mergeQueryListAndSet(this._contentHeaderRowDefs, this._customHeaderRowDefs);
-        this._footerRowDefs =
-            mergeQueryListAndSet(this._contentFooterRowDefs, this._customFooterRowDefs);
-        this._rowDefs = mergeQueryListAndSet(this._contentRowDefs, this._customRowDefs);
+        this._headerRowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentHeaderRowDefs), this._customHeaderRowDefs);
+        this._footerRowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentFooterRowDefs), this._customFooterRowDefs);
+        this._rowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentRowDefs), this._customRowDefs);
         // After all row definitions are determined, find the row definition to be considered default.
         var defaultRowDefs = this._rowDefs.filter(function (def) { return !def.when; });
         if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
@@ -1721,6 +1747,11 @@ var CdkTable = /** @class */ (function () {
             _this.updateStickyColumnStyles();
         });
     };
+    /** Filters definitions that belong to this table from a QueryList. */
+    CdkTable.prototype._getOwnDefs = function (items) {
+        var _this = this;
+        return items.filter(function (item) { return !item._table || item._table === _this; });
+    };
     CdkTable.decorators = [
         { type: Component, args: [{
                     selector: 'cdk-table, table[cdk-table]',
@@ -1734,7 +1765,8 @@ var CdkTable = /** @class */ (function () {
                     // The view for `MatTable` consists entirely of templates declared in other views. As they are
                     // declared elsewhere, they are checked when their declaration points are checked.
                     // tslint:disable-next-line:validate-decorators
-                    changeDetection: ChangeDetectionStrategy.Default
+                    changeDetection: ChangeDetectionStrategy.Default,
+                    providers: [{ provide: CDK_TABLE, useExisting: CdkTable }]
                 }] }
     ];
     /** @nocollapse */
@@ -1765,9 +1797,9 @@ var CdkTable = /** @class */ (function () {
     };
     return CdkTable;
 }());
-/** Utility function that gets a merged list of the entries in a QueryList and values of a Set. */
-function mergeQueryListAndSet(queryList, set) {
-    return queryList.toArray().concat(Array.from(set));
+/** Utility function that gets a merged list of the entries in an array and values of a Set. */
+function mergeArrayAndSet(array, set) {
+    return array.concat(Array.from(set));
 }
 
 /**
@@ -1777,8 +1809,6 @@ function mergeQueryListAndSet(queryList, set) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** Injection token that can be used to specify the text column options. */
-var TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
 /**
  * Column that simply shows text content for the header and row cells. Assumes that the table
  * is using the native table implementation (`<table>`).
@@ -1939,5 +1969,5 @@ var CdkTableModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

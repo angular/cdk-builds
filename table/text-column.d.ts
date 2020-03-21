@@ -5,21 +5,10 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, OnDestroy, OnInit } from '@angular/core';
+import { OnDestroy, OnInit } from '@angular/core';
 import { CdkCellDef, CdkColumnDef, CdkHeaderCellDef } from './cell';
 import { CdkTable } from './table';
-/** Configurable options for `CdkTextColumn`. */
-export interface TextColumnOptions<T> {
-    /**
-     * Default function that provides the header text based on the column name if a header
-     * text is not provided.
-     */
-    defaultHeaderTextTransform?: (name: string) => string;
-    /** Default data accessor to use if one is not provided. */
-    defaultDataAccessor?: (data: T, name: string) => string;
-}
-/** Injection token that can be used to specify the text column options. */
-export declare const TEXT_COLUMN_OPTIONS: InjectionToken<TextColumnOptions<any>>;
+import { TextColumnOptions } from './tokens';
 /**
  * Column that simply shows text content for the header and row cells. Assumes that the table
  * is using the native table implementation (`<table>`).
