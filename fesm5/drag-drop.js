@@ -323,13 +323,16 @@ var DragRef = /** @class */ (function () {
      * dragging on an element that you might not have access to.
      */
     DragRef.prototype.withRootElement = function (rootElement) {
+        var _this = this;
         var element = coerceElement(rootElement);
         if (element !== this._rootElement) {
             if (this._rootElement) {
                 this._removeRootElementListeners(this._rootElement);
             }
-            element.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
-            element.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+            this._ngZone.runOutsideAngular(function () {
+                element.addEventListener('mousedown', _this._pointerDown, activeEventListenerOptions);
+                element.addEventListener('touchstart', _this._pointerDown, passiveEventListenerOptions);
+            });
             this._initialTransform = undefined;
             this._rootElement = element;
         }

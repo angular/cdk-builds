@@ -570,8 +570,13 @@ class DragRef {
             if ((/** @type {?} */ (this))._rootElement) {
                 (/** @type {?} */ (this))._removeRootElementListeners((/** @type {?} */ (this))._rootElement);
             }
-            element.addEventListener('mousedown', (/** @type {?} */ (this))._pointerDown, activeEventListenerOptions);
-            element.addEventListener('touchstart', (/** @type {?} */ (this))._pointerDown, passiveEventListenerOptions);
+            (/** @type {?} */ (this))._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            () => {
+                element.addEventListener('mousedown', (/** @type {?} */ (this))._pointerDown, activeEventListenerOptions);
+                element.addEventListener('touchstart', (/** @type {?} */ (this))._pointerDown, passiveEventListenerOptions);
+            }));
             (/** @type {?} */ (this))._initialTransform = undefined;
             (/** @type {?} */ (this))._rootElement = element;
         }
