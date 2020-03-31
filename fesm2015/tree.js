@@ -1287,10 +1287,14 @@ class CdkTreeNodePadding {
      * @param {?} _element
      * @param {?} _dir
      */
-    constructor(_treeNode, _tree, _renderer, _element, _dir) {
+    constructor(_treeNode, _tree, 
+    /**
+     * @deprecated _renderer parameter no longer being used. To be removed.
+     * @breaking-change 11.0.0
+     */
+    _renderer, _element, _dir) {
         this._treeNode = _treeNode;
         this._tree = _tree;
-        this._renderer = _renderer;
         this._element = _element;
         this._dir = _dir;
         /**
@@ -1392,8 +1396,8 @@ class CdkTreeNodePadding {
             const paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
             /** @type {?} */
             const resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
-            this._renderer.setStyle(element, paddingProp, padding);
-            this._renderer.setStyle(element, resetProp, null);
+            element.style[paddingProp] = padding || '';
+            element.style[resetProp] = '';
             this._currentPadding = padding;
         }
     }
@@ -1449,11 +1453,6 @@ if (false) {
      * @private
      */
     CdkTreeNodePadding.prototype._tree;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTreeNodePadding.prototype._renderer;
     /**
      * @type {?}
      * @private
