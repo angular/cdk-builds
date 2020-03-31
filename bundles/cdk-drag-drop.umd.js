@@ -713,7 +713,7 @@
                 position: 'fixed',
                 top: '0',
                 left: '0',
-                zIndex: '1000'
+                zIndex: "" + (this._config.zIndex || 1000)
             });
             toggleNativeDragInteractions(preview, false);
             preview.classList.add('cdk-drag-preview');
@@ -2638,7 +2638,8 @@
                 dragStartThreshold: config && config.dragStartThreshold != null ?
                     config.dragStartThreshold : 5,
                 pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                    config.pointerDirectionChangeThreshold : 5
+                    config.pointerDirectionChangeThreshold : 5,
+                zIndex: config === null || config === void 0 ? void 0 : config.zIndex
             });
             this._dragRef.data = this;
             if (config) {
@@ -3070,15 +3071,6 @@
             enumerable: true,
             configurable: true
         });
-        CdkDropList.prototype.ngAfterContentInit = function () {
-            // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-            if (this._scrollDispatcher) {
-                var scrollableParents = this._scrollDispatcher
-                    .getAncestorScrollContainers(this.element)
-                    .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
-                this._dropListRef.withScrollableParents(scrollableParents);
-            }
-        };
         /** Registers an items with the drop list. */
         CdkDropList.prototype.addItem = function (item) {
             this._unsortedItems.add(item);
@@ -3186,6 +3178,18 @@
                             siblings.push(drop);
                         }
                     });
+                }
+                // Note that we resolve the scrollable parents here so that we delay the resolution
+                // as long as possible, ensuring that the element is in its final place in the DOM.
+                // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
+                if (!_this._scrollableParentsResolved && _this._scrollDispatcher) {
+                    var scrollableParents = _this._scrollDispatcher
+                        .getAncestorScrollContainers(_this.element)
+                        .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
+                    _this._dropListRef.withScrollableParents(scrollableParents);
+                    // Only do this once since it involves traversing the DOM and the parents
+                    // shouldn't be able to change without the drop list being destroyed.
+                    _this._scrollableParentsResolved = true;
                 }
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;
