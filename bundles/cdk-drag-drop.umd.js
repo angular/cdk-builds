@@ -713,7 +713,7 @@
                 position: 'fixed',
                 top: '0',
                 left: '0',
-                zIndex: "" + (this._config.zIndex || 1000)
+                zIndex: '1000'
             });
             toggleNativeDragInteractions(preview, false);
             preview.classList.add('cdk-drag-preview');
@@ -2638,8 +2638,7 @@
                 dragStartThreshold: config && config.dragStartThreshold != null ?
                     config.dragStartThreshold : 5,
                 pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                    config.pointerDirectionChangeThreshold : 5,
-                zIndex: config === null || config === void 0 ? void 0 : config.zIndex
+                    config.pointerDirectionChangeThreshold : 5
             });
             this._dragRef.data = this;
             if (config) {

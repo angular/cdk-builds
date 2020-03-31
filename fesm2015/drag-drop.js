@@ -160,11 +160,6 @@ if (false) {
      * @type {?}
      */
     DragRefConfig.prototype.pointerDirectionChangeThreshold;
-    /**
-     * `z-index` for the absolutely-positioned elements that are created by the drag item.
-     * @type {?|undefined}
-     */
-    DragRefConfig.prototype.zIndex;
 }
 /**
  * Options that can be used to bind a passive event listener.
@@ -1060,7 +1055,7 @@ class DragRef {
             position: 'fixed',
             top: '0',
             left: '0',
-            zIndex: `${this._config.zIndex || 1000}`
+            zIndex: '1000'
         });
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
@@ -4206,8 +4201,6 @@ if (false) {
     DragDropConfig.prototype.listAutoScrollDisabled;
     /** @type {?|undefined} */
     DragDropConfig.prototype.listOrientation;
-    /** @type {?|undefined} */
-    DragDropConfig.prototype.zIndex;
 }
 /**
  * @deprecated No longer being used. To be removed.
@@ -4311,8 +4304,7 @@ class CdkDrag {
             dragStartThreshold: config && config.dragStartThreshold != null ?
                 config.dragStartThreshold : 5,
             pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                config.pointerDirectionChangeThreshold : 5,
-            zIndex: config === null || config === void 0 ? void 0 : config.zIndex
+                config.pointerDirectionChangeThreshold : 5
         });
         this._dragRef.data = this;
         if (config) {

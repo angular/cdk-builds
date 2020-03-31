@@ -23,8 +23,6 @@ export interface DragRefConfig {
      * considers them to have changed the drag direction.
      */
     pointerDirectionChangeThreshold: number;
-    /** `z-index` for the absolutely-positioned elements that are created by the drag item. */
-    zIndex?: number;
 }
 /**
  * Internal compile-time-only representation of a `DragRef`.

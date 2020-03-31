@@ -38,7 +38,6 @@ export interface DragDropConfig extends Partial<DragRefConfig> {
     sortingDisabled?: boolean;
     listAutoScrollDisabled?: boolean;
     listOrientation?: DropListOrientation;
-    zIndex?: number;
 }
 /**
  * @deprecated No longer being used. To be removed.
