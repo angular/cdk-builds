@@ -717,7 +717,7 @@ var DragRef = /** @class */ (function () {
             position: 'fixed',
             top: '0',
             left: '0',
-            zIndex: '1000'
+            zIndex: "" + (this._config.zIndex || 1000)
         });
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
@@ -2445,7 +2445,8 @@ var CdkDrag = /** @class */ (function () {
             dragStartThreshold: config && config.dragStartThreshold != null ?
                 config.dragStartThreshold : 5,
             pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                config.pointerDirectionChangeThreshold : 5
+                config.pointerDirectionChangeThreshold : 5,
+            zIndex: config === null || config === void 0 ? void 0 : config.zIndex
         });
         this._dragRef.data = this;
         if (config) {
