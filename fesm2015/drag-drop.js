@@ -1860,14 +1860,18 @@ function getPreviewInsertionPoint(documentRef) {
  */
 function getRootNode(viewRef, _document) {
     /** @type {?} */
-    const rootNode = viewRef.rootNodes[0];
-    if (rootNode.nodeType !== _document.ELEMENT_NODE) {
-        /** @type {?} */
-        const wrapper = _document.createElement('div');
-        wrapper.appendChild(rootNode);
-        return wrapper;
+    const rootNodes = viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+        return (/** @type {?} */ (rootNodes[0]));
     }
-    return (/** @type {?} */ (rootNode));
+    /** @type {?} */
+    const wrapper = _document.createElement('div');
+    rootNodes.forEach((/**
+     * @param {?} node
+     * @return {?}
+     */
+    node => wrapper.appendChild(node)));
+    return wrapper;
 }
 /**
  * Matches the target element's size to the source's size.

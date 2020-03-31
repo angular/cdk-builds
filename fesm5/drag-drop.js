@@ -1045,13 +1045,13 @@ function getPreviewInsertionPoint(documentRef) {
  * If the root is not an HTML element it gets wrapped in one.
  */
 function getRootNode(viewRef, _document) {
-    var rootNode = viewRef.rootNodes[0];
-    if (rootNode.nodeType !== _document.ELEMENT_NODE) {
-        var wrapper = _document.createElement('div');
-        wrapper.appendChild(rootNode);
-        return wrapper;
+    var rootNodes = viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+        return rootNodes[0];
     }
-    return rootNode;
+    var wrapper = _document.createElement('div');
+    rootNodes.forEach(function (node) { return wrapper.appendChild(node); });
+    return wrapper;
 }
 /**
  * Matches the target element's size to the source's size.
