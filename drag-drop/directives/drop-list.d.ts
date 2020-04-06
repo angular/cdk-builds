@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { BooleanInput } from '@angular/cdk/coercion';
-import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, AfterContentInit } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { CdkDrag } from './drag';
@@ -23,7 +23,7 @@ import { DropListOrientation, DragAxis, DragDropConfig } from './config';
 export interface CdkDropListInternal extends CdkDropList {
 }
 /** Container that wraps a set of draggable items. */
-export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy {
+export declare class CdkDropList<T = any> implements OnDestroy {
     /** Element that the drop list is attached to. */
     element: ElementRef<HTMLElement>;
     private _changeDetectorRef;
@@ -36,6 +36,8 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
     private _scrollDispatcher?;
     /** Emits when the list has been destroyed. */
     private _destroyed;
+    /** Whether the element's scrollable parents have been resolved. */
+    private _scrollableParentsResolved;
     /** Keeps track of the drop lists that are currently on the page. */
     private static _dropLists;
     /** Reference to the underlying drop list instance. */
@@ -99,7 +101,6 @@ export declare class CdkDropList<T = any> implements AfterContentInit, OnDestroy
      * @breaking-change 11.0.0
      */
     _scrollDispatcher?: ScrollDispatcher | undefined, config?: DragDropConfig);
-    ngAfterContentInit(): void;
     /** Registers an items with the drop list. */
     addItem(item: CdkDrag): void;
     /** Removes an item from the drop list. */

@@ -160,6 +160,11 @@ if (false) {
      * @type {?}
      */
     DragRefConfig.prototype.pointerDirectionChangeThreshold;
+    /**
+     * `z-index` for the absolutely-positioned elements that are created by the drag item.
+     * @type {?|undefined}
+     */
+    DragRefConfig.prototype.zIndex;
 }
 /**
  * Options that can be used to bind a passive event listener.
@@ -565,8 +570,13 @@ class DragRef {
             if ((/** @type {?} */ (this))._rootElement) {
                 (/** @type {?} */ (this))._removeRootElementListeners((/** @type {?} */ (this))._rootElement);
             }
-            element.addEventListener('mousedown', (/** @type {?} */ (this))._pointerDown, activeEventListenerOptions);
-            element.addEventListener('touchstart', (/** @type {?} */ (this))._pointerDown, passiveEventListenerOptions);
+            (/** @type {?} */ (this))._ngZone.runOutsideAngular((/**
+             * @return {?}
+             */
+            () => {
+                element.addEventListener('mousedown', (/** @type {?} */ (this))._pointerDown, activeEventListenerOptions);
+                element.addEventListener('touchstart', (/** @type {?} */ (this))._pointerDown, passiveEventListenerOptions);
+            }));
             (/** @type {?} */ (this))._initialTransform = undefined;
             (/** @type {?} */ (this))._rootElement = element;
         }
@@ -1055,7 +1065,7 @@ class DragRef {
             position: 'fixed',
             top: '0',
             left: '0',
-            zIndex: '1000'
+            zIndex: `${this._config.zIndex || 1000}`
         });
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
@@ -1850,14 +1860,18 @@ function getPreviewInsertionPoint(documentRef) {
  */
 function getRootNode(viewRef, _document) {
     /** @type {?} */
-    const rootNode = viewRef.rootNodes[0];
-    if (rootNode.nodeType !== _document.ELEMENT_NODE) {
-        /** @type {?} */
-        const wrapper = _document.createElement('div');
-        wrapper.appendChild(rootNode);
-        return wrapper;
+    const rootNodes = viewRef.rootNodes;
+    if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+        return (/** @type {?} */ (rootNodes[0]));
     }
-    return (/** @type {?} */ (rootNode));
+    /** @type {?} */
+    const wrapper = _document.createElement('div');
+    rootNodes.forEach((/**
+     * @param {?} node
+     * @return {?}
+     */
+    node => wrapper.appendChild(node)));
+    return wrapper;
 }
 /**
  * Matches the target element's size to the source's size.
@@ -4201,6 +4215,8 @@ if (false) {
     DragDropConfig.prototype.listAutoScrollDisabled;
     /** @type {?|undefined} */
     DragDropConfig.prototype.listOrientation;
+    /** @type {?|undefined} */
+    DragDropConfig.prototype.zIndex;
 }
 /**
  * @deprecated No longer being used. To be removed.
@@ -4304,7 +4320,8 @@ class CdkDrag {
             dragStartThreshold: config && config.dragStartThreshold != null ?
                 config.dragStartThreshold : 5,
             pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                config.pointerDirectionChangeThreshold : 5
+                config.pointerDirectionChangeThreshold : 5,
+            zIndex: config === null || config === void 0 ? void 0 : config.zIndex
         });
         this._dragRef.data = this;
         if (config) {
@@ -5052,23 +5069,6 @@ class CdkDropList {
         this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
     }
     /**
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-        if (this._scrollDispatcher) {
-            /** @type {?} */
-            const scrollableParents = this._scrollDispatcher
-                .getAncestorScrollContainers(this.element)
-                .map((/**
-             * @param {?} scrollable
-             * @return {?}
-             */
-            scrollable => scrollable.getElementRef().nativeElement));
-            this._dropListRef.withScrollableParents(scrollableParents);
-        }
-    }
-    /**
      * Registers an items with the drop list.
      * @param {?} item
      * @return {?}
@@ -5225,6 +5225,23 @@ class CdkDropList {
                         siblings.push(drop);
                     }
                 }));
+            }
+            // Note that we resolve the scrollable parents here so that we delay the resolution
+            // as long as possible, ensuring that the element is in its final place in the DOM.
+            // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
+            if (!this._scrollableParentsResolved && this._scrollDispatcher) {
+                /** @type {?} */
+                const scrollableParents = this._scrollDispatcher
+                    .getAncestorScrollContainers(this.element)
+                    .map((/**
+                 * @param {?} scrollable
+                 * @return {?}
+                 */
+                scrollable => scrollable.getElementRef().nativeElement));
+                this._dropListRef.withScrollableParents(scrollableParents);
+                // Only do this once since it involves traversing the DOM and the parents
+                // shouldn't be able to change without the drop list being destroyed.
+                this._scrollableParentsResolved = true;
             }
             ref.disabled = this.disabled;
             ref.lockAxis = this.lockAxis;
@@ -5405,6 +5422,12 @@ if (false) {
      * @private
      */
     CdkDropList.prototype._destroyed;
+    /**
+     * Whether the element's scrollable parents have been resolved.
+     * @type {?}
+     * @private
+     */
+    CdkDropList.prototype._scrollableParentsResolved;
     /**
      * Reference to the underlying drop list instance.
      * @type {?}

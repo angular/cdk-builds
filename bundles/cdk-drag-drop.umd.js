@@ -319,13 +319,16 @@
          * dragging on an element that you might not have access to.
          */
         DragRef.prototype.withRootElement = function (rootElement) {
+            var _this = this;
             var element = coercion.coerceElement(rootElement);
             if (element !== this._rootElement) {
                 if (this._rootElement) {
                     this._removeRootElementListeners(this._rootElement);
                 }
-                element.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
-                element.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+                this._ngZone.runOutsideAngular(function () {
+                    element.addEventListener('mousedown', _this._pointerDown, activeEventListenerOptions);
+                    element.addEventListener('touchstart', _this._pointerDown, passiveEventListenerOptions);
+                });
                 this._initialTransform = undefined;
                 this._rootElement = element;
             }
@@ -713,7 +716,7 @@
                 position: 'fixed',
                 top: '0',
                 left: '0',
-                zIndex: '1000'
+                zIndex: "" + (this._config.zIndex || 1000)
             });
             toggleNativeDragInteractions(preview, false);
             preview.classList.add('cdk-drag-preview');
@@ -1038,13 +1041,13 @@
      * If the root is not an HTML element it gets wrapped in one.
      */
     function getRootNode(viewRef, _document) {
-        var rootNode = viewRef.rootNodes[0];
-        if (rootNode.nodeType !== _document.ELEMENT_NODE) {
-            var wrapper = _document.createElement('div');
-            wrapper.appendChild(rootNode);
-            return wrapper;
+        var rootNodes = viewRef.rootNodes;
+        if (rootNodes.length === 1 && rootNodes[0].nodeType === _document.ELEMENT_NODE) {
+            return rootNodes[0];
         }
-        return rootNode;
+        var wrapper = _document.createElement('div');
+        rootNodes.forEach(function (node) { return wrapper.appendChild(node); });
+        return wrapper;
     }
     /**
      * Matches the target element's size to the source's size.
@@ -2638,7 +2641,8 @@
                 dragStartThreshold: config && config.dragStartThreshold != null ?
                     config.dragStartThreshold : 5,
                 pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                    config.pointerDirectionChangeThreshold : 5
+                    config.pointerDirectionChangeThreshold : 5,
+                zIndex: config === null || config === void 0 ? void 0 : config.zIndex
             });
             this._dragRef.data = this;
             if (config) {
@@ -3070,15 +3074,6 @@
             enumerable: true,
             configurable: true
         });
-        CdkDropList.prototype.ngAfterContentInit = function () {
-            // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-            if (this._scrollDispatcher) {
-                var scrollableParents = this._scrollDispatcher
-                    .getAncestorScrollContainers(this.element)
-                    .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
-                this._dropListRef.withScrollableParents(scrollableParents);
-            }
-        };
         /** Registers an items with the drop list. */
         CdkDropList.prototype.addItem = function (item) {
             this._unsortedItems.add(item);
@@ -3186,6 +3181,18 @@
                             siblings.push(drop);
                         }
                     });
+                }
+                // Note that we resolve the scrollable parents here so that we delay the resolution
+                // as long as possible, ensuring that the element is in its final place in the DOM.
+                // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
+                if (!_this._scrollableParentsResolved && _this._scrollDispatcher) {
+                    var scrollableParents = _this._scrollDispatcher
+                        .getAncestorScrollContainers(_this.element)
+                        .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
+                    _this._dropListRef.withScrollableParents(scrollableParents);
+                    // Only do this once since it involves traversing the DOM and the parents
+                    // shouldn't be able to change without the drop list being destroyed.
+                    _this._scrollableParentsResolved = true;
                 }
                 ref.disabled = _this.disabled;
                 ref.lockAxis = _this.lockAxis;

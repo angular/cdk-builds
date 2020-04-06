@@ -720,11 +720,15 @@ var cssUnitPattern = /([A-Za-z%]+)$/;
  * This directive will add left-padding to the node to show hierarchy.
  */
 var CdkTreeNodePadding = /** @class */ (function () {
-    function CdkTreeNodePadding(_treeNode, _tree, _renderer, _element, _dir) {
+    function CdkTreeNodePadding(_treeNode, _tree, 
+    /**
+     * @deprecated _renderer parameter no longer being used. To be removed.
+     * @breaking-change 11.0.0
+     */
+    _renderer, _element, _dir) {
         var _this = this;
         this._treeNode = _treeNode;
         this._tree = _tree;
-        this._renderer = _renderer;
         this._element = _element;
         this._dir = _dir;
         /** Subject that emits when the component has been destroyed. */
@@ -794,8 +798,8 @@ var CdkTreeNodePadding = /** @class */ (function () {
             var element = this._element.nativeElement;
             var paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
             var resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
-            this._renderer.setStyle(element, paddingProp, padding);
-            this._renderer.setStyle(element, resetProp, null);
+            element.style[paddingProp] = padding || '';
+            element.style[resetProp] = '';
             this._currentPadding = padding;
         }
     };
