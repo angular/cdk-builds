@@ -2110,9 +2110,12 @@ var HighContrastModeDetector = /** @class */ (function () {
         this._document.body.appendChild(testElement);
         // Get the computed style for the background color, collapsing spaces to normalize between
         // browsers. Once we get this color, we no longer need the test element. Access the `window`
-        // via the document so we can fake it in tests.
-        var documentWindow = this._document.defaultView;
-        var computedColor = (documentWindow.getComputedStyle(testElement).backgroundColor || '').replace(/ /g, '');
+        // via the document so we can fake it in tests. Note that we have extra null checks, because
+        // this logic will likely run during app bootstrap and throwing can break the entire app.
+        var documentWindow = this._document.defaultView || window;
+        var computedStyle = (documentWindow && documentWindow.getComputedStyle) ?
+            documentWindow.getComputedStyle(testElement) : null;
+        var computedColor = (computedStyle && computedStyle.backgroundColor || '').replace(/ /g, '');
         this._document.body.removeChild(testElement);
         switch (computedColor) {
             case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
