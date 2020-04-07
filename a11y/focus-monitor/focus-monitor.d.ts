@@ -91,6 +91,11 @@ export declare class FocusMonitor implements OnDestroy {
     /** @breaking-change 11.0.0 make document required */
     document: any | null, options: FocusMonitorOptions | null);
     /**
+     * Event listener for `focus` and 'blur' events on the document.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     */
+    private _documentFocusAndBlurListener;
+    /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
      * @param checkChildren Whether to count the element as focused when its children are focused.
@@ -136,6 +141,7 @@ export declare class FocusMonitor implements OnDestroy {
     /** Use defaultView of injected document if available or fallback to global window reference */
     private _getWindow;
     private _toggleClass;
+    private _getFocusOrigin;
     /**
      * Sets the focus classes on the element based on the given focus origin.
      * @param element The element to update the classes on.

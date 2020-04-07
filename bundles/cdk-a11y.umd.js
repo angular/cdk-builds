@@ -1964,11 +1964,22 @@
                 _this._windowFocused = true;
                 _this._windowFocusTimeoutId = setTimeout(function () { return _this._windowFocused = false; });
             };
+            /**
+             * Event listener for `focus` and 'blur' events on the document.
+             * Needs to be an arrow function in order to preserve the context when it gets bound.
+             */
+            this._documentFocusAndBlurListener = function (event) {
+                var target = event.target;
+                var handler = event.type === 'focus' ? _this._onFocus : _this._onBlur;
+                // We need to walk up the ancestor chain in order to support `checkChildren`.
+                for (var el = target; el; el = el.parentElement) {
+                    handler.call(_this, event, el);
+                }
+            };
             this._document = document;
             this._detectionMode = (options === null || options === void 0 ? void 0 : options.detectionMode) || 0 /* IMMEDIATE */;
         }
         FocusMonitor.prototype.monitor = function (element, checkChildren) {
-            var _this = this;
             if (checkChildren === void 0) { checkChildren = false; }
             // Do nothing if we're not on the browser platform.
             if (!this._platform.isBrowser) {
@@ -1983,31 +1994,17 @@
             }
             // Create monitored element info.
             var info = {
-                unlisten: function () { },
                 checkChildren: checkChildren,
                 subject: new rxjs.Subject()
             };
             this._elementInfo.set(nativeElement, info);
             this._incrementMonitoredElementCount();
-            // Start listening. We need to listen in capture phase since focus events don't bubble.
-            var focusListener = function (event) { return _this._onFocus(event, nativeElement); };
-            var blurListener = function (event) { return _this._onBlur(event, nativeElement); };
-            this._ngZone.runOutsideAngular(function () {
-                nativeElement.addEventListener('focus', focusListener, true);
-                nativeElement.addEventListener('blur', blurListener, true);
-            });
-            // Create an unlisten function for later.
-            info.unlisten = function () {
-                nativeElement.removeEventListener('focus', focusListener, true);
-                nativeElement.removeEventListener('blur', blurListener, true);
-            };
             return info.subject.asObservable();
         };
         FocusMonitor.prototype.stopMonitoring = function (element) {
             var nativeElement = coercion.coerceElement(element);
             var elementInfo = this._elementInfo.get(nativeElement);
             if (elementInfo) {
-                elementInfo.unlisten();
                 elementInfo.subject.complete();
                 this._setClasses(nativeElement);
                 this._elementInfo.delete(nativeElement);
@@ -2044,20 +2041,37 @@
                 element.classList.remove(className);
             }
         };
+        FocusMonitor.prototype._getFocusOrigin = function (event) {
+            // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
+            // 1) The window has just regained focus, in which case we want to restore the focused state of
+            //    the element from before the window blurred.
+            // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
+            // 3) The element was programmatically focused, in which case we should mark the origin as
+            //    'program'.
+            if (this._origin) {
+                return this._origin;
+            }
+            if (this._windowFocused && this._lastFocusOrigin) {
+                return this._lastFocusOrigin;
+            }
+            else if (this._wasCausedByTouch(event)) {
+                return 'touch';
+            }
+            else {
+                return 'program';
+            }
+        };
         /**
          * Sets the focus classes on the element based on the given focus origin.
          * @param element The element to update the classes on.
          * @param origin The focus origin.
          */
         FocusMonitor.prototype._setClasses = function (element, origin) {
-            var elementInfo = this._elementInfo.get(element);
-            if (elementInfo) {
-                this._toggleClass(element, 'cdk-focused', !!origin);
-                this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
-                this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
-                this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
-                this._toggleClass(element, 'cdk-program-focused', origin === 'program');
-            }
+            this._toggleClass(element, 'cdk-focused', !!origin);
+            this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
+            this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
+            this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
+            this._toggleClass(element, 'cdk-program-focused', origin === 'program');
         };
         /**
          * Sets the origin and schedules an async function to clear it at the end of the event queue.
@@ -2119,24 +2133,7 @@
             if (!elementInfo || (!elementInfo.checkChildren && element !== event.target)) {
                 return;
             }
-            // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
-            // 1) The window has just regained focus, in which case we want to restore the focused state of
-            //    the element from before the window blurred.
-            // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
-            // 3) The element was programmatically focused, in which case we should mark the origin as
-            //    'program'.
-            var origin = this._origin;
-            if (!origin) {
-                if (this._windowFocused && this._lastFocusOrigin) {
-                    origin = this._lastFocusOrigin;
-                }
-                else if (this._wasCausedByTouch(event)) {
-                    origin = 'touch';
-                }
-                else {
-                    origin = 'program';
-                }
-            }
+            var origin = this._getFocusOrigin(event);
             this._setClasses(element, origin);
             this._emitOrigin(elementInfo.subject, origin);
             this._lastFocusOrigin = origin;
@@ -2169,6 +2166,8 @@
                 this._ngZone.runOutsideAngular(function () {
                     var document = _this._getDocument();
                     var window = _this._getWindow();
+                    document.addEventListener('focus', _this._documentFocusAndBlurListener, captureEventListenerOptions);
+                    document.addEventListener('blur', _this._documentFocusAndBlurListener, captureEventListenerOptions);
                     document.addEventListener('keydown', _this._documentKeydownListener, captureEventListenerOptions);
                     document.addEventListener('mousedown', _this._documentMousedownListener, captureEventListenerOptions);
                     document.addEventListener('touchstart', _this._documentTouchstartListener, captureEventListenerOptions);
@@ -2181,6 +2180,8 @@
             if (!--this._monitoredElementCount) {
                 var document_1 = this._getDocument();
                 var window_1 = this._getWindow();
+                document_1.removeEventListener('focus', this._documentFocusAndBlurListener, captureEventListenerOptions);
+                document_1.removeEventListener('blur', this._documentFocusAndBlurListener, captureEventListenerOptions);
                 document_1.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
                 document_1.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
                 document_1.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
