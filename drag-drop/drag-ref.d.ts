@@ -375,5 +375,7 @@ export declare class DragRef<T = any> {
     private _containInsideBoundaryOnResize;
     /** Gets the drag start delay, based on the event type. */
     private _getDragStartDelay;
+    /** Updates the internal state of the draggable element when scrolling has occurred. */
+    private _updateOnScroll;
 }
 export {};
