@@ -139,6 +139,81 @@ function parseCssPropertyValue(computedStyle, name) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/drag-drop/client-rect.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Gets a mutable version of an element's bounding `ClientRect`.
+ * @param {?} element
+ * @return {?}
+ */
+function getMutableClientRect(element) {
+    /** @type {?} */
+    const clientRect = element.getBoundingClientRect();
+    // We need to clone the `clientRect` here, because all the values on it are readonly
+    // and we need to be able to update them. Also we can't use a spread here, because
+    // the values on a `ClientRect` aren't own properties. See:
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect#Notes
+    return {
+        top: clientRect.top,
+        right: clientRect.right,
+        bottom: clientRect.bottom,
+        left: clientRect.left,
+        width: clientRect.width,
+        height: clientRect.height
+    };
+}
+/**
+ * Checks whether some coordinates are within a `ClientRect`.
+ * @param {?} clientRect ClientRect that is being checked.
+ * @param {?} x Coordinates along the X axis.
+ * @param {?} y Coordinates along the Y axis.
+ * @return {?}
+ */
+function isInsideClientRect(clientRect, x, y) {
+    const { top, bottom, left, right } = clientRect;
+    return y >= top && y <= bottom && x >= left && x <= right;
+}
+/**
+ * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
+ * @param {?} clientRect `ClientRect` that should be updated.
+ * @param {?} top Amount to add to the `top` position.
+ * @param {?} left Amount to add to the `left` position.
+ * @return {?}
+ */
+function adjustClientRect(clientRect, top, left) {
+    clientRect.top += top;
+    clientRect.bottom = clientRect.top + clientRect.height;
+    clientRect.left += left;
+    clientRect.right = clientRect.left + clientRect.width;
+}
+/**
+ * Checks whether the pointer coordinates are close to a ClientRect.
+ * @param {?} rect ClientRect to check against.
+ * @param {?} threshold Threshold around the ClientRect.
+ * @param {?} pointerX Coordinates along the X axis.
+ * @param {?} pointerY Coordinates along the Y axis.
+ * @return {?}
+ */
+function isPointerNearClientRect(rect, threshold, pointerX, pointerY) {
+    const { top, right, bottom, left, width, height } = rect;
+    /** @type {?} */
+    const xThreshold = width * threshold;
+    /** @type {?} */
+    const yThreshold = height * threshold;
+    return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
+        pointerX > left - xThreshold && pointerX < right + xThreshold;
+}
+
+/**
+ * @fileoverview added by tsickle
  * Generated from: src/cdk/drag-drop/drag-ref.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -375,9 +450,9 @@ class DragRef {
             // Prevent the default action as early as possible in order to block
             // native actions like dragging the selected text or images with the mouse.
             event.preventDefault();
+            /** @type {?} */
+            const pointerPosition = this._getPointerPositionOnPage(event);
             if (!this._hasStartedDragging) {
-                /** @type {?} */
-                const pointerPosition = this._getPointerPositionOnPage(event);
                 /** @type {?} */
                 const distanceX = Math.abs(pointerPosition.x - this._pickupPositionOnPage.x);
                 /** @type {?} */
@@ -417,7 +492,7 @@ class DragRef {
                 }
             }
             /** @type {?} */
-            const constrainedPointerPosition = this._getConstrainedPointerPosition(event);
+            const constrainedPointerPosition = this._getConstrainedPointerPosition(pointerPosition);
             this._hasMoved = true;
             this._updatePointerDirectionDelta(constrainedPointerPosition);
             if (this._dropContainer) {
@@ -721,7 +796,7 @@ class DragRef {
         /** @type {?} */
         const position = this._pointerPositionAtLastDirectionChange;
         if (position && this._dropContainer) {
-            this._updateActiveDropContainer(position);
+            this._updateActiveDropContainer(this._getConstrainedPointerPosition(position));
         }
     }
     /**
@@ -911,10 +986,10 @@ class DragRef {
          * @return {?}
          */
         () => {
-            this._scrollPosition = this._viewportRuler.getViewportScrollPosition();
+            this._updateOnScroll();
         }));
         if (this._boundaryElement) {
-            this._boundaryRect = this._boundaryElement.getBoundingClientRect();
+            this._boundaryRect = getMutableClientRect(this._boundaryElement);
         }
         // If we have a custom preview we can't know ahead of time how large it'll be so we position
         // it next to the cursor. The exception is when the consumer has opted into making the preview
@@ -1205,12 +1280,10 @@ class DragRef {
     /**
      * Gets the pointer position on the page, accounting for any position constraints.
      * @private
-     * @param {?} event
+     * @param {?} point
      * @return {?}
      */
-    _getConstrainedPointerPosition(event) {
-        /** @type {?} */
-        const point = this._getPointerPositionOnPage(event);
+    _getConstrainedPointerPosition(point) {
         /** @type {?} */
         const constrainedPoint = this.constrainPosition ? this.constrainPosition(point, this) : point;
         /** @type {?} */
@@ -1415,6 +1488,27 @@ class DragRef {
             return value.touch;
         }
         return value ? value.mouse : 0;
+    }
+    /**
+     * Updates the internal state of the draggable element when scrolling has occurred.
+     * @private
+     * @return {?}
+     */
+    _updateOnScroll() {
+        /** @type {?} */
+        const oldScrollPosition = this._scrollPosition;
+        /** @type {?} */
+        const currentScrollPosition = this._viewportRuler.getViewportScrollPosition();
+        // ClientRect dimensions are based on the page's scroll position so
+        // we have to update the cached boundary ClientRect if the user has scrolled.
+        if (oldScrollPosition && this._boundaryRect) {
+            /** @type {?} */
+            const topDifference = oldScrollPosition.top - currentScrollPosition.top;
+            /** @type {?} */
+            const leftDifference = oldScrollPosition.left - currentScrollPosition.left;
+            adjustClientRect(this._boundaryRect, topDifference, leftDifference);
+        }
+        this._scrollPosition = currentScrollPosition;
     }
 }
 if (false) {
@@ -2445,7 +2539,8 @@ class DropListRef {
      */
     _sortItem(item, pointerX, pointerY, pointerDelta) {
         // Don't sort the item if sorting is disabled or it's out of range.
-        if (this.sortingDisabled || !isPointerNearClientRect(this._clientRect, pointerX, pointerY)) {
+        if (this.sortingDisabled ||
+            !isPointerNearClientRect(this._clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
             return;
         }
         /** @type {?} */
@@ -2555,7 +2650,7 @@ class DropListRef {
             if (element === this._document || !position.clientRect || scrollNode) {
                 return;
             }
-            if (isPointerNearClientRect(position.clientRect, pointerX, pointerY)) {
+            if (isPointerNearClientRect(position.clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
                 [verticalScrollDirection, horizontalScrollDirection] = getElementScrollDirections((/** @type {?} */ (element)), position.clientRect, pointerX, pointerY);
                 if (verticalScrollDirection || horizontalScrollDirection) {
                     scrollNode = (/** @type {?} */ (element));
@@ -3182,35 +3277,6 @@ if (false) {
     DropListRef.prototype._viewportRuler;
 }
 /**
- * Updates the top/left positions of a `ClientRect`, as well as their bottom/right counterparts.
- * @param {?} clientRect `ClientRect` that should be updated.
- * @param {?} top Amount to add to the `top` position.
- * @param {?} left Amount to add to the `left` position.
- * @return {?}
- */
-function adjustClientRect(clientRect, top, left) {
-    clientRect.top += top;
-    clientRect.bottom = clientRect.top + clientRect.height;
-    clientRect.left += left;
-    clientRect.right = clientRect.left + clientRect.width;
-}
-/**
- * Checks whether the pointer coordinates are close to a ClientRect.
- * @param {?} rect ClientRect to check against.
- * @param {?} pointerX Coordinates along the X axis.
- * @param {?} pointerY Coordinates along the Y axis.
- * @return {?}
- */
-function isPointerNearClientRect(rect, pointerX, pointerY) {
-    const { top, right, bottom, left, width, height } = rect;
-    /** @type {?} */
-    const xThreshold = width * DROP_PROXIMITY_THRESHOLD;
-    /** @type {?} */
-    const yThreshold = height * DROP_PROXIMITY_THRESHOLD;
-    return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
-        pointerX > left - xThreshold && pointerX < right + xThreshold;
-}
-/**
  * Finds the index of an item that matches a predicate function. Used as an equivalent
  * of `Array.prototype.findIndex` which isn't part of the standard Google typings.
  * @template T
@@ -3225,38 +3291,6 @@ function findIndex(array, predicate) {
         }
     }
     return -1;
-}
-/**
- * Checks whether some coordinates are within a `ClientRect`.
- * @param {?} clientRect ClientRect that is being checked.
- * @param {?} x Coordinates along the X axis.
- * @param {?} y Coordinates along the Y axis.
- * @return {?}
- */
-function isInsideClientRect(clientRect, x, y) {
-    const { top, bottom, left, right } = clientRect;
-    return y >= top && y <= bottom && x >= left && x <= right;
-}
-/**
- * Gets a mutable version of an element's bounding `ClientRect`.
- * @param {?} element
- * @return {?}
- */
-function getMutableClientRect(element) {
-    /** @type {?} */
-    const clientRect = element.getBoundingClientRect();
-    // We need to clone the `clientRect` here, because all the values on it are readonly
-    // and we need to be able to update them. Also we can't use a spread here, because
-    // the values on a `ClientRect` aren't own properties. See:
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect#Notes
-    return {
-        top: clientRect.top,
-        right: clientRect.right,
-        bottom: clientRect.bottom,
-        left: clientRect.left,
-        width: clientRect.width,
-        height: clientRect.height
-    };
 }
 /**
  * Increments the vertical scroll position of a node.
