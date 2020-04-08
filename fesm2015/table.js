@@ -1403,6 +1403,7 @@ const CDK_TABLE_TEMPLATE =
 // element in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
 `
   <ng-content select="caption"></ng-content>
+  <ng-content select="colgroup, col"></ng-content>
   <ng-container headerRowOutlet></ng-container>
   <ng-container rowOutlet></ng-container>
   <ng-container footerRowOutlet></ng-container>
