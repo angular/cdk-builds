@@ -1695,6 +1695,24 @@ var CdkAriaLive = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Screenreaders will often fire fake mousedown events when a focusable element
+ * is activated using the keyboard. We can typically distinguish between these faked
+ * mousedown events and real mousedown events using the "buttons" property. While
+ * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
+ * the left mouse button), faked mousedowns will usually set the property value to 0.
+ */
+function isFakeMousedownFromScreenReader(event) {
+    return event.buttons === 0;
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
 var TOUCH_BUFFER_MS = 650;
@@ -1737,11 +1755,14 @@ var FocusMonitor = /** @class */ (function () {
          * Event listener for `mousedown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentMousedownListener = function () {
+        this._documentMousedownListener = function (event) {
             // On mousedown record the origin only if there is not touch
             // target, since a mousedown can happen as a result of a touch event.
             if (!_this._lastTouchTarget) {
-                _this._setOriginForCurrentEventQueue('mouse');
+                // In some cases screen readers fire fake `mousedown` events instead of `keydown`.
+                // Resolve the focus source to `keyboard` if we detect one of them.
+                var source = isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse';
+                _this._setOriginForCurrentEventQueue(source);
             }
         };
         /**
@@ -2049,24 +2070,6 @@ var CdkMonitorFocus = /** @class */ (function () {
     };
     return CdkMonitorFocus;
 }());
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Screenreaders will often fire fake mousedown events when a focusable element
- * is activated using the keyboard. We can typically distinguish between these faked
- * mousedown events and real mousedown events using the "buttons" property. While
- * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
- * the left mouse button), faked mousedowns will usually set the property value to 0.
- */
-function isFakeMousedownFromScreenReader(event) {
-    return event.buttons === 0;
-}
 
 /**
  * @license
