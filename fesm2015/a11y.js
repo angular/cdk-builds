@@ -2655,6 +2655,31 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: src/cdk/a11y/fake-mousedown.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Screenreaders will often fire fake mousedown events when a focusable element
+ * is activated using the keyboard. We can typically distinguish between these faked
+ * mousedown events and real mousedown events using the "buttons" property. While
+ * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
+ * the left mouse button), faked mousedowns will usually set the property value to 0.
+ * @param {?} event
+ * @return {?}
+ */
+function isFakeMousedownFromScreenReader(event) {
+    return event.buttons === 0;
+}
+
+/**
+ * @fileoverview added by tsickle
  * Generated from: src/cdk/a11y/focus-monitor/focus-monitor.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -2760,13 +2785,18 @@ class FocusMonitor {
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
         this._documentMousedownListener = (/**
+         * @param {?} event
          * @return {?}
          */
-        () => {
+        (event) => {
             // On mousedown record the origin only if there is not touch
             // target, since a mousedown can happen as a result of a touch event.
             if (!this._lastTouchTarget) {
-                this._setOriginForCurrentEventQueue('mouse');
+                // In some cases screen readers fire fake `mousedown` events instead of `keydown`.
+                // Resolve the focus source to `keyboard` if we detect one of them.
+                /** @type {?} */
+                const source = isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse';
+                this._setOriginForCurrentEventQueue(source);
             }
         });
         /**
@@ -2809,6 +2839,24 @@ class FocusMonitor {
              */
             () => this._windowFocused = false));
         });
+        /**
+         * Event listener for `focus` and 'blur' events on the document.
+         * Needs to be an arrow function in order to preserve the context when it gets bound.
+         */
+        this._documentFocusAndBlurListener = (/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
+            /** @type {?} */
+            const target = (/** @type {?} */ (event.target));
+            /** @type {?} */
+            const handler = event.type === 'focus' ? this._onFocus : this._onBlur;
+            // We need to walk up the ancestor chain in order to support `checkChildren`.
+            for (let el = target; el; el = el.parentElement) {
+                handler.call(this, event, el);
+            }
+        });
         this._document = document;
         this._detectionMode = (options === null || options === void 0 ? void 0 : options.detectionMode) || 0 /* IMMEDIATE */;
     }
@@ -2827,50 +2875,18 @@ class FocusMonitor {
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
             /** @type {?} */
-            let cachedInfo = this._elementInfo.get(nativeElement);
+            const cachedInfo = this._elementInfo.get(nativeElement);
             (/** @type {?} */ (cachedInfo)).checkChildren = checkChildren;
             return (/** @type {?} */ (cachedInfo)).subject.asObservable();
         }
         // Create monitored element info.
         /** @type {?} */
-        let info = {
-            unlisten: (/**
-             * @return {?}
-             */
-            () => { }),
+        const info = {
             checkChildren: checkChildren,
             subject: new Subject()
         };
         this._elementInfo.set(nativeElement, info);
         this._incrementMonitoredElementCount();
-        // Start listening. We need to listen in capture phase since focus events don't bubble.
-        /** @type {?} */
-        let focusListener = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        (event) => this._onFocus(event, nativeElement));
-        /** @type {?} */
-        let blurListener = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        (event) => this._onBlur(event, nativeElement));
-        this._ngZone.runOutsideAngular((/**
-         * @return {?}
-         */
-        () => {
-            nativeElement.addEventListener('focus', focusListener, true);
-            nativeElement.addEventListener('blur', blurListener, true);
-        }));
-        // Create an unlisten function for later.
-        info.unlisten = (/**
-         * @return {?}
-         */
-        () => {
-            nativeElement.removeEventListener('focus', focusListener, true);
-            nativeElement.removeEventListener('blur', blurListener, true);
-        });
         return info.subject.asObservable();
     }
     /**
@@ -2883,7 +2899,6 @@ class FocusMonitor {
         /** @type {?} */
         const elementInfo = this._elementInfo.get(nativeElement);
         if (elementInfo) {
-            elementInfo.unlisten();
             elementInfo.subject.complete();
             this._setClasses(nativeElement);
             this._elementInfo.delete(nativeElement);
@@ -2951,6 +2966,31 @@ class FocusMonitor {
         }
     }
     /**
+     * @private
+     * @param {?} event
+     * @return {?}
+     */
+    _getFocusOrigin(event) {
+        // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
+        // 1) The window has just regained focus, in which case we want to restore the focused state of
+        //    the element from before the window blurred.
+        // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
+        // 3) The element was programmatically focused, in which case we should mark the origin as
+        //    'program'.
+        if (this._origin) {
+            return this._origin;
+        }
+        if (this._windowFocused && this._lastFocusOrigin) {
+            return this._lastFocusOrigin;
+        }
+        else if (this._wasCausedByTouch(event)) {
+            return 'touch';
+        }
+        else {
+            return 'program';
+        }
+    }
+    /**
      * Sets the focus classes on the element based on the given focus origin.
      * @private
      * @param {?} element The element to update the classes on.
@@ -2958,15 +2998,11 @@ class FocusMonitor {
      * @return {?}
      */
     _setClasses(element, origin) {
-        /** @type {?} */
-        const elementInfo = this._elementInfo.get(element);
-        if (elementInfo) {
-            this._toggleClass(element, 'cdk-focused', !!origin);
-            this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
-            this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
-            this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
-            this._toggleClass(element, 'cdk-program-focused', origin === 'program');
-        }
+        this._toggleClass(element, 'cdk-focused', !!origin);
+        this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
+        this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
+        this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
+        this._toggleClass(element, 'cdk-program-focused', origin === 'program');
     }
     /**
      * Sets the origin and schedules an async function to clear it at the end of the event queue.
@@ -3044,25 +3080,8 @@ class FocusMonitor {
         if (!elementInfo || (!elementInfo.checkChildren && element !== event.target)) {
             return;
         }
-        // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
-        // 1) The window has just regained focus, in which case we want to restore the focused state of
-        //    the element from before the window blurred.
-        // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
-        // 3) The element was programmatically focused, in which case we should mark the origin as
-        //    'program'.
         /** @type {?} */
-        let origin = this._origin;
-        if (!origin) {
-            if (this._windowFocused && this._lastFocusOrigin) {
-                origin = this._lastFocusOrigin;
-            }
-            else if (this._wasCausedByTouch(event)) {
-                origin = 'touch';
-            }
-            else {
-                origin = 'program';
-            }
-        }
+        const origin = this._getFocusOrigin(event);
         this._setClasses(element, origin);
         this._emitOrigin(elementInfo.subject, origin);
         this._lastFocusOrigin = origin;
@@ -3114,6 +3133,8 @@ class FocusMonitor {
                 const document = this._getDocument();
                 /** @type {?} */
                 const window = this._getWindow();
+                document.addEventListener('focus', this._documentFocusAndBlurListener, captureEventListenerOptions);
+                document.addEventListener('blur', this._documentFocusAndBlurListener, captureEventListenerOptions);
                 document.addEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
                 document.addEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
                 document.addEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
@@ -3132,6 +3153,8 @@ class FocusMonitor {
             const document = this._getDocument();
             /** @type {?} */
             const window = this._getWindow();
+            document.removeEventListener('focus', this._documentFocusAndBlurListener, captureEventListenerOptions);
+            document.removeEventListener('blur', this._documentFocusAndBlurListener, captureEventListenerOptions);
             document.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
             document.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
             document.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
@@ -3251,6 +3274,13 @@ if (false) {
      */
     FocusMonitor.prototype._document;
     /**
+     * Event listener for `focus` and 'blur' events on the document.
+     * Needs to be an arrow function in order to preserve the context when it gets bound.
+     * @type {?}
+     * @private
+     */
+    FocusMonitor.prototype._documentFocusAndBlurListener;
+    /**
      * @type {?}
      * @private
      */
@@ -3329,31 +3359,6 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * Generated from: src/cdk/a11y/fake-mousedown.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Screenreaders will often fire fake mousedown events when a focusable element
- * is activated using the keyboard. We can typically distinguish between these faked
- * mousedown events and real mousedown events using the "buttons" property. While
- * real mousedowns will indicate the mouse button that was pressed (e.g. "1" for
- * the left mouse button), faked mousedowns will usually set the property value to 0.
- * @param {?} event
- * @return {?}
- */
-function isFakeMousedownFromScreenReader(event) {
-    return event.buttons === 0;
-}
-
-/**
- * @fileoverview added by tsickle
  * Generated from: src/cdk/a11y/high-contrast-mode/high-contrast-mode-detector.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
@@ -3416,11 +3421,15 @@ class HighContrastModeDetector {
         this._document.body.appendChild(testElement);
         // Get the computed style for the background color, collapsing spaces to normalize between
         // browsers. Once we get this color, we no longer need the test element. Access the `window`
-        // via the document so we can fake it in tests.
+        // via the document so we can fake it in tests. Note that we have extra null checks, because
+        // this logic will likely run during app bootstrap and throwing can break the entire app.
         /** @type {?} */
-        const documentWindow = (/** @type {?} */ (this._document.defaultView));
+        const documentWindow = this._document.defaultView || window;
         /** @type {?} */
-        const computedColor = (documentWindow.getComputedStyle(testElement).backgroundColor || '').replace(/ /g, '');
+        const computedStyle = (documentWindow && documentWindow.getComputedStyle) ?
+            documentWindow.getComputedStyle(testElement) : null;
+        /** @type {?} */
+        const computedColor = (computedStyle && computedStyle.backgroundColor || '').replace(/ /g, '');
         this._document.body.removeChild(testElement);
         switch (computedColor) {
             case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
