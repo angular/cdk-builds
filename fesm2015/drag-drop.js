@@ -2441,6 +2441,8 @@ class DropListRef {
      * @return {THIS}
      */
     withItems(items) {
+        /** @type {?} */
+        const previousItems = (/** @type {?} */ (this))._draggables;
         (/** @type {?} */ (this))._draggables = items;
         items.forEach((/**
          * @param {?} item
@@ -2448,7 +2450,24 @@ class DropListRef {
          */
         item => item._withDropContainer((/** @type {?} */ (this)))));
         if ((/** @type {?} */ (this)).isDragging()) {
-            (/** @type {?} */ (this))._cacheItems();
+            /** @type {?} */
+            const draggedItems = previousItems.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => item.isDragging()));
+            // If all of the items being dragged were removed
+            // from the list, abort the current drag sequence.
+            if (draggedItems.every((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => items.indexOf(item) === -1))) {
+                (/** @type {?} */ (this))._reset();
+            }
+            else {
+                (/** @type {?} */ (this))._cacheItems();
+            }
         }
         return (/** @type {?} */ (this));
     }
@@ -2759,7 +2778,13 @@ class DropListRef {
          * @param {?} item
          * @return {?}
          */
-        item => item.getRootElement().style.transform = ''));
+        item => {
+            /** @type {?} */
+            const rootElement = item.getRootElement();
+            if (rootElement) {
+                rootElement.style.transform = '';
+            }
+        }));
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}

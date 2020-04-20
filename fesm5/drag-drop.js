@@ -1447,10 +1447,19 @@ var DropListRef = /** @class */ (function () {
      */
     DropListRef.prototype.withItems = function (items) {
         var _this = this;
+        var previousItems = this._draggables;
         this._draggables = items;
         items.forEach(function (item) { return item._withDropContainer(_this); });
         if (this.isDragging()) {
-            this._cacheItems();
+            var draggedItems = previousItems.filter(function (item) { return item.isDragging(); });
+            // If all of the items being dragged were removed
+            // from the list, abort the current drag sequence.
+            if (draggedItems.every(function (item) { return items.indexOf(item) === -1; })) {
+                this._reset();
+            }
+            else {
+                this._cacheItems();
+            }
         }
         return this;
     };
@@ -1672,7 +1681,12 @@ var DropListRef = /** @class */ (function () {
         var styles = coerceElement(this.element).style;
         styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
+        this._activeDraggables.forEach(function (item) {
+            var rootElement = item.getRootElement();
+            if (rootElement) {
+                rootElement.style.transform = '';
+            }
+        });
         this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });
         this._activeDraggables = [];
         this._itemPositions = [];
