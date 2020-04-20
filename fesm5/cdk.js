@@ -8,7 +8,7 @@ import { Version } from '@angular/core';
  * found in the LICENSE file at https://angular.io/license
  */
 /** Current version of the Angular Component Development Kit. */
-var VERSION = new Version('9.2.1-sha-a2d041803');
+var VERSION = new Version('9.2.1-sha-1cf4048b2');
 
 /**
  * @license
