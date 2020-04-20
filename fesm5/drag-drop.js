@@ -753,13 +753,16 @@ var DragRef = /** @class */ (function () {
         var previewClass = this.previewClass;
         var previewTemplate = previewConfig ? previewConfig.template : null;
         var preview;
-        if (previewTemplate) {
+        if (previewTemplate && previewConfig) {
+            // Measure the element before we've inserted the preview
+            // since the insertion could throw off the measurement.
+            var rootRect = previewConfig.matchSize ? this._rootElement.getBoundingClientRect() : null;
             var viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
             viewRef.detectChanges();
             preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
             if (previewConfig.matchSize) {
-                matchElementSize(preview, this._rootElement);
+                matchElementSize(preview, rootRect);
             }
             else {
                 preview.style.transform =
@@ -769,7 +772,7 @@ var DragRef = /** @class */ (function () {
         else {
             var element = this._rootElement;
             preview = deepCloneNode(element);
-            matchElementSize(preview, element);
+            matchElementSize(preview, element.getBoundingClientRect());
         }
         extendStyles(preview.style, {
             // It's important that we disable the pointer events on the preview, because
@@ -1128,10 +1131,9 @@ function getRootNode(viewRef, _document) {
 /**
  * Matches the target element's size to the source's size.
  * @param target Element that needs to be resized.
- * @param source Element whose size needs to be matched.
+ * @param sourceRect Dimensions of the source element.
  */
-function matchElementSize(target, source) {
-    var sourceRect = source.getBoundingClientRect();
+function matchElementSize(target, sourceRect) {
     target.style.width = sourceRect.width + "px";
     target.style.height = sourceRect.height + "px";
     target.style.transform = getTransform(sourceRect.left, sourceRect.top);
@@ -1445,10 +1447,19 @@ var DropListRef = /** @class */ (function () {
      */
     DropListRef.prototype.withItems = function (items) {
         var _this = this;
+        var previousItems = this._draggables;
         this._draggables = items;
         items.forEach(function (item) { return item._withDropContainer(_this); });
         if (this.isDragging()) {
-            this._cacheItems();
+            var draggedItems = previousItems.filter(function (item) { return item.isDragging(); });
+            // If all of the items being dragged were removed
+            // from the list, abort the current drag sequence.
+            if (draggedItems.every(function (item) { return items.indexOf(item) === -1; })) {
+                this._reset();
+            }
+            else {
+                this._cacheItems();
+            }
         }
         return this;
     };
@@ -1670,7 +1681,12 @@ var DropListRef = /** @class */ (function () {
         var styles = coerceElement(this.element).style;
         styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(function (item) { return item.getRootElement().style.transform = ''; });
+        this._activeDraggables.forEach(function (item) {
+            var rootElement = item.getRootElement();
+            if (rootElement) {
+                rootElement.style.transform = '';
+            }
+        });
         this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });
         this._activeDraggables = [];
         this._itemPositions = [];

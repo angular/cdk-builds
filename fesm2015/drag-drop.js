@@ -1111,14 +1111,18 @@ class DragRef {
         const previewTemplate = previewConfig ? previewConfig.template : null;
         /** @type {?} */
         let preview;
-        if (previewTemplate) {
+        if (previewTemplate && previewConfig) {
+            // Measure the element before we've inserted the preview
+            // since the insertion could throw off the measurement.
             /** @type {?} */
-            const viewRef = (/** @type {?} */ (previewConfig)).viewContainer.createEmbeddedView(previewTemplate, (/** @type {?} */ (previewConfig)).context);
+            const rootRect = previewConfig.matchSize ? this._rootElement.getBoundingClientRect() : null;
+            /** @type {?} */
+            const viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
             viewRef.detectChanges();
             preview = getRootNode(viewRef, this._document);
             this._previewRef = viewRef;
-            if ((/** @type {?} */ (previewConfig)).matchSize) {
-                matchElementSize(preview, this._rootElement);
+            if (previewConfig.matchSize) {
+                matchElementSize(preview, (/** @type {?} */ (rootRect)));
             }
             else {
                 preview.style.transform =
@@ -1129,7 +1133,7 @@ class DragRef {
             /** @type {?} */
             const element = this._rootElement;
             preview = deepCloneNode(element);
-            matchElementSize(preview, element);
+            matchElementSize(preview, element.getBoundingClientRect());
         }
         extendStyles(preview.style, {
             // It's important that we disable the pointer events on the preview, because
@@ -1970,12 +1974,10 @@ function getRootNode(viewRef, _document) {
 /**
  * Matches the target element's size to the source's size.
  * @param {?} target Element that needs to be resized.
- * @param {?} source Element whose size needs to be matched.
+ * @param {?} sourceRect Dimensions of the source element.
  * @return {?}
  */
-function matchElementSize(target, source) {
-    /** @type {?} */
-    const sourceRect = source.getBoundingClientRect();
+function matchElementSize(target, sourceRect) {
     target.style.width = `${sourceRect.width}px`;
     target.style.height = `${sourceRect.height}px`;
     target.style.transform = getTransform(sourceRect.left, sourceRect.top);
@@ -2439,6 +2441,8 @@ class DropListRef {
      * @return {THIS}
      */
     withItems(items) {
+        /** @type {?} */
+        const previousItems = (/** @type {?} */ (this))._draggables;
         (/** @type {?} */ (this))._draggables = items;
         items.forEach((/**
          * @param {?} item
@@ -2446,7 +2450,24 @@ class DropListRef {
          */
         item => item._withDropContainer((/** @type {?} */ (this)))));
         if ((/** @type {?} */ (this)).isDragging()) {
-            (/** @type {?} */ (this))._cacheItems();
+            /** @type {?} */
+            const draggedItems = previousItems.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => item.isDragging()));
+            // If all of the items being dragged were removed
+            // from the list, abort the current drag sequence.
+            if (draggedItems.every((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => items.indexOf(item) === -1))) {
+                (/** @type {?} */ (this))._reset();
+            }
+            else {
+                (/** @type {?} */ (this))._cacheItems();
+            }
         }
         return (/** @type {?} */ (this));
     }
@@ -2757,7 +2778,13 @@ class DropListRef {
          * @param {?} item
          * @return {?}
          */
-        item => item.getRootElement().style.transform = ''));
+        item => {
+            /** @type {?} */
+            const rootElement = item.getRootElement();
+            if (rootElement) {
+                rootElement.style.transform = '';
+            }
+        }));
         this._siblings.forEach((/**
          * @param {?} sibling
          * @return {?}
