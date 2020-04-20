@@ -749,13 +749,16 @@
             var previewClass = this.previewClass;
             var previewTemplate = previewConfig ? previewConfig.template : null;
             var preview;
-            if (previewTemplate) {
+            if (previewTemplate && previewConfig) {
+                // Measure the element before we've inserted the preview
+                // since the insertion could throw off the measurement.
+                var rootRect = previewConfig.matchSize ? this._rootElement.getBoundingClientRect() : null;
                 var viewRef = previewConfig.viewContainer.createEmbeddedView(previewTemplate, previewConfig.context);
                 viewRef.detectChanges();
                 preview = getRootNode(viewRef, this._document);
                 this._previewRef = viewRef;
                 if (previewConfig.matchSize) {
-                    matchElementSize(preview, this._rootElement);
+                    matchElementSize(preview, rootRect);
                 }
                 else {
                     preview.style.transform =
@@ -765,7 +768,7 @@
             else {
                 var element = this._rootElement;
                 preview = deepCloneNode(element);
-                matchElementSize(preview, element);
+                matchElementSize(preview, element.getBoundingClientRect());
             }
             extendStyles(preview.style, {
                 // It's important that we disable the pointer events on the preview, because
@@ -1124,10 +1127,9 @@
     /**
      * Matches the target element's size to the source's size.
      * @param target Element that needs to be resized.
-     * @param source Element whose size needs to be matched.
+     * @param sourceRect Dimensions of the source element.
      */
-    function matchElementSize(target, source) {
-        var sourceRect = source.getBoundingClientRect();
+    function matchElementSize(target, sourceRect) {
         target.style.width = sourceRect.width + "px";
         target.style.height = sourceRect.height + "px";
         target.style.transform = getTransform(sourceRect.left, sourceRect.top);
