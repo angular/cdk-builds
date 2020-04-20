@@ -150,4 +150,9 @@ export declare class CdkFooterRow {
 /** Data row template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkRow {
 }
+/** Row that can be used to display a message when no data is shown in the table. */
+export declare class CdkNoDataRow {
+    templateRef: TemplateRef<any>;
+    constructor(templateRef: TemplateRef<any>);
+}
 export {};

@@ -12,7 +12,7 @@ import { Platform } from '@angular/cdk/platform';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
-import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef } from './row';
+import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef, CdkNoDataRow } from './row';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;
@@ -50,11 +50,21 @@ export declare class FooterRowOutlet implements RowOutlet {
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
 }
 /**
+ * Provides a handle for the table to grab the view
+ * container's ng-container to insert the no data row.
+ * @docs-private
+ */
+export declare class NoDataRowOutlet implements RowOutlet {
+    viewContainer: ViewContainerRef;
+    elementRef: ElementRef;
+    constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+}
+/**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  * @docs-private
  */
-export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"></ng-content>\n  <ng-content select=\"colgroup, col\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
+export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"></ng-content>\n  <ng-content select=\"colgroup, col\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container noDataRowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
 /**
  * Interface used to conveniently type the possible context interfaces for the render row.
  * @docs-private
@@ -187,6 +197,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table subclasses.
      */
     protected stickyCssClass: string;
+    /** Whether the no data row is currently showing anything. */
+    private _isShowingNoDataRow;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize row operations by identifying a row based on its data
@@ -241,6 +253,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _rowOutlet: DataRowOutlet;
     _headerRowOutlet: HeaderRowOutlet;
     _footerRowOutlet: FooterRowOutlet;
+    _noDataRowOutlet: NoDataRowOutlet;
     /**
      * The column definitions provided by the user that contain what the header, data, and footer
      * cells should render for each column.
@@ -252,6 +265,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentHeaderRowDefs: QueryList<CdkHeaderRowDef>;
     /** Set of footer row definitions that were provided to the table as content children. */
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
+    /** Row definition that will only be rendered if there's no data in the table. */
+    _noDataRow: CdkNoDataRow;
     constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
@@ -416,6 +431,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _setupStickyStyler;
     /** Filters definitions that belong to this table from a QueryList. */
     private _getOwnDefs;
+    /** Creates or removes the no data row, depending on whether any data is being shown. */
+    private _updateNoDataRow;
     static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
 }
 export {};

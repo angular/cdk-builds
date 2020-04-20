@@ -874,6 +874,30 @@ CdkRow.decorators = [
                 encapsulation: ViewEncapsulation.None
             }] }
 ];
+/**
+ * Row that can be used to display a message when no data is shown in the table.
+ */
+class CdkNoDataRow {
+    /**
+     * @param {?} templateRef
+     */
+    constructor(templateRef) {
+        this.templateRef = templateRef;
+    }
+}
+CdkNoDataRow.decorators = [
+    { type: Directive, args: [{
+                selector: 'ng-template[cdkNoDataRow]'
+            },] }
+];
+/** @nocollapse */
+CdkNoDataRow.ctorParameters = () => [
+    { type: TemplateRef }
+];
+if (false) {
+    /** @type {?} */
+    CdkNoDataRow.prototype.templateRef;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1393,6 +1417,35 @@ if (false) {
     FooterRowOutlet.prototype.elementRef;
 }
 /**
+ * Provides a handle for the table to grab the view
+ * container's ng-container to insert the no data row.
+ * \@docs-private
+ */
+class NoDataRowOutlet {
+    /**
+     * @param {?} viewContainer
+     * @param {?} elementRef
+     */
+    constructor(viewContainer, elementRef) {
+        this.viewContainer = viewContainer;
+        this.elementRef = elementRef;
+    }
+}
+NoDataRowOutlet.decorators = [
+    { type: Directive, args: [{ selector: '[noDataRowOutlet]' },] }
+];
+/** @nocollapse */
+NoDataRowOutlet.ctorParameters = () => [
+    { type: ViewContainerRef },
+    { type: ElementRef }
+];
+if (false) {
+    /** @type {?} */
+    NoDataRowOutlet.prototype.viewContainer;
+    /** @type {?} */
+    NoDataRowOutlet.prototype.elementRef;
+}
+/**
  * The table template that can be used by the mat-table. Should not be used outside of the
  * material library.
  * \@docs-private
@@ -1406,6 +1459,7 @@ const CDK_TABLE_TEMPLATE =
   <ng-content select="colgroup, col"></ng-content>
   <ng-container headerRowOutlet></ng-container>
   <ng-container rowOutlet></ng-container>
+  <ng-container noDataRowOutlet></ng-container>
   <ng-container footerRowOutlet></ng-container>
 `;
 /**
@@ -1533,6 +1587,10 @@ class CdkTable {
          * table subclasses.
          */
         this.stickyCssClass = 'cdk-table-sticky';
+        /**
+         * Whether the no data row is currently showing anything.
+         */
+        this._isShowingNoDataRow = false;
         this._multiTemplateDataRows = false;
         // TODO(andrewseguin): Remove max value as the end index
         //   and instead calculate the view on init and scroll.
@@ -1680,6 +1738,7 @@ class CdkTable {
      */
     ngOnDestroy() {
         this._rowOutlet.viewContainer.clear();
+        this._noDataRowOutlet.viewContainer.clear();
         this._headerRowOutlet.viewContainer.clear();
         this._footerRowOutlet.viewContainer.clear();
         this._cachedRenderRowsMap.clear();
@@ -1741,6 +1800,7 @@ class CdkTable {
             const rowView = (/** @type {?} */ (viewContainer.get((/** @type {?} */ (record.currentIndex)))));
             rowView.context.$implicit = record.item.data;
         }));
+        this._updateNoDataRow();
         this.updateStickyColumnStyles();
     }
     /**
@@ -2395,15 +2455,17 @@ class CdkTable {
         const documentFragment = this._document.createDocumentFragment();
         /** @type {?} */
         const sections = [
-            { tag: 'thead', outlet: this._headerRowOutlet },
-            { tag: 'tbody', outlet: this._rowOutlet },
-            { tag: 'tfoot', outlet: this._footerRowOutlet },
+            { tag: 'thead', outlets: [this._headerRowOutlet] },
+            { tag: 'tbody', outlets: [this._rowOutlet, this._noDataRowOutlet] },
+            { tag: 'tfoot', outlets: [this._footerRowOutlet] },
         ];
         for (const section of sections) {
             /** @type {?} */
             const element = this._document.createElement(section.tag);
             element.setAttribute('role', 'rowgroup');
-            element.appendChild(section.outlet.elementRef.nativeElement);
+            for (const outlet of section.outlets) {
+                element.appendChild(outlet.elementRef.nativeElement);
+            }
             documentFragment.appendChild(element);
         }
         // Use a DocumentFragment so we don't hit the DOM on each iteration.
@@ -2488,6 +2550,23 @@ class CdkTable {
          */
         item => !item._table || item._table === this));
     }
+    /**
+     * Creates or removes the no data row, depending on whether any data is being shown.
+     * @private
+     * @return {?}
+     */
+    _updateNoDataRow() {
+        if (this._noDataRow) {
+            /** @type {?} */
+            const shouldShow = this._rowOutlet.viewContainer.length === 0;
+            if (shouldShow !== this._isShowingNoDataRow) {
+                /** @type {?} */
+                const container = this._noDataRowOutlet.viewContainer;
+                shouldShow ? container.createEmbeddedView(this._noDataRow.templateRef) : container.clear();
+                this._isShowingNoDataRow = shouldShow;
+            }
+        }
+    }
 }
 CdkTable.decorators = [
     { type: Component, args: [{
@@ -2523,6 +2602,7 @@ CdkTable.propDecorators = {
     _rowOutlet: [{ type: ViewChild, args: [DataRowOutlet, { static: true },] }],
     _headerRowOutlet: [{ type: ViewChild, args: [HeaderRowOutlet, { static: true },] }],
     _footerRowOutlet: [{ type: ViewChild, args: [FooterRowOutlet, { static: true },] }],
+    _noDataRowOutlet: [{ type: ViewChild, args: [NoDataRowOutlet, { static: true },] }],
     _contentColumnDefs: [{ type: ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
     _contentRowDefs: [{ type: ContentChildren, args: [CdkRowDef, { descendants: true },] }],
     _contentHeaderRowDefs: [{ type: ContentChildren, args: [CdkHeaderRowDef, {
@@ -2530,7 +2610,8 @@ CdkTable.propDecorators = {
                 },] }],
     _contentFooterRowDefs: [{ type: ContentChildren, args: [CdkFooterRowDef, {
                     descendants: true
-                },] }]
+                },] }],
+    _noDataRow: [{ type: ContentChild, args: [CdkNoDataRow,] }]
 };
 if (false) {
     /** @type {?} */
@@ -2690,6 +2771,12 @@ if (false) {
      */
     CdkTable.prototype.stickyCssClass;
     /**
+     * Whether the no data row is currently showing anything.
+     * @type {?}
+     * @private
+     */
+    CdkTable.prototype._isShowingNoDataRow;
+    /**
      * @type {?}
      * @private
      */
@@ -2715,6 +2802,8 @@ if (false) {
     CdkTable.prototype._headerRowOutlet;
     /** @type {?} */
     CdkTable.prototype._footerRowOutlet;
+    /** @type {?} */
+    CdkTable.prototype._noDataRowOutlet;
     /**
      * The column definitions provided by the user that contain what the header, data, and footer
      * cells should render for each column.
@@ -2736,6 +2825,11 @@ if (false) {
      * @type {?}
      */
     CdkTable.prototype._contentFooterRowDefs;
+    /**
+     * Row definition that will only be rendered if there's no data in the table.
+     * @type {?}
+     */
+    CdkTable.prototype._noDataRow;
     /**
      * @type {?}
      * @protected
@@ -3003,6 +3097,8 @@ const EXPORTED_DECLARATIONS = [
     HeaderRowOutlet,
     FooterRowOutlet,
     CdkTextColumn,
+    CdkNoDataRow,
+    NoDataRowOutlet,
 ];
 class CdkTableModule {
 }
@@ -3023,5 +3119,5 @@ CdkTableModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

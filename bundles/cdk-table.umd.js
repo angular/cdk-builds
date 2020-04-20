@@ -727,6 +727,22 @@
         ];
         return CdkRow;
     }());
+    /** Row that can be used to display a message when no data is shown in the table. */
+    var CdkNoDataRow = /** @class */ (function () {
+        function CdkNoDataRow(templateRef) {
+            this.templateRef = templateRef;
+        }
+        CdkNoDataRow.decorators = [
+            { type: core.Directive, args: [{
+                        selector: 'ng-template[cdkNoDataRow]'
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkNoDataRow.ctorParameters = function () { return [
+            { type: core.TemplateRef }
+        ]; };
+        return CdkNoDataRow;
+    }());
 
     /**
      * @license
@@ -1153,6 +1169,26 @@
         return FooterRowOutlet;
     }());
     /**
+     * Provides a handle for the table to grab the view
+     * container's ng-container to insert the no data row.
+     * @docs-private
+     */
+    var NoDataRowOutlet = /** @class */ (function () {
+        function NoDataRowOutlet(viewContainer, elementRef) {
+            this.viewContainer = viewContainer;
+            this.elementRef = elementRef;
+        }
+        NoDataRowOutlet.decorators = [
+            { type: core.Directive, args: [{ selector: '[noDataRowOutlet]' },] }
+        ];
+        /** @nocollapse */
+        NoDataRowOutlet.ctorParameters = function () { return [
+            { type: core.ViewContainerRef },
+            { type: core.ElementRef }
+        ]; };
+        return NoDataRowOutlet;
+    }());
+    /**
      * The table template that can be used by the mat-table. Should not be used outside of the
      * material library.
      * @docs-private
@@ -1160,7 +1196,7 @@
     var CDK_TABLE_TEMPLATE = 
     // Note that according to MDN, the `caption` element has to be projected as the **first**
     // element in the table. See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/caption
-    "\n  <ng-content select=\"caption\"></ng-content>\n  <ng-content select=\"colgroup, col\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
+    "\n  <ng-content select=\"caption\"></ng-content>\n  <ng-content select=\"colgroup, col\"></ng-content>\n  <ng-container headerRowOutlet></ng-container>\n  <ng-container rowOutlet></ng-container>\n  <ng-container noDataRowOutlet></ng-container>\n  <ng-container footerRowOutlet></ng-container>\n";
     /**
      * Class used to conveniently type the embedded view ref for rows with a context.
      * @docs-private
@@ -1246,6 +1282,8 @@
              * table subclasses.
              */
             this.stickyCssClass = 'cdk-table-sticky';
+            /** Whether the no data row is currently showing anything. */
+            this._isShowingNoDataRow = false;
             this._multiTemplateDataRows = false;
             // TODO(andrewseguin): Remove max value as the end index
             //   and instead calculate the view on init and scroll.
@@ -1377,6 +1415,7 @@
         };
         CdkTable.prototype.ngOnDestroy = function () {
             this._rowOutlet.viewContainer.clear();
+            this._noDataRowOutlet.viewContainer.clear();
             this._headerRowOutlet.viewContainer.clear();
             this._footerRowOutlet.viewContainer.clear();
             this._cachedRenderRowsMap.clear();
@@ -1424,6 +1463,7 @@
                 var rowView = viewContainer.get(record.currentIndex);
                 rowView.context.$implicit = record.item.data;
             });
+            this._updateNoDataRow();
             this.updateStickyColumnStyles();
         };
         /**
@@ -1864,19 +1904,31 @@
         };
         /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
         CdkTable.prototype._applyNativeTableSections = function () {
-            var e_2, _a;
+            var e_2, _a, e_3, _b;
             var documentFragment = this._document.createDocumentFragment();
             var sections = [
-                { tag: 'thead', outlet: this._headerRowOutlet },
-                { tag: 'tbody', outlet: this._rowOutlet },
-                { tag: 'tfoot', outlet: this._footerRowOutlet },
+                { tag: 'thead', outlets: [this._headerRowOutlet] },
+                { tag: 'tbody', outlets: [this._rowOutlet, this._noDataRowOutlet] },
+                { tag: 'tfoot', outlets: [this._footerRowOutlet] },
             ];
             try {
                 for (var sections_1 = __values(sections), sections_1_1 = sections_1.next(); !sections_1_1.done; sections_1_1 = sections_1.next()) {
                     var section = sections_1_1.value;
                     var element = this._document.createElement(section.tag);
                     element.setAttribute('role', 'rowgroup');
-                    element.appendChild(section.outlet.elementRef.nativeElement);
+                    try {
+                        for (var _c = (e_3 = void 0, __values(section.outlets)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                            var outlet = _d.value;
+                            element.appendChild(outlet.elementRef.nativeElement);
+                        }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                    }
                     documentFragment.appendChild(element);
                 }
             }
@@ -1944,6 +1996,17 @@
             var _this = this;
             return items.filter(function (item) { return !item._table || item._table === _this; });
         };
+        /** Creates or removes the no data row, depending on whether any data is being shown. */
+        CdkTable.prototype._updateNoDataRow = function () {
+            if (this._noDataRow) {
+                var shouldShow = this._rowOutlet.viewContainer.length === 0;
+                if (shouldShow !== this._isShowingNoDataRow) {
+                    var container = this._noDataRowOutlet.viewContainer;
+                    shouldShow ? container.createEmbeddedView(this._noDataRow.templateRef) : container.clear();
+                    this._isShowingNoDataRow = shouldShow;
+                }
+            }
+        };
         CdkTable.decorators = [
             { type: core.Component, args: [{
                         selector: 'cdk-table, table[cdk-table]',
@@ -1978,6 +2041,7 @@
             _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
             _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
             _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],
+            _noDataRowOutlet: [{ type: core.ViewChild, args: [NoDataRowOutlet, { static: true },] }],
             _contentColumnDefs: [{ type: core.ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
             _contentRowDefs: [{ type: core.ContentChildren, args: [CdkRowDef, { descendants: true },] }],
             _contentHeaderRowDefs: [{ type: core.ContentChildren, args: [CdkHeaderRowDef, {
@@ -1985,7 +2049,8 @@
                         },] }],
             _contentFooterRowDefs: [{ type: core.ContentChildren, args: [CdkFooterRowDef, {
                             descendants: true
-                        },] }]
+                        },] }],
+            _noDataRow: [{ type: core.ContentChild, args: [CdkNoDataRow,] }]
         };
         return CdkTable;
     }());
@@ -2136,6 +2201,8 @@
         HeaderRowOutlet,
         FooterRowOutlet,
         CdkTextColumn,
+        CdkNoDataRow,
+        NoDataRowOutlet,
     ];
     var CdkTableModule = /** @class */ (function () {
         function CdkTableModule() {
@@ -2184,6 +2251,7 @@
     exports.CdkHeaderCellDef = CdkHeaderCellDef;
     exports.CdkHeaderRow = CdkHeaderRow;
     exports.CdkHeaderRowDef = CdkHeaderRowDef;
+    exports.CdkNoDataRow = CdkNoDataRow;
     exports.CdkRow = CdkRow;
     exports.CdkRowDef = CdkRowDef;
     exports.CdkTable = CdkTable;
@@ -2192,6 +2260,7 @@
     exports.DataRowOutlet = DataRowOutlet;
     exports.FooterRowOutlet = FooterRowOutlet;
     exports.HeaderRowOutlet = HeaderRowOutlet;
+    exports.NoDataRowOutlet = NoDataRowOutlet;
     exports.STICKY_DIRECTIONS = STICKY_DIRECTIONS;
     exports.StickyStyler = StickyStyler;
     exports.TEXT_COLUMN_OPTIONS = TEXT_COLUMN_OPTIONS;
