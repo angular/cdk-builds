@@ -14,7 +14,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
 /**
  * Base tree control. It has basic toggle/expand/collapse operations on a single data node.
  * @abstract
- * @template T
+ * @template T, K
  */
 class BaseTreeControl {
     constructor() {
@@ -29,7 +29,7 @@ class BaseTreeControl {
      * @return {?}
      */
     toggle(dataNode) {
-        this.expansionModel.toggle(dataNode);
+        this.expansionModel.toggle(this._trackByValue(dataNode));
     }
     /**
      * Expands one single data node.
@@ -37,7 +37,7 @@ class BaseTreeControl {
      * @return {?}
      */
     expand(dataNode) {
-        this.expansionModel.select(dataNode);
+        this.expansionModel.select(this._trackByValue(dataNode));
     }
     /**
      * Collapses one single data node.
@@ -45,7 +45,7 @@ class BaseTreeControl {
      * @return {?}
      */
     collapse(dataNode) {
-        this.expansionModel.deselect(dataNode);
+        this.expansionModel.deselect(this._trackByValue(dataNode));
     }
     /**
      * Whether a given data node is expanded or not. Returns true if the data node is expanded.
@@ -53,7 +53,7 @@ class BaseTreeControl {
      * @return {?}
      */
     isExpanded(dataNode) {
-        return this.expansionModel.isSelected(dataNode);
+        return this.expansionModel.isSelected(this._trackByValue(dataNode));
     }
     /**
      * Toggles a subtree rooted at `node` recursively.
@@ -61,9 +61,9 @@ class BaseTreeControl {
      * @return {?}
      */
     toggleDescendants(dataNode) {
-        this.expansionModel.isSelected(dataNode)
-            ? this.collapseDescendants(dataNode)
-            : this.expandDescendants(dataNode);
+        this.expansionModel.isSelected(this._trackByValue(dataNode)) ?
+            this.collapseDescendants(dataNode) :
+            this.expandDescendants(dataNode);
     }
     /**
      * Collapse all dataNodes in the tree.
@@ -81,7 +81,11 @@ class BaseTreeControl {
         /** @type {?} */
         let toBeProcessed = [dataNode];
         toBeProcessed.push(...this.getDescendants(dataNode));
-        this.expansionModel.select(...toBeProcessed);
+        this.expansionModel.select(...toBeProcessed.map((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => this._trackByValue(value))));
     }
     /**
      * Collapses a subtree rooted at given data node recursively.
@@ -92,7 +96,19 @@ class BaseTreeControl {
         /** @type {?} */
         let toBeProcessed = [dataNode];
         toBeProcessed.push(...this.getDescendants(dataNode));
-        this.expansionModel.deselect(...toBeProcessed);
+        this.expansionModel.deselect(...toBeProcessed.map((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => this._trackByValue(value))));
+    }
+    /**
+     * @protected
+     * @param {?} value
+     * @return {?}
+     */
+    _trackByValue(value) {
+        return this.trackBy ? this.trackBy((/** @type {?} */ (value))) : (/** @type {?} */ (value));
     }
 }
 if (false) {
@@ -106,6 +122,14 @@ if (false) {
      * @type {?}
      */
     BaseTreeControl.prototype.expansionModel;
+    /**
+     * Returns the identifier by which a dataNode should be tracked, should its
+     * reference change.
+     *
+     * Similar to trackBy for *ngFor
+     * @type {?}
+     */
+    BaseTreeControl.prototype.trackBy;
     /**
      * Get depth of a given data node, return the level number. This is for flat tree node.
      * @type {?}
@@ -143,19 +167,34 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
+ * Optional set of configuration that can be provided to the FlatTreeControl.
+ * @record
+ * @template T, K
+ */
+function FlatTreeControlOptions() { }
+if (false) {
+    /** @type {?|undefined} */
+    FlatTreeControlOptions.prototype.trackBy;
+}
+/**
  * Flat tree control. Able to expand/collapse a subtree recursively for flattened tree.
- * @template T
+ * @template T, K
  */
 class FlatTreeControl extends BaseTreeControl {
     /**
      * Construct with flat tree data node functions getLevel and isExpandable.
      * @param {?} getLevel
      * @param {?} isExpandable
+     * @param {?=} options
      */
-    constructor(getLevel, isExpandable) {
+    constructor(getLevel, isExpandable, options) {
         super();
         this.getLevel = getLevel;
         this.isExpandable = isExpandable;
+        this.options = options;
+        if (this.options) {
+            this.trackBy = this.options.trackBy;
+        }
     }
     /**
      * Gets a list of the data node's subtree of descendent data nodes.
@@ -189,7 +228,11 @@ class FlatTreeControl extends BaseTreeControl {
      * @return {?}
      */
     expandAll() {
-        this.expansionModel.select(...this.dataNodes);
+        this.expansionModel.select(...this.dataNodes.map((/**
+         * @param {?} node
+         * @return {?}
+         */
+        node => this._trackByValue(node))));
     }
 }
 if (false) {
@@ -197,6 +240,8 @@ if (false) {
     FlatTreeControl.prototype.getLevel;
     /** @type {?} */
     FlatTreeControl.prototype.isExpandable;
+    /** @type {?} */
+    FlatTreeControl.prototype.options;
 }
 
 /**
@@ -296,7 +341,7 @@ if (false) {
  * The CDKTree will use this TreeControl to expand/collapse a node.
  * User can also use it outside the `<cdk-tree>` to control the expansion status of the tree.
  * @record
- * @template T
+ * @template T, K
  */
 function TreeControl() { }
 if (false) {

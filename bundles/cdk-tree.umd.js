@@ -209,25 +209,25 @@
         }
         /** Toggles one single data node's expanded/collapsed state. */
         BaseTreeControl.prototype.toggle = function (dataNode) {
-            this.expansionModel.toggle(dataNode);
+            this.expansionModel.toggle(this._trackByValue(dataNode));
         };
         /** Expands one single data node. */
         BaseTreeControl.prototype.expand = function (dataNode) {
-            this.expansionModel.select(dataNode);
+            this.expansionModel.select(this._trackByValue(dataNode));
         };
         /** Collapses one single data node. */
         BaseTreeControl.prototype.collapse = function (dataNode) {
-            this.expansionModel.deselect(dataNode);
+            this.expansionModel.deselect(this._trackByValue(dataNode));
         };
         /** Whether a given data node is expanded or not. Returns true if the data node is expanded. */
         BaseTreeControl.prototype.isExpanded = function (dataNode) {
-            return this.expansionModel.isSelected(dataNode);
+            return this.expansionModel.isSelected(this._trackByValue(dataNode));
         };
         /** Toggles a subtree rooted at `node` recursively. */
         BaseTreeControl.prototype.toggleDescendants = function (dataNode) {
-            this.expansionModel.isSelected(dataNode)
-                ? this.collapseDescendants(dataNode)
-                : this.expandDescendants(dataNode);
+            this.expansionModel.isSelected(this._trackByValue(dataNode)) ?
+                this.collapseDescendants(dataNode) :
+                this.expandDescendants(dataNode);
         };
         /** Collapse all dataNodes in the tree. */
         BaseTreeControl.prototype.collapseAll = function () {
@@ -236,16 +236,21 @@
         /** Expands a subtree rooted at given data node recursively. */
         BaseTreeControl.prototype.expandDescendants = function (dataNode) {
             var _a;
+            var _this = this;
             var toBeProcessed = [dataNode];
             toBeProcessed.push.apply(toBeProcessed, __spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).select.apply(_a, __spread(toBeProcessed));
+            (_a = this.expansionModel).select.apply(_a, __spread(toBeProcessed.map(function (value) { return _this._trackByValue(value); })));
         };
         /** Collapses a subtree rooted at given data node recursively. */
         BaseTreeControl.prototype.collapseDescendants = function (dataNode) {
             var _a;
+            var _this = this;
             var toBeProcessed = [dataNode];
             toBeProcessed.push.apply(toBeProcessed, __spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).deselect.apply(_a, __spread(toBeProcessed));
+            (_a = this.expansionModel).deselect.apply(_a, __spread(toBeProcessed.map(function (value) { return _this._trackByValue(value); })));
+        };
+        BaseTreeControl.prototype._trackByValue = function (value) {
+            return this.trackBy ? this.trackBy(value) : value;
         };
         return BaseTreeControl;
     }());
@@ -261,10 +266,14 @@
     var FlatTreeControl = /** @class */ (function (_super) {
         __extends(FlatTreeControl, _super);
         /** Construct with flat tree data node functions getLevel and isExpandable. */
-        function FlatTreeControl(getLevel, isExpandable) {
+        function FlatTreeControl(getLevel, isExpandable, options) {
             var _this = _super.call(this) || this;
             _this.getLevel = getLevel;
             _this.isExpandable = isExpandable;
+            _this.options = options;
+            if (_this.options) {
+                _this.trackBy = _this.options.trackBy;
+            }
             return _this;
         }
         /**
@@ -295,7 +304,8 @@
          */
         FlatTreeControl.prototype.expandAll = function () {
             var _a;
-            (_a = this.expansionModel).select.apply(_a, __spread(this.dataNodes));
+            var _this = this;
+            (_a = this.expansionModel).select.apply(_a, __spread(this.dataNodes.map(function (node) { return _this._trackByValue(node); })));
         };
         return FlatTreeControl;
     }(BaseTreeControl));

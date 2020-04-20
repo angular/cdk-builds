@@ -9,7 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Observable } from 'rxjs';
 import { TreeControl } from './tree-control';
 /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
-export declare abstract class BaseTreeControl<T> implements TreeControl<T> {
+export declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T, K> {
     /** Gets a list of descendent data nodes of a subtree rooted at given data node recursively. */
     abstract getDescendants(dataNode: T): T[];
     /** Expands all data nodes in the tree. */
@@ -17,7 +17,14 @@ export declare abstract class BaseTreeControl<T> implements TreeControl<T> {
     /** Saved data node for `expandAll` action. */
     dataNodes: T[];
     /** A selection model with multi-selection to track expansion status. */
-    expansionModel: SelectionModel<T>;
+    expansionModel: SelectionModel<K>;
+    /**
+     * Returns the identifier by which a dataNode should be tracked, should its
+     * reference change.
+     *
+     * Similar to trackBy for *ngFor
+     */
+    trackBy?: (dataNode: T) => K;
     /** Get depth of a given data node, return the level number. This is for flat tree node. */
     getLevel: (dataNode: T) => number;
     /**
@@ -43,4 +50,5 @@ export declare abstract class BaseTreeControl<T> implements TreeControl<T> {
     expandDescendants(dataNode: T): void;
     /** Collapses a subtree rooted at given data node recursively. */
     collapseDescendants(dataNode: T): void;
+    protected _trackByValue(value: T | K): K;
 }
