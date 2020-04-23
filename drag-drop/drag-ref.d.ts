@@ -96,8 +96,8 @@ export declare class DragRef<T = any> {
     private _initialContainer;
     /** Index at which the item started in its initial container. */
     private _initialIndex;
-    /** Cached scroll position on the page when the element was picked up. */
-    private _scrollPosition;
+    /** Cached positions of scrollable parent elements. */
+    private _parentPositions;
     /** Emits when the item is being moved. */
     private _moveEvents;
     /** Keeps track of the direction in which the user is dragging along each axis. */
@@ -377,5 +377,7 @@ export declare class DragRef<T = any> {
     private _getDragStartDelay;
     /** Updates the internal state of the draggable element when scrolling has occurred. */
     private _updateOnScroll;
+    /** Gets the scroll position of the viewport. */
+    private _getViewportScrollPosition;
 }
 export {};
