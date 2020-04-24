@@ -523,6 +523,7 @@
         };
         CdkTree.prototype.ngOnDestroy = function () {
             this._nodeOutlet.viewContainer.clear();
+            this.viewChange.complete();
             this._onDestroy.next();
             this._onDestroy.complete();
             if (this._dataSource && typeof this._dataSource.disconnect === 'function') {

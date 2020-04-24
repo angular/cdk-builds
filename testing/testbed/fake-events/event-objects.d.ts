@@ -10,7 +10,7 @@ import { ModifierKeys } from '@angular/cdk/testing';
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-export declare function createMouseEvent(type: string, x?: number, y?: number, button?: number): MouseEvent;
+export declare function createMouseEvent(type: string, clientX?: number, clientY?: number, button?: number): MouseEvent;
 /**
  * Creates a browser TouchEvent with the specified pointer coordinates.
  * @docs-private

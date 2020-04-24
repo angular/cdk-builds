@@ -84,7 +84,7 @@ export declare class DropListRef<T = any> {
     private _isDragging;
     /** Cache of the dimensions of all the items inside the container. */
     private _itemPositions;
-    /** Cached positions of the scrollable parent elements. */
+    /** Keeps track of the positions of any parent scrollable elements. */
     private _parentPositions;
     /** Cached `ClientRect` of the drop list. */
     private _clientRect;
@@ -184,6 +184,8 @@ export declare class DropListRef<T = any> {
      * @param elements Elements that can be scrolled.
      */
     withScrollableParents(elements: HTMLElement[]): this;
+    /** Gets the scrollable parents that are registered with this drop container. */
+    getScrollableParents(): ReadonlyArray<HTMLElement>;
     /**
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.
@@ -244,13 +246,6 @@ export declare class DropListRef<T = any> {
     private _getItemIndexFromPointerPosition;
     /** Caches the current items in the list and their positions. */
     private _cacheItems;
-    /**
-     * Updates the internal state of the container after a scroll event has happened.
-     * @param scrolledParent Element that was scrolled.
-     * @param newTop New top scroll position.
-     * @param newLeft New left scroll position.
-     */
-    private _updateAfterScroll;
     /** Starts the interval that'll auto-scroll the element. */
     private _startScrollInterval;
     /**

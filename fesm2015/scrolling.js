@@ -2295,21 +2295,32 @@ if (false) {
  * Generated from: src/cdk/scrolling/scrolling-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class CdkScrollableModule {
+}
+CdkScrollableModule.decorators = [
+    { type: NgModule, args: [{
+                exports: [CdkScrollable],
+                declarations: [CdkScrollable]
+            },] }
+];
 class ScrollingModule {
 }
 ScrollingModule.decorators = [
     { type: NgModule, args: [{
-                imports: [BidiModule, PlatformModule],
+                imports: [
+                    BidiModule,
+                    PlatformModule,
+                    CdkScrollableModule
+                ],
                 exports: [
                     BidiModule,
+                    CdkScrollableModule,
                     CdkFixedSizeVirtualScroll,
-                    CdkScrollable,
                     CdkVirtualForOf,
                     CdkVirtualScrollViewport,
                 ],
                 declarations: [
                     CdkFixedSizeVirtualScroll,
-                    CdkScrollable,
                     CdkVirtualForOf,
                     CdkVirtualScrollViewport,
                 ],
@@ -2326,5 +2337,5 @@ ScrollingModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.js.map

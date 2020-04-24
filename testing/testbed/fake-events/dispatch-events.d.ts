@@ -10,7 +10,7 @@ import { ModifierKeys } from '@angular/cdk/testing';
  * Utility to dispatch any event on a Node.
  * @docs-private
  */
-export declare function dispatchEvent(node: Node | Window, event: Event): Event;
+export declare function dispatchEvent<T extends Event>(node: Node | Window, event: T): T;
 /**
  * Shorthand to dispatch a fake event on a specified node.
  * @docs-private
@@ -25,9 +25,9 @@ export declare function dispatchKeyboardEvent(node: Node, type: string, keyCode?
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-export declare function dispatchMouseEvent(node: Node, type: string, x?: number, y?: number, event?: MouseEvent): MouseEvent;
+export declare function dispatchMouseEvent(node: Node, type: string, clientX?: number, clientY?: number): MouseEvent;
 /**
  * Shorthand to dispatch a touch event on the specified coordinates.
  * @docs-private
  */
-export declare function dispatchTouchEvent(node: Node, type: string, x?: number, y?: number): Event;
+export declare function dispatchTouchEvent(node: Node, type: string, x?: number, y?: number): UIEvent;
