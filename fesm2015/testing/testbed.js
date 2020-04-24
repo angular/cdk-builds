@@ -97,10 +97,30 @@ class TaskStateZoneInterceptor {
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-function createMouseEvent(type, x = 0, y = 0, button = 0) {
+function createMouseEvent(type, clientX = 0, clientY = 0, button = 0) {
     const event = document.createEvent('MouseEvent');
     const originalPreventDefault = event.preventDefault.bind(event);
-    event.initMouseEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* detail */ x, /* screenX */ y, /* screenY */ x, /* clientX */ y, /* clientY */ false, /* ctrlKey */ false, /* altKey */ false, /* shiftKey */ false, /* metaKey */ button, /* button */ null /* relatedTarget */);
+    // Note: We cannot determine the position of the mouse event based on the screen
+    // because the dimensions and position of the browser window are not available
+    // To provide reasonable `screenX` and `screenY` coordinates, we simply use the
+    // client coordinates as if the browser is opened in fullscreen.
+    const screenX = clientX;
+    const screenY = clientY;
+    event.initMouseEvent(type, 
+    /* canBubble */ true, 
+    /* cancelable */ true, 
+    /* view */ window, 
+    /* detail */ 0, 
+    /* screenX */ screenX, 
+    /* screenY */ screenY, 
+    /* clientX */ clientX, 
+    /* clientY */ clientY, 
+    /* ctrlKey */ false, 
+    /* altKey */ false, 
+    /* shiftKey */ false, 
+    /* metaKey */ false, 
+    /* button */ button, 
+    /* relatedTarget */ null);
     // `initMouseEvent` doesn't allow us to pass the `buttons` and
     // defaults it to 0 which looks like a fake event.
     Object.defineProperty(event, 'buttons', { get: () => 1 });
@@ -221,8 +241,8 @@ function dispatchKeyboardEvent(node, type, keyCode, key, target, modifiers) {
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-function dispatchMouseEvent(node, type, x = 0, y = 0, event = createMouseEvent(type, x, y)) {
-    return dispatchEvent(node, event);
+function dispatchMouseEvent(node, type, clientX = 0, clientY = 0) {
+    return dispatchEvent(node, createMouseEvent(type, clientX, clientY));
 }
 /**
  * Shorthand to dispatch a touch event on the specified coordinates.
