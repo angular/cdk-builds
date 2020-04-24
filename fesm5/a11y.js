@@ -5,7 +5,7 @@ import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
-import { Platform, normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
+import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -1743,6 +1743,13 @@ var FocusMonitor = /** @class */ (function () {
         /** The number of elements currently being monitored. */
         this._monitoredElementCount = 0;
         /**
+         * Keeps track of the root nodes to which we've currently bound a focus/blur handler,
+         * as well as the number of monitored elements that they contain. We have to treat focus/blur
+         * handlers differently from the rest of the events, because the browser won't emit events
+         * to the document when focus moves inside of a shadow root.
+         */
+        this._rootNodeFocusListenerCount = new Map();
+        /**
          * Event listener for `keydown` events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
@@ -1776,10 +1783,7 @@ var FocusMonitor = /** @class */ (function () {
             if (_this._touchTimeoutId != null) {
                 clearTimeout(_this._touchTimeoutId);
             }
-            // Since this listener is bound on the `document` level, any events coming from the shadow DOM
-            // will have their `target` set to the shadow root. If available, use `composedPath` to
-            // figure out the event target.
-            _this._lastTouchTarget = event.composedPath ? event.composedPath()[0] : event.target;
+            _this._lastTouchTarget = getTarget(event);
             _this._touchTimeoutId = setTimeout(function () { return _this._lastTouchTarget = null; }, TOUCH_BUFFER_MS);
         };
         /**
@@ -1796,12 +1800,12 @@ var FocusMonitor = /** @class */ (function () {
          * Event listener for `focus` and 'blur' events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
-        this._documentFocusAndBlurListener = function (event) {
-            var target = event.target;
+        this._rootNodeFocusAndBlurListener = function (event) {
+            var target = getTarget(event);
             var handler = event.type === 'focus' ? _this._onFocus : _this._onBlur;
             // We need to walk up the ancestor chain in order to support `checkChildren`.
-            for (var el = target; el; el = el.parentElement) {
-                handler.call(_this, event, el);
+            for (var element = target; element; element = element.parentElement) {
+                handler.call(_this, event, element);
             }
         };
         this._document = document;
@@ -1814,6 +1818,10 @@ var FocusMonitor = /** @class */ (function () {
             return of(null);
         }
         var nativeElement = coerceElement(element);
+        // If the element is inside the shadow DOM, we need to bind our focus/blur listeners to
+        // the shadow root, rather than the `document`, because the browser won't emit focus events
+        // to the `document`, if focus is moving within the same shadow root.
+        var rootNode = _getShadowRoot(nativeElement) || this._getDocument();
         // Check if we're already monitoring this element.
         if (this._elementInfo.has(nativeElement)) {
             var cachedInfo = this._elementInfo.get(nativeElement);
@@ -1823,10 +1831,11 @@ var FocusMonitor = /** @class */ (function () {
         // Create monitored element info.
         var info = {
             checkChildren: checkChildren,
-            subject: new Subject()
+            subject: new Subject(),
+            rootNode: rootNode
         };
         this._elementInfo.set(nativeElement, info);
-        this._incrementMonitoredElementCount();
+        this._registerGlobalListeners(info);
         return info.subject.asObservable();
     };
     FocusMonitor.prototype.stopMonitoring = function (element) {
@@ -1836,7 +1845,7 @@ var FocusMonitor = /** @class */ (function () {
             elementInfo.subject.complete();
             this._setClasses(nativeElement);
             this._elementInfo.delete(nativeElement);
-            this._decrementMonitoredElementCount();
+            this._removeGlobalListeners(elementInfo);
         }
     };
     FocusMonitor.prototype.focusVia = function (element, origin, options) {
@@ -1941,7 +1950,7 @@ var FocusMonitor = /** @class */ (function () {
         // for the first focus event after the touchstart, and then the first blur event after that
         // focus event. When that blur event fires we know that whatever follows is not a result of the
         // touchstart.
-        var focusTarget = event.target;
+        var focusTarget = getTarget(event);
         return this._lastTouchTarget instanceof Node && focusTarget instanceof Node &&
             (focusTarget === this._lastTouchTarget || focusTarget.contains(this._lastTouchTarget));
     };
@@ -1958,7 +1967,7 @@ var FocusMonitor = /** @class */ (function () {
         // If we are not counting child-element-focus as focused, make sure that the event target is the
         // monitored element itself.
         var elementInfo = this._elementInfo.get(element);
-        if (!elementInfo || (!elementInfo.checkChildren && element !== event.target)) {
+        if (!elementInfo || (!elementInfo.checkChildren && element !== getTarget(event))) {
             return;
         }
         var origin = this._getFocusOrigin(event);
@@ -1985,17 +1994,27 @@ var FocusMonitor = /** @class */ (function () {
     FocusMonitor.prototype._emitOrigin = function (subject, origin) {
         this._ngZone.run(function () { return subject.next(origin); });
     };
-    FocusMonitor.prototype._incrementMonitoredElementCount = function () {
+    FocusMonitor.prototype._registerGlobalListeners = function (elementInfo) {
         var _this = this;
+        if (!this._platform.isBrowser) {
+            return;
+        }
+        var rootNode = elementInfo.rootNode;
+        var rootNodeFocusListeners = this._rootNodeFocusListenerCount.get(rootNode) || 0;
+        if (!rootNodeFocusListeners) {
+            this._ngZone.runOutsideAngular(function () {
+                rootNode.addEventListener('focus', _this._rootNodeFocusAndBlurListener, captureEventListenerOptions);
+                rootNode.addEventListener('blur', _this._rootNodeFocusAndBlurListener, captureEventListenerOptions);
+            });
+        }
+        this._rootNodeFocusListenerCount.set(rootNode, rootNodeFocusListeners + 1);
         // Register global listeners when first element is monitored.
-        if (++this._monitoredElementCount == 1 && this._platform.isBrowser) {
+        if (++this._monitoredElementCount === 1) {
             // Note: we listen to events in the capture phase so we
             // can detect them even if the user stops propagation.
             this._ngZone.runOutsideAngular(function () {
                 var document = _this._getDocument();
                 var window = _this._getWindow();
-                document.addEventListener('focus', _this._documentFocusAndBlurListener, captureEventListenerOptions);
-                document.addEventListener('blur', _this._documentFocusAndBlurListener, captureEventListenerOptions);
                 document.addEventListener('keydown', _this._documentKeydownListener, captureEventListenerOptions);
                 document.addEventListener('mousedown', _this._documentMousedownListener, captureEventListenerOptions);
                 document.addEventListener('touchstart', _this._documentTouchstartListener, captureEventListenerOptions);
@@ -2003,13 +2022,23 @@ var FocusMonitor = /** @class */ (function () {
             });
         }
     };
-    FocusMonitor.prototype._decrementMonitoredElementCount = function () {
+    FocusMonitor.prototype._removeGlobalListeners = function (elementInfo) {
+        var rootNode = elementInfo.rootNode;
+        if (this._rootNodeFocusListenerCount.has(rootNode)) {
+            var rootNodeFocusListeners = this._rootNodeFocusListenerCount.get(rootNode);
+            if (rootNodeFocusListeners > 1) {
+                this._rootNodeFocusListenerCount.set(rootNode, rootNodeFocusListeners - 1);
+            }
+            else {
+                rootNode.removeEventListener('focus', this._rootNodeFocusAndBlurListener, captureEventListenerOptions);
+                rootNode.removeEventListener('blur', this._rootNodeFocusAndBlurListener, captureEventListenerOptions);
+                this._rootNodeFocusListenerCount.delete(rootNode);
+            }
+        }
         // Unregister global listeners when last element is unmonitored.
         if (!--this._monitoredElementCount) {
             var document_1 = this._getDocument();
             var window_1 = this._getWindow();
-            document_1.removeEventListener('focus', this._documentFocusAndBlurListener, captureEventListenerOptions);
-            document_1.removeEventListener('blur', this._documentFocusAndBlurListener, captureEventListenerOptions);
             document_1.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
             document_1.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
             document_1.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
@@ -2033,6 +2062,12 @@ var FocusMonitor = /** @class */ (function () {
     FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
     return FocusMonitor;
 }());
+/** Gets the target of an event, accounting for Shadow DOM. */
+function getTarget(event) {
+    // If an event is bound outside the Shadow DOM, the `event.target` will
+    // point to the shadow root so we have to use `composedPath` instead.
+    return (event.composedPath ? event.composedPath()[0] : event.target);
+}
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.

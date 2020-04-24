@@ -61,6 +61,13 @@ export declare class FocusMonitor implements OnDestroy {
     /** The number of elements currently being monitored. */
     private _monitoredElementCount;
     /**
+     * Keeps track of the root nodes to which we've currently bound a focus/blur handler,
+     * as well as the number of monitored elements that they contain. We have to treat focus/blur
+     * handlers differently from the rest of the events, because the browser won't emit events
+     * to the document when focus moves inside of a shadow root.
+     */
+    private _rootNodeFocusListenerCount;
+    /**
      * The specified detection mode, used for attributing the origin of a focus
      * event.
      */
@@ -94,7 +101,7 @@ export declare class FocusMonitor implements OnDestroy {
      * Event listener for `focus` and 'blur' events on the document.
      * Needs to be an arrow function in order to preserve the context when it gets bound.
      */
-    private _documentFocusAndBlurListener;
+    private _rootNodeFocusAndBlurListener;
     /**
      * Monitors focus on an element and applies appropriate CSS classes.
      * @param element The element to monitor
@@ -173,8 +180,8 @@ export declare class FocusMonitor implements OnDestroy {
      */
     _onBlur(event: FocusEvent, element: HTMLElement): void;
     private _emitOrigin;
-    private _incrementMonitoredElementCount;
-    private _decrementMonitoredElementCount;
+    private _registerGlobalListeners;
+    private _removeGlobalListeners;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
