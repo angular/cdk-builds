@@ -1404,22 +1404,36 @@ var CdkVirtualForOf = /** @class */ (function () {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+var CdkScrollableModule = /** @class */ (function () {
+    function CdkScrollableModule() {
+    }
+    CdkScrollableModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkScrollable],
+                    declarations: [CdkScrollable]
+                },] }
+    ];
+    return CdkScrollableModule;
+}());
 var ScrollingModule = /** @class */ (function () {
     function ScrollingModule() {
     }
     ScrollingModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [BidiModule, PlatformModule],
+                    imports: [
+                        BidiModule,
+                        PlatformModule,
+                        CdkScrollableModule
+                    ],
                     exports: [
                         BidiModule,
+                        CdkScrollableModule,
                         CdkFixedSizeVirtualScroll,
-                        CdkScrollable,
                         CdkVirtualForOf,
                         CdkVirtualScrollViewport,
                     ],
                     declarations: [
                         CdkFixedSizeVirtualScroll,
-                        CdkScrollable,
                         CdkVirtualForOf,
                         CdkVirtualScrollViewport,
                     ],
@@ -1440,5 +1454,5 @@ var ScrollingModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.js.map

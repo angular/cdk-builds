@@ -1597,22 +1597,36 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var CdkScrollableModule = /** @class */ (function () {
+        function CdkScrollableModule() {
+        }
+        CdkScrollableModule.decorators = [
+            { type: i0.NgModule, args: [{
+                        exports: [CdkScrollable],
+                        declarations: [CdkScrollable]
+                    },] }
+        ];
+        return CdkScrollableModule;
+    }());
     var ScrollingModule = /** @class */ (function () {
         function ScrollingModule() {
         }
         ScrollingModule.decorators = [
             { type: i0.NgModule, args: [{
-                        imports: [bidi.BidiModule, i1.PlatformModule],
+                        imports: [
+                            bidi.BidiModule,
+                            i1.PlatformModule,
+                            CdkScrollableModule
+                        ],
                         exports: [
                             bidi.BidiModule,
+                            CdkScrollableModule,
                             CdkFixedSizeVirtualScroll,
-                            CdkScrollable,
                             CdkVirtualForOf,
                             CdkVirtualScrollViewport,
                         ],
                         declarations: [
                             CdkFixedSizeVirtualScroll,
-                            CdkScrollable,
                             CdkVirtualForOf,
                             CdkVirtualScrollViewport,
                         ],
@@ -1635,6 +1649,7 @@
 
     exports.CdkFixedSizeVirtualScroll = CdkFixedSizeVirtualScroll;
     exports.CdkScrollable = CdkScrollable;
+    exports.CdkScrollableModule = CdkScrollableModule;
     exports.CdkVirtualForOf = CdkVirtualForOf;
     exports.CdkVirtualScrollViewport = CdkVirtualScrollViewport;
     exports.DEFAULT_RESIZE_TIME = DEFAULT_RESIZE_TIME;

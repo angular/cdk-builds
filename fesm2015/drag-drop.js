@@ -1,6 +1,6 @@
 import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, Directive, ElementRef, Optional, Input, TemplateRef, EventEmitter, isDevMode, SkipSelf, ViewContainerRef, ChangeDetectorRef, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ViewportRuler, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
@@ -5698,6 +5698,7 @@ DragDropModule.decorators = [
                     CdkDragPlaceholder,
                 ],
                 exports: [
+                    CdkScrollableModule,
                     CdkDropList,
                     CdkDropListGroup,
                     CdkDrag,

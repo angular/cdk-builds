@@ -3405,6 +3405,7 @@
                             CdkDragPlaceholder,
                         ],
                         exports: [
+                            i2.CdkScrollableModule,
                             CdkDropList,
                             CdkDropListGroup,
                             CdkDrag,
