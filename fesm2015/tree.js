@@ -670,6 +670,7 @@ class CdkTree {
      */
     ngOnDestroy() {
         this._nodeOutlet.viewContainer.clear();
+        this.viewChange.complete();
         this._onDestroy.next();
         this._onDestroy.complete();
         if (this._dataSource && typeof ((/** @type {?} */ (this._dataSource))).disconnect === 'function') {
