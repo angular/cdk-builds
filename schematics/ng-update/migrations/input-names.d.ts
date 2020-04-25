@@ -5,22 +5,22 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/input-names-rule" />
+/// <amd-module name="@angular/cdk/schematics/ng-update/migrations/input-names" />
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
-import { MigrationRule } from '../../update-tool/migration-rule';
+import { Migration } from '../../update-tool/migration';
 import { InputNameUpgradeData } from '../data';
-import { RuleUpgradeData } from '../upgrade-data';
+import { UpgradeData } from '../upgrade-data';
 /**
- * Rule that walks through every template or stylesheet and replaces outdated input
+ * Migration that walks through every template or stylesheet and replaces outdated input
  * names to the new input name. Selectors in stylesheets could also target input
  * bindings declared as static attribute. See for example:
  *
  * e.g. `<my-component color="primary">` becomes `my-component[color]`
  */
-export declare class InputNamesRule extends MigrationRule<RuleUpgradeData> {
+export declare class InputNamesMigration extends Migration<UpgradeData> {
     /** Change data that upgrades to the specified target version. */
     data: InputNameUpgradeData[];
-    ruleEnabled: boolean;
+    enabled: boolean;
     visitStylesheet(stylesheet: ResolvedResource): void;
     visitTemplate(template: ResolvedResource): void;
     private _replaceInputName;
