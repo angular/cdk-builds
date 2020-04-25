@@ -7,6 +7,7 @@
  */
 /// <amd-module name="@angular/cdk/schematics/update-tool/component-resource-collector" />
 import * as ts from 'typescript';
+import { FileSystem } from './file-system';
 import { LineAndCharacter } from './utils/line-mappings';
 export interface ResolvedResource {
     /** Class declaration that contains this resource. */
@@ -32,9 +33,10 @@ export interface ResolvedResource {
  */
 export declare class ComponentResourceCollector {
     typeChecker: ts.TypeChecker;
+    private _fileSystem;
     resolvedTemplates: ResolvedResource[];
     resolvedStylesheets: ResolvedResource[];
-    constructor(typeChecker: ts.TypeChecker);
+    constructor(typeChecker: ts.TypeChecker, _fileSystem: FileSystem);
     visitNode(node: ts.Node): void;
     private _visitClassDeclaration;
     /** Resolves an external stylesheet by reading its content and computing line mappings. */

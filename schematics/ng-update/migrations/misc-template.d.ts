@@ -5,15 +5,15 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/misc-template-rule" />
+/// <amd-module name="@angular/cdk/schematics/ng-update/migrations/misc-template" />
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
-import { MigrationRule } from '../../update-tool/migration-rule';
-import { RuleUpgradeData } from '../upgrade-data';
+import { Migration } from '../../update-tool/migration';
+import { UpgradeData } from '../upgrade-data';
 /**
- * Rule that walks through every template and reports if there are
+ * Migration that walks through every template and reports if there are
  * instances of outdated Angular CDK API that can't be migrated automatically.
  */
-export declare class MiscTemplateRule extends MigrationRule<RuleUpgradeData> {
-    ruleEnabled: boolean;
+export declare class MiscTemplateMigration extends Migration<UpgradeData> {
+    enabled: boolean;
     visitTemplate(template: ResolvedResource): void;
 }

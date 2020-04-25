@@ -5,17 +5,17 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/ng-update/upgrade-rules/constructor-signature-rule" />
+/// <amd-module name="@angular/cdk/schematics/ng-update/migrations/constructor-signature" />
 import * as ts from 'typescript';
-import { MigrationRule } from '../../update-tool/migration-rule';
-import { RuleUpgradeData } from '../upgrade-data';
+import { Migration } from '../../update-tool/migration';
+import { UpgradeData } from '../upgrade-data';
 /**
- * Rule that visits every TypeScript new expression or super call and checks if
+ * Migration that visits every TypeScript new expression or super call and checks if
  * the parameter type signature is invalid and needs to be updated manually.
  */
-export declare class ConstructorSignatureRule extends MigrationRule<RuleUpgradeData> {
+export declare class ConstructorSignatureMigration extends Migration<UpgradeData> {
     data: string[];
-    ruleEnabled: boolean;
+    enabled: boolean;
     visitNode(node: ts.Node): void;
     /**
      * Method that will be called for each source file of the upgrade project. In order to
