@@ -19,7 +19,7 @@ export declare const WHITE_ON_BLACK_CSS_CLASS = "cdk-high-contrast-white-on-blac
 /** CSS class applied to the document body when in high-contrast mode. */
 export declare const HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = "cdk-high-contrast-active";
 /**
- * Service to determine whether the browser is currently in a high-constrast-mode environment.
+ * Service to determine whether the browser is currently in a high-contrast-mode environment.
  *
  * Microsoft Windows supports an accessibility feature called "High Contrast Mode". This mode
  * changes the appearance of all applications, including web applications, to dramatically increase
@@ -33,7 +33,7 @@ export declare class HighContrastModeDetector {
     private _platform;
     private _document;
     constructor(_platform: Platform, document: any);
-    /** Gets the current high-constrast-mode for the page. */
+    /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode(): HighContrastMode;
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses(): void;

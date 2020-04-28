@@ -15,8 +15,8 @@ import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** IDs are deliminated by an empty space, as per the spec. */
-var ID_DELIMINATOR = ' ';
+/** IDs are delimited by an empty space, as per the spec. */
+var ID_DELIMITER = ' ';
 /**
  * Adds the given ID to the specified ARIA attribute on an element.
  * Used for attributes such as aria-labelledby, aria-owns, etc.
@@ -27,7 +27,7 @@ function addAriaReferencedId(el, attr, id) {
         return;
     }
     ids.push(id.trim());
-    el.setAttribute(attr, ids.join(ID_DELIMINATOR));
+    el.setAttribute(attr, ids.join(ID_DELIMITER));
 }
 /**
  * Removes the given ID from the specified ARIA attribute on an element.
@@ -37,7 +37,7 @@ function removeAriaReferencedId(el, attr, id) {
     var ids = getAriaReferenceIds(el, attr);
     var filteredIds = ids.filter(function (val) { return val != id.trim(); });
     if (filteredIds.length) {
-        el.setAttribute(attr, filteredIds.join(ID_DELIMINATOR));
+        el.setAttribute(attr, filteredIds.join(ID_DELIMITER));
     }
     else {
         el.removeAttribute(attr);
@@ -48,7 +48,7 @@ function removeAriaReferencedId(el, attr, id) {
  * Used for attributes such as aria-labelledby, aria-owns, etc.
  */
 function getAriaReferenceIds(el, attr) {
-    // Get string array of all individual ids (whitespace deliminated) in the attribute value
+    // Get string array of all individual ids (whitespace delimited) in the attribute value
     return (el.getAttribute(attr) || '').match(/\S+/g) || [];
 }
 
@@ -2120,7 +2120,7 @@ var WHITE_ON_BLACK_CSS_CLASS = 'cdk-high-contrast-white-on-black';
 /** CSS class applied to the document body when in high-contrast mode. */
 var HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = 'cdk-high-contrast-active';
 /**
- * Service to determine whether the browser is currently in a high-constrast-mode environment.
+ * Service to determine whether the browser is currently in a high-contrast-mode environment.
  *
  * Microsoft Windows supports an accessibility feature called "High Contrast Mode". This mode
  * changes the appearance of all applications, including web applications, to dramatically increase
@@ -2135,7 +2135,7 @@ var HighContrastModeDetector = /** @class */ (function () {
         this._platform = _platform;
         this._document = document;
     }
-    /** Gets the current high-constrast-mode for the page. */
+    /** Gets the current high-contrast-mode for the page. */
     HighContrastModeDetector.prototype.getHighContrastMode = function () {
         if (!this._platform.isBrowser) {
             return 0 /* NONE */;
