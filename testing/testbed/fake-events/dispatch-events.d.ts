@@ -27,6 +27,11 @@ export declare function dispatchKeyboardEvent(node: Node, type: string, keyCode?
  */
 export declare function dispatchMouseEvent(node: Node, type: string, clientX?: number, clientY?: number): MouseEvent;
 /**
+ * Shorthand to dispatch a pointer event on the specified coordinates.
+ * @docs-private
+ */
+export declare function dispatchPointerEvent(node: Node, type: string, clientX?: number, clientY?: number, options?: PointerEventInit): PointerEvent;
+/**
  * Shorthand to dispatch a touch event on the specified coordinates.
  * @docs-private
  */

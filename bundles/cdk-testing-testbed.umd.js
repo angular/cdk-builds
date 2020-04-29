@@ -336,6 +336,23 @@
         return event;
     }
     /**
+     * Creates a browser `PointerEvent` with the specified options. Pointer events
+     * by default will appear as if they are the primary pointer of their type.
+     * https://www.w3.org/TR/pointerevents2/#dom-pointerevent-isprimary.
+     *
+     * For example, if pointer events for a multi-touch interaction are created, the non-primary
+     * pointer touches would need to be represented by non-primary pointer events.
+     *
+     * @docs-private
+     */
+    function createPointerEvent(type, clientX, clientY, options) {
+        if (clientX === void 0) { clientX = 0; }
+        if (clientY === void 0) { clientY = 0; }
+        if (options === void 0) { options = { isPrimary: true }; }
+        return new PointerEvent(type, __assign({ bubbles: true, cancelable: true, view: window, clientX: clientX,
+            clientY: clientY }, options));
+    }
+    /**
      * Creates a browser TouchEvent with the specified pointer coordinates.
      * @docs-private
      */
@@ -456,6 +473,15 @@
         if (clientX === void 0) { clientX = 0; }
         if (clientY === void 0) { clientY = 0; }
         return dispatchEvent(node, createMouseEvent(type, clientX, clientY));
+    }
+    /**
+     * Shorthand to dispatch a pointer event on the specified coordinates.
+     * @docs-private
+     */
+    function dispatchPointerEvent(node, type, clientX, clientY, options) {
+        if (clientX === void 0) { clientX = 0; }
+        if (clientY === void 0) { clientY = 0; }
+        return dispatchEvent(node, createPointerEvent(type, clientX, clientY, options));
     }
     /**
      * Shorthand to dispatch a touch event on the specified coordinates.
@@ -664,7 +690,7 @@
             if (relativeX === void 0) { relativeX = 0; }
             if (relativeY === void 0) { relativeY = 0; }
             return __awaiter(this, void 0, void 0, function () {
-                var _a, left, top, clientX, clientY;
+                var _a, left, top, clientX, clientY, emitPointerEvents;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
@@ -673,7 +699,14 @@
                             _a = this.element.getBoundingClientRect(), left = _a.left, top = _a.top;
                             clientX = Math.round(left + relativeX);
                             clientY = Math.round(top + relativeY);
+                            emitPointerEvents = window.PointerEvent !== undefined;
+                            if (emitPointerEvents) {
+                                dispatchPointerEvent(this.element, 'pointerdown', clientX, clientY);
+                            }
                             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
+                            if (emitPointerEvents) {
+                                dispatchMouseEvent(this.element, 'pointerup', clientX, clientY);
+                            }
                             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
                             dispatchMouseEvent(this.element, 'click', clientX, clientY);
                             return [4 /*yield*/, this._stabilize()];
