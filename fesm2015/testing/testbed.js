@@ -132,6 +132,20 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0) {
     return event;
 }
 /**
+ * Creates a browser `PointerEvent` with the specified options. Pointer events
+ * by default will appear as if they are the primary pointer of their type.
+ * https://www.w3.org/TR/pointerevents2/#dom-pointerevent-isprimary.
+ *
+ * For example, if pointer events for a multi-touch interaction are created, the non-primary
+ * pointer touches would need to be represented by non-primary pointer events.
+ *
+ * @docs-private
+ */
+function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimary: true }) {
+    return new PointerEvent(type, Object.assign({ bubbles: true, cancelable: true, view: window, clientX,
+        clientY }, options));
+}
+/**
  * Creates a browser TouchEvent with the specified pointer coordinates.
  * @docs-private
  */
@@ -243,6 +257,13 @@ function dispatchKeyboardEvent(node, type, keyCode, key, target, modifiers) {
  */
 function dispatchMouseEvent(node, type, clientX = 0, clientY = 0) {
     return dispatchEvent(node, createMouseEvent(type, clientX, clientY));
+}
+/**
+ * Shorthand to dispatch a pointer event on the specified coordinates.
+ * @docs-private
+ */
+function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, options) {
+    return dispatchEvent(node, createPointerEvent(type, clientX, clientY, options));
 }
 /**
  * Shorthand to dispatch a touch event on the specified coordinates.
@@ -419,7 +440,18 @@ class UnitTestElement {
             // supported by mouse events and could lead to unexpected results.
             const clientX = Math.round(left + relativeX);
             const clientY = Math.round(top + relativeY);
+            // The latest versions of all browsers we support have the new `PointerEvent` API.
+            // Though since we capture the two most recent versions of these browsers, we also
+            // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
+            // so we need to conditionally create and dispatch these events based on feature detection.
+            const emitPointerEvents = window.PointerEvent !== undefined;
+            if (emitPointerEvents) {
+                dispatchPointerEvent(this.element, 'pointerdown', clientX, clientY);
+            }
             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
+            if (emitPointerEvents) {
+                dispatchMouseEvent(this.element, 'pointerup', clientX, clientY);
+            }
             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
             dispatchMouseEvent(this.element, 'click', clientX, clientY);
             yield this._stabilize();

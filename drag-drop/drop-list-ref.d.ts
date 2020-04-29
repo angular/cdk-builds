@@ -237,6 +237,12 @@ export declare class DropListRef<T = any> {
      */
     private _getItemOffsetPx;
     /**
+     * Checks if pointer is entering in the first position
+     * @param pointerX Position of the user's pointer along the X axis.
+     * @param pointerY Position of the user's pointer along the Y axis.
+     */
+    private _shouldEnterAsFirstChild;
+    /**
      * Gets the index of an item in the drop container, based on the position of the user's pointer.
      * @param item Item that is being sorted.
      * @param pointerX Position of the user's pointer along the X axis.
