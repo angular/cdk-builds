@@ -14,7 +14,7 @@ import { OverlayReference } from '../overlay-reference';
 import { Platform } from '@angular/cdk/platform';
 import { OverlayContainer } from '../overlay-container';
 /** Possible values that can be set as the origin of a FlexibleConnectedPositionStrategy. */
-export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | HTMLElement | Point & {
+export declare type FlexibleConnectedPositionStrategyOrigin = ElementRef | Element | Point & {
     width?: number;
     height?: number;
 };
