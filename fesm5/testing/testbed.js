@@ -490,17 +490,20 @@ var UnitTestElement = /** @class */ (function () {
             });
         });
     };
-    UnitTestElement.prototype.click = function (relativeX, relativeY) {
-        if (relativeX === void 0) { relativeX = 0; }
-        if (relativeY === void 0) { relativeY = 0; }
+    UnitTestElement.prototype.click = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return __awaiter(this, void 0, void 0, function () {
-            var _a, left, top, clientX, clientY, emitPointerEvents;
+            var _a, left, top, width, height, relativeX, relativeY, clientX, clientY, emitPointerEvents;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this._stabilize()];
+                    case 0: return [4 /*yield*/, this.getDimensions()];
                     case 1:
-                        _b.sent();
-                        _a = this.element.getBoundingClientRect(), left = _a.left, top = _a.top;
+                        _a = _b.sent(), left = _a.left, top = _a.top, width = _a.width, height = _a.height;
+                        relativeX = args.length ? args[0] : width / 2;
+                        relativeY = args.length ? args[1] : height / 2;
                         clientX = Math.round(left + relativeX);
                         clientY = Math.round(top + relativeY);
                         emitPointerEvents = window.PointerEvent !== undefined;
