@@ -13,7 +13,7 @@ export declare class UnitTestElement implements TestElement {
     constructor(element: Element, _stabilize: () => Promise<void>);
     blur(): Promise<void>;
     clear(): Promise<void>;
-    click(relativeX?: number, relativeY?: number): Promise<void>;
+    click(...args: number[]): Promise<void>;
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;

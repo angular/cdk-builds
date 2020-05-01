@@ -79,21 +79,25 @@ var ProtractorElement = /** @class */ (function () {
             });
         });
     };
-    ProtractorElement.prototype.click = function (relativeX, relativeY) {
-        if (relativeX === void 0) { relativeX = 0; }
-        if (relativeY === void 0) { relativeY = 0; }
+    ProtractorElement.prototype.click = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
         return __awaiter(this, void 0, void 0, function () {
-            var _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var offsetArgs, _a, _b, _c;
+            var _d;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
-                        _b = (_a = browser.actions()).mouseMove;
+                        offsetArgs = args.length ? [{ x: args[0], y: args[1] }] : [];
+                        _b = (_a = (_d = browser.actions()).mouseMove).apply;
+                        _c = [_d];
                         return [4 /*yield*/, this.element.getWebElement()];
-                    case 1: return [4 /*yield*/, _b.apply(_a, [_c.sent(), { x: relativeX, y: relativeY }])
-                            .click()
+                    case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([__spread.apply(void 0, [[_e.sent()], offsetArgs])])).click()
                             .perform()];
                     case 2:
-                        _c.sent();
+                        _e.sent();
                         return [2 /*return*/];
                 }
             });

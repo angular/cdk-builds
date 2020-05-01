@@ -13,7 +13,7 @@ export declare class ProtractorElement implements TestElement {
     constructor(element: ElementFinder);
     blur(): Promise<void>;
     clear(): Promise<void>;
-    click(relativeX?: number, relativeY?: number): Promise<void>;
+    click(...args: number[]): Promise<void>;
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;
