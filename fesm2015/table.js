@@ -497,6 +497,14 @@ class BaseRowDef {
         }
     }
 }
+BaseRowDef.decorators = [
+    { type: Directive }
+];
+/** @nocollapse */
+BaseRowDef.ctorParameters = () => [
+    { type: TemplateRef },
+    { type: IterableDiffers }
+];
 if (false) {
     /**
      * The columns to be displayed on this row.
