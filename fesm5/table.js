@@ -332,6 +332,14 @@ var BaseRowDef = /** @class */ (function () {
             return column.cell.template;
         }
     };
+    BaseRowDef.decorators = [
+        { type: Directive }
+    ];
+    /** @nocollapse */
+    BaseRowDef.ctorParameters = function () { return [
+        { type: TemplateRef },
+        { type: IterableDiffers }
+    ]; };
     return BaseRowDef;
 }());
 // Boilerplate for applying mixins to CdkHeaderRowDef.
