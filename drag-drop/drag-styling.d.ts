@@ -12,9 +12,12 @@ declare type Writeable<T> = {
  * Extended CSSStyleDeclaration that includes a couple of drag-related
  * properties that aren't in the built-in TS typings.
  */
-interface DragCSSStyleDeclaration extends CSSStyleDeclaration {
+export interface DragCSSStyleDeclaration extends CSSStyleDeclaration {
     webkitUserDrag: string;
     MozUserSelect: string;
+    msScrollSnapType: string;
+    scrollSnapType: string;
+    msUserSelect: string;
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.

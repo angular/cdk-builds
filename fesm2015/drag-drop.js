@@ -30,6 +30,12 @@ if (false) {
     DragCSSStyleDeclaration.prototype.webkitUserDrag;
     /** @type {?} */
     DragCSSStyleDeclaration.prototype.MozUserSelect;
+    /** @type {?} */
+    DragCSSStyleDeclaration.prototype.msScrollSnapType;
+    /** @type {?} */
+    DragCSSStyleDeclaration.prototype.scrollSnapType;
+    /** @type {?} */
+    DragCSSStyleDeclaration.prototype.msUserSelect;
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet object.
@@ -1113,7 +1119,7 @@ class DragRef {
         // otherwise iOS will still add it, even though all the drag interactions on the handle
         // are disabled.
         if (this._handles.length) {
-            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor;
+            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor || '';
             rootElement.style.webkitTapHighlightColor = 'transparent';
         }
         this._hasStartedDragging = this._hasMoved = false;
@@ -2452,14 +2458,14 @@ class DropListRef {
      */
     start() {
         /** @type {?} */
-        const styles = coerceElement(this.element).style;
+        const styles = (/** @type {?} */ (coerceElement(this.element).style));
         this.beforeStarted.next();
         this._isDragging = true;
         // We need to disable scroll snapping while the user is dragging, because it breaks automatic
         // scrolling. The browser seems to round the value based on the snapping points which means
         // that we can't increment/decrement the scroll position.
-        this._initialScrollSnap = styles.msScrollSnapType || ((/** @type {?} */ (styles))).scrollSnapType || '';
-        ((/** @type {?} */ (styles))).scrollSnapType = styles.msScrollSnapType = 'none';
+        this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
+        styles.scrollSnapType = styles.msScrollSnapType = 'none';
         this._cacheItems();
         this._siblings.forEach((/**
          * @param {?} sibling
@@ -2908,8 +2914,8 @@ class DropListRef {
     _reset() {
         this._isDragging = false;
         /** @type {?} */
-        const styles = coerceElement(this.element).style;
-        ((/** @type {?} */ (styles))).scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
+        const styles = (/** @type {?} */ (coerceElement(this.element).style));
+        styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach((/**
          * @param {?} item

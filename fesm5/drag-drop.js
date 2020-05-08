@@ -721,7 +721,7 @@ var DragRef = /** @class */ (function () {
         // otherwise iOS will still add it, even though all the drag interactions on the handle
         // are disabled.
         if (this._handles.length) {
-            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor;
+            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor || '';
             rootElement.style.webkitTapHighlightColor = 'transparent';
         }
         this._hasStartedDragging = this._hasMoved = false;
