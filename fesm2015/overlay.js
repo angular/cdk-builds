@@ -6,7 +6,7 @@ import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angula
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Platform } from '@angular/cdk/platform';
-import { Subject, Subscription, Observable, merge } from 'rxjs';
+import { Subject, Subscription, merge } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
@@ -1023,7 +1023,7 @@ class OverlayKeyboardDispatcher {
                 // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
                 // because we don't want overlays that don't handle keyboard events to block the ones below
                 // them that do.
-                if (overlays[i]._keydownEventSubscriptions > 0) {
+                if (overlays[i]._keydownEvents.observers.length > 0) {
                     overlays[i]._keydownEvents.next(event);
                     break;
                 }
@@ -1318,30 +1318,10 @@ class OverlayRef {
          * @return {?}
          */
         (event) => this._backdropClick.next(event));
-        this._keydownEventsObservable = new Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        (observer) => {
-            /** @type {?} */
-            const subscription = this._keydownEvents.subscribe(observer);
-            this._keydownEventSubscriptions++;
-            return (/**
-             * @return {?}
-             */
-            () => {
-                subscription.unsubscribe();
-                this._keydownEventSubscriptions--;
-            });
-        }));
         /**
          * Stream of keydown events dispatched to this overlay.
          */
         this._keydownEvents = new Subject();
-        /**
-         * Amount of subscriptions to the keydown events.
-         */
-        this._keydownEventSubscriptions = 0;
         if (_config.scrollStrategy) {
             this._scrollStrategy = _config.scrollStrategy;
             this._scrollStrategy.attach(this);
@@ -1524,7 +1504,7 @@ class OverlayRef {
      * @return {?}
      */
     keydownEvents() {
-        return this._keydownEventsObservable;
+        return this._keydownEvents.asObservable();
     }
     /**
      * Gets the current overlay configuration, which is immutable.
@@ -1895,20 +1875,10 @@ if (false) {
      */
     OverlayRef.prototype._previousHostParent;
     /**
-     * @type {?}
-     * @private
-     */
-    OverlayRef.prototype._keydownEventsObservable;
-    /**
      * Stream of keydown events dispatched to this overlay.
      * @type {?}
      */
     OverlayRef.prototype._keydownEvents;
-    /**
-     * Amount of subscriptions to the keydown events.
-     * @type {?}
-     */
-    OverlayRef.prototype._keydownEventSubscriptions;
     /**
      * @type {?}
      * @private
