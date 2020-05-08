@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/observers",
   "main": "../bundles/cdk-observers.umd.js",
-  "fesm5": "../fesm5/observers.js",
   "fesm2015": "../fesm2015/observers.js",
-  "esm5": "../esm5/observers/index.js",
   "esm2015": "../esm2015/observers/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/observers.js",
+  "module": "../fesm2015/observers.js",
   "es2015": "../fesm2015/observers.js"
 }

@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/scrolling",
   "main": "../bundles/cdk-scrolling.umd.js",
-  "fesm5": "../fesm5/scrolling.js",
   "fesm2015": "../fesm2015/scrolling.js",
-  "esm5": "../esm5/scrolling/index.js",
   "esm2015": "../esm2015/scrolling/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/scrolling.js",
+  "module": "../fesm2015/scrolling.js",
   "es2015": "../fesm2015/scrolling.js"
 }

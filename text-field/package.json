@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/text-field",
   "main": "../bundles/cdk-text-field.umd.js",
-  "fesm5": "../fesm5/text-field.js",
   "fesm2015": "../fesm2015/text-field.js",
-  "esm5": "../esm5/text-field/index.js",
   "esm2015": "../esm2015/text-field/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/text-field.js",
+  "module": "../fesm2015/text-field.js",
   "es2015": "../fesm2015/text-field.js"
 }

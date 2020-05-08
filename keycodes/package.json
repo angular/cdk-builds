@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/keycodes",
   "main": "../bundles/cdk-keycodes.umd.js",
-  "fesm5": "../fesm5/keycodes.js",
   "fesm2015": "../fesm2015/keycodes.js",
-  "esm5": "../esm5/keycodes/index.js",
   "esm2015": "../esm2015/keycodes/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/keycodes.js",
+  "module": "../fesm2015/keycodes.js",
   "es2015": "../fesm2015/keycodes.js"
 }

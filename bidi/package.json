@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/bidi",
   "main": "../bundles/cdk-bidi.umd.js",
-  "fesm5": "../fesm5/bidi.js",
   "fesm2015": "../fesm2015/bidi.js",
-  "esm5": "../esm5/bidi/index.js",
   "esm2015": "../esm2015/bidi/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/bidi.js",
+  "module": "../fesm2015/bidi.js",
   "es2015": "../fesm2015/bidi.js"
 }

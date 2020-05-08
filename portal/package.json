@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/portal",
   "main": "../bundles/cdk-portal.umd.js",
-  "fesm5": "../fesm5/portal.js",
   "fesm2015": "../fesm2015/portal.js",
-  "esm5": "../esm5/portal/index.js",
   "esm2015": "../esm2015/portal/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/portal.js",
+  "module": "../fesm2015/portal.js",
   "es2015": "../fesm2015/portal.js"
 }

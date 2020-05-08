@@ -1,11 +1,9 @@
 {
   "name": "@angular/cdk/overlay",
   "main": "../bundles/cdk-overlay.umd.js",
-  "fesm5": "../fesm5/overlay.js",
   "fesm2015": "../fesm2015/overlay.js",
-  "esm5": "../esm5/overlay/index.js",
   "esm2015": "../esm2015/overlay/index.js",
   "typings": "./index.d.ts",
-  "module": "../fesm5/overlay.js",
+  "module": "../fesm2015/overlay.js",
   "es2015": "../fesm2015/overlay.js"
 }
