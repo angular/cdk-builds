@@ -45,11 +45,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
      * the `_host` to its original position in the DOM when it gets re-attached.
      */
     private _previousHostParent;
-    private _keydownEventsObservable;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;
-    /** Amount of subscriptions to the keydown events. */
-    _keydownEventSubscriptions: number;
     constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;

@@ -711,7 +711,7 @@
                     // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
                     // because we don't want overlays that don't handle keyboard events to block the ones below
                     // them that do.
-                    if (overlays[i]._keydownEventSubscriptions > 0) {
+                    if (overlays[i]._keydownEvents.observers.length > 0) {
                         overlays[i]._keydownEvents.next(event);
                         break;
                     }
@@ -914,18 +914,8 @@
             this._detachments = new rxjs.Subject();
             this._locationChanges = rxjs.Subscription.EMPTY;
             this._backdropClickHandler = function (event) { return _this._backdropClick.next(event); };
-            this._keydownEventsObservable = new rxjs.Observable(function (observer) {
-                var subscription = _this._keydownEvents.subscribe(observer);
-                _this._keydownEventSubscriptions++;
-                return function () {
-                    subscription.unsubscribe();
-                    _this._keydownEventSubscriptions--;
-                };
-            });
             /** Stream of keydown events dispatched to this overlay. */
             this._keydownEvents = new rxjs.Subject();
-            /** Amount of subscriptions to the keydown events. */
-            this._keydownEventSubscriptions = 0;
             if (_config.scrollStrategy) {
                 this._scrollStrategy = _config.scrollStrategy;
                 this._scrollStrategy.attach(this);
@@ -1087,7 +1077,7 @@
         };
         /** Gets an observable of keydown events targeted to this overlay. */
         OverlayRef.prototype.keydownEvents = function () {
-            return this._keydownEventsObservable;
+            return this._keydownEvents.asObservable();
         };
         /** Gets the current overlay configuration, which is immutable. */
         OverlayRef.prototype.getConfig = function () {
