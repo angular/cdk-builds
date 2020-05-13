@@ -282,24 +282,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * an array, this function will need to be called to render any changes.
      */
     renderRows(): void;
-    /**
-     * Sets the header row definition to be used. Overrides the header row definition gathered by
-     * using `ContentChild`, if one exists. Sets a flag that will re-render the header row after the
-     * table's content is checked.
-     * @docs-private
-     * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-     * @breaking-change 8.0.0
-     */
-    setHeaderRowDef(headerRowDef: CdkHeaderRowDef): void;
-    /**
-     * Sets the footer row definition to be used. Overrides the footer row definition gathered by
-     * using `ContentChild`, if one exists. Sets a flag that will re-render the footer row after the
-     * table's content is checked.
-     * @docs-private
-     * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-     * @breaking-change 8.0.0
-     */
-    setFooterRowDef(footerRowDef: CdkFooterRowDef): void;
     /** Adds a column definition that was not included as part of the content children. */
     addColumnDef(columnDef: CdkColumnDef): void;
     /** Removes a column definition that was not included as part of the content children. */

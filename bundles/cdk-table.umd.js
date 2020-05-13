@@ -1474,30 +1474,6 @@
             this._updateNoDataRow();
             this.updateStickyColumnStyles();
         };
-        /**
-         * Sets the header row definition to be used. Overrides the header row definition gathered by
-         * using `ContentChild`, if one exists. Sets a flag that will re-render the header row after the
-         * table's content is checked.
-         * @docs-private
-         * @deprecated Use `addHeaderRowDef` and `removeHeaderRowDef` instead
-         * @breaking-change 8.0.0
-         */
-        CdkTable.prototype.setHeaderRowDef = function (headerRowDef) {
-            this._customHeaderRowDefs = new Set([headerRowDef]);
-            this._headerRowDefChanged = true;
-        };
-        /**
-         * Sets the footer row definition to be used. Overrides the footer row definition gathered by
-         * using `ContentChild`, if one exists. Sets a flag that will re-render the footer row after the
-         * table's content is checked.
-         * @docs-private
-         * @deprecated Use `addFooterRowDef` and `removeFooterRowDef` instead
-         * @breaking-change 8.0.0
-         */
-        CdkTable.prototype.setFooterRowDef = function (footerRowDef) {
-            this._customFooterRowDefs = new Set([footerRowDef]);
-            this._footerRowDefChanged = true;
-        };
         /** Adds a column definition that was not included as part of the content children. */
         CdkTable.prototype.addColumnDef = function (columnDef) {
             this._customColumnDefs.add(columnDef);
