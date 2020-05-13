@@ -40,3 +40,9 @@ export interface DragDropConfig extends Partial<DragRefConfig> {
     listOrientation?: DropListOrientation;
     zIndex?: number;
 }
+/**
+ * @deprecated No longer being used. To be removed.
+ * @breaking-change 10.0.0
+ * @docs-private
+ */
+export declare function CDK_DRAG_CONFIG_FACTORY(): DragDropConfig;
