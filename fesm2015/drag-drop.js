@@ -4401,15 +4401,6 @@ if (false) {
     /** @type {?|undefined} */
     DragDropConfig.prototype.zIndex;
 }
-/**
- * @deprecated No longer being used. To be removed.
- * \@breaking-change 10.0.0
- * \@docs-private
- * @return {?}
- */
-function CDK_DRAG_CONFIG_FACTORY() {
-    return { dragStartThreshold: 5, pointerDirectionChangeThreshold: 5 };
-}
 
 /**
  * @fileoverview added by tsickle
@@ -4542,6 +4533,8 @@ class CdkDrag {
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
+     * @deprecated No longer being used to be removed.
+     * \@breaking-change 11.0.0
      * @return {?}
      */
     getPlaceholderElement() {
@@ -4549,6 +4542,8 @@ class CdkDrag {
     }
     /**
      * Returns the root draggable element.
+     * @deprecated No longer being used to be removed.
+     * \@breaking-change 11.0.0
      * @return {?}
      */
     getRootElement() {
@@ -5310,62 +5305,6 @@ class CdkDropList {
         this._destroyed.complete();
     }
     /**
-     * Starts dragging an item.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 10.0.0
-     * @return {?}
-     */
-    start() {
-        this._dropListRef.start();
-    }
-    /**
-     * Drops an item into this container.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 10.0.0
-     * @param {?} item Item being dropped into the container.
-     * @param {?} currentIndex Index at which the item should be inserted.
-     * @param {?} previousContainer Container from which the item got dragged in.
-     * @param {?} isPointerOverContainer Whether the user's pointer was over the
-     *    container when the item was dropped.
-     *
-     * @return {?}
-     */
-    drop(item, currentIndex, previousContainer, isPointerOverContainer) {
-        this._dropListRef.drop(item._dragRef, currentIndex, previousContainer._dropListRef, isPointerOverContainer, { x: 0, y: 0 });
-    }
-    /**
-     * Emits an event to indicate that the user moved an item into the container.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 10.0.0
-     * @param {?} item Item that was moved into the container.
-     * @param {?} pointerX Position of the item along the X axis.
-     * @param {?} pointerY Position of the item along the Y axis.
-     * @return {?}
-     */
-    enter(item, pointerX, pointerY) {
-        this._dropListRef.enter(item._dragRef, pointerX, pointerY);
-    }
-    /**
-     * Removes an item from the container after it was dragged into another container by the user.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 10.0.0
-     * @param {?} item Item that was dragged out.
-     * @return {?}
-     */
-    exit(item) {
-        this._dropListRef.exit(item._dragRef);
-    }
-    /**
-     * Figures out the index of an item in the container.
-     * @deprecated No longer being used. To be removed.
-     * \@breaking-change 10.0.0
-     * @param {?} item Item whose index should be determined.
-     * @return {?}
-     */
-    getItemIndex(item) {
-        return this._dropListRef.getItemIndex(item._dragRef);
-    }
-    /**
      * Syncs the inputs of the CdkDropList with the options of the underlying DropListRef.
      * @private
      * @param {?} ref
@@ -5767,5 +5706,5 @@ DragDropModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_DRAG_CONFIG, CDK_DRAG_CONFIG_FACTORY, CDK_DROP_LIST, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem, CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_b };
+export { CDK_DRAG_CONFIG, CDK_DROP_LIST, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem, CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_b };
 //# sourceMappingURL=drag-drop.js.map

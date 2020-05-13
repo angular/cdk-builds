@@ -245,6 +245,9 @@ class CdkTextareaAutosize {
         this._previousMinRows = -1;
         this._document = document;
         this._textareaElement = (/** @type {?} */ (this._elementRef.nativeElement));
+        this._measuringClass = _platform.FIREFOX ?
+            'cdk-textarea-autosize-measuring-firefox' :
+            'cdk-textarea-autosize-measuring';
     }
     /**
      * Minimum amount of rows in the textarea.
@@ -423,15 +426,15 @@ class CdkTextareaAutosize {
         // Long placeholders that are wider than the textarea width may lead to a bigger scrollHeight
         // value. To ensure that the scrollHeight is not bigger than the content, the placeholders
         // need to be removed temporarily.
-        textarea.classList.add('cdk-textarea-autosize-measuring');
+        textarea.classList.add(this._measuringClass);
         textarea.placeholder = '';
-        // The cdk-textarea-autosize-measuring class includes a 2px padding to workaround an issue with
-        // Chrome, so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
+        // The measuring class includes a 2px padding to workaround an issue with Chrome,
+        // so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
         /** @type {?} */
         const height = textarea.scrollHeight - 4;
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
         textarea.style.height = `${height}px`;
-        textarea.classList.remove('cdk-textarea-autosize-measuring');
+        textarea.classList.remove(this._measuringClass);
         textarea.placeholder = placeholderText;
         this._ngZone.runOutsideAngular((/**
          * @return {?}
@@ -603,6 +606,12 @@ if (false) {
      * @protected
      */
     CdkTextareaAutosize.prototype._document;
+    /**
+     * Class that should be applied to the textarea while it's being measured.
+     * @type {?}
+     * @private
+     */
+    CdkTextareaAutosize.prototype._measuringClass;
     /**
      * @type {?}
      * @private
