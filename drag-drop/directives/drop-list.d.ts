@@ -108,47 +108,6 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Gets the registered items in the list, sorted by their position in the DOM. */
     getSortedItems(): CdkDrag[];
     ngOnDestroy(): void;
-    /**
-     * Starts dragging an item.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 10.0.0
-     */
-    start(): void;
-    /**
-     * Drops an item into this container.
-     * @param item Item being dropped into the container.
-     * @param currentIndex Index at which the item should be inserted.
-     * @param previousContainer Container from which the item got dragged in.
-     * @param isPointerOverContainer Whether the user's pointer was over the
-     *    container when the item was dropped.
-     *
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 10.0.0
-     */
-    drop(item: CdkDrag, currentIndex: number, previousContainer: CdkDropList, isPointerOverContainer: boolean): void;
-    /**
-     * Emits an event to indicate that the user moved an item into the container.
-     * @param item Item that was moved into the container.
-     * @param pointerX Position of the item along the X axis.
-     * @param pointerY Position of the item along the Y axis.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 10.0.0
-     */
-    enter(item: CdkDrag, pointerX: number, pointerY: number): void;
-    /**
-     * Removes an item from the container after it was dragged into another container by the user.
-     * @param item Item that was dragged out.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 10.0.0
-     */
-    exit(item: CdkDrag): void;
-    /**
-     * Figures out the index of an item in the container.
-     * @param item Item whose index should be determined.
-     * @deprecated No longer being used. To be removed.
-     * @breaking-change 10.0.0
-     */
-    getItemIndex(item: CdkDrag): number;
     /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
     private _setupInputSyncSubscription;
     /** Handles events from the underlying DropListRef. */
