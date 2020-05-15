@@ -2881,11 +2881,16 @@ class FocusMonitor {
         // to the `document`, if focus is moving within the same shadow root.
         /** @type {?} */
         const rootNode = ((/** @type {?} */ (_getShadowRoot(nativeElement)))) || this._getDocument();
+        /** @type {?} */
+        const cachedInfo = this._elementInfo.get(nativeElement);
         // Check if we're already monitoring this element.
-        if (this._elementInfo.has(nativeElement)) {
-            /** @type {?} */
-            const cachedInfo = (/** @type {?} */ (this._elementInfo.get(nativeElement)));
-            cachedInfo.checkChildren = checkChildren;
+        if (cachedInfo) {
+            if (checkChildren) {
+                // TODO(COMP-318): this can be problematic, because it'll turn all non-checkChildren
+                // observers into ones that behave as if `checkChildren` was turned on. We need a more
+                // robust solution.
+                cachedInfo.checkChildren = true;
+            }
             return cachedInfo.subject.asObservable();
         }
         // Create monitored element info.

@@ -40,6 +40,8 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _cachedLineHeight;
     /** Used to reference correct document/window */
     protected _document?: Document;
+    /** Class that should be applied to the textarea while it's being measured. */
+    private _measuringClass;
     constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone, 
     /** @breaking-change 11.0.0 make document required */
     document?: any);
