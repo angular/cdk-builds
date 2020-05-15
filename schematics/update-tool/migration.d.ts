@@ -8,12 +8,12 @@
 /// <amd-module name="@angular/cdk/schematics/update-tool/migration" />
 import * as ts from 'typescript';
 import { ResolvedResource } from './component-resource-collector';
-import { FileSystem } from './file-system';
+import { FileSystem, WorkspacePath } from './file-system';
 import { UpdateLogger } from './logger';
 import { TargetVersion } from './target-version';
 import { LineAndCharacter } from './utils/line-mappings';
 export interface MigrationFailure {
-    filePath: string;
+    filePath: WorkspacePath;
     message: string;
     position?: LineAndCharacter;
 }

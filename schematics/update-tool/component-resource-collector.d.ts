@@ -7,7 +7,7 @@
  */
 /// <amd-module name="@angular/cdk/schematics/update-tool/component-resource-collector" />
 import * as ts from 'typescript';
-import { FileSystem } from './file-system';
+import { FileSystem, WorkspacePath } from './file-system';
 import { LineAndCharacter } from './utils/line-mappings';
 export interface ResolvedResource {
     /** Class declaration that contains this resource. */
@@ -19,7 +19,7 @@ export interface ResolvedResource {
     /** Whether the given resource is inline or not. */
     inline: boolean;
     /** Path to the file that contains this resource. */
-    filePath: string;
+    filePath: WorkspacePath;
     /**
      * Gets the character and line of a given position index in the resource.
      * If the resource is declared inline within a TypeScript source file, the line and
@@ -40,5 +40,5 @@ export declare class ComponentResourceCollector {
     visitNode(node: ts.Node): void;
     private _visitClassDeclaration;
     /** Resolves an external stylesheet by reading its content and computing line mappings. */
-    resolveExternalStylesheet(filePath: string, container: ts.ClassDeclaration | null): ResolvedResource;
+    resolveExternalStylesheet(filePath: WorkspacePath, container: ts.ClassDeclaration | null): ResolvedResource;
 }

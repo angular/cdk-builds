@@ -7,7 +7,7 @@
  */
 /// <amd-module name="@angular/cdk/schematics/update-tool" />
 import * as ts from 'typescript';
-import { FileSystem } from './file-system';
+import { FileSystem, WorkspacePath } from './file-system';
 import { UpdateLogger } from './logger';
 import { MigrationCtor } from './migration';
 import { TargetVersion } from './target-version';
@@ -25,7 +25,7 @@ export declare class UpdateProject<Context> {
     private _analyzedFiles;
     private _logger;
     private readonly _typeChecker;
-    constructor(_context: Context, _program: ts.Program, _fileSystem: FileSystem, _analyzedFiles?: Set<string>, _logger?: UpdateLogger);
+    constructor(_context: Context, _program: ts.Program, _fileSystem: FileSystem, _analyzedFiles?: Set<WorkspacePath>, _logger?: UpdateLogger);
     /**
      * Migrates the project to the specified target version.
      * @param migrationTypes Migrations that should be run.
