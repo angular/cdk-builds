@@ -129,7 +129,7 @@
                 this._disabled = coercion.coerceBooleanProperty(value);
                 this._disabled ? this._unsubscribe() : this._subscribe();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkObserveContent.prototype, "debounce", {
@@ -139,7 +139,7 @@
                 this._debounce = coercion.coerceNumberProperty(value);
                 this._subscribe();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         CdkObserveContent.prototype.ngAfterContentInit = function () {

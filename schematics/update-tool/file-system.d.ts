@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/update-tool/file-system" />
 import { UpdateRecorder } from './update-recorder';
 /**
  * A workspace path semantically is equivalent to the `Path` type provided by the

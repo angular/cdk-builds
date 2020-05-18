@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -5,45 +6,34 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define("@angular/cdk/schematics/ng-add/index", ["require", "exports", "@angular-devkit/schematics/tasks", "@angular/cdk/schematics/ng-add/package-config"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const tasks_1 = require("@angular-devkit/schematics/tasks");
-    const package_config_1 = require("@angular/cdk/schematics/ng-add/package-config");
-    /**
-     * Schematic factory entry-point for the `ng-add` schematic. The ng-add schematic will be
-     * automatically executed if developers run `ng add @angular/cdk`.
-     *
-     * By default, the CLI already installs the package that has been specified with `ng add`.
-     * We just store the version in the `package.json` in case the package manager didn't. Also
-     * this ensures that there will be no error that says that the CDK does not support `ng add`.
-     */
-    function default_1() {
-        return (host, context) => {
-            // The CLI inserts `@angular/cdk` into the `package.json` before this schematic runs. This
-            // means that we do not need to insert the CDK into `package.json` files again. In some cases
-            // though, it could happen that this schematic runs outside of the CLI `ng add` command, or
-            // the CDK is only listed as a dev dependency. If that is the case, we insert a version based
-            // on the current build version (substituted version placeholder).
-            if (package_config_1.getPackageVersionFromPackageJson(host, '@angular/cdk') === null) {
-                // In order to align the CDK version with other Angular dependencies that are setup by
-                // `@schematics/angular`, we use tilde instead of caret. This is default for Angular
-                // dependencies in new CLI projects.
-                package_config_1.addPackageToPackageJson(host, '@angular/cdk', `~10.0.0-next.0-sha-948dfa96b`);
-                // Add a task to run the package manager. This is necessary because we updated the
-                // workspace "package.json" file and we want lock files to reflect the new version range.
-                context.addTask(new tasks_1.NodePackageInstallTask());
-            }
-        };
-    }
-    exports.default = default_1;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3NjaGVtYXRpY3MvbmctYWRkL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRzs7Ozs7Ozs7Ozs7O0lBR0gsNERBQXdFO0lBQ3hFLGtGQUEyRjtJQUUzRjs7Ozs7OztPQU9HO0lBQ0g7UUFDRSxPQUFPLENBQUMsSUFBVSxFQUFFLE9BQXlCLEVBQUUsRUFBRTtZQUMvQywwRkFBMEY7WUFDMUYsNkZBQTZGO1lBQzdGLDJGQUEyRjtZQUMzRiw2RkFBNkY7WUFDN0Ysa0VBQWtFO1lBQ2xFLElBQUksaURBQWdDLENBQUMsSUFBSSxFQUFFLGNBQWMsQ0FBQyxLQUFLLElBQUksRUFBRTtnQkFDbkUsc0ZBQXNGO2dCQUN0RixvRkFBb0Y7Z0JBQ3BGLG9DQUFvQztnQkFDcEMsd0NBQXVCLENBQUMsSUFBSSxFQUFFLGNBQWMsRUFBRSxvQkFBb0IsQ0FBQyxDQUFDO2dCQUVwRSxrRkFBa0Y7Z0JBQ2xGLHlGQUF5RjtnQkFDekYsT0FBTyxDQUFDLE9BQU8sQ0FBQyxJQUFJLDhCQUFzQixFQUFFLENBQUMsQ0FBQzthQUMvQztRQUNILENBQUMsQ0FBQztJQUNKLENBQUM7SUFsQkQsNEJBa0JDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7UnVsZSwgU2NoZW1hdGljQ29udGV4dCwgVHJlZX0gZnJvbSAnQGFuZ3VsYXItZGV2a2l0L3NjaGVtYXRpY3MnO1xuaW1wb3J0IHtOb2RlUGFja2FnZUluc3RhbGxUYXNrfSBmcm9tICdAYW5ndWxhci1kZXZraXQvc2NoZW1hdGljcy90YXNrcyc7XG5pbXBvcnQge2FkZFBhY2thZ2VUb1BhY2thZ2VKc29uLCBnZXRQYWNrYWdlVmVyc2lvbkZyb21QYWNrYWdlSnNvbn0gZnJvbSAnLi9wYWNrYWdlLWNvbmZpZyc7XG5cbi8qKlxuICogU2NoZW1hdGljIGZhY3RvcnkgZW50cnktcG9pbnQgZm9yIHRoZSBgbmctYWRkYCBzY2hlbWF0aWMuIFRoZSBuZy1hZGQgc2NoZW1hdGljIHdpbGwgYmVcbiAqIGF1dG9tYXRpY2FsbHkgZXhlY3V0ZWQgaWYgZGV2ZWxvcGVycyBydW4gYG5nIGFkZCBAYW5ndWxhci9jZGtgLlxuICpcbiAqIEJ5IGRlZmF1bHQsIHRoZSBDTEkgYWxyZWFkeSBpbnN0YWxscyB0aGUgcGFja2FnZSB0aGF0IGhhcyBiZWVuIHNwZWNpZmllZCB3aXRoIGBuZyBhZGRgLlxuICogV2UganVzdCBzdG9yZSB0aGUgdmVyc2lvbiBpbiB0aGUgYHBhY2thZ2UuanNvbmAgaW4gY2FzZSB0aGUgcGFja2FnZSBtYW5hZ2VyIGRpZG4ndC4gQWxzb1xuICogdGhpcyBlbnN1cmVzIHRoYXQgdGhlcmUgd2lsbCBiZSBubyBlcnJvciB0aGF0IHNheXMgdGhhdCB0aGUgQ0RLIGRvZXMgbm90IHN1cHBvcnQgYG5nIGFkZGAuXG4gKi9cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uKCk6IFJ1bGUge1xuICByZXR1cm4gKGhvc3Q6IFRyZWUsIGNvbnRleHQ6IFNjaGVtYXRpY0NvbnRleHQpID0+IHtcbiAgICAvLyBUaGUgQ0xJIGluc2VydHMgYEBhbmd1bGFyL2Nka2AgaW50byB0aGUgYHBhY2thZ2UuanNvbmAgYmVmb3JlIHRoaXMgc2NoZW1hdGljIHJ1bnMuIFRoaXNcbiAgICAvLyBtZWFucyB0aGF0IHdlIGRvIG5vdCBuZWVkIHRvIGluc2VydCB0aGUgQ0RLIGludG8gYHBhY2thZ2UuanNvbmAgZmlsZXMgYWdhaW4uIEluIHNvbWUgY2FzZXNcbiAgICAvLyB0aG91Z2gsIGl0IGNvdWxkIGhhcHBlbiB0aGF0IHRoaXMgc2NoZW1hdGljIHJ1bnMgb3V0c2lkZSBvZiB0aGUgQ0xJIGBuZyBhZGRgIGNvbW1hbmQsIG9yXG4gICAgLy8gdGhlIENESyBpcyBvbmx5IGxpc3RlZCBhcyBhIGRldiBkZXBlbmRlbmN5LiBJZiB0aGF0IGlzIHRoZSBjYXNlLCB3ZSBpbnNlcnQgYSB2ZXJzaW9uIGJhc2VkXG4gICAgLy8gb24gdGhlIGN1cnJlbnQgYnVpbGQgdmVyc2lvbiAoc3Vic3RpdHV0ZWQgdmVyc2lvbiBwbGFjZWhvbGRlcikuXG4gICAgaWYgKGdldFBhY2thZ2VWZXJzaW9uRnJvbVBhY2thZ2VKc29uKGhvc3QsICdAYW5ndWxhci9jZGsnKSA9PT0gbnVsbCkge1xuICAgICAgLy8gSW4gb3JkZXIgdG8gYWxpZ24gdGhlIENESyB2ZXJzaW9uIHdpdGggb3RoZXIgQW5ndWxhciBkZXBlbmRlbmNpZXMgdGhhdCBhcmUgc2V0dXAgYnlcbiAgICAgIC8vIGBAc2NoZW1hdGljcy9hbmd1bGFyYCwgd2UgdXNlIHRpbGRlIGluc3RlYWQgb2YgY2FyZXQuIFRoaXMgaXMgZGVmYXVsdCBmb3IgQW5ndWxhclxuICAgICAgLy8gZGVwZW5kZW5jaWVzIGluIG5ldyBDTEkgcHJvamVjdHMuXG4gICAgICBhZGRQYWNrYWdlVG9QYWNrYWdlSnNvbihob3N0LCAnQGFuZ3VsYXIvY2RrJywgYH4wLjAuMC1QTEFDRUhPTERFUmApO1xuXG4gICAgICAvLyBBZGQgYSB0YXNrIHRvIHJ1biB0aGUgcGFja2FnZSBtYW5hZ2VyLiBUaGlzIGlzIG5lY2Vzc2FyeSBiZWNhdXNlIHdlIHVwZGF0ZWQgdGhlXG4gICAgICAvLyB3b3Jrc3BhY2UgXCJwYWNrYWdlLmpzb25cIiBmaWxlIGFuZCB3ZSB3YW50IGxvY2sgZmlsZXMgdG8gcmVmbGVjdCB0aGUgbmV3IHZlcnNpb24gcmFuZ2UuXG4gICAgICBjb250ZXh0LmFkZFRhc2sobmV3IE5vZGVQYWNrYWdlSW5zdGFsbFRhc2soKSk7XG4gICAgfVxuICB9O1xufVxuIl19
+Object.defineProperty(exports, "__esModule", { value: true });
+const tasks_1 = require("@angular-devkit/schematics/tasks");
+const package_config_1 = require("./package-config");
+/**
+ * Schematic factory entry-point for the `ng-add` schematic. The ng-add schematic will be
+ * automatically executed if developers run `ng add @angular/cdk`.
+ *
+ * By default, the CLI already installs the package that has been specified with `ng add`.
+ * We just store the version in the `package.json` in case the package manager didn't. Also
+ * this ensures that there will be no error that says that the CDK does not support `ng add`.
+ */
+function default_1() {
+    return (host, context) => {
+        // The CLI inserts `@angular/cdk` into the `package.json` before this schematic runs. This
+        // means that we do not need to insert the CDK into `package.json` files again. In some cases
+        // though, it could happen that this schematic runs outside of the CLI `ng add` command, or
+        // the CDK is only listed as a dev dependency. If that is the case, we insert a version based
+        // on the current build version (substituted version placeholder).
+        if (package_config_1.getPackageVersionFromPackageJson(host, '@angular/cdk') === null) {
+            // In order to align the CDK version with other Angular dependencies that are setup by
+            // `@schematics/angular`, we use tilde instead of caret. This is default for Angular
+            // dependencies in new CLI projects.
+            package_config_1.addPackageToPackageJson(host, '@angular/cdk', `~10.0.0-next.0-sha-a86064ac8`);
+            // Add a task to run the package manager. This is necessary because we updated the
+            // workspace "package.json" file and we want lock files to reflect the new version range.
+            context.addTask(new tasks_1.NodePackageInstallTask());
+        }
+    };
+}
+exports.default = default_1;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3NjaGVtYXRpY3MvbmctYWRkL2luZGV4LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQTs7Ozs7O0dBTUc7O0FBR0gsNERBQXdFO0FBQ3hFLHFEQUEyRjtBQUUzRjs7Ozs7OztHQU9HO0FBQ0g7SUFDRSxPQUFPLENBQUMsSUFBVSxFQUFFLE9BQXlCLEVBQUUsRUFBRTtRQUMvQywwRkFBMEY7UUFDMUYsNkZBQTZGO1FBQzdGLDJGQUEyRjtRQUMzRiw2RkFBNkY7UUFDN0Ysa0VBQWtFO1FBQ2xFLElBQUksaURBQWdDLENBQUMsSUFBSSxFQUFFLGNBQWMsQ0FBQyxLQUFLLElBQUksRUFBRTtZQUNuRSxzRkFBc0Y7WUFDdEYsb0ZBQW9GO1lBQ3BGLG9DQUFvQztZQUNwQyx3Q0FBdUIsQ0FBQyxJQUFJLEVBQUUsY0FBYyxFQUFFLG9CQUFvQixDQUFDLENBQUM7WUFFcEUsa0ZBQWtGO1lBQ2xGLHlGQUF5RjtZQUN6RixPQUFPLENBQUMsT0FBTyxDQUFDLElBQUksOEJBQXNCLEVBQUUsQ0FBQyxDQUFDO1NBQy9DO0lBQ0gsQ0FBQyxDQUFDO0FBQ0osQ0FBQztBQWxCRCw0QkFrQkMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtSdWxlLCBTY2hlbWF0aWNDb250ZXh0LCBUcmVlfSBmcm9tICdAYW5ndWxhci1kZXZraXQvc2NoZW1hdGljcyc7XG5pbXBvcnQge05vZGVQYWNrYWdlSW5zdGFsbFRhc2t9IGZyb20gJ0Bhbmd1bGFyLWRldmtpdC9zY2hlbWF0aWNzL3Rhc2tzJztcbmltcG9ydCB7YWRkUGFja2FnZVRvUGFja2FnZUpzb24sIGdldFBhY2thZ2VWZXJzaW9uRnJvbVBhY2thZ2VKc29ufSBmcm9tICcuL3BhY2thZ2UtY29uZmlnJztcblxuLyoqXG4gKiBTY2hlbWF0aWMgZmFjdG9yeSBlbnRyeS1wb2ludCBmb3IgdGhlIGBuZy1hZGRgIHNjaGVtYXRpYy4gVGhlIG5nLWFkZCBzY2hlbWF0aWMgd2lsbCBiZVxuICogYXV0b21hdGljYWxseSBleGVjdXRlZCBpZiBkZXZlbG9wZXJzIHJ1biBgbmcgYWRkIEBhbmd1bGFyL2Nka2AuXG4gKlxuICogQnkgZGVmYXVsdCwgdGhlIENMSSBhbHJlYWR5IGluc3RhbGxzIHRoZSBwYWNrYWdlIHRoYXQgaGFzIGJlZW4gc3BlY2lmaWVkIHdpdGggYG5nIGFkZGAuXG4gKiBXZSBqdXN0IHN0b3JlIHRoZSB2ZXJzaW9uIGluIHRoZSBgcGFja2FnZS5qc29uYCBpbiBjYXNlIHRoZSBwYWNrYWdlIG1hbmFnZXIgZGlkbid0LiBBbHNvXG4gKiB0aGlzIGVuc3VyZXMgdGhhdCB0aGVyZSB3aWxsIGJlIG5vIGVycm9yIHRoYXQgc2F5cyB0aGF0IHRoZSBDREsgZG9lcyBub3Qgc3VwcG9ydCBgbmcgYWRkYC5cbiAqL1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24oKTogUnVsZSB7XG4gIHJldHVybiAoaG9zdDogVHJlZSwgY29udGV4dDogU2NoZW1hdGljQ29udGV4dCkgPT4ge1xuICAgIC8vIFRoZSBDTEkgaW5zZXJ0cyBgQGFuZ3VsYXIvY2RrYCBpbnRvIHRoZSBgcGFja2FnZS5qc29uYCBiZWZvcmUgdGhpcyBzY2hlbWF0aWMgcnVucy4gVGhpc1xuICAgIC8vIG1lYW5zIHRoYXQgd2UgZG8gbm90IG5lZWQgdG8gaW5zZXJ0IHRoZSBDREsgaW50byBgcGFja2FnZS5qc29uYCBmaWxlcyBhZ2Fpbi4gSW4gc29tZSBjYXNlc1xuICAgIC8vIHRob3VnaCwgaXQgY291bGQgaGFwcGVuIHRoYXQgdGhpcyBzY2hlbWF0aWMgcnVucyBvdXRzaWRlIG9mIHRoZSBDTEkgYG5nIGFkZGAgY29tbWFuZCwgb3JcbiAgICAvLyB0aGUgQ0RLIGlzIG9ubHkgbGlzdGVkIGFzIGEgZGV2IGRlcGVuZGVuY3kuIElmIHRoYXQgaXMgdGhlIGNhc2UsIHdlIGluc2VydCBhIHZlcnNpb24gYmFzZWRcbiAgICAvLyBvbiB0aGUgY3VycmVudCBidWlsZCB2ZXJzaW9uIChzdWJzdGl0dXRlZCB2ZXJzaW9uIHBsYWNlaG9sZGVyKS5cbiAgICBpZiAoZ2V0UGFja2FnZVZlcnNpb25Gcm9tUGFja2FnZUpzb24oaG9zdCwgJ0Bhbmd1bGFyL2NkaycpID09PSBudWxsKSB7XG4gICAgICAvLyBJbiBvcmRlciB0byBhbGlnbiB0aGUgQ0RLIHZlcnNpb24gd2l0aCBvdGhlciBBbmd1bGFyIGRlcGVuZGVuY2llcyB0aGF0IGFyZSBzZXR1cCBieVxuICAgICAgLy8gYEBzY2hlbWF0aWNzL2FuZ3VsYXJgLCB3ZSB1c2UgdGlsZGUgaW5zdGVhZCBvZiBjYXJldC4gVGhpcyBpcyBkZWZhdWx0IGZvciBBbmd1bGFyXG4gICAgICAvLyBkZXBlbmRlbmNpZXMgaW4gbmV3IENMSSBwcm9qZWN0cy5cbiAgICAgIGFkZFBhY2thZ2VUb1BhY2thZ2VKc29uKGhvc3QsICdAYW5ndWxhci9jZGsnLCBgfjAuMC4wLVBMQUNFSE9MREVSYCk7XG5cbiAgICAgIC8vIEFkZCBhIHRhc2sgdG8gcnVuIHRoZSBwYWNrYWdlIG1hbmFnZXIuIFRoaXMgaXMgbmVjZXNzYXJ5IGJlY2F1c2Ugd2UgdXBkYXRlZCB0aGVcbiAgICAgIC8vIHdvcmtzcGFjZSBcInBhY2thZ2UuanNvblwiIGZpbGUgYW5kIHdlIHdhbnQgbG9jayBmaWxlcyB0byByZWZsZWN0IHRoZSBuZXcgdmVyc2lvbiByYW5nZS5cbiAgICAgIGNvbnRleHQuYWRkVGFzayhuZXcgTm9kZVBhY2thZ2VJbnN0YWxsVGFzaygpKTtcbiAgICB9XG4gIH07XG59XG4iXX0=

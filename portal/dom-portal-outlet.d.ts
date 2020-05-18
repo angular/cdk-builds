@@ -44,7 +44,7 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
      * @deprecated To be turned into a method.
      * @breaking-change 10.0.0
      */
-    attachDomPortal: (portal: DomPortal<HTMLElement>) => void;
+    attachDomPortal: (portal: DomPortal) => void;
     /**
      * Clears out a portal from the DOM.
      */

@@ -423,52 +423,64 @@ function getMultipleValuesInSingleSelectionError() {
  * This service does not *store* any IDs and names because they may change at any time, so it is
  * less error-prone if they are simply passed through when the events occur.
  */
-class UniqueSelectionDispatcher {
-    constructor() {
-        this._listeners = [];
-    }
+let UniqueSelectionDispatcher = /** @class */ (() => {
     /**
-     * Notify other items that selection for the given name has been set.
-     * @param {?} id ID of the item.
-     * @param {?} name Name of the item.
-     * @return {?}
+     * Class to coordinate unique selection based on name.
+     * Intended to be consumed as an Angular service.
+     * This service is needed because native radio change events are only fired on the item currently
+     * being selected, and we still need to uncheck the previous selection.
+     *
+     * This service does not *store* any IDs and names because they may change at any time, so it is
+     * less error-prone if they are simply passed through when the events occur.
      */
-    notify(id, name) {
-        for (let listener of this._listeners) {
-            listener(id, name);
+    class UniqueSelectionDispatcher {
+        constructor() {
+            this._listeners = [];
         }
-    }
-    /**
-     * Listen for future changes to item selection.
-     * @param {?} listener
-     * @return {?} Function used to deregister listener
-     */
-    listen(listener) {
-        this._listeners.push(listener);
-        return (/**
+        /**
+         * Notify other items that selection for the given name has been set.
+         * @param {?} id ID of the item.
+         * @param {?} name Name of the item.
          * @return {?}
          */
-        () => {
-            this._listeners = this._listeners.filter((/**
-             * @param {?} registered
+        notify(id, name) {
+            for (let listener of this._listeners) {
+                listener(id, name);
+            }
+        }
+        /**
+         * Listen for future changes to item selection.
+         * @param {?} listener
+         * @return {?} Function used to deregister listener
+         */
+        listen(listener) {
+            this._listeners.push(listener);
+            return (/**
              * @return {?}
              */
-            (registered) => {
-                return listener !== registered;
-            }));
-        });
+            () => {
+                this._listeners = this._listeners.filter((/**
+                 * @param {?} registered
+                 * @return {?}
+                 */
+                (registered) => {
+                    return listener !== registered;
+                }));
+            });
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this._listeners = [];
+        }
     }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._listeners = [];
-    }
-}
-UniqueSelectionDispatcher.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */ UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+    UniqueSelectionDispatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */ UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+    return UniqueSelectionDispatcher;
+})();
 if (false) {
     /**
      * @type {?}

@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -5,26 +6,16 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define("@angular/cdk/schematics/update-tool/utils/functions", ["require", "exports", "typescript"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const ts = require("typescript");
-    /**
-     * Unwraps a given expression TypeScript node. Expressions can be wrapped within multiple
-     * parentheses. e.g. "(((({exp}))))()". The function should return the TypeScript node
-     * referring to the inner expression. e.g "exp".
-     */
-    function unwrapExpression(node) {
-        return ts.isParenthesizedExpression(node) ? unwrapExpression(node.expression) : node;
-    }
-    exports.unwrapExpression = unwrapExpression;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZnVuY3Rpb25zLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9zY2hlbWF0aWNzL3VwZGF0ZS10b29sL3V0aWxzL2Z1bmN0aW9ucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7Ozs7Ozs7Ozs7OztJQUVILGlDQUFpQztJQUVqQzs7OztPQUlHO0lBQ0gsU0FBZ0IsZ0JBQWdCLENBQUMsSUFBOEM7UUFDN0UsT0FBTyxFQUFFLENBQUMseUJBQXlCLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDO0lBQ3ZGLENBQUM7SUFGRCw0Q0FFQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQgKiBhcyB0cyBmcm9tICd0eXBlc2NyaXB0JztcblxuLyoqXG4gKiBVbndyYXBzIGEgZ2l2ZW4gZXhwcmVzc2lvbiBUeXBlU2NyaXB0IG5vZGUuIEV4cHJlc3Npb25zIGNhbiBiZSB3cmFwcGVkIHdpdGhpbiBtdWx0aXBsZVxuICogcGFyZW50aGVzZXMuIGUuZy4gXCIoKCgoe2V4cH0pKSkpKClcIi4gVGhlIGZ1bmN0aW9uIHNob3VsZCByZXR1cm4gdGhlIFR5cGVTY3JpcHQgbm9kZVxuICogcmVmZXJyaW5nIHRvIHRoZSBpbm5lciBleHByZXNzaW9uLiBlLmcgXCJleHBcIi5cbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIHVud3JhcEV4cHJlc3Npb24obm9kZTogdHMuRXhwcmVzc2lvbnx0cy5QYXJlbnRoZXNpemVkRXhwcmVzc2lvbik6IHRzLkV4cHJlc3Npb24ge1xuICByZXR1cm4gdHMuaXNQYXJlbnRoZXNpemVkRXhwcmVzc2lvbihub2RlKSA/IHVud3JhcEV4cHJlc3Npb24obm9kZS5leHByZXNzaW9uKSA6IG5vZGU7XG59XG4iXX0=
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.unwrapExpression = void 0;
+const ts = require("typescript");
+/**
+ * Unwraps a given expression TypeScript node. Expressions can be wrapped within multiple
+ * parentheses. e.g. "(((({exp}))))()". The function should return the TypeScript node
+ * referring to the inner expression. e.g "exp".
+ */
+function unwrapExpression(node) {
+    return ts.isParenthesizedExpression(node) ? unwrapExpression(node.expression) : node;
+}
+exports.unwrapExpression = unwrapExpression;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZnVuY3Rpb25zLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9zY2hlbWF0aWNzL3VwZGF0ZS10b29sL3V0aWxzL2Z1bmN0aW9ucy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUE7Ozs7OztHQU1HOzs7QUFFSCxpQ0FBaUM7QUFFakM7Ozs7R0FJRztBQUNILFNBQWdCLGdCQUFnQixDQUFDLElBQThDO0lBQzdFLE9BQU8sRUFBRSxDQUFDLHlCQUF5QixDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsQ0FBQyxnQkFBZ0IsQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQztBQUN2RixDQUFDO0FBRkQsNENBRUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0ICogYXMgdHMgZnJvbSAndHlwZXNjcmlwdCc7XG5cbi8qKlxuICogVW53cmFwcyBhIGdpdmVuIGV4cHJlc3Npb24gVHlwZVNjcmlwdCBub2RlLiBFeHByZXNzaW9ucyBjYW4gYmUgd3JhcHBlZCB3aXRoaW4gbXVsdGlwbGVcbiAqIHBhcmVudGhlc2VzLiBlLmcuIFwiKCgoKHtleHB9KSkpKSgpXCIuIFRoZSBmdW5jdGlvbiBzaG91bGQgcmV0dXJuIHRoZSBUeXBlU2NyaXB0IG5vZGVcbiAqIHJlZmVycmluZyB0byB0aGUgaW5uZXIgZXhwcmVzc2lvbi4gZS5nIFwiZXhwXCIuXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiB1bndyYXBFeHByZXNzaW9uKG5vZGU6IHRzLkV4cHJlc3Npb258dHMuUGFyZW50aGVzaXplZEV4cHJlc3Npb24pOiB0cy5FeHByZXNzaW9uIHtcbiAgcmV0dXJuIHRzLmlzUGFyZW50aGVzaXplZEV4cHJlc3Npb24obm9kZSkgPyB1bndyYXBFeHByZXNzaW9uKG5vZGUuZXhwcmVzc2lvbikgOiBub2RlO1xufVxuIl19

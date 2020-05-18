@@ -73,7 +73,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
      * @deprecated To be turned into a method.
      * @breaking-change 10.0.0
      */
-    attachDomPortal: (portal: DomPortal<HTMLElement>) => void;
+    attachDomPortal: (portal: DomPortal) => void;
     /** Gets the root node of the portal outlet. */
     private _getRootNode;
     static ngAcceptInputType_portal: Portal<any> | null | undefined | '';

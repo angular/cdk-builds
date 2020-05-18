@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/ng-update/migrations/element-selectors" />
 import * as ts from 'typescript';
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
 import { Migration } from '../../update-tool/migration';

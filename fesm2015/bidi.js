@@ -43,48 +43,55 @@ function DIR_DOCUMENT_FACTORY() {
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
  */
-class Directionality {
+let Directionality = /** @class */ (() => {
     /**
-     * @param {?=} _document
+     * The directionality (LTR / RTL) context for the application (or a subtree of it).
+     * Exposes the current direction and a stream of direction changes.
      */
-    constructor(_document) {
+    class Directionality {
         /**
-         * The current 'ltr' or 'rtl' value.
+         * @param {?=} _document
          */
-        this.value = 'ltr';
+        constructor(_document) {
+            /**
+             * The current 'ltr' or 'rtl' value.
+             */
+            this.value = 'ltr';
+            /**
+             * Stream that emits whenever the 'ltr' / 'rtl' state changes.
+             */
+            this.change = new EventEmitter();
+            if (_document) {
+                // TODO: handle 'auto' value -
+                // We still need to account for dir="auto".
+                // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
+                // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
+                /** @type {?} */
+                const bodyDir = _document.body ? _document.body.dir : null;
+                /** @type {?} */
+                const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
+                /** @type {?} */
+                const value = bodyDir || htmlDir;
+                this.value = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
+            }
+        }
         /**
-         * Stream that emits whenever the 'ltr' / 'rtl' state changes.
+         * @return {?}
          */
-        this.change = new EventEmitter();
-        if (_document) {
-            // TODO: handle 'auto' value -
-            // We still need to account for dir="auto".
-            // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
-            // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
-            /** @type {?} */
-            const bodyDir = _document.body ? _document.body.dir : null;
-            /** @type {?} */
-            const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            /** @type {?} */
-            const value = bodyDir || htmlDir;
-            this.value = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
+        ngOnDestroy() {
+            this.change.complete();
         }
     }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this.change.complete();
-    }
-}
-Directionality.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-Directionality.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] }] }
-];
-/** @nocollapse */ Directionality.ɵprov = ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+    Directionality.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    Directionality.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] }] }
+    ];
+    /** @nocollapse */ Directionality.ɵprov = ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+    return Directionality;
+})();
 if (false) {
     /**
      * The current 'ltr' or 'rtl' value.
@@ -109,72 +116,81 @@ if (false) {
  * Provides itself as Directionality such that descendant directives only need to ever inject
  * Directionality to get the closest direction.
  */
-class Dir {
-    constructor() {
-        /**
-         * Normalized direction that accounts for invalid/unsupported values.
-         */
-        this._dir = 'ltr';
-        /**
-         * Whether the `value` has been set to its initial value.
-         */
-        this._isInitialized = false;
-        /**
-         * Event emitted when the direction changes.
-         */
-        this.change = new EventEmitter();
-    }
+let Dir = /** @class */ (() => {
     /**
-     * \@docs-private
-     * @return {?}
+     * Directive to listen for changes of direction of part of the DOM.
+     *
+     * Provides itself as Directionality such that descendant directives only need to ever inject
+     * Directionality to get the closest direction.
      */
-    get dir() { return this._dir; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set dir(value) {
-        /** @type {?} */
-        const old = this._dir;
-        /** @type {?} */
-        const normalizedValue = value ? value.toLowerCase() : value;
-        this._rawDir = value;
-        this._dir = (normalizedValue === 'ltr' || normalizedValue === 'rtl') ? normalizedValue : 'ltr';
-        if (old !== this._dir && this._isInitialized) {
-            this.change.emit(this._dir);
+    class Dir {
+        constructor() {
+            /**
+             * Normalized direction that accounts for invalid/unsupported values.
+             */
+            this._dir = 'ltr';
+            /**
+             * Whether the `value` has been set to its initial value.
+             */
+            this._isInitialized = false;
+            /**
+             * Event emitted when the direction changes.
+             */
+            this.change = new EventEmitter();
+        }
+        /**
+         * \@docs-private
+         * @return {?}
+         */
+        get dir() { return this._dir; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set dir(value) {
+            /** @type {?} */
+            const old = this._dir;
+            /** @type {?} */
+            const normalizedValue = value ? value.toLowerCase() : value;
+            this._rawDir = value;
+            this._dir = (normalizedValue === 'ltr' || normalizedValue === 'rtl') ? normalizedValue : 'ltr';
+            if (old !== this._dir && this._isInitialized) {
+                this.change.emit(this._dir);
+            }
+        }
+        /**
+         * Current layout direction of the element.
+         * @return {?}
+         */
+        get value() { return this.dir; }
+        /**
+         * Initialize once default value has been set.
+         * @return {?}
+         */
+        ngAfterContentInit() {
+            this._isInitialized = true;
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this.change.complete();
         }
     }
-    /**
-     * Current layout direction of the element.
-     * @return {?}
-     */
-    get value() { return this.dir; }
-    /**
-     * Initialize once default value has been set.
-     * @return {?}
-     */
-    ngAfterContentInit() {
-        this._isInitialized = true;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this.change.complete();
-    }
-}
-Dir.decorators = [
-    { type: Directive, args: [{
-                selector: '[dir]',
-                providers: [{ provide: Directionality, useExisting: Dir }],
-                host: { '[attr.dir]': '_rawDir' },
-                exportAs: 'dir',
-            },] }
-];
-Dir.propDecorators = {
-    change: [{ type: Output, args: ['dirChange',] }],
-    dir: [{ type: Input }]
-};
+    Dir.decorators = [
+        { type: Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[attr.dir]': '_rawDir' },
+                    exportAs: 'dir',
+                },] }
+    ];
+    Dir.propDecorators = {
+        change: [{ type: Output, args: ['dirChange',] }],
+        dir: [{ type: Input }]
+    };
+    return Dir;
+})();
 if (false) {
     /**
      * Normalized direction that accounts for invalid/unsupported values.
@@ -205,14 +221,17 @@ if (false) {
  * Generated from: src/cdk/bidi/bidi-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class BidiModule {
-}
-BidiModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [Dir],
-                declarations: [Dir],
-            },] }
-];
+let BidiModule = /** @class */ (() => {
+    class BidiModule {
+    }
+    BidiModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                },] }
+    ];
+    return BidiModule;
+})();
 
 /**
  * @fileoverview added by tsickle

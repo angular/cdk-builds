@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/utils/ast/ng-module-imports" />
 import { Tree } from '@angular-devkit/schematics';
 /**
  * Whether the Angular module in the given path imports the specified module class name.

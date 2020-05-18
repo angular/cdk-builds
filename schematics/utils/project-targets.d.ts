@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/utils/project-targets" />
 import { WorkspaceProject } from '@angular-devkit/core/src/experimental/workspace';
 import { BuilderTarget } from '@schematics/angular/utility/workspace-models';
 /** Object that maps a CLI target to its default builder name. */

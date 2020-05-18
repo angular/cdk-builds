@@ -170,33 +170,33 @@ export declare class DragRef<T = any> {
     beforeStarted: Subject<void>;
     /** Emits when the user starts dragging the item. */
     started: Subject<{
-        source: DragRef<any>;
+        source: DragRef;
     }>;
     /** Emits when the user has released a drag item, before any animations have started. */
     released: Subject<{
-        source: DragRef<any>;
+        source: DragRef;
     }>;
     /** Emits when the user stops dragging an item in the container. */
     ended: Subject<{
-        source: DragRef<any>;
+        source: DragRef;
         distance: Point;
     }>;
     /** Emits when the user has moved the item into a new container. */
     entered: Subject<{
         container: DropListRef;
-        item: DragRef<any>;
+        item: DragRef;
         currentIndex: number;
     }>;
     /** Emits when the user removes the item its container by dragging it into another container. */
     exited: Subject<{
         container: DropListRef;
-        item: DragRef<any>;
+        item: DragRef;
     }>;
     /** Emits when the user drops the item inside a container. */
     dropped: Subject<{
         previousIndex: number;
         currentIndex: number;
-        item: DragRef<any>;
+        item: DragRef;
         container: DropListRef;
         previousContainer: DropListRef;
         distance: Point;

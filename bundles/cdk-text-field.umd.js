@@ -158,7 +158,7 @@
                 this._minRows = coercion.coerceNumberProperty(value);
                 this._setMinHeight();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkTextareaAutosize.prototype, "maxRows", {
@@ -168,7 +168,7 @@
                 this._maxRows = coercion.coerceNumberProperty(value);
                 this._setMaxHeight();
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkTextareaAutosize.prototype, "enabled", {
@@ -182,7 +182,7 @@
                     (this._enabled = value) ? this.resizeToFitContent(true) : this.reset();
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** Sets the minimum height of the textarea as determined by minRows. */

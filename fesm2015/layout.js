@@ -9,11 +9,14 @@ import { coerceArray } from '@angular/cdk/coercion';
  * Generated from: src/cdk/layout/layout-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class LayoutModule {
-}
-LayoutModule.decorators = [
-    { type: NgModule, args: [{},] }
-];
+let LayoutModule = /** @class */ (() => {
+    class LayoutModule {
+    }
+    LayoutModule.decorators = [
+        { type: NgModule, args: [{},] }
+    ];
+    return LayoutModule;
+})();
 
 /**
  * @fileoverview added by tsickle
@@ -33,41 +36,47 @@ let mediaQueryStyleNode;
 /**
  * A utility for calling matchMedia queries.
  */
-class MediaMatcher {
+let MediaMatcher = /** @class */ (() => {
     /**
-     * @param {?} _platform
+     * A utility for calling matchMedia queries.
      */
-    constructor(_platform) {
-        this._platform = _platform;
-        this._matchMedia = this._platform.isBrowser && window.matchMedia ?
-            // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
-            // call it from a different scope.
-            window.matchMedia.bind(window) :
-            noopMatchMedia;
-    }
-    /**
-     * Evaluates the given media query and returns the native MediaQueryList from which results
-     * can be retrieved.
-     * Confirms the layout engine will trigger for the selector query provided and returns the
-     * MediaQueryList for the query provided.
-     * @param {?} query
-     * @return {?}
-     */
-    matchMedia(query) {
-        if (this._platform.WEBKIT) {
-            createEmptyStyleRule(query);
+    class MediaMatcher {
+        /**
+         * @param {?} _platform
+         */
+        constructor(_platform) {
+            this._platform = _platform;
+            this._matchMedia = this._platform.isBrowser && window.matchMedia ?
+                // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
+                // call it from a different scope.
+                window.matchMedia.bind(window) :
+                noopMatchMedia;
         }
-        return this._matchMedia(query);
+        /**
+         * Evaluates the given media query and returns the native MediaQueryList from which results
+         * can be retrieved.
+         * Confirms the layout engine will trigger for the selector query provided and returns the
+         * MediaQueryList for the query provided.
+         * @param {?} query
+         * @return {?}
+         */
+        matchMedia(query) {
+            if (this._platform.WEBKIT) {
+                createEmptyStyleRule(query);
+            }
+            return this._matchMedia(query);
+        }
     }
-}
-MediaMatcher.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-MediaMatcher.ctorParameters = () => [
-    { type: Platform }
-];
-/** @nocollapse */ MediaMatcher.ɵprov = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
+    MediaMatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    MediaMatcher.ctorParameters = () => [
+        { type: Platform }
+    ];
+    /** @nocollapse */ MediaMatcher.ɵprov = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
+    return MediaMatcher;
+})();
 if (false) {
     /**
      * The internal matchMedia method to return back a MediaQueryList like object.
@@ -182,147 +191,153 @@ if (false) {
 /**
  * Utility for checking the matching state of \@media queries.
  */
-class BreakpointObserver {
+let BreakpointObserver = /** @class */ (() => {
     /**
-     * @param {?} _mediaMatcher
-     * @param {?} _zone
+     * Utility for checking the matching state of \@media queries.
      */
-    constructor(_mediaMatcher, _zone) {
-        this._mediaMatcher = _mediaMatcher;
-        this._zone = _zone;
+    class BreakpointObserver {
         /**
-         * A map of all media queries currently being listened for.
+         * @param {?} _mediaMatcher
+         * @param {?} _zone
          */
-        this._queries = new Map();
+        constructor(_mediaMatcher, _zone) {
+            this._mediaMatcher = _mediaMatcher;
+            this._zone = _zone;
+            /**
+             * A map of all media queries currently being listened for.
+             */
+            this._queries = new Map();
+            /**
+             * A subject for all other observables to takeUntil based on.
+             */
+            this._destroySubject = new Subject();
+        }
         /**
-         * A subject for all other observables to takeUntil based on.
-         */
-        this._destroySubject = new Subject();
-    }
-    /**
-     * Completes the active subject, signalling to all other observables to complete.
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._destroySubject.next();
-        this._destroySubject.complete();
-    }
-    /**
-     * Whether one or more media queries match the current viewport size.
-     * @param {?} value One or more media queries to check.
-     * @return {?} Whether any of the media queries match.
-     */
-    isMatched(value) {
-        /** @type {?} */
-        const queries = splitQueries(coerceArray(value));
-        return queries.some((/**
-         * @param {?} mediaQuery
+         * Completes the active subject, signalling to all other observables to complete.
          * @return {?}
          */
-        mediaQuery => this._registerQuery(mediaQuery).mql.matches));
-    }
-    /**
-     * Gets an observable of results for the given queries that will emit new results for any changes
-     * in matching of the given queries.
-     * @param {?} value One or more media queries to check.
-     * @return {?} A stream of matches for the given queries.
-     */
-    observe(value) {
-        /** @type {?} */
-        const queries = splitQueries(coerceArray(value));
-        /** @type {?} */
-        const observables = queries.map((/**
+        ngOnDestroy() {
+            this._destroySubject.next();
+            this._destroySubject.complete();
+        }
+        /**
+         * Whether one or more media queries match the current viewport size.
+         * @param {?} value One or more media queries to check.
+         * @return {?} Whether any of the media queries match.
+         */
+        isMatched(value) {
+            /** @type {?} */
+            const queries = splitQueries(coerceArray(value));
+            return queries.some((/**
+             * @param {?} mediaQuery
+             * @return {?}
+             */
+            mediaQuery => this._registerQuery(mediaQuery).mql.matches));
+        }
+        /**
+         * Gets an observable of results for the given queries that will emit new results for any changes
+         * in matching of the given queries.
+         * @param {?} value One or more media queries to check.
+         * @return {?} A stream of matches for the given queries.
+         */
+        observe(value) {
+            /** @type {?} */
+            const queries = splitQueries(coerceArray(value));
+            /** @type {?} */
+            const observables = queries.map((/**
+             * @param {?} query
+             * @return {?}
+             */
+            query => this._registerQuery(query).observable));
+            /** @type {?} */
+            let stateObservable = combineLatest(observables);
+            // Emit the first state immediately, and then debounce the subsequent emissions.
+            stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
+            return stateObservable.pipe(map((/**
+             * @param {?} breakpointStates
+             * @return {?}
+             */
+            (breakpointStates) => {
+                /** @type {?} */
+                const response = {
+                    matches: false,
+                    breakpoints: {},
+                };
+                breakpointStates.forEach((/**
+                 * @param {?} state
+                 * @return {?}
+                 */
+                (state) => {
+                    response.matches = response.matches || state.matches;
+                    response.breakpoints[state.query] = state.matches;
+                }));
+                return response;
+            })));
+        }
+        /**
+         * Registers a specific query to be listened for.
+         * @private
          * @param {?} query
          * @return {?}
          */
-        query => this._registerQuery(query).observable));
-        /** @type {?} */
-        let stateObservable = combineLatest(observables);
-        // Emit the first state immediately, and then debounce the subsequent emissions.
-        stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
-        return stateObservable.pipe(map((/**
-         * @param {?} breakpointStates
-         * @return {?}
-         */
-        (breakpointStates) => {
+        _registerQuery(query) {
+            // Only set up a new MediaQueryList if it is not already being listened for.
+            if (this._queries.has(query)) {
+                return (/** @type {?} */ (this._queries.get(query)));
+            }
             /** @type {?} */
-            const response = {
-                matches: false,
-                breakpoints: {},
-            };
-            breakpointStates.forEach((/**
-             * @param {?} state
+            const mql = this._mediaMatcher.matchMedia(query);
+            // Create callback for match changes and add it is as a listener.
+            /** @type {?} */
+            const queryObservable = new Observable((/**
+             * @param {?} observer
              * @return {?}
              */
-            (state) => {
-                response.matches = response.matches || state.matches;
-                response.breakpoints[state.query] = state.matches;
-            }));
-            return response;
-        })));
-    }
-    /**
-     * Registers a specific query to be listened for.
-     * @private
-     * @param {?} query
-     * @return {?}
-     */
-    _registerQuery(query) {
-        // Only set up a new MediaQueryList if it is not already being listened for.
-        if (this._queries.has(query)) {
-            return (/** @type {?} */ (this._queries.get(query)));
+            (observer) => {
+                // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
+                // back into the zone because matchMedia is only included in Zone.js by loading the
+                // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
+                // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
+                // patches it.
+                /** @type {?} */
+                const handler = (/**
+                 * @param {?} e
+                 * @return {?}
+                 */
+                (e) => this._zone.run((/**
+                 * @return {?}
+                 */
+                () => observer.next(e))));
+                mql.addListener(handler);
+                return (/**
+                 * @return {?}
+                 */
+                () => {
+                    mql.removeListener(handler);
+                });
+            })).pipe(startWith(mql), map((/**
+             * @param {?} nextMql
+             * @return {?}
+             */
+            (nextMql) => ({ query, matches: nextMql.matches }))), takeUntil(this._destroySubject));
+            // Add the MediaQueryList to the set of queries.
+            /** @type {?} */
+            const output = { observable: queryObservable, mql };
+            this._queries.set(query, output);
+            return output;
         }
-        /** @type {?} */
-        const mql = this._mediaMatcher.matchMedia(query);
-        // Create callback for match changes and add it is as a listener.
-        /** @type {?} */
-        const queryObservable = new Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        (observer) => {
-            // Listener callback methods are wrapped to be placed back in ngZone. Callbacks must be placed
-            // back into the zone because matchMedia is only included in Zone.js by loading the
-            // webapis-media-query.js file alongside the zone.js file.  Additionally, some browsers do not
-            // have MediaQueryList inherit from EventTarget, which causes inconsistencies in how Zone.js
-            // patches it.
-            /** @type {?} */
-            const handler = (/**
-             * @param {?} e
-             * @return {?}
-             */
-            (e) => this._zone.run((/**
-             * @return {?}
-             */
-            () => observer.next(e))));
-            mql.addListener(handler);
-            return (/**
-             * @return {?}
-             */
-            () => {
-                mql.removeListener(handler);
-            });
-        })).pipe(startWith(mql), map((/**
-         * @param {?} nextMql
-         * @return {?}
-         */
-        (nextMql) => ({ query, matches: nextMql.matches }))), takeUntil(this._destroySubject));
-        // Add the MediaQueryList to the set of queries.
-        /** @type {?} */
-        const output = { observable: queryObservable, mql };
-        this._queries.set(query, output);
-        return output;
     }
-}
-BreakpointObserver.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-BreakpointObserver.ctorParameters = () => [
-    { type: MediaMatcher },
-    { type: NgZone }
-];
-/** @nocollapse */ BreakpointObserver.ɵprov = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    BreakpointObserver.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    BreakpointObserver.ctorParameters = () => [
+        { type: MediaMatcher },
+        { type: NgZone }
+    ];
+    /** @nocollapse */ BreakpointObserver.ɵprov = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    return BreakpointObserver;
+})();
 if (false) {
     /**
      * A map of all media queries currently being listened for.

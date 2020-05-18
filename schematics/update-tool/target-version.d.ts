@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/update-tool/target-version" />
 /** Possible versions that can be automatically migrated by `ng update`. */
 export declare enum TargetVersion {
     V6 = "version 6",

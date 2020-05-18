@@ -50,7 +50,7 @@ export declare class DropListRef<T = any> {
      */
     entered: Subject<{
         item: DragRef;
-        container: DropListRef<any>;
+        container: DropListRef;
         currentIndex: number;
     }>;
     /**
@@ -59,15 +59,15 @@ export declare class DropListRef<T = any> {
      */
     exited: Subject<{
         item: DragRef;
-        container: DropListRef<any>;
+        container: DropListRef;
     }>;
     /** Emits when the user drops an item inside the container. */
     dropped: Subject<{
         item: DragRef;
         currentIndex: number;
         previousIndex: number;
-        container: DropListRef<any>;
-        previousContainer: DropListRef<any>;
+        container: DropListRef;
+        previousContainer: DropListRef;
         isPointerOverContainer: boolean;
         distance: Point;
     }>;
@@ -75,7 +75,7 @@ export declare class DropListRef<T = any> {
     sorted: Subject<{
         previousIndex: number;
         currentIndex: number;
-        container: DropListRef<any>;
+        container: DropListRef;
         item: DragRef;
     }>;
     /** Arbitrary data that can be attached to the drop list. */

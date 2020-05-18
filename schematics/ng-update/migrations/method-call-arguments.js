@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -5,66 +6,56 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MethodCallArgumentsMigration = void 0;
+const ts = require("typescript");
+const migration_1 = require("../../update-tool/migration");
+const upgrade_data_1 = require("../upgrade-data");
+/**
+ * Migration that visits every TypeScript method call expression and checks if the
+ * argument count is invalid and needs to be *manually* updated.
+ */
+class MethodCallArgumentsMigration extends migration_1.Migration {
+    constructor() {
+        super(...arguments);
+        /** Change data that upgrades to the specified target version. */
+        this.data = upgrade_data_1.getVersionUpgradeData(this, 'methodCallChecks');
+        // Only enable the migration rule if there is upgrade data.
+        this.enabled = this.data.length !== 0;
     }
-    else if (typeof define === "function" && define.amd) {
-        define("@angular/cdk/schematics/ng-update/migrations/method-call-arguments", ["require", "exports", "typescript", "@angular/cdk/schematics/update-tool/migration", "@angular/cdk/schematics/ng-update/upgrade-data"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const ts = require("typescript");
-    const migration_1 = require("@angular/cdk/schematics/update-tool/migration");
-    const upgrade_data_1 = require("@angular/cdk/schematics/ng-update/upgrade-data");
-    /**
-     * Migration that visits every TypeScript method call expression and checks if the
-     * argument count is invalid and needs to be *manually* updated.
-     */
-    class MethodCallArgumentsMigration extends migration_1.Migration {
-        constructor() {
-            super(...arguments);
-            /** Change data that upgrades to the specified target version. */
-            this.data = upgrade_data_1.getVersionUpgradeData(this, 'methodCallChecks');
-            // Only enable the migration rule if there is upgrade data.
-            this.enabled = this.data.length !== 0;
-        }
-        visitNode(node) {
-            if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression)) {
-                this._checkPropertyAccessMethodCall(node);
-            }
-        }
-        _checkPropertyAccessMethodCall(node) {
-            const propertyAccess = node.expression;
-            if (!ts.isIdentifier(propertyAccess.name)) {
-                return;
-            }
-            const hostType = this.typeChecker.getTypeAtLocation(propertyAccess.expression);
-            const hostTypeName = hostType.symbol && hostType.symbol.name;
-            const methodName = propertyAccess.name.text;
-            if (!hostTypeName) {
-                return;
-            }
-            // TODO(devversion): Revisit the implementation of this upgrade rule. It seems difficult
-            // and ambiguous to maintain the data for this rule. e.g. consider a method which has the
-            // same amount of arguments but just had a type change. In that case we could still add
-            // new entries to the upgrade data that match the current argument length to just show
-            // a failure message, but adding that data becomes painful if the method has optional
-            // parameters and it would mean that the error message would always show up, even if the
-            // argument is in some cases still assignable to the new parameter type. We could re-use
-            // the logic we have in the constructor-signature checks to check for assignability and
-            // to make the upgrade data less verbose.
-            const failure = this.data.filter(data => data.method === methodName && data.className === hostTypeName)
-                .map(data => data.invalidArgCounts.find(f => f.count === node.arguments.length))[0];
-            if (!failure) {
-                return;
-            }
-            this.createFailureAtNode(node, `Found call to "${hostTypeName + '.' + methodName}" ` +
-                `with ${failure.count} arguments. Message: ${failure.message}`);
+    visitNode(node) {
+        if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression)) {
+            this._checkPropertyAccessMethodCall(node);
         }
     }
-    exports.MethodCallArgumentsMigration = MethodCallArgumentsMigration;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWV0aG9kLWNhbGwtYXJndW1lbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9zY2hlbWF0aWNzL25nLXVwZGF0ZS9taWdyYXRpb25zL21ldGhvZC1jYWxsLWFyZ3VtZW50cy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7Ozs7Ozs7Ozs7OztJQUVILGlDQUFpQztJQUNqQyw2RUFBc0Q7SUFHdEQsaUZBQW1FO0lBRW5FOzs7T0FHRztJQUNILE1BQWEsNEJBQTZCLFNBQVEscUJBQXNCO1FBQXhFOztZQUNFLGlFQUFpRTtZQUNqRSxTQUFJLEdBQTRCLG9DQUFxQixDQUFDLElBQUksRUFBRSxrQkFBa0IsQ0FBQyxDQUFDO1lBRWhGLDJEQUEyRDtZQUMzRCxZQUFPLEdBQUcsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLEtBQUssQ0FBQyxDQUFDO1FBNkNuQyxDQUFDO1FBM0NDLFNBQVMsQ0FBQyxJQUFhO1lBQ3JCLElBQUksRUFBRSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQywwQkFBMEIsQ0FBQyxJQUFJLENBQUMsVUFBVSxDQUFDLEVBQUU7Z0JBQy9FLElBQUksQ0FBQyw4QkFBOEIsQ0FBQyxJQUFJLENBQUMsQ0FBQzthQUMzQztRQUNILENBQUM7UUFFTyw4QkFBOEIsQ0FBQyxJQUF1QjtZQUM1RCxNQUFNLGNBQWMsR0FBRyxJQUFJLENBQUMsVUFBeUMsQ0FBQztZQUV0RSxJQUFJLENBQUMsRUFBRSxDQUFDLFlBQVksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLEVBQUU7Z0JBQ3pDLE9BQU87YUFDUjtZQUVELE1BQU0sUUFBUSxHQUFHLElBQUksQ0FBQyxXQUFXLENBQUMsaUJBQWlCLENBQUMsY0FBYyxDQUFDLFVBQVUsQ0FBQyxDQUFDO1lBQy9FLE1BQU0sWUFBWSxHQUFHLFFBQVEsQ0FBQyxNQUFNLElBQUksUUFBUSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUM7WUFDN0QsTUFBTSxVQUFVLEdBQUcsY0FBYyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUM7WUFFNUMsSUFBSSxDQUFDLFlBQVksRUFBRTtnQkFDakIsT0FBTzthQUNSO1lBRUQsd0ZBQXdGO1lBQ3hGLHlGQUF5RjtZQUN6Rix1RkFBdUY7WUFDdkYsc0ZBQXNGO1lBQ3RGLHFGQUFxRjtZQUNyRix3RkFBd0Y7WUFDeEYsd0ZBQXdGO1lBQ3hGLHVGQUF1RjtZQUN2Rix5Q0FBeUM7WUFDekMsTUFBTSxPQUFPLEdBQ1QsSUFBSSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxJQUFJLENBQUMsTUFBTSxLQUFLLFVBQVUsSUFBSSxJQUFJLENBQUMsU0FBUyxLQUFLLFlBQVksQ0FBQztpQkFDbEYsR0FBRyxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQyxLQUFLLEtBQUssSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO1lBRTVGLElBQUksQ0FBQyxPQUFPLEVBQUU7Z0JBQ1osT0FBTzthQUNSO1lBRUQsSUFBSSxDQUFDLG1CQUFtQixDQUNwQixJQUFJLEVBQ0osa0JBQWtCLFlBQVksR0FBRyxHQUFHLEdBQUcsVUFBVSxJQUFJO2dCQUNqRCxRQUFRLE9BQU8sQ0FBQyxLQUFLLHdCQUF3QixPQUFPLENBQUMsT0FBTyxFQUFFLENBQUMsQ0FBQztRQUMxRSxDQUFDO0tBQ0Y7SUFsREQsb0VBa0RDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCAqIGFzIHRzIGZyb20gJ3R5cGVzY3JpcHQnO1xuaW1wb3J0IHtNaWdyYXRpb259IGZyb20gJy4uLy4uL3VwZGF0ZS10b29sL21pZ3JhdGlvbic7XG5cbmltcG9ydCB7TWV0aG9kQ2FsbFVwZ3JhZGVEYXRhfSBmcm9tICcuLi9kYXRhJztcbmltcG9ydCB7Z2V0VmVyc2lvblVwZ3JhZGVEYXRhLCBVcGdyYWRlRGF0YX0gZnJvbSAnLi4vdXBncmFkZS1kYXRhJztcblxuLyoqXG4gKiBNaWdyYXRpb24gdGhhdCB2aXNpdHMgZXZlcnkgVHlwZVNjcmlwdCBtZXRob2QgY2FsbCBleHByZXNzaW9uIGFuZCBjaGVja3MgaWYgdGhlXG4gKiBhcmd1bWVudCBjb3VudCBpcyBpbnZhbGlkIGFuZCBuZWVkcyB0byBiZSAqbWFudWFsbHkqIHVwZGF0ZWQuXG4gKi9cbmV4cG9ydCBjbGFzcyBNZXRob2RDYWxsQXJndW1lbnRzTWlncmF0aW9uIGV4dGVuZHMgTWlncmF0aW9uPFVwZ3JhZGVEYXRhPiB7XG4gIC8qKiBDaGFuZ2UgZGF0YSB0aGF0IHVwZ3JhZGVzIHRvIHRoZSBzcGVjaWZpZWQgdGFyZ2V0IHZlcnNpb24uICovXG4gIGRhdGE6IE1ldGhvZENhbGxVcGdyYWRlRGF0YVtdID0gZ2V0VmVyc2lvblVwZ3JhZGVEYXRhKHRoaXMsICdtZXRob2RDYWxsQ2hlY2tzJyk7XG5cbiAgLy8gT25seSBlbmFibGUgdGhlIG1pZ3JhdGlvbiBydWxlIGlmIHRoZXJlIGlzIHVwZ3JhZGUgZGF0YS5cbiAgZW5hYmxlZCA9IHRoaXMuZGF0YS5sZW5ndGggIT09IDA7XG5cbiAgdmlzaXROb2RlKG5vZGU6IHRzLk5vZGUpOiB2b2lkIHtcbiAgICBpZiAodHMuaXNDYWxsRXhwcmVzc2lvbihub2RlKSAmJiB0cy5pc1Byb3BlcnR5QWNjZXNzRXhwcmVzc2lvbihub2RlLmV4cHJlc3Npb24pKSB7XG4gICAgICB0aGlzLl9jaGVja1Byb3BlcnR5QWNjZXNzTWV0aG9kQ2FsbChub2RlKTtcbiAgICB9XG4gIH1cblxuICBwcml2YXRlIF9jaGVja1Byb3BlcnR5QWNjZXNzTWV0aG9kQ2FsbChub2RlOiB0cy5DYWxsRXhwcmVzc2lvbikge1xuICAgIGNvbnN0IHByb3BlcnR5QWNjZXNzID0gbm9kZS5leHByZXNzaW9uIGFzIHRzLlByb3BlcnR5QWNjZXNzRXhwcmVzc2lvbjtcblxuICAgIGlmICghdHMuaXNJZGVudGlmaWVyKHByb3BlcnR5QWNjZXNzLm5hbWUpKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgY29uc3QgaG9zdFR5cGUgPSB0aGlzLnR5cGVDaGVja2VyLmdldFR5cGVBdExvY2F0aW9uKHByb3BlcnR5QWNjZXNzLmV4cHJlc3Npb24pO1xuICAgIGNvbnN0IGhvc3RUeXBlTmFtZSA9IGhvc3RUeXBlLnN5bWJvbCAmJiBob3N0VHlwZS5zeW1ib2wubmFtZTtcbiAgICBjb25zdCBtZXRob2ROYW1lID0gcHJvcGVydHlBY2Nlc3MubmFtZS50ZXh0O1xuXG4gICAgaWYgKCFob3N0VHlwZU5hbWUpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG5cbiAgICAvLyBUT0RPKGRldnZlcnNpb24pOiBSZXZpc2l0IHRoZSBpbXBsZW1lbnRhdGlvbiBvZiB0aGlzIHVwZ3JhZGUgcnVsZS4gSXQgc2VlbXMgZGlmZmljdWx0XG4gICAgLy8gYW5kIGFtYmlndW91cyB0byBtYWludGFpbiB0aGUgZGF0YSBmb3IgdGhpcyBydWxlLiBlLmcuIGNvbnNpZGVyIGEgbWV0aG9kIHdoaWNoIGhhcyB0aGVcbiAgICAvLyBzYW1lIGFtb3VudCBvZiBhcmd1bWVudHMgYnV0IGp1c3QgaGFkIGEgdHlwZSBjaGFuZ2UuIEluIHRoYXQgY2FzZSB3ZSBjb3VsZCBzdGlsbCBhZGRcbiAgICAvLyBuZXcgZW50cmllcyB0byB0aGUgdXBncmFkZSBkYXRhIHRoYXQgbWF0Y2ggdGhlIGN1cnJlbnQgYXJndW1lbnQgbGVuZ3RoIHRvIGp1c3Qgc2hvd1xuICAgIC8vIGEgZmFpbHVyZSBtZXNzYWdlLCBidXQgYWRkaW5nIHRoYXQgZGF0YSBiZWNvbWVzIHBhaW5mdWwgaWYgdGhlIG1ldGhvZCBoYXMgb3B0aW9uYWxcbiAgICAvLyBwYXJhbWV0ZXJzIGFuZCBpdCB3b3VsZCBtZWFuIHRoYXQgdGhlIGVycm9yIG1lc3NhZ2Ugd291bGQgYWx3YXlzIHNob3cgdXAsIGV2ZW4gaWYgdGhlXG4gICAgLy8gYXJndW1lbnQgaXMgaW4gc29tZSBjYXNlcyBzdGlsbCBhc3NpZ25hYmxlIHRvIHRoZSBuZXcgcGFyYW1ldGVyIHR5cGUuIFdlIGNvdWxkIHJlLXVzZVxuICAgIC8vIHRoZSBsb2dpYyB3ZSBoYXZlIGluIHRoZSBjb25zdHJ1Y3Rvci1zaWduYXR1cmUgY2hlY2tzIHRvIGNoZWNrIGZvciBhc3NpZ25hYmlsaXR5IGFuZFxuICAgIC8vIHRvIG1ha2UgdGhlIHVwZ3JhZGUgZGF0YSBsZXNzIHZlcmJvc2UuXG4gICAgY29uc3QgZmFpbHVyZSA9XG4gICAgICAgIHRoaXMuZGF0YS5maWx0ZXIoZGF0YSA9PiBkYXRhLm1ldGhvZCA9PT0gbWV0aG9kTmFtZSAmJiBkYXRhLmNsYXNzTmFtZSA9PT0gaG9zdFR5cGVOYW1lKVxuICAgICAgICAgICAgLm1hcChkYXRhID0+IGRhdGEuaW52YWxpZEFyZ0NvdW50cy5maW5kKGYgPT4gZi5jb3VudCA9PT0gbm9kZS5hcmd1bWVudHMubGVuZ3RoKSlbMF07XG5cbiAgICBpZiAoIWZhaWx1cmUpIHtcbiAgICAgIHJldHVybjtcbiAgICB9XG5cbiAgICB0aGlzLmNyZWF0ZUZhaWx1cmVBdE5vZGUoXG4gICAgICAgIG5vZGUsXG4gICAgICAgIGBGb3VuZCBjYWxsIHRvIFwiJHtob3N0VHlwZU5hbWUgKyAnLicgKyBtZXRob2ROYW1lfVwiIGAgK1xuICAgICAgICAgICAgYHdpdGggJHtmYWlsdXJlLmNvdW50fSBhcmd1bWVudHMuIE1lc3NhZ2U6ICR7ZmFpbHVyZS5tZXNzYWdlfWApO1xuICB9XG59XG4iXX0=
+    _checkPropertyAccessMethodCall(node) {
+        const propertyAccess = node.expression;
+        if (!ts.isIdentifier(propertyAccess.name)) {
+            return;
+        }
+        const hostType = this.typeChecker.getTypeAtLocation(propertyAccess.expression);
+        const hostTypeName = hostType.symbol && hostType.symbol.name;
+        const methodName = propertyAccess.name.text;
+        if (!hostTypeName) {
+            return;
+        }
+        // TODO(devversion): Revisit the implementation of this upgrade rule. It seems difficult
+        // and ambiguous to maintain the data for this rule. e.g. consider a method which has the
+        // same amount of arguments but just had a type change. In that case we could still add
+        // new entries to the upgrade data that match the current argument length to just show
+        // a failure message, but adding that data becomes painful if the method has optional
+        // parameters and it would mean that the error message would always show up, even if the
+        // argument is in some cases still assignable to the new parameter type. We could re-use
+        // the logic we have in the constructor-signature checks to check for assignability and
+        // to make the upgrade data less verbose.
+        const failure = this.data.filter(data => data.method === methodName && data.className === hostTypeName)
+            .map(data => data.invalidArgCounts.find(f => f.count === node.arguments.length))[0];
+        if (!failure) {
+            return;
+        }
+        this.createFailureAtNode(node, `Found call to "${hostTypeName + '.' + methodName}" ` +
+            `with ${failure.count} arguments. Message: ${failure.message}`);
+    }
+}
+exports.MethodCallArgumentsMigration = MethodCallArgumentsMigration;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibWV0aG9kLWNhbGwtYXJndW1lbnRzLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vLi4vLi4vc3JjL2Nkay9zY2hlbWF0aWNzL25nLXVwZGF0ZS9taWdyYXRpb25zL21ldGhvZC1jYWxsLWFyZ3VtZW50cy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUE7Ozs7OztHQU1HOzs7QUFFSCxpQ0FBaUM7QUFDakMsMkRBQXNEO0FBR3RELGtEQUFtRTtBQUVuRTs7O0dBR0c7QUFDSCxNQUFhLDRCQUE2QixTQUFRLHFCQUFzQjtJQUF4RTs7UUFDRSxpRUFBaUU7UUFDakUsU0FBSSxHQUE0QixvQ0FBcUIsQ0FBQyxJQUFJLEVBQUUsa0JBQWtCLENBQUMsQ0FBQztRQUVoRiwyREFBMkQ7UUFDM0QsWUFBTyxHQUFHLElBQUksQ0FBQyxJQUFJLENBQUMsTUFBTSxLQUFLLENBQUMsQ0FBQztJQTZDbkMsQ0FBQztJQTNDQyxTQUFTLENBQUMsSUFBYTtRQUNyQixJQUFJLEVBQUUsQ0FBQyxnQkFBZ0IsQ0FBQyxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUMsMEJBQTBCLENBQUMsSUFBSSxDQUFDLFVBQVUsQ0FBQyxFQUFFO1lBQy9FLElBQUksQ0FBQyw4QkFBOEIsQ0FBQyxJQUFJLENBQUMsQ0FBQztTQUMzQztJQUNILENBQUM7SUFFTyw4QkFBOEIsQ0FBQyxJQUF1QjtRQUM1RCxNQUFNLGNBQWMsR0FBRyxJQUFJLENBQUMsVUFBeUMsQ0FBQztRQUV0RSxJQUFJLENBQUMsRUFBRSxDQUFDLFlBQVksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLEVBQUU7WUFDekMsT0FBTztTQUNSO1FBRUQsTUFBTSxRQUFRLEdBQUcsSUFBSSxDQUFDLFdBQVcsQ0FBQyxpQkFBaUIsQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDLENBQUM7UUFDL0UsTUFBTSxZQUFZLEdBQUcsUUFBUSxDQUFDLE1BQU0sSUFBSSxRQUFRLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQztRQUM3RCxNQUFNLFVBQVUsR0FBRyxjQUFjLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztRQUU1QyxJQUFJLENBQUMsWUFBWSxFQUFFO1lBQ2pCLE9BQU87U0FDUjtRQUVELHdGQUF3RjtRQUN4Rix5RkFBeUY7UUFDekYsdUZBQXVGO1FBQ3ZGLHNGQUFzRjtRQUN0RixxRkFBcUY7UUFDckYsd0ZBQXdGO1FBQ3hGLHdGQUF3RjtRQUN4Rix1RkFBdUY7UUFDdkYseUNBQXlDO1FBQ3pDLE1BQU0sT0FBTyxHQUNULElBQUksQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsSUFBSSxDQUFDLE1BQU0sS0FBSyxVQUFVLElBQUksSUFBSSxDQUFDLFNBQVMsS0FBSyxZQUFZLENBQUM7YUFDbEYsR0FBRyxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQyxLQUFLLEtBQUssSUFBSSxDQUFDLFNBQVMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBRTVGLElBQUksQ0FBQyxPQUFPLEVBQUU7WUFDWixPQUFPO1NBQ1I7UUFFRCxJQUFJLENBQUMsbUJBQW1CLENBQ3BCLElBQUksRUFDSixrQkFBa0IsWUFBWSxHQUFHLEdBQUcsR0FBRyxVQUFVLElBQUk7WUFDakQsUUFBUSxPQUFPLENBQUMsS0FBSyx3QkFBd0IsT0FBTyxDQUFDLE9BQU8sRUFBRSxDQUFDLENBQUM7SUFDMUUsQ0FBQztDQUNGO0FBbERELG9FQWtEQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQgKiBhcyB0cyBmcm9tICd0eXBlc2NyaXB0JztcbmltcG9ydCB7TWlncmF0aW9ufSBmcm9tICcuLi8uLi91cGRhdGUtdG9vbC9taWdyYXRpb24nO1xuXG5pbXBvcnQge01ldGhvZENhbGxVcGdyYWRlRGF0YX0gZnJvbSAnLi4vZGF0YSc7XG5pbXBvcnQge2dldFZlcnNpb25VcGdyYWRlRGF0YSwgVXBncmFkZURhdGF9IGZyb20gJy4uL3VwZ3JhZGUtZGF0YSc7XG5cbi8qKlxuICogTWlncmF0aW9uIHRoYXQgdmlzaXRzIGV2ZXJ5IFR5cGVTY3JpcHQgbWV0aG9kIGNhbGwgZXhwcmVzc2lvbiBhbmQgY2hlY2tzIGlmIHRoZVxuICogYXJndW1lbnQgY291bnQgaXMgaW52YWxpZCBhbmQgbmVlZHMgdG8gYmUgKm1hbnVhbGx5KiB1cGRhdGVkLlxuICovXG5leHBvcnQgY2xhc3MgTWV0aG9kQ2FsbEFyZ3VtZW50c01pZ3JhdGlvbiBleHRlbmRzIE1pZ3JhdGlvbjxVcGdyYWRlRGF0YT4ge1xuICAvKiogQ2hhbmdlIGRhdGEgdGhhdCB1cGdyYWRlcyB0byB0aGUgc3BlY2lmaWVkIHRhcmdldCB2ZXJzaW9uLiAqL1xuICBkYXRhOiBNZXRob2RDYWxsVXBncmFkZURhdGFbXSA9IGdldFZlcnNpb25VcGdyYWRlRGF0YSh0aGlzLCAnbWV0aG9kQ2FsbENoZWNrcycpO1xuXG4gIC8vIE9ubHkgZW5hYmxlIHRoZSBtaWdyYXRpb24gcnVsZSBpZiB0aGVyZSBpcyB1cGdyYWRlIGRhdGEuXG4gIGVuYWJsZWQgPSB0aGlzLmRhdGEubGVuZ3RoICE9PSAwO1xuXG4gIHZpc2l0Tm9kZShub2RlOiB0cy5Ob2RlKTogdm9pZCB7XG4gICAgaWYgKHRzLmlzQ2FsbEV4cHJlc3Npb24obm9kZSkgJiYgdHMuaXNQcm9wZXJ0eUFjY2Vzc0V4cHJlc3Npb24obm9kZS5leHByZXNzaW9uKSkge1xuICAgICAgdGhpcy5fY2hlY2tQcm9wZXJ0eUFjY2Vzc01ldGhvZENhbGwobm9kZSk7XG4gICAgfVxuICB9XG5cbiAgcHJpdmF0ZSBfY2hlY2tQcm9wZXJ0eUFjY2Vzc01ldGhvZENhbGwobm9kZTogdHMuQ2FsbEV4cHJlc3Npb24pIHtcbiAgICBjb25zdCBwcm9wZXJ0eUFjY2VzcyA9IG5vZGUuZXhwcmVzc2lvbiBhcyB0cy5Qcm9wZXJ0eUFjY2Vzc0V4cHJlc3Npb247XG5cbiAgICBpZiAoIXRzLmlzSWRlbnRpZmllcihwcm9wZXJ0eUFjY2Vzcy5uYW1lKSkge1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIGNvbnN0IGhvc3RUeXBlID0gdGhpcy50eXBlQ2hlY2tlci5nZXRUeXBlQXRMb2NhdGlvbihwcm9wZXJ0eUFjY2Vzcy5leHByZXNzaW9uKTtcbiAgICBjb25zdCBob3N0VHlwZU5hbWUgPSBob3N0VHlwZS5zeW1ib2wgJiYgaG9zdFR5cGUuc3ltYm9sLm5hbWU7XG4gICAgY29uc3QgbWV0aG9kTmFtZSA9IHByb3BlcnR5QWNjZXNzLm5hbWUudGV4dDtcblxuICAgIGlmICghaG9zdFR5cGVOYW1lKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgLy8gVE9ETyhkZXZ2ZXJzaW9uKTogUmV2aXNpdCB0aGUgaW1wbGVtZW50YXRpb24gb2YgdGhpcyB1cGdyYWRlIHJ1bGUuIEl0IHNlZW1zIGRpZmZpY3VsdFxuICAgIC8vIGFuZCBhbWJpZ3VvdXMgdG8gbWFpbnRhaW4gdGhlIGRhdGEgZm9yIHRoaXMgcnVsZS4gZS5nLiBjb25zaWRlciBhIG1ldGhvZCB3aGljaCBoYXMgdGhlXG4gICAgLy8gc2FtZSBhbW91bnQgb2YgYXJndW1lbnRzIGJ1dCBqdXN0IGhhZCBhIHR5cGUgY2hhbmdlLiBJbiB0aGF0IGNhc2Ugd2UgY291bGQgc3RpbGwgYWRkXG4gICAgLy8gbmV3IGVudHJpZXMgdG8gdGhlIHVwZ3JhZGUgZGF0YSB0aGF0IG1hdGNoIHRoZSBjdXJyZW50IGFyZ3VtZW50IGxlbmd0aCB0byBqdXN0IHNob3dcbiAgICAvLyBhIGZhaWx1cmUgbWVzc2FnZSwgYnV0IGFkZGluZyB0aGF0IGRhdGEgYmVjb21lcyBwYWluZnVsIGlmIHRoZSBtZXRob2QgaGFzIG9wdGlvbmFsXG4gICAgLy8gcGFyYW1ldGVycyBhbmQgaXQgd291bGQgbWVhbiB0aGF0IHRoZSBlcnJvciBtZXNzYWdlIHdvdWxkIGFsd2F5cyBzaG93IHVwLCBldmVuIGlmIHRoZVxuICAgIC8vIGFyZ3VtZW50IGlzIGluIHNvbWUgY2FzZXMgc3RpbGwgYXNzaWduYWJsZSB0byB0aGUgbmV3IHBhcmFtZXRlciB0eXBlLiBXZSBjb3VsZCByZS11c2VcbiAgICAvLyB0aGUgbG9naWMgd2UgaGF2ZSBpbiB0aGUgY29uc3RydWN0b3Itc2lnbmF0dXJlIGNoZWNrcyB0byBjaGVjayBmb3IgYXNzaWduYWJpbGl0eSBhbmRcbiAgICAvLyB0byBtYWtlIHRoZSB1cGdyYWRlIGRhdGEgbGVzcyB2ZXJib3NlLlxuICAgIGNvbnN0IGZhaWx1cmUgPVxuICAgICAgICB0aGlzLmRhdGEuZmlsdGVyKGRhdGEgPT4gZGF0YS5tZXRob2QgPT09IG1ldGhvZE5hbWUgJiYgZGF0YS5jbGFzc05hbWUgPT09IGhvc3RUeXBlTmFtZSlcbiAgICAgICAgICAgIC5tYXAoZGF0YSA9PiBkYXRhLmludmFsaWRBcmdDb3VudHMuZmluZChmID0+IGYuY291bnQgPT09IG5vZGUuYXJndW1lbnRzLmxlbmd0aCkpWzBdO1xuXG4gICAgaWYgKCFmYWlsdXJlKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgdGhpcy5jcmVhdGVGYWlsdXJlQXROb2RlKFxuICAgICAgICBub2RlLFxuICAgICAgICBgRm91bmQgY2FsbCB0byBcIiR7aG9zdFR5cGVOYW1lICsgJy4nICsgbWV0aG9kTmFtZX1cIiBgICtcbiAgICAgICAgICAgIGB3aXRoICR7ZmFpbHVyZS5jb3VudH0gYXJndW1lbnRzLiBNZXNzYWdlOiAke2ZhaWx1cmUubWVzc2FnZX1gKTtcbiAgfVxufVxuIl19

@@ -636,42 +636,56 @@ class DomPortalHost extends DomPortalOutlet {
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
-class CdkPortal extends TemplatePortal {
+let CdkPortal = /** @class */ (() => {
     /**
-     * @param {?} templateRef
-     * @param {?} viewContainerRef
+     * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
+     * the directive instance itself can be attached to a host, enabling declarative use of portals.
      */
-    constructor(templateRef, viewContainerRef) {
-        super(templateRef, viewContainerRef);
+    class CdkPortal extends TemplatePortal {
+        /**
+         * @param {?} templateRef
+         * @param {?} viewContainerRef
+         */
+        constructor(templateRef, viewContainerRef) {
+            super(templateRef, viewContainerRef);
+        }
     }
-}
-CdkPortal.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkPortal]',
-                exportAs: 'cdkPortal',
-            },] }
-];
-/** @nocollapse */
-CdkPortal.ctorParameters = () => [
-    { type: TemplateRef },
-    { type: ViewContainerRef }
-];
+    CdkPortal.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortal]',
+                    exportAs: 'cdkPortal',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkPortal.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: ViewContainerRef }
+    ];
+    return CdkPortal;
+})();
 /**
  * @deprecated Use `CdkPortal` instead.
  * \@breaking-change 9.0.0
  */
-class TemplatePortalDirective extends CdkPortal {
-}
-TemplatePortalDirective.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-portal], [portal]',
-                exportAs: 'cdkPortal',
-                providers: [{
-                        provide: CdkPortal,
-                        useExisting: TemplatePortalDirective
-                    }]
-            },] }
-];
+let TemplatePortalDirective = /** @class */ (() => {
+    /**
+     * @deprecated Use `CdkPortal` instead.
+     * \@breaking-change 9.0.0
+     */
+    class TemplatePortalDirective extends CdkPortal {
+    }
+    TemplatePortalDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-portal], [portal]',
+                    exportAs: 'cdkPortal',
+                    providers: [{
+                            provide: CdkPortal,
+                            useExisting: TemplatePortalDirective
+                        }]
+                },] }
+    ];
+    return TemplatePortalDirective;
+})();
 /**
  * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
  * directly attached to it, enabling declarative use.
@@ -679,201 +693,211 @@ TemplatePortalDirective.decorators = [
  * Usage:
  * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
-class CdkPortalOutlet extends BasePortalOutlet {
+let CdkPortalOutlet = /** @class */ (() => {
     /**
-     * @param {?} _componentFactoryResolver
-     * @param {?} _viewContainerRef
-     * @param {?=} _document
+     * Directive version of a PortalOutlet. Because the directive *is* a PortalOutlet, portals can be
+     * directly attached to it, enabling declarative use.
+     *
+     * Usage:
+     * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
      */
-    constructor(_componentFactoryResolver, _viewContainerRef, 
-    /**
-     * @deprecated `_document` parameter to be made required.
-     * @breaking-change 9.0.0
-     */
-    _document) {
-        super();
-        this._componentFactoryResolver = _componentFactoryResolver;
-        this._viewContainerRef = _viewContainerRef;
+    class CdkPortalOutlet extends BasePortalOutlet {
         /**
-         * Whether the portal component is initialized.
+         * @param {?} _componentFactoryResolver
+         * @param {?} _viewContainerRef
+         * @param {?=} _document
          */
-        this._isInitialized = false;
+        constructor(_componentFactoryResolver, _viewContainerRef, 
         /**
-         * Emits when a portal is attached to the outlet.
+         * @deprecated `_document` parameter to be made required.
+         * @breaking-change 9.0.0
          */
-        this.attached = new EventEmitter();
+        _document) {
+            super();
+            this._componentFactoryResolver = _componentFactoryResolver;
+            this._viewContainerRef = _viewContainerRef;
+            /**
+             * Whether the portal component is initialized.
+             */
+            this._isInitialized = false;
+            /**
+             * Emits when a portal is attached to the outlet.
+             */
+            this.attached = new EventEmitter();
+            /**
+             * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
+             * @param portal Portal to be attached.
+             * @deprecated To be turned into a method.
+             * \@breaking-change 10.0.0
+             */
+            this.attachDomPortal = (/**
+             * @param {?} portal
+             * @return {?}
+             */
+            (portal) => {
+                // @breaking-change 9.0.0 Remove check and error once the
+                // `_document` constructor parameter is required.
+                if (!this._document) {
+                    throw Error('Cannot attach DOM portal without _document constructor parameter');
+                }
+                /** @type {?} */
+                const element = portal.element;
+                if (!element.parentNode) {
+                    throw Error('DOM portal content must be attached to a parent node.');
+                }
+                // Anchor used to save the element's previous position so
+                // that we can restore it when the portal is detached.
+                /** @type {?} */
+                const anchorNode = this._document.createComment('dom-portal');
+                portal.setAttachedHost(this);
+                element.parentNode.insertBefore(anchorNode, element);
+                this._getRootNode().appendChild(element);
+                super.setDisposeFn((/**
+                 * @return {?}
+                 */
+                () => {
+                    if (anchorNode.parentNode) {
+                        (/** @type {?} */ (anchorNode.parentNode)).replaceChild(element, anchorNode);
+                    }
+                }));
+            });
+            this._document = _document;
+        }
         /**
-         * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
-         * @param portal Portal to be attached.
-         * @deprecated To be turned into a method.
-         * \@breaking-change 10.0.0
+         * Portal associated with the Portal outlet.
+         * @return {?}
          */
-        this.attachDomPortal = (/**
+        get portal() {
+            return this._attachedPortal;
+        }
+        /**
          * @param {?} portal
          * @return {?}
          */
-        (portal) => {
-            // @breaking-change 9.0.0 Remove check and error once the
-            // `_document` constructor parameter is required.
-            if (!this._document) {
-                throw Error('Cannot attach DOM portal without _document constructor parameter');
+        set portal(portal) {
+            // Ignore the cases where the `portal` is set to a falsy value before the lifecycle hooks have
+            // run. This handles the cases where the user might do something like `<div cdkPortalOutlet>`
+            // and attach a portal programmatically in the parent component. When Angular does the first CD
+            // round, it will fire the setter with empty string, causing the user's content to be cleared.
+            if (this.hasAttached() && !portal && !this._isInitialized) {
+                return;
             }
-            /** @type {?} */
-            const element = portal.element;
-            if (!element.parentNode) {
-                throw Error('DOM portal content must be attached to a parent node.');
+            if (this.hasAttached()) {
+                super.detach();
             }
-            // Anchor used to save the element's previous position so
-            // that we can restore it when the portal is detached.
-            /** @type {?} */
-            const anchorNode = this._document.createComment('dom-portal');
+            if (portal) {
+                super.attach(portal);
+            }
+            this._attachedPortal = portal;
+        }
+        /**
+         * Component or view reference that is attached to the portal.
+         * @return {?}
+         */
+        get attachedRef() {
+            return this._attachedRef;
+        }
+        /**
+         * @return {?}
+         */
+        ngOnInit() {
+            this._isInitialized = true;
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            super.dispose();
+            this._attachedPortal = null;
+            this._attachedRef = null;
+        }
+        /**
+         * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
+         *
+         * @template T
+         * @param {?} portal Portal to be attached to the portal outlet.
+         * @return {?} Reference to the created component.
+         */
+        attachComponentPortal(portal) {
             portal.setAttachedHost(this);
-            element.parentNode.insertBefore(anchorNode, element);
-            this._getRootNode().appendChild(element);
+            // If the portal specifies an origin, use that as the logical location of the component
+            // in the application tree. Otherwise use the location of this PortalOutlet.
+            /** @type {?} */
+            const viewContainerRef = portal.viewContainerRef != null ?
+                portal.viewContainerRef :
+                this._viewContainerRef;
+            /** @type {?} */
+            const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+            /** @type {?} */
+            const componentFactory = resolver.resolveComponentFactory(portal.component);
+            /** @type {?} */
+            const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
+            // If we're using a view container that's different from the injected one (e.g. when the portal
+            // specifies its own) we need to move the component into the outlet, otherwise it'll be rendered
+            // inside of the alternate view container.
+            if (viewContainerRef !== this._viewContainerRef) {
+                this._getRootNode().appendChild(((/** @type {?} */ (ref.hostView))).rootNodes[0]);
+            }
             super.setDisposeFn((/**
              * @return {?}
              */
-            () => {
-                if (anchorNode.parentNode) {
-                    (/** @type {?} */ (anchorNode.parentNode)).replaceChild(element, anchorNode);
-                }
-            }));
-        });
-        this._document = _document;
-    }
-    /**
-     * Portal associated with the Portal outlet.
-     * @return {?}
-     */
-    get portal() {
-        return this._attachedPortal;
-    }
-    /**
-     * @param {?} portal
-     * @return {?}
-     */
-    set portal(portal) {
-        // Ignore the cases where the `portal` is set to a falsy value before the lifecycle hooks have
-        // run. This handles the cases where the user might do something like `<div cdkPortalOutlet>`
-        // and attach a portal programmatically in the parent component. When Angular does the first CD
-        // round, it will fire the setter with empty string, causing the user's content to be cleared.
-        if (this.hasAttached() && !portal && !this._isInitialized) {
-            return;
+            () => ref.destroy()));
+            this._attachedPortal = portal;
+            this._attachedRef = ref;
+            this.attached.emit(ref);
+            return ref;
         }
-        if (this.hasAttached()) {
-            super.detach();
+        /**
+         * Attach the given TemplatePortal to this PortalHost as an embedded View.
+         * @template C
+         * @param {?} portal Portal to be attached.
+         * @return {?} Reference to the created embedded view.
+         */
+        attachTemplatePortal(portal) {
+            portal.setAttachedHost(this);
+            /** @type {?} */
+            const viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
+            super.setDisposeFn((/**
+             * @return {?}
+             */
+            () => this._viewContainerRef.clear()));
+            this._attachedPortal = portal;
+            this._attachedRef = viewRef;
+            this.attached.emit(viewRef);
+            return viewRef;
         }
-        if (portal) {
-            super.attach(portal);
-        }
-        this._attachedPortal = portal;
-    }
-    /**
-     * Component or view reference that is attached to the portal.
-     * @return {?}
-     */
-    get attachedRef() {
-        return this._attachedRef;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        this._isInitialized = true;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        super.dispose();
-        this._attachedPortal = null;
-        this._attachedRef = null;
-    }
-    /**
-     * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
-     *
-     * @template T
-     * @param {?} portal Portal to be attached to the portal outlet.
-     * @return {?} Reference to the created component.
-     */
-    attachComponentPortal(portal) {
-        portal.setAttachedHost(this);
-        // If the portal specifies an origin, use that as the logical location of the component
-        // in the application tree. Otherwise use the location of this PortalOutlet.
-        /** @type {?} */
-        const viewContainerRef = portal.viewContainerRef != null ?
-            portal.viewContainerRef :
-            this._viewContainerRef;
-        /** @type {?} */
-        const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
-        /** @type {?} */
-        const componentFactory = resolver.resolveComponentFactory(portal.component);
-        /** @type {?} */
-        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
-        // If we're using a view container that's different from the injected one (e.g. when the portal
-        // specifies its own) we need to move the component into the outlet, otherwise it'll be rendered
-        // inside of the alternate view container.
-        if (viewContainerRef !== this._viewContainerRef) {
-            this._getRootNode().appendChild(((/** @type {?} */ (ref.hostView))).rootNodes[0]);
-        }
-        super.setDisposeFn((/**
+        /**
+         * Gets the root node of the portal outlet.
+         * @private
          * @return {?}
          */
-        () => ref.destroy()));
-        this._attachedPortal = portal;
-        this._attachedRef = ref;
-        this.attached.emit(ref);
-        return ref;
+        _getRootNode() {
+            /** @type {?} */
+            const nativeElement = this._viewContainerRef.element.nativeElement;
+            // The directive could be set on a template which will result in a comment
+            // node being the root. Use the comment's parent node if that is the case.
+            return (/** @type {?} */ ((nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
+                nativeElement : (/** @type {?} */ (nativeElement.parentNode)))));
+        }
     }
-    /**
-     * Attach the given TemplatePortal to this PortalHost as an embedded View.
-     * @template C
-     * @param {?} portal Portal to be attached.
-     * @return {?} Reference to the created embedded view.
-     */
-    attachTemplatePortal(portal) {
-        portal.setAttachedHost(this);
-        /** @type {?} */
-        const viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
-        super.setDisposeFn((/**
-         * @return {?}
-         */
-        () => this._viewContainerRef.clear()));
-        this._attachedPortal = portal;
-        this._attachedRef = viewRef;
-        this.attached.emit(viewRef);
-        return viewRef;
-    }
-    /**
-     * Gets the root node of the portal outlet.
-     * @private
-     * @return {?}
-     */
-    _getRootNode() {
-        /** @type {?} */
-        const nativeElement = this._viewContainerRef.element.nativeElement;
-        // The directive could be set on a template which will result in a comment
-        // node being the root. Use the comment's parent node if that is the case.
-        return (/** @type {?} */ ((nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
-            nativeElement : (/** @type {?} */ (nativeElement.parentNode)))));
-    }
-}
-CdkPortalOutlet.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkPortalOutlet]',
-                exportAs: 'cdkPortalOutlet',
-                inputs: ['portal: cdkPortalOutlet']
-            },] }
-];
-/** @nocollapse */
-CdkPortalOutlet.ctorParameters = () => [
-    { type: ComponentFactoryResolver },
-    { type: ViewContainerRef },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-];
-CdkPortalOutlet.propDecorators = {
-    attached: [{ type: Output }]
-};
+    CdkPortalOutlet.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortalOutlet]',
+                    exportAs: 'cdkPortalOutlet',
+                    inputs: ['portal: cdkPortalOutlet']
+                },] }
+    ];
+    /** @nocollapse */
+    CdkPortalOutlet.ctorParameters = () => [
+        { type: ComponentFactoryResolver },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    CdkPortalOutlet.propDecorators = {
+        attached: [{ type: Output }]
+    };
+    return CdkPortalOutlet;
+})();
 if (false) {
     /** @type {?} */
     CdkPortalOutlet.ngAcceptInputType_portal;
@@ -922,27 +946,37 @@ if (false) {
  * @deprecated Use `CdkPortalOutlet` instead.
  * \@breaking-change 9.0.0
  */
-class PortalHostDirective extends CdkPortalOutlet {
-}
-PortalHostDirective.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkPortalHost], [portalHost]',
-                exportAs: 'cdkPortalHost',
-                inputs: ['portal: cdkPortalHost'],
-                providers: [{
-                        provide: CdkPortalOutlet,
-                        useExisting: PortalHostDirective
-                    }]
-            },] }
-];
-class PortalModule {
-}
-PortalModule.decorators = [
-    { type: NgModule, args: [{
-                exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-                declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-            },] }
-];
+let PortalHostDirective = /** @class */ (() => {
+    /**
+     * @deprecated Use `CdkPortalOutlet` instead.
+     * \@breaking-change 9.0.0
+     */
+    class PortalHostDirective extends CdkPortalOutlet {
+    }
+    PortalHostDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalHost',
+                    inputs: ['portal: cdkPortalHost'],
+                    providers: [{
+                            provide: CdkPortalOutlet,
+                            useExisting: PortalHostDirective
+                        }]
+                },] }
+    ];
+    return PortalHostDirective;
+})();
+let PortalModule = /** @class */ (() => {
+    class PortalModule {
+    }
+    PortalModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                    declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                },] }
+    ];
+    return PortalModule;
+})();
 
 /**
  * @fileoverview added by tsickle

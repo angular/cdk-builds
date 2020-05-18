@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/ng-update/devkit-migration" />
 import { SchematicContext, Tree } from '@angular-devkit/schematics';
 import { WorkspaceProject } from '@schematics/angular/utility/workspace-models';
 import { Constructor, Migration, PostMigrationAction } from '../update-tool/migration';

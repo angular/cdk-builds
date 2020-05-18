@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -5,28 +6,18 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define("@angular/cdk/schematics/update-tool/utils/parse-tsconfig", ["require", "exports", "typescript"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const ts = require("typescript");
-    function parseTsconfigFile(tsconfigPath, basePath) {
-        const { config } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
-        const parseConfigHost = {
-            useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
-            fileExists: ts.sys.fileExists,
-            readDirectory: ts.sys.readDirectory,
-            readFile: ts.sys.readFile,
-        };
-        return ts.parseJsonConfigFileContent(config, parseConfigHost, basePath, {});
-    }
-    exports.parseTsconfigFile = parseTsconfigFile;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFyc2UtdHNjb25maWcuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3NjaGVtYXRpY3MvdXBkYXRlLXRvb2wvdXRpbHMvcGFyc2UtdHNjb25maWcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HOzs7Ozs7Ozs7Ozs7SUFFSCxpQ0FBaUM7SUFFakMsU0FBZ0IsaUJBQWlCLENBQUMsWUFBb0IsRUFBRSxRQUFnQjtRQUN0RSxNQUFNLEVBQUMsTUFBTSxFQUFDLEdBQUcsRUFBRSxDQUFDLGNBQWMsQ0FBQyxZQUFZLEVBQUUsRUFBRSxDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsQ0FBQztRQUNsRSxNQUFNLGVBQWUsR0FBRztZQUN0Qix5QkFBeUIsRUFBRSxFQUFFLENBQUMsR0FBRyxDQUFDLHlCQUF5QjtZQUMzRCxVQUFVLEVBQUUsRUFBRSxDQUFDLEdBQUcsQ0FBQyxVQUFVO1lBQzdCLGFBQWEsRUFBRSxFQUFFLENBQUMsR0FBRyxDQUFDLGFBQWE7WUFDbkMsUUFBUSxFQUFFLEVBQUUsQ0FBQyxHQUFHLENBQUMsUUFBUTtTQUMxQixDQUFDO1FBSUYsT0FBTyxFQUFFLENBQUMsMEJBQTBCLENBQUMsTUFBTSxFQUFFLGVBQWUsRUFBRSxRQUFRLEVBQUUsRUFBRSxDQUFDLENBQUM7SUFDOUUsQ0FBQztJQVpELDhDQVlDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCAqIGFzIHRzIGZyb20gJ3R5cGVzY3JpcHQnO1xuXG5leHBvcnQgZnVuY3Rpb24gcGFyc2VUc2NvbmZpZ0ZpbGUodHNjb25maWdQYXRoOiBzdHJpbmcsIGJhc2VQYXRoOiBzdHJpbmcpOiB0cy5QYXJzZWRDb21tYW5kTGluZSB7XG4gIGNvbnN0IHtjb25maWd9ID0gdHMucmVhZENvbmZpZ0ZpbGUodHNjb25maWdQYXRoLCB0cy5zeXMucmVhZEZpbGUpO1xuICBjb25zdCBwYXJzZUNvbmZpZ0hvc3QgPSB7XG4gICAgdXNlQ2FzZVNlbnNpdGl2ZUZpbGVOYW1lczogdHMuc3lzLnVzZUNhc2VTZW5zaXRpdmVGaWxlTmFtZXMsXG4gICAgZmlsZUV4aXN0czogdHMuc3lzLmZpbGVFeGlzdHMsXG4gICAgcmVhZERpcmVjdG9yeTogdHMuc3lzLnJlYWREaXJlY3RvcnksXG4gICAgcmVhZEZpbGU6IHRzLnN5cy5yZWFkRmlsZSxcbiAgfTtcblxuXG5cbiAgcmV0dXJuIHRzLnBhcnNlSnNvbkNvbmZpZ0ZpbGVDb250ZW50KGNvbmZpZywgcGFyc2VDb25maWdIb3N0LCBiYXNlUGF0aCwge30pO1xufVxuIl19
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseTsconfigFile = void 0;
+const ts = require("typescript");
+function parseTsconfigFile(tsconfigPath, basePath) {
+    const { config } = ts.readConfigFile(tsconfigPath, ts.sys.readFile);
+    const parseConfigHost = {
+        useCaseSensitiveFileNames: ts.sys.useCaseSensitiveFileNames,
+        fileExists: ts.sys.fileExists,
+        readDirectory: ts.sys.readDirectory,
+        readFile: ts.sys.readFile,
+    };
+    return ts.parseJsonConfigFileContent(config, parseConfigHost, basePath, {});
+}
+exports.parseTsconfigFile = parseTsconfigFile;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGFyc2UtdHNjb25maWcuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3NjaGVtYXRpY3MvdXBkYXRlLXRvb2wvdXRpbHMvcGFyc2UtdHNjb25maWcudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQUFBOzs7Ozs7R0FNRzs7O0FBRUgsaUNBQWlDO0FBRWpDLFNBQWdCLGlCQUFpQixDQUFDLFlBQW9CLEVBQUUsUUFBZ0I7SUFDdEUsTUFBTSxFQUFDLE1BQU0sRUFBQyxHQUFHLEVBQUUsQ0FBQyxjQUFjLENBQUMsWUFBWSxFQUFFLEVBQUUsQ0FBQyxHQUFHLENBQUMsUUFBUSxDQUFDLENBQUM7SUFDbEUsTUFBTSxlQUFlLEdBQUc7UUFDdEIseUJBQXlCLEVBQUUsRUFBRSxDQUFDLEdBQUcsQ0FBQyx5QkFBeUI7UUFDM0QsVUFBVSxFQUFFLEVBQUUsQ0FBQyxHQUFHLENBQUMsVUFBVTtRQUM3QixhQUFhLEVBQUUsRUFBRSxDQUFDLEdBQUcsQ0FBQyxhQUFhO1FBQ25DLFFBQVEsRUFBRSxFQUFFLENBQUMsR0FBRyxDQUFDLFFBQVE7S0FDMUIsQ0FBQztJQUlGLE9BQU8sRUFBRSxDQUFDLDBCQUEwQixDQUFDLE1BQU0sRUFBRSxlQUFlLEVBQUUsUUFBUSxFQUFFLEVBQUUsQ0FBQyxDQUFDO0FBQzlFLENBQUM7QUFaRCw4Q0FZQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQgKiBhcyB0cyBmcm9tICd0eXBlc2NyaXB0JztcblxuZXhwb3J0IGZ1bmN0aW9uIHBhcnNlVHNjb25maWdGaWxlKHRzY29uZmlnUGF0aDogc3RyaW5nLCBiYXNlUGF0aDogc3RyaW5nKTogdHMuUGFyc2VkQ29tbWFuZExpbmUge1xuICBjb25zdCB7Y29uZmlnfSA9IHRzLnJlYWRDb25maWdGaWxlKHRzY29uZmlnUGF0aCwgdHMuc3lzLnJlYWRGaWxlKTtcbiAgY29uc3QgcGFyc2VDb25maWdIb3N0ID0ge1xuICAgIHVzZUNhc2VTZW5zaXRpdmVGaWxlTmFtZXM6IHRzLnN5cy51c2VDYXNlU2Vuc2l0aXZlRmlsZU5hbWVzLFxuICAgIGZpbGVFeGlzdHM6IHRzLnN5cy5maWxlRXhpc3RzLFxuICAgIHJlYWREaXJlY3Rvcnk6IHRzLnN5cy5yZWFkRGlyZWN0b3J5LFxuICAgIHJlYWRGaWxlOiB0cy5zeXMucmVhZEZpbGUsXG4gIH07XG5cblxuXG4gIHJldHVybiB0cy5wYXJzZUpzb25Db25maWdGaWxlQ29udGVudChjb25maWcsIHBhcnNlQ29uZmlnSG9zdCwgYmFzZVBhdGgsIHt9KTtcbn1cbiJdfQ==

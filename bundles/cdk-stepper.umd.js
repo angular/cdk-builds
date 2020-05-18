@@ -109,7 +109,7 @@
             set: function (value) {
                 this._editable = coercion.coerceBooleanProperty(value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkStep.prototype, "optional", {
@@ -120,7 +120,7 @@
             set: function (value) {
                 this._optional = coercion.coerceBooleanProperty(value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkStep.prototype, "completed", {
@@ -131,7 +131,7 @@
             set: function (value) {
                 this._completedOverride = coercion.coerceBooleanProperty(value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         CdkStep.prototype._getDefaultCompleted = function () {
@@ -145,7 +145,7 @@
             set: function (value) {
                 this._customError = coercion.coerceBooleanProperty(value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         CdkStep.prototype._getDefaultError = function () {
@@ -225,7 +225,7 @@
             get: function () {
                 return this._steps;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkStepper.prototype, "linear", {
@@ -236,7 +236,7 @@
             set: function (value) {
                 this._linear = coercion.coerceBooleanProperty(value);
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkStepper.prototype, "selectedIndex", {
@@ -260,7 +260,7 @@
                     this._selectedIndex = newIndex;
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkStepper.prototype, "selected", {
@@ -272,7 +272,7 @@
             set: function (step) {
                 this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         CdkStepper.prototype.ngAfterViewInit = function () {

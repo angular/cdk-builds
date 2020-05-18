@@ -3578,244 +3578,256 @@ const activeCapturingEventOptions = normalizePassiveListenerOptions({
 // Note: this class is generic, rather than referencing CdkDrag and CdkDropList directly, in order
 // to avoid circular imports. If we were to reference them here, importing the registry into the
 // classes that are registering themselves will introduce a circular import.
-class DragDropRegistry {
+let DragDropRegistry = /** @class */ (() => {
     /**
-     * @param {?} _ngZone
-     * @param {?} _document
+     * Service that keeps track of all the drag item and drop container
+     * instances, and manages global event listeners on the `document`.
+     * \@docs-private
+     * @template I, C
      */
-    constructor(_ngZone, _document) {
-        this._ngZone = _ngZone;
+    // Note: this class is generic, rather than referencing CdkDrag and CdkDropList directly, in order
+    // to avoid circular imports. If we were to reference them here, importing the registry into the
+    // classes that are registering themselves will introduce a circular import.
+    class DragDropRegistry {
         /**
-         * Registered drop container instances.
+         * @param {?} _ngZone
+         * @param {?} _document
          */
-        this._dropInstances = new Set();
-        /**
-         * Registered drag item instances.
-         */
-        this._dragInstances = new Set();
-        /**
-         * Drag item instances that are currently being dragged.
-         */
-        this._activeDragInstances = new Set();
-        /**
-         * Keeps track of the event listeners that we've bound to the `document`.
-         */
-        this._globalListeners = new Map();
-        /**
-         * Emits the `touchmove` or `mousemove` events that are dispatched
-         * while the user is dragging a drag item instance.
-         */
-        this.pointerMove = new Subject();
-        /**
-         * Emits the `touchend` or `mouseup` events that are dispatched
-         * while the user is dragging a drag item instance.
-         */
-        this.pointerUp = new Subject();
-        /**
-         * Emits when the viewport has been scrolled while the user is dragging an item.
-         */
-        this.scroll = new Subject();
-        /**
-         * Event listener that will prevent the default browser action while the user is dragging.
-         * @param event Event whose default action should be prevented.
-         */
-        this._preventDefaultWhileDragging = (/**
-         * @param {?} event
-         * @return {?}
-         */
-        (event) => {
-            if (this._activeDragInstances.size) {
-                event.preventDefault();
-            }
-        });
-        this._document = _document;
-    }
-    /**
-     * Adds a drop container to the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    registerDropContainer(drop) {
-        if (!this._dropInstances.has(drop)) {
-            this._dropInstances.add(drop);
-        }
-    }
-    /**
-     * Adds a drag item instance to the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    registerDragItem(drag) {
-        this._dragInstances.add(drag);
-        // The `touchmove` event gets bound once, ahead of time, because WebKit
-        // won't preventDefault on a dynamically-added `touchmove` listener.
-        // See https://bugs.webkit.org/show_bug.cgi?id=184250.
-        if (this._dragInstances.size === 1) {
-            this._ngZone.runOutsideAngular((/**
+        constructor(_ngZone, _document) {
+            this._ngZone = _ngZone;
+            /**
+             * Registered drop container instances.
+             */
+            this._dropInstances = new Set();
+            /**
+             * Registered drag item instances.
+             */
+            this._dragInstances = new Set();
+            /**
+             * Drag item instances that are currently being dragged.
+             */
+            this._activeDragInstances = new Set();
+            /**
+             * Keeps track of the event listeners that we've bound to the `document`.
+             */
+            this._globalListeners = new Map();
+            /**
+             * Emits the `touchmove` or `mousemove` events that are dispatched
+             * while the user is dragging a drag item instance.
+             */
+            this.pointerMove = new Subject();
+            /**
+             * Emits the `touchend` or `mouseup` events that are dispatched
+             * while the user is dragging a drag item instance.
+             */
+            this.pointerUp = new Subject();
+            /**
+             * Emits when the viewport has been scrolled while the user is dragging an item.
+             */
+            this.scroll = new Subject();
+            /**
+             * Event listener that will prevent the default browser action while the user is dragging.
+             * @param event Event whose default action should be prevented.
+             */
+            this._preventDefaultWhileDragging = (/**
+             * @param {?} event
              * @return {?}
              */
-            () => {
-                // The event handler has to be explicitly active,
-                // because newer browsers make it passive by default.
-                this._document.addEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
-            }));
-        }
-    }
-    /**
-     * Removes a drop container from the registry.
-     * @param {?} drop
-     * @return {?}
-     */
-    removeDropContainer(drop) {
-        this._dropInstances.delete(drop);
-    }
-    /**
-     * Removes a drag item instance from the registry.
-     * @param {?} drag
-     * @return {?}
-     */
-    removeDragItem(drag) {
-        this._dragInstances.delete(drag);
-        this.stopDragging(drag);
-        if (this._dragInstances.size === 0) {
-            this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
-        }
-    }
-    /**
-     * Starts the dragging sequence for a drag instance.
-     * @param {?} drag Drag instance which is being dragged.
-     * @param {?} event Event that initiated the dragging.
-     * @return {?}
-     */
-    startDragging(drag, event) {
-        // Do not process the same drag twice to avoid memory leaks and redundant listeners
-        if (this._activeDragInstances.has(drag)) {
-            return;
-        }
-        this._activeDragInstances.add(drag);
-        if (this._activeDragInstances.size === 1) {
-            /** @type {?} */
-            const isTouchEvent = event.type.startsWith('touch');
-            /** @type {?} */
-            const moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
-            /** @type {?} */
-            const upEvent = isTouchEvent ? 'touchend' : 'mouseup';
-            // We explicitly bind __active__ listeners here, because newer browsers will default to
-            // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
-            // use `preventDefault` to prevent the page from scrolling while the user is dragging.
-            this._globalListeners
-                .set(moveEvent, {
-                handler: (/**
-                 * @param {?} e
-                 * @return {?}
-                 */
-                (e) => this.pointerMove.next((/** @type {?} */ (e)))),
-                options: activeCapturingEventOptions
-            })
-                .set(upEvent, {
-                handler: (/**
-                 * @param {?} e
-                 * @return {?}
-                 */
-                (e) => this.pointerUp.next((/** @type {?} */ (e)))),
-                options: true
-            })
-                .set('scroll', {
-                handler: (/**
-                 * @param {?} e
-                 * @return {?}
-                 */
-                (e) => this.scroll.next(e)),
-                // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
-                // the document. See https://github.com/angular/components/issues/17144.
-                options: true
-            })
-                // Preventing the default action on `mousemove` isn't enough to disable text selection
-                // on Safari so we need to prevent the selection event as well. Alternatively this can
-                // be done by setting `user-select: none` on the `body`, however it has causes a style
-                // recalculation which can be expensive on pages with a lot of elements.
-                .set('selectstart', {
-                handler: this._preventDefaultWhileDragging,
-                options: activeCapturingEventOptions
+            (event) => {
+                if (this._activeDragInstances.size) {
+                    event.preventDefault();
+                }
             });
-            this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
-                this._globalListeners.forEach((/**
-                 * @param {?} config
-                 * @param {?} name
+            this._document = _document;
+        }
+        /**
+         * Adds a drop container to the registry.
+         * @param {?} drop
+         * @return {?}
+         */
+        registerDropContainer(drop) {
+            if (!this._dropInstances.has(drop)) {
+                this._dropInstances.add(drop);
+            }
+        }
+        /**
+         * Adds a drag item instance to the registry.
+         * @param {?} drag
+         * @return {?}
+         */
+        registerDragItem(drag) {
+            this._dragInstances.add(drag);
+            // The `touchmove` event gets bound once, ahead of time, because WebKit
+            // won't preventDefault on a dynamically-added `touchmove` listener.
+            // See https://bugs.webkit.org/show_bug.cgi?id=184250.
+            if (this._dragInstances.size === 1) {
+                this._ngZone.runOutsideAngular((/**
                  * @return {?}
                  */
-                (config, name) => {
-                    this._document.addEventListener(name, config.handler, config.options);
+                () => {
+                    // The event handler has to be explicitly active,
+                    // because newer browsers make it passive by default.
+                    this._document.addEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
                 }));
-            }));
+            }
         }
-    }
-    /**
-     * Stops dragging a drag item instance.
-     * @param {?} drag
-     * @return {?}
-     */
-    stopDragging(drag) {
-        this._activeDragInstances.delete(drag);
-        if (this._activeDragInstances.size === 0) {
+        /**
+         * Removes a drop container from the registry.
+         * @param {?} drop
+         * @return {?}
+         */
+        removeDropContainer(drop) {
+            this._dropInstances.delete(drop);
+        }
+        /**
+         * Removes a drag item instance from the registry.
+         * @param {?} drag
+         * @return {?}
+         */
+        removeDragItem(drag) {
+            this._dragInstances.delete(drag);
+            this.stopDragging(drag);
+            if (this._dragInstances.size === 0) {
+                this._document.removeEventListener('touchmove', this._preventDefaultWhileDragging, activeCapturingEventOptions);
+            }
+        }
+        /**
+         * Starts the dragging sequence for a drag instance.
+         * @param {?} drag Drag instance which is being dragged.
+         * @param {?} event Event that initiated the dragging.
+         * @return {?}
+         */
+        startDragging(drag, event) {
+            // Do not process the same drag twice to avoid memory leaks and redundant listeners
+            if (this._activeDragInstances.has(drag)) {
+                return;
+            }
+            this._activeDragInstances.add(drag);
+            if (this._activeDragInstances.size === 1) {
+                /** @type {?} */
+                const isTouchEvent = event.type.startsWith('touch');
+                /** @type {?} */
+                const moveEvent = isTouchEvent ? 'touchmove' : 'mousemove';
+                /** @type {?} */
+                const upEvent = isTouchEvent ? 'touchend' : 'mouseup';
+                // We explicitly bind __active__ listeners here, because newer browsers will default to
+                // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
+                // use `preventDefault` to prevent the page from scrolling while the user is dragging.
+                this._globalListeners
+                    .set(moveEvent, {
+                    handler: (/**
+                     * @param {?} e
+                     * @return {?}
+                     */
+                    (e) => this.pointerMove.next((/** @type {?} */ (e)))),
+                    options: activeCapturingEventOptions
+                })
+                    .set(upEvent, {
+                    handler: (/**
+                     * @param {?} e
+                     * @return {?}
+                     */
+                    (e) => this.pointerUp.next((/** @type {?} */ (e)))),
+                    options: true
+                })
+                    .set('scroll', {
+                    handler: (/**
+                     * @param {?} e
+                     * @return {?}
+                     */
+                    (e) => this.scroll.next(e)),
+                    // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
+                    // the document. See https://github.com/angular/components/issues/17144.
+                    options: true
+                })
+                    // Preventing the default action on `mousemove` isn't enough to disable text selection
+                    // on Safari so we need to prevent the selection event as well. Alternatively this can
+                    // be done by setting `user-select: none` on the `body`, however it has causes a style
+                    // recalculation which can be expensive on pages with a lot of elements.
+                    .set('selectstart', {
+                    handler: this._preventDefaultWhileDragging,
+                    options: activeCapturingEventOptions
+                });
+                this._ngZone.runOutsideAngular((/**
+                 * @return {?}
+                 */
+                () => {
+                    this._globalListeners.forEach((/**
+                     * @param {?} config
+                     * @param {?} name
+                     * @return {?}
+                     */
+                    (config, name) => {
+                        this._document.addEventListener(name, config.handler, config.options);
+                    }));
+                }));
+            }
+        }
+        /**
+         * Stops dragging a drag item instance.
+         * @param {?} drag
+         * @return {?}
+         */
+        stopDragging(drag) {
+            this._activeDragInstances.delete(drag);
+            if (this._activeDragInstances.size === 0) {
+                this._clearGlobalListeners();
+            }
+        }
+        /**
+         * Gets whether a drag item instance is currently being dragged.
+         * @param {?} drag
+         * @return {?}
+         */
+        isDragging(drag) {
+            return this._activeDragInstances.has(drag);
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this._dragInstances.forEach((/**
+             * @param {?} instance
+             * @return {?}
+             */
+            instance => this.removeDragItem(instance)));
+            this._dropInstances.forEach((/**
+             * @param {?} instance
+             * @return {?}
+             */
+            instance => this.removeDropContainer(instance)));
             this._clearGlobalListeners();
+            this.pointerMove.complete();
+            this.pointerUp.complete();
+        }
+        /**
+         * Clears out the global event listeners from the `document`.
+         * @private
+         * @return {?}
+         */
+        _clearGlobalListeners() {
+            this._globalListeners.forEach((/**
+             * @param {?} config
+             * @param {?} name
+             * @return {?}
+             */
+            (config, name) => {
+                this._document.removeEventListener(name, config.handler, config.options);
+            }));
+            this._globalListeners.clear();
         }
     }
-    /**
-     * Gets whether a drag item instance is currently being dragged.
-     * @param {?} drag
-     * @return {?}
-     */
-    isDragging(drag) {
-        return this._activeDragInstances.has(drag);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._dragInstances.forEach((/**
-         * @param {?} instance
-         * @return {?}
-         */
-        instance => this.removeDragItem(instance)));
-        this._dropInstances.forEach((/**
-         * @param {?} instance
-         * @return {?}
-         */
-        instance => this.removeDropContainer(instance)));
-        this._clearGlobalListeners();
-        this.pointerMove.complete();
-        this.pointerUp.complete();
-    }
-    /**
-     * Clears out the global event listeners from the `document`.
-     * @private
-     * @return {?}
-     */
-    _clearGlobalListeners() {
-        this._globalListeners.forEach((/**
-         * @param {?} config
-         * @param {?} name
-         * @return {?}
-         */
-        (config, name) => {
-            this._document.removeEventListener(name, config.handler, config.options);
-        }));
-        this._globalListeners.clear();
-    }
-}
-DragDropRegistry.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-DragDropRegistry.ctorParameters = () => [
-    { type: NgZone },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-];
-/** @nocollapse */ DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    DragDropRegistry.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    DragDropRegistry.ctorParameters = () => [
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    /** @nocollapse */ DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    return DragDropRegistry;
+})();
 if (false) {
     /**
      * @type {?}
@@ -3893,50 +3905,56 @@ const DEFAULT_CONFIG = {
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
  */
-class DragDrop {
+let DragDrop = /** @class */ (() => {
     /**
-     * @param {?} _document
-     * @param {?} _ngZone
-     * @param {?} _viewportRuler
-     * @param {?} _dragDropRegistry
+     * Service that allows for drag-and-drop functionality to be attached to DOM elements.
      */
-    constructor(_document, _ngZone, _viewportRuler, _dragDropRegistry) {
-        this._document = _document;
-        this._ngZone = _ngZone;
-        this._viewportRuler = _viewportRuler;
-        this._dragDropRegistry = _dragDropRegistry;
+    class DragDrop {
+        /**
+         * @param {?} _document
+         * @param {?} _ngZone
+         * @param {?} _viewportRuler
+         * @param {?} _dragDropRegistry
+         */
+        constructor(_document, _ngZone, _viewportRuler, _dragDropRegistry) {
+            this._document = _document;
+            this._ngZone = _ngZone;
+            this._viewportRuler = _viewportRuler;
+            this._dragDropRegistry = _dragDropRegistry;
+        }
+        /**
+         * Turns an element into a draggable item.
+         * @template T
+         * @param {?} element Element to which to attach the dragging functionality.
+         * @param {?=} config Object used to configure the dragging behavior.
+         * @return {?}
+         */
+        createDrag(element, config = DEFAULT_CONFIG) {
+            return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry);
+        }
+        /**
+         * Turns an element into a drop list.
+         * @template T
+         * @param {?} element Element to which to attach the drop list functionality.
+         * @return {?}
+         */
+        createDropList(element) {
+            return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
+        }
     }
-    /**
-     * Turns an element into a draggable item.
-     * @template T
-     * @param {?} element Element to which to attach the dragging functionality.
-     * @param {?=} config Object used to configure the dragging behavior.
-     * @return {?}
-     */
-    createDrag(element, config = DEFAULT_CONFIG) {
-        return new DragRef(element, config, this._document, this._ngZone, this._viewportRuler, this._dragDropRegistry);
-    }
-    /**
-     * Turns an element into a drop list.
-     * @template T
-     * @param {?} element Element to which to attach the drop list functionality.
-     * @return {?}
-     */
-    createDropList(element) {
-        return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
-    }
-}
-DragDrop.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-DragDrop.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: NgZone },
-    { type: ViewportRuler },
-    { type: DragDropRegistry }
-];
-/** @nocollapse */ DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    DragDrop.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    DragDrop.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: NgZone },
+        { type: ViewportRuler },
+        { type: DragDropRegistry }
+    ];
+    /** @nocollapse */ DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    return DragDrop;
+})();
 if (false) {
     /**
      * @type {?}
@@ -4188,57 +4206,63 @@ const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 /**
  * Handle that can be used to drag and CdkDrag instance.
  */
-class CdkDragHandle {
+let CdkDragHandle = /** @class */ (() => {
     /**
-     * @param {?} element
-     * @param {?=} parentDrag
+     * Handle that can be used to drag and CdkDrag instance.
      */
-    constructor(element, parentDrag) {
-        this.element = element;
+    class CdkDragHandle {
         /**
-         * Emits when the state of the handle has changed.
+         * @param {?} element
+         * @param {?=} parentDrag
          */
-        this._stateChanges = new Subject();
-        this._disabled = false;
-        this._parentDrag = parentDrag;
-        toggleNativeDragInteractions(element.nativeElement, false);
+        constructor(element, parentDrag) {
+            this.element = element;
+            /**
+             * Emits when the state of the handle has changed.
+             */
+            this._stateChanges = new Subject();
+            this._disabled = false;
+            this._parentDrag = parentDrag;
+            toggleNativeDragInteractions(element.nativeElement, false);
+        }
+        /**
+         * Whether starting to drag through this handle is disabled.
+         * @return {?}
+         */
+        get disabled() { return this._disabled; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set disabled(value) {
+            this._disabled = coerceBooleanProperty(value);
+            this._stateChanges.next(this);
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this._stateChanges.complete();
+        }
     }
-    /**
-     * Whether starting to drag through this handle is disabled.
-     * @return {?}
-     */
-    get disabled() { return this._disabled; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-        this._stateChanges.next(this);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._stateChanges.complete();
-    }
-}
-CdkDragHandle.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkDragHandle]',
-                host: {
-                    'class': 'cdk-drag-handle'
-                }
-            },] }
-];
-/** @nocollapse */
-CdkDragHandle.ctorParameters = () => [
-    { type: ElementRef },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
-];
-CdkDragHandle.propDecorators = {
-    disabled: [{ type: Input, args: ['cdkDragHandleDisabled',] }]
-};
+    CdkDragHandle.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragHandle.ctorParameters = () => [
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
+    ];
+    CdkDragHandle.propDecorators = {
+        disabled: [{ type: Input, args: ['cdkDragHandleDisabled',] }]
+    };
+    return CdkDragHandle;
+})();
 if (false) {
     /** @type {?} */
     CdkDragHandle.ngAcceptInputType_disabled;
@@ -4271,26 +4295,34 @@ if (false) {
  * it is being dragged. The placeholder is displayed in place of the element being dragged.
  * @template T
  */
-class CdkDragPlaceholder {
+let CdkDragPlaceholder = /** @class */ (() => {
     /**
-     * @param {?} templateRef
+     * Element that will be used as a template for the placeholder of a CdkDrag when
+     * it is being dragged. The placeholder is displayed in place of the element being dragged.
+     * @template T
      */
-    constructor(templateRef) {
-        this.templateRef = templateRef;
+    class CdkDragPlaceholder {
+        /**
+         * @param {?} templateRef
+         */
+        constructor(templateRef) {
+            this.templateRef = templateRef;
+        }
     }
-}
-CdkDragPlaceholder.decorators = [
-    { type: Directive, args: [{
-                selector: 'ng-template[cdkDragPlaceholder]'
-            },] }
-];
-/** @nocollapse */
-CdkDragPlaceholder.ctorParameters = () => [
-    { type: TemplateRef }
-];
-CdkDragPlaceholder.propDecorators = {
-    data: [{ type: Input }]
-};
+    CdkDragPlaceholder.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragPlaceholder.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: Input }]
+    };
+    return CdkDragPlaceholder;
+})();
 if (false) {
     /**
      * Context data to be added to the placeholder template instance.
@@ -4311,38 +4343,46 @@ if (false) {
  * of a CdkDrag when it is being dragged.
  * @template T
  */
-class CdkDragPreview {
+let CdkDragPreview = /** @class */ (() => {
     /**
-     * @param {?} templateRef
+     * Element that will be used as a template for the preview
+     * of a CdkDrag when it is being dragged.
+     * @template T
      */
-    constructor(templateRef) {
-        this.templateRef = templateRef;
-        this._matchSize = false;
+    class CdkDragPreview {
+        /**
+         * @param {?} templateRef
+         */
+        constructor(templateRef) {
+            this.templateRef = templateRef;
+            this._matchSize = false;
+        }
+        /**
+         * Whether the preview should preserve the same size as the item that is being dragged.
+         * @return {?}
+         */
+        get matchSize() { return this._matchSize; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set matchSize(value) { this._matchSize = coerceBooleanProperty(value); }
     }
-    /**
-     * Whether the preview should preserve the same size as the item that is being dragged.
-     * @return {?}
-     */
-    get matchSize() { return this._matchSize; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set matchSize(value) { this._matchSize = coerceBooleanProperty(value); }
-}
-CdkDragPreview.decorators = [
-    { type: Directive, args: [{
-                selector: 'ng-template[cdkDragPreview]'
-            },] }
-];
-/** @nocollapse */
-CdkDragPreview.ctorParameters = () => [
-    { type: TemplateRef }
-];
-CdkDragPreview.propDecorators = {
-    data: [{ type: Input }],
-    matchSize: [{ type: Input }]
-};
+    CdkDragPreview.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragPreview.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
+    CdkDragPreview.propDecorators = {
+        data: [{ type: Input }],
+        matchSize: [{ type: Input }]
+    };
+    return CdkDragPreview;
+})();
 if (false) {
     /** @type {?} */
     CdkDragPreview.ngAcceptInputType_matchSize;
@@ -4417,473 +4457,480 @@ const CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
  * Element that can be moved inside a CdkDropList container.
  * @template T
  */
-class CdkDrag {
+let CdkDrag = /** @class */ (() => {
     /**
-     * @param {?} element
-     * @param {?} dropContainer
-     * @param {?} _document
-     * @param {?} _ngZone
-     * @param {?} _viewContainerRef
-     * @param {?} config
-     * @param {?} _dir
-     * @param {?} dragDrop
-     * @param {?} _changeDetectorRef
+     * Element that can be moved inside a CdkDropList container.
+     * @template T
      */
-    constructor(element, dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef) {
-        this.element = element;
-        this.dropContainer = dropContainer;
-        this._document = _document;
-        this._ngZone = _ngZone;
-        this._viewContainerRef = _viewContainerRef;
-        this._dir = _dir;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._destroyed = new Subject();
+    class CdkDrag {
         /**
-         * Emits when the user starts dragging the item.
+         * @param {?} element
+         * @param {?} dropContainer
+         * @param {?} _document
+         * @param {?} _ngZone
+         * @param {?} _viewContainerRef
+         * @param {?} config
+         * @param {?} _dir
+         * @param {?} dragDrop
+         * @param {?} _changeDetectorRef
          */
-        this.started = new EventEmitter();
-        /**
-         * Emits when the user has released a drag item, before any animations have started.
-         */
-        this.released = new EventEmitter();
-        /**
-         * Emits when the user stops dragging an item in the container.
-         */
-        this.ended = new EventEmitter();
-        /**
-         * Emits when the user has moved the item into a new container.
-         */
-        this.entered = new EventEmitter();
-        /**
-         * Emits when the user removes the item its container by dragging it into another container.
-         */
-        this.exited = new EventEmitter();
-        /**
-         * Emits when the user drops the item inside a container.
-         */
-        this.dropped = new EventEmitter();
-        /**
-         * Emits as the user is dragging the item. Use with caution,
-         * because this event will fire for every pixel that the user has dragged.
-         */
-        this.moved = new Observable((/**
-         * @param {?} observer
-         * @return {?}
-         */
-        (observer) => {
-            /** @type {?} */
-            const subscription = this._dragRef.moved.pipe(map((/**
-             * @param {?} movedEvent
+        constructor(element, dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef) {
+            this.element = element;
+            this.dropContainer = dropContainer;
+            this._document = _document;
+            this._ngZone = _ngZone;
+            this._viewContainerRef = _viewContainerRef;
+            this._dir = _dir;
+            this._changeDetectorRef = _changeDetectorRef;
+            this._destroyed = new Subject();
+            /**
+             * Emits when the user starts dragging the item.
+             */
+            this.started = new EventEmitter();
+            /**
+             * Emits when the user has released a drag item, before any animations have started.
+             */
+            this.released = new EventEmitter();
+            /**
+             * Emits when the user stops dragging an item in the container.
+             */
+            this.ended = new EventEmitter();
+            /**
+             * Emits when the user has moved the item into a new container.
+             */
+            this.entered = new EventEmitter();
+            /**
+             * Emits when the user removes the item its container by dragging it into another container.
+             */
+            this.exited = new EventEmitter();
+            /**
+             * Emits when the user drops the item inside a container.
+             */
+            this.dropped = new EventEmitter();
+            /**
+             * Emits as the user is dragging the item. Use with caution,
+             * because this event will fire for every pixel that the user has dragged.
+             */
+            this.moved = new Observable((/**
+             * @param {?} observer
              * @return {?}
              */
-            movedEvent => ({
-                source: this,
-                pointerPosition: movedEvent.pointerPosition,
-                event: movedEvent.event,
-                delta: movedEvent.delta,
-                distance: movedEvent.distance
-            })))).subscribe(observer);
-            return (/**
+            (observer) => {
+                /** @type {?} */
+                const subscription = this._dragRef.moved.pipe(map((/**
+                 * @param {?} movedEvent
+                 * @return {?}
+                 */
+                movedEvent => ({
+                    source: this,
+                    pointerPosition: movedEvent.pointerPosition,
+                    event: movedEvent.event,
+                    delta: movedEvent.delta,
+                    distance: movedEvent.distance
+                })))).subscribe(observer);
+                return (/**
+                 * @return {?}
+                 */
+                () => {
+                    subscription.unsubscribe();
+                });
+            }));
+            this._dragRef = dragDrop.createDrag(element, {
+                dragStartThreshold: config && config.dragStartThreshold != null ?
+                    config.dragStartThreshold : 5,
+                pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
+                    config.pointerDirectionChangeThreshold : 5,
+                zIndex: config === null || config === void 0 ? void 0 : config.zIndex
+            });
+            this._dragRef.data = this;
+            if (config) {
+                this._assignDefaults(config);
+            }
+            // Note that usually the container is assigned when the drop list is picks up the item, but in
+            // some cases (mainly transplanted views with OnPush, see #18341) we may end up in a situation
+            // where there are no items on the first change detection pass, but the items get picked up as
+            // soon as the user triggers another pass by dragging. This is a problem, because the item would
+            // have to switch from standalone mode to drag mode in the middle of the dragging sequence which
+            // is too late since the two modes save different kinds of information. We work around it by
+            // assigning the drop container both from here and the list.
+            if (dropContainer) {
+                this._dragRef._withDropContainer(dropContainer._dropListRef);
+                dropContainer.addItem(this);
+            }
+            this._syncInputs(this._dragRef);
+            this._handleEvents(this._dragRef);
+        }
+        /**
+         * Whether starting to drag this element is disabled.
+         * @return {?}
+         */
+        get disabled() {
+            return this._disabled || (this.dropContainer && this.dropContainer.disabled);
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set disabled(value) {
+            this._disabled = coerceBooleanProperty(value);
+            this._dragRef.disabled = this._disabled;
+        }
+        /**
+         * Returns the element that is being used as a placeholder
+         * while the current element is being dragged.
+         * @deprecated No longer being used to be removed.
+         * \@breaking-change 11.0.0
+         * @return {?}
+         */
+        getPlaceholderElement() {
+            return this._dragRef.getPlaceholderElement();
+        }
+        /**
+         * Returns the root draggable element.
+         * @deprecated No longer being used to be removed.
+         * \@breaking-change 11.0.0
+         * @return {?}
+         */
+        getRootElement() {
+            return this._dragRef.getRootElement();
+        }
+        /**
+         * Resets a standalone drag item to its initial position.
+         * @return {?}
+         */
+        reset() {
+            this._dragRef.reset();
+        }
+        /**
+         * Gets the pixel coordinates of the draggable outside of a drop container.
+         * @return {?}
+         */
+        getFreeDragPosition() {
+            return this._dragRef.getFreeDragPosition();
+        }
+        /**
+         * @return {?}
+         */
+        ngAfterViewInit() {
+            // We need to wait for the zone to stabilize, in order for the reference
+            // element to be in the proper place in the DOM. This is mostly relevant
+            // for draggable elements inside portals since they get stamped out in
+            // their original DOM position and then they get transferred to the portal.
+            this._ngZone.onStable.asObservable()
+                .pipe(take(1), takeUntil(this._destroyed))
+                .subscribe((/**
              * @return {?}
              */
             () => {
-                subscription.unsubscribe();
-            });
-        }));
-        this._dragRef = dragDrop.createDrag(element, {
-            dragStartThreshold: config && config.dragStartThreshold != null ?
-                config.dragStartThreshold : 5,
-            pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                config.pointerDirectionChangeThreshold : 5,
-            zIndex: config === null || config === void 0 ? void 0 : config.zIndex
-        });
-        this._dragRef.data = this;
-        if (config) {
-            this._assignDefaults(config);
+                this._updateRootElement();
+                // Listen for any newly-added handles.
+                this._handles.changes.pipe(startWith(this._handles), 
+                // Sync the new handles with the DragRef.
+                tap((/**
+                 * @param {?} handles
+                 * @return {?}
+                 */
+                (handles) => {
+                    /** @type {?} */
+                    const childHandleElements = handles
+                        .filter((/**
+                     * @param {?} handle
+                     * @return {?}
+                     */
+                    handle => handle._parentDrag === this))
+                        .map((/**
+                     * @param {?} handle
+                     * @return {?}
+                     */
+                    handle => handle.element));
+                    this._dragRef.withHandles(childHandleElements);
+                })), 
+                // Listen if the state of any of the handles changes.
+                switchMap((/**
+                 * @param {?} handles
+                 * @return {?}
+                 */
+                (handles) => {
+                    return (/** @type {?} */ (merge(...handles.map((/**
+                     * @param {?} item
+                     * @return {?}
+                     */
+                    item => {
+                        return item._stateChanges.pipe(startWith(item));
+                    })))));
+                })), takeUntil(this._destroyed)).subscribe((/**
+                 * @param {?} handleInstance
+                 * @return {?}
+                 */
+                handleInstance => {
+                    // Enabled/disable the handle that changed in the DragRef.
+                    /** @type {?} */
+                    const dragRef = this._dragRef;
+                    /** @type {?} */
+                    const handle = handleInstance.element.nativeElement;
+                    handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
+                }));
+                if (this.freeDragPosition) {
+                    this._dragRef.setFreeDragPosition(this.freeDragPosition);
+                }
+            }));
         }
-        // Note that usually the container is assigned when the drop list is picks up the item, but in
-        // some cases (mainly transplanted views with OnPush, see #18341) we may end up in a situation
-        // where there are no items on the first change detection pass, but the items get picked up as
-        // soon as the user triggers another pass by dragging. This is a problem, because the item would
-        // have to switch from standalone mode to drag mode in the middle of the dragging sequence which
-        // is too late since the two modes save different kinds of information. We work around it by
-        // assigning the drop container both from here and the list.
-        if (dropContainer) {
-            this._dragRef._withDropContainer(dropContainer._dropListRef);
-            dropContainer.addItem(this);
-        }
-        this._syncInputs(this._dragRef);
-        this._handleEvents(this._dragRef);
-    }
-    /**
-     * Whether starting to drag this element is disabled.
-     * @return {?}
-     */
-    get disabled() {
-        return this._disabled || (this.dropContainer && this.dropContainer.disabled);
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-        this._dragRef.disabled = this._disabled;
-    }
-    /**
-     * Returns the element that is being used as a placeholder
-     * while the current element is being dragged.
-     * @deprecated No longer being used to be removed.
-     * \@breaking-change 11.0.0
-     * @return {?}
-     */
-    getPlaceholderElement() {
-        return this._dragRef.getPlaceholderElement();
-    }
-    /**
-     * Returns the root draggable element.
-     * @deprecated No longer being used to be removed.
-     * \@breaking-change 11.0.0
-     * @return {?}
-     */
-    getRootElement() {
-        return this._dragRef.getRootElement();
-    }
-    /**
-     * Resets a standalone drag item to its initial position.
-     * @return {?}
-     */
-    reset() {
-        this._dragRef.reset();
-    }
-    /**
-     * Gets the pixel coordinates of the draggable outside of a drop container.
-     * @return {?}
-     */
-    getFreeDragPosition() {
-        return this._dragRef.getFreeDragPosition();
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterViewInit() {
-        // We need to wait for the zone to stabilize, in order for the reference
-        // element to be in the proper place in the DOM. This is mostly relevant
-        // for draggable elements inside portals since they get stamped out in
-        // their original DOM position and then they get transferred to the portal.
-        this._ngZone.onStable.asObservable()
-            .pipe(take(1), takeUntil(this._destroyed))
-            .subscribe((/**
+        /**
+         * @param {?} changes
          * @return {?}
          */
-        () => {
-            this._updateRootElement();
-            // Listen for any newly-added handles.
-            this._handles.changes.pipe(startWith(this._handles), 
-            // Sync the new handles with the DragRef.
-            tap((/**
-             * @param {?} handles
-             * @return {?}
-             */
-            (handles) => {
-                /** @type {?} */
-                const childHandleElements = handles
-                    .filter((/**
-                 * @param {?} handle
-                 * @return {?}
-                 */
-                handle => handle._parentDrag === this))
-                    .map((/**
-                 * @param {?} handle
-                 * @return {?}
-                 */
-                handle => handle.element));
-                this._dragRef.withHandles(childHandleElements);
-            })), 
-            // Listen if the state of any of the handles changes.
-            switchMap((/**
-             * @param {?} handles
-             * @return {?}
-             */
-            (handles) => {
-                return (/** @type {?} */ (merge(...handles.map((/**
-                 * @param {?} item
-                 * @return {?}
-                 */
-                item => {
-                    return item._stateChanges.pipe(startWith(item));
-                })))));
-            })), takeUntil(this._destroyed)).subscribe((/**
-             * @param {?} handleInstance
-             * @return {?}
-             */
-            handleInstance => {
-                // Enabled/disable the handle that changed in the DragRef.
-                /** @type {?} */
-                const dragRef = this._dragRef;
-                /** @type {?} */
-                const handle = handleInstance.element.nativeElement;
-                handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
-            }));
-            if (this.freeDragPosition) {
+        ngOnChanges(changes) {
+            /** @type {?} */
+            const rootSelectorChange = changes['rootElementSelector'];
+            /** @type {?} */
+            const positionChange = changes['freeDragPosition'];
+            // We don't have to react to the first change since it's being
+            // handled in `ngAfterViewInit` where it needs to be deferred.
+            if (rootSelectorChange && !rootSelectorChange.firstChange) {
+                this._updateRootElement();
+            }
+            // Skip the first change since it's being handled in `ngAfterViewInit`.
+            if (positionChange && !positionChange.firstChange && this.freeDragPosition) {
                 this._dragRef.setFreeDragPosition(this.freeDragPosition);
             }
-        }));
-    }
-    /**
-     * @param {?} changes
-     * @return {?}
-     */
-    ngOnChanges(changes) {
-        /** @type {?} */
-        const rootSelectorChange = changes['rootElementSelector'];
-        /** @type {?} */
-        const positionChange = changes['freeDragPosition'];
-        // We don't have to react to the first change since it's being
-        // handled in `ngAfterViewInit` where it needs to be deferred.
-        if (rootSelectorChange && !rootSelectorChange.firstChange) {
-            this._updateRootElement();
         }
-        // Skip the first change since it's being handled in `ngAfterViewInit`.
-        if (positionChange && !positionChange.firstChange && this.freeDragPosition) {
-            this._dragRef.setFreeDragPosition(this.freeDragPosition);
-        }
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        if (this.dropContainer) {
-            this.dropContainer.removeItem(this);
-        }
-        this._destroyed.next();
-        this._destroyed.complete();
-        this._dragRef.dispose();
-    }
-    /**
-     * Syncs the root element with the `DragRef`.
-     * @private
-     * @return {?}
-     */
-    _updateRootElement() {
-        /** @type {?} */
-        const element = this.element.nativeElement;
-        /** @type {?} */
-        const rootElement = this.rootElementSelector ?
-            getClosestMatchingAncestor(element, this.rootElementSelector) : element;
-        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
-            throw Error(`cdkDrag must be attached to an element node. ` +
-                `Currently attached to "${rootElement.nodeName}".`);
-        }
-        this._dragRef.withRootElement(rootElement || element);
-    }
-    /**
-     * Gets the boundary element, based on the `boundaryElement` value.
-     * @private
-     * @return {?}
-     */
-    _getBoundaryElement() {
-        /** @type {?} */
-        const boundary = this.boundaryElement;
-        if (!boundary) {
-            return null;
-        }
-        if (typeof boundary === 'string') {
-            return getClosestMatchingAncestor(this.element.nativeElement, boundary);
-        }
-        /** @type {?} */
-        const element = coerceElement(boundary);
-        if (isDevMode() && !element.contains(this.element.nativeElement)) {
-            throw Error('Draggable element is not inside of the node passed into cdkDragBoundary.');
-        }
-        return element;
-    }
-    /**
-     * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    _syncInputs(ref) {
-        ref.beforeStarted.subscribe((/**
+        /**
          * @return {?}
          */
-        () => {
-            if (!ref.isDragging()) {
-                /** @type {?} */
-                const dir = this._dir;
-                /** @type {?} */
-                const dragStartDelay = this.dragStartDelay;
-                /** @type {?} */
-                const placeholder = this._placeholderTemplate ? {
-                    template: this._placeholderTemplate.templateRef,
-                    context: this._placeholderTemplate.data,
-                    viewContainer: this._viewContainerRef
-                } : null;
-                /** @type {?} */
-                const preview = this._previewTemplate ? {
-                    template: this._previewTemplate.templateRef,
-                    context: this._previewTemplate.data,
-                    matchSize: this._previewTemplate.matchSize,
-                    viewContainer: this._viewContainerRef
-                } : null;
-                ref.disabled = this.disabled;
-                ref.lockAxis = this.lockAxis;
-                ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
-                    dragStartDelay : coerceNumberProperty(dragStartDelay);
-                ref.constrainPosition = this.constrainPosition;
-                ref.previewClass = this.previewClass;
-                ref
-                    .withBoundaryElement(this._getBoundaryElement())
-                    .withPlaceholderTemplate(placeholder)
-                    .withPreviewTemplate(preview);
-                if (dir) {
-                    ref.withDirection(dir.value);
-                }
+        ngOnDestroy() {
+            if (this.dropContainer) {
+                this.dropContainer.removeItem(this);
             }
-        }));
+            this._destroyed.next();
+            this._destroyed.complete();
+            this._dragRef.dispose();
+        }
+        /**
+         * Syncs the root element with the `DragRef`.
+         * @private
+         * @return {?}
+         */
+        _updateRootElement() {
+            /** @type {?} */
+            const element = this.element.nativeElement;
+            /** @type {?} */
+            const rootElement = this.rootElementSelector ?
+                getClosestMatchingAncestor(element, this.rootElementSelector) : element;
+            if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
+                throw Error(`cdkDrag must be attached to an element node. ` +
+                    `Currently attached to "${rootElement.nodeName}".`);
+            }
+            this._dragRef.withRootElement(rootElement || element);
+        }
+        /**
+         * Gets the boundary element, based on the `boundaryElement` value.
+         * @private
+         * @return {?}
+         */
+        _getBoundaryElement() {
+            /** @type {?} */
+            const boundary = this.boundaryElement;
+            if (!boundary) {
+                return null;
+            }
+            if (typeof boundary === 'string') {
+                return getClosestMatchingAncestor(this.element.nativeElement, boundary);
+            }
+            /** @type {?} */
+            const element = coerceElement(boundary);
+            if (isDevMode() && !element.contains(this.element.nativeElement)) {
+                throw Error('Draggable element is not inside of the node passed into cdkDragBoundary.');
+            }
+            return element;
+        }
+        /**
+         * Syncs the inputs of the CdkDrag with the options of the underlying DragRef.
+         * @private
+         * @param {?} ref
+         * @return {?}
+         */
+        _syncInputs(ref) {
+            ref.beforeStarted.subscribe((/**
+             * @return {?}
+             */
+            () => {
+                if (!ref.isDragging()) {
+                    /** @type {?} */
+                    const dir = this._dir;
+                    /** @type {?} */
+                    const dragStartDelay = this.dragStartDelay;
+                    /** @type {?} */
+                    const placeholder = this._placeholderTemplate ? {
+                        template: this._placeholderTemplate.templateRef,
+                        context: this._placeholderTemplate.data,
+                        viewContainer: this._viewContainerRef
+                    } : null;
+                    /** @type {?} */
+                    const preview = this._previewTemplate ? {
+                        template: this._previewTemplate.templateRef,
+                        context: this._previewTemplate.data,
+                        matchSize: this._previewTemplate.matchSize,
+                        viewContainer: this._viewContainerRef
+                    } : null;
+                    ref.disabled = this.disabled;
+                    ref.lockAxis = this.lockAxis;
+                    ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
+                        dragStartDelay : coerceNumberProperty(dragStartDelay);
+                    ref.constrainPosition = this.constrainPosition;
+                    ref.previewClass = this.previewClass;
+                    ref
+                        .withBoundaryElement(this._getBoundaryElement())
+                        .withPlaceholderTemplate(placeholder)
+                        .withPreviewTemplate(preview);
+                    if (dir) {
+                        ref.withDirection(dir.value);
+                    }
+                }
+            }));
+        }
+        /**
+         * Handles the events from the underlying `DragRef`.
+         * @private
+         * @param {?} ref
+         * @return {?}
+         */
+        _handleEvents(ref) {
+            ref.started.subscribe((/**
+             * @return {?}
+             */
+            () => {
+                this.started.emit({ source: this });
+                // Since all of these events run outside of change detection,
+                // we need to ensure that everything is marked correctly.
+                this._changeDetectorRef.markForCheck();
+            }));
+            ref.released.subscribe((/**
+             * @return {?}
+             */
+            () => {
+                this.released.emit({ source: this });
+            }));
+            ref.ended.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.ended.emit({ source: this, distance: event.distance });
+                // Since all of these events run outside of change detection,
+                // we need to ensure that everything is marked correctly.
+                this._changeDetectorRef.markForCheck();
+            }));
+            ref.entered.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.entered.emit({
+                    container: event.container.data,
+                    item: this,
+                    currentIndex: event.currentIndex
+                });
+            }));
+            ref.exited.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.exited.emit({
+                    container: event.container.data,
+                    item: this
+                });
+            }));
+            ref.dropped.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.dropped.emit({
+                    previousIndex: event.previousIndex,
+                    currentIndex: event.currentIndex,
+                    previousContainer: event.previousContainer.data,
+                    container: event.container.data,
+                    isPointerOverContainer: event.isPointerOverContainer,
+                    item: this,
+                    distance: event.distance
+                });
+            }));
+        }
+        /**
+         * Assigns the default input values based on a provided config object.
+         * @private
+         * @param {?} config
+         * @return {?}
+         */
+        _assignDefaults(config) {
+            const { lockAxis, dragStartDelay, constrainPosition, previewClass, boundaryElement, draggingDisabled, rootElementSelector } = config;
+            this.disabled = draggingDisabled == null ? false : draggingDisabled;
+            this.dragStartDelay = dragStartDelay || 0;
+            if (lockAxis) {
+                this.lockAxis = lockAxis;
+            }
+            if (constrainPosition) {
+                this.constrainPosition = constrainPosition;
+            }
+            if (previewClass) {
+                this.previewClass = previewClass;
+            }
+            if (boundaryElement) {
+                this.boundaryElement = boundaryElement;
+            }
+            if (rootElementSelector) {
+                this.rootElementSelector = rootElementSelector;
+            }
+        }
     }
-    /**
-     * Handles the events from the underlying `DragRef`.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    _handleEvents(ref) {
-        ref.started.subscribe((/**
-         * @return {?}
-         */
-        () => {
-            this.started.emit({ source: this });
-            // Since all of these events run outside of change detection,
-            // we need to ensure that everything is marked correctly.
-            this._changeDetectorRef.markForCheck();
-        }));
-        ref.released.subscribe((/**
-         * @return {?}
-         */
-        () => {
-            this.released.emit({ source: this });
-        }));
-        ref.ended.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.ended.emit({ source: this, distance: event.distance });
-            // Since all of these events run outside of change detection,
-            // we need to ensure that everything is marked correctly.
-            this._changeDetectorRef.markForCheck();
-        }));
-        ref.entered.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.entered.emit({
-                container: event.container.data,
-                item: this,
-                currentIndex: event.currentIndex
-            });
-        }));
-        ref.exited.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.exited.emit({
-                container: event.container.data,
-                item: this
-            });
-        }));
-        ref.dropped.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.dropped.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                previousContainer: event.previousContainer.data,
-                container: event.container.data,
-                isPointerOverContainer: event.isPointerOverContainer,
-                item: this,
-                distance: event.distance
-            });
-        }));
-    }
-    /**
-     * Assigns the default input values based on a provided config object.
-     * @private
-     * @param {?} config
-     * @return {?}
-     */
-    _assignDefaults(config) {
-        const { lockAxis, dragStartDelay, constrainPosition, previewClass, boundaryElement, draggingDisabled, rootElementSelector } = config;
-        this.disabled = draggingDisabled == null ? false : draggingDisabled;
-        this.dragStartDelay = dragStartDelay || 0;
-        if (lockAxis) {
-            this.lockAxis = lockAxis;
-        }
-        if (constrainPosition) {
-            this.constrainPosition = constrainPosition;
-        }
-        if (previewClass) {
-            this.previewClass = previewClass;
-        }
-        if (boundaryElement) {
-            this.boundaryElement = boundaryElement;
-        }
-        if (rootElementSelector) {
-            this.rootElementSelector = rootElementSelector;
-        }
-    }
-}
-CdkDrag.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkDrag]',
-                exportAs: 'cdkDrag',
-                host: {
-                    'class': 'cdk-drag',
-                    '[class.cdk-drag-disabled]': 'disabled',
-                    '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
-                },
-                providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
-            },] }
-];
-/** @nocollapse */
-CdkDrag.ctorParameters = () => [
-    { type: ElementRef },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_LIST,] }, { type: Optional }, { type: SkipSelf }] },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: NgZone },
-    { type: ViewContainerRef },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] },
-    { type: Directionality, decorators: [{ type: Optional }] },
-    { type: DragDrop },
-    { type: ChangeDetectorRef }
-];
-CdkDrag.propDecorators = {
-    _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
-    _previewTemplate: [{ type: ContentChild, args: [CdkDragPreview,] }],
-    _placeholderTemplate: [{ type: ContentChild, args: [CdkDragPlaceholder,] }],
-    data: [{ type: Input, args: ['cdkDragData',] }],
-    lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
-    rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
-    boundaryElement: [{ type: Input, args: ['cdkDragBoundary',] }],
-    dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
-    freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
-    disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
-    constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
-    previewClass: [{ type: Input, args: ['cdkDragPreviewClass',] }],
-    started: [{ type: Output, args: ['cdkDragStarted',] }],
-    released: [{ type: Output, args: ['cdkDragReleased',] }],
-    ended: [{ type: Output, args: ['cdkDragEnded',] }],
-    entered: [{ type: Output, args: ['cdkDragEntered',] }],
-    exited: [{ type: Output, args: ['cdkDragExited',] }],
-    dropped: [{ type: Output, args: ['cdkDragDropped',] }],
-    moved: [{ type: Output, args: ['cdkDragMoved',] }]
-};
+    CdkDrag.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDrag]',
+                    exportAs: 'cdkDrag',
+                    host: {
+                        'class': 'cdk-drag',
+                        '[class.cdk-drag-disabled]': 'disabled',
+                        '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
+                    },
+                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDrag.ctorParameters = () => [
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_LIST,] }, { type: Optional }, { type: SkipSelf }] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: NgZone },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] },
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: DragDrop },
+        { type: ChangeDetectorRef }
+    ];
+    CdkDrag.propDecorators = {
+        _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
+        _previewTemplate: [{ type: ContentChild, args: [CdkDragPreview,] }],
+        _placeholderTemplate: [{ type: ContentChild, args: [CdkDragPlaceholder,] }],
+        data: [{ type: Input, args: ['cdkDragData',] }],
+        lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
+        rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
+        boundaryElement: [{ type: Input, args: ['cdkDragBoundary',] }],
+        dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
+        freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
+        disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
+        constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
+        previewClass: [{ type: Input, args: ['cdkDragPreviewClass',] }],
+        started: [{ type: Output, args: ['cdkDragStarted',] }],
+        released: [{ type: Output, args: ['cdkDragReleased',] }],
+        ended: [{ type: Output, args: ['cdkDragEnded',] }],
+        entered: [{ type: Output, args: ['cdkDragEntered',] }],
+        exited: [{ type: Output, args: ['cdkDragExited',] }],
+        dropped: [{ type: Output, args: ['cdkDragDropped',] }],
+        moved: [{ type: Output, args: ['cdkDragMoved',] }]
+    };
+    return CdkDrag;
+})();
 if (false) {
     /** @type {?} */
     CdkDrag.ngAcceptInputType_disabled;
@@ -5071,42 +5118,52 @@ function getClosestMatchingAncestor(element, selector) {
  * from `cdkDropList`.
  * @template T
  */
-class CdkDropListGroup {
-    constructor() {
+let CdkDropListGroup = /** @class */ (() => {
+    /**
+     * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
+     * elements that are placed inside a `cdkDropListGroup` will be connected to each other
+     * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
+     * from `cdkDropList`.
+     * @template T
+     */
+    class CdkDropListGroup {
+        constructor() {
+            /**
+             * Drop lists registered inside the group.
+             */
+            this._items = new Set();
+            this._disabled = false;
+        }
         /**
-         * Drop lists registered inside the group.
+         * Whether starting a dragging sequence from inside this group is disabled.
+         * @return {?}
          */
-        this._items = new Set();
-        this._disabled = false;
+        get disabled() { return this._disabled; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set disabled(value) {
+            this._disabled = coerceBooleanProperty(value);
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this._items.clear();
+        }
     }
-    /**
-     * Whether starting a dragging sequence from inside this group is disabled.
-     * @return {?}
-     */
-    get disabled() { return this._disabled; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._items.clear();
-    }
-}
-CdkDropListGroup.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkDropListGroup]',
-                exportAs: 'cdkDropListGroup',
-            },] }
-];
-CdkDropListGroup.propDecorators = {
-    disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
-};
+    CdkDropListGroup.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
+                },] }
+    ];
+    CdkDropListGroup.propDecorators = {
+        disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
+    };
+    return CdkDropListGroup;
+})();
 if (false) {
     /** @type {?} */
     CdkDropListGroup.ngAcceptInputType_disabled;
@@ -5144,387 +5201,394 @@ const ɵ0 = undefined;
  * Container that wraps a set of draggable items.
  * @template T
  */
-class CdkDropList {
+let CdkDropList = /** @class */ (() => {
     /**
-     * @param {?} element
-     * @param {?} dragDrop
-     * @param {?} _changeDetectorRef
-     * @param {?=} _dir
-     * @param {?=} _group
-     * @param {?=} _scrollDispatcher
-     * @param {?=} config
+     * Container that wraps a set of draggable items.
+     * @template T
      */
-    constructor(element, dragDrop, _changeDetectorRef, _dir, _group, _scrollDispatcher, config) {
-        this.element = element;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._dir = _dir;
-        this._group = _group;
-        this._scrollDispatcher = _scrollDispatcher;
+    class CdkDropList {
         /**
-         * Emits when the list has been destroyed.
+         * @param {?} element
+         * @param {?} dragDrop
+         * @param {?} _changeDetectorRef
+         * @param {?=} _dir
+         * @param {?=} _group
+         * @param {?=} _scrollDispatcher
+         * @param {?=} config
          */
-        this._destroyed = new Subject();
-        /**
-         * Other draggable containers that this container is connected to and into which the
-         * container's items can be transferred. Can either be references to other drop containers,
-         * or their unique IDs.
-         */
-        this.connectedTo = [];
-        /**
-         * Unique ID for the drop zone. Can be used as a reference
-         * in the `connectedTo` of another `CdkDropList`.
-         */
-        this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
-        /**
-         * Function that is used to determine whether an item
-         * is allowed to be moved into a drop container.
-         */
-        this.enterPredicate = (/**
-         * @return {?}
-         */
-        () => true);
-        /**
-         * Emits when the user drops an item inside the container.
-         */
-        this.dropped = new EventEmitter();
-        /**
-         * Emits when the user has moved a new drag item into this container.
-         */
-        this.entered = new EventEmitter();
-        /**
-         * Emits when the user removes an item from the container
-         * by dragging it into another container.
-         */
-        this.exited = new EventEmitter();
-        /**
-         * Emits as the user is swapping items while actively dragging.
-         */
-        this.sorted = new EventEmitter();
-        /**
-         * Keeps track of the items that are registered with this container. Historically we used to
-         * do this with a `ContentChildren` query, however queries don't handle transplanted views very
-         * well which means that we can't handle cases like dragging the headers of a `mat-table`
-         * correctly. What we do instead is to have the items register themselves with the container
-         * and then we sort them based on their position in the DOM.
-         */
-        this._unsortedItems = new Set();
-        this._dropListRef = dragDrop.createDropList(element);
-        this._dropListRef.data = this;
-        if (config) {
-            this._assignDefaults(config);
-        }
-        this._dropListRef.enterPredicate = (/**
-         * @param {?} drag
-         * @param {?} drop
-         * @return {?}
-         */
-        (drag, drop) => {
-            return this.enterPredicate(drag.data, drop.data);
-        });
-        this._setupInputSyncSubscription(this._dropListRef);
-        this._handleEvents(this._dropListRef);
-        CdkDropList._dropLists.push(this);
-        if (_group) {
-            _group._items.add(this);
-        }
-    }
-    /**
-     * Whether starting a dragging sequence from this container is disabled.
-     * @return {?}
-     */
-    get disabled() {
-        return this._disabled || (!!this._group && this._group.disabled);
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set disabled(value) {
-        // Usually we sync the directive and ref state right before dragging starts, in order to have
-        // a single point of failure and to avoid having to use setters for everything. `disabled` is
-        // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
-        // the user in a disabled state, so we also need to sync it as it's being set.
-        this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
-    }
-    /**
-     * Registers an items with the drop list.
-     * @param {?} item
-     * @return {?}
-     */
-    addItem(item) {
-        this._unsortedItems.add(item);
-        if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
-        }
-    }
-    /**
-     * Removes an item from the drop list.
-     * @param {?} item
-     * @return {?}
-     */
-    removeItem(item) {
-        this._unsortedItems.delete(item);
-        if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
-        }
-    }
-    /**
-     * Gets the registered items in the list, sorted by their position in the DOM.
-     * @return {?}
-     */
-    getSortedItems() {
-        return Array.from(this._unsortedItems).sort((/**
-         * @param {?} a
-         * @param {?} b
-         * @return {?}
-         */
-        (a, b) => {
-            /** @type {?} */
-            const documentPosition = a._dragRef.getVisibleElement().compareDocumentPosition(b._dragRef.getVisibleElement());
-            // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
-            // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
-            // tslint:disable-next-line:no-bitwise
-            return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-        }));
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        /** @type {?} */
-        const index = CdkDropList._dropLists.indexOf(this);
-        if (index > -1) {
-            CdkDropList._dropLists.splice(index, 1);
-        }
-        if (this._group) {
-            this._group._items.delete(this);
-        }
-        this._unsortedItems.clear();
-        this._dropListRef.dispose();
-        this._destroyed.next();
-        this._destroyed.complete();
-    }
-    /**
-     * Syncs the inputs of the CdkDropList with the options of the underlying DropListRef.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    _setupInputSyncSubscription(ref) {
-        if (this._dir) {
-            this._dir.change
-                .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
-                .subscribe((/**
-             * @param {?} value
+        constructor(element, dragDrop, _changeDetectorRef, _dir, _group, _scrollDispatcher, config) {
+            this.element = element;
+            this._changeDetectorRef = _changeDetectorRef;
+            this._dir = _dir;
+            this._group = _group;
+            this._scrollDispatcher = _scrollDispatcher;
+            /**
+             * Emits when the list has been destroyed.
+             */
+            this._destroyed = new Subject();
+            /**
+             * Other draggable containers that this container is connected to and into which the
+             * container's items can be transferred. Can either be references to other drop containers,
+             * or their unique IDs.
+             */
+            this.connectedTo = [];
+            /**
+             * Unique ID for the drop zone. Can be used as a reference
+             * in the `connectedTo` of another `CdkDropList`.
+             */
+            this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
+            /**
+             * Function that is used to determine whether an item
+             * is allowed to be moved into a drop container.
+             */
+            this.enterPredicate = (/**
              * @return {?}
              */
-            value => ref.withDirection(value)));
-        }
-        ref.beforeStarted.subscribe((/**
-         * @return {?}
-         */
-        () => {
-            /** @type {?} */
-            const siblings = coerceArray(this.connectedTo).map((/**
+            () => true);
+            /**
+             * Emits when the user drops an item inside the container.
+             */
+            this.dropped = new EventEmitter();
+            /**
+             * Emits when the user has moved a new drag item into this container.
+             */
+            this.entered = new EventEmitter();
+            /**
+             * Emits when the user removes an item from the container
+             * by dragging it into another container.
+             */
+            this.exited = new EventEmitter();
+            /**
+             * Emits as the user is swapping items while actively dragging.
+             */
+            this.sorted = new EventEmitter();
+            /**
+             * Keeps track of the items that are registered with this container. Historically we used to
+             * do this with a `ContentChildren` query, however queries don't handle transplanted views very
+             * well which means that we can't handle cases like dragging the headers of a `mat-table`
+             * correctly. What we do instead is to have the items register themselves with the container
+             * and then we sort them based on their position in the DOM.
+             */
+            this._unsortedItems = new Set();
+            this._dropListRef = dragDrop.createDropList(element);
+            this._dropListRef.data = this;
+            if (config) {
+                this._assignDefaults(config);
+            }
+            this._dropListRef.enterPredicate = (/**
+             * @param {?} drag
              * @param {?} drop
              * @return {?}
              */
-            drop => {
-                return typeof drop === 'string' ?
-                    (/** @type {?} */ (CdkDropList._dropLists.find((/**
-                     * @param {?} list
-                     * @return {?}
-                     */
-                    list => list.id === drop)))) : drop;
+            (drag, drop) => {
+                return this.enterPredicate(drag.data, drop.data);
+            });
+            this._setupInputSyncSubscription(this._dropListRef);
+            this._handleEvents(this._dropListRef);
+            CdkDropList._dropLists.push(this);
+            if (_group) {
+                _group._items.add(this);
+            }
+        }
+        /**
+         * Whether starting a dragging sequence from this container is disabled.
+         * @return {?}
+         */
+        get disabled() {
+            return this._disabled || (!!this._group && this._group.disabled);
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set disabled(value) {
+            // Usually we sync the directive and ref state right before dragging starts, in order to have
+            // a single point of failure and to avoid having to use setters for everything. `disabled` is
+            // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
+            // the user in a disabled state, so we also need to sync it as it's being set.
+            this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
+        }
+        /**
+         * Registers an items with the drop list.
+         * @param {?} item
+         * @return {?}
+         */
+        addItem(item) {
+            this._unsortedItems.add(item);
+            if (this._dropListRef.isDragging()) {
+                this._syncItemsWithRef();
+            }
+        }
+        /**
+         * Removes an item from the drop list.
+         * @param {?} item
+         * @return {?}
+         */
+        removeItem(item) {
+            this._unsortedItems.delete(item);
+            if (this._dropListRef.isDragging()) {
+                this._syncItemsWithRef();
+            }
+        }
+        /**
+         * Gets the registered items in the list, sorted by their position in the DOM.
+         * @return {?}
+         */
+        getSortedItems() {
+            return Array.from(this._unsortedItems).sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            (a, b) => {
+                /** @type {?} */
+                const documentPosition = a._dragRef.getVisibleElement().compareDocumentPosition(b._dragRef.getVisibleElement());
+                // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
+                // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+                // tslint:disable-next-line:no-bitwise
+                return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
             }));
+        }
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            /** @type {?} */
+            const index = CdkDropList._dropLists.indexOf(this);
+            if (index > -1) {
+                CdkDropList._dropLists.splice(index, 1);
+            }
             if (this._group) {
-                this._group._items.forEach((/**
+                this._group._items.delete(this);
+            }
+            this._unsortedItems.clear();
+            this._dropListRef.dispose();
+            this._destroyed.next();
+            this._destroyed.complete();
+        }
+        /**
+         * Syncs the inputs of the CdkDropList with the options of the underlying DropListRef.
+         * @private
+         * @param {?} ref
+         * @return {?}
+         */
+        _setupInputSyncSubscription(ref) {
+            if (this._dir) {
+                this._dir.change
+                    .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
+                    .subscribe((/**
+                 * @param {?} value
+                 * @return {?}
+                 */
+                value => ref.withDirection(value)));
+            }
+            ref.beforeStarted.subscribe((/**
+             * @return {?}
+             */
+            () => {
+                /** @type {?} */
+                const siblings = coerceArray(this.connectedTo).map((/**
                  * @param {?} drop
                  * @return {?}
                  */
                 drop => {
-                    if (siblings.indexOf(drop) === -1) {
-                        siblings.push(drop);
-                    }
+                    return typeof drop === 'string' ?
+                        (/** @type {?} */ (CdkDropList._dropLists.find((/**
+                         * @param {?} list
+                         * @return {?}
+                         */
+                        list => list.id === drop)))) : drop;
                 }));
-            }
-            // Note that we resolve the scrollable parents here so that we delay the resolution
-            // as long as possible, ensuring that the element is in its final place in the DOM.
-            // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-            if (!this._scrollableParentsResolved && this._scrollDispatcher) {
-                /** @type {?} */
-                const scrollableParents = this._scrollDispatcher
-                    .getAncestorScrollContainers(this.element)
-                    .map((/**
-                 * @param {?} scrollable
+                if (this._group) {
+                    this._group._items.forEach((/**
+                     * @param {?} drop
+                     * @return {?}
+                     */
+                    drop => {
+                        if (siblings.indexOf(drop) === -1) {
+                            siblings.push(drop);
+                        }
+                    }));
+                }
+                // Note that we resolve the scrollable parents here so that we delay the resolution
+                // as long as possible, ensuring that the element is in its final place in the DOM.
+                // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
+                if (!this._scrollableParentsResolved && this._scrollDispatcher) {
+                    /** @type {?} */
+                    const scrollableParents = this._scrollDispatcher
+                        .getAncestorScrollContainers(this.element)
+                        .map((/**
+                     * @param {?} scrollable
+                     * @return {?}
+                     */
+                    scrollable => scrollable.getElementRef().nativeElement));
+                    this._dropListRef.withScrollableParents(scrollableParents);
+                    // Only do this once since it involves traversing the DOM and the parents
+                    // shouldn't be able to change without the drop list being destroyed.
+                    this._scrollableParentsResolved = true;
+                }
+                ref.disabled = this.disabled;
+                ref.lockAxis = this.lockAxis;
+                ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
+                ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
+                ref
+                    .connectedTo(siblings.filter((/**
+                 * @param {?} drop
                  * @return {?}
                  */
-                scrollable => scrollable.getElementRef().nativeElement));
-                this._dropListRef.withScrollableParents(scrollableParents);
-                // Only do this once since it involves traversing the DOM and the parents
-                // shouldn't be able to change without the drop list being destroyed.
-                this._scrollableParentsResolved = true;
+                drop => drop && drop !== this)).map((/**
+                 * @param {?} list
+                 * @return {?}
+                 */
+                list => list._dropListRef)))
+                    .withOrientation(this.orientation);
+            }));
+        }
+        /**
+         * Handles events from the underlying DropListRef.
+         * @private
+         * @param {?} ref
+         * @return {?}
+         */
+        _handleEvents(ref) {
+            ref.beforeStarted.subscribe((/**
+             * @return {?}
+             */
+            () => {
+                this._syncItemsWithRef();
+                this._changeDetectorRef.markForCheck();
+            }));
+            ref.entered.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.entered.emit({
+                    container: this,
+                    item: event.item.data,
+                    currentIndex: event.currentIndex
+                });
+            }));
+            ref.exited.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.exited.emit({
+                    container: this,
+                    item: event.item.data
+                });
+                this._changeDetectorRef.markForCheck();
+            }));
+            ref.sorted.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.sorted.emit({
+                    previousIndex: event.previousIndex,
+                    currentIndex: event.currentIndex,
+                    container: this,
+                    item: event.item.data
+                });
+            }));
+            ref.dropped.subscribe((/**
+             * @param {?} event
+             * @return {?}
+             */
+            event => {
+                this.dropped.emit({
+                    previousIndex: event.previousIndex,
+                    currentIndex: event.currentIndex,
+                    previousContainer: event.previousContainer.data,
+                    container: event.container.data,
+                    item: event.item.data,
+                    isPointerOverContainer: event.isPointerOverContainer,
+                    distance: event.distance
+                });
+                // Mark for check since all of these events run outside of change
+                // detection and we're not guaranteed for something else to have triggered it.
+                this._changeDetectorRef.markForCheck();
+            }));
+        }
+        /**
+         * Assigns the default input values based on a provided config object.
+         * @private
+         * @param {?} config
+         * @return {?}
+         */
+        _assignDefaults(config) {
+            const { lockAxis, draggingDisabled, sortingDisabled, listAutoScrollDisabled, listOrientation } = config;
+            this.disabled = draggingDisabled == null ? false : draggingDisabled;
+            this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
+            this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
+            this.orientation = listOrientation || 'vertical';
+            if (lockAxis) {
+                this.lockAxis = lockAxis;
             }
-            ref.disabled = this.disabled;
-            ref.lockAxis = this.lockAxis;
-            ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
-            ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
-            ref
-                .connectedTo(siblings.filter((/**
-             * @param {?} drop
+        }
+        /**
+         * Syncs up the registered drag items with underlying drop list ref.
+         * @private
+         * @return {?}
+         */
+        _syncItemsWithRef() {
+            this._dropListRef.withItems(this.getSortedItems().map((/**
+             * @param {?} item
              * @return {?}
              */
-            drop => drop && drop !== this)).map((/**
-             * @param {?} list
-             * @return {?}
-             */
-            list => list._dropListRef)))
-                .withOrientation(this.orientation);
-        }));
-    }
-    /**
-     * Handles events from the underlying DropListRef.
-     * @private
-     * @param {?} ref
-     * @return {?}
-     */
-    _handleEvents(ref) {
-        ref.beforeStarted.subscribe((/**
-         * @return {?}
-         */
-        () => {
-            this._syncItemsWithRef();
-            this._changeDetectorRef.markForCheck();
-        }));
-        ref.entered.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.entered.emit({
-                container: this,
-                item: event.item.data,
-                currentIndex: event.currentIndex
-            });
-        }));
-        ref.exited.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.exited.emit({
-                container: this,
-                item: event.item.data
-            });
-            this._changeDetectorRef.markForCheck();
-        }));
-        ref.sorted.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.sorted.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                container: this,
-                item: event.item.data
-            });
-        }));
-        ref.dropped.subscribe((/**
-         * @param {?} event
-         * @return {?}
-         */
-        event => {
-            this.dropped.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                previousContainer: event.previousContainer.data,
-                container: event.container.data,
-                item: event.item.data,
-                isPointerOverContainer: event.isPointerOverContainer,
-                distance: event.distance
-            });
-            // Mark for check since all of these events run outside of change
-            // detection and we're not guaranteed for something else to have triggered it.
-            this._changeDetectorRef.markForCheck();
-        }));
-    }
-    /**
-     * Assigns the default input values based on a provided config object.
-     * @private
-     * @param {?} config
-     * @return {?}
-     */
-    _assignDefaults(config) {
-        const { lockAxis, draggingDisabled, sortingDisabled, listAutoScrollDisabled, listOrientation } = config;
-        this.disabled = draggingDisabled == null ? false : draggingDisabled;
-        this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
-        this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
-        this.orientation = listOrientation || 'vertical';
-        if (lockAxis) {
-            this.lockAxis = lockAxis;
+            item => item._dragRef)));
         }
     }
     /**
-     * Syncs up the registered drag items with underlying drop list ref.
-     * @private
-     * @return {?}
+     * Keeps track of the drop lists that are currently on the page.
      */
-    _syncItemsWithRef() {
-        this._dropListRef.withItems(this.getSortedItems().map((/**
-         * @param {?} item
-         * @return {?}
-         */
-        item => item._dragRef)));
-    }
-}
-/**
- * Keeps track of the drop lists that are currently on the page.
- */
-CdkDropList._dropLists = [];
-CdkDropList.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkDropList], cdk-drop-list',
-                exportAs: 'cdkDropList',
-                providers: [
-                    // Prevent child drop lists from picking up the same group as their parent.
-                    { provide: CdkDropListGroup, useValue: ɵ0 },
-                    { provide: CDK_DROP_LIST, useExisting: CdkDropList },
-                ],
-                host: {
-                    'class': 'cdk-drop-list',
-                    '[id]': 'id',
-                    '[class.cdk-drop-list-disabled]': 'disabled',
-                    '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
-                    '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
-                }
-            },] }
-];
-/** @nocollapse */
-CdkDropList.ctorParameters = () => [
-    { type: ElementRef },
-    { type: DragDrop },
-    { type: ChangeDetectorRef },
-    { type: Directionality, decorators: [{ type: Optional }] },
-    { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
-    { type: ScrollDispatcher },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] }
-];
-CdkDropList.propDecorators = {
-    connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
-    data: [{ type: Input, args: ['cdkDropListData',] }],
-    orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
-    id: [{ type: Input }],
-    lockAxis: [{ type: Input, args: ['cdkDropListLockAxis',] }],
-    disabled: [{ type: Input, args: ['cdkDropListDisabled',] }],
-    sortingDisabled: [{ type: Input, args: ['cdkDropListSortingDisabled',] }],
-    enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
-    autoScrollDisabled: [{ type: Input, args: ['cdkDropListAutoScrollDisabled',] }],
-    dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
-    entered: [{ type: Output, args: ['cdkDropListEntered',] }],
-    exited: [{ type: Output, args: ['cdkDropListExited',] }],
-    sorted: [{ type: Output, args: ['cdkDropListSorted',] }]
-};
+    CdkDropList._dropLists = [];
+    CdkDropList.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDropList], cdk-drop-list',
+                    exportAs: 'cdkDropList',
+                    providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CdkDropListGroup, useValue: ɵ0 },
+                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
+                    ],
+                    host: {
+                        'class': 'cdk-drop-list',
+                        '[id]': 'id',
+                        '[class.cdk-drop-list-disabled]': 'disabled',
+                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDropList.ctorParameters = () => [
+        { type: ElementRef },
+        { type: DragDrop },
+        { type: ChangeDetectorRef },
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
+        { type: ScrollDispatcher },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] }
+    ];
+    CdkDropList.propDecorators = {
+        connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
+        data: [{ type: Input, args: ['cdkDropListData',] }],
+        orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
+        id: [{ type: Input }],
+        lockAxis: [{ type: Input, args: ['cdkDropListLockAxis',] }],
+        disabled: [{ type: Input, args: ['cdkDropListDisabled',] }],
+        sortingDisabled: [{ type: Input, args: ['cdkDropListSortingDisabled',] }],
+        enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
+        autoScrollDisabled: [{ type: Input, args: ['cdkDropListAutoScrollDisabled',] }],
+        dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
+        entered: [{ type: Output, args: ['cdkDropListEntered',] }],
+        exited: [{ type: Output, args: ['cdkDropListExited',] }],
+        sorted: [{ type: Output, args: ['cdkDropListSorted',] }]
+    };
+    return CdkDropList;
+})();
 if (false) {
     /**
      * Keeps track of the drop lists that are currently on the page.
@@ -5669,32 +5733,35 @@ if (false) {
  * Generated from: src/cdk/drag-drop/drag-drop-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class DragDropModule {
-}
-DragDropModule.decorators = [
-    { type: NgModule, args: [{
-                declarations: [
-                    CdkDropList,
-                    CdkDropListGroup,
-                    CdkDrag,
-                    CdkDragHandle,
-                    CdkDragPreview,
-                    CdkDragPlaceholder,
-                ],
-                exports: [
-                    CdkScrollableModule,
-                    CdkDropList,
-                    CdkDropListGroup,
-                    CdkDrag,
-                    CdkDragHandle,
-                    CdkDragPreview,
-                    CdkDragPlaceholder,
-                ],
-                providers: [
-                    DragDrop,
-                ]
-            },] }
-];
+let DragDropModule = /** @class */ (() => {
+    class DragDropModule {
+    }
+    DragDropModule.decorators = [
+        { type: NgModule, args: [{
+                    declarations: [
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    exports: [
+                        CdkScrollableModule,
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    providers: [
+                        DragDrop,
+                    ]
+                },] }
+    ];
+    return DragDropModule;
+})();
 
 /**
  * @fileoverview added by tsickle

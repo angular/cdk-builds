@@ -111,13 +111,13 @@
                     this.change.emit(this._dir);
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Dir.prototype, "value", {
             /** Current layout direction of the element. */
             get: function () { return this.dir; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** Initialize once default value has been set. */

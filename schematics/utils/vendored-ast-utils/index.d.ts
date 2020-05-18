@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/utils/vendored-ast-utils/index" />
 import { Tree } from '@angular-devkit/schematics';
 import { Change } from '@schematics/angular/utility/change';
 import * as ts from 'typescript';

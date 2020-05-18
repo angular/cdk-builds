@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -5,29 +6,19 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.determineBaseTypes = void 0;
+const ts = require("typescript");
+/** Determines the base types of the specified class declaration. */
+function determineBaseTypes(node) {
+    if (!node.heritageClauses) {
+        return null;
     }
-    else if (typeof define === "function" && define.amd) {
-        define("@angular/cdk/schematics/ng-update/typescript/base-types", ["require", "exports", "typescript"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const ts = require("typescript");
-    /** Determines the base types of the specified class declaration. */
-    function determineBaseTypes(node) {
-        if (!node.heritageClauses) {
-            return null;
-        }
-        return node.heritageClauses
-            .reduce((types, clause) => types.concat(clause.types), [])
-            .map(typeExpression => typeExpression.expression)
-            .filter(expression => expression && ts.isIdentifier(expression))
-            .map((identifier) => identifier.text);
-    }
-    exports.determineBaseTypes = determineBaseTypes;
-});
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFzZS10eXBlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvc2NoZW1hdGljcy9uZy11cGRhdGUvdHlwZXNjcmlwdC9iYXNlLXR5cGVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRzs7Ozs7Ozs7Ozs7O0lBRUgsaUNBQWlDO0lBRWpDLG9FQUFvRTtJQUNwRSxTQUFnQixrQkFBa0IsQ0FBQyxJQUF5QjtRQUMxRCxJQUFJLENBQUMsSUFBSSxDQUFDLGVBQWUsRUFBRTtZQUN6QixPQUFPLElBQUksQ0FBQztTQUNiO1FBRUQsT0FBTyxJQUFJLENBQUMsZUFBZTthQUN0QixNQUFNLENBQUMsQ0FBQyxLQUFLLEVBQUUsTUFBTSxFQUFFLEVBQUUsQ0FBQyxLQUFLLENBQUMsTUFBTSxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUMsRUFBRSxFQUFzQyxDQUFDO2FBQzdGLEdBQUcsQ0FBQyxjQUFjLENBQUMsRUFBRSxDQUFDLGNBQWMsQ0FBQyxVQUFVLENBQUM7YUFDaEQsTUFBTSxDQUFDLFVBQVUsQ0FBQyxFQUFFLENBQUMsVUFBVSxJQUFJLEVBQUUsQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLENBQUM7YUFDL0QsR0FBRyxDQUFDLENBQUMsVUFBeUIsRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLElBQUksQ0FBQyxDQUFDO0lBQzNELENBQUM7SUFWRCxnREFVQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQgKiBhcyB0cyBmcm9tICd0eXBlc2NyaXB0JztcblxuLyoqIERldGVybWluZXMgdGhlIGJhc2UgdHlwZXMgb2YgdGhlIHNwZWNpZmllZCBjbGFzcyBkZWNsYXJhdGlvbi4gKi9cbmV4cG9ydCBmdW5jdGlvbiBkZXRlcm1pbmVCYXNlVHlwZXMobm9kZTogdHMuQ2xhc3NEZWNsYXJhdGlvbik6IHN0cmluZ1tdfG51bGwge1xuICBpZiAoIW5vZGUuaGVyaXRhZ2VDbGF1c2VzKSB7XG4gICAgcmV0dXJuIG51bGw7XG4gIH1cblxuICByZXR1cm4gbm9kZS5oZXJpdGFnZUNsYXVzZXNcbiAgICAgIC5yZWR1Y2UoKHR5cGVzLCBjbGF1c2UpID0+IHR5cGVzLmNvbmNhdChjbGF1c2UudHlwZXMpLCBbXSBhcyB0cy5FeHByZXNzaW9uV2l0aFR5cGVBcmd1bWVudHNbXSlcbiAgICAgIC5tYXAodHlwZUV4cHJlc3Npb24gPT4gdHlwZUV4cHJlc3Npb24uZXhwcmVzc2lvbilcbiAgICAgIC5maWx0ZXIoZXhwcmVzc2lvbiA9PiBleHByZXNzaW9uICYmIHRzLmlzSWRlbnRpZmllcihleHByZXNzaW9uKSlcbiAgICAgIC5tYXAoKGlkZW50aWZpZXI6IHRzLklkZW50aWZpZXIpID0+IGlkZW50aWZpZXIudGV4dCk7XG59XG4iXX0=
+    return node.heritageClauses
+        .reduce((types, clause) => types.concat(clause.types), [])
+        .map(typeExpression => typeExpression.expression)
+        .filter(expression => expression && ts.isIdentifier(expression))
+        .map((identifier) => identifier.text);
+}
+exports.determineBaseTypes = determineBaseTypes;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYmFzZS10eXBlcy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvc2NoZW1hdGljcy9uZy11cGRhdGUvdHlwZXNjcmlwdC9iYXNlLXR5cGVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFBQTs7Ozs7O0dBTUc7OztBQUVILGlDQUFpQztBQUVqQyxvRUFBb0U7QUFDcEUsU0FBZ0Isa0JBQWtCLENBQUMsSUFBeUI7SUFDMUQsSUFBSSxDQUFDLElBQUksQ0FBQyxlQUFlLEVBQUU7UUFDekIsT0FBTyxJQUFJLENBQUM7S0FDYjtJQUVELE9BQU8sSUFBSSxDQUFDLGVBQWU7U0FDdEIsTUFBTSxDQUFDLENBQUMsS0FBSyxFQUFFLE1BQU0sRUFBRSxFQUFFLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsRUFBc0MsQ0FBQztTQUM3RixHQUFHLENBQUMsY0FBYyxDQUFDLEVBQUUsQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDO1NBQ2hELE1BQU0sQ0FBQyxVQUFVLENBQUMsRUFBRSxDQUFDLFVBQVUsSUFBSSxFQUFFLENBQUMsWUFBWSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1NBQy9ELEdBQUcsQ0FBQyxDQUFDLFVBQXlCLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxJQUFJLENBQUMsQ0FBQztBQUMzRCxDQUFDO0FBVkQsZ0RBVUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0ICogYXMgdHMgZnJvbSAndHlwZXNjcmlwdCc7XG5cbi8qKiBEZXRlcm1pbmVzIHRoZSBiYXNlIHR5cGVzIG9mIHRoZSBzcGVjaWZpZWQgY2xhc3MgZGVjbGFyYXRpb24uICovXG5leHBvcnQgZnVuY3Rpb24gZGV0ZXJtaW5lQmFzZVR5cGVzKG5vZGU6IHRzLkNsYXNzRGVjbGFyYXRpb24pOiBzdHJpbmdbXXxudWxsIHtcbiAgaWYgKCFub2RlLmhlcml0YWdlQ2xhdXNlcykge1xuICAgIHJldHVybiBudWxsO1xuICB9XG5cbiAgcmV0dXJuIG5vZGUuaGVyaXRhZ2VDbGF1c2VzXG4gICAgICAucmVkdWNlKCh0eXBlcywgY2xhdXNlKSA9PiB0eXBlcy5jb25jYXQoY2xhdXNlLnR5cGVzKSwgW10gYXMgdHMuRXhwcmVzc2lvbldpdGhUeXBlQXJndW1lbnRzW10pXG4gICAgICAubWFwKHR5cGVFeHByZXNzaW9uID0+IHR5cGVFeHByZXNzaW9uLmV4cHJlc3Npb24pXG4gICAgICAuZmlsdGVyKGV4cHJlc3Npb24gPT4gZXhwcmVzc2lvbiAmJiB0cy5pc0lkZW50aWZpZXIoZXhwcmVzc2lvbikpXG4gICAgICAubWFwKChpZGVudGlmaWVyOiB0cy5JZGVudGlmaWVyKSA9PiBpZGVudGlmaWVyLnRleHQpO1xufVxuIl19

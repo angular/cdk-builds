@@ -30,7 +30,7 @@
             /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
             get: function () { return this._multi; },
             set: function (multi) { this._multi = coercion.coerceBooleanProperty(multi); },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** Opens all enabled accordion items in an accordion where multi is enabled. */
@@ -142,14 +142,14 @@
                     this._changeDetectorRef.markForCheck();
                 }
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(CdkAccordionItem.prototype, "disabled", {
             /** Whether the AccordionItem is disabled. */
             get: function () { return this._disabled; },
             set: function (disabled) { this._disabled = coercion.coerceBooleanProperty(disabled); },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         /** Emits an event for the accordion item being destroyed. */

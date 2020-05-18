@@ -12,33 +12,36 @@ import { startWith, takeUntil } from 'rxjs/operators';
  * Generated from: src/cdk/stepper/step-header.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class CdkStepHeader {
-    /**
-     * @param {?} _elementRef
-     */
-    constructor(_elementRef) {
-        this._elementRef = _elementRef;
+let CdkStepHeader = /** @class */ (() => {
+    class CdkStepHeader {
+        /**
+         * @param {?} _elementRef
+         */
+        constructor(_elementRef) {
+            this._elementRef = _elementRef;
+        }
+        /**
+         * Focuses the step header.
+         * @return {?}
+         */
+        focus() {
+            this._elementRef.nativeElement.focus();
+        }
     }
-    /**
-     * Focuses the step header.
-     * @return {?}
-     */
-    focus() {
-        this._elementRef.nativeElement.focus();
-    }
-}
-CdkStepHeader.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepHeader]',
-                host: {
-                    'role': 'tab',
-                },
-            },] }
-];
-/** @nocollapse */
-CdkStepHeader.ctorParameters = () => [
-    { type: ElementRef }
-];
+    CdkStepHeader.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepHeader]',
+                    host: {
+                        'role': 'tab',
+                    },
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepHeader.ctorParameters = () => [
+        { type: ElementRef }
+    ];
+    return CdkStepHeader;
+})();
 if (false) {
     /**
      * @type {?}
@@ -52,23 +55,26 @@ if (false) {
  * Generated from: src/cdk/stepper/step-label.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class CdkStepLabel {
-    /**
-     * @param {?} template
-     */
-    constructor(/** @docs-private */ template) {
-        this.template = template;
+let CdkStepLabel = /** @class */ (() => {
+    class CdkStepLabel {
+        /**
+         * @param {?} template
+         */
+        constructor(/** @docs-private */ template) {
+            this.template = template;
+        }
     }
-}
-CdkStepLabel.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepLabel]',
-            },] }
-];
-/** @nocollapse */
-CdkStepLabel.ctorParameters = () => [
-    { type: TemplateRef }
-];
+    CdkStepLabel.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepLabel.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
+    return CdkStepLabel;
+})();
 if (false) {
     /**
      * \@docs-private
@@ -156,159 +162,162 @@ if (false) {
      */
     StepperOptions.prototype.displayDefaultIndicatorType;
 }
-class CdkStep {
-    /**
-     * \@breaking-change 8.0.0 remove the `?` after `stepperOptions`
-     * @param {?} _stepper
-     * @param {?=} stepperOptions
-     */
-    constructor(_stepper, stepperOptions) {
-        this._stepper = _stepper;
+let CdkStep = /** @class */ (() => {
+    class CdkStep {
         /**
-         * Whether user has seen the expanded step content or not.
+         * \@breaking-change 8.0.0 remove the `?` after `stepperOptions`
+         * @param {?} _stepper
+         * @param {?=} stepperOptions
          */
-        this.interacted = false;
-        this._editable = true;
-        this._optional = false;
-        this._completedOverride = null;
-        this._customError = null;
-        this._stepperOptions = stepperOptions ? stepperOptions : {};
-        this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
-        this._showError = !!this._stepperOptions.showError;
-    }
-    /**
-     * Whether the user can return to this step once it has been marked as completed.
-     * @return {?}
-     */
-    get editable() {
-        return this._editable;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set editable(value) {
-        this._editable = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether the completion of step is optional.
-     * @return {?}
-     */
-    get optional() {
-        return this._optional;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set optional(value) {
-        this._optional = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether step is marked as completed.
-     * @return {?}
-     */
-    get completed() {
-        return this._completedOverride == null ? this._getDefaultCompleted() : this._completedOverride;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set completed(value) {
-        this._completedOverride = coerceBooleanProperty(value);
-    }
-    /**
-     * @private
-     * @return {?}
-     */
-    _getDefaultCompleted() {
-        return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
-    }
-    /**
-     * Whether step has an error.
-     * @return {?}
-     */
-    get hasError() {
-        return this._customError == null ? this._getDefaultError() : this._customError;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set hasError(value) {
-        this._customError = coerceBooleanProperty(value);
-    }
-    /**
-     * @private
-     * @return {?}
-     */
-    _getDefaultError() {
-        return this.stepControl && this.stepControl.invalid && this.interacted;
-    }
-    /**
-     * Selects this step component.
-     * @return {?}
-     */
-    select() {
-        this._stepper.selected = this;
-    }
-    /**
-     * Resets the step to its initial state. Note that this includes resetting form data.
-     * @return {?}
-     */
-    reset() {
-        this.interacted = false;
-        if (this._completedOverride != null) {
-            this._completedOverride = false;
+        constructor(_stepper, stepperOptions) {
+            this._stepper = _stepper;
+            /**
+             * Whether user has seen the expanded step content or not.
+             */
+            this.interacted = false;
+            this._editable = true;
+            this._optional = false;
+            this._completedOverride = null;
+            this._customError = null;
+            this._stepperOptions = stepperOptions ? stepperOptions : {};
+            this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
+            this._showError = !!this._stepperOptions.showError;
         }
-        if (this._customError != null) {
-            this._customError = false;
+        /**
+         * Whether the user can return to this step once it has been marked as completed.
+         * @return {?}
+         */
+        get editable() {
+            return this._editable;
         }
-        if (this.stepControl) {
-            this.stepControl.reset();
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set editable(value) {
+            this._editable = coerceBooleanProperty(value);
+        }
+        /**
+         * Whether the completion of step is optional.
+         * @return {?}
+         */
+        get optional() {
+            return this._optional;
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set optional(value) {
+            this._optional = coerceBooleanProperty(value);
+        }
+        /**
+         * Whether step is marked as completed.
+         * @return {?}
+         */
+        get completed() {
+            return this._completedOverride == null ? this._getDefaultCompleted() : this._completedOverride;
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set completed(value) {
+            this._completedOverride = coerceBooleanProperty(value);
+        }
+        /**
+         * @private
+         * @return {?}
+         */
+        _getDefaultCompleted() {
+            return this.stepControl ? this.stepControl.valid && this.interacted : this.interacted;
+        }
+        /**
+         * Whether step has an error.
+         * @return {?}
+         */
+        get hasError() {
+            return this._customError == null ? this._getDefaultError() : this._customError;
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set hasError(value) {
+            this._customError = coerceBooleanProperty(value);
+        }
+        /**
+         * @private
+         * @return {?}
+         */
+        _getDefaultError() {
+            return this.stepControl && this.stepControl.invalid && this.interacted;
+        }
+        /**
+         * Selects this step component.
+         * @return {?}
+         */
+        select() {
+            this._stepper.selected = this;
+        }
+        /**
+         * Resets the step to its initial state. Note that this includes resetting form data.
+         * @return {?}
+         */
+        reset() {
+            this.interacted = false;
+            if (this._completedOverride != null) {
+                this._completedOverride = false;
+            }
+            if (this._customError != null) {
+                this._customError = false;
+            }
+            if (this.stepControl) {
+                this.stepControl.reset();
+            }
+        }
+        /**
+         * @return {?}
+         */
+        ngOnChanges() {
+            // Since basically all inputs of the MatStep get proxied through the view down to the
+            // underlying MatStepHeader, we have to make sure that change detection runs correctly.
+            this._stepper._stateChanged();
         }
     }
-    /**
-     * @return {?}
-     */
-    ngOnChanges() {
-        // Since basically all inputs of the MatStep get proxied through the view down to the
-        // underlying MatStepHeader, we have to make sure that change detection runs correctly.
-        this._stepper._stateChanged();
-    }
-}
-CdkStep.decorators = [
-    { type: Component, args: [{
-                selector: 'cdk-step',
-                exportAs: 'cdkStep',
-                template: '<ng-template><ng-content></ng-content></ng-template>',
-                encapsulation: ViewEncapsulation.None,
-                changeDetection: ChangeDetectionStrategy.OnPush
-            }] }
-];
-/** @nocollapse */
-CdkStep.ctorParameters = () => [
-    { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef((/**
-                     * @return {?}
-                     */
-                    () => CdkStepper)),] }] },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
-];
-CdkStep.propDecorators = {
-    stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
-    content: [{ type: ViewChild, args: [TemplateRef, { static: true },] }],
-    stepControl: [{ type: Input }],
-    label: [{ type: Input }],
-    errorMessage: [{ type: Input }],
-    ariaLabel: [{ type: Input, args: ['aria-label',] }],
-    ariaLabelledby: [{ type: Input, args: ['aria-labelledby',] }],
-    state: [{ type: Input }],
-    editable: [{ type: Input }],
-    optional: [{ type: Input }],
-    completed: [{ type: Input }],
-    hasError: [{ type: Input }]
-};
+    CdkStep.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-step',
+                    exportAs: 'cdkStep',
+                    template: '<ng-template><ng-content></ng-content></ng-template>',
+                    encapsulation: ViewEncapsulation.None,
+                    changeDetection: ChangeDetectionStrategy.OnPush
+                }] }
+    ];
+    /** @nocollapse */
+    CdkStep.ctorParameters = () => [
+        { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef((/**
+                         * @return {?}
+                         */
+                        () => CdkStepper)),] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
+    ];
+    CdkStep.propDecorators = {
+        stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
+        content: [{ type: ViewChild, args: [TemplateRef, { static: true },] }],
+        stepControl: [{ type: Input }],
+        label: [{ type: Input }],
+        errorMessage: [{ type: Input }],
+        ariaLabel: [{ type: Input, args: ['aria-label',] }],
+        ariaLabelledby: [{ type: Input, args: ['aria-labelledby',] }],
+        state: [{ type: Input }],
+        editable: [{ type: Input }],
+        optional: [{ type: Input }],
+        completed: [{ type: Input }],
+        hasError: [{ type: Input }]
+    };
+    return CdkStep;
+})();
 if (false) {
     /** @type {?} */
     CdkStep.ngAcceptInputType_editable;
@@ -396,384 +405,387 @@ if (false) {
      */
     CdkStep.prototype._stepper;
 }
-class CdkStepper {
-    /**
-     * @param {?} _dir
-     * @param {?} _changeDetectorRef
-     * @param {?=} _elementRef
-     * @param {?=} _document
-     */
-    constructor(_dir, _changeDetectorRef, _elementRef, _document) {
-        this._dir = _dir;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._elementRef = _elementRef;
+let CdkStepper = /** @class */ (() => {
+    class CdkStepper {
         /**
-         * Emits when the component is destroyed.
+         * @param {?} _dir
+         * @param {?} _changeDetectorRef
+         * @param {?=} _elementRef
+         * @param {?=} _document
          */
-        this._destroyed = new Subject();
-        this._linear = false;
-        this._selectedIndex = 0;
+        constructor(_dir, _changeDetectorRef, _elementRef, _document) {
+            this._dir = _dir;
+            this._changeDetectorRef = _changeDetectorRef;
+            this._elementRef = _elementRef;
+            /**
+             * Emits when the component is destroyed.
+             */
+            this._destroyed = new Subject();
+            this._linear = false;
+            this._selectedIndex = 0;
+            /**
+             * Event emitted when the selected step has changed.
+             */
+            this.selectionChange = new EventEmitter();
+            this._orientation = 'horizontal';
+            this._groupId = nextId++;
+            this._document = _document;
+        }
         /**
-         * Event emitted when the selected step has changed.
-         */
-        this.selectionChange = new EventEmitter();
-        this._orientation = 'horizontal';
-        this._groupId = nextId++;
-        this._document = _document;
-    }
-    /**
-     * The list of step components that the stepper is holding.
-     * @return {?}
-     */
-    get steps() {
-        return this._steps;
-    }
-    /**
-     * Whether the validity of previous steps should be checked or not.
-     * @return {?}
-     */
-    get linear() {
-        return this._linear;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set linear(value) {
-        this._linear = coerceBooleanProperty(value);
-    }
-    /**
-     * The index of the selected step.
-     * @return {?}
-     */
-    get selectedIndex() {
-        return this._selectedIndex;
-    }
-    /**
-     * @param {?} index
-     * @return {?}
-     */
-    set selectedIndex(index) {
-        /** @type {?} */
-        const newIndex = coerceNumberProperty(index);
-        if (this.steps) {
-            // Ensure that the index can't be out of bounds.
-            if (newIndex < 0 || newIndex > this.steps.length - 1) {
-                throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
-            }
-            if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
-                (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
-                this._updateSelectedItemIndex(index);
-            }
-        }
-        else {
-            this._selectedIndex = newIndex;
-        }
-    }
-    /**
-     * The step that is selected.
-     * @return {?}
-     */
-    get selected() {
-        // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
-        return this.steps ? this.steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
-    }
-    /**
-     * @param {?} step
-     * @return {?}
-     */
-    set selected(step) {
-        this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
-    }
-    /**
-     * @return {?}
-     */
-    ngAfterViewInit() {
-        // Note that while the step headers are content children by default, any components that
-        // extend this one might have them as view children. We initialize the keyboard handling in
-        // AfterViewInit so we're guaranteed for both view and content children to be defined.
-        this._keyManager = new FocusKeyManager(this._stepHeader)
-            .withWrap()
-            .withVerticalOrientation(this._orientation === 'vertical');
-        (this._dir ? ((/** @type {?} */ (this._dir.change))) : of())
-            .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
-            .subscribe((/**
-         * @param {?} direction
+         * The list of step components that the stepper is holding.
          * @return {?}
          */
-        direction => this._keyManager.withHorizontalOrientation(direction)));
-        this._keyManager.updateActiveItem(this._selectedIndex);
-        this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe((/**
+        get steps() {
+            return this._steps;
+        }
+        /**
+         * Whether the validity of previous steps should be checked or not.
          * @return {?}
          */
-        () => {
-            if (!this.selected) {
-                this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
+        get linear() {
+            return this._linear;
+        }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set linear(value) {
+            this._linear = coerceBooleanProperty(value);
+        }
+        /**
+         * The index of the selected step.
+         * @return {?}
+         */
+        get selectedIndex() {
+            return this._selectedIndex;
+        }
+        /**
+         * @param {?} index
+         * @return {?}
+         */
+        set selectedIndex(index) {
+            /** @type {?} */
+            const newIndex = coerceNumberProperty(index);
+            if (this.steps) {
+                // Ensure that the index can't be out of bounds.
+                if (newIndex < 0 || newIndex > this.steps.length - 1) {
+                    throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
+                }
+                if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
+                    (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
+                    this._updateSelectedItemIndex(index);
+                }
             }
-        }));
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._destroyed.next();
-        this._destroyed.complete();
-    }
-    /**
-     * Selects and focuses the next step in list.
-     * @return {?}
-     */
-    next() {
-        this.selectedIndex = Math.min(this._selectedIndex + 1, this.steps.length - 1);
-    }
-    /**
-     * Selects and focuses the previous step in list.
-     * @return {?}
-     */
-    previous() {
-        this.selectedIndex = Math.max(this._selectedIndex - 1, 0);
-    }
-    /**
-     * Resets the stepper to its initial state. Note that this includes clearing form data.
-     * @return {?}
-     */
-    reset() {
-        this._updateSelectedItemIndex(0);
-        this.steps.forEach((/**
+            else {
+                this._selectedIndex = newIndex;
+            }
+        }
+        /**
+         * The step that is selected.
+         * @return {?}
+         */
+        get selected() {
+            // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
+            return this.steps ? this.steps.toArray()[this.selectedIndex] : (/** @type {?} */ (undefined));
+        }
+        /**
          * @param {?} step
          * @return {?}
          */
-        step => step.reset()));
-        this._stateChanged();
-    }
-    /**
-     * Returns a unique id for each step label element.
-     * @param {?} i
-     * @return {?}
-     */
-    _getStepLabelId(i) {
-        return `cdk-step-label-${this._groupId}-${i}`;
-    }
-    /**
-     * Returns unique id for each step content element.
-     * @param {?} i
-     * @return {?}
-     */
-    _getStepContentId(i) {
-        return `cdk-step-content-${this._groupId}-${i}`;
-    }
-    /**
-     * Marks the component to be change detected.
-     * @return {?}
-     */
-    _stateChanged() {
-        this._changeDetectorRef.markForCheck();
-    }
-    /**
-     * Returns position state of the step with the given index.
-     * @param {?} index
-     * @return {?}
-     */
-    _getAnimationDirection(index) {
-        /** @type {?} */
-        const position = index - this._selectedIndex;
-        if (position < 0) {
-            return this._layoutDirection() === 'rtl' ? 'next' : 'previous';
+        set selected(step) {
+            this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
         }
-        else if (position > 0) {
-            return this._layoutDirection() === 'rtl' ? 'previous' : 'next';
+        /**
+         * @return {?}
+         */
+        ngAfterViewInit() {
+            // Note that while the step headers are content children by default, any components that
+            // extend this one might have them as view children. We initialize the keyboard handling in
+            // AfterViewInit so we're guaranteed for both view and content children to be defined.
+            this._keyManager = new FocusKeyManager(this._stepHeader)
+                .withWrap()
+                .withVerticalOrientation(this._orientation === 'vertical');
+            (this._dir ? ((/** @type {?} */ (this._dir.change))) : of())
+                .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
+                .subscribe((/**
+             * @param {?} direction
+             * @return {?}
+             */
+            direction => this._keyManager.withHorizontalOrientation(direction)));
+            this._keyManager.updateActiveItem(this._selectedIndex);
+            this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe((/**
+             * @return {?}
+             */
+            () => {
+                if (!this.selected) {
+                    this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
+                }
+            }));
         }
-        return 'current';
-    }
-    /**
-     * Returns the type of icon to be displayed.
-     * @param {?} index
-     * @param {?=} state
-     * @return {?}
-     */
-    _getIndicatorType(index, state = STEP_STATE.NUMBER) {
-        /** @type {?} */
-        const step = this.steps.toArray()[index];
-        /** @type {?} */
-        const isCurrentStep = this._isCurrentStep(index);
-        return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
-            this._getGuidelineLogic(step, isCurrentStep, state);
-    }
-    /**
-     * @private
-     * @param {?} step
-     * @param {?} isCurrentStep
-     * @return {?}
-     */
-    _getDefaultIndicatorLogic(step, isCurrentStep) {
-        if (step._showError && step.hasError && !isCurrentStep) {
-            return STEP_STATE.ERROR;
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            this._destroyed.next();
+            this._destroyed.complete();
         }
-        else if (!step.completed || isCurrentStep) {
-            return STEP_STATE.NUMBER;
+        /**
+         * Selects and focuses the next step in list.
+         * @return {?}
+         */
+        next() {
+            this.selectedIndex = Math.min(this._selectedIndex + 1, this.steps.length - 1);
         }
-        else {
-            return step.editable ? STEP_STATE.EDIT : STEP_STATE.DONE;
+        /**
+         * Selects and focuses the previous step in list.
+         * @return {?}
+         */
+        previous() {
+            this.selectedIndex = Math.max(this._selectedIndex - 1, 0);
         }
-    }
-    /**
-     * @private
-     * @param {?} step
-     * @param {?} isCurrentStep
-     * @param {?=} state
-     * @return {?}
-     */
-    _getGuidelineLogic(step, isCurrentStep, state = STEP_STATE.NUMBER) {
-        if (step._showError && step.hasError && !isCurrentStep) {
-            return STEP_STATE.ERROR;
-        }
-        else if (step.completed && !isCurrentStep) {
-            return STEP_STATE.DONE;
-        }
-        else if (step.completed && isCurrentStep) {
-            return state;
-        }
-        else if (step.editable && isCurrentStep) {
-            return STEP_STATE.EDIT;
-        }
-        else {
-            return state;
-        }
-    }
-    /**
-     * @private
-     * @param {?} index
-     * @return {?}
-     */
-    _isCurrentStep(index) {
-        return this._selectedIndex === index;
-    }
-    /**
-     * Returns the index of the currently-focused step header.
-     * @return {?}
-     */
-    _getFocusIndex() {
-        return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
-    }
-    /**
-     * @private
-     * @param {?} newIndex
-     * @return {?}
-     */
-    _updateSelectedItemIndex(newIndex) {
-        /** @type {?} */
-        const stepsArray = this.steps.toArray();
-        this.selectionChange.emit({
-            selectedIndex: newIndex,
-            previouslySelectedIndex: this._selectedIndex,
-            selectedStep: stepsArray[newIndex],
-            previouslySelectedStep: stepsArray[this._selectedIndex],
-        });
-        // If focus is inside the stepper, move it to the next header, otherwise it may become
-        // lost when the active step content is hidden. We can't be more granular with the check
-        // (e.g. checking whether focus is inside the active step), because we don't have a
-        // reference to the elements that are rendering out the content.
-        this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
-            this._keyManager.updateActiveItem(newIndex);
-        this._selectedIndex = newIndex;
-        this._stateChanged();
-    }
-    /**
-     * @param {?} event
-     * @return {?}
-     */
-    _onKeydown(event) {
-        /** @type {?} */
-        const hasModifier = hasModifierKey(event);
-        /** @type {?} */
-        const keyCode = event.keyCode;
-        /** @type {?} */
-        const manager = this._keyManager;
-        if (manager.activeItemIndex != null && !hasModifier &&
-            (keyCode === SPACE || keyCode === ENTER)) {
-            this.selectedIndex = manager.activeItemIndex;
-            event.preventDefault();
-        }
-        else if (keyCode === HOME) {
-            manager.setFirstItemActive();
-            event.preventDefault();
-        }
-        else if (keyCode === END) {
-            manager.setLastItemActive();
-            event.preventDefault();
-        }
-        else {
-            manager.onKeydown(event);
-        }
-    }
-    /**
-     * @private
-     * @param {?} index
-     * @return {?}
-     */
-    _anyControlsInvalidOrPending(index) {
-        /** @type {?} */
-        const steps = this.steps.toArray();
-        steps[this._selectedIndex].interacted = true;
-        if (this._linear && index >= 0) {
-            return steps.slice(0, index).some((/**
+        /**
+         * Resets the stepper to its initial state. Note that this includes clearing form data.
+         * @return {?}
+         */
+        reset() {
+            this._updateSelectedItemIndex(0);
+            this.steps.forEach((/**
              * @param {?} step
              * @return {?}
              */
-            step => {
-                /** @type {?} */
-                const control = step.stepControl;
-                /** @type {?} */
-                const isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
-                return isIncomplete && !step.optional && !step._completedOverride;
-            }));
+            step => step.reset()));
+            this._stateChanged();
         }
-        return false;
-    }
-    /**
-     * @private
-     * @return {?}
-     */
-    _layoutDirection() {
-        return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
-    }
-    /**
-     * Checks whether the stepper contains the focused element.
-     * @private
-     * @return {?}
-     */
-    _containsFocus() {
-        if (!this._document || !this._elementRef) {
+        /**
+         * Returns a unique id for each step label element.
+         * @param {?} i
+         * @return {?}
+         */
+        _getStepLabelId(i) {
+            return `cdk-step-label-${this._groupId}-${i}`;
+        }
+        /**
+         * Returns unique id for each step content element.
+         * @param {?} i
+         * @return {?}
+         */
+        _getStepContentId(i) {
+            return `cdk-step-content-${this._groupId}-${i}`;
+        }
+        /**
+         * Marks the component to be change detected.
+         * @return {?}
+         */
+        _stateChanged() {
+            this._changeDetectorRef.markForCheck();
+        }
+        /**
+         * Returns position state of the step with the given index.
+         * @param {?} index
+         * @return {?}
+         */
+        _getAnimationDirection(index) {
+            /** @type {?} */
+            const position = index - this._selectedIndex;
+            if (position < 0) {
+                return this._layoutDirection() === 'rtl' ? 'next' : 'previous';
+            }
+            else if (position > 0) {
+                return this._layoutDirection() === 'rtl' ? 'previous' : 'next';
+            }
+            return 'current';
+        }
+        /**
+         * Returns the type of icon to be displayed.
+         * @param {?} index
+         * @param {?=} state
+         * @return {?}
+         */
+        _getIndicatorType(index, state = STEP_STATE.NUMBER) {
+            /** @type {?} */
+            const step = this.steps.toArray()[index];
+            /** @type {?} */
+            const isCurrentStep = this._isCurrentStep(index);
+            return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
+                this._getGuidelineLogic(step, isCurrentStep, state);
+        }
+        /**
+         * @private
+         * @param {?} step
+         * @param {?} isCurrentStep
+         * @return {?}
+         */
+        _getDefaultIndicatorLogic(step, isCurrentStep) {
+            if (step._showError && step.hasError && !isCurrentStep) {
+                return STEP_STATE.ERROR;
+            }
+            else if (!step.completed || isCurrentStep) {
+                return STEP_STATE.NUMBER;
+            }
+            else {
+                return step.editable ? STEP_STATE.EDIT : STEP_STATE.DONE;
+            }
+        }
+        /**
+         * @private
+         * @param {?} step
+         * @param {?} isCurrentStep
+         * @param {?=} state
+         * @return {?}
+         */
+        _getGuidelineLogic(step, isCurrentStep, state = STEP_STATE.NUMBER) {
+            if (step._showError && step.hasError && !isCurrentStep) {
+                return STEP_STATE.ERROR;
+            }
+            else if (step.completed && !isCurrentStep) {
+                return STEP_STATE.DONE;
+            }
+            else if (step.completed && isCurrentStep) {
+                return state;
+            }
+            else if (step.editable && isCurrentStep) {
+                return STEP_STATE.EDIT;
+            }
+            else {
+                return state;
+            }
+        }
+        /**
+         * @private
+         * @param {?} index
+         * @return {?}
+         */
+        _isCurrentStep(index) {
+            return this._selectedIndex === index;
+        }
+        /**
+         * Returns the index of the currently-focused step header.
+         * @return {?}
+         */
+        _getFocusIndex() {
+            return this._keyManager ? this._keyManager.activeItemIndex : this._selectedIndex;
+        }
+        /**
+         * @private
+         * @param {?} newIndex
+         * @return {?}
+         */
+        _updateSelectedItemIndex(newIndex) {
+            /** @type {?} */
+            const stepsArray = this.steps.toArray();
+            this.selectionChange.emit({
+                selectedIndex: newIndex,
+                previouslySelectedIndex: this._selectedIndex,
+                selectedStep: stepsArray[newIndex],
+                previouslySelectedStep: stepsArray[this._selectedIndex],
+            });
+            // If focus is inside the stepper, move it to the next header, otherwise it may become
+            // lost when the active step content is hidden. We can't be more granular with the check
+            // (e.g. checking whether focus is inside the active step), because we don't have a
+            // reference to the elements that are rendering out the content.
+            this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
+                this._keyManager.updateActiveItem(newIndex);
+            this._selectedIndex = newIndex;
+            this._stateChanged();
+        }
+        /**
+         * @param {?} event
+         * @return {?}
+         */
+        _onKeydown(event) {
+            /** @type {?} */
+            const hasModifier = hasModifierKey(event);
+            /** @type {?} */
+            const keyCode = event.keyCode;
+            /** @type {?} */
+            const manager = this._keyManager;
+            if (manager.activeItemIndex != null && !hasModifier &&
+                (keyCode === SPACE || keyCode === ENTER)) {
+                this.selectedIndex = manager.activeItemIndex;
+                event.preventDefault();
+            }
+            else if (keyCode === HOME) {
+                manager.setFirstItemActive();
+                event.preventDefault();
+            }
+            else if (keyCode === END) {
+                manager.setLastItemActive();
+                event.preventDefault();
+            }
+            else {
+                manager.onKeydown(event);
+            }
+        }
+        /**
+         * @private
+         * @param {?} index
+         * @return {?}
+         */
+        _anyControlsInvalidOrPending(index) {
+            /** @type {?} */
+            const steps = this.steps.toArray();
+            steps[this._selectedIndex].interacted = true;
+            if (this._linear && index >= 0) {
+                return steps.slice(0, index).some((/**
+                 * @param {?} step
+                 * @return {?}
+                 */
+                step => {
+                    /** @type {?} */
+                    const control = step.stepControl;
+                    /** @type {?} */
+                    const isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
+                    return isIncomplete && !step.optional && !step._completedOverride;
+                }));
+            }
             return false;
         }
-        /** @type {?} */
-        const stepperElement = this._elementRef.nativeElement;
-        /** @type {?} */
-        const focusedElement = this._document.activeElement;
-        return stepperElement === focusedElement || stepperElement.contains(focusedElement);
+        /**
+         * @private
+         * @return {?}
+         */
+        _layoutDirection() {
+            return this._dir && this._dir.value === 'rtl' ? 'rtl' : 'ltr';
+        }
+        /**
+         * Checks whether the stepper contains the focused element.
+         * @private
+         * @return {?}
+         */
+        _containsFocus() {
+            if (!this._document || !this._elementRef) {
+                return false;
+            }
+            /** @type {?} */
+            const stepperElement = this._elementRef.nativeElement;
+            /** @type {?} */
+            const focusedElement = this._document.activeElement;
+            return stepperElement === focusedElement || stepperElement.contains(focusedElement);
+        }
     }
-}
-CdkStepper.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdkStepper]',
-                exportAs: 'cdkStepper',
-            },] }
-];
-/** @nocollapse */
-CdkStepper.ctorParameters = () => [
-    { type: Directionality, decorators: [{ type: Optional }] },
-    { type: ChangeDetectorRef },
-    { type: ElementRef },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-];
-CdkStepper.propDecorators = {
-    _steps: [{ type: ContentChildren, args: [CdkStep, { descendants: true },] }],
-    _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader, { descendants: true },] }],
-    linear: [{ type: Input }],
-    selectedIndex: [{ type: Input }],
-    selected: [{ type: Input }],
-    selectionChange: [{ type: Output }]
-};
+    CdkStepper.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepper]',
+                    exportAs: 'cdkStepper',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepper.ctorParameters = () => [
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: ChangeDetectorRef },
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    CdkStepper.propDecorators = {
+        _steps: [{ type: ContentChildren, args: [CdkStep, { descendants: true },] }],
+        _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader, { descendants: true },] }],
+        linear: [{ type: Input }],
+        selectedIndex: [{ type: Input }],
+        selected: [{ type: Input }],
+        selectionChange: [{ type: Output }]
+    };
+    return CdkStepper;
+})();
 if (false) {
     /** @type {?} */
     CdkStepper.ngAcceptInputType_editable;
@@ -1043,45 +1055,51 @@ if (false) {
 /**
  * Button that moves to the next step in a stepper workflow.
  */
-class CdkStepperNext {
+let CdkStepperNext = /** @class */ (() => {
     /**
-     * @param {?} _stepper
+     * Button that moves to the next step in a stepper workflow.
      */
-    constructor(_stepper) {
-        this._stepper = _stepper;
+    class CdkStepperNext {
         /**
-         * Type of the next button. Defaults to "submit" if not specified.
+         * @param {?} _stepper
          */
-        this.type = 'submit';
+        constructor(_stepper) {
+            this._stepper = _stepper;
+            /**
+             * Type of the next button. Defaults to "submit" if not specified.
+             */
+            this.type = 'submit';
+        }
+        // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+        // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+        // ViewEngine they're overwritten.
+        // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+        // tslint:disable-next-line:no-host-decorator-in-concrete
+        /**
+         * @return {?}
+         */
+        _handleClick() {
+            this._stepper.next();
+        }
     }
-    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-    // ViewEngine they're overwritten.
-    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-    // tslint:disable-next-line:no-host-decorator-in-concrete
-    /**
-     * @return {?}
-     */
-    _handleClick() {
-        this._stepper.next();
-    }
-}
-CdkStepperNext.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperNext]',
-                host: {
-                    '[type]': 'type',
-                }
-            },] }
-];
-/** @nocollapse */
-CdkStepperNext.ctorParameters = () => [
-    { type: CdkStepper }
-];
-CdkStepperNext.propDecorators = {
-    type: [{ type: Input }],
-    _handleClick: [{ type: HostListener, args: ['click',] }]
-};
+    CdkStepperNext.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperNext]',
+                    host: {
+                        '[type]': 'type',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepperNext.ctorParameters = () => [
+        { type: CdkStepper }
+    ];
+    CdkStepperNext.propDecorators = {
+        type: [{ type: Input }],
+        _handleClick: [{ type: HostListener, args: ['click',] }]
+    };
+    return CdkStepperNext;
+})();
 if (false) {
     /**
      * Type of the next button. Defaults to "submit" if not specified.
@@ -1094,45 +1112,51 @@ if (false) {
 /**
  * Button that moves to the previous step in a stepper workflow.
  */
-class CdkStepperPrevious {
+let CdkStepperPrevious = /** @class */ (() => {
     /**
-     * @param {?} _stepper
+     * Button that moves to the previous step in a stepper workflow.
      */
-    constructor(_stepper) {
-        this._stepper = _stepper;
+    class CdkStepperPrevious {
         /**
-         * Type of the previous button. Defaults to "button" if not specified.
+         * @param {?} _stepper
          */
-        this.type = 'button';
+        constructor(_stepper) {
+            this._stepper = _stepper;
+            /**
+             * Type of the previous button. Defaults to "button" if not specified.
+             */
+            this.type = 'button';
+        }
+        // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+        // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+        // ViewEngine they're overwritten.
+        // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+        // tslint:disable-next-line:no-host-decorator-in-concrete
+        /**
+         * @return {?}
+         */
+        _handleClick() {
+            this._stepper.previous();
+        }
     }
-    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-    // ViewEngine they're overwritten.
-    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-    // tslint:disable-next-line:no-host-decorator-in-concrete
-    /**
-     * @return {?}
-     */
-    _handleClick() {
-        this._stepper.previous();
-    }
-}
-CdkStepperPrevious.decorators = [
-    { type: Directive, args: [{
-                selector: 'button[cdkStepperPrevious]',
-                host: {
-                    '[type]': 'type',
-                }
-            },] }
-];
-/** @nocollapse */
-CdkStepperPrevious.ctorParameters = () => [
-    { type: CdkStepper }
-];
-CdkStepperPrevious.propDecorators = {
-    type: [{ type: Input }],
-    _handleClick: [{ type: HostListener, args: ['click',] }]
-};
+    CdkStepperPrevious.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperPrevious]',
+                    host: {
+                        '[type]': 'type',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepperPrevious.ctorParameters = () => [
+        { type: CdkStepper }
+    ];
+    CdkStepperPrevious.propDecorators = {
+        type: [{ type: Input }],
+        _handleClick: [{ type: HostListener, args: ['click',] }]
+    };
+    return CdkStepperPrevious;
+})();
 if (false) {
     /**
      * Type of the previous button. Defaults to "button" if not specified.
@@ -1148,29 +1172,32 @@ if (false) {
  * Generated from: src/cdk/stepper/stepper-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class CdkStepperModule {
-}
-CdkStepperModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [BidiModule],
-                exports: [
-                    CdkStep,
-                    CdkStepper,
-                    CdkStepHeader,
-                    CdkStepLabel,
-                    CdkStepperNext,
-                    CdkStepperPrevious,
-                ],
-                declarations: [
-                    CdkStep,
-                    CdkStepper,
-                    CdkStepHeader,
-                    CdkStepLabel,
-                    CdkStepperNext,
-                    CdkStepperPrevious,
-                ]
-            },] }
-];
+let CdkStepperModule = /** @class */ (() => {
+    class CdkStepperModule {
+    }
+    CdkStepperModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule],
+                    exports: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ],
+                    declarations: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ]
+                },] }
+    ];
+    return CdkStepperModule;
+})();
 
 /**
  * @fileoverview added by tsickle

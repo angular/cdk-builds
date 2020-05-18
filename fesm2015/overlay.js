@@ -572,64 +572,73 @@ if (false) {
  * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
-class ScrollStrategyOptions {
+let ScrollStrategyOptions = /** @class */ (() => {
     /**
-     * @param {?} _scrollDispatcher
-     * @param {?} _viewportRuler
-     * @param {?} _ngZone
-     * @param {?} document
+     * Options for how an overlay will handle scrolling.
+     *
+     * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
+     * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
      */
-    constructor(_scrollDispatcher, _viewportRuler, _ngZone, document) {
-        this._scrollDispatcher = _scrollDispatcher;
-        this._viewportRuler = _viewportRuler;
-        this._ngZone = _ngZone;
+    class ScrollStrategyOptions {
         /**
-         * Do nothing on scroll.
+         * @param {?} _scrollDispatcher
+         * @param {?} _viewportRuler
+         * @param {?} _ngZone
+         * @param {?} document
          */
-        this.noop = (/**
-         * @return {?}
-         */
-        () => new NoopScrollStrategy());
-        /**
-         * Close the overlay as soon as the user scrolls.
-         * @param config Configuration to be used inside the scroll strategy.
-         */
-        this.close = (/**
-         * @param {?=} config
-         * @return {?}
-         */
-        (config) => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone, this._viewportRuler, config));
-        /**
-         * Block scrolling.
-         */
-        this.block = (/**
-         * @return {?}
-         */
-        () => new BlockScrollStrategy(this._viewportRuler, this._document));
-        /**
-         * Update the overlay's position on scroll.
-         * @param config Configuration to be used inside the scroll strategy.
-         * Allows debouncing the reposition calls.
-         */
-        this.reposition = (/**
-         * @param {?=} config
-         * @return {?}
-         */
-        (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config));
-        this._document = document;
+        constructor(_scrollDispatcher, _viewportRuler, _ngZone, document) {
+            this._scrollDispatcher = _scrollDispatcher;
+            this._viewportRuler = _viewportRuler;
+            this._ngZone = _ngZone;
+            /**
+             * Do nothing on scroll.
+             */
+            this.noop = (/**
+             * @return {?}
+             */
+            () => new NoopScrollStrategy());
+            /**
+             * Close the overlay as soon as the user scrolls.
+             * @param config Configuration to be used inside the scroll strategy.
+             */
+            this.close = (/**
+             * @param {?=} config
+             * @return {?}
+             */
+            (config) => new CloseScrollStrategy(this._scrollDispatcher, this._ngZone, this._viewportRuler, config));
+            /**
+             * Block scrolling.
+             */
+            this.block = (/**
+             * @return {?}
+             */
+            () => new BlockScrollStrategy(this._viewportRuler, this._document));
+            /**
+             * Update the overlay's position on scroll.
+             * @param config Configuration to be used inside the scroll strategy.
+             * Allows debouncing the reposition calls.
+             */
+            this.reposition = (/**
+             * @param {?=} config
+             * @return {?}
+             */
+            (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config));
+            this._document = document;
+        }
     }
-}
-ScrollStrategyOptions.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-ScrollStrategyOptions.ctorParameters = () => [
-    { type: ScrollDispatcher },
-    { type: ViewportRuler },
-    { type: NgZone },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-];
-/** @nocollapse */ ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    ScrollStrategyOptions.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    ScrollStrategyOptions.ctorParameters = () => [
+        { type: ScrollDispatcher },
+        { type: ViewportRuler },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    /** @nocollapse */ ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    return ScrollStrategyOptions;
+})();
 if (false) {
     /**
      * @type {?}
@@ -933,21 +942,27 @@ if (false) {
 /**
  * The change event emitted by the strategy when a fallback position is used.
  */
-class ConnectedOverlayPositionChange {
+let ConnectedOverlayPositionChange = /** @class */ (() => {
     /**
-     * @param {?} connectionPair
-     * @param {?} scrollableViewProperties
+     * The change event emitted by the strategy when a fallback position is used.
      */
-    constructor(connectionPair, scrollableViewProperties) {
-        this.connectionPair = connectionPair;
-        this.scrollableViewProperties = scrollableViewProperties;
+    class ConnectedOverlayPositionChange {
+        /**
+         * @param {?} connectionPair
+         * @param {?} scrollableViewProperties
+         */
+        constructor(connectionPair, scrollableViewProperties) {
+            this.connectionPair = connectionPair;
+            this.scrollableViewProperties = scrollableViewProperties;
+        }
     }
-}
-/** @nocollapse */
-ConnectedOverlayPositionChange.ctorParameters = () => [
-    { type: ConnectionPositionPair },
-    { type: ScrollingVisibility, decorators: [{ type: Optional }] }
-];
+    /** @nocollapse */
+    ConnectedOverlayPositionChange.ctorParameters = () => [
+        { type: ConnectionPositionPair },
+        { type: ScrollingVisibility, decorators: [{ type: Optional }] }
+    ];
+    return ConnectedOverlayPositionChange;
+})();
 if (false) {
     /**
      * The position used as a result of this change.
@@ -997,97 +1012,105 @@ function validateHorizontalPosition(property, value) {
  * if any. It maintains a list of attached overlays to determine best suited overlay based
  * on event target and order of overlay opens.
  */
-class OverlayKeyboardDispatcher {
+let OverlayKeyboardDispatcher = /** @class */ (() => {
     /**
-     * @param {?} document
+     * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
+     * if any. It maintains a list of attached overlays to determine best suited overlay based
+     * on event target and order of overlay opens.
      */
-    constructor(document) {
+    class OverlayKeyboardDispatcher {
         /**
-         * Currently attached overlays in the order they were attached.
+         * @param {?} document
          */
-        this._attachedOverlays = [];
+        constructor(document) {
+            /**
+             * Currently attached overlays in the order they were attached.
+             */
+            this._attachedOverlays = [];
+            /**
+             * Keyboard event listener that will be attached to the body.
+             */
+            this._keydownListener = (/**
+             * @param {?} event
+             * @return {?}
+             */
+            (event) => {
+                /** @type {?} */
+                const overlays = this._attachedOverlays;
+                for (let i = overlays.length - 1; i > -1; i--) {
+                    // Dispatch the keydown event to the top overlay which has subscribers to its keydown events.
+                    // We want to target the most recent overlay, rather than trying to match where the event came
+                    // from, because some components might open an overlay, but keep focus on a trigger element
+                    // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
+                    // because we don't want overlays that don't handle keyboard events to block the ones below
+                    // them that do.
+                    if (overlays[i]._keydownEvents.observers.length > 0) {
+                        overlays[i]._keydownEvents.next(event);
+                        break;
+                    }
+                }
+            });
+            this._document = document;
+        }
         /**
-         * Keyboard event listener that will be attached to the body.
-         */
-        this._keydownListener = (/**
-         * @param {?} event
          * @return {?}
          */
-        (event) => {
-            /** @type {?} */
-            const overlays = this._attachedOverlays;
-            for (let i = overlays.length - 1; i > -1; i--) {
-                // Dispatch the keydown event to the top overlay which has subscribers to its keydown events.
-                // We want to target the most recent overlay, rather than trying to match where the event came
-                // from, because some components might open an overlay, but keep focus on a trigger element
-                // (e.g. for select and autocomplete). We skip overlays without keydown event subscriptions,
-                // because we don't want overlays that don't handle keyboard events to block the ones below
-                // them that do.
-                if (overlays[i]._keydownEvents.observers.length > 0) {
-                    overlays[i]._keydownEvents.next(event);
-                    break;
-                }
-            }
-        });
-        this._document = document;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        this._detach();
-    }
-    /**
-     * Add a new overlay to the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    add(overlayRef) {
-        // Ensure that we don't get the same overlay multiple times.
-        this.remove(overlayRef);
-        // Lazily start dispatcher once first overlay is added
-        if (!this._isAttached) {
-            this._document.body.addEventListener('keydown', this._keydownListener);
-            this._isAttached = true;
-        }
-        this._attachedOverlays.push(overlayRef);
-    }
-    /**
-     * Remove an overlay from the list of attached overlay refs.
-     * @param {?} overlayRef
-     * @return {?}
-     */
-    remove(overlayRef) {
-        /** @type {?} */
-        const index = this._attachedOverlays.indexOf(overlayRef);
-        if (index > -1) {
-            this._attachedOverlays.splice(index, 1);
-        }
-        // Remove the global listener once there are no more overlays.
-        if (this._attachedOverlays.length === 0) {
+        ngOnDestroy() {
             this._detach();
         }
-    }
-    /**
-     * Detaches the global keyboard event listener.
-     * @private
-     * @return {?}
-     */
-    _detach() {
-        if (this._isAttached) {
-            this._document.body.removeEventListener('keydown', this._keydownListener);
-            this._isAttached = false;
+        /**
+         * Add a new overlay to the list of attached overlay refs.
+         * @param {?} overlayRef
+         * @return {?}
+         */
+        add(overlayRef) {
+            // Ensure that we don't get the same overlay multiple times.
+            this.remove(overlayRef);
+            // Lazily start dispatcher once first overlay is added
+            if (!this._isAttached) {
+                this._document.body.addEventListener('keydown', this._keydownListener);
+                this._isAttached = true;
+            }
+            this._attachedOverlays.push(overlayRef);
+        }
+        /**
+         * Remove an overlay from the list of attached overlay refs.
+         * @param {?} overlayRef
+         * @return {?}
+         */
+        remove(overlayRef) {
+            /** @type {?} */
+            const index = this._attachedOverlays.indexOf(overlayRef);
+            if (index > -1) {
+                this._attachedOverlays.splice(index, 1);
+            }
+            // Remove the global listener once there are no more overlays.
+            if (this._attachedOverlays.length === 0) {
+                this._detach();
+            }
+        }
+        /**
+         * Detaches the global keyboard event listener.
+         * @private
+         * @return {?}
+         */
+        _detach() {
+            if (this._isAttached) {
+                this._document.body.removeEventListener('keydown', this._keydownListener);
+                this._isAttached = false;
+            }
         }
     }
-}
-OverlayKeyboardDispatcher.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-OverlayKeyboardDispatcher.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-];
-/** @nocollapse */ OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    OverlayKeyboardDispatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayKeyboardDispatcher.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    /** @nocollapse */ OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    return OverlayKeyboardDispatcher;
+})();
 if (false) {
     /**
      * Currently attached overlays in the order they were attached.
@@ -1153,90 +1176,96 @@ const isTestEnvironment = typeof window !== 'undefined' && !!window &&
 /**
  * Container inside which all overlays will render.
  */
-class OverlayContainer {
+let OverlayContainer = /** @class */ (() => {
     /**
-     * @param {?} document
-     * @param {?=} _platform
+     * Container inside which all overlays will render.
      */
-    constructor(document, _platform) {
-        this._platform = _platform;
-        this._document = document;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        /** @type {?} */
-        const container = this._containerElement;
-        if (container && container.parentNode) {
-            container.parentNode.removeChild(container);
+    class OverlayContainer {
+        /**
+         * @param {?} document
+         * @param {?=} _platform
+         */
+        constructor(document, _platform) {
+            this._platform = _platform;
+            this._document = document;
         }
-    }
-    /**
-     * This method returns the overlay container element. It will lazily
-     * create the element the first time  it is called to facilitate using
-     * the container in non-browser environments.
-     * @return {?} the container element
-     */
-    getContainerElement() {
-        if (!this._containerElement) {
-            this._createContainer();
-        }
-        return this._containerElement;
-    }
-    /**
-     * Create the overlay container element, which is simply a div
-     * with the 'cdk-overlay-container' class on the document body.
-     * @protected
-     * @return {?}
-     */
-    _createContainer() {
-        // @breaking-change 10.0.0 Remove null check for `_platform`.
-        /** @type {?} */
-        const isBrowser = this._platform ? this._platform.isBrowser : typeof window !== 'undefined';
-        /** @type {?} */
-        const containerClass = 'cdk-overlay-container';
-        if (isBrowser || isTestEnvironment) {
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
             /** @type {?} */
-            const oppositePlatformContainers = this._document.querySelectorAll(`.${containerClass}[platform="server"], ` +
-                `.${containerClass}[platform="test"]`);
-            // Remove any old containers from the opposite platform.
-            // This can happen when transitioning from the server to the client.
-            for (let i = 0; i < oppositePlatformContainers.length; i++) {
-                (/** @type {?} */ (oppositePlatformContainers[i].parentNode)).removeChild(oppositePlatformContainers[i]);
+            const container = this._containerElement;
+            if (container && container.parentNode) {
+                container.parentNode.removeChild(container);
             }
         }
-        /** @type {?} */
-        const container = this._document.createElement('div');
-        container.classList.add(containerClass);
-        // A long time ago we kept adding new overlay containers whenever a new app was instantiated,
-        // but at some point we added logic which clears the duplicate ones in order to avoid leaks.
-        // The new logic was a little too aggressive since it was breaking some legitimate use cases.
-        // To mitigate the problem we made it so that only containers from a different platform are
-        // cleared, but the side-effect was that people started depending on the overly-aggressive
-        // logic to clean up their tests for them. Until we can introduce an overlay-specific testing
-        // module which does the cleanup, we try to detect that we're in a test environment and we
-        // always clear the container. See #17006.
-        // TODO(crisbeto): remove the test environment check once we have an overlay testing module.
-        if (isTestEnvironment) {
-            container.setAttribute('platform', 'test');
+        /**
+         * This method returns the overlay container element. It will lazily
+         * create the element the first time  it is called to facilitate using
+         * the container in non-browser environments.
+         * @return {?} the container element
+         */
+        getContainerElement() {
+            if (!this._containerElement) {
+                this._createContainer();
+            }
+            return this._containerElement;
         }
-        else if (!isBrowser) {
-            container.setAttribute('platform', 'server');
+        /**
+         * Create the overlay container element, which is simply a div
+         * with the 'cdk-overlay-container' class on the document body.
+         * @protected
+         * @return {?}
+         */
+        _createContainer() {
+            // @breaking-change 10.0.0 Remove null check for `_platform`.
+            /** @type {?} */
+            const isBrowser = this._platform ? this._platform.isBrowser : typeof window !== 'undefined';
+            /** @type {?} */
+            const containerClass = 'cdk-overlay-container';
+            if (isBrowser || isTestEnvironment) {
+                /** @type {?} */
+                const oppositePlatformContainers = this._document.querySelectorAll(`.${containerClass}[platform="server"], ` +
+                    `.${containerClass}[platform="test"]`);
+                // Remove any old containers from the opposite platform.
+                // This can happen when transitioning from the server to the client.
+                for (let i = 0; i < oppositePlatformContainers.length; i++) {
+                    (/** @type {?} */ (oppositePlatformContainers[i].parentNode)).removeChild(oppositePlatformContainers[i]);
+                }
+            }
+            /** @type {?} */
+            const container = this._document.createElement('div');
+            container.classList.add(containerClass);
+            // A long time ago we kept adding new overlay containers whenever a new app was instantiated,
+            // but at some point we added logic which clears the duplicate ones in order to avoid leaks.
+            // The new logic was a little too aggressive since it was breaking some legitimate use cases.
+            // To mitigate the problem we made it so that only containers from a different platform are
+            // cleared, but the side-effect was that people started depending on the overly-aggressive
+            // logic to clean up their tests for them. Until we can introduce an overlay-specific testing
+            // module which does the cleanup, we try to detect that we're in a test environment and we
+            // always clear the container. See #17006.
+            // TODO(crisbeto): remove the test environment check once we have an overlay testing module.
+            if (isTestEnvironment) {
+                container.setAttribute('platform', 'test');
+            }
+            else if (!isBrowser) {
+                container.setAttribute('platform', 'server');
+            }
+            this._document.body.appendChild(container);
+            this._containerElement = container;
         }
-        this._document.body.appendChild(container);
-        this._containerElement = container;
     }
-}
-OverlayContainer.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-OverlayContainer.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform }
-];
-/** @nocollapse */ OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
+    OverlayContainer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayContainer.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
+    ];
+    /** @nocollapse */ OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
+    return OverlayContainer;
+})();
 if (false) {
     /**
      * @type {?}
@@ -4037,58 +4066,64 @@ if (false) {
 /**
  * Builder for overlay position strategy.
  */
-class OverlayPositionBuilder {
+let OverlayPositionBuilder = /** @class */ (() => {
     /**
-     * @param {?} _viewportRuler
-     * @param {?} _document
-     * @param {?} _platform
-     * @param {?} _overlayContainer
+     * Builder for overlay position strategy.
      */
-    constructor(_viewportRuler, _document, _platform, _overlayContainer) {
-        this._viewportRuler = _viewportRuler;
-        this._document = _document;
-        this._platform = _platform;
-        this._overlayContainer = _overlayContainer;
+    class OverlayPositionBuilder {
+        /**
+         * @param {?} _viewportRuler
+         * @param {?} _document
+         * @param {?} _platform
+         * @param {?} _overlayContainer
+         */
+        constructor(_viewportRuler, _document, _platform, _overlayContainer) {
+            this._viewportRuler = _viewportRuler;
+            this._document = _document;
+            this._platform = _platform;
+            this._overlayContainer = _overlayContainer;
+        }
+        /**
+         * Creates a global position strategy.
+         * @return {?}
+         */
+        global() {
+            return new GlobalPositionStrategy();
+        }
+        /**
+         * Creates a relative position strategy.
+         * @deprecated Use `flexibleConnectedTo` instead.
+         * \@breaking-change 8.0.0
+         * @param {?} elementRef
+         * @param {?} originPos
+         * @param {?} overlayPos
+         * @return {?}
+         */
+        connectedTo(elementRef, originPos, overlayPos) {
+            return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
+        }
+        /**
+         * Creates a flexible position strategy.
+         * @param {?} origin Origin relative to which to position the overlay.
+         * @return {?}
+         */
+        flexibleConnectedTo(origin) {
+            return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
+        }
     }
-    /**
-     * Creates a global position strategy.
-     * @return {?}
-     */
-    global() {
-        return new GlobalPositionStrategy();
-    }
-    /**
-     * Creates a relative position strategy.
-     * @deprecated Use `flexibleConnectedTo` instead.
-     * \@breaking-change 8.0.0
-     * @param {?} elementRef
-     * @param {?} originPos
-     * @param {?} overlayPos
-     * @return {?}
-     */
-    connectedTo(elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(originPos, overlayPos, elementRef, this._viewportRuler, this._document, this._platform, this._overlayContainer);
-    }
-    /**
-     * Creates a flexible position strategy.
-     * @param {?} origin Origin relative to which to position the overlay.
-     * @return {?}
-     */
-    flexibleConnectedTo(origin) {
-        return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
-    }
-}
-OverlayPositionBuilder.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-OverlayPositionBuilder.ctorParameters = () => [
-    { type: ViewportRuler },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform },
-    { type: OverlayContainer }
-];
-/** @nocollapse */ OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    OverlayPositionBuilder.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayPositionBuilder.ctorParameters = () => [
+        { type: ViewportRuler },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform },
+        { type: OverlayContainer }
+    ];
+    /** @nocollapse */ OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    return OverlayPositionBuilder;
+})();
 if (false) {
     /**
      * @type {?}
@@ -4132,113 +4167,126 @@ let nextUniqueId = 0;
  *
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
-class Overlay {
+let Overlay = /** @class */ (() => {
+    // Note that Overlay is *not* scoped to the app root because of the ComponentFactoryResolver
+    // which needs to be different depending on where OverlayModule is imported.
     /**
-     * @param {?} scrollStrategies
-     * @param {?} _overlayContainer
-     * @param {?} _componentFactoryResolver
-     * @param {?} _positionBuilder
-     * @param {?} _keyboardDispatcher
-     * @param {?} _injector
-     * @param {?} _ngZone
-     * @param {?} _document
-     * @param {?} _directionality
-     * @param {?=} _location
+     * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
+     * used as a low-level building block for other components. Dialogs, tooltips, menus,
+     * selects, etc. can all be built using overlays. The service should primarily be used by authors
+     * of re-usable components rather than developers building end-user applications.
+     *
+     * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
      */
-    constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location) {
-        this.scrollStrategies = scrollStrategies;
-        this._overlayContainer = _overlayContainer;
-        this._componentFactoryResolver = _componentFactoryResolver;
-        this._positionBuilder = _positionBuilder;
-        this._keyboardDispatcher = _keyboardDispatcher;
-        this._injector = _injector;
-        this._ngZone = _ngZone;
-        this._document = _document;
-        this._directionality = _directionality;
-        this._location = _location;
-    }
-    /**
-     * Creates an overlay.
-     * @param {?=} config Configuration applied to the overlay.
-     * @return {?} Reference to the created overlay.
-     */
-    create(config) {
-        /** @type {?} */
-        const host = this._createHostElement();
-        /** @type {?} */
-        const pane = this._createPaneElement(host);
-        /** @type {?} */
-        const portalOutlet = this._createPortalOutlet(pane);
-        /** @type {?} */
-        const overlayConfig = new OverlayConfig(config);
-        overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location);
-    }
-    /**
-     * Gets a position builder that can be used, via fluent API,
-     * to construct and configure a position strategy.
-     * @return {?} An overlay position builder.
-     */
-    position() {
-        return this._positionBuilder;
-    }
-    /**
-     * Creates the DOM element for an overlay and appends it to the overlay container.
-     * @private
-     * @param {?} host
-     * @return {?} Newly-created pane element
-     */
-    _createPaneElement(host) {
-        /** @type {?} */
-        const pane = this._document.createElement('div');
-        pane.id = `cdk-overlay-${nextUniqueId++}`;
-        pane.classList.add('cdk-overlay-pane');
-        host.appendChild(pane);
-        return pane;
-    }
-    /**
-     * Creates the host element that wraps around an overlay
-     * and can be used for advanced positioning.
-     * @private
-     * @return {?} Newly-create host element.
-     */
-    _createHostElement() {
-        /** @type {?} */
-        const host = this._document.createElement('div');
-        this._overlayContainer.getContainerElement().appendChild(host);
-        return host;
-    }
-    /**
-     * Create a DomPortalOutlet into which the overlay content can be loaded.
-     * @private
-     * @param {?} pane The DOM element to turn into a portal outlet.
-     * @return {?} A portal outlet for the given DOM element.
-     */
-    _createPortalOutlet(pane) {
-        // We have to resolve the ApplicationRef later in order to allow people
-        // to use overlay-based providers during app initialization.
-        if (!this._appRef) {
-            this._appRef = this._injector.get(ApplicationRef);
+    class Overlay {
+        /**
+         * @param {?} scrollStrategies
+         * @param {?} _overlayContainer
+         * @param {?} _componentFactoryResolver
+         * @param {?} _positionBuilder
+         * @param {?} _keyboardDispatcher
+         * @param {?} _injector
+         * @param {?} _ngZone
+         * @param {?} _document
+         * @param {?} _directionality
+         * @param {?=} _location
+         */
+        constructor(scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location) {
+            this.scrollStrategies = scrollStrategies;
+            this._overlayContainer = _overlayContainer;
+            this._componentFactoryResolver = _componentFactoryResolver;
+            this._positionBuilder = _positionBuilder;
+            this._keyboardDispatcher = _keyboardDispatcher;
+            this._injector = _injector;
+            this._ngZone = _ngZone;
+            this._document = _document;
+            this._directionality = _directionality;
+            this._location = _location;
         }
-        return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
+        /**
+         * Creates an overlay.
+         * @param {?=} config Configuration applied to the overlay.
+         * @return {?} Reference to the created overlay.
+         */
+        create(config) {
+            /** @type {?} */
+            const host = this._createHostElement();
+            /** @type {?} */
+            const pane = this._createPaneElement(host);
+            /** @type {?} */
+            const portalOutlet = this._createPortalOutlet(pane);
+            /** @type {?} */
+            const overlayConfig = new OverlayConfig(config);
+            overlayConfig.direction = overlayConfig.direction || this._directionality.value;
+            return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location);
+        }
+        /**
+         * Gets a position builder that can be used, via fluent API,
+         * to construct and configure a position strategy.
+         * @return {?} An overlay position builder.
+         */
+        position() {
+            return this._positionBuilder;
+        }
+        /**
+         * Creates the DOM element for an overlay and appends it to the overlay container.
+         * @private
+         * @param {?} host
+         * @return {?} Newly-created pane element
+         */
+        _createPaneElement(host) {
+            /** @type {?} */
+            const pane = this._document.createElement('div');
+            pane.id = `cdk-overlay-${nextUniqueId++}`;
+            pane.classList.add('cdk-overlay-pane');
+            host.appendChild(pane);
+            return pane;
+        }
+        /**
+         * Creates the host element that wraps around an overlay
+         * and can be used for advanced positioning.
+         * @private
+         * @return {?} Newly-create host element.
+         */
+        _createHostElement() {
+            /** @type {?} */
+            const host = this._document.createElement('div');
+            this._overlayContainer.getContainerElement().appendChild(host);
+            return host;
+        }
+        /**
+         * Create a DomPortalOutlet into which the overlay content can be loaded.
+         * @private
+         * @param {?} pane The DOM element to turn into a portal outlet.
+         * @return {?} A portal outlet for the given DOM element.
+         */
+        _createPortalOutlet(pane) {
+            // We have to resolve the ApplicationRef later in order to allow people
+            // to use overlay-based providers during app initialization.
+            if (!this._appRef) {
+                this._appRef = this._injector.get(ApplicationRef);
+            }
+            return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
+        }
     }
-}
-Overlay.decorators = [
-    { type: Injectable }
-];
-/** @nocollapse */
-Overlay.ctorParameters = () => [
-    { type: ScrollStrategyOptions },
-    { type: OverlayContainer },
-    { type: ComponentFactoryResolver },
-    { type: OverlayPositionBuilder },
-    { type: OverlayKeyboardDispatcher },
-    { type: Injector },
-    { type: NgZone },
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Directionality },
-    { type: Location, decorators: [{ type: Optional }] }
-];
+    Overlay.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    Overlay.ctorParameters = () => [
+        { type: ScrollStrategyOptions },
+        { type: OverlayContainer },
+        { type: ComponentFactoryResolver },
+        { type: OverlayPositionBuilder },
+        { type: OverlayKeyboardDispatcher },
+        { type: Injector },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Directionality },
+        { type: Location, decorators: [{ type: Optional }] }
+    ];
+    return Overlay;
+})();
 if (false) {
     /**
      * @type {?}
@@ -4353,24 +4401,31 @@ function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY(overlay) {
  * Directive applied to an element to make it usable as an origin for an Overlay using a
  * ConnectedPositionStrategy.
  */
-class CdkOverlayOrigin {
+let CdkOverlayOrigin = /** @class */ (() => {
     /**
-     * @param {?} elementRef
+     * Directive applied to an element to make it usable as an origin for an Overlay using a
+     * ConnectedPositionStrategy.
      */
-    constructor(elementRef) {
-        this.elementRef = elementRef;
+    class CdkOverlayOrigin {
+        /**
+         * @param {?} elementRef
+         */
+        constructor(elementRef) {
+            this.elementRef = elementRef;
+        }
     }
-}
-CdkOverlayOrigin.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
-                exportAs: 'cdkOverlayOrigin',
-            },] }
-];
-/** @nocollapse */
-CdkOverlayOrigin.ctorParameters = () => [
-    { type: ElementRef }
-];
+    CdkOverlayOrigin.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
+                    exportAs: 'cdkOverlayOrigin',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkOverlayOrigin.ctorParameters = () => [
+        { type: ElementRef }
+    ];
+    return CdkOverlayOrigin;
+})();
 if (false) {
     /**
      * Reference to the element on which the directive is applied.
@@ -4382,371 +4437,378 @@ if (false) {
  * Directive to facilitate declarative creation of an
  * Overlay using a FlexibleConnectedPositionStrategy.
  */
-class CdkConnectedOverlay {
-    // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
+let CdkConnectedOverlay = /** @class */ (() => {
     /**
-     * @param {?} _overlay
-     * @param {?} templateRef
-     * @param {?} viewContainerRef
-     * @param {?} scrollStrategyFactory
-     * @param {?} _dir
+     * Directive to facilitate declarative creation of an
+     * Overlay using a FlexibleConnectedPositionStrategy.
      */
-    constructor(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
-        this._overlay = _overlay;
-        this._dir = _dir;
-        this._hasBackdrop = false;
-        this._lockPosition = false;
-        this._growAfterOpen = false;
-        this._flexibleDimensions = false;
-        this._push = false;
-        this._backdropSubscription = Subscription.EMPTY;
+    class CdkConnectedOverlay {
+        // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
         /**
-         * Margin between the overlay and the viewport edges.
+         * @param {?} _overlay
+         * @param {?} templateRef
+         * @param {?} viewContainerRef
+         * @param {?} scrollStrategyFactory
+         * @param {?} _dir
          */
-        this.viewportMargin = 0;
-        /**
-         * Whether the overlay is open.
-         */
-        this.open = false;
-        /**
-         * Event emitted when the backdrop is clicked.
-         */
-        this.backdropClick = new EventEmitter();
-        /**
-         * Event emitted when the position has changed.
-         */
-        this.positionChange = new EventEmitter();
-        /**
-         * Event emitted when the overlay has been attached.
-         */
-        this.attach = new EventEmitter();
-        /**
-         * Event emitted when the overlay has been detached.
-         */
-        this.detach = new EventEmitter();
-        /**
-         * Emits when there are keyboard events that are targeted at the overlay.
-         */
-        this.overlayKeydown = new EventEmitter();
-        this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
-        this._scrollStrategyFactory = scrollStrategyFactory;
-        this.scrollStrategy = this._scrollStrategyFactory();
-    }
-    /**
-     * The offset in pixels for the overlay connection point on the x-axis
-     * @return {?}
-     */
-    get offsetX() { return this._offsetX; }
-    /**
-     * @param {?} offsetX
-     * @return {?}
-     */
-    set offsetX(offsetX) {
-        this._offsetX = offsetX;
-        if (this._position) {
-            this._updatePositionStrategy(this._position);
+        constructor(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
+            this._overlay = _overlay;
+            this._dir = _dir;
+            this._hasBackdrop = false;
+            this._lockPosition = false;
+            this._growAfterOpen = false;
+            this._flexibleDimensions = false;
+            this._push = false;
+            this._backdropSubscription = Subscription.EMPTY;
+            /**
+             * Margin between the overlay and the viewport edges.
+             */
+            this.viewportMargin = 0;
+            /**
+             * Whether the overlay is open.
+             */
+            this.open = false;
+            /**
+             * Event emitted when the backdrop is clicked.
+             */
+            this.backdropClick = new EventEmitter();
+            /**
+             * Event emitted when the position has changed.
+             */
+            this.positionChange = new EventEmitter();
+            /**
+             * Event emitted when the overlay has been attached.
+             */
+            this.attach = new EventEmitter();
+            /**
+             * Event emitted when the overlay has been detached.
+             */
+            this.detach = new EventEmitter();
+            /**
+             * Emits when there are keyboard events that are targeted at the overlay.
+             */
+            this.overlayKeydown = new EventEmitter();
+            this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
+            this._scrollStrategyFactory = scrollStrategyFactory;
+            this.scrollStrategy = this._scrollStrategyFactory();
         }
-    }
-    /**
-     * The offset in pixels for the overlay connection point on the y-axis
-     * @return {?}
-     */
-    get offsetY() { return this._offsetY; }
-    /**
-     * @param {?} offsetY
-     * @return {?}
-     */
-    set offsetY(offsetY) {
-        this._offsetY = offsetY;
-        if (this._position) {
-            this._updatePositionStrategy(this._position);
-        }
-    }
-    /**
-     * Whether or not the overlay should attach a backdrop.
-     * @return {?}
-     */
-    get hasBackdrop() { return this._hasBackdrop; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set hasBackdrop(value) { this._hasBackdrop = coerceBooleanProperty(value); }
-    /**
-     * Whether or not the overlay should be locked when scrolling.
-     * @return {?}
-     */
-    get lockPosition() { return this._lockPosition; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set lockPosition(value) { this._lockPosition = coerceBooleanProperty(value); }
-    /**
-     * Whether the overlay's width and height can be constrained to fit within the viewport.
-     * @return {?}
-     */
-    get flexibleDimensions() { return this._flexibleDimensions; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set flexibleDimensions(value) {
-        this._flexibleDimensions = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether the overlay can grow after the initial open when flexible positioning is turned on.
-     * @return {?}
-     */
-    get growAfterOpen() { return this._growAfterOpen; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set growAfterOpen(value) { this._growAfterOpen = coerceBooleanProperty(value); }
-    /**
-     * Whether the overlay can be pushed on-screen if none of the provided positions fit.
-     * @return {?}
-     */
-    get push() { return this._push; }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    set push(value) { this._push = coerceBooleanProperty(value); }
-    /**
-     * The associated overlay reference.
-     * @return {?}
-     */
-    get overlayRef() {
-        return this._overlayRef;
-    }
-    /**
-     * The element's layout direction.
-     * @return {?}
-     */
-    get dir() {
-        return this._dir ? this._dir.value : 'ltr';
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        if (this._overlayRef) {
-            this._overlayRef.dispose();
-        }
-        this._backdropSubscription.unsubscribe();
-    }
-    /**
-     * @param {?} changes
-     * @return {?}
-     */
-    ngOnChanges(changes) {
-        if (this._position) {
-            this._updatePositionStrategy(this._position);
-            this._overlayRef.updateSize({
-                width: this.width,
-                minWidth: this.minWidth,
-                height: this.height,
-                minHeight: this.minHeight,
-            });
-            if (changes['origin'] && this.open) {
-                this._position.apply();
+        /**
+         * The offset in pixels for the overlay connection point on the x-axis
+         * @return {?}
+         */
+        get offsetX() { return this._offsetX; }
+        /**
+         * @param {?} offsetX
+         * @return {?}
+         */
+        set offsetX(offsetX) {
+            this._offsetX = offsetX;
+            if (this._position) {
+                this._updatePositionStrategy(this._position);
             }
         }
-        if (changes['open']) {
-            this.open ? this._attachOverlay() : this._detachOverlay();
-        }
-    }
-    /**
-     * Creates an overlay
-     * @private
-     * @return {?}
-     */
-    _createOverlay() {
-        if (!this.positions || !this.positions.length) {
-            this.positions = defaultPositionList;
-        }
-        this._overlayRef = this._overlay.create(this._buildConfig());
-        this._overlayRef.keydownEvents().subscribe((/**
-         * @param {?} event
+        /**
+         * The offset in pixels for the overlay connection point on the y-axis
          * @return {?}
          */
-        (event) => {
-            this.overlayKeydown.next(event);
-            if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
-                event.preventDefault();
-                this._detachOverlay();
+        get offsetY() { return this._offsetY; }
+        /**
+         * @param {?} offsetY
+         * @return {?}
+         */
+        set offsetY(offsetY) {
+            this._offsetY = offsetY;
+            if (this._position) {
+                this._updatePositionStrategy(this._position);
             }
-        }));
-    }
-    /**
-     * Builds the overlay config based on the directive's inputs
-     * @private
-     * @return {?}
-     */
-    _buildConfig() {
-        /** @type {?} */
-        const positionStrategy = this._position =
-            this.positionStrategy || this._createPositionStrategy();
-        /** @type {?} */
-        const overlayConfig = new OverlayConfig({
-            direction: this._dir,
-            positionStrategy,
-            scrollStrategy: this.scrollStrategy,
-            hasBackdrop: this.hasBackdrop
-        });
-        if (this.width || this.width === 0) {
-            overlayConfig.width = this.width;
         }
-        if (this.height || this.height === 0) {
-            overlayConfig.height = this.height;
-        }
-        if (this.minWidth || this.minWidth === 0) {
-            overlayConfig.minWidth = this.minWidth;
-        }
-        if (this.minHeight || this.minHeight === 0) {
-            overlayConfig.minHeight = this.minHeight;
-        }
-        if (this.backdropClass) {
-            overlayConfig.backdropClass = this.backdropClass;
-        }
-        if (this.panelClass) {
-            overlayConfig.panelClass = this.panelClass;
-        }
-        return overlayConfig;
-    }
-    /**
-     * Updates the state of a position strategy, based on the values of the directive inputs.
-     * @private
-     * @param {?} positionStrategy
-     * @return {?}
-     */
-    _updatePositionStrategy(positionStrategy) {
-        /** @type {?} */
-        const positions = this.positions.map((/**
-         * @param {?} currentPosition
+        /**
+         * Whether or not the overlay should attach a backdrop.
          * @return {?}
          */
-        currentPosition => ({
-            originX: currentPosition.originX,
-            originY: currentPosition.originY,
-            overlayX: currentPosition.overlayX,
-            overlayY: currentPosition.overlayY,
-            offsetX: currentPosition.offsetX || this.offsetX,
-            offsetY: currentPosition.offsetY || this.offsetY,
-            panelClass: currentPosition.panelClass || undefined,
-        })));
-        return positionStrategy
-            .setOrigin(this.origin.elementRef)
-            .withPositions(positions)
-            .withFlexibleDimensions(this.flexibleDimensions)
-            .withPush(this.push)
-            .withGrowAfterOpen(this.growAfterOpen)
-            .withViewportMargin(this.viewportMargin)
-            .withLockedPosition(this.lockPosition)
-            .withTransformOriginOn(this.transformOriginSelector);
-    }
-    /**
-     * Returns the position strategy of the overlay to be set on the overlay config
-     * @private
-     * @return {?}
-     */
-    _createPositionStrategy() {
-        /** @type {?} */
-        const strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
-        this._updatePositionStrategy(strategy);
-        strategy.positionChanges.subscribe((/**
-         * @param {?} p
+        get hasBackdrop() { return this._hasBackdrop; }
+        /**
+         * @param {?} value
          * @return {?}
          */
-        p => this.positionChange.emit(p)));
-        return strategy;
-    }
-    /**
-     * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
-     * @private
-     * @return {?}
-     */
-    _attachOverlay() {
-        if (!this._overlayRef) {
-            this._createOverlay();
+        set hasBackdrop(value) { this._hasBackdrop = coerceBooleanProperty(value); }
+        /**
+         * Whether or not the overlay should be locked when scrolling.
+         * @return {?}
+         */
+        get lockPosition() { return this._lockPosition; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set lockPosition(value) { this._lockPosition = coerceBooleanProperty(value); }
+        /**
+         * Whether the overlay's width and height can be constrained to fit within the viewport.
+         * @return {?}
+         */
+        get flexibleDimensions() { return this._flexibleDimensions; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set flexibleDimensions(value) {
+            this._flexibleDimensions = coerceBooleanProperty(value);
         }
-        else {
-            // Update the overlay size, in case the directive's inputs have changed
-            this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
+        /**
+         * Whether the overlay can grow after the initial open when flexible positioning is turned on.
+         * @return {?}
+         */
+        get growAfterOpen() { return this._growAfterOpen; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set growAfterOpen(value) { this._growAfterOpen = coerceBooleanProperty(value); }
+        /**
+         * Whether the overlay can be pushed on-screen if none of the provided positions fit.
+         * @return {?}
+         */
+        get push() { return this._push; }
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        set push(value) { this._push = coerceBooleanProperty(value); }
+        /**
+         * The associated overlay reference.
+         * @return {?}
+         */
+        get overlayRef() {
+            return this._overlayRef;
         }
-        if (!this._overlayRef.hasAttached()) {
-            this._overlayRef.attach(this._templatePortal);
-            this.attach.emit();
+        /**
+         * The element's layout direction.
+         * @return {?}
+         */
+        get dir() {
+            return this._dir ? this._dir.value : 'ltr';
         }
-        if (this.hasBackdrop) {
-            this._backdropSubscription = this._overlayRef.backdropClick().subscribe((/**
+        /**
+         * @return {?}
+         */
+        ngOnDestroy() {
+            if (this._overlayRef) {
+                this._overlayRef.dispose();
+            }
+            this._backdropSubscription.unsubscribe();
+        }
+        /**
+         * @param {?} changes
+         * @return {?}
+         */
+        ngOnChanges(changes) {
+            if (this._position) {
+                this._updatePositionStrategy(this._position);
+                this._overlayRef.updateSize({
+                    width: this.width,
+                    minWidth: this.minWidth,
+                    height: this.height,
+                    minHeight: this.minHeight,
+                });
+                if (changes['origin'] && this.open) {
+                    this._position.apply();
+                }
+            }
+            if (changes['open']) {
+                this.open ? this._attachOverlay() : this._detachOverlay();
+            }
+        }
+        /**
+         * Creates an overlay
+         * @private
+         * @return {?}
+         */
+        _createOverlay() {
+            if (!this.positions || !this.positions.length) {
+                this.positions = defaultPositionList;
+            }
+            this._overlayRef = this._overlay.create(this._buildConfig());
+            this._overlayRef.keydownEvents().subscribe((/**
              * @param {?} event
              * @return {?}
              */
-            event => {
-                this.backdropClick.emit(event);
+            (event) => {
+                this.overlayKeydown.next(event);
+                if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
+                    event.preventDefault();
+                    this._detachOverlay();
+                }
             }));
         }
-        else {
+        /**
+         * Builds the overlay config based on the directive's inputs
+         * @private
+         * @return {?}
+         */
+        _buildConfig() {
+            /** @type {?} */
+            const positionStrategy = this._position =
+                this.positionStrategy || this._createPositionStrategy();
+            /** @type {?} */
+            const overlayConfig = new OverlayConfig({
+                direction: this._dir,
+                positionStrategy,
+                scrollStrategy: this.scrollStrategy,
+                hasBackdrop: this.hasBackdrop
+            });
+            if (this.width || this.width === 0) {
+                overlayConfig.width = this.width;
+            }
+            if (this.height || this.height === 0) {
+                overlayConfig.height = this.height;
+            }
+            if (this.minWidth || this.minWidth === 0) {
+                overlayConfig.minWidth = this.minWidth;
+            }
+            if (this.minHeight || this.minHeight === 0) {
+                overlayConfig.minHeight = this.minHeight;
+            }
+            if (this.backdropClass) {
+                overlayConfig.backdropClass = this.backdropClass;
+            }
+            if (this.panelClass) {
+                overlayConfig.panelClass = this.panelClass;
+            }
+            return overlayConfig;
+        }
+        /**
+         * Updates the state of a position strategy, based on the values of the directive inputs.
+         * @private
+         * @param {?} positionStrategy
+         * @return {?}
+         */
+        _updatePositionStrategy(positionStrategy) {
+            /** @type {?} */
+            const positions = this.positions.map((/**
+             * @param {?} currentPosition
+             * @return {?}
+             */
+            currentPosition => ({
+                originX: currentPosition.originX,
+                originY: currentPosition.originY,
+                overlayX: currentPosition.overlayX,
+                overlayY: currentPosition.overlayY,
+                offsetX: currentPosition.offsetX || this.offsetX,
+                offsetY: currentPosition.offsetY || this.offsetY,
+                panelClass: currentPosition.panelClass || undefined,
+            })));
+            return positionStrategy
+                .setOrigin(this.origin.elementRef)
+                .withPositions(positions)
+                .withFlexibleDimensions(this.flexibleDimensions)
+                .withPush(this.push)
+                .withGrowAfterOpen(this.growAfterOpen)
+                .withViewportMargin(this.viewportMargin)
+                .withLockedPosition(this.lockPosition)
+                .withTransformOriginOn(this.transformOriginSelector);
+        }
+        /**
+         * Returns the position strategy of the overlay to be set on the overlay config
+         * @private
+         * @return {?}
+         */
+        _createPositionStrategy() {
+            /** @type {?} */
+            const strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
+            this._updatePositionStrategy(strategy);
+            strategy.positionChanges.subscribe((/**
+             * @param {?} p
+             * @return {?}
+             */
+            p => this.positionChange.emit(p)));
+            return strategy;
+        }
+        /**
+         * Attaches the overlay and subscribes to backdrop clicks if backdrop exists
+         * @private
+         * @return {?}
+         */
+        _attachOverlay() {
+            if (!this._overlayRef) {
+                this._createOverlay();
+            }
+            else {
+                // Update the overlay size, in case the directive's inputs have changed
+                this._overlayRef.getConfig().hasBackdrop = this.hasBackdrop;
+            }
+            if (!this._overlayRef.hasAttached()) {
+                this._overlayRef.attach(this._templatePortal);
+                this.attach.emit();
+            }
+            if (this.hasBackdrop) {
+                this._backdropSubscription = this._overlayRef.backdropClick().subscribe((/**
+                 * @param {?} event
+                 * @return {?}
+                 */
+                event => {
+                    this.backdropClick.emit(event);
+                }));
+            }
+            else {
+                this._backdropSubscription.unsubscribe();
+            }
+        }
+        /**
+         * Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists
+         * @private
+         * @return {?}
+         */
+        _detachOverlay() {
+            if (this._overlayRef) {
+                this._overlayRef.detach();
+                this.detach.emit();
+            }
             this._backdropSubscription.unsubscribe();
         }
     }
-    /**
-     * Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists
-     * @private
-     * @return {?}
-     */
-    _detachOverlay() {
-        if (this._overlayRef) {
-            this._overlayRef.detach();
-            this.detach.emit();
-        }
-        this._backdropSubscription.unsubscribe();
-    }
-}
-CdkConnectedOverlay.decorators = [
-    { type: Directive, args: [{
-                selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
-                exportAs: 'cdkConnectedOverlay'
-            },] }
-];
-/** @nocollapse */
-CdkConnectedOverlay.ctorParameters = () => [
-    { type: Overlay },
-    { type: TemplateRef },
-    { type: ViewContainerRef },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] }] },
-    { type: Directionality, decorators: [{ type: Optional }] }
-];
-CdkConnectedOverlay.propDecorators = {
-    origin: [{ type: Input, args: ['cdkConnectedOverlayOrigin',] }],
-    positions: [{ type: Input, args: ['cdkConnectedOverlayPositions',] }],
-    positionStrategy: [{ type: Input, args: ['cdkConnectedOverlayPositionStrategy',] }],
-    offsetX: [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] }],
-    offsetY: [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] }],
-    width: [{ type: Input, args: ['cdkConnectedOverlayWidth',] }],
-    height: [{ type: Input, args: ['cdkConnectedOverlayHeight',] }],
-    minWidth: [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] }],
-    minHeight: [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] }],
-    backdropClass: [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] }],
-    panelClass: [{ type: Input, args: ['cdkConnectedOverlayPanelClass',] }],
-    viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
-    scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
-    open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
-    transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
-    hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
-    lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
-    flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
-    growAfterOpen: [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
-    push: [{ type: Input, args: ['cdkConnectedOverlayPush',] }],
-    backdropClick: [{ type: Output }],
-    positionChange: [{ type: Output }],
-    attach: [{ type: Output }],
-    detach: [{ type: Output }],
-    overlayKeydown: [{ type: Output }]
-};
+    CdkConnectedOverlay.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
+                    exportAs: 'cdkConnectedOverlay'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkConnectedOverlay.ctorParameters = () => [
+        { type: Overlay },
+        { type: TemplateRef },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] }] },
+        { type: Directionality, decorators: [{ type: Optional }] }
+    ];
+    CdkConnectedOverlay.propDecorators = {
+        origin: [{ type: Input, args: ['cdkConnectedOverlayOrigin',] }],
+        positions: [{ type: Input, args: ['cdkConnectedOverlayPositions',] }],
+        positionStrategy: [{ type: Input, args: ['cdkConnectedOverlayPositionStrategy',] }],
+        offsetX: [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] }],
+        offsetY: [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] }],
+        width: [{ type: Input, args: ['cdkConnectedOverlayWidth',] }],
+        height: [{ type: Input, args: ['cdkConnectedOverlayHeight',] }],
+        minWidth: [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] }],
+        minHeight: [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] }],
+        backdropClass: [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] }],
+        panelClass: [{ type: Input, args: ['cdkConnectedOverlayPanelClass',] }],
+        viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
+        scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
+        open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
+        transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
+        hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
+        lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
+        flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
+        growAfterOpen: [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
+        push: [{ type: Input, args: ['cdkConnectedOverlayPush',] }],
+        backdropClick: [{ type: Output }],
+        positionChange: [{ type: Output }],
+        attach: [{ type: Output }],
+        detach: [{ type: Output }],
+        overlayKeydown: [{ type: Output }]
+    };
+    return CdkConnectedOverlay;
+})();
 if (false) {
     /** @type {?} */
     CdkConnectedOverlay.ngAcceptInputType_hasBackdrop;
@@ -4946,19 +5008,22 @@ const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
  * Generated from: src/cdk/overlay/overlay-module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class OverlayModule {
-}
-OverlayModule.decorators = [
-    { type: NgModule, args: [{
-                imports: [BidiModule, PortalModule, ScrollingModule],
-                exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollingModule],
-                declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
-                providers: [
-                    Overlay,
-                    CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
-                ],
-            },] }
-];
+let OverlayModule = /** @class */ (() => {
+    class OverlayModule {
+    }
+    OverlayModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule, PortalModule, ScrollingModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollingModule],
+                    declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
+                    providers: [
+                        Overlay,
+                        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+                    ],
+                },] }
+    ];
+    return OverlayModule;
+})();
 /**
  * @deprecated Use `OverlayModule` instead.
  * \@breaking-change 8.0.0
@@ -4985,117 +5050,127 @@ const OVERLAY_PROVIDERS = [
  *
  * Should be provided in the root component.
  */
-class FullscreenOverlayContainer extends OverlayContainer {
+let FullscreenOverlayContainer = /** @class */ (() => {
     /**
-     * @param {?} _document
-     * @param {?=} platform
+     * Alternative to OverlayContainer that supports correct displaying of overlay elements in
+     * Fullscreen mode
+     * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
+     *
+     * Should be provided in the root component.
      */
-    constructor(_document, 
-    /**
-     * @deprecated `platform` parameter to become required.
-     * @breaking-change 10.0.0
-     */
-    platform) {
-        super(_document, platform);
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() {
-        super.ngOnDestroy();
-        if (this._fullScreenEventName && this._fullScreenListener) {
-            this._document.removeEventListener(this._fullScreenEventName, this._fullScreenListener);
+    class FullscreenOverlayContainer extends OverlayContainer {
+        /**
+         * @param {?} _document
+         * @param {?=} platform
+         */
+        constructor(_document, 
+        /**
+         * @deprecated `platform` parameter to become required.
+         * @breaking-change 10.0.0
+         */
+        platform) {
+            super(_document, platform);
         }
-    }
-    /**
-     * @protected
-     * @return {?}
-     */
-    _createContainer() {
-        super._createContainer();
-        this._adjustParentForFullscreenChange();
-        this._addFullscreenChangeListener((/**
+        /**
          * @return {?}
          */
-        () => this._adjustParentForFullscreenChange()));
-    }
-    /**
-     * @private
-     * @return {?}
-     */
-    _adjustParentForFullscreenChange() {
-        if (!this._containerElement) {
-            return;
-        }
-        /** @type {?} */
-        const fullscreenElement = this.getFullscreenElement();
-        /** @type {?} */
-        const parent = fullscreenElement || this._document.body;
-        parent.appendChild(this._containerElement);
-    }
-    /**
-     * @private
-     * @param {?} fn
-     * @return {?}
-     */
-    _addFullscreenChangeListener(fn) {
-        /** @type {?} */
-        const eventName = this._getEventName();
-        if (eventName) {
-            if (this._fullScreenListener) {
-                this._document.removeEventListener(eventName, this._fullScreenListener);
+        ngOnDestroy() {
+            super.ngOnDestroy();
+            if (this._fullScreenEventName && this._fullScreenListener) {
+                this._document.removeEventListener(this._fullScreenEventName, this._fullScreenListener);
             }
-            this._document.addEventListener(eventName, fn);
-            this._fullScreenListener = fn;
         }
-    }
-    /**
-     * @private
-     * @return {?}
-     */
-    _getEventName() {
-        if (!this._fullScreenEventName) {
+        /**
+         * @protected
+         * @return {?}
+         */
+        _createContainer() {
+            super._createContainer();
+            this._adjustParentForFullscreenChange();
+            this._addFullscreenChangeListener((/**
+             * @return {?}
+             */
+            () => this._adjustParentForFullscreenChange()));
+        }
+        /**
+         * @private
+         * @return {?}
+         */
+        _adjustParentForFullscreenChange() {
+            if (!this._containerElement) {
+                return;
+            }
+            /** @type {?} */
+            const fullscreenElement = this.getFullscreenElement();
+            /** @type {?} */
+            const parent = fullscreenElement || this._document.body;
+            parent.appendChild(this._containerElement);
+        }
+        /**
+         * @private
+         * @param {?} fn
+         * @return {?}
+         */
+        _addFullscreenChangeListener(fn) {
+            /** @type {?} */
+            const eventName = this._getEventName();
+            if (eventName) {
+                if (this._fullScreenListener) {
+                    this._document.removeEventListener(eventName, this._fullScreenListener);
+                }
+                this._document.addEventListener(eventName, fn);
+                this._fullScreenListener = fn;
+            }
+        }
+        /**
+         * @private
+         * @return {?}
+         */
+        _getEventName() {
+            if (!this._fullScreenEventName) {
+                /** @type {?} */
+                const _document = (/** @type {?} */ (this._document));
+                if (_document.fullscreenEnabled) {
+                    this._fullScreenEventName = 'fullscreenchange';
+                }
+                else if (_document.webkitFullscreenEnabled) {
+                    this._fullScreenEventName = 'webkitfullscreenchange';
+                }
+                else if (_document.mozFullScreenEnabled) {
+                    this._fullScreenEventName = 'mozfullscreenchange';
+                }
+                else if (_document.msFullscreenEnabled) {
+                    this._fullScreenEventName = 'MSFullscreenChange';
+                }
+            }
+            return this._fullScreenEventName;
+        }
+        /**
+         * When the page is put into fullscreen mode, a specific element is specified.
+         * Only that element and its children are visible when in fullscreen mode.
+         * @return {?}
+         */
+        getFullscreenElement() {
             /** @type {?} */
             const _document = (/** @type {?} */ (this._document));
-            if (_document.fullscreenEnabled) {
-                this._fullScreenEventName = 'fullscreenchange';
-            }
-            else if (_document.webkitFullscreenEnabled) {
-                this._fullScreenEventName = 'webkitfullscreenchange';
-            }
-            else if (_document.mozFullScreenEnabled) {
-                this._fullScreenEventName = 'mozfullscreenchange';
-            }
-            else if (_document.msFullscreenEnabled) {
-                this._fullScreenEventName = 'MSFullscreenChange';
-            }
+            return _document.fullscreenElement ||
+                _document.webkitFullscreenElement ||
+                _document.mozFullScreenElement ||
+                _document.msFullscreenElement ||
+                null;
         }
-        return this._fullScreenEventName;
     }
-    /**
-     * When the page is put into fullscreen mode, a specific element is specified.
-     * Only that element and its children are visible when in fullscreen mode.
-     * @return {?}
-     */
-    getFullscreenElement() {
-        /** @type {?} */
-        const _document = (/** @type {?} */ (this._document));
-        return _document.fullscreenElement ||
-            _document.webkitFullscreenElement ||
-            _document.mozFullScreenElement ||
-            _document.msFullscreenElement ||
-            null;
-    }
-}
-FullscreenOverlayContainer.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-FullscreenOverlayContainer.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform }
-];
-/** @nocollapse */ FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    FullscreenOverlayContainer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    FullscreenOverlayContainer.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
+    ];
+    /** @nocollapse */ FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    return FullscreenOverlayContainer;
+})();
 if (false) {
     /**
      * @type {?}

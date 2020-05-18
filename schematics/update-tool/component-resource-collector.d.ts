@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/// <amd-module name="@angular/cdk/schematics/update-tool/component-resource-collector" />
 import * as ts from 'typescript';
 import { FileSystem, WorkspacePath } from './file-system';
 import { LineAndCharacter } from './utils/line-mappings';
