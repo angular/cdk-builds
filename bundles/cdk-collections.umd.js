@@ -512,10 +512,10 @@
         UniqueSelectionDispatcher.prototype.ngOnDestroy = function () {
             this._listeners = [];
         };
-        UniqueSelectionDispatcher.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
         UniqueSelectionDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+        UniqueSelectionDispatcher = __decorate([
+            i0.Injectable({ providedIn: 'root' })
+        ], UniqueSelectionDispatcher);
         return UniqueSelectionDispatcher;
     }());
 
