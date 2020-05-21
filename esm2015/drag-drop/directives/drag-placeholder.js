@@ -1,57 +1,33 @@
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/drag-drop/directives/drag-placeholder.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { __decorate, __metadata } from "tslib";
 import { Directive, TemplateRef, Input } from '@angular/core';
 /**
  * Element that will be used as a template for the placeholder of a CdkDrag when
  * it is being dragged. The placeholder is displayed in place of the element being dragged.
- * @template T
  */
 let CdkDragPlaceholder = /** @class */ (() => {
-    /**
-     * Element that will be used as a template for the placeholder of a CdkDrag when
-     * it is being dragged. The placeholder is displayed in place of the element being dragged.
-     * @template T
-     */
-    class CdkDragPlaceholder {
-        /**
-         * @param {?} templateRef
-         */
+    let CdkDragPlaceholder = class CdkDragPlaceholder {
         constructor(templateRef) {
             this.templateRef = templateRef;
         }
-    }
-    CdkDragPlaceholder.decorators = [
-        { type: Directive, args: [{
-                    selector: 'ng-template[cdkDragPlaceholder]'
-                },] }
-    ];
-    /** @nocollapse */
-    CdkDragPlaceholder.ctorParameters = () => [
-        { type: TemplateRef }
-    ];
-    CdkDragPlaceholder.propDecorators = {
-        data: [{ type: Input }]
     };
+    __decorate([
+        Input(),
+        __metadata("design:type", Object)
+    ], CdkDragPlaceholder.prototype, "data", void 0);
+    CdkDragPlaceholder = __decorate([
+        Directive({
+            selector: 'ng-template[cdkDragPlaceholder]'
+        }),
+        __metadata("design:paramtypes", [TemplateRef])
+    ], CdkDragPlaceholder);
     return CdkDragPlaceholder;
 })();
 export { CdkDragPlaceholder };
-if (false) {
-    /**
-     * Context data to be added to the placeholder template instance.
-     * @type {?}
-     */
-    CdkDragPlaceholder.prototype.data;
-    /** @type {?} */
-    CdkDragPlaceholder.prototype.templateRef;
-}
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZHJhZy1wbGFjZWhvbGRlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvZHJhZy1kcm9wL2RpcmVjdGl2ZXMvZHJhZy1wbGFjZWhvbGRlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFRQSxPQUFPLEVBQUMsU0FBUyxFQUFFLFdBQVcsRUFBRSxLQUFLLEVBQUMsTUFBTSxlQUFlLENBQUM7Ozs7OztBQU01RDs7Ozs7O0lBQUEsTUFHYSxrQkFBa0I7Ozs7UUFHN0IsWUFBbUIsV0FBMkI7WUFBM0IsZ0JBQVcsR0FBWCxXQUFXLENBQWdCO1FBQUcsQ0FBQzs7O2dCQU5uRCxTQUFTLFNBQUM7b0JBQ1QsUUFBUSxFQUFFLGlDQUFpQztpQkFDNUM7Ozs7Z0JBUmtCLFdBQVc7Ozt1QkFXM0IsS0FBSzs7SUFFUix5QkFBQztLQUFBO1NBSlksa0JBQWtCOzs7Ozs7SUFFN0Isa0NBQWlCOztJQUNMLHlDQUFrQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge0RpcmVjdGl2ZSwgVGVtcGxhdGVSZWYsIElucHV0fSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuLyoqXG4gKiBFbGVtZW50IHRoYXQgd2lsbCBiZSB1c2VkIGFzIGEgdGVtcGxhdGUgZm9yIHRoZSBwbGFjZWhvbGRlciBvZiBhIENka0RyYWcgd2hlblxuICogaXQgaXMgYmVpbmcgZHJhZ2dlZC4gVGhlIHBsYWNlaG9sZGVyIGlzIGRpc3BsYXllZCBpbiBwbGFjZSBvZiB0aGUgZWxlbWVudCBiZWluZyBkcmFnZ2VkLlxuICovXG5ARGlyZWN0aXZlKHtcbiAgc2VsZWN0b3I6ICduZy10ZW1wbGF0ZVtjZGtEcmFnUGxhY2Vob2xkZXJdJ1xufSlcbmV4cG9ydCBjbGFzcyBDZGtEcmFnUGxhY2Vob2xkZXI8VCA9IGFueT4ge1xuICAvKiogQ29udGV4dCBkYXRhIHRvIGJlIGFkZGVkIHRvIHRoZSBwbGFjZWhvbGRlciB0ZW1wbGF0ZSBpbnN0YW5jZS4gKi9cbiAgQElucHV0KCkgZGF0YTogVDtcbiAgY29uc3RydWN0b3IocHVibGljIHRlbXBsYXRlUmVmOiBUZW1wbGF0ZVJlZjxUPikge31cbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZHJhZy1wbGFjZWhvbGRlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvZHJhZy1kcm9wL2RpcmVjdGl2ZXMvZHJhZy1wbGFjZWhvbGRlci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7O0FBRUgsT0FBTyxFQUFDLFNBQVMsRUFBRSxXQUFXLEVBQUUsS0FBSyxFQUFDLE1BQU0sZUFBZSxDQUFDO0FBRTVEOzs7R0FHRztBQUlIO0lBQUEsSUFBYSxrQkFBa0IsR0FBL0IsTUFBYSxrQkFBa0I7UUFHN0IsWUFBbUIsV0FBMkI7WUFBM0IsZ0JBQVcsR0FBWCxXQUFXLENBQWdCO1FBQUcsQ0FBQztLQUNuRCxDQUFBO0lBRlU7UUFBUixLQUFLLEVBQUU7O29EQUFTO0lBRk4sa0JBQWtCO1FBSDlCLFNBQVMsQ0FBQztZQUNULFFBQVEsRUFBRSxpQ0FBaUM7U0FDNUMsQ0FBQzt5Q0FJZ0MsV0FBVztPQUhoQyxrQkFBa0IsQ0FJOUI7SUFBRCx5QkFBQztLQUFBO1NBSlksa0JBQWtCIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7RGlyZWN0aXZlLCBUZW1wbGF0ZVJlZiwgSW5wdXR9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuXG4vKipcbiAqIEVsZW1lbnQgdGhhdCB3aWxsIGJlIHVzZWQgYXMgYSB0ZW1wbGF0ZSBmb3IgdGhlIHBsYWNlaG9sZGVyIG9mIGEgQ2RrRHJhZyB3aGVuXG4gKiBpdCBpcyBiZWluZyBkcmFnZ2VkLiBUaGUgcGxhY2Vob2xkZXIgaXMgZGlzcGxheWVkIGluIHBsYWNlIG9mIHRoZSBlbGVtZW50IGJlaW5nIGRyYWdnZWQuXG4gKi9cbkBEaXJlY3RpdmUoe1xuICBzZWxlY3RvcjogJ25nLXRlbXBsYXRlW2Nka0RyYWdQbGFjZWhvbGRlcl0nXG59KVxuZXhwb3J0IGNsYXNzIENka0RyYWdQbGFjZWhvbGRlcjxUID0gYW55PiB7XG4gIC8qKiBDb250ZXh0IGRhdGEgdG8gYmUgYWRkZWQgdG8gdGhlIHBsYWNlaG9sZGVyIHRlbXBsYXRlIGluc3RhbmNlLiAqL1xuICBASW5wdXQoKSBkYXRhOiBUO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgdGVtcGxhdGVSZWY6IFRlbXBsYXRlUmVmPFQ+KSB7fVxufVxuIl19

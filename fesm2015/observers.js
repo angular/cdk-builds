@@ -1,108 +1,55 @@
+import { __decorate, __metadata } from 'tslib';
 import { coerceElement, coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Input, Directive, ElementRef, NgZone, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/observers/observe-content.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
- * \@docs-private
+ * @docs-private
  */
 let MutationObserverFactory = /** @class */ (() => {
-    /**
-     * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
-     * \@docs-private
-     */
-    class MutationObserverFactory {
-        /**
-         * @param {?} callback
-         * @return {?}
-         */
+    let MutationObserverFactory = class MutationObserverFactory {
         create(callback) {
             return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
         }
-    }
-    MutationObserverFactory.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */ MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    };
+    MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    MutationObserverFactory = __decorate([
+        Injectable({ providedIn: 'root' })
+    ], MutationObserverFactory);
     return MutationObserverFactory;
 })();
-/**
- * An injectable service that allows watching elements for changes to their content.
- */
+/** An injectable service that allows watching elements for changes to their content. */
 let ContentObserver = /** @class */ (() => {
-    /**
-     * An injectable service that allows watching elements for changes to their content.
-     */
-    class ContentObserver {
-        /**
-         * @param {?} _mutationObserverFactory
-         */
+    let ContentObserver = class ContentObserver {
         constructor(_mutationObserverFactory) {
             this._mutationObserverFactory = _mutationObserverFactory;
-            /**
-             * Keeps track of the existing MutationObservers so they can be reused.
-             */
+            /** Keeps track of the existing MutationObservers so they can be reused. */
             this._observedElements = new Map();
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
-            this._observedElements.forEach((/**
-             * @param {?} _
-             * @param {?} element
-             * @return {?}
-             */
-            (_, element) => this._cleanupObserver(element)));
+            this._observedElements.forEach((_, element) => this._cleanupObserver(element));
         }
-        /**
-         * @param {?} elementOrRef
-         * @return {?}
-         */
         observe(elementOrRef) {
-            /** @type {?} */
             const element = coerceElement(elementOrRef);
-            return new Observable((/**
-             * @param {?} observer
-             * @return {?}
-             */
-            (observer) => {
-                /** @type {?} */
+            return new Observable((observer) => {
                 const stream = this._observeElement(element);
-                /** @type {?} */
                 const subscription = stream.subscribe(observer);
-                return (/**
-                 * @return {?}
-                 */
-                () => {
+                return () => {
                     subscription.unsubscribe();
                     this._unobserveElement(element);
-                });
-            }));
+                };
+            });
         }
         /**
          * Observes the given element by using the existing MutationObserver if available, or creating a
          * new one if not.
-         * @private
-         * @param {?} element
-         * @return {?}
          */
         _observeElement(element) {
             if (!this._observedElements.has(element)) {
-                /** @type {?} */
                 const stream = new Subject();
-                /** @type {?} */
-                const observer = this._mutationObserverFactory.create((/**
-                 * @param {?} mutations
-                 * @return {?}
-                 */
-                mutations => stream.next(mutations)));
+                const observer = this._mutationObserverFactory.create(mutations => stream.next(mutations));
                 if (observer) {
                     observer.observe(element, {
                         characterData: true,
@@ -113,34 +60,26 @@ let ContentObserver = /** @class */ (() => {
                 this._observedElements.set(element, { observer, stream, count: 1 });
             }
             else {
-                (/** @type {?} */ (this._observedElements.get(element))).count++;
+                this._observedElements.get(element).count++;
             }
-            return (/** @type {?} */ (this._observedElements.get(element))).stream;
+            return this._observedElements.get(element).stream;
         }
         /**
          * Un-observes the given element and cleans up the underlying MutationObserver if nobody else is
          * observing this element.
-         * @private
-         * @param {?} element
-         * @return {?}
          */
         _unobserveElement(element) {
             if (this._observedElements.has(element)) {
-                (/** @type {?} */ (this._observedElements.get(element))).count--;
-                if (!(/** @type {?} */ (this._observedElements.get(element))).count) {
+                this._observedElements.get(element).count--;
+                if (!this._observedElements.get(element).count) {
                     this._cleanupObserver(element);
                 }
             }
         }
-        /**
-         * Clean up the underlying MutationObserver for the specified element.
-         * @private
-         * @param {?} element
-         * @return {?}
-         */
+        /** Clean up the underlying MutationObserver for the specified element. */
         _cleanupObserver(element) {
             if (this._observedElements.has(element)) {
-                const { observer, stream } = (/** @type {?} */ (this._observedElements.get(element)));
+                const { observer, stream } = this._observedElements.get(element);
                 if (observer) {
                     observer.disconnect();
                 }
@@ -148,52 +87,25 @@ let ContentObserver = /** @class */ (() => {
                 this._observedElements.delete(element);
             }
         }
-    }
-    ContentObserver.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    ContentObserver.ctorParameters = () => [
-        { type: MutationObserverFactory }
-    ];
-    /** @nocollapse */ ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    };
+    ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    ContentObserver = __decorate([
+        Injectable({ providedIn: 'root' }),
+        __metadata("design:paramtypes", [MutationObserverFactory])
+    ], ContentObserver);
     return ContentObserver;
 })();
-if (false) {
-    /**
-     * Keeps track of the existing MutationObservers so they can be reused.
-     * @type {?}
-     * @private
-     */
-    ContentObserver.prototype._observedElements;
-    /**
-     * @type {?}
-     * @private
-     */
-    ContentObserver.prototype._mutationObserverFactory;
-}
 /**
  * Directive that triggers a callback whenever the content of
  * its associated element has changed.
  */
 let CdkObserveContent = /** @class */ (() => {
-    /**
-     * Directive that triggers a callback whenever the content of
-     * its associated element has changed.
-     */
-    class CdkObserveContent {
-        /**
-         * @param {?} _contentObserver
-         * @param {?} _elementRef
-         * @param {?} _ngZone
-         */
+    let CdkObserveContent = class CdkObserveContent {
         constructor(_contentObserver, _elementRef, _ngZone) {
             this._contentObserver = _contentObserver;
             this._elementRef = _elementRef;
             this._ngZone = _ngZone;
-            /**
-             * Event emitted for each change in the element's content.
-             */
+            /** Event emitted for each change in the element's content. */
             this.event = new EventEmitter();
             this._disabled = false;
             this._currentSubscription = null;
@@ -201,151 +113,88 @@ let CdkObserveContent = /** @class */ (() => {
         /**
          * Whether observing content is disabled. This option can be used
          * to disconnect the underlying MutationObserver until it is needed.
-         * @return {?}
          */
         get disabled() { return this._disabled; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set disabled(value) {
             this._disabled = coerceBooleanProperty(value);
             this._disabled ? this._unsubscribe() : this._subscribe();
         }
-        /**
-         * Debounce interval for emitting the changes.
-         * @return {?}
-         */
+        /** Debounce interval for emitting the changes. */
         get debounce() { return this._debounce; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set debounce(value) {
             this._debounce = coerceNumberProperty(value);
             this._subscribe();
         }
-        /**
-         * @return {?}
-         */
         ngAfterContentInit() {
             if (!this._currentSubscription && !this.disabled) {
                 this._subscribe();
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._unsubscribe();
         }
-        /**
-         * @private
-         * @return {?}
-         */
         _subscribe() {
             this._unsubscribe();
-            /** @type {?} */
             const stream = this._contentObserver.observe(this._elementRef);
             // TODO(mmalerba): We shouldn't be emitting on this @Output() outside the zone.
             // Consider brining it back inside the zone next time we're making breaking changes.
             // Bringing it back inside can cause things like infinite change detection loops and changed
             // after checked errors if people's code isn't handling it properly.
-            this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
+            this._ngZone.runOutsideAngular(() => {
                 this._currentSubscription =
                     (this.debounce ? stream.pipe(debounceTime(this.debounce)) : stream).subscribe(this.event);
-            }));
+            });
         }
-        /**
-         * @private
-         * @return {?}
-         */
         _unsubscribe() {
             if (this._currentSubscription) {
                 this._currentSubscription.unsubscribe();
             }
         }
-    }
-    CdkObserveContent.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkObserveContent]',
-                    exportAs: 'cdkObserveContent',
-                },] }
-    ];
-    /** @nocollapse */
-    CdkObserveContent.ctorParameters = () => [
-        { type: ContentObserver },
-        { type: ElementRef },
-        { type: NgZone }
-    ];
-    CdkObserveContent.propDecorators = {
-        event: [{ type: Output, args: ['cdkObserveContent',] }],
-        disabled: [{ type: Input, args: ['cdkObserveContentDisabled',] }],
-        debounce: [{ type: Input }]
     };
+    __decorate([
+        Output('cdkObserveContent'),
+        __metadata("design:type", Object)
+    ], CdkObserveContent.prototype, "event", void 0);
+    __decorate([
+        Input('cdkObserveContentDisabled'),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], CdkObserveContent.prototype, "disabled", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkObserveContent.prototype, "debounce", null);
+    CdkObserveContent = __decorate([
+        Directive({
+            selector: '[cdkObserveContent]',
+            exportAs: 'cdkObserveContent',
+        }),
+        __metadata("design:paramtypes", [ContentObserver,
+            ElementRef,
+            NgZone])
+    ], CdkObserveContent);
     return CdkObserveContent;
 })();
-if (false) {
-    /** @type {?} */
-    CdkObserveContent.ngAcceptInputType_disabled;
-    /** @type {?} */
-    CdkObserveContent.ngAcceptInputType_debounce;
-    /**
-     * Event emitted for each change in the element's content.
-     * @type {?}
-     */
-    CdkObserveContent.prototype.event;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._disabled;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._debounce;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._currentSubscription;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._contentObserver;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._elementRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkObserveContent.prototype._ngZone;
-}
 let ObserversModule = /** @class */ (() => {
-    class ObserversModule {
-    }
-    ObserversModule.decorators = [
-        { type: NgModule, args: [{
-                    exports: [CdkObserveContent],
-                    declarations: [CdkObserveContent],
-                    providers: [MutationObserverFactory]
-                },] }
-    ];
+    let ObserversModule = class ObserversModule {
+    };
+    ObserversModule = __decorate([
+        NgModule({
+            exports: [CdkObserveContent],
+            declarations: [CdkObserveContent],
+            providers: [MutationObserverFactory]
+        })
+    ], ObserversModule);
     return ObserversModule;
 })();
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/observers/public-api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**

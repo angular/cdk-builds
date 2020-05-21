@@ -1,23 +1,18 @@
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/table/public-api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-export { DataRowOutlet, HeaderRowOutlet, FooterRowOutlet, NoDataRowOutlet, CDK_TABLE_TEMPLATE, CdkTable } from './table';
-export { CdkCellDef, CdkHeaderCellDef, CdkFooterCellDef, CdkColumnDef, BaseCdkCell, CdkHeaderCell, CdkFooterCell, CdkCell } from './cell';
-export { CDK_ROW_TEMPLATE, BaseRowDef, CdkHeaderRowDef, CdkFooterRowDef, CdkRowDef, CdkCellOutlet, CdkHeaderRow, CdkFooterRow, CdkRow, CdkNoDataRow } from './row';
-export { CdkTableModule } from './table-module';
-export { STICKY_DIRECTIONS, StickyStyler } from './sticky-styler';
-export { mixinHasStickyInput } from './can-stick';
-export { CdkTextColumn } from './text-column';
-export { CDK_TABLE, TEXT_COLUMN_OPTIONS } from './tokens';
+export * from './table';
+export * from './cell';
+export * from './row';
+export * from './table-module';
+export * from './sticky-styler';
+export * from './can-stick';
+export * from './text-column';
+export * from './tokens';
 /** Re-export DataSource for a more intuitive experience for users of just the table. */
 export { DataSource } from '@angular/cdk/collections';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvdGFibGUvcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFRQSwrR0FBYyxTQUFTLENBQUM7QUFDeEIsaUlBQWMsUUFBUSxDQUFDO0FBQ3ZCLDJKQUFjLE9BQU8sQ0FBQztBQUN0QiwrQkFBYyxnQkFBZ0IsQ0FBQztBQUMvQixnREFBYyxpQkFBaUIsQ0FBQztBQUNoQyxvQ0FBYyxhQUFhLENBQUM7QUFDNUIsOEJBQWMsZUFBZSxDQUFDO0FBQzlCLCtDQUFjLFVBQVUsQ0FBQzs7QUFHekIsT0FBTyxFQUFDLFVBQVUsRUFBQyxNQUFNLDBCQUEwQixDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBAbGljZW5zZVxuICogQ29weXJpZ2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmV4cG9ydCAqIGZyb20gJy4vdGFibGUnO1xuZXhwb3J0ICogZnJvbSAnLi9jZWxsJztcbmV4cG9ydCAqIGZyb20gJy4vcm93JztcbmV4cG9ydCAqIGZyb20gJy4vdGFibGUtbW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vc3RpY2t5LXN0eWxlcic7XG5leHBvcnQgKiBmcm9tICcuL2Nhbi1zdGljayc7XG5leHBvcnQgKiBmcm9tICcuL3RleHQtY29sdW1uJztcbmV4cG9ydCAqIGZyb20gJy4vdG9rZW5zJztcblxuLyoqIFJlLWV4cG9ydCBEYXRhU291cmNlIGZvciBhIG1vcmUgaW50dWl0aXZlIGV4cGVyaWVuY2UgZm9yIHVzZXJzIG9mIGp1c3QgdGhlIHRhYmxlLiAqL1xuZXhwb3J0IHtEYXRhU291cmNlfSBmcm9tICdAYW5ndWxhci9jZGsvY29sbGVjdGlvbnMnO1xuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvdGFibGUvcHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7O0dBTUc7QUFFSCxjQUFjLFNBQVMsQ0FBQztBQUN4QixjQUFjLFFBQVEsQ0FBQztBQUN2QixjQUFjLE9BQU8sQ0FBQztBQUN0QixjQUFjLGdCQUFnQixDQUFDO0FBQy9CLGNBQWMsaUJBQWlCLENBQUM7QUFDaEMsY0FBYyxhQUFhLENBQUM7QUFDNUIsY0FBYyxlQUFlLENBQUM7QUFDOUIsY0FBYyxVQUFVLENBQUM7QUFFekIsd0ZBQXdGO0FBQ3hGLE9BQU8sRUFBQyxVQUFVLEVBQUMsTUFBTSwwQkFBMEIsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL3RhYmxlJztcbmV4cG9ydCAqIGZyb20gJy4vY2VsbCc7XG5leHBvcnQgKiBmcm9tICcuL3Jvdyc7XG5leHBvcnQgKiBmcm9tICcuL3RhYmxlLW1vZHVsZSc7XG5leHBvcnQgKiBmcm9tICcuL3N0aWNreS1zdHlsZXInO1xuZXhwb3J0ICogZnJvbSAnLi9jYW4tc3RpY2snO1xuZXhwb3J0ICogZnJvbSAnLi90ZXh0LWNvbHVtbic7XG5leHBvcnQgKiBmcm9tICcuL3Rva2Vucyc7XG5cbi8qKiBSZS1leHBvcnQgRGF0YVNvdXJjZSBmb3IgYSBtb3JlIGludHVpdGl2ZSBleHBlcmllbmNlIGZvciB1c2VycyBvZiBqdXN0IHRoZSB0YWJsZS4gKi9cbmV4cG9ydCB7RGF0YVNvdXJjZX0gZnJvbSAnQGFuZ3VsYXIvY2RrL2NvbGxlY3Rpb25zJztcbiJdfQ==

@@ -1,27 +1,23 @@
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/clipboard-module.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
  * @license
  * Copyright Google LLC All Rights Reserved.
  *
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+import { __decorate } from "tslib";
 import { NgModule } from '@angular/core';
 import { CdkCopyToClipboard } from './copy-to-clipboard';
 let ClipboardModule = /** @class */ (() => {
-    class ClipboardModule {
-    }
-    ClipboardModule.decorators = [
-        { type: NgModule, args: [{
-                    declarations: [CdkCopyToClipboard],
-                    exports: [CdkCopyToClipboard],
-                },] }
-    ];
+    let ClipboardModule = class ClipboardModule {
+    };
+    ClipboardModule = __decorate([
+        NgModule({
+            declarations: [CdkCopyToClipboard],
+            exports: [CdkCopyToClipboard],
+        })
+    ], ClipboardModule);
     return ClipboardModule;
 })();
 export { ClipboardModule };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpcGJvYXJkLW1vZHVsZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvY2xpcGJvYXJkL2NsaXBib2FyZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBUUEsT0FBTyxFQUFDLFFBQVEsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUV2QyxPQUFPLEVBQUMsa0JBQWtCLEVBQUMsTUFBTSxxQkFBcUIsQ0FBQztBQUV2RDtJQUFBLE1BSWEsZUFBZTs7O2dCQUozQixRQUFRLFNBQUM7b0JBQ1IsWUFBWSxFQUFFLENBQUMsa0JBQWtCLENBQUM7b0JBQ2xDLE9BQU8sRUFBRSxDQUFDLGtCQUFrQixDQUFDO2lCQUM5Qjs7SUFFRCxzQkFBQztLQUFBO1NBRFksZUFBZSIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge05nTW9kdWxlfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuaW1wb3J0IHtDZGtDb3B5VG9DbGlwYm9hcmR9IGZyb20gJy4vY29weS10by1jbGlwYm9hcmQnO1xuXG5ATmdNb2R1bGUoe1xuICBkZWNsYXJhdGlvbnM6IFtDZGtDb3B5VG9DbGlwYm9hcmRdLFxuICBleHBvcnRzOiBbQ2RrQ29weVRvQ2xpcGJvYXJkXSxcbn0pXG5leHBvcnQgY2xhc3MgQ2xpcGJvYXJkTW9kdWxlIHtcbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2xpcGJvYXJkLW1vZHVsZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvY2xpcGJvYXJkL2NsaXBib2FyZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HOztBQUVILE9BQU8sRUFBQyxRQUFRLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFFdkMsT0FBTyxFQUFDLGtCQUFrQixFQUFDLE1BQU0scUJBQXFCLENBQUM7QUFNdkQ7SUFBQSxJQUFhLGVBQWUsR0FBNUIsTUFBYSxlQUFlO0tBQzNCLENBQUE7SUFEWSxlQUFlO1FBSjNCLFFBQVEsQ0FBQztZQUNSLFlBQVksRUFBRSxDQUFDLGtCQUFrQixDQUFDO1lBQ2xDLE9BQU8sRUFBRSxDQUFDLGtCQUFrQixDQUFDO1NBQzlCLENBQUM7T0FDVyxlQUFlLENBQzNCO0lBQUQsc0JBQUM7S0FBQTtTQURZLGVBQWUiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtOZ01vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbmltcG9ydCB7Q2RrQ29weVRvQ2xpcGJvYXJkfSBmcm9tICcuL2NvcHktdG8tY2xpcGJvYXJkJztcblxuQE5nTW9kdWxlKHtcbiAgZGVjbGFyYXRpb25zOiBbQ2RrQ29weVRvQ2xpcGJvYXJkXSxcbiAgZXhwb3J0czogW0Nka0NvcHlUb0NsaXBib2FyZF0sXG59KVxuZXhwb3J0IGNsYXNzIENsaXBib2FyZE1vZHVsZSB7XG59XG4iXX0=

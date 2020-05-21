@@ -1,112 +1,65 @@
+import { __decorate, __metadata, __param } from 'tslib';
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, EventEmitter, Output, Directive, ElementRef, Input, HostListener, Optional, Inject, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
 
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/text-field/autofill.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Options to pass to the animationstart listener.
- * @type {?}
- */
+/** Options to pass to the animationstart listener. */
 const listenerOptions = normalizePassiveListenerOptions({ passive: true });
 /**
  * An injectable service that can be used to monitor the autofill state of an input.
  * Based on the following blog post:
- * https://medium.com/\@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
+ * https://medium.com/@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
  */
 let AutofillMonitor = /** @class */ (() => {
-    /**
-     * An injectable service that can be used to monitor the autofill state of an input.
-     * Based on the following blog post:
-     * https://medium.com/\@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
-     */
-    class AutofillMonitor {
-        /**
-         * @param {?} _platform
-         * @param {?} _ngZone
-         */
+    let AutofillMonitor = class AutofillMonitor {
         constructor(_platform, _ngZone) {
             this._platform = _platform;
             this._ngZone = _ngZone;
             this._monitoredElements = new Map();
         }
-        /**
-         * @param {?} elementOrRef
-         * @return {?}
-         */
         monitor(elementOrRef) {
             if (!this._platform.isBrowser) {
                 return EMPTY;
             }
-            /** @type {?} */
             const element = coerceElement(elementOrRef);
-            /** @type {?} */
             const info = this._monitoredElements.get(element);
             if (info) {
                 return info.subject.asObservable();
             }
-            /** @type {?} */
             const result = new Subject();
-            /** @type {?} */
             const cssClass = 'cdk-text-field-autofilled';
-            /** @type {?} */
-            const listener = (/** @type {?} */ (((/**
-             * @param {?} event
-             * @return {?}
-             */
-            (event) => {
+            const listener = ((event) => {
                 // Animation events fire on initial element render, we check for the presence of the autofill
                 // CSS class to make sure this is a real change in state, not just the initial render before
                 // we fire off events.
                 if (event.animationName === 'cdk-text-field-autofill-start' &&
                     !element.classList.contains(cssClass)) {
                     element.classList.add(cssClass);
-                    this._ngZone.run((/**
-                     * @return {?}
-                     */
-                    () => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: true })));
+                    this._ngZone.run(() => result.next({ target: event.target, isAutofilled: true }));
                 }
                 else if (event.animationName === 'cdk-text-field-autofill-end' &&
                     element.classList.contains(cssClass)) {
                     element.classList.remove(cssClass);
-                    this._ngZone.run((/**
-                     * @return {?}
-                     */
-                    () => result.next({ target: (/** @type {?} */ (event.target)), isAutofilled: false })));
+                    this._ngZone.run(() => result.next({ target: event.target, isAutofilled: false }));
                 }
-            }))));
-            this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
+            });
+            this._ngZone.runOutsideAngular(() => {
                 element.addEventListener('animationstart', listener, listenerOptions);
                 element.classList.add('cdk-text-field-autofill-monitored');
-            }));
+            });
             this._monitoredElements.set(element, {
                 subject: result,
-                unlisten: (/**
-                 * @return {?}
-                 */
-                () => {
+                unlisten: () => {
                     element.removeEventListener('animationstart', listener, listenerOptions);
-                })
+                }
             });
             return result.asObservable();
         }
-        /**
-         * @param {?} elementOrRef
-         * @return {?}
-         */
         stopMonitoring(elementOrRef) {
-            /** @type {?} */
             const element = coerceElement(elementOrRef);
-            /** @type {?} */
             const info = this._monitoredElements.get(element);
             if (info) {
                 info.unlisten();
@@ -116,137 +69,59 @@ let AutofillMonitor = /** @class */ (() => {
                 this._monitoredElements.delete(element);
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
-            this._monitoredElements.forEach((/**
-             * @param {?} _info
-             * @param {?} element
-             * @return {?}
-             */
-            (_info, element) => this.stopMonitoring(element)));
+            this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
         }
-    }
-    AutofillMonitor.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    AutofillMonitor.ctorParameters = () => [
-        { type: Platform },
-        { type: NgZone }
-    ];
-    /** @nocollapse */ AutofillMonitor.ɵprov = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+    };
+    AutofillMonitor.ɵprov = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+    AutofillMonitor = __decorate([
+        Injectable({ providedIn: 'root' }),
+        __metadata("design:paramtypes", [Platform, NgZone])
+    ], AutofillMonitor);
     return AutofillMonitor;
 })();
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    AutofillMonitor.prototype._monitoredElements;
-    /**
-     * @type {?}
-     * @private
-     */
-    AutofillMonitor.prototype._platform;
-    /**
-     * @type {?}
-     * @private
-     */
-    AutofillMonitor.prototype._ngZone;
-}
-/**
- * A directive that can be used to monitor the autofill state of an input.
- */
+/** A directive that can be used to monitor the autofill state of an input. */
 let CdkAutofill = /** @class */ (() => {
-    /**
-     * A directive that can be used to monitor the autofill state of an input.
-     */
-    class CdkAutofill {
-        /**
-         * @param {?} _elementRef
-         * @param {?} _autofillMonitor
-         */
+    let CdkAutofill = class CdkAutofill {
         constructor(_elementRef, _autofillMonitor) {
             this._elementRef = _elementRef;
             this._autofillMonitor = _autofillMonitor;
-            /**
-             * Emits when the autofill state of the element changes.
-             */
+            /** Emits when the autofill state of the element changes. */
             this.cdkAutofill = new EventEmitter();
         }
-        /**
-         * @return {?}
-         */
         ngOnInit() {
             this._autofillMonitor
                 .monitor(this._elementRef)
-                .subscribe((/**
-             * @param {?} event
-             * @return {?}
-             */
-            event => this.cdkAutofill.emit(event)));
+                .subscribe(event => this.cdkAutofill.emit(event));
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._autofillMonitor.stopMonitoring(this._elementRef);
         }
-    }
-    CdkAutofill.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkAutofill]',
-                },] }
-    ];
-    /** @nocollapse */
-    CdkAutofill.ctorParameters = () => [
-        { type: ElementRef },
-        { type: AutofillMonitor }
-    ];
-    CdkAutofill.propDecorators = {
-        cdkAutofill: [{ type: Output }]
     };
+    __decorate([
+        Output(),
+        __metadata("design:type", EventEmitter)
+    ], CdkAutofill.prototype, "cdkAutofill", void 0);
+    CdkAutofill = __decorate([
+        Directive({
+            selector: '[cdkAutofill]',
+        }),
+        __metadata("design:paramtypes", [ElementRef,
+            AutofillMonitor])
+    ], CdkAutofill);
     return CdkAutofill;
 })();
-if (false) {
-    /**
-     * Emits when the autofill state of the element changes.
-     * @type {?}
-     */
-    CdkAutofill.prototype.cdkAutofill;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkAutofill.prototype._elementRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkAutofill.prototype._autofillMonitor;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/text-field/autosize.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Directive to automatically resize a textarea to fit its content.
- */
+/** Directive to automatically resize a textarea to fit its content. */
 let CdkTextareaAutosize = /** @class */ (() => {
-    /**
-     * Directive to automatically resize a textarea to fit its content.
-     */
-    class CdkTextareaAutosize {
-        /**
-         * @param {?} _elementRef
-         * @param {?} _platform
-         * @param {?} _ngZone
-         * @param {?=} document
-         */
+    let CdkTextareaAutosize = class CdkTextareaAutosize {
         constructor(_elementRef, _platform, _ngZone, 
         /** @breaking-change 11.0.0 make document required */
         document) {
@@ -262,46 +137,25 @@ let CdkTextareaAutosize = /** @class */ (() => {
              */
             this._previousMinRows = -1;
             this._document = document;
-            this._textareaElement = (/** @type {?} */ (this._elementRef.nativeElement));
+            this._textareaElement = this._elementRef.nativeElement;
             this._measuringClass = _platform.FIREFOX ?
                 'cdk-textarea-autosize-measuring-firefox' :
                 'cdk-textarea-autosize-measuring';
         }
-        /**
-         * Minimum amount of rows in the textarea.
-         * @return {?}
-         */
+        /** Minimum amount of rows in the textarea. */
         get minRows() { return this._minRows; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set minRows(value) {
             this._minRows = coerceNumberProperty(value);
             this._setMinHeight();
         }
-        /**
-         * Maximum amount of rows in the textarea.
-         * @return {?}
-         */
+        /** Maximum amount of rows in the textarea. */
         get maxRows() { return this._maxRows; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set maxRows(value) {
             this._maxRows = coerceNumberProperty(value);
             this._setMaxHeight();
         }
-        /**
-         * Whether autosizing is enabled or not
-         * @return {?}
-         */
+        /** Whether autosizing is enabled or not */
         get enabled() { return this._enabled; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set enabled(value) {
             value = coerceBooleanProperty(value);
             // Only act if the actual value changed. This specifically helps to not run
@@ -310,56 +164,35 @@ let CdkTextareaAutosize = /** @class */ (() => {
                 (this._enabled = value) ? this.resizeToFitContent(true) : this.reset();
             }
         }
-        /**
-         * Sets the minimum height of the textarea as determined by minRows.
-         * @return {?}
-         */
+        /** Sets the minimum height of the textarea as determined by minRows. */
         _setMinHeight() {
-            /** @type {?} */
             const minHeight = this.minRows && this._cachedLineHeight ?
                 `${this.minRows * this._cachedLineHeight}px` : null;
             if (minHeight) {
                 this._textareaElement.style.minHeight = minHeight;
             }
         }
-        /**
-         * Sets the maximum height of the textarea as determined by maxRows.
-         * @return {?}
-         */
+        /** Sets the maximum height of the textarea as determined by maxRows. */
         _setMaxHeight() {
-            /** @type {?} */
             const maxHeight = this.maxRows && this._cachedLineHeight ?
                 `${this.maxRows * this._cachedLineHeight}px` : null;
             if (maxHeight) {
                 this._textareaElement.style.maxHeight = maxHeight;
             }
         }
-        /**
-         * @return {?}
-         */
         ngAfterViewInit() {
             if (this._platform.isBrowser) {
                 // Remember the height which we started with in case autosizing is disabled
                 this._initialHeight = this._textareaElement.style.height;
                 this.resizeToFitContent();
-                this._ngZone.runOutsideAngular((/**
-                 * @return {?}
-                 */
-                () => {
-                    /** @type {?} */
+                this._ngZone.runOutsideAngular(() => {
                     const window = this._getWindow();
                     fromEvent(window, 'resize')
                         .pipe(auditTime(16), takeUntil(this._destroyed))
-                        .subscribe((/**
-                     * @return {?}
-                     */
-                    () => this.resizeToFitContent(true)));
-                }));
+                        .subscribe(() => this.resizeToFitContent(true));
+                });
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._destroyed.next();
             this._destroyed.complete();
@@ -370,16 +203,13 @@ let CdkTextareaAutosize = /** @class */ (() => {
          * We need to know how large a single "row" of a textarea is in order to apply minRows and
          * maxRows. For the initial version, we will assume that the height of a single line in the
          * textarea does not ever change.
-         * @private
-         * @return {?}
          */
         _cacheTextareaLineHeight() {
             if (this._cachedLineHeight) {
                 return;
             }
             // Use a clone element because we have to override some styles.
-            /** @type {?} */
-            let textareaClone = (/** @type {?} */ (this._textareaElement.cloneNode(false)));
+            let textareaClone = this._textareaElement.cloneNode(false);
             textareaClone.rows = 1;
             // Use `position: absolute` so that this doesn't cause a browser layout and use
             // `visibility: hidden` so that nothing is rendered. Clear any other styles that
@@ -397,16 +227,13 @@ let CdkTextareaAutosize = /** @class */ (() => {
             // to hidden. This ensures that there is no invalid calculation of the line height.
             // See Firefox bug report: https://bugzilla.mozilla.org/show_bug.cgi?id=33654
             textareaClone.style.overflow = 'hidden';
-            (/** @type {?} */ (this._textareaElement.parentNode)).appendChild(textareaClone);
+            this._textareaElement.parentNode.appendChild(textareaClone);
             this._cachedLineHeight = textareaClone.clientHeight;
-            (/** @type {?} */ (this._textareaElement.parentNode)).removeChild(textareaClone);
+            this._textareaElement.parentNode.removeChild(textareaClone);
             // Min and max heights have to be re-calculated if the cached line height changes
             this._setMinHeight();
             this._setMaxHeight();
         }
-        /**
-         * @return {?}
-         */
         ngDoCheck() {
             if (this._platform.isBrowser) {
                 this.resizeToFitContent();
@@ -414,9 +241,8 @@ let CdkTextareaAutosize = /** @class */ (() => {
         }
         /**
          * Resize the textarea to fit its content.
-         * @param {?=} force Whether to force a height recalculation. By default the height will be
+         * @param force Whether to force a height recalculation. By default the height will be
          *    recalculated only if the value changed since the last call.
-         * @return {?}
          */
         resizeToFitContent(force = false) {
             // If autosizing is disabled, just skip everything else
@@ -429,15 +255,12 @@ let CdkTextareaAutosize = /** @class */ (() => {
             if (!this._cachedLineHeight) {
                 return;
             }
-            /** @type {?} */
-            const textarea = (/** @type {?} */ (this._elementRef.nativeElement));
-            /** @type {?} */
+            const textarea = this._elementRef.nativeElement;
             const value = textarea.value;
             // Only resize if the value or minRows have changed since these calculations can be expensive.
             if (!force && this._minRows === this._previousMinRows && value === this._previousValue) {
                 return;
             }
-            /** @type {?} */
             const placeholderText = textarea.placeholder;
             // Reset the textarea height to auto in order to shrink back to its default size.
             // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
@@ -448,35 +271,24 @@ let CdkTextareaAutosize = /** @class */ (() => {
             textarea.placeholder = '';
             // The measuring class includes a 2px padding to workaround an issue with Chrome,
             // so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
-            /** @type {?} */
             const height = textarea.scrollHeight - 4;
             // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
             textarea.style.height = `${height}px`;
             textarea.classList.remove(this._measuringClass);
             textarea.placeholder = placeholderText;
-            this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
+            this._ngZone.runOutsideAngular(() => {
                 if (typeof requestAnimationFrame !== 'undefined') {
-                    requestAnimationFrame((/**
-                     * @return {?}
-                     */
-                    () => this._scrollToCaretPosition(textarea)));
+                    requestAnimationFrame(() => this._scrollToCaretPosition(textarea));
                 }
                 else {
-                    setTimeout((/**
-                     * @return {?}
-                     */
-                    () => this._scrollToCaretPosition(textarea)));
+                    setTimeout(() => this._scrollToCaretPosition(textarea));
                 }
-            }));
+            });
             this._previousValue = value;
             this._previousMinRows = this._minRows;
         }
         /**
          * Resets the textarea to its original size
-         * @return {?}
          */
         reset() {
             // Do not try to change the textarea, if the initialHeight has not been determined yet
@@ -489,27 +301,15 @@ let CdkTextareaAutosize = /** @class */ (() => {
         // to avoid double event listeners, we need to use `HostListener`. Once Ivy is the default, we
         // can move this back into `host`.
         // tslint:disable:no-host-decorator-in-concrete
-        /**
-         * @return {?}
-         */
         _noopInputHandler() {
             // no-op handler that ensures we're running change detection on input events.
         }
-        /**
-         * Access injected document if available or fallback to global document reference
-         * @private
-         * @return {?}
-         */
+        /** Access injected document if available or fallback to global document reference */
         _getDocument() {
             return this._document || document;
         }
-        /**
-         * Use defaultView of injected document if available or fallback to global window reference
-         * @private
-         * @return {?}
-         */
+        /** Use defaultView of injected document if available or fallback to global window reference */
         _getWindow() {
-            /** @type {?} */
             const doc = this._getDocument();
             return doc.defaultView || window;
         }
@@ -517,13 +317,9 @@ let CdkTextareaAutosize = /** @class */ (() => {
          * Scrolls a textarea to the caret position. On Firefox resizing the textarea will
          * prevent it from scrolling to the caret position. We need to re-set the selection
          * in order for it to scroll to the proper position.
-         * @private
-         * @param {?} textarea
-         * @return {?}
          */
         _scrollToCaretPosition(textarea) {
             const { selectionStart, selectionEnd } = textarea;
-            /** @type {?} */
             const document = this._getDocument();
             // IE will throw an "Unspecified error" if we try to set the selection range after the
             // element has been removed from the DOM. Assert that the directive hasn't been destroyed
@@ -535,142 +331,73 @@ let CdkTextareaAutosize = /** @class */ (() => {
                 textarea.setSelectionRange(selectionStart, selectionEnd);
             }
         }
-    }
-    CdkTextareaAutosize.decorators = [
-        { type: Directive, args: [{
-                    selector: 'textarea[cdkTextareaAutosize]',
-                    exportAs: 'cdkTextareaAutosize',
-                    host: {
-                        'class': 'cdk-textarea-autosize',
-                        // Textarea elements that have the directive applied should have a single row by default.
-                        // Browsers normally show two rows by default and therefore this limits the minRows binding.
-                        'rows': '1',
-                    },
-                },] }
-    ];
-    /** @nocollapse */
-    CdkTextareaAutosize.ctorParameters = () => [
-        { type: ElementRef },
-        { type: Platform },
-        { type: NgZone },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
-    ];
-    CdkTextareaAutosize.propDecorators = {
-        minRows: [{ type: Input, args: ['cdkAutosizeMinRows',] }],
-        maxRows: [{ type: Input, args: ['cdkAutosizeMaxRows',] }],
-        enabled: [{ type: Input, args: ['cdkTextareaAutosize',] }],
-        _noopInputHandler: [{ type: HostListener, args: ['input',] }]
     };
+    __decorate([
+        Input('cdkAutosizeMinRows'),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkTextareaAutosize.prototype, "minRows", null);
+    __decorate([
+        Input('cdkAutosizeMaxRows'),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkTextareaAutosize.prototype, "maxRows", null);
+    __decorate([
+        Input('cdkTextareaAutosize'),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], CdkTextareaAutosize.prototype, "enabled", null);
+    __decorate([
+        HostListener('input'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", void 0)
+    ], CdkTextareaAutosize.prototype, "_noopInputHandler", null);
+    CdkTextareaAutosize = __decorate([
+        Directive({
+            selector: 'textarea[cdkTextareaAutosize]',
+            exportAs: 'cdkTextareaAutosize',
+            host: {
+                'class': 'cdk-textarea-autosize',
+                // Textarea elements that have the directive applied should have a single row by default.
+                // Browsers normally show two rows by default and therefore this limits the minRows binding.
+                'rows': '1',
+            },
+        }),
+        __param(3, Optional()), __param(3, Inject(DOCUMENT)),
+        __metadata("design:paramtypes", [ElementRef,
+            Platform,
+            NgZone, Object])
+    ], CdkTextareaAutosize);
     return CdkTextareaAutosize;
 })();
-if (false) {
-    /** @type {?} */
-    CdkTextareaAutosize.ngAcceptInputType_minRows;
-    /** @type {?} */
-    CdkTextareaAutosize.ngAcceptInputType_maxRows;
-    /** @type {?} */
-    CdkTextareaAutosize.ngAcceptInputType_enabled;
-    /**
-     * Keep track of the previous textarea value to avoid resizing when the value hasn't changed.
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._previousValue;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._initialHeight;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._destroyed;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._minRows;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._maxRows;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._enabled;
-    /**
-     * Value of minRows as of last resize. If the minRows has decreased, the
-     * height of the textarea needs to be recomputed to reflect the new minimum. The maxHeight
-     * does not have the same problem because it does not affect the textarea's scrollHeight.
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._previousMinRows;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._textareaElement;
-    /**
-     * Cached height of a textarea with a single row.
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._cachedLineHeight;
-    /**
-     * Used to reference correct document/window
-     * @type {?}
-     * @protected
-     */
-    CdkTextareaAutosize.prototype._document;
-    /**
-     * Class that should be applied to the textarea while it's being measured.
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._measuringClass;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._elementRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._platform;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkTextareaAutosize.prototype._ngZone;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/text-field/text-field-module.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 let TextFieldModule = /** @class */ (() => {
-    class TextFieldModule {
-    }
-    TextFieldModule.decorators = [
-        { type: NgModule, args: [{
-                    declarations: [CdkAutofill, CdkTextareaAutosize],
-                    imports: [PlatformModule],
-                    exports: [CdkAutofill, CdkTextareaAutosize],
-                },] }
-    ];
+    let TextFieldModule = class TextFieldModule {
+    };
+    TextFieldModule = __decorate([
+        NgModule({
+            declarations: [CdkAutofill, CdkTextareaAutosize],
+            imports: [PlatformModule],
+            exports: [CdkAutofill, CdkTextareaAutosize],
+        })
+    ], TextFieldModule);
     return TextFieldModule;
 })();
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/text-field/public-api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**

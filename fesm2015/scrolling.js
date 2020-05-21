@@ -1,5 +1,6 @@
+import { __decorate, __metadata, __param } from 'tslib';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
-import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, Inject, ɵɵdefineInjectable, ɵɵinject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
+import { InjectionToken, Input, Directive, forwardRef, ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Optional, Inject, ElementRef, Output, ViewChild, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, TemplateRef, SkipSelf, ViewContainerRef, IterableDiffers, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, merge, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
@@ -8,89 +9,34 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { isDataSource, ArrayDataSource } from '@angular/cdk/collections';
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/virtual-scroll-strategy.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * The injection token used to specify the virtual scrolling strategy.
- * @type {?}
- */
+/** The injection token used to specify the virtual scrolling strategy. */
 const VIRTUAL_SCROLL_STRATEGY = new InjectionToken('VIRTUAL_SCROLL_STRATEGY');
-/**
- * A strategy that dictates which items should be rendered in the viewport.
- * @record
- */
-function VirtualScrollStrategy() { }
-if (false) {
-    /**
-     * Emits when the index of the first element visible in the viewport changes.
-     * @type {?}
-     */
-    VirtualScrollStrategy.prototype.scrolledIndexChange;
-    /**
-     * Attaches this scroll strategy to a viewport.
-     * @param {?} viewport The viewport to attach this strategy to.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.attach = function (viewport) { };
-    /**
-     * Detaches this scroll strategy from the currently attached viewport.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.detach = function () { };
-    /**
-     * Called when the viewport is scrolled (debounced using requestAnimationFrame).
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.onContentScrolled = function () { };
-    /**
-     * Called when the length of the data changes.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.onDataLengthChanged = function () { };
-    /**
-     * Called when the range of items rendered in the DOM has changed.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.onContentRendered = function () { };
-    /**
-     * Called when the offset of the rendered items changed.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.onRenderedOffsetChanged = function () { };
-    /**
-     * Scroll to the offset for the given index.
-     * @param {?} index The index of the element to scroll to.
-     * @param {?} behavior The ScrollBehavior to use when scrolling.
-     * @return {?}
-     */
-    VirtualScrollStrategy.prototype.scrollToIndex = function (index, behavior) { };
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/fixed-size-virtual-scroll.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Virtual scrolling strategy for lists with items of known fixed size.
- */
+/** Virtual scrolling strategy for lists with items of known fixed size. */
 class FixedSizeVirtualScrollStrategy {
     /**
-     * @param {?} itemSize The size of the items in the virtually scrolling list.
-     * @param {?} minBufferPx The minimum amount of buffer (in pixels) before needing to render more
-     * @param {?} maxBufferPx The amount of buffer (in pixels) to render when rendering more.
+     * @param itemSize The size of the items in the virtually scrolling list.
+     * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
     constructor(itemSize, minBufferPx, maxBufferPx) {
         this._scrolledIndexChange = new Subject();
-        /**
-         * \@docs-private Implemented as part of VirtualScrollStrategy.
-         */
+        /** @docs-private Implemented as part of VirtualScrollStrategy. */
         this.scrolledIndexChange = this._scrolledIndexChange.pipe(distinctUntilChanged());
-        /**
-         * The attached viewport.
-         */
+        /** The attached viewport. */
         this._viewport = null;
         this._itemSize = itemSize;
         this._minBufferPx = minBufferPx;
@@ -98,28 +44,23 @@ class FixedSizeVirtualScrollStrategy {
     }
     /**
      * Attaches this scroll strategy to a viewport.
-     * @param {?} viewport The viewport to attach this strategy to.
-     * @return {?}
+     * @param viewport The viewport to attach this strategy to.
      */
     attach(viewport) {
         this._viewport = viewport;
         this._updateTotalContentSize();
         this._updateRenderedRange();
     }
-    /**
-     * Detaches this scroll strategy from the currently attached viewport.
-     * @return {?}
-     */
+    /** Detaches this scroll strategy from the currently attached viewport. */
     detach() {
         this._scrolledIndexChange.complete();
         this._viewport = null;
     }
     /**
      * Update the item size and buffer size.
-     * @param {?} itemSize The size of the items in the virtually scrolling list.
-     * @param {?} minBufferPx The minimum amount of buffer (in pixels) before needing to render more
-     * @param {?} maxBufferPx The amount of buffer (in pixels) to render when rendering more.
-     * @return {?}
+     * @param itemSize The size of the items in the virtually scrolling list.
+     * @param minBufferPx The minimum amount of buffer (in pixels) before needing to render more
+     * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
     updateItemAndBufferSize(itemSize, minBufferPx, maxBufferPx) {
         if (maxBufferPx < minBufferPx) {
@@ -131,87 +72,56 @@ class FixedSizeVirtualScrollStrategy {
         this._updateTotalContentSize();
         this._updateRenderedRange();
     }
-    /**
-     * \@docs-private Implemented as part of VirtualScrollStrategy.
-     * @return {?}
-     */
+    /** @docs-private Implemented as part of VirtualScrollStrategy. */
     onContentScrolled() {
         this._updateRenderedRange();
     }
-    /**
-     * \@docs-private Implemented as part of VirtualScrollStrategy.
-     * @return {?}
-     */
+    /** @docs-private Implemented as part of VirtualScrollStrategy. */
     onDataLengthChanged() {
         this._updateTotalContentSize();
         this._updateRenderedRange();
     }
-    /**
-     * \@docs-private Implemented as part of VirtualScrollStrategy.
-     * @return {?}
-     */
+    /** @docs-private Implemented as part of VirtualScrollStrategy. */
     onContentRendered() { }
-    /**
-     * \@docs-private Implemented as part of VirtualScrollStrategy.
-     * @return {?}
-     */
+    /** @docs-private Implemented as part of VirtualScrollStrategy. */
     onRenderedOffsetChanged() { }
     /**
      * Scroll to the offset for the given index.
-     * @param {?} index The index of the element to scroll to.
-     * @param {?} behavior The ScrollBehavior to use when scrolling.
-     * @return {?}
+     * @param index The index of the element to scroll to.
+     * @param behavior The ScrollBehavior to use when scrolling.
      */
     scrollToIndex(index, behavior) {
         if (this._viewport) {
             this._viewport.scrollToOffset(index * this._itemSize, behavior);
         }
     }
-    /**
-     * Update the viewport's total content size.
-     * @private
-     * @return {?}
-     */
+    /** Update the viewport's total content size. */
     _updateTotalContentSize() {
         if (!this._viewport) {
             return;
         }
         this._viewport.setTotalContentSize(this._viewport.getDataLength() * this._itemSize);
     }
-    /**
-     * Update the viewport's rendered range.
-     * @private
-     * @return {?}
-     */
+    /** Update the viewport's rendered range. */
     _updateRenderedRange() {
         if (!this._viewport) {
             return;
         }
-        /** @type {?} */
         const scrollOffset = this._viewport.measureScrollOffset();
-        /** @type {?} */
         const firstVisibleIndex = scrollOffset / this._itemSize;
-        /** @type {?} */
         const renderedRange = this._viewport.getRenderedRange();
-        /** @type {?} */
         const newRange = { start: renderedRange.start, end: renderedRange.end };
-        /** @type {?} */
         const viewportSize = this._viewport.getViewportSize();
-        /** @type {?} */
         const dataLength = this._viewport.getDataLength();
-        /** @type {?} */
         const startBuffer = scrollOffset - newRange.start * this._itemSize;
         if (startBuffer < this._minBufferPx && newRange.start != 0) {
-            /** @type {?} */
             const expandStart = Math.ceil((this._maxBufferPx - startBuffer) / this._itemSize);
             newRange.start = Math.max(0, newRange.start - expandStart);
             newRange.end = Math.min(dataLength, Math.ceil(firstVisibleIndex + (viewportSize + this._minBufferPx) / this._itemSize));
         }
         else {
-            /** @type {?} */
             const endBuffer = newRange.end * this._itemSize - (scrollOffset + viewportSize);
             if (endBuffer < this._minBufferPx && newRange.end != dataLength) {
-                /** @type {?} */
                 const expandEnd = Math.ceil((this._maxBufferPx - endBuffer) / this._itemSize);
                 if (expandEnd > 0) {
                     newRange.end = Math.min(dataLength, newRange.end + expandEnd);
@@ -224,188 +134,90 @@ class FixedSizeVirtualScrollStrategy {
         this._scrolledIndexChange.next(Math.floor(firstVisibleIndex));
     }
 }
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    FixedSizeVirtualScrollStrategy.prototype._scrolledIndexChange;
-    /**
-     * \@docs-private Implemented as part of VirtualScrollStrategy.
-     * @type {?}
-     */
-    FixedSizeVirtualScrollStrategy.prototype.scrolledIndexChange;
-    /**
-     * The attached viewport.
-     * @type {?}
-     * @private
-     */
-    FixedSizeVirtualScrollStrategy.prototype._viewport;
-    /**
-     * The size of the items in the virtually scrolling list.
-     * @type {?}
-     * @private
-     */
-    FixedSizeVirtualScrollStrategy.prototype._itemSize;
-    /**
-     * The minimum amount of buffer rendered beyond the viewport (in pixels).
-     * @type {?}
-     * @private
-     */
-    FixedSizeVirtualScrollStrategy.prototype._minBufferPx;
-    /**
-     * The number of buffer items to render beyond the edge of the viewport (in pixels).
-     * @type {?}
-     * @private
-     */
-    FixedSizeVirtualScrollStrategy.prototype._maxBufferPx;
-}
 /**
  * Provider factory for `FixedSizeVirtualScrollStrategy` that simply extracts the already created
  * `FixedSizeVirtualScrollStrategy` from the given directive.
- * @param {?} fixedSizeDir The instance of `CdkFixedSizeVirtualScroll` to extract the
+ * @param fixedSizeDir The instance of `CdkFixedSizeVirtualScroll` to extract the
  *     `FixedSizeVirtualScrollStrategy` from.
- * @return {?}
  */
 function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir) {
     return fixedSizeDir._scrollStrategy;
 }
-/**
- * A virtual scroll strategy that supports fixed-size items.
- */
+/** A virtual scroll strategy that supports fixed-size items. */
 let CdkFixedSizeVirtualScroll = /** @class */ (() => {
-    /**
-     * A virtual scroll strategy that supports fixed-size items.
-     */
-    class CdkFixedSizeVirtualScroll {
+    var CdkFixedSizeVirtualScroll_1;
+    let CdkFixedSizeVirtualScroll = CdkFixedSizeVirtualScroll_1 = class CdkFixedSizeVirtualScroll {
         constructor() {
             this._itemSize = 20;
             this._minBufferPx = 100;
             this._maxBufferPx = 200;
-            /**
-             * The scroll strategy used by this directive.
-             */
+            /** The scroll strategy used by this directive. */
             this._scrollStrategy = new FixedSizeVirtualScrollStrategy(this.itemSize, this.minBufferPx, this.maxBufferPx);
         }
-        /**
-         * The size of the items in the list (in pixels).
-         * @return {?}
-         */
+        /** The size of the items in the list (in pixels). */
         get itemSize() { return this._itemSize; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set itemSize(value) { this._itemSize = coerceNumberProperty(value); }
         /**
          * The minimum amount of buffer rendered beyond the viewport (in pixels).
          * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
-         * @return {?}
          */
         get minBufferPx() { return this._minBufferPx; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set minBufferPx(value) { this._minBufferPx = coerceNumberProperty(value); }
         /**
          * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
-         * @return {?}
          */
         get maxBufferPx() { return this._maxBufferPx; }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set maxBufferPx(value) { this._maxBufferPx = coerceNumberProperty(value); }
-        /**
-         * @return {?}
-         */
         ngOnChanges() {
             this._scrollStrategy.updateItemAndBufferSize(this.itemSize, this.minBufferPx, this.maxBufferPx);
         }
-    }
-    CdkFixedSizeVirtualScroll.decorators = [
-        { type: Directive, args: [{
-                    selector: 'cdk-virtual-scroll-viewport[itemSize]',
-                    providers: [{
-                            provide: VIRTUAL_SCROLL_STRATEGY,
-                            useFactory: _fixedSizeVirtualScrollStrategyFactory,
-                            deps: [forwardRef((/**
-                                 * @return {?}
-                                 */
-                                () => CdkFixedSizeVirtualScroll))],
-                        }],
-                },] }
-    ];
-    CdkFixedSizeVirtualScroll.propDecorators = {
-        itemSize: [{ type: Input }],
-        minBufferPx: [{ type: Input }],
-        maxBufferPx: [{ type: Input }]
     };
+    __decorate([
+        Input(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkFixedSizeVirtualScroll.prototype, "itemSize", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkFixedSizeVirtualScroll.prototype, "minBufferPx", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], CdkFixedSizeVirtualScroll.prototype, "maxBufferPx", null);
+    CdkFixedSizeVirtualScroll = CdkFixedSizeVirtualScroll_1 = __decorate([
+        Directive({
+            selector: 'cdk-virtual-scroll-viewport[itemSize]',
+            providers: [{
+                    provide: VIRTUAL_SCROLL_STRATEGY,
+                    useFactory: _fixedSizeVirtualScrollStrategyFactory,
+                    deps: [forwardRef(() => CdkFixedSizeVirtualScroll_1)],
+                }],
+        })
+    ], CdkFixedSizeVirtualScroll);
     return CdkFixedSizeVirtualScroll;
 })();
-if (false) {
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.ngAcceptInputType_itemSize;
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.ngAcceptInputType_minBufferPx;
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.ngAcceptInputType_maxBufferPx;
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.prototype._itemSize;
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.prototype._minBufferPx;
-    /** @type {?} */
-    CdkFixedSizeVirtualScroll.prototype._maxBufferPx;
-    /**
-     * The scroll strategy used by this directive.
-     * @type {?}
-     */
-    CdkFixedSizeVirtualScroll.prototype._scrollStrategy;
-}
 
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/scroll-dispatcher.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Time in ms to throttle the scrolling events by default.
- * @type {?}
- */
+/** Time in ms to throttle the scrolling events by default. */
 const DEFAULT_SCROLL_TIME = 20;
 /**
  * Service contained all registered Scrollable references and emits an event when any one of the
  * Scrollable references emit a scrolled event.
  */
 let ScrollDispatcher = /** @class */ (() => {
-    /**
-     * Service contained all registered Scrollable references and emits an event when any one of the
-     * Scrollable references emit a scrolled event.
-     */
-    class ScrollDispatcher {
-        /**
-         * @param {?} _ngZone
-         * @param {?} _platform
-         * @param {?=} document
-         */
+    let ScrollDispatcher = class ScrollDispatcher {
         constructor(_ngZone, _platform, 
         /** @breaking-change 11.0.0 make document required */
         document) {
             this._ngZone = _ngZone;
             this._platform = _platform;
-            /**
-             * Subject for notifying that a registered scrollable reference element has been scrolled.
-             */
+            /** Subject for notifying that a registered scrollable reference element has been scrolled. */
             this._scrolled = new Subject();
-            /**
-             * Keeps track of the global `scroll` and `resize` subscriptions.
-             */
+            /** Keeps track of the global `scroll` and `resize` subscriptions. */
             this._globalSubscription = null;
-            /**
-             * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
-             */
+            /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */
             this._scrolledCount = 0;
             /**
              * Map of all the scrollable references that are registered with the service and their
@@ -417,25 +229,19 @@ let ScrollDispatcher = /** @class */ (() => {
         /**
          * Registers a scrollable instance with the service and listens for its scrolled events. When the
          * scrollable is scrolled, the service emits the event to its scrolled observable.
-         * @param {?} scrollable Scrollable instance to be registered.
-         * @return {?}
+         * @param scrollable Scrollable instance to be registered.
          */
         register(scrollable) {
             if (!this.scrollContainers.has(scrollable)) {
                 this.scrollContainers.set(scrollable, scrollable.elementScrolled()
-                    .subscribe((/**
-                 * @return {?}
-                 */
-                () => this._scrolled.next(scrollable))));
+                    .subscribe(() => this._scrolled.next(scrollable)));
             }
         }
         /**
          * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
-         * @param {?} scrollable Scrollable instance to be deregistered.
-         * @return {?}
+         * @param scrollable Scrollable instance to be deregistered.
          */
         deregister(scrollable) {
-            /** @type {?} */
             const scrollableReference = this.scrollContainers.get(scrollable);
             if (scrollableReference) {
                 scrollableReference.unsubscribe();
@@ -451,120 +257,69 @@ let ScrollDispatcher = /** @class */ (() => {
          * all of the events emitted from this stream will be run outside the Angular zone.
          * If you need to update any data bindings as a result of a scroll event, you have
          * to run the callback using `NgZone.run`.
-         * @param {?=} auditTimeInMs
-         * @return {?}
          */
         scrolled(auditTimeInMs = DEFAULT_SCROLL_TIME) {
             if (!this._platform.isBrowser) {
                 return of();
             }
-            return new Observable((/**
-             * @param {?} observer
-             * @return {?}
-             */
-            (observer) => {
+            return new Observable((observer) => {
                 if (!this._globalSubscription) {
                     this._addGlobalListener();
                 }
                 // In the case of a 0ms delay, use an observable without auditTime
                 // since it does add a perceptible delay in processing overhead.
-                /** @type {?} */
                 const subscription = auditTimeInMs > 0 ?
                     this._scrolled.pipe(auditTime(auditTimeInMs)).subscribe(observer) :
                     this._scrolled.subscribe(observer);
                 this._scrolledCount++;
-                return (/**
-                 * @return {?}
-                 */
-                () => {
+                return () => {
                     subscription.unsubscribe();
                     this._scrolledCount--;
                     if (!this._scrolledCount) {
                         this._removeGlobalListener();
                     }
-                });
-            }));
+                };
+            });
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._removeGlobalListener();
-            this.scrollContainers.forEach((/**
-             * @param {?} _
-             * @param {?} container
-             * @return {?}
-             */
-            (_, container) => this.deregister(container)));
+            this.scrollContainers.forEach((_, container) => this.deregister(container));
             this._scrolled.complete();
         }
         /**
          * Returns an observable that emits whenever any of the
          * scrollable ancestors of an element are scrolled.
-         * @param {?} elementRef Element whose ancestors to listen for.
-         * @param {?=} auditTimeInMs Time to throttle the scroll events.
-         * @return {?}
+         * @param elementRef Element whose ancestors to listen for.
+         * @param auditTimeInMs Time to throttle the scroll events.
          */
         ancestorScrolled(elementRef, auditTimeInMs) {
-            /** @type {?} */
             const ancestors = this.getAncestorScrollContainers(elementRef);
-            return this.scrolled(auditTimeInMs).pipe(filter((/**
-             * @param {?} target
-             * @return {?}
-             */
-            target => {
+            return this.scrolled(auditTimeInMs).pipe(filter(target => {
                 return !target || ancestors.indexOf(target) > -1;
-            })));
+            }));
         }
-        /**
-         * Returns all registered Scrollables that contain the provided element.
-         * @param {?} elementRef
-         * @return {?}
-         */
+        /** Returns all registered Scrollables that contain the provided element. */
         getAncestorScrollContainers(elementRef) {
-            /** @type {?} */
             const scrollingContainers = [];
-            this.scrollContainers.forEach((/**
-             * @param {?} _subscription
-             * @param {?} scrollable
-             * @return {?}
-             */
-            (_subscription, scrollable) => {
+            this.scrollContainers.forEach((_subscription, scrollable) => {
                 if (this._scrollableContainsElement(scrollable, elementRef)) {
                     scrollingContainers.push(scrollable);
                 }
-            }));
+            });
             return scrollingContainers;
         }
-        /**
-         * Access injected document if available or fallback to global document reference
-         * @private
-         * @return {?}
-         */
+        /** Access injected document if available or fallback to global document reference */
         _getDocument() {
             return this._document || document;
         }
-        /**
-         * Use defaultView of injected document if available or fallback to global window reference
-         * @private
-         * @return {?}
-         */
+        /** Use defaultView of injected document if available or fallback to global window reference */
         _getWindow() {
-            /** @type {?} */
             const doc = this._getDocument();
             return doc.defaultView || window;
         }
-        /**
-         * Returns true if the element is contained within the provided Scrollable.
-         * @private
-         * @param {?} scrollable
-         * @param {?} elementRef
-         * @return {?}
-         */
+        /** Returns true if the element is contained within the provided Scrollable. */
         _scrollableContainsElement(scrollable, elementRef) {
-            /** @type {?} */
             let element = elementRef.nativeElement;
-            /** @type {?} */
             let scrollableElement = scrollable.getElementRef().nativeElement;
             // Traverse through the element parents until we reach null, checking if any of the elements
             // are the scrollable's element.
@@ -572,97 +327,40 @@ let ScrollDispatcher = /** @class */ (() => {
                 if (element == scrollableElement) {
                     return true;
                 }
-            } while (element = (/** @type {?} */ (element)).parentElement);
+            } while (element = element.parentElement);
             return false;
         }
-        /**
-         * Sets up the global scroll listeners.
-         * @private
-         * @return {?}
-         */
+        /** Sets up the global scroll listeners. */
         _addGlobalListener() {
-            this._globalSubscription = this._ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
-                /** @type {?} */
+            this._globalSubscription = this._ngZone.runOutsideAngular(() => {
                 const window = this._getWindow();
-                return fromEvent(window.document, 'scroll').subscribe((/**
-                 * @return {?}
-                 */
-                () => this._scrolled.next()));
-            }));
+                return fromEvent(window.document, 'scroll').subscribe(() => this._scrolled.next());
+            });
         }
-        /**
-         * Cleans up the global scroll listener.
-         * @private
-         * @return {?}
-         */
+        /** Cleans up the global scroll listener. */
         _removeGlobalListener() {
             if (this._globalSubscription) {
                 this._globalSubscription.unsubscribe();
                 this._globalSubscription = null;
             }
         }
-    }
-    ScrollDispatcher.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    ScrollDispatcher.ctorParameters = () => [
-        { type: NgZone },
-        { type: Platform },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
-    ];
-    /** @nocollapse */ ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
+    };
+    ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
+    ScrollDispatcher = __decorate([
+        Injectable({ providedIn: 'root' }),
+        __param(2, Optional()), __param(2, Inject(DOCUMENT)),
+        __metadata("design:paramtypes", [NgZone,
+            Platform, Object])
+    ], ScrollDispatcher);
     return ScrollDispatcher;
 })();
-if (false) {
-    /**
-     * Used to reference correct document/window
-     * @type {?}
-     * @protected
-     */
-    ScrollDispatcher.prototype._document;
-    /**
-     * Subject for notifying that a registered scrollable reference element has been scrolled.
-     * @type {?}
-     * @private
-     */
-    ScrollDispatcher.prototype._scrolled;
-    /**
-     * Keeps track of the global `scroll` and `resize` subscriptions.
-     * @type {?}
-     */
-    ScrollDispatcher.prototype._globalSubscription;
-    /**
-     * Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards.
-     * @type {?}
-     * @private
-     */
-    ScrollDispatcher.prototype._scrolledCount;
-    /**
-     * Map of all the scrollable references that are registered with the service and their
-     * scroll event subscriptions.
-     * @type {?}
-     */
-    ScrollDispatcher.prototype.scrollContainers;
-    /**
-     * @type {?}
-     * @private
-     */
-    ScrollDispatcher.prototype._ngZone;
-    /**
-     * @type {?}
-     * @private
-     */
-    ScrollDispatcher.prototype._platform;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/scrollable.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 /**
  * Sends an event when the directive's element is scrolled. Registers itself with the
@@ -670,59 +368,29 @@ if (false) {
  * can be listened to through the service.
  */
 let CdkScrollable = /** @class */ (() => {
-    /**
-     * Sends an event when the directive's element is scrolled. Registers itself with the
-     * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
-     * can be listened to through the service.
-     */
-    class CdkScrollable {
-        /**
-         * @param {?} elementRef
-         * @param {?} scrollDispatcher
-         * @param {?} ngZone
-         * @param {?=} dir
-         */
+    let CdkScrollable = class CdkScrollable {
         constructor(elementRef, scrollDispatcher, ngZone, dir) {
             this.elementRef = elementRef;
             this.scrollDispatcher = scrollDispatcher;
             this.ngZone = ngZone;
             this.dir = dir;
             this._destroyed = new Subject();
-            this._elementScrolled = new Observable((/**
-             * @param {?} observer
-             * @return {?}
-             */
-            (observer) => this.ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => fromEvent(this.elementRef.nativeElement, 'scroll').pipe(takeUntil(this._destroyed))
-                .subscribe(observer)))));
+            this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(this.elementRef.nativeElement, 'scroll').pipe(takeUntil(this._destroyed))
+                .subscribe(observer)));
         }
-        /**
-         * @return {?}
-         */
         ngOnInit() {
             this.scrollDispatcher.register(this);
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this.scrollDispatcher.deregister(this);
             this._destroyed.next();
             this._destroyed.complete();
         }
-        /**
-         * Returns observable that emits when a scroll event is fired on the host element.
-         * @return {?}
-         */
+        /** Returns observable that emits when a scroll event is fired on the host element. */
         elementScrolled() {
             return this._elementScrolled;
         }
-        /**
-         * Gets the ElementRef for the viewport.
-         * @return {?}
-         */
+        /** Gets the ElementRef for the viewport. */
         getElementRef() {
             return this.elementRef;
         }
@@ -732,13 +400,10 @@ let CdkScrollable = /** @class */ (() => {
          * left and right always refer to the left and right side of the scrolling container irrespective
          * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
          * in an RTL context.
-         * @param {?} options specified the offsets to scroll to.
-         * @return {?}
+         * @param options specified the offsets to scroll to.
          */
         scrollTo(options) {
-            /** @type {?} */
             const el = this.elementRef.nativeElement;
-            /** @type {?} */
             const isRtl = this.dir && this.dir.value == 'rtl';
             // Rewrite start & end offsets as right or left offsets.
             if (options.left == null) {
@@ -749,13 +414,13 @@ let CdkScrollable = /** @class */ (() => {
             }
             // Rewrite the bottom offset as a top offset.
             if (options.bottom != null) {
-                ((/** @type {?} */ (options))).top =
+                options.top =
                     el.scrollHeight - el.clientHeight - options.bottom;
             }
             // Rewrite the right offset as a left offset.
             if (isRtl && getRtlScrollAxisType() != 0 /* NORMAL */) {
                 if (options.left != null) {
-                    ((/** @type {?} */ (options))).right =
+                    options.right =
                         el.scrollWidth - el.clientWidth - options.left;
                 }
                 if (getRtlScrollAxisType() == 2 /* INVERTED */) {
@@ -767,19 +432,13 @@ let CdkScrollable = /** @class */ (() => {
             }
             else {
                 if (options.right != null) {
-                    ((/** @type {?} */ (options))).left =
+                    options.left =
                         el.scrollWidth - el.clientWidth - options.right;
                 }
             }
             this._applyScrollToOptions(options);
         }
-        /**
-         * @private
-         * @param {?} options
-         * @return {?}
-         */
         _applyScrollToOptions(options) {
-            /** @type {?} */
             const el = this.elementRef.nativeElement;
             if (supportsScrollBehavior()) {
                 el.scrollTo(options);
@@ -800,15 +459,11 @@ let CdkScrollable = /** @class */ (() => {
          * left and right always refer to the left and right side of the scrolling container irrespective
          * of the layout direction. start and end refer to left and right in an LTR context and vice-versa
          * in an RTL context.
-         * @param {?} from The edge to measure from.
-         * @return {?}
+         * @param from The edge to measure from.
          */
         measureScrollOffset(from) {
-            /** @type {?} */
             const LEFT = 'left';
-            /** @type {?} */
             const RIGHT = 'right';
-            /** @type {?} */
             const el = this.elementRef.nativeElement;
             if (from == 'top') {
                 return el.scrollTop;
@@ -817,7 +472,6 @@ let CdkScrollable = /** @class */ (() => {
                 return el.scrollHeight - el.clientHeight - el.scrollTop;
             }
             // Rewrite start & end as left or right offsets.
-            /** @type {?} */
             const isRtl = this.dir && this.dir.value == 'rtl';
             if (from == 'start') {
                 from = isRtl ? RIGHT : LEFT;
@@ -856,138 +510,59 @@ let CdkScrollable = /** @class */ (() => {
                 }
             }
         }
-    }
-    CdkScrollable.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdk-scrollable], [cdkScrollable]'
-                },] }
-    ];
-    /** @nocollapse */
-    CdkScrollable.ctorParameters = () => [
-        { type: ElementRef },
-        { type: ScrollDispatcher },
-        { type: NgZone },
-        { type: Directionality, decorators: [{ type: Optional }] }
-    ];
+    };
+    CdkScrollable = __decorate([
+        Directive({
+            selector: '[cdk-scrollable], [cdkScrollable]'
+        }),
+        __param(3, Optional()),
+        __metadata("design:paramtypes", [ElementRef,
+            ScrollDispatcher,
+            NgZone,
+            Directionality])
+    ], CdkScrollable);
     return CdkScrollable;
 })();
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkScrollable.prototype._destroyed;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkScrollable.prototype._elementScrolled;
-    /**
-     * @type {?}
-     * @protected
-     */
-    CdkScrollable.prototype.elementRef;
-    /**
-     * @type {?}
-     * @protected
-     */
-    CdkScrollable.prototype.scrollDispatcher;
-    /**
-     * @type {?}
-     * @protected
-     */
-    CdkScrollable.prototype.ngZone;
-    /**
-     * @type {?}
-     * @protected
-     */
-    CdkScrollable.prototype.dir;
-}
 
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/viewport-ruler.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * Time in ms to throttle the resize events by default.
- * @type {?}
- */
+/** Time in ms to throttle the resize events by default. */
 const DEFAULT_RESIZE_TIME = 20;
 /**
- * Object that holds the scroll position of the viewport in each direction.
- * @record
- */
-function ViewportScrollPosition() { }
-if (false) {
-    /** @type {?} */
-    ViewportScrollPosition.prototype.top;
-    /** @type {?} */
-    ViewportScrollPosition.prototype.left;
-}
-/**
  * Simple utility for getting the bounds of the browser viewport.
- * \@docs-private
+ * @docs-private
  */
 let ViewportRuler = /** @class */ (() => {
-    /**
-     * Simple utility for getting the bounds of the browser viewport.
-     * \@docs-private
-     */
-    class ViewportRuler {
-        /**
-         * @param {?} _platform
-         * @param {?} ngZone
-         * @param {?=} document
-         */
+    let ViewportRuler = class ViewportRuler {
         constructor(_platform, ngZone, 
         /** @breaking-change 11.0.0 make document required */
         document) {
             this._platform = _platform;
             this._document = document;
-            ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
-                /** @type {?} */
+            ngZone.runOutsideAngular(() => {
                 const window = this._getWindow();
                 this._change = _platform.isBrowser ?
                     merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
                     of();
                 // Note that we need to do the subscription inside `runOutsideAngular`
                 // since subscribing is what causes the event listener to be added.
-                this._invalidateCache = this.change().subscribe((/**
-                 * @return {?}
-                 */
-                () => this._updateViewportSize()));
-            }));
+                this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
+            });
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._invalidateCache.unsubscribe();
         }
-        /**
-         * Returns the viewport's width and height.
-         * @return {?}
-         */
+        /** Returns the viewport's width and height. */
         getViewportSize() {
             if (!this._viewportSize) {
                 this._updateViewportSize();
             }
-            /** @type {?} */
             const output = { width: this._viewportSize.width, height: this._viewportSize.height };
             // If we're not on a browser, don't cache the size since it'll be mocked out anyway.
             if (!this._platform.isBrowser) {
-                this._viewportSize = (/** @type {?} */ (null));
+                this._viewportSize = null;
             }
             return output;
         }
-        /**
-         * Gets a ClientRect for the viewport's bounds.
-         * @return {?}
-         */
+        /** Gets a ClientRect for the viewport's bounds. */
         getViewportRect() {
             // Use the document element's bounding rect rather than the window scroll properties
             // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
@@ -998,7 +573,6 @@ let ViewportRuler = /** @class */ (() => {
             // We use the documentElement instead of the body because, by default (without a css reset)
             // browsers typically give the document body an 8px margin, which is not included in
             // getBoundingClientRect().
-            /** @type {?} */
             const scrollPosition = this.getViewportScrollPosition();
             const { width, height } = this.getViewportSize();
             return {
@@ -1010,10 +584,7 @@ let ViewportRuler = /** @class */ (() => {
                 width,
             };
         }
-        /**
-         * Gets the (top, left) scroll position of the viewport.
-         * @return {?}
-         */
+        /** Gets the (top, left) scroll position of the viewport. */
         getViewportScrollPosition() {
             // While we can get a reference to the fake document
             // during SSR, it doesn't have getBoundingClientRect.
@@ -1026,116 +597,58 @@ let ViewportRuler = /** @class */ (() => {
             // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
             // `document.documentElement` works consistently, where the `top` and `left` values will
             // equal negative the scroll position.
-            /** @type {?} */
             const document = this._getDocument();
-            /** @type {?} */
             const window = this._getWindow();
-            /** @type {?} */
-            const documentElement = (/** @type {?} */ (document.documentElement));
-            /** @type {?} */
+            const documentElement = document.documentElement;
             const documentRect = documentElement.getBoundingClientRect();
-            /** @type {?} */
             const top = -documentRect.top || document.body.scrollTop || window.scrollY ||
                 documentElement.scrollTop || 0;
-            /** @type {?} */
             const left = -documentRect.left || document.body.scrollLeft || window.scrollX ||
                 documentElement.scrollLeft || 0;
             return { top, left };
         }
         /**
          * Returns a stream that emits whenever the size of the viewport changes.
-         * @param {?=} throttleTime Time in milliseconds to throttle the stream.
-         * @return {?}
+         * @param throttleTime Time in milliseconds to throttle the stream.
          */
         change(throttleTime = DEFAULT_RESIZE_TIME) {
             return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
         }
-        /**
-         * Access injected document if available or fallback to global document reference
-         * @private
-         * @return {?}
-         */
+        /** Access injected document if available or fallback to global document reference */
         _getDocument() {
             return this._document || document;
         }
-        /**
-         * Use defaultView of injected document if available or fallback to global window reference
-         * @private
-         * @return {?}
-         */
+        /** Use defaultView of injected document if available or fallback to global window reference */
         _getWindow() {
-            /** @type {?} */
             const doc = this._getDocument();
             return doc.defaultView || window;
         }
-        /**
-         * Updates the cached viewport size.
-         * @private
-         * @return {?}
-         */
+        /** Updates the cached viewport size. */
         _updateViewportSize() {
-            /** @type {?} */
             const window = this._getWindow();
             this._viewportSize = this._platform.isBrowser ?
                 { width: window.innerWidth, height: window.innerHeight } :
                 { width: 0, height: 0 };
         }
-    }
-    ViewportRuler.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    ViewportRuler.ctorParameters = () => [
-        { type: Platform },
-        { type: NgZone },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] }
-    ];
-    /** @nocollapse */ ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone), ɵɵinject(DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
+    };
+    ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone), ɵɵinject(DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
+    ViewportRuler = __decorate([
+        Injectable({ providedIn: 'root' }),
+        __param(2, Optional()), __param(2, Inject(DOCUMENT)),
+        __metadata("design:paramtypes", [Platform,
+            NgZone, Object])
+    ], ViewportRuler);
     return ViewportRuler;
 })();
-if (false) {
-    /**
-     * Cached viewport dimensions.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._viewportSize;
-    /**
-     * Stream of viewport change events.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._change;
-    /**
-     * Subscription to streams that invalidate the cached viewport dimensions.
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._invalidateCache;
-    /**
-     * Used to reference correct document/window
-     * @type {?}
-     * @protected
-     */
-    ViewportRuler.prototype._document;
-    /**
-     * @type {?}
-     * @private
-     */
-    ViewportRuler.prototype._platform;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/virtual-scroll-viewport.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Checks if the given ranges are equal.
- * @param {?} r1
- * @param {?} r2
- * @return {?}
- */
+/** Checks if the given ranges are equal. */
 function rangesEqual(r1, r2) {
     return r1.start == r2.start && r1.end == r2.end;
 }
@@ -1143,26 +656,12 @@ function rangesEqual(r1, r2) {
  * Scheduler to be used for scroll events. Needs to fall back to
  * something that doesn't rely on requestAnimationFrame on environments
  * that don't support it (e.g. server-side rendering).
- * @type {?}
  */
 const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
-/**
- * A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`.
- */
+/** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 let CdkVirtualScrollViewport = /** @class */ (() => {
-    /**
-     * A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`.
-     */
-    class CdkVirtualScrollViewport extends CdkScrollable {
-        /**
-         * @param {?} elementRef
-         * @param {?} _changeDetectorRef
-         * @param {?} ngZone
-         * @param {?} _scrollStrategy
-         * @param {?} dir
-         * @param {?} scrollDispatcher
-         * @param {?=} viewportRuler
-         */
+    var CdkVirtualScrollViewport_1;
+    let CdkVirtualScrollViewport = CdkVirtualScrollViewport_1 = class CdkVirtualScrollViewport extends CdkScrollable {
         constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, 
         /**
          * @deprecated `viewportRuler` parameter to become required.
@@ -1173,152 +672,87 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             this.elementRef = elementRef;
             this._changeDetectorRef = _changeDetectorRef;
             this._scrollStrategy = _scrollStrategy;
-            /**
-             * Emits when the viewport is detached from a CdkVirtualForOf.
-             */
+            /** Emits when the viewport is detached from a CdkVirtualForOf. */
             this._detachedSubject = new Subject();
-            /**
-             * Emits when the rendered range changes.
-             */
+            /** Emits when the rendered range changes. */
             this._renderedRangeSubject = new Subject();
             this._orientation = 'vertical';
             // Note: we don't use the typical EventEmitter here because we need to subscribe to the scroll
             // strategy lazily (i.e. only if the user is actually listening to the events). We do this because
             // depending on how the strategy calculates the scrolled index, it may come at a cost to
             // performance.
-            /**
-             * Emits when the index of the first element visible in the viewport changes.
-             */
-            this.scrolledIndexChange = new Observable((/**
-             * @param {?} observer
-             * @return {?}
-             */
-            (observer) => this._scrollStrategy.scrolledIndexChange.subscribe((/**
-             * @param {?} index
-             * @return {?}
-             */
-            index => Promise.resolve().then((/**
-             * @return {?}
-             */
-            () => this.ngZone.run((/**
-             * @return {?}
-             */
-            () => observer.next(index)))))))));
-            /**
-             * A stream that emits whenever the rendered range changes.
-             */
+            /** Emits when the index of the first element visible in the viewport changes. */
+            this.scrolledIndexChange = new Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
+            /** A stream that emits whenever the rendered range changes. */
             this.renderedRangeStream = this._renderedRangeSubject.asObservable();
             /**
              * The total size of all content (in pixels), including content that is not currently rendered.
              */
             this._totalContentSize = 0;
-            /**
-             * A string representing the `style.width` property value to be used for the spacer element.
-             */
+            /** A string representing the `style.width` property value to be used for the spacer element. */
             this._totalContentWidth = '';
-            /**
-             * A string representing the `style.height` property value to be used for the spacer element.
-             */
+            /** A string representing the `style.height` property value to be used for the spacer element. */
             this._totalContentHeight = '';
-            /**
-             * The currently rendered range of indices.
-             */
+            /** The currently rendered range of indices. */
             this._renderedRange = { start: 0, end: 0 };
-            /**
-             * The length of the data bound to this viewport (in number of items).
-             */
+            /** The length of the data bound to this viewport (in number of items). */
             this._dataLength = 0;
-            /**
-             * The size of the viewport (in pixels).
-             */
+            /** The size of the viewport (in pixels). */
             this._viewportSize = 0;
-            /**
-             * The last rendered content offset that was set.
-             */
+            /** The last rendered content offset that was set. */
             this._renderedContentOffset = 0;
             /**
              * Whether the last rendered content offset was to the end of the content (and therefore needs to
              * be rewritten as an offset to the start of the content).
              */
             this._renderedContentOffsetNeedsRewrite = false;
-            /**
-             * Whether there is a pending change detection cycle.
-             */
+            /** Whether there is a pending change detection cycle. */
             this._isChangeDetectionPending = false;
-            /**
-             * A list of functions to run after the next change detection cycle.
-             */
+            /** A list of functions to run after the next change detection cycle. */
             this._runAfterChangeDetection = [];
-            /**
-             * Subscription to changes in the viewport size.
-             */
+            /** Subscription to changes in the viewport size. */
             this._viewportChanges = Subscription.EMPTY;
             if (!_scrollStrategy) {
                 throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
             }
             // @breaking-change 11.0.0 Remove null check for `viewportRuler`.
             if (viewportRuler) {
-                this._viewportChanges = viewportRuler.change().subscribe((/**
-                 * @return {?}
-                 */
-                () => {
+                this._viewportChanges = viewportRuler.change().subscribe(() => {
                     this.checkViewportSize();
-                }));
+                });
             }
         }
-        /**
-         * The direction the viewport scrolls.
-         * @return {?}
-         */
+        /** The direction the viewport scrolls. */
         get orientation() {
             return this._orientation;
         }
-        /**
-         * @param {?} orientation
-         * @return {?}
-         */
         set orientation(orientation) {
             if (this._orientation !== orientation) {
                 this._orientation = orientation;
                 this._calculateSpacerSize();
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnInit() {
             super.ngOnInit();
             // It's still too early to measure the viewport at this point. Deferring with a promise allows
             // the Viewport to be rendered with the correct size before we measure. We run this outside the
             // zone to avoid causing more change detection cycles. We handle the change detection loop
             // ourselves instead.
-            this.ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => Promise.resolve().then((/**
-             * @return {?}
-             */
-            () => {
+            this.ngZone.runOutsideAngular(() => Promise.resolve().then(() => {
                 this._measureViewportSize();
                 this._scrollStrategy.attach(this);
                 this.elementScrolled()
                     .pipe(
                 // Start off with a fake scroll event so we properly detect our initial position.
-                startWith((/** @type {?} */ (null))), 
+                startWith(null), 
                 // Collect multiple events into one until the next animation frame. This way if
                 // there are multiple scroll events in the same frame we only need to recheck
                 // our layout once.
                 auditTime(0, SCROLL_SCHEDULER))
-                    .subscribe((/**
-                 * @return {?}
-                 */
-                () => this._scrollStrategy.onContentScrolled()));
+                    .subscribe(() => this._scrollStrategy.onContentScrolled());
                 this._markChangeDetectionNeeded();
-            }))));
+            }));
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this.detach();
             this._scrollStrategy.detach();
@@ -1328,11 +762,7 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             this._viewportChanges.unsubscribe();
             super.ngOnDestroy();
         }
-        /**
-         * Attaches a `CdkVirtualForOf` to this viewport.
-         * @param {?} forOf
-         * @return {?}
-         */
+        /** Attaches a `CdkVirtualForOf` to this viewport. */
         attach(forOf) {
             if (this._forOf) {
                 throw Error('CdkVirtualScrollViewport is already attached.');
@@ -1340,45 +770,28 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             // Subscribe to the data stream of the CdkVirtualForOf to keep track of when the data length
             // changes. Run outside the zone to avoid triggering change detection, since we're managing the
             // change detection loop ourselves.
-            this.ngZone.runOutsideAngular((/**
-             * @return {?}
-             */
-            () => {
+            this.ngZone.runOutsideAngular(() => {
                 this._forOf = forOf;
-                this._forOf.dataStream.pipe(takeUntil(this._detachedSubject)).subscribe((/**
-                 * @param {?} data
-                 * @return {?}
-                 */
-                data => {
-                    /** @type {?} */
+                this._forOf.dataStream.pipe(takeUntil(this._detachedSubject)).subscribe(data => {
                     const newLength = data.length;
                     if (newLength !== this._dataLength) {
                         this._dataLength = newLength;
                         this._scrollStrategy.onDataLengthChanged();
                     }
                     this._doChangeDetection();
-                }));
-            }));
+                });
+            });
         }
-        /**
-         * Detaches the current `CdkVirtualForOf`.
-         * @return {?}
-         */
+        /** Detaches the current `CdkVirtualForOf`. */
         detach() {
             this._forOf = null;
             this._detachedSubject.next();
         }
-        /**
-         * Gets the length of the data bound to this viewport (in number of items).
-         * @return {?}
-         */
+        /** Gets the length of the data bound to this viewport (in number of items). */
         getDataLength() {
             return this._dataLength;
         }
-        /**
-         * Gets the size of the viewport (in pixels).
-         * @return {?}
-         */
+        /** Gets the size of the viewport (in pixels). */
         getViewportSize() {
             return this._viewportSize;
         }
@@ -1386,18 +799,13 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
         // cycle happens. I'm being careful to only call it after the render cycle is complete and before
         // setting it to something else, but its error prone and should probably be split into
         // `pendingRange` and `renderedRange`, the latter reflecting whats actually in the DOM.
-        /**
-         * Get the current rendered range of items.
-         * @return {?}
-         */
+        /** Get the current rendered range of items. */
         getRenderedRange() {
             return this._renderedRange;
         }
         /**
          * Sets the total size of all content (in pixels), including content that is not currently
          * rendered.
-         * @param {?} size
-         * @return {?}
          */
         setTotalContentSize(size) {
             if (this._totalContentSize !== size) {
@@ -1406,23 +814,15 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
                 this._markChangeDetectionNeeded();
             }
         }
-        /**
-         * Sets the currently rendered range of indices.
-         * @param {?} range
-         * @return {?}
-         */
+        /** Sets the currently rendered range of indices. */
         setRenderedRange(range) {
             if (!rangesEqual(this._renderedRange, range)) {
                 this._renderedRangeSubject.next(this._renderedRange = range);
-                this._markChangeDetectionNeeded((/**
-                 * @return {?}
-                 */
-                () => this._scrollStrategy.onContentRendered()));
+                this._markChangeDetectionNeeded(() => this._scrollStrategy.onContentRendered());
             }
         }
         /**
          * Gets the offset from the start of the viewport to the start of the rendered data (in pixels).
-         * @return {?}
          */
         getOffsetToRenderedContentStart() {
             return this._renderedContentOffsetNeedsRewrite ? null : this._renderedContentOffset;
@@ -1430,22 +830,14 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
         /**
          * Sets the offset from the start of the viewport to either the start or end of the rendered data
          * (in pixels).
-         * @param {?} offset
-         * @param {?=} to
-         * @return {?}
          */
         setRenderedContentOffset(offset, to = 'to-start') {
             // For a horizontal viewport in a right-to-left language we need to translate along the x-axis
             // in the negative direction.
-            /** @type {?} */
             const isRtl = this.dir && this.dir.value == 'rtl';
-            /** @type {?} */
             const isHorizontal = this.orientation == 'horizontal';
-            /** @type {?} */
             const axis = isHorizontal ? 'X' : 'Y';
-            /** @type {?} */
             const axisDirection = isHorizontal && isRtl ? -1 : 1;
-            /** @type {?} */
             let transform = `translate${axis}(${Number(axisDirection * offset)}px)`;
             this._renderedContentOffset = offset;
             if (to === 'to-end') {
@@ -1459,10 +851,7 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
                 // We know this value is safe because we parse `offset` with `Number()` before passing it
                 // into the string.
                 this._renderedContentTransform = transform;
-                this._markChangeDetectionNeeded((/**
-                 * @return {?}
-                 */
-                () => {
+                this._markChangeDetectionNeeded(() => {
                     if (this._renderedContentOffsetNeedsRewrite) {
                         this._renderedContentOffset -= this.measureRenderedContentSize();
                         this._renderedContentOffsetNeedsRewrite = false;
@@ -1471,19 +860,17 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
                     else {
                         this._scrollStrategy.onRenderedOffsetChanged();
                     }
-                }));
+                });
             }
         }
         /**
          * Scrolls to the given offset from the start of the viewport. Please note that this is not always
          * the same as setting `scrollTop` or `scrollLeft`. In a horizontal viewport with right-to-left
          * direction, this would be the equivalent of setting a fictional `scrollRight` property.
-         * @param {?} offset The offset to scroll to.
-         * @param {?=} behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
-         * @return {?}
+         * @param offset The offset to scroll to.
+         * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
          */
         scrollToOffset(offset, behavior = 'auto') {
-            /** @type {?} */
             const options = { behavior };
             if (this.orientation === 'horizontal') {
                 options.start = offset;
@@ -1495,38 +882,30 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
         }
         /**
          * Scrolls to the offset for the given index.
-         * @param {?} index The index of the element to scroll to.
-         * @param {?=} behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
-         * @return {?}
+         * @param index The index of the element to scroll to.
+         * @param behavior The ScrollBehavior to use when scrolling. Default is behavior is `auto`.
          */
         scrollToIndex(index, behavior = 'auto') {
             this._scrollStrategy.scrollToIndex(index, behavior);
         }
         /**
          * Gets the current scroll offset from the start of the viewport (in pixels).
-         * @param {?=} from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
+         * @param from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
          *     in horizontal mode.
-         * @return {?}
          */
         measureScrollOffset(from) {
             return from ?
                 super.measureScrollOffset(from) :
                 super.measureScrollOffset(this.orientation === 'horizontal' ? 'start' : 'top');
         }
-        /**
-         * Measure the combined size of all of the rendered items.
-         * @return {?}
-         */
+        /** Measure the combined size of all of the rendered items. */
         measureRenderedContentSize() {
-            /** @type {?} */
             const contentEl = this._contentWrapper.nativeElement;
             return this.orientation === 'horizontal' ? contentEl.offsetWidth : contentEl.offsetHeight;
         }
         /**
          * Measure the total combined size of the given range. Throws if the range includes items that are
          * not rendered.
-         * @param {?} range
-         * @return {?}
          */
         measureRangeSize(range) {
             if (!this._forOf) {
@@ -1534,32 +913,19 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             }
             return this._forOf.measureRangeSize(range, this.orientation);
         }
-        /**
-         * Update the viewport dimensions and re-render.
-         * @return {?}
-         */
+        /** Update the viewport dimensions and re-render. */
         checkViewportSize() {
             // TODO: Cleanup later when add logic for handling content resize
             this._measureViewportSize();
             this._scrollStrategy.onDataLengthChanged();
         }
-        /**
-         * Measure the viewport size.
-         * @private
-         * @return {?}
-         */
+        /** Measure the viewport size. */
         _measureViewportSize() {
-            /** @type {?} */
             const viewportEl = this.elementRef.nativeElement;
             this._viewportSize = this.orientation === 'horizontal' ?
                 viewportEl.clientWidth : viewportEl.clientHeight;
         }
-        /**
-         * Queue up change detection to run.
-         * @private
-         * @param {?=} runAfter
-         * @return {?}
-         */
+        /** Queue up change detection to run. */
         _markChangeDetectionNeeded(runAfter) {
             if (runAfter) {
                 this._runAfterChangeDetection.push(runAfter);
@@ -1568,22 +934,12 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             // properties sequentially we only have to run `_doChangeDetection` once at the end.
             if (!this._isChangeDetectionPending) {
                 this._isChangeDetectionPending = true;
-                this.ngZone.runOutsideAngular((/**
-                 * @return {?}
-                 */
-                () => Promise.resolve().then((/**
-                 * @return {?}
-                 */
-                () => {
+                this.ngZone.runOutsideAngular(() => Promise.resolve().then(() => {
                     this._doChangeDetection();
-                }))));
+                }));
             }
         }
-        /**
-         * Run change detection.
-         * @private
-         * @return {?}
-         */
+        /** Run change detection. */
         _doChangeDetection() {
             this._isChangeDetectionPending = false;
             // Apply the content transform. The transform can't be set via an Angular binding because
@@ -1594,269 +950,121 @@ let CdkVirtualScrollViewport = /** @class */ (() => {
             // Apply changes to Angular bindings. Note: We must call `markForCheck` to run change detection
             // from the root, since the repeated items are content projected in. Calling `detectChanges`
             // instead does not properly check the projected content.
-            this.ngZone.run((/**
-             * @return {?}
-             */
-            () => this._changeDetectorRef.markForCheck()));
-            /** @type {?} */
+            this.ngZone.run(() => this._changeDetectorRef.markForCheck());
             const runAfterChangeDetection = this._runAfterChangeDetection;
             this._runAfterChangeDetection = [];
             for (const fn of runAfterChangeDetection) {
                 fn();
             }
         }
-        /**
-         * Calculates the `style.width` and `style.height` for the spacer element.
-         * @private
-         * @return {?}
-         */
+        /** Calculates the `style.width` and `style.height` for the spacer element. */
         _calculateSpacerSize() {
             this._totalContentHeight =
                 this.orientation === 'horizontal' ? '' : `${this._totalContentSize}px`;
             this._totalContentWidth =
                 this.orientation === 'horizontal' ? `${this._totalContentSize}px` : '';
         }
-    }
-    CdkVirtualScrollViewport.decorators = [
-        { type: Component, args: [{
-                    selector: 'cdk-virtual-scroll-viewport',
-                    template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n",
-                    host: {
-                        'class': 'cdk-virtual-scroll-viewport',
-                        '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',
-                        '[class.cdk-virtual-scroll-orientation-vertical]': 'orientation !== "horizontal"',
-                    },
-                    encapsulation: ViewEncapsulation.None,
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    providers: [{
-                            provide: CdkScrollable,
-                            useExisting: CdkVirtualScrollViewport,
-                        }],
-                    styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}\n"]
-                }] }
-    ];
-    /** @nocollapse */
-    CdkVirtualScrollViewport.ctorParameters = () => [
-        { type: ElementRef },
-        { type: ChangeDetectorRef },
-        { type: NgZone },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [VIRTUAL_SCROLL_STRATEGY,] }] },
-        { type: Directionality, decorators: [{ type: Optional }] },
-        { type: ScrollDispatcher },
-        { type: ViewportRuler, decorators: [{ type: Optional }] }
-    ];
-    CdkVirtualScrollViewport.propDecorators = {
-        orientation: [{ type: Input }],
-        scrolledIndexChange: [{ type: Output }],
-        _contentWrapper: [{ type: ViewChild, args: ['contentWrapper', { static: true },] }]
     };
+    __decorate([
+        Input(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], CdkVirtualScrollViewport.prototype, "orientation", null);
+    __decorate([
+        Output(),
+        __metadata("design:type", Observable)
+    ], CdkVirtualScrollViewport.prototype, "scrolledIndexChange", void 0);
+    __decorate([
+        ViewChild('contentWrapper', { static: true }),
+        __metadata("design:type", ElementRef)
+    ], CdkVirtualScrollViewport.prototype, "_contentWrapper", void 0);
+    CdkVirtualScrollViewport = CdkVirtualScrollViewport_1 = __decorate([
+        Component({
+            selector: 'cdk-virtual-scroll-viewport',
+            template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n",
+            host: {
+                'class': 'cdk-virtual-scroll-viewport',
+                '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',
+                '[class.cdk-virtual-scroll-orientation-vertical]': 'orientation !== "horizontal"',
+            },
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            providers: [{
+                    provide: CdkScrollable,
+                    useExisting: CdkVirtualScrollViewport_1,
+                }],
+            styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}\n"]
+        }),
+        __param(3, Optional()), __param(3, Inject(VIRTUAL_SCROLL_STRATEGY)),
+        __param(4, Optional()),
+        __param(6, Optional()),
+        __metadata("design:paramtypes", [ElementRef,
+            ChangeDetectorRef,
+            NgZone, Object, Directionality,
+            ScrollDispatcher,
+            ViewportRuler])
+    ], CdkVirtualScrollViewport);
     return CdkVirtualScrollViewport;
 })();
-if (false) {
-    /**
-     * Emits when the viewport is detached from a CdkVirtualForOf.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._detachedSubject;
-    /**
-     * Emits when the rendered range changes.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._renderedRangeSubject;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._orientation;
-    /**
-     * Emits when the index of the first element visible in the viewport changes.
-     * @type {?}
-     */
-    CdkVirtualScrollViewport.prototype.scrolledIndexChange;
-    /**
-     * The element that wraps the rendered content.
-     * @type {?}
-     */
-    CdkVirtualScrollViewport.prototype._contentWrapper;
-    /**
-     * A stream that emits whenever the rendered range changes.
-     * @type {?}
-     */
-    CdkVirtualScrollViewport.prototype.renderedRangeStream;
-    /**
-     * The total size of all content (in pixels), including content that is not currently rendered.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._totalContentSize;
-    /**
-     * A string representing the `style.width` property value to be used for the spacer element.
-     * @type {?}
-     */
-    CdkVirtualScrollViewport.prototype._totalContentWidth;
-    /**
-     * A string representing the `style.height` property value to be used for the spacer element.
-     * @type {?}
-     */
-    CdkVirtualScrollViewport.prototype._totalContentHeight;
-    /**
-     * The CSS transform applied to the rendered subset of items so that they appear within the bounds
-     * of the visible viewport.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._renderedContentTransform;
-    /**
-     * The currently rendered range of indices.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._renderedRange;
-    /**
-     * The length of the data bound to this viewport (in number of items).
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._dataLength;
-    /**
-     * The size of the viewport (in pixels).
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._viewportSize;
-    /**
-     * the currently attached CdkVirtualForOf.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._forOf;
-    /**
-     * The last rendered content offset that was set.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._renderedContentOffset;
-    /**
-     * Whether the last rendered content offset was to the end of the content (and therefore needs to
-     * be rewritten as an offset to the start of the content).
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._renderedContentOffsetNeedsRewrite;
-    /**
-     * Whether there is a pending change detection cycle.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._isChangeDetectionPending;
-    /**
-     * A list of functions to run after the next change detection cycle.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._runAfterChangeDetection;
-    /**
-     * Subscription to changes in the viewport size.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._viewportChanges;
-    /** @type {?} */
-    CdkVirtualScrollViewport.prototype.elementRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._changeDetectorRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkVirtualScrollViewport.prototype._scrollStrategy;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/virtual-for-of.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Helper to extract size from a DOM Node.
- * @param {?} orientation
- * @param {?} node
- * @return {?}
- */
+/** Helper to extract size from a DOM Node. */
 function getSize(orientation, node) {
-    /** @type {?} */
-    const el = (/** @type {?} */ (node));
+    const el = node;
     if (!el.getBoundingClientRect) {
         return 0;
     }
-    /** @type {?} */
     const rect = el.getBoundingClientRect();
     return orientation == 'horizontal' ? rect.width : rect.height;
 }
 /**
  * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
  * container.
- * @template T
  */
 let CdkVirtualForOf = /** @class */ (() => {
-    /**
-     * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
-     * container.
-     * @template T
-     */
-    class CdkVirtualForOf {
-        /**
-         * @param {?} _viewContainerRef
-         * @param {?} _template
-         * @param {?} _differs
-         * @param {?} _viewport
-         * @param {?} ngZone
-         */
-        constructor(_viewContainerRef, _template, _differs, _viewport, ngZone) {
+    let CdkVirtualForOf = class CdkVirtualForOf {
+        constructor(
+        /** The view container to add items to. */
+        _viewContainerRef, 
+        /** The template to use when stamping out new items. */
+        _template, 
+        /** The set of available differs. */
+        _differs, 
+        /** The virtual scrolling viewport that these items are being rendered in. */
+        _viewport, ngZone) {
             this._viewContainerRef = _viewContainerRef;
             this._template = _template;
             this._differs = _differs;
             this._viewport = _viewport;
-            /**
-             * Emits when the rendered view of the data changes.
-             */
+            /** Emits when the rendered view of the data changes. */
             this.viewChange = new Subject();
-            /**
-             * Subject that emits when a new DataSource instance is given.
-             */
+            /** Subject that emits when a new DataSource instance is given. */
             this._dataSourceChanges = new Subject();
             /**
              * The size of the cache used to store templates that are not being used for re-use later.
              * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
              */
             this.cdkVirtualForTemplateCacheSize = 20;
-            /**
-             * Emits whenever the data in the current DataSource changes.
-             */
+            /** Emits whenever the data in the current DataSource changes. */
             this.dataStream = this._dataSourceChanges
                 .pipe(
             // Start off with null `DataSource`.
-            startWith((/** @type {?} */ (null))), 
+            startWith(null), 
             // Bundle up the previous and current data sources so we can work with both.
             pairwise(), 
             // Use `_changeDataSource` to disconnect from the previous data source and connect to the
             // new one, passing back a stream of data changes which we run through `switchMap` to give
             // us a data stream that emits the latest data from whatever the current `DataSource` is.
-            switchMap((/**
-             * @param {?} __0
-             * @return {?}
-             */
-            ([prev, cur]) => this._changeDataSource(prev, cur))), 
+            switchMap(([prev, cur]) => this._changeDataSource(prev, cur)), 
             // Replay the last emitted data when someone subscribes.
             shareReplay(1));
-            /**
-             * The differ used to calculate changes to the data.
-             */
+            /** The differ used to calculate changes to the data. */
             this._differ = null;
             /**
              * The template cache used to hold on ot template instancess that have been stamped out, but don't
@@ -1864,44 +1072,24 @@ let CdkVirtualForOf = /** @class */ (() => {
              * stamping out brand new ones.
              */
             this._templateCache = [];
-            /**
-             * Whether the rendered data should be updated during the next ngDoCheck cycle.
-             */
+            /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
             this._needsUpdate = false;
             this._destroyed = new Subject();
-            this.dataStream.subscribe((/**
-             * @param {?} data
-             * @return {?}
-             */
-            data => {
+            this.dataStream.subscribe(data => {
                 this._data = data;
                 this._onRenderedDataChange();
-            }));
-            this._viewport.renderedRangeStream.pipe(takeUntil(this._destroyed)).subscribe((/**
-             * @param {?} range
-             * @return {?}
-             */
-            range => {
+            });
+            this._viewport.renderedRangeStream.pipe(takeUntil(this._destroyed)).subscribe(range => {
                 this._renderedRange = range;
-                ngZone.run((/**
-                 * @return {?}
-                 */
-                () => this.viewChange.next(this._renderedRange)));
+                ngZone.run(() => this.viewChange.next(this._renderedRange));
                 this._onRenderedDataChange();
-            }));
+            });
             this._viewport.attach(this);
         }
-        /**
-         * The DataSource to display.
-         * @return {?}
-         */
+        /** The DataSource to display. */
         get cdkVirtualForOf() {
             return this._cdkVirtualForOf;
         }
-        /**
-         * @param {?} value
-         * @return {?}
-         */
         set cdkVirtualForOf(value) {
             this._cdkVirtualForOf = value;
             if (isDataSource(value)) {
@@ -1915,31 +1103,17 @@ let CdkVirtualForOf = /** @class */ (() => {
         /**
          * The `TrackByFunction` to use for tracking changes. The `TrackByFunction` takes the index and
          * the item and produces a value to be used as the item's identity when tracking changes.
-         * @return {?}
          */
         get cdkVirtualForTrackBy() {
             return this._cdkVirtualForTrackBy;
         }
-        /**
-         * @param {?} fn
-         * @return {?}
-         */
         set cdkVirtualForTrackBy(fn) {
             this._needsUpdate = true;
             this._cdkVirtualForTrackBy = fn ?
-                (/**
-                 * @param {?} index
-                 * @param {?} item
-                 * @return {?}
-                 */
-                (index, item) => fn(index + (this._renderedRange ? this._renderedRange.start : 0), item)) :
+                (index, item) => fn(index + (this._renderedRange ? this._renderedRange.start : 0), item) :
                 undefined;
         }
-        /**
-         * The template used to stamp out new elements.
-         * @param {?} value
-         * @return {?}
-         */
+        /** The template used to stamp out new elements. */
         set cdkVirtualForTemplate(value) {
             if (value) {
                 this._needsUpdate = true;
@@ -1950,9 +1124,6 @@ let CdkVirtualForOf = /** @class */ (() => {
          * Measures the combined size (width for horizontal orientation, height for vertical) of all items
          * in the specified range. Throws an error if the range includes items that are not currently
          * rendered.
-         * @param {?} range
-         * @param {?} orientation
-         * @return {?}
          */
         measureRangeSize(range, orientation) {
             if (range.start >= range.end) {
@@ -1962,36 +1133,26 @@ let CdkVirtualForOf = /** @class */ (() => {
                 throw Error(`Error: attempted to measure an item that isn't rendered.`);
             }
             // The index into the list of rendered views for the first item in the range.
-            /** @type {?} */
             const renderedStartIndex = range.start - this._renderedRange.start;
             // The length of the range we're measuring.
-            /** @type {?} */
             const rangeLen = range.end - range.start;
             // Loop over all root nodes for all items in the range and sum up their size.
-            /** @type {?} */
             let totalSize = 0;
-            /** @type {?} */
             let i = rangeLen;
             while (i--) {
-                /** @type {?} */
-                const view = (/** @type {?} */ (this._viewContainerRef.get(i + renderedStartIndex)));
-                /** @type {?} */
+                const view = this._viewContainerRef.get(i + renderedStartIndex);
                 let j = view ? view.rootNodes.length : 0;
                 while (j--) {
-                    totalSize += getSize(orientation, (/** @type {?} */ (view)).rootNodes[j]);
+                    totalSize += getSize(orientation, view.rootNodes[j]);
                 }
             }
             return totalSize;
         }
-        /**
-         * @return {?}
-         */
         ngDoCheck() {
             if (this._differ && this._needsUpdate) {
                 // TODO(mmalerba): We should differentiate needs update due to scrolling and a new portion of
                 // this list being rendered (can use simpler algorithm) vs needs update due to data actually
                 // changing (need to do this diff).
-                /** @type {?} */
                 const changes = this._differ.diff(this._renderedItems);
                 if (!changes) {
                     this._updateContext();
@@ -2002,9 +1163,6 @@ let CdkVirtualForOf = /** @class */ (() => {
                 this._needsUpdate = false;
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             this._viewport.detach();
             this._dataSourceChanges.next();
@@ -2016,11 +1174,7 @@ let CdkVirtualForOf = /** @class */ (() => {
                 view.destroy();
             }
         }
-        /**
-         * React to scroll state changes in the viewport.
-         * @private
-         * @return {?}
-         */
+        /** React to scroll state changes in the viewport. */
         _onRenderedDataChange() {
             if (!this._renderedRange) {
                 return;
@@ -2031,13 +1185,7 @@ let CdkVirtualForOf = /** @class */ (() => {
             }
             this._needsUpdate = true;
         }
-        /**
-         * Swap out one `DataSource` for another.
-         * @private
-         * @param {?} oldDs
-         * @param {?} newDs
-         * @return {?}
-         */
+        /** Swap out one `DataSource` for another. */
         _changeDataSource(oldDs, newDs) {
             if (oldDs) {
                 oldDs.disconnect(this);
@@ -2045,92 +1193,56 @@ let CdkVirtualForOf = /** @class */ (() => {
             this._needsUpdate = true;
             return newDs ? newDs.connect(this) : of();
         }
-        /**
-         * Update the `CdkVirtualForOfContext` for all views.
-         * @private
-         * @return {?}
-         */
+        /** Update the `CdkVirtualForOfContext` for all views. */
         _updateContext() {
-            /** @type {?} */
             const count = this._data.length;
-            /** @type {?} */
             let i = this._viewContainerRef.length;
             while (i--) {
-                /** @type {?} */
-                let view = (/** @type {?} */ (this._viewContainerRef.get(i)));
+                let view = this._viewContainerRef.get(i);
                 view.context.index = this._renderedRange.start + i;
                 view.context.count = count;
                 this._updateComputedContextProperties(view.context);
                 view.detectChanges();
             }
         }
-        /**
-         * Apply changes to the DOM.
-         * @private
-         * @param {?} changes
-         * @return {?}
-         */
+        /** Apply changes to the DOM. */
         _applyChanges(changes) {
             // Rearrange the views to put them in the right location.
-            changes.forEachOperation((/**
-             * @param {?} record
-             * @param {?} adjustedPreviousIndex
-             * @param {?} currentIndex
-             * @return {?}
-             */
-            (record, adjustedPreviousIndex, currentIndex) => {
+            changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
                 if (record.previousIndex == null) { // Item added.
-                    // Item added.
-                    /** @type {?} */
-                    const view = this._insertViewForNewItem((/** @type {?} */ (currentIndex)));
+                    const view = this._insertViewForNewItem(currentIndex);
                     view.context.$implicit = record.item;
                 }
                 else if (currentIndex == null) { // Item removed.
-                    this._cacheView(this._detachView((/** @type {?} */ (adjustedPreviousIndex))));
+                    this._cacheView(this._detachView(adjustedPreviousIndex));
                 }
                 else { // Item moved.
-                    // Item moved.
-                    /** @type {?} */
-                    const view = (/** @type {?} */ (this._viewContainerRef.get((/** @type {?} */ (adjustedPreviousIndex)))));
+                    const view = this._viewContainerRef.get(adjustedPreviousIndex);
                     this._viewContainerRef.move(view, currentIndex);
                     view.context.$implicit = record.item;
                 }
-            }));
+            });
             // Update $implicit for any items that had an identity change.
-            changes.forEachIdentityChange((/**
-             * @param {?} record
-             * @return {?}
-             */
-            (record) => {
-                /** @type {?} */
-                const view = (/** @type {?} */ (this._viewContainerRef.get((/** @type {?} */ (record.currentIndex)))));
+            changes.forEachIdentityChange((record) => {
+                const view = this._viewContainerRef.get(record.currentIndex);
                 view.context.$implicit = record.item;
-            }));
+            });
             // Update the context variables on all items.
-            /** @type {?} */
             const count = this._data.length;
-            /** @type {?} */
             let i = this._viewContainerRef.length;
             while (i--) {
-                /** @type {?} */
-                const view = (/** @type {?} */ (this._viewContainerRef.get(i)));
+                const view = this._viewContainerRef.get(i);
                 view.context.index = this._renderedRange.start + i;
                 view.context.count = count;
                 this._updateComputedContextProperties(view.context);
             }
         }
-        /**
-         * Cache the given detached view.
-         * @private
-         * @param {?} view
-         * @return {?}
-         */
+        /** Cache the given detached view. */
         _cacheView(view) {
             if (this._templateCache.length < this.cdkVirtualForTemplateCacheSize) {
                 this._templateCache.push(view);
             }
             else {
-                /** @type {?} */
                 const index = this._viewContainerRef.indexOf(view);
                 // It's very unlikely that the index will ever be -1, but just in case,
                 // destroy the view on its own, otherwise destroy it through the
@@ -2143,43 +1255,28 @@ let CdkVirtualForOf = /** @class */ (() => {
                 }
             }
         }
-        /**
-         * Inserts a view for a new item, either from the cache or by creating a new one.
-         * @private
-         * @param {?} index
-         * @return {?}
-         */
+        /** Inserts a view for a new item, either from the cache or by creating a new one. */
         _insertViewForNewItem(index) {
             return this._insertViewFromCache(index) || this._createEmbeddedViewAt(index);
         }
-        /**
-         * Update the computed properties on the `CdkVirtualForOfContext`.
-         * @private
-         * @param {?} context
-         * @return {?}
-         */
+        /** Update the computed properties on the `CdkVirtualForOfContext`. */
         _updateComputedContextProperties(context) {
             context.first = context.index === 0;
             context.last = context.index === context.count - 1;
             context.even = context.index % 2 === 0;
             context.odd = !context.even;
         }
-        /**
-         * Creates a new embedded view and moves it to the given index
-         * @private
-         * @param {?} index
-         * @return {?}
-         */
+        /** Creates a new embedded view and moves it to the given index */
         _createEmbeddedViewAt(index) {
             // Note that it's important that we insert the item directly at the proper index,
             // rather than inserting it and the moving it in place, because if there's a directive
             // on the same node that injects the `ViewContainerRef`, Angular will insert another
             // comment node which can throw off the move when it's being repeated for all items.
             return this._viewContainerRef.createEmbeddedView(this._template, {
-                $implicit: (/** @type {?} */ (null)),
+                $implicit: null,
                 // It's guaranteed that the iterable is not "undefined" or "null" because we only
                 // generate views for elements if the "cdkVirtualForOf" iterable has elements.
-                cdkVirtualForOf: (/** @type {?} */ (this._cdkVirtualForOf)),
+                cdkVirtualForOf: this._cdkVirtualForOf,
                 index: -1,
                 count: -1,
                 first: false,
@@ -2188,197 +1285,103 @@ let CdkVirtualForOf = /** @class */ (() => {
                 even: false
             }, index);
         }
-        /**
-         * Inserts a recycled view from the cache at the given index.
-         * @private
-         * @param {?} index
-         * @return {?}
-         */
+        /** Inserts a recycled view from the cache at the given index. */
         _insertViewFromCache(index) {
-            /** @type {?} */
             const cachedView = this._templateCache.pop();
             if (cachedView) {
                 this._viewContainerRef.insert(cachedView, index);
             }
             return cachedView || null;
         }
-        /**
-         * Detaches the embedded view at the given index.
-         * @private
-         * @param {?} index
-         * @return {?}
-         */
+        /** Detaches the embedded view at the given index. */
         _detachView(index) {
-            return (/** @type {?} */ (this._viewContainerRef.detach(index)));
+            return this._viewContainerRef.detach(index);
         }
-    }
-    CdkVirtualForOf.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkVirtualFor][cdkVirtualForOf]',
-                },] }
-    ];
-    /** @nocollapse */
-    CdkVirtualForOf.ctorParameters = () => [
-        { type: ViewContainerRef },
-        { type: TemplateRef },
-        { type: IterableDiffers },
-        { type: CdkVirtualScrollViewport, decorators: [{ type: SkipSelf }] },
-        { type: NgZone }
-    ];
-    CdkVirtualForOf.propDecorators = {
-        cdkVirtualForOf: [{ type: Input }],
-        cdkVirtualForTrackBy: [{ type: Input }],
-        cdkVirtualForTemplate: [{ type: Input }],
-        cdkVirtualForTemplateCacheSize: [{ type: Input }]
     };
+    __decorate([
+        Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], CdkVirtualForOf.prototype, "cdkVirtualForOf", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], CdkVirtualForOf.prototype, "cdkVirtualForTrackBy", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", TemplateRef),
+        __metadata("design:paramtypes", [TemplateRef])
+    ], CdkVirtualForOf.prototype, "cdkVirtualForTemplate", null);
+    __decorate([
+        Input(),
+        __metadata("design:type", Number)
+    ], CdkVirtualForOf.prototype, "cdkVirtualForTemplateCacheSize", void 0);
+    CdkVirtualForOf = __decorate([
+        Directive({
+            selector: '[cdkVirtualFor][cdkVirtualForOf]',
+        }),
+        __param(3, SkipSelf()),
+        __metadata("design:paramtypes", [ViewContainerRef,
+            TemplateRef,
+            IterableDiffers,
+            CdkVirtualScrollViewport,
+            NgZone])
+    ], CdkVirtualForOf);
     return CdkVirtualForOf;
 })();
-if (false) {
-    /**
-     * Emits when the rendered view of the data changes.
-     * @type {?}
-     */
-    CdkVirtualForOf.prototype.viewChange;
-    /**
-     * Subject that emits when a new DataSource instance is given.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._dataSourceChanges;
-    /** @type {?} */
-    CdkVirtualForOf.prototype._cdkVirtualForOf;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._cdkVirtualForTrackBy;
-    /**
-     * The size of the cache used to store templates that are not being used for re-use later.
-     * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
-     * @type {?}
-     */
-    CdkVirtualForOf.prototype.cdkVirtualForTemplateCacheSize;
-    /**
-     * Emits whenever the data in the current DataSource changes.
-     * @type {?}
-     */
-    CdkVirtualForOf.prototype.dataStream;
-    /**
-     * The differ used to calculate changes to the data.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._differ;
-    /**
-     * The most recent data emitted from the DataSource.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._data;
-    /**
-     * The currently rendered items.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._renderedItems;
-    /**
-     * The currently rendered range of indices.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._renderedRange;
-    /**
-     * The template cache used to hold on ot template instancess that have been stamped out, but don't
-     * currently need to be rendered. These instances will be reused in the future rather than
-     * stamping out brand new ones.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._templateCache;
-    /**
-     * Whether the rendered data should be updated during the next ngDoCheck cycle.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._needsUpdate;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._destroyed;
-    /**
-     * The view container to add items to.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._viewContainerRef;
-    /**
-     * The template to use when stamping out new items.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._template;
-    /**
-     * The set of available differs.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._differs;
-    /**
-     * The virtual scrolling viewport that these items are being rendered in.
-     * @type {?}
-     * @private
-     */
-    CdkVirtualForOf.prototype._viewport;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/scrolling-module.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 let CdkScrollableModule = /** @class */ (() => {
-    class CdkScrollableModule {
-    }
-    CdkScrollableModule.decorators = [
-        { type: NgModule, args: [{
-                    exports: [CdkScrollable],
-                    declarations: [CdkScrollable]
-                },] }
-    ];
+    let CdkScrollableModule = class CdkScrollableModule {
+    };
+    CdkScrollableModule = __decorate([
+        NgModule({
+            exports: [CdkScrollable],
+            declarations: [CdkScrollable]
+        })
+    ], CdkScrollableModule);
     return CdkScrollableModule;
 })();
 let ScrollingModule = /** @class */ (() => {
-    class ScrollingModule {
-    }
-    ScrollingModule.decorators = [
-        { type: NgModule, args: [{
-                    imports: [
-                        BidiModule,
-                        PlatformModule,
-                        CdkScrollableModule
-                    ],
-                    exports: [
-                        BidiModule,
-                        CdkScrollableModule,
-                        CdkFixedSizeVirtualScroll,
-                        CdkVirtualForOf,
-                        CdkVirtualScrollViewport,
-                    ],
-                    declarations: [
-                        CdkFixedSizeVirtualScroll,
-                        CdkVirtualForOf,
-                        CdkVirtualScrollViewport,
-                    ],
-                },] }
-    ];
+    let ScrollingModule = class ScrollingModule {
+    };
+    ScrollingModule = __decorate([
+        NgModule({
+            imports: [
+                BidiModule,
+                PlatformModule,
+                CdkScrollableModule
+            ],
+            exports: [
+                BidiModule,
+                CdkScrollableModule,
+                CdkFixedSizeVirtualScroll,
+                CdkVirtualForOf,
+                CdkVirtualScrollViewport,
+            ],
+            declarations: [
+                CdkFixedSizeVirtualScroll,
+                CdkVirtualForOf,
+                CdkVirtualScrollViewport,
+            ],
+        })
+    ], ScrollingModule);
     return ScrollingModule;
 })();
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/scrolling/public-api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**

@@ -1,11 +1,7 @@
+import { __decorate, __param, __metadata } from 'tslib';
 import { DOCUMENT } from '@angular/common';
-import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, InjectionToken, EventEmitter, Input, Output, Directive, Optional, NgZone, NgModule } from '@angular/core';
 
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/pending-copy.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 /**
  * @license
  * Copyright Google LLC All Rights Reserved.
@@ -27,15 +23,9 @@ import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, E
  * called.
  */
 class PendingCopy {
-    /**
-     * @param {?} text
-     * @param {?} _document
-     */
     constructor(text, _document) {
         this._document = _document;
-        /** @type {?} */
         const textarea = this._textarea = this._document.createElement('textarea');
-        /** @type {?} */
         const styles = textarea.style;
         // Hide the element for display and accessibility. Set an
         // absolute position so the page layout isn't affected.
@@ -46,19 +36,13 @@ class PendingCopy {
         textarea.value = text;
         this._document.body.appendChild(textarea);
     }
-    /**
-     * Finishes copying the text.
-     * @return {?}
-     */
+    /** Finishes copying the text. */
     copy() {
-        /** @type {?} */
         const textarea = this._textarea;
-        /** @type {?} */
         let successful = false;
         try { // Older browsers could throw if copy is not supported.
             if (textarea) {
-                /** @type {?} */
-                const currentFocus = (/** @type {?} */ (this._document.activeElement));
+                const currentFocus = this._document.activeElement;
                 textarea.select();
                 textarea.setSelectionRange(0, textarea.value.length);
                 successful = this._document.execCommand('copy');
@@ -73,12 +57,8 @@ class PendingCopy {
         }
         return successful;
     }
-    /**
-     * Cleans up DOM changes used to perform the copy operation.
-     * @return {?}
-     */
+    /** Cleans up DOM changes used to perform the copy operation. */
     destroy() {
-        /** @type {?} */
         const textarea = this._textarea;
         if (textarea) {
             if (textarea.parentNode) {
@@ -88,48 +68,23 @@ class PendingCopy {
         }
     }
 }
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    PendingCopy.prototype._textarea;
-    /**
-     * @type {?}
-     * @private
-     */
-    PendingCopy.prototype._document;
-}
 
-/**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/clipboard.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 /**
  * A service for copying text to the clipboard.
  */
 let Clipboard = /** @class */ (() => {
-    /**
-     * A service for copying text to the clipboard.
-     */
-    class Clipboard {
-        /**
-         * @param {?} document
-         */
+    let Clipboard = class Clipboard {
         constructor(document) {
             this._document = document;
         }
         /**
          * Copies the provided text into the user's clipboard.
          *
-         * @param {?} text The string to copy.
-         * @return {?} Whether the operation was successful.
+         * @param text The string to copy.
+         * @returns Whether the operation was successful.
          */
         copy(text) {
-            /** @type {?} */
             const pendingCopy = this.beginCopy(text);
-            /** @type {?} */
             const successful = pendingCopy.copy();
             pendingCopy.destroy();
             return successful;
@@ -140,74 +95,41 @@ let Clipboard = /** @class */ (() => {
          *
          * The caller must call `destroy` on the returned `PendingCopy`.
          *
-         * @param {?} text The string to copy.
-         * @return {?} the pending copy operation.
+         * @param text The string to copy.
+         * @returns the pending copy operation.
          */
         beginCopy(text) {
             return new PendingCopy(text, this._document);
         }
-    }
-    Clipboard.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    Clipboard.ctorParameters = () => [
-        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
-    ];
-    /** @nocollapse */ Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+    };
+    Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+    Clipboard = __decorate([
+        Injectable({ providedIn: 'root' }),
+        __param(0, Inject(DOCUMENT)),
+        __metadata("design:paramtypes", [Object])
+    ], Clipboard);
     return Clipboard;
 })();
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    Clipboard.prototype._document;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/copy-to-clipboard.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Object that can be used to configure the default options for `CdkCopyToClipboard`.
- * @record
- */
-function CdkCopyToClipboardConfig() { }
-if (false) {
-    /**
-     * Default number of attempts to make when copying text to the clipboard.
-     * @type {?|undefined}
-     */
-    CdkCopyToClipboardConfig.prototype.attempts;
-}
-/**
- * Injection token that can be used to provide the default options to `CdkCopyToClipboard`.
- * @type {?}
- */
+/** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
 const CKD_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CKD_COPY_TO_CLIPBOARD_CONFIG');
 /**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
  */
 let CdkCopyToClipboard = /** @class */ (() => {
-    /**
-     * Provides behavior for a button that when clicked copies content into user's
-     * clipboard.
-     */
-    class CdkCopyToClipboard {
-        /**
-         * @param {?} _clipboard
-         * @param {?} _ngZone
-         * @param {?=} config
-         */
+    let CdkCopyToClipboard = class CdkCopyToClipboard {
         constructor(_clipboard, _ngZone, config) {
             this._clipboard = _clipboard;
             this._ngZone = _ngZone;
-            /**
-             * Content to be copied.
-             */
+            /** Content to be copied. */
             this.text = '';
             /**
              * How many times to attempt to copy the text. This may be necessary for longer text, because
@@ -219,39 +141,23 @@ let CdkCopyToClipboard = /** @class */ (() => {
              * emitted value indicates whether copying was successful.
              */
             this.copied = new EventEmitter();
-            /**
-             * Copies that are currently being attempted.
-             */
+            /** Copies that are currently being attempted. */
             this._pending = new Set();
             if (config && config.attempts != null) {
                 this.attempts = config.attempts;
             }
         }
-        /**
-         * Copies the current text to the clipboard.
-         * @param {?=} attempts
-         * @return {?}
-         */
+        /** Copies the current text to the clipboard. */
         copy(attempts = this.attempts) {
             if (attempts > 1) {
-                /** @type {?} */
                 let remainingAttempts = attempts;
-                /** @type {?} */
                 const pending = this._clipboard.beginCopy(this.text);
                 this._pending.add(pending);
-                /** @type {?} */
-                const attempt = (/**
-                 * @return {?}
-                 */
-                () => {
-                    /** @type {?} */
+                const attempt = () => {
                     const successful = pending.copy();
                     if (!successful && --remainingAttempts && !this._destroyed) {
                         // We use 1 for the timeout since it's more predictable when flushing in unit tests.
-                        this._currentTimeout = this._ngZone.runOutsideAngular((/**
-                         * @return {?}
-                         */
-                        () => setTimeout(attempt, 1)));
+                        this._currentTimeout = this._ngZone.runOutsideAngular(() => setTimeout(attempt, 1));
                     }
                     else {
                         this._currentTimeout = null;
@@ -259,119 +165,73 @@ let CdkCopyToClipboard = /** @class */ (() => {
                         pending.destroy();
                         this.copied.emit(successful);
                     }
-                });
+                };
                 attempt();
             }
             else {
                 this.copied.emit(this._clipboard.copy(this.text));
             }
         }
-        /**
-         * @return {?}
-         */
         ngOnDestroy() {
             if (this._currentTimeout) {
                 clearTimeout(this._currentTimeout);
             }
-            this._pending.forEach((/**
-             * @param {?} copy
-             * @return {?}
-             */
-            copy => copy.destroy()));
+            this._pending.forEach(copy => copy.destroy());
             this._pending.clear();
             this._destroyed = true;
         }
-    }
-    CdkCopyToClipboard.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkCopyToClipboard]',
-                    host: {
-                        '(click)': 'copy()',
-                    }
-                },] }
-    ];
-    /** @nocollapse */
-    CdkCopyToClipboard.ctorParameters = () => [
-        { type: Clipboard },
-        { type: NgZone },
-        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
-    ];
-    CdkCopyToClipboard.propDecorators = {
-        text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
-        attempts: [{ type: Input, args: ['cdkCopyToClipboardAttempts',] }],
-        copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }]
     };
+    __decorate([
+        Input('cdkCopyToClipboard'),
+        __metadata("design:type", String)
+    ], CdkCopyToClipboard.prototype, "text", void 0);
+    __decorate([
+        Input('cdkCopyToClipboardAttempts'),
+        __metadata("design:type", Number)
+    ], CdkCopyToClipboard.prototype, "attempts", void 0);
+    __decorate([
+        Output('cdkCopyToClipboardCopied'),
+        __metadata("design:type", Object)
+    ], CdkCopyToClipboard.prototype, "copied", void 0);
+    CdkCopyToClipboard = __decorate([
+        Directive({
+            selector: '[cdkCopyToClipboard]',
+            host: {
+                '(click)': 'copy()',
+            }
+        }),
+        __param(2, Optional()), __param(2, Inject(CKD_COPY_TO_CLIPBOARD_CONFIG)),
+        __metadata("design:paramtypes", [Clipboard,
+            NgZone, Object])
+    ], CdkCopyToClipboard);
     return CdkCopyToClipboard;
 })();
-if (false) {
-    /**
-     * Content to be copied.
-     * @type {?}
-     */
-    CdkCopyToClipboard.prototype.text;
-    /**
-     * How many times to attempt to copy the text. This may be necessary for longer text, because
-     * the browser needs time to fill an intermediate textarea element and copy the content.
-     * @type {?}
-     */
-    CdkCopyToClipboard.prototype.attempts;
-    /**
-     * Emits when some text is copied to the clipboard. The
-     * emitted value indicates whether copying was successful.
-     * @type {?}
-     */
-    CdkCopyToClipboard.prototype.copied;
-    /**
-     * Copies that are currently being attempted.
-     * @type {?}
-     * @private
-     */
-    CdkCopyToClipboard.prototype._pending;
-    /**
-     * Whether the directive has been destroyed.
-     * @type {?}
-     * @private
-     */
-    CdkCopyToClipboard.prototype._destroyed;
-    /**
-     * Timeout for the current copy attempt.
-     * @type {?}
-     * @private
-     */
-    CdkCopyToClipboard.prototype._currentTimeout;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkCopyToClipboard.prototype._clipboard;
-    /**
-     * @type {?}
-     * @private
-     */
-    CdkCopyToClipboard.prototype._ngZone;
-}
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/clipboard-module.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 let ClipboardModule = /** @class */ (() => {
-    class ClipboardModule {
-    }
-    ClipboardModule.decorators = [
-        { type: NgModule, args: [{
-                    declarations: [CdkCopyToClipboard],
-                    exports: [CdkCopyToClipboard],
-                },] }
-    ];
+    let ClipboardModule = class ClipboardModule {
+    };
+    ClipboardModule = __decorate([
+        NgModule({
+            declarations: [CdkCopyToClipboard],
+            exports: [CdkCopyToClipboard],
+        })
+    ], ClipboardModule);
     return ClipboardModule;
 })();
 
 /**
- * @fileoverview added by tsickle
- * Generated from: src/cdk/clipboard/public-api.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
  */
 
 /**
