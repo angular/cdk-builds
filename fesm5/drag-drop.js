@@ -952,9 +952,16 @@ var DragRef = /** @class */ (function () {
     };
     /** Determines the point of the page that was touched by the user. */
     DragRef.prototype._getPointerPositionOnPage = function (event) {
-        // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
-        var point = isTouchEvent(event) ? (event.touches[0] || event.changedTouches[0]) : event;
         var scrollPosition = this._getViewportScrollPosition();
+        var point = isTouchEvent(event) ?
+            // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
+            // Also note that on real devices we're guaranteed for either `touches` or `changedTouches`
+            // to have a value, but Firefox in device emulation mode has a bug where both can be empty
+            // for `touchstart` and `touchend` so we fall back to a dummy object in order to avoid
+            // throwing an error. The value returned here will be incorrect, but since this only
+            // breaks inside a developer tool and the value is only used for secondary information,
+            // we can get away with it. See https://bugzilla.mozilla.org/show_bug.cgi?id=1615824.
+            (event.touches[0] || event.changedTouches[0] || { pageX: 0, pageY: 0 }) : event;
         return {
             x: point.pageX - scrollPosition.left,
             y: point.pageY - scrollPosition.top
@@ -1477,16 +1484,14 @@ var DropListRef = /** @class */ (function () {
             element.parentElement.insertBefore(placeholder, element);
             activeDraggables.splice(newIndex, 0, item);
         }
+        else if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
+            var reference = activeDraggables[0].getRootElement();
+            reference.parentNode.insertBefore(placeholder, reference);
+            activeDraggables.unshift(item);
+        }
         else {
-            var element = coerceElement(this.element);
-            if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
-                element.insertBefore(placeholder, activeDraggables[0].getRootElement());
-                activeDraggables.unshift(item);
-            }
-            else {
-                element.appendChild(placeholder);
-                activeDraggables.push(item);
-            }
+            coerceElement(this.element).appendChild(placeholder);
+            activeDraggables.push(item);
         }
         // The transform needs to be cleared so it doesn't throw off the measurements.
         placeholder.style.transform = '';
