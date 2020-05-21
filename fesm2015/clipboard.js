@@ -199,7 +199,7 @@ let CdkCopyToClipboard = /** @class */ (() => {
     class CdkCopyToClipboard {
         /**
          * @param {?} _clipboard
-         * @param {?=} _ngZone
+         * @param {?} _ngZone
          * @param {?=} config
          */
         constructor(_clipboard, _ngZone, config) {
@@ -219,13 +219,6 @@ let CdkCopyToClipboard = /** @class */ (() => {
              * emitted value indicates whether copying was successful.
              */
             this.copied = new EventEmitter();
-            /**
-             * Emits when some text is copied to the clipboard. The
-             * emitted value indicates whether copying was successful.
-             * @deprecated Use `cdkCopyToClipboardCopied` instead.
-             * \@breaking-change 10.0.0
-             */
-            this._deprecatedCopied = this.copied;
             /**
              * Copies that are currently being attempted.
              */
@@ -254,17 +247,11 @@ let CdkCopyToClipboard = /** @class */ (() => {
                     /** @type {?} */
                     const successful = pending.copy();
                     if (!successful && --remainingAttempts && !this._destroyed) {
-                        // @breaking-change 10.0.0 Remove null check for `_ngZone`.
-                        if (this._ngZone) {
-                            this._currentTimeout = this._ngZone.runOutsideAngular((/**
-                             * @return {?}
-                             */
-                            () => setTimeout(attempt, 1)));
-                        }
-                        else {
-                            // We use 1 for the timeout since it's more predictable when flushing in unit tests.
-                            this._currentTimeout = setTimeout(attempt, 1);
-                        }
+                        // We use 1 for the timeout since it's more predictable when flushing in unit tests.
+                        this._currentTimeout = this._ngZone.runOutsideAngular((/**
+                         * @return {?}
+                         */
+                        () => setTimeout(attempt, 1)));
                     }
                     else {
                         this._currentTimeout = null;
@@ -312,8 +299,7 @@ let CdkCopyToClipboard = /** @class */ (() => {
     CdkCopyToClipboard.propDecorators = {
         text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
         attempts: [{ type: Input, args: ['cdkCopyToClipboardAttempts',] }],
-        copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }],
-        _deprecatedCopied: [{ type: Output, args: ['copied',] }]
+        copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }]
     };
     return CdkCopyToClipboard;
 })();
@@ -335,14 +321,6 @@ if (false) {
      * @type {?}
      */
     CdkCopyToClipboard.prototype.copied;
-    /**
-     * Emits when some text is copied to the clipboard. The
-     * emitted value indicates whether copying was successful.
-     * @deprecated Use `cdkCopyToClipboardCopied` instead.
-     * \@breaking-change 10.0.0
-     * @type {?}
-     */
-    CdkCopyToClipboard.prototype._deprecatedCopied;
     /**
      * Copies that are currently being attempted.
      * @type {?}
@@ -367,8 +345,6 @@ if (false) {
      */
     CdkCopyToClipboard.prototype._clipboard;
     /**
-     * @deprecated _ngZone parameter to become required.
-     * \@breaking-change 10.0.0
      * @type {?}
      * @private
      */

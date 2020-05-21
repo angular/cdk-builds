@@ -20,11 +20,7 @@ export declare const CKD_COPY_TO_CLIPBOARD_CONFIG: InjectionToken<CdkCopyToClipb
  */
 export declare class CdkCopyToClipboard implements OnDestroy {
     private _clipboard;
-    /**
-     * @deprecated _ngZone parameter to become required.
-     * @breaking-change 10.0.0
-     */
-    private _ngZone?;
+    private _ngZone;
     /** Content to be copied. */
     text: string;
     /**
@@ -37,25 +33,13 @@ export declare class CdkCopyToClipboard implements OnDestroy {
      * emitted value indicates whether copying was successful.
      */
     copied: EventEmitter<boolean>;
-    /**
-     * Emits when some text is copied to the clipboard. The
-     * emitted value indicates whether copying was successful.
-     * @deprecated Use `cdkCopyToClipboardCopied` instead.
-     * @breaking-change 10.0.0
-     */
-    _deprecatedCopied: EventEmitter<boolean>;
     /** Copies that are currently being attempted. */
     private _pending;
     /** Whether the directive has been destroyed. */
     private _destroyed;
     /** Timeout for the current copy attempt. */
     private _currentTimeout;
-    constructor(_clipboard: Clipboard, 
-    /**
-     * @deprecated _ngZone parameter to become required.
-     * @breaking-change 10.0.0
-     */
-    _ngZone?: NgZone | undefined, config?: CdkCopyToClipboardConfig);
+    constructor(_clipboard: Clipboard, _ngZone: NgZone, config?: CdkCopyToClipboardConfig);
     /** Copies the current text to the clipboard. */
     copy(attempts?: number): void;
     ngOnDestroy(): void;

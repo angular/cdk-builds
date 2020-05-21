@@ -354,12 +354,7 @@
      * clipboard.
      */
     var CdkCopyToClipboard = /** @class */ (function () {
-        function CdkCopyToClipboard(_clipboard, 
-        /**
-         * @deprecated _ngZone parameter to become required.
-         * @breaking-change 10.0.0
-         */
-        _ngZone, config) {
+        function CdkCopyToClipboard(_clipboard, _ngZone, config) {
             this._clipboard = _clipboard;
             this._ngZone = _ngZone;
             /** Content to be copied. */
@@ -374,13 +369,6 @@
              * emitted value indicates whether copying was successful.
              */
             this.copied = new i0.EventEmitter();
-            /**
-             * Emits when some text is copied to the clipboard. The
-             * emitted value indicates whether copying was successful.
-             * @deprecated Use `cdkCopyToClipboardCopied` instead.
-             * @breaking-change 10.0.0
-             */
-            this._deprecatedCopied = this.copied;
             /** Copies that are currently being attempted. */
             this._pending = new Set();
             if (config && config.attempts != null) {
@@ -398,14 +386,8 @@
                 var attempt_1 = function () {
                     var successful = pending_1.copy();
                     if (!successful && --remainingAttempts_1 && !_this._destroyed) {
-                        // @breaking-change 10.0.0 Remove null check for `_ngZone`.
-                        if (_this._ngZone) {
-                            _this._currentTimeout = _this._ngZone.runOutsideAngular(function () { return setTimeout(attempt_1, 1); });
-                        }
-                        else {
-                            // We use 1 for the timeout since it's more predictable when flushing in unit tests.
-                            _this._currentTimeout = setTimeout(attempt_1, 1);
-                        }
+                        // We use 1 for the timeout since it's more predictable when flushing in unit tests.
+                        _this._currentTimeout = _this._ngZone.runOutsideAngular(function () { return setTimeout(attempt_1, 1); });
                     }
                     else {
                         _this._currentTimeout = null;
@@ -440,10 +422,6 @@
             i0.Output('cdkCopyToClipboardCopied'),
             __metadata("design:type", Object)
         ], CdkCopyToClipboard.prototype, "copied", void 0);
-        __decorate([
-            i0.Output('copied'),
-            __metadata("design:type", Object)
-        ], CdkCopyToClipboard.prototype, "_deprecatedCopied", void 0);
         CdkCopyToClipboard = __decorate([
             i0.Directive({
                 selector: '[cdkCopyToClipboard]',
