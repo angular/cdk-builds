@@ -1708,16 +1708,14 @@
                 element.parentElement.insertBefore(placeholder, element);
                 activeDraggables.splice(newIndex, 0, item);
             }
+            else if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
+                var reference = activeDraggables[0].getRootElement();
+                reference.parentNode.insertBefore(placeholder, reference);
+                activeDraggables.unshift(item);
+            }
             else {
-                var element = coercion.coerceElement(this.element);
-                if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
-                    element.insertBefore(placeholder, activeDraggables[0].getRootElement());
-                    activeDraggables.unshift(item);
-                }
-                else {
-                    element.appendChild(placeholder);
-                    activeDraggables.push(item);
-                }
+                coercion.coerceElement(this.element).appendChild(placeholder);
+                activeDraggables.push(item);
             }
             // The transform needs to be cleared so it doesn't throw off the measurements.
             placeholder.style.transform = '';

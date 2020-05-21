@@ -2535,17 +2535,15 @@ class DropListRef {
             (/** @type {?} */ (element.parentElement)).insertBefore(placeholder, element);
             activeDraggables.splice(newIndex, 0, item);
         }
-        else {
+        else if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
             /** @type {?} */
-            const element = coerceElement(this.element);
-            if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
-                element.insertBefore(placeholder, activeDraggables[0].getRootElement());
-                activeDraggables.unshift(item);
-            }
-            else {
-                element.appendChild(placeholder);
-                activeDraggables.push(item);
-            }
+            const reference = activeDraggables[0].getRootElement();
+            (/** @type {?} */ (reference.parentNode)).insertBefore(placeholder, reference);
+            activeDraggables.unshift(item);
+        }
+        else {
+            coerceElement(this.element).appendChild(placeholder);
+            activeDraggables.push(item);
         }
         // The transform needs to be cleared so it doesn't throw off the measurements.
         placeholder.style.transform = '';
