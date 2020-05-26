@@ -10,7 +10,7 @@
  * checking browser-specific global properties.
  */
 export declare class Platform {
-    private _platformId?;
+    private _platformId;
     /** Whether the Angular application is being rendered in the browser. */
     isBrowser: boolean;
     /** Whether the current browser is Microsoft Edge. */
@@ -29,8 +29,5 @@ export declare class Platform {
     ANDROID: boolean;
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
-    /**
-     * @breaking-change 8.0.0 remove optional decorator
-     */
-    constructor(_platformId?: Object | undefined);
+    constructor(_platformId: Object);
 }

@@ -1,5 +1,5 @@
 import { __decorate, __param, __metadata } from 'tslib';
-import { ɵɵdefineInjectable, ɵɵinject, PLATFORM_ID, Injectable, Optional, Inject, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, PLATFORM_ID, Injectable, Inject, NgModule } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 // Whether the current platform supports the V8 Break Iterator. The V8 check
@@ -22,9 +22,6 @@ catch (_a) {
  */
 let Platform = /** @class */ (() => {
     let Platform = class Platform {
-        /**
-         * @breaking-change 8.0.0 remove optional decorator
-         */
         constructor(_platformId) {
             this._platformId = _platformId;
             // We want to use the Angular platform check because if the Document is shimmed
@@ -65,10 +62,10 @@ let Platform = /** @class */ (() => {
             this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
         }
     };
-    Platform.ɵprov = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+    Platform.ɵprov = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID)); }, token: Platform, providedIn: "root" });
     Platform = __decorate([
         Injectable({ providedIn: 'root' }),
-        __param(0, Optional()), __param(0, Inject(PLATFORM_ID)),
+        __param(0, Inject(PLATFORM_ID)),
         __metadata("design:paramtypes", [Object])
     ], Platform);
     return Platform;

@@ -251,9 +251,6 @@
      * checking browser-specific global properties.
      */
     var Platform = /** @class */ (function () {
-        /**
-         * @breaking-change 8.0.0 remove optional decorator
-         */
         function Platform(_platformId) {
             this._platformId = _platformId;
             // We want to use the Angular platform check because if the Document is shimmed
@@ -293,10 +290,10 @@
             /** Whether the current browser is Safari. */
             this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
         }
-        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID, 8)); }, token: Platform, providedIn: "root" });
+        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
         Platform = __decorate([
             i0.Injectable({ providedIn: 'root' }),
-            __param(0, i0.Optional()), __param(0, i0.Inject(i0.PLATFORM_ID)),
+            __param(0, i0.Inject(i0.PLATFORM_ID)),
             __metadata("design:paramtypes", [Object])
         ], Platform);
         return Platform;
