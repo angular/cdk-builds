@@ -361,6 +361,20 @@
                 });
             });
         };
+        ProtractorElement.prototype.mouseAway = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var _a, _b;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            _b = (_a = protractor.browser.actions()).mouseMove;
+                            return [4 /*yield*/, this.element.getWebElement()];
+                        case 1: return [2 /*return*/, _b.apply(_a, [_c.sent(), { x: -1, y: -1 }])
+                                .perform()];
+                    }
+                });
+            });
+        };
         ProtractorElement.prototype.sendKeys = function () {
             var modifiersAndKeys = [];
             for (var _i = 0; _i < arguments.length; _i++) {

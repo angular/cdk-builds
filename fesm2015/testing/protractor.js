@@ -103,6 +103,13 @@ class ProtractorElement {
                 .perform();
         });
     }
+    mouseAway() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return browser.actions()
+                .mouseMove(yield this.element.getWebElement(), { x: -1, y: -1 })
+                .perform();
+        });
+    }
     sendKeys(...modifiersAndKeys) {
         return __awaiter(this, void 0, void 0, function* () {
             const first = modifiersAndKeys[0];

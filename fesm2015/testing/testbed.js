@@ -480,6 +480,13 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
+    mouseAway() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            dispatchMouseEvent(this.element, 'mouseleave');
+            yield this._stabilize();
+        });
+    }
     sendKeys(...modifiersAndKeys) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();

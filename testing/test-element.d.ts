@@ -69,6 +69,8 @@ export interface TestElement {
     getCssValue(property: string): Promise<string>;
     /** Hovers the mouse over the element. */
     hover(): Promise<void>;
+    /** Moves the mouse away from the element. */
+    mouseAway(): Promise<void>;
     /**
      * Sends the given string to the input as a series of key presses. Also fires input events
      * and attempts to add the string to the Element's value.

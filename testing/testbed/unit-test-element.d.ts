@@ -17,6 +17,7 @@ export declare class UnitTestElement implements TestElement {
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;
+    mouseAway(): Promise<void>;
     sendKeys(...keys: (string | TestKey)[]): Promise<void>;
     sendKeys(modifiers: ModifierKeys, ...keys: (string | TestKey)[]): Promise<void>;
     text(): Promise<string>;

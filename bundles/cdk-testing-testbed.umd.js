@@ -797,6 +797,22 @@
                 });
             });
         };
+        UnitTestElement.prototype.mouseAway = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
+                            dispatchMouseEvent(this.element, 'mouseleave');
+                            return [4 /*yield*/, this._stabilize()];
+                        case 2:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
         UnitTestElement.prototype.sendKeys = function () {
             var modifiersAndKeys = [];
             for (var _i = 0; _i < arguments.length; _i++) {
