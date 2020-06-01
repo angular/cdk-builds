@@ -1,5 +1,4 @@
-import { __decorate, __param, __metadata } from 'tslib';
-import { InjectionToken, inject, EventEmitter, ɵɵdefineInjectable, ɵɵinject, Injectable, Optional, Inject, Output, Input, Directive, NgModule } from '@angular/core';
+import { InjectionToken, inject, EventEmitter, Injectable, Optional, Inject, ɵɵdefineInjectable, ɵɵinject, Directive, Output, Input, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -34,11 +33,18 @@ function DIR_DOCUMENT_FACTORY() {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
  */
 let Directionality = /** @class */ (() => {
-    let Directionality = class Directionality {
+    class Directionality {
         constructor(_document) {
             /** The current 'ltr' or 'rtl' value. */
             this.value = 'ltr';
@@ -58,13 +64,15 @@ let Directionality = /** @class */ (() => {
         ngOnDestroy() {
             this.change.complete();
         }
-    };
+    }
+    Directionality.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    Directionality.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DIR_DOCUMENT,] }] }
+    ];
     Directionality.ɵprov = ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
-    Directionality = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Optional()), __param(0, Inject(DIR_DOCUMENT)),
-        __metadata("design:paramtypes", [Object])
-    ], Directionality);
     return Directionality;
 })();
 
@@ -82,8 +90,7 @@ let Directionality = /** @class */ (() => {
  * Directionality to get the closest direction.
  */
 let Dir = /** @class */ (() => {
-    var Dir_1;
-    let Dir = Dir_1 = class Dir {
+    class Dir {
         constructor() {
             /** Normalized direction that accounts for invalid/unsupported values. */
             this._dir = 'ltr';
@@ -112,24 +119,19 @@ let Dir = /** @class */ (() => {
         ngOnDestroy() {
             this.change.complete();
         }
+    }
+    Dir.decorators = [
+        { type: Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[attr.dir]': '_rawDir' },
+                    exportAs: 'dir',
+                },] }
+    ];
+    Dir.propDecorators = {
+        change: [{ type: Output, args: ['dirChange',] }],
+        dir: [{ type: Input }]
     };
-    __decorate([
-        Output('dirChange'),
-        __metadata("design:type", Object)
-    ], Dir.prototype, "change", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], Dir.prototype, "dir", null);
-    Dir = Dir_1 = __decorate([
-        Directive({
-            selector: '[dir]',
-            providers: [{ provide: Directionality, useExisting: Dir_1 }],
-            host: { '[attr.dir]': '_rawDir' },
-            exportAs: 'dir',
-        })
-    ], Dir);
     return Dir;
 })();
 
@@ -141,14 +143,14 @@ let Dir = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let BidiModule = /** @class */ (() => {
-    let BidiModule = class BidiModule {
-    };
-    BidiModule = __decorate([
-        NgModule({
-            exports: [Dir],
-            declarations: [Dir],
-        })
-    ], BidiModule);
+    class BidiModule {
+    }
+    BidiModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                },] }
+    ];
     return BidiModule;
 })();
 

@@ -1,8 +1,7 @@
 import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
-import { __decorate, __param, __metadata } from 'tslib';
 import { DOCUMENT, Location } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, Optional, SkipSelf, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, Input, Output, TemplateRef, ViewContainerRef, NgModule } from '@angular/core';
+import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -274,13 +273,20 @@ class RepositionScrollStrategy {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Options for how an overlay will handle scrolling.
  *
  * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
  * behaviors. This class primarily acts as a factory for ScrollStrategy instances.
  */
 let ScrollStrategyOptions = /** @class */ (() => {
-    let ScrollStrategyOptions = class ScrollStrategyOptions {
+    class ScrollStrategyOptions {
         constructor(_scrollDispatcher, _viewportRuler, _ngZone, document) {
             this._scrollDispatcher = _scrollDispatcher;
             this._viewportRuler = _viewportRuler;
@@ -302,15 +308,18 @@ let ScrollStrategyOptions = /** @class */ (() => {
             this.reposition = (config) => new RepositionScrollStrategy(this._scrollDispatcher, this._viewportRuler, this._ngZone, config);
             this._document = document;
         }
-    };
+    }
+    ScrollStrategyOptions.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    ScrollStrategyOptions.ctorParameters = () => [
+        { type: ScrollDispatcher },
+        { type: ViewportRuler },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
-    ScrollStrategyOptions = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(3, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [ScrollDispatcher,
-            ViewportRuler,
-            NgZone, Object])
-    ], ScrollStrategyOptions);
     return ScrollStrategyOptions;
 })();
 
@@ -420,7 +429,7 @@ class ScrollingVisibility {
 }
 /** The change event emitted by the strategy when a fallback position is used. */
 let ConnectedOverlayPositionChange = /** @class */ (() => {
-    let ConnectedOverlayPositionChange = class ConnectedOverlayPositionChange {
+    class ConnectedOverlayPositionChange {
         constructor(
         /** The position used as a result of this change. */
         connectionPair, 
@@ -429,12 +438,12 @@ let ConnectedOverlayPositionChange = /** @class */ (() => {
             this.connectionPair = connectionPair;
             this.scrollableViewProperties = scrollableViewProperties;
         }
-    };
-    ConnectedOverlayPositionChange = __decorate([
-        __param(1, Optional()),
-        __metadata("design:paramtypes", [ConnectionPositionPair,
-            ScrollingVisibility])
-    ], ConnectedOverlayPositionChange);
+    }
+    /** @nocollapse */
+    ConnectedOverlayPositionChange.ctorParameters = () => [
+        { type: ConnectionPositionPair },
+        { type: ScrollingVisibility, decorators: [{ type: Optional }] }
+    ];
     return ConnectedOverlayPositionChange;
 })();
 /**
@@ -463,12 +472,19 @@ function validateHorizontalPosition(property, value) {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
  * on event target and order of overlay opens.
  */
 let OverlayKeyboardDispatcher = /** @class */ (() => {
-    let OverlayKeyboardDispatcher = class OverlayKeyboardDispatcher {
+    class OverlayKeyboardDispatcher {
         constructor(document) {
             /** Currently attached overlays in the order they were attached. */
             this._attachedOverlays = [];
@@ -522,13 +538,15 @@ let OverlayKeyboardDispatcher = /** @class */ (() => {
                 this._isAttached = false;
             }
         }
-    };
+    }
+    OverlayKeyboardDispatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayKeyboardDispatcher.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
-    OverlayKeyboardDispatcher = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object])
-    ], OverlayKeyboardDispatcher);
     return OverlayKeyboardDispatcher;
 })();
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -550,6 +568,13 @@ const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
 };
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Whether we're in a testing environment.
  * TODO(crisbeto): remove this once we have an overlay testing module.
  */
@@ -557,7 +582,7 @@ const isTestEnvironment = typeof window !== 'undefined' && !!window &&
     !!(window.__karma__ || window.jasmine);
 /** Container inside which all overlays will render. */
 let OverlayContainer = /** @class */ (() => {
-    let OverlayContainer = class OverlayContainer {
+    class OverlayContainer {
         constructor(document, 
         /**
          * @deprecated `platform` parameter to become required.
@@ -622,13 +647,16 @@ let OverlayContainer = /** @class */ (() => {
             this._document.body.appendChild(container);
             this._containerElement = container;
         }
-    };
+    }
+    OverlayContainer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayContainer.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
+    ];
     OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
-    OverlayContainer = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object, Platform])
-    ], OverlayContainer);
     return OverlayContainer;
 })();
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -2328,9 +2356,16 @@ class GlobalPositionStrategy {
     }
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Builder for overlay position strategy. */
 let OverlayPositionBuilder = /** @class */ (() => {
-    let OverlayPositionBuilder = class OverlayPositionBuilder {
+    class OverlayPositionBuilder {
         constructor(_viewportRuler, _document, _platform, _overlayContainer) {
             this._viewportRuler = _viewportRuler;
             this._document = _document;
@@ -2361,13 +2396,18 @@ let OverlayPositionBuilder = /** @class */ (() => {
         flexibleConnectedTo(origin) {
             return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
         }
-    };
+    }
+    OverlayPositionBuilder.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    OverlayPositionBuilder.ctorParameters = () => [
+        { type: ViewportRuler },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform },
+        { type: OverlayContainer }
+    ];
     OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
-    OverlayPositionBuilder = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(1, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [ViewportRuler, Object, Platform, OverlayContainer])
-    ], OverlayPositionBuilder);
     return OverlayPositionBuilder;
 })();
 
@@ -2391,7 +2431,7 @@ let nextUniqueId = 0;
  * An overlay *is* a PortalOutlet, so any kind of Portal can be loaded into one.
  */
 let Overlay = /** @class */ (() => {
-    let Overlay = class Overlay {
+    class Overlay {
         constructor(
         /** Scrolling strategies that can be used when creating an overlay. */
         scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, 
@@ -2463,20 +2503,23 @@ let Overlay = /** @class */ (() => {
             }
             return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
         }
-    };
-    Overlay = __decorate([
-        Injectable(),
-        __param(7, Inject(DOCUMENT)),
-        __param(9, Optional()),
-        __metadata("design:paramtypes", [ScrollStrategyOptions,
-            OverlayContainer,
-            ComponentFactoryResolver,
-            OverlayPositionBuilder,
-            OverlayKeyboardDispatcher,
-            Injector,
-            NgZone, Object, Directionality,
-            Location])
-    ], Overlay);
+    }
+    Overlay.decorators = [
+        { type: Injectable }
+    ];
+    /** @nocollapse */
+    Overlay.ctorParameters = () => [
+        { type: ScrollStrategyOptions },
+        { type: OverlayContainer },
+        { type: ComponentFactoryResolver },
+        { type: OverlayPositionBuilder },
+        { type: OverlayKeyboardDispatcher },
+        { type: Injector },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Directionality },
+        { type: Location, decorators: [{ type: Optional }] }
+    ];
     return Overlay;
 })();
 
@@ -2525,20 +2568,23 @@ function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY(overlay) {
  * ConnectedPositionStrategy.
  */
 let CdkOverlayOrigin = /** @class */ (() => {
-    let CdkOverlayOrigin = class CdkOverlayOrigin {
+    class CdkOverlayOrigin {
         constructor(
         /** Reference to the element on which the directive is applied. */
         elementRef) {
             this.elementRef = elementRef;
         }
-    };
-    CdkOverlayOrigin = __decorate([
-        Directive({
-            selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
-            exportAs: 'cdkOverlayOrigin',
-        }),
-        __metadata("design:paramtypes", [ElementRef])
-    ], CdkOverlayOrigin);
+    }
+    CdkOverlayOrigin.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]',
+                    exportAs: 'cdkOverlayOrigin',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkOverlayOrigin.ctorParameters = () => [
+        { type: ElementRef }
+    ];
     return CdkOverlayOrigin;
 })();
 /**
@@ -2546,7 +2592,7 @@ let CdkOverlayOrigin = /** @class */ (() => {
  * Overlay using a FlexibleConnectedPositionStrategy.
  */
 let CdkConnectedOverlay = /** @class */ (() => {
-    let CdkConnectedOverlay = class CdkConnectedOverlay {
+    class CdkConnectedOverlay {
         // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
         constructor(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
             this._overlay = _overlay;
@@ -2741,125 +2787,48 @@ let CdkConnectedOverlay = /** @class */ (() => {
             }
             this._backdropSubscription.unsubscribe();
         }
+    }
+    CdkConnectedOverlay.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
+                    exportAs: 'cdkConnectedOverlay'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkConnectedOverlay.ctorParameters = () => [
+        { type: Overlay },
+        { type: TemplateRef },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,] }] },
+        { type: Directionality, decorators: [{ type: Optional }] }
+    ];
+    CdkConnectedOverlay.propDecorators = {
+        origin: [{ type: Input, args: ['cdkConnectedOverlayOrigin',] }],
+        positions: [{ type: Input, args: ['cdkConnectedOverlayPositions',] }],
+        positionStrategy: [{ type: Input, args: ['cdkConnectedOverlayPositionStrategy',] }],
+        offsetX: [{ type: Input, args: ['cdkConnectedOverlayOffsetX',] }],
+        offsetY: [{ type: Input, args: ['cdkConnectedOverlayOffsetY',] }],
+        width: [{ type: Input, args: ['cdkConnectedOverlayWidth',] }],
+        height: [{ type: Input, args: ['cdkConnectedOverlayHeight',] }],
+        minWidth: [{ type: Input, args: ['cdkConnectedOverlayMinWidth',] }],
+        minHeight: [{ type: Input, args: ['cdkConnectedOverlayMinHeight',] }],
+        backdropClass: [{ type: Input, args: ['cdkConnectedOverlayBackdropClass',] }],
+        panelClass: [{ type: Input, args: ['cdkConnectedOverlayPanelClass',] }],
+        viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
+        scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
+        open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
+        transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
+        hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
+        lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],
+        flexibleDimensions: [{ type: Input, args: ['cdkConnectedOverlayFlexibleDimensions',] }],
+        growAfterOpen: [{ type: Input, args: ['cdkConnectedOverlayGrowAfterOpen',] }],
+        push: [{ type: Input, args: ['cdkConnectedOverlayPush',] }],
+        backdropClick: [{ type: Output }],
+        positionChange: [{ type: Output }],
+        attach: [{ type: Output }],
+        detach: [{ type: Output }],
+        overlayKeydown: [{ type: Output }]
     };
-    __decorate([
-        Input('cdkConnectedOverlayOrigin'),
-        __metadata("design:type", CdkOverlayOrigin)
-    ], CdkConnectedOverlay.prototype, "origin", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayPositions'),
-        __metadata("design:type", Array)
-    ], CdkConnectedOverlay.prototype, "positions", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayPositionStrategy'),
-        __metadata("design:type", FlexibleConnectedPositionStrategy)
-    ], CdkConnectedOverlay.prototype, "positionStrategy", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayOffsetX'),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], CdkConnectedOverlay.prototype, "offsetX", null);
-    __decorate([
-        Input('cdkConnectedOverlayOffsetY'),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], CdkConnectedOverlay.prototype, "offsetY", null);
-    __decorate([
-        Input('cdkConnectedOverlayWidth'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "width", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayHeight'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "height", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayMinWidth'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "minWidth", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayMinHeight'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "minHeight", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayBackdropClass'),
-        __metadata("design:type", String)
-    ], CdkConnectedOverlay.prototype, "backdropClass", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayPanelClass'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "panelClass", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayViewportMargin'),
-        __metadata("design:type", Number)
-    ], CdkConnectedOverlay.prototype, "viewportMargin", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayScrollStrategy'),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "scrollStrategy", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayOpen'),
-        __metadata("design:type", Boolean)
-    ], CdkConnectedOverlay.prototype, "open", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayTransformOriginOn'),
-        __metadata("design:type", String)
-    ], CdkConnectedOverlay.prototype, "transformOriginSelector", void 0);
-    __decorate([
-        Input('cdkConnectedOverlayHasBackdrop'),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkConnectedOverlay.prototype, "hasBackdrop", null);
-    __decorate([
-        Input('cdkConnectedOverlayLockPosition'),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkConnectedOverlay.prototype, "lockPosition", null);
-    __decorate([
-        Input('cdkConnectedOverlayFlexibleDimensions'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkConnectedOverlay.prototype, "flexibleDimensions", null);
-    __decorate([
-        Input('cdkConnectedOverlayGrowAfterOpen'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkConnectedOverlay.prototype, "growAfterOpen", null);
-    __decorate([
-        Input('cdkConnectedOverlayPush'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkConnectedOverlay.prototype, "push", null);
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "backdropClick", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "positionChange", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "attach", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "detach", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkConnectedOverlay.prototype, "overlayKeydown", void 0);
-    CdkConnectedOverlay = __decorate([
-        Directive({
-            selector: '[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]',
-            exportAs: 'cdkConnectedOverlay'
-        }),
-        __param(3, Inject(CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY)),
-        __param(4, Optional()),
-        __metadata("design:paramtypes", [Overlay,
-            TemplateRef,
-            ViewContainerRef, Object, Directionality])
-    ], CdkConnectedOverlay);
     return CdkConnectedOverlay;
 })();
 /** @docs-private */
@@ -2881,19 +2850,19 @@ const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
  * found in the LICENSE file at https://angular.io/license
  */
 let OverlayModule = /** @class */ (() => {
-    let OverlayModule = class OverlayModule {
-    };
-    OverlayModule = __decorate([
-        NgModule({
-            imports: [BidiModule, PortalModule, ScrollingModule],
-            exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollingModule],
-            declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
-            providers: [
-                Overlay,
-                CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
-            ],
-        })
-    ], OverlayModule);
+    class OverlayModule {
+    }
+    OverlayModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule, PortalModule, ScrollingModule],
+                    exports: [CdkConnectedOverlay, CdkOverlayOrigin, ScrollingModule],
+                    declarations: [CdkConnectedOverlay, CdkOverlayOrigin],
+                    providers: [
+                        Overlay,
+                        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
+                    ],
+                },] }
+    ];
     return OverlayModule;
 })();
 /**
@@ -2910,6 +2879,13 @@ const OVERLAY_PROVIDERS = [
 ];
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
  * Fullscreen mode
  * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
@@ -2917,7 +2893,7 @@ const OVERLAY_PROVIDERS = [
  * Should be provided in the root component.
  */
 let FullscreenOverlayContainer = /** @class */ (() => {
-    let FullscreenOverlayContainer = class FullscreenOverlayContainer extends OverlayContainer {
+    class FullscreenOverlayContainer extends OverlayContainer {
         constructor(_document, 
         /**
          * @deprecated `platform` parameter to become required.
@@ -2985,13 +2961,16 @@ let FullscreenOverlayContainer = /** @class */ (() => {
                 _document.msFullscreenElement ||
                 null;
         }
-    };
+    }
+    FullscreenOverlayContainer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    FullscreenOverlayContainer.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
+    ];
     FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
-    FullscreenOverlayContainer = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object, Platform])
-    ], FullscreenOverlayContainer);
     return FullscreenOverlayContainer;
 })();
 

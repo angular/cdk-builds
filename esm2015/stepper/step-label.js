@@ -5,21 +5,23 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { __decorate, __metadata } from "tslib";
 import { Directive, TemplateRef } from '@angular/core';
 let CdkStepLabel = /** @class */ (() => {
-    let CdkStepLabel = class CdkStepLabel {
+    class CdkStepLabel {
         constructor(/** @docs-private */ template) {
             this.template = template;
         }
-    };
-    CdkStepLabel = __decorate([
-        Directive({
-            selector: '[cdkStepLabel]',
-        }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkStepLabel);
+    }
+    CdkStepLabel.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepLabel.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkStepLabel;
 })();
 export { CdkStepLabel };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3RlcC1sYWJlbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvc3RlcHBlci9zdGVwLWxhYmVsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRzs7QUFFSCxPQUFPLEVBQUMsU0FBUyxFQUFFLFdBQVcsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUtyRDtJQUFBLElBQWEsWUFBWSxHQUF6QixNQUFhLFlBQVk7UUFDdkIsWUFBWSxvQkFBb0IsQ0FBUSxRQUEwQjtZQUExQixhQUFRLEdBQVIsUUFBUSxDQUFrQjtRQUFJLENBQUM7S0FDeEUsQ0FBQTtJQUZZLFlBQVk7UUFIeEIsU0FBUyxDQUFDO1lBQ1QsUUFBUSxFQUFFLGdCQUFnQjtTQUMzQixDQUFDO3lDQUVrRCxXQUFXO09BRGxELFlBQVksQ0FFeEI7SUFBRCxtQkFBQztLQUFBO1NBRlksWUFBWSIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge0RpcmVjdGl2ZSwgVGVtcGxhdGVSZWZ9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuXG5ARGlyZWN0aXZlKHtcbiAgc2VsZWN0b3I6ICdbY2RrU3RlcExhYmVsXScsXG59KVxuZXhwb3J0IGNsYXNzIENka1N0ZXBMYWJlbCB7XG4gIGNvbnN0cnVjdG9yKC8qKiBAZG9jcy1wcml2YXRlICovIHB1YmxpYyB0ZW1wbGF0ZTogVGVtcGxhdGVSZWY8YW55PikgeyB9XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic3RlcC1sYWJlbC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvc3RlcHBlci9zdGVwLWxhYmVsLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7R0FNRztBQUVILE9BQU8sRUFBQyxTQUFTLEVBQUUsV0FBVyxFQUFDLE1BQU0sZUFBZSxDQUFDO0FBRXJEO0lBQUEsTUFHYSxZQUFZO1FBQ3ZCLFlBQVksb0JBQW9CLENBQVEsUUFBMEI7WUFBMUIsYUFBUSxHQUFSLFFBQVEsQ0FBa0I7UUFBSSxDQUFDOzs7Z0JBSnhFLFNBQVMsU0FBQztvQkFDVCxRQUFRLEVBQUUsZ0JBQWdCO2lCQUMzQjs7OztnQkFKa0IsV0FBVzs7SUFPOUIsbUJBQUM7S0FBQTtTQUZZLFlBQVkiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtEaXJlY3RpdmUsIFRlbXBsYXRlUmVmfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuQERpcmVjdGl2ZSh7XG4gIHNlbGVjdG9yOiAnW2Nka1N0ZXBMYWJlbF0nLFxufSlcbmV4cG9ydCBjbGFzcyBDZGtTdGVwTGFiZWwge1xuICBjb25zdHJ1Y3RvcigvKiogQGRvY3MtcHJpdmF0ZSAqLyBwdWJsaWMgdGVtcGxhdGU6IFRlbXBsYXRlUmVmPGFueT4pIHsgfVxufVxuIl19

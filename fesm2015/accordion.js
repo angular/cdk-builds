@@ -1,5 +1,4 @@
-import { __decorate, __metadata, __param } from 'tslib';
-import { Input, Directive, EventEmitter, Output, Optional, SkipSelf, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Directive, Input, EventEmitter, Optional, SkipSelf, ChangeDetectorRef, Output, NgModule } from '@angular/core';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription } from 'rxjs';
@@ -17,7 +16,7 @@ let nextId = 0;
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
 let CdkAccordion = /** @class */ (() => {
-    let CdkAccordion = class CdkAccordion {
+    class CdkAccordion {
         constructor() {
             /** Emits when the state of the accordion changes */
             this._stateChanges = new Subject();
@@ -49,18 +48,16 @@ let CdkAccordion = /** @class */ (() => {
                 this._openCloseAllActions.next(expanded);
             }
         }
+    }
+    CdkAccordion.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-accordion, [cdkAccordion]',
+                    exportAs: 'cdkAccordion',
+                },] }
+    ];
+    CdkAccordion.propDecorators = {
+        multi: [{ type: Input }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkAccordion.prototype, "multi", null);
-    CdkAccordion = __decorate([
-        Directive({
-            selector: 'cdk-accordion, [cdkAccordion]',
-            exportAs: 'cdkAccordion',
-        })
-    ], CdkAccordion);
     return CdkAccordion;
 })();
 
@@ -79,7 +76,7 @@ const ɵ0 = undefined;
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
 let CdkAccordionItem = /** @class */ (() => {
-    let CdkAccordionItem = class CdkAccordionItem {
+    class CdkAccordionItem {
         constructor(accordion, _changeDetectorRef, _expansionDispatcher) {
             this.accordion = accordion;
             this._changeDetectorRef = _changeDetectorRef;
@@ -179,48 +176,32 @@ let CdkAccordionItem = /** @class */ (() => {
                 }
             });
         }
+    }
+    CdkAccordionItem.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-accordion-item, [cdkAccordionItem]',
+                    exportAs: 'cdkAccordionItem',
+                    providers: [
+                        // Provide CdkAccordion as undefined to prevent nested accordion items from registering
+                        // to the same accordion.
+                        { provide: CdkAccordion, useValue: ɵ0 },
+                    ],
+                },] }
+    ];
+    /** @nocollapse */
+    CdkAccordionItem.ctorParameters = () => [
+        { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf }] },
+        { type: ChangeDetectorRef },
+        { type: UniqueSelectionDispatcher }
+    ];
+    CdkAccordionItem.propDecorators = {
+        closed: [{ type: Output }],
+        opened: [{ type: Output }],
+        destroyed: [{ type: Output }],
+        expandedChange: [{ type: Output }],
+        expanded: [{ type: Input }],
+        disabled: [{ type: Input }]
     };
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkAccordionItem.prototype, "closed", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkAccordionItem.prototype, "opened", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkAccordionItem.prototype, "destroyed", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkAccordionItem.prototype, "expandedChange", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkAccordionItem.prototype, "expanded", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkAccordionItem.prototype, "disabled", null);
-    CdkAccordionItem = __decorate([
-        Directive({
-            selector: 'cdk-accordion-item, [cdkAccordionItem]',
-            exportAs: 'cdkAccordionItem',
-            providers: [
-                // Provide CdkAccordion as undefined to prevent nested accordion items from registering
-                // to the same accordion.
-                { provide: CdkAccordion, useValue: ɵ0 },
-            ],
-        }),
-        __param(0, Optional()), __param(0, SkipSelf()),
-        __metadata("design:paramtypes", [CdkAccordion,
-            ChangeDetectorRef,
-            UniqueSelectionDispatcher])
-    ], CdkAccordionItem);
     return CdkAccordionItem;
 })();
 
@@ -232,14 +213,14 @@ let CdkAccordionItem = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let CdkAccordionModule = /** @class */ (() => {
-    let CdkAccordionModule = class CdkAccordionModule {
-    };
-    CdkAccordionModule = __decorate([
-        NgModule({
-            exports: [CdkAccordion, CdkAccordionItem],
-            declarations: [CdkAccordion, CdkAccordionItem],
-        })
-    ], CdkAccordionModule);
+    class CdkAccordionModule {
+    }
+    CdkAccordionModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkAccordion, CdkAccordionItem],
+                    declarations: [CdkAccordion, CdkAccordionItem],
+                },] }
+    ];
     return CdkAccordionModule;
 })();
 

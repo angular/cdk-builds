@@ -1,6 +1,5 @@
-import { __decorate, __param, __metadata } from 'tslib';
 import { DOCUMENT } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, InjectionToken, EventEmitter, Input, Output, Directive, Optional, NgZone, NgModule } from '@angular/core';
+import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
 
 /**
  * @license
@@ -70,10 +69,17 @@ class PendingCopy {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * A service for copying text to the clipboard.
  */
 let Clipboard = /** @class */ (() => {
-    let Clipboard = class Clipboard {
+    class Clipboard {
         constructor(document) {
             this._document = document;
         }
@@ -101,13 +107,15 @@ let Clipboard = /** @class */ (() => {
         beginCopy(text) {
             return new PendingCopy(text, this._document);
         }
-    };
+    }
+    Clipboard.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    Clipboard.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
-    Clipboard = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object])
-    ], Clipboard);
     return Clipboard;
 })();
 
@@ -125,7 +133,7 @@ const CKD_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CKD_COPY_TO_CLIPBOARD_C
  * clipboard.
  */
 let CdkCopyToClipboard = /** @class */ (() => {
-    let CdkCopyToClipboard = class CdkCopyToClipboard {
+    class CdkCopyToClipboard {
         constructor(_clipboard, _ngZone, config) {
             this._clipboard = _clipboard;
             this._ngZone = _ngZone;
@@ -180,30 +188,26 @@ let CdkCopyToClipboard = /** @class */ (() => {
             this._pending.clear();
             this._destroyed = true;
         }
+    }
+    CdkCopyToClipboard.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkCopyToClipboard]',
+                    host: {
+                        '(click)': 'copy()',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkCopyToClipboard.ctorParameters = () => [
+        { type: Clipboard },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
+    ];
+    CdkCopyToClipboard.propDecorators = {
+        text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
+        attempts: [{ type: Input, args: ['cdkCopyToClipboardAttempts',] }],
+        copied: [{ type: Output, args: ['cdkCopyToClipboardCopied',] }]
     };
-    __decorate([
-        Input('cdkCopyToClipboard'),
-        __metadata("design:type", String)
-    ], CdkCopyToClipboard.prototype, "text", void 0);
-    __decorate([
-        Input('cdkCopyToClipboardAttempts'),
-        __metadata("design:type", Number)
-    ], CdkCopyToClipboard.prototype, "attempts", void 0);
-    __decorate([
-        Output('cdkCopyToClipboardCopied'),
-        __metadata("design:type", Object)
-    ], CdkCopyToClipboard.prototype, "copied", void 0);
-    CdkCopyToClipboard = __decorate([
-        Directive({
-            selector: '[cdkCopyToClipboard]',
-            host: {
-                '(click)': 'copy()',
-            }
-        }),
-        __param(2, Optional()), __param(2, Inject(CKD_COPY_TO_CLIPBOARD_CONFIG)),
-        __metadata("design:paramtypes", [Clipboard,
-            NgZone, Object])
-    ], CdkCopyToClipboard);
     return CdkCopyToClipboard;
 })();
 
@@ -215,14 +219,14 @@ let CdkCopyToClipboard = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let ClipboardModule = /** @class */ (() => {
-    let ClipboardModule = class ClipboardModule {
-    };
-    ClipboardModule = __decorate([
-        NgModule({
-            declarations: [CdkCopyToClipboard],
-            exports: [CdkCopyToClipboard],
-        })
-    ], ClipboardModule);
+    class ClipboardModule {
+    }
+    ClipboardModule.decorators = [
+        { type: NgModule, args: [{
+                    declarations: [CdkCopyToClipboard],
+                    exports: [CdkCopyToClipboard],
+                },] }
+    ];
     return ClipboardModule;
 })();
 

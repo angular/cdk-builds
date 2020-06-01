@@ -1,5 +1,4 @@
-import { ElementRef, Directive, TemplateRef, ViewContainerRef, EventEmitter, Output, Inject, ComponentFactoryResolver, NgModule } from '@angular/core';
-import { __decorate, __metadata, __param } from 'tslib';
+import { ElementRef, Directive, TemplateRef, ViewContainerRef, EventEmitter, ComponentFactoryResolver, Inject, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -365,18 +364,22 @@ class DomPortalHost extends DomPortalOutlet {
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
 let CdkPortal = /** @class */ (() => {
-    let CdkPortal = class CdkPortal extends TemplatePortal {
+    class CdkPortal extends TemplatePortal {
         constructor(templateRef, viewContainerRef) {
             super(templateRef, viewContainerRef);
         }
-    };
-    CdkPortal = __decorate([
-        Directive({
-            selector: '[cdkPortal]',
-            exportAs: 'cdkPortal',
-        }),
-        __metadata("design:paramtypes", [TemplateRef, ViewContainerRef])
-    ], CdkPortal);
+    }
+    CdkPortal.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortal]',
+                    exportAs: 'cdkPortal',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkPortal.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: ViewContainerRef }
+    ];
     return CdkPortal;
 })();
 /**
@@ -384,19 +387,18 @@ let CdkPortal = /** @class */ (() => {
  * @breaking-change 9.0.0
  */
 let TemplatePortalDirective = /** @class */ (() => {
-    var TemplatePortalDirective_1;
-    let TemplatePortalDirective = TemplatePortalDirective_1 = class TemplatePortalDirective extends CdkPortal {
-    };
-    TemplatePortalDirective = TemplatePortalDirective_1 = __decorate([
-        Directive({
-            selector: '[cdk-portal], [portal]',
-            exportAs: 'cdkPortal',
-            providers: [{
-                    provide: CdkPortal,
-                    useExisting: TemplatePortalDirective_1
-                }]
-        })
-    ], TemplatePortalDirective);
+    class TemplatePortalDirective extends CdkPortal {
+    }
+    TemplatePortalDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdk-portal], [portal]',
+                    exportAs: 'cdkPortal',
+                    providers: [{
+                            provide: CdkPortal,
+                            useExisting: TemplatePortalDirective
+                        }]
+                },] }
+    ];
     return TemplatePortalDirective;
 })();
 /**
@@ -407,7 +409,7 @@ let TemplatePortalDirective = /** @class */ (() => {
  * `<ng-template [cdkPortalOutlet]="greeting"></ng-template>`
  */
 let CdkPortalOutlet = /** @class */ (() => {
-    let CdkPortalOutlet = class CdkPortalOutlet extends BasePortalOutlet {
+    class CdkPortalOutlet extends BasePortalOutlet {
         constructor(_componentFactoryResolver, _viewContainerRef, 
         /**
          * @deprecated `_document` parameter to be made required.
@@ -533,21 +535,23 @@ let CdkPortalOutlet = /** @class */ (() => {
             return (nativeElement.nodeType === nativeElement.ELEMENT_NODE ?
                 nativeElement : nativeElement.parentNode);
         }
+    }
+    CdkPortalOutlet.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortalOutlet]',
+                    exportAs: 'cdkPortalOutlet',
+                    inputs: ['portal: cdkPortalOutlet']
+                },] }
+    ];
+    /** @nocollapse */
+    CdkPortalOutlet.ctorParameters = () => [
+        { type: ComponentFactoryResolver },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    CdkPortalOutlet.propDecorators = {
+        attached: [{ type: Output }]
     };
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkPortalOutlet.prototype, "attached", void 0);
-    CdkPortalOutlet = __decorate([
-        Directive({
-            selector: '[cdkPortalOutlet]',
-            exportAs: 'cdkPortalOutlet',
-            inputs: ['portal: cdkPortalOutlet']
-        }),
-        __param(2, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [ComponentFactoryResolver,
-            ViewContainerRef, Object])
-    ], CdkPortalOutlet);
     return CdkPortalOutlet;
 })();
 /**
@@ -555,31 +559,30 @@ let CdkPortalOutlet = /** @class */ (() => {
  * @breaking-change 9.0.0
  */
 let PortalHostDirective = /** @class */ (() => {
-    var PortalHostDirective_1;
-    let PortalHostDirective = PortalHostDirective_1 = class PortalHostDirective extends CdkPortalOutlet {
-    };
-    PortalHostDirective = PortalHostDirective_1 = __decorate([
-        Directive({
-            selector: '[cdkPortalHost], [portalHost]',
-            exportAs: 'cdkPortalHost',
-            inputs: ['portal: cdkPortalHost'],
-            providers: [{
-                    provide: CdkPortalOutlet,
-                    useExisting: PortalHostDirective_1
-                }]
-        })
-    ], PortalHostDirective);
+    class PortalHostDirective extends CdkPortalOutlet {
+    }
+    PortalHostDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkPortalHost], [portalHost]',
+                    exportAs: 'cdkPortalHost',
+                    inputs: ['portal: cdkPortalHost'],
+                    providers: [{
+                            provide: CdkPortalOutlet,
+                            useExisting: PortalHostDirective
+                        }]
+                },] }
+    ];
     return PortalHostDirective;
 })();
 let PortalModule = /** @class */ (() => {
-    let PortalModule = class PortalModule {
-    };
-    PortalModule = __decorate([
-        NgModule({
-            exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-            declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
-        })
-    ], PortalModule);
+    class PortalModule {
+    }
+    PortalModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                    declarations: [CdkPortal, CdkPortalOutlet, TemplatePortalDirective, PortalHostDirective],
+                },] }
+    ];
     return PortalModule;
 })();
 

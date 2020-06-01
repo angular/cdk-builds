@@ -406,6 +406,13 @@
     }(BaseTreeControl));
 
     /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * Injection token used to provide a `CdkTreeNode` to its outlet.
      * Used primarily to avoid circular imports.
      * @docs-private
@@ -420,13 +427,16 @@
             this.viewContainer = viewContainer;
             this._node = _node;
         }
-        CdkTreeNodeOutlet = __decorate([
-            core.Directive({
-                selector: '[cdkTreeNodeOutlet]'
-            }),
-            __param(1, core.Inject(CDK_TREE_NODE_OUTLET_NODE)), __param(1, core.Optional()),
-            __metadata("design:paramtypes", [core.ViewContainerRef, Object])
-        ], CdkTreeNodeOutlet);
+        CdkTreeNodeOutlet.decorators = [
+            { type: core.Directive, args: [{
+                        selector: '[cdkTreeNodeOutlet]'
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkTreeNodeOutlet.ctorParameters = function () { return [
+            { type: core.ViewContainerRef },
+            { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TREE_NODE_OUTLET_NODE,] }, { type: core.Optional }] }
+        ]; };
         return CdkTreeNodeOutlet;
     }());
 
@@ -453,15 +463,18 @@
         function CdkTreeNodeDef(template) {
             this.template = template;
         }
-        CdkTreeNodeDef = __decorate([
-            core.Directive({
-                selector: '[cdkTreeNodeDef]',
-                inputs: [
-                    'when: cdkTreeNodeDefWhen'
-                ],
-            }),
-            __metadata("design:paramtypes", [core.TemplateRef])
-        ], CdkTreeNodeDef);
+        CdkTreeNodeDef.decorators = [
+            { type: core.Directive, args: [{
+                        selector: '[cdkTreeNodeDef]',
+                        inputs: [
+                            'when: cdkTreeNodeDefWhen'
+                        ],
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkTreeNodeDef.ctorParameters = function () { return [
+            { type: core.TemplateRef }
+        ]; };
         return CdkTreeNodeDef;
     }());
 
@@ -687,50 +700,39 @@
                 CdkTreeNode.mostRecentTreeNode.data = nodeData;
             }
         };
-        __decorate([
-            core.Input(),
-            __metadata("design:type", Object),
-            __metadata("design:paramtypes", [Object])
-        ], CdkTree.prototype, "dataSource", null);
-        __decorate([
-            core.Input(),
-            __metadata("design:type", Object)
-        ], CdkTree.prototype, "treeControl", void 0);
-        __decorate([
-            core.Input(),
-            __metadata("design:type", Function)
-        ], CdkTree.prototype, "trackBy", void 0);
-        __decorate([
-            core.ViewChild(CdkTreeNodeOutlet, { static: true }),
-            __metadata("design:type", CdkTreeNodeOutlet)
-        ], CdkTree.prototype, "_nodeOutlet", void 0);
-        __decorate([
-            core.ContentChildren(CdkTreeNodeDef, {
-                // We need to use `descendants: true`, because Ivy will no longer match
-                // indirect descendants if it's left as false.
-                descendants: true
-            }),
-            __metadata("design:type", core.QueryList)
-        ], CdkTree.prototype, "_nodeDefs", void 0);
-        CdkTree = __decorate([
-            core.Component({
-                selector: 'cdk-tree',
-                exportAs: 'cdkTree',
-                template: "<ng-container cdkTreeNodeOutlet></ng-container>",
-                host: {
-                    'class': 'cdk-tree',
-                    'role': 'tree',
-                },
-                encapsulation: core.ViewEncapsulation.None,
-                // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
-                // The view for `CdkTree` consists entirely of templates declared in other views. As they are
-                // declared elsewhere, they are checked when their declaration points are checked.
-                // tslint:disable-next-line:validate-decorators
-                changeDetection: core.ChangeDetectionStrategy.Default
-            }),
-            __metadata("design:paramtypes", [core.IterableDiffers,
-                core.ChangeDetectorRef])
-        ], CdkTree);
+        CdkTree.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'cdk-tree',
+                        exportAs: 'cdkTree',
+                        template: "<ng-container cdkTreeNodeOutlet></ng-container>",
+                        host: {
+                            'class': 'cdk-tree',
+                            'role': 'tree',
+                        },
+                        encapsulation: core.ViewEncapsulation.None,
+                        // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
+                        // The view for `CdkTree` consists entirely of templates declared in other views. As they are
+                        // declared elsewhere, they are checked when their declaration points are checked.
+                        // tslint:disable-next-line:validate-decorators
+                        changeDetection: core.ChangeDetectionStrategy.Default
+                    }] }
+        ];
+        /** @nocollapse */
+        CdkTree.ctorParameters = function () { return [
+            { type: core.IterableDiffers },
+            { type: core.ChangeDetectorRef }
+        ]; };
+        CdkTree.propDecorators = {
+            dataSource: [{ type: core.Input }],
+            treeControl: [{ type: core.Input }],
+            trackBy: [{ type: core.Input }],
+            _nodeOutlet: [{ type: core.ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
+            _nodeDefs: [{ type: core.ContentChildren, args: [CdkTreeNodeDef, {
+                            // We need to use `descendants: true`, because Ivy will no longer match
+                            // indirect descendants if it's left as false.
+                            descendants: true
+                        },] }]
+        };
         return CdkTree;
     }());
     /**
@@ -749,9 +751,8 @@
              * and 'treeitem' if it's a leaf node.
              */
             this.role = 'treeitem';
-            CdkTreeNode_1.mostRecentTreeNode = this;
+            CdkTreeNode.mostRecentTreeNode = this;
         }
-        CdkTreeNode_1 = CdkTreeNode;
         Object.defineProperty(CdkTreeNode.prototype, "data", {
             /** The tree node's data. */
             get: function () { return this._data; },
@@ -782,8 +783,8 @@
         CdkTreeNode.prototype.ngOnDestroy = function () {
             // If this is the last tree node being destroyed,
             // clear out the reference to avoid leaking memory.
-            if (CdkTreeNode_1.mostRecentTreeNode === this) {
-                CdkTreeNode_1.mostRecentTreeNode = null;
+            if (CdkTreeNode.mostRecentTreeNode === this) {
+                CdkTreeNode.mostRecentTreeNode = null;
             }
             this._dataChanges.complete();
             this._destroyed.next();
@@ -815,30 +816,31 @@
         CdkTreeNode.prototype._setRoleFromChildren = function (children) {
             this.role = children && children.length ? 'group' : 'treeitem';
         };
-        var CdkTreeNode_1;
         /**
          * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
          * in `CdkTree` and set the data to it.
          */
         CdkTreeNode.mostRecentTreeNode = null;
-        __decorate([
-            core.Input(),
-            __metadata("design:type", String)
-        ], CdkTreeNode.prototype, "role", void 0);
-        CdkTreeNode = CdkTreeNode_1 = __decorate([
-            core.Directive({
-                selector: 'cdk-tree-node',
-                exportAs: 'cdkTreeNode',
-                host: {
-                    '[attr.aria-expanded]': 'isExpanded',
-                    '[attr.aria-level]': 'role === "treeitem" ? level : null',
-                    '[attr.role]': 'role',
-                    'class': 'cdk-tree-node',
-                },
-            }),
-            __metadata("design:paramtypes", [core.ElementRef,
-                CdkTree])
-        ], CdkTreeNode);
+        CdkTreeNode.decorators = [
+            { type: core.Directive, args: [{
+                        selector: 'cdk-tree-node',
+                        exportAs: 'cdkTreeNode',
+                        host: {
+                            '[attr.aria-expanded]': 'isExpanded',
+                            '[attr.aria-level]': 'role === "treeitem" ? level : null',
+                            '[attr.role]': 'role',
+                            'class': 'cdk-tree-node',
+                        },
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkTreeNode.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: CdkTree }
+        ]; };
+        CdkTreeNode.propDecorators = {
+            role: [{ type: core.Input }]
+        };
         return CdkTreeNode;
     }());
 
@@ -857,7 +859,6 @@
             _this._differs = _differs;
             return _this;
         }
-        CdkNestedTreeNode_1 = CdkNestedTreeNode;
         CdkNestedTreeNode.prototype.ngAfterContentInit = function () {
             var _this = this;
             this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
@@ -910,33 +911,34 @@
             // that we don't pick up the outlet of a child node by accident.
             return outlets && outlets.find(function (outlet) { return !outlet._node || outlet._node === _this; });
         };
-        var CdkNestedTreeNode_1;
-        __decorate([
-            core.ContentChildren(CdkTreeNodeOutlet, {
-                // We need to use `descendants: true`, because Ivy will no longer match
-                // indirect descendants if it's left as false.
-                descendants: true
-            }),
-            __metadata("design:type", core.QueryList)
-        ], CdkNestedTreeNode.prototype, "nodeOutlet", void 0);
-        CdkNestedTreeNode = CdkNestedTreeNode_1 = __decorate([
-            core.Directive({
-                selector: 'cdk-nested-tree-node',
-                exportAs: 'cdkNestedTreeNode',
-                host: {
-                    '[attr.aria-expanded]': 'isExpanded',
-                    '[attr.role]': 'role',
-                    'class': 'cdk-tree-node cdk-nested-tree-node',
-                },
-                providers: [
-                    { provide: CdkTreeNode, useExisting: CdkNestedTreeNode_1 },
-                    { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode_1 }
-                ]
-            }),
-            __metadata("design:paramtypes", [core.ElementRef,
-                CdkTree,
-                core.IterableDiffers])
-        ], CdkNestedTreeNode);
+        CdkNestedTreeNode.decorators = [
+            { type: core.Directive, args: [{
+                        selector: 'cdk-nested-tree-node',
+                        exportAs: 'cdkNestedTreeNode',
+                        host: {
+                            '[attr.aria-expanded]': 'isExpanded',
+                            '[attr.role]': 'role',
+                            'class': 'cdk-tree-node cdk-nested-tree-node',
+                        },
+                        providers: [
+                            { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
+                            { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
+                        ]
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkNestedTreeNode.ctorParameters = function () { return [
+            { type: core.ElementRef },
+            { type: CdkTree },
+            { type: core.IterableDiffers }
+        ]; };
+        CdkNestedTreeNode.propDecorators = {
+            nodeOutlet: [{ type: core.ContentChildren, args: [CdkTreeNodeOutlet, {
+                            // We need to use `descendants: true`, because Ivy will no longer match
+                            // indirect descendants if it's left as false.
+                            descendants: true
+                        },] }]
+        };
         return CdkNestedTreeNode;
     }(CdkTreeNode));
 
@@ -1037,27 +1039,23 @@
                 this._currentPadding = padding;
             }
         };
-        __decorate([
-            core.Input('cdkTreeNodePadding'),
-            __metadata("design:type", Number),
-            __metadata("design:paramtypes", [Number])
-        ], CdkTreeNodePadding.prototype, "level", null);
-        __decorate([
-            core.Input('cdkTreeNodePaddingIndent'),
-            __metadata("design:type", Object),
-            __metadata("design:paramtypes", [Object])
-        ], CdkTreeNodePadding.prototype, "indent", null);
-        CdkTreeNodePadding = __decorate([
-            core.Directive({
-                selector: '[cdkTreeNodePadding]',
-            }),
-            __param(4, core.Optional()),
-            __metadata("design:paramtypes", [CdkTreeNode,
-                CdkTree,
-                core.Renderer2,
-                core.ElementRef,
-                bidi.Directionality])
-        ], CdkTreeNodePadding);
+        CdkTreeNodePadding.decorators = [
+            { type: core.Directive, args: [{
+                        selector: '[cdkTreeNodePadding]',
+                    },] }
+        ];
+        /** @nocollapse */
+        CdkTreeNodePadding.ctorParameters = function () { return [
+            { type: CdkTreeNode },
+            { type: CdkTree },
+            { type: core.Renderer2 },
+            { type: core.ElementRef },
+            { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
+        ]; };
+        CdkTreeNodePadding.propDecorators = {
+            level: [{ type: core.Input, args: ['cdkTreeNodePadding',] }],
+            indent: [{ type: core.Input, args: ['cdkTreeNodePaddingIndent',] }]
+        };
         return CdkTreeNodePadding;
     }());
 
@@ -1095,22 +1093,18 @@
                 : this._tree.treeControl.toggle(this._treeNode.data);
             event.stopPropagation();
         };
-        __decorate([
-            core.Input('cdkTreeNodeToggleRecursive'),
-            __metadata("design:type", Boolean),
-            __metadata("design:paramtypes", [Boolean])
-        ], CdkTreeNodeToggle.prototype, "recursive", null);
-        __decorate([
-            core.HostListener('click', ['$event']),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Event]),
-            __metadata("design:returntype", void 0)
-        ], CdkTreeNodeToggle.prototype, "_toggle", null);
-        CdkTreeNodeToggle = __decorate([
-            core.Directive({ selector: '[cdkTreeNodeToggle]' }),
-            __metadata("design:paramtypes", [CdkTree,
-                CdkTreeNode])
-        ], CdkTreeNodeToggle);
+        CdkTreeNodeToggle.decorators = [
+            { type: core.Directive, args: [{ selector: '[cdkTreeNodeToggle]' },] }
+        ];
+        /** @nocollapse */
+        CdkTreeNodeToggle.ctorParameters = function () { return [
+            { type: CdkTree },
+            { type: CdkTreeNode }
+        ]; };
+        CdkTreeNodeToggle.propDecorators = {
+            recursive: [{ type: core.Input, args: ['cdkTreeNodeToggleRecursive',] }],
+            _toggle: [{ type: core.HostListener, args: ['click', ['$event'],] }]
+        };
         return CdkTreeNodeToggle;
     }());
 
@@ -1133,13 +1127,13 @@
     var CdkTreeModule = /** @class */ (function () {
         function CdkTreeModule() {
         }
-        CdkTreeModule = __decorate([
-            core.NgModule({
-                exports: EXPORTED_DECLARATIONS,
-                declarations: EXPORTED_DECLARATIONS,
-                providers: [a11y.FocusMonitor, CdkTreeNodeDef]
-            })
-        ], CdkTreeModule);
+        CdkTreeModule.decorators = [
+            { type: core.NgModule, args: [{
+                        exports: EXPORTED_DECLARATIONS,
+                        declarations: EXPORTED_DECLARATIONS,
+                        providers: [a11y.FocusMonitor, CdkTreeNodeDef]
+                    },] }
+        ];
         return CdkTreeModule;
     }());
 

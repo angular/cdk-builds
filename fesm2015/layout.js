@@ -1,26 +1,39 @@
-import { __decorate, __metadata } from 'tslib';
-import { NgModule, ɵɵdefineInjectable, ɵɵinject, Injectable, NgZone } from '@angular/core';
+import { NgModule, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
 import { coerceArray } from '@angular/cdk/coercion';
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 let LayoutModule = /** @class */ (() => {
-    let LayoutModule = class LayoutModule {
-    };
-    LayoutModule = __decorate([
-        NgModule({})
-    ], LayoutModule);
+    class LayoutModule {
+    }
+    LayoutModule.decorators = [
+        { type: NgModule, args: [{},] }
+    ];
     return LayoutModule;
 })();
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Global registry for all dynamically-created, injected media queries. */
 const mediaQueriesForWebkitCompatibility = new Set();
 /** Style tag that holds all of the dynamically-created media queries. */
 let mediaQueryStyleNode;
 /** A utility for calling matchMedia queries. */
 let MediaMatcher = /** @class */ (() => {
-    let MediaMatcher = class MediaMatcher {
+    class MediaMatcher {
         constructor(_platform) {
             this._platform = _platform;
             this._matchMedia = this._platform.isBrowser && window.matchMedia ?
@@ -41,12 +54,15 @@ let MediaMatcher = /** @class */ (() => {
             }
             return this._matchMedia(query);
         }
-    };
+    }
+    MediaMatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    MediaMatcher.ctorParameters = () => [
+        { type: Platform }
+    ];
     MediaMatcher.ɵprov = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
-    MediaMatcher = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [Platform])
-    ], MediaMatcher);
     return MediaMatcher;
 })();
 /**
@@ -85,9 +101,16 @@ function noopMatchMedia(query) {
     };
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Utility for checking the matching state of @media queries. */
 let BreakpointObserver = /** @class */ (() => {
-    let BreakpointObserver = class BreakpointObserver {
+    class BreakpointObserver {
         constructor(_mediaMatcher, _zone) {
             this._mediaMatcher = _mediaMatcher;
             this._zone = _zone;
@@ -159,12 +182,16 @@ let BreakpointObserver = /** @class */ (() => {
             this._queries.set(query, output);
             return output;
         }
-    };
+    }
+    BreakpointObserver.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    BreakpointObserver.ctorParameters = () => [
+        { type: MediaMatcher },
+        { type: NgZone }
+    ];
     BreakpointObserver.ɵprov = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
-    BreakpointObserver = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [MediaMatcher, NgZone])
-    ], BreakpointObserver);
     return BreakpointObserver;
 })();
 /**

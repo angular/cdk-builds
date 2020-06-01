@@ -1,6 +1,5 @@
 import { isObservable, of, Subject } from 'rxjs';
-import { __decorate } from 'tslib';
-import { ɵɵdefineInjectable, Injectable } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable } from '@angular/core';
 
 /**
  * @license
@@ -208,6 +207,13 @@ function getMultipleValuesInSingleSelectionError() {
 }
 
 /**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
  * This service is needed because native radio change events are only fired on the item currently
@@ -217,7 +223,7 @@ function getMultipleValuesInSingleSelectionError() {
  * less error-prone if they are simply passed through when the events occur.
  */
 let UniqueSelectionDispatcher = /** @class */ (() => {
-    let UniqueSelectionDispatcher = class UniqueSelectionDispatcher {
+    class UniqueSelectionDispatcher {
         constructor() {
             this._listeners = [];
         }
@@ -246,11 +252,11 @@ let UniqueSelectionDispatcher = /** @class */ (() => {
         ngOnDestroy() {
             this._listeners = [];
         }
-    };
+    }
+    UniqueSelectionDispatcher.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
     UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
-    UniqueSelectionDispatcher = __decorate([
-        Injectable({ providedIn: 'root' })
-    ], UniqueSelectionDispatcher);
     return UniqueSelectionDispatcher;
 })();
 

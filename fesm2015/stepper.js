@@ -1,10 +1,9 @@
-import { __decorate, __metadata, __param } from 'tslib';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER, HOME, END } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
-import { Directive, ElementRef, TemplateRef, InjectionToken, ContentChild, ViewChild, Input, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, EventEmitter, ContentChildren, QueryList, Output, ChangeDetectorRef, HostListener, NgModule } from '@angular/core';
+import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
@@ -16,7 +15,7 @@ import { startWith, takeUntil } from 'rxjs/operators';
  * found in the LICENSE file at https://angular.io/license
  */
 let CdkStepHeader = /** @class */ (() => {
-    let CdkStepHeader = class CdkStepHeader {
+    class CdkStepHeader {
         constructor(_elementRef) {
             this._elementRef = _elementRef;
         }
@@ -24,16 +23,19 @@ let CdkStepHeader = /** @class */ (() => {
         focus() {
             this._elementRef.nativeElement.focus();
         }
-    };
-    CdkStepHeader = __decorate([
-        Directive({
-            selector: '[cdkStepHeader]',
-            host: {
-                'role': 'tab',
-            },
-        }),
-        __metadata("design:paramtypes", [ElementRef])
-    ], CdkStepHeader);
+    }
+    CdkStepHeader.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepHeader]',
+                    host: {
+                        'role': 'tab',
+                    },
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepHeader.ctorParameters = () => [
+        { type: ElementRef }
+    ];
     return CdkStepHeader;
 })();
 
@@ -45,17 +47,20 @@ let CdkStepHeader = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let CdkStepLabel = /** @class */ (() => {
-    let CdkStepLabel = class CdkStepLabel {
+    class CdkStepLabel {
         constructor(/** @docs-private */ template) {
             this.template = template;
         }
-    };
-    CdkStepLabel = __decorate([
-        Directive({
-            selector: '[cdkStepLabel]',
-        }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkStepLabel);
+    }
+    CdkStepLabel.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepLabel]',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepLabel.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkStepLabel;
 })();
 
@@ -87,7 +92,7 @@ const STEPPER_GLOBAL_OPTIONS = new InjectionToken('STEPPER_GLOBAL_OPTIONS');
  */
 const MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 let CdkStep = /** @class */ (() => {
-    let CdkStep = class CdkStep {
+    class CdkStep {
         /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
         constructor(_stepper, stepperOptions) {
             this._stepper = _stepper;
@@ -157,75 +162,39 @@ let CdkStep = /** @class */ (() => {
             // underlying MatStepHeader, we have to make sure that change detection runs correctly.
             this._stepper._stateChanged();
         }
+    }
+    CdkStep.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-step',
+                    exportAs: 'cdkStep',
+                    template: '<ng-template><ng-content></ng-content></ng-template>',
+                    encapsulation: ViewEncapsulation.None,
+                    changeDetection: ChangeDetectionStrategy.OnPush
+                }] }
+    ];
+    /** @nocollapse */
+    CdkStep.ctorParameters = () => [
+        { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
+    ];
+    CdkStep.propDecorators = {
+        stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
+        content: [{ type: ViewChild, args: [TemplateRef, { static: true },] }],
+        stepControl: [{ type: Input }],
+        label: [{ type: Input }],
+        errorMessage: [{ type: Input }],
+        ariaLabel: [{ type: Input, args: ['aria-label',] }],
+        ariaLabelledby: [{ type: Input, args: ['aria-labelledby',] }],
+        state: [{ type: Input }],
+        editable: [{ type: Input }],
+        optional: [{ type: Input }],
+        completed: [{ type: Input }],
+        hasError: [{ type: Input }]
     };
-    __decorate([
-        ContentChild(CdkStepLabel),
-        __metadata("design:type", CdkStepLabel)
-    ], CdkStep.prototype, "stepLabel", void 0);
-    __decorate([
-        ViewChild(TemplateRef, { static: true }),
-        __metadata("design:type", TemplateRef)
-    ], CdkStep.prototype, "content", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], CdkStep.prototype, "stepControl", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkStep.prototype, "label", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkStep.prototype, "errorMessage", void 0);
-    __decorate([
-        Input('aria-label'),
-        __metadata("design:type", String)
-    ], CdkStep.prototype, "ariaLabel", void 0);
-    __decorate([
-        Input('aria-labelledby'),
-        __metadata("design:type", String)
-    ], CdkStep.prototype, "ariaLabelledby", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkStep.prototype, "state", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkStep.prototype, "editable", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkStep.prototype, "optional", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkStep.prototype, "completed", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkStep.prototype, "hasError", null);
-    CdkStep = __decorate([
-        Component({
-            selector: 'cdk-step',
-            exportAs: 'cdkStep',
-            template: '<ng-template><ng-content></ng-content></ng-template>',
-            encapsulation: ViewEncapsulation.None,
-            changeDetection: ChangeDetectionStrategy.OnPush
-        }),
-        __param(0, Inject(forwardRef(() => CdkStepper))),
-        __param(1, Optional()), __param(1, Inject(STEPPER_GLOBAL_OPTIONS)),
-        __metadata("design:paramtypes", [CdkStepper, Object])
-    ], CdkStep);
     return CdkStep;
 })();
 let CdkStepper = /** @class */ (() => {
-    let CdkStepper = class CdkStepper {
+    class CdkStepper {
         constructor(_dir, _changeDetectorRef, 
         // @breaking-change 8.0.0 `_elementRef` and `_document` parameters to become required.
         _elementRef, _document) {
@@ -443,44 +412,28 @@ let CdkStepper = /** @class */ (() => {
             const focusedElement = this._document.activeElement;
             return stepperElement === focusedElement || stepperElement.contains(focusedElement);
         }
+    }
+    CdkStepper.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkStepper]',
+                    exportAs: 'cdkStepper',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepper.ctorParameters = () => [
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: ChangeDetectorRef },
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    CdkStepper.propDecorators = {
+        _steps: [{ type: ContentChildren, args: [CdkStep, { descendants: true },] }],
+        _stepHeader: [{ type: ContentChildren, args: [CdkStepHeader, { descendants: true },] }],
+        linear: [{ type: Input }],
+        selectedIndex: [{ type: Input }],
+        selected: [{ type: Input }],
+        selectionChange: [{ type: Output }]
     };
-    __decorate([
-        ContentChildren(CdkStep, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], CdkStepper.prototype, "_steps", void 0);
-    __decorate([
-        ContentChildren(CdkStepHeader, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], CdkStepper.prototype, "_stepHeader", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkStepper.prototype, "linear", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], CdkStepper.prototype, "selectedIndex", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", CdkStep),
-        __metadata("design:paramtypes", [CdkStep])
-    ], CdkStepper.prototype, "selected", null);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], CdkStepper.prototype, "selectionChange", void 0);
-    CdkStepper = __decorate([
-        Directive({
-            selector: '[cdkStepper]',
-            exportAs: 'cdkStepper',
-        }),
-        __param(0, Optional()),
-        __param(3, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Directionality, ChangeDetectorRef,
-            ElementRef, Object])
-    ], CdkStepper);
     return CdkStepper;
 })();
 
@@ -493,7 +446,7 @@ let CdkStepper = /** @class */ (() => {
  */
 /** Button that moves to the next step in a stepper workflow. */
 let CdkStepperNext = /** @class */ (() => {
-    let CdkStepperNext = class CdkStepperNext {
+    class CdkStepperNext {
         constructor(_stepper) {
             this._stepper = _stepper;
             /** Type of the next button. Defaults to "submit" if not specified. */
@@ -507,31 +460,28 @@ let CdkStepperNext = /** @class */ (() => {
         _handleClick() {
             this._stepper.next();
         }
+    }
+    CdkStepperNext.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperNext]',
+                    host: {
+                        '[type]': 'type',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepperNext.ctorParameters = () => [
+        { type: CdkStepper }
+    ];
+    CdkStepperNext.propDecorators = {
+        type: [{ type: Input }],
+        _handleClick: [{ type: HostListener, args: ['click',] }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkStepperNext.prototype, "type", void 0);
-    __decorate([
-        HostListener('click'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], CdkStepperNext.prototype, "_handleClick", null);
-    CdkStepperNext = __decorate([
-        Directive({
-            selector: 'button[cdkStepperNext]',
-            host: {
-                '[type]': 'type',
-            }
-        }),
-        __metadata("design:paramtypes", [CdkStepper])
-    ], CdkStepperNext);
     return CdkStepperNext;
 })();
 /** Button that moves to the previous step in a stepper workflow. */
 let CdkStepperPrevious = /** @class */ (() => {
-    let CdkStepperPrevious = class CdkStepperPrevious {
+    class CdkStepperPrevious {
         constructor(_stepper) {
             this._stepper = _stepper;
             /** Type of the previous button. Defaults to "button" if not specified. */
@@ -545,26 +495,23 @@ let CdkStepperPrevious = /** @class */ (() => {
         _handleClick() {
             this._stepper.previous();
         }
+    }
+    CdkStepperPrevious.decorators = [
+        { type: Directive, args: [{
+                    selector: 'button[cdkStepperPrevious]',
+                    host: {
+                        '[type]': 'type',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkStepperPrevious.ctorParameters = () => [
+        { type: CdkStepper }
+    ];
+    CdkStepperPrevious.propDecorators = {
+        type: [{ type: Input }],
+        _handleClick: [{ type: HostListener, args: ['click',] }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkStepperPrevious.prototype, "type", void 0);
-    __decorate([
-        HostListener('click'),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], CdkStepperPrevious.prototype, "_handleClick", null);
-    CdkStepperPrevious = __decorate([
-        Directive({
-            selector: 'button[cdkStepperPrevious]',
-            host: {
-                '[type]': 'type',
-            }
-        }),
-        __metadata("design:paramtypes", [CdkStepper])
-    ], CdkStepperPrevious);
     return CdkStepperPrevious;
 })();
 
@@ -576,29 +523,29 @@ let CdkStepperPrevious = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let CdkStepperModule = /** @class */ (() => {
-    let CdkStepperModule = class CdkStepperModule {
-    };
-    CdkStepperModule = __decorate([
-        NgModule({
-            imports: [BidiModule],
-            exports: [
-                CdkStep,
-                CdkStepper,
-                CdkStepHeader,
-                CdkStepLabel,
-                CdkStepperNext,
-                CdkStepperPrevious,
-            ],
-            declarations: [
-                CdkStep,
-                CdkStepper,
-                CdkStepHeader,
-                CdkStepLabel,
-                CdkStepperNext,
-                CdkStepperPrevious,
-            ]
-        })
-    ], CdkStepperModule);
+    class CdkStepperModule {
+    }
+    CdkStepperModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [BidiModule],
+                    exports: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ],
+                    declarations: [
+                        CdkStep,
+                        CdkStepper,
+                        CdkStepHeader,
+                        CdkStepLabel,
+                        CdkStepperNext,
+                        CdkStepperPrevious,
+                    ]
+                },] }
+    ];
     return CdkStepperModule;
 })();
 

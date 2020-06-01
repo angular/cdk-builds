@@ -1,11 +1,10 @@
-import { __decorate, __metadata, __param } from 'tslib';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { isDataSource } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
-import { InjectionToken, Directive, TemplateRef, Input, ContentChild, Inject, Optional, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ViewChild, ContentChildren, QueryList, Attribute, ChangeDetectorRef, NgModule } from '@angular/core';
+import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -77,15 +76,18 @@ const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
  * Captures the template of a column's data row cell as well as cell-specific properties.
  */
 let CdkCellDef = /** @class */ (() => {
-    let CdkCellDef = class CdkCellDef {
+    class CdkCellDef {
         constructor(/** @docs-private */ template) {
             this.template = template;
         }
-    };
-    CdkCellDef = __decorate([
-        Directive({ selector: '[cdkCellDef]' }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkCellDef);
+    }
+    CdkCellDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkCellDef]' },] }
+    ];
+    /** @nocollapse */
+    CdkCellDef.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkCellDef;
 })();
 /**
@@ -93,15 +95,18 @@ let CdkCellDef = /** @class */ (() => {
  * Captures the template of a column's header cell and as well as cell-specific properties.
  */
 let CdkHeaderCellDef = /** @class */ (() => {
-    let CdkHeaderCellDef = class CdkHeaderCellDef {
+    class CdkHeaderCellDef {
         constructor(/** @docs-private */ template) {
             this.template = template;
         }
-    };
-    CdkHeaderCellDef = __decorate([
-        Directive({ selector: '[cdkHeaderCellDef]' }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkHeaderCellDef);
+    }
+    CdkHeaderCellDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] }
+    ];
+    /** @nocollapse */
+    CdkHeaderCellDef.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkHeaderCellDef;
 })();
 /**
@@ -109,15 +114,18 @@ let CdkHeaderCellDef = /** @class */ (() => {
  * Captures the template of a column's footer cell and as well as cell-specific properties.
  */
 let CdkFooterCellDef = /** @class */ (() => {
-    let CdkFooterCellDef = class CdkFooterCellDef {
+    class CdkFooterCellDef {
         constructor(/** @docs-private */ template) {
             this.template = template;
         }
-    };
-    CdkFooterCellDef = __decorate([
-        Directive({ selector: '[cdkFooterCellDef]' }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkFooterCellDef);
+    }
+    CdkFooterCellDef.decorators = [
+        { type: Directive, args: [{ selector: '[cdkFooterCellDef]' },] }
+    ];
+    /** @nocollapse */
+    CdkFooterCellDef.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkFooterCellDef;
 })();
 // Boilerplate for applying mixins to CdkColumnDef.
@@ -130,8 +138,7 @@ const _CdkColumnDefBase = mixinHasStickyInput(CdkColumnDefBase);
  * Defines a set of cells available for a table column.
  */
 let CdkColumnDef = /** @class */ (() => {
-    var CdkColumnDef_1;
-    let CdkColumnDef = CdkColumnDef_1 = class CdkColumnDef extends _CdkColumnDefBase {
+    class CdkColumnDef extends _CdkColumnDefBase {
         constructor(_table) {
             super();
             this._table = _table;
@@ -162,38 +169,25 @@ let CdkColumnDef = /** @class */ (() => {
             this._stickyEnd = coerceBooleanProperty(v);
             this._hasStickyChanged = prevValue !== this._stickyEnd;
         }
+    }
+    CdkColumnDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkColumnDef]',
+                    inputs: ['sticky'],
+                    providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
+                },] }
+    ];
+    /** @nocollapse */
+    CdkColumnDef.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
+    ];
+    CdkColumnDef.propDecorators = {
+        name: [{ type: Input, args: ['cdkColumnDef',] }],
+        stickyEnd: [{ type: Input, args: ['stickyEnd',] }],
+        cell: [{ type: ContentChild, args: [CdkCellDef,] }],
+        headerCell: [{ type: ContentChild, args: [CdkHeaderCellDef,] }],
+        footerCell: [{ type: ContentChild, args: [CdkFooterCellDef,] }]
     };
-    __decorate([
-        Input('cdkColumnDef'),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], CdkColumnDef.prototype, "name", null);
-    __decorate([
-        Input('stickyEnd'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkColumnDef.prototype, "stickyEnd", null);
-    __decorate([
-        ContentChild(CdkCellDef),
-        __metadata("design:type", CdkCellDef)
-    ], CdkColumnDef.prototype, "cell", void 0);
-    __decorate([
-        ContentChild(CdkHeaderCellDef),
-        __metadata("design:type", CdkHeaderCellDef)
-    ], CdkColumnDef.prototype, "headerCell", void 0);
-    __decorate([
-        ContentChild(CdkFooterCellDef),
-        __metadata("design:type", CdkFooterCellDef)
-    ], CdkColumnDef.prototype, "footerCell", void 0);
-    CdkColumnDef = CdkColumnDef_1 = __decorate([
-        Directive({
-            selector: '[cdkColumnDef]',
-            inputs: ['sticky'],
-            providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef_1 }],
-        }),
-        __param(0, Inject(CDK_TABLE)), __param(0, Optional()),
-        __metadata("design:paramtypes", [Object])
-    ], CdkColumnDef);
     return CdkColumnDef;
 })();
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
@@ -205,59 +199,71 @@ class BaseCdkCell {
 }
 /** Header cell template container that adds the right classes and role. */
 let CdkHeaderCell = /** @class */ (() => {
-    let CdkHeaderCell = class CdkHeaderCell extends BaseCdkCell {
+    class CdkHeaderCell extends BaseCdkCell {
         constructor(columnDef, elementRef) {
             super(columnDef, elementRef);
         }
-    };
-    CdkHeaderCell = __decorate([
-        Directive({
-            selector: 'cdk-header-cell, th[cdk-header-cell]',
-            host: {
-                'class': 'cdk-header-cell',
-                'role': 'columnheader',
-            },
-        }),
-        __metadata("design:paramtypes", [CdkColumnDef, ElementRef])
-    ], CdkHeaderCell);
+    }
+    CdkHeaderCell.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-header-cell, th[cdk-header-cell]',
+                    host: {
+                        'class': 'cdk-header-cell',
+                        'role': 'columnheader',
+                    },
+                },] }
+    ];
+    /** @nocollapse */
+    CdkHeaderCell.ctorParameters = () => [
+        { type: CdkColumnDef },
+        { type: ElementRef }
+    ];
     return CdkHeaderCell;
 })();
 /** Footer cell template container that adds the right classes and role. */
 let CdkFooterCell = /** @class */ (() => {
-    let CdkFooterCell = class CdkFooterCell extends BaseCdkCell {
+    class CdkFooterCell extends BaseCdkCell {
         constructor(columnDef, elementRef) {
             super(columnDef, elementRef);
         }
-    };
-    CdkFooterCell = __decorate([
-        Directive({
-            selector: 'cdk-footer-cell, td[cdk-footer-cell]',
-            host: {
-                'class': 'cdk-footer-cell',
-                'role': 'gridcell',
-            },
-        }),
-        __metadata("design:paramtypes", [CdkColumnDef, ElementRef])
-    ], CdkFooterCell);
+    }
+    CdkFooterCell.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-footer-cell, td[cdk-footer-cell]',
+                    host: {
+                        'class': 'cdk-footer-cell',
+                        'role': 'gridcell',
+                    },
+                },] }
+    ];
+    /** @nocollapse */
+    CdkFooterCell.ctorParameters = () => [
+        { type: CdkColumnDef },
+        { type: ElementRef }
+    ];
     return CdkFooterCell;
 })();
 /** Cell template container that adds the right classes and role. */
 let CdkCell = /** @class */ (() => {
-    let CdkCell = class CdkCell extends BaseCdkCell {
+    class CdkCell extends BaseCdkCell {
         constructor(columnDef, elementRef) {
             super(columnDef, elementRef);
         }
-    };
-    CdkCell = __decorate([
-        Directive({
-            selector: 'cdk-cell, td[cdk-cell]',
-            host: {
-                'class': 'cdk-cell',
-                'role': 'gridcell',
-            },
-        }),
-        __metadata("design:paramtypes", [CdkColumnDef, ElementRef])
-    ], CdkCell);
+    }
+    CdkCell.decorators = [
+        { type: Directive, args: [{
+                    selector: 'cdk-cell, td[cdk-cell]',
+                    host: {
+                        'class': 'cdk-cell',
+                        'role': 'gridcell',
+                    },
+                },] }
+    ];
+    /** @nocollapse */
+    CdkCell.ctorParameters = () => [
+        { type: CdkColumnDef },
+        { type: ElementRef }
+    ];
     return CdkCell;
 })();
 
@@ -278,7 +284,7 @@ const CDK_ROW_TEMPLATE = `<ng-container cdkCellOutlet></ng-container>`;
  * for changes and notifying the table.
  */
 let BaseRowDef = /** @class */ (() => {
-    let BaseRowDef = class BaseRowDef {
+    class BaseRowDef {
         constructor(
         /** @docs-private */ template, _differs) {
             this.template = template;
@@ -312,11 +318,15 @@ let BaseRowDef = /** @class */ (() => {
                 return column.cell.template;
             }
         }
-    };
-    BaseRowDef = __decorate([
-        Directive(),
-        __metadata("design:paramtypes", [TemplateRef, IterableDiffers])
-    ], BaseRowDef);
+    }
+    BaseRowDef.decorators = [
+        { type: Directive }
+    ];
+    /** @nocollapse */
+    BaseRowDef.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: IterableDiffers }
+    ];
     return BaseRowDef;
 })();
 // Boilerplate for applying mixins to CdkHeaderRowDef.
@@ -329,7 +339,7 @@ const _CdkHeaderRowDefBase = mixinHasStickyInput(CdkHeaderRowDefBase);
  * Captures the header row's template and other header properties such as the columns to display.
  */
 let CdkHeaderRowDef = /** @class */ (() => {
-    let CdkHeaderRowDef = class CdkHeaderRowDef extends _CdkHeaderRowDefBase {
+    class CdkHeaderRowDef extends _CdkHeaderRowDefBase {
         constructor(template, _differs, _table) {
             super(template, _differs);
             this._table = _table;
@@ -339,16 +349,19 @@ let CdkHeaderRowDef = /** @class */ (() => {
         ngOnChanges(changes) {
             super.ngOnChanges(changes);
         }
-    };
-    CdkHeaderRowDef = __decorate([
-        Directive({
-            selector: '[cdkHeaderRowDef]',
-            inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
-        }),
-        __param(2, Inject(CDK_TABLE)), __param(2, Optional()),
-        __metadata("design:paramtypes", [TemplateRef,
-            IterableDiffers, Object])
-    ], CdkHeaderRowDef);
+    }
+    CdkHeaderRowDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkHeaderRowDef]',
+                    inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
+                },] }
+    ];
+    /** @nocollapse */
+    CdkHeaderRowDef.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
+    ];
     return CdkHeaderRowDef;
 })();
 // Boilerplate for applying mixins to CdkFooterRowDef.
@@ -361,7 +374,7 @@ const _CdkFooterRowDefBase = mixinHasStickyInput(CdkFooterRowDefBase);
  * Captures the footer row's template and other footer properties such as the columns to display.
  */
 let CdkFooterRowDef = /** @class */ (() => {
-    let CdkFooterRowDef = class CdkFooterRowDef extends _CdkFooterRowDefBase {
+    class CdkFooterRowDef extends _CdkFooterRowDefBase {
         constructor(template, _differs, _table) {
             super(template, _differs);
             this._table = _table;
@@ -371,16 +384,19 @@ let CdkFooterRowDef = /** @class */ (() => {
         ngOnChanges(changes) {
             super.ngOnChanges(changes);
         }
-    };
-    CdkFooterRowDef = __decorate([
-        Directive({
-            selector: '[cdkFooterRowDef]',
-            inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
-        }),
-        __param(2, Inject(CDK_TABLE)), __param(2, Optional()),
-        __metadata("design:paramtypes", [TemplateRef,
-            IterableDiffers, Object])
-    ], CdkFooterRowDef);
+    }
+    CdkFooterRowDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkFooterRowDef]',
+                    inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
+                },] }
+    ];
+    /** @nocollapse */
+    CdkFooterRowDef.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
+    ];
     return CdkFooterRowDef;
 })();
 /**
@@ -389,23 +405,26 @@ let CdkFooterRowDef = /** @class */ (() => {
  * a when predicate that describes when this row should be used.
  */
 let CdkRowDef = /** @class */ (() => {
-    let CdkRowDef = class CdkRowDef extends BaseRowDef {
+    class CdkRowDef extends BaseRowDef {
         // TODO(andrewseguin): Add an input for providing a switch function to determine
         //   if this template should be used.
         constructor(template, _differs, _table) {
             super(template, _differs);
             this._table = _table;
         }
-    };
-    CdkRowDef = __decorate([
-        Directive({
-            selector: '[cdkRowDef]',
-            inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
-        }),
-        __param(2, Inject(CDK_TABLE)), __param(2, Optional()),
-        __metadata("design:paramtypes", [TemplateRef,
-            IterableDiffers, Object])
-    ], CdkRowDef);
+    }
+    CdkRowDef.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkRowDef]',
+                    inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
+                },] }
+    ];
+    /** @nocollapse */
+    CdkRowDef.ctorParameters = () => [
+        { type: TemplateRef },
+        { type: IterableDiffers },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
+    ];
     return CdkRowDef;
 })();
 /**
@@ -413,20 +432,19 @@ let CdkRowDef = /** @class */ (() => {
  * @docs-private
  */
 let CdkCellOutlet = /** @class */ (() => {
-    var CdkCellOutlet_1;
-    let CdkCellOutlet = CdkCellOutlet_1 = class CdkCellOutlet {
+    class CdkCellOutlet {
         constructor(_viewContainer) {
             this._viewContainer = _viewContainer;
-            CdkCellOutlet_1.mostRecentCellOutlet = this;
+            CdkCellOutlet.mostRecentCellOutlet = this;
         }
         ngOnDestroy() {
             // If this was the last outlet being rendered in the view, remove the reference
             // from the static property after it has been destroyed to avoid leaking memory.
-            if (CdkCellOutlet_1.mostRecentCellOutlet === this) {
-                CdkCellOutlet_1.mostRecentCellOutlet = null;
+            if (CdkCellOutlet.mostRecentCellOutlet === this) {
+                CdkCellOutlet.mostRecentCellOutlet = null;
             }
         }
-    };
+    }
     /**
      * Static property containing the latest constructed instance of this class.
      * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
@@ -435,85 +453,91 @@ let CdkCellOutlet = /** @class */ (() => {
      * construct the cells with the provided context.
      */
     CdkCellOutlet.mostRecentCellOutlet = null;
-    CdkCellOutlet = CdkCellOutlet_1 = __decorate([
-        Directive({ selector: '[cdkCellOutlet]' }),
-        __metadata("design:paramtypes", [ViewContainerRef])
-    ], CdkCellOutlet);
+    CdkCellOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[cdkCellOutlet]' },] }
+    ];
+    /** @nocollapse */
+    CdkCellOutlet.ctorParameters = () => [
+        { type: ViewContainerRef }
+    ];
     return CdkCellOutlet;
 })();
 /** Header template container that contains the cell outlet. Adds the right class and role. */
 let CdkHeaderRow = /** @class */ (() => {
-    let CdkHeaderRow = class CdkHeaderRow {
-    };
-    CdkHeaderRow = __decorate([
-        Component({
-            selector: 'cdk-header-row, tr[cdk-header-row]',
-            template: CDK_ROW_TEMPLATE,
-            host: {
-                'class': 'cdk-header-row',
-                'role': 'row',
-            },
-            // See note on CdkTable for explanation on why this uses the default change detection strategy.
-            // tslint:disable-next-line:validate-decorators
-            changeDetection: ChangeDetectionStrategy.Default,
-            encapsulation: ViewEncapsulation.None
-        })
-    ], CdkHeaderRow);
+    class CdkHeaderRow {
+    }
+    CdkHeaderRow.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-header-row, tr[cdk-header-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-header-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: ChangeDetectionStrategy.Default,
+                    encapsulation: ViewEncapsulation.None
+                }] }
+    ];
     return CdkHeaderRow;
 })();
 /** Footer template container that contains the cell outlet. Adds the right class and role. */
 let CdkFooterRow = /** @class */ (() => {
-    let CdkFooterRow = class CdkFooterRow {
-    };
-    CdkFooterRow = __decorate([
-        Component({
-            selector: 'cdk-footer-row, tr[cdk-footer-row]',
-            template: CDK_ROW_TEMPLATE,
-            host: {
-                'class': 'cdk-footer-row',
-                'role': 'row',
-            },
-            // See note on CdkTable for explanation on why this uses the default change detection strategy.
-            // tslint:disable-next-line:validate-decorators
-            changeDetection: ChangeDetectionStrategy.Default,
-            encapsulation: ViewEncapsulation.None
-        })
-    ], CdkFooterRow);
+    class CdkFooterRow {
+    }
+    CdkFooterRow.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-footer-row, tr[cdk-footer-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-footer-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: ChangeDetectionStrategy.Default,
+                    encapsulation: ViewEncapsulation.None
+                }] }
+    ];
     return CdkFooterRow;
 })();
 /** Data row template container that contains the cell outlet. Adds the right class and role. */
 let CdkRow = /** @class */ (() => {
-    let CdkRow = class CdkRow {
-    };
-    CdkRow = __decorate([
-        Component({
-            selector: 'cdk-row, tr[cdk-row]',
-            template: CDK_ROW_TEMPLATE,
-            host: {
-                'class': 'cdk-row',
-                'role': 'row',
-            },
-            // See note on CdkTable for explanation on why this uses the default change detection strategy.
-            // tslint:disable-next-line:validate-decorators
-            changeDetection: ChangeDetectionStrategy.Default,
-            encapsulation: ViewEncapsulation.None
-        })
-    ], CdkRow);
+    class CdkRow {
+    }
+    CdkRow.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-row, tr[cdk-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: ChangeDetectionStrategy.Default,
+                    encapsulation: ViewEncapsulation.None
+                }] }
+    ];
     return CdkRow;
 })();
 /** Row that can be used to display a message when no data is shown in the table. */
 let CdkNoDataRow = /** @class */ (() => {
-    let CdkNoDataRow = class CdkNoDataRow {
+    class CdkNoDataRow {
         constructor(templateRef) {
             this.templateRef = templateRef;
         }
-    };
-    CdkNoDataRow = __decorate([
-        Directive({
-            selector: 'ng-template[cdkNoDataRow]'
-        }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkNoDataRow);
+    }
+    CdkNoDataRow.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkNoDataRow]'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkNoDataRow.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
     return CdkNoDataRow;
 })();
 
@@ -845,16 +869,20 @@ function getTableTextColumnMissingNameError() {
  * @docs-private
  */
 let DataRowOutlet = /** @class */ (() => {
-    let DataRowOutlet = class DataRowOutlet {
+    class DataRowOutlet {
         constructor(viewContainer, elementRef) {
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-    };
-    DataRowOutlet = __decorate([
-        Directive({ selector: '[rowOutlet]' }),
-        __metadata("design:paramtypes", [ViewContainerRef, ElementRef])
-    ], DataRowOutlet);
+    }
+    DataRowOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[rowOutlet]' },] }
+    ];
+    /** @nocollapse */
+    DataRowOutlet.ctorParameters = () => [
+        { type: ViewContainerRef },
+        { type: ElementRef }
+    ];
     return DataRowOutlet;
 })();
 /**
@@ -862,16 +890,20 @@ let DataRowOutlet = /** @class */ (() => {
  * @docs-private
  */
 let HeaderRowOutlet = /** @class */ (() => {
-    let HeaderRowOutlet = class HeaderRowOutlet {
+    class HeaderRowOutlet {
         constructor(viewContainer, elementRef) {
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-    };
-    HeaderRowOutlet = __decorate([
-        Directive({ selector: '[headerRowOutlet]' }),
-        __metadata("design:paramtypes", [ViewContainerRef, ElementRef])
-    ], HeaderRowOutlet);
+    }
+    HeaderRowOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[headerRowOutlet]' },] }
+    ];
+    /** @nocollapse */
+    HeaderRowOutlet.ctorParameters = () => [
+        { type: ViewContainerRef },
+        { type: ElementRef }
+    ];
     return HeaderRowOutlet;
 })();
 /**
@@ -879,16 +911,20 @@ let HeaderRowOutlet = /** @class */ (() => {
  * @docs-private
  */
 let FooterRowOutlet = /** @class */ (() => {
-    let FooterRowOutlet = class FooterRowOutlet {
+    class FooterRowOutlet {
         constructor(viewContainer, elementRef) {
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-    };
-    FooterRowOutlet = __decorate([
-        Directive({ selector: '[footerRowOutlet]' }),
-        __metadata("design:paramtypes", [ViewContainerRef, ElementRef])
-    ], FooterRowOutlet);
+    }
+    FooterRowOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[footerRowOutlet]' },] }
+    ];
+    /** @nocollapse */
+    FooterRowOutlet.ctorParameters = () => [
+        { type: ViewContainerRef },
+        { type: ElementRef }
+    ];
     return FooterRowOutlet;
 })();
 /**
@@ -897,16 +933,20 @@ let FooterRowOutlet = /** @class */ (() => {
  * @docs-private
  */
 let NoDataRowOutlet = /** @class */ (() => {
-    let NoDataRowOutlet = class NoDataRowOutlet {
+    class NoDataRowOutlet {
         constructor(viewContainer, elementRef) {
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-    };
-    NoDataRowOutlet = __decorate([
-        Directive({ selector: '[noDataRowOutlet]' }),
-        __metadata("design:paramtypes", [ViewContainerRef, ElementRef])
-    ], NoDataRowOutlet);
+    }
+    NoDataRowOutlet.decorators = [
+        { type: Directive, args: [{ selector: '[noDataRowOutlet]' },] }
+    ];
+    /** @nocollapse */
+    NoDataRowOutlet.ctorParameters = () => [
+        { type: ViewContainerRef },
+        { type: ElementRef }
+    ];
     return NoDataRowOutlet;
 })();
 /**
@@ -938,8 +978,7 @@ class RowViewRef extends EmbeddedViewRef {
  * connect function that will return an Observable stream that emits the data array to render.
  */
 let CdkTable = /** @class */ (() => {
-    var CdkTable_1;
-    let CdkTable = CdkTable_1 = class CdkTable {
+    class CdkTable {
         constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform) {
             this._differs = _differs;
             this._changeDetectorRef = _changeDetectorRef;
@@ -1652,84 +1691,52 @@ let CdkTable = /** @class */ (() => {
                 }
             }
         }
+    }
+    CdkTable.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-table, table[cdk-table]',
+                    exportAs: 'cdkTable',
+                    template: CDK_TABLE_TEMPLATE,
+                    host: {
+                        'class': 'cdk-table',
+                    },
+                    encapsulation: ViewEncapsulation.None,
+                    // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
+                    // The view for `MatTable` consists entirely of templates declared in other views. As they are
+                    // declared elsewhere, they are checked when their declaration points are checked.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: ChangeDetectionStrategy.Default,
+                    providers: [{ provide: CDK_TABLE, useExisting: CdkTable }]
+                }] }
+    ];
+    /** @nocollapse */
+    CdkTable.ctorParameters = () => [
+        { type: IterableDiffers },
+        { type: ChangeDetectorRef },
+        { type: ElementRef },
+        { type: String, decorators: [{ type: Attribute, args: ['role',] }] },
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: Platform }
+    ];
+    CdkTable.propDecorators = {
+        trackBy: [{ type: Input }],
+        dataSource: [{ type: Input }],
+        multiTemplateDataRows: [{ type: Input }],
+        _rowOutlet: [{ type: ViewChild, args: [DataRowOutlet, { static: true },] }],
+        _headerRowOutlet: [{ type: ViewChild, args: [HeaderRowOutlet, { static: true },] }],
+        _footerRowOutlet: [{ type: ViewChild, args: [FooterRowOutlet, { static: true },] }],
+        _noDataRowOutlet: [{ type: ViewChild, args: [NoDataRowOutlet, { static: true },] }],
+        _contentColumnDefs: [{ type: ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
+        _contentRowDefs: [{ type: ContentChildren, args: [CdkRowDef, { descendants: true },] }],
+        _contentHeaderRowDefs: [{ type: ContentChildren, args: [CdkHeaderRowDef, {
+                        descendants: true
+                    },] }],
+        _contentFooterRowDefs: [{ type: ContentChildren, args: [CdkFooterRowDef, {
+                        descendants: true
+                    },] }],
+        _noDataRow: [{ type: ContentChild, args: [CdkNoDataRow,] }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Function])
-    ], CdkTable.prototype, "trackBy", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkTable.prototype, "dataSource", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkTable.prototype, "multiTemplateDataRows", null);
-    __decorate([
-        ViewChild(DataRowOutlet, { static: true }),
-        __metadata("design:type", DataRowOutlet)
-    ], CdkTable.prototype, "_rowOutlet", void 0);
-    __decorate([
-        ViewChild(HeaderRowOutlet, { static: true }),
-        __metadata("design:type", HeaderRowOutlet)
-    ], CdkTable.prototype, "_headerRowOutlet", void 0);
-    __decorate([
-        ViewChild(FooterRowOutlet, { static: true }),
-        __metadata("design:type", FooterRowOutlet)
-    ], CdkTable.prototype, "_footerRowOutlet", void 0);
-    __decorate([
-        ViewChild(NoDataRowOutlet, { static: true }),
-        __metadata("design:type", NoDataRowOutlet)
-    ], CdkTable.prototype, "_noDataRowOutlet", void 0);
-    __decorate([
-        ContentChildren(CdkColumnDef, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], CdkTable.prototype, "_contentColumnDefs", void 0);
-    __decorate([
-        ContentChildren(CdkRowDef, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], CdkTable.prototype, "_contentRowDefs", void 0);
-    __decorate([
-        ContentChildren(CdkHeaderRowDef, {
-            descendants: true
-        }),
-        __metadata("design:type", QueryList)
-    ], CdkTable.prototype, "_contentHeaderRowDefs", void 0);
-    __decorate([
-        ContentChildren(CdkFooterRowDef, {
-            descendants: true
-        }),
-        __metadata("design:type", QueryList)
-    ], CdkTable.prototype, "_contentFooterRowDefs", void 0);
-    __decorate([
-        ContentChild(CdkNoDataRow),
-        __metadata("design:type", CdkNoDataRow)
-    ], CdkTable.prototype, "_noDataRow", void 0);
-    CdkTable = CdkTable_1 = __decorate([
-        Component({
-            selector: 'cdk-table, table[cdk-table]',
-            exportAs: 'cdkTable',
-            template: CDK_TABLE_TEMPLATE,
-            host: {
-                'class': 'cdk-table',
-            },
-            encapsulation: ViewEncapsulation.None,
-            // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
-            // The view for `MatTable` consists entirely of templates declared in other views. As they are
-            // declared elsewhere, they are checked when their declaration points are checked.
-            // tslint:disable-next-line:validate-decorators
-            changeDetection: ChangeDetectionStrategy.Default,
-            providers: [{ provide: CDK_TABLE, useExisting: CdkTable_1 }]
-        }),
-        __param(3, Attribute('role')),
-        __param(4, Optional()), __param(5, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [IterableDiffers,
-            ChangeDetectorRef,
-            ElementRef, String, Directionality, Object, Platform])
-    ], CdkTable);
     return CdkTable;
 })();
 /** Utility function that gets a merged list of the entries in an array and values of a Set. */
@@ -1754,7 +1761,7 @@ function mergeArrayAndSet(array, set) {
  * input.
  */
 let CdkTextColumn = /** @class */ (() => {
-    let CdkTextColumn = class CdkTextColumn {
+    class CdkTextColumn {
         constructor(_table, _options) {
             this._table = _table;
             this._options = _options;
@@ -1818,40 +1825,11 @@ let CdkTextColumn = /** @class */ (() => {
                 this.columnDef.name = this.name;
             }
         }
-    };
-    __decorate([
-        Input(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], CdkTextColumn.prototype, "name", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkTextColumn.prototype, "headerText", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Function)
-    ], CdkTextColumn.prototype, "dataAccessor", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkTextColumn.prototype, "justify", void 0);
-    __decorate([
-        ViewChild(CdkColumnDef, { static: true }),
-        __metadata("design:type", CdkColumnDef)
-    ], CdkTextColumn.prototype, "columnDef", void 0);
-    __decorate([
-        ViewChild(CdkCellDef, { static: true }),
-        __metadata("design:type", CdkCellDef)
-    ], CdkTextColumn.prototype, "cell", void 0);
-    __decorate([
-        ViewChild(CdkHeaderCellDef, { static: true }),
-        __metadata("design:type", CdkHeaderCellDef)
-    ], CdkTextColumn.prototype, "headerCell", void 0);
-    CdkTextColumn = __decorate([
-        Component({
-            selector: 'cdk-text-column',
-            template: `
+    }
+    CdkTextColumn.decorators = [
+        { type: Component, args: [{
+                    selector: 'cdk-text-column',
+                    template: `
     <ng-container cdkColumnDef>
       <th cdk-header-cell *cdkHeaderCellDef [style.text-align]="justify">
         {{headerText}}
@@ -1861,19 +1839,30 @@ let CdkTextColumn = /** @class */ (() => {
       </td>
     </ng-container>
   `,
-            encapsulation: ViewEncapsulation.None,
-            // Change detection is intentionally not set to OnPush. This component's template will be provided
-            // to the table to be inserted into its view. This is problematic when change detection runs since
-            // the bindings in this template will be evaluated _after_ the table's view is evaluated, which
-            // mean's the template in the table's view will not have the updated value (and in fact will cause
-            // an ExpressionChangedAfterItHasBeenCheckedError).
-            // tslint:disable-next-line:validate-decorators
-            changeDetection: ChangeDetectionStrategy.Default
-        }),
-        __param(0, Optional()),
-        __param(1, Optional()), __param(1, Inject(TEXT_COLUMN_OPTIONS)),
-        __metadata("design:paramtypes", [CdkTable, Object])
-    ], CdkTextColumn);
+                    encapsulation: ViewEncapsulation.None,
+                    // Change detection is intentionally not set to OnPush. This component's template will be provided
+                    // to the table to be inserted into its view. This is problematic when change detection runs since
+                    // the bindings in this template will be evaluated _after_ the table's view is evaluated, which
+                    // mean's the template in the table's view will not have the updated value (and in fact will cause
+                    // an ExpressionChangedAfterItHasBeenCheckedError).
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: ChangeDetectionStrategy.Default
+                }] }
+    ];
+    /** @nocollapse */
+    CdkTextColumn.ctorParameters = () => [
+        { type: CdkTable, decorators: [{ type: Optional }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [TEXT_COLUMN_OPTIONS,] }] }
+    ];
+    CdkTextColumn.propDecorators = {
+        name: [{ type: Input }],
+        headerText: [{ type: Input }],
+        dataAccessor: [{ type: Input }],
+        justify: [{ type: Input }],
+        columnDef: [{ type: ViewChild, args: [CdkColumnDef, { static: true },] }],
+        cell: [{ type: ViewChild, args: [CdkCellDef, { static: true },] }],
+        headerCell: [{ type: ViewChild, args: [CdkHeaderCellDef, { static: true },] }]
+    };
     return CdkTextColumn;
 })();
 
@@ -1908,14 +1897,14 @@ const EXPORTED_DECLARATIONS = [
     NoDataRowOutlet,
 ];
 let CdkTableModule = /** @class */ (() => {
-    let CdkTableModule = class CdkTableModule {
-    };
-    CdkTableModule = __decorate([
-        NgModule({
-            exports: EXPORTED_DECLARATIONS,
-            declarations: EXPORTED_DECLARATIONS
-        })
-    ], CdkTableModule);
+    class CdkTableModule {
+    }
+    CdkTableModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: EXPORTED_DECLARATIONS,
+                    declarations: EXPORTED_DECLARATIONS
+                },] }
+    ];
     return CdkTableModule;
 })();
 

@@ -1,6 +1,5 @@
-import { __decorate, __param, __metadata } from 'tslib';
 import { DOCUMENT } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, isDevMode, NgZone, Input, Directive, ElementRef, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
@@ -52,6 +51,13 @@ function getAriaReferenceIds(el, attr) {
     return (el.getAttribute(attr) || '').match(/\S+/g) || [];
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** ID used for the body container where all messages are appended. */
 const MESSAGES_CONTAINER_ID = 'cdk-describedby-message-container';
 /** ID prefix used for each created message element. */
@@ -70,7 +76,7 @@ let messagesContainer = null;
  * content.
  */
 let AriaDescriber = /** @class */ (() => {
-    let AriaDescriber = class AriaDescriber {
+    class AriaDescriber {
         constructor(_document) {
             this._document = _document;
         }
@@ -236,13 +242,15 @@ let AriaDescriber = /** @class */ (() => {
         _isElementNode(element) {
             return element.nodeType === this._document.ELEMENT_NODE;
         }
-    };
+    }
+    AriaDescriber.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    AriaDescriber.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     AriaDescriber.ɵprov = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
-    AriaDescriber = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object])
-    ], AriaDescriber);
     return AriaDescriber;
 })();
 
@@ -579,6 +587,13 @@ class FocusKeyManager extends ListKeyManager {
     }
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
 // supported.
@@ -587,7 +602,7 @@ class FocusKeyManager extends ListKeyManager {
  * tabbable.
  */
 let InteractivityChecker = /** @class */ (() => {
-    let InteractivityChecker = class InteractivityChecker {
+    class InteractivityChecker {
         constructor(_platform) {
             this._platform = _platform;
         }
@@ -692,12 +707,15 @@ let InteractivityChecker = /** @class */ (() => {
             // Again, naive approach that does not capture many edge cases and browser quirks.
             return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
         }
-    };
+    }
+    InteractivityChecker.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    InteractivityChecker.ctorParameters = () => [
+        { type: Platform }
+    ];
     InteractivityChecker.ɵprov = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
-    InteractivityChecker = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [Platform])
-    ], InteractivityChecker);
     return InteractivityChecker;
 })();
 /**
@@ -797,6 +815,13 @@ function getWindow(node) {
     return node.ownerDocument && node.ownerDocument.defaultView || window;
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * Class that allows for trapping focus within a DOM element.
  *
@@ -1072,7 +1097,7 @@ class FocusTrap {
  * @breaking-change for 11.0.0 Remove this class.
  */
 let FocusTrapFactory = /** @class */ (() => {
-    let FocusTrapFactory = class FocusTrapFactory {
+    class FocusTrapFactory {
         constructor(_checker, _ngZone, _document) {
             this._checker = _checker;
             this._ngZone = _ngZone;
@@ -1088,19 +1113,22 @@ let FocusTrapFactory = /** @class */ (() => {
         create(element, deferCaptureElements = false) {
             return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
         }
-    };
+    }
+    FocusTrapFactory.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    FocusTrapFactory.ctorParameters = () => [
+        { type: InteractivityChecker },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     FocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
-    FocusTrapFactory = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(2, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [InteractivityChecker,
-            NgZone, Object])
-    ], FocusTrapFactory);
     return FocusTrapFactory;
 })();
 /** Directive for trapping focus within a region. */
 let CdkTrapFocus = /** @class */ (() => {
-    let CdkTrapFocus = class CdkTrapFocus {
+    class CdkTrapFocus {
         constructor(_elementRef, _focusTrapFactory, _document) {
             this._elementRef = _elementRef;
             this._focusTrapFactory = _focusTrapFactory;
@@ -1139,26 +1167,23 @@ let CdkTrapFocus = /** @class */ (() => {
                 this.focusTrap.attachAnchors();
             }
         }
+    }
+    CdkTrapFocus.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkTrapFocus]',
+                    exportAs: 'cdkTrapFocus',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkTrapFocus.ctorParameters = () => [
+        { type: ElementRef },
+        { type: FocusTrapFactory },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
+    CdkTrapFocus.propDecorators = {
+        enabled: [{ type: Input, args: ['cdkTrapFocus',] }],
+        autoCapture: [{ type: Input, args: ['cdkTrapFocusAutoCapture',] }]
     };
-    __decorate([
-        Input('cdkTrapFocus'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkTrapFocus.prototype, "enabled", null);
-    __decorate([
-        Input('cdkTrapFocusAutoCapture'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkTrapFocus.prototype, "autoCapture", null);
-    CdkTrapFocus = __decorate([
-        Directive({
-            selector: '[cdkTrapFocus]',
-            exportAs: 'cdkTrapFocus',
-        }),
-        __param(2, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [ElementRef,
-            FocusTrapFactory, Object])
-    ], CdkTrapFocus);
     return CdkTrapFocus;
 })();
 
@@ -1337,9 +1362,16 @@ class ConfigurableFocusTrapConfig {
 /** The injection token used to specify the inert strategy. */
 const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Injectable that ensures only the most recently enabled FocusTrap is active. */
 let FocusTrapManager = /** @class */ (() => {
-    let FocusTrapManager = class FocusTrapManager {
+    class FocusTrapManager {
         constructor() {
             // A stack of the FocusTraps on the page. Only the FocusTrap at the
             // top of the stack is active.
@@ -1374,17 +1406,24 @@ let FocusTrapManager = /** @class */ (() => {
                 }
             }
         }
-    };
+    }
+    FocusTrapManager.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
     FocusTrapManager.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
-    FocusTrapManager = __decorate([
-        Injectable({ providedIn: 'root' })
-    ], FocusTrapManager);
     return FocusTrapManager;
 })();
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Factory that allows easy instantiation of configurable focus traps. */
 let ConfigurableFocusTrapFactory = /** @class */ (() => {
-    let ConfigurableFocusTrapFactory = class ConfigurableFocusTrapFactory {
+    class ConfigurableFocusTrapFactory {
         constructor(_checker, _ngZone, _focusTrapManager, _document, _inertStrategy) {
             this._checker = _checker;
             this._ngZone = _ngZone;
@@ -1404,16 +1443,19 @@ let ConfigurableFocusTrapFactory = /** @class */ (() => {
             }
             return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
         }
-    };
+    }
+    ConfigurableFocusTrapFactory.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    ConfigurableFocusTrapFactory.ctorParameters = () => [
+        { type: InteractivityChecker },
+        { type: NgZone },
+        { type: FocusTrapManager },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_TRAP_INERT_STRATEGY,] }] }
+    ];
     ConfigurableFocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(FocusTrapManager), ɵɵinject(DOCUMENT), ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
-    ConfigurableFocusTrapFactory = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(3, Inject(DOCUMENT)),
-        __param(4, Optional()), __param(4, Inject(FOCUS_TRAP_INERT_STRATEGY)),
-        __metadata("design:paramtypes", [InteractivityChecker,
-            NgZone,
-            FocusTrapManager, Object, Object])
-    ], ConfigurableFocusTrapFactory);
     return ConfigurableFocusTrapFactory;
 })();
 
@@ -1435,8 +1477,15 @@ function LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY() {
 /** Injection token that can be used to configure the default options for the LiveAnnouncer. */
 const LIVE_ANNOUNCER_DEFAULT_OPTIONS = new InjectionToken('LIVE_ANNOUNCER_DEFAULT_OPTIONS');
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 let LiveAnnouncer = /** @class */ (() => {
-    let LiveAnnouncer = class LiveAnnouncer {
+    class LiveAnnouncer {
         constructor(elementToken, _ngZone, _document, _defaultOptions) {
             this._ngZone = _ngZone;
             this._defaultOptions = _defaultOptions;
@@ -1517,15 +1566,18 @@ let LiveAnnouncer = /** @class */ (() => {
             this._document.body.appendChild(liveEl);
             return liveEl;
         }
-    };
+    }
+    LiveAnnouncer.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    LiveAnnouncer.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
+    ];
     LiveAnnouncer.ɵprov = ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), ɵɵinject(NgZone), ɵɵinject(DOCUMENT), ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
-    LiveAnnouncer = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Optional()), __param(0, Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)),
-        __param(2, Inject(DOCUMENT)),
-        __param(3, Optional()), __param(3, Inject(LIVE_ANNOUNCER_DEFAULT_OPTIONS)),
-        __metadata("design:paramtypes", [Object, NgZone, Object, Object])
-    ], LiveAnnouncer);
     return LiveAnnouncer;
 })();
 /**
@@ -1533,7 +1585,7 @@ let LiveAnnouncer = /** @class */ (() => {
  * with a wider range of browsers and screen readers.
  */
 let CdkAriaLive = /** @class */ (() => {
-    let CdkAriaLive = class CdkAriaLive {
+    class CdkAriaLive {
         constructor(_elementRef, _liveAnnouncer, _contentObserver, _ngZone) {
             this._elementRef = _elementRef;
             this._liveAnnouncer = _liveAnnouncer;
@@ -1573,20 +1625,23 @@ let CdkAriaLive = /** @class */ (() => {
                 this._subscription.unsubscribe();
             }
         }
+    }
+    CdkAriaLive.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkAriaLive]',
+                    exportAs: 'cdkAriaLive',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkAriaLive.ctorParameters = () => [
+        { type: ElementRef },
+        { type: LiveAnnouncer },
+        { type: ContentObserver },
+        { type: NgZone }
+    ];
+    CdkAriaLive.propDecorators = {
+        politeness: [{ type: Input, args: ['cdkAriaLive',] }]
     };
-    __decorate([
-        Input('cdkAriaLive'),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], CdkAriaLive.prototype, "politeness", null);
-    CdkAriaLive = __decorate([
-        Directive({
-            selector: '[cdkAriaLive]',
-            exportAs: 'cdkAriaLive',
-        }),
-        __metadata("design:paramtypes", [ElementRef, LiveAnnouncer,
-            ContentObserver, NgZone])
-    ], CdkAriaLive);
     return CdkAriaLive;
 })();
 
@@ -1608,6 +1663,13 @@ function isFakeMousedownFromScreenReader(event) {
     return event.buttons === 0;
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
 // that a value of around 650ms seems appropriate.
 const TOUCH_BUFFER_MS = 650;
@@ -1623,7 +1685,7 @@ const captureEventListenerOptions = normalizePassiveListenerOptions({
 });
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
 let FocusMonitor = /** @class */ (() => {
-    let FocusMonitor = class FocusMonitor {
+    class FocusMonitor {
         constructor(_ngZone, _platform, 
         /** @breaking-change 11.0.0 make document required */
         document, options) {
@@ -1945,15 +2007,18 @@ let FocusMonitor = /** @class */ (() => {
                 clearTimeout(this._originTimeoutId);
             }
         }
-    };
+    }
+    FocusMonitor.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    FocusMonitor.ctorParameters = () => [
+        { type: NgZone },
+        { type: Platform },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_MONITOR_DEFAULT_OPTIONS,] }] }
+    ];
     FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
-    FocusMonitor = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(2, Optional()), __param(2, Inject(DOCUMENT)),
-        __param(3, Optional()), __param(3, Inject(FOCUS_MONITOR_DEFAULT_OPTIONS)),
-        __metadata("design:paramtypes", [NgZone,
-            Platform, Object, Object])
-    ], FocusMonitor);
     return FocusMonitor;
 })();
 /** Gets the target of an event, accounting for Shadow DOM. */
@@ -1972,7 +2037,7 @@ function getTarget(event) {
  * 2) cdkMonitorSubtreeFocus: considers an element focused if it or any of its children are focused.
  */
 let CdkMonitorFocus = /** @class */ (() => {
-    let CdkMonitorFocus = class CdkMonitorFocus {
+    class CdkMonitorFocus {
         constructor(_elementRef, _focusMonitor) {
             this._elementRef = _elementRef;
             this._focusMonitor = _focusMonitor;
@@ -1984,20 +2049,30 @@ let CdkMonitorFocus = /** @class */ (() => {
             this._focusMonitor.stopMonitoring(this._elementRef);
             this._monitorSubscription.unsubscribe();
         }
+    }
+    CdkMonitorFocus.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkMonitorFocus.ctorParameters = () => [
+        { type: ElementRef },
+        { type: FocusMonitor }
+    ];
+    CdkMonitorFocus.propDecorators = {
+        cdkFocusChange: [{ type: Output }]
     };
-    __decorate([
-        Output(),
-        __metadata("design:type", Object)
-    ], CdkMonitorFocus.prototype, "cdkFocusChange", void 0);
-    CdkMonitorFocus = __decorate([
-        Directive({
-            selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
-        }),
-        __metadata("design:paramtypes", [ElementRef, FocusMonitor])
-    ], CdkMonitorFocus);
     return CdkMonitorFocus;
 })();
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** CSS class applied to the document body when in black-on-white high-contrast mode. */
 const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
 /** CSS class applied to the document body when in white-on-black high-contrast mode. */
@@ -2016,7 +2091,7 @@ const HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = 'cdk-high-contrast-active';
  * browser extension.
  */
 let HighContrastModeDetector = /** @class */ (() => {
-    let HighContrastModeDetector = class HighContrastModeDetector {
+    class HighContrastModeDetector {
         constructor(_platform, document) {
             this._platform = _platform;
             this._document = document;
@@ -2067,13 +2142,16 @@ let HighContrastModeDetector = /** @class */ (() => {
                 }
             }
         }
-    };
+    }
+    HighContrastModeDetector.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    HighContrastModeDetector.ctorParameters = () => [
+        { type: Platform },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     HighContrastModeDetector.ɵprov = ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(ɵɵinject(Platform), ɵɵinject(DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
-    HighContrastModeDetector = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(1, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Platform, Object])
-    ], HighContrastModeDetector);
     return HighContrastModeDetector;
 })();
 
@@ -2085,19 +2163,22 @@ let HighContrastModeDetector = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let A11yModule = /** @class */ (() => {
-    let A11yModule = class A11yModule {
+    class A11yModule {
         constructor(highContrastModeDetector) {
             highContrastModeDetector._applyBodyHighContrastModeCssClasses();
         }
-    };
-    A11yModule = __decorate([
-        NgModule({
-            imports: [PlatformModule, ObserversModule],
-            declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
-            exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
-        }),
-        __metadata("design:paramtypes", [HighContrastModeDetector])
-    ], A11yModule);
+    }
+    A11yModule.decorators = [
+        { type: NgModule, args: [{
+                    imports: [PlatformModule, ObserversModule],
+                    declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
+                    exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
+                },] }
+    ];
+    /** @nocollapse */
+    A11yModule.ctorParameters = () => [
+        { type: HighContrastModeDetector }
+    ];
     return A11yModule;
 })();
 

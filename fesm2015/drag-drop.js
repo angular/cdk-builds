@@ -1,5 +1,4 @@
-import { __decorate, __param, __metadata } from 'tslib';
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Input, Directive, Optional, ElementRef, TemplateRef, EventEmitter, isDevMode, ContentChildren, QueryList, ContentChild, Output, SkipSelf, ViewContainerRef, ChangeDetectorRef, NgModule } from '@angular/core';
+import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, Directive, ElementRef, Optional, Input, TemplateRef, EventEmitter, isDevMode, SkipSelf, ViewContainerRef, ChangeDetectorRef, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
@@ -2088,6 +2087,13 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
     return [verticalScrollDirection, horizontalScrollDirection];
 }
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Event options that can be used to bind an active, capturing event. */
 const activeCapturingEventOptions = normalizePassiveListenerOptions({
     passive: false,
@@ -2102,7 +2108,7 @@ const activeCapturingEventOptions = normalizePassiveListenerOptions({
 // to avoid circular imports. If we were to reference them here, importing the registry into the
 // classes that are registering themselves will introduce a circular import.
 let DragDropRegistry = /** @class */ (() => {
-    let DragDropRegistry = class DragDropRegistry {
+    class DragDropRegistry {
         constructor(_ngZone, _document) {
             this._ngZone = _ngZone;
             /** Registered drop container instances. */
@@ -2241,16 +2247,26 @@ let DragDropRegistry = /** @class */ (() => {
             });
             this._globalListeners.clear();
         }
-    };
+    }
+    DragDropRegistry.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    DragDropRegistry.ctorParameters = () => [
+        { type: NgZone },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+    ];
     DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
-    DragDropRegistry = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(1, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [NgZone, Object])
-    ], DragDropRegistry);
     return DragDropRegistry;
 })();
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
     dragStartThreshold: 5,
@@ -2260,7 +2276,7 @@ const DEFAULT_CONFIG = {
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
  */
 let DragDrop = /** @class */ (() => {
-    let DragDrop = class DragDrop {
+    class DragDrop {
         constructor(_document, _ngZone, _viewportRuler, _dragDropRegistry) {
             this._document = _document;
             this._ngZone = _ngZone;
@@ -2282,15 +2298,18 @@ let DragDrop = /** @class */ (() => {
         createDropList(element) {
             return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
         }
-    };
+    }
+    DragDrop.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    DragDrop.ctorParameters = () => [
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: NgZone },
+        { type: ViewportRuler },
+        { type: DragDropRegistry }
+    ];
     DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
-    DragDrop = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(DOCUMENT)),
-        __metadata("design:paramtypes", [Object, NgZone,
-            ViewportRuler,
-            DragDropRegistry])
-    ], DragDrop);
     return DragDrop;
 })();
 
@@ -2326,7 +2345,7 @@ const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
  */
 /** Handle that can be used to drag and CdkDrag instance. */
 let CdkDragHandle = /** @class */ (() => {
-    let CdkDragHandle = class CdkDragHandle {
+    class CdkDragHandle {
         constructor(element, parentDrag) {
             this.element = element;
             /** Emits when the state of the handle has changed. */
@@ -2344,22 +2363,23 @@ let CdkDragHandle = /** @class */ (() => {
         ngOnDestroy() {
             this._stateChanges.complete();
         }
+    }
+    CdkDragHandle.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragHandle.ctorParameters = () => [
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
+    ];
+    CdkDragHandle.propDecorators = {
+        disabled: [{ type: Input, args: ['cdkDragHandleDisabled',] }]
     };
-    __decorate([
-        Input('cdkDragHandleDisabled'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkDragHandle.prototype, "disabled", null);
-    CdkDragHandle = __decorate([
-        Directive({
-            selector: '[cdkDragHandle]',
-            host: {
-                'class': 'cdk-drag-handle'
-            }
-        }),
-        __param(1, Inject(CDK_DRAG_PARENT)), __param(1, Optional()),
-        __metadata("design:paramtypes", [ElementRef, Object])
-    ], CdkDragHandle);
     return CdkDragHandle;
 })();
 
@@ -2375,21 +2395,23 @@ let CdkDragHandle = /** @class */ (() => {
  * it is being dragged. The placeholder is displayed in place of the element being dragged.
  */
 let CdkDragPlaceholder = /** @class */ (() => {
-    let CdkDragPlaceholder = class CdkDragPlaceholder {
+    class CdkDragPlaceholder {
         constructor(templateRef) {
             this.templateRef = templateRef;
         }
+    }
+    CdkDragPlaceholder.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragPlaceholder.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: Input }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], CdkDragPlaceholder.prototype, "data", void 0);
-    CdkDragPlaceholder = __decorate([
-        Directive({
-            selector: 'ng-template[cdkDragPlaceholder]'
-        }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkDragPlaceholder);
     return CdkDragPlaceholder;
 })();
 
@@ -2405,7 +2427,7 @@ let CdkDragPlaceholder = /** @class */ (() => {
  * of a CdkDrag when it is being dragged.
  */
 let CdkDragPreview = /** @class */ (() => {
-    let CdkDragPreview = class CdkDragPreview {
+    class CdkDragPreview {
         constructor(templateRef) {
             this.templateRef = templateRef;
             this._matchSize = false;
@@ -2413,22 +2435,20 @@ let CdkDragPreview = /** @class */ (() => {
         /** Whether the preview should preserve the same size as the item that is being dragged. */
         get matchSize() { return this._matchSize; }
         set matchSize(value) { this._matchSize = coerceBooleanProperty(value); }
+    }
+    CdkDragPreview.decorators = [
+        { type: Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]'
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDragPreview.ctorParameters = () => [
+        { type: TemplateRef }
+    ];
+    CdkDragPreview.propDecorators = {
+        data: [{ type: Input }],
+        matchSize: [{ type: Input }]
     };
-    __decorate([
-        Input(),
-        __metadata("design:type", Object)
-    ], CdkDragPreview.prototype, "data", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkDragPreview.prototype, "matchSize", null);
-    CdkDragPreview = __decorate([
-        Directive({
-            selector: 'ng-template[cdkDragPreview]'
-        }),
-        __metadata("design:paramtypes", [TemplateRef])
-    ], CdkDragPreview);
     return CdkDragPreview;
 })();
 
@@ -2459,8 +2479,7 @@ const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
 const CDK_DROP_LIST = new InjectionToken('CDK_DROP_LIST');
 /** Element that can be moved inside a CdkDropList container. */
 let CdkDrag = /** @class */ (() => {
-    var CdkDrag_1;
-    let CdkDrag = CdkDrag_1 = class CdkDrag {
+    class CdkDrag {
         constructor(
         /** Element that the draggable is attached to. */
         element, 
@@ -2739,103 +2758,52 @@ let CdkDrag = /** @class */ (() => {
                 this.rootElementSelector = rootElementSelector;
             }
         }
+    }
+    CdkDrag.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDrag]',
+                    exportAs: 'cdkDrag',
+                    host: {
+                        'class': 'cdk-drag',
+                        '[class.cdk-drag-disabled]': 'disabled',
+                        '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
+                    },
+                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDrag.ctorParameters = () => [
+        { type: ElementRef },
+        { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_LIST,] }, { type: Optional }, { type: SkipSelf }] },
+        { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+        { type: NgZone },
+        { type: ViewContainerRef },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] },
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: DragDrop },
+        { type: ChangeDetectorRef }
+    ];
+    CdkDrag.propDecorators = {
+        _handles: [{ type: ContentChildren, args: [CdkDragHandle, { descendants: true },] }],
+        _previewTemplate: [{ type: ContentChild, args: [CdkDragPreview,] }],
+        _placeholderTemplate: [{ type: ContentChild, args: [CdkDragPlaceholder,] }],
+        data: [{ type: Input, args: ['cdkDragData',] }],
+        lockAxis: [{ type: Input, args: ['cdkDragLockAxis',] }],
+        rootElementSelector: [{ type: Input, args: ['cdkDragRootElement',] }],
+        boundaryElement: [{ type: Input, args: ['cdkDragBoundary',] }],
+        dragStartDelay: [{ type: Input, args: ['cdkDragStartDelay',] }],
+        freeDragPosition: [{ type: Input, args: ['cdkDragFreeDragPosition',] }],
+        disabled: [{ type: Input, args: ['cdkDragDisabled',] }],
+        constrainPosition: [{ type: Input, args: ['cdkDragConstrainPosition',] }],
+        previewClass: [{ type: Input, args: ['cdkDragPreviewClass',] }],
+        started: [{ type: Output, args: ['cdkDragStarted',] }],
+        released: [{ type: Output, args: ['cdkDragReleased',] }],
+        ended: [{ type: Output, args: ['cdkDragEnded',] }],
+        entered: [{ type: Output, args: ['cdkDragEntered',] }],
+        exited: [{ type: Output, args: ['cdkDragExited',] }],
+        dropped: [{ type: Output, args: ['cdkDragDropped',] }],
+        moved: [{ type: Output, args: ['cdkDragMoved',] }]
     };
-    __decorate([
-        ContentChildren(CdkDragHandle, { descendants: true }),
-        __metadata("design:type", QueryList)
-    ], CdkDrag.prototype, "_handles", void 0);
-    __decorate([
-        ContentChild(CdkDragPreview),
-        __metadata("design:type", CdkDragPreview)
-    ], CdkDrag.prototype, "_previewTemplate", void 0);
-    __decorate([
-        ContentChild(CdkDragPlaceholder),
-        __metadata("design:type", CdkDragPlaceholder)
-    ], CdkDrag.prototype, "_placeholderTemplate", void 0);
-    __decorate([
-        Input('cdkDragData'),
-        __metadata("design:type", Object)
-    ], CdkDrag.prototype, "data", void 0);
-    __decorate([
-        Input('cdkDragLockAxis'),
-        __metadata("design:type", String)
-    ], CdkDrag.prototype, "lockAxis", void 0);
-    __decorate([
-        Input('cdkDragRootElement'),
-        __metadata("design:type", String)
-    ], CdkDrag.prototype, "rootElementSelector", void 0);
-    __decorate([
-        Input('cdkDragBoundary'),
-        __metadata("design:type", Object)
-    ], CdkDrag.prototype, "boundaryElement", void 0);
-    __decorate([
-        Input('cdkDragStartDelay'),
-        __metadata("design:type", Object)
-    ], CdkDrag.prototype, "dragStartDelay", void 0);
-    __decorate([
-        Input('cdkDragFreeDragPosition'),
-        __metadata("design:type", Object)
-    ], CdkDrag.prototype, "freeDragPosition", void 0);
-    __decorate([
-        Input('cdkDragDisabled'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkDrag.prototype, "disabled", null);
-    __decorate([
-        Input('cdkDragConstrainPosition'),
-        __metadata("design:type", Function)
-    ], CdkDrag.prototype, "constrainPosition", void 0);
-    __decorate([
-        Input('cdkDragPreviewClass'),
-        __metadata("design:type", Object)
-    ], CdkDrag.prototype, "previewClass", void 0);
-    __decorate([
-        Output('cdkDragStarted'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "started", void 0);
-    __decorate([
-        Output('cdkDragReleased'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "released", void 0);
-    __decorate([
-        Output('cdkDragEnded'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "ended", void 0);
-    __decorate([
-        Output('cdkDragEntered'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "entered", void 0);
-    __decorate([
-        Output('cdkDragExited'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "exited", void 0);
-    __decorate([
-        Output('cdkDragDropped'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDrag.prototype, "dropped", void 0);
-    __decorate([
-        Output('cdkDragMoved'),
-        __metadata("design:type", Observable)
-    ], CdkDrag.prototype, "moved", void 0);
-    CdkDrag = CdkDrag_1 = __decorate([
-        Directive({
-            selector: '[cdkDrag]',
-            exportAs: 'cdkDrag',
-            host: {
-                'class': 'cdk-drag',
-                '[class.cdk-drag-disabled]': 'disabled',
-                '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
-            },
-            providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag_1 }]
-        }),
-        __param(1, Inject(CDK_DROP_LIST)), __param(1, Optional()), __param(1, SkipSelf()),
-        __param(2, Inject(DOCUMENT)),
-        __param(5, Optional()), __param(5, Inject(CDK_DRAG_CONFIG)),
-        __param(6, Optional()),
-        __metadata("design:paramtypes", [ElementRef, Object, Object, NgZone,
-            ViewContainerRef, Object, Directionality, DragDrop,
-            ChangeDetectorRef])
-    ], CdkDrag);
     return CdkDrag;
 })();
 /** Gets the closest ancestor of an element that matches a selector. */
@@ -2866,7 +2834,7 @@ function getClosestMatchingAncestor(element, selector) {
  * from `cdkDropList`.
  */
 let CdkDropListGroup = /** @class */ (() => {
-    let CdkDropListGroup = class CdkDropListGroup {
+    class CdkDropListGroup {
         constructor() {
             /** Drop lists registered inside the group. */
             this._items = new Set();
@@ -2880,18 +2848,16 @@ let CdkDropListGroup = /** @class */ (() => {
         ngOnDestroy() {
             this._items.clear();
         }
+    }
+    CdkDropListGroup.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
+                },] }
+    ];
+    CdkDropListGroup.propDecorators = {
+        disabled: [{ type: Input, args: ['cdkDropListGroupDisabled',] }]
     };
-    __decorate([
-        Input('cdkDropListGroupDisabled'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkDropListGroup.prototype, "disabled", null);
-    CdkDropListGroup = __decorate([
-        Directive({
-            selector: '[cdkDropListGroup]',
-            exportAs: 'cdkDropListGroup',
-        })
-    ], CdkDropListGroup);
     return CdkDropListGroup;
 })();
 
@@ -2907,8 +2873,7 @@ let _uniqueIdCounter = 0;
 const ɵ0 = undefined;
 /** Container that wraps a set of draggable items. */
 let CdkDropList = /** @class */ (() => {
-    var CdkDropList_1;
-    let CdkDropList = CdkDropList_1 = class CdkDropList {
+    class CdkDropList {
         constructor(
         /** Element that the drop list is attached to. */
         element, dragDrop, _changeDetectorRef, _dir, _group, 
@@ -2971,7 +2936,7 @@ let CdkDropList = /** @class */ (() => {
             };
             this._setupInputSyncSubscription(this._dropListRef);
             this._handleEvents(this._dropListRef);
-            CdkDropList_1._dropLists.push(this);
+            CdkDropList._dropLists.push(this);
             if (_group) {
                 _group._items.add(this);
             }
@@ -3012,9 +2977,9 @@ let CdkDropList = /** @class */ (() => {
             });
         }
         ngOnDestroy() {
-            const index = CdkDropList_1._dropLists.indexOf(this);
+            const index = CdkDropList._dropLists.indexOf(this);
             if (index > -1) {
-                CdkDropList_1._dropLists.splice(index, 1);
+                CdkDropList._dropLists.splice(index, 1);
             }
             if (this._group) {
                 this._group._items.delete(this);
@@ -3034,7 +2999,7 @@ let CdkDropList = /** @class */ (() => {
             ref.beforeStarted.subscribe(() => {
                 const siblings = coerceArray(this.connectedTo).map(drop => {
                     return typeof drop === 'string' ?
-                        CdkDropList_1._dropLists.find(list => list.id === drop) : drop;
+                        CdkDropList._dropLists.find(list => list.id === drop) : drop;
                 });
                 if (this._group) {
                     this._group._items.forEach(drop => {
@@ -3122,87 +3087,52 @@ let CdkDropList = /** @class */ (() => {
         _syncItemsWithRef() {
             this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
         }
-    };
+    }
     /** Keeps track of the drop lists that are currently on the page. */
     CdkDropList._dropLists = [];
-    __decorate([
-        Input('cdkDropListConnectedTo'),
-        __metadata("design:type", Object)
-    ], CdkDropList.prototype, "connectedTo", void 0);
-    __decorate([
-        Input('cdkDropListData'),
-        __metadata("design:type", Object)
-    ], CdkDropList.prototype, "data", void 0);
-    __decorate([
-        Input('cdkDropListOrientation'),
-        __metadata("design:type", String)
-    ], CdkDropList.prototype, "orientation", void 0);
-    __decorate([
-        Input(),
-        __metadata("design:type", String)
-    ], CdkDropList.prototype, "id", void 0);
-    __decorate([
-        Input('cdkDropListLockAxis'),
-        __metadata("design:type", String)
-    ], CdkDropList.prototype, "lockAxis", void 0);
-    __decorate([
-        Input('cdkDropListDisabled'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], CdkDropList.prototype, "disabled", null);
-    __decorate([
-        Input('cdkDropListSortingDisabled'),
-        __metadata("design:type", Boolean)
-    ], CdkDropList.prototype, "sortingDisabled", void 0);
-    __decorate([
-        Input('cdkDropListEnterPredicate'),
-        __metadata("design:type", Function)
-    ], CdkDropList.prototype, "enterPredicate", void 0);
-    __decorate([
-        Input('cdkDropListAutoScrollDisabled'),
-        __metadata("design:type", Boolean)
-    ], CdkDropList.prototype, "autoScrollDisabled", void 0);
-    __decorate([
-        Output('cdkDropListDropped'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDropList.prototype, "dropped", void 0);
-    __decorate([
-        Output('cdkDropListEntered'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDropList.prototype, "entered", void 0);
-    __decorate([
-        Output('cdkDropListExited'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDropList.prototype, "exited", void 0);
-    __decorate([
-        Output('cdkDropListSorted'),
-        __metadata("design:type", EventEmitter)
-    ], CdkDropList.prototype, "sorted", void 0);
-    CdkDropList = CdkDropList_1 = __decorate([
-        Directive({
-            selector: '[cdkDropList], cdk-drop-list',
-            exportAs: 'cdkDropList',
-            providers: [
-                // Prevent child drop lists from picking up the same group as their parent.
-                { provide: CdkDropListGroup, useValue: ɵ0 },
-                { provide: CDK_DROP_LIST, useExisting: CdkDropList_1 },
-            ],
-            host: {
-                'class': 'cdk-drop-list',
-                '[id]': 'id',
-                '[class.cdk-drop-list-disabled]': 'disabled',
-                '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
-                '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
-            }
-        }),
-        __param(3, Optional()),
-        __param(4, Optional()), __param(4, SkipSelf()),
-        __param(6, Optional()), __param(6, Inject(CDK_DRAG_CONFIG)),
-        __metadata("design:paramtypes", [ElementRef, DragDrop,
-            ChangeDetectorRef, Directionality,
-            CdkDropListGroup,
-            ScrollDispatcher, Object])
-    ], CdkDropList);
+    CdkDropList.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkDropList], cdk-drop-list',
+                    exportAs: 'cdkDropList',
+                    providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CdkDropListGroup, useValue: ɵ0 },
+                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
+                    ],
+                    host: {
+                        'class': 'cdk-drop-list',
+                        '[id]': 'id',
+                        '[class.cdk-drop-list-disabled]': 'disabled',
+                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
+                    }
+                },] }
+    ];
+    /** @nocollapse */
+    CdkDropList.ctorParameters = () => [
+        { type: ElementRef },
+        { type: DragDrop },
+        { type: ChangeDetectorRef },
+        { type: Directionality, decorators: [{ type: Optional }] },
+        { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: SkipSelf }] },
+        { type: ScrollDispatcher },
+        { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] }
+    ];
+    CdkDropList.propDecorators = {
+        connectedTo: [{ type: Input, args: ['cdkDropListConnectedTo',] }],
+        data: [{ type: Input, args: ['cdkDropListData',] }],
+        orientation: [{ type: Input, args: ['cdkDropListOrientation',] }],
+        id: [{ type: Input }],
+        lockAxis: [{ type: Input, args: ['cdkDropListLockAxis',] }],
+        disabled: [{ type: Input, args: ['cdkDropListDisabled',] }],
+        sortingDisabled: [{ type: Input, args: ['cdkDropListSortingDisabled',] }],
+        enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
+        autoScrollDisabled: [{ type: Input, args: ['cdkDropListAutoScrollDisabled',] }],
+        dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
+        entered: [{ type: Output, args: ['cdkDropListEntered',] }],
+        exited: [{ type: Output, args: ['cdkDropListExited',] }],
+        sorted: [{ type: Output, args: ['cdkDropListSorted',] }]
+    };
     return CdkDropList;
 })();
 
@@ -3214,32 +3144,32 @@ let CdkDropList = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let DragDropModule = /** @class */ (() => {
-    let DragDropModule = class DragDropModule {
-    };
-    DragDropModule = __decorate([
-        NgModule({
-            declarations: [
-                CdkDropList,
-                CdkDropListGroup,
-                CdkDrag,
-                CdkDragHandle,
-                CdkDragPreview,
-                CdkDragPlaceholder,
-            ],
-            exports: [
-                CdkScrollableModule,
-                CdkDropList,
-                CdkDropListGroup,
-                CdkDrag,
-                CdkDragHandle,
-                CdkDragPreview,
-                CdkDragPlaceholder,
-            ],
-            providers: [
-                DragDrop,
-            ]
-        })
-    ], DragDropModule);
+    class DragDropModule {
+    }
+    DragDropModule.decorators = [
+        { type: NgModule, args: [{
+                    declarations: [
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    exports: [
+                        CdkScrollableModule,
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    providers: [
+                        DragDrop,
+                    ]
+                },] }
+    ];
     return DragDropModule;
 })();
 

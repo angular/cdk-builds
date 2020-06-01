@@ -1,7 +1,13 @@
-import { __decorate, __param, __metadata } from 'tslib';
-import { ɵɵdefineInjectable, ɵɵinject, PLATFORM_ID, Injectable, Inject, NgModule } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, ɵɵdefineInjectable, ɵɵinject, NgModule } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
 let hasV8BreakIterator;
@@ -21,7 +27,7 @@ catch (_a) {
  * checking browser-specific global properties.
  */
 let Platform = /** @class */ (() => {
-    let Platform = class Platform {
+    class Platform {
         constructor(_platformId) {
             this._platformId = _platformId;
             // We want to use the Angular platform check because if the Document is shimmed
@@ -61,13 +67,15 @@ let Platform = /** @class */ (() => {
             /** Whether the current browser is Safari. */
             this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
         }
-    };
+    }
+    Platform.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    Platform.ctorParameters = () => [
+        { type: Object, decorators: [{ type: Inject, args: [PLATFORM_ID,] }] }
+    ];
     Platform.ɵprov = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID)); }, token: Platform, providedIn: "root" });
-    Platform = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __param(0, Inject(PLATFORM_ID)),
-        __metadata("design:paramtypes", [Object])
-    ], Platform);
     return Platform;
 })();
 
@@ -79,11 +87,11 @@ let Platform = /** @class */ (() => {
  * found in the LICENSE file at https://angular.io/license
  */
 let PlatformModule = /** @class */ (() => {
-    let PlatformModule = class PlatformModule {
-    };
-    PlatformModule = __decorate([
-        NgModule({})
-    ], PlatformModule);
+    class PlatformModule {
+    }
+    PlatformModule.decorators = [
+        { type: NgModule, args: [{},] }
+    ];
     return PlatformModule;
 })();
 

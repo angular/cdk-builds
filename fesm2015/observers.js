@@ -1,28 +1,34 @@
-import { __decorate, __metadata } from 'tslib';
 import { coerceElement, coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Input, Directive, ElementRef, NgZone, NgModule } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private
  */
 let MutationObserverFactory = /** @class */ (() => {
-    let MutationObserverFactory = class MutationObserverFactory {
+    class MutationObserverFactory {
         create(callback) {
             return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
         }
-    };
+    }
+    MutationObserverFactory.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
     MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
-    MutationObserverFactory = __decorate([
-        Injectable({ providedIn: 'root' })
-    ], MutationObserverFactory);
     return MutationObserverFactory;
 })();
 /** An injectable service that allows watching elements for changes to their content. */
 let ContentObserver = /** @class */ (() => {
-    let ContentObserver = class ContentObserver {
+    class ContentObserver {
         constructor(_mutationObserverFactory) {
             this._mutationObserverFactory = _mutationObserverFactory;
             /** Keeps track of the existing MutationObservers so they can be reused. */
@@ -87,12 +93,15 @@ let ContentObserver = /** @class */ (() => {
                 this._observedElements.delete(element);
             }
         }
-    };
+    }
+    ContentObserver.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    ContentObserver.ctorParameters = () => [
+        { type: MutationObserverFactory }
+    ];
     ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
-    ContentObserver = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [MutationObserverFactory])
-    ], ContentObserver);
     return ContentObserver;
 })();
 /**
@@ -100,7 +109,7 @@ let ContentObserver = /** @class */ (() => {
  * its associated element has changed.
  */
 let CdkObserveContent = /** @class */ (() => {
-    let CdkObserveContent = class CdkObserveContent {
+    class CdkObserveContent {
         constructor(_contentObserver, _elementRef, _ngZone) {
             this._contentObserver = _contentObserver;
             this._elementRef = _elementRef;
@@ -150,42 +159,36 @@ let CdkObserveContent = /** @class */ (() => {
                 this._currentSubscription.unsubscribe();
             }
         }
+    }
+    CdkObserveContent.decorators = [
+        { type: Directive, args: [{
+                    selector: '[cdkObserveContent]',
+                    exportAs: 'cdkObserveContent',
+                },] }
+    ];
+    /** @nocollapse */
+    CdkObserveContent.ctorParameters = () => [
+        { type: ContentObserver },
+        { type: ElementRef },
+        { type: NgZone }
+    ];
+    CdkObserveContent.propDecorators = {
+        event: [{ type: Output, args: ['cdkObserveContent',] }],
+        disabled: [{ type: Input, args: ['cdkObserveContentDisabled',] }],
+        debounce: [{ type: Input }]
     };
-    __decorate([
-        Output('cdkObserveContent'),
-        __metadata("design:type", Object)
-    ], CdkObserveContent.prototype, "event", void 0);
-    __decorate([
-        Input('cdkObserveContentDisabled'),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], CdkObserveContent.prototype, "disabled", null);
-    __decorate([
-        Input(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], CdkObserveContent.prototype, "debounce", null);
-    CdkObserveContent = __decorate([
-        Directive({
-            selector: '[cdkObserveContent]',
-            exportAs: 'cdkObserveContent',
-        }),
-        __metadata("design:paramtypes", [ContentObserver,
-            ElementRef,
-            NgZone])
-    ], CdkObserveContent);
     return CdkObserveContent;
 })();
 let ObserversModule = /** @class */ (() => {
-    let ObserversModule = class ObserversModule {
-    };
-    ObserversModule = __decorate([
-        NgModule({
-            exports: [CdkObserveContent],
-            declarations: [CdkObserveContent],
-            providers: [MutationObserverFactory]
-        })
-    ], ObserversModule);
+    class ObserversModule {
+    }
+    ObserversModule.decorators = [
+        { type: NgModule, args: [{
+                    exports: [CdkObserveContent],
+                    declarations: [CdkObserveContent],
+                    providers: [MutationObserverFactory]
+                },] }
+    ];
     return ObserversModule;
 })();
 
