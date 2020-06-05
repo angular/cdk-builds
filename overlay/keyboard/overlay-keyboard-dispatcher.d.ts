@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, OnDestroy, Optional } from '@angular/core';
-import { OverlayRef } from '../overlay-ref';
+import { OverlayReference } from '../overlay-reference';
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -14,15 +14,15 @@ import { OverlayRef } from '../overlay-ref';
  */
 export declare class OverlayKeyboardDispatcher implements OnDestroy {
     /** Currently attached overlays in the order they were attached. */
-    _attachedOverlays: OverlayRef[];
+    _attachedOverlays: OverlayReference[];
     private _document;
     private _isAttached;
     constructor(document: any);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayRef): void;
+    add(overlayRef: OverlayReference): void;
     /** Remove an overlay from the list of attached overlay refs. */
-    remove(overlayRef: OverlayRef): void;
+    remove(overlayRef: OverlayReference): void;
     /** Detaches the global keyboard event listener. */
     private _detach;
     /** Keyboard event listener that will be attached to the body. */
