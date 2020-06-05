@@ -123,10 +123,10 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0) {
     /* relatedTarget */ null);
     // `initMouseEvent` doesn't allow us to pass the `buttons` and
     // defaults it to 0 which looks like a fake event.
-    Object.defineProperty(event, 'buttons', { get: () => 1 });
+    defineReadonlyEventProperty(event, 'buttons', 1);
     // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
     event.preventDefault = function () {
-        Object.defineProperty(event, 'defaultPrevented', { get: () => true });
+        defineReadonlyEventProperty(event, 'defaultPrevented', true);
         return originalPreventDefault();
     };
     return event;
@@ -158,11 +158,9 @@ function createTouchEvent(type, pageX = 0, pageY = 0) {
     event.initUIEvent(type, true, true, window, 0);
     // Most of the browsers don't have a "initTouchEvent" method that can be used to define
     // the touch details.
-    Object.defineProperties(event, {
-        touches: { value: [touchDetails] },
-        targetTouches: { value: [touchDetails] },
-        changedTouches: { value: [touchDetails] }
-    });
+    defineReadonlyEventProperty(event, 'touches', [touchDetails]);
+    defineReadonlyEventProperty(event, 'targetTouches', [touchDetails]);
+    defineReadonlyEventProperty(event, 'changedTouches', [touchDetails]);
     return event;
 }
 /**
@@ -196,18 +194,16 @@ function createKeyboardEvent(type, keyCode = 0, key = '', target, modifiers = {}
     }
     // Webkit Browsers don't set the keyCode when calling the init function.
     // See related bug https://bugs.webkit.org/show_bug.cgi?id=16735
-    Object.defineProperties(event, {
-        keyCode: { get: () => keyCode },
-        key: { get: () => key },
-        target: { get: () => target },
-        ctrlKey: { get: () => !!modifiers.control },
-        altKey: { get: () => !!modifiers.alt },
-        shiftKey: { get: () => !!modifiers.shift },
-        metaKey: { get: () => !!modifiers.meta }
-    });
+    defineReadonlyEventProperty(event, 'keyCode', keyCode);
+    defineReadonlyEventProperty(event, 'key', key);
+    defineReadonlyEventProperty(event, 'target', target);
+    defineReadonlyEventProperty(event, 'ctrlKey', !!modifiers.control);
+    defineReadonlyEventProperty(event, 'altKey', !!modifiers.alt);
+    defineReadonlyEventProperty(event, 'shiftKey', !!modifiers.shift);
+    defineReadonlyEventProperty(event, 'metaKey', !!modifiers.meta);
     // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
     event.preventDefault = function () {
-        Object.defineProperty(event, 'defaultPrevented', { get: () => true });
+        defineReadonlyEventProperty(event, 'defaultPrevented', true);
         return originalPreventDefault.apply(this, arguments);
     };
     return event;
@@ -220,6 +216,13 @@ function createFakeEvent(type, canBubble = false, cancelable = true) {
     const event = document.createEvent('Event');
     event.initEvent(type, canBubble, cancelable);
     return event;
+}
+/**
+ * Defines a readonly property on the given event object. Readonly properties on an event object
+ * are always set as configurable as that matches default readonly properties for DOM event objects.
+ */
+function defineReadonlyEventProperty(event, propertyName, value) {
+    Object.defineProperty(event, propertyName, { get: () => value, configurable: true });
 }
 
 /**
