@@ -898,6 +898,19 @@
                 });
             });
         };
+        UnitTestElement.prototype.setInputValue = function (value) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
+                            this.element.value = value;
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
         UnitTestElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var elementPrototype;
