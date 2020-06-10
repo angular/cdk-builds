@@ -2042,12 +2042,16 @@ let CdkMonitorFocus = /** @class */ (() => {
             this._elementRef = _elementRef;
             this._focusMonitor = _focusMonitor;
             this.cdkFocusChange = new EventEmitter();
+        }
+        ngAfterViewInit() {
             this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
                 .subscribe(origin => this.cdkFocusChange.emit(origin));
         }
         ngOnDestroy() {
             this._focusMonitor.stopMonitoring(this._elementRef);
-            this._monitorSubscription.unsubscribe();
+            if (this._monitorSubscription) {
+                this._monitorSubscription.unsubscribe();
+            }
         }
     }
     CdkMonitorFocus.decorators = [
