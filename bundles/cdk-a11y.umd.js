@@ -2308,16 +2308,20 @@
      */
     var CdkMonitorFocus = /** @class */ (function () {
         function CdkMonitorFocus(_elementRef, _focusMonitor) {
-            var _this = this;
             this._elementRef = _elementRef;
             this._focusMonitor = _focusMonitor;
             this.cdkFocusChange = new i0.EventEmitter();
+        }
+        CdkMonitorFocus.prototype.ngAfterViewInit = function () {
+            var _this = this;
             this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
                 .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
-        }
+        };
         CdkMonitorFocus.prototype.ngOnDestroy = function () {
             this._focusMonitor.stopMonitoring(this._elementRef);
-            this._monitorSubscription.unsubscribe();
+            if (this._monitorSubscription) {
+                this._monitorSubscription.unsubscribe();
+            }
         };
         CdkMonitorFocus.decorators = [
             { type: i0.Directive, args: [{

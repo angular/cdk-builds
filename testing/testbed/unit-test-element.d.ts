@@ -25,6 +25,7 @@ export declare class UnitTestElement implements TestElement {
     hasClass(name: string): Promise<boolean>;
     getDimensions(): Promise<ElementDimensions>;
     getProperty(name: string): Promise<any>;
+    setInputValue(value: string): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
 }

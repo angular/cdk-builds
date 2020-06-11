@@ -453,6 +453,13 @@
                 });
             });
         };
+        ProtractorElement.prototype.setInputValue = function (value) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, protractor.browser.executeScript("arguments[0].value = arguments[1]", this.element, value)];
+                });
+            });
+        };
         ProtractorElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
