@@ -89,6 +89,11 @@ export interface TestElement {
     getDimensions(): Promise<ElementDimensions>;
     /** Gets the value of a property of an element. */
     getProperty(name: string): Promise<any>;
+    /**
+     * Sets the value of a property of an input.
+     * @breaking-change 11.0.0 To become a required method.
+     */
+    setInputValue?(value: string): Promise<void>;
     /** Checks whether this element matches the given selector. */
     matchesSelector(selector: string): Promise<boolean>;
     /** Checks whether the element is focused. */

@@ -521,6 +521,12 @@ class UnitTestElement {
             return this.element[name];
         });
     }
+    setInputValue(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            this.element.value = value;
+        });
+    }
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();

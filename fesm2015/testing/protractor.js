@@ -153,6 +153,11 @@ class ProtractorElement {
             return browser.executeScript(`return arguments[0][arguments[1]]`, this.element, name);
         });
     }
+    setInputValue(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return browser.executeScript(`arguments[0].value = arguments[1]`, this.element, value);
+        });
+    }
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(`
