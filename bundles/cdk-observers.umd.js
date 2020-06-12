@@ -21,10 +21,10 @@
         MutationObserverFactory.prototype.create = function (callback) {
             return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
         };
+        MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
         MutationObserverFactory.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
         return MutationObserverFactory;
     }());
     /** An injectable service that allows watching elements for changes to their content. */
@@ -95,14 +95,13 @@
                 this._observedElements.delete(element);
             }
         };
+        ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
         ContentObserver.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         ContentObserver.ctorParameters = function () { return [
             { type: MutationObserverFactory }
         ]; };
-        ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
         return ContentObserver;
     }());
     /**
@@ -174,7 +173,6 @@
                         exportAs: 'cdkObserveContent',
                     },] }
         ];
-        /** @nocollapse */
         CdkObserveContent.ctorParameters = function () { return [
             { type: ContentObserver },
             { type: i0.ElementRef },

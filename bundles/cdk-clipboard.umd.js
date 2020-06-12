@@ -110,14 +110,13 @@
         Clipboard.prototype.beginCopy = function (text) {
             return new PendingCopy(text, this._document);
         };
+        Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
         Clipboard.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         Clipboard.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
         return Clipboard;
     }());
 
@@ -199,7 +198,6 @@
                         }
                     },] }
         ];
-        /** @nocollapse */
         CdkCopyToClipboard.ctorParameters = function () { return [
             { type: Clipboard },
             { type: i0.NgZone },

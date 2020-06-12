@@ -317,7 +317,6 @@
         CdkCellDef.decorators = [
             { type: core.Directive, args: [{ selector: '[cdkCellDef]' },] }
         ];
-        /** @nocollapse */
         CdkCellDef.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -334,7 +333,6 @@
         CdkHeaderCellDef.decorators = [
             { type: core.Directive, args: [{ selector: '[cdkHeaderCellDef]' },] }
         ];
-        /** @nocollapse */
         CdkHeaderCellDef.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -351,7 +349,6 @@
         CdkFooterCellDef.decorators = [
             { type: core.Directive, args: [{ selector: '[cdkFooterCellDef]' },] }
         ];
-        /** @nocollapse */
         CdkFooterCellDef.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -417,7 +414,6 @@
                         providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
                     },] }
         ];
-        /** @nocollapse */
         CdkColumnDef.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
         ]; };
@@ -453,7 +449,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkHeaderCell.ctorParameters = function () { return [
             { type: CdkColumnDef },
             { type: core.ElementRef }
@@ -475,7 +470,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkFooterCell.ctorParameters = function () { return [
             { type: CdkColumnDef },
             { type: core.ElementRef }
@@ -497,7 +491,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkCell.ctorParameters = function () { return [
             { type: CdkColumnDef },
             { type: core.ElementRef }
@@ -558,7 +551,6 @@
         BaseRowDef.decorators = [
             { type: core.Directive }
         ];
-        /** @nocollapse */
         BaseRowDef.ctorParameters = function () { return [
             { type: core.TemplateRef },
             { type: core.IterableDiffers }
@@ -597,7 +589,6 @@
                         inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
                     },] }
         ];
-        /** @nocollapse */
         CdkHeaderRowDef.ctorParameters = function () { return [
             { type: core.TemplateRef },
             { type: core.IterableDiffers },
@@ -637,7 +628,6 @@
                         inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
                     },] }
         ];
-        /** @nocollapse */
         CdkFooterRowDef.ctorParameters = function () { return [
             { type: core.TemplateRef },
             { type: core.IterableDiffers },
@@ -665,7 +655,6 @@
                         inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
                     },] }
         ];
-        /** @nocollapse */
         CdkRowDef.ctorParameters = function () { return [
             { type: core.TemplateRef },
             { type: core.IterableDiffers },
@@ -700,7 +689,6 @@
         CdkCellOutlet.decorators = [
             { type: core.Directive, args: [{ selector: '[cdkCellOutlet]' },] }
         ];
-        /** @nocollapse */
         CdkCellOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef }
         ]; };
@@ -722,7 +710,7 @@
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default,
                         encapsulation: core.ViewEncapsulation.None
-                    }] }
+                    },] }
         ];
         return CdkHeaderRow;
     }());
@@ -742,7 +730,7 @@
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default,
                         encapsulation: core.ViewEncapsulation.None
-                    }] }
+                    },] }
         ];
         return CdkFooterRow;
     }());
@@ -762,7 +750,7 @@
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default,
                         encapsulation: core.ViewEncapsulation.None
-                    }] }
+                    },] }
         ];
         return CdkRow;
     }());
@@ -776,7 +764,6 @@
                         selector: 'ng-template[cdkNoDataRow]'
                     },] }
         ];
-        /** @nocollapse */
         CdkNoDataRow.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -1164,7 +1151,6 @@
         DataRowOutlet.decorators = [
             { type: core.Directive, args: [{ selector: '[rowOutlet]' },] }
         ];
-        /** @nocollapse */
         DataRowOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef },
             { type: core.ElementRef }
@@ -1183,7 +1169,6 @@
         HeaderRowOutlet.decorators = [
             { type: core.Directive, args: [{ selector: '[headerRowOutlet]' },] }
         ];
-        /** @nocollapse */
         HeaderRowOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef },
             { type: core.ElementRef }
@@ -1202,7 +1187,6 @@
         FooterRowOutlet.decorators = [
             { type: core.Directive, args: [{ selector: '[footerRowOutlet]' },] }
         ];
-        /** @nocollapse */
         FooterRowOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef },
             { type: core.ElementRef }
@@ -1222,7 +1206,6 @@
         NoDataRowOutlet.decorators = [
             { type: core.Directive, args: [{ selector: '[noDataRowOutlet]' },] }
         ];
-        /** @nocollapse */
         NoDataRowOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef },
             { type: core.ElementRef }
@@ -2039,9 +2022,8 @@
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default,
                         providers: [{ provide: CDK_TABLE, useExisting: CdkTable }]
-                    }] }
+                    },] }
         ];
-        /** @nocollapse */
         CdkTable.ctorParameters = function () { return [
             { type: core.IterableDiffers },
             { type: core.ChangeDetectorRef },
@@ -2172,9 +2154,8 @@
                         // an ExpressionChangedAfterItHasBeenCheckedError).
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default
-                    }] }
+                    },] }
         ];
-        /** @nocollapse */
         CdkTextColumn.ctorParameters = function () { return [
             { type: CdkTable, decorators: [{ type: core.Optional }] },
             { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [TEXT_COLUMN_OPTIONS,] }] }

@@ -78,15 +78,14 @@
             var _this = this;
             this._monitoredElements.forEach(function (_info, element) { return _this.stopMonitoring(element); });
         };
+        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
         AutofillMonitor.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         AutofillMonitor.ctorParameters = function () { return [
             { type: i1.Platform },
             { type: i0.NgZone }
         ]; };
-        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
         return AutofillMonitor;
     }());
     /** A directive that can be used to monitor the autofill state of an input. */
@@ -111,7 +110,6 @@
                         selector: '[cdkAutofill]',
                     },] }
         ];
-        /** @nocollapse */
         CdkAutofill.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: AutofillMonitor }
@@ -367,7 +365,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkTextareaAutosize.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: i1.Platform },

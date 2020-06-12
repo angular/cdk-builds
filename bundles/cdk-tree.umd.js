@@ -432,7 +432,6 @@
                         selector: '[cdkTreeNodeOutlet]'
                     },] }
         ];
-        /** @nocollapse */
         CdkTreeNodeOutlet.ctorParameters = function () { return [
             { type: core.ViewContainerRef },
             { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TREE_NODE_OUTLET_NODE,] }, { type: core.Optional }] }
@@ -471,7 +470,6 @@
                         ],
                     },] }
         ];
-        /** @nocollapse */
         CdkTreeNodeDef.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -715,9 +713,8 @@
                         // declared elsewhere, they are checked when their declaration points are checked.
                         // tslint:disable-next-line:validate-decorators
                         changeDetection: core.ChangeDetectionStrategy.Default
-                    }] }
+                    },] }
         ];
-        /** @nocollapse */
         CdkTree.ctorParameters = function () { return [
             { type: core.IterableDiffers },
             { type: core.ChangeDetectorRef }
@@ -833,7 +830,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkTreeNode.ctorParameters = function () { return [
             { type: core.ElementRef },
             { type: CdkTree }
@@ -926,7 +922,6 @@
                         ]
                     },] }
         ];
-        /** @nocollapse */
         CdkNestedTreeNode.ctorParameters = function () { return [
             { type: core.ElementRef },
             { type: CdkTree },
@@ -1044,7 +1039,6 @@
                         selector: '[cdkTreeNodePadding]',
                     },] }
         ];
-        /** @nocollapse */
         CdkTreeNodePadding.ctorParameters = function () { return [
             { type: CdkTreeNode },
             { type: CdkTree },
@@ -1096,7 +1090,6 @@
         CdkTreeNodeToggle.decorators = [
             { type: core.Directive, args: [{ selector: '[cdkTreeNodeToggle]' },] }
         ];
-        /** @nocollapse */
         CdkTreeNodeToggle.ctorParameters = function () { return [
             { type: CdkTree },
             { type: CdkTreeNode }

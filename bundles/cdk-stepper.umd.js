@@ -27,7 +27,6 @@
                         },
                     },] }
         ];
-        /** @nocollapse */
         CdkStepHeader.ctorParameters = function () { return [
             { type: core.ElementRef }
         ]; };
@@ -50,7 +49,6 @@
                         selector: '[cdkStepLabel]',
                     },] }
         ];
-        /** @nocollapse */
         CdkStepLabel.ctorParameters = function () { return [
             { type: core.TemplateRef }
         ]; };
@@ -180,9 +178,8 @@
                         template: '<ng-template><ng-content></ng-content></ng-template>',
                         encapsulation: core.ViewEncapsulation.None,
                         changeDetection: core.ChangeDetectionStrategy.OnPush
-                    }] }
+                    },] }
         ];
-        /** @nocollapse */
         CdkStep.ctorParameters = function () { return [
             { type: CdkStepper, decorators: [{ type: core.Inject, args: [core.forwardRef(function () { return CdkStepper; }),] }] },
             { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
@@ -446,7 +443,6 @@
                         exportAs: 'cdkStepper',
                     },] }
         ];
-        /** @nocollapse */
         CdkStepper.ctorParameters = function () { return [
             { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
             { type: core.ChangeDetectorRef },
@@ -494,7 +490,6 @@
                         }
                     },] }
         ];
-        /** @nocollapse */
         CdkStepperNext.ctorParameters = function () { return [
             { type: CdkStepper }
         ]; };
@@ -527,7 +522,6 @@
                         }
                     },] }
         ];
-        /** @nocollapse */
         CdkStepperPrevious.ctorParameters = function () { return [
             { type: CdkStepper }
         ]; };

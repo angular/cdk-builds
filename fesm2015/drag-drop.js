@@ -1,4 +1,4 @@
-import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, Directive, ElementRef, Optional, Input, TemplateRef, EventEmitter, isDevMode, SkipSelf, ViewContainerRef, ChangeDetectorRef, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, ElementRef, Optional, Input, TemplateRef, EventEmitter, isDevMode, SkipSelf, ViewContainerRef, ChangeDetectorRef, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
@@ -2248,15 +2248,14 @@ let DragDropRegistry = /** @class */ (() => {
             this._globalListeners.clear();
         }
     }
+    DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     DragDropRegistry.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     DragDropRegistry.ctorParameters = () => [
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ];
-    DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     return DragDropRegistry;
 })();
 
@@ -2299,17 +2298,16 @@ let DragDrop = /** @class */ (() => {
             return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
         }
     }
+    DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     DragDrop.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     DragDrop.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: NgZone },
         { type: ViewportRuler },
         { type: DragDropRegistry }
     ];
-    DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     return DragDrop;
 })();
 
@@ -2372,7 +2370,6 @@ let CdkDragHandle = /** @class */ (() => {
                     }
                 },] }
     ];
-    /** @nocollapse */
     CdkDragHandle.ctorParameters = () => [
         { type: ElementRef },
         { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
@@ -2405,7 +2402,6 @@ let CdkDragPlaceholder = /** @class */ (() => {
                     selector: 'ng-template[cdkDragPlaceholder]'
                 },] }
     ];
-    /** @nocollapse */
     CdkDragPlaceholder.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -2441,7 +2437,6 @@ let CdkDragPreview = /** @class */ (() => {
                     selector: 'ng-template[cdkDragPreview]'
                 },] }
     ];
-    /** @nocollapse */
     CdkDragPreview.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -2771,7 +2766,6 @@ let CdkDrag = /** @class */ (() => {
                     providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
                 },] }
     ];
-    /** @nocollapse */
     CdkDrag.ctorParameters = () => [
         { type: ElementRef },
         { type: undefined, decorators: [{ type: Inject, args: [CDK_DROP_LIST,] }, { type: Optional }, { type: SkipSelf }] },
@@ -3108,7 +3102,6 @@ let CdkDropList = /** @class */ (() => {
                     }
                 },] }
     ];
-    /** @nocollapse */
     CdkDropList.ctorParameters = () => [
         { type: ElementRef },
         { type: DragDrop },

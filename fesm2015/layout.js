@@ -1,4 +1,4 @@
-import { NgModule, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone } from '@angular/core';
+import { NgModule, ɵɵdefineInjectable, ɵɵinject, Injectable, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
@@ -55,14 +55,13 @@ let MediaMatcher = /** @class */ (() => {
             return this._matchMedia(query);
         }
     }
+    MediaMatcher.ɵprov = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
     MediaMatcher.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     MediaMatcher.ctorParameters = () => [
         { type: Platform }
     ];
-    MediaMatcher.ɵprov = ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(ɵɵinject(Platform)); }, token: MediaMatcher, providedIn: "root" });
     return MediaMatcher;
 })();
 /**
@@ -183,15 +182,14 @@ let BreakpointObserver = /** @class */ (() => {
             return output;
         }
     }
+    BreakpointObserver.ɵprov = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     BreakpointObserver.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     BreakpointObserver.ctorParameters = () => [
         { type: MediaMatcher },
         { type: NgZone }
     ];
-    BreakpointObserver.ɵprov = ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(ɵɵinject(MediaMatcher), ɵɵinject(NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     return BreakpointObserver;
 })();
 /**

@@ -375,7 +375,6 @@ let CdkPortal = /** @class */ (() => {
                     exportAs: 'cdkPortal',
                 },] }
     ];
-    /** @nocollapse */
     CdkPortal.ctorParameters = () => [
         { type: TemplateRef },
         { type: ViewContainerRef }
@@ -543,7 +542,6 @@ let CdkPortalOutlet = /** @class */ (() => {
                     inputs: ['portal: cdkPortalOutlet']
                 },] }
     ];
-    /** @nocollapse */
     CdkPortalOutlet.ctorParameters = () => [
         { type: ComponentFactoryResolver },
         { type: ViewContainerRef },

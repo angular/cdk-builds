@@ -642,7 +642,6 @@
                         exportAs: 'cdkPortal',
                     },] }
         ];
-        /** @nocollapse */
         CdkPortal.ctorParameters = function () { return [
             { type: core.TemplateRef },
             { type: core.ViewContainerRef }
@@ -821,7 +820,6 @@
                         inputs: ['portal: cdkPortalOutlet']
                     },] }
         ];
-        /** @nocollapse */
         CdkPortalOutlet.ctorParameters = function () { return [
             { type: core.ComponentFactoryResolver },
             { type: core.ViewContainerRef },

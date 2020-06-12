@@ -1,5 +1,5 @@
 import { isObservable, of, Subject } from 'rxjs';
-import { Injectable, ɵɵdefineInjectable } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable } from '@angular/core';
 
 /**
  * @license
@@ -253,10 +253,10 @@ let UniqueSelectionDispatcher = /** @class */ (() => {
             this._listeners = [];
         }
     }
+    UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
     UniqueSelectionDispatcher.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
     return UniqueSelectionDispatcher;
 })();
 
