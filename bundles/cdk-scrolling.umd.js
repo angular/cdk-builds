@@ -352,16 +352,15 @@
                 this._globalSubscription = null;
             }
         };
+        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
         ScrollDispatcher.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         ScrollDispatcher.ctorParameters = function () { return [
             { type: i0.NgZone },
             { type: i1.Platform },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
         return ScrollDispatcher;
     }());
 
@@ -529,7 +528,6 @@
                         selector: '[cdk-scrollable], [cdkScrollable]'
                     },] }
         ];
-        /** @nocollapse */
         CdkScrollable.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: ScrollDispatcher },
@@ -881,16 +879,15 @@
                 { width: window.innerWidth, height: window.innerHeight } :
                 { width: 0, height: 0 };
         };
+        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
         ViewportRuler.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         ViewportRuler.ctorParameters = function () { return [
             { type: i1.Platform },
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
         return ViewportRuler;
     }());
 
@@ -1261,9 +1258,8 @@
                                 useExisting: CdkVirtualScrollViewport,
                             }],
                         styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}\n"]
-                    }] }
+                    },] }
         ];
-        /** @nocollapse */
         CdkVirtualScrollViewport.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: i0.ChangeDetectorRef },
@@ -1604,7 +1600,6 @@
                         selector: '[cdkVirtualFor][cdkVirtualForOf]',
                     },] }
         ];
-        /** @nocollapse */
         CdkVirtualForOf.ctorParameters = function () { return [
             { type: i0.ViewContainerRef },
             { type: i0.TemplateRef },

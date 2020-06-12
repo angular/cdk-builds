@@ -84,7 +84,6 @@ let CdkCellDef = /** @class */ (() => {
     CdkCellDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkCellDef]' },] }
     ];
-    /** @nocollapse */
     CdkCellDef.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -103,7 +102,6 @@ let CdkHeaderCellDef = /** @class */ (() => {
     CdkHeaderCellDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkHeaderCellDef]' },] }
     ];
-    /** @nocollapse */
     CdkHeaderCellDef.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -122,7 +120,6 @@ let CdkFooterCellDef = /** @class */ (() => {
     CdkFooterCellDef.decorators = [
         { type: Directive, args: [{ selector: '[cdkFooterCellDef]' },] }
     ];
-    /** @nocollapse */
     CdkFooterCellDef.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -177,7 +174,6 @@ let CdkColumnDef = /** @class */ (() => {
                     providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
                 },] }
     ];
-    /** @nocollapse */
     CdkColumnDef.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [CDK_TABLE,] }, { type: Optional }] }
     ];
@@ -213,7 +209,6 @@ let CdkHeaderCell = /** @class */ (() => {
                     },
                 },] }
     ];
-    /** @nocollapse */
     CdkHeaderCell.ctorParameters = () => [
         { type: CdkColumnDef },
         { type: ElementRef }
@@ -236,7 +231,6 @@ let CdkFooterCell = /** @class */ (() => {
                     },
                 },] }
     ];
-    /** @nocollapse */
     CdkFooterCell.ctorParameters = () => [
         { type: CdkColumnDef },
         { type: ElementRef }
@@ -259,7 +253,6 @@ let CdkCell = /** @class */ (() => {
                     },
                 },] }
     ];
-    /** @nocollapse */
     CdkCell.ctorParameters = () => [
         { type: CdkColumnDef },
         { type: ElementRef }
@@ -322,7 +315,6 @@ let BaseRowDef = /** @class */ (() => {
     BaseRowDef.decorators = [
         { type: Directive }
     ];
-    /** @nocollapse */
     BaseRowDef.ctorParameters = () => [
         { type: TemplateRef },
         { type: IterableDiffers }
@@ -356,7 +348,6 @@ let CdkHeaderRowDef = /** @class */ (() => {
                     inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
                 },] }
     ];
-    /** @nocollapse */
     CdkHeaderRowDef.ctorParameters = () => [
         { type: TemplateRef },
         { type: IterableDiffers },
@@ -391,7 +382,6 @@ let CdkFooterRowDef = /** @class */ (() => {
                     inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
                 },] }
     ];
-    /** @nocollapse */
     CdkFooterRowDef.ctorParameters = () => [
         { type: TemplateRef },
         { type: IterableDiffers },
@@ -419,7 +409,6 @@ let CdkRowDef = /** @class */ (() => {
                     inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
                 },] }
     ];
-    /** @nocollapse */
     CdkRowDef.ctorParameters = () => [
         { type: TemplateRef },
         { type: IterableDiffers },
@@ -456,7 +445,6 @@ let CdkCellOutlet = /** @class */ (() => {
     CdkCellOutlet.decorators = [
         { type: Directive, args: [{ selector: '[cdkCellOutlet]' },] }
     ];
-    /** @nocollapse */
     CdkCellOutlet.ctorParameters = () => [
         { type: ViewContainerRef }
     ];
@@ -478,7 +466,7 @@ let CdkHeaderRow = /** @class */ (() => {
                     // tslint:disable-next-line:validate-decorators
                     changeDetection: ChangeDetectionStrategy.Default,
                     encapsulation: ViewEncapsulation.None
-                }] }
+                },] }
     ];
     return CdkHeaderRow;
 })();
@@ -498,7 +486,7 @@ let CdkFooterRow = /** @class */ (() => {
                     // tslint:disable-next-line:validate-decorators
                     changeDetection: ChangeDetectionStrategy.Default,
                     encapsulation: ViewEncapsulation.None
-                }] }
+                },] }
     ];
     return CdkFooterRow;
 })();
@@ -518,7 +506,7 @@ let CdkRow = /** @class */ (() => {
                     // tslint:disable-next-line:validate-decorators
                     changeDetection: ChangeDetectionStrategy.Default,
                     encapsulation: ViewEncapsulation.None
-                }] }
+                },] }
     ];
     return CdkRow;
 })();
@@ -534,7 +522,6 @@ let CdkNoDataRow = /** @class */ (() => {
                     selector: 'ng-template[cdkNoDataRow]'
                 },] }
     ];
-    /** @nocollapse */
     CdkNoDataRow.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -878,7 +865,6 @@ let DataRowOutlet = /** @class */ (() => {
     DataRowOutlet.decorators = [
         { type: Directive, args: [{ selector: '[rowOutlet]' },] }
     ];
-    /** @nocollapse */
     DataRowOutlet.ctorParameters = () => [
         { type: ViewContainerRef },
         { type: ElementRef }
@@ -899,7 +885,6 @@ let HeaderRowOutlet = /** @class */ (() => {
     HeaderRowOutlet.decorators = [
         { type: Directive, args: [{ selector: '[headerRowOutlet]' },] }
     ];
-    /** @nocollapse */
     HeaderRowOutlet.ctorParameters = () => [
         { type: ViewContainerRef },
         { type: ElementRef }
@@ -920,7 +905,6 @@ let FooterRowOutlet = /** @class */ (() => {
     FooterRowOutlet.decorators = [
         { type: Directive, args: [{ selector: '[footerRowOutlet]' },] }
     ];
-    /** @nocollapse */
     FooterRowOutlet.ctorParameters = () => [
         { type: ViewContainerRef },
         { type: ElementRef }
@@ -942,7 +926,6 @@ let NoDataRowOutlet = /** @class */ (() => {
     NoDataRowOutlet.decorators = [
         { type: Directive, args: [{ selector: '[noDataRowOutlet]' },] }
     ];
-    /** @nocollapse */
     NoDataRowOutlet.ctorParameters = () => [
         { type: ViewContainerRef },
         { type: ElementRef }
@@ -1707,9 +1690,8 @@ let CdkTable = /** @class */ (() => {
                     // tslint:disable-next-line:validate-decorators
                     changeDetection: ChangeDetectionStrategy.Default,
                     providers: [{ provide: CDK_TABLE, useExisting: CdkTable }]
-                }] }
+                },] }
     ];
-    /** @nocollapse */
     CdkTable.ctorParameters = () => [
         { type: IterableDiffers },
         { type: ChangeDetectorRef },
@@ -1847,9 +1829,8 @@ let CdkTextColumn = /** @class */ (() => {
                     // an ExpressionChangedAfterItHasBeenCheckedError).
                     // tslint:disable-next-line:validate-decorators
                     changeDetection: ChangeDetectionStrategy.Default
-                }] }
+                },] }
     ];
-    /** @nocollapse */
     CdkTextColumn.ctorParameters = () => [
         { type: CdkTable, decorators: [{ type: Optional }] },
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [TEXT_COLUMN_OPTIONS,] }] }

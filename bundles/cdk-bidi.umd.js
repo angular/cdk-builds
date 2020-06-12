@@ -66,14 +66,13 @@
         Directionality.prototype.ngOnDestroy = function () {
             this.change.complete();
         };
+        Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
         Directionality.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         Directionality.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [DIR_DOCUMENT,] }] }
         ]; };
-        Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
         return Directionality;
     }());
 

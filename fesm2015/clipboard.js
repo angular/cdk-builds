@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Injectable, Inject, ɵɵdefineInjectable, ɵɵinject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
 
 /**
  * @license
@@ -108,14 +108,13 @@ let Clipboard = /** @class */ (() => {
             return new PendingCopy(text, this._document);
         }
     }
+    Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
     Clipboard.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     Clipboard.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ];
-    Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
     return Clipboard;
 })();
 
@@ -197,7 +196,6 @@ let CdkCopyToClipboard = /** @class */ (() => {
                     }
                 },] }
     ];
-    /** @nocollapse */
     CdkCopyToClipboard.ctorParameters = () => [
         { type: Clipboard },
         { type: NgZone },

@@ -539,17 +539,16 @@
             this.reposition = function (config) { return new RepositionScrollStrategy(_this._scrollDispatcher, _this._viewportRuler, _this._ngZone, config); };
             this._document = document;
         }
+        ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
         ScrollStrategyOptions.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         ScrollStrategyOptions.ctorParameters = function () { return [
             { type: i1.ScrollDispatcher },
             { type: i1.ViewportRuler },
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
         return ScrollStrategyOptions;
     }());
 
@@ -683,7 +682,6 @@
             this.connectionPair = connectionPair;
             this.scrollableViewProperties = scrollableViewProperties;
         }
-        /** @nocollapse */
         ConnectedOverlayPositionChange.ctorParameters = function () { return [
             { type: ConnectionPositionPair },
             { type: ScrollingVisibility, decorators: [{ type: i0.Optional }] }
@@ -782,14 +780,13 @@
                 this._isAttached = false;
             }
         };
+        OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
         OverlayKeyboardDispatcher.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         OverlayKeyboardDispatcher.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
         ]; };
-        OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
         return OverlayKeyboardDispatcher;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -889,15 +886,14 @@
             this._document.body.appendChild(container);
             this._containerElement = container;
         };
+        OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayContainer, providedIn: "root" });
         OverlayContainer.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         OverlayContainer.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
             { type: i2.Platform }
         ]; };
-        OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayContainer, providedIn: "root" });
         return OverlayContainer;
     }());
     /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -2713,17 +2709,16 @@
         OverlayPositionBuilder.prototype.flexibleConnectedTo = function (origin) {
             return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
         };
+        OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
         OverlayPositionBuilder.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         OverlayPositionBuilder.ctorParameters = function () { return [
             { type: i1.ViewportRuler },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
             { type: i2.Platform },
             { type: OverlayContainer }
         ]; };
-        OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
         return OverlayPositionBuilder;
     }());
 
@@ -2821,7 +2816,6 @@
         Overlay.decorators = [
             { type: i0.Injectable }
         ];
-        /** @nocollapse */
         Overlay.ctorParameters = function () { return [
             { type: ScrollStrategyOptions },
             { type: OverlayContainer },
@@ -2893,7 +2887,6 @@
                         exportAs: 'cdkOverlayOrigin',
                     },] }
         ];
-        /** @nocollapse */
         CdkOverlayOrigin.ctorParameters = function () { return [
             { type: i0.ElementRef }
         ]; };
@@ -3144,7 +3137,6 @@
                         exportAs: 'cdkConnectedOverlay'
                     },] }
         ];
-        /** @nocollapse */
         CdkConnectedOverlay.ctorParameters = function () { return [
             { type: Overlay },
             { type: i0.TemplateRef },
@@ -3305,15 +3297,14 @@
                 _document.msFullscreenElement ||
                 null;
         };
+        FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
         FullscreenOverlayContainer.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         FullscreenOverlayContainer.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
             { type: i2.Platform }
         ]; };
-        FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
         return FullscreenOverlayContainer;
     }(OverlayContainer));
 

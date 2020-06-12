@@ -1,5 +1,5 @@
 import { coerceElement, coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -20,10 +20,10 @@ let MutationObserverFactory = /** @class */ (() => {
             return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
         }
     }
+    MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     MutationObserverFactory.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
     return MutationObserverFactory;
 })();
 /** An injectable service that allows watching elements for changes to their content. */
@@ -94,14 +94,13 @@ let ContentObserver = /** @class */ (() => {
             }
         }
     }
+    ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     ContentObserver.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     ContentObserver.ctorParameters = () => [
         { type: MutationObserverFactory }
     ];
-    ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
     return ContentObserver;
 })();
 /**
@@ -166,7 +165,6 @@ let CdkObserveContent = /** @class */ (() => {
                     exportAs: 'cdkObserveContent',
                 },] }
     ];
-    /** @nocollapse */
     CdkObserveContent.ctorParameters = () => [
         { type: ContentObserver },
         { type: ElementRef },

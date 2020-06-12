@@ -1,7 +1,7 @@
 import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
 import { DOCUMENT, Location } from '@angular/common';
-import { Injectable, NgZone, Inject, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, Optional, SkipSelf, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -309,17 +309,16 @@ let ScrollStrategyOptions = /** @class */ (() => {
             this._document = document;
         }
     }
+    ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     ScrollStrategyOptions.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     ScrollStrategyOptions.ctorParameters = () => [
         { type: ScrollDispatcher },
         { type: ViewportRuler },
         { type: NgZone },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ];
-    ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     return ScrollStrategyOptions;
 })();
 
@@ -439,7 +438,6 @@ let ConnectedOverlayPositionChange = /** @class */ (() => {
             this.scrollableViewProperties = scrollableViewProperties;
         }
     }
-    /** @nocollapse */
     ConnectedOverlayPositionChange.ctorParameters = () => [
         { type: ConnectionPositionPair },
         { type: ScrollingVisibility, decorators: [{ type: Optional }] }
@@ -539,14 +537,13 @@ let OverlayKeyboardDispatcher = /** @class */ (() => {
             }
         }
     }
+    OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     OverlayKeyboardDispatcher.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     OverlayKeyboardDispatcher.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
     ];
-    OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     return OverlayKeyboardDispatcher;
 })();
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -648,15 +645,14 @@ let OverlayContainer = /** @class */ (() => {
             this._containerElement = container;
         }
     }
+    OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
     OverlayContainer.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     OverlayContainer.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: Platform }
     ];
-    OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
     return OverlayContainer;
 })();
 /** @docs-private @deprecated @breaking-change 8.0.0 */
@@ -2397,17 +2393,16 @@ let OverlayPositionBuilder = /** @class */ (() => {
             return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
         }
     }
+    OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     OverlayPositionBuilder.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     OverlayPositionBuilder.ctorParameters = () => [
         { type: ViewportRuler },
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: Platform },
         { type: OverlayContainer }
     ];
-    OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     return OverlayPositionBuilder;
 })();
 
@@ -2507,7 +2502,6 @@ let Overlay = /** @class */ (() => {
     Overlay.decorators = [
         { type: Injectable }
     ];
-    /** @nocollapse */
     Overlay.ctorParameters = () => [
         { type: ScrollStrategyOptions },
         { type: OverlayContainer },
@@ -2581,7 +2575,6 @@ let CdkOverlayOrigin = /** @class */ (() => {
                     exportAs: 'cdkOverlayOrigin',
                 },] }
     ];
-    /** @nocollapse */
     CdkOverlayOrigin.ctorParameters = () => [
         { type: ElementRef }
     ];
@@ -2794,7 +2787,6 @@ let CdkConnectedOverlay = /** @class */ (() => {
                     exportAs: 'cdkConnectedOverlay'
                 },] }
     ];
-    /** @nocollapse */
     CdkConnectedOverlay.ctorParameters = () => [
         { type: Overlay },
         { type: TemplateRef },
@@ -2962,15 +2954,14 @@ let FullscreenOverlayContainer = /** @class */ (() => {
                 null;
         }
     }
+    FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     FullscreenOverlayContainer.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     FullscreenOverlayContainer.ctorParameters = () => [
         { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
         { type: Platform }
     ];
-    FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     return FullscreenOverlayContainer;
 })();
 

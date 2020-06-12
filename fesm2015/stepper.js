@@ -32,7 +32,6 @@ let CdkStepHeader = /** @class */ (() => {
                     },
                 },] }
     ];
-    /** @nocollapse */
     CdkStepHeader.ctorParameters = () => [
         { type: ElementRef }
     ];
@@ -57,7 +56,6 @@ let CdkStepLabel = /** @class */ (() => {
                     selector: '[cdkStepLabel]',
                 },] }
     ];
-    /** @nocollapse */
     CdkStepLabel.ctorParameters = () => [
         { type: TemplateRef }
     ];
@@ -170,9 +168,8 @@ let CdkStep = /** @class */ (() => {
                     template: '<ng-template><ng-content></ng-content></ng-template>',
                     encapsulation: ViewEncapsulation.None,
                     changeDetection: ChangeDetectionStrategy.OnPush
-                }] }
+                },] }
     ];
-    /** @nocollapse */
     CdkStep.ctorParameters = () => [
         { type: CdkStepper, decorators: [{ type: Inject, args: [forwardRef(() => CdkStepper),] }] },
         { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [STEPPER_GLOBAL_OPTIONS,] }] }
@@ -419,7 +416,6 @@ let CdkStepper = /** @class */ (() => {
                     exportAs: 'cdkStepper',
                 },] }
     ];
-    /** @nocollapse */
     CdkStepper.ctorParameters = () => [
         { type: Directionality, decorators: [{ type: Optional }] },
         { type: ChangeDetectorRef },
@@ -469,7 +465,6 @@ let CdkStepperNext = /** @class */ (() => {
                     }
                 },] }
     ];
-    /** @nocollapse */
     CdkStepperNext.ctorParameters = () => [
         { type: CdkStepper }
     ];
@@ -504,7 +499,6 @@ let CdkStepperPrevious = /** @class */ (() => {
                     }
                 },] }
     ];
-    /** @nocollapse */
     CdkStepperPrevious.ctorParameters = () => [
         { type: CdkStepper }
     ];

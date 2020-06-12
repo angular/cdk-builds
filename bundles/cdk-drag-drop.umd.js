@@ -2502,15 +2502,14 @@
             });
             this._globalListeners.clear();
         };
+        DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
         DragDropRegistry.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         DragDropRegistry.ctorParameters = function () { return [
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
         ]; };
-        DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
         return DragDropRegistry;
     }());
 
@@ -2552,17 +2551,16 @@
         DragDrop.prototype.createDropList = function (element) {
             return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
         };
+        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
         DragDrop.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         DragDrop.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
             { type: i0.NgZone },
             { type: i2.ViewportRuler },
             { type: DragDropRegistry }
         ]; };
-        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
         return DragDrop;
     }());
 
@@ -2627,7 +2625,6 @@
                         }
                     },] }
         ];
-        /** @nocollapse */
         CdkDragHandle.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DRAG_PARENT,] }, { type: i0.Optional }] }
@@ -2658,7 +2655,6 @@
                         selector: 'ng-template[cdkDragPlaceholder]'
                     },] }
         ];
-        /** @nocollapse */
         CdkDragPlaceholder.ctorParameters = function () { return [
             { type: i0.TemplateRef }
         ]; };
@@ -2696,7 +2692,6 @@
                         selector: 'ng-template[cdkDragPreview]'
                     },] }
         ];
-        /** @nocollapse */
         CdkDragPreview.ctorParameters = function () { return [
             { type: i0.TemplateRef }
         ]; };
@@ -3032,7 +3027,6 @@
                         providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
                     },] }
         ];
-        /** @nocollapse */
         CdkDrag.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DROP_LIST,] }, { type: i0.Optional }, { type: i0.SkipSelf }] },
@@ -3376,7 +3370,6 @@
                         }
                     },] }
         ];
-        /** @nocollapse */
         CdkDropList.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: DragDrop },

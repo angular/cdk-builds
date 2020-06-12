@@ -188,7 +188,6 @@ let CdkAccordionItem = /** @class */ (() => {
                     ],
                 },] }
     ];
-    /** @nocollapse */
     CdkAccordionItem.ctorParameters = () => [
         { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf }] },
         { type: ChangeDetectorRef },

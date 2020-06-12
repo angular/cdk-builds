@@ -1,5 +1,5 @@
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { Injectable, NgZone, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -79,15 +79,14 @@ let AutofillMonitor = /** @class */ (() => {
             this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
         }
     }
+    AutofillMonitor.ɵprov = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     AutofillMonitor.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
-    /** @nocollapse */
     AutofillMonitor.ctorParameters = () => [
         { type: Platform },
         { type: NgZone }
     ];
-    AutofillMonitor.ɵprov = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
     return AutofillMonitor;
 })();
 /** A directive that can be used to monitor the autofill state of an input. */
@@ -113,7 +112,6 @@ let CdkAutofill = /** @class */ (() => {
                     selector: '[cdkAutofill]',
                 },] }
     ];
-    /** @nocollapse */
     CdkAutofill.ctorParameters = () => [
         { type: ElementRef },
         { type: AutofillMonitor }
@@ -356,7 +354,6 @@ let CdkTextareaAutosize = /** @class */ (() => {
                     },
                 },] }
     ];
-    /** @nocollapse */
     CdkTextareaAutosize.ctorParameters = () => [
         { type: ElementRef },
         { type: Platform },

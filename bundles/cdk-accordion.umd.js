@@ -199,7 +199,6 @@
                         ],
                     },] }
         ];
-        /** @nocollapse */
         CdkAccordionItem.ctorParameters = function () { return [
             { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] },
             { type: core.ChangeDetectorRef },

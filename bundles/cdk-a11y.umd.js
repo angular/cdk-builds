@@ -238,14 +238,13 @@
         AriaDescriber.prototype._isElementNode = function (element) {
             return element.nodeType === this._document.ELEMENT_NODE;
         };
+        AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
         AriaDescriber.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         AriaDescriber.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
         return AriaDescriber;
     }());
 
@@ -952,14 +951,13 @@
             // Again, naive approach that does not capture many edge cases and browser quirks.
             return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
         };
+        InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
         InteractivityChecker.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         InteractivityChecker.ctorParameters = function () { return [
             { type: i1.Platform }
         ]; };
-        InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
         return InteractivityChecker;
     }());
     /**
@@ -1368,16 +1366,15 @@
             if (deferCaptureElements === void 0) { deferCaptureElements = false; }
             return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
         };
+        FocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
         FocusTrapFactory.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         FocusTrapFactory.ctorParameters = function () { return [
             { type: InteractivityChecker },
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        FocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
         return FocusTrapFactory;
     }());
     /** Directive for trapping focus within a region. */
@@ -1434,7 +1431,6 @@
                         exportAs: 'cdkTrapFocus',
                     },] }
         ];
-        /** @nocollapse */
         CdkTrapFocus.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: FocusTrapFactory },
@@ -1675,10 +1671,10 @@
                 }
             }
         };
+        FocusTrapManager.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
         FocusTrapManager.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        FocusTrapManager.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
         return FocusTrapManager;
     }());
 
@@ -1711,10 +1707,10 @@
             }
             return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
         };
+        ConfigurableFocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(FocusTrapManager), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
         ConfigurableFocusTrapFactory.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         ConfigurableFocusTrapFactory.ctorParameters = function () { return [
             { type: InteractivityChecker },
             { type: i0.NgZone },
@@ -1722,7 +1718,6 @@
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [FOCUS_TRAP_INERT_STRATEGY,] }] }
         ]; };
-        ConfigurableFocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(FocusTrapManager), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
         return ConfigurableFocusTrapFactory;
     }());
 
@@ -1831,17 +1826,16 @@
             this._document.body.appendChild(liveEl);
             return liveEl;
         };
+        LiveAnnouncer.ɵprov = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
         LiveAnnouncer.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         LiveAnnouncer.ctorParameters = function () { return [
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [LIVE_ANNOUNCER_ELEMENT_TOKEN,] }] },
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [LIVE_ANNOUNCER_DEFAULT_OPTIONS,] }] }
         ]; };
-        LiveAnnouncer.ɵprov = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
         return LiveAnnouncer;
     }());
     /**
@@ -1899,7 +1893,6 @@
                         exportAs: 'cdkAriaLive',
                     },] }
         ];
-        /** @nocollapse */
         CdkAriaLive.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: LiveAnnouncer },
@@ -2278,17 +2271,16 @@
                 clearTimeout(this._originTimeoutId);
             }
         };
+        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
         FocusMonitor.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         FocusMonitor.ctorParameters = function () { return [
             { type: i0.NgZone },
             { type: i1.Platform },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [i2.DOCUMENT,] }] },
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [FOCUS_MONITOR_DEFAULT_OPTIONS,] }] }
         ]; };
-        FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
         return FocusMonitor;
     }());
     /** Gets the target of an event, accounting for Shadow DOM. */
@@ -2328,7 +2320,6 @@
                         selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
                     },] }
         ];
-        /** @nocollapse */
         CdkMonitorFocus.ctorParameters = function () { return [
             { type: i0.ElementRef },
             { type: FocusMonitor }
@@ -2414,15 +2405,14 @@
                 }
             }
         };
+        HighContrastModeDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
         HighContrastModeDetector.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
-        /** @nocollapse */
         HighContrastModeDetector.ctorParameters = function () { return [
             { type: i1.Platform },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
         ]; };
-        HighContrastModeDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
         return HighContrastModeDetector;
     }());
 
@@ -2444,7 +2434,6 @@
                         exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     },] }
         ];
-        /** @nocollapse */
         A11yModule.ctorParameters = function () { return [
             { type: HighContrastModeDetector }
         ]; };
