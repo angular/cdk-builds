@@ -31,7 +31,7 @@ function updateToV9() {
     return devkit_migration_rule_1.createMigrationSchematicRule(target_version_1.TargetVersion.V9, [], upgrade_data_1.cdkUpgradeData, onMigrationComplete);
 }
 exports.updateToV9 = updateToV9;
-/** Entry point for the migration schematics with target of Angular CDK 10.0.0-sha-d3f287d65 */
+/** Entry point for the migration schematics with target of Angular CDK 10.0.0-sha-952f57631 */
 function updateToV10() {
     return devkit_migration_rule_1.createMigrationSchematicRule(target_version_1.TargetVersion.V10, [], upgrade_data_1.cdkUpgradeData, onMigrationComplete);
 }

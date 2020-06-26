@@ -71,7 +71,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
      * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
      * @param portal Portal to be attached.
      * @deprecated To be turned into a method.
-     * @breaking-change 10.0.0-sha-d3f287d65
+     * @breaking-change 10.0.0-sha-952f57631
      */
     attachDomPortal: (portal: DomPortal) => void;
     /** Gets the root node of the portal outlet. */

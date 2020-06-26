@@ -825,7 +825,7 @@
         function OverlayContainer(document, 
         /**
          * @deprecated `platform` parameter to become required.
-         * @breaking-change 10.0.0-sha-d3f287d65
+         * @breaking-change 10.0.0-sha-952f57631
          */
         _platform) {
             this._platform = _platform;
@@ -854,7 +854,7 @@
          * with the 'cdk-overlay-container' class on the document body.
          */
         OverlayContainer.prototype._createContainer = function () {
-            // @breaking-change 10.0.0-sha-d3f287d65 Remove null check for `_platform`.
+            // @breaking-change 10.0.0-sha-952f57631 Remove null check for `_platform`.
             var isBrowser = this._platform ? this._platform.isBrowser : typeof window !== 'undefined';
             var containerClass = 'cdk-overlay-container';
             if (isBrowser || isTestEnvironment) {
@@ -3232,7 +3232,7 @@
         function FullscreenOverlayContainer(_document, 
         /**
          * @deprecated `platform` parameter to become required.
-         * @breaking-change 10.0.0-sha-d3f287d65
+         * @breaking-change 10.0.0-sha-952f57631
          */
         platform) {
             return _super.call(this, _document, platform) || this;

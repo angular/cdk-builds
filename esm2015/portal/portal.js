@@ -104,7 +104,7 @@ export class BasePortalOutlet {
     constructor() {
         /** Whether this host has already been permanently disposed. */
         this._isDisposed = false;
-        // @breaking-change 10.0.0-sha-d3f287d65 `attachDomPortal` to become a required abstract method.
+        // @breaking-change 10.0.0-sha-952f57631 `attachDomPortal` to become a required abstract method.
         this.attachDomPortal = null;
     }
     /** Whether this host has an attached portal. */
@@ -129,7 +129,7 @@ export class BasePortalOutlet {
         else if (portal instanceof TemplatePortal) {
             this._attachedPortal = portal;
             return this.attachTemplatePortal(portal);
-            // @breaking-change 10.0.0-sha-d3f287d65 remove null check for `this.attachDomPortal`.
+            // @breaking-change 10.0.0-sha-952f57631 remove null check for `this.attachDomPortal`.
         }
         else if (this.attachDomPortal && portal instanceof DomPortal) {
             this._attachedPortal = portal;
