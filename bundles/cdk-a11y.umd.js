@@ -604,9 +604,9 @@
             return this;
         };
         ListKeyManager.prototype.setActiveItem = function (item) {
-            var previousActiveItem = this._activeItem;
+            var previousIndex = this._activeItemIndex;
             this.updateActiveItem(item);
-            if (this._activeItem !== previousActiveItem) {
+            if (this._activeItemIndex !== previousIndex) {
                 this.change.next(this._activeItemIndex);
             }
         };

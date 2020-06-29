@@ -1111,21 +1111,10 @@ class DragRef {
     /** Updates the internal state of the draggable element when scrolling has occurred. */
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
-        if (scrollDifference) {
-            // ClientRect dimensions are based on the page's scroll position so
-            // we have to update the cached boundary ClientRect if the user has scrolled.
-            if (this._boundaryRect) {
-                adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
-            }
-            this._pickupPositionOnPage.x += scrollDifference.left;
-            this._pickupPositionOnPage.y += scrollDifference.top;
-            // If we're in free drag mode, we have to update the active transform, because
-            // it isn't relative to the viewport like the preview inside a drop list.
-            if (!this._dropContainer) {
-                this._activeTransform.x -= scrollDifference.left;
-                this._activeTransform.y -= scrollDifference.top;
-                this._applyRootElementTransform(this._activeTransform.x, this._activeTransform.y);
-            }
+        // ClientRect dimensions are based on the page's scroll position so
+        // we have to update the cached boundary ClientRect if the user has scrolled.
+        if (this._boundaryRect && scrollDifference) {
+            adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
         }
     }
     /** Gets the scroll position of the viewport. */

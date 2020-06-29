@@ -376,9 +376,9 @@ class ListKeyManager {
         return this;
     }
     setActiveItem(item) {
-        const previousActiveItem = this._activeItem;
+        const previousIndex = this._activeItemIndex;
         this.updateActiveItem(item);
-        if (this._activeItem !== previousActiveItem) {
+        if (this._activeItemIndex !== previousIndex) {
             this.change.next(this._activeItemIndex);
         }
     }
