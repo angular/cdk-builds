@@ -11,7 +11,7 @@ import { Platform } from '@angular/cdk/platform';
 export declare class OverlayContainer implements OnDestroy {
     /**
      * @deprecated `platform` parameter to become required.
-     * @breaking-change 10.0.0-sha-27f52711c
+     * @breaking-change 10.0.0-sha-ad231390b
      */
     protected _platform?: Platform | undefined;
     protected _containerElement: HTMLElement;
@@ -19,7 +19,7 @@ export declare class OverlayContainer implements OnDestroy {
     constructor(document: any, 
     /**
      * @deprecated `platform` parameter to become required.
-     * @breaking-change 10.0.0-sha-27f52711c
+     * @breaking-change 10.0.0-sha-ad231390b
      */
     _platform?: Platform | undefined);
     ngOnDestroy(): void;

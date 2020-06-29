@@ -24,7 +24,7 @@ let FullscreenOverlayContainer = /** @class */ (() => {
         constructor(_document, 
         /**
          * @deprecated `platform` parameter to become required.
-         * @breaking-change 10.0.0-sha-27f52711c
+         * @breaking-change 10.0.0-sha-ad231390b
          */
         platform) {
             super(_document, platform);
