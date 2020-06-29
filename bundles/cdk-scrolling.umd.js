@@ -103,12 +103,26 @@
             if (!this._viewport) {
                 return;
             }
-            var scrollOffset = this._viewport.measureScrollOffset();
-            var firstVisibleIndex = scrollOffset / this._itemSize;
             var renderedRange = this._viewport.getRenderedRange();
             var newRange = { start: renderedRange.start, end: renderedRange.end };
             var viewportSize = this._viewport.getViewportSize();
             var dataLength = this._viewport.getDataLength();
+            var scrollOffset = this._viewport.measureScrollOffset();
+            var firstVisibleIndex = scrollOffset / this._itemSize;
+            // If user scrolls to the bottom of the list and data changes to a smaller list
+            if (newRange.end > dataLength) {
+                // We have to recalculate the first visible index based on new data length and viewport size.
+                var maxVisibleItems = Math.ceil(viewportSize / this._itemSize);
+                var newVisibleIndex = Math.max(0, Math.min(firstVisibleIndex, dataLength - maxVisibleItems));
+                // If first visible index changed we must update scroll offset to handle start/end buffers
+                // Current range must also be adjusted to cover the new position (bottom of new list).
+                if (firstVisibleIndex != newVisibleIndex) {
+                    firstVisibleIndex = newVisibleIndex;
+                    scrollOffset = newVisibleIndex * this._itemSize;
+                    newRange.start = Math.floor(firstVisibleIndex);
+                }
+                newRange.end = Math.max(0, Math.min(dataLength, newRange.start + maxVisibleItems));
+            }
             var startBuffer = scrollOffset - newRange.start * this._itemSize;
             if (startBuffer < this._minBufferPx && newRange.start != 0) {
                 var expandStart = Math.ceil((this._maxBufferPx - startBuffer) / this._itemSize);
