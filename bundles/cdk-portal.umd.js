@@ -408,7 +408,7 @@
         function BasePortalOutlet() {
             /** Whether this host has already been permanently disposed. */
             this._isDisposed = false;
-            // @breaking-change 10.0.0-sha-cf53a70b1 `attachDomPortal` to become a required abstract method.
+            // @breaking-change 10.0.0-sha-27f52711c `attachDomPortal` to become a required abstract method.
             this.attachDomPortal = null;
         }
         /** Whether this host has an attached portal. */
@@ -433,7 +433,7 @@
             else if (portal instanceof TemplatePortal) {
                 this._attachedPortal = portal;
                 return this.attachTemplatePortal(portal);
-                // @breaking-change 10.0.0-sha-cf53a70b1 remove null check for `this.attachDomPortal`.
+                // @breaking-change 10.0.0-sha-27f52711c remove null check for `this.attachDomPortal`.
             }
             else if (this.attachDomPortal && portal instanceof DomPortal) {
                 this._attachedPortal = portal;
@@ -499,7 +499,7 @@
         outletElement, _componentFactoryResolver, _appRef, _defaultInjector, 
         /**
          * @deprecated `_document` Parameter to be made required.
-         * @breaking-change 10.0.0-sha-cf53a70b1
+         * @breaking-change 10.0.0-sha-27f52711c
          */
         _document) {
             var _this = _super.call(this) || this;
@@ -511,10 +511,10 @@
              * Attaches a DOM portal by transferring its content into the outlet.
              * @param portal Portal to be attached.
              * @deprecated To be turned into a method.
-             * @breaking-change 10.0.0-sha-cf53a70b1
+             * @breaking-change 10.0.0-sha-27f52711c
              */
             _this.attachDomPortal = function (portal) {
-                // @breaking-change 10.0.0-sha-cf53a70b1 Remove check and error once the
+                // @breaking-change 10.0.0-sha-27f52711c Remove check and error once the
                 // `_document` constructor parameter is required.
                 if (!_this._document) {
                     throw Error('Cannot attach DOM portal without _document constructor parameter');
@@ -695,7 +695,7 @@
              * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
              * @param portal Portal to be attached.
              * @deprecated To be turned into a method.
-             * @breaking-change 10.0.0-sha-cf53a70b1
+             * @breaking-change 10.0.0-sha-27f52711c
              */
             _this.attachDomPortal = function (portal) {
                 // @breaking-change 9.0.0 Remove check and error once the

@@ -643,8 +643,6 @@ class DragRef {
     }
     /** Starts the dragging sequence. */
     _startDragSequence(event) {
-        // Emit the event on the item before the one on the container.
-        this.started.next({ source: this });
         if (isTouchEvent(event)) {
             this._lastTouchEventTime = Date.now();
         }
@@ -664,11 +662,13 @@ class DragRef {
             element.style.display = 'none';
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             getPreviewInsertionPoint(this._document).appendChild(preview);
+            this.started.next({ source: this }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
             this._initialIndex = dropContainer.getItemIndex(this);
         }
         else {
+            this.started.next({ source: this });
             this._initialContainer = this._initialIndex = undefined;
         }
         // Important to run after we've called `start` on the parent container
@@ -1111,10 +1111,21 @@ class DragRef {
     /** Updates the internal state of the draggable element when scrolling has occurred. */
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
-        // ClientRect dimensions are based on the page's scroll position so
-        // we have to update the cached boundary ClientRect if the user has scrolled.
-        if (this._boundaryRect && scrollDifference) {
-            adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
+        if (scrollDifference) {
+            // ClientRect dimensions are based on the page's scroll position so
+            // we have to update the cached boundary ClientRect if the user has scrolled.
+            if (this._boundaryRect) {
+                adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
+            }
+            this._pickupPositionOnPage.x += scrollDifference.left;
+            this._pickupPositionOnPage.y += scrollDifference.top;
+            // If we're in free drag mode, we have to update the active transform, because
+            // it isn't relative to the viewport like the preview inside a drop list.
+            if (!this._dropContainer) {
+                this._activeTransform.x -= scrollDifference.left;
+                this._activeTransform.y -= scrollDifference.top;
+                this._applyRootElementTransform(this._activeTransform.x, this._activeTransform.y);
+            }
         }
     }
     /** Gets the scroll position of the viewport. */
@@ -1151,7 +1162,12 @@ function deepCloneNode(node) {
         for (let i = 0; i < descendantCanvases.length; i++) {
             const correspondingCloneContext = cloneCanvases[i].getContext('2d');
             if (correspondingCloneContext) {
-                correspondingCloneContext.drawImage(descendantCanvases[i], 0, 0);
+                // In some cases `drawImage` can throw (e.g. if the canvas size is 0x0).
+                // We can't do much about it so just ignore the error.
+                try {
+                    correspondingCloneContext.drawImage(descendantCanvases[i], 0, 0);
+                }
+                catch (_a) { }
             }
         }
     }
@@ -1336,10 +1352,11 @@ class DropListRef {
         /** Cache of the dimensions of all the items inside the container. */
         this._itemPositions = [];
         /**
-         * Keeps track of the item that was last swapped with the dragged item, as
-         * well as what direction the pointer was moving in when the swap occured.
+         * Keeps track of the item that was last swapped with the dragged item, as well as what direction
+         * the pointer was moving in when the swap occured and whether the user's pointer continued to
+         * overlap with the swapped item after the swapping occurred.
          */
-        this._previousSwap = { drag: null, delta: 0 };
+        this._previousSwap = { drag: null, delta: 0, overlaps: false };
         /** Drop lists that are connected to the current one. */
         this._siblings = [];
         /** Direction in which the list is oriented. */
@@ -1622,8 +1639,6 @@ class DropListRef {
         const currentPosition = siblings[currentIndex].clientRect;
         const newPosition = siblingAtNewPosition.clientRect;
         const delta = currentIndex > newIndex ? 1 : -1;
-        this._previousSwap.drag = siblingAtNewPosition.drag;
-        this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
         // How many pixels the item's placeholder should be offset.
         const itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
         // How many pixels all the other items should be offset.
@@ -1665,6 +1680,10 @@ class DropListRef {
                 adjustClientRect(sibling.clientRect, offset, 0);
             }
         });
+        // Note that it's important that we do this after the client rects have been adjusted.
+        this._previousSwap.overlaps = isInsideClientRect(newPosition, pointerX, pointerY);
+        this._previousSwap.drag = siblingAtNewPosition.drag;
+        this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
     }
     /**
      * Checks whether the user's pointer is close to the edges of either the
@@ -1755,6 +1774,7 @@ class DropListRef {
         this._itemPositions = [];
         this._previousSwap.drag = null;
         this._previousSwap.delta = 0;
+        this._previousSwap.overlaps = false;
         this._stopScrolling();
         this._viewportScrollSubscription.unsubscribe();
         this._parentPositions.clear();
@@ -1843,9 +1863,11 @@ class DropListRef {
             }
             if (delta) {
                 const direction = isHorizontal ? delta.x : delta.y;
-                // If the user is still hovering over the same item as last time, and they didn't change
-                // the direction in which they're dragging, we don't consider it a direction swap.
-                if (drag === this._previousSwap.drag && direction === this._previousSwap.delta) {
+                // If the user is still hovering over the same item as last time, their cursor hasn't left
+                // the item after we made the swap, and they didn't change the direction in which they're
+                // dragging, we don't consider it a direction swap.
+                if (drag === this._previousSwap.drag && this._previousSwap.overlaps &&
+                    direction === this._previousSwap.delta) {
                     return false;
                 }
             }
@@ -2552,17 +2574,11 @@ let CdkDrag = /** @class */ (() => {
         /**
          * Returns the element that is being used as a placeholder
          * while the current element is being dragged.
-         * @deprecated No longer being used to be removed.
-         * @breaking-change 11.0.0
          */
         getPlaceholderElement() {
             return this._dragRef.getPlaceholderElement();
         }
-        /**
-         * Returns the root draggable element.
-         * @deprecated No longer being used to be removed.
-         * @breaking-change 11.0.0
-         */
+        /** Returns the root draggable element. */
         getRootElement() {
             return this._dragRef.getRootElement();
         }

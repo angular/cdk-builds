@@ -21,7 +21,7 @@ export declare class FullscreenOverlayContainer extends OverlayContainer impleme
     constructor(_document: any, 
     /**
      * @deprecated `platform` parameter to become required.
-     * @breaking-change 10.0.0-sha-cf53a70b1
+     * @breaking-change 10.0.0-sha-27f52711c
      */
     platform?: Platform);
     ngOnDestroy(): void;

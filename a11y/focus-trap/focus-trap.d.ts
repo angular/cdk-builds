@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { BooleanInput } from '@angular/cdk/coercion';
-import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck } from '@angular/core';
+import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck, SimpleChanges, OnChanges } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 /**
  * Class that allows for trapping focus within a DOM element.
@@ -128,7 +128,7 @@ export declare class FocusTrapFactory {
     create(element: HTMLElement, deferCaptureElements?: boolean): FocusTrap;
 }
 /** Directive for trapping focus within a region. */
-export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoCheck {
+export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, DoCheck {
     private _elementRef;
     private _focusTrapFactory;
     private _document;
@@ -150,6 +150,8 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, DoChec
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;
+    ngOnChanges(changes: SimpleChanges): void;
+    private _captureFocus;
     static ngAcceptInputType_enabled: BooleanInput;
     static ngAcceptInputType_autoCapture: BooleanInput;
 }
