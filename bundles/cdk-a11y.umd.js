@@ -839,6 +839,18 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * Configuration for the isFocusable method.
+     */
+    var IsFocusableConfig = /** @class */ (function () {
+        function IsFocusableConfig() {
+            /**
+             * Whether to count an element as focusable even if it is not currently visible.
+             */
+            this.ignoreVisibility = false;
+        }
+        return IsFocusableConfig;
+    }());
     // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
     // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
     // supported.
@@ -944,12 +956,14 @@
          * Gets whether an element can be focused by the user.
          *
          * @param element Element to be checked.
+         * @param config The config object with options to customize this method's behavior
          * @returns Whether the element is focusable.
          */
-        InteractivityChecker.prototype.isFocusable = function (element) {
+        InteractivityChecker.prototype.isFocusable = function (element, config) {
             // Perform checks in order of left to most expensive.
             // Again, naive approach that does not capture many edge cases and browser quirks.
-            return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
+            return isPotentiallyFocusable(element) && !this.isDisabled(element) &&
+                ((config === null || config === void 0 ? void 0 : config.ignoreVisibility) || this.isVisible(element));
         };
         InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
         InteractivityChecker.decorators = [
@@ -2471,6 +2485,7 @@
     exports.FocusTrapFactory = FocusTrapFactory;
     exports.HighContrastModeDetector = HighContrastModeDetector;
     exports.InteractivityChecker = InteractivityChecker;
+    exports.IsFocusableConfig = IsFocusableConfig;
     exports.LIVE_ANNOUNCER_DEFAULT_OPTIONS = LIVE_ANNOUNCER_DEFAULT_OPTIONS;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = LIVE_ANNOUNCER_ELEMENT_TOKEN;
     exports.LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY = LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY;

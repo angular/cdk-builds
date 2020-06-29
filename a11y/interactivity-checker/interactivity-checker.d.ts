@@ -7,6 +7,15 @@
  */
 import { Platform } from '@angular/cdk/platform';
 /**
+ * Configuration for the isFocusable method.
+ */
+export declare class IsFocusableConfig {
+    /**
+     * Whether to count an element as focusable even if it is not currently visible.
+     */
+    ignoreVisibility: boolean;
+}
+/**
  * Utility for checking the interactivity of an element, such as whether is is focusable or
  * tabbable.
  */
@@ -41,7 +50,8 @@ export declare class InteractivityChecker {
      * Gets whether an element can be focused by the user.
      *
      * @param element Element to be checked.
+     * @param config The config object with options to customize this method's behavior
      * @returns Whether the element is focusable.
      */
-    isFocusable(element: HTMLElement): boolean;
+    isFocusable(element: HTMLElement, config?: IsFocusableConfig): boolean;
 }

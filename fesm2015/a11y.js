@@ -593,6 +593,17 @@ class FocusKeyManager extends ListKeyManager {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Configuration for the isFocusable method.
+ */
+class IsFocusableConfig {
+    constructor() {
+        /**
+         * Whether to count an element as focusable even if it is not currently visible.
+         */
+        this.ignoreVisibility = false;
+    }
+}
 // The InteractivityChecker leans heavily on the ally.js accessibility utilities.
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
 // supported.
@@ -699,12 +710,14 @@ let InteractivityChecker = /** @class */ (() => {
          * Gets whether an element can be focused by the user.
          *
          * @param element Element to be checked.
+         * @param config The config object with options to customize this method's behavior
          * @returns Whether the element is focusable.
          */
-        isFocusable(element) {
+        isFocusable(element, config) {
             // Perform checks in order of left to most expensive.
             // Again, naive approach that does not capture many edge cases and browser quirks.
-            return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
+            return isPotentiallyFocusable(element) && !this.isDisabled(element) &&
+                ((config === null || config === void 0 ? void 0 : config.ignoreVisibility) || this.isVisible(element));
         }
     }
     InteractivityChecker.ɵprov = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
@@ -2187,5 +2200,5 @@ let A11yModule = /** @class */ (() => {
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a, ConfigurableFocusTrapConfig as ɵangular_material_src_cdk_a11y_a11y_b };
 //# sourceMappingURL=a11y.js.map
