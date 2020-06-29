@@ -23,7 +23,7 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
     outletElement: Element, _componentFactoryResolver: ComponentFactoryResolver, _appRef: ApplicationRef, _defaultInjector: Injector, 
     /**
      * @deprecated `_document` Parameter to be made required.
-     * @breaking-change 10.0.0-sha-ad231390b
+     * @breaking-change 10.0.0
      */
     _document?: any);
     /**
@@ -42,7 +42,7 @@ export declare class DomPortalOutlet extends BasePortalOutlet {
      * Attaches a DOM portal by transferring its content into the outlet.
      * @param portal Portal to be attached.
      * @deprecated To be turned into a method.
-     * @breaking-change 10.0.0-sha-ad231390b
+     * @breaking-change 10.0.0
      */
     attachDomPortal: (portal: DomPortal) => void;
     /**

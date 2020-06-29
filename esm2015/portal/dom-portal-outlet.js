@@ -16,7 +16,7 @@ export class DomPortalOutlet extends BasePortalOutlet {
     outletElement, _componentFactoryResolver, _appRef, _defaultInjector, 
     /**
      * @deprecated `_document` Parameter to be made required.
-     * @breaking-change 10.0.0-sha-ad231390b
+     * @breaking-change 10.0.0
      */
     _document) {
         super();
@@ -28,10 +28,10 @@ export class DomPortalOutlet extends BasePortalOutlet {
          * Attaches a DOM portal by transferring its content into the outlet.
          * @param portal Portal to be attached.
          * @deprecated To be turned into a method.
-         * @breaking-change 10.0.0-sha-ad231390b
+         * @breaking-change 10.0.0
          */
         this.attachDomPortal = (portal) => {
-            // @breaking-change 10.0.0-sha-ad231390b Remove check and error once the
+            // @breaking-change 10.0.0 Remove check and error once the
             // `_document` constructor parameter is required.
             if (!this._document) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
