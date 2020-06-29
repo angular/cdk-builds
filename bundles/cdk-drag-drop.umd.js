@@ -1594,10 +1594,11 @@
             /** Cache of the dimensions of all the items inside the container. */
             this._itemPositions = [];
             /**
-             * Keeps track of the item that was last swapped with the dragged item, as
-             * well as what direction the pointer was moving in when the swap occured.
+             * Keeps track of the item that was last swapped with the dragged item, as well as what direction
+             * the pointer was moving in when the swap occured and whether the user's pointer continued to
+             * overlap with the swapped item after the swapping occurred.
              */
-            this._previousSwap = { drag: null, delta: 0 };
+            this._previousSwap = { drag: null, delta: 0, overlaps: false };
             /** Drop lists that are connected to the current one. */
             this._siblings = [];
             /** Direction in which the list is oriented. */
@@ -1880,8 +1881,6 @@
             var currentPosition = siblings[currentIndex].clientRect;
             var newPosition = siblingAtNewPosition.clientRect;
             var delta = currentIndex > newIndex ? 1 : -1;
-            this._previousSwap.drag = siblingAtNewPosition.drag;
-            this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
             // How many pixels the item's placeholder should be offset.
             var itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
             // How many pixels all the other items should be offset.
@@ -1923,6 +1922,10 @@
                     adjustClientRect(sibling.clientRect, offset, 0);
                 }
             });
+            // Note that it's important that we do this after the client rects have been adjusted.
+            this._previousSwap.overlaps = isInsideClientRect(newPosition, pointerX, pointerY);
+            this._previousSwap.drag = siblingAtNewPosition.drag;
+            this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
         };
         /**
          * Checks whether the user's pointer is close to the edges of either the
@@ -2016,6 +2019,7 @@
             this._itemPositions = [];
             this._previousSwap.drag = null;
             this._previousSwap.delta = 0;
+            this._previousSwap.overlaps = false;
             this._stopScrolling();
             this._viewportScrollSubscription.unsubscribe();
             this._parentPositions.clear();
@@ -2106,9 +2110,11 @@
                 }
                 if (delta) {
                     var direction = isHorizontal ? delta.x : delta.y;
-                    // If the user is still hovering over the same item as last time, and they didn't change
-                    // the direction in which they're dragging, we don't consider it a direction swap.
-                    if (drag === _this._previousSwap.drag && direction === _this._previousSwap.delta) {
+                    // If the user is still hovering over the same item as last time, their cursor hasn't left
+                    // the item after we made the swap, and they didn't change the direction in which they're
+                    // dragging, we don't consider it a direction swap.
+                    if (drag === _this._previousSwap.drag && _this._previousSwap.overlaps &&
+                        direction === _this._previousSwap.delta) {
                         return false;
                     }
                 }
