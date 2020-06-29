@@ -1,4 +1,4 @@
-import { Directive, Input, EventEmitter, Optional, SkipSelf, ChangeDetectorRef, Output, NgModule } from '@angular/core';
+import { InjectionToken, Directive, Input, EventEmitter, Optional, Inject, SkipSelf, ChangeDetectorRef, Output, NgModule } from '@angular/core';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription } from 'rxjs';
@@ -12,6 +12,12 @@ import { Subject, Subscription } from 'rxjs';
  */
 /** Used to generate unique ID for each accordion. */
 let nextId = 0;
+/**
+ * Injection token that can be used to reference instances of `CdkAccordion`. It serves
+ * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+const CDK_ACCORDION = new InjectionToken('CdkAccordion');
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */
@@ -53,6 +59,7 @@ let CdkAccordion = /** @class */ (() => {
         { type: Directive, args: [{
                     selector: 'cdk-accordion, [cdkAccordion]',
                     exportAs: 'cdkAccordion',
+                    providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }],
                 },] }
     ];
     CdkAccordion.propDecorators = {
@@ -182,14 +189,14 @@ let CdkAccordionItem = /** @class */ (() => {
                     selector: 'cdk-accordion-item, [cdkAccordionItem]',
                     exportAs: 'cdkAccordionItem',
                     providers: [
-                        // Provide CdkAccordion as undefined to prevent nested accordion items from registering
-                        // to the same accordion.
-                        { provide: CdkAccordion, useValue: ɵ0 },
+                        // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
+                        // registering to the same accordion.
+                        { provide: CDK_ACCORDION, useValue: ɵ0 },
                     ],
                 },] }
     ];
     CdkAccordionItem.ctorParameters = () => [
-        { type: CdkAccordion, decorators: [{ type: Optional }, { type: SkipSelf }] },
+        { type: CdkAccordion, decorators: [{ type: Optional }, { type: Inject, args: [CDK_ACCORDION,] }, { type: SkipSelf }] },
         { type: ChangeDetectorRef },
         { type: UniqueSelectionDispatcher }
     ];
@@ -235,5 +242,5 @@ let CdkAccordionModule = /** @class */ (() => {
  * Generated bundle index. Do not edit.
  */
 
-export { CdkAccordion, CdkAccordionItem, CdkAccordionModule };
+export { CdkAccordion, CdkAccordionItem, CdkAccordionModule, CDK_ACCORDION as ɵangular_material_src_cdk_accordion_accordion_a };
 //# sourceMappingURL=accordion.js.map

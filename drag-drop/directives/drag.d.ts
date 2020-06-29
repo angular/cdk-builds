@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Directionality } from '@angular/cdk/bidi';
-import { AfterViewInit, ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ElementRef, EventEmitter, NgZone, OnDestroy, QueryList, ViewContainerRef, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { Observable } from 'rxjs';
 import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDragStart, CdkDragRelease } from '../drag-events';
@@ -17,11 +17,6 @@ import { DragRef, Point } from '../drag-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
 import { DragDropConfig, DragStartDelay, DragAxis } from './config';
-/**
- * Injection token that is used to provide a CdkDropList instance to CdkDrag.
- * Used for avoiding circular imports.
- */
-export declare const CDK_DROP_LIST: InjectionToken<CdkDropList>;
 /** Element that can be moved inside a CdkDropList container. */
 export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDestroy {
     /** Element that the draggable is attached to. */

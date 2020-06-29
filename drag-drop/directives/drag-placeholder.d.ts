@@ -5,7 +5,13 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { TemplateRef } from '@angular/core';
+import { TemplateRef, InjectionToken } from '@angular/core';
+/**
+ * Injection token that can be used to reference instances of `CdkDragPlaceholder`. It serves as
+ * alternative token to the actual `CdkDragPlaceholder` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+export declare const CDK_DRAG_PLACEHOLDER: InjectionToken<CdkDragPlaceholder<any>>;
 /**
  * Element that will be used as a template for the placeholder of a CdkDrag when
  * it is being dragged. The placeholder is displayed in place of the element being dragged.

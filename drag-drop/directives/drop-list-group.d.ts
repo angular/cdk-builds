@@ -5,8 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, InjectionToken } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
+/**
+ * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
+ * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+export declare const CDK_DROP_LIST_GROUP: InjectionToken<CdkDropListGroup<unknown>>;
 /**
  * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
  * elements that are placed inside a `cdkDropListGroup` will be connected to each other

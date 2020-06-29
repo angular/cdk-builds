@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { BooleanInput } from '@angular/cdk/coercion';
-import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, InjectionToken } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { CdkDrag } from './drag';
@@ -22,6 +22,12 @@ import { DropListOrientation, DragAxis, DragDropConfig } from './config';
  */
 export interface CdkDropListInternal extends CdkDropList {
 }
+/**
+ * Injection token that can be used to reference instances of `CdkDropList`. It serves as
+ * alternative token to the actual `CdkDropList` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+export declare const CDK_DROP_LIST: InjectionToken<CdkDropList<any>>;
 /** Container that wraps a set of draggable items. */
 export declare class CdkDropList<T = any> implements OnDestroy {
     /** Element that the drop list is attached to. */

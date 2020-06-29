@@ -6,8 +6,14 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { BooleanInput } from '@angular/cdk/coercion';
-import { OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
+import { InjectionToken, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
+/**
+ * Injection token that can be used to reference instances of `CdkAccordion`. It serves
+ * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+export declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
  */

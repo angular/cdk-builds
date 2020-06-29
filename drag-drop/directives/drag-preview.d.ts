@@ -5,8 +5,14 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { TemplateRef } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
+import { InjectionToken, TemplateRef } from '@angular/core';
+/**
+ * Injection token that can be used to reference instances of `CdkDragPreview`. It serves as
+ * alternative token to the actual `CdkDragPreview` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+export declare const CDK_DRAG_PREVIEW: InjectionToken<CdkDragPreview<any>>;
 /**
  * Element that will be used as a template for the preview
  * of a CdkDrag when it is being dragged.

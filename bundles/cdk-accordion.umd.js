@@ -14,6 +14,12 @@
     /** Used to generate unique ID for each accordion. */
     var nextId = 0;
     /**
+     * Injection token that can be used to reference instances of `CdkAccordion`. It serves
+     * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
+     * retention of the class and its directive metadata.
+     */
+    var CDK_ACCORDION = new core.InjectionToken('CdkAccordion');
+    /**
      * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.
      */
     var CdkAccordion = /** @class */ (function () {
@@ -56,6 +62,7 @@
             { type: core.Directive, args: [{
                         selector: 'cdk-accordion, [cdkAccordion]',
                         exportAs: 'cdkAccordion',
+                        providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }],
                     },] }
         ];
         CdkAccordion.propDecorators = {
@@ -193,14 +200,14 @@
                         selector: 'cdk-accordion-item, [cdkAccordionItem]',
                         exportAs: 'cdkAccordionItem',
                         providers: [
-                            // Provide CdkAccordion as undefined to prevent nested accordion items from registering
-                            // to the same accordion.
-                            { provide: CdkAccordion, useValue: ɵ0 },
+                            // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
+                            // registering to the same accordion.
+                            { provide: CDK_ACCORDION, useValue: ɵ0 },
                         ],
                     },] }
         ];
         CdkAccordionItem.ctorParameters = function () { return [
-            { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] },
+            { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.Inject, args: [CDK_ACCORDION,] }, { type: core.SkipSelf }] },
             { type: core.ChangeDetectorRef },
             { type: collections.UniqueSelectionDispatcher }
         ]; };
@@ -249,6 +256,7 @@
     exports.CdkAccordion = CdkAccordion;
     exports.CdkAccordionItem = CdkAccordionItem;
     exports.CdkAccordionModule = CdkAccordionModule;
+    exports.ɵangular_material_src_cdk_accordion_accordion_a = CDK_ACCORDION;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
