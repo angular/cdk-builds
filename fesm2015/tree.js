@@ -122,9 +122,13 @@ class FlatTreeControl extends BaseTreeControl {
 /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
 class NestedTreeControl extends BaseTreeControl {
     /** Construct with nested tree function getChildren. */
-    constructor(getChildren) {
+    constructor(getChildren, options) {
         super();
         this.getChildren = getChildren;
+        this.options = options;
+        if (this.options) {
+            this.trackBy = this.options.trackBy;
+        }
     }
     /**
      * Expands all dataNodes in the tree.
@@ -135,7 +139,7 @@ class NestedTreeControl extends BaseTreeControl {
     expandAll() {
         this.expansionModel.clear();
         const allNodes = this.dataNodes.reduce((accumulator, dataNode) => [...accumulator, ...this.getDescendants(dataNode), dataNode], []);
-        this.expansionModel.select(...allNodes);
+        this.expansionModel.select(...allNodes.map(node => this._trackByValue(node)));
     }
     /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
     getDescendants(dataNode) {

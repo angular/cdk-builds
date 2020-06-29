@@ -345,9 +345,13 @@
     var NestedTreeControl = /** @class */ (function (_super) {
         __extends(NestedTreeControl, _super);
         /** Construct with nested tree function getChildren. */
-        function NestedTreeControl(getChildren) {
+        function NestedTreeControl(getChildren, options) {
             var _this = _super.call(this) || this;
             _this.getChildren = getChildren;
+            _this.options = options;
+            if (_this.options) {
+                _this.trackBy = _this.options.trackBy;
+            }
             return _this;
         }
         /**
@@ -363,7 +367,7 @@
             var allNodes = this.dataNodes.reduce(function (accumulator, dataNode) {
                 return __spread(accumulator, _this.getDescendants(dataNode), [dataNode]);
             }, []);
-            (_a = this.expansionModel).select.apply(_a, __spread(allNodes));
+            (_a = this.expansionModel).select.apply(_a, __spread(allNodes.map(function (node) { return _this._trackByValue(node); })));
         };
         /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
         NestedTreeControl.prototype.getDescendants = function (dataNode) {
