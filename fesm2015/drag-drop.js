@@ -643,8 +643,6 @@ class DragRef {
     }
     /** Starts the dragging sequence. */
     _startDragSequence(event) {
-        // Emit the event on the item before the one on the container.
-        this.started.next({ source: this });
         if (isTouchEvent(event)) {
             this._lastTouchEventTime = Date.now();
         }
@@ -664,11 +662,13 @@ class DragRef {
             element.style.display = 'none';
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             getPreviewInsertionPoint(this._document).appendChild(preview);
+            this.started.next({ source: this }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
             this._initialIndex = dropContainer.getItemIndex(this);
         }
         else {
+            this.started.next({ source: this });
             this._initialContainer = this._initialIndex = undefined;
         }
         // Important to run after we've called `start` on the parent container
@@ -2918,17 +2918,11 @@ let CdkDrag = /** @class */ (() => {
         /**
          * Returns the element that is being used as a placeholder
          * while the current element is being dragged.
-         * @deprecated No longer being used to be removed.
-         * @breaking-change 11.0.0
          */
         getPlaceholderElement() {
             return this._dragRef.getPlaceholderElement();
         }
-        /**
-         * Returns the root draggable element.
-         * @deprecated No longer being used to be removed.
-         * @breaking-change 11.0.0
-         */
+        /** Returns the root draggable element. */
         getRootElement() {
             return this._dragRef.getRootElement();
         }
