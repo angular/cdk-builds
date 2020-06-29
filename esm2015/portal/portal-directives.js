@@ -77,7 +77,7 @@ let CdkPortalOutlet = /** @class */ (() => {
              * Attaches the given DomPortal to this PortalHost by moving all of the portal content into it.
              * @param portal Portal to be attached.
              * @deprecated To be turned into a method.
-             * @breaking-change 10.0.0-sha-952f57631
+             * @breaking-change 10.0.0-sha-cf53a70b1
              */
             this.attachDomPortal = (portal) => {
                 // @breaking-change 9.0.0 Remove check and error once the
