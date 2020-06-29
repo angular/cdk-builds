@@ -376,9 +376,9 @@ class ListKeyManager {
         return this;
     }
     setActiveItem(item) {
-        const previousActiveItem = this._activeItem;
+        const previousIndex = this._activeItemIndex;
         this.updateActiveItem(item);
-        if (this._activeItem !== previousActiveItem) {
+        if (this._activeItemIndex !== previousIndex) {
             this.change.next(this._activeItemIndex);
         }
     }
@@ -884,7 +884,6 @@ class FocusTrap {
             }
         }
         this._startAnchor = this._endAnchor = null;
-        this._hasAttached = false;
     }
     /**
      * Inserts the anchors into the DOM. This is usually done automatically
@@ -1169,24 +1168,14 @@ let CdkTrapFocus = /** @class */ (() => {
         ngAfterContentInit() {
             this.focusTrap.attachAnchors();
             if (this.autoCapture) {
-                this._captureFocus();
+                this._previouslyFocusedElement = this._document.activeElement;
+                this.focusTrap.focusInitialElementWhenReady();
             }
         }
         ngDoCheck() {
             if (!this.focusTrap.hasAttached()) {
                 this.focusTrap.attachAnchors();
             }
-        }
-        ngOnChanges(changes) {
-            const autoCaptureChange = changes['autoCapture'];
-            if (autoCaptureChange && !autoCaptureChange.firstChange && this.autoCapture &&
-                this.focusTrap.hasAttached()) {
-                this._captureFocus();
-            }
-        }
-        _captureFocus() {
-            this._previouslyFocusedElement = this._document.activeElement;
-            this.focusTrap.focusInitialElementWhenReady();
         }
     }
     CdkTrapFocus.decorators = [
