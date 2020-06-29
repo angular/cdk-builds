@@ -222,43 +222,40 @@ function getMultipleValuesInSingleSelectionError() {
  * This service does not *store* any IDs and names because they may change at any time, so it is
  * less error-prone if they are simply passed through when the events occur.
  */
-let UniqueSelectionDispatcher = /** @class */ (() => {
-    class UniqueSelectionDispatcher {
-        constructor() {
-            this._listeners = [];
-        }
-        /**
-         * Notify other items that selection for the given name has been set.
-         * @param id ID of the item.
-         * @param name Name of the item.
-         */
-        notify(id, name) {
-            for (let listener of this._listeners) {
-                listener(id, name);
-            }
-        }
-        /**
-         * Listen for future changes to item selection.
-         * @return Function used to deregister listener
-         */
-        listen(listener) {
-            this._listeners.push(listener);
-            return () => {
-                this._listeners = this._listeners.filter((registered) => {
-                    return listener !== registered;
-                });
-            };
-        }
-        ngOnDestroy() {
-            this._listeners = [];
+class UniqueSelectionDispatcher {
+    constructor() {
+        this._listeners = [];
+    }
+    /**
+     * Notify other items that selection for the given name has been set.
+     * @param id ID of the item.
+     * @param name Name of the item.
+     */
+    notify(id, name) {
+        for (let listener of this._listeners) {
+            listener(id, name);
         }
     }
-    UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
-    UniqueSelectionDispatcher.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    return UniqueSelectionDispatcher;
-})();
+    /**
+     * Listen for future changes to item selection.
+     * @return Function used to deregister listener
+     */
+    listen(listener) {
+        this._listeners.push(listener);
+        return () => {
+            this._listeners = this._listeners.filter((registered) => {
+                return listener !== registered;
+            });
+        };
+    }
+    ngOnDestroy() {
+        this._listeners = [];
+    }
+}
+UniqueSelectionDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function UniqueSelectionDispatcher_Factory() { return new UniqueSelectionDispatcher(); }, token: UniqueSelectionDispatcher, providedIn: "root" });
+UniqueSelectionDispatcher.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
 
 /**
  * @license

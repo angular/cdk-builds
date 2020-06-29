@@ -185,24 +185,21 @@ const CDK_TREE_NODE_OUTLET_NODE = new InjectionToken('CDK_TREE_NODE_OUTLET_NODE'
  * Outlet for nested CdkNode. Put `[cdkTreeNodeOutlet]` on a tag to place children dataNodes
  * inside the outlet.
  */
-let CdkTreeNodeOutlet = /** @class */ (() => {
-    class CdkTreeNodeOutlet {
-        constructor(viewContainer, _node) {
-            this.viewContainer = viewContainer;
-            this._node = _node;
-        }
+class CdkTreeNodeOutlet {
+    constructor(viewContainer, _node) {
+        this.viewContainer = viewContainer;
+        this._node = _node;
     }
-    CdkTreeNodeOutlet.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkTreeNodeOutlet]'
-                },] }
-    ];
-    CdkTreeNodeOutlet.ctorParameters = () => [
-        { type: ViewContainerRef },
-        { type: undefined, decorators: [{ type: Inject, args: [CDK_TREE_NODE_OUTLET_NODE,] }, { type: Optional }] }
-    ];
-    return CdkTreeNodeOutlet;
-})();
+}
+CdkTreeNodeOutlet.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkTreeNodeOutlet]'
+            },] }
+];
+CdkTreeNodeOutlet.ctorParameters = () => [
+    { type: ViewContainerRef },
+    { type: undefined, decorators: [{ type: Inject, args: [CDK_TREE_NODE_OUTLET_NODE,] }, { type: Optional }] }
+];
 
 /**
  * @license
@@ -221,26 +218,23 @@ class CdkTreeNodeOutletContext {
  * Data node definition for the CdkTree.
  * Captures the node's template and a when predicate that describes when this node should be used.
  */
-let CdkTreeNodeDef = /** @class */ (() => {
-    class CdkTreeNodeDef {
-        /** @docs-private */
-        constructor(template) {
-            this.template = template;
-        }
+class CdkTreeNodeDef {
+    /** @docs-private */
+    constructor(template) {
+        this.template = template;
     }
-    CdkTreeNodeDef.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkTreeNodeDef]',
-                    inputs: [
-                        'when: cdkTreeNodeDefWhen'
-                    ],
-                },] }
-    ];
-    CdkTreeNodeDef.ctorParameters = () => [
-        { type: TemplateRef }
-    ];
-    return CdkTreeNodeDef;
-})();
+}
+CdkTreeNodeDef.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkTreeNodeDef]',
+                inputs: [
+                    'when: cdkTreeNodeDefWhen'
+                ],
+            },] }
+];
+CdkTreeNodeDef.ctorParameters = () => [
+    { type: TemplateRef }
+];
 
 /**
  * @license
@@ -289,305 +283,299 @@ function getTreeControlFunctionsMissingError() {
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
-let CdkTree = /** @class */ (() => {
-    class CdkTree {
-        constructor(_differs, _changeDetectorRef) {
-            this._differs = _differs;
-            this._changeDetectorRef = _changeDetectorRef;
-            /** Subject that emits when the component has been destroyed. */
-            this._onDestroy = new Subject();
-            /** Level of nodes */
-            this._levels = new Map();
-            // TODO(tinayuangao): Setup a listener for scrolling, emit the calculated view to viewChange.
-            //     Remove the MAX_VALUE in viewChange
-            /**
-             * Stream containing the latest information on what rows are being displayed on screen.
-             * Can be used by the data source to as a heuristic of what data should be provided.
-             */
-            this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
-        }
+class CdkTree {
+    constructor(_differs, _changeDetectorRef) {
+        this._differs = _differs;
+        this._changeDetectorRef = _changeDetectorRef;
+        /** Subject that emits when the component has been destroyed. */
+        this._onDestroy = new Subject();
+        /** Level of nodes */
+        this._levels = new Map();
+        // TODO(tinayuangao): Setup a listener for scrolling, emit the calculated view to viewChange.
+        //     Remove the MAX_VALUE in viewChange
         /**
-         * Provides a stream containing the latest data array to render. Influenced by the tree's
-         * stream of view window (what dataNodes are currently on screen).
-         * Data source can be an observable of data array, or a data array to render.
+         * Stream containing the latest information on what rows are being displayed on screen.
+         * Can be used by the data source to as a heuristic of what data should be provided.
          */
-        get dataSource() { return this._dataSource; }
-        set dataSource(dataSource) {
-            if (this._dataSource !== dataSource) {
-                this._switchDataSource(dataSource);
-            }
-        }
-        ngOnInit() {
-            this._dataDiffer = this._differs.find([]).create(this.trackBy);
-            if (!this.treeControl) {
-                throw getTreeControlMissingError();
-            }
-        }
-        ngOnDestroy() {
-            this._nodeOutlet.viewContainer.clear();
-            this.viewChange.complete();
-            this._onDestroy.next();
-            this._onDestroy.complete();
-            if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
-                this.dataSource.disconnect(this);
-            }
-            if (this._dataSubscription) {
-                this._dataSubscription.unsubscribe();
-                this._dataSubscription = null;
-            }
-        }
-        ngAfterContentChecked() {
-            const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
-            if (defaultNodeDefs.length > 1) {
-                throw getTreeMultipleDefaultNodeDefsError();
-            }
-            this._defaultNodeDef = defaultNodeDefs[0];
-            if (this.dataSource && this._nodeDefs && !this._dataSubscription) {
-                this._observeRenderChanges();
-            }
-        }
-        // TODO(tinayuangao): Work on keyboard traversal and actions, make sure it's working for RTL
-        //     and nested trees.
-        /**
-         * Switch to the provided data source by resetting the data and unsubscribing from the current
-         * render change subscription if one exists. If the data source is null, interpret this by
-         * clearing the node outlet. Otherwise start listening for new data.
-         */
-        _switchDataSource(dataSource) {
-            if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
-                this.dataSource.disconnect(this);
-            }
-            if (this._dataSubscription) {
-                this._dataSubscription.unsubscribe();
-                this._dataSubscription = null;
-            }
-            // Remove the all dataNodes if there is now no data source
-            if (!dataSource) {
-                this._nodeOutlet.viewContainer.clear();
-            }
-            this._dataSource = dataSource;
-            if (this._nodeDefs) {
-                this._observeRenderChanges();
-            }
-        }
-        /** Set up a subscription for the data provided by the data source. */
-        _observeRenderChanges() {
-            let dataStream;
-            if (isDataSource(this._dataSource)) {
-                dataStream = this._dataSource.connect(this);
-            }
-            else if (isObservable(this._dataSource)) {
-                dataStream = this._dataSource;
-            }
-            else if (Array.isArray(this._dataSource)) {
-                dataStream = of(this._dataSource);
-            }
-            if (dataStream) {
-                this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
-                    .subscribe(data => this.renderNodeChanges(data));
-            }
-            else {
-                throw getTreeNoValidDataSourceError();
-            }
-        }
-        /** Check for changes made in the data and render each change (node added/removed/moved). */
-        renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer, parentData) {
-            const changes = dataDiffer.diff(data);
-            if (!changes) {
-                return;
-            }
-            changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
-                if (item.previousIndex == null) {
-                    this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
-                }
-                else if (currentIndex == null) {
-                    viewContainer.remove(adjustedPreviousIndex);
-                    this._levels.delete(item.item);
-                }
-                else {
-                    const view = viewContainer.get(adjustedPreviousIndex);
-                    viewContainer.move(view, currentIndex);
-                }
-            });
-            this._changeDetectorRef.detectChanges();
-        }
-        /**
-         * Finds the matching node definition that should be used for this node data. If there is only
-         * one node definition, it is returned. Otherwise, find the node definition that has a when
-         * predicate that returns true with the data. If none return true, return the default node
-         * definition.
-         */
-        _getNodeDef(data, i) {
-            if (this._nodeDefs.length === 1) {
-                return this._nodeDefs.first;
-            }
-            const nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
-            if (!nodeDef) {
-                throw getTreeMissingMatchingNodeDefError();
-            }
-            return nodeDef;
-        }
-        /**
-         * Create the embedded view for the data node template and place it in the correct index location
-         * within the data node view container.
-         */
-        insertNode(nodeData, index, viewContainer, parentData) {
-            const node = this._getNodeDef(nodeData, index);
-            // Node context that will be provided to created embedded view
-            const context = new CdkTreeNodeOutletContext(nodeData);
-            // If the tree is flat tree, then use the `getLevel` function in flat tree control
-            // Otherwise, use the level of parent node.
-            if (this.treeControl.getLevel) {
-                context.level = this.treeControl.getLevel(nodeData);
-            }
-            else if (typeof parentData !== 'undefined' && this._levels.has(parentData)) {
-                context.level = this._levels.get(parentData) + 1;
-            }
-            else {
-                context.level = 0;
-            }
-            this._levels.set(nodeData, context.level);
-            // Use default tree nodeOutlet, or nested node's nodeOutlet
-            const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
-            container.createEmbeddedView(node.template, context, index);
-            // Set the data to just created `CdkTreeNode`.
-            // The `CdkTreeNode` created from `createEmbeddedView` will be saved in static variable
-            //     `mostRecentTreeNode`. We get it from static variable and pass the node data to it.
-            if (CdkTreeNode.mostRecentTreeNode) {
-                CdkTreeNode.mostRecentTreeNode.data = nodeData;
-            }
+        this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
+    }
+    /**
+     * Provides a stream containing the latest data array to render. Influenced by the tree's
+     * stream of view window (what dataNodes are currently on screen).
+     * Data source can be an observable of data array, or a data array to render.
+     */
+    get dataSource() { return this._dataSource; }
+    set dataSource(dataSource) {
+        if (this._dataSource !== dataSource) {
+            this._switchDataSource(dataSource);
         }
     }
-    CdkTree.decorators = [
-        { type: Component, args: [{
-                    selector: 'cdk-tree',
-                    exportAs: 'cdkTree',
-                    template: `<ng-container cdkTreeNodeOutlet></ng-container>`,
-                    host: {
-                        'class': 'cdk-tree',
-                        'role': 'tree',
-                    },
-                    encapsulation: ViewEncapsulation.None,
-                    // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
-                    // The view for `CdkTree` consists entirely of templates declared in other views. As they are
-                    // declared elsewhere, they are checked when their declaration points are checked.
-                    // tslint:disable-next-line:validate-decorators
-                    changeDetection: ChangeDetectionStrategy.Default
-                },] }
-    ];
-    CdkTree.ctorParameters = () => [
-        { type: IterableDiffers },
-        { type: ChangeDetectorRef }
-    ];
-    CdkTree.propDecorators = {
-        dataSource: [{ type: Input }],
-        treeControl: [{ type: Input }],
-        trackBy: [{ type: Input }],
-        _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
-        _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef, {
-                        // We need to use `descendants: true`, because Ivy will no longer match
-                        // indirect descendants if it's left as false.
-                        descendants: true
-                    },] }]
-    };
-    return CdkTree;
-})();
+    ngOnInit() {
+        this._dataDiffer = this._differs.find([]).create(this.trackBy);
+        if (!this.treeControl) {
+            throw getTreeControlMissingError();
+        }
+    }
+    ngOnDestroy() {
+        this._nodeOutlet.viewContainer.clear();
+        this.viewChange.complete();
+        this._onDestroy.next();
+        this._onDestroy.complete();
+        if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
+            this.dataSource.disconnect(this);
+        }
+        if (this._dataSubscription) {
+            this._dataSubscription.unsubscribe();
+            this._dataSubscription = null;
+        }
+    }
+    ngAfterContentChecked() {
+        const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
+        if (defaultNodeDefs.length > 1) {
+            throw getTreeMultipleDefaultNodeDefsError();
+        }
+        this._defaultNodeDef = defaultNodeDefs[0];
+        if (this.dataSource && this._nodeDefs && !this._dataSubscription) {
+            this._observeRenderChanges();
+        }
+    }
+    // TODO(tinayuangao): Work on keyboard traversal and actions, make sure it's working for RTL
+    //     and nested trees.
+    /**
+     * Switch to the provided data source by resetting the data and unsubscribing from the current
+     * render change subscription if one exists. If the data source is null, interpret this by
+     * clearing the node outlet. Otherwise start listening for new data.
+     */
+    _switchDataSource(dataSource) {
+        if (this._dataSource && typeof this._dataSource.disconnect === 'function') {
+            this.dataSource.disconnect(this);
+        }
+        if (this._dataSubscription) {
+            this._dataSubscription.unsubscribe();
+            this._dataSubscription = null;
+        }
+        // Remove the all dataNodes if there is now no data source
+        if (!dataSource) {
+            this._nodeOutlet.viewContainer.clear();
+        }
+        this._dataSource = dataSource;
+        if (this._nodeDefs) {
+            this._observeRenderChanges();
+        }
+    }
+    /** Set up a subscription for the data provided by the data source. */
+    _observeRenderChanges() {
+        let dataStream;
+        if (isDataSource(this._dataSource)) {
+            dataStream = this._dataSource.connect(this);
+        }
+        else if (isObservable(this._dataSource)) {
+            dataStream = this._dataSource;
+        }
+        else if (Array.isArray(this._dataSource)) {
+            dataStream = of(this._dataSource);
+        }
+        if (dataStream) {
+            this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
+                .subscribe(data => this.renderNodeChanges(data));
+        }
+        else {
+            throw getTreeNoValidDataSourceError();
+        }
+    }
+    /** Check for changes made in the data and render each change (node added/removed/moved). */
+    renderNodeChanges(data, dataDiffer = this._dataDiffer, viewContainer = this._nodeOutlet.viewContainer, parentData) {
+        const changes = dataDiffer.diff(data);
+        if (!changes) {
+            return;
+        }
+        changes.forEachOperation((item, adjustedPreviousIndex, currentIndex) => {
+            if (item.previousIndex == null) {
+                this.insertNode(data[currentIndex], currentIndex, viewContainer, parentData);
+            }
+            else if (currentIndex == null) {
+                viewContainer.remove(adjustedPreviousIndex);
+                this._levels.delete(item.item);
+            }
+            else {
+                const view = viewContainer.get(adjustedPreviousIndex);
+                viewContainer.move(view, currentIndex);
+            }
+        });
+        this._changeDetectorRef.detectChanges();
+    }
+    /**
+     * Finds the matching node definition that should be used for this node data. If there is only
+     * one node definition, it is returned. Otherwise, find the node definition that has a when
+     * predicate that returns true with the data. If none return true, return the default node
+     * definition.
+     */
+    _getNodeDef(data, i) {
+        if (this._nodeDefs.length === 1) {
+            return this._nodeDefs.first;
+        }
+        const nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
+        if (!nodeDef) {
+            throw getTreeMissingMatchingNodeDefError();
+        }
+        return nodeDef;
+    }
+    /**
+     * Create the embedded view for the data node template and place it in the correct index location
+     * within the data node view container.
+     */
+    insertNode(nodeData, index, viewContainer, parentData) {
+        const node = this._getNodeDef(nodeData, index);
+        // Node context that will be provided to created embedded view
+        const context = new CdkTreeNodeOutletContext(nodeData);
+        // If the tree is flat tree, then use the `getLevel` function in flat tree control
+        // Otherwise, use the level of parent node.
+        if (this.treeControl.getLevel) {
+            context.level = this.treeControl.getLevel(nodeData);
+        }
+        else if (typeof parentData !== 'undefined' && this._levels.has(parentData)) {
+            context.level = this._levels.get(parentData) + 1;
+        }
+        else {
+            context.level = 0;
+        }
+        this._levels.set(nodeData, context.level);
+        // Use default tree nodeOutlet, or nested node's nodeOutlet
+        const container = viewContainer ? viewContainer : this._nodeOutlet.viewContainer;
+        container.createEmbeddedView(node.template, context, index);
+        // Set the data to just created `CdkTreeNode`.
+        // The `CdkTreeNode` created from `createEmbeddedView` will be saved in static variable
+        //     `mostRecentTreeNode`. We get it from static variable and pass the node data to it.
+        if (CdkTreeNode.mostRecentTreeNode) {
+            CdkTreeNode.mostRecentTreeNode.data = nodeData;
+        }
+    }
+}
+CdkTree.decorators = [
+    { type: Component, args: [{
+                selector: 'cdk-tree',
+                exportAs: 'cdkTree',
+                template: `<ng-container cdkTreeNodeOutlet></ng-container>`,
+                host: {
+                    'class': 'cdk-tree',
+                    'role': 'tree',
+                },
+                encapsulation: ViewEncapsulation.None,
+                // The "OnPush" status for the `CdkTree` component is effectively a noop, so we are removing it.
+                // The view for `CdkTree` consists entirely of templates declared in other views. As they are
+                // declared elsewhere, they are checked when their declaration points are checked.
+                // tslint:disable-next-line:validate-decorators
+                changeDetection: ChangeDetectionStrategy.Default
+            },] }
+];
+CdkTree.ctorParameters = () => [
+    { type: IterableDiffers },
+    { type: ChangeDetectorRef }
+];
+CdkTree.propDecorators = {
+    dataSource: [{ type: Input }],
+    treeControl: [{ type: Input }],
+    trackBy: [{ type: Input }],
+    _nodeOutlet: [{ type: ViewChild, args: [CdkTreeNodeOutlet, { static: true },] }],
+    _nodeDefs: [{ type: ContentChildren, args: [CdkTreeNodeDef, {
+                    // We need to use `descendants: true`, because Ivy will no longer match
+                    // indirect descendants if it's left as false.
+                    descendants: true
+                },] }]
+};
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-let CdkTreeNode = /** @class */ (() => {
-    class CdkTreeNode {
-        constructor(_elementRef, _tree) {
-            this._elementRef = _elementRef;
-            this._tree = _tree;
-            /** Subject that emits when the component has been destroyed. */
-            this._destroyed = new Subject();
-            /** Emits when the node's data has changed. */
-            this._dataChanges = new Subject();
-            /**
-             * The role of the node should be 'group' if it's an internal node,
-             * and 'treeitem' if it's a leaf node.
-             */
-            this.role = 'treeitem';
-            CdkTreeNode.mostRecentTreeNode = this;
-        }
-        /** The tree node's data. */
-        get data() { return this._data; }
-        set data(value) {
-            if (value !== this._data) {
-                this._data = value;
-                this._setRoleFromData();
-                this._dataChanges.next();
-            }
-        }
-        get isExpanded() {
-            return this._tree.treeControl.isExpanded(this._data);
-        }
-        get level() {
-            return this._tree.treeControl.getLevel ? this._tree.treeControl.getLevel(this._data) : 0;
-        }
-        ngOnDestroy() {
-            // If this is the last tree node being destroyed,
-            // clear out the reference to avoid leaking memory.
-            if (CdkTreeNode.mostRecentTreeNode === this) {
-                CdkTreeNode.mostRecentTreeNode = null;
-            }
-            this._dataChanges.complete();
-            this._destroyed.next();
-            this._destroyed.complete();
-        }
-        /** Focuses the menu item. Implements for FocusableOption. */
-        focus() {
-            this._elementRef.nativeElement.focus();
-        }
-        _setRoleFromData() {
-            if (this._tree.treeControl.isExpandable) {
-                this.role = this._tree.treeControl.isExpandable(this._data) ? 'group' : 'treeitem';
-            }
-            else {
-                if (!this._tree.treeControl.getChildren) {
-                    throw getTreeControlFunctionsMissingError();
-                }
-                const childrenNodes = this._tree.treeControl.getChildren(this._data);
-                if (Array.isArray(childrenNodes)) {
-                    this._setRoleFromChildren(childrenNodes);
-                }
-                else if (isObservable(childrenNodes)) {
-                    childrenNodes.pipe(takeUntil(this._destroyed))
-                        .subscribe(children => this._setRoleFromChildren(children));
-                }
-            }
-        }
-        _setRoleFromChildren(children) {
-            this.role = children && children.length ? 'group' : 'treeitem';
+class CdkTreeNode {
+    constructor(_elementRef, _tree) {
+        this._elementRef = _elementRef;
+        this._tree = _tree;
+        /** Subject that emits when the component has been destroyed. */
+        this._destroyed = new Subject();
+        /** Emits when the node's data has changed. */
+        this._dataChanges = new Subject();
+        /**
+         * The role of the node should be 'group' if it's an internal node,
+         * and 'treeitem' if it's a leaf node.
+         */
+        this.role = 'treeitem';
+        CdkTreeNode.mostRecentTreeNode = this;
+    }
+    /** The tree node's data. */
+    get data() { return this._data; }
+    set data(value) {
+        if (value !== this._data) {
+            this._data = value;
+            this._setRoleFromData();
+            this._dataChanges.next();
         }
     }
-    /**
-     * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
-     * in `CdkTree` and set the data to it.
-     */
-    CdkTreeNode.mostRecentTreeNode = null;
-    CdkTreeNode.decorators = [
-        { type: Directive, args: [{
-                    selector: 'cdk-tree-node',
-                    exportAs: 'cdkTreeNode',
-                    host: {
-                        '[attr.aria-expanded]': 'isExpanded',
-                        '[attr.aria-level]': 'role === "treeitem" ? level : null',
-                        '[attr.role]': 'role',
-                        'class': 'cdk-tree-node',
-                    },
-                },] }
-    ];
-    CdkTreeNode.ctorParameters = () => [
-        { type: ElementRef },
-        { type: CdkTree }
-    ];
-    CdkTreeNode.propDecorators = {
-        role: [{ type: Input }]
-    };
-    return CdkTreeNode;
-})();
+    get isExpanded() {
+        return this._tree.treeControl.isExpanded(this._data);
+    }
+    get level() {
+        return this._tree.treeControl.getLevel ? this._tree.treeControl.getLevel(this._data) : 0;
+    }
+    ngOnDestroy() {
+        // If this is the last tree node being destroyed,
+        // clear out the reference to avoid leaking memory.
+        if (CdkTreeNode.mostRecentTreeNode === this) {
+            CdkTreeNode.mostRecentTreeNode = null;
+        }
+        this._dataChanges.complete();
+        this._destroyed.next();
+        this._destroyed.complete();
+    }
+    /** Focuses the menu item. Implements for FocusableOption. */
+    focus() {
+        this._elementRef.nativeElement.focus();
+    }
+    _setRoleFromData() {
+        if (this._tree.treeControl.isExpandable) {
+            this.role = this._tree.treeControl.isExpandable(this._data) ? 'group' : 'treeitem';
+        }
+        else {
+            if (!this._tree.treeControl.getChildren) {
+                throw getTreeControlFunctionsMissingError();
+            }
+            const childrenNodes = this._tree.treeControl.getChildren(this._data);
+            if (Array.isArray(childrenNodes)) {
+                this._setRoleFromChildren(childrenNodes);
+            }
+            else if (isObservable(childrenNodes)) {
+                childrenNodes.pipe(takeUntil(this._destroyed))
+                    .subscribe(children => this._setRoleFromChildren(children));
+            }
+        }
+    }
+    _setRoleFromChildren(children) {
+        this.role = children && children.length ? 'group' : 'treeitem';
+    }
+}
+/**
+ * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
+ * in `CdkTree` and set the data to it.
+ */
+CdkTreeNode.mostRecentTreeNode = null;
+CdkTreeNode.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-tree-node',
+                exportAs: 'cdkTreeNode',
+                host: {
+                    '[attr.aria-expanded]': 'isExpanded',
+                    '[attr.aria-level]': 'role === "treeitem" ? level : null',
+                    '[attr.role]': 'role',
+                    'class': 'cdk-tree-node',
+                },
+            },] }
+];
+CdkTreeNode.ctorParameters = () => [
+    { type: ElementRef },
+    { type: CdkTree }
+];
+CdkTreeNode.propDecorators = {
+    role: [{ type: Input }]
+};
 
 /**
  * @license
@@ -602,94 +590,91 @@ let CdkTreeNode = /** @class */ (() => {
  * be added in the `cdkTreeNodeOutlet` in tree node template.
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
-let CdkNestedTreeNode = /** @class */ (() => {
-    class CdkNestedTreeNode extends CdkTreeNode {
-        constructor(_elementRef, _tree, _differs) {
-            super(_elementRef, _tree);
-            this._elementRef = _elementRef;
-            this._tree = _tree;
-            this._differs = _differs;
+class CdkNestedTreeNode extends CdkTreeNode {
+    constructor(_elementRef, _tree, _differs) {
+        super(_elementRef, _tree);
+        this._elementRef = _elementRef;
+        this._tree = _tree;
+        this._differs = _differs;
+    }
+    ngAfterContentInit() {
+        this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
+        if (!this._tree.treeControl.getChildren) {
+            throw getTreeControlFunctionsMissingError();
         }
-        ngAfterContentInit() {
-            this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
-            if (!this._tree.treeControl.getChildren) {
-                throw getTreeControlFunctionsMissingError();
-            }
-            const childrenNodes = this._tree.treeControl.getChildren(this.data);
-            if (Array.isArray(childrenNodes)) {
-                this.updateChildrenNodes(childrenNodes);
-            }
-            else if (isObservable(childrenNodes)) {
-                childrenNodes.pipe(takeUntil(this._destroyed))
-                    .subscribe(result => this.updateChildrenNodes(result));
-            }
-            this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
-                .subscribe(() => this.updateChildrenNodes());
+        const childrenNodes = this._tree.treeControl.getChildren(this.data);
+        if (Array.isArray(childrenNodes)) {
+            this.updateChildrenNodes(childrenNodes);
         }
-        ngOnDestroy() {
-            this._clear();
-            super.ngOnDestroy();
+        else if (isObservable(childrenNodes)) {
+            childrenNodes.pipe(takeUntil(this._destroyed))
+                .subscribe(result => this.updateChildrenNodes(result));
         }
-        /** Add children dataNodes to the NodeOutlet */
-        updateChildrenNodes(children) {
-            const outlet = this._getNodeOutlet();
-            if (children) {
-                this._children = children;
-            }
-            if (outlet && this._children) {
-                const viewContainer = outlet.viewContainer;
-                this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);
-            }
-            else {
-                // Reset the data differ if there's no children nodes displayed
-                this._dataDiffer.diff([]);
-            }
+        this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
+            .subscribe(() => this.updateChildrenNodes());
+    }
+    ngOnDestroy() {
+        this._clear();
+        super.ngOnDestroy();
+    }
+    /** Add children dataNodes to the NodeOutlet */
+    updateChildrenNodes(children) {
+        const outlet = this._getNodeOutlet();
+        if (children) {
+            this._children = children;
         }
-        /** Clear the children dataNodes. */
-        _clear() {
-            const outlet = this._getNodeOutlet();
-            if (outlet) {
-                outlet.viewContainer.clear();
-                this._dataDiffer.diff([]);
-            }
+        if (outlet && this._children) {
+            const viewContainer = outlet.viewContainer;
+            this._tree.renderNodeChanges(this._children, this._dataDiffer, viewContainer, this._data);
         }
-        /** Gets the outlet for the current node. */
-        _getNodeOutlet() {
-            const outlets = this.nodeOutlet;
-            // Note that since we use `descendants: true` on the query, we have to ensure
-            // that we don't pick up the outlet of a child node by accident.
-            return outlets && outlets.find(outlet => !outlet._node || outlet._node === this);
+        else {
+            // Reset the data differ if there's no children nodes displayed
+            this._dataDiffer.diff([]);
         }
     }
-    CdkNestedTreeNode.decorators = [
-        { type: Directive, args: [{
-                    selector: 'cdk-nested-tree-node',
-                    exportAs: 'cdkNestedTreeNode',
-                    host: {
-                        '[attr.aria-expanded]': 'isExpanded',
-                        '[attr.role]': 'role',
-                        'class': 'cdk-tree-node cdk-nested-tree-node',
-                    },
-                    providers: [
-                        { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
-                        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
-                    ]
-                },] }
-    ];
-    CdkNestedTreeNode.ctorParameters = () => [
-        { type: ElementRef },
-        { type: CdkTree },
-        { type: IterableDiffers }
-    ];
-    CdkNestedTreeNode.propDecorators = {
-        nodeOutlet: [{ type: ContentChildren, args: [CdkTreeNodeOutlet, {
-                        // We need to use `descendants: true`, because Ivy will no longer match
-                        // indirect descendants if it's left as false.
-                        descendants: true
-                    },] }]
-    };
-    return CdkNestedTreeNode;
-})();
+    /** Clear the children dataNodes. */
+    _clear() {
+        const outlet = this._getNodeOutlet();
+        if (outlet) {
+            outlet.viewContainer.clear();
+            this._dataDiffer.diff([]);
+        }
+    }
+    /** Gets the outlet for the current node. */
+    _getNodeOutlet() {
+        const outlets = this.nodeOutlet;
+        // Note that since we use `descendants: true` on the query, we have to ensure
+        // that we don't pick up the outlet of a child node by accident.
+        return outlets && outlets.find(outlet => !outlet._node || outlet._node === this);
+    }
+}
+CdkNestedTreeNode.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-nested-tree-node',
+                exportAs: 'cdkNestedTreeNode',
+                host: {
+                    '[attr.aria-expanded]': 'isExpanded',
+                    '[attr.role]': 'role',
+                    'class': 'cdk-tree-node cdk-nested-tree-node',
+                },
+                providers: [
+                    { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
+                    { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
+                ]
+            },] }
+];
+CdkNestedTreeNode.ctorParameters = () => [
+    { type: ElementRef },
+    { type: CdkTree },
+    { type: IterableDiffers }
+];
+CdkNestedTreeNode.propDecorators = {
+    nodeOutlet: [{ type: ContentChildren, args: [CdkTreeNodeOutlet, {
+                    // We need to use `descendants: true`, because Ivy will no longer match
+                    // indirect descendants if it's left as false.
+                    descendants: true
+                },] }]
+};
 
 /**
  * @license
@@ -704,100 +689,97 @@ const cssUnitPattern = /([A-Za-z%]+)$/;
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
  */
-let CdkTreeNodePadding = /** @class */ (() => {
-    class CdkTreeNodePadding {
-        constructor(_treeNode, _tree, 
-        /**
-         * @deprecated _renderer parameter no longer being used. To be removed.
-         * @breaking-change 11.0.0
-         */
-        _renderer, _element, _dir) {
-            this._treeNode = _treeNode;
-            this._tree = _tree;
-            this._element = _element;
-            this._dir = _dir;
-            /** Subject that emits when the component has been destroyed. */
-            this._destroyed = new Subject();
-            /** CSS units used for the indentation value. */
-            this.indentUnits = 'px';
-            this._indent = 40;
-            this._setPadding();
-            if (_dir) {
-                _dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding(true));
-            }
-            // In Ivy the indentation binding might be set before the tree node's data has been added,
-            // which means that we'll miss the first render. We have to subscribe to changes in the
-            // data to ensure that everything is up to date.
-            _treeNode._dataChanges.subscribe(() => this._setPadding());
+class CdkTreeNodePadding {
+    constructor(_treeNode, _tree, 
+    /**
+     * @deprecated _renderer parameter no longer being used. To be removed.
+     * @breaking-change 11.0.0
+     */
+    _renderer, _element, _dir) {
+        this._treeNode = _treeNode;
+        this._tree = _tree;
+        this._element = _element;
+        this._dir = _dir;
+        /** Subject that emits when the component has been destroyed. */
+        this._destroyed = new Subject();
+        /** CSS units used for the indentation value. */
+        this.indentUnits = 'px';
+        this._indent = 40;
+        this._setPadding();
+        if (_dir) {
+            _dir.change.pipe(takeUntil(this._destroyed)).subscribe(() => this._setPadding(true));
         }
-        /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
-        get level() { return this._level; }
-        set level(value) {
-            // Set to null as the fallback value so that _setPadding can fall back to the node level if the
-            // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
-            // they set 0 explicitly.
-            this._level = coerceNumberProperty(value, null);
-            this._setPadding();
+        // In Ivy the indentation binding might be set before the tree node's data has been added,
+        // which means that we'll miss the first render. We have to subscribe to changes in the
+        // data to ensure that everything is up to date.
+        _treeNode._dataChanges.subscribe(() => this._setPadding());
+    }
+    /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
+    get level() { return this._level; }
+    set level(value) {
+        // Set to null as the fallback value so that _setPadding can fall back to the node level if the
+        // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
+        // they set 0 explicitly.
+        this._level = coerceNumberProperty(value, null);
+        this._setPadding();
+    }
+    /**
+     * The indent for each level. Can be a number or a CSS string.
+     * Default number 40px from material design menu sub-menu spec.
+     */
+    get indent() { return this._indent; }
+    set indent(indent) {
+        let value = indent;
+        let units = 'px';
+        if (typeof indent === 'string') {
+            const parts = indent.split(cssUnitPattern);
+            value = parts[0];
+            units = parts[1] || units;
         }
-        /**
-         * The indent for each level. Can be a number or a CSS string.
-         * Default number 40px from material design menu sub-menu spec.
-         */
-        get indent() { return this._indent; }
-        set indent(indent) {
-            let value = indent;
-            let units = 'px';
-            if (typeof indent === 'string') {
-                const parts = indent.split(cssUnitPattern);
-                value = parts[0];
-                units = parts[1] || units;
-            }
-            this.indentUnits = units;
-            this._indent = coerceNumberProperty(value);
-            this._setPadding();
-        }
-        ngOnDestroy() {
-            this._destroyed.next();
-            this._destroyed.complete();
-        }
-        /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
-        _paddingIndent() {
-            const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
-                ? this._tree.treeControl.getLevel(this._treeNode.data)
-                : null;
-            const level = this._level == null ? nodeLevel : this._level;
-            return typeof level === 'number' ? `${level * this._indent}${this.indentUnits}` : null;
-        }
-        _setPadding(forceChange = false) {
-            const padding = this._paddingIndent();
-            if (padding !== this._currentPadding || forceChange) {
-                const element = this._element.nativeElement;
-                const paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
-                const resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
-                element.style[paddingProp] = padding || '';
-                element.style[resetProp] = '';
-                this._currentPadding = padding;
-            }
+        this.indentUnits = units;
+        this._indent = coerceNumberProperty(value);
+        this._setPadding();
+    }
+    ngOnDestroy() {
+        this._destroyed.next();
+        this._destroyed.complete();
+    }
+    /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
+    _paddingIndent() {
+        const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
+            ? this._tree.treeControl.getLevel(this._treeNode.data)
+            : null;
+        const level = this._level == null ? nodeLevel : this._level;
+        return typeof level === 'number' ? `${level * this._indent}${this.indentUnits}` : null;
+    }
+    _setPadding(forceChange = false) {
+        const padding = this._paddingIndent();
+        if (padding !== this._currentPadding || forceChange) {
+            const element = this._element.nativeElement;
+            const paddingProp = this._dir && this._dir.value === 'rtl' ? 'paddingRight' : 'paddingLeft';
+            const resetProp = paddingProp === 'paddingLeft' ? 'paddingRight' : 'paddingLeft';
+            element.style[paddingProp] = padding || '';
+            element.style[resetProp] = '';
+            this._currentPadding = padding;
         }
     }
-    CdkTreeNodePadding.decorators = [
-        { type: Directive, args: [{
-                    selector: '[cdkTreeNodePadding]',
-                },] }
-    ];
-    CdkTreeNodePadding.ctorParameters = () => [
-        { type: CdkTreeNode },
-        { type: CdkTree },
-        { type: Renderer2 },
-        { type: ElementRef },
-        { type: Directionality, decorators: [{ type: Optional }] }
-    ];
-    CdkTreeNodePadding.propDecorators = {
-        level: [{ type: Input, args: ['cdkTreeNodePadding',] }],
-        indent: [{ type: Input, args: ['cdkTreeNodePaddingIndent',] }]
-    };
-    return CdkTreeNodePadding;
-})();
+}
+CdkTreeNodePadding.decorators = [
+    { type: Directive, args: [{
+                selector: '[cdkTreeNodePadding]',
+            },] }
+];
+CdkTreeNodePadding.ctorParameters = () => [
+    { type: CdkTreeNode },
+    { type: CdkTree },
+    { type: Renderer2 },
+    { type: ElementRef },
+    { type: Directionality, decorators: [{ type: Optional }] }
+];
+CdkTreeNodePadding.propDecorators = {
+    level: [{ type: Input, args: ['cdkTreeNodePadding',] }],
+    indent: [{ type: Input, args: ['cdkTreeNodePaddingIndent',] }]
+};
 
 /**
  * @license
@@ -809,41 +791,38 @@ let CdkTreeNodePadding = /** @class */ (() => {
 /**
  * Node toggle to expand/collapse the node.
  */
-let CdkTreeNodeToggle = /** @class */ (() => {
-    class CdkTreeNodeToggle {
-        constructor(_tree, _treeNode) {
-            this._tree = _tree;
-            this._treeNode = _treeNode;
-            this._recursive = false;
-        }
-        /** Whether expand/collapse the node recursively. */
-        get recursive() { return this._recursive; }
-        set recursive(value) { this._recursive = coerceBooleanProperty(value); }
-        // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-        // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-        // ViewEngine they're overwritten.
-        // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-        // tslint:disable-next-line:no-host-decorator-in-concrete
-        _toggle(event) {
-            this.recursive
-                ? this._tree.treeControl.toggleDescendants(this._treeNode.data)
-                : this._tree.treeControl.toggle(this._treeNode.data);
-            event.stopPropagation();
-        }
+class CdkTreeNodeToggle {
+    constructor(_tree, _treeNode) {
+        this._tree = _tree;
+        this._treeNode = _treeNode;
+        this._recursive = false;
     }
-    CdkTreeNodeToggle.decorators = [
-        { type: Directive, args: [{ selector: '[cdkTreeNodeToggle]' },] }
-    ];
-    CdkTreeNodeToggle.ctorParameters = () => [
-        { type: CdkTree },
-        { type: CdkTreeNode }
-    ];
-    CdkTreeNodeToggle.propDecorators = {
-        recursive: [{ type: Input, args: ['cdkTreeNodeToggleRecursive',] }],
-        _toggle: [{ type: HostListener, args: ['click', ['$event'],] }]
-    };
-    return CdkTreeNodeToggle;
-})();
+    /** Whether expand/collapse the node recursively. */
+    get recursive() { return this._recursive; }
+    set recursive(value) { this._recursive = coerceBooleanProperty(value); }
+    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
+    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
+    // ViewEngine they're overwritten.
+    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
+    // tslint:disable-next-line:no-host-decorator-in-concrete
+    _toggle(event) {
+        this.recursive
+            ? this._tree.treeControl.toggleDescendants(this._treeNode.data)
+            : this._tree.treeControl.toggle(this._treeNode.data);
+        event.stopPropagation();
+    }
+}
+CdkTreeNodeToggle.decorators = [
+    { type: Directive, args: [{ selector: '[cdkTreeNodeToggle]' },] }
+];
+CdkTreeNodeToggle.ctorParameters = () => [
+    { type: CdkTree },
+    { type: CdkTreeNode }
+];
+CdkTreeNodeToggle.propDecorators = {
+    recursive: [{ type: Input, args: ['cdkTreeNodeToggleRecursive',] }],
+    _toggle: [{ type: HostListener, args: ['click', ['$event'],] }]
+};
 
 /**
  * @license
@@ -861,18 +840,15 @@ const EXPORTED_DECLARATIONS = [
     CdkTreeNode,
     CdkTreeNodeOutlet,
 ];
-let CdkTreeModule = /** @class */ (() => {
-    class CdkTreeModule {
-    }
-    CdkTreeModule.decorators = [
-        { type: NgModule, args: [{
-                    exports: EXPORTED_DECLARATIONS,
-                    declarations: EXPORTED_DECLARATIONS,
-                    providers: [FocusMonitor, CdkTreeNodeDef]
-                },] }
-    ];
-    return CdkTreeModule;
-})();
+class CdkTreeModule {
+}
+CdkTreeModule.decorators = [
+    { type: NgModule, args: [{
+                exports: EXPORTED_DECLARATIONS,
+                declarations: EXPORTED_DECLARATIONS,
+                providers: [FocusMonitor, CdkTreeNodeDef]
+            },] }
+];
 
 /**
  * @license

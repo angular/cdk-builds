@@ -9,17 +9,13 @@ import { PlatformModule } from '@angular/cdk/platform';
 import { NgModule } from '@angular/core';
 import { CdkAutofill } from './autofill';
 import { CdkTextareaAutosize } from './autosize';
-let TextFieldModule = /** @class */ (() => {
-    class TextFieldModule {
-    }
-    TextFieldModule.decorators = [
-        { type: NgModule, args: [{
-                    declarations: [CdkAutofill, CdkTextareaAutosize],
-                    imports: [PlatformModule],
-                    exports: [CdkAutofill, CdkTextareaAutosize],
-                },] }
-    ];
-    return TextFieldModule;
-})();
-export { TextFieldModule };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC1maWVsZC1tb2R1bGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3RleHQtZmllbGQvdGV4dC1maWVsZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLGNBQWMsRUFBQyxNQUFNLHVCQUF1QixDQUFDO0FBQ3JELE9BQU8sRUFBQyxRQUFRLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDdkMsT0FBTyxFQUFDLFdBQVcsRUFBQyxNQUFNLFlBQVksQ0FBQztBQUN2QyxPQUFPLEVBQUMsbUJBQW1CLEVBQUMsTUFBTSxZQUFZLENBQUM7QUFHL0M7SUFBQSxNQUthLGVBQWU7OztnQkFMM0IsUUFBUSxTQUFDO29CQUNSLFlBQVksRUFBRSxDQUFDLFdBQVcsRUFBRSxtQkFBbUIsQ0FBQztvQkFDaEQsT0FBTyxFQUFFLENBQUMsY0FBYyxDQUFDO29CQUN6QixPQUFPLEVBQUUsQ0FBQyxXQUFXLEVBQUUsbUJBQW1CLENBQUM7aUJBQzVDOztJQUM2QixzQkFBQztLQUFBO1NBQWxCLGVBQWUiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtQbGF0Zm9ybU1vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY2RrL3BsYXRmb3JtJztcbmltcG9ydCB7TmdNb2R1bGV9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHtDZGtBdXRvZmlsbH0gZnJvbSAnLi9hdXRvZmlsbCc7XG5pbXBvcnQge0Nka1RleHRhcmVhQXV0b3NpemV9IGZyb20gJy4vYXV0b3NpemUnO1xuXG5cbkBOZ01vZHVsZSh7XG4gIGRlY2xhcmF0aW9uczogW0Nka0F1dG9maWxsLCBDZGtUZXh0YXJlYUF1dG9zaXplXSxcbiAgaW1wb3J0czogW1BsYXRmb3JtTW9kdWxlXSxcbiAgZXhwb3J0czogW0Nka0F1dG9maWxsLCBDZGtUZXh0YXJlYUF1dG9zaXplXSxcbn0pXG5leHBvcnQgY2xhc3MgVGV4dEZpZWxkTW9kdWxlIHt9XG4iXX0=
+export class TextFieldModule {
+}
+TextFieldModule.decorators = [
+    { type: NgModule, args: [{
+                declarations: [CdkAutofill, CdkTextareaAutosize],
+                imports: [PlatformModule],
+                exports: [CdkAutofill, CdkTextareaAutosize],
+            },] }
+];
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC1maWVsZC1tb2R1bGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3RleHQtZmllbGQvdGV4dC1maWVsZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLGNBQWMsRUFBQyxNQUFNLHVCQUF1QixDQUFDO0FBQ3JELE9BQU8sRUFBQyxRQUFRLEVBQUMsTUFBTSxlQUFlLENBQUM7QUFDdkMsT0FBTyxFQUFDLFdBQVcsRUFBQyxNQUFNLFlBQVksQ0FBQztBQUN2QyxPQUFPLEVBQUMsbUJBQW1CLEVBQUMsTUFBTSxZQUFZLENBQUM7QUFRL0MsTUFBTSxPQUFPLGVBQWU7OztZQUwzQixRQUFRLFNBQUM7Z0JBQ1IsWUFBWSxFQUFFLENBQUMsV0FBVyxFQUFFLG1CQUFtQixDQUFDO2dCQUNoRCxPQUFPLEVBQUUsQ0FBQyxjQUFjLENBQUM7Z0JBQ3pCLE9BQU8sRUFBRSxDQUFDLFdBQVcsRUFBRSxtQkFBbUIsQ0FBQzthQUM1QyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge1BsYXRmb3JtTW9kdWxlfSBmcm9tICdAYW5ndWxhci9jZGsvcGxhdGZvcm0nO1xuaW1wb3J0IHtOZ01vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQge0Nka0F1dG9maWxsfSBmcm9tICcuL2F1dG9maWxsJztcbmltcG9ydCB7Q2RrVGV4dGFyZWFBdXRvc2l6ZX0gZnJvbSAnLi9hdXRvc2l6ZSc7XG5cblxuQE5nTW9kdWxlKHtcbiAgZGVjbGFyYXRpb25zOiBbQ2RrQXV0b2ZpbGwsIENka1RleHRhcmVhQXV0b3NpemVdLFxuICBpbXBvcnRzOiBbUGxhdGZvcm1Nb2R1bGVdLFxuICBleHBvcnRzOiBbQ2RrQXV0b2ZpbGwsIENka1RleHRhcmVhQXV0b3NpemVdLFxufSlcbmV4cG9ydCBjbGFzcyBUZXh0RmllbGRNb2R1bGUge31cbiJdfQ==
