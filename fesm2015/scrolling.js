@@ -1178,7 +1178,7 @@ let CdkVirtualForOf = /** @class */ (() => {
         }
         ngOnDestroy() {
             this._viewport.detach();
-            this._dataSourceChanges.next();
+            this._dataSourceChanges.next(undefined);
             this._dataSourceChanges.complete();
             this.viewChange.complete();
             this._destroyed.next();

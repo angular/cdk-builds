@@ -1466,7 +1466,7 @@
         CdkVirtualForOf.prototype.ngOnDestroy = function () {
             var e_1, _a;
             this._viewport.detach();
-            this._dataSourceChanges.next();
+            this._dataSourceChanges.next(undefined);
             this._dataSourceChanges.complete();
             this.viewChange.complete();
             this._destroyed.next();
