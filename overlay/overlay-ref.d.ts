@@ -10,7 +10,8 @@ import { ComponentPortal, PortalOutlet, TemplatePortal } from '@angular/cdk/port
 import { ComponentRef, EmbeddedViewRef, NgZone } from '@angular/core';
 import { Location } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
-import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
+import { OverlayKeyboardDispatcher } from './dispatchers/overlay-keyboard-dispatcher';
+import { OverlayOutsideClickDispatcher } from './dispatchers/overlay-outside-click-dispatcher';
 import { OverlayConfig } from './overlay-config';
 import { OverlayReference } from './overlay-reference';
 import { PositionStrategy } from './position/position-strategy';
@@ -32,6 +33,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _keyboardDispatcher;
     private _document;
     private _location?;
+    private _outsideClickDispatcher?;
     private _backdropElement;
     private _backdropClick;
     private _attachments;
@@ -47,7 +49,9 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _previousHostParent;
     /** Stream of keydown events dispatched to this overlay. */
     _keydownEvents: Subject<KeyboardEvent>;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined);
+    /** Stream of mouse outside events dispatched to this overlay. */
+    _outsidePointerEvents: Subject<MouseEvent>;
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined, _outsideClickDispatcher?: OverlayOutsideClickDispatcher | undefined);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;
     /** The overlay's backdrop HTML element. */
@@ -78,6 +82,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     detachments(): Observable<void>;
     /** Gets an observable of keydown events targeted to this overlay. */
     keydownEvents(): Observable<KeyboardEvent>;
+    /** Gets an observable of pointer events targeted outside this overlay. */
+    outsidePointerEvents(): Observable<MouseEvent>;
     /** Gets the current overlay configuration, which is immutable. */
     getConfig(): OverlayConfig;
     /** Updates the position of the overlay based on the position strategy. */

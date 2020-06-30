@@ -8,7 +8,8 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { Location } from '@angular/common';
 import { ComponentFactoryResolver, Injector, NgZone } from '@angular/core';
-import { OverlayKeyboardDispatcher } from './keyboard/overlay-keyboard-dispatcher';
+import { OverlayKeyboardDispatcher } from './dispatchers/overlay-keyboard-dispatcher';
+import { OverlayOutsideClickDispatcher } from './dispatchers/overlay-outside-click-dispatcher';
 import { OverlayConfig } from './overlay-config';
 import { OverlayContainer } from './overlay-container';
 import { OverlayRef } from './overlay-ref';
@@ -34,10 +35,11 @@ export declare class Overlay {
     private _document;
     private _directionality;
     private _location?;
+    private _outsideClickDispatcher?;
     private _appRef;
     constructor(
     /** Scrolling strategies that can be used when creating an overlay. */
-    scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality, _location?: Location | undefined);
+    scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality, _location?: Location | undefined, _outsideClickDispatcher?: OverlayOutsideClickDispatcher | undefined);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.

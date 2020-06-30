@@ -351,6 +351,10 @@ class OverlayConfig {
          * the `HashLocationStrategy`).
          */
         this.disposeOnNavigation = false;
+        /**
+         * Array of HTML elements clicking on which should not be considered as outside click
+         */
+        this.excludeFromOutsideClick = [];
         if (config) {
             // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
             // loses the array generic type in the `for of`. But we *also* have to use `Array` because
@@ -471,14 +475,60 @@ function validateHorizontalPosition(property, value) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
+ * Service for dispatching events that land on the body to appropriate overlay ref,
+ * if any. It maintains a list of attached overlays to determine best suited overlay based
+ * on event target and order of overlay opens.
+ */
+class BaseOverlayDispatcher {
+    constructor(document) {
+        /** Currently attached overlays in the order they were attached. */
+        this._attachedOverlays = [];
+        this._document = document;
+    }
+    ngOnDestroy() {
+        this.detach();
+    }
+    /** Add a new overlay to the list of attached overlay refs. */
+    add(overlayRef) {
+        // Ensure that we don't get the same overlay multiple times.
+        this.remove(overlayRef);
+        this._attachedOverlays.push(overlayRef);
+    }
+    /** Remove an overlay from the list of attached overlay refs. */
+    remove(overlayRef) {
+        const index = this._attachedOverlays.indexOf(overlayRef);
+        if (index > -1) {
+            this._attachedOverlays.splice(index, 1);
+        }
+        // Remove the global listener once there are no more overlays.
+        if (this._attachedOverlays.length === 0) {
+            this.detach();
+        }
+    }
+}
+BaseOverlayDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function BaseOverlayDispatcher_Factory() { return new BaseOverlayDispatcher(ɵɵinject(DOCUMENT)); }, token: BaseOverlayDispatcher, providedIn: "root" });
+BaseOverlayDispatcher.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+BaseOverlayDispatcher.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
+];
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
  * on event target and order of overlay opens.
  */
-class OverlayKeyboardDispatcher {
+class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     constructor(document) {
-        /** Currently attached overlays in the order they were attached. */
-        this._attachedOverlays = [];
+        super(document);
         /** Keyboard event listener that will be attached to the body. */
         this._keydownListener = (event) => {
             const overlays = this._attachedOverlays;
@@ -495,35 +545,18 @@ class OverlayKeyboardDispatcher {
                 }
             }
         };
-        this._document = document;
-    }
-    ngOnDestroy() {
-        this._detach();
     }
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef) {
-        // Ensure that we don't get the same overlay multiple times.
-        this.remove(overlayRef);
+        super.add(overlayRef);
         // Lazily start dispatcher once first overlay is added
         if (!this._isAttached) {
             this._document.body.addEventListener('keydown', this._keydownListener);
             this._isAttached = true;
         }
-        this._attachedOverlays.push(overlayRef);
-    }
-    /** Remove an overlay from the list of attached overlay refs. */
-    remove(overlayRef) {
-        const index = this._attachedOverlays.indexOf(overlayRef);
-        if (index > -1) {
-            this._attachedOverlays.splice(index, 1);
-        }
-        // Remove the global listener once there are no more overlays.
-        if (this._attachedOverlays.length === 0) {
-            this._detach();
-        }
     }
     /** Detaches the global keyboard event listener. */
-    _detach() {
+    detach() {
         if (this._isAttached) {
             this._document.body.removeEventListener('keydown', this._keydownListener);
             this._isAttached = false;
@@ -554,6 +587,91 @@ const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
     ],
     useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
 };
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
+ * if any. It maintains a list of attached overlays to determine best suited overlay based
+ * on event target and order of overlay opens.
+ */
+class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
+    constructor(document, _platform) {
+        super(document);
+        this._platform = _platform;
+        this._cursorStyleIsSet = false;
+        /** Click event listener that will be attached to the body propagate phase. */
+        this._clickListener = (event) => {
+            const overlays = this._attachedOverlays;
+            // Dispatch the mouse event to the top overlay which has subscribers to its mouse events.
+            // We want to target all overlays for which the click could be considered as outside click.
+            // As soon as we reach an overlay for which the click is not outside click we break off
+            // the loop.
+            for (let i = overlays.length - 1; i > -1; i--) {
+                const overlayRef = overlays[i];
+                if (overlayRef._outsidePointerEvents.observers.length < 1) {
+                    continue;
+                }
+                const config = overlayRef.getConfig();
+                const excludeElements = [...config.excludeFromOutsideClick, overlayRef.overlayElement];
+                const isInsideClick = excludeElements.some(e => e.contains(event.target));
+                // If it is inside click just break - we should do nothing
+                // If it is outside click dispatch the mouse event, and proceed with the next overlay
+                if (isInsideClick) {
+                    break;
+                }
+                overlayRef._outsidePointerEvents.next(event);
+            }
+        };
+    }
+    /** Add a new overlay to the list of attached overlay refs. */
+    add(overlayRef) {
+        super.add(overlayRef);
+        // tslint:disable: max-line-length
+        // Safari on iOS does not generate click events for non-interactive
+        // elements. However, we want to receive a click for any element outside
+        // the overlay. We can force a "clickable" state by setting
+        // `cursor: pointer` on the document body.
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#Safari_Mobile
+        // and https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html
+        // tslint:enable: max-line-length
+        if (!this._isAttached) {
+            this._document.body.addEventListener('click', this._clickListener, true);
+            // click event is not fired on iOS. To make element "clickable" we are
+            // setting the cursor to pointer
+            if (this._platform.IOS && !this._cursorStyleIsSet) {
+                this._cursorOriginalValue = this._document.body.style.cursor;
+                this._document.body.style.cursor = 'pointer';
+                this._cursorStyleIsSet = true;
+            }
+            this._isAttached = true;
+        }
+    }
+    /** Detaches the global keyboard event listener. */
+    detach() {
+        if (this._isAttached) {
+            this._document.body.removeEventListener('click', this._clickListener, true);
+            if (this._platform.IOS && this._cursorStyleIsSet) {
+                this._document.body.style.cursor = this._cursorOriginalValue;
+                this._cursorStyleIsSet = false;
+            }
+            this._isAttached = false;
+        }
+    }
+}
+OverlayOutsideClickDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayOutsideClickDispatcher_Factory() { return new OverlayOutsideClickDispatcher(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayOutsideClickDispatcher, providedIn: "root" });
+OverlayOutsideClickDispatcher.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+OverlayOutsideClickDispatcher.ctorParameters = () => [
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: Platform }
+];
 
 /**
  * @license
@@ -672,7 +790,9 @@ const OVERLAY_CONTAINER_PROVIDER = {
 class OverlayRef {
     constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, 
     // @breaking-change 8.0.0 `_location` parameter to be made required.
-    _location) {
+    _location, 
+    // @breaking-change 9.0.0 `_mouseClickDispatcher` parameter to be made required.
+    _outsideClickDispatcher) {
         this._portalOutlet = _portalOutlet;
         this._host = _host;
         this._pane = _pane;
@@ -681,6 +801,7 @@ class OverlayRef {
         this._keyboardDispatcher = _keyboardDispatcher;
         this._document = _document;
         this._location = _location;
+        this._outsideClickDispatcher = _outsideClickDispatcher;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
@@ -689,6 +810,8 @@ class OverlayRef {
         this._backdropClickHandler = (event) => this._backdropClick.next(event);
         /** Stream of keydown events dispatched to this overlay. */
         this._keydownEvents = new Subject();
+        /** Stream of mouse outside events dispatched to this overlay. */
+        this._outsidePointerEvents = new Subject();
         if (_config.scrollStrategy) {
             this._scrollStrategy = _config.scrollStrategy;
             this._scrollStrategy.attach(this);
@@ -762,6 +885,10 @@ class OverlayRef {
         if (this._config.disposeOnNavigation && this._location) {
             this._locationChanges = this._location.subscribe(() => this.dispose());
         }
+        // @breaking-change 9.0.0 remove the null check for `_mouseClickDispatcher`
+        if (this._outsideClickDispatcher) {
+            this._outsideClickDispatcher.add(this);
+        }
         return attachResult;
     }
     /**
@@ -793,6 +920,10 @@ class OverlayRef {
         this._detachContentWhenStable();
         // Stop listening for location changes.
         this._locationChanges.unsubscribe();
+        // @breaking-change 9.0.0 remove the null check for `_outsideClickDispatcher`
+        if (this._outsideClickDispatcher) {
+            this._outsideClickDispatcher.remove(this);
+        }
         return detachmentResult;
     }
     /** Cleans up the overlay from the DOM. */
@@ -809,6 +940,11 @@ class OverlayRef {
         this._attachments.complete();
         this._backdropClick.complete();
         this._keydownEvents.complete();
+        this._outsidePointerEvents.complete();
+        // @breaking-change 9.0.0 remove the null check for `_outsideClickDispatcher`
+        if (this._outsideClickDispatcher) {
+            this._outsideClickDispatcher.remove(this);
+        }
         if (this._host && this._host.parentNode) {
             this._host.parentNode.removeChild(this._host);
             this._host = null;
@@ -838,6 +974,10 @@ class OverlayRef {
     /** Gets an observable of keydown events targeted to this overlay. */
     keydownEvents() {
         return this._keydownEvents.asObservable();
+    }
+    /** Gets an observable of pointer events targeted outside this overlay. */
+    outsidePointerEvents() {
+        return this._outsidePointerEvents.asObservable();
     }
     /** Gets the current overlay configuration, which is immutable. */
     getConfig() {
@@ -2415,7 +2555,9 @@ class Overlay {
     /** Scrolling strategies that can be used when creating an overlay. */
     scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, 
     // @breaking-change 8.0.0 `_location` parameter to be made required.
-    _location) {
+    _location, 
+    // @breaking-change 9.0.0 `_outsideClickDispatcher` parameter to be made required.
+    _outsideClickDispatcher) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -2426,6 +2568,7 @@ class Overlay {
         this._document = _document;
         this._directionality = _directionality;
         this._location = _location;
+        this._outsideClickDispatcher = _outsideClickDispatcher;
     }
     /**
      * Creates an overlay.
@@ -2438,7 +2581,7 @@ class Overlay {
         const portalOutlet = this._createPortalOutlet(pane);
         const overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location);
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher);
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -2496,7 +2639,8 @@ Overlay.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Directionality },
-    { type: Location, decorators: [{ type: Optional }] }
+    { type: Location, decorators: [{ type: Optional }] },
+    { type: OverlayOutsideClickDispatcher, decorators: [{ type: Optional }] }
 ];
 
 /**
@@ -2588,6 +2732,8 @@ class CdkConnectedOverlay {
         this.detach = new EventEmitter();
         /** Emits when there are keyboard events that are targeted at the overlay. */
         this.overlayKeydown = new EventEmitter();
+        /** Emits when there are mouse outside click events that are targeted at the overlay. */
+        this.overlayOutsideClick = new EventEmitter();
         this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
         this._scrollStrategyFactory = scrollStrategyFactory;
         this.scrollStrategy = this._scrollStrategyFactory();
@@ -2668,6 +2814,9 @@ class CdkConnectedOverlay {
                 event.preventDefault();
                 this._detachOverlay();
             }
+        });
+        this._overlayRef.outsidePointerEvents().subscribe((event) => {
+            this.overlayOutsideClick.next(event);
         });
     }
     /** Builds the overlay config based on the directive's inputs */
@@ -2797,7 +2946,8 @@ CdkConnectedOverlay.propDecorators = {
     positionChange: [{ type: Output }],
     attach: [{ type: Output }],
     detach: [{ type: Output }],
-    overlayKeydown: [{ type: Output }]
+    overlayKeydown: [{ type: Output }],
+    overlayOutsideClick: [{ type: Output }]
 };
 /** @docs-private */
 function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY(overlay) {
@@ -2842,6 +2992,14 @@ const OVERLAY_PROVIDERS = [
     OVERLAY_CONTAINER_PROVIDER,
     CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
 ];
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * @license
@@ -2947,5 +3105,5 @@ FullscreenOverlayContainer.ctorParameters = () => [
  * Generated bundle index. Do not edit.
  */
 
-export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectedPositionStrategy, ConnectionPositionPair, FlexibleConnectedPositionStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_PROVIDERS, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_a, OVERLAY_CONTAINER_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_b, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵangular_material_src_cdk_overlay_overlay_c, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_d, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_e, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_f, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_g };
+export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectedPositionStrategy, ConnectionPositionPair, FlexibleConnectedPositionStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, OVERLAY_PROVIDERS, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_a, OVERLAY_KEYBOARD_DISPATCHER_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_b, OVERLAY_CONTAINER_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_c, OVERLAY_CONTAINER_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_d, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY as ɵangular_material_src_cdk_overlay_overlay_e, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY as ɵangular_material_src_cdk_overlay_overlay_f, CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER as ɵangular_material_src_cdk_overlay_overlay_g, BaseOverlayDispatcher as ɵangular_material_src_cdk_overlay_overlay_h };
 //# sourceMappingURL=overlay.js.map
