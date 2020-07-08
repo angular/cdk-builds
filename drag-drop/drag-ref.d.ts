@@ -104,6 +104,8 @@ export declare class DragRef<T = any> {
     private _pointerDirectionDelta;
     /** Pointer position at which the last change in the delta occurred. */
     private _pointerPositionAtLastDirectionChange;
+    /** Position of the pointer at the last pointer event. */
+    private _lastKnownPointerPosition;
     /**
      * Root DOM node of the drag instance. This is the element that will
      * be moved around as the user is dragging.

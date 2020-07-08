@@ -350,9 +350,10 @@ class DragRef {
             }
             const constrainedPointerPosition = this._getConstrainedPointerPosition(pointerPosition);
             this._hasMoved = true;
+            this._lastKnownPointerPosition = pointerPosition;
             this._updatePointerDirectionDelta(constrainedPointerPosition);
             if (this._dropContainer) {
-                this._updateActiveDropContainer(constrainedPointerPosition);
+                this._updateActiveDropContainer(constrainedPointerPosition, pointerPosition);
             }
             else {
                 const activeTransform = this._activeTransform;
@@ -563,9 +564,9 @@ class DragRef {
     }
     /** Updates the item's sort order based on the last-known pointer position. */
     _sortFromLastPointerPosition() {
-        const position = this._pointerPositionAtLastDirectionChange;
+        const position = this._lastKnownPointerPosition;
         if (position && this._dropContainer) {
-            this._updateActiveDropContainer(this._getConstrainedPointerPosition(position));
+            this._updateActiveDropContainer(this._getConstrainedPointerPosition(position), position);
         }
     }
     /** Unsubscribes from the global subscriptions. */
@@ -731,7 +732,8 @@ class DragRef {
         this._pickupPositionInElement = previewTemplate && previewTemplate.template &&
             !previewTemplate.matchSize ? { x: 0, y: 0 } :
             this._getPointerPositionInElement(referenceElement, event);
-        const pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
+        const pointerPosition = this._pickupPositionOnPage = this._lastKnownPointerPosition =
+            this._getPointerPositionOnPage(event);
         this._pointerDirectionDelta = { x: 0, y: 0 };
         this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
         this._dragStartTime = Date.now();
@@ -773,7 +775,7 @@ class DragRef {
      * Updates the item's position in its drop container, or moves it
      * into a new one, depending on its current drag position.
      */
-    _updateActiveDropContainer({ x, y }) {
+    _updateActiveDropContainer({ x, y }, { x: rawX, y: rawY }) {
         // Drop container that draggable has been moved into.
         let newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
         // If we couldn't find a new container to move the item into, and the item has left its
@@ -802,7 +804,7 @@ class DragRef {
                 });
             });
         }
-        this._dropContainer._startScrollingIfNecessary(x, y);
+        this._dropContainer._startScrollingIfNecessary(rawX, rawY);
         this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
         this._preview.style.transform =
             getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
@@ -953,13 +955,13 @@ class DragRef {
     }
     /** Gets the pointer position on the page, accounting for any position constraints. */
     _getConstrainedPointerPosition(point) {
-        const constrainedPoint = this.constrainPosition ? this.constrainPosition(point, this) : point;
         const dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
+        let { x, y } = this.constrainPosition ? this.constrainPosition(point, this) : point;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
-            constrainedPoint.y = this._pickupPositionOnPage.y;
+            y = this._pickupPositionOnPage.y;
         }
         else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
-            constrainedPoint.x = this._pickupPositionOnPage.x;
+            x = this._pickupPositionOnPage.x;
         }
         if (this._boundaryRect) {
             const { x: pickupX, y: pickupY } = this._pickupPositionInElement;
@@ -969,10 +971,10 @@ class DragRef {
             const maxY = boundaryRect.bottom - (previewRect.height - pickupY);
             const minX = boundaryRect.left + pickupX;
             const maxX = boundaryRect.right - (previewRect.width - pickupX);
-            constrainedPoint.x = clamp(constrainedPoint.x, minX, maxX);
-            constrainedPoint.y = clamp(constrainedPoint.y, minY, maxY);
+            x = clamp(x, minX, maxX);
+            y = clamp(y, minY, maxY);
         }
-        return constrainedPoint;
+        return { x, y };
     }
     /** Updates the current drag delta, based on the user's current pointer position on the page. */
     _updatePointerDirectionDelta(pointerPositionOnPage) {
@@ -1112,9 +1114,12 @@ class DragRef {
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
-            // ClientRect dimensions are based on the page's scroll position so
-            // we have to update the cached boundary ClientRect if the user has scrolled.
-            if (this._boundaryRect) {
+            const target = event.target;
+            // ClientRect dimensions are based on the scroll position of the page and its parent node so
+            // we have to update the cached boundary ClientRect if the user has scrolled. Check for
+            // the `document` specifically since IE doesn't support `contains` on it.
+            if (this._boundaryRect && (target === this._document ||
+                (target !== this._boundaryElement && target.contains(this._boundaryElement)))) {
                 adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
             }
             this._pickupPositionOnPage.x += scrollDifference.left;

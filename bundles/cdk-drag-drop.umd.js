@@ -350,9 +350,10 @@
                 }
                 var constrainedPointerPosition = _this._getConstrainedPointerPosition(pointerPosition);
                 _this._hasMoved = true;
+                _this._lastKnownPointerPosition = pointerPosition;
                 _this._updatePointerDirectionDelta(constrainedPointerPosition);
                 if (_this._dropContainer) {
-                    _this._updateActiveDropContainer(constrainedPointerPosition);
+                    _this._updateActiveDropContainer(constrainedPointerPosition, pointerPosition);
                 }
                 else {
                     var activeTransform = _this._activeTransform;
@@ -569,9 +570,9 @@
         };
         /** Updates the item's sort order based on the last-known pointer position. */
         DragRef.prototype._sortFromLastPointerPosition = function () {
-            var position = this._pointerPositionAtLastDirectionChange;
+            var position = this._lastKnownPointerPosition;
             if (position && this._dropContainer) {
-                this._updateActiveDropContainer(this._getConstrainedPointerPosition(position));
+                this._updateActiveDropContainer(this._getConstrainedPointerPosition(position), position);
             }
         };
         /** Unsubscribes from the global subscriptions. */
@@ -739,7 +740,8 @@
             this._pickupPositionInElement = previewTemplate && previewTemplate.template &&
                 !previewTemplate.matchSize ? { x: 0, y: 0 } :
                 this._getPointerPositionInElement(referenceElement, event);
-            var pointerPosition = this._pickupPositionOnPage = this._getPointerPositionOnPage(event);
+            var pointerPosition = this._pickupPositionOnPage = this._lastKnownPointerPosition =
+                this._getPointerPositionOnPage(event);
             this._pointerDirectionDelta = { x: 0, y: 0 };
             this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
             this._dragStartTime = Date.now();
@@ -782,9 +784,10 @@
          * Updates the item's position in its drop container, or moves it
          * into a new one, depending on its current drag position.
          */
-        DragRef.prototype._updateActiveDropContainer = function (_a) {
+        DragRef.prototype._updateActiveDropContainer = function (_a, _b) {
             var _this = this;
             var x = _a.x, y = _a.y;
+            var rawX = _b.x, rawY = _b.y;
             // Drop container that draggable has been moved into.
             var newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
             // If we couldn't find a new container to move the item into, and the item has left its
@@ -813,7 +816,7 @@
                     });
                 });
             }
-            this._dropContainer._startScrollingIfNecessary(x, y);
+            this._dropContainer._startScrollingIfNecessary(rawX, rawY);
             this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
             this._preview.style.transform =
                 getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
@@ -965,26 +968,26 @@
         };
         /** Gets the pointer position on the page, accounting for any position constraints. */
         DragRef.prototype._getConstrainedPointerPosition = function (point) {
-            var constrainedPoint = this.constrainPosition ? this.constrainPosition(point, this) : point;
             var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
+            var _a = this.constrainPosition ? this.constrainPosition(point, this) : point, x = _a.x, y = _a.y;
             if (this.lockAxis === 'x' || dropContainerLock === 'x') {
-                constrainedPoint.y = this._pickupPositionOnPage.y;
+                y = this._pickupPositionOnPage.y;
             }
             else if (this.lockAxis === 'y' || dropContainerLock === 'y') {
-                constrainedPoint.x = this._pickupPositionOnPage.x;
+                x = this._pickupPositionOnPage.x;
             }
             if (this._boundaryRect) {
-                var _a = this._pickupPositionInElement, pickupX = _a.x, pickupY = _a.y;
+                var _b = this._pickupPositionInElement, pickupX = _b.x, pickupY = _b.y;
                 var boundaryRect = this._boundaryRect;
                 var previewRect = this._previewRect;
                 var minY = boundaryRect.top + pickupY;
                 var maxY = boundaryRect.bottom - (previewRect.height - pickupY);
                 var minX = boundaryRect.left + pickupX;
                 var maxX = boundaryRect.right - (previewRect.width - pickupX);
-                constrainedPoint.x = clamp(constrainedPoint.x, minX, maxX);
-                constrainedPoint.y = clamp(constrainedPoint.y, minY, maxY);
+                x = clamp(x, minX, maxX);
+                y = clamp(y, minY, maxY);
             }
-            return constrainedPoint;
+            return { x: x, y: y };
         };
         /** Updates the current drag delta, based on the user's current pointer position on the page. */
         DragRef.prototype._updatePointerDirectionDelta = function (pointerPositionOnPage) {
@@ -1124,9 +1127,12 @@
         DragRef.prototype._updateOnScroll = function (event) {
             var scrollDifference = this._parentPositions.handleScroll(event);
             if (scrollDifference) {
-                // ClientRect dimensions are based on the page's scroll position so
-                // we have to update the cached boundary ClientRect if the user has scrolled.
-                if (this._boundaryRect) {
+                var target = event.target;
+                // ClientRect dimensions are based on the scroll position of the page and its parent node so
+                // we have to update the cached boundary ClientRect if the user has scrolled. Check for
+                // the `document` specifically since IE doesn't support `contains` on it.
+                if (this._boundaryRect && (target === this._document ||
+                    (target !== this._boundaryElement && target.contains(this._boundaryElement)))) {
                     adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
                 }
                 this._pickupPositionOnPage.x += scrollDifference.left;
