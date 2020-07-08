@@ -1,4 +1,4 @@
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, isDevMode, ViewContainerRef, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, isDevMode, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
@@ -2747,7 +2747,7 @@ CdkDragHandle.decorators = [
 ];
 CdkDragHandle.ctorParameters = () => [
     { type: ElementRef },
-    { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }] }
+    { type: undefined, decorators: [{ type: Inject, args: [CDK_DRAG_PARENT,] }, { type: Optional }, { type: SkipSelf }] }
 ];
 CdkDragHandle.propDecorators = {
     disabled: [{ type: Input, args: ['cdkDragHandleDisabled',] }]
@@ -2841,7 +2841,7 @@ class CdkDrag {
     /** Element that the draggable is attached to. */
     element, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef) {
+    dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle) {
         this.element = element;
         this.dropContainer = dropContainer;
         this._document = _document;
@@ -2849,6 +2849,7 @@ class CdkDrag {
         this._viewContainerRef = _viewContainerRef;
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
+        this._selfHandle = _selfHandle;
         this._destroyed = new Subject();
         /** Emits when the user starts dragging the item. */
         this.started = new EventEmitter();
@@ -2948,6 +2949,12 @@ class CdkDrag {
                 const childHandleElements = handles
                     .filter(handle => handle._parentDrag === this)
                     .map(handle => handle.element);
+                // Usually handles are only allowed to be a descendant of the drag element, but if
+                // the consumer defined a different drag root, we should allow the drag element
+                // itself to be a handle too.
+                if (this._selfHandle && this.rootElementSelector) {
+                    childHandleElements.push(this.element);
+                }
                 this._dragRef.withHandles(childHandleElements);
             }), 
             // Listen if the state of any of the handles changes.
@@ -3131,7 +3138,8 @@ CdkDrag.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: DragDrop },
-    { type: ChangeDetectorRef }
+    { type: ChangeDetectorRef },
+    { type: CdkDragHandle, decorators: [{ type: Optional }, { type: Self }] }
 ];
 CdkDrag.propDecorators = {
     _handles: [{ type: ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],

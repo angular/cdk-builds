@@ -3023,7 +3023,7 @@
         ];
         CdkDragHandle.ctorParameters = function () { return [
             { type: i0.ElementRef },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DRAG_PARENT,] }, { type: i0.Optional }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DRAG_PARENT,] }, { type: i0.Optional }, { type: i0.SkipSelf }] }
         ]; };
         CdkDragHandle.propDecorators = {
             disabled: [{ type: i0.Input, args: ['cdkDragHandleDisabled',] }]
@@ -3125,7 +3125,7 @@
         /** Element that the draggable is attached to. */
         element, 
         /** Droppable container that the draggable is a part of. */
-        dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef) {
+        dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle) {
             var _this = this;
             this.element = element;
             this.dropContainer = dropContainer;
@@ -3134,6 +3134,7 @@
             this._viewContainerRef = _viewContainerRef;
             this._dir = _dir;
             this._changeDetectorRef = _changeDetectorRef;
+            this._selfHandle = _selfHandle;
             this._destroyed = new rxjs.Subject();
             /** Emits when the user starts dragging the item. */
             this.started = new i0.EventEmitter();
@@ -3238,6 +3239,12 @@
                     var childHandleElements = handles
                         .filter(function (handle) { return handle._parentDrag === _this; })
                         .map(function (handle) { return handle.element; });
+                    // Usually handles are only allowed to be a descendant of the drag element, but if
+                    // the consumer defined a different drag root, we should allow the drag element
+                    // itself to be a handle too.
+                    if (_this._selfHandle && _this.rootElementSelector) {
+                        childHandleElements.push(_this.element);
+                    }
                     _this._dragRef.withHandles(childHandleElements);
                 }), 
                 // Listen if the state of any of the handles changes.
@@ -3422,7 +3429,8 @@
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] },
             { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
             { type: DragDrop },
-            { type: i0.ChangeDetectorRef }
+            { type: i0.ChangeDetectorRef },
+            { type: CdkDragHandle, decorators: [{ type: i0.Optional }, { type: i0.Self }] }
         ]; };
         CdkDrag.propDecorators = {
             _handles: [{ type: i0.ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],
