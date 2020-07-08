@@ -461,6 +461,9 @@ class DragRef {
             this._initialTransform = undefined;
             this._rootElement = element;
         }
+        if (typeof SVGElement !== 'undefined' && this._rootElement instanceof SVGElement) {
+            this._ownerSVGElement = this._rootElement.ownerSVGElement;
+        }
         return this;
     }
     /**
@@ -504,7 +507,7 @@ class DragRef {
         this._dropContainer = undefined;
         this._resizeSubscription.unsubscribe();
         this._parentPositions.clear();
-        this._boundaryElement = this._rootElement = this._placeholderTemplate =
+        this._boundaryElement = this._rootElement = this._ownerSVGElement = this._placeholderTemplate =
             this._previewTemplate = this._anchor = null;
     }
     /** Checks whether the element is currently being dragged. */
@@ -948,10 +951,20 @@ class DragRef {
             // breaks inside a developer tool and the value is only used for secondary information,
             // we can get away with it. See https://bugzilla.mozilla.org/show_bug.cgi?id=1615824.
             (event.touches[0] || event.changedTouches[0] || { pageX: 0, pageY: 0 }) : event;
-        return {
-            x: point.pageX - scrollPosition.left,
-            y: point.pageY - scrollPosition.top
-        };
+        const x = point.pageX - scrollPosition.left;
+        const y = point.pageY - scrollPosition.top;
+        // if dragging SVG element, try to convert from the screen coordinate system to the SVG
+        // coordinate system
+        if (this._ownerSVGElement) {
+            const svgMatrix = this._ownerSVGElement.getScreenCTM();
+            if (svgMatrix) {
+                const svgPoint = this._ownerSVGElement.createSVGPoint();
+                svgPoint.x = x;
+                svgPoint.y = y;
+                return svgPoint.matrixTransform(svgMatrix.inverse());
+            }
+        }
+        return { x, y };
     }
     /** Gets the pointer position on the page, accounting for any position constraints. */
     _getConstrainedPointerPosition(point) {

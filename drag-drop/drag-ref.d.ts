@@ -112,6 +112,10 @@ export declare class DragRef<T = any> {
      */
     private _rootElement;
     /**
+     * Nearest ancestor SVG, relative to which coordinates are calculated if dragging SVGElement
+     */
+    private _ownerSVGElement;
+    /**
      * Inline style value of `-webkit-tap-highlight-color` at the time the
      * dragging was started. Used to restore the value once we're done dragging.
      */
