@@ -600,6 +600,14 @@
             return function () { return _this._getAllHarnessesAndTestElements(queries); };
         };
         // Implemented as part of the `LocatorFactory` interface.
+        HarnessEnvironment.prototype.rootHarnessLoader = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, this];
+                });
+            });
+        };
+        // Implemented as part of the `LocatorFactory` interface.
         HarnessEnvironment.prototype.harnessLoaderFor = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var _a;

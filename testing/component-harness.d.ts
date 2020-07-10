@@ -175,6 +175,8 @@ export interface LocatorFactory {
      * - `await lf.locatorForAll('span')()` gets `[]`.
      */
     locatorForAll<T extends (HarnessQuery<any> | string)[]>(...queries: T): AsyncFactoryFn<LocatorFnResult<T>[]>;
+    /** @return A `HarnessLoader` rooted at the root element of this `LocatorFactory`. */
+    rootHarnessLoader(): Promise<HarnessLoader>;
     /**
      * Gets a `HarnessLoader` instance for an element under the root of this `LocatorFactory`.
      * @param selector The selector for the root element.

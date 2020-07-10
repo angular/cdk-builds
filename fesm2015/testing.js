@@ -297,6 +297,12 @@ class HarnessEnvironment {
         return () => this._getAllHarnessesAndTestElements(queries);
     }
     // Implemented as part of the `LocatorFactory` interface.
+    rootHarnessLoader() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this;
+        });
+    }
+    // Implemented as part of the `LocatorFactory` interface.
     harnessLoaderFor(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.createEnvironment(yield _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)]));
