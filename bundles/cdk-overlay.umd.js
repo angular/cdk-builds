@@ -848,6 +848,8 @@
             _this._cursorStyleIsSet = false;
             /** Click event listener that will be attached to the body propagate phase. */
             _this._clickListener = function (event) {
+                // Get the target through the `composedPath` if possible to account for shadow DOM.
+                var target = event.composedPath ? event.composedPath()[0] : event.target;
                 var overlays = _this._attachedOverlays;
                 // Dispatch the mouse event to the top overlay which has subscribers to its mouse events.
                 // We want to target all overlays for which the click could be considered as outside click.
@@ -860,7 +862,7 @@
                     }
                     var config = overlayRef.getConfig();
                     var excludeElements = __spread(config.excludeFromOutsideClick, [overlayRef.overlayElement]);
-                    var isInsideClick = excludeElements.some(function (e) { return e.contains(event.target); });
+                    var isInsideClick = excludeElements.some(function (e) { return e.contains(target); });
                     // If it is inside click just break - we should do nothing
                     // If it is outside click dispatch the mouse event, and proceed with the next overlay
                     if (isInsideClick) {
