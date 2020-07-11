@@ -11,9 +11,9 @@ import { ChangeDetectorRef, ElementRef, NgZone, OnDestroy, OnInit } from '@angul
 import { Observable } from 'rxjs';
 import { ScrollDispatcher } from './scroll-dispatcher';
 import { CdkScrollable } from './scrollable';
-import { CdkVirtualForOf } from './virtual-for-of';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 import { ViewportRuler } from './viewport-ruler';
+import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
@@ -52,7 +52,7 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _dataLength;
     /** The size of the viewport (in pixels). */
     private _viewportSize;
-    /** the currently attached CdkVirtualForOf. */
+    /** the currently attached CdkVirtualScrollRepeater. */
     private _forOf;
     /** The last rendered content offset that was set. */
     private _renderedContentOffset;
@@ -75,8 +75,8 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     viewportRuler?: ViewportRuler);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    /** Attaches a `CdkVirtualForOf` to this viewport. */
-    attach(forOf: CdkVirtualForOf<any>): void;
+    /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
+    attach(forOf: CdkVirtualScrollRepeater<any>): void;
     /** Detaches the current `CdkVirtualForOf`. */
     detach(): void;
     /** Gets the length of the data bound to this viewport (in number of items). */

@@ -9,6 +9,7 @@ import { CollectionViewer, DataSource, ListRange } from '@angular/cdk/collection
 import { DoCheck, IterableDiffers, NgIterable, NgZone, OnDestroy, TemplateRef, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
+import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
 /** The context for an item rendered by `CdkVirtualForOf` */
 export declare type CdkVirtualForOfContext<T> = {
     /** The item value. */
@@ -32,7 +33,7 @@ export declare type CdkVirtualForOfContext<T> = {
  * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
  * container.
  */
-export declare class CdkVirtualForOf<T> implements CollectionViewer, DoCheck, OnDestroy {
+export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, CollectionViewer, DoCheck, OnDestroy {
     /** The view container to add items to. */
     private _viewContainerRef;
     /** The template to use when stamping out new items. */

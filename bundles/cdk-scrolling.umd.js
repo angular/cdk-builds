@@ -1035,7 +1035,7 @@
             this._viewportChanges.unsubscribe();
             _super.prototype.ngOnDestroy.call(this);
         };
-        /** Attaches a `CdkVirtualForOf` to this viewport. */
+        /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
         CdkVirtualScrollViewport.prototype.attach = function (forOf) {
             var _this = this;
             if (this._forOf) {
@@ -1674,6 +1674,14 @@
         ];
         return ScrollingModule;
     }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
 
     /**
      * @license

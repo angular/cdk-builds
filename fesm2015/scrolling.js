@@ -769,7 +769,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         this._viewportChanges.unsubscribe();
         super.ngOnDestroy();
     }
-    /** Attaches a `CdkVirtualForOf` to this viewport. */
+    /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
     attach(forOf) {
         if (this._forOf) {
             throw Error('CdkVirtualScrollViewport is already attached.');
@@ -1352,6 +1352,14 @@ ScrollingModule.decorators = [
                 ],
             },] }
 ];
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * @license
