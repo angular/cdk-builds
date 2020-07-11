@@ -7,23 +7,23 @@
  */
 import { Path } from '@angular-devkit/core';
 import { Tree, UpdateRecorder } from '@angular-devkit/schematics';
-import { FileSystem } from '../update-tool/file-system';
+import { DirectoryEntry, FileSystem } from '../update-tool/file-system';
 /**
  * File system that leverages the virtual tree from the CLI devkit. This file
  * system is commonly used by `ng update` migrations that run as part of the
  * Angular CLI.
  */
-export declare class DevkitFileSystem extends FileSystem<Path> {
+export declare class DevkitFileSystem extends FileSystem {
     private _tree;
     private _updateRecorderCache;
-    private _workspaceFsPath;
-    constructor(_tree: Tree, workspaceFsPath: string);
+    constructor(_tree: Tree);
     resolve(...segments: string[]): Path;
     edit(filePath: Path): UpdateRecorder;
     commitEdits(): void;
-    exists(filePath: Path): boolean;
+    exists(fileOrDirPath: Path): boolean;
     overwrite(filePath: Path, content: string): void;
     create(filePath: Path, content: string): void;
     delete(filePath: Path): void;
     read(filePath: Path): string | null;
+    readDirectory(dirPath: Path): DirectoryEntry;
 }

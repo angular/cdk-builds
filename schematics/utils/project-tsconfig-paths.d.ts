@@ -7,8 +7,9 @@
  */
 import { Tree } from '@angular-devkit/schematics';
 import { WorkspaceProject, WorkspaceSchema } from '@schematics/angular/utility/workspace-models';
+import { WorkspacePath } from '../update-tool/file-system';
 /** Gets the tsconfig path from the given target within the specified project. */
-export declare function getTargetTsconfigPath(project: WorkspaceProject, targetName: string): string | null;
+export declare function getTargetTsconfigPath(project: WorkspaceProject, targetName: string): WorkspacePath | null;
 /**
  * Resolve the workspace configuration of the specified tree gracefully. We cannot use the utility
  * functions from the default Angular schematics because those might not be present in older
