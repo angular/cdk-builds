@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
-import { hasModifierKey, A, Z, ZERO, NINE, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
+import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
@@ -271,6 +271,7 @@ class ListKeyManager {
         this._typeaheadSubscription = Subscription.EMPTY;
         this._vertical = true;
         this._allowedModifierKeys = [];
+        this._homeAndEnd = false;
         /**
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
@@ -372,6 +373,14 @@ class ListKeyManager {
         });
         return this;
     }
+    /**
+     * Configures the key manager to focus the first and last items
+     * respectively when the Home key and End Key are pressed.
+     */
+    withHomeAndEnd() {
+        this._homeAndEnd = true;
+        return this;
+    }
     setActiveItem(item) {
         const previousActiveItem = this._activeItem;
         this.updateActiveItem(item);
@@ -420,6 +429,22 @@ class ListKeyManager {
             case LEFT_ARROW:
                 if (this._horizontal && isModifierAllowed) {
                     this._horizontal === 'rtl' ? this.setNextItemActive() : this.setPreviousItemActive();
+                    break;
+                }
+                else {
+                    return;
+                }
+            case HOME:
+                if (this._homeAndEnd && isModifierAllowed) {
+                    this.setFirstItemActive();
+                    break;
+                }
+                else {
+                    return;
+                }
+            case END:
+                if (this._homeAndEnd && isModifierAllowed) {
+                    this.setLastItemActive();
                     break;
                 }
                 else {

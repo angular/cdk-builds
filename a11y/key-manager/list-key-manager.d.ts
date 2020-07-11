@@ -30,6 +30,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _vertical;
     private _horizontal;
     private _allowedModifierKeys;
+    private _homeAndEnd;
     /**
      * Predicate function that can be used to check whether an item should be skipped
      * by the key manager. By default, disabled items are skipped.
@@ -77,6 +78,11 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
     withTypeAhead(debounceInterval?: number): this;
+    /**
+     * Configures the key manager to focus the first and last items
+     * respectively when the Home key and End Key are pressed.
+     */
+    withHomeAndEnd(): this;
     /**
      * Sets the active item to the item at the index specified.
      * @param index The index of the item to be set as active.

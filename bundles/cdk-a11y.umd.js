@@ -498,6 +498,7 @@
             this._typeaheadSubscription = rxjs.Subscription.EMPTY;
             this._vertical = true;
             this._allowedModifierKeys = [];
+            this._homeAndEnd = false;
             /**
              * Predicate function that can be used to check whether an item should be skipped
              * by the key manager. By default, disabled items are skipped.
@@ -603,6 +604,14 @@
             });
             return this;
         };
+        /**
+         * Configures the key manager to focus the first and last items
+         * respectively when the Home key and End Key are pressed.
+         */
+        ListKeyManager.prototype.withHomeAndEnd = function () {
+            this._homeAndEnd = true;
+            return this;
+        };
         ListKeyManager.prototype.setActiveItem = function (item) {
             var previousActiveItem = this._activeItem;
             this.updateActiveItem(item);
@@ -652,6 +661,22 @@
                 case keycodes.LEFT_ARROW:
                     if (this._horizontal && isModifierAllowed) {
                         this._horizontal === 'rtl' ? this.setNextItemActive() : this.setPreviousItemActive();
+                        break;
+                    }
+                    else {
+                        return;
+                    }
+                case keycodes.HOME:
+                    if (this._homeAndEnd && isModifierAllowed) {
+                        this.setFirstItemActive();
+                        break;
+                    }
+                    else {
+                        return;
+                    }
+                case keycodes.END:
+                    if (this._homeAndEnd && isModifierAllowed) {
+                        this.setLastItemActive();
                         break;
                     }
                     else {
