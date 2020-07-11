@@ -3139,7 +3139,7 @@ CdkDrag.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: DragDrop },
     { type: ChangeDetectorRef },
-    { type: CdkDragHandle, decorators: [{ type: Optional }, { type: Self }] }
+    { type: CdkDragHandle, decorators: [{ type: Optional }, { type: Self }, { type: Inject, args: [CDK_DRAG_HANDLE,] }] }
 ];
 CdkDrag.propDecorators = {
     _handles: [{ type: ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],

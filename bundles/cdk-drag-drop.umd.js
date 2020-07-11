@@ -3430,7 +3430,7 @@
             { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
             { type: DragDrop },
             { type: i0.ChangeDetectorRef },
-            { type: CdkDragHandle, decorators: [{ type: i0.Optional }, { type: i0.Self }] }
+            { type: CdkDragHandle, decorators: [{ type: i0.Optional }, { type: i0.Self }, { type: i0.Inject, args: [CDK_DRAG_HANDLE,] }] }
         ]; };
         CdkDrag.propDecorators = {
             _handles: [{ type: i0.ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],
