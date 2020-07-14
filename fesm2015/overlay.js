@@ -2720,6 +2720,8 @@ class CdkConnectedOverlay {
         this._flexibleDimensions = false;
         this._push = false;
         this._backdropSubscription = Subscription.EMPTY;
+        this._attachSubscription = Subscription.EMPTY;
+        this._detachSubscription = Subscription.EMPTY;
         /** Margin between the overlay and the viewport edges. */
         this.viewportMargin = 0;
         /** Whether the overlay is open. */
@@ -2782,10 +2784,12 @@ class CdkConnectedOverlay {
         return this._dir ? this._dir.value : 'ltr';
     }
     ngOnDestroy() {
+        this._attachSubscription.unsubscribe();
+        this._detachSubscription.unsubscribe();
+        this._backdropSubscription.unsubscribe();
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
-        this._backdropSubscription.unsubscribe();
     }
     ngOnChanges(changes) {
         if (this._position) {
@@ -2809,8 +2813,10 @@ class CdkConnectedOverlay {
         if (!this.positions || !this.positions.length) {
             this.positions = defaultPositionList;
         }
-        this._overlayRef = this._overlay.create(this._buildConfig());
-        this._overlayRef.keydownEvents().subscribe((event) => {
+        const overlayRef = this._overlayRef = this._overlay.create(this._buildConfig());
+        this._attachSubscription = overlayRef.attachments().subscribe(() => this.attach.emit());
+        this._detachSubscription = overlayRef.detachments().subscribe(() => this.detach.emit());
+        overlayRef.keydownEvents().subscribe((event) => {
             this.overlayKeydown.next(event);
             if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
                 event.preventDefault();
@@ -2890,7 +2896,6 @@ class CdkConnectedOverlay {
         }
         if (!this._overlayRef.hasAttached()) {
             this._overlayRef.attach(this._templatePortal);
-            this.attach.emit();
         }
         if (this.hasBackdrop) {
             this._backdropSubscription = this._overlayRef.backdropClick().subscribe(event => {
@@ -2905,7 +2910,6 @@ class CdkConnectedOverlay {
     _detachOverlay() {
         if (this._overlayRef) {
             this._overlayRef.detach();
-            this.detach.emit();
         }
         this._backdropSubscription.unsubscribe();
     }

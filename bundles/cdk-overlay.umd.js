@@ -3044,6 +3044,8 @@
             this._flexibleDimensions = false;
             this._push = false;
             this._backdropSubscription = rxjs.Subscription.EMPTY;
+            this._attachSubscription = rxjs.Subscription.EMPTY;
+            this._detachSubscription = rxjs.Subscription.EMPTY;
             /** Margin between the overlay and the viewport edges. */
             this.viewportMargin = 0;
             /** Whether the overlay is open. */
@@ -3142,10 +3144,12 @@
             configurable: true
         });
         CdkConnectedOverlay.prototype.ngOnDestroy = function () {
+            this._attachSubscription.unsubscribe();
+            this._detachSubscription.unsubscribe();
+            this._backdropSubscription.unsubscribe();
             if (this._overlayRef) {
                 this._overlayRef.dispose();
             }
-            this._backdropSubscription.unsubscribe();
         };
         CdkConnectedOverlay.prototype.ngOnChanges = function (changes) {
             if (this._position) {
@@ -3170,8 +3174,10 @@
             if (!this.positions || !this.positions.length) {
                 this.positions = defaultPositionList;
             }
-            this._overlayRef = this._overlay.create(this._buildConfig());
-            this._overlayRef.keydownEvents().subscribe(function (event) {
+            var overlayRef = this._overlayRef = this._overlay.create(this._buildConfig());
+            this._attachSubscription = overlayRef.attachments().subscribe(function () { return _this.attach.emit(); });
+            this._detachSubscription = overlayRef.detachments().subscribe(function () { return _this.detach.emit(); });
+            overlayRef.keydownEvents().subscribe(function (event) {
                 _this.overlayKeydown.next(event);
                 if (event.keyCode === keycodes.ESCAPE && !keycodes.hasModifierKey(event)) {
                     event.preventDefault();
@@ -3254,7 +3260,6 @@
             }
             if (!this._overlayRef.hasAttached()) {
                 this._overlayRef.attach(this._templatePortal);
-                this.attach.emit();
             }
             if (this.hasBackdrop) {
                 this._backdropSubscription = this._overlayRef.backdropClick().subscribe(function (event) {
@@ -3269,7 +3274,6 @@
         CdkConnectedOverlay.prototype._detachOverlay = function () {
             if (this._overlayRef) {
                 this._overlayRef.detach();
-                this.detach.emit();
             }
             this._backdropSubscription.unsubscribe();
         };
