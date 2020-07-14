@@ -138,6 +138,24 @@ class ComponentHarness {
     }
 }
 /**
+ * Base class for component harnesses that authors should extend if they anticipate that consumers
+ * of the harness may want to access other harnesses within the `<ng-content>` of the component.
+ */
+class ContentContainerComponentHarness extends ComponentHarness {
+    getChildLoader(selector) {
+        return this.locatorFactory.harnessLoaderFor(selector);
+    }
+    getAllChildLoaders(selector) {
+        return this.locatorFactory.harnessLoaderForAll(selector);
+    }
+    getHarness(query) {
+        return this.locatorFor(query)();
+    }
+    getAllHarnesses(query) {
+        return this.locatorForAll(query)();
+    }
+}
+/**
  * A class used to associate a ComponentHarness class with predicates functions that can be used to
  * filter instances of the class.
  */
@@ -550,5 +568,5 @@ var TestKey;
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { ComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey };
+export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey };
 //# sourceMappingURL=testing.js.map

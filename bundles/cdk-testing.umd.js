@@ -392,6 +392,29 @@
         return ComponentHarness;
     }());
     /**
+     * Base class for component harnesses that authors should extend if they anticipate that consumers
+     * of the harness may want to access other harnesses within the `<ng-content>` of the component.
+     */
+    var ContentContainerComponentHarness = /** @class */ (function (_super) {
+        __extends(ContentContainerComponentHarness, _super);
+        function ContentContainerComponentHarness() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ContentContainerComponentHarness.prototype.getChildLoader = function (selector) {
+            return this.locatorFactory.harnessLoaderFor(selector);
+        };
+        ContentContainerComponentHarness.prototype.getAllChildLoaders = function (selector) {
+            return this.locatorFactory.harnessLoaderForAll(selector);
+        };
+        ContentContainerComponentHarness.prototype.getHarness = function (query) {
+            return this.locatorFor(query)();
+        };
+        ContentContainerComponentHarness.prototype.getAllHarnesses = function (query) {
+            return this.locatorForAll(query)();
+        };
+        return ContentContainerComponentHarness;
+    }(ComponentHarness));
+    /**
      * A class used to associate a ComponentHarness class with predicates functions that can be used to
      * filter instances of the class.
      */
@@ -955,6 +978,7 @@
      */
 
     exports.ComponentHarness = ComponentHarness;
+    exports.ContentContainerComponentHarness = ContentContainerComponentHarness;
     exports.HarnessEnvironment = HarnessEnvironment;
     exports.HarnessPredicate = HarnessPredicate;
 

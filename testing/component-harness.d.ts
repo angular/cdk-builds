@@ -318,6 +318,16 @@ export declare abstract class ComponentHarness {
      */
     protected waitForTasksOutsideAngular(): Promise<void>;
 }
+/**
+ * Base class for component harnesses that authors should extend if they anticipate that consumers
+ * of the harness may want to access other harnesses within the `<ng-content>` of the component.
+ */
+export declare abstract class ContentContainerComponentHarness<S extends string = string> extends ComponentHarness implements HarnessLoader {
+    getChildLoader(selector: S): Promise<HarnessLoader>;
+    getAllChildLoaders(selector: S): Promise<HarnessLoader[]>;
+    getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
+    getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
+}
 /** Constructor for a ComponentHarness subclass. */
 export interface ComponentHarnessConstructor<T extends ComponentHarness> {
     new (locatorFactory: LocatorFactory): T;
