@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { OnDestroy } from '@angular/core';
+import { Platform } from '@angular/cdk/platform';
 /**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the `aria-describedby`.
@@ -28,8 +29,16 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  * content.
  */
 export declare class AriaDescriber implements OnDestroy {
+    /**
+     * @breaking-change 8.0.0 `_platform` parameter to be made required.
+     */
+    private _platform?;
     private _document;
-    constructor(_document: any);
+    constructor(_document: any, 
+    /**
+     * @breaking-change 8.0.0 `_platform` parameter to be made required.
+     */
+    _platform?: Platform | undefined);
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
