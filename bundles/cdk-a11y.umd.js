@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/observers')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/observers'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}), global.ng.common, global.ng.core, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.observers));
-}(this, (function (exports, i2, i0, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('@angular/cdk/platform'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/cdk/observers')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', '@angular/cdk/platform', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/coercion', '@angular/cdk/observers'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}), global.ng.common, global.ng.core, global.ng.cdk.platform, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.observers));
+}(this, (function (exports, i2, i0, i1, rxjs, keycodes, operators, coercion, observers) { 'use strict';
 
     /**
      * @license
@@ -73,7 +73,12 @@
      * content.
      */
     var AriaDescriber = /** @class */ (function () {
-        function AriaDescriber(_document) {
+        function AriaDescriber(_document, 
+        /**
+         * @breaking-change 8.0.0 `_platform` parameter to be made required.
+         */
+        _platform) {
+            this._platform = _platform;
             this._document = _document;
         }
         /**
@@ -159,6 +164,8 @@
         /** Creates the global container for all aria-describedby messages. */
         AriaDescriber.prototype._createMessagesContainer = function () {
             if (!messagesContainer) {
+                // @breaking-change 8.0.0 `_platform` null check can be removed once the parameter is required
+                var canBeAriaHidden = !this._platform || (!this._platform.EDGE && !this._platform.TRIDENT);
                 var preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
                 // When going from the server to the client, we may end up in a situation where there's
                 // already a container on the page, but we don't have a reference to it. Clear the
@@ -169,8 +176,12 @@
                 }
                 messagesContainer = this._document.createElement('div');
                 messagesContainer.id = MESSAGES_CONTAINER_ID;
-                messagesContainer.setAttribute('aria-hidden', 'true');
-                messagesContainer.style.display = 'none';
+                messagesContainer.classList.add('cdk-visually-hidden');
+                // IE and Edge won't read out the messages if they're in an `aria-hidden` container.
+                // We only disable `aria-hidden` for these platforms, because it comes with the
+                // disadvantage that people might hit the messages when they've navigated past
+                // the end of the document using the arrow keys.
+                messagesContainer.setAttribute('aria-hidden', canBeAriaHidden + '');
                 this._document.body.appendChild(messagesContainer);
             }
         };
@@ -238,12 +249,13 @@
         AriaDescriber.prototype._isElementNode = function (element) {
             return element.nodeType === this._document.ELEMENT_NODE;
         };
-        AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+        AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(i1.Platform)); }, token: AriaDescriber, providedIn: "root" });
         AriaDescriber.decorators = [
             { type: i0.Injectable, args: [{ providedIn: 'root' },] }
         ];
         AriaDescriber.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] }
+            { type: undefined, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] },
+            { type: i1.Platform }
         ]; };
         return AriaDescriber;
     }());
