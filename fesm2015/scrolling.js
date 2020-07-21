@@ -1,6 +1,6 @@
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { InjectionToken, Directive, forwardRef, Input, ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Optional, Inject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
-import { Subject, of, Observable, fromEvent, merge, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
+import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import { Platform, getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
@@ -545,19 +545,33 @@ class ViewportRuler {
     /** @breaking-change 11.0.0 make document required */
     document) {
         this._platform = _platform;
+        /** Stream of viewport change events. */
+        this._change = new Subject();
+        /** Event listener that will be used to handle the viewport change events. */
+        this._changeListener = (event) => {
+            this._change.next(event);
+        };
         this._document = document;
         ngZone.runOutsideAngular(() => {
-            const window = this._getWindow();
-            this._change = _platform.isBrowser ?
-                merge(fromEvent(window, 'resize'), fromEvent(window, 'orientationchange')) :
-                of();
-            // Note that we need to do the subscription inside `runOutsideAngular`
-            // since subscribing is what causes the event listener to be added.
-            this._invalidateCache = this.change().subscribe(() => this._updateViewportSize());
+            if (_platform.isBrowser) {
+                const window = this._getWindow();
+                // Note that bind the events ourselves, rather than going through something like RxJS's
+                // `fromEvent` so that we can ensure that they're bound outside of the NgZone.
+                window.addEventListener('resize', this._changeListener);
+                window.addEventListener('orientationchange', this._changeListener);
+            }
+            // We don't need to keep track of the subscription,
+            // because we complete the `change` stream on destroy.
+            this.change().subscribe(() => this._updateViewportSize());
         });
     }
     ngOnDestroy() {
-        this._invalidateCache.unsubscribe();
+        if (this._platform.isBrowser) {
+            const window = this._getWindow();
+            window.removeEventListener('resize', this._changeListener);
+            window.removeEventListener('orientationchange', this._changeListener);
+        }
+        this._change.complete();
     }
     /** Returns the viewport's width and height. */
     getViewportSize() {

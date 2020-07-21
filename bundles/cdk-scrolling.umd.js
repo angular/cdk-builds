@@ -798,19 +798,33 @@
         document) {
             var _this = this;
             this._platform = _platform;
+            /** Stream of viewport change events. */
+            this._change = new rxjs.Subject();
+            /** Event listener that will be used to handle the viewport change events. */
+            this._changeListener = function (event) {
+                _this._change.next(event);
+            };
             this._document = document;
             ngZone.runOutsideAngular(function () {
-                var window = _this._getWindow();
-                _this._change = _platform.isBrowser ?
-                    rxjs.merge(rxjs.fromEvent(window, 'resize'), rxjs.fromEvent(window, 'orientationchange')) :
-                    rxjs.of();
-                // Note that we need to do the subscription inside `runOutsideAngular`
-                // since subscribing is what causes the event listener to be added.
-                _this._invalidateCache = _this.change().subscribe(function () { return _this._updateViewportSize(); });
+                if (_platform.isBrowser) {
+                    var window_1 = _this._getWindow();
+                    // Note that bind the events ourselves, rather than going through something like RxJS's
+                    // `fromEvent` so that we can ensure that they're bound outside of the NgZone.
+                    window_1.addEventListener('resize', _this._changeListener);
+                    window_1.addEventListener('orientationchange', _this._changeListener);
+                }
+                // We don't need to keep track of the subscription,
+                // because we complete the `change` stream on destroy.
+                _this.change().subscribe(function () { return _this._updateViewportSize(); });
             });
         }
         ViewportRuler.prototype.ngOnDestroy = function () {
-            this._invalidateCache.unsubscribe();
+            if (this._platform.isBrowser) {
+                var window_2 = this._getWindow();
+                window_2.removeEventListener('resize', this._changeListener);
+                window_2.removeEventListener('orientationchange', this._changeListener);
+            }
+            this._change.complete();
         };
         /** Returns the viewport's width and height. */
         ViewportRuler.prototype.getViewportSize = function () {
