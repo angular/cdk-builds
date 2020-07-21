@@ -218,6 +218,60 @@ class ParentPositionTracker {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** Creates a deep clone of an element. */
+function deepCloneNode(node) {
+    const clone = node.cloneNode(true);
+    const descendantsWithId = clone.querySelectorAll('[id]');
+    const nodeName = node.nodeName.toLowerCase();
+    // Remove the `id` to avoid having multiple elements with the same id on the page.
+    clone.removeAttribute('id');
+    for (let i = 0; i < descendantsWithId.length; i++) {
+        descendantsWithId[i].removeAttribute('id');
+    }
+    if (nodeName === 'canvas') {
+        transferCanvasData(node, clone);
+    }
+    else if (nodeName === 'input' || nodeName === 'select' || nodeName === 'textarea') {
+        transferInputData(node, clone);
+    }
+    transferData('canvas', node, clone, transferCanvasData);
+    transferData('input, textarea, select', node, clone, transferInputData);
+    return clone;
+}
+/** Matches elements between an element and its clone and allows for their data to be cloned. */
+function transferData(selector, node, clone, callback) {
+    const descendantElements = node.querySelectorAll(selector);
+    if (descendantElements.length) {
+        const cloneElements = clone.querySelectorAll(selector);
+        for (let i = 0; i < descendantElements.length; i++) {
+            callback(descendantElements[i], cloneElements[i]);
+        }
+    }
+}
+/** Transfers the data of one input element to another. */
+function transferInputData(source, clone) {
+    clone.value = source.value;
+}
+/** Transfers the data of one canvas element to another. */
+function transferCanvasData(source, clone) {
+    const context = clone.getContext('2d');
+    if (context) {
+        // In some cases `drawImage` can throw (e.g. if the canvas size is 0x0).
+        // We can't do much about it so just ignore the error.
+        try {
+            context.drawImage(source, 0, 0);
+        }
+        catch (_a) { }
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Options that can be used to bind a passive event listener. */
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 /** Options that can be used to bind an active event listener. */
@@ -1162,34 +1216,6 @@ function getTransform(x, y) {
     // Round the transforms since some browsers will
     // blur the elements for sub-pixel transforms.
     return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-}
-/** Creates a deep clone of an element. */
-function deepCloneNode(node) {
-    const clone = node.cloneNode(true);
-    const descendantsWithId = clone.querySelectorAll('[id]');
-    const descendantCanvases = node.querySelectorAll('canvas');
-    // Remove the `id` to avoid having multiple elements with the same id on the page.
-    clone.removeAttribute('id');
-    for (let i = 0; i < descendantsWithId.length; i++) {
-        descendantsWithId[i].removeAttribute('id');
-    }
-    // `cloneNode` won't transfer the content of `canvas` elements so we have to do it ourselves.
-    // We match up the cloned canvas to their sources using their index in the DOM.
-    if (descendantCanvases.length) {
-        const cloneCanvases = clone.querySelectorAll('canvas');
-        for (let i = 0; i < descendantCanvases.length; i++) {
-            const correspondingCloneContext = cloneCanvases[i].getContext('2d');
-            if (correspondingCloneContext) {
-                // In some cases `drawImage` can throw (e.g. if the canvas size is 0x0).
-                // We can't do much about it so just ignore the error.
-                try {
-                    correspondingCloneContext.drawImage(descendantCanvases[i], 0, 0);
-                }
-                catch (_a) { }
-            }
-        }
-    }
-    return clone;
 }
 /** Clamps a value between a minimum and a maximum. */
 function clamp(value, min, max) {
