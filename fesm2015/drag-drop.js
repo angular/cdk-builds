@@ -2716,7 +2716,7 @@ const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
  * retention of the class and its directive metadata.
  */
 const CDK_DRAG_HANDLE = new InjectionToken('CdkDragHandle');
-/** Handle that can be used to drag and CdkDrag instance. */
+/** Handle that can be used to drag a CdkDrag instance. */
 class CdkDragHandle {
     constructor(element, parentDrag) {
         this.element = element;

@@ -2989,7 +2989,7 @@
      * retention of the class and its directive metadata.
      */
     var CDK_DRAG_HANDLE = new i0.InjectionToken('CdkDragHandle');
-    /** Handle that can be used to drag and CdkDrag instance. */
+    /** Handle that can be used to drag a CdkDrag instance. */
     var CdkDragHandle = /** @class */ (function () {
         function CdkDragHandle(element, parentDrag) {
             this.element = element;
