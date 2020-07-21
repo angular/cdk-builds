@@ -28,10 +28,10 @@ export declare function createPointerEvent(type: string, clientX?: number, clien
  */
 export declare function createTouchEvent(type: string, pageX?: number, pageY?: number): UIEvent;
 /**
- * Dispatches a keydown event from an element.
+ * Creates a keyboard event with the specified key and modifiers.
  * @docs-private
  */
-export declare function createKeyboardEvent(type: string, keyCode?: number, key?: string, target?: Element, modifiers?: ModifierKeys): any;
+export declare function createKeyboardEvent(type: string, keyCode?: number, key?: string, modifiers?: ModifierKeys): KeyboardEvent;
 /**
  * Creates a fake event object with any desired event type.
  * @docs-private

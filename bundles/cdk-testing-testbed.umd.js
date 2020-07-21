@@ -404,17 +404,18 @@
         return event;
     }
     /**
-     * Dispatches a keydown event from an element.
+     * Creates a keyboard event with the specified key and modifiers.
      * @docs-private
      */
-    function createKeyboardEvent(type, keyCode, key, target, modifiers) {
+    function createKeyboardEvent(type, keyCode, key, modifiers) {
         if (keyCode === void 0) { keyCode = 0; }
         if (key === void 0) { key = ''; }
         if (modifiers === void 0) { modifiers = {}; }
         var event = document.createEvent('KeyboardEvent');
-        var originalPreventDefault = event.preventDefault;
+        var originalPreventDefault = event.preventDefault.bind(event);
         // Firefox does not support `initKeyboardEvent`, but supports `initKeyEvent`.
-        if (event.initKeyEvent) {
+        // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyEvent.
+        if (event.initKeyEvent !== undefined) {
             event.initKeyEvent(type, true, true, window, modifiers.control, modifiers.alt, modifiers.shift, modifiers.meta, keyCode);
         }
         else {
@@ -433,13 +434,15 @@
             if (modifiers.meta) {
                 modifiersList += 'Meta ';
             }
+            // TS3.6 removed the `initKeyboardEvent` method and suggested porting to
+            // `new KeyboardEvent()` constructor. We cannot use that as we support IE11.
+            // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyboardEvent.
             event.initKeyboardEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* char */ key, /* key */ 0, /* location */ modifiersList.trim(), /* modifiersList */ false /* repeat */);
         }
         // Webkit Browsers don't set the keyCode when calling the init function.
         // See related bug https://bugs.webkit.org/show_bug.cgi?id=16735
         defineReadonlyEventProperty(event, 'keyCode', keyCode);
         defineReadonlyEventProperty(event, 'key', key);
-        defineReadonlyEventProperty(event, 'target', target);
         defineReadonlyEventProperty(event, 'ctrlKey', !!modifiers.control);
         defineReadonlyEventProperty(event, 'altKey', !!modifiers.alt);
         defineReadonlyEventProperty(event, 'shiftKey', !!modifiers.shift);
@@ -447,7 +450,7 @@
         // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
         event.preventDefault = function () {
             defineReadonlyEventProperty(event, 'defaultPrevented', true);
-            return originalPreventDefault.apply(this, arguments);
+            return originalPreventDefault();
         };
         return event;
     }
@@ -493,11 +496,12 @@
         return dispatchEvent(node, createFakeEvent(type, canBubble));
     }
     /**
-     * Shorthand to dispatch a keyboard event with a specified key code.
+     * Shorthand to dispatch a keyboard event with a specified key code and
+     * optional modifiers.
      * @docs-private
      */
-    function dispatchKeyboardEvent(node, type, keyCode, key, target, modifiers) {
-        return dispatchEvent(node, createKeyboardEvent(type, keyCode, key, target, modifiers));
+    function dispatchKeyboardEvent(node, type, keyCode, key, modifiers) {
+        return dispatchEvent(node, createKeyboardEvent(type, keyCode, key, modifiers));
     }
     /**
      * Shorthand to dispatch a mouse event on the specified coordinates.
@@ -603,13 +607,13 @@
         try {
             for (var keys_1 = __values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
                 var key = keys_1_1.value;
-                dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, element, modifiers);
-                dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, element, modifiers);
+                dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, modifiers);
+                dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, modifiers);
                 if (isTextInput(element) && key.key && key.key.length === 1) {
                     element.value += key.key;
                     dispatchFakeEvent(element, 'input');
                 }
-                dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, element, modifiers);
+                dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
