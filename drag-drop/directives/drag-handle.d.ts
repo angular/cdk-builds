@@ -14,7 +14,7 @@ import { Subject } from 'rxjs';
  * retention of the class and its directive metadata.
  */
 export declare const CDK_DRAG_HANDLE: InjectionToken<CdkDragHandle>;
-/** Handle that can be used to drag and CdkDrag instance. */
+/** Handle that can be used to drag a CdkDrag instance. */
 export declare class CdkDragHandle implements OnDestroy {
     element: ElementRef<HTMLElement>;
     /** Closest parent draggable instance. */
