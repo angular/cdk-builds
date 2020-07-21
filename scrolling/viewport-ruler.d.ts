@@ -25,8 +25,8 @@ export declare class ViewportRuler implements OnDestroy {
     private _viewportSize;
     /** Stream of viewport change events. */
     private _change;
-    /** Subscription to streams that invalidate the cached viewport dimensions. */
-    private _invalidateCache;
+    /** Event listener that will be used to handle the viewport change events. */
+    private _changeListener;
     /** Used to reference correct document/window */
     protected _document?: Document;
     constructor(_platform: Platform, ngZone: NgZone, 

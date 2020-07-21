@@ -1464,6 +1464,7 @@
             this._renderRows = this._getAllRenderRows();
             var changes = this._dataDiffer.diff(this._renderRows);
             if (!changes) {
+                this._updateNoDataRow();
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;

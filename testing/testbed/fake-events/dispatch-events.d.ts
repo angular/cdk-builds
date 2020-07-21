@@ -17,10 +17,11 @@ export declare function dispatchEvent<T extends Event>(node: Node | Window, even
  */
 export declare function dispatchFakeEvent(node: Node | Window, type: string, canBubble?: boolean): Event;
 /**
- * Shorthand to dispatch a keyboard event with a specified key code.
+ * Shorthand to dispatch a keyboard event with a specified key code and
+ * optional modifiers.
  * @docs-private
  */
-export declare function dispatchKeyboardEvent(node: Node, type: string, keyCode?: number, key?: string, target?: Element, modifiers?: ModifierKeys): KeyboardEvent;
+export declare function dispatchKeyboardEvent(node: Node, type: string, keyCode?: number, key?: string, modifiers?: ModifierKeys): KeyboardEvent;
 /**
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private

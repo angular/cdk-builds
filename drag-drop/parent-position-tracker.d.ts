@@ -16,7 +16,7 @@ export declare class ParentPositionTracker {
     private _document;
     private _viewportRuler;
     /** Cached positions of the scrollable parent elements. */
-    readonly positions: Map<Document | HTMLElement, {
+    readonly positions: Map<HTMLElement | Document, {
         scrollPosition: ScrollPosition;
         clientRect?: ClientRect | undefined;
     }>;
