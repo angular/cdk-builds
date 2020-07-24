@@ -2850,8 +2850,14 @@
             }
             ref.beforeStarted.subscribe(function () {
                 var siblings = coercion.coerceArray(_this.connectedTo).map(function (drop) {
-                    return typeof drop === 'string' ?
-                        CdkDropList._dropLists.find(function (list) { return list.id === drop; }) : drop;
+                    if (typeof drop === 'string') {
+                        var correspondingDropList = CdkDropList._dropLists.find(function (list) { return list.id === drop; });
+                        if (!correspondingDropList && i0.isDevMode()) {
+                            console.warn("CdkDropList could not find connected drop list with id \"" + drop + "\"");
+                        }
+                        return correspondingDropList;
+                    }
+                    return drop;
                 });
                 if (_this._group) {
                     _this._group._items.forEach(function (drop) {

@@ -1,4 +1,4 @@
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, isDevMode, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, isDevMode, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
@@ -2579,8 +2579,14 @@ class CdkDropList {
         }
         ref.beforeStarted.subscribe(() => {
             const siblings = coerceArray(this.connectedTo).map(drop => {
-                return typeof drop === 'string' ?
-                    CdkDropList._dropLists.find(list => list.id === drop) : drop;
+                if (typeof drop === 'string') {
+                    const correspondingDropList = CdkDropList._dropLists.find(list => list.id === drop);
+                    if (!correspondingDropList && isDevMode()) {
+                        console.warn(`CdkDropList could not find connected drop list with id "${drop}"`);
+                    }
+                    return correspondingDropList;
+                }
+                return drop;
             });
             if (this._group) {
                 this._group._items.forEach(drop => {
