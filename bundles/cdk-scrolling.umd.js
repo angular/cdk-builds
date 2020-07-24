@@ -1295,7 +1295,7 @@
             { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [VIRTUAL_SCROLL_STRATEGY,] }] },
             { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
             { type: ScrollDispatcher },
-            { type: ViewportRuler, decorators: [{ type: i0.Optional }] }
+            { type: ViewportRuler }
         ]; };
         CdkVirtualScrollViewport.propDecorators = {
             orientation: [{ type: i0.Input }],

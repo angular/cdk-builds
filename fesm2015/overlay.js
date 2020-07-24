@@ -2641,8 +2641,8 @@ Overlay.ctorParameters = () => [
     { type: NgZone },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Directionality },
-    { type: Location, decorators: [{ type: Optional }] },
-    { type: OverlayOutsideClickDispatcher, decorators: [{ type: Optional }] }
+    { type: Location },
+    { type: OverlayOutsideClickDispatcher }
 ];
 
 /**

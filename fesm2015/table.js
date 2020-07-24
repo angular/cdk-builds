@@ -1681,7 +1681,11 @@ function mergeArrayAndSet(array, set) {
  * input.
  */
 class CdkTextColumn {
-    constructor(_table, _options) {
+    constructor(
+    // `CdkTextColumn` is always requiring a table, but we just assert it manually
+    // for better error reporting.
+    // tslint:disable-next-line: lightweight-tokens
+    _table, _options) {
         this._table = _table;
         this._options = _options;
         /** Alignment of the cell values. */

@@ -1011,7 +1011,7 @@ CdkVirtualScrollViewport.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [VIRTUAL_SCROLL_STRATEGY,] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: ScrollDispatcher },
-    { type: ViewportRuler, decorators: [{ type: Optional }] }
+    { type: ViewportRuler }
 ];
 CdkVirtualScrollViewport.propDecorators = {
     orientation: [{ type: Input }],

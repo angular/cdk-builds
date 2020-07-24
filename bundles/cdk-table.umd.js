@@ -2076,7 +2076,11 @@
      * input.
      */
     var CdkTextColumn = /** @class */ (function () {
-        function CdkTextColumn(_table, _options) {
+        function CdkTextColumn(
+        // `CdkTextColumn` is always requiring a table, but we just assert it manually
+        // for better error reporting.
+        // tslint:disable-next-line: lightweight-tokens
+        _table, _options) {
             this._table = _table;
             this._options = _options;
             /** Alignment of the cell values. */

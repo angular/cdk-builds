@@ -2962,8 +2962,8 @@
             { type: i0.NgZone },
             { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
             { type: bidi.Directionality },
-            { type: i1$1.Location, decorators: [{ type: i0.Optional }] },
-            { type: OverlayOutsideClickDispatcher, decorators: [{ type: i0.Optional }] }
+            { type: i1$1.Location },
+            { type: OverlayOutsideClickDispatcher }
         ]; };
         return Overlay;
     }());
