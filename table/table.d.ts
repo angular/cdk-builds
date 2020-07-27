@@ -12,6 +12,7 @@ import { Platform } from '@angular/cdk/platform';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
+import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef, CdkNoDataRow } from './row';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
@@ -98,6 +99,7 @@ export interface RenderRow<T> {
 export declare class CdkTable<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
+    protected readonly _coalescedStyleScheduler: _CoalescedStyleScheduler;
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
     private _platform;
@@ -267,7 +269,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
