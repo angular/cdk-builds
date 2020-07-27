@@ -7,6 +7,7 @@
  */
 export * from './table';
 export * from './cell';
+export * from './coalesced-style-scheduler';
 export * from './row';
 export * from './table-module';
 export * from './sticky-styler';

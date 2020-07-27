@@ -10,6 +10,7 @@
  * @docs-private
  */
 import { Direction } from '@angular/cdk/bidi';
+import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
 export declare type StickyDirection = 'top' | 'bottom' | 'left' | 'right';
 /**
  * List of all possible directions that can be used for sticky positioning.
@@ -24,6 +25,7 @@ export declare class StickyStyler {
     private _isNativeHtmlTable;
     private _stickCellCss;
     direction: Direction;
+    private _coalescedStyleScheduler;
     private _isBrowser;
     /**
      * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
@@ -34,7 +36,7 @@ export declare class StickyStyler {
      *     by reversing left/right positions.
      * @param _isBrowser Whether the table is currently being rendered on the server or the client.
      */
-    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _isBrowser?: boolean);
+    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean);
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
      * style, setting the zIndex to 0, and unsetting each provided sticky direction.
