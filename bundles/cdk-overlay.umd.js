@@ -2459,14 +2459,6 @@
                 .withViewportMargin(0);
             this.withFallbackPosition(originPos, overlayPos);
         }
-        Object.defineProperty(ConnectedPositionStrategy.prototype, "_isRtl", {
-            /** Whether the we're dealing with an RTL context */
-            get: function () {
-                return this._overlayRef.getDirection() === 'rtl';
-            },
-            enumerable: false,
-            configurable: true
-        });
         Object.defineProperty(ConnectedPositionStrategy.prototype, "onPositionChange", {
             /** Emits an event when the connection point changes. */
             get: function () {
