@@ -174,7 +174,7 @@ class AriaDescriber {
             // already a container on the page, but we don't have a reference to it. Clear the
             // old container so we don't get duplicates. Doing this, instead of emptying the previous
             // container, should be slightly faster.
-            if (preExistingContainer) {
+            if (preExistingContainer && preExistingContainer.parentNode) {
                 preExistingContainer.parentNode.removeChild(preExistingContainer);
             }
             messagesContainer = this._document.createElement('div');
