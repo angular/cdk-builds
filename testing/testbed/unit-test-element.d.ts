@@ -28,4 +28,11 @@ export declare class UnitTestElement implements TestElement {
     setInputValue(value: string): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
+    /**
+     * Dispatches a pointer event on the current element if the browser supports it.
+     * @param name Name of the pointer event to be dispatched.
+     * @param clientX Coordinate of the user's pointer along the X axis.
+     * @param clientY Coordinate of the user's pointer along the Y axis.
+     */
+    private _dispatchPointerEventIfSupported;
 }

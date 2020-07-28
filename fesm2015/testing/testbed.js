@@ -448,18 +448,9 @@ class UnitTestElement {
             // supported by mouse events and could lead to unexpected results.
             const clientX = Math.round(left + relativeX);
             const clientY = Math.round(top + relativeY);
-            // The latest versions of all browsers we support have the new `PointerEvent` API.
-            // Though since we capture the two most recent versions of these browsers, we also
-            // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
-            // so we need to conditionally create and dispatch these events based on feature detection.
-            const emitPointerEvents = window.PointerEvent !== undefined;
-            if (emitPointerEvents) {
-                dispatchPointerEvent(this.element, 'pointerdown', clientX, clientY);
-            }
+            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
-            if (emitPointerEvents) {
-                dispatchMouseEvent(this.element, 'pointerup', clientX, clientY);
-            }
+            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);
             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
             dispatchMouseEvent(this.element, 'click', clientX, clientY);
             yield this._stabilize();
@@ -483,6 +474,7 @@ class UnitTestElement {
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
+            this._dispatchPointerEventIfSupported('pointerenter');
             dispatchMouseEvent(this.element, 'mouseenter');
             yield this._stabilize();
         });
@@ -490,6 +482,7 @@ class UnitTestElement {
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
+            this._dispatchPointerEventIfSupported('pointerleave');
             dispatchMouseEvent(this.element, 'mouseleave');
             yield this._stabilize();
         });
@@ -551,6 +544,21 @@ class UnitTestElement {
             yield this._stabilize();
             return document.activeElement === this.element;
         });
+    }
+    /**
+     * Dispatches a pointer event on the current element if the browser supports it.
+     * @param name Name of the pointer event to be dispatched.
+     * @param clientX Coordinate of the user's pointer along the X axis.
+     * @param clientY Coordinate of the user's pointer along the Y axis.
+     */
+    _dispatchPointerEventIfSupported(name, clientX, clientY) {
+        // The latest versions of all browsers we support have the new `PointerEvent` API.
+        // Though since we capture the two most recent versions of these browsers, we also
+        // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
+        // so we need to conditionally create and dispatch these events based on feature detection.
+        if (typeof PointerEvent !== 'undefined' && PointerEvent) {
+            dispatchPointerEvent(this.element, name, clientX, clientY);
+        }
     }
 }
 
