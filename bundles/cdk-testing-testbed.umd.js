@@ -730,7 +730,7 @@
                 args[_i] = arguments[_i];
             }
             return __awaiter(this, void 0, void 0, function () {
-                var _a, left, top, width, height, relativeX, relativeY, clientX, clientY, emitPointerEvents;
+                var _a, left, top, width, height, relativeX, relativeY, clientX, clientY;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0: return [4 /*yield*/, this.getDimensions()];
@@ -740,14 +740,9 @@
                             relativeY = args.length ? args[1] : height / 2;
                             clientX = Math.round(left + relativeX);
                             clientY = Math.round(top + relativeY);
-                            emitPointerEvents = window.PointerEvent !== undefined;
-                            if (emitPointerEvents) {
-                                dispatchPointerEvent(this.element, 'pointerdown', clientX, clientY);
-                            }
+                            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
                             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
-                            if (emitPointerEvents) {
-                                dispatchMouseEvent(this.element, 'pointerup', clientX, clientY);
-                            }
+                            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);
                             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
                             dispatchMouseEvent(this.element, 'click', clientX, clientY);
                             return [4 /*yield*/, this._stabilize()];
@@ -795,6 +790,7 @@
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();
+                            this._dispatchPointerEventIfSupported('pointerenter');
                             dispatchMouseEvent(this.element, 'mouseenter');
                             return [4 /*yield*/, this._stabilize()];
                         case 2:
@@ -811,6 +807,7 @@
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();
+                            this._dispatchPointerEventIfSupported('pointerleave');
                             dispatchMouseEvent(this.element, 'mouseleave');
                             return [4 /*yield*/, this._stabilize()];
                         case 2:
@@ -941,6 +938,21 @@
                     }
                 });
             });
+        };
+        /**
+         * Dispatches a pointer event on the current element if the browser supports it.
+         * @param name Name of the pointer event to be dispatched.
+         * @param clientX Coordinate of the user's pointer along the X axis.
+         * @param clientY Coordinate of the user's pointer along the Y axis.
+         */
+        UnitTestElement.prototype._dispatchPointerEventIfSupported = function (name, clientX, clientY) {
+            // The latest versions of all browsers we support have the new `PointerEvent` API.
+            // Though since we capture the two most recent versions of these browsers, we also
+            // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
+            // so we need to conditionally create and dispatch these events based on feature detection.
+            if (typeof PointerEvent !== 'undefined' && PointerEvent) {
+                dispatchPointerEvent(this.element, name, clientX, clientY);
+            }
         };
         return UnitTestElement;
     }());

@@ -29,11 +29,12 @@
             this._document = _document;
             var textarea = this._textarea = this._document.createElement('textarea');
             var styles = textarea.style;
-            // Hide the element for display and accessibility. Set an
-            // absolute position so the page layout isn't affected.
-            styles.opacity = '0';
-            styles.position = 'absolute';
-            styles.left = styles.top = '-999em';
+            // Hide the element for display and accessibility. Set a fixed position so the page layout
+            // isn't affected. We use `fixed` with `top: 0`, because focus is moved into the textarea
+            // for a split second and if it's off-screen, some browsers will attempt to scroll it into view.
+            styles.position = 'fixed';
+            styles.top = styles.opacity = '0';
+            styles.left = '-999em';
             textarea.setAttribute('aria-hidden', 'true');
             textarea.value = text;
             this._document.body.appendChild(textarea);

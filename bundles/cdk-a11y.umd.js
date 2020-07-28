@@ -104,7 +104,7 @@
         };
         /** Removes the host element's aria-describedby reference to the message element. */
         AriaDescriber.prototype.removeDescription = function (hostElement, message) {
-            if (!this._isElementNode(hostElement)) {
+            if (!message || !this._isElementNode(hostElement)) {
                 return;
             }
             if (this._isElementDescribedByMessage(hostElement, message)) {

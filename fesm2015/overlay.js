@@ -2160,10 +2160,6 @@ class ConnectedPositionStrategy {
             .withViewportMargin(0);
         this.withFallbackPosition(originPos, overlayPos);
     }
-    /** Whether the we're dealing with an RTL context */
-    get _isRtl() {
-        return this._overlayRef.getDirection() === 'rtl';
-    }
     /** Emits an event when the connection point changes. */
     get onPositionChange() {
         return this._positionStrategy.positionChanges;
