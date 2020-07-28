@@ -7,7 +7,7 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Platform } from '@angular/cdk/platform';
 import { Subject, Subscription, merge } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil, takeWhile } from 'rxjs/operators';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
 /**
@@ -2718,6 +2718,7 @@ class CdkConnectedOverlay {
         this._backdropSubscription = Subscription.EMPTY;
         this._attachSubscription = Subscription.EMPTY;
         this._detachSubscription = Subscription.EMPTY;
+        this._positionSubscription = Subscription.EMPTY;
         /** Margin between the overlay and the viewport edges. */
         this.viewportMargin = 0;
         /** Whether the overlay is open. */
@@ -2783,6 +2784,7 @@ class CdkConnectedOverlay {
         this._attachSubscription.unsubscribe();
         this._detachSubscription.unsubscribe();
         this._backdropSubscription.unsubscribe();
+        this._positionSubscription.unsubscribe();
         if (this._overlayRef) {
             this._overlayRef.dispose();
         }
@@ -2878,7 +2880,6 @@ class CdkConnectedOverlay {
     _createPositionStrategy() {
         const strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
         this._updatePositionStrategy(strategy);
-        strategy.positionChanges.subscribe(p => this.positionChange.emit(p));
         return strategy;
     }
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
@@ -2901,6 +2902,19 @@ class CdkConnectedOverlay {
         else {
             this._backdropSubscription.unsubscribe();
         }
+        this._positionSubscription.unsubscribe();
+        // Only subscribe to `positionChanges` if requested, because putting
+        // together all the information for it can be expensive.
+        if (this.positionChange.observers.length > 0) {
+            this._positionSubscription = this._position.positionChanges
+                .pipe(takeWhile(() => this.positionChange.observers.length > 0))
+                .subscribe(position => {
+                this.positionChange.emit(position);
+                if (this.positionChange.observers.length === 0) {
+                    this._positionSubscription.unsubscribe();
+                }
+            });
+        }
     }
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     _detachOverlay() {
@@ -2908,6 +2922,7 @@ class CdkConnectedOverlay {
             this._overlayRef.detach();
         }
         this._backdropSubscription.unsubscribe();
+        this._positionSubscription.unsubscribe();
     }
 }
 CdkConnectedOverlay.decorators = [
