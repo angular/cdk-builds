@@ -3038,6 +3038,7 @@
             this._backdropSubscription = rxjs.Subscription.EMPTY;
             this._attachSubscription = rxjs.Subscription.EMPTY;
             this._detachSubscription = rxjs.Subscription.EMPTY;
+            this._positionSubscription = rxjs.Subscription.EMPTY;
             /** Margin between the overlay and the viewport edges. */
             this.viewportMargin = 0;
             /** Whether the overlay is open. */
@@ -3139,6 +3140,7 @@
             this._attachSubscription.unsubscribe();
             this._detachSubscription.unsubscribe();
             this._backdropSubscription.unsubscribe();
+            this._positionSubscription.unsubscribe();
             if (this._overlayRef) {
                 this._overlayRef.dispose();
             }
@@ -3234,10 +3236,8 @@
         };
         /** Returns the position strategy of the overlay to be set on the overlay config */
         CdkConnectedOverlay.prototype._createPositionStrategy = function () {
-            var _this = this;
             var strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
             this._updatePositionStrategy(strategy);
-            strategy.positionChanges.subscribe(function (p) { return _this.positionChange.emit(p); });
             return strategy;
         };
         /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
@@ -3261,6 +3261,19 @@
             else {
                 this._backdropSubscription.unsubscribe();
             }
+            this._positionSubscription.unsubscribe();
+            // Only subscribe to `positionChanges` if requested, because putting
+            // together all the information for it can be expensive.
+            if (this.positionChange.observers.length > 0) {
+                this._positionSubscription = this._position.positionChanges
+                    .pipe(operators.takeWhile(function () { return _this.positionChange.observers.length > 0; }))
+                    .subscribe(function (position) {
+                    _this.positionChange.emit(position);
+                    if (_this.positionChange.observers.length === 0) {
+                        _this._positionSubscription.unsubscribe();
+                    }
+                });
+            }
         };
         /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
         CdkConnectedOverlay.prototype._detachOverlay = function () {
@@ -3268,6 +3281,7 @@
                 this._overlayRef.detach();
             }
             this._backdropSubscription.unsubscribe();
+            this._positionSubscription.unsubscribe();
         };
         CdkConnectedOverlay.decorators = [
             { type: i0.Directive, args: [{

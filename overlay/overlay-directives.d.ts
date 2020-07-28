@@ -45,6 +45,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _backdropSubscription;
     private _attachSubscription;
     private _detachSubscription;
+    private _positionSubscription;
     private _offsetX;
     private _offsetY;
     private _position;
