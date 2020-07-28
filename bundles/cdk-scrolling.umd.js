@@ -1312,14 +1312,17 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    /** Helper to extract size from a DOM Node. */
-    function getSize(orientation, node) {
+    /** Helper to extract the offset of a DOM Node in a certain direction. */
+    function getOffset(orientation, direction, node) {
         var el = node;
         if (!el.getBoundingClientRect) {
             return 0;
         }
         var rect = el.getBoundingClientRect();
-        return orientation == 'horizontal' ? rect.width : rect.height;
+        if (orientation === 'horizontal') {
+            return direction === 'start' ? rect.left : rect.right;
+        }
+        return direction === 'start' ? rect.top : rect.bottom;
     }
     /**
      * A directive similar to `ngForOf` to be used for rendering data inside a virtual scrolling
@@ -1450,17 +1453,28 @@
             var renderedStartIndex = range.start - this._renderedRange.start;
             // The length of the range we're measuring.
             var rangeLen = range.end - range.start;
-            // Loop over all root nodes for all items in the range and sum up their size.
-            var totalSize = 0;
-            var i = rangeLen;
-            while (i--) {
+            // Loop over all the views, find the first and land node and compute the size by subtracting
+            // the top of the first node from the bottom of the last one.
+            var firstNode;
+            var lastNode;
+            // Find the first node by starting from the beginning and going forwards.
+            for (var i = 0; i < rangeLen; i++) {
                 var view = this._viewContainerRef.get(i + renderedStartIndex);
-                var j = view ? view.rootNodes.length : 0;
-                while (j--) {
-                    totalSize += getSize(orientation, view.rootNodes[j]);
+                if (view && view.rootNodes.length) {
+                    firstNode = lastNode = view.rootNodes[0];
+                    break;
                 }
             }
-            return totalSize;
+            // Find the last node by starting from the end and going backwards.
+            for (var i = rangeLen - 1; i > -1; i--) {
+                var view = this._viewContainerRef.get(i + renderedStartIndex);
+                if (view && view.rootNodes.length) {
+                    lastNode = view.rootNodes[view.rootNodes.length - 1];
+                    break;
+                }
+            }
+            return firstNode && lastNode ?
+                getOffset(orientation, 'end', lastNode) - getOffset(orientation, 'start', firstNode) : 0;
         };
         CdkVirtualForOf.prototype.ngDoCheck = function () {
             if (this._differ && this._needsUpdate) {
