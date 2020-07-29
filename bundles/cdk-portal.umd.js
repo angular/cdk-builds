@@ -578,12 +578,15 @@
             var _this = this;
             var viewContainer = portal.viewContainerRef;
             var viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
-            viewRef.detectChanges();
             // The method `createEmbeddedView` will add the view as a child of the viewContainer.
             // But for the DomPortalOutlet the view can be added everywhere in the DOM
             // (e.g Overlay Container) To move the view to the specified host element. We just
             // re-append the existing root nodes.
             viewRef.rootNodes.forEach(function (rootNode) { return _this.outletElement.appendChild(rootNode); });
+            // Note that we want to detect changes after the nodes have been moved so that
+            // any directives inside the portal that are looking at the DOM inside a lifecycle
+            // hook won't be invoked too early.
+            viewRef.detectChanges();
             this.setDisposeFn((function () {
                 var index = viewContainer.indexOf(viewRef);
                 if (index !== -1) {
