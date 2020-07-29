@@ -43,9 +43,5 @@ export declare class OverlayConfig {
      * the `HashLocationStrategy`).
      */
     disposeOnNavigation?: boolean;
-    /**
-     * Array of HTML elements clicking on which should not be considered as outside click
-     */
-    excludeFromOutsideClick?: HTMLElement[];
     constructor(config?: OverlayConfig);
 }

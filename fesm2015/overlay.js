@@ -351,10 +351,6 @@ class OverlayConfig {
          * the `HashLocationStrategy`).
          */
         this.disposeOnNavigation = false;
-        /**
-         * Array of HTML elements clicking on which should not be considered as outside click
-         */
-        this.excludeFromOutsideClick = [];
         if (config) {
             // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
             // loses the array generic type in the `for of`. But we *also* have to use `Array` because
@@ -619,12 +615,9 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
                 if (overlayRef._outsidePointerEvents.observers.length < 1) {
                     continue;
                 }
-                const config = overlayRef.getConfig();
-                const excludeElements = [...config.excludeFromOutsideClick, overlayRef.overlayElement];
-                const isInsideClick = excludeElements.some(e => e.contains(target));
-                // If it is inside click just break - we should do nothing
-                // If it is outside click dispatch the mouse event, and proceed with the next overlay
-                if (isInsideClick) {
+                // If it's a click inside the overlay, just break - we should do nothing
+                // If it's an outside click dispatch the mouse event, and proceed with the next overlay
+                if (overlayRef.overlayElement.contains(target)) {
                     break;
                 }
                 overlayRef._outsidePointerEvents.next(event);
