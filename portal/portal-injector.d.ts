@@ -10,6 +10,8 @@ import { Injector } from '@angular/core';
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.
  * @docs-private
+ * @deprecated Use `Injector.create` instead.
+ * @breaking-change 11.0.0
  */
 export declare class PortalInjector implements Injector {
     private _parentInjector;

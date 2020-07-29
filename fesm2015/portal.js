@@ -583,6 +583,8 @@ PortalModule.decorators = [
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.
  * @docs-private
+ * @deprecated Use `Injector.create` instead.
+ * @breaking-change 11.0.0
  */
 class PortalInjector {
     constructor(_parentInjector, _customTokens) {
