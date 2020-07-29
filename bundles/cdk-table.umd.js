@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, (function (exports, bidi, coercion, collections, platform, common, core, rxjs, operators) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/scrolling')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/scrolling'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.scrolling));
+}(this, (function (exports, bidi, coercion, collections, platform, common, core, rxjs, operators, scrolling) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -1382,13 +1382,17 @@
      * connect function that will return an Observable stream that emits the data array to render.
      */
     var CdkTable = /** @class */ (function () {
-        function CdkTable(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform) {
+        function CdkTable(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
+        // Optional for backwards compatibility, but a view repeater strategy will always
+        // be provided.
+        _viewRepeater) {
             this._differs = _differs;
             this._changeDetectorRef = _changeDetectorRef;
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
             this._elementRef = _elementRef;
             this._dir = _dir;
             this._platform = _platform;
+            this._viewRepeater = _viewRepeater;
             /** Subject that emits when the component has been destroyed. */
             this._onDestroy = new rxjs.Subject();
             /**
@@ -1619,16 +1623,9 @@
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;
-            changes.forEachOperation(function (record, prevIndex, currentIndex) {
-                if (record.previousIndex == null) {
-                    _this._insertRow(record.item, currentIndex);
-                }
-                else if (currentIndex == null) {
-                    viewContainer.remove(prevIndex);
-                }
-                else {
-                    var view = viewContainer.get(prevIndex);
-                    viewContainer.move(view, currentIndex);
+            this._viewRepeater.applyChanges(changes, viewContainer, function (record, adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
+                if (change.operation === 1 /* INSERTED */ && change.context) {
+                    _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
                 }
             });
             // Update the meta context of a row's context data (index, count, first, last, ...)
@@ -1983,14 +1980,14 @@
             }
             return rowDefs;
         };
-        /**
-         * Create the embedded view for the data row template and place it in the correct index location
-         * within the data row view container.
-         */
-        CdkTable.prototype._insertRow = function (renderRow, renderIndex) {
+        CdkTable.prototype._getEmbeddedViewArgs = function (renderRow, index) {
             var rowDef = renderRow.rowDef;
             var context = { $implicit: renderRow.data };
-            this._renderRow(this._rowOutlet, rowDef, renderIndex, context);
+            return {
+                templateRef: rowDef.template,
+                context: context,
+                index: index,
+            };
         };
         /**
          * Creates a new row template in the outlet and fills it with the set of cell templates.
@@ -1998,10 +1995,14 @@
          * of where to place the new row template in the outlet.
          */
         CdkTable.prototype._renderRow = function (outlet, rowDef, index, context) {
-            var e_1, _a;
             if (context === void 0) { context = {}; }
             // TODO(andrewseguin): enforce that one outlet was instantiated from createEmbeddedView
-            outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
+            var view = outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
+            this._renderCellTemplateForItem(rowDef, context);
+            return view;
+        };
+        CdkTable.prototype._renderCellTemplateForItem = function (rowDef, context) {
+            var e_1, _a;
             try {
                 for (var _b = __values(this._getCellTemplates(rowDef)), _c = _b.next(); !_c.done; _c = _b.next()) {
                     var cellTemplate = _c.value;
@@ -2176,6 +2177,7 @@
                         changeDetection: core.ChangeDetectionStrategy.Default,
                         providers: [
                             { provide: CDK_TABLE, useExisting: CdkTable },
+                            { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._DisposeViewRepeaterStrategy },
                             _CoalescedStyleScheduler,
                         ]
                     },] }
@@ -2188,7 +2190,8 @@
             { type: String, decorators: [{ type: core.Attribute, args: ['role',] }] },
             { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
             { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-            { type: platform.Platform }
+            { type: platform.Platform },
+            { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] }
         ]; };
         CdkTable.propDecorators = {
             trackBy: [{ type: core.Input }],
@@ -2369,7 +2372,8 @@
         CdkTableModule.decorators = [
             { type: core.NgModule, args: [{
                         exports: EXPORTED_DECLARATIONS,
-                        declarations: EXPORTED_DECLARATIONS
+                        declarations: EXPORTED_DECLARATIONS,
+                        imports: [scrolling.ScrollingModule]
                     },] }
         ];
         return CdkTableModule;

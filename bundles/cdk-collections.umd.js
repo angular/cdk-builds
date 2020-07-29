@@ -290,6 +290,198 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
+     * A repeater that destroys views when they are removed from a
+     * {@link ViewContainerRef}. When new items are inserted into the container,
+     * the repeater will always construct a new embedded view for each item.
+     *
+     * @template T The type for the embedded view's $implicit property.
+     * @template R The type for the item in each IterableDiffer change record.
+     * @template C The type for the context passed to each embedded view.
+     */
+    var _DisposeViewRepeaterStrategy = /** @class */ (function () {
+        function _DisposeViewRepeaterStrategy() {
+        }
+        _DisposeViewRepeaterStrategy.prototype.applyChanges = function (changes, viewContainerRef, itemContextFactory, itemValueResolver, itemViewChanged) {
+            changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
+                var view;
+                var operation;
+                if (record.previousIndex == null) {
+                    var insertContext = itemContextFactory(record, adjustedPreviousIndex, currentIndex);
+                    view = viewContainerRef.createEmbeddedView(insertContext.templateRef, insertContext.context, insertContext.index);
+                    operation = 1 /* INSERTED */;
+                }
+                else if (currentIndex == null) {
+                    viewContainerRef.remove(adjustedPreviousIndex);
+                    operation = 3 /* REMOVED */;
+                }
+                else {
+                    view = viewContainerRef.get(adjustedPreviousIndex);
+                    viewContainerRef.move(view, currentIndex);
+                    operation = 2 /* MOVED */;
+                }
+                if (itemViewChanged) {
+                    itemViewChanged({
+                        context: view === null || view === void 0 ? void 0 : view.context,
+                        operation: operation,
+                        record: record,
+                    });
+                }
+            });
+        };
+        _DisposeViewRepeaterStrategy.prototype.detach = function () {
+        };
+        return _DisposeViewRepeaterStrategy;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
+     * A repeater that caches views when they are removed from a
+     * {@link ViewContainerRef}. When new items are inserted into the container,
+     * the repeater will reuse one of the cached views instead of creating a new
+     * embedded view. Recycling cached views reduces the quantity of expensive DOM
+     * inserts.
+     *
+     * @template T The type for the embedded view's $implicit property.
+     * @template R The type for the item in each IterableDiffer change record.
+     * @template C The type for the context passed to each embedded view.
+     */
+    var _RecycleViewRepeaterStrategy = /** @class */ (function () {
+        function _RecycleViewRepeaterStrategy() {
+            /**
+             * The size of the cache used to store unused views.
+             * Setting the cache size to `0` will disable caching. Defaults to 20 views.
+             */
+            this.viewCacheSize = 20;
+            /**
+             * View cache that stores embedded view instances that have been previously stamped out,
+             * but don't are not currently rendered. The view repeater will reuse these views rather than
+             * creating brand new ones.
+             *
+             * TODO(michaeljamesparsons) Investigate whether using a linked list would improve performance.
+             */
+            this._viewCache = [];
+        }
+        /** Apply changes to the DOM. */
+        _RecycleViewRepeaterStrategy.prototype.applyChanges = function (changes, viewContainerRef, itemContextFactory, itemValueResolver, itemViewChanged) {
+            var _this = this;
+            // Rearrange the views to put them in the right location.
+            changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
+                var view;
+                var operation;
+                if (record.previousIndex == null) { // Item added.
+                    var viewArgsFactory = function () { return itemContextFactory(record, adjustedPreviousIndex, currentIndex); };
+                    view = _this._insertView(viewArgsFactory, currentIndex, viewContainerRef, itemValueResolver(record));
+                    operation = view ? 1 /* INSERTED */ : 0 /* REPLACED */;
+                }
+                else if (currentIndex == null) { // Item removed.
+                    _this._detachAndCacheView(adjustedPreviousIndex, viewContainerRef);
+                    operation = 3 /* REMOVED */;
+                }
+                else { // Item moved.
+                    view = _this._moveView(adjustedPreviousIndex, currentIndex, viewContainerRef, itemValueResolver(record));
+                    operation = 2 /* MOVED */;
+                }
+                if (itemViewChanged) {
+                    itemViewChanged({
+                        context: view === null || view === void 0 ? void 0 : view.context,
+                        operation: operation,
+                        record: record,
+                    });
+                }
+            });
+        };
+        _RecycleViewRepeaterStrategy.prototype.detach = function () {
+            var e_1, _a;
+            try {
+                for (var _b = __values(this._viewCache), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var view = _c.value;
+                    view.destroy();
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+        };
+        /**
+         * Inserts a view for a new item, either from the cache or by creating a new
+         * one. Returns `undefined` if the item was inserted into a cached view.
+         */
+        _RecycleViewRepeaterStrategy.prototype._insertView = function (viewArgsFactory, currentIndex, viewContainerRef, value) {
+            var cachedView = this._insertViewFromCache(currentIndex, viewContainerRef);
+            if (cachedView) {
+                cachedView.context.$implicit = value;
+                return undefined;
+            }
+            var viewArgs = viewArgsFactory();
+            return viewContainerRef.createEmbeddedView(viewArgs.templateRef, viewArgs.context, viewArgs.index);
+        };
+        /** Detaches the view at the given index and inserts into the view cache. */
+        _RecycleViewRepeaterStrategy.prototype._detachAndCacheView = function (index, viewContainerRef) {
+            var detachedView = this._detachView(index, viewContainerRef);
+            this._maybeCacheView(detachedView, viewContainerRef);
+        };
+        /** Moves view at the previous index to the current index. */
+        _RecycleViewRepeaterStrategy.prototype._moveView = function (adjustedPreviousIndex, currentIndex, viewContainerRef, value) {
+            var view = viewContainerRef.get(adjustedPreviousIndex);
+            viewContainerRef.move(view, currentIndex);
+            view.context.$implicit = value;
+            return view;
+        };
+        /**
+         * Cache the given detached view. If the cache is full, the view will be
+         * destroyed.
+         */
+        _RecycleViewRepeaterStrategy.prototype._maybeCacheView = function (view, viewContainerRef) {
+            if (this._viewCache.length < this.viewCacheSize) {
+                this._viewCache.push(view);
+            }
+            else {
+                var index = viewContainerRef.indexOf(view);
+                // The host component could remove views from the container outside of
+                // the view repeater. It's unlikely this will occur, but just in case,
+                // destroy the view on its own, otherwise destroy it through the
+                // container to ensure that all the references are removed.
+                if (index === -1) {
+                    view.destroy();
+                }
+                else {
+                    viewContainerRef.remove(index);
+                }
+            }
+        };
+        /** Inserts a recycled view from the cache at the given index. */
+        _RecycleViewRepeaterStrategy.prototype._insertViewFromCache = function (index, viewContainerRef) {
+            var cachedView = this._viewCache.pop();
+            if (cachedView) {
+                viewContainerRef.insert(cachedView, index);
+            }
+            return cachedView || null;
+        };
+        /** Detaches the embedded view at the given index. */
+        _RecycleViewRepeaterStrategy.prototype._detachView = function (index, viewContainerRef) {
+            return viewContainerRef.detach(index);
+        };
+        return _RecycleViewRepeaterStrategy;
+    }());
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * Class to be used to power selecting one or more options from a list.
      */
     var SelectionModel = /** @class */ (function () {
@@ -534,6 +726,21 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * Injection token for {@link _ViewRepeater}.
+     *
+     * INTERNAL ONLY - not for public consumption.
+     * @docs-private
+     */
+    var _VIEW_REPEATER_STRATEGY = new i0.InjectionToken('_ViewRepeater');
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
 
     /**
      * Generated bundle index. Do not edit.
@@ -543,6 +750,9 @@
     exports.DataSource = DataSource;
     exports.SelectionModel = SelectionModel;
     exports.UniqueSelectionDispatcher = UniqueSelectionDispatcher;
+    exports._DisposeViewRepeaterStrategy = _DisposeViewRepeaterStrategy;
+    exports._RecycleViewRepeaterStrategy = _RecycleViewRepeaterStrategy;
+    exports._VIEW_REPEATER_STRATEGY = _VIEW_REPEATER_STRATEGY;
     exports.getMultipleValuesInSingleSelectionError = getMultipleValuesInSingleSelectionError;
     exports.isDataSource = isDataSource;
 

@@ -1,12 +1,13 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { isDataSource } from '@angular/cdk/collections';
+import { isDataSource, _VIEW_REPEATER_STRATEGY, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 /**
  * @license
@@ -994,13 +995,17 @@ class RowViewRef extends EmbeddedViewRef {
  * connect function that will return an Observable stream that emits the data array to render.
  */
 class CdkTable {
-    constructor(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform) {
+    constructor(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
+    // Optional for backwards compatibility, but a view repeater strategy will always
+    // be provided.
+    _viewRepeater) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._elementRef = _elementRef;
         this._dir = _dir;
         this._platform = _platform;
+        this._viewRepeater = _viewRepeater;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1217,16 +1222,9 @@ class CdkTable {
             return;
         }
         const viewContainer = this._rowOutlet.viewContainer;
-        changes.forEachOperation((record, prevIndex, currentIndex) => {
-            if (record.previousIndex == null) {
-                this._insertRow(record.item, currentIndex);
-            }
-            else if (currentIndex == null) {
-                viewContainer.remove(prevIndex);
-            }
-            else {
-                const view = viewContainer.get(prevIndex);
-                viewContainer.move(view, currentIndex);
+        this._viewRepeater.applyChanges(changes, viewContainer, (record, adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
+            if (change.operation === 1 /* INSERTED */ && change.context) {
+                this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
             }
         });
         // Update the meta context of a row's context data (index, count, first, last, ...)
@@ -1575,14 +1573,14 @@ class CdkTable {
         }
         return rowDefs;
     }
-    /**
-     * Create the embedded view for the data row template and place it in the correct index location
-     * within the data row view container.
-     */
-    _insertRow(renderRow, renderIndex) {
+    _getEmbeddedViewArgs(renderRow, index) {
         const rowDef = renderRow.rowDef;
         const context = { $implicit: renderRow.data };
-        this._renderRow(this._rowOutlet, rowDef, renderIndex, context);
+        return {
+            templateRef: rowDef.template,
+            context,
+            index,
+        };
     }
     /**
      * Creates a new row template in the outlet and fills it with the set of cell templates.
@@ -1591,7 +1589,11 @@ class CdkTable {
      */
     _renderRow(outlet, rowDef, index, context = {}) {
         // TODO(andrewseguin): enforce that one outlet was instantiated from createEmbeddedView
-        outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
+        const view = outlet.viewContainer.createEmbeddedView(rowDef.template, context, index);
+        this._renderCellTemplateForItem(rowDef, context);
+        return view;
+    }
+    _renderCellTemplateForItem(rowDef, context) {
         for (let cellTemplate of this._getCellTemplates(rowDef)) {
             if (CdkCellOutlet.mostRecentCellOutlet) {
                 CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cellTemplate, context);
@@ -1733,6 +1735,7 @@ CdkTable.decorators = [
                 changeDetection: ChangeDetectionStrategy.Default,
                 providers: [
                     { provide: CDK_TABLE, useExisting: CdkTable },
+                    { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
                     _CoalescedStyleScheduler,
                 ]
             },] }
@@ -1745,7 +1748,8 @@ CdkTable.ctorParameters = () => [
     { type: String, decorators: [{ type: Attribute, args: ['role',] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform }
+    { type: Platform },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] }
 ];
 CdkTable.propDecorators = {
     trackBy: [{ type: Input }],
@@ -1927,7 +1931,8 @@ class CdkTableModule {
 CdkTableModule.decorators = [
     { type: NgModule, args: [{
                 exports: EXPORTED_DECLARATIONS,
-                declarations: EXPORTED_DECLARATIONS
+                declarations: EXPORTED_DECLARATIONS,
+                imports: [ScrollingModule]
             },] }
 ];
 

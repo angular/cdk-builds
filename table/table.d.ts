@@ -7,13 +7,13 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput } from '@angular/cdk/coercion';
-import { CollectionViewer, DataSource } from '@angular/cdk/collections';
+import { CollectionViewer, DataSource, _ViewRepeater } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
-import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkRowDef, CdkNoDataRow } from './row';
+import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkNoDataRow, CdkRowDef } from './row';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;
@@ -103,6 +103,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
     private _platform;
+    protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
@@ -269,7 +270,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -375,17 +376,14 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * definition.
      */
     _getRowDefs(data: T, dataIndex: number): CdkRowDef<T>[];
-    /**
-     * Create the embedded view for the data row template and place it in the correct index location
-     * within the data row view container.
-     */
-    private _insertRow;
+    private _getEmbeddedViewArgs;
     /**
      * Creates a new row template in the outlet and fills it with the set of cell templates.
      * Optionally takes a context to provide to the row and cells, as well as an optional index
      * of where to place the new row template in the outlet.
      */
     private _renderRow;
+    private _renderCellTemplateForItem;
     /**
      * Updates the index-related context for each row to reflect any changes in the index of the rows,
      * e.g. first/last/even/odd.

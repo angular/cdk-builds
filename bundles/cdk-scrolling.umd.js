@@ -1336,22 +1336,20 @@
         _template, 
         /** The set of available differs. */
         _differs, 
+        /** The strategy used to render items in the virtual scroll viewport. */
+        _viewRepeater, 
         /** The virtual scrolling viewport that these items are being rendered in. */
         _viewport, ngZone) {
             var _this = this;
             this._viewContainerRef = _viewContainerRef;
             this._template = _template;
             this._differs = _differs;
+            this._viewRepeater = _viewRepeater;
             this._viewport = _viewport;
             /** Emits when the rendered view of the data changes. */
             this.viewChange = new rxjs.Subject();
             /** Subject that emits when a new DataSource instance is given. */
             this._dataSourceChanges = new rxjs.Subject();
-            /**
-             * The size of the cache used to store templates that are not being used for re-use later.
-             * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
-             */
-            this.cdkVirtualForTemplateCacheSize = 20;
             /** Emits whenever the data in the current DataSource changes. */
             this.dataStream = this._dataSourceChanges
                 .pipe(
@@ -1370,12 +1368,6 @@
             operators.shareReplay(1));
             /** The differ used to calculate changes to the data. */
             this._differ = null;
-            /**
-             * The template cache used to hold on ot template instancess that have been stamped out, but don't
-             * currently need to be rendered. These instances will be reused in the future rather than
-             * stamping out brand new ones.
-             */
-            this._templateCache = [];
             /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
             this._needsUpdate = false;
             this._destroyed = new rxjs.Subject();
@@ -1437,6 +1429,20 @@
             enumerable: false,
             configurable: true
         });
+        Object.defineProperty(CdkVirtualForOf.prototype, "cdkVirtualForTemplateCacheSize", {
+            /**
+             * The size of the cache used to store templates that are not being used for re-use later.
+             * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
+             */
+            get: function () {
+                return this._viewRepeater.viewCacheSize;
+            },
+            set: function (size) {
+                this._viewRepeater.viewCacheSize = coercion.coerceNumberProperty(size);
+            },
+            enumerable: false,
+            configurable: true
+        });
         /**
          * Measures the combined size (width for horizontal orientation, height for vertical) of all items
          * in the specified range. Throws an error if the range includes items that are not currently
@@ -1492,26 +1498,13 @@
             }
         };
         CdkVirtualForOf.prototype.ngOnDestroy = function () {
-            var e_1, _a;
             this._viewport.detach();
             this._dataSourceChanges.next(undefined);
             this._dataSourceChanges.complete();
             this.viewChange.complete();
             this._destroyed.next();
             this._destroyed.complete();
-            try {
-                for (var _b = __values(this._templateCache), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var view = _c.value;
-                    view.destroy();
-                }
-            }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
-            finally {
-                try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
-                }
-                finally { if (e_1) throw e_1.error; }
-            }
+            this._viewRepeater.detach();
         };
         /** React to scroll state changes in the viewport. */
         CdkVirtualForOf.prototype._onRenderedDataChange = function () {
@@ -1547,21 +1540,7 @@
         /** Apply changes to the DOM. */
         CdkVirtualForOf.prototype._applyChanges = function (changes) {
             var _this = this;
-            // Rearrange the views to put them in the right location.
-            changes.forEachOperation(function (record, adjustedPreviousIndex, currentIndex) {
-                if (record.previousIndex == null) { // Item added.
-                    var view = _this._insertViewForNewItem(currentIndex);
-                    view.context.$implicit = record.item;
-                }
-                else if (currentIndex == null) { // Item removed.
-                    _this._cacheView(_this._detachView(adjustedPreviousIndex));
-                }
-                else { // Item moved.
-                    var view = _this._viewContainerRef.get(adjustedPreviousIndex);
-                    _this._viewContainerRef.move(view, currentIndex);
-                    view.context.$implicit = record.item;
-                }
-            });
+            this._viewRepeater.applyChanges(changes, this._viewContainerRef, function (record, adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record, currentIndex); }, function (record) { return record.item; });
             // Update $implicit for any items that had an identity change.
             changes.forEachIdentityChange(function (record) {
                 var view = _this._viewContainerRef.get(record.currentIndex);
@@ -1577,28 +1556,6 @@
                 this._updateComputedContextProperties(view.context);
             }
         };
-        /** Cache the given detached view. */
-        CdkVirtualForOf.prototype._cacheView = function (view) {
-            if (this._templateCache.length < this.cdkVirtualForTemplateCacheSize) {
-                this._templateCache.push(view);
-            }
-            else {
-                var index = this._viewContainerRef.indexOf(view);
-                // It's very unlikely that the index will ever be -1, but just in case,
-                // destroy the view on its own, otherwise destroy it through the
-                // container to ensure that all the references are removed.
-                if (index === -1) {
-                    view.destroy();
-                }
-                else {
-                    this._viewContainerRef.remove(index);
-                }
-            }
-        };
-        /** Inserts a view for a new item, either from the cache or by creating a new one. */
-        CdkVirtualForOf.prototype._insertViewForNewItem = function (index) {
-            return this._insertViewFromCache(index) || this._createEmbeddedViewAt(index);
-        };
         /** Update the computed properties on the `CdkVirtualForOfContext`. */
         CdkVirtualForOf.prototype._updateComputedContextProperties = function (context) {
             context.first = context.index === 0;
@@ -1606,46 +1563,41 @@
             context.even = context.index % 2 === 0;
             context.odd = !context.even;
         };
-        /** Creates a new embedded view and moves it to the given index */
-        CdkVirtualForOf.prototype._createEmbeddedViewAt = function (index) {
+        CdkVirtualForOf.prototype._getEmbeddedViewArgs = function (record, index) {
             // Note that it's important that we insert the item directly at the proper index,
             // rather than inserting it and the moving it in place, because if there's a directive
             // on the same node that injects the `ViewContainerRef`, Angular will insert another
             // comment node which can throw off the move when it's being repeated for all items.
-            return this._viewContainerRef.createEmbeddedView(this._template, {
-                $implicit: null,
-                // It's guaranteed that the iterable is not "undefined" or "null" because we only
-                // generate views for elements if the "cdkVirtualForOf" iterable has elements.
-                cdkVirtualForOf: this._cdkVirtualForOf,
-                index: -1,
-                count: -1,
-                first: false,
-                last: false,
-                odd: false,
-                even: false
-            }, index);
-        };
-        /** Inserts a recycled view from the cache at the given index. */
-        CdkVirtualForOf.prototype._insertViewFromCache = function (index) {
-            var cachedView = this._templateCache.pop();
-            if (cachedView) {
-                this._viewContainerRef.insert(cachedView, index);
-            }
-            return cachedView || null;
-        };
-        /** Detaches the embedded view at the given index. */
-        CdkVirtualForOf.prototype._detachView = function (index) {
-            return this._viewContainerRef.detach(index);
+            return {
+                templateRef: this._template,
+                context: {
+                    $implicit: record.item,
+                    // It's guaranteed that the iterable is not "undefined" or "null" because we only
+                    // generate views for elements if the "cdkVirtualForOf" iterable has elements.
+                    cdkVirtualForOf: this._cdkVirtualForOf,
+                    index: -1,
+                    count: -1,
+                    first: false,
+                    last: false,
+                    odd: false,
+                    even: false
+                },
+                index: index,
+            };
         };
         CdkVirtualForOf.decorators = [
             { type: i0.Directive, args: [{
                         selector: '[cdkVirtualFor][cdkVirtualForOf]',
+                        providers: [
+                            { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._RecycleViewRepeaterStrategy },
+                        ]
                     },] }
         ];
         CdkVirtualForOf.ctorParameters = function () { return [
             { type: i0.ViewContainerRef },
             { type: i0.TemplateRef },
             { type: i0.IterableDiffers },
+            { type: collections._RecycleViewRepeaterStrategy, decorators: [{ type: i0.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
             { type: CdkVirtualScrollViewport, decorators: [{ type: i0.SkipSelf }] },
             { type: i0.NgZone }
         ]; };

@@ -5,11 +5,12 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { CollectionViewer, DataSource, ListRange } from '@angular/cdk/collections';
+import { CollectionViewer, DataSource, ListRange, _RecycleViewRepeaterStrategy } from '@angular/cdk/collections';
 import { DoCheck, IterableDiffers, NgIterable, NgZone, OnDestroy, TemplateRef, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { NumberInput } from '@angular/cdk/coercion';
 import { Observable, Subject } from 'rxjs';
-import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
 import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
+import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
 /** The context for an item rendered by `CdkVirtualForOf` */
 export declare type CdkVirtualForOfContext<T> = {
     /** The item value. */
@@ -40,6 +41,8 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _template;
     /** The set of available differs. */
     private _differs;
+    /** The strategy used to render items in the virtual scroll viewport. */
+    private _viewRepeater;
     /** The virtual scrolling viewport that these items are being rendered in. */
     private _viewport;
     /** Emits when the rendered view of the data changes. */
@@ -63,7 +66,8 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
      * The size of the cache used to store templates that are not being used for re-use later.
      * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
      */
-    cdkVirtualForTemplateCacheSize: number;
+    get cdkVirtualForTemplateCacheSize(): number;
+    set cdkVirtualForTemplateCacheSize(size: number);
     /** Emits whenever the data in the current DataSource changes. */
     dataStream: Observable<T[] | ReadonlyArray<T>>;
     /** The differ used to calculate changes to the data. */
@@ -74,12 +78,6 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _renderedItems;
     /** The currently rendered range of indices. */
     private _renderedRange;
-    /**
-     * The template cache used to hold on ot template instancess that have been stamped out, but don't
-     * currently need to be rendered. These instances will be reused in the future rather than
-     * stamping out brand new ones.
-     */
-    private _templateCache;
     /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
     private _needsUpdate;
     private _destroyed;
@@ -90,6 +88,8 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     _template: TemplateRef<CdkVirtualForOfContext<T>>, 
     /** The set of available differs. */
     _differs: IterableDiffers, 
+    /** The strategy used to render items in the virtual scroll viewport. */
+    _viewRepeater: _RecycleViewRepeaterStrategy<T, T, CdkVirtualForOfContext<T>>, 
     /** The virtual scrolling viewport that these items are being rendered in. */
     _viewport: CdkVirtualScrollViewport, ngZone: NgZone);
     /**
@@ -108,16 +108,8 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _updateContext;
     /** Apply changes to the DOM. */
     private _applyChanges;
-    /** Cache the given detached view. */
-    private _cacheView;
-    /** Inserts a view for a new item, either from the cache or by creating a new one. */
-    private _insertViewForNewItem;
     /** Update the computed properties on the `CdkVirtualForOfContext`. */
     private _updateComputedContextProperties;
-    /** Creates a new embedded view and moves it to the given index */
-    private _createEmbeddedViewAt;
-    /** Inserts a recycled view from the cache at the given index. */
-    private _insertViewFromCache;
-    /** Detaches the embedded view at the given index. */
-    private _detachView;
+    private _getEmbeddedViewArgs;
+    static ngAcceptInputType_cdkVirtualForTemplateCacheSize: NumberInput;
 }
