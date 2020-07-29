@@ -1564,7 +1564,8 @@
                 throw getTableMissingRowDefsError();
             }
             // Render updates if the list of columns have been changed for the header, row, or footer defs.
-            this._renderUpdatedColumns();
+            var columnsChanged = this._renderUpdatedColumns();
+            var stickyColumnStyleUpdateNeeded = columnsChanged || this._headerRowDefChanged || this._footerRowDefChanged;
             // If the header row definition has been changed, trigger a render to the header row.
             if (this._headerRowDefChanged) {
                 this._forceRenderHeaderRows();
@@ -1579,6 +1580,11 @@
             // connection has already been made.
             if (this.dataSource && this._rowDefs.length > 0 && !this._renderChangeSubscription) {
                 this._observeRenderChanges();
+            }
+            else if (stickyColumnStyleUpdateNeeded) {
+                // In the above case, _observeRenderChanges will result in updateStickyColumnStyles being
+                // called when it row data arrives. Otherwise, we need to call it proactively.
+                this.updateStickyColumnStyles();
             }
             this._checkStickyStates();
         };
@@ -1840,16 +1846,20 @@
         CdkTable.prototype._renderUpdatedColumns = function () {
             var columnsDiffReducer = function (acc, def) { return acc || !!def.getColumnsDiff(); };
             // Force re-render data rows if the list of column definitions have changed.
-            if (this._rowDefs.reduce(columnsDiffReducer, false)) {
+            var dataColumnsChanged = this._rowDefs.reduce(columnsDiffReducer, false);
+            if (dataColumnsChanged) {
                 this._forceRenderDataRows();
             }
-            // Force re-render header/footer rows if the list of column definitions have changed..
-            if (this._headerRowDefs.reduce(columnsDiffReducer, false)) {
+            // Force re-render header/footer rows if the list of column definitions have changed.
+            var headerColumnsChanged = this._headerRowDefs.reduce(columnsDiffReducer, false);
+            if (headerColumnsChanged) {
                 this._forceRenderHeaderRows();
             }
-            if (this._footerRowDefs.reduce(columnsDiffReducer, false)) {
+            var footerColumnsChanged = this._footerRowDefs.reduce(columnsDiffReducer, false);
+            if (footerColumnsChanged) {
                 this._forceRenderFooterRows();
             }
+            return dataColumnsChanged || headerColumnsChanged || footerColumnsChanged;
         };
         /**
          * Switch to the provided data source by resetting the data and unsubscribing from the current
@@ -1911,7 +1921,6 @@
             }
             this._headerRowDefs.forEach(function (def, i) { return _this._renderRow(_this._headerRowOutlet, def, i); });
             this.updateStickyHeaderRowStyles();
-            this.updateStickyColumnStyles();
         };
         /**
          * Clears any existing content in the footer row outlet and creates a new embedded view
@@ -1925,7 +1934,6 @@
             }
             this._footerRowDefs.forEach(function (def, i) { return _this._renderRow(_this._footerRowOutlet, def, i); });
             this.updateStickyFooterRowStyles();
-            this.updateStickyColumnStyles();
         };
         /** Adds the sticky column styles for the rows according to the columns' stick states. */
         CdkTable.prototype._addStickyColumnStyles = function (rows, rowDef) {
@@ -2097,7 +2105,6 @@
             this._dataDiffer.diff([]);
             this._rowOutlet.viewContainer.clear();
             this.renderRows();
-            this.updateStickyColumnStyles();
         };
         /**
          * Checks if there has been a change in sticky states since last check and applies the correct
