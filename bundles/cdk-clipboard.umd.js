@@ -111,15 +111,15 @@
         Clipboard.prototype.beginCopy = function (text) {
             return new PendingCopy(text, this._document);
         };
-        Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
-        Clipboard.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        Clipboard.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
-        ]; };
         return Clipboard;
     }());
+    Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+    Clipboard.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    Clipboard.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
+    ]; };
 
     /**
      * @license
@@ -191,26 +191,26 @@
             this._pending.clear();
             this._destroyed = true;
         };
-        CdkCopyToClipboard.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkCopyToClipboard]',
-                        host: {
-                            '(click)': 'copy()',
-                        }
-                    },] }
-        ];
-        CdkCopyToClipboard.ctorParameters = function () { return [
-            { type: Clipboard },
-            { type: i0.NgZone },
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
-        ]; };
-        CdkCopyToClipboard.propDecorators = {
-            text: [{ type: i0.Input, args: ['cdkCopyToClipboard',] }],
-            attempts: [{ type: i0.Input, args: ['cdkCopyToClipboardAttempts',] }],
-            copied: [{ type: i0.Output, args: ['cdkCopyToClipboardCopied',] }]
-        };
         return CdkCopyToClipboard;
     }());
+    CdkCopyToClipboard.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkCopyToClipboard]',
+                    host: {
+                        '(click)': 'copy()',
+                    }
+                },] }
+    ];
+    CdkCopyToClipboard.ctorParameters = function () { return [
+        { type: Clipboard },
+        { type: i0.NgZone },
+        { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
+    ]; };
+    CdkCopyToClipboard.propDecorators = {
+        text: [{ type: i0.Input, args: ['cdkCopyToClipboard',] }],
+        attempts: [{ type: i0.Input, args: ['cdkCopyToClipboardAttempts',] }],
+        copied: [{ type: i0.Output, args: ['cdkCopyToClipboardCopied',] }]
+    };
 
     /**
      * @license
@@ -222,14 +222,14 @@
     var ClipboardModule = /** @class */ (function () {
         function ClipboardModule() {
         }
-        ClipboardModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        declarations: [CdkCopyToClipboard],
-                        exports: [CdkCopyToClipboard],
-                    },] }
-        ];
         return ClipboardModule;
     }());
+    ClipboardModule.decorators = [
+        { type: i0.NgModule, args: [{
+                    declarations: [CdkCopyToClipboard],
+                    exports: [CdkCopyToClipboard],
+                },] }
+    ];
 
     /**
      * @license

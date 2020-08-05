@@ -69,15 +69,15 @@
             /** Whether the current browser is Safari. */
             this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
         }
-        Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
-        Platform.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        Platform.ctorParameters = function () { return [
-            { type: Object, decorators: [{ type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
-        ]; };
         return Platform;
     }());
+    Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
+    Platform.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    Platform.ctorParameters = function () { return [
+        { type: Object, decorators: [{ type: i0.Inject, args: [i0.PLATFORM_ID,] }] }
+    ]; };
 
     /**
      * @license
@@ -89,11 +89,11 @@
     var PlatformModule = /** @class */ (function () {
         function PlatformModule() {
         }
-        PlatformModule.decorators = [
-            { type: i0.NgModule, args: [{},] }
-        ];
         return PlatformModule;
     }());
+    PlatformModule.decorators = [
+        { type: i0.NgModule, args: [{},] }
+    ];
 
     /**
      * @license

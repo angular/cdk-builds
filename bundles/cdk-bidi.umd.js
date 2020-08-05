@@ -66,15 +66,15 @@
         Directionality.prototype.ngOnDestroy = function () {
             this.change.complete();
         };
-        Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
-        Directionality.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        Directionality.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [DIR_DOCUMENT,] }] }
-        ]; };
         return Directionality;
     }());
+    Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+    Directionality.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    Directionality.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [DIR_DOCUMENT,] }] }
+    ]; };
 
     /**
      * @license
@@ -126,20 +126,20 @@
         Dir.prototype.ngOnDestroy = function () {
             this.change.complete();
         };
-        Dir.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[dir]',
-                        providers: [{ provide: Directionality, useExisting: Dir }],
-                        host: { '[attr.dir]': '_rawDir' },
-                        exportAs: 'dir',
-                    },] }
-        ];
-        Dir.propDecorators = {
-            change: [{ type: i0.Output, args: ['dirChange',] }],
-            dir: [{ type: i0.Input }]
-        };
         return Dir;
     }());
+    Dir.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[dir]',
+                    providers: [{ provide: Directionality, useExisting: Dir }],
+                    host: { '[attr.dir]': '_rawDir' },
+                    exportAs: 'dir',
+                },] }
+    ];
+    Dir.propDecorators = {
+        change: [{ type: i0.Output, args: ['dirChange',] }],
+        dir: [{ type: i0.Input }]
+    };
 
     /**
      * @license
@@ -151,14 +151,14 @@
     var BidiModule = /** @class */ (function () {
         function BidiModule() {
         }
-        BidiModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        exports: [Dir],
-                        declarations: [Dir],
-                    },] }
-        ];
         return BidiModule;
     }());
+    BidiModule.decorators = [
+        { type: i0.NgModule, args: [{
+                    exports: [Dir],
+                    declarations: [Dir],
+                },] }
+    ];
 
     /**
      * @license

@@ -19,35 +19,36 @@
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
     /* global Reflect, Promise */
-
-    var extendStatics = function(d, b) {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b)
+                if (b.hasOwnProperty(p))
+                    d[p] = b[p]; };
         return extendStatics(d, b);
     };
-
     function __extends(d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
-
-    var __assign = function() {
+    var __assign = function () {
         __assign = Object.assign || function __assign(t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+                for (var p in s)
+                    if (Object.prototype.hasOwnProperty.call(s, p))
+                        t[p] = s[p];
             }
             return t;
         };
         return __assign.apply(this, arguments);
     };
-
     function __rest(s, e) {
         var t = {};
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-            t[p] = s[p];
+        for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+                t[p] = s[p];
         if (s != null && typeof Object.getOwnPropertySymbols === "function")
             for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
                 if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -55,175 +56,247 @@
             }
         return t;
     }
-
     function __decorate(decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+            r = Reflect.decorate(decorators, target, key, desc);
+        else
+            for (var i = decorators.length - 1; i >= 0; i--)
+                if (d = decorators[i])
+                    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
-
     function __param(paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); }
+        return function (target, key) { decorator(target, key, paramIndex); };
     }
-
     function __metadata(metadataKey, metadataValue) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+            return Reflect.metadata(metadataKey, metadataValue);
     }
-
     function __awaiter(thisArg, _arguments, P, generator) {
         function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
         return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function fulfilled(value) { try {
+                step(generator.next(value));
+            }
+            catch (e) {
+                reject(e);
+            } }
+            function rejected(value) { try {
+                step(generator["throw"](value));
+            }
+            catch (e) {
+                reject(e);
+            } }
             function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
     }
-
     function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        var _ = { label: 0, sent: function () { if (t[0] & 1)
+                throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
         function verb(n) { return function (v) { return step([n, v]); }; }
         function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
+            if (f)
+                throw new TypeError("Generator is already executing.");
+            while (_)
+                try {
+                    if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+                        return t;
+                    if (y = 0, t)
+                        op = [op[0] & 2, t.value];
+                    switch (op[0]) {
+                        case 0:
+                        case 1:
+                            t = op;
+                            break;
+                        case 4:
+                            _.label++;
+                            return { value: op[1], done: false };
+                        case 5:
+                            _.label++;
+                            y = op[1];
+                            op = [0];
+                            continue;
+                        case 7:
+                            op = _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                        default:
+                            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                                _ = 0;
+                                continue;
+                            }
+                            if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
+                                _.label = op[1];
+                                break;
+                            }
+                            if (op[0] === 6 && _.label < t[1]) {
+                                _.label = t[1];
+                                t = op;
+                                break;
+                            }
+                            if (t && _.label < t[2]) {
+                                _.label = t[2];
+                                _.ops.push(op);
+                                break;
+                            }
+                            if (t[2])
+                                _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                    }
+                    op = body.call(thisArg, _);
                 }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+                catch (e) {
+                    op = [6, e];
+                    y = 0;
+                }
+                finally {
+                    f = t = 0;
+                }
+            if (op[0] & 5)
+                throw op[1];
+            return { value: op[0] ? op[1] : void 0, done: true };
         }
     }
-
-    var __createBinding = Object.create ? (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-    }) : (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
+    var __createBinding = Object.create ? (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function () { return m[k]; } });
+    }) : (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
         o[k2] = m[k];
     });
-
     function __exportStar(m, exports) {
-        for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+        for (var p in m)
+            if (p !== "default" && !exports.hasOwnProperty(p))
+                __createBinding(exports, m, p);
     }
-
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-        if (m) return m.call(o);
-        if (o && typeof o.length === "number") return {
-            next: function () {
-                if (o && i >= o.length) o = void 0;
-                return { value: o && o[i++], done: !o };
-            }
-        };
+        if (m)
+            return m.call(o);
+        if (o && typeof o.length === "number")
+            return {
+                next: function () {
+                    if (o && i >= o.length)
+                        o = void 0;
+                    return { value: o && o[i++], done: !o };
+                }
+            };
         throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
     }
-
     function __read(o, n) {
         var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m) return o;
+        if (!m)
+            return o;
         var i = m.call(o), r, ar = [], e;
         try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+                ar.push(r.value);
         }
-        catch (error) { e = { error: error }; }
+        catch (error) {
+            e = { error: error };
+        }
         finally {
             try {
-                if (r && !r.done && (m = i["return"])) m.call(i);
+                if (r && !r.done && (m = i["return"]))
+                    m.call(i);
             }
-            finally { if (e) throw e.error; }
+            finally {
+                if (e)
+                    throw e.error;
+            }
         }
         return ar;
     }
-
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
-
     function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++)
+            s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
             for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
                 r[k] = a[j];
         return r;
-    };
-
+    }
+    ;
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
-
     function __asyncGenerator(thisArg, _arguments, generator) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var g = generator.apply(thisArg, _arguments || []), i, q = [];
         return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function verb(n) { if (g[n])
+            i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try {
+            step(g[n](v));
+        }
+        catch (e) {
+            settle(q[0][3], e);
+        } }
         function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
         function fulfill(value) { resume("next", value); }
         function reject(value) { resume("throw", value); }
-        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+        function settle(f, v) { if (f(v), q.shift(), q.length)
+            resume(q[0][0], q[0][1]); }
     }
-
     function __asyncDelegator(o) {
         var i, p;
         return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
         function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
     }
-
     function __asyncValues(o) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var m = o[Symbol.asyncIterator], i;
         return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
         function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function (v) { resolve({ value: v, done: d }); }, reject); }
     }
-
     function __makeTemplateObject(cooked, raw) {
-        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        if (Object.defineProperty) {
+            Object.defineProperty(cooked, "raw", { value: raw });
+        }
+        else {
+            cooked.raw = raw;
+        }
         return cooked;
-    };
-
-    var __setModuleDefault = Object.create ? (function(o, v) {
+    }
+    ;
+    var __setModuleDefault = Object.create ? (function (o, v) {
         Object.defineProperty(o, "default", { enumerable: true, value: v });
-    }) : function(o, v) {
+    }) : function (o, v) {
         o["default"] = v;
     };
-
     function __importStar(mod) {
-        if (mod && mod.__esModule) return mod;
+        if (mod && mod.__esModule)
+            return mod;
         var result = {};
-        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        if (mod != null)
+            for (var k in mod)
+                if (Object.hasOwnProperty.call(mod, k))
+                    __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
     }
-
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
     function __classPrivateFieldGet(receiver, privateMap) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to get private field on non-instance");
         }
         return privateMap.get(receiver);
     }
-
     function __classPrivateFieldSet(receiver, privateMap, value) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to set private field on non-instance");
@@ -232,13 +305,6 @@
         return value;
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * Mixin to provide a directive with a function that checks if the sticky input has been
      * changed since the last time the function was called. Essentially adds a dirty-check to the
@@ -300,13 +366,6 @@
     var TEXT_COLUMN_OPTIONS = new core.InjectionToken('text-column-options');
 
     /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
      * Cell definition for a CDK table.
      * Captures the template of a column's data row cell as well as cell-specific properties.
      */
@@ -314,14 +373,14 @@
         function CdkCellDef(/** @docs-private */ template) {
             this.template = template;
         }
-        CdkCellDef.decorators = [
-            { type: core.Directive, args: [{ selector: '[cdkCellDef]' },] }
-        ];
-        CdkCellDef.ctorParameters = function () { return [
-            { type: core.TemplateRef }
-        ]; };
         return CdkCellDef;
     }());
+    CdkCellDef.decorators = [
+        { type: core.Directive, args: [{ selector: '[cdkCellDef]' },] }
+    ];
+    CdkCellDef.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
     /**
      * Header cell definition for a CDK table.
      * Captures the template of a column's header cell and as well as cell-specific properties.
@@ -330,14 +389,14 @@
         function CdkHeaderCellDef(/** @docs-private */ template) {
             this.template = template;
         }
-        CdkHeaderCellDef.decorators = [
-            { type: core.Directive, args: [{ selector: '[cdkHeaderCellDef]' },] }
-        ];
-        CdkHeaderCellDef.ctorParameters = function () { return [
-            { type: core.TemplateRef }
-        ]; };
         return CdkHeaderCellDef;
     }());
+    CdkHeaderCellDef.decorators = [
+        { type: core.Directive, args: [{ selector: '[cdkHeaderCellDef]' },] }
+    ];
+    CdkHeaderCellDef.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
     /**
      * Footer cell definition for a CDK table.
      * Captures the template of a column's footer cell and as well as cell-specific properties.
@@ -346,14 +405,14 @@
         function CdkFooterCellDef(/** @docs-private */ template) {
             this.template = template;
         }
-        CdkFooterCellDef.decorators = [
-            { type: core.Directive, args: [{ selector: '[cdkFooterCellDef]' },] }
-        ];
-        CdkFooterCellDef.ctorParameters = function () { return [
-            { type: core.TemplateRef }
-        ]; };
         return CdkFooterCellDef;
     }());
+    CdkFooterCellDef.decorators = [
+        { type: core.Directive, args: [{ selector: '[cdkFooterCellDef]' },] }
+    ];
+    CdkFooterCellDef.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
     // Boilerplate for applying mixins to CdkColumnDef.
     /** @docs-private */
     var CdkColumnDefBase = /** @class */ (function () {
@@ -418,25 +477,25 @@
         CdkColumnDef.prototype._updateColumnCssClassName = function () {
             this._columnCssClassName = ["cdk-column-" + this.cssClassFriendlyName];
         };
-        CdkColumnDef.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[cdkColumnDef]',
-                        inputs: ['sticky'],
-                        providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
-                    },] }
-        ];
-        CdkColumnDef.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
-        ]; };
-        CdkColumnDef.propDecorators = {
-            name: [{ type: core.Input, args: ['cdkColumnDef',] }],
-            stickyEnd: [{ type: core.Input, args: ['stickyEnd',] }],
-            cell: [{ type: core.ContentChild, args: [CdkCellDef,] }],
-            headerCell: [{ type: core.ContentChild, args: [CdkHeaderCellDef,] }],
-            footerCell: [{ type: core.ContentChild, args: [CdkFooterCellDef,] }]
-        };
         return CdkColumnDef;
     }(_CdkColumnDefBase));
+    CdkColumnDef.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkColumnDef]',
+                    inputs: ['sticky'],
+                    providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }],
+                },] }
+    ];
+    CdkColumnDef.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
+    ]; };
+    CdkColumnDef.propDecorators = {
+        name: [{ type: core.Input, args: ['cdkColumnDef',] }],
+        stickyEnd: [{ type: core.Input, args: ['stickyEnd',] }],
+        cell: [{ type: core.ContentChild, args: [CdkCellDef,] }],
+        headerCell: [{ type: core.ContentChild, args: [CdkHeaderCellDef,] }],
+        footerCell: [{ type: core.ContentChild, args: [CdkFooterCellDef,] }]
+    };
     /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
     var BaseCdkCell = /** @class */ (function () {
         function BaseCdkCell(columnDef, elementRef) {
@@ -466,71 +525,64 @@
         function CdkHeaderCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
-        CdkHeaderCell.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'cdk-header-cell, th[cdk-header-cell]',
-                        host: {
-                            'class': 'cdk-header-cell',
-                            'role': 'columnheader',
-                        },
-                    },] }
-        ];
-        CdkHeaderCell.ctorParameters = function () { return [
-            { type: CdkColumnDef },
-            { type: core.ElementRef }
-        ]; };
         return CdkHeaderCell;
     }(BaseCdkCell));
+    CdkHeaderCell.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-header-cell, th[cdk-header-cell]',
+                    host: {
+                        'class': 'cdk-header-cell',
+                        'role': 'columnheader',
+                    },
+                },] }
+    ];
+    CdkHeaderCell.ctorParameters = function () { return [
+        { type: CdkColumnDef },
+        { type: core.ElementRef }
+    ]; };
     /** Footer cell template container that adds the right classes and role. */
     var CdkFooterCell = /** @class */ (function (_super) {
         __extends(CdkFooterCell, _super);
         function CdkFooterCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
-        CdkFooterCell.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'cdk-footer-cell, td[cdk-footer-cell]',
-                        host: {
-                            'class': 'cdk-footer-cell',
-                            'role': 'gridcell',
-                        },
-                    },] }
-        ];
-        CdkFooterCell.ctorParameters = function () { return [
-            { type: CdkColumnDef },
-            { type: core.ElementRef }
-        ]; };
         return CdkFooterCell;
     }(BaseCdkCell));
+    CdkFooterCell.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-footer-cell, td[cdk-footer-cell]',
+                    host: {
+                        'class': 'cdk-footer-cell',
+                        'role': 'gridcell',
+                    },
+                },] }
+    ];
+    CdkFooterCell.ctorParameters = function () { return [
+        { type: CdkColumnDef },
+        { type: core.ElementRef }
+    ]; };
     /** Cell template container that adds the right classes and role. */
     var CdkCell = /** @class */ (function (_super) {
         __extends(CdkCell, _super);
         function CdkCell(columnDef, elementRef) {
             return _super.call(this, columnDef, elementRef) || this;
         }
-        CdkCell.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'cdk-cell, td[cdk-cell]',
-                        host: {
-                            'class': 'cdk-cell',
-                            'role': 'gridcell',
-                        },
-                    },] }
-        ];
-        CdkCell.ctorParameters = function () { return [
-            { type: CdkColumnDef },
-            { type: core.ElementRef }
-        ]; };
         return CdkCell;
     }(BaseCdkCell));
+    CdkCell.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-cell, td[cdk-cell]',
+                    host: {
+                        'class': 'cdk-cell',
+                        'role': 'gridcell',
+                    },
+                },] }
+    ];
+    CdkCell.ctorParameters = function () { return [
+        { type: CdkColumnDef },
+        { type: core.ElementRef }
+    ]; };
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * @docs-private
      */
@@ -623,22 +675,15 @@
                 rxjs.from(Promise.resolve(undefined)) :
                 this._ngZone.onStable.pipe(operators.take(1));
         };
-        _CoalescedStyleScheduler.decorators = [
-            { type: core.Injectable }
-        ];
-        _CoalescedStyleScheduler.ctorParameters = function () { return [
-            { type: core.NgZone }
-        ]; };
         return _CoalescedStyleScheduler;
     }());
+    _CoalescedStyleScheduler.decorators = [
+        { type: core.Injectable }
+    ];
+    _CoalescedStyleScheduler.ctorParameters = function () { return [
+        { type: core.NgZone }
+    ]; };
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * The row template that can be used by the mat-table. Should not be used outside of the
      * material library.
@@ -682,15 +727,15 @@
                 return column.cell.template;
             }
         };
-        BaseRowDef.decorators = [
-            { type: core.Directive }
-        ];
-        BaseRowDef.ctorParameters = function () { return [
-            { type: core.TemplateRef },
-            { type: core.IterableDiffers }
-        ]; };
         return BaseRowDef;
     }());
+    BaseRowDef.decorators = [
+        { type: core.Directive }
+    ];
+    BaseRowDef.ctorParameters = function () { return [
+        { type: core.TemplateRef },
+        { type: core.IterableDiffers }
+    ]; };
     // Boilerplate for applying mixins to CdkHeaderRowDef.
     /** @docs-private */
     var CdkHeaderRowDefBase = /** @class */ (function (_super) {
@@ -717,19 +762,19 @@
         CdkHeaderRowDef.prototype.ngOnChanges = function (changes) {
             _super.prototype.ngOnChanges.call(this, changes);
         };
-        CdkHeaderRowDef.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[cdkHeaderRowDef]',
-                        inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
-                    },] }
-        ];
-        CdkHeaderRowDef.ctorParameters = function () { return [
-            { type: core.TemplateRef },
-            { type: core.IterableDiffers },
-            { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
-        ]; };
         return CdkHeaderRowDef;
     }(_CdkHeaderRowDefBase));
+    CdkHeaderRowDef.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkHeaderRowDef]',
+                    inputs: ['columns: cdkHeaderRowDef', 'sticky: cdkHeaderRowDefSticky'],
+                },] }
+    ];
+    CdkHeaderRowDef.ctorParameters = function () { return [
+        { type: core.TemplateRef },
+        { type: core.IterableDiffers },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
+    ]; };
     // Boilerplate for applying mixins to CdkFooterRowDef.
     /** @docs-private */
     var CdkFooterRowDefBase = /** @class */ (function (_super) {
@@ -756,19 +801,19 @@
         CdkFooterRowDef.prototype.ngOnChanges = function (changes) {
             _super.prototype.ngOnChanges.call(this, changes);
         };
-        CdkFooterRowDef.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[cdkFooterRowDef]',
-                        inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
-                    },] }
-        ];
-        CdkFooterRowDef.ctorParameters = function () { return [
-            { type: core.TemplateRef },
-            { type: core.IterableDiffers },
-            { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
-        ]; };
         return CdkFooterRowDef;
     }(_CdkFooterRowDefBase));
+    CdkFooterRowDef.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkFooterRowDef]',
+                    inputs: ['columns: cdkFooterRowDef', 'sticky: cdkFooterRowDefSticky'],
+                },] }
+    ];
+    CdkFooterRowDef.ctorParameters = function () { return [
+        { type: core.TemplateRef },
+        { type: core.IterableDiffers },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
+    ]; };
     /**
      * Data row definition for the CDK table.
      * Captures the header row's template and other row properties such as the columns to display and
@@ -783,19 +828,19 @@
             _this._table = _table;
             return _this;
         }
-        CdkRowDef.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[cdkRowDef]',
-                        inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
-                    },] }
-        ];
-        CdkRowDef.ctorParameters = function () { return [
-            { type: core.TemplateRef },
-            { type: core.IterableDiffers },
-            { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
-        ]; };
         return CdkRowDef;
     }(BaseRowDef));
+    CdkRowDef.decorators = [
+        { type: core.Directive, args: [{
+                    selector: '[cdkRowDef]',
+                    inputs: ['columns: cdkRowDefColumns', 'when: cdkRowDefWhen'],
+                },] }
+    ];
+    CdkRowDef.ctorParameters = function () { return [
+        { type: core.TemplateRef },
+        { type: core.IterableDiffers },
+        { type: undefined, decorators: [{ type: core.Inject, args: [CDK_TABLE,] }, { type: core.Optional }] }
+    ]; };
     /**
      * Outlet for rendering cells inside of a row or header row.
      * @docs-private
@@ -812,97 +857,97 @@
                 CdkCellOutlet.mostRecentCellOutlet = null;
             }
         };
-        /**
-         * Static property containing the latest constructed instance of this class.
-         * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
-         * createEmbeddedView. After one of these components are created, this property will provide
-         * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
-         * construct the cells with the provided context.
-         */
-        CdkCellOutlet.mostRecentCellOutlet = null;
-        CdkCellOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: '[cdkCellOutlet]' },] }
-        ];
-        CdkCellOutlet.ctorParameters = function () { return [
-            { type: core.ViewContainerRef }
-        ]; };
         return CdkCellOutlet;
     }());
+    /**
+     * Static property containing the latest constructed instance of this class.
+     * Used by the CDK table when each CdkHeaderRow and CdkRow component is created using
+     * createEmbeddedView. After one of these components are created, this property will provide
+     * a handle to provide that component's cells and context. After init, the CdkCellOutlet will
+     * construct the cells with the provided context.
+     */
+    CdkCellOutlet.mostRecentCellOutlet = null;
+    CdkCellOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: '[cdkCellOutlet]' },] }
+    ];
+    CdkCellOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef }
+    ]; };
     /** Header template container that contains the cell outlet. Adds the right class and role. */
     var CdkHeaderRow = /** @class */ (function () {
         function CdkHeaderRow() {
         }
-        CdkHeaderRow.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'cdk-header-row, tr[cdk-header-row]',
-                        template: CDK_ROW_TEMPLATE,
-                        host: {
-                            'class': 'cdk-header-row',
-                            'role': 'row',
-                        },
-                        // See note on CdkTable for explanation on why this uses the default change detection strategy.
-                        // tslint:disable-next-line:validate-decorators
-                        changeDetection: core.ChangeDetectionStrategy.Default,
-                        encapsulation: core.ViewEncapsulation.None
-                    },] }
-        ];
         return CdkHeaderRow;
     }());
+    CdkHeaderRow.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'cdk-header-row, tr[cdk-header-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-header-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default,
+                    encapsulation: core.ViewEncapsulation.None
+                },] }
+    ];
     /** Footer template container that contains the cell outlet. Adds the right class and role. */
     var CdkFooterRow = /** @class */ (function () {
         function CdkFooterRow() {
         }
-        CdkFooterRow.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'cdk-footer-row, tr[cdk-footer-row]',
-                        template: CDK_ROW_TEMPLATE,
-                        host: {
-                            'class': 'cdk-footer-row',
-                            'role': 'row',
-                        },
-                        // See note on CdkTable for explanation on why this uses the default change detection strategy.
-                        // tslint:disable-next-line:validate-decorators
-                        changeDetection: core.ChangeDetectionStrategy.Default,
-                        encapsulation: core.ViewEncapsulation.None
-                    },] }
-        ];
         return CdkFooterRow;
     }());
+    CdkFooterRow.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'cdk-footer-row, tr[cdk-footer-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-footer-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default,
+                    encapsulation: core.ViewEncapsulation.None
+                },] }
+    ];
     /** Data row template container that contains the cell outlet. Adds the right class and role. */
     var CdkRow = /** @class */ (function () {
         function CdkRow() {
         }
-        CdkRow.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'cdk-row, tr[cdk-row]',
-                        template: CDK_ROW_TEMPLATE,
-                        host: {
-                            'class': 'cdk-row',
-                            'role': 'row',
-                        },
-                        // See note on CdkTable for explanation on why this uses the default change detection strategy.
-                        // tslint:disable-next-line:validate-decorators
-                        changeDetection: core.ChangeDetectionStrategy.Default,
-                        encapsulation: core.ViewEncapsulation.None
-                    },] }
-        ];
         return CdkRow;
     }());
+    CdkRow.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'cdk-row, tr[cdk-row]',
+                    template: CDK_ROW_TEMPLATE,
+                    host: {
+                        'class': 'cdk-row',
+                        'role': 'row',
+                    },
+                    // See note on CdkTable for explanation on why this uses the default change detection strategy.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default,
+                    encapsulation: core.ViewEncapsulation.None
+                },] }
+    ];
     /** Row that can be used to display a message when no data is shown in the table. */
     var CdkNoDataRow = /** @class */ (function () {
         function CdkNoDataRow(templateRef) {
             this.templateRef = templateRef;
         }
-        CdkNoDataRow.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'ng-template[cdkNoDataRow]'
-                    },] }
-        ];
-        CdkNoDataRow.ctorParameters = function () { return [
-            { type: core.TemplateRef }
-        ]; };
         return CdkNoDataRow;
     }());
+    CdkNoDataRow.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'ng-template[cdkNoDataRow]'
+                },] }
+    ];
+    CdkNoDataRow.ctorParameters = function () { return [
+        { type: core.TemplateRef }
+    ]; };
 
     /**
      * @license
@@ -1184,8 +1229,8 @@
                 // Use `Iterable` instead of `Array` because TypeScript, as of 3.6.3,
                 // loses the array generic type in the `for of`. But we *also* have to use `Array` because
                 // typescript won't iterate over an `Iterable` unless you compile with `--downlevelIteration`
-                for (var _b = __values(STICKY_DIRECTIONS), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var dir = _c.value;
+                for (var STICKY_DIRECTIONS_1 = __values(STICKY_DIRECTIONS), STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next(); !STICKY_DIRECTIONS_1_1.done; STICKY_DIRECTIONS_1_1 = STICKY_DIRECTIONS_1.next()) {
+                    var dir = STICKY_DIRECTIONS_1_1.value;
                     if (element.style[dir]) {
                         zIndex += zIndexIncrements[dir];
                     }
@@ -1194,7 +1239,7 @@
             catch (e_6_1) { e_6 = { error: e_6_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    if (STICKY_DIRECTIONS_1_1 && !STICKY_DIRECTIONS_1_1.done && (_a = STICKY_DIRECTIONS_1.return)) _a.call(STICKY_DIRECTIONS_1);
                 }
                 finally { if (e_6) throw e_6.error; }
             }
@@ -1313,13 +1358,6 @@
     }
 
     /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
      * Provides a handle for the table to grab the view container's ng-container to insert data rows.
      * @docs-private
      */
@@ -1328,15 +1366,15 @@
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-        DataRowOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: '[rowOutlet]' },] }
-        ];
-        DataRowOutlet.ctorParameters = function () { return [
-            { type: core.ViewContainerRef },
-            { type: core.ElementRef }
-        ]; };
         return DataRowOutlet;
     }());
+    DataRowOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: '[rowOutlet]' },] }
+    ];
+    DataRowOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef },
+        { type: core.ElementRef }
+    ]; };
     /**
      * Provides a handle for the table to grab the view container's ng-container to insert the header.
      * @docs-private
@@ -1346,15 +1384,15 @@
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-        HeaderRowOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: '[headerRowOutlet]' },] }
-        ];
-        HeaderRowOutlet.ctorParameters = function () { return [
-            { type: core.ViewContainerRef },
-            { type: core.ElementRef }
-        ]; };
         return HeaderRowOutlet;
     }());
+    HeaderRowOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: '[headerRowOutlet]' },] }
+    ];
+    HeaderRowOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef },
+        { type: core.ElementRef }
+    ]; };
     /**
      * Provides a handle for the table to grab the view container's ng-container to insert the footer.
      * @docs-private
@@ -1364,15 +1402,15 @@
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-        FooterRowOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: '[footerRowOutlet]' },] }
-        ];
-        FooterRowOutlet.ctorParameters = function () { return [
-            { type: core.ViewContainerRef },
-            { type: core.ElementRef }
-        ]; };
         return FooterRowOutlet;
     }());
+    FooterRowOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: '[footerRowOutlet]' },] }
+    ];
+    FooterRowOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef },
+        { type: core.ElementRef }
+    ]; };
     /**
      * Provides a handle for the table to grab the view
      * container's ng-container to insert the no data row.
@@ -1383,15 +1421,15 @@
             this.viewContainer = viewContainer;
             this.elementRef = elementRef;
         }
-        NoDataRowOutlet.decorators = [
-            { type: core.Directive, args: [{ selector: '[noDataRowOutlet]' },] }
-        ];
-        NoDataRowOutlet.ctorParameters = function () { return [
-            { type: core.ViewContainerRef },
-            { type: core.ElementRef }
-        ]; };
         return NoDataRowOutlet;
     }());
+    NoDataRowOutlet.decorators = [
+        { type: core.Directive, args: [{ selector: '[noDataRowOutlet]' },] }
+    ];
+    NoDataRowOutlet.ctorParameters = function () { return [
+        { type: core.ViewContainerRef },
+        { type: core.ElementRef }
+    ]; };
     /**
      * The table template that can be used by the mat-table. Should not be used outside of the
      * material library.
@@ -2197,56 +2235,56 @@
                 }
             }
         };
-        CdkTable.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'cdk-table, table[cdk-table]',
-                        exportAs: 'cdkTable',
-                        template: CDK_TABLE_TEMPLATE,
-                        host: {
-                            'class': 'cdk-table',
-                        },
-                        encapsulation: core.ViewEncapsulation.None,
-                        // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
-                        // The view for `MatTable` consists entirely of templates declared in other views. As they are
-                        // declared elsewhere, they are checked when their declaration points are checked.
-                        // tslint:disable-next-line:validate-decorators
-                        changeDetection: core.ChangeDetectionStrategy.Default,
-                        providers: [
-                            { provide: CDK_TABLE, useExisting: CdkTable },
-                            _CoalescedStyleScheduler,
-                        ]
-                    },] }
-        ];
-        CdkTable.ctorParameters = function () { return [
-            { type: core.IterableDiffers },
-            { type: core.ChangeDetectorRef },
-            { type: _CoalescedStyleScheduler },
-            { type: core.ElementRef },
-            { type: String, decorators: [{ type: core.Attribute, args: ['role',] }] },
-            { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
-            { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
-            { type: platform.Platform }
-        ]; };
-        CdkTable.propDecorators = {
-            trackBy: [{ type: core.Input }],
-            dataSource: [{ type: core.Input }],
-            multiTemplateDataRows: [{ type: core.Input }],
-            _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
-            _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
-            _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],
-            _noDataRowOutlet: [{ type: core.ViewChild, args: [NoDataRowOutlet, { static: true },] }],
-            _contentColumnDefs: [{ type: core.ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
-            _contentRowDefs: [{ type: core.ContentChildren, args: [CdkRowDef, { descendants: true },] }],
-            _contentHeaderRowDefs: [{ type: core.ContentChildren, args: [CdkHeaderRowDef, {
-                            descendants: true
-                        },] }],
-            _contentFooterRowDefs: [{ type: core.ContentChildren, args: [CdkFooterRowDef, {
-                            descendants: true
-                        },] }],
-            _noDataRow: [{ type: core.ContentChild, args: [CdkNoDataRow,] }]
-        };
         return CdkTable;
     }());
+    CdkTable.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'cdk-table, table[cdk-table]',
+                    exportAs: 'cdkTable',
+                    template: CDK_TABLE_TEMPLATE,
+                    host: {
+                        'class': 'cdk-table',
+                    },
+                    encapsulation: core.ViewEncapsulation.None,
+                    // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
+                    // The view for `MatTable` consists entirely of templates declared in other views. As they are
+                    // declared elsewhere, they are checked when their declaration points are checked.
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default,
+                    providers: [
+                        { provide: CDK_TABLE, useExisting: CdkTable },
+                        _CoalescedStyleScheduler,
+                    ]
+                },] }
+    ];
+    CdkTable.ctorParameters = function () { return [
+        { type: core.IterableDiffers },
+        { type: core.ChangeDetectorRef },
+        { type: _CoalescedStyleScheduler },
+        { type: core.ElementRef },
+        { type: String, decorators: [{ type: core.Attribute, args: ['role',] }] },
+        { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
+        { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
+        { type: platform.Platform }
+    ]; };
+    CdkTable.propDecorators = {
+        trackBy: [{ type: core.Input }],
+        dataSource: [{ type: core.Input }],
+        multiTemplateDataRows: [{ type: core.Input }],
+        _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
+        _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
+        _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],
+        _noDataRowOutlet: [{ type: core.ViewChild, args: [NoDataRowOutlet, { static: true },] }],
+        _contentColumnDefs: [{ type: core.ContentChildren, args: [CdkColumnDef, { descendants: true },] }],
+        _contentRowDefs: [{ type: core.ContentChildren, args: [CdkRowDef, { descendants: true },] }],
+        _contentHeaderRowDefs: [{ type: core.ContentChildren, args: [CdkHeaderRowDef, {
+                        descendants: true
+                    },] }],
+        _contentFooterRowDefs: [{ type: core.ContentChildren, args: [CdkFooterRowDef, {
+                        descendants: true
+                    },] }],
+        _noDataRow: [{ type: core.ContentChild, args: [CdkNoDataRow,] }]
+    };
     /** Utility function that gets a merged list of the entries in an array and values of a Set. */
     function mergeArrayAndSet(array, set) {
         return array.concat(Array.from(set));
@@ -2336,35 +2374,35 @@
                 this.columnDef.name = this.name;
             }
         };
-        CdkTextColumn.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'cdk-text-column',
-                        template: "\n    <ng-container cdkColumnDef>\n      <th cdk-header-cell *cdkHeaderCellDef [style.text-align]=\"justify\">\n        {{headerText}}\n      </th>\n      <td cdk-cell *cdkCellDef=\"let data\" [style.text-align]=\"justify\">\n        {{dataAccessor(data, name)}}\n      </td>\n    </ng-container>\n  ",
-                        encapsulation: core.ViewEncapsulation.None,
-                        // Change detection is intentionally not set to OnPush. This component's template will be provided
-                        // to the table to be inserted into its view. This is problematic when change detection runs since
-                        // the bindings in this template will be evaluated _after_ the table's view is evaluated, which
-                        // mean's the template in the table's view will not have the updated value (and in fact will cause
-                        // an ExpressionChangedAfterItHasBeenCheckedError).
-                        // tslint:disable-next-line:validate-decorators
-                        changeDetection: core.ChangeDetectionStrategy.Default
-                    },] }
-        ];
-        CdkTextColumn.ctorParameters = function () { return [
-            { type: CdkTable, decorators: [{ type: core.Optional }] },
-            { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [TEXT_COLUMN_OPTIONS,] }] }
-        ]; };
-        CdkTextColumn.propDecorators = {
-            name: [{ type: core.Input }],
-            headerText: [{ type: core.Input }],
-            dataAccessor: [{ type: core.Input }],
-            justify: [{ type: core.Input }],
-            columnDef: [{ type: core.ViewChild, args: [CdkColumnDef, { static: true },] }],
-            cell: [{ type: core.ViewChild, args: [CdkCellDef, { static: true },] }],
-            headerCell: [{ type: core.ViewChild, args: [CdkHeaderCellDef, { static: true },] }]
-        };
         return CdkTextColumn;
     }());
+    CdkTextColumn.decorators = [
+        { type: core.Component, args: [{
+                    selector: 'cdk-text-column',
+                    template: "\n    <ng-container cdkColumnDef>\n      <th cdk-header-cell *cdkHeaderCellDef [style.text-align]=\"justify\">\n        {{headerText}}\n      </th>\n      <td cdk-cell *cdkCellDef=\"let data\" [style.text-align]=\"justify\">\n        {{dataAccessor(data, name)}}\n      </td>\n    </ng-container>\n  ",
+                    encapsulation: core.ViewEncapsulation.None,
+                    // Change detection is intentionally not set to OnPush. This component's template will be provided
+                    // to the table to be inserted into its view. This is problematic when change detection runs since
+                    // the bindings in this template will be evaluated _after_ the table's view is evaluated, which
+                    // mean's the template in the table's view will not have the updated value (and in fact will cause
+                    // an ExpressionChangedAfterItHasBeenCheckedError).
+                    // tslint:disable-next-line:validate-decorators
+                    changeDetection: core.ChangeDetectionStrategy.Default
+                },] }
+    ];
+    CdkTextColumn.ctorParameters = function () { return [
+        { type: CdkTable, decorators: [{ type: core.Optional }] },
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [TEXT_COLUMN_OPTIONS,] }] }
+    ]; };
+    CdkTextColumn.propDecorators = {
+        name: [{ type: core.Input }],
+        headerText: [{ type: core.Input }],
+        dataAccessor: [{ type: core.Input }],
+        justify: [{ type: core.Input }],
+        columnDef: [{ type: core.ViewChild, args: [CdkColumnDef, { static: true },] }],
+        cell: [{ type: core.ViewChild, args: [CdkCellDef, { static: true },] }],
+        headerCell: [{ type: core.ViewChild, args: [CdkHeaderCellDef, { static: true },] }]
+    };
 
     /**
      * @license
@@ -2399,14 +2437,14 @@
     var CdkTableModule = /** @class */ (function () {
         function CdkTableModule() {
         }
-        CdkTableModule.decorators = [
-            { type: core.NgModule, args: [{
-                        exports: EXPORTED_DECLARATIONS,
-                        declarations: EXPORTED_DECLARATIONS
-                    },] }
-        ];
         return CdkTableModule;
     }());
+    CdkTableModule.decorators = [
+        { type: core.NgModule, args: [{
+                    exports: EXPORTED_DECLARATIONS,
+                    declarations: EXPORTED_DECLARATIONS
+                },] }
+    ];
 
     /**
      * @license
