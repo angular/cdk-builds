@@ -554,37 +554,48 @@
                 return;
             }
             this._currentSchedule = new _Schedule();
-            this._ngZone.onStable.pipe(operators.take(1), operators.takeUntil(this._destroyed)).subscribe(function () {
+            this._getScheduleObservable().pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
                 var e_1, _a, e_2, _b;
-                var schedule = _this._currentSchedule;
+                while (_this._currentSchedule.tasks.length || _this._currentSchedule.endTasks.length) {
+                    var schedule = _this._currentSchedule;
+                    // Capture new tasks scheduled by the current set of tasks.
+                    _this._currentSchedule = new _Schedule();
+                    try {
+                        for (var _c = (e_1 = void 0, __values(schedule.tasks)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                            var task = _d.value;
+                            task();
+                        }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                    }
+                    try {
+                        for (var _e = (e_2 = void 0, __values(schedule.endTasks)), _f = _e.next(); !_f.done; _f = _e.next()) {
+                            var task = _f.value;
+                            task();
+                        }
+                    }
+                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    finally {
+                        try {
+                            if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+                        }
+                        finally { if (e_2) throw e_2.error; }
+                    }
+                }
                 _this._currentSchedule = null;
-                try {
-                    for (var _c = __values(schedule.tasks), _d = _c.next(); !_d.done; _d = _c.next()) {
-                        var task = _d.value;
-                        task();
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                try {
-                    for (var _e = __values(schedule.endTasks), _f = _e.next(); !_f.done; _f = _e.next()) {
-                        var task = _f.value;
-                        task();
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
             });
+        };
+        _CoalescedStyleScheduler.prototype._getScheduleObservable = function () {
+            // Use onStable when in the context of an ongoing change detection cycle so that we
+            // do not accidentally trigger additional cycles.
+            return this._ngZone.isStable ?
+                rxjs.from(Promise.resolve(undefined)) :
+                this._ngZone.onStable.pipe(operators.take(1));
         };
         _CoalescedStyleScheduler.decorators = [
             { type: core.Injectable }

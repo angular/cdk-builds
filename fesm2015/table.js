@@ -5,8 +5,8 @@ export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
-import { Subject, BehaviorSubject, isObservable, of } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
+import { takeUntil, take } from 'rxjs/operators';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 /**
@@ -294,16 +294,27 @@ class _CoalescedStyleScheduler {
             return;
         }
         this._currentSchedule = new _Schedule();
-        this._ngZone.onStable.pipe(take(1), takeUntil(this._destroyed)).subscribe(() => {
-            const schedule = this._currentSchedule;
+        this._getScheduleObservable().pipe(takeUntil(this._destroyed)).subscribe(() => {
+            while (this._currentSchedule.tasks.length || this._currentSchedule.endTasks.length) {
+                const schedule = this._currentSchedule;
+                // Capture new tasks scheduled by the current set of tasks.
+                this._currentSchedule = new _Schedule();
+                for (const task of schedule.tasks) {
+                    task();
+                }
+                for (const task of schedule.endTasks) {
+                    task();
+                }
+            }
             this._currentSchedule = null;
-            for (const task of schedule.tasks) {
-                task();
-            }
-            for (const task of schedule.endTasks) {
-                task();
-            }
         });
+    }
+    _getScheduleObservable() {
+        // Use onStable when in the context of an ongoing change detection cycle so that we
+        // do not accidentally trigger additional cycles.
+        return this._ngZone.isStable ?
+            from(Promise.resolve(undefined)) :
+            this._ngZone.onStable.pipe(take(1));
     }
 }
 _CoalescedStyleScheduler.decorators = [
