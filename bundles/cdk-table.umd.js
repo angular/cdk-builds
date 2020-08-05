@@ -385,6 +385,7 @@
                 if (name) {
                     this._name = name;
                     this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+                    this._updateColumnCssClassName();
                 }
             },
             enumerable: false,
@@ -407,6 +408,16 @@
             enumerable: false,
             configurable: true
         });
+        /**
+         * Overridable method that sets the css classes that will be added to every cell in this
+         * column.
+         * In the future, columnCssClassName will change from type string[] to string and this
+         * will set a single string value.
+         * @docs-private
+         */
+        CdkColumnDef.prototype._updateColumnCssClassName = function () {
+            this._columnCssClassName = ["cdk-column-" + this.cssClassFriendlyName];
+        };
         CdkColumnDef.decorators = [
             { type: core.Directive, args: [{
                         selector: '[cdkColumnDef]',
@@ -429,8 +440,23 @@
     /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
     var BaseCdkCell = /** @class */ (function () {
         function BaseCdkCell(columnDef, elementRef) {
-            var columnClassName = "cdk-column-" + columnDef.cssClassFriendlyName;
-            elementRef.nativeElement.classList.add(columnClassName);
+            var e_1, _a;
+            // If IE 11 is dropped before we switch to setting a single class name, change to multi param
+            // with destructuring.
+            var classList = elementRef.nativeElement.classList;
+            try {
+                for (var _b = __values(columnDef._columnCssClassName), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var className = _c.value;
+                    classList.add(className);
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
         }
         return BaseCdkCell;
     }());

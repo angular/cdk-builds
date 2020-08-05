@@ -70,7 +70,20 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      * do not match are replaced by the '-' character.
      */
     cssClassFriendlyName: string;
+    /**
+     * Class name for cells in this column.
+     * @docs-private
+     */
+    _columnCssClassName: string[];
     constructor(_table?: any);
+    /**
+     * Overridable method that sets the css classes that will be added to every cell in this
+     * column.
+     * In the future, columnCssClassName will change from type string[] to string and this
+     * will set a single string value.
+     * @docs-private
+     */
+    protected _updateColumnCssClassName(): void;
     static ngAcceptInputType_sticky: BooleanInput;
     static ngAcceptInputType_stickyEnd: BooleanInput;
 }

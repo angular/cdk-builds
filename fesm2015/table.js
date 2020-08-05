@@ -142,6 +142,7 @@ class CdkColumnDef extends _CdkColumnDefBase {
         if (name) {
             this._name = name;
             this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+            this._updateColumnCssClassName();
         }
     }
     /**
@@ -156,6 +157,16 @@ class CdkColumnDef extends _CdkColumnDefBase {
         const prevValue = this._stickyEnd;
         this._stickyEnd = coerceBooleanProperty(v);
         this._hasStickyChanged = prevValue !== this._stickyEnd;
+    }
+    /**
+     * Overridable method that sets the css classes that will be added to every cell in this
+     * column.
+     * In the future, columnCssClassName will change from type string[] to string and this
+     * will set a single string value.
+     * @docs-private
+     */
+    _updateColumnCssClassName() {
+        this._columnCssClassName = [`cdk-column-${this.cssClassFriendlyName}`];
     }
 }
 CdkColumnDef.decorators = [
@@ -178,8 +189,12 @@ CdkColumnDef.propDecorators = {
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
 class BaseCdkCell {
     constructor(columnDef, elementRef) {
-        const columnClassName = `cdk-column-${columnDef.cssClassFriendlyName}`;
-        elementRef.nativeElement.classList.add(columnClassName);
+        // If IE 11 is dropped before we switch to setting a single class name, change to multi param
+        // with destructuring.
+        const classList = elementRef.nativeElement.classList;
+        for (const className of columnDef._columnCssClassName) {
+            classList.add(className);
+        }
     }
 }
 /** Header cell template container that adds the right classes and role. */
