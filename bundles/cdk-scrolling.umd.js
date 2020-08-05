@@ -1628,6 +1628,9 @@
         ];
         return CdkScrollableModule;
     }());
+    /**
+     * @docs-primary-export
+     */
     var ScrollingModule = /** @class */ (function () {
         function ScrollingModule() {
         }

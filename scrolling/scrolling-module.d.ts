@@ -7,5 +7,8 @@
  */
 export declare class CdkScrollableModule {
 }
+/**
+ * @docs-primary-export
+ */
 export declare class ScrollingModule {
 }
