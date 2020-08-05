@@ -37,4 +37,5 @@ export declare class _CoalescedStyleScheduler implements OnDestroy {
     /** Prevent any further tasks from running. */
     ngOnDestroy(): void;
     private _createScheduleIfNeeded;
+    private _getScheduleObservable;
 }

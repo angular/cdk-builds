@@ -385,6 +385,7 @@
                 if (name) {
                     this._name = name;
                     this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
+                    this._updateColumnCssClassName();
                 }
             },
             enumerable: false,
@@ -407,6 +408,16 @@
             enumerable: false,
             configurable: true
         });
+        /**
+         * Overridable method that sets the css classes that will be added to every cell in this
+         * column.
+         * In the future, columnCssClassName will change from type string[] to string and this
+         * will set a single string value.
+         * @docs-private
+         */
+        CdkColumnDef.prototype._updateColumnCssClassName = function () {
+            this._columnCssClassName = ["cdk-column-" + this.cssClassFriendlyName];
+        };
         CdkColumnDef.decorators = [
             { type: core.Directive, args: [{
                         selector: '[cdkColumnDef]',
@@ -429,8 +440,23 @@
     /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
     var BaseCdkCell = /** @class */ (function () {
         function BaseCdkCell(columnDef, elementRef) {
-            var columnClassName = "cdk-column-" + columnDef.cssClassFriendlyName;
-            elementRef.nativeElement.classList.add(columnClassName);
+            var e_1, _a;
+            // If IE 11 is dropped before we switch to setting a single class name, change to multi param
+            // with destructuring.
+            var classList = elementRef.nativeElement.classList;
+            try {
+                for (var _b = __values(columnDef._columnCssClassName), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var className = _c.value;
+                    classList.add(className);
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
         }
         return BaseCdkCell;
     }());
@@ -554,37 +580,48 @@
                 return;
             }
             this._currentSchedule = new _Schedule();
-            this._ngZone.onStable.pipe(operators.take(1), operators.takeUntil(this._destroyed)).subscribe(function () {
+            this._getScheduleObservable().pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
                 var e_1, _a, e_2, _b;
-                var schedule = _this._currentSchedule;
+                while (_this._currentSchedule.tasks.length || _this._currentSchedule.endTasks.length) {
+                    var schedule = _this._currentSchedule;
+                    // Capture new tasks scheduled by the current set of tasks.
+                    _this._currentSchedule = new _Schedule();
+                    try {
+                        for (var _c = (e_1 = void 0, __values(schedule.tasks)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                            var task = _d.value;
+                            task();
+                        }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                    }
+                    try {
+                        for (var _e = (e_2 = void 0, __values(schedule.endTasks)), _f = _e.next(); !_f.done; _f = _e.next()) {
+                            var task = _f.value;
+                            task();
+                        }
+                    }
+                    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                    finally {
+                        try {
+                            if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
+                        }
+                        finally { if (e_2) throw e_2.error; }
+                    }
+                }
                 _this._currentSchedule = null;
-                try {
-                    for (var _c = __values(schedule.tasks), _d = _c.next(); !_d.done; _d = _c.next()) {
-                        var task = _d.value;
-                        task();
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-                try {
-                    for (var _e = __values(schedule.endTasks), _f = _e.next(); !_f.done; _f = _e.next()) {
-                        var task = _f.value;
-                        task();
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (_f && !_f.done && (_b = _e.return)) _b.call(_e);
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
             });
+        };
+        _CoalescedStyleScheduler.prototype._getScheduleObservable = function () {
+            // Use onStable when in the context of an ongoing change detection cycle so that we
+            // do not accidentally trigger additional cycles.
+            return this._ngZone.isStable ?
+                rxjs.from(Promise.resolve(undefined)) :
+                this._ngZone.onStable.pipe(operators.take(1));
         };
         _CoalescedStyleScheduler.decorators = [
             { type: core.Injectable }
