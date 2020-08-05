@@ -1357,6 +1357,9 @@ CdkScrollableModule.decorators = [
                 declarations: [CdkScrollable]
             },] }
 ];
+/**
+ * @docs-primary-export
+ */
 class ScrollingModule {
 }
 ScrollingModule.decorators = [
