@@ -14,11 +14,11 @@
     var LayoutModule = /** @class */ (function () {
         function LayoutModule() {
         }
-        LayoutModule.decorators = [
-            { type: i0.NgModule, args: [{},] }
-        ];
         return LayoutModule;
     }());
+    LayoutModule.decorators = [
+        { type: i0.NgModule, args: [{},] }
+    ];
 
     /**
      * @license
@@ -53,15 +53,15 @@
             }
             return this._matchMedia(query);
         };
-        MediaMatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(i0.ɵɵinject(i1.Platform)); }, token: MediaMatcher, providedIn: "root" });
-        MediaMatcher.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        MediaMatcher.ctorParameters = function () { return [
-            { type: i1.Platform }
-        ]; };
         return MediaMatcher;
     }());
+    MediaMatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(i0.ɵɵinject(i1.Platform)); }, token: MediaMatcher, providedIn: "root" });
+    MediaMatcher.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    MediaMatcher.ctorParameters = function () { return [
+        { type: i1.Platform }
+    ]; };
     /**
      * For Webkit engines that only trigger the MediaQueryListListener when
      * there is at least one CSS selector for the respective media query.
@@ -181,16 +181,16 @@
             this._queries.set(query, output);
             return output;
         };
-        BreakpointObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(i0.ɵɵinject(MediaMatcher), i0.ɵɵinject(i0.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
-        BreakpointObserver.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        BreakpointObserver.ctorParameters = function () { return [
-            { type: MediaMatcher },
-            { type: i0.NgZone }
-        ]; };
         return BreakpointObserver;
     }());
+    BreakpointObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(i0.ɵɵinject(MediaMatcher), i0.ɵɵinject(i0.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    BreakpointObserver.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    BreakpointObserver.ctorParameters = function () { return [
+        { type: MediaMatcher },
+        { type: i0.NgZone }
+    ]; };
     /**
      * Split each query string into separate query strings if two queries are provided as comma
      * separated.

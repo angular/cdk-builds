@@ -715,17 +715,17 @@
             var dropContainer = this._dropContainer;
             if (dropContainer) {
                 var element = this._rootElement;
-                var parent_1 = element.parentNode;
+                var parent = element.parentNode;
                 var preview = this._preview = this._createPreviewElement();
                 var placeholder = this._placeholder = this._createPlaceholderElement();
                 var anchor = this._anchor = this._anchor || this._document.createComment('');
                 // Insert an anchor node so that we can restore the element's position in the DOM.
-                parent_1.insertBefore(anchor, element);
+                parent.insertBefore(anchor, element);
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 element.style.display = 'none';
-                this._document.body.appendChild(parent_1.replaceChild(placeholder, element));
+                this._document.body.appendChild(parent.replaceChild(placeholder, element));
                 getPreviewInsertionPoint(this._document).appendChild(preview);
                 this.started.next({ source: this }); // Emit before notifying the container.
                 dropContainer.start();
@@ -1301,35 +1301,36 @@
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
     /* global Reflect, Promise */
-
-    var extendStatics = function(d, b) {
+    var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b)
+                if (b.hasOwnProperty(p))
+                    d[p] = b[p]; };
         return extendStatics(d, b);
     };
-
     function __extends(d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     }
-
-    var __assign = function() {
+    var __assign = function () {
         __assign = Object.assign || function __assign(t) {
             for (var s, i = 1, n = arguments.length; i < n; i++) {
                 s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+                for (var p in s)
+                    if (Object.prototype.hasOwnProperty.call(s, p))
+                        t[p] = s[p];
             }
             return t;
         };
         return __assign.apply(this, arguments);
     };
-
     function __rest(s, e) {
         var t = {};
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-            t[p] = s[p];
+        for (var p in s)
+            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+                t[p] = s[p];
         if (s != null && typeof Object.getOwnPropertySymbols === "function")
             for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
                 if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
@@ -1337,175 +1338,247 @@
             }
         return t;
     }
-
     function __decorate(decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
+            r = Reflect.decorate(decorators, target, key, desc);
+        else
+            for (var i = decorators.length - 1; i >= 0; i--)
+                if (d = decorators[i])
+                    r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
-
     function __param(paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); }
+        return function (target, key) { decorator(target, key, paramIndex); };
     }
-
     function __metadata(metadataKey, metadataValue) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
+            return Reflect.metadata(metadataKey, metadataValue);
     }
-
     function __awaiter(thisArg, _arguments, P, generator) {
         function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
         return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function fulfilled(value) { try {
+                step(generator.next(value));
+            }
+            catch (e) {
+                reject(e);
+            } }
+            function rejected(value) { try {
+                step(generator["throw"](value));
+            }
+            catch (e) {
+                reject(e);
+            } }
             function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
     }
-
     function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        var _ = { label: 0, sent: function () { if (t[0] & 1)
+                throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function () { return this; }), g;
         function verb(n) { return function (v) { return step([n, v]); }; }
         function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
+            if (f)
+                throw new TypeError("Generator is already executing.");
+            while (_)
+                try {
+                    if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
+                        return t;
+                    if (y = 0, t)
+                        op = [op[0] & 2, t.value];
+                    switch (op[0]) {
+                        case 0:
+                        case 1:
+                            t = op;
+                            break;
+                        case 4:
+                            _.label++;
+                            return { value: op[1], done: false };
+                        case 5:
+                            _.label++;
+                            y = op[1];
+                            op = [0];
+                            continue;
+                        case 7:
+                            op = _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                        default:
+                            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                                _ = 0;
+                                continue;
+                            }
+                            if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
+                                _.label = op[1];
+                                break;
+                            }
+                            if (op[0] === 6 && _.label < t[1]) {
+                                _.label = t[1];
+                                t = op;
+                                break;
+                            }
+                            if (t && _.label < t[2]) {
+                                _.label = t[2];
+                                _.ops.push(op);
+                                break;
+                            }
+                            if (t[2])
+                                _.ops.pop();
+                            _.trys.pop();
+                            continue;
+                    }
+                    op = body.call(thisArg, _);
                 }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+                catch (e) {
+                    op = [6, e];
+                    y = 0;
+                }
+                finally {
+                    f = t = 0;
+                }
+            if (op[0] & 5)
+                throw op[1];
+            return { value: op[0] ? op[1] : void 0, done: true };
         }
     }
-
-    var __createBinding = Object.create ? (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-    }) : (function(o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
+    var __createBinding = Object.create ? (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
+        Object.defineProperty(o, k2, { enumerable: true, get: function () { return m[k]; } });
+    }) : (function (o, m, k, k2) {
+        if (k2 === undefined)
+            k2 = k;
         o[k2] = m[k];
     });
-
     function __exportStar(m, exports) {
-        for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
+        for (var p in m)
+            if (p !== "default" && !exports.hasOwnProperty(p))
+                __createBinding(exports, m, p);
     }
-
     function __values(o) {
         var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-        if (m) return m.call(o);
-        if (o && typeof o.length === "number") return {
-            next: function () {
-                if (o && i >= o.length) o = void 0;
-                return { value: o && o[i++], done: !o };
-            }
-        };
+        if (m)
+            return m.call(o);
+        if (o && typeof o.length === "number")
+            return {
+                next: function () {
+                    if (o && i >= o.length)
+                        o = void 0;
+                    return { value: o && o[i++], done: !o };
+                }
+            };
         throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
     }
-
     function __read(o, n) {
         var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m) return o;
+        if (!m)
+            return o;
         var i = m.call(o), r, ar = [], e;
         try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
+                ar.push(r.value);
         }
-        catch (error) { e = { error: error }; }
+        catch (error) {
+            e = { error: error };
+        }
         finally {
             try {
-                if (r && !r.done && (m = i["return"])) m.call(i);
+                if (r && !r.done && (m = i["return"]))
+                    m.call(i);
             }
-            finally { if (e) throw e.error; }
+            finally {
+                if (e)
+                    throw e.error;
+            }
         }
         return ar;
     }
-
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
-
     function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++)
+            s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
             for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
                 r[k] = a[j];
         return r;
-    };
-
+    }
+    ;
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
     }
-
     function __asyncGenerator(thisArg, _arguments, generator) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var g = generator.apply(thisArg, _arguments || []), i, q = [];
         return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function verb(n) { if (g[n])
+            i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try {
+            step(g[n](v));
+        }
+        catch (e) {
+            settle(q[0][3], e);
+        } }
         function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
         function fulfill(value) { resume("next", value); }
         function reject(value) { resume("throw", value); }
-        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+        function settle(f, v) { if (f(v), q.shift(), q.length)
+            resume(q[0][0], q[0][1]); }
     }
-
     function __asyncDelegator(o) {
         var i, p;
         return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
         function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
     }
-
     function __asyncValues(o) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        if (!Symbol.asyncIterator)
+            throw new TypeError("Symbol.asyncIterator is not defined.");
         var m = o[Symbol.asyncIterator], i;
         return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
         function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function (v) { resolve({ value: v, done: d }); }, reject); }
     }
-
     function __makeTemplateObject(cooked, raw) {
-        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        if (Object.defineProperty) {
+            Object.defineProperty(cooked, "raw", { value: raw });
+        }
+        else {
+            cooked.raw = raw;
+        }
         return cooked;
-    };
-
-    var __setModuleDefault = Object.create ? (function(o, v) {
+    }
+    ;
+    var __setModuleDefault = Object.create ? (function (o, v) {
         Object.defineProperty(o, "default", { enumerable: true, value: v });
-    }) : function(o, v) {
+    }) : function (o, v) {
         o["default"] = v;
     };
-
     function __importStar(mod) {
-        if (mod && mod.__esModule) return mod;
+        if (mod && mod.__esModule)
+            return mod;
         var result = {};
-        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        if (mod != null)
+            for (var k in mod)
+                if (Object.hasOwnProperty.call(mod, k))
+                    __createBinding(result, mod, k);
         __setModuleDefault(result, mod);
         return result;
     }
-
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
     function __classPrivateFieldGet(receiver, privateMap) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to get private field on non-instance");
         }
         return privateMap.get(receiver);
     }
-
     function __classPrivateFieldSet(receiver, privateMap, value) {
         if (!privateMap.has(receiver)) {
             throw new TypeError("attempted to set private field on non-instance");
@@ -1574,13 +1647,6 @@
         return Math.max(0, Math.min(max, value));
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * Proximity, as a ratio to width/height, at which a
      * dragged item will affect the drop container.
@@ -2569,16 +2635,16 @@
             });
             this._globalListeners.clear();
         };
-        DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
-        DragDropRegistry.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        DragDropRegistry.ctorParameters = function () { return [
-            { type: i0.NgZone },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
-        ]; };
         return DragDropRegistry;
     }());
+    DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    DragDropRegistry.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    DragDropRegistry.ctorParameters = function () { return [
+        { type: i0.NgZone },
+        { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] }
+    ]; };
 
     /**
      * @license
@@ -2618,18 +2684,18 @@
         DragDrop.prototype.createDropList = function (element) {
             return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
         };
-        DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
-        DragDrop.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        DragDrop.ctorParameters = function () { return [
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
-            { type: i0.NgZone },
-            { type: i2.ViewportRuler },
-            { type: DragDropRegistry }
-        ]; };
         return DragDrop;
     }());
+    DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    DragDrop.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    DragDrop.ctorParameters = function () { return [
+        { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
+        { type: i0.NgZone },
+        { type: i2.ViewportRuler },
+        { type: DragDropRegistry }
+    ]; };
 
     /**
      * @license
@@ -2676,18 +2742,18 @@
         CdkDropListGroup.prototype.ngOnDestroy = function () {
             this._items.clear();
         };
-        CdkDropListGroup.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkDropListGroup]',
-                        exportAs: 'cdkDropListGroup',
-                        providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }],
-                    },] }
-        ];
-        CdkDropListGroup.propDecorators = {
-            disabled: [{ type: i0.Input, args: ['cdkDropListGroupDisabled',] }]
-        };
         return CdkDropListGroup;
     }());
+    CdkDropListGroup.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
+                    providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }],
+                },] }
+    ];
+    CdkDropListGroup.propDecorators = {
+        disabled: [{ type: i0.Input, args: ['cdkDropListGroupDisabled',] }]
+    };
 
     /**
      * @license
@@ -2946,52 +3012,52 @@
         CdkDropList.prototype._syncItemsWithRef = function () {
             this._dropListRef.withItems(this.getSortedItems().map(function (item) { return item._dragRef; }));
         };
-        /** Keeps track of the drop lists that are currently on the page. */
-        CdkDropList._dropLists = [];
-        CdkDropList.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkDropList], cdk-drop-list',
-                        exportAs: 'cdkDropList',
-                        providers: [
-                            // Prevent child drop lists from picking up the same group as their parent.
-                            { provide: CDK_DROP_LIST_GROUP, useValue: ɵ0 },
-                            { provide: CDK_DROP_LIST, useExisting: CdkDropList },
-                        ],
-                        host: {
-                            'class': 'cdk-drop-list',
-                            '[id]': 'id',
-                            '[class.cdk-drop-list-disabled]': 'disabled',
-                            '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
-                            '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
-                        }
-                    },] }
-        ];
-        CdkDropList.ctorParameters = function () { return [
-            { type: i0.ElementRef },
-            { type: DragDrop },
-            { type: i0.ChangeDetectorRef },
-            { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
-            { type: CdkDropListGroup, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DROP_LIST_GROUP,] }, { type: i0.SkipSelf }] },
-            { type: i2.ScrollDispatcher },
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] }
-        ]; };
-        CdkDropList.propDecorators = {
-            connectedTo: [{ type: i0.Input, args: ['cdkDropListConnectedTo',] }],
-            data: [{ type: i0.Input, args: ['cdkDropListData',] }],
-            orientation: [{ type: i0.Input, args: ['cdkDropListOrientation',] }],
-            id: [{ type: i0.Input }],
-            lockAxis: [{ type: i0.Input, args: ['cdkDropListLockAxis',] }],
-            disabled: [{ type: i0.Input, args: ['cdkDropListDisabled',] }],
-            sortingDisabled: [{ type: i0.Input, args: ['cdkDropListSortingDisabled',] }],
-            enterPredicate: [{ type: i0.Input, args: ['cdkDropListEnterPredicate',] }],
-            autoScrollDisabled: [{ type: i0.Input, args: ['cdkDropListAutoScrollDisabled',] }],
-            dropped: [{ type: i0.Output, args: ['cdkDropListDropped',] }],
-            entered: [{ type: i0.Output, args: ['cdkDropListEntered',] }],
-            exited: [{ type: i0.Output, args: ['cdkDropListExited',] }],
-            sorted: [{ type: i0.Output, args: ['cdkDropListSorted',] }]
-        };
         return CdkDropList;
     }());
+    /** Keeps track of the drop lists that are currently on the page. */
+    CdkDropList._dropLists = [];
+    CdkDropList.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkDropList], cdk-drop-list',
+                    exportAs: 'cdkDropList',
+                    providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CDK_DROP_LIST_GROUP, useValue: ɵ0 },
+                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
+                    ],
+                    host: {
+                        'class': 'cdk-drop-list',
+                        '[id]': 'id',
+                        '[class.cdk-drop-list-disabled]': 'disabled',
+                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
+                    }
+                },] }
+    ];
+    CdkDropList.ctorParameters = function () { return [
+        { type: i0.ElementRef },
+        { type: DragDrop },
+        { type: i0.ChangeDetectorRef },
+        { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
+        { type: CdkDropListGroup, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DROP_LIST_GROUP,] }, { type: i0.SkipSelf }] },
+        { type: i2.ScrollDispatcher },
+        { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] }
+    ]; };
+    CdkDropList.propDecorators = {
+        connectedTo: [{ type: i0.Input, args: ['cdkDropListConnectedTo',] }],
+        data: [{ type: i0.Input, args: ['cdkDropListData',] }],
+        orientation: [{ type: i0.Input, args: ['cdkDropListOrientation',] }],
+        id: [{ type: i0.Input }],
+        lockAxis: [{ type: i0.Input, args: ['cdkDropListLockAxis',] }],
+        disabled: [{ type: i0.Input, args: ['cdkDropListDisabled',] }],
+        sortingDisabled: [{ type: i0.Input, args: ['cdkDropListSortingDisabled',] }],
+        enterPredicate: [{ type: i0.Input, args: ['cdkDropListEnterPredicate',] }],
+        autoScrollDisabled: [{ type: i0.Input, args: ['cdkDropListAutoScrollDisabled',] }],
+        dropped: [{ type: i0.Output, args: ['cdkDropListDropped',] }],
+        entered: [{ type: i0.Output, args: ['cdkDropListEntered',] }],
+        exited: [{ type: i0.Output, args: ['cdkDropListExited',] }],
+        sorted: [{ type: i0.Output, args: ['cdkDropListSorted',] }]
+    };
 
     /**
      * @license
@@ -3044,24 +3110,24 @@
         CdkDragHandle.prototype.ngOnDestroy = function () {
             this._stateChanges.complete();
         };
-        CdkDragHandle.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkDragHandle]',
-                        host: {
-                            'class': 'cdk-drag-handle'
-                        },
-                        providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }],
-                    },] }
-        ];
-        CdkDragHandle.ctorParameters = function () { return [
-            { type: i0.ElementRef },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DRAG_PARENT,] }, { type: i0.Optional }, { type: i0.SkipSelf }] }
-        ]; };
-        CdkDragHandle.propDecorators = {
-            disabled: [{ type: i0.Input, args: ['cdkDragHandleDisabled',] }]
-        };
         return CdkDragHandle;
     }());
+    CdkDragHandle.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkDragHandle]',
+                    host: {
+                        'class': 'cdk-drag-handle'
+                    },
+                    providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }],
+                },] }
+    ];
+    CdkDragHandle.ctorParameters = function () { return [
+        { type: i0.ElementRef },
+        { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DRAG_PARENT,] }, { type: i0.Optional }, { type: i0.SkipSelf }] }
+    ]; };
+    CdkDragHandle.propDecorators = {
+        disabled: [{ type: i0.Input, args: ['cdkDragHandleDisabled',] }]
+    };
 
     /**
      * @license
@@ -3084,20 +3150,20 @@
         function CdkDragPlaceholder(templateRef) {
             this.templateRef = templateRef;
         }
-        CdkDragPlaceholder.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: 'ng-template[cdkDragPlaceholder]',
-                        providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }],
-                    },] }
-        ];
-        CdkDragPlaceholder.ctorParameters = function () { return [
-            { type: i0.TemplateRef }
-        ]; };
-        CdkDragPlaceholder.propDecorators = {
-            data: [{ type: i0.Input }]
-        };
         return CdkDragPlaceholder;
     }());
+    CdkDragPlaceholder.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: 'ng-template[cdkDragPlaceholder]',
+                    providers: [{ provide: CDK_DRAG_PLACEHOLDER, useExisting: CdkDragPlaceholder }],
+                },] }
+    ];
+    CdkDragPlaceholder.ctorParameters = function () { return [
+        { type: i0.TemplateRef }
+    ]; };
+    CdkDragPlaceholder.propDecorators = {
+        data: [{ type: i0.Input }]
+    };
 
     /**
      * @license
@@ -3128,29 +3194,22 @@
             enumerable: false,
             configurable: true
         });
-        CdkDragPreview.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: 'ng-template[cdkDragPreview]',
-                        providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }],
-                    },] }
-        ];
-        CdkDragPreview.ctorParameters = function () { return [
-            { type: i0.TemplateRef }
-        ]; };
-        CdkDragPreview.propDecorators = {
-            data: [{ type: i0.Input }],
-            matchSize: [{ type: i0.Input }]
-        };
         return CdkDragPreview;
     }());
+    CdkDragPreview.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: 'ng-template[cdkDragPreview]',
+                    providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }],
+                },] }
+    ];
+    CdkDragPreview.ctorParameters = function () { return [
+        { type: i0.TemplateRef }
+    ]; };
+    CdkDragPreview.propDecorators = {
+        data: [{ type: i0.Input }],
+        matchSize: [{ type: i0.Input }]
+    };
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /** Element that can be moved inside a CdkDropList container. */
     var CdkDrag = /** @class */ (function () {
         function CdkDrag(
@@ -3440,53 +3499,53 @@
                 this.rootElementSelector = rootElementSelector;
             }
         };
-        CdkDrag.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkDrag]',
-                        exportAs: 'cdkDrag',
-                        host: {
-                            'class': 'cdk-drag',
-                            '[class.cdk-drag-disabled]': 'disabled',
-                            '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
-                        },
-                        providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
-                    },] }
-        ];
-        CdkDrag.ctorParameters = function () { return [
-            { type: i0.ElementRef },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DROP_LIST,] }, { type: i0.Optional }, { type: i0.SkipSelf }] },
-            { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
-            { type: i0.NgZone },
-            { type: i0.ViewContainerRef },
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] },
-            { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
-            { type: DragDrop },
-            { type: i0.ChangeDetectorRef },
-            { type: CdkDragHandle, decorators: [{ type: i0.Optional }, { type: i0.Self }, { type: i0.Inject, args: [CDK_DRAG_HANDLE,] }] }
-        ]; };
-        CdkDrag.propDecorators = {
-            _handles: [{ type: i0.ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],
-            _previewTemplate: [{ type: i0.ContentChild, args: [CDK_DRAG_PREVIEW,] }],
-            _placeholderTemplate: [{ type: i0.ContentChild, args: [CDK_DRAG_PLACEHOLDER,] }],
-            data: [{ type: i0.Input, args: ['cdkDragData',] }],
-            lockAxis: [{ type: i0.Input, args: ['cdkDragLockAxis',] }],
-            rootElementSelector: [{ type: i0.Input, args: ['cdkDragRootElement',] }],
-            boundaryElement: [{ type: i0.Input, args: ['cdkDragBoundary',] }],
-            dragStartDelay: [{ type: i0.Input, args: ['cdkDragStartDelay',] }],
-            freeDragPosition: [{ type: i0.Input, args: ['cdkDragFreeDragPosition',] }],
-            disabled: [{ type: i0.Input, args: ['cdkDragDisabled',] }],
-            constrainPosition: [{ type: i0.Input, args: ['cdkDragConstrainPosition',] }],
-            previewClass: [{ type: i0.Input, args: ['cdkDragPreviewClass',] }],
-            started: [{ type: i0.Output, args: ['cdkDragStarted',] }],
-            released: [{ type: i0.Output, args: ['cdkDragReleased',] }],
-            ended: [{ type: i0.Output, args: ['cdkDragEnded',] }],
-            entered: [{ type: i0.Output, args: ['cdkDragEntered',] }],
-            exited: [{ type: i0.Output, args: ['cdkDragExited',] }],
-            dropped: [{ type: i0.Output, args: ['cdkDragDropped',] }],
-            moved: [{ type: i0.Output, args: ['cdkDragMoved',] }]
-        };
         return CdkDrag;
     }());
+    CdkDrag.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkDrag]',
+                    exportAs: 'cdkDrag',
+                    host: {
+                        'class': 'cdk-drag',
+                        '[class.cdk-drag-disabled]': 'disabled',
+                        '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
+                    },
+                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
+                },] }
+    ];
+    CdkDrag.ctorParameters = function () { return [
+        { type: i0.ElementRef },
+        { type: undefined, decorators: [{ type: i0.Inject, args: [CDK_DROP_LIST,] }, { type: i0.Optional }, { type: i0.SkipSelf }] },
+        { type: undefined, decorators: [{ type: i0.Inject, args: [i1.DOCUMENT,] }] },
+        { type: i0.NgZone },
+        { type: i0.ViewContainerRef },
+        { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] },
+        { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
+        { type: DragDrop },
+        { type: i0.ChangeDetectorRef },
+        { type: CdkDragHandle, decorators: [{ type: i0.Optional }, { type: i0.Self }, { type: i0.Inject, args: [CDK_DRAG_HANDLE,] }] }
+    ]; };
+    CdkDrag.propDecorators = {
+        _handles: [{ type: i0.ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],
+        _previewTemplate: [{ type: i0.ContentChild, args: [CDK_DRAG_PREVIEW,] }],
+        _placeholderTemplate: [{ type: i0.ContentChild, args: [CDK_DRAG_PLACEHOLDER,] }],
+        data: [{ type: i0.Input, args: ['cdkDragData',] }],
+        lockAxis: [{ type: i0.Input, args: ['cdkDragLockAxis',] }],
+        rootElementSelector: [{ type: i0.Input, args: ['cdkDragRootElement',] }],
+        boundaryElement: [{ type: i0.Input, args: ['cdkDragBoundary',] }],
+        dragStartDelay: [{ type: i0.Input, args: ['cdkDragStartDelay',] }],
+        freeDragPosition: [{ type: i0.Input, args: ['cdkDragFreeDragPosition',] }],
+        disabled: [{ type: i0.Input, args: ['cdkDragDisabled',] }],
+        constrainPosition: [{ type: i0.Input, args: ['cdkDragConstrainPosition',] }],
+        previewClass: [{ type: i0.Input, args: ['cdkDragPreviewClass',] }],
+        started: [{ type: i0.Output, args: ['cdkDragStarted',] }],
+        released: [{ type: i0.Output, args: ['cdkDragReleased',] }],
+        ended: [{ type: i0.Output, args: ['cdkDragEnded',] }],
+        entered: [{ type: i0.Output, args: ['cdkDragEntered',] }],
+        exited: [{ type: i0.Output, args: ['cdkDragExited',] }],
+        dropped: [{ type: i0.Output, args: ['cdkDragDropped',] }],
+        moved: [{ type: i0.Output, args: ['cdkDragMoved',] }]
+    };
     /** Gets the closest ancestor of an element that matches a selector. */
     function getClosestMatchingAncestor(element, selector) {
         var currentElement = element.parentElement;
@@ -3511,32 +3570,32 @@
     var DragDropModule = /** @class */ (function () {
         function DragDropModule() {
         }
-        DragDropModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        declarations: [
-                            CdkDropList,
-                            CdkDropListGroup,
-                            CdkDrag,
-                            CdkDragHandle,
-                            CdkDragPreview,
-                            CdkDragPlaceholder,
-                        ],
-                        exports: [
-                            i2.CdkScrollableModule,
-                            CdkDropList,
-                            CdkDropListGroup,
-                            CdkDrag,
-                            CdkDragHandle,
-                            CdkDragPreview,
-                            CdkDragPlaceholder,
-                        ],
-                        providers: [
-                            DragDrop,
-                        ]
-                    },] }
-        ];
         return DragDropModule;
     }());
+    DragDropModule.decorators = [
+        { type: i0.NgModule, args: [{
+                    declarations: [
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    exports: [
+                        i2.CdkScrollableModule,
+                        CdkDropList,
+                        CdkDropListGroup,
+                        CdkDrag,
+                        CdkDragHandle,
+                        CdkDragPreview,
+                        CdkDragPlaceholder,
+                    ],
+                    providers: [
+                        DragDrop,
+                    ]
+                },] }
+    ];
 
     /**
      * @license

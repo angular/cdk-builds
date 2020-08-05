@@ -21,12 +21,12 @@
         MutationObserverFactory.prototype.create = function (callback) {
             return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
         };
-        MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
-        MutationObserverFactory.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
         return MutationObserverFactory;
     }());
+    MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+    MutationObserverFactory.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
     /** An injectable service that allows watching elements for changes to their content. */
     var ContentObserver = /** @class */ (function () {
         function ContentObserver(_mutationObserverFactory) {
@@ -95,15 +95,15 @@
                 this._observedElements.delete(element);
             }
         };
-        ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
-        ContentObserver.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        ContentObserver.ctorParameters = function () { return [
-            { type: MutationObserverFactory }
-        ]; };
         return ContentObserver;
     }());
+    ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+    ContentObserver.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    ContentObserver.ctorParameters = function () { return [
+        { type: MutationObserverFactory }
+    ]; };
     /**
      * Directive that triggers a callback whenever the content of
      * its associated element has changed.
@@ -167,36 +167,36 @@
                 this._currentSubscription.unsubscribe();
             }
         };
-        CdkObserveContent.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkObserveContent]',
-                        exportAs: 'cdkObserveContent',
-                    },] }
-        ];
-        CdkObserveContent.ctorParameters = function () { return [
-            { type: ContentObserver },
-            { type: i0.ElementRef },
-            { type: i0.NgZone }
-        ]; };
-        CdkObserveContent.propDecorators = {
-            event: [{ type: i0.Output, args: ['cdkObserveContent',] }],
-            disabled: [{ type: i0.Input, args: ['cdkObserveContentDisabled',] }],
-            debounce: [{ type: i0.Input }]
-        };
         return CdkObserveContent;
     }());
+    CdkObserveContent.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkObserveContent]',
+                    exportAs: 'cdkObserveContent',
+                },] }
+    ];
+    CdkObserveContent.ctorParameters = function () { return [
+        { type: ContentObserver },
+        { type: i0.ElementRef },
+        { type: i0.NgZone }
+    ]; };
+    CdkObserveContent.propDecorators = {
+        event: [{ type: i0.Output, args: ['cdkObserveContent',] }],
+        disabled: [{ type: i0.Input, args: ['cdkObserveContentDisabled',] }],
+        debounce: [{ type: i0.Input }]
+    };
     var ObserversModule = /** @class */ (function () {
         function ObserversModule() {
         }
-        ObserversModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        exports: [CdkObserveContent],
-                        declarations: [CdkObserveContent],
-                        providers: [MutationObserverFactory]
-                    },] }
-        ];
         return ObserversModule;
     }());
+    ObserversModule.decorators = [
+        { type: i0.NgModule, args: [{
+                    exports: [CdkObserveContent],
+                    declarations: [CdkObserveContent],
+                    providers: [MutationObserverFactory]
+                },] }
+    ];
 
     /**
      * @license

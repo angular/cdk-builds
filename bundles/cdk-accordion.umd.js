@@ -58,18 +58,18 @@
                 this._openCloseAllActions.next(expanded);
             }
         };
-        CdkAccordion.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'cdk-accordion, [cdkAccordion]',
-                        exportAs: 'cdkAccordion',
-                        providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }],
-                    },] }
-        ];
-        CdkAccordion.propDecorators = {
-            multi: [{ type: core.Input }]
-        };
         return CdkAccordion;
     }());
+    CdkAccordion.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-accordion, [cdkAccordion]',
+                    exportAs: 'cdkAccordion',
+                    providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }],
+                },] }
+    ];
+    CdkAccordion.propDecorators = {
+        multi: [{ type: core.Input }]
+    };
 
     /**
      * @license
@@ -195,32 +195,32 @@
                 }
             });
         };
-        CdkAccordionItem.decorators = [
-            { type: core.Directive, args: [{
-                        selector: 'cdk-accordion-item, [cdkAccordionItem]',
-                        exportAs: 'cdkAccordionItem',
-                        providers: [
-                            // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
-                            // registering to the same accordion.
-                            { provide: CDK_ACCORDION, useValue: ɵ0 },
-                        ],
-                    },] }
-        ];
-        CdkAccordionItem.ctorParameters = function () { return [
-            { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.Inject, args: [CDK_ACCORDION,] }, { type: core.SkipSelf }] },
-            { type: core.ChangeDetectorRef },
-            { type: collections.UniqueSelectionDispatcher }
-        ]; };
-        CdkAccordionItem.propDecorators = {
-            closed: [{ type: core.Output }],
-            opened: [{ type: core.Output }],
-            destroyed: [{ type: core.Output }],
-            expandedChange: [{ type: core.Output }],
-            expanded: [{ type: core.Input }],
-            disabled: [{ type: core.Input }]
-        };
         return CdkAccordionItem;
     }());
+    CdkAccordionItem.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-accordion-item, [cdkAccordionItem]',
+                    exportAs: 'cdkAccordionItem',
+                    providers: [
+                        // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
+                        // registering to the same accordion.
+                        { provide: CDK_ACCORDION, useValue: ɵ0 },
+                    ],
+                },] }
+    ];
+    CdkAccordionItem.ctorParameters = function () { return [
+        { type: CdkAccordion, decorators: [{ type: core.Optional }, { type: core.Inject, args: [CDK_ACCORDION,] }, { type: core.SkipSelf }] },
+        { type: core.ChangeDetectorRef },
+        { type: collections.UniqueSelectionDispatcher }
+    ]; };
+    CdkAccordionItem.propDecorators = {
+        closed: [{ type: core.Output }],
+        opened: [{ type: core.Output }],
+        destroyed: [{ type: core.Output }],
+        expandedChange: [{ type: core.Output }],
+        expanded: [{ type: core.Input }],
+        disabled: [{ type: core.Input }]
+    };
 
     /**
      * @license
@@ -232,14 +232,14 @@
     var CdkAccordionModule = /** @class */ (function () {
         function CdkAccordionModule() {
         }
-        CdkAccordionModule.decorators = [
-            { type: core.NgModule, args: [{
-                        exports: [CdkAccordion, CdkAccordionItem],
-                        declarations: [CdkAccordion, CdkAccordionItem],
-                    },] }
-        ];
         return CdkAccordionModule;
     }());
+    CdkAccordionModule.decorators = [
+        { type: core.NgModule, args: [{
+                    exports: [CdkAccordion, CdkAccordionItem],
+                    declarations: [CdkAccordion, CdkAccordionItem],
+                },] }
+    ];
 
     /**
      * @license

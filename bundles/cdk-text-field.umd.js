@@ -78,16 +78,16 @@
             var _this = this;
             this._monitoredElements.forEach(function (_info, element) { return _this.stopMonitoring(element); });
         };
-        AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
-        AutofillMonitor.decorators = [
-            { type: i0.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        AutofillMonitor.ctorParameters = function () { return [
-            { type: i1.Platform },
-            { type: i0.NgZone }
-        ]; };
         return AutofillMonitor;
     }());
+    AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+    AutofillMonitor.decorators = [
+        { type: i0.Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    AutofillMonitor.ctorParameters = function () { return [
+        { type: i1.Platform },
+        { type: i0.NgZone }
+    ]; };
     /** A directive that can be used to monitor the autofill state of an input. */
     var CdkAutofill = /** @class */ (function () {
         function CdkAutofill(_elementRef, _autofillMonitor) {
@@ -105,20 +105,20 @@
         CdkAutofill.prototype.ngOnDestroy = function () {
             this._autofillMonitor.stopMonitoring(this._elementRef);
         };
-        CdkAutofill.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: '[cdkAutofill]',
-                    },] }
-        ];
-        CdkAutofill.ctorParameters = function () { return [
-            { type: i0.ElementRef },
-            { type: AutofillMonitor }
-        ]; };
-        CdkAutofill.propDecorators = {
-            cdkAutofill: [{ type: i0.Output }]
-        };
         return CdkAutofill;
     }());
+    CdkAutofill.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: '[cdkAutofill]',
+                },] }
+    ];
+    CdkAutofill.ctorParameters = function () { return [
+        { type: i0.ElementRef },
+        { type: AutofillMonitor }
+    ]; };
+    CdkAutofill.propDecorators = {
+        cdkAutofill: [{ type: i0.Output }]
+    };
 
     /**
      * @license
@@ -353,32 +353,32 @@
                 textarea.setSelectionRange(selectionStart, selectionEnd);
             }
         };
-        CdkTextareaAutosize.decorators = [
-            { type: i0.Directive, args: [{
-                        selector: 'textarea[cdkTextareaAutosize]',
-                        exportAs: 'cdkTextareaAutosize',
-                        host: {
-                            'class': 'cdk-textarea-autosize',
-                            // Textarea elements that have the directive applied should have a single row by default.
-                            // Browsers normally show two rows by default and therefore this limits the minRows binding.
-                            'rows': '1',
-                        },
-                    },] }
-        ];
-        CdkTextareaAutosize.ctorParameters = function () { return [
-            { type: i0.ElementRef },
-            { type: i1.Platform },
-            { type: i0.NgZone },
-            { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [common.DOCUMENT,] }] }
-        ]; };
-        CdkTextareaAutosize.propDecorators = {
-            minRows: [{ type: i0.Input, args: ['cdkAutosizeMinRows',] }],
-            maxRows: [{ type: i0.Input, args: ['cdkAutosizeMaxRows',] }],
-            enabled: [{ type: i0.Input, args: ['cdkTextareaAutosize',] }],
-            _noopInputHandler: [{ type: i0.HostListener, args: ['input',] }]
-        };
         return CdkTextareaAutosize;
     }());
+    CdkTextareaAutosize.decorators = [
+        { type: i0.Directive, args: [{
+                    selector: 'textarea[cdkTextareaAutosize]',
+                    exportAs: 'cdkTextareaAutosize',
+                    host: {
+                        'class': 'cdk-textarea-autosize',
+                        // Textarea elements that have the directive applied should have a single row by default.
+                        // Browsers normally show two rows by default and therefore this limits the minRows binding.
+                        'rows': '1',
+                    },
+                },] }
+    ];
+    CdkTextareaAutosize.ctorParameters = function () { return [
+        { type: i0.ElementRef },
+        { type: i1.Platform },
+        { type: i0.NgZone },
+        { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [common.DOCUMENT,] }] }
+    ]; };
+    CdkTextareaAutosize.propDecorators = {
+        minRows: [{ type: i0.Input, args: ['cdkAutosizeMinRows',] }],
+        maxRows: [{ type: i0.Input, args: ['cdkAutosizeMaxRows',] }],
+        enabled: [{ type: i0.Input, args: ['cdkTextareaAutosize',] }],
+        _noopInputHandler: [{ type: i0.HostListener, args: ['input',] }]
+    };
 
     /**
      * @license
@@ -390,15 +390,15 @@
     var TextFieldModule = /** @class */ (function () {
         function TextFieldModule() {
         }
-        TextFieldModule.decorators = [
-            { type: i0.NgModule, args: [{
-                        declarations: [CdkAutofill, CdkTextareaAutosize],
-                        imports: [i1.PlatformModule],
-                        exports: [CdkAutofill, CdkTextareaAutosize],
-                    },] }
-        ];
         return TextFieldModule;
     }());
+    TextFieldModule.decorators = [
+        { type: i0.NgModule, args: [{
+                    declarations: [CdkAutofill, CdkTextareaAutosize],
+                    imports: [i1.PlatformModule],
+                    exports: [CdkAutofill, CdkTextareaAutosize],
+                },] }
+    ];
 
     /**
      * @license
