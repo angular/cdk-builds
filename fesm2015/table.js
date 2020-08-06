@@ -604,13 +604,17 @@ class StickyStyler {
      * @param direction The directionality context of the table (ltr/rtl); affects column positioning
      *     by reversing left/right positions.
      * @param _isBrowser Whether the table is currently being rendered on the server or the client.
+     * @param _needsPositionStickyOnElement Whether we need to specify position: sticky on cells
+     *     using inline styles. If false, it is assumed that position: sticky is included in
+     *     the component stylesheet for _stickCellCss.
      */
-    constructor(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser = true) {
+    constructor(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true) {
         this._isNativeHtmlTable = _isNativeHtmlTable;
         this._stickCellCss = _stickCellCss;
         this.direction = direction;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._isBrowser = _isBrowser;
+        this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
     }
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -755,12 +759,20 @@ class StickyStyler {
         for (const dir of stickyDirections) {
             element.style[dir] = '';
         }
-        element.style.zIndex = this._getCalculatedZIndex(element);
         // If the element no longer has any more sticky directions, remove sticky positioning and
         // the sticky CSS class.
-        const hasDirection = STICKY_DIRECTIONS.some(dir => !!element.style[dir]);
-        if (!hasDirection) {
-            element.style.position = '';
+        // Short-circuit checking element.style[dir] for stickyDirections as they
+        // were already removed above.
+        const hasDirection = STICKY_DIRECTIONS.some(dir => stickyDirections.indexOf(dir) === -1 && element.style[dir]);
+        if (hasDirection) {
+            element.style.zIndex = this._getCalculatedZIndex(element);
+        }
+        else {
+            // When not hasDirection, _getCalculatedZIndex will always return ''.
+            element.style.zIndex = '';
+            if (this._needsPositionStickyOnElement) {
+                element.style.position = '';
+            }
             element.classList.remove(this._stickCellCss);
         }
     }
@@ -772,8 +784,10 @@ class StickyStyler {
     _addStickyStyle(element, dir, dirValue) {
         element.classList.add(this._stickCellCss);
         element.style[dir] = `${dirValue}px`;
-        element.style.cssText += 'position: -webkit-sticky; position: sticky; ';
         element.style.zIndex = this._getCalculatedZIndex(element);
+        if (this._needsPositionStickyOnElement) {
+            element.style.cssText += 'position: -webkit-sticky; position: sticky; ';
+        }
     }
     /**
      * Calculate what the z-index should be for the element, depending on what directions (top,
@@ -1088,6 +1102,12 @@ class CdkTable {
          * table subclasses.
          */
         this.stickyCssClass = 'cdk-table-sticky';
+        /**
+         * Whether to manually add positon: sticky to all sticky cell elements. Not needed if
+         * the position is set in a selector associated with the value of stickyCssClass. May be
+         * overridden by table subclasses
+         */
+        this.needsPositionStickyOnElement = true;
         /** Whether the no data row is currently showing anything. */
         this._isShowingNoDataRow = false;
         this._multiTemplateDataRows = false;
@@ -1719,7 +1739,7 @@ class CdkTable {
      */
     _setupStickyStyler() {
         const direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(value => {

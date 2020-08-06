@@ -495,9 +495,9 @@ class CdkTreeNode {
         /** Emits when the node's data has changed. */
         this._dataChanges = new Subject();
         /**
-         * The role of the node should be 'group' if it's an internal node,
-         * and 'treeitem' if it's a leaf node.
+         * The role of the node should always be 'treeitem'.
          */
+        // TODO: mark as deprecated
         this.role = 'treeitem';
         CdkTreeNode.mostRecentTreeNode = this;
     }
@@ -530,26 +530,12 @@ class CdkTreeNode {
     focus() {
         this._elementRef.nativeElement.focus();
     }
+    // TODO: role should eventually just be set in the component host
     _setRoleFromData() {
-        if (this._tree.treeControl.isExpandable) {
-            this.role = this._tree.treeControl.isExpandable(this._data) ? 'group' : 'treeitem';
+        if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren) {
+            throw getTreeControlFunctionsMissingError();
         }
-        else {
-            if (!this._tree.treeControl.getChildren) {
-                throw getTreeControlFunctionsMissingError();
-            }
-            const childrenNodes = this._tree.treeControl.getChildren(this._data);
-            if (Array.isArray(childrenNodes)) {
-                this._setRoleFromChildren(childrenNodes);
-            }
-            else if (isObservable(childrenNodes)) {
-                childrenNodes.pipe(takeUntil(this._destroyed))
-                    .subscribe(children => this._setRoleFromChildren(children));
-            }
-        }
-    }
-    _setRoleFromChildren(children) {
-        this.role = children && children.length ? 'group' : 'treeitem';
+        this.role = 'treeitem';
     }
 }
 /**
@@ -563,7 +549,7 @@ CdkTreeNode.decorators = [
                 exportAs: 'cdkTreeNode',
                 host: {
                     '[attr.aria-expanded]': 'isExpanded',
-                    '[attr.aria-level]': 'role === "treeitem" ? level : null',
+                    '[attr.aria-level]': 'level + 1',
                     '[attr.role]': 'role',
                     'class': 'cdk-tree-node',
                 },

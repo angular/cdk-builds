@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, ViewContainerRef, TrackByFunction } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
@@ -106,8 +106,7 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     get isExpanded(): boolean;
     get level(): number;
     /**
-     * The role of the node should be 'group' if it's an internal node,
-     * and 'treeitem' if it's a leaf node.
+     * The role of the node should always be 'treeitem'.
      */
     role: 'treeitem' | 'group';
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>);
@@ -115,5 +114,4 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;
     protected _setRoleFromData(): void;
-    protected _setRoleFromChildren(children: T[]): void;
 }

@@ -27,6 +27,7 @@ export declare class StickyStyler {
     direction: Direction;
     private _coalescedStyleScheduler;
     private _isBrowser;
+    private readonly _needsPositionStickyOnElement;
     /**
      * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
      *     that uses the native `<table>` element.
@@ -35,8 +36,11 @@ export declare class StickyStyler {
      * @param direction The directionality context of the table (ltr/rtl); affects column positioning
      *     by reversing left/right positions.
      * @param _isBrowser Whether the table is currently being rendered on the server or the client.
+     * @param _needsPositionStickyOnElement Whether we need to specify position: sticky on cells
+     *     using inline styles. If false, it is assumed that position: sticky is included in
+     *     the component stylesheet for _stickCellCss.
      */
-    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean);
+    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean, _needsPositionStickyOnElement?: boolean);
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
      * style, setting the zIndex to 0, and unsetting each provided sticky direction.

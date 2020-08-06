@@ -199,6 +199,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * table subclasses.
      */
     protected stickyCssClass: string;
+    /**
+     * Whether to manually add positon: sticky to all sticky cell elements. Not needed if
+     * the position is set in a selector associated with the value of stickyCssClass. May be
+     * overridden by table subclasses
+     */
+    protected needsPositionStickyOnElement: boolean;
     /** Whether the no data row is currently showing anything. */
     private _isShowingNoDataRow;
     /**
