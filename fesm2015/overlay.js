@@ -1656,8 +1656,8 @@ class FlexibleConnectedPositionStrategy {
         const viewport = this._viewportRect;
         // Determine how much the overlay goes outside the viewport on each
         // side, which we'll use to decide which direction to push it.
-        const overflowRight = Math.max(start.x + overlay.width - viewport.right, 0);
-        const overflowBottom = Math.max(start.y + overlay.height - viewport.bottom, 0);
+        const overflowRight = Math.max(start.x + overlay.width - viewport.width, 0);
+        const overflowBottom = Math.max(start.y + overlay.height - viewport.height, 0);
         const overflowTop = Math.max(viewport.top - scrollPosition.top - start.y, 0);
         const overflowLeft = Math.max(viewport.left - scrollPosition.left - start.x, 0);
         // Amount by which to push the overlay in each axis such that it remains on-screen.
