@@ -209,6 +209,8 @@
             this._elementRef = _elementRef;
             /** Emits when the component is destroyed. */
             this._destroyed = new rxjs.Subject();
+            /** Steps that belong to the current stepper, excluding ones from nested steppers. */
+            this.steps = new core.QueryList();
             this._linear = false;
             this._selectedIndex = 0;
             /** Event emitted when the selected step has changed. */
@@ -217,14 +219,6 @@
             this._groupId = nextId++;
             this._document = _document;
         }
-        Object.defineProperty(CdkStepper.prototype, "steps", {
-            /** The list of step components that the stepper is holding. */
-            get: function () {
-                return this._steps;
-            },
-            enumerable: false,
-            configurable: true
-        });
         Object.defineProperty(CdkStepper.prototype, "linear", {
             /** Whether the validity of previous steps should be checked or not. */
             get: function () {
@@ -243,7 +237,7 @@
             },
             set: function (index) {
                 var newIndex = coercion.coerceNumberProperty(index);
-                if (this.steps) {
+                if (this.steps && this._steps) {
                     // Ensure that the index can't be out of bounds.
                     if (newIndex < 0 || newIndex > this.steps.length - 1) {
                         throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
@@ -272,6 +266,15 @@
             enumerable: false,
             configurable: true
         });
+        CdkStepper.prototype.ngAfterContentInit = function () {
+            var _this = this;
+            this._steps.changes
+                .pipe(operators.startWith(this._steps), operators.takeUntil(this._destroyed))
+                .subscribe(function (steps) {
+                _this.steps.reset(steps.filter(function (step) { return step._stepper === _this; }));
+                _this.steps.notifyOnChanges();
+            });
+        };
         CdkStepper.prototype.ngAfterViewInit = function () {
             var _this = this;
             // Note that while the step headers are content children by default, any components that
@@ -284,13 +287,15 @@
                 .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
                 .subscribe(function (direction) { return _this._keyManager.withHorizontalOrientation(direction); });
             this._keyManager.updateActiveItem(this._selectedIndex);
-            this.steps.changes.pipe(operators.takeUntil(this._destroyed)).subscribe(function () {
+            // No need to `takeUntil` here, because we're the ones destroying `steps`.
+            this.steps.changes.subscribe(function () {
                 if (!_this.selected) {
                     _this._selectedIndex = Math.max(_this._selectedIndex - 1, 0);
                 }
             });
         };
         CdkStepper.prototype.ngOnDestroy = function () {
+            this.steps.destroy();
             this._destroyed.next();
             this._destroyed.complete();
         };

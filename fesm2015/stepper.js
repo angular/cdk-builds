@@ -3,7 +3,7 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER, HOME, END } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
-import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
+import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, QueryList, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
@@ -190,6 +190,8 @@ class CdkStepper {
         this._elementRef = _elementRef;
         /** Emits when the component is destroyed. */
         this._destroyed = new Subject();
+        /** Steps that belong to the current stepper, excluding ones from nested steppers. */
+        this.steps = new QueryList();
         this._linear = false;
         this._selectedIndex = 0;
         /** Event emitted when the selected step has changed. */
@@ -197,10 +199,6 @@ class CdkStepper {
         this._orientation = 'horizontal';
         this._groupId = nextId++;
         this._document = _document;
-    }
-    /** The list of step components that the stepper is holding. */
-    get steps() {
-        return this._steps;
     }
     /** Whether the validity of previous steps should be checked or not. */
     get linear() {
@@ -215,7 +213,7 @@ class CdkStepper {
     }
     set selectedIndex(index) {
         const newIndex = coerceNumberProperty(index);
-        if (this.steps) {
+        if (this.steps && this._steps) {
             // Ensure that the index can't be out of bounds.
             if (newIndex < 0 || newIndex > this.steps.length - 1) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
@@ -237,6 +235,14 @@ class CdkStepper {
     set selected(step) {
         this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
     }
+    ngAfterContentInit() {
+        this._steps.changes
+            .pipe(startWith(this._steps), takeUntil(this._destroyed))
+            .subscribe((steps) => {
+            this.steps.reset(steps.filter(step => step._stepper === this));
+            this.steps.notifyOnChanges();
+        });
+    }
     ngAfterViewInit() {
         // Note that while the step headers are content children by default, any components that
         // extend this one might have them as view children. We initialize the keyboard handling in
@@ -248,13 +254,15 @@ class CdkStepper {
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
             .subscribe(direction => this._keyManager.withHorizontalOrientation(direction));
         this._keyManager.updateActiveItem(this._selectedIndex);
-        this.steps.changes.pipe(takeUntil(this._destroyed)).subscribe(() => {
+        // No need to `takeUntil` here, because we're the ones destroying `steps`.
+        this.steps.changes.subscribe(() => {
             if (!this.selected) {
                 this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
             }
         });
     }
     ngOnDestroy() {
+        this.steps.destroy();
         this._destroyed.next();
         this._destroyed.complete();
     }
