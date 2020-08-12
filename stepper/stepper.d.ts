@@ -8,7 +8,7 @@
 import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
-import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef, AfterContentInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CdkStepLabel } from './step-label';
 /**
@@ -61,7 +61,7 @@ export interface StepperOptions {
     displayDefaultIndicatorType?: boolean;
 }
 export declare class CdkStep implements OnChanges {
-    private _stepper;
+    _stepper: CdkStepper;
     private _stepperOptions;
     _showError: boolean;
     _displayDefaultIndicatorType: boolean;
@@ -116,7 +116,7 @@ export declare class CdkStep implements OnChanges {
     static ngAcceptInputType_optional: BooleanInput;
     static ngAcceptInputType_completed: BooleanInput;
 }
-export declare class CdkStepper implements AfterViewInit, OnDestroy {
+export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
     private _elementRef?;
@@ -129,14 +129,10 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
      * constructor param is required.
      */
     private _document;
-    /**
-     * The list of step components that the stepper is holding.
-     * @deprecated use `steps` instead
-     * @breaking-change 9.0.0 remove this property
-     */
+    /** Full list of steps inside the stepper, including inside nested steppers. */
     _steps: QueryList<CdkStep>;
-    /** The list of step components that the stepper is holding. */
-    get steps(): QueryList<CdkStep>;
+    /** Steps that belong to the current stepper, excluding ones from nested steppers. */
+    readonly steps: QueryList<CdkStep>;
     /**
      * The list of step headers of the steps in the stepper.
      * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.
@@ -160,6 +156,7 @@ export declare class CdkStepper implements AfterViewInit, OnDestroy {
     _groupId: number;
     protected _orientation: StepperOrientation;
     constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef?: ElementRef<HTMLElement> | undefined, _document?: any);
+    ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     /** Selects and focuses the next step in list. */
