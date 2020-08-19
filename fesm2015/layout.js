@@ -1,8 +1,8 @@
 import { NgModule, ɵɵdefineInjectable, ɵɵinject, Injectable, NgZone } from '@angular/core';
-import { Platform } from '@angular/cdk/platform';
+import { coerceArray } from '@angular/cdk/coercion';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
-import { coerceArray } from '@angular/cdk/coercion';
+import { Platform } from '@angular/cdk/platform';
 
 /**
  * @license
@@ -137,14 +137,14 @@ class BreakpointObserver {
         let stateObservable = combineLatest(observables);
         // Emit the first state immediately, and then debounce the subsequent emissions.
         stateObservable = concat(stateObservable.pipe(take(1)), stateObservable.pipe(skip(1), debounceTime(0)));
-        return stateObservable.pipe(map((breakpointStates) => {
+        return stateObservable.pipe(map(breakpointStates => {
             const response = {
                 matches: false,
                 breakpoints: {},
             };
-            breakpointStates.forEach((state) => {
-                response.matches = response.matches || state.matches;
-                response.breakpoints[state.query] = state.matches;
+            breakpointStates.forEach(({ matches, query }) => {
+                response.matches = response.matches || matches;
+                response.breakpoints[query] = matches;
             });
             return response;
         }));
@@ -168,7 +168,7 @@ class BreakpointObserver {
             return () => {
                 mql.removeListener(handler);
             };
-        }).pipe(startWith(mql), map((nextMql) => ({ query, matches: nextMql.matches })), takeUntil(this._destroySubject));
+        }).pipe(startWith(mql), map(({ matches }) => ({ query, matches })), takeUntil(this._destroySubject));
         // Add the MediaQueryList to the set of queries.
         const output = { observable: queryObservable, mql };
         this._queries.set(query, output);
@@ -188,7 +188,7 @@ BreakpointObserver.ctorParameters = () => [
  * separated.
  */
 function splitQueries(queries) {
-    return queries.map((query) => query.split(','))
+    return queries.map(query => query.split(','))
         .reduce((a1, a2) => a1.concat(a2))
         .map(query => query.trim());
 }

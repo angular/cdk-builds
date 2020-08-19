@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgZone, OnDestroy } from '@angular/core';
-import { MediaMatcher } from './media-matcher';
 import { Observable } from 'rxjs';
+import { MediaMatcher } from './media-matcher';
 /** The current state of a layout breakpoint. */
 export interface BreakpointState {
     /** Whether the breakpoint is currently matching. */
@@ -36,14 +36,14 @@ export declare class BreakpointObserver implements OnDestroy {
      * @param value One or more media queries to check.
      * @returns Whether any of the media queries match.
      */
-    isMatched(value: string | string[]): boolean;
+    isMatched(value: string | readonly string[]): boolean;
     /**
      * Gets an observable of results for the given queries that will emit new results for any changes
      * in matching of the given queries.
      * @param value One or more media queries to check.
      * @returns A stream of matches for the given queries.
      */
-    observe(value: string | string[]): Observable<BreakpointState>;
+    observe(value: string | readonly string[]): Observable<BreakpointState>;
     /** Registers a specific query to be listened for. */
     private _registerQuery;
 }

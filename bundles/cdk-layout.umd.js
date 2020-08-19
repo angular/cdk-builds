@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/coercion')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/coercion'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}), global.ng.core, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.coercion));
-}(this, (function (exports, i0, i1, rxjs, operators, coercion) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', '@angular/cdk/platform'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}), global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.platform));
+}(this, (function (exports, i0, coercion, rxjs, operators, i1) { 'use strict';
 
     /**
      * @license
@@ -148,9 +148,10 @@
                     matches: false,
                     breakpoints: {},
                 };
-                breakpointStates.forEach(function (state) {
-                    response.matches = response.matches || state.matches;
-                    response.breakpoints[state.query] = state.matches;
+                breakpointStates.forEach(function (_a) {
+                    var matches = _a.matches, query = _a.query;
+                    response.matches = response.matches || matches;
+                    response.breakpoints[query] = matches;
                 });
                 return response;
             }));
@@ -175,7 +176,10 @@
                 return function () {
                     mql.removeListener(handler);
                 };
-            }).pipe(operators.startWith(mql), operators.map(function (nextMql) { return ({ query: query, matches: nextMql.matches }); }), operators.takeUntil(this._destroySubject));
+            }).pipe(operators.startWith(mql), operators.map(function (_a) {
+                var matches = _a.matches;
+                return ({ query: query, matches: matches });
+            }), operators.takeUntil(this._destroySubject));
             // Add the MediaQueryList to the set of queries.
             var output = { observable: queryObservable, mql: mql };
             this._queries.set(query, output);
