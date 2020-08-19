@@ -81,8 +81,11 @@ export interface TestElement {
      * and attempts to add the string to the Element's value.
      */
     sendKeys(modifiers: ModifierKeys, ...keys: (string | TestKey)[]): Promise<void>;
-    /** Gets the text from the element. */
-    text(): Promise<string>;
+    /**
+     * Gets the text from the element.
+     * @param options Options that affect what text is included.
+     */
+    text(options?: TextOptions): Promise<string>;
     /** Gets the value for the given attribute from the element. */
     getAttribute(name: string): Promise<string | null>;
     /** Checks whether the element has the given class. */
@@ -100,4 +103,8 @@ export interface TestElement {
     matchesSelector(selector: string): Promise<boolean>;
     /** Checks whether the element is focused. */
     isFocused(): Promise<boolean>;
+}
+export interface TextOptions {
+    /** Optional selector for elements to exclude. */
+    exclude?: string;
 }

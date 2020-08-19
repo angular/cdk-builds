@@ -891,13 +891,16 @@
                 });
             });
         };
-        UnitTestElement.prototype.text = function () {
+        UnitTestElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();
+                            if (options === null || options === void 0 ? void 0 : options.exclude) {
+                                return [2 /*return*/, testing._getTextWithExcludedElements(this.element, options.exclude)];
+                            }
                             return [2 /*return*/, (this.element.textContent || '').trim()];
                     }
                 });

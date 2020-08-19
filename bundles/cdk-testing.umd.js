@@ -1024,6 +1024,29 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /**
+     * Gets text of element excluding certain selectors within the element.
+     * @param element Element to get text from,
+     * @param excludeSelector Selector identifying which elements to exclude,
+     */
+    function _getTextWithExcludedElements(element, excludeSelector) {
+        var _a;
+        var clone = element.cloneNode(true);
+        var exclusions = clone.querySelectorAll(excludeSelector);
+        for (var i = 0; i < exclusions.length; i++) {
+            var child = exclusions[i];
+            (_a = child.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(child);
+        }
+        return (clone.textContent || '').trim();
+    }
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
 
     /**
      * @license
@@ -1037,6 +1060,7 @@
     exports.ContentContainerComponentHarness = ContentContainerComponentHarness;
     exports.HarnessEnvironment = HarnessEnvironment;
     exports.HarnessPredicate = HarnessPredicate;
+    exports._getTextWithExcludedElements = _getTextWithExcludedElements;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

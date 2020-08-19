@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementDimensions, ModifierKeys, TestElement, TestKey } from '@angular/cdk/testing';
+import { ElementDimensions, ModifierKeys, TestElement, TestKey, TextOptions } from '@angular/cdk/testing';
 /** A `TestElement` implementation for unit tests. */
 export declare class UnitTestElement implements TestElement {
     readonly element: Element;
@@ -20,7 +20,7 @@ export declare class UnitTestElement implements TestElement {
     mouseAway(): Promise<void>;
     sendKeys(...keys: (string | TestKey)[]): Promise<void>;
     sendKeys(modifiers: ModifierKeys, ...keys: (string | TestKey)[]): Promise<void>;
-    text(): Promise<string>;
+    text(options?: TextOptions): Promise<string>;
     getAttribute(name: string): Promise<string | null>;
     hasClass(name: string): Promise<boolean>;
     getDimensions(): Promise<ElementDimensions>;

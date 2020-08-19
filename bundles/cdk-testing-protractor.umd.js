@@ -469,9 +469,12 @@
                 });
             });
         };
-        ProtractorElement.prototype.text = function () {
+        ProtractorElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
+                    if (options === null || options === void 0 ? void 0 : options.exclude) {
+                        return [2 /*return*/, protractor.browser.executeScript(testing._getTextWithExcludedElements, this.element, options.exclude)];
+                    }
                     return [2 /*return*/, this.element.getText()];
                 });
             });

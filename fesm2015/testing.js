@@ -559,6 +559,21 @@ var TestKey;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Gets text of element excluding certain selectors within the element.
+ * @param element Element to get text from,
+ * @param excludeSelector Selector identifying which elements to exclude,
+ */
+function _getTextWithExcludedElements(element, excludeSelector) {
+    var _a;
+    const clone = element.cloneNode(true);
+    const exclusions = clone.querySelectorAll(excludeSelector);
+    for (let i = 0; i < exclusions.length; i++) {
+        let child = exclusions[i];
+        (_a = child.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(child);
+    }
+    return (clone.textContent || '').trim();
+}
 
 /**
  * @license
@@ -568,5 +583,13 @@ var TestKey;
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey };
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements };
 //# sourceMappingURL=testing.js.map

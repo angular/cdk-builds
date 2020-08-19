@@ -1,5 +1,5 @@
 import { __awaiter } from 'tslib';
-import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
+import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
@@ -495,9 +495,12 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
-    text() {
+    text(options) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
+            if (options === null || options === void 0 ? void 0 : options.exclude) {
+                return _getTextWithExcludedElements(this.element, options.exclude);
+            }
             return (this.element.textContent || '').trim();
         });
     }

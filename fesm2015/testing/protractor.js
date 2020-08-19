@@ -1,5 +1,5 @@
 import { __awaiter } from 'tslib';
-import { TestKey, HarnessEnvironment } from '@angular/cdk/testing';
+import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
 import { Key, browser, by, element } from 'protractor';
 
 /**
@@ -132,8 +132,11 @@ class ProtractorElement {
             return this.element.sendKeys(...keys);
         });
     }
-    text() {
+    text(options) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (options === null || options === void 0 ? void 0 : options.exclude) {
+                return browser.executeScript(_getTextWithExcludedElements, this.element, options.exclude);
+            }
             return this.element.getText();
         });
     }
