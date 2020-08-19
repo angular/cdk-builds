@@ -346,7 +346,7 @@ class DragRef {
          * Emits as the user is dragging the item. Use with caution,
          * because this event will fire for every pixel that the user has dragged.
          */
-        this.moved = this._moveEvents.asObservable();
+        this.moved = this._moveEvents;
         /** Handler for the `mousedown`/`touchstart` events. */
         this._pointerDown = (event) => {
             this.beforeStarted.next();
@@ -2970,7 +2970,7 @@ class CdkDrag {
         // element to be in the proper place in the DOM. This is mostly relevant
         // for draggable elements inside portals since they get stamped out in
         // their original DOM position and then they get transferred to the portal.
-        this._ngZone.onStable.asObservable()
+        this._ngZone.onStable
             .pipe(take(1), takeUntil(this._destroyed))
             .subscribe(() => {
             this._updateRootElement();

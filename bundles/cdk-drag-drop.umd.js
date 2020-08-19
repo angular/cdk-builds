@@ -346,7 +346,7 @@
              * Emits as the user is dragging the item. Use with caution,
              * because this event will fire for every pixel that the user has dragged.
              */
-            this.moved = this._moveEvents.asObservable();
+            this.moved = this._moveEvents;
             /** Handler for the `mousedown`/`touchstart` events. */
             this._pointerDown = function (event) {
                 _this.beforeStarted.next();
@@ -3319,7 +3319,7 @@
             // element to be in the proper place in the DOM. This is mostly relevant
             // for draggable elements inside portals since they get stamped out in
             // their original DOM position and then they get transferred to the portal.
-            this._ngZone.onStable.asObservable()
+            this._ngZone.onStable
                 .pipe(operators.take(1), operators.takeUntil(this._destroyed))
                 .subscribe(function () {
                 _this._updateRootElement();

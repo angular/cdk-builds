@@ -855,7 +855,6 @@ class OverlayRef {
         // before attempting to position it, as the position may depend on the size of the rendered
         // content.
         this._ngZone.onStable
-            .asObservable()
             .pipe(take(1))
             .subscribe(() => {
             // The overlay could've been detached before the zone has stabilized.
@@ -956,23 +955,23 @@ class OverlayRef {
     }
     /** Gets an observable that emits when the backdrop has been clicked. */
     backdropClick() {
-        return this._backdropClick.asObservable();
+        return this._backdropClick;
     }
     /** Gets an observable that emits when the overlay has been attached. */
     attachments() {
-        return this._attachments.asObservable();
+        return this._attachments;
     }
     /** Gets an observable that emits when the overlay has been detached. */
     detachments() {
-        return this._detachments.asObservable();
+        return this._detachments;
     }
     /** Gets an observable of keydown events targeted to this overlay. */
     keydownEvents() {
-        return this._keydownEvents.asObservable();
+        return this._keydownEvents;
     }
     /** Gets an observable of pointer events targeted outside this overlay. */
     outsidePointerEvents() {
-        return this._outsidePointerEvents.asObservable();
+        return this._outsidePointerEvents;
     }
     /** Gets the current overlay configuration, which is immutable. */
     getConfig() {
@@ -1163,7 +1162,6 @@ class OverlayRef {
             // might still be animating. This stream helps us avoid interrupting the animation
             // by waiting for the pane to become empty.
             const subscription = this._ngZone.onStable
-                .asObservable()
                 .pipe(takeUntil(merge(this._attachments, this._detachments)))
                 .subscribe(() => {
                 // Needs a couple of checks for the pane and host, because
@@ -1248,7 +1246,7 @@ class FlexibleConnectedPositionStrategy {
         /** Keeps track of the CSS classes that the position strategy has applied on the overlay panel. */
         this._appliedPanelClasses = [];
         /** Observable sequence of position changes. */
-        this.positionChanges = this._positionChanges.asObservable();
+        this.positionChanges = this._positionChanges;
         this.setOrigin(connectedTo);
     }
     /** Ordered list of preferred positions, from most to least desirable. */
@@ -2152,10 +2150,7 @@ class ConnectedPositionStrategy {
             .withPush(false)
             .withViewportMargin(0);
         this.withFallbackPosition(originPos, overlayPos);
-    }
-    /** Emits an event when the connection point changes. */
-    get onPositionChange() {
-        return this._positionStrategy.positionChanges;
+        this.onPositionChange = this._positionStrategy.positionChanges;
     }
     /** Ordered list of preferred positions, from most to least desirable. */
     get positions() {

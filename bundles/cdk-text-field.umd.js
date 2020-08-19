@@ -32,7 +32,7 @@
             var element = coercion.coerceElement(elementOrRef);
             var info = this._monitoredElements.get(element);
             if (info) {
-                return info.subject.asObservable();
+                return info.subject;
             }
             var result = new rxjs.Subject();
             var cssClass = 'cdk-text-field-autofilled';
@@ -61,7 +61,7 @@
                     element.removeEventListener('animationstart', listener, listenerOptions);
                 }
             });
-            return result.asObservable();
+            return result;
         };
         AutofillMonitor.prototype.stopMonitoring = function (elementOrRef) {
             var element = coercion.coerceElement(elementOrRef);

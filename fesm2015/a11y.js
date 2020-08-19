@@ -1130,7 +1130,7 @@ class FocusTrap {
             fn();
         }
         else {
-            this._ngZone.onStable.asObservable().pipe(take(1)).subscribe(fn);
+            this._ngZone.onStable.pipe(take(1)).subscribe(fn);
         }
     }
 }
@@ -1816,7 +1816,7 @@ class FocusMonitor {
                 // robust solution.
                 cachedInfo.checkChildren = true;
             }
-            return cachedInfo.subject.asObservable();
+            return cachedInfo.subject;
         }
         // Create monitored element info.
         const info = {
@@ -1826,7 +1826,7 @@ class FocusMonitor {
         };
         this._elementInfo.set(nativeElement, info);
         this._registerGlobalListeners(info);
-        return info.subject.asObservable();
+        return info.subject;
     }
     stopMonitoring(element) {
         const nativeElement = coerceElement(element);

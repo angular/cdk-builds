@@ -35,7 +35,7 @@ export declare class ConnectedPositionStrategy implements PositionStrategy {
     /** Ordered list of preferred positions, from most to least desirable. */
     _preferredPositions: ConnectionPositionPair[];
     /** Emits an event when the connection point changes. */
-    get onPositionChange(): Observable<ConnectedOverlayPositionChange>;
+    readonly onPositionChange: Observable<ConnectedOverlayPositionChange>;
     constructor(originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition, connectedTo: ElementRef<HTMLElement>, viewportRuler: ViewportRuler, document: Document, platform: Platform, overlayContainer: OverlayContainer);
     /** Ordered list of preferred positions, from most to least desirable. */
     get positions(): ConnectionPositionPair[];
