@@ -248,9 +248,17 @@ function transferData(selector, node, clone, callback) {
         }
     }
 }
+// Counter for unique cloned radio button names.
+let cloneUniqueId = 0;
 /** Transfers the data of one input element to another. */
 function transferInputData(source, clone) {
     clone.value = source.value;
+    // Radio button `name` attributes must be unique for radio button groups
+    // otherwise original radio buttons can lose their checked state
+    // once the clone is inserted in the DOM.
+    if (clone.type === 'radio' && clone.name) {
+        clone.name = `mat-clone-${clone.name}-${cloneUniqueId++}`;
+    }
 }
 /** Transfers the data of one canvas element to another. */
 function transferCanvasData(source, clone) {
