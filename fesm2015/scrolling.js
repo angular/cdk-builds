@@ -705,7 +705,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         /** Emits when the index of the first element visible in the viewport changes. */
         this.scrolledIndexChange = new Observable((observer) => this._scrollStrategy.scrolledIndexChange.subscribe(index => Promise.resolve().then(() => this.ngZone.run(() => observer.next(index)))));
         /** A stream that emits whenever the rendered range changes. */
-        this.renderedRangeStream = this._renderedRangeSubject.asObservable();
+        this.renderedRangeStream = this._renderedRangeSubject;
         /**
          * The total size of all content (in pixels), including content that is not currently rendered.
          */

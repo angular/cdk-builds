@@ -26,7 +26,7 @@ class TaskStateZoneInterceptor {
         /** Subject that can be used to emit a new state change. */
         this._stateSubject = new BehaviorSubject(this._lastState ? this._getTaskStateFromInternalZoneState(this._lastState) : { stable: true });
         /** Public observable that emits whenever the task state changes. */
-        this.state = this._stateSubject.asObservable();
+        this.state = this._stateSubject;
     }
     /** This will be called whenever the task state changes in the intercepted zone. */
     onHasTask(delegate, current, target, hasTaskState) {

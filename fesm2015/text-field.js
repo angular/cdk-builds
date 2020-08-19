@@ -32,7 +32,7 @@ class AutofillMonitor {
         const element = coerceElement(elementOrRef);
         const info = this._monitoredElements.get(element);
         if (info) {
-            return info.subject.asObservable();
+            return info.subject;
         }
         const result = new Subject();
         const cssClass = 'cdk-text-field-autofilled';
@@ -61,7 +61,7 @@ class AutofillMonitor {
                 element.removeEventListener('animationstart', listener, listenerOptions);
             }
         });
-        return result.asObservable();
+        return result;
     }
     stopMonitoring(elementOrRef) {
         const element = coerceElement(elementOrRef);

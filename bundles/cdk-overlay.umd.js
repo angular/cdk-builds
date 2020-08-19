@@ -1186,7 +1186,6 @@
             // before attempting to position it, as the position may depend on the size of the rendered
             // content.
             this._ngZone.onStable
-                .asObservable()
                 .pipe(operators.take(1))
                 .subscribe(function () {
                 // The overlay could've been detached before the zone has stabilized.
@@ -1287,23 +1286,23 @@
         };
         /** Gets an observable that emits when the backdrop has been clicked. */
         OverlayRef.prototype.backdropClick = function () {
-            return this._backdropClick.asObservable();
+            return this._backdropClick;
         };
         /** Gets an observable that emits when the overlay has been attached. */
         OverlayRef.prototype.attachments = function () {
-            return this._attachments.asObservable();
+            return this._attachments;
         };
         /** Gets an observable that emits when the overlay has been detached. */
         OverlayRef.prototype.detachments = function () {
-            return this._detachments.asObservable();
+            return this._detachments;
         };
         /** Gets an observable of keydown events targeted to this overlay. */
         OverlayRef.prototype.keydownEvents = function () {
-            return this._keydownEvents.asObservable();
+            return this._keydownEvents;
         };
         /** Gets an observable of pointer events targeted outside this overlay. */
         OverlayRef.prototype.outsidePointerEvents = function () {
-            return this._outsidePointerEvents.asObservable();
+            return this._outsidePointerEvents;
         };
         /** Gets the current overlay configuration, which is immutable. */
         OverlayRef.prototype.getConfig = function () {
@@ -1497,7 +1496,6 @@
                 // might still be animating. This stream helps us avoid interrupting the animation
                 // by waiting for the pane to become empty.
                 var subscription = _this._ngZone.onStable
-                    .asObservable()
                     .pipe(operators.takeUntil(rxjs.merge(_this._attachments, _this._detachments)))
                     .subscribe(function () {
                     // Needs a couple of checks for the pane and host, because
@@ -1576,7 +1574,7 @@
             /** Keeps track of the CSS classes that the position strategy has applied on the overlay panel. */
             this._appliedPanelClasses = [];
             /** Observable sequence of position changes. */
-            this.positionChanges = this._positionChanges.asObservable();
+            this.positionChanges = this._positionChanges;
             this.setOrigin(connectedTo);
         }
         Object.defineProperty(FlexibleConnectedPositionStrategy.prototype, "positions", {
@@ -2517,15 +2515,8 @@
                 .withPush(false)
                 .withViewportMargin(0);
             this.withFallbackPosition(originPos, overlayPos);
+            this.onPositionChange = this._positionStrategy.positionChanges;
         }
-        Object.defineProperty(ConnectedPositionStrategy.prototype, "onPositionChange", {
-            /** Emits an event when the connection point changes. */
-            get: function () {
-                return this._positionStrategy.positionChanges;
-            },
-            enumerable: false,
-            configurable: true
-        });
         Object.defineProperty(ConnectedPositionStrategy.prototype, "positions", {
             /** Ordered list of preferred positions, from most to least desirable. */
             get: function () {

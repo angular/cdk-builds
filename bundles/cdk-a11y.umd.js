@@ -1450,7 +1450,7 @@
                 fn();
             }
             else {
-                this._ngZone.onStable.asObservable().pipe(operators.take(1)).subscribe(fn);
+                this._ngZone.onStable.pipe(operators.take(1)).subscribe(fn);
             }
         };
         return FocusTrap;
@@ -2162,7 +2162,7 @@
                     // robust solution.
                     cachedInfo.checkChildren = true;
                 }
-                return cachedInfo.subject.asObservable();
+                return cachedInfo.subject;
             }
             // Create monitored element info.
             var info = {
@@ -2172,7 +2172,7 @@
             };
             this._elementInfo.set(nativeElement, info);
             this._registerGlobalListeners(info);
-            return info.subject.asObservable();
+            return info.subject;
         };
         FocusMonitor.prototype.stopMonitoring = function (element) {
             var nativeElement = coercion.coerceElement(element);

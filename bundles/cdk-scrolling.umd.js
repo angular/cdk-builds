@@ -1023,7 +1023,7 @@
             /** Emits when the index of the first element visible in the viewport changes. */
             _this.scrolledIndexChange = new rxjs.Observable(function (observer) { return _this._scrollStrategy.scrolledIndexChange.subscribe(function (index) { return Promise.resolve().then(function () { return _this.ngZone.run(function () { return observer.next(index); }); }); }); });
             /** A stream that emits whenever the rendered range changes. */
-            _this.renderedRangeStream = _this._renderedRangeSubject.asObservable();
+            _this.renderedRangeStream = _this._renderedRangeSubject;
             /**
              * The total size of all content (in pixels), including content that is not currently rendered.
              */
