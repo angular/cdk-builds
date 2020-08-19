@@ -192,9 +192,36 @@ function normalizePassiveListenerOptions(options) {
  */
 /** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
 let rtlScrollAxisType;
+/** Cached result of the check that indicates whether the browser supports scroll behaviors. */
+let scrollBehaviorSupported;
 /** Check whether the browser supports scroll behaviors. */
 function supportsScrollBehavior() {
-    return !!(typeof document == 'object' && 'scrollBehavior' in document.documentElement.style);
+    if (scrollBehaviorSupported == null) {
+        // If we're not in the browser, it can't be supported.
+        if (typeof document !== 'object' || !document) {
+            scrollBehaviorSupported = false;
+        }
+        // If the element can have a `scrollBehavior` style, we can be sure that it's supported.
+        if ('scrollBehavior' in document.documentElement.style) {
+            scrollBehaviorSupported = true;
+        }
+        else {
+            // At this point we have 3 possibilities: `scrollTo` isn't supported at all, it's
+            // supported but it doesn't handle scroll behavior, or it has been polyfilled.
+            const scrollToFunction = Element.prototype.scrollTo;
+            if (scrollToFunction) {
+                // We can detect if the function has been polyfilled by calling `toString` on it. Native
+                // functions are obfuscated using `[native code]`, whereas if it was overwritten we'd get
+                // the actual function source. Via https://davidwalsh.name/detect-native-function. Consider
+                // polyfilled functions as supporting scroll behavior.
+                scrollBehaviorSupported = !/\{\s*\[native code\]\s*\}/.test(scrollToFunction.toString());
+            }
+            else {
+                scrollBehaviorSupported = false;
+            }
+        }
+    }
+    return scrollBehaviorSupported;
 }
 /**
  * Checks the type of RTL scroll axis used by this browser. As of time of writing, Chrome is NORMAL,
