@@ -3103,7 +3103,6 @@
             this._stateChanges = new rxjs.Subject();
             this._disabled = false;
             this._parentDrag = parentDrag;
-            toggleNativeDragInteractions(element.nativeElement, false);
         }
         Object.defineProperty(CdkDragHandle.prototype, "disabled", {
             /** Whether starting to drag through this handle is disabled. */

@@ -2764,7 +2764,6 @@ class CdkDragHandle {
         this._stateChanges = new Subject();
         this._disabled = false;
         this._parentDrag = parentDrag;
-        toggleNativeDragInteractions(element.nativeElement, false);
     }
     /** Whether starting to drag through this handle is disabled. */
     get disabled() { return this._disabled; }
