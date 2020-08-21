@@ -283,6 +283,7 @@
             // AfterViewInit so we're guaranteed for both view and content children to be defined.
             this._keyManager = new a11y.FocusKeyManager(this._stepHeader)
                 .withWrap()
+                .withHomeAndEnd()
                 .withVerticalOrientation(this._orientation === 'vertical');
             (this._dir ? this._dir.change : rxjs.of())
                 .pipe(operators.startWith(this._layoutDirection()), operators.takeUntil(this._destroyed))
@@ -405,14 +406,6 @@
             if (manager.activeItemIndex != null && !hasModifier &&
                 (keyCode === keycodes.SPACE || keyCode === keycodes.ENTER)) {
                 this.selectedIndex = manager.activeItemIndex;
-                event.preventDefault();
-            }
-            else if (keyCode === keycodes.HOME) {
-                manager.setFirstItemActive();
-                event.preventDefault();
-            }
-            else if (keyCode === keycodes.END) {
-                manager.setLastItemActive();
                 event.preventDefault();
             }
             else {

@@ -1,7 +1,7 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { hasModifierKey, SPACE, ENTER, HOME, END } from '@angular/cdk/keycodes';
+import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
 import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, QueryList, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
@@ -250,6 +250,7 @@ class CdkStepper {
         // AfterViewInit so we're guaranteed for both view and content children to be defined.
         this._keyManager = new FocusKeyManager(this._stepHeader)
             .withWrap()
+            .withHomeAndEnd()
             .withVerticalOrientation(this._orientation === 'vertical');
         (this._dir ? this._dir.change : of())
             .pipe(startWith(this._layoutDirection()), takeUntil(this._destroyed))
@@ -370,14 +371,6 @@ class CdkStepper {
         if (manager.activeItemIndex != null && !hasModifier &&
             (keyCode === SPACE || keyCode === ENTER)) {
             this.selectedIndex = manager.activeItemIndex;
-            event.preventDefault();
-        }
-        else if (keyCode === HOME) {
-            manager.setFirstItemActive();
-            event.preventDefault();
-        }
-        else if (keyCode === END) {
-            manager.setLastItemActive();
             event.preventDefault();
         }
         else {

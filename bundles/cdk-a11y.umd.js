@@ -691,11 +691,13 @@
             return this;
         };
         /**
-         * Configures the key manager to focus the first and last items
-         * respectively when the Home key and End Key are pressed.
+         * Configures the key manager to activate the first and last items
+         * respectively when the Home or End key is pressed.
+         * @param enabled Whether pressing the Home or End key activates the first/last item.
          */
-        ListKeyManager.prototype.withHomeAndEnd = function () {
-            this._homeAndEnd = true;
+        ListKeyManager.prototype.withHomeAndEnd = function (enabled) {
+            if (enabled === void 0) { enabled = true; }
+            this._homeAndEnd = enabled;
             return this;
         };
         ListKeyManager.prototype.setActiveItem = function (item) {
