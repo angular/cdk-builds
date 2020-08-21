@@ -637,6 +637,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         // tslint:enable: max-line-length
         if (!this._isAttached) {
             this._document.body.addEventListener('click', this._clickListener, true);
+            this._document.body.addEventListener('contextmenu', this._clickListener, true);
             // click event is not fired on iOS. To make element "clickable" we are
             // setting the cursor to pointer
             if (this._platform.IOS && !this._cursorStyleIsSet) {
@@ -651,6 +652,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
     detach() {
         if (this._isAttached) {
             this._document.body.removeEventListener('click', this._clickListener, true);
+            this._document.body.removeEventListener('contextmenu', this._clickListener, true);
             if (this._platform.IOS && this._cursorStyleIsSet) {
                 this._document.body.style.cursor = this._cursorOriginalValue;
                 this._cursorStyleIsSet = false;
