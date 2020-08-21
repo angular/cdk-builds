@@ -4,7 +4,7 @@ import { isDataSource, _VIEW_REPEATER_STRATEGY, _DisposeViewRepeaterStrategy } f
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
-import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, isDevMode, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
+import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -1141,8 +1141,7 @@ class CdkTable {
         return this._trackByFn;
     }
     set trackBy(fn) {
-        if (isDevMode() && fn != null && typeof fn !== 'function' && console &&
-            console.warn) {
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && fn != null && typeof fn !== 'function') {
             console.warn(`trackBy must be a function, but received ${JSON.stringify(fn)}.`);
         }
         this._trackByFn = fn;
@@ -1210,7 +1209,8 @@ class CdkTable {
         this._cacheRowDefs();
         this._cacheColumnDefs();
         // Make sure that the user has at least added header, footer, or data row def.
-        if (!this._headerRowDefs.length && !this._footerRowDefs.length && !this._rowDefs.length) {
+        if (!this._headerRowDefs.length && !this._footerRowDefs.length && !this._rowDefs.length &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTableMissingRowDefsError();
         }
         // Render updates if the list of columns have been changed for the header, row, or footer defs.
@@ -1460,7 +1460,8 @@ class CdkTable {
         this._columnDefsByName.clear();
         const columnDefs = mergeArrayAndSet(this._getOwnDefs(this._contentColumnDefs), this._customColumnDefs);
         columnDefs.forEach(columnDef => {
-            if (this._columnDefsByName.has(columnDef.name)) {
+            if (this._columnDefsByName.has(columnDef.name) &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableDuplicateColumnNameError(columnDef.name);
             }
             this._columnDefsByName.set(columnDef.name, columnDef);
@@ -1473,7 +1474,8 @@ class CdkTable {
         this._rowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentRowDefs), this._customRowDefs);
         // After all row definitions are determined, find the row definition to be considered default.
         const defaultRowDefs = this._rowDefs.filter(def => !def.when);
-        if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
+        if (!this.multiTemplateDataRows && defaultRowDefs.length > 1 &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTableMultipleDefaultRowDefsError();
         }
         this._defaultRowDef = defaultRowDefs[0];
@@ -1540,10 +1542,11 @@ class CdkTable {
         else if (Array.isArray(this.dataSource)) {
             dataStream = of(this.dataSource);
         }
-        if (dataStream === undefined) {
+        if (dataStream === undefined && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTableUnknownDataSourceError();
         }
-        this._renderChangeSubscription = dataStream.pipe(takeUntil(this._onDestroy)).subscribe(data => {
+        this._renderChangeSubscription = dataStream.pipe(takeUntil(this._onDestroy))
+            .subscribe(data => {
             this._data = data || [];
             this.renderRows();
         });
@@ -1576,7 +1579,7 @@ class CdkTable {
     _addStickyColumnStyles(rows, rowDef) {
         const columnDefs = Array.from(rowDef.columns || []).map(columnName => {
             const columnDef = this._columnDefsByName.get(columnName);
-            if (!columnDef) {
+            if (!columnDef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableUnknownColumnError(columnName);
             }
             return columnDef;
@@ -1614,7 +1617,7 @@ class CdkTable {
                 rowDefs.push(rowDef);
             }
         }
-        if (!rowDefs.length) {
+        if (!rowDefs.length && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTableMissingMatchingRowDefError(data);
         }
         return rowDefs;
@@ -1677,7 +1680,7 @@ class CdkTable {
         }
         return Array.from(rowDef.columns, columnId => {
             const column = this._columnDefsByName.get(columnId);
-            if (!column) {
+            if (!column && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableUnknownColumnError(columnId);
             }
             return rowDef.extractCellTemplate(column);
@@ -1875,7 +1878,7 @@ class CdkTextColumn {
             this.columnDef.headerCell = this.headerCell;
             this._table.addColumnDef(this.columnDef);
         }
-        else {
+        else if (typeof ngDevMode === 'undefined' || ngDevMode) {
             throw getTableTextColumnMissingParentTableError();
         }
     }
@@ -1890,7 +1893,7 @@ class CdkTextColumn {
      */
     _createDefaultHeaderText() {
         const name = this.name;
-        if (isDevMode() && !name) {
+        if (!name && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTableTextColumnMissingNameError();
         }
         if (this._options && this._options.defaultHeaderTextTransform) {

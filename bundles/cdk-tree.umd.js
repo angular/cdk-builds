@@ -624,7 +624,7 @@
         });
         CdkTree.prototype.ngOnInit = function () {
             this._dataDiffer = this._differs.find([]).create(this.trackBy);
-            if (!this.treeControl) {
+            if (!this.treeControl && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTreeControlMissingError();
             }
         };
@@ -643,7 +643,7 @@
         };
         CdkTree.prototype.ngAfterContentChecked = function () {
             var defaultNodeDefs = this._nodeDefs.filter(function (def) { return !def.when; });
-            if (defaultNodeDefs.length > 1) {
+            if (defaultNodeDefs.length > 1 && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTreeMultipleDefaultNodeDefsError();
             }
             this._defaultNodeDef = defaultNodeDefs[0];
@@ -692,7 +692,7 @@
                 this._dataSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy))
                     .subscribe(function (data) { return _this.renderNodeChanges(data); });
             }
-            else {
+            else if (typeof ngDevMode === 'undefined' || ngDevMode) {
                 throw getTreeNoValidDataSourceError();
             }
         };
@@ -731,7 +731,7 @@
                 return this._nodeDefs.first;
             }
             var nodeDef = this._nodeDefs.find(function (def) { return def.when && def.when(i, data); }) || this._defaultNodeDef;
-            if (!nodeDef) {
+            if (!nodeDef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTreeMissingMatchingNodeDefError();
             }
             return nodeDef;
@@ -861,7 +861,8 @@
         };
         // TODO: role should eventually just be set in the component host
         CdkTreeNode.prototype._setRoleFromData = function () {
-            if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren) {
+            if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTreeControlFunctionsMissingError();
             }
             this.role = 'treeitem';
@@ -911,7 +912,7 @@
         CdkNestedTreeNode.prototype.ngAfterContentInit = function () {
             var _this = this;
             this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
-            if (!this._tree.treeControl.getChildren) {
+            if (!this._tree.treeControl.getChildren && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTreeControlFunctionsMissingError();
             }
             var childrenNodes = this._tree.treeControl.getChildren(this.data);

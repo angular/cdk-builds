@@ -1,4 +1,4 @@
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, isDevMode, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
@@ -2589,7 +2589,7 @@ class CdkDropList {
             const siblings = coerceArray(this.connectedTo).map(drop => {
                 if (typeof drop === 'string') {
                     const correspondingDropList = CdkDropList._dropLists.find(list => list.id === drop);
-                    if (!correspondingDropList && isDevMode()) {
+                    if (!correspondingDropList && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                         console.warn(`CdkDropList could not find connected drop list with id "${drop}"`);
                     }
                     return correspondingDropList;
@@ -3038,7 +3038,8 @@ class CdkDrag {
         const element = this.element.nativeElement;
         const rootElement = this.rootElementSelector ?
             getClosestMatchingAncestor(element, this.rootElementSelector) : element;
-        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
+        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error(`cdkDrag must be attached to an element node. ` +
                 `Currently attached to "${rootElement.nodeName}".`);
         }
@@ -3054,7 +3055,8 @@ class CdkDrag {
             return getClosestMatchingAncestor(this.element.nativeElement, boundary);
         }
         const element = coerceElement(boundary);
-        if (isDevMode() && !element.contains(this.element.nativeElement)) {
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+            !element.contains(this.element.nativeElement)) {
             throw Error('Draggable element is not inside of the node passed into cdkDragBoundary.');
         }
         return element;

@@ -1579,8 +1579,7 @@
                 return this._trackByFn;
             },
             set: function (fn) {
-                if (core.isDevMode() && fn != null && typeof fn !== 'function' && console &&
-                    console.warn) {
+                if ((typeof ngDevMode === 'undefined' || ngDevMode) && fn != null && typeof fn !== 'function') {
                     console.warn("trackBy must be a function, but received " + JSON.stringify(fn) + ".");
                 }
                 this._trackByFn = fn;
@@ -1660,7 +1659,8 @@
             this._cacheRowDefs();
             this._cacheColumnDefs();
             // Make sure that the user has at least added header, footer, or data row def.
-            if (!this._headerRowDefs.length && !this._footerRowDefs.length && !this._rowDefs.length) {
+            if (!this._headerRowDefs.length && !this._footerRowDefs.length && !this._rowDefs.length &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableMissingRowDefsError();
             }
             // Render updates if the list of columns have been changed for the header, row, or footer defs.
@@ -1913,7 +1913,8 @@
             this._columnDefsByName.clear();
             var columnDefs = mergeArrayAndSet(this._getOwnDefs(this._contentColumnDefs), this._customColumnDefs);
             columnDefs.forEach(function (columnDef) {
-                if (_this._columnDefsByName.has(columnDef.name)) {
+                if (_this._columnDefsByName.has(columnDef.name) &&
+                    (typeof ngDevMode === 'undefined' || ngDevMode)) {
                     throw getTableDuplicateColumnNameError(columnDef.name);
                 }
                 _this._columnDefsByName.set(columnDef.name, columnDef);
@@ -1926,7 +1927,8 @@
             this._rowDefs = mergeArrayAndSet(this._getOwnDefs(this._contentRowDefs), this._customRowDefs);
             // After all row definitions are determined, find the row definition to be considered default.
             var defaultRowDefs = this._rowDefs.filter(function (def) { return !def.when; });
-            if (!this.multiTemplateDataRows && defaultRowDefs.length > 1) {
+            if (!this.multiTemplateDataRows && defaultRowDefs.length > 1 &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableMultipleDefaultRowDefsError();
             }
             this._defaultRowDef = defaultRowDefs[0];
@@ -1994,10 +1996,11 @@
             else if (Array.isArray(this.dataSource)) {
                 dataStream = rxjs.of(this.dataSource);
             }
-            if (dataStream === undefined) {
+            if (dataStream === undefined && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableUnknownDataSourceError();
             }
-            this._renderChangeSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy)).subscribe(function (data) {
+            this._renderChangeSubscription = dataStream.pipe(operators.takeUntil(this._onDestroy))
+                .subscribe(function (data) {
                 _this._data = data || [];
                 _this.renderRows();
             });
@@ -2033,7 +2036,7 @@
             var _this = this;
             var columnDefs = Array.from(rowDef.columns || []).map(function (columnName) {
                 var columnDef = _this._columnDefsByName.get(columnName);
-                if (!columnDef) {
+                if (!columnDef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                     throw getTableUnknownColumnError(columnName);
                 }
                 return columnDef;
@@ -2071,7 +2074,7 @@
                     rowDefs.push(rowDef);
                 }
             }
-            if (!rowDefs.length) {
+            if (!rowDefs.length && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableMissingMatchingRowDefError(data);
             }
             return rowDefs;
@@ -2147,7 +2150,7 @@
             }
             return Array.from(rowDef.columns, function (columnId) {
                 var column = _this._columnDefsByName.get(columnId);
-                if (!column) {
+                if (!column && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                     throw getTableUnknownColumnError(columnId);
                 }
                 return rowDef.extractCellTemplate(column);
@@ -2373,7 +2376,7 @@
                 this.columnDef.headerCell = this.headerCell;
                 this._table.addColumnDef(this.columnDef);
             }
-            else {
+            else if (typeof ngDevMode === 'undefined' || ngDevMode) {
                 throw getTableTextColumnMissingParentTableError();
             }
         };
@@ -2388,7 +2391,7 @@
          */
         CdkTextColumn.prototype._createDefaultHeaderText = function () {
             var name = this.name;
-            if (core.isDevMode() && !name) {
+            if (!name && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getTableTextColumnMissingNameError();
             }
             if (this._options && this._options.defaultHeaderTextTransform) {

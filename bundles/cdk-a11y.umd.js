@@ -665,7 +665,8 @@
         ListKeyManager.prototype.withTypeAhead = function (debounceInterval) {
             var _this = this;
             if (debounceInterval === void 0) { debounceInterval = 200; }
-            if (this._items.length && this._items.some(function (item) { return typeof item.getLabel !== 'function'; })) {
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) && (this._items.length &&
+                this._items.some(function (item) { return typeof item.getLabel !== 'function'; }))) {
                 throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
             }
             this._typeaheadSubscription.unsubscribe();
@@ -1344,7 +1345,8 @@
                 }
                 // Warn the consumer if the element they've pointed to
                 // isn't focusable, when not in production mode.
-                if (i0.isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+                if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+                    !this._checker.isFocusable(redirectToElement)) {
                     console.warn("Element matching '[cdkFocusInitial]' is not focusable.", redirectToElement);
                 }
                 redirectToElement.focus();

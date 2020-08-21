@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, isDevMode, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
@@ -361,7 +361,8 @@ class ListKeyManager {
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
     withTypeAhead(debounceInterval = 200) {
-        if (this._items.length && this._items.some(item => typeof item.getLabel !== 'function')) {
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && (this._items.length &&
+            this._items.some(item => typeof item.getLabel !== 'function'))) {
             throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
         }
         this._typeaheadSubscription.unsubscribe();
@@ -1024,7 +1025,8 @@ class FocusTrap {
             }
             // Warn the consumer if the element they've pointed to
             // isn't focusable, when not in production mode.
-            if (isDevMode() && !this._checker.isFocusable(redirectToElement)) {
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+                !this._checker.isFocusable(redirectToElement)) {
                 console.warn(`Element matching '[cdkFocusInitial]' is not focusable.`, redirectToElement);
             }
             redirectToElement.focus();

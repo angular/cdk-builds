@@ -705,7 +705,7 @@
          * including multiple values while the selection model is not supporting multiple values.
          */
         SelectionModel.prototype._verifyValueAssignment = function (values) {
-            if (values.length > 1 && !this._multiple) {
+            if (values.length > 1 && !this._multiple && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw getMultipleValuesInSingleSelectionError();
             }
         };

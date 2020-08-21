@@ -66,11 +66,13 @@ function throwNoPortalAttachedError() {
 class Portal {
     /** Attach this portal to a host. */
     attach(host) {
-        if (host == null) {
-            throwNullPortalOutletError();
-        }
-        if (host.hasAttached()) {
-            throwPortalAlreadyAttachedError();
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (host == null) {
+                throwNullPortalOutletError();
+            }
+            if (host.hasAttached()) {
+                throwPortalAlreadyAttachedError();
+            }
         }
         this._attachedHost = host;
         return host.attach(this);
@@ -78,12 +80,12 @@ class Portal {
     /** Detach this portal from its host */
     detach() {
         let host = this._attachedHost;
-        if (host == null) {
-            throwNoPortalAttachedError();
-        }
-        else {
+        if (host != null) {
             this._attachedHost = null;
             host.detach();
+        }
+        else if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            throwNoPortalAttachedError();
         }
     }
     /** Whether this portal is attached to a host. */
@@ -165,14 +167,16 @@ class BasePortalOutlet {
     }
     /** Attaches a portal. */
     attach(portal) {
-        if (!portal) {
-            throwNullPortalError();
-        }
-        if (this.hasAttached()) {
-            throwPortalAlreadyAttachedError();
-        }
-        if (this._isDisposed) {
-            throwPortalOutletAlreadyDisposedError();
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (!portal) {
+                throwNullPortalError();
+            }
+            if (this.hasAttached()) {
+                throwPortalAlreadyAttachedError();
+            }
+            if (this._isDisposed) {
+                throwPortalOutletAlreadyDisposedError();
+            }
         }
         if (portal instanceof ComponentPortal) {
             this._attachedPortal = portal;
@@ -187,7 +191,9 @@ class BasePortalOutlet {
             this._attachedPortal = portal;
             return this.attachDomPortal(portal);
         }
-        throwUnknownPortalTypeError();
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            throwUnknownPortalTypeError();
+        }
     }
     /** Detaches a previously attached portal. */
     detach() {
@@ -257,11 +263,11 @@ class DomPortalOutlet extends BasePortalOutlet {
         this.attachDomPortal = (portal) => {
             // @breaking-change 10.0.0 Remove check and error once the
             // `_document` constructor parameter is required.
-            if (!this._document) {
+            if (!this._document && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
             }
             const element = portal.element;
-            if (!element.parentNode) {
+            if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('DOM portal content must be attached to a parent node.');
             }
             // Anchor used to save the element's previous position so
@@ -427,11 +433,11 @@ class CdkPortalOutlet extends BasePortalOutlet {
         this.attachDomPortal = (portal) => {
             // @breaking-change 9.0.0 Remove check and error once the
             // `_document` constructor parameter is required.
-            if (!this._document) {
+            if (!this._document && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('Cannot attach DOM portal without _document constructor parameter');
             }
             const element = portal.element;
-            if (!element.parentNode) {
+            if (!element.parentNode && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('DOM portal content must be attached to a parent node.');
             }
             // Anchor used to save the element's previous position so

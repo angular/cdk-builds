@@ -114,7 +114,7 @@ class CloseScrollStrategy {
     }
     /** Attaches this scroll strategy to an overlay. */
     attach(overlayRef) {
-        if (this._overlayRef) {
+        if (this._overlayRef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
@@ -233,7 +233,7 @@ class RepositionScrollStrategy {
     }
     /** Attaches this scroll strategy to an overlay. */
     attach(overlayRef) {
-        if (this._overlayRef) {
+        if (this._overlayRef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getMatScrollStrategyAlreadyAttachedError();
         }
         this._overlayRef = overlayRef;
@@ -1255,7 +1255,8 @@ class FlexibleConnectedPositionStrategy {
     }
     /** Attaches this position strategy to an overlay. */
     attach(overlayRef) {
-        if (this._overlayRef && overlayRef !== this._overlayRef) {
+        if (this._overlayRef && overlayRef !== this._overlayRef &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('This position strategy is already attached to an overlay');
         }
         this._validatePositions();
@@ -2045,17 +2046,19 @@ class FlexibleConnectedPositionStrategy {
     }
     /** Validates that the current position match the expected values. */
     _validatePositions() {
-        if (!this._preferredPositions.length) {
-            throw Error('FlexibleConnectedPositionStrategy: At least one position is required.');
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            if (!this._preferredPositions.length) {
+                throw Error('FlexibleConnectedPositionStrategy: At least one position is required.');
+            }
+            // TODO(crisbeto): remove these once Angular's template type
+            // checking is advanced enough to catch these cases.
+            this._preferredPositions.forEach(pair => {
+                validateHorizontalPosition('originX', pair.originX);
+                validateVerticalPosition('originY', pair.originY);
+                validateHorizontalPosition('overlayX', pair.overlayX);
+                validateVerticalPosition('overlayY', pair.overlayY);
+            });
         }
-        // TODO(crisbeto): remove these once Angular's template type
-        // checking is advanced enough to catch these cases.
-        this._preferredPositions.forEach(pair => {
-            validateHorizontalPosition('originX', pair.originX);
-            validateVerticalPosition('originY', pair.originY);
-            validateHorizontalPosition('overlayX', pair.overlayX);
-            validateVerticalPosition('overlayY', pair.overlayY);
-        });
     }
     /** Adds a single CSS class or an array of classes on the overlay panel. */
     _addPanelClasses(cssClasses) {

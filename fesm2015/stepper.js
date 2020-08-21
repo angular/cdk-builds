@@ -215,7 +215,8 @@ class CdkStepper {
         const newIndex = coerceNumberProperty(index);
         if (this.steps && this._steps) {
             // Ensure that the index can't be out of bounds.
-            if (newIndex < 0 || newIndex > this.steps.length - 1) {
+            if ((newIndex < 0 || newIndex > this.steps.length - 1) &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
             if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&

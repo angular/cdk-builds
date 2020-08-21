@@ -2926,7 +2926,7 @@
                 var siblings = coercion.coerceArray(_this.connectedTo).map(function (drop) {
                     if (typeof drop === 'string') {
                         var correspondingDropList = CdkDropList._dropLists.find(function (list) { return list.id === drop; });
-                        if (!correspondingDropList && i0.isDevMode()) {
+                        if (!correspondingDropList && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                             console.warn("CdkDropList could not find connected drop list with id \"" + drop + "\"");
                         }
                         return correspondingDropList;
@@ -3387,7 +3387,8 @@
             var element = this.element.nativeElement;
             var rootElement = this.rootElementSelector ?
                 getClosestMatchingAncestor(element, this.rootElementSelector) : element;
-            if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE) {
+            if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE &&
+                (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error("cdkDrag must be attached to an element node. " +
                     ("Currently attached to \"" + rootElement.nodeName + "\"."));
             }
@@ -3403,7 +3404,8 @@
                 return getClosestMatchingAncestor(this.element.nativeElement, boundary);
             }
             var element = coercion.coerceElement(boundary);
-            if (i0.isDevMode() && !element.contains(this.element.nativeElement)) {
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+                !element.contains(this.element.nativeElement)) {
                 throw Error('Draggable element is not inside of the node passed into cdkDragBoundary.');
             }
             return element;

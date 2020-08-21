@@ -312,7 +312,7 @@ class CdkTree {
     }
     ngOnInit() {
         this._dataDiffer = this._differs.find([]).create(this.trackBy);
-        if (!this.treeControl) {
+        if (!this.treeControl && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeControlMissingError();
         }
     }
@@ -331,7 +331,7 @@ class CdkTree {
     }
     ngAfterContentChecked() {
         const defaultNodeDefs = this._nodeDefs.filter(def => !def.when);
-        if (defaultNodeDefs.length > 1) {
+        if (defaultNodeDefs.length > 1 && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeMultipleDefaultNodeDefsError();
         }
         this._defaultNodeDef = defaultNodeDefs[0];
@@ -379,7 +379,7 @@ class CdkTree {
             this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
                 .subscribe(data => this.renderNodeChanges(data));
         }
-        else {
+        else if (typeof ngDevMode === 'undefined' || ngDevMode) {
             throw getTreeNoValidDataSourceError();
         }
     }
@@ -415,7 +415,7 @@ class CdkTree {
             return this._nodeDefs.first;
         }
         const nodeDef = this._nodeDefs.find(def => def.when && def.when(i, data)) || this._defaultNodeDef;
-        if (!nodeDef) {
+        if (!nodeDef && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeMissingMatchingNodeDefError();
         }
         return nodeDef;
@@ -532,7 +532,8 @@ class CdkTreeNode {
     }
     // TODO: role should eventually just be set in the component host
     _setRoleFromData() {
-        if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren) {
+        if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeControlFunctionsMissingError();
         }
         this.role = 'treeitem';
@@ -585,7 +586,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     }
     ngAfterContentInit() {
         this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
-        if (!this._tree.treeControl.getChildren) {
+        if (!this._tree.treeControl.getChildren && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeControlFunctionsMissingError();
         }
         const childrenNodes = this._tree.treeControl.getChildren(this.data);

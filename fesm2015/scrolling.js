@@ -62,7 +62,7 @@ class FixedSizeVirtualScrollStrategy {
      * @param maxBufferPx The amount of buffer (in pixels) to render when rendering more.
      */
     updateItemAndBufferSize(itemSize, minBufferPx, maxBufferPx) {
-        if (maxBufferPx < minBufferPx) {
+        if (maxBufferPx < minBufferPx && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('CDK virtual scroll: maxBufferPx must be greater than or equal to minBufferPx');
         }
         this._itemSize = itemSize;
@@ -733,7 +733,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         this._runAfterChangeDetection = [];
         /** Subscription to changes in the viewport size. */
         this._viewportChanges = Subscription.EMPTY;
-        if (!_scrollStrategy) {
+        if (!_scrollStrategy && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
         }
         // @breaking-change 11.0.0 Remove null check for `viewportRuler`.
@@ -785,7 +785,7 @@ class CdkVirtualScrollViewport extends CdkScrollable {
     }
     /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */
     attach(forOf) {
-        if (this._forOf) {
+        if (this._forOf && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('CdkVirtualScrollViewport is already attached.');
         }
         // Subscribe to the data stream of the CdkVirtualForOf to keep track of when the data length
@@ -1145,7 +1145,8 @@ class CdkVirtualForOf {
         if (range.start >= range.end) {
             return 0;
         }
-        if (range.start < this._renderedRange.start || range.end > this._renderedRange.end) {
+        if ((range.start < this._renderedRange.start || range.end > this._renderedRange.end) &&
+            (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error(`Error: attempted to measure an item that isn't rendered.`);
         }
         // The index into the list of rendered views for the first item in the range.
