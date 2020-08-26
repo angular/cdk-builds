@@ -133,18 +133,8 @@ class CdkColumnDef extends _CdkColumnDefBase {
         this._stickyEnd = false;
     }
     /** Unique name for this column. */
-    get name() {
-        return this._name;
-    }
-    set name(name) {
-        // If the directive is set without a name (updated programatically), then this setter will
-        // trigger with an empty string and should not overwrite the programatically set value.
-        if (name) {
-            this._name = name;
-            this.cssClassFriendlyName = name.replace(/[^a-z0-9_-]/ig, '-');
-            this._updateColumnCssClassName();
-        }
-    }
+    get name() { return this._name; }
+    set name(name) { this._setNameInput(name); }
     /**
      * Whether this column should be sticky positioned on the end of the row. Should make sure
      * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
@@ -167,6 +157,21 @@ class CdkColumnDef extends _CdkColumnDefBase {
      */
     _updateColumnCssClassName() {
         this._columnCssClassName = [`cdk-column-${this.cssClassFriendlyName}`];
+    }
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    _setNameInput(value) {
+        // If the directive is set without a name (updated programatically), then this setter will
+        // trigger with an empty string and should not overwrite the programatically set value.
+        if (value) {
+            this._name = value;
+            this.cssClassFriendlyName = value.replace(/[^a-z0-9_-]/ig, '-');
+            this._updateColumnCssClassName();
+        }
     }
 }
 CdkColumnDef.decorators = [

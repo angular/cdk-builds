@@ -703,30 +703,13 @@ class CdkTreeNodePadding {
     }
     /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
     get level() { return this._level; }
-    set level(value) {
-        // Set to null as the fallback value so that _setPadding can fall back to the node level if the
-        // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
-        // they set 0 explicitly.
-        this._level = coerceNumberProperty(value, null);
-        this._setPadding();
-    }
+    set level(value) { this._setLevelInput(value); }
     /**
      * The indent for each level. Can be a number or a CSS string.
      * Default number 40px from material design menu sub-menu spec.
      */
     get indent() { return this._indent; }
-    set indent(indent) {
-        let value = indent;
-        let units = 'px';
-        if (typeof indent === 'string') {
-            const parts = indent.split(cssUnitPattern);
-            value = parts[0];
-            units = parts[1] || units;
-        }
-        this.indentUnits = units;
-        this._indent = coerceNumberProperty(value);
-        this._setPadding();
-    }
+    set indent(indent) { this._setIndentInput(indent); }
     ngOnDestroy() {
         this._destroyed.next();
         this._destroyed.complete();
@@ -749,6 +732,37 @@ class CdkTreeNodePadding {
             element.style[resetProp] = '';
             this._currentPadding = padding;
         }
+    }
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    _setLevelInput(value) {
+        // Set to null as the fallback value so that _setPadding can fall back to the node level if the
+        // consumer set the directive as `cdkTreeNodePadding=""`. We still want to take this value if
+        // they set 0 explicitly.
+        this._level = coerceNumberProperty(value, null);
+        this._setPadding();
+    }
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    _setIndentInput(indent) {
+        let value = indent;
+        let units = 'px';
+        if (typeof indent === 'string') {
+            const parts = indent.split(cssUnitPattern);
+            value = parts[0];
+            units = parts[1] || units;
+        }
+        this.indentUnits = units;
+        this._indent = coerceNumberProperty(value);
+        this._setPadding();
     }
 }
 CdkTreeNodePadding.decorators = [

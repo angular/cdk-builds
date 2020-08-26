@@ -45,5 +45,19 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
     _setPadding(forceChange?: boolean): void;
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    protected _setLevelInput(value: number): void;
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    protected _setIndentInput(indent: number | string): void;
     static ngAcceptInputType_level: NumberInput;
 }

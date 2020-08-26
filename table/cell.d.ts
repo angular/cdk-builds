@@ -49,7 +49,7 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
     /** Unique name for this column. */
     get name(): string;
     set name(name: string);
-    _name: string;
+    protected _name: string;
     /**
      * Whether this column should be sticky positioned on the end of the row. Should make sure
      * that it mimics the `CanStick` mixin such that `_hasStickyChanged` is set to true if the value
@@ -84,6 +84,13 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      * @docs-private
      */
     protected _updateColumnCssClassName(): void;
+    /**
+     * This has been extracted to a util because of TS 4 and VE.
+     * View Engine doesn't support property rename inheritance.
+     * TS 4.0 doesn't allow properties to override accessors or vice-versa.
+     * @docs-private
+     */
+    protected _setNameInput(value: string): void;
     static ngAcceptInputType_sticky: BooleanInput;
     static ngAcceptInputType_stickyEnd: BooleanInput;
 }

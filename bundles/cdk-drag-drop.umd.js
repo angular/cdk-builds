@@ -2712,14 +2712,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /**
      * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
      * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary

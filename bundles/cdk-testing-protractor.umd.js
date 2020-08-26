@@ -387,7 +387,8 @@
                     switch (_e.label) {
                         case 0:
                             offsetArgs = args.length ? [{ x: args[0], y: args[1] }] : [];
-                            _b = (_a = (_d = protractor.browser.actions()).mouseMove).apply;
+                            _b = (_a = (_d = protractor.browser.actions())
+                                .mouseMove).apply;
                             _c = [_d];
                             return [4 /*yield*/, this.element.getWebElement()];
                         case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([__spread.apply(void 0, [[_e.sent()], offsetArgs])])).click()
@@ -419,7 +420,8 @@
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            _b = (_a = protractor.browser.actions()).mouseMove;
+                            _b = (_a = protractor.browser.actions())
+                                .mouseMove;
                             return [4 /*yield*/, this.element.getWebElement()];
                         case 1: return [2 /*return*/, _b.apply(_a, [_c.sent()])
                                 .perform()];
@@ -433,7 +435,8 @@
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
-                            _b = (_a = protractor.browser.actions()).mouseMove;
+                            _b = (_a = protractor.browser.actions())
+                                .mouseMove;
                             return [4 /*yield*/, this.element.getWebElement()];
                         case 1: return [2 /*return*/, _b.apply(_a, [_c.sent(), { x: -1, y: -1 }])
                                 .perform()];
