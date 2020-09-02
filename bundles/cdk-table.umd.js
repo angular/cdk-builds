@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/cdk/scrolling', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, (function (exports, bidi, coercion, collections, platform, scrolling, common, core, rxjs, operators) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/collections'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/scrolling')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/table', ['exports', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/collections', '@angular/cdk/platform', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/scrolling'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.table = {}), global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.collections, global.ng.cdk.platform, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.scrolling));
+}(this, (function (exports, bidi, coercion, collections, platform, common, core, rxjs, operators, scrolling) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -992,7 +992,6 @@
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
             this._isBrowser = _isBrowser;
             this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
-            this._cachedCellWidths = [];
         }
         /**
          * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -1051,19 +1050,16 @@
          *     in this index position should be stuck to the start of the row.
          * @param stickyEndStates A list of boolean states where each state represents whether the cell
          *     in this index position should be stuck to the end of the row.
-         * @param recalculateCellWidths Whether the sticky styler should recalculate the width of each
-         *     column cell. If `false` cached widths will be used instead.
          */
-        StickyStyler.prototype.updateStickyColumns = function (rows, stickyStartStates, stickyEndStates, recalculateCellWidths) {
+        StickyStyler.prototype.updateStickyColumns = function (rows, stickyStartStates, stickyEndStates) {
             var _this = this;
-            if (recalculateCellWidths === void 0) { recalculateCellWidths = true; }
             if (!rows.length || !this._isBrowser || !(stickyStartStates.some(function (state) { return state; }) ||
                 stickyEndStates.some(function (state) { return state; }))) {
                 return;
             }
             var firstRow = rows[0];
             var numCells = firstRow.children.length;
-            var cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
+            var cellWidths = this._getCellWidths(firstRow);
             var startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
             var endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
             // Coalesce with sticky row updates (and potentially other changes like column resize).
@@ -1270,18 +1266,13 @@
             return zIndex ? "" + zIndex : '';
         };
         /** Gets the widths for each cell in the provided row. */
-        StickyStyler.prototype._getCellWidths = function (row, recalculateCellWidths) {
-            if (recalculateCellWidths === void 0) { recalculateCellWidths = true; }
-            if (!recalculateCellWidths && this._cachedCellWidths.length) {
-                return this._cachedCellWidths;
-            }
+        StickyStyler.prototype._getCellWidths = function (row) {
             var cellWidths = [];
             var firstRowCells = row.children;
             for (var i = 0; i < firstRowCells.length; i++) {
                 var cell = firstRowCells[i];
                 cellWidths.push(cell.getBoundingClientRect().width);
             }
-            this._cachedCellWidths = cellWidths;
             return cellWidths;
         };
         /**
@@ -1489,11 +1480,7 @@
         function CdkTable(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
         // Optional for backwards compatibility, but a view repeater strategy will always
         // be provided.
-        _viewRepeater, 
-        // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
-        // this property will never be null.
-        // tslint:disable-next-line: lightweight-tokens
-        _viewportRuler) {
+        _viewRepeater) {
             this._differs = _differs;
             this._changeDetectorRef = _changeDetectorRef;
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
@@ -1501,7 +1488,6 @@
             this._dir = _dir;
             this._platform = _platform;
             this._viewRepeater = _viewRepeater;
-            this._viewportRuler = _viewportRuler;
             /** Subject that emits when the component has been destroyed. */
             this._onDestroy = new rxjs.Subject();
             /**
@@ -1545,17 +1531,6 @@
              */
             this._footerRowDefChanged = true;
             /**
-             * Whether the sticky column styles need to be updated. Set to `true` when the visible columns
-             * change.
-             */
-            this._stickyColumnStylesNeedReset = true;
-            /**
-             * Whether the sticky styler should recalculate cell widths when applying sticky styles. If
-             * `false`, cached values will be used instead. This is only applicable to tables with
-             * {@link fixedLayout} enabled. For other tables, cell widths will always be recalculated.
-             */
-            this._forceRecalculateCellWidths = true;
-            /**
              * Cache of the latest rendered `RenderRow` objects as a map for easy retrieval when constructing
              * a new list of `RenderRow` objects for rendering rows. Since the new list is constructed with
              * the cached `RenderRow` objects when possible, the row identity is preserved when the data
@@ -1583,7 +1558,6 @@
             /** Whether the no data row is currently showing anything. */
             this._isShowingNoDataRow = false;
             this._multiTemplateDataRows = false;
-            this._fixedLayout = false;
             // TODO(andrewseguin): Remove max value as the end index
             //   and instead calculate the view on init and scroll.
             /**
@@ -1672,23 +1646,6 @@
             enumerable: false,
             configurable: true
         });
-        Object.defineProperty(CdkTable.prototype, "fixedLayout", {
-            /**
-             * Whether to use a fixed table layout. Enabling this option will enforce consistent column widths
-             * and optimize rendering sticky styles for native tables. No-op for flex tables.
-             */
-            get: function () {
-                return this._fixedLayout;
-            },
-            set: function (v) {
-                this._fixedLayout = coercion.coerceBooleanProperty(v);
-                // Toggling `fixedLayout` may change column widths. Sticky column styles should be recalculated.
-                this._forceRecalculateCellWidths = true;
-                this._stickyColumnStylesNeedReset = true;
-            },
-            enumerable: false,
-            configurable: true
-        });
         CdkTable.prototype.ngOnInit = function () {
             var _this = this;
             this._setupStickyStyler();
@@ -1700,11 +1657,6 @@
             // with the values of the `RenderRow`'s data and index.
             this._dataDiffer = this._differs.find([]).create(function (_i, dataRow) {
                 return _this.trackBy ? _this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
-            });
-            // Table cell dimensions may change after resizing the window. Signal the sticky styler to
-            // refresh its cache of cell widths the next time sticky styles are updated.
-            this._viewportRuler.change().pipe(operators.takeUntil(this._onDestroy)).subscribe(function () {
-                _this._forceRecalculateCellWidths = true;
             });
         };
         CdkTable.prototype.ngAfterContentChecked = function () {
@@ -1718,10 +1670,7 @@
             }
             // Render updates if the list of columns have been changed for the header, row, or footer defs.
             var columnsChanged = this._renderUpdatedColumns();
-            var rowDefsChanged = columnsChanged || this._headerRowDefChanged || this._footerRowDefChanged;
-            // Ensure sticky column styles are reset if set to `true` elsewhere.
-            this._stickyColumnStylesNeedReset = this._stickyColumnStylesNeedReset || rowDefsChanged;
-            this._forceRecalculateCellWidths = rowDefsChanged;
+            var stickyColumnStyleUpdateNeeded = columnsChanged || this._headerRowDefChanged || this._footerRowDefChanged;
             // If the header row definition has been changed, trigger a render to the header row.
             if (this._headerRowDefChanged) {
                 this._forceRenderHeaderRows();
@@ -1737,7 +1686,7 @@
             if (this.dataSource && this._rowDefs.length > 0 && !this._renderChangeSubscription) {
                 this._observeRenderChanges();
             }
-            else if (this._stickyColumnStylesNeedReset) {
+            else if (stickyColumnStyleUpdateNeeded) {
                 // In the above case, _observeRenderChanges will result in updateStickyColumnStyles being
                 // called when it row data arrives. Otherwise, we need to call it proactively.
                 this.updateStickyColumnStyles();
@@ -1886,17 +1835,9 @@
             var headerRows = this._getRenderedRows(this._headerRowOutlet);
             var dataRows = this._getRenderedRows(this._rowOutlet);
             var footerRows = this._getRenderedRows(this._footerRowOutlet);
-            // For tables not using a fixed layout, the column widths may change when new rows are rendered.
-            // In a table using a fixed layout, row content won't affect column width, so sticky styles
-            // don't need to be cleared unless either the sticky column config changes or one of the row
-            // defs change.
-            if ((this._isNativeHtmlTable && !this._fixedLayout)
-                || this._stickyColumnStylesNeedReset) {
-                // Clear the left and right positioning from all columns in the table across all rows since
-                // sticky columns span across all table sections (header, data, footer)
-                this._stickyStyler.clearStickyPositioning(__spread(headerRows, dataRows, footerRows), ['left', 'right']);
-                this._stickyColumnStylesNeedReset = false;
-            }
+            // Clear the left and right positioning from all columns in the table across all rows since
+            // sticky columns span across all table sections (header, data, footer)
+            this._stickyStyler.clearStickyPositioning(__spread(headerRows, dataRows, footerRows), ['left', 'right']);
             // Update the sticky styles for each header row depending on the def's sticky state
             headerRows.forEach(function (headerRow, i) {
                 _this._addStickyColumnStyles([headerRow], _this._headerRowDefs[i]);
@@ -2107,7 +2048,7 @@
             });
             var stickyStartStates = columnDefs.map(function (columnDef) { return columnDef.sticky; });
             var stickyEndStates = columnDefs.map(function (columnDef) { return columnDef.stickyEnd; });
-            this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates, !this._fixedLayout || this._forceRecalculateCellWidths);
+            this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates);
         };
         /** Gets the list of rows that have been rendered in the row outlet. */
         CdkTable.prototype._getRenderedRows = function (rowOutlet) {
@@ -2289,7 +2230,6 @@
                 this.updateStickyFooterRowStyles();
             }
             if (Array.from(this._columnDefsByName.values()).reduce(stickyCheckReducer, false)) {
-                this._stickyColumnStylesNeedReset = true;
                 this.updateStickyColumnStyles();
             }
         };
@@ -2334,7 +2274,6 @@
                     template: CDK_TABLE_TEMPLATE,
                     host: {
                         'class': 'cdk-table',
-                        '[class.cdk-table-fixed-layout]': 'fixedLayout',
                     },
                     encapsulation: core.ViewEncapsulation.None,
                     // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
@@ -2346,8 +2285,7 @@
                         { provide: CDK_TABLE, useExisting: CdkTable },
                         { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._DisposeViewRepeaterStrategy },
                         _CoalescedStyleScheduler,
-                    ],
-                    styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"]
+                    ]
                 },] }
     ];
     CdkTable.ctorParameters = function () { return [
@@ -2359,14 +2297,12 @@
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: platform.Platform },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
-        { type: scrolling.ViewportRuler, decorators: [{ type: core.Optional }] }
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] }
     ]; };
     CdkTable.propDecorators = {
         trackBy: [{ type: core.Input }],
         dataSource: [{ type: core.Input }],
         multiTemplateDataRows: [{ type: core.Input }],
-        fixedLayout: [{ type: core.Input }],
         _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
         _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
         _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],

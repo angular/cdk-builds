@@ -424,12 +424,14 @@ class UnitTestElement {
     }
     blur() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             triggerBlur(this.element);
             yield this._stabilize();
         });
     }
     clear() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             if (!isTextInput(this.element)) {
                 throw Error('Attempting to clear an invalid element');
             }
@@ -456,6 +458,7 @@ class UnitTestElement {
     }
     focus() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             triggerFocus(this.element);
             yield this._stabilize();
         });
@@ -470,6 +473,7 @@ class UnitTestElement {
     }
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             this._dispatchPointerEventIfSupported('pointerenter');
             dispatchMouseEvent(this.element, 'mouseenter');
             yield this._stabilize();
@@ -477,6 +481,7 @@ class UnitTestElement {
     }
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             this._dispatchPointerEventIfSupported('pointerleave');
             dispatchMouseEvent(this.element, 'mouseleave');
             yield this._stabilize();
@@ -484,6 +489,7 @@ class UnitTestElement {
     }
     sendKeys(...modifiersAndKeys) {
         return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
             const args = modifiersAndKeys.map(k => typeof k === 'number' ? keyMap[k] : k);
             typeInElement(this.element, ...args);
             yield this._stabilize();
@@ -524,8 +530,8 @@ class UnitTestElement {
     }
     setInputValue(value) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.element.value = value;
             yield this._stabilize();
+            this.element.value = value;
         });
     }
     matchesSelector(selector) {

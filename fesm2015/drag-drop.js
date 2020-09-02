@@ -2386,21 +2386,6 @@ DragDrop.ctorParameters = () => [
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
- * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
- * to avoid circular imports.
- * @docs-private
- */
-const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * @license
@@ -2742,6 +2727,21 @@ CdkDropList.propDecorators = {
     exited: [{ type: Output, args: ['cdkDropListExited',] }],
     sorted: [{ type: Output, args: ['cdkDropListSorted',] }]
 };
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
+ * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
+ * to avoid circular imports.
+ * @docs-private
+ */
+const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 
 /**
  * @license
@@ -3263,5 +3263,5 @@ DragDropModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PARENT, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem };
+export { CDK_DRAG_CONFIG, CDK_DRAG_HANDLE, CDK_DRAG_PLACEHOLDER, CDK_DRAG_PREVIEW, CDK_DROP_LIST_GROUP, CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, CdkDropList, CdkDropListGroup, DragDrop, DragDropModule, DragDropRegistry, DragRef, DropListRef, copyArrayItem, moveItemInArray, transferArrayItem, CDK_DROP_LIST as ɵangular_material_src_cdk_drag_drop_drag_drop_b, CDK_DRAG_PARENT as ɵangular_material_src_cdk_drag_drop_drag_drop_c };
 //# sourceMappingURL=drag-drop.js.map

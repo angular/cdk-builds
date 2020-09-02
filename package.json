@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "11.0.0-next.0-sha-d9875872b",
+  "version": "10.2.0-rc.0-sha-9094de847",
   "description": "Angular Material Component Development Kit",
   "repository": {
     "type": "git",

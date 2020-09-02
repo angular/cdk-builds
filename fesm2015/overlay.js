@@ -605,17 +605,14 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         this._clickListener = (event) => {
             // Get the target through the `composedPath` if possible to account for shadow DOM.
             const target = event.composedPath ? event.composedPath()[0] : event.target;
-            // We copy the array because the original may be modified asynchronously if the
-            // outsidePointerEvents listener decides to detach overlays resulting in index errors inside
-            // the for loop.
-            const overlays = this._attachedOverlays.slice();
+            const overlays = this._attachedOverlays;
             // Dispatch the mouse event to the top overlay which has subscribers to its mouse events.
             // We want to target all overlays for which the click could be considered as outside click.
             // As soon as we reach an overlay for which the click is not outside click we break off
             // the loop.
             for (let i = overlays.length - 1; i > -1; i--) {
                 const overlayRef = overlays[i];
-                if (overlayRef._outsidePointerEvents.observers.length < 1 || !overlayRef.hasAttached()) {
+                if (overlayRef._outsidePointerEvents.observers.length < 1) {
                     continue;
                 }
                 // If it's a click inside the overlay, just break - we should do nothing

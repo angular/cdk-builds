@@ -745,10 +745,12 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             triggerBlur(this.element);
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -759,13 +761,15 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             if (!isTextInput(this.element)) {
                                 throw Error('Attempting to clear an invalid element');
                             }
                             clearElement(this.element);
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -805,10 +809,12 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             triggerFocus(this.element);
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -833,11 +839,13 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             this._dispatchPointerEventIfSupported('pointerenter');
                             dispatchMouseEvent(this.element, 'mouseenter');
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -848,11 +856,13 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             this._dispatchPointerEventIfSupported('pointerleave');
                             dispatchMouseEvent(this.element, 'mouseleave');
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -868,11 +878,13 @@
                 var args;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
+                        case 0: return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
                             args = modifiersAndKeys.map(function (k) { return typeof k === 'number' ? keyMap[k] : k; });
                             typeInElement.apply(void 0, __spread([this.element], args));
                             return [4 /*yield*/, this._stabilize()];
-                        case 1:
+                        case 2:
                             _a.sent();
                             return [2 /*return*/];
                     }
@@ -946,11 +958,10 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0:
-                            this.element.value = value;
-                            return [4 /*yield*/, this._stabilize()];
+                        case 0: return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();
+                            this.element.value = value;
                             return [2 /*return*/];
                     }
                 });

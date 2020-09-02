@@ -3,11 +3,11 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { isDataSource, _VIEW_REPEATER_STRATEGY, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
-import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 /**
  * @license
@@ -621,7 +621,6 @@ class StickyStyler {
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._isBrowser = _isBrowser;
         this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
-        this._cachedCellWidths = [];
     }
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -657,17 +656,15 @@ class StickyStyler {
      *     in this index position should be stuck to the start of the row.
      * @param stickyEndStates A list of boolean states where each state represents whether the cell
      *     in this index position should be stuck to the end of the row.
-     * @param recalculateCellWidths Whether the sticky styler should recalculate the width of each
-     *     column cell. If `false` cached widths will be used instead.
      */
-    updateStickyColumns(rows, stickyStartStates, stickyEndStates, recalculateCellWidths = true) {
+    updateStickyColumns(rows, stickyStartStates, stickyEndStates) {
         if (!rows.length || !this._isBrowser || !(stickyStartStates.some(state => state) ||
             stickyEndStates.some(state => state))) {
             return;
         }
         const firstRow = rows[0];
         const numCells = firstRow.children.length;
-        const cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
+        const cellWidths = this._getCellWidths(firstRow);
         const startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
         const endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
         // Coalesce with sticky row updates (and potentially other changes like column resize).
@@ -828,17 +825,13 @@ class StickyStyler {
         return zIndex ? `${zIndex}` : '';
     }
     /** Gets the widths for each cell in the provided row. */
-    _getCellWidths(row, recalculateCellWidths = true) {
-        if (!recalculateCellWidths && this._cachedCellWidths.length) {
-            return this._cachedCellWidths;
-        }
+    _getCellWidths(row) {
         const cellWidths = [];
         const firstRowCells = row.children;
         for (let i = 0; i < firstRowCells.length; i++) {
             let cell = firstRowCells[i];
             cellWidths.push(cell.getBoundingClientRect().width);
         }
-        this._cachedCellWidths = cellWidths;
         return cellWidths;
     }
     /**
@@ -1050,11 +1043,7 @@ class CdkTable {
     constructor(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
     // Optional for backwards compatibility, but a view repeater strategy will always
     // be provided.
-    _viewRepeater, 
-    // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
-    // this property will never be null.
-    // tslint:disable-next-line: lightweight-tokens
-    _viewportRuler) {
+    _viewRepeater) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
@@ -1062,7 +1051,6 @@ class CdkTable {
         this._dir = _dir;
         this._platform = _platform;
         this._viewRepeater = _viewRepeater;
-        this._viewportRuler = _viewportRuler;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1106,17 +1094,6 @@ class CdkTable {
          */
         this._footerRowDefChanged = true;
         /**
-         * Whether the sticky column styles need to be updated. Set to `true` when the visible columns
-         * change.
-         */
-        this._stickyColumnStylesNeedReset = true;
-        /**
-         * Whether the sticky styler should recalculate cell widths when applying sticky styles. If
-         * `false`, cached values will be used instead. This is only applicable to tables with
-         * {@link fixedLayout} enabled. For other tables, cell widths will always be recalculated.
-         */
-        this._forceRecalculateCellWidths = true;
-        /**
          * Cache of the latest rendered `RenderRow` objects as a map for easy retrieval when constructing
          * a new list of `RenderRow` objects for rendering rows. Since the new list is constructed with
          * the cached `RenderRow` objects when possible, the row identity is preserved when the data
@@ -1144,7 +1121,6 @@ class CdkTable {
         /** Whether the no data row is currently showing anything. */
         this._isShowingNoDataRow = false;
         this._multiTemplateDataRows = false;
-        this._fixedLayout = false;
         // TODO(andrewseguin): Remove max value as the end index
         //   and instead calculate the view on init and scroll.
         /**
@@ -1221,19 +1197,6 @@ class CdkTable {
             this.updateStickyColumnStyles();
         }
     }
-    /**
-     * Whether to use a fixed table layout. Enabling this option will enforce consistent column widths
-     * and optimize rendering sticky styles for native tables. No-op for flex tables.
-     */
-    get fixedLayout() {
-        return this._fixedLayout;
-    }
-    set fixedLayout(v) {
-        this._fixedLayout = coerceBooleanProperty(v);
-        // Toggling `fixedLayout` may change column widths. Sticky column styles should be recalculated.
-        this._forceRecalculateCellWidths = true;
-        this._stickyColumnStylesNeedReset = true;
-    }
     ngOnInit() {
         this._setupStickyStyler();
         if (this._isNativeHtmlTable) {
@@ -1244,11 +1207,6 @@ class CdkTable {
         // with the values of the `RenderRow`'s data and index.
         this._dataDiffer = this._differs.find([]).create((_i, dataRow) => {
             return this.trackBy ? this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
-        });
-        // Table cell dimensions may change after resizing the window. Signal the sticky styler to
-        // refresh its cache of cell widths the next time sticky styles are updated.
-        this._viewportRuler.change().pipe(takeUntil(this._onDestroy)).subscribe(() => {
-            this._forceRecalculateCellWidths = true;
         });
     }
     ngAfterContentChecked() {
@@ -1262,10 +1220,7 @@ class CdkTable {
         }
         // Render updates if the list of columns have been changed for the header, row, or footer defs.
         const columnsChanged = this._renderUpdatedColumns();
-        const rowDefsChanged = columnsChanged || this._headerRowDefChanged || this._footerRowDefChanged;
-        // Ensure sticky column styles are reset if set to `true` elsewhere.
-        this._stickyColumnStylesNeedReset = this._stickyColumnStylesNeedReset || rowDefsChanged;
-        this._forceRecalculateCellWidths = rowDefsChanged;
+        const stickyColumnStyleUpdateNeeded = columnsChanged || this._headerRowDefChanged || this._footerRowDefChanged;
         // If the header row definition has been changed, trigger a render to the header row.
         if (this._headerRowDefChanged) {
             this._forceRenderHeaderRows();
@@ -1281,7 +1236,7 @@ class CdkTable {
         if (this.dataSource && this._rowDefs.length > 0 && !this._renderChangeSubscription) {
             this._observeRenderChanges();
         }
-        else if (this._stickyColumnStylesNeedReset) {
+        else if (stickyColumnStyleUpdateNeeded) {
             // In the above case, _observeRenderChanges will result in updateStickyColumnStyles being
             // called when it row data arrives. Otherwise, we need to call it proactively.
             this.updateStickyColumnStyles();
@@ -1428,17 +1383,9 @@ class CdkTable {
         const headerRows = this._getRenderedRows(this._headerRowOutlet);
         const dataRows = this._getRenderedRows(this._rowOutlet);
         const footerRows = this._getRenderedRows(this._footerRowOutlet);
-        // For tables not using a fixed layout, the column widths may change when new rows are rendered.
-        // In a table using a fixed layout, row content won't affect column width, so sticky styles
-        // don't need to be cleared unless either the sticky column config changes or one of the row
-        // defs change.
-        if ((this._isNativeHtmlTable && !this._fixedLayout)
-            || this._stickyColumnStylesNeedReset) {
-            // Clear the left and right positioning from all columns in the table across all rows since
-            // sticky columns span across all table sections (header, data, footer)
-            this._stickyStyler.clearStickyPositioning([...headerRows, ...dataRows, ...footerRows], ['left', 'right']);
-            this._stickyColumnStylesNeedReset = false;
-        }
+        // Clear the left and right positioning from all columns in the table across all rows since
+        // sticky columns span across all table sections (header, data, footer)
+        this._stickyStyler.clearStickyPositioning([...headerRows, ...dataRows, ...footerRows], ['left', 'right']);
         // Update the sticky styles for each header row depending on the def's sticky state
         headerRows.forEach((headerRow, i) => {
             this._addStickyColumnStyles([headerRow], this._headerRowDefs[i]);
@@ -1644,7 +1591,7 @@ class CdkTable {
         });
         const stickyStartStates = columnDefs.map(columnDef => columnDef.sticky);
         const stickyEndStates = columnDefs.map(columnDef => columnDef.stickyEnd);
-        this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates, !this._fixedLayout || this._forceRecalculateCellWidths);
+        this._stickyStyler.updateStickyColumns(rows, stickyStartStates, stickyEndStates);
     }
     /** Gets the list of rows that have been rendered in the row outlet. */
     _getRenderedRows(rowOutlet) {
@@ -1792,7 +1739,6 @@ class CdkTable {
             this.updateStickyFooterRowStyles();
         }
         if (Array.from(this._columnDefsByName.values()).reduce(stickyCheckReducer, false)) {
-            this._stickyColumnStylesNeedReset = true;
             this.updateStickyColumnStyles();
         }
     }
@@ -1834,7 +1780,6 @@ CdkTable.decorators = [
                 template: CDK_TABLE_TEMPLATE,
                 host: {
                     'class': 'cdk-table',
-                    '[class.cdk-table-fixed-layout]': 'fixedLayout',
                 },
                 encapsulation: ViewEncapsulation.None,
                 // The "OnPush" status for the `MatTable` component is effectively a noop, so we are removing it.
@@ -1846,8 +1791,7 @@ CdkTable.decorators = [
                     { provide: CDK_TABLE, useExisting: CdkTable },
                     { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
                     _CoalescedStyleScheduler,
-                ],
-                styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"]
+                ]
             },] }
 ];
 CdkTable.ctorParameters = () => [
@@ -1859,14 +1803,12 @@ CdkTable.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Platform },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] },
-    { type: ViewportRuler, decorators: [{ type: Optional }] }
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] }
 ];
 CdkTable.propDecorators = {
     trackBy: [{ type: Input }],
     dataSource: [{ type: Input }],
     multiTemplateDataRows: [{ type: Input }],
-    fixedLayout: [{ type: Input }],
     _rowOutlet: [{ type: ViewChild, args: [DataRowOutlet, { static: true },] }],
     _headerRowOutlet: [{ type: ViewChild, args: [HeaderRowOutlet, { static: true },] }],
     _footerRowOutlet: [{ type: ViewChild, args: [FooterRowOutlet, { static: true },] }],

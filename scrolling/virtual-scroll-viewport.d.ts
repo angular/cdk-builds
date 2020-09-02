@@ -67,7 +67,12 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _runAfterChangeDetection;
     /** Subscription to changes in the viewport size. */
     private _viewportChanges;
-    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher, viewportRuler: ViewportRuler);
+    constructor(elementRef: ElementRef<HTMLElement>, _changeDetectorRef: ChangeDetectorRef, ngZone: NgZone, _scrollStrategy: VirtualScrollStrategy, dir: Directionality, scrollDispatcher: ScrollDispatcher, 
+    /**
+     * @deprecated `viewportRuler` parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    viewportRuler?: ViewportRuler);
     ngOnInit(): void;
     ngOnDestroy(): void;
     /** Attaches a `CdkVirtualScrollRepeater` to this viewport. */

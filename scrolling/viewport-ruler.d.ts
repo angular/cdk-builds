@@ -28,8 +28,10 @@ export declare class ViewportRuler implements OnDestroy {
     /** Event listener that will be used to handle the viewport change events. */
     private _changeListener;
     /** Used to reference correct document/window */
-    protected _document: Document;
-    constructor(_platform: Platform, ngZone: NgZone, document: any);
+    protected _document?: Document;
+    constructor(_platform: Platform, ngZone: NgZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document?: any);
     ngOnDestroy(): void;
     /** Returns the viewport's width and height. */
     getViewportSize(): Readonly<{
@@ -45,6 +47,8 @@ export declare class ViewportRuler implements OnDestroy {
      * @param throttleTime Time in milliseconds to throttle the stream.
      */
     change(throttleTime?: number): Observable<Event>;
+    /** Access injected document if available or fallback to global document reference */
+    private _getDocument;
     /** Use defaultView of injected document if available or fallback to global window reference */
     private _getWindow;
     /** Updates the cached viewport size. */
