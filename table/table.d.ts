@@ -9,6 +9,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CollectionViewer, DataSource, _ViewRepeater } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
@@ -104,6 +105,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _dir: Directionality;
     private _platform;
     protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
+    private readonly _viewportRuler;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
@@ -174,6 +176,17 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * content is checked. Initialized as true so that the table renders the initial set of rows.
      */
     private _footerRowDefChanged;
+    /**
+     * Whether the sticky column styles need to be updated. Set to `true` when the visible columns
+     * change.
+     */
+    private _stickyColumnStylesNeedReset;
+    /**
+     * Whether the sticky styler should recalculate cell widths when applying sticky styles. If
+     * `false`, cached values will be used instead. This is only applicable to tables with
+     * {@link fixedLayout} enabled. For other tables, cell widths will always be recalculated.
+     */
+    private _forceRecalculateCellWidths;
     /**
      * Cache of the latest rendered `RenderRow` objects as a map for easy retrieval when constructing
      * a new list of `RenderRow` objects for rendering rows. Since the new list is constructed with
@@ -250,6 +263,13 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     set multiTemplateDataRows(v: boolean);
     _multiTemplateDataRows: boolean;
     /**
+     * Whether to use a fixed table layout. Enabling this option will enforce consistent column widths
+     * and optimize rendering sticky styles for native tables. No-op for flex tables.
+     */
+    get fixedLayout(): boolean;
+    set fixedLayout(v: boolean);
+    private _fixedLayout;
+    /**
      * Stream containing the latest information on what rows are being displayed on screen.
      * Can be used by the data source to as a heuristic of what data should be provided.
      *
@@ -276,7 +296,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>, _viewportRuler: ViewportRuler);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -422,5 +442,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
     static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
+    static ngAcceptInputType_fixedLayout: BooleanInput;
 }
 export {};

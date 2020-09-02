@@ -28,6 +28,7 @@ export declare class StickyStyler {
     private _coalescedStyleScheduler;
     private _isBrowser;
     private readonly _needsPositionStickyOnElement;
+    private _cachedCellWidths;
     /**
      * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
      *     that uses the native `<table>` element.
@@ -56,8 +57,10 @@ export declare class StickyStyler {
      *     in this index position should be stuck to the start of the row.
      * @param stickyEndStates A list of boolean states where each state represents whether the cell
      *     in this index position should be stuck to the end of the row.
+     * @param recalculateCellWidths Whether the sticky styler should recalculate the width of each
+     *     column cell. If `false` cached widths will be used instead.
      */
-    updateStickyColumns(rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[]): void;
+    updateStickyColumns(rows: HTMLElement[], stickyStartStates: boolean[], stickyEndStates: boolean[], recalculateCellWidths?: boolean): void;
     /**
      * Applies sticky positioning to the row's cells if using the native table layout, and to the
      * row itself otherwise.
@@ -102,7 +105,7 @@ export declare class StickyStyler {
      */
     _getCalculatedZIndex(element: HTMLElement): string;
     /** Gets the widths for each cell in the provided row. */
-    _getCellWidths(row: HTMLElement): number[];
+    _getCellWidths(row: HTMLElement, recalculateCellWidths?: boolean): number[];
     /**
      * Determines the left and right positions of each sticky column cell, which will be the
      * accumulation of all sticky column cell widths to the left and right, respectively.
