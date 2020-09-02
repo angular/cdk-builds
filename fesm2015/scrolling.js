@@ -213,9 +213,7 @@ const DEFAULT_SCROLL_TIME = 20;
  * Scrollable references emit a scrolled event.
  */
 class ScrollDispatcher {
-    constructor(_ngZone, _platform, 
-    /** @breaking-change 11.0.0 make document required */
-    document) {
+    constructor(_ngZone, _platform, document) {
         this._ngZone = _ngZone;
         this._platform = _platform;
         /** Subject for notifying that a registered scrollable reference element has been scrolled. */
@@ -313,14 +311,9 @@ class ScrollDispatcher {
         });
         return scrollingContainers;
     }
-    /** Access injected document if available or fallback to global document reference */
-    _getDocument() {
-        return this._document || document;
-    }
     /** Use defaultView of injected document if available or fallback to global window reference */
     _getWindow() {
-        const doc = this._getDocument();
-        return doc.defaultView || window;
+        return this._document.defaultView || window;
     }
     /** Returns true if the element is contained within the provided Scrollable. */
     _scrollableContainsElement(scrollable, elementRef) {
@@ -541,9 +534,7 @@ const DEFAULT_RESIZE_TIME = 20;
  * @docs-private
  */
 class ViewportRuler {
-    constructor(_platform, ngZone, 
-    /** @breaking-change 11.0.0 make document required */
-    document) {
+    constructor(_platform, ngZone, document) {
         this._platform = _platform;
         /** Stream of viewport change events. */
         this._change = new Subject();
@@ -620,7 +611,7 @@ class ViewportRuler {
         // `scrollTop` and `scrollLeft` is inconsistent. However, using the bounding rect of
         // `document.documentElement` works consistently, where the `top` and `left` values will
         // equal negative the scroll position.
-        const document = this._getDocument();
+        const document = this._document;
         const window = this._getWindow();
         const documentElement = document.documentElement;
         const documentRect = documentElement.getBoundingClientRect();
@@ -637,14 +628,9 @@ class ViewportRuler {
     change(throttleTime = DEFAULT_RESIZE_TIME) {
         return throttleTime > 0 ? this._change.pipe(auditTime(throttleTime)) : this._change;
     }
-    /** Access injected document if available or fallback to global document reference */
-    _getDocument() {
-        return this._document || document;
-    }
     /** Use defaultView of injected document if available or fallback to global window reference */
     _getWindow() {
-        const doc = this._getDocument();
-        return doc.defaultView || window;
+        return this._document.defaultView || window;
     }
     /** Updates the cached viewport size. */
     _updateViewportSize() {
@@ -683,12 +669,7 @@ function rangesEqual(r1, r2) {
 const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 class CdkVirtualScrollViewport extends CdkScrollable {
-    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, 
-    /**
-     * @deprecated `viewportRuler` parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    viewportRuler) {
+    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, viewportRuler) {
         super(elementRef, scrollDispatcher, ngZone, dir);
         this.elementRef = elementRef;
         this._changeDetectorRef = _changeDetectorRef;
@@ -736,12 +717,9 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         if (!_scrollStrategy && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw Error('Error: cdk-virtual-scroll-viewport requires the "itemSize" property to be set.');
         }
-        // @breaking-change 11.0.0 Remove null check for `viewportRuler`.
-        if (viewportRuler) {
-            this._viewportChanges = viewportRuler.change().subscribe(() => {
-                this.checkViewportSize();
-            });
-        }
+        this._viewportChanges = viewportRuler.change().subscribe(() => {
+            this.checkViewportSize();
+        });
     }
     /** The direction the viewport scrolls. */
     get orientation() {
