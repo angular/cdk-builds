@@ -2713,6 +2713,21 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
+     * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
+     * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
+     * to avoid circular imports.
+     * @docs-private
+     */
+    var CDK_DRAG_PARENT = new i0.InjectionToken('CDK_DRAG_PARENT');
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /**
      * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
      * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
      * retention of the class and its directive metadata.
@@ -3058,21 +3073,6 @@
         exited: [{ type: i0.Output, args: ['cdkDropListExited',] }],
         sorted: [{ type: i0.Output, args: ['cdkDropListSorted',] }]
     };
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
-     * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
-     * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
-     * to avoid circular imports.
-     * @docs-private
-     */
-    var CDK_DRAG_PARENT = new i0.InjectionToken('CDK_DRAG_PARENT');
 
     /**
      * @license
@@ -3612,8 +3612,10 @@
 
     exports.CDK_DRAG_CONFIG = CDK_DRAG_CONFIG;
     exports.CDK_DRAG_HANDLE = CDK_DRAG_HANDLE;
+    exports.CDK_DRAG_PARENT = CDK_DRAG_PARENT;
     exports.CDK_DRAG_PLACEHOLDER = CDK_DRAG_PLACEHOLDER;
     exports.CDK_DRAG_PREVIEW = CDK_DRAG_PREVIEW;
+    exports.CDK_DROP_LIST = CDK_DROP_LIST;
     exports.CDK_DROP_LIST_GROUP = CDK_DROP_LIST_GROUP;
     exports.CdkDrag = CdkDrag;
     exports.CdkDragHandle = CdkDragHandle;
@@ -3629,8 +3631,6 @@
     exports.copyArrayItem = copyArrayItem;
     exports.moveItemInArray = moveItemInArray;
     exports.transferArrayItem = transferArrayItem;
-    exports.ɵangular_material_src_cdk_drag_drop_drag_drop_b = CDK_DROP_LIST;
-    exports.ɵangular_material_src_cdk_drag_drop_drag_drop_c = CDK_DRAG_PARENT;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
