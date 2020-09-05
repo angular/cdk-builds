@@ -1194,7 +1194,7 @@
         { type: core.NgModule, args: [{
                     exports: EXPORTED_DECLARATIONS,
                     declarations: EXPORTED_DECLARATIONS,
-                    providers: [a11y.FocusMonitor, CdkTreeNodeDef]
+                    providers: [a11y.FocusMonitor]
                 },] }
     ];
 
