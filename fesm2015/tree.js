@@ -847,7 +847,7 @@ CdkTreeModule.decorators = [
     { type: NgModule, args: [{
                 exports: EXPORTED_DECLARATIONS,
                 declarations: EXPORTED_DECLARATIONS,
-                providers: [FocusMonitor, CdkTreeNodeDef]
+                providers: [FocusMonitor]
             },] }
 ];
 
