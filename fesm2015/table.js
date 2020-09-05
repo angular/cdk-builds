@@ -276,6 +276,8 @@ class _Schedule {
         this.endTasks = [];
     }
 }
+/** Injection token used to provide a coalesced style scheduler. */
+const _COALESCED_STYLE_SCHEDULER = new InjectionToken('_COALESCED_STYLE_SCHEDULER');
 /**
  * Allows grouping up CSSDom mutations after the current execution context.
  * This can significantly improve performance when separate consecutive functions are
@@ -614,7 +616,12 @@ class StickyStyler {
      *     using inline styles. If false, it is assumed that position: sticky is included in
      *     the component stylesheet for _stickCellCss.
      */
-    constructor(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true) {
+    constructor(_isNativeHtmlTable, _stickCellCss, direction, 
+    /**
+     * @deprecated `_coalescedStyleScheduler` parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true) {
         this._isNativeHtmlTable = _isNativeHtmlTable;
         this._stickCellCss = _stickCellCss;
         this.direction = direction;
@@ -642,7 +649,7 @@ class StickyStyler {
             }
         }
         // Coalesce with sticky row/column updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             for (const element of elementsToClear) {
                 this._removeStickyStyle(element, stickyDirections);
             }
@@ -668,7 +675,7 @@ class StickyStyler {
         const startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
         const endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
         // Coalesce with sticky row updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             const isRtl = this.direction === 'rtl';
             const start = isRtl ? 'right' : 'left';
             const end = isRtl ? 'left' : 'right';
@@ -723,7 +730,7 @@ class StickyStyler {
         }
         // Coalesce with other sticky row updates (top/bottom), sticky columns updates
         // (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                 if (!states[rowIndex]) {
                     continue;
@@ -747,7 +754,7 @@ class StickyStyler {
         }
         const tfoot = tableElement.querySelector('tfoot');
         // Coalesce with other sticky updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             if (stickyStates.some(state => !state)) {
                 this._removeStickyStyle(tfoot, ['bottom']);
             }
@@ -865,6 +872,19 @@ class StickyStyler {
             }
         }
         return positions;
+    }
+    /**
+     * Schedules styles to be applied when the style scheduler deems appropriate.
+     * @breaking-change 11.0.0 This method can be removed in favor of calling
+     * `CoalescedStyleScheduler.schedule` directly once the scheduler is a required parameter.
+     */
+    _scheduleStyleChanges(changes) {
+        if (this._coalescedStyleScheduler) {
+            this._coalescedStyleScheduler.schedule(changes);
+        }
+        else {
+            changes();
+        }
     }
 }
 
@@ -1040,17 +1060,20 @@ class RowViewRef extends EmbeddedViewRef {
  * connect function that will return an Observable stream that emits the data array to render.
  */
 class CdkTable {
-    constructor(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
-    // Optional for backwards compatibility, but a view repeater strategy will always
-    // be provided.
-    _viewRepeater) {
+    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, 
+    /**
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
+     */
+    _viewRepeater, _coalescedStyleScheduler) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
-        this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._elementRef = _elementRef;
         this._dir = _dir;
         this._platform = _platform;
         this._viewRepeater = _viewRepeater;
+        this._coalescedStyleScheduler = _coalescedStyleScheduler;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1266,6 +1289,7 @@ class CdkTable {
      * an array, this function will need to be called to render any changes.
      */
     renderRows() {
+        var _a;
         this._renderRows = this._getAllRenderRows();
         const changes = this._dataDiffer.diff(this._renderRows);
         if (!changes) {
@@ -1273,7 +1297,9 @@ class CdkTable {
             return;
         }
         const viewContainer = this._rowOutlet.viewContainer;
-        this._viewRepeater.applyChanges(changes, viewContainer, (record, adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
+        // @breaking-change 11.0.0 Remove null check for `_viewRepeater`
+        // once it's a required parameter in the constructor.
+        (_a = this._viewRepeater) === null || _a === void 0 ? void 0 : _a.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
             if (change.operation === 1 /* INSERTED */ && change.context) {
                 this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
             }
@@ -1790,20 +1816,20 @@ CdkTable.decorators = [
                 providers: [
                     { provide: CDK_TABLE, useExisting: CdkTable },
                     { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
-                    _CoalescedStyleScheduler,
+                    { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
                 ]
             },] }
 ];
 CdkTable.ctorParameters = () => [
     { type: IterableDiffers },
     { type: ChangeDetectorRef },
-    { type: _CoalescedStyleScheduler },
     { type: ElementRef },
     { type: String, decorators: [{ type: Attribute, args: ['role',] }] },
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Platform },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] }
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] },
+    { type: _CoalescedStyleScheduler, decorators: [{ type: Optional }, { type: Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] }
 ];
 CdkTable.propDecorators = {
     trackBy: [{ type: Input }],
@@ -2002,5 +2028,5 @@ CdkTableModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

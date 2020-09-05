@@ -99,11 +99,16 @@ export interface RenderRow<T> {
 export declare class CdkTable<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     protected readonly _differs: IterableDiffers;
     protected readonly _changeDetectorRef: ChangeDetectorRef;
-    protected readonly _coalescedStyleScheduler: _CoalescedStyleScheduler;
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
     private _platform;
-    protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
+    /**
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
+     */
+    protected readonly _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined;
+    protected readonly _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
@@ -276,7 +281,13 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _coalescedStyleScheduler: _CoalescedStyleScheduler, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>);
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, 
+    /**
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
+     */
+    _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined, _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;

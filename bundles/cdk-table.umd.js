@@ -598,6 +598,8 @@
         }
         return _Schedule;
     }());
+    /** Injection token used to provide a coalesced style scheduler. */
+    var _COALESCED_STYLE_SCHEDULER = new core.InjectionToken('_COALESCED_STYLE_SCHEDULER');
     /**
      * Allows grouping up CSSDom mutations after the current execution context.
      * This can significantly improve performance when separate consecutive functions are
@@ -983,7 +985,12 @@
          *     using inline styles. If false, it is assumed that position: sticky is included in
          *     the component stylesheet for _stickCellCss.
          */
-        function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement) {
+        function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, 
+        /**
+         * @deprecated `_coalescedStyleScheduler` parameter to become required.
+         * @breaking-change 11.0.0
+         */
+        _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement) {
             if (_isBrowser === void 0) { _isBrowser = true; }
             if (_needsPositionStickyOnElement === void 0) { _needsPositionStickyOnElement = true; }
             this._isNativeHtmlTable = _isNativeHtmlTable;
@@ -1025,7 +1032,7 @@
                 finally { if (e_1) throw e_1.error; }
             }
             // Coalesce with sticky row/column updates (and potentially other changes like column resize).
-            this._coalescedStyleScheduler.schedule(function () {
+            this._scheduleStyleChanges(function () {
                 var e_2, _a;
                 try {
                     for (var elementsToClear_1 = __values(elementsToClear), elementsToClear_1_1 = elementsToClear_1.next(); !elementsToClear_1_1.done; elementsToClear_1_1 = elementsToClear_1.next()) {
@@ -1063,7 +1070,7 @@
             var startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
             var endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
             // Coalesce with sticky row updates (and potentially other changes like column resize).
-            this._coalescedStyleScheduler.schedule(function () {
+            this._scheduleStyleChanges(function () {
                 var e_3, _a;
                 var isRtl = _this.direction === 'rtl';
                 var start = isRtl ? 'right' : 'left';
@@ -1130,7 +1137,7 @@
             }
             // Coalesce with other sticky row updates (top/bottom), sticky columns updates
             // (and potentially other changes like column resize).
-            this._coalescedStyleScheduler.schedule(function () {
+            this._scheduleStyleChanges(function () {
                 var e_4, _a;
                 for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                     if (!states[rowIndex]) {
@@ -1166,7 +1173,7 @@
             }
             var tfoot = tableElement.querySelector('tfoot');
             // Coalesce with other sticky updates (and potentially other changes like column resize).
-            this._coalescedStyleScheduler.schedule(function () {
+            this._scheduleStyleChanges(function () {
                 if (stickyStates.some(function (state) { return !state; })) {
                     _this._removeStickyStyle(tfoot, ['bottom']);
                 }
@@ -1306,6 +1313,19 @@
                 }
             }
             return positions;
+        };
+        /**
+         * Schedules styles to be applied when the style scheduler deems appropriate.
+         * @breaking-change 11.0.0 This method can be removed in favor of calling
+         * `CoalescedStyleScheduler.schedule` directly once the scheduler is a required parameter.
+         */
+        StickyStyler.prototype._scheduleStyleChanges = function (changes) {
+            if (this._coalescedStyleScheduler) {
+                this._coalescedStyleScheduler.schedule(changes);
+            }
+            else {
+                changes();
+            }
         };
         return StickyStyler;
     }());
@@ -1477,17 +1497,20 @@
      * connect function that will return an Observable stream that emits the data array to render.
      */
     var CdkTable = /** @class */ (function () {
-        function CdkTable(_differs, _changeDetectorRef, _coalescedStyleScheduler, _elementRef, role, _dir, _document, _platform, 
-        // Optional for backwards compatibility, but a view repeater strategy will always
-        // be provided.
-        _viewRepeater) {
+        function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, 
+        /**
+         * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+         *    parameters to become required.
+         * @breaking-change 11.0.0
+         */
+        _viewRepeater, _coalescedStyleScheduler) {
             this._differs = _differs;
             this._changeDetectorRef = _changeDetectorRef;
-            this._coalescedStyleScheduler = _coalescedStyleScheduler;
             this._elementRef = _elementRef;
             this._dir = _dir;
             this._platform = _platform;
             this._viewRepeater = _viewRepeater;
+            this._coalescedStyleScheduler = _coalescedStyleScheduler;
             /** Subject that emits when the component has been destroyed. */
             this._onDestroy = new rxjs.Subject();
             /**
@@ -1717,6 +1740,7 @@
          */
         CdkTable.prototype.renderRows = function () {
             var _this = this;
+            var _a;
             this._renderRows = this._getAllRenderRows();
             var changes = this._dataDiffer.diff(this._renderRows);
             if (!changes) {
@@ -1724,7 +1748,9 @@
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;
-            this._viewRepeater.applyChanges(changes, viewContainer, function (record, adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
+            // @breaking-change 11.0.0 Remove null check for `_viewRepeater`
+            // once it's a required parameter in the constructor.
+            (_a = this._viewRepeater) === null || _a === void 0 ? void 0 : _a.applyChanges(changes, viewContainer, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
                 if (change.operation === 1 /* INSERTED */ && change.context) {
                     _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
                 }
@@ -2106,10 +2132,10 @@
             return view;
         };
         CdkTable.prototype._renderCellTemplateForItem = function (rowDef, context) {
-            var e_1, _a;
+            var e_1, _b;
             try {
-                for (var _b = __values(this._getCellTemplates(rowDef)), _c = _b.next(); !_c.done; _c = _b.next()) {
-                    var cellTemplate = _c.value;
+                for (var _c = __values(this._getCellTemplates(rowDef)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                    var cellTemplate = _d.value;
                     if (CdkCellOutlet.mostRecentCellOutlet) {
                         CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cellTemplate, context);
                     }
@@ -2118,7 +2144,7 @@
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                    if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -2163,7 +2189,7 @@
         };
         /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
         CdkTable.prototype._applyNativeTableSections = function () {
-            var e_2, _a, e_3, _b;
+            var e_2, _b, e_3, _c;
             var documentFragment = this._document.createDocumentFragment();
             var sections = [
                 { tag: 'thead', outlets: [this._headerRowOutlet] },
@@ -2176,15 +2202,15 @@
                     var element = this._document.createElement(section.tag);
                     element.setAttribute('role', 'rowgroup');
                     try {
-                        for (var _c = (e_3 = void 0, __values(section.outlets)), _d = _c.next(); !_d.done; _d = _c.next()) {
-                            var outlet = _d.value;
+                        for (var _d = (e_3 = void 0, __values(section.outlets)), _e = _d.next(); !_e.done; _e = _d.next()) {
+                            var outlet = _e.value;
                             element.appendChild(outlet.elementRef.nativeElement);
                         }
                     }
                     catch (e_3_1) { e_3 = { error: e_3_1 }; }
                     finally {
                         try {
-                            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+                            if (_e && !_e.done && (_c = _d.return)) _c.call(_d);
                         }
                         finally { if (e_3) throw e_3.error; }
                     }
@@ -2194,7 +2220,7 @@
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (sections_1_1 && !sections_1_1.done && (_a = sections_1.return)) _a.call(sections_1);
+                    if (sections_1_1 && !sections_1_1.done && (_b = sections_1.return)) _b.call(sections_1);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
@@ -2284,20 +2310,20 @@
                     providers: [
                         { provide: CDK_TABLE, useExisting: CdkTable },
                         { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._DisposeViewRepeaterStrategy },
-                        _CoalescedStyleScheduler,
+                        { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
                     ]
                 },] }
     ];
     CdkTable.ctorParameters = function () { return [
         { type: core.IterableDiffers },
         { type: core.ChangeDetectorRef },
-        { type: _CoalescedStyleScheduler },
         { type: core.ElementRef },
         { type: String, decorators: [{ type: core.Attribute, args: ['role',] }] },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: platform.Platform },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] }
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
+        { type: _CoalescedStyleScheduler, decorators: [{ type: core.Optional }, { type: core.Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] }
     ]; };
     CdkTable.propDecorators = {
         trackBy: [{ type: core.Input }],
@@ -2531,6 +2557,7 @@
     exports.STICKY_DIRECTIONS = STICKY_DIRECTIONS;
     exports.StickyStyler = StickyStyler;
     exports.TEXT_COLUMN_OPTIONS = TEXT_COLUMN_OPTIONS;
+    exports._COALESCED_STYLE_SCHEDULER = _COALESCED_STYLE_SCHEDULER;
     exports._CoalescedStyleScheduler = _CoalescedStyleScheduler;
     exports._Schedule = _Schedule;
     exports.mixinHasStickyInput = mixinHasStickyInput;

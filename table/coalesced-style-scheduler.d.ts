@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { NgZone, OnDestroy } from '@angular/core';
+import { NgZone, OnDestroy, InjectionToken } from '@angular/core';
 /**
  * @docs-private
  */
@@ -13,6 +13,8 @@ export declare class _Schedule {
     tasks: (() => unknown)[];
     endTasks: (() => unknown)[];
 }
+/** Injection token used to provide a coalesced style scheduler. */
+export declare const _COALESCED_STYLE_SCHEDULER: InjectionToken<_CoalescedStyleScheduler>;
 /**
  * Allows grouping up CSSDom mutations after the current execution context.
  * This can significantly improve performance when separate consecutive functions are
