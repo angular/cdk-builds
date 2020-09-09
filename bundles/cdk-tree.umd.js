@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/a11y'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.a11y));
-}(this, (function (exports, collections, rxjs, operators, core, bidi, coercion, a11y) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/a11y')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/a11y'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.a11y));
+}(this, (function (exports, collections, rxjs, operators, core, coercion, bidi, a11y) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -811,13 +811,29 @@
             this._destroyed = new rxjs.Subject();
             /** Emits when the node's data has changed. */
             this._dataChanges = new rxjs.Subject();
-            /**
-             * The role of the node should always be 'treeitem'.
-             */
-            // TODO: mark as deprecated
-            this.role = 'treeitem';
             CdkTreeNode.mostRecentTreeNode = this;
+            // The classes are directly added here instead of in the host property because classes on
+            // the host property are not inherited with View Engine. It is not set as a @HostBinding because
+            // it is not set by the time it's children nodes try to read the class from it.
+            // TODO: move to host after View Engine deprecation
+            this._elementRef.nativeElement.classList.add('cdk-tree-node');
+            this.role = 'treeitem';
         }
+        Object.defineProperty(CdkTreeNode.prototype, "role", {
+            /**
+             * The role of the tree node.
+             * @deprecated The correct role is 'treeitem', 'group' should not be used. This input will be
+             *   removed in a future version.
+             * @breaking-change 12.0.0 Remove this input
+             */
+            get: function () { return 'treeitem'; },
+            set: function (_role) {
+                // TODO: move to host after View Engine deprecation
+                this._elementRef.nativeElement.setAttribute('role', _role);
+            },
+            enumerable: false,
+            configurable: true
+        });
         Object.defineProperty(CdkTreeNode.prototype, "data", {
             /** The tree node's data. */
             get: function () { return this._data; },
@@ -838,13 +854,34 @@
             enumerable: false,
             configurable: true
         });
+        CdkTreeNode.prototype._setExpanded = function (_expanded) {
+            this._isAriaExpanded = _expanded;
+            this._elementRef.nativeElement.setAttribute('aria-expanded', "" + _expanded);
+        };
         Object.defineProperty(CdkTreeNode.prototype, "level", {
             get: function () {
-                return this._tree.treeControl.getLevel ? this._tree.treeControl.getLevel(this._data) : 0;
+                // If the treeControl has a getLevel method, use it to get the level. Otherwise read the
+                // aria-level off the parent node and use it as the level for this node (note aria-level is
+                // 1-indexed, while this property is 0-indexed, so we don't need to increment).
+                return this._tree.treeControl.getLevel ?
+                    this._tree.treeControl.getLevel(this._data) : this._parentNodeAriaLevel;
             },
             enumerable: false,
             configurable: true
         });
+        CdkTreeNode.prototype.ngOnInit = function () {
+            this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
+            this._elementRef.nativeElement.setAttribute('aria-level', "" + (this.level + 1));
+        };
+        CdkTreeNode.prototype.ngDoCheck = function () {
+            // aria-expanded is be set here because the expanded state is stored in the tree control and
+            // the node isn't aware when the state is changed.
+            // It is not set using a @HostBinding because they sometimes get lost with Mixin based classes.
+            // TODO: move to host after View Engine deprecation
+            if (this.isExpanded != this._isAriaExpanded) {
+                this._setExpanded(this.isExpanded);
+            }
+        };
         CdkTreeNode.prototype.ngOnDestroy = function () {
             // If this is the last tree node being destroyed,
             // clear out the reference to avoid leaking memory.
@@ -878,12 +915,6 @@
         { type: core.Directive, args: [{
                     selector: 'cdk-tree-node',
                     exportAs: 'cdkTreeNode',
-                    host: {
-                        '[attr.aria-expanded]': 'isExpanded',
-                        '[attr.aria-level]': 'level + 1',
-                        '[attr.role]': 'role',
-                        'class': 'cdk-tree-node',
-                    },
                 },] }
     ];
     CdkTreeNode.ctorParameters = function () { return [
@@ -893,6 +924,31 @@
     CdkTreeNode.propDecorators = {
         role: [{ type: core.Input }]
     };
+    function getParentNodeAriaLevel(nodeElement) {
+        var parent = nodeElement.parentElement;
+        while (parent && !isNodeElement(parent)) {
+            parent = parent.parentElement;
+        }
+        if (!parent) {
+            if (typeof ngDevMode === 'undefined' || ngDevMode) {
+                throw Error('Incorrect tree structure containing detached node.');
+            }
+            else {
+                return -1;
+            }
+        }
+        else if (parent.classList.contains('cdk-nested-tree-node')) {
+            return coercion.coerceNumberProperty(parent.getAttribute('aria-level'));
+        }
+        else {
+            // The ancestor element is the cdk-tree itself
+            return 0;
+        }
+    }
+    function isNodeElement(element) {
+        var classList = element.classList;
+        return !!((classList === null || classList === void 0 ? void 0 : classList.contains('cdk-nested-tree-node')) || (classList === null || classList === void 0 ? void 0 : classList.contains('cdk-tree')));
+    }
 
     /**
      * Nested node is a child of `<cdk-tree>`. It works with nested tree.
@@ -907,6 +963,11 @@
             _this._elementRef = _elementRef;
             _this._tree = _tree;
             _this._differs = _differs;
+            // The classes are directly added here instead of in the host property because classes on
+            // the host property are not inherited with View Engine. It is not set as a @HostBinding because
+            // it is not set by the time it's children nodes try to read the class from it.
+            // TODO: move to host after View Engine deprecation
+            _this._elementRef.nativeElement.classList.add('cdk-nested-tree-node');
             return _this;
         }
         CdkNestedTreeNode.prototype.ngAfterContentInit = function () {
@@ -925,6 +986,14 @@
             }
             this.nodeOutlet.changes.pipe(operators.takeUntil(this._destroyed))
                 .subscribe(function () { return _this.updateChildrenNodes(); });
+        };
+        // This is a workaround for https://github.com/angular/angular/issues/23091
+        // In aot mode, the lifecycle hooks from parent class are not called.
+        CdkNestedTreeNode.prototype.ngOnInit = function () {
+            _super.prototype.ngOnInit.call(this);
+        };
+        CdkNestedTreeNode.prototype.ngDoCheck = function () {
+            _super.prototype.ngDoCheck.call(this);
         };
         CdkNestedTreeNode.prototype.ngOnDestroy = function () {
             this._clear();
@@ -967,11 +1036,7 @@
         { type: core.Directive, args: [{
                     selector: 'cdk-nested-tree-node',
                     exportAs: 'cdkNestedTreeNode',
-                    host: {
-                        '[attr.aria-expanded]': 'isExpanded',
-                        '[attr.role]': 'role',
-                        'class': 'cdk-tree-node cdk-nested-tree-node',
-                    },
+                    inputs: ['role', 'disabled', 'tabIndex'],
                     providers: [
                         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
                         { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }

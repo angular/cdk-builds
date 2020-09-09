@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { AfterContentInit, ElementRef, IterableDiffers, OnDestroy, QueryList } from '@angular/core';
+import { AfterContentInit, DoCheck, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList } from '@angular/core';
 import { CdkTreeNodeOutlet } from './outlet';
 import { CdkTree, CdkTreeNode } from './tree';
 /**
@@ -14,7 +14,7 @@ import { CdkTree, CdkTreeNode } from './tree';
  * be added in the `cdkTreeNodeOutlet` in tree node template.
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
-export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements AfterContentInit, OnDestroy {
+export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements AfterContentInit, DoCheck, OnDestroy, OnInit {
     protected _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T>;
     protected _differs: IterableDiffers;
@@ -26,6 +26,8 @@ export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements Afte
     nodeOutlet: QueryList<CdkTreeNodeOutlet>;
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>, _differs: IterableDiffers);
     ngAfterContentInit(): void;
+    ngOnInit(): void;
+    ngDoCheck(): void;
     ngOnDestroy(): void;
     /** Add children dataNodes to the NodeOutlet */
     protected updateChildrenNodes(children?: T[]): void;

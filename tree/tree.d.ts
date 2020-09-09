@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, DoCheck, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
@@ -87,9 +87,17 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
+export declare class CdkTreeNode<T> implements DoCheck, FocusableOption, OnDestroy, OnInit {
     protected _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T>;
+    /**
+     * The role of the tree node.
+     * @deprecated The correct role is 'treeitem', 'group' should not be used. This input will be
+     *   removed in a future version.
+     * @breaking-change 12.0.0 Remove this input
+     */
+    get role(): 'treeitem' | 'group';
+    set role(_role: 'treeitem' | 'group');
     /**
      * The most recently created `CdkTreeNode`. We save it in static variable so we can retrieve it
      * in `CdkTree` and set the data to it.
@@ -99,17 +107,18 @@ export declare class CdkTreeNode<T> implements FocusableOption, OnDestroy {
     protected _destroyed: Subject<void>;
     /** Emits when the node's data has changed. */
     _dataChanges: Subject<void>;
+    private _parentNodeAriaLevel;
     /** The tree node's data. */
     get data(): T;
     set data(value: T);
     protected _data: T;
     get isExpanded(): boolean;
+    private _setExpanded;
+    protected _isAriaExpanded: boolean;
     get level(): number;
-    /**
-     * The role of the node should always be 'treeitem'.
-     */
-    role: 'treeitem' | 'group';
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>);
+    ngOnInit(): void;
+    ngDoCheck(): void;
     ngOnDestroy(): void;
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;
