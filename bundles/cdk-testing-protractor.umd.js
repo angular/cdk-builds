@@ -613,6 +613,13 @@
         ProtractorHarnessEnvironment.loader = function (options) {
             return new ProtractorHarnessEnvironment(protractor.element(protractor.by.css('body')), options);
         };
+        /** Gets the ElementFinder corresponding to the given TestElement. */
+        ProtractorHarnessEnvironment.getNativeElement = function (el) {
+            if (el instanceof ProtractorElement) {
+                return el.element;
+            }
+            throw Error('This TestElement was not created by the ProtractorHarnessEnvironment');
+        };
         ProtractorHarnessEnvironment.prototype.forceStabilize = function () {
             return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                 return [2 /*return*/];

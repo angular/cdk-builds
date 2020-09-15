@@ -1063,6 +1063,13 @@
         TestbedHarnessEnvironment.documentRootLoader = function (fixture, options) {
             return new TestbedHarnessEnvironment(document.body, fixture, options);
         };
+        /** Gets the native DOM element corresponding to the given TestElement. */
+        TestbedHarnessEnvironment.getNativeElement = function (el) {
+            if (el instanceof UnitTestElement) {
+                return el.element;
+            }
+            throw Error('This TestElement was not created by the TestbedHarnessEnvironment');
+        };
         /**
          * Creates an instance of the given harness type, using the fixture's root element as the
          * harness's host element. This method should be used when creating a harness for the root element

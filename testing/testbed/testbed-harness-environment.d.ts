@@ -29,6 +29,8 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
      * located outside of a fixture (e.g. overlays appended to the document body).
      */
     static documentRootLoader(fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
+    /** Gets the native DOM element corresponding to the given TestElement. */
+    static getNativeElement(el: TestElement): Element;
     /**
      * Creates an instance of the given harness type, using the fixture's root element as the
      * harness's host element. This method should be used when creating a harness for the root element

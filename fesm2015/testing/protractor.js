@@ -224,6 +224,13 @@ class ProtractorHarnessEnvironment extends HarnessEnvironment {
     static loader(options) {
         return new ProtractorHarnessEnvironment(element(by.css('body')), options);
     }
+    /** Gets the ElementFinder corresponding to the given TestElement. */
+    static getNativeElement(el) {
+        if (el instanceof ProtractorElement) {
+            return el.element;
+        }
+        throw Error('This TestElement was not created by the ProtractorHarnessEnvironment');
+    }
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () { });
     }
