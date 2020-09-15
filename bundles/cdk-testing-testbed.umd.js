@@ -956,6 +956,40 @@
                 });
             });
         };
+        UnitTestElement.prototype.selectOptions = function () {
+            var optionIndexes = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                optionIndexes[_i] = arguments[_i];
+            }
+            return __awaiter(this, void 0, void 0, function () {
+                var hasChanged, options, indexes, i, option, wasSelected;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            hasChanged = false;
+                            options = this.element.querySelectorAll('option');
+                            indexes = new Set(optionIndexes);
+                            for (i = 0; i < options.length; i++) {
+                                option = options[i];
+                                wasSelected = option.selected;
+                                // We have to go through `option.selected`, because `HTMLSelectElement.value` doesn't
+                                // allow for multiple options to be selected, even in `multiple` mode.
+                                option.selected = indexes.has(i);
+                                if (option.selected !== wasSelected) {
+                                    hasChanged = true;
+                                    dispatchFakeEvent(this.element, 'change');
+                                }
+                            }
+                            if (!hasChanged) return [3 /*break*/, 2];
+                            return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
+                            _a.label = 2;
+                        case 2: return [2 /*return*/];
+                    }
+                });
+            });
+        };
         UnitTestElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var elementPrototype;

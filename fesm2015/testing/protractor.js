@@ -168,6 +168,26 @@ class ProtractorElement {
             return browser.executeScript(`arguments[0].value = arguments[1]`, this.element, value);
         });
     }
+    selectOptions(...optionIndexes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = yield this.element.all(by.css('option'));
+            const indexes = new Set(optionIndexes); // Convert to a set to remove duplicates.
+            if (options.length && indexes.size) {
+                // Reset the value so all the selected states are cleared. We can
+                // reuse the input-specific method since the logic is the same.
+                yield this.setInputValue('');
+                for (let i = 0; i < options.length; i++) {
+                    if (indexes.has(i)) {
+                        // We have to hold the control key while clicking on options so that multiple can be
+                        // selected in multi-selection mode. The key doesn't do anything for single selection.
+                        yield browser.actions().keyDown(Key.CONTROL).perform();
+                        yield options[i].click();
+                        yield browser.actions().keyUp(Key.CONTROL).perform();
+                    }
+                }
+            }
+        });
+    }
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(`

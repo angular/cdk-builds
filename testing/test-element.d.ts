@@ -94,15 +94,20 @@ export interface TestElement {
     getDimensions(): Promise<ElementDimensions>;
     /** Gets the value of a property of an element. */
     getProperty(name: string): Promise<any>;
+    /** Checks whether this element matches the given selector. */
+    matchesSelector(selector: string): Promise<boolean>;
+    /** Checks whether the element is focused. */
+    isFocused(): Promise<boolean>;
     /**
      * Sets the value of a property of an input.
      * @breaking-change 11.0.0 To become a required method.
      */
     setInputValue?(value: string): Promise<void>;
-    /** Checks whether this element matches the given selector. */
-    matchesSelector(selector: string): Promise<boolean>;
-    /** Checks whether the element is focused. */
-    isFocused(): Promise<boolean>;
+    /**
+     * Selects the options at the specified indexes inside of a native `select` element.
+     * @breaking-change 12.0.0 To become a required method.
+     */
+    selectOptions?(...optionIndexes: number[]): Promise<void>;
 }
 export interface TextOptions {
     /** Optional selector for elements to exclude. */

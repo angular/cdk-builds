@@ -532,6 +532,54 @@
                 });
             });
         };
+        ProtractorElement.prototype.selectOptions = function () {
+            var optionIndexes = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                optionIndexes[_i] = arguments[_i];
+            }
+            return __awaiter(this, void 0, void 0, function () {
+                var options, indexes, i;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.element.all(protractor.by.css('option'))];
+                        case 1:
+                            options = _a.sent();
+                            indexes = new Set(optionIndexes);
+                            if (!(options.length && indexes.size)) return [3 /*break*/, 8];
+                            // Reset the value so all the selected states are cleared. We can
+                            // reuse the input-specific method since the logic is the same.
+                            return [4 /*yield*/, this.setInputValue('')];
+                        case 2:
+                            // Reset the value so all the selected states are cleared. We can
+                            // reuse the input-specific method since the logic is the same.
+                            _a.sent();
+                            i = 0;
+                            _a.label = 3;
+                        case 3:
+                            if (!(i < options.length)) return [3 /*break*/, 8];
+                            if (!indexes.has(i)) return [3 /*break*/, 7];
+                            // We have to hold the control key while clicking on options so that multiple can be
+                            // selected in multi-selection mode. The key doesn't do anything for single selection.
+                            return [4 /*yield*/, protractor.browser.actions().keyDown(protractor.Key.CONTROL).perform()];
+                        case 4:
+                            // We have to hold the control key while clicking on options so that multiple can be
+                            // selected in multi-selection mode. The key doesn't do anything for single selection.
+                            _a.sent();
+                            return [4 /*yield*/, options[i].click()];
+                        case 5:
+                            _a.sent();
+                            return [4 /*yield*/, protractor.browser.actions().keyUp(protractor.Key.CONTROL).perform()];
+                        case 6:
+                            _a.sent();
+                            _a.label = 7;
+                        case 7:
+                            i++;
+                            return [3 /*break*/, 3];
+                        case 8: return [2 /*return*/];
+                    }
+                });
+            });
+        };
         ProtractorElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {

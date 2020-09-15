@@ -528,6 +528,27 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
+    selectOptions(...optionIndexes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let hasChanged = false;
+            const options = this.element.querySelectorAll('option');
+            const indexes = new Set(optionIndexes); // Convert to a set to remove duplicates.
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const wasSelected = option.selected;
+                // We have to go through `option.selected`, because `HTMLSelectElement.value` doesn't
+                // allow for multiple options to be selected, even in `multiple` mode.
+                option.selected = indexes.has(i);
+                if (option.selected !== wasSelected) {
+                    hasChanged = true;
+                    dispatchFakeEvent(this.element, 'change');
+                }
+            }
+            if (hasChanged) {
+                yield this._stabilize();
+            }
+        });
+    }
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
