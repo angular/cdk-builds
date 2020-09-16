@@ -8,7 +8,7 @@
 import { ElementRef } from '@angular/core';
 import { FocusableOption } from '@angular/cdk/a11y';
 export declare class CdkStepHeader implements FocusableOption {
-    protected _elementRef: ElementRef<HTMLElement>;
+    _elementRef: ElementRef<HTMLElement>;
     constructor(_elementRef: ElementRef<HTMLElement>);
     /** Focuses the step header. */
     focus(): void;
