@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/a11y')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/a11y'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.a11y));
-}(this, (function (exports, collections, rxjs, operators, core, coercion, bidi, a11y) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/collections'), require('rxjs'), require('rxjs/operators'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/tree', ['exports', '@angular/cdk/collections', 'rxjs', 'rxjs/operators', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.tree = {}), global.ng.cdk.collections, global.rxjs, global.rxjs.operators, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi));
+}(this, (function (exports, collections, rxjs, operators, core, coercion, bidi) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -1259,7 +1259,6 @@
         { type: core.NgModule, args: [{
                     exports: EXPORTED_DECLARATIONS,
                     declarations: EXPORTED_DECLARATIONS,
-                    providers: [a11y.FocusMonitor]
                 },] }
     ];
 
