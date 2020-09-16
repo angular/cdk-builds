@@ -60,6 +60,8 @@ export declare class DragDropRegistry<I, C> implements OnDestroy {
      * @param event Event whose default action should be prevented.
      */
     private _preventDefaultWhileDragging;
+    /** Event listener for `touchmove` that is bound even if no dragging is happening. */
+    private _persistentTouchmoveListener;
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
 }

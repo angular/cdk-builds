@@ -4,7 +4,6 @@ import { take, filter, takeUntil } from 'rxjs/operators';
 import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, IterableDiffers, ChangeDetectorRef, Input, ViewChild, ContentChildren, ElementRef, Renderer2, HostListener, NgModule } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
-import { FocusMonitor } from '@angular/cdk/a11y';
 
 /**
  * @license
@@ -847,7 +846,6 @@ CdkTreeModule.decorators = [
     { type: NgModule, args: [{
                 exports: EXPORTED_DECLARATIONS,
                 declarations: EXPORTED_DECLARATIONS,
-                providers: [FocusMonitor]
             },] }
 ];
 
