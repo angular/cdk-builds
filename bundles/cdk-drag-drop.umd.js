@@ -1693,6 +1693,8 @@
              * is allowed to be moved into a drop container.
              */
             this.enterPredicate = function () { return true; };
+            /** Functions that is used to determine whether an item can be sorted into a particular index. */
+            this.sortPredicate = function () { return true; };
             /** Emits right before dragging has started. */
             this.beforeStarted = new rxjs.Subject();
             /**
@@ -2220,7 +2222,7 @@
         DropListRef.prototype._getItemIndexFromPointerPosition = function (item, pointerX, pointerY, delta) {
             var _this = this;
             var isHorizontal = this._orientation === 'horizontal';
-            return findIndex(this._itemPositions, function (_a, _, array) {
+            var index = findIndex(this._itemPositions, function (_a, _, array) {
                 var drag = _a.drag, clientRect = _a.clientRect;
                 if (drag === item) {
                     // If there's only one item left in the container, it must be
@@ -2243,6 +2245,7 @@
                     pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) :
                     pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
             });
+            return (index === -1 || !this.sortPredicate(index, item, this)) ? -1 : index;
         };
         /** Caches the current items in the list and their positions. */
         DropListRef.prototype._cacheItems = function () {
@@ -2842,6 +2845,8 @@
              * is allowed to be moved into a drop container.
              */
             this.enterPredicate = function () { return true; };
+            /** Functions that is used to determine whether an item can be sorted into a particular index. */
+            this.sortPredicate = function () { return true; };
             /** Emits when the user drops an item inside the container. */
             this.dropped = new i0.EventEmitter();
             /**
@@ -2871,6 +2876,10 @@
             this._dropListRef.enterPredicate = function (drag, drop) {
                 return _this.enterPredicate(drag.data, drop.data);
             };
+            this._dropListRef.sortPredicate =
+                function (index, drag, drop) {
+                    return _this.sortPredicate(index, drag.data, drop.data);
+                };
             this._setupInputSyncSubscription(this._dropListRef);
             this._handleEvents(this._dropListRef);
             CdkDropList._dropLists.push(this);
@@ -3076,6 +3085,7 @@
         disabled: [{ type: i0.Input, args: ['cdkDropListDisabled',] }],
         sortingDisabled: [{ type: i0.Input, args: ['cdkDropListSortingDisabled',] }],
         enterPredicate: [{ type: i0.Input, args: ['cdkDropListEnterPredicate',] }],
+        sortPredicate: [{ type: i0.Input, args: ['cdkDropListSortPredicate',] }],
         autoScrollDisabled: [{ type: i0.Input, args: ['cdkDropListAutoScrollDisabled',] }],
         dropped: [{ type: i0.Output, args: ['cdkDropListDropped',] }],
         entered: [{ type: i0.Output, args: ['cdkDropListEntered',] }],

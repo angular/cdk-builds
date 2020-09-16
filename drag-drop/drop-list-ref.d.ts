@@ -43,6 +43,8 @@ export declare class DropListRef<T = any> {
      * is allowed to be moved into a drop container.
      */
     enterPredicate: (drag: DragRef, drop: DropListRef) => boolean;
+    /** Functions that is used to determine whether an item can be sorted into a particular index. */
+    sortPredicate: (index: number, drag: DragRef, drop: DropListRef) => boolean;
     /** Emits right before dragging has started. */
     beforeStarted: Subject<void>;
     /**

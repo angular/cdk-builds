@@ -76,6 +76,8 @@ export declare class CdkDropList<T = any> implements OnDestroy {
      * is allowed to be moved into a drop container.
      */
     enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean;
+    /** Functions that is used to determine whether an item can be sorted into a particular index. */
+    sortPredicate: (index: number, drag: CdkDrag, drop: CdkDropList) => boolean;
     /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
     autoScrollDisabled: boolean;
     /** Emits when the user drops an item inside the container. */
