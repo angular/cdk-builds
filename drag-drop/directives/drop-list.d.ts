@@ -33,13 +33,9 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Element that the drop list is attached to. */
     element: ElementRef<HTMLElement>;
     private _changeDetectorRef;
+    private _scrollDispatcher;
     private _dir?;
     private _group?;
-    /**
-     * @deprecated _scrollDispatcher parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    private _scrollDispatcher?;
     /** Emits when the list has been destroyed. */
     private _destroyed;
     /** Whether the element's scrollable parents have been resolved. */
@@ -103,12 +99,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _unsortedItems;
     constructor(
     /** Element that the drop list is attached to. */
-    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, 
-    /**
-     * @deprecated _scrollDispatcher parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    _scrollDispatcher?: ScrollDispatcher | undefined, config?: DragDropConfig);
+    element: ElementRef<HTMLElement>, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _scrollDispatcher: ScrollDispatcher, _dir?: Directionality | undefined, _group?: CdkDropListGroup<CdkDropList<any>> | undefined, config?: DragDropConfig);
     /** Registers an items with the drop list. */
     addItem(item: CdkDrag): void;
     /** Removes an item from the drop list. */

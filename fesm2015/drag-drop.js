@@ -832,7 +832,7 @@ class DragRef {
                 isPointerOverContainer,
                 distance
             });
-            container.drop(this, currentIndex, this._initialContainer, isPointerOverContainer, distance, this._initialIndex);
+            container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance);
             this._dropContainer = this._initialContainer;
         });
     }
@@ -1565,21 +1565,16 @@ class DropListRef {
      * Drops an item into this container.
      * @param item Item being dropped into the container.
      * @param currentIndex Index at which the item should be inserted.
+     * @param previousIndex Index of the item when dragging started.
      * @param previousContainer Container from which the item got dragged in.
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
-     * @param previousIndex Index of the item when dragging started.
-     *
-     * @breaking-change 11.0.0 `previousIndex` parameter to become required.
      */
-    drop(item, currentIndex, previousContainer, isPointerOverContainer, distance, previousIndex) {
+    drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance) {
         this._reset();
-        // @breaking-change 11.0.0 Remove this fallback logic once `previousIndex` is a required param.
-        if (previousIndex == null) {
-            previousIndex = previousContainer.getItemIndex(item);
-        }
-        this.dropped.next({ item,
+        this.dropped.next({
+            item,
             currentIndex,
             previousIndex,
             container: this,
@@ -2492,17 +2487,12 @@ const ɵ0 = undefined;
 class CdkDropList {
     constructor(
     /** Element that the drop list is attached to. */
-    element, dragDrop, _changeDetectorRef, _dir, _group, 
-    /**
-     * @deprecated _scrollDispatcher parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    _scrollDispatcher, config) {
+    element, dragDrop, _changeDetectorRef, _scrollDispatcher, _dir, _group, config) {
         this.element = element;
         this._changeDetectorRef = _changeDetectorRef;
+        this._scrollDispatcher = _scrollDispatcher;
         this._dir = _dir;
         this._group = _group;
-        this._scrollDispatcher = _scrollDispatcher;
         /** Emits when the list has been destroyed. */
         this._destroyed = new Subject();
         /**
@@ -2638,8 +2628,7 @@ class CdkDropList {
             }
             // Note that we resolve the scrollable parents here so that we delay the resolution
             // as long as possible, ensuring that the element is in its final place in the DOM.
-            // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-            if (!this._scrollableParentsResolved && this._scrollDispatcher) {
+            if (!this._scrollableParentsResolved) {
                 const scrollableParents = this._scrollDispatcher
                     .getAncestorScrollContainers(this.element)
                     .map(scrollable => scrollable.getElementRef().nativeElement);
@@ -2740,9 +2729,9 @@ CdkDropList.ctorParameters = () => [
     { type: ElementRef },
     { type: DragDrop },
     { type: ChangeDetectorRef },
+    { type: ScrollDispatcher },
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: CdkDropListGroup, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DROP_LIST_GROUP,] }, { type: SkipSelf }] },
-    { type: ScrollDispatcher },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_DRAG_CONFIG,] }] }
 ];
 CdkDropList.propDecorators = {

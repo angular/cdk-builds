@@ -841,7 +841,7 @@
                     isPointerOverContainer: isPointerOverContainer,
                     distance: distance
                 });
-                container.drop(_this, currentIndex, _this._initialContainer, isPointerOverContainer, distance, _this._initialIndex);
+                container.drop(_this, currentIndex, _this._initialIndex, _this._initialContainer, isPointerOverContainer, distance);
                 _this._dropContainer = _this._initialContainer;
             });
         };
@@ -1875,23 +1875,20 @@
          * Drops an item into this container.
          * @param item Item being dropped into the container.
          * @param currentIndex Index at which the item should be inserted.
+         * @param previousIndex Index of the item when dragging started.
          * @param previousContainer Container from which the item got dragged in.
          * @param isPointerOverContainer Whether the user's pointer was over the
          *    container when the item was dropped.
          * @param distance Distance the user has dragged since the start of the dragging sequence.
-         * @param previousIndex Index of the item when dragging started.
-         *
-         * @breaking-change 11.0.0 `previousIndex` parameter to become required.
          */
-        DropListRef.prototype.drop = function (item, currentIndex, previousContainer, isPointerOverContainer, distance, previousIndex) {
+        DropListRef.prototype.drop = function (item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance) {
             this._reset();
-            // @breaking-change 11.0.0 Remove this fallback logic once `previousIndex` is a required param.
-            if (previousIndex == null) {
-                previousIndex = previousContainer.getItemIndex(item);
-            }
-            this.dropped.next({ item: item,
+            this.dropped.next({
+                item: item,
                 currentIndex: currentIndex,
-                previousIndex: previousIndex, container: this, previousContainer: previousContainer,
+                previousIndex: previousIndex,
+                container: this,
+                previousContainer: previousContainer,
                 isPointerOverContainer: isPointerOverContainer,
                 distance: distance
             });
@@ -2815,18 +2812,13 @@
     var CdkDropList = /** @class */ (function () {
         function CdkDropList(
         /** Element that the drop list is attached to. */
-        element, dragDrop, _changeDetectorRef, _dir, _group, 
-        /**
-         * @deprecated _scrollDispatcher parameter to become required.
-         * @breaking-change 11.0.0
-         */
-        _scrollDispatcher, config) {
+        element, dragDrop, _changeDetectorRef, _scrollDispatcher, _dir, _group, config) {
             var _this = this;
             this.element = element;
             this._changeDetectorRef = _changeDetectorRef;
+            this._scrollDispatcher = _scrollDispatcher;
             this._dir = _dir;
             this._group = _group;
-            this._scrollDispatcher = _scrollDispatcher;
             /** Emits when the list has been destroyed. */
             this._destroyed = new rxjs.Subject();
             /**
@@ -2967,8 +2959,7 @@
                 }
                 // Note that we resolve the scrollable parents here so that we delay the resolution
                 // as long as possible, ensuring that the element is in its final place in the DOM.
-                // @breaking-change 11.0.0 Remove null check for _scrollDispatcher once it's required.
-                if (!_this._scrollableParentsResolved && _this._scrollDispatcher) {
+                if (!_this._scrollableParentsResolved) {
                     var scrollableParents = _this._scrollDispatcher
                         .getAncestorScrollContainers(_this.element)
                         .map(function (scrollable) { return scrollable.getElementRef().nativeElement; });
@@ -3071,9 +3062,9 @@
         { type: i0.ElementRef },
         { type: DragDrop },
         { type: i0.ChangeDetectorRef },
+        { type: i2.ScrollDispatcher },
         { type: bidi.Directionality, decorators: [{ type: i0.Optional }] },
         { type: CdkDropListGroup, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DROP_LIST_GROUP,] }, { type: i0.SkipSelf }] },
-        { type: i2.ScrollDispatcher },
         { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [CDK_DRAG_CONFIG,] }] }
     ]; };
     CdkDropList.propDecorators = {
