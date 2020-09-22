@@ -1070,7 +1070,12 @@
      * This directive will add left-padding to the node to show hierarchy.
      */
     var CdkTreeNodePadding = /** @class */ (function () {
-        function CdkTreeNodePadding(_treeNode, _tree, _element, _dir) {
+        function CdkTreeNodePadding(_treeNode, _tree, 
+        /**
+         * @deprecated _renderer parameter no longer being used. To be removed.
+         * @breaking-change 11.0.0
+         */
+        _renderer, _element, _dir) {
             var _this = this;
             this._treeNode = _treeNode;
             this._tree = _tree;
@@ -1172,6 +1177,7 @@
     CdkTreeNodePadding.ctorParameters = function () { return [
         { type: CdkTreeNode },
         { type: CdkTree },
+        { type: core.Renderer2 },
         { type: core.ElementRef },
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] }
     ]; };

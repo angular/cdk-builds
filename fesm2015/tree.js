@@ -1,7 +1,7 @@
 import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
 import { take, filter, takeUntil } from 'rxjs/operators';
-import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, IterableDiffers, ChangeDetectorRef, Input, ViewChild, ContentChildren, ElementRef, HostListener, NgModule } from '@angular/core';
+import { InjectionToken, Directive, ViewContainerRef, Inject, Optional, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, IterableDiffers, ChangeDetectorRef, Input, ViewChild, ContentChildren, ElementRef, Renderer2, HostListener, NgModule } from '@angular/core';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 
@@ -737,7 +737,12 @@ const cssUnitPattern = /([A-Za-z%]+)$/;
  * This directive will add left-padding to the node to show hierarchy.
  */
 class CdkTreeNodePadding {
-    constructor(_treeNode, _tree, _element, _dir) {
+    constructor(_treeNode, _tree, 
+    /**
+     * @deprecated _renderer parameter no longer being used. To be removed.
+     * @breaking-change 11.0.0
+     */
+    _renderer, _element, _dir) {
         this._treeNode = _treeNode;
         this._tree = _tree;
         this._element = _element;
@@ -828,6 +833,7 @@ CdkTreeNodePadding.decorators = [
 CdkTreeNodePadding.ctorParameters = () => [
     { type: CdkTreeNode },
     { type: CdkTree },
+    { type: Renderer2 },
     { type: ElementRef },
     { type: Directionality, decorators: [{ type: Optional }] }
 ];

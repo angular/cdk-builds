@@ -7,7 +7,7 @@
  */
 import { Directionality } from '@angular/cdk/bidi';
 import { NumberInput } from '@angular/cdk/coercion';
-import { ElementRef, OnDestroy } from '@angular/core';
+import { ElementRef, OnDestroy, Renderer2 } from '@angular/core';
 import { CdkTree, CdkTreeNode } from './tree';
 /**
  * Indent for the children tree dataNodes.
@@ -35,7 +35,12 @@ export declare class CdkTreeNodePadding<T> implements OnDestroy {
     get indent(): number | string;
     set indent(indent: number | string);
     _indent: number;
-    constructor(_treeNode: CdkTreeNode<T>, _tree: CdkTree<T>, _element: ElementRef<HTMLElement>, _dir: Directionality);
+    constructor(_treeNode: CdkTreeNode<T>, _tree: CdkTree<T>, 
+    /**
+     * @deprecated _renderer parameter no longer being used. To be removed.
+     * @breaking-change 11.0.0
+     */
+    _renderer: Renderer2, _element: ElementRef<HTMLElement>, _dir: Directionality);
     ngOnDestroy(): void;
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent(): string | null;
