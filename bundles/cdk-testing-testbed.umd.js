@@ -1047,6 +1047,56 @@
     var defaultEnvironmentOptions = {
         queryFn: function (selector, root) { return root.querySelectorAll(selector); }
     };
+    /** Whether auto change detection is currently disabled. */
+    var disableAutoChangeDetection = false;
+    /**
+     * The set of non-destroyed fixtures currently being used by `TestbedHarnessEnvironment` instances.
+     */
+    var activeFixtures = new Set();
+    /**
+     * Installs a handler for change detection batching status changes for a specific fixture.
+     * @param fixture The fixture to handle change detection batching for.
+     */
+    function installAutoChangeDetectionStatusHandler(fixture) {
+        if (!activeFixtures.size) {
+            testing.handleAutoChangeDetectionStatus(function (_a) {
+                var isDisabled = _a.isDisabled, onDetectChangesNow = _a.onDetectChangesNow;
+                disableAutoChangeDetection = isDisabled;
+                if (onDetectChangesNow) {
+                    Promise.all(Array.from(activeFixtures).map(detectChanges)).then(onDetectChangesNow);
+                }
+            });
+        }
+        activeFixtures.add(fixture);
+    }
+    /**
+     * Uninstalls a handler for change detection batching status changes for a specific fixture.
+     * @param fixture The fixture to stop handling change detection batching for.
+     */
+    function uninstallAutoChangeDetectionStatusHandler(fixture) {
+        activeFixtures.delete(fixture);
+        if (!activeFixtures.size) {
+            testing.stopHandlingAutoChangeDetectionStatus();
+        }
+    }
+    /**
+     * Triggers change detection for a specific fixture.
+     * @param fixture The fixture to trigger change detection for.
+     */
+    function detectChanges(fixture) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        fixture.detectChanges();
+                        return [4 /*yield*/, fixture.whenStable()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
     /** A `HarnessEnvironment` implementation for Angular's Testbed. */
     var TestbedHarnessEnvironment = /** @class */ (function (_super) {
         __extends(TestbedHarnessEnvironment, _super);
@@ -1057,7 +1107,11 @@
             _this._destroyed = false;
             _this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
             _this._taskState = TaskStateZoneInterceptor.setup();
-            _fixture.componentRef.onDestroy(function () { return _this._destroyed = true; });
+            installAutoChangeDetectionStatusHandler(_fixture);
+            _fixture.componentRef.onDestroy(function () {
+                uninstallAutoChangeDetectionStatusHandler(_fixture);
+                _this._destroyed = true;
+            });
             return _this;
         }
         /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
@@ -1104,14 +1158,15 @@
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
+                            if (!!disableAutoChangeDetection) return [3 /*break*/, 2];
                             if (this._destroyed) {
                                 throw Error('Harness is attempting to use a fixture that has already been destroyed.');
                             }
-                            this._fixture.detectChanges();
-                            return [4 /*yield*/, this._fixture.whenStable()];
+                            return [4 /*yield*/, detectChanges(this._fixture)];
                         case 1:
                             _a.sent();
-                            return [2 /*return*/];
+                            _a.label = 2;
+                        case 2: return [2 /*return*/];
                     }
                 });
             });

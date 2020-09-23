@@ -1,5 +1,5 @@
 import { __awaiter } from 'tslib';
-import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
+import { TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
@@ -595,6 +595,47 @@ class UnitTestElement {
 const defaultEnvironmentOptions = {
     queryFn: (selector, root) => root.querySelectorAll(selector)
 };
+/** Whether auto change detection is currently disabled. */
+let disableAutoChangeDetection = false;
+/**
+ * The set of non-destroyed fixtures currently being used by `TestbedHarnessEnvironment` instances.
+ */
+const activeFixtures = new Set();
+/**
+ * Installs a handler for change detection batching status changes for a specific fixture.
+ * @param fixture The fixture to handle change detection batching for.
+ */
+function installAutoChangeDetectionStatusHandler(fixture) {
+    if (!activeFixtures.size) {
+        handleAutoChangeDetectionStatus(({ isDisabled, onDetectChangesNow }) => {
+            disableAutoChangeDetection = isDisabled;
+            if (onDetectChangesNow) {
+                Promise.all(Array.from(activeFixtures).map(detectChanges)).then(onDetectChangesNow);
+            }
+        });
+    }
+    activeFixtures.add(fixture);
+}
+/**
+ * Uninstalls a handler for change detection batching status changes for a specific fixture.
+ * @param fixture The fixture to stop handling change detection batching for.
+ */
+function uninstallAutoChangeDetectionStatusHandler(fixture) {
+    activeFixtures.delete(fixture);
+    if (!activeFixtures.size) {
+        stopHandlingAutoChangeDetectionStatus();
+    }
+}
+/**
+ * Triggers change detection for a specific fixture.
+ * @param fixture The fixture to trigger change detection for.
+ */
+function detectChanges(fixture) {
+    return __awaiter(this, void 0, void 0, function* () {
+        fixture.detectChanges();
+        yield fixture.whenStable();
+    });
+}
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
 class TestbedHarnessEnvironment extends HarnessEnvironment {
     constructor(rawRootElement, _fixture, options) {
@@ -604,7 +645,11 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         this._destroyed = false;
         this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
         this._taskState = TaskStateZoneInterceptor.setup();
-        _fixture.componentRef.onDestroy(() => this._destroyed = true);
+        installAutoChangeDetectionStatusHandler(_fixture);
+        _fixture.componentRef.onDestroy(() => {
+            uninstallAutoChangeDetectionStatusHandler(_fixture);
+            this._destroyed = true;
+        });
     }
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
     static loader(fixture, options) {
@@ -639,11 +684,12 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
     }
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this._destroyed) {
-                throw Error('Harness is attempting to use a fixture that has already been destroyed.');
+            if (!disableAutoChangeDetection) {
+                if (this._destroyed) {
+                    throw Error('Harness is attempting to use a fixture that has already been destroyed.');
+                }
+                yield detectChanges(this._fixture);
             }
-            this._fixture.detectChanges();
-            yield this._fixture.whenStable();
         });
     }
     waitForTasksOutsideAngular() {

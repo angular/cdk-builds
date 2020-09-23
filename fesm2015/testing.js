@@ -1,4 +1,113 @@
 import { __awaiter } from 'tslib';
+import { BehaviorSubject } from 'rxjs';
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Subject used to dispatch and listen for changes to the auto change detection status . */
+const autoChangeDetectionSubject = new BehaviorSubject({
+    isDisabled: false
+});
+/** The current subscription to `autoChangeDetectionSubject`. */
+let autoChangeDetectionSubscription;
+/**
+ * The default handler for auto change detection status changes. This handler will be used if the
+ * specific environment does not install its own.
+ * @param status The new auto change detection status.
+ */
+function defaultAutoChangeDetectionHandler(status) {
+    var _a;
+    (_a = status.onDetectChangesNow) === null || _a === void 0 ? void 0 : _a.call(status);
+}
+/**
+ * Allows a test `HarnessEnvironment` to install its own handler for auto change detection status
+ * changes.
+ * @param handler The handler for the auto change detection status.
+ */
+function handleAutoChangeDetectionStatus(handler) {
+    stopHandlingAutoChangeDetectionStatus();
+    autoChangeDetectionSubscription = autoChangeDetectionSubject.subscribe(handler);
+}
+/** Allows a `HarnessEnvironment` to stop handling auto change detection status changes. */
+function stopHandlingAutoChangeDetectionStatus() {
+    autoChangeDetectionSubscription === null || autoChangeDetectionSubscription === void 0 ? void 0 : autoChangeDetectionSubscription.unsubscribe();
+    autoChangeDetectionSubscription = null;
+}
+/**
+ * Batches together triggering of change detection over the duration of the given function.
+ * @param fn The function to call with batched change detection.
+ * @param triggerBeforeAndAfter Optionally trigger change detection once before and after the batch
+ *   operation. If false, change detection will not be triggered.
+ * @return The result of the given function.
+ */
+function batchChangeDetection(fn, triggerBeforeAndAfter) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // If change detection batching is already in progress, just run the function.
+        if (autoChangeDetectionSubject.getValue().isDisabled) {
+            return yield fn();
+        }
+        // If nothing is handling change detection batching, install the default handler.
+        if (!autoChangeDetectionSubscription) {
+            autoChangeDetectionSubject.subscribe(defaultAutoChangeDetectionHandler);
+        }
+        if (triggerBeforeAndAfter) {
+            yield new Promise(resolve => autoChangeDetectionSubject.next({
+                isDisabled: true,
+                onDetectChangesNow: resolve,
+            }));
+            // The function passed in may throw (e.g. if the user wants to make an expectation of an error
+            // being thrown. If this happens, we need to make sure we still re-enable change detection, so
+            // we wrap it in a `finally` block.
+            try {
+                return yield fn();
+            }
+            finally {
+                yield new Promise(resolve => autoChangeDetectionSubject.next({
+                    isDisabled: false,
+                    onDetectChangesNow: resolve,
+                }));
+            }
+        }
+        else {
+            autoChangeDetectionSubject.next({ isDisabled: true });
+            // The function passed in may throw (e.g. if the user wants to make an expectation of an error
+            // being thrown. If this happens, we need to make sure we still re-enable change detection, so
+            // we wrap it in a `finally` block.
+            try {
+                return yield fn();
+            }
+            finally {
+                autoChangeDetectionSubject.next({ isDisabled: false });
+            }
+        }
+    });
+}
+/**
+ * Disables the harness system's auto change detection for the duration of the given function.
+ * @param fn The function to disable auto change detection for.
+ * @return The result of the given function.
+ */
+function manualChangeDetection(fn) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return batchChangeDetection(fn, false);
+    });
+}
+/**
+ * Resolves the given list of async values in parallel (i.e. via Promise.all) while batching change
+ * detection over the entire operation such that change detection occurs exactly once before
+ * resolving the values and once after.
+ * @param values A getter for the async values to resolve in parallel with batched change detection.
+ * @return The resolved values.
+ */
+function parallel(values) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return batchChangeDetection(() => Promise.all(values()), true);
+    });
+}
 
 /**
  * @license
@@ -219,7 +328,10 @@ class HarnessPredicate {
      */
     filter(harnesses) {
         return __awaiter(this, void 0, void 0, function* () {
-            const results = yield Promise.all(harnesses.map(h => this.evaluate(h)));
+            if (harnesses.length === 0) {
+                return [];
+            }
+            const results = yield parallel(() => harnesses.map(h => this.evaluate(h)));
             return harnesses.filter((_, i) => results[i]);
         });
     }
@@ -231,7 +343,7 @@ class HarnessPredicate {
      */
     evaluate(harness) {
         return __awaiter(this, void 0, void 0, function* () {
-            const results = yield Promise.all(this._predicates.map(p => p(harness)));
+            const results = yield parallel(() => this._predicates.map(p => p(harness)));
             return results.reduce((combined, current) => combined && current, true);
         });
     }
@@ -380,13 +492,13 @@ class HarnessEnvironment {
             // found by which selector so it can be matched to the appropriate instance.
             const skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
                 harnessQueries.length === 0;
-            const perElementMatches = yield Promise.all(rawElements.map((rawElement) => __awaiter(this, void 0, void 0, function* () {
+            const perElementMatches = yield parallel(() => rawElements.map((rawElement) => __awaiter(this, void 0, void 0, function* () {
                 const testElement = this.createTestElement(rawElement);
                 const allResultsForElement = yield Promise.all(
                 // For each query, get `null` if it doesn't match, or a `TestElement` or
                 // `ComponentHarness` as appropriate if it does match. This gives us everything that
-                // matches the current raw element, but it may contain duplicate entries (e.g. multiple
-                // `TestElement` or multiple `ComponentHarness` of the same type.
+                // matches the current raw element, but it may contain duplicate entries (e.g.
+                // multiple `TestElement` or multiple `ComponentHarness` of the same type).
                 allQueries.map(query => this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck)));
                 return _removeDuplicateQueryResults(allResultsForElement);
             })));
@@ -591,5 +703,5 @@ function _getTextWithExcludedElements(element, excludeSelector) {
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements };
+export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
 //# sourceMappingURL=testing.js.map

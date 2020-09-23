@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/testing', ['exports'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {})));
-}(this, (function (exports) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/testing', ['exports', 'rxjs'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {}), global.rxjs));
+}(this, (function (exports, rxjs) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -305,6 +305,117 @@
         return value;
     }
 
+    /** Subject used to dispatch and listen for changes to the auto change detection status . */
+    var autoChangeDetectionSubject = new rxjs.BehaviorSubject({
+        isDisabled: false
+    });
+    /** The current subscription to `autoChangeDetectionSubject`. */
+    var autoChangeDetectionSubscription;
+    /**
+     * The default handler for auto change detection status changes. This handler will be used if the
+     * specific environment does not install its own.
+     * @param status The new auto change detection status.
+     */
+    function defaultAutoChangeDetectionHandler(status) {
+        var _a;
+        (_a = status.onDetectChangesNow) === null || _a === void 0 ? void 0 : _a.call(status);
+    }
+    /**
+     * Allows a test `HarnessEnvironment` to install its own handler for auto change detection status
+     * changes.
+     * @param handler The handler for the auto change detection status.
+     */
+    function handleAutoChangeDetectionStatus(handler) {
+        stopHandlingAutoChangeDetectionStatus();
+        autoChangeDetectionSubscription = autoChangeDetectionSubject.subscribe(handler);
+    }
+    /** Allows a `HarnessEnvironment` to stop handling auto change detection status changes. */
+    function stopHandlingAutoChangeDetectionStatus() {
+        autoChangeDetectionSubscription === null || autoChangeDetectionSubscription === void 0 ? void 0 : autoChangeDetectionSubscription.unsubscribe();
+        autoChangeDetectionSubscription = null;
+    }
+    /**
+     * Batches together triggering of change detection over the duration of the given function.
+     * @param fn The function to call with batched change detection.
+     * @param triggerBeforeAndAfter Optionally trigger change detection once before and after the batch
+     *   operation. If false, change detection will not be triggered.
+     * @return The result of the given function.
+     */
+    function batchChangeDetection(fn, triggerBeforeAndAfter) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!autoChangeDetectionSubject.getValue().isDisabled) return [3 /*break*/, 2];
+                        return [4 /*yield*/, fn()];
+                    case 1: return [2 /*return*/, _b.sent()];
+                    case 2:
+                        // If nothing is handling change detection batching, install the default handler.
+                        if (!autoChangeDetectionSubscription) {
+                            autoChangeDetectionSubject.subscribe(defaultAutoChangeDetectionHandler);
+                        }
+                        if (!triggerBeforeAndAfter) return [3 /*break*/, 9];
+                        return [4 /*yield*/, new Promise(function (resolve) { return autoChangeDetectionSubject.next({
+                                isDisabled: true,
+                                onDetectChangesNow: resolve,
+                            }); })];
+                    case 3:
+                        _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        _b.trys.push([4, , 6, 8]);
+                        return [4 /*yield*/, fn()];
+                    case 5: return [2 /*return*/, _b.sent()];
+                    case 6: return [4 /*yield*/, new Promise(function (resolve) { return autoChangeDetectionSubject.next({
+                            isDisabled: false,
+                            onDetectChangesNow: resolve,
+                        }); })];
+                    case 7:
+                        _b.sent();
+                        return [7 /*endfinally*/];
+                    case 8: return [3 /*break*/, 13];
+                    case 9:
+                        autoChangeDetectionSubject.next({ isDisabled: true });
+                        _b.label = 10;
+                    case 10:
+                        _b.trys.push([10, , 12, 13]);
+                        return [4 /*yield*/, fn()];
+                    case 11: return [2 /*return*/, _b.sent()];
+                    case 12:
+                        autoChangeDetectionSubject.next({ isDisabled: false });
+                        return [7 /*endfinally*/];
+                    case 13: return [2 /*return*/];
+                }
+            });
+        });
+    }
+    /**
+     * Disables the harness system's auto change detection for the duration of the given function.
+     * @param fn The function to disable auto change detection for.
+     * @return The result of the given function.
+     */
+    function manualChangeDetection(fn) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                return [2 /*return*/, batchChangeDetection(fn, false)];
+            });
+        });
+    }
+    /**
+     * Resolves the given list of async values in parallel (i.e. via Promise.all) while batching change
+     * detection over the entire operation such that change detection occurs exactly once before
+     * resolving the values and once after.
+     * @param values A getter for the async values to resolve in parallel with batched change detection.
+     * @return The resolved values.
+     */
+    function parallel(values) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                return [2 /*return*/, batchChangeDetection(function () { return Promise.all(values()); }, true)];
+            });
+        });
+    }
+
     /**
      * Base class for component harnesses that all component harness authors should extend. This base
      * component harness provides the basic ability to locate element and sub-component harness. It
@@ -554,7 +665,11 @@
                 var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, Promise.all(harnesses.map(function (h) { return _this.evaluate(h); }))];
+                        case 0:
+                            if (harnesses.length === 0) {
+                                return [2 /*return*/, []];
+                            }
+                            return [4 /*yield*/, parallel(function () { return harnesses.map(function (h) { return _this.evaluate(h); }); })];
                         case 1:
                             results = _b.sent();
                             return [2 /*return*/, harnesses.filter(function (_, i) { return results[i]; })];
@@ -571,9 +686,10 @@
         HarnessPredicate.prototype.evaluate = function (harness) {
             return __awaiter(this, void 0, void 0, function () {
                 var results;
+                var _this = this;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, Promise.all(this._predicates.map(function (p) { return p(harness); }))];
+                        case 0: return [4 /*yield*/, parallel(function () { return _this._predicates.map(function (p) { return p(harness); }); })];
                         case 1:
                             results = _b.sent();
                             return [2 /*return*/, results.reduce(function (combined, current) { return combined && current; }, true)];
@@ -787,7 +903,7 @@
                             rawElements = _b.sent();
                             skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
                                 harnessQueries.length === 0;
-                            return [4 /*yield*/, Promise.all(rawElements.map(function (rawElement) { return __awaiter(_this, void 0, void 0, function () {
+                            return [4 /*yield*/, parallel(function () { return rawElements.map(function (rawElement) { return __awaiter(_this, void 0, void 0, function () {
                                     var testElement, allResultsForElement;
                                     var _this = this;
                                     return __generator(this, function (_a) {
@@ -797,15 +913,15 @@
                                                 return [4 /*yield*/, Promise.all(
                                                     // For each query, get `null` if it doesn't match, or a `TestElement` or
                                                     // `ComponentHarness` as appropriate if it does match. This gives us everything that
-                                                    // matches the current raw element, but it may contain duplicate entries (e.g. multiple
-                                                    // `TestElement` or multiple `ComponentHarness` of the same type.
+                                                    // matches the current raw element, but it may contain duplicate entries (e.g.
+                                                    // multiple `TestElement` or multiple `ComponentHarness` of the same type).
                                                     allQueries.map(function (query) { return _this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck); }))];
                                             case 1:
                                                 allResultsForElement = _a.sent();
                                                 return [2 /*return*/, _removeDuplicateQueryResults(allResultsForElement)];
                                         }
                                     });
-                                }); }))];
+                                }); }); })];
                         case 2:
                             perElementMatches = _b.sent();
                             return [2 /*return*/, [].concat.apply([], __spread(perElementMatches))];
@@ -1053,6 +1169,10 @@
     exports.HarnessEnvironment = HarnessEnvironment;
     exports.HarnessPredicate = HarnessPredicate;
     exports._getTextWithExcludedElements = _getTextWithExcludedElements;
+    exports.handleAutoChangeDetectionStatus = handleAutoChangeDetectionStatus;
+    exports.manualChangeDetection = manualChangeDetection;
+    exports.parallel = parallel;
+    exports.stopHandlingAutoChangeDetectionStatus = stopHandlingAutoChangeDetectionStatus;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
