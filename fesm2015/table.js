@@ -1289,7 +1289,6 @@ class CdkTable {
      * an array, this function will need to be called to render any changes.
      */
     renderRows() {
-        var _a;
         this._renderRows = this._getAllRenderRows();
         const changes = this._dataDiffer.diff(this._renderRows);
         if (!changes) {
@@ -1297,13 +1296,32 @@ class CdkTable {
             return;
         }
         const viewContainer = this._rowOutlet.viewContainer;
-        // @breaking-change 11.0.0 Remove null check for `_viewRepeater`
-        // once it's a required parameter in the constructor.
-        (_a = this._viewRepeater) === null || _a === void 0 ? void 0 : _a.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
-            if (change.operation === 1 /* INSERTED */ && change.context) {
-                this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
-            }
-        });
+        // @breaking-change 11.0.0 Remove null check for `_viewRepeater` and the
+        // `else` clause once `_viewRepeater` is turned into a required parameter.
+        if (this._viewRepeater) {
+            this._viewRepeater.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
+                if (change.operation === 1 /* INSERTED */ && change.context) {
+                    this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
+                }
+            });
+        }
+        else {
+            changes.forEachOperation((record, prevIndex, currentIndex) => {
+                if (record.previousIndex == null) {
+                    const renderRow = record.item;
+                    const rowDef = renderRow.rowDef;
+                    const context = { $implicit: renderRow.data };
+                    this._renderRow(this._rowOutlet, rowDef, currentIndex, context);
+                }
+                else if (currentIndex == null) {
+                    viewContainer.remove(prevIndex);
+                }
+                else {
+                    const view = viewContainer.get(prevIndex);
+                    viewContainer.move(view, currentIndex);
+                }
+            });
+        }
         // Update the meta context of a row's context data (index, count, first, last, ...)
         this._updateRowIndexContext();
         // Update rows that did not get added/removed/moved but may have had their identity changed,
