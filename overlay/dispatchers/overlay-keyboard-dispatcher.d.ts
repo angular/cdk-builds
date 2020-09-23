@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { InjectionToken, Optional } from '@angular/core';
 import { OverlayReference } from '../overlay-reference';
 import { BaseOverlayDispatcher } from './base-overlay-dispatcher';
 /**
@@ -22,11 +21,3 @@ export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     /** Keyboard event listener that will be attached to the body. */
     private _keydownListener;
 }
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher: OverlayKeyboardDispatcher, _document: any): OverlayKeyboardDispatcher;
-/** @docs-private @deprecated @breaking-change 8.0.0 */
-export declare const OVERLAY_KEYBOARD_DISPATCHER_PROVIDER: {
-    provide: typeof OverlayKeyboardDispatcher;
-    deps: (Optional[] | InjectionToken<any>)[];
-    useFactory: typeof OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
-};

@@ -18,12 +18,7 @@ import { Platform } from '@angular/cdk/platform';
 export declare class FullscreenOverlayContainer extends OverlayContainer implements OnDestroy {
     private _fullScreenEventName;
     private _fullScreenListener;
-    constructor(_document: any, 
-    /**
-     * @deprecated `platform` parameter to become required.
-     * @breaking-change 10.0.0
-     */
-    platform?: Platform);
+    constructor(_document: any, platform: Platform);
     ngOnDestroy(): void;
     protected _createContainer(): void;
     private _adjustParentForFullscreenChange;

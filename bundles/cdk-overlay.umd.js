@@ -879,23 +879,6 @@
     OverlayKeyboardDispatcher.ctorParameters = function () { return [
         { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] }
     ]; };
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY(dispatcher, _document) {
-        return dispatcher || new OverlayKeyboardDispatcher(_document);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var OVERLAY_KEYBOARD_DISPATCHER_PROVIDER = {
-        // If there is already an OverlayKeyboardDispatcher available, use that.
-        // Otherwise, provide a new one.
-        provide: OverlayKeyboardDispatcher,
-        deps: [
-            [new i0.Optional(), new i0.SkipSelf(), OverlayKeyboardDispatcher],
-            // Coerce to `InjectionToken` so that the `deps` match the "shape"
-            // of the type expected by Angular
-            i1$1.DOCUMENT
-        ],
-        useFactory: OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY
-    };
 
     /**
      * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
@@ -997,12 +980,7 @@
         !!(window.__karma__ || window.jasmine);
     /** Container inside which all overlays will render. */
     var OverlayContainer = /** @class */ (function () {
-        function OverlayContainer(document, 
-        /**
-         * @deprecated `platform` parameter to become required.
-         * @breaking-change 10.0.0
-         */
-        _platform) {
+        function OverlayContainer(document, _platform) {
             this._platform = _platform;
             this._document = document;
         }
@@ -1029,10 +1007,8 @@
          * with the 'cdk-overlay-container' class on the document body.
          */
         OverlayContainer.prototype._createContainer = function () {
-            // @breaking-change 10.0.0 Remove null check for `_platform`.
-            var isBrowser = this._platform ? this._platform.isBrowser : typeof window !== 'undefined';
             var containerClass = 'cdk-overlay-container';
-            if (isBrowser || isTestEnvironment) {
+            if (this._platform.isBrowser || isTestEnvironment) {
                 var oppositePlatformContainers = this._document.querySelectorAll("." + containerClass + "[platform=\"server\"], " +
                     ("." + containerClass + "[platform=\"test\"]"));
                 // Remove any old containers from the opposite platform.
@@ -1055,7 +1031,7 @@
             if (isTestEnvironment) {
                 container.setAttribute('platform', 'test');
             }
-            else if (!isBrowser) {
+            else if (!this._platform.isBrowser) {
                 container.setAttribute('platform', 'server');
             }
             this._document.body.appendChild(container);
@@ -1071,20 +1047,6 @@
         { type: undefined, decorators: [{ type: i0.Inject, args: [i1$1.DOCUMENT,] }] },
         { type: i2.Platform }
     ]; };
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function OVERLAY_CONTAINER_PROVIDER_FACTORY(parentContainer, _document) {
-        return parentContainer || new OverlayContainer(_document);
-    }
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    var OVERLAY_CONTAINER_PROVIDER = {
-        // If there is already an OverlayContainer available, use that. Otherwise, provide a new one.
-        provide: OverlayContainer,
-        deps: [
-            [new i0.Optional(), new i0.SkipSelf(), OverlayContainer],
-            i1$1.DOCUMENT // We need to use the InjectionToken somewhere to keep TS happy
-        ],
-        useFactory: OVERLAY_CONTAINER_PROVIDER_FACTORY
-    };
 
     /**
      * @license
@@ -1098,11 +1060,7 @@
      * Used to manipulate or dispose of said overlay.
      */
     var OverlayRef = /** @class */ (function () {
-        function OverlayRef(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, 
-        // @breaking-change 8.0.0 `_location` parameter to be made required.
-        _location, 
-        // @breaking-change 9.0.0 `_mouseClickDispatcher` parameter to be made required.
-        _outsideClickDispatcher) {
+        function OverlayRef(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher) {
             var _this = this;
             this._portalOutlet = _portalOutlet;
             this._host = _host;
@@ -1203,15 +1161,10 @@
             this._attachments.next();
             // Track this overlay by the keyboard dispatcher
             this._keyboardDispatcher.add(this);
-            // @breaking-change 8.0.0 remove the null check for `_location`
-            // once the constructor parameter is made required.
-            if (this._config.disposeOnNavigation && this._location) {
+            if (this._config.disposeOnNavigation) {
                 this._locationChanges = this._location.subscribe(function () { return _this.dispose(); });
             }
-            // @breaking-change 9.0.0 remove the null check for `_mouseClickDispatcher`
-            if (this._outsideClickDispatcher) {
-                this._outsideClickDispatcher.add(this);
-            }
+            this._outsideClickDispatcher.add(this);
             return attachResult;
         };
         /**
@@ -1241,12 +1194,8 @@
             // Keeping the host element in the DOM can cause scroll jank, because it still gets
             // rendered, even though it's transparent and unclickable which is why we remove it.
             this._detachContentWhenStable();
-            // Stop listening for location changes.
             this._locationChanges.unsubscribe();
-            // @breaking-change 9.0.0 remove the null check for `_outsideClickDispatcher`
-            if (this._outsideClickDispatcher) {
-                this._outsideClickDispatcher.remove(this);
-            }
+            this._outsideClickDispatcher.remove(this);
             return detachmentResult;
         };
         /** Cleans up the overlay from the DOM. */
@@ -1264,10 +1213,7 @@
             this._backdropClick.complete();
             this._keydownEvents.complete();
             this._outsidePointerEvents.complete();
-            // @breaking-change 9.0.0 remove the null check for `_outsideClickDispatcher`
-            if (this._outsideClickDispatcher) {
-                this._outsideClickDispatcher.remove(this);
-            }
+            this._outsideClickDispatcher.remove(this);
             if (this._host && this._host.parentNode) {
                 this._host.parentNode.removeChild(this._host);
                 this._host = null;
@@ -2920,11 +2866,7 @@
     var Overlay = /** @class */ (function () {
         function Overlay(
         /** Scrolling strategies that can be used when creating an overlay. */
-        scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, 
-        // @breaking-change 8.0.0 `_location` parameter to be made required.
-        _location, 
-        // @breaking-change 9.0.0 `_outsideClickDispatcher` parameter to be made required.
-        _outsideClickDispatcher) {
+        scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location, _outsideClickDispatcher) {
             this.scrollStrategies = scrollStrategies;
             this._overlayContainer = _overlayContainer;
             this._componentFactoryResolver = _componentFactoryResolver;
@@ -3047,10 +2989,6 @@
     ];
     /** Injection token that determines the scroll handling while the connected overlay is open. */
     var CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY = new i0.InjectionToken('cdk-connected-overlay-scroll-strategy');
-    /** @docs-private @deprecated @breaking-change 8.0.0 */
-    function CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_FACTORY(overlay) {
-        return function (config) { return overlay.scrollStrategies.reposition(config); };
-    }
     /**
      * Directive applied to an element to make it usable as an origin for an Overlay using a
      * ConnectedPositionStrategy.
@@ -3411,18 +3349,6 @@
                     ],
                 },] }
     ];
-    /**
-     * @deprecated Use `OverlayModule` instead.
-     * @breaking-change 8.0.0
-     * @docs-private
-     */
-    var OVERLAY_PROVIDERS = [
-        Overlay,
-        OverlayPositionBuilder,
-        OVERLAY_KEYBOARD_DISPATCHER_PROVIDER,
-        OVERLAY_CONTAINER_PROVIDER,
-        CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER,
-    ];
 
     /**
      * @license
@@ -3441,12 +3367,7 @@
      */
     var FullscreenOverlayContainer = /** @class */ (function (_super) {
         __extends(FullscreenOverlayContainer, _super);
-        function FullscreenOverlayContainer(_document, 
-        /**
-         * @deprecated `platform` parameter to become required.
-         * @breaking-change 10.0.0
-         */
-        platform) {
+        function FullscreenOverlayContainer(_document, platform) {
             return _super.call(this, _document, platform) || this;
         }
         FullscreenOverlayContainer.prototype.ngOnDestroy = function () {
@@ -3561,7 +3482,6 @@
     exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
     exports.GlobalPositionStrategy = GlobalPositionStrategy;
     exports.NoopScrollStrategy = NoopScrollStrategy;
-    exports.OVERLAY_PROVIDERS = OVERLAY_PROVIDERS;
     exports.Overlay = Overlay;
     exports.OverlayConfig = OverlayConfig;
     exports.OverlayContainer = OverlayContainer;
@@ -3575,14 +3495,10 @@
     exports.ScrollingVisibility = ScrollingVisibility;
     exports.validateHorizontalPosition = validateHorizontalPosition;
     exports.validateVerticalPosition = validateVerticalPosition;
-    exports.ɵangular_material_src_cdk_overlay_overlay_a = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER_FACTORY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_b = OVERLAY_KEYBOARD_DISPATCHER_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_c = OVERLAY_CONTAINER_PROVIDER_FACTORY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_d = OVERLAY_CONTAINER_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_e = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_f = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
-    exports.ɵangular_material_src_cdk_overlay_overlay_g = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
-    exports.ɵangular_material_src_cdk_overlay_overlay_h = BaseOverlayDispatcher;
+    exports.ɵangular_material_src_cdk_overlay_overlay_a = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_b = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY;
+    exports.ɵangular_material_src_cdk_overlay_overlay_c = CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER;
+    exports.ɵangular_material_src_cdk_overlay_overlay_d = BaseOverlayDispatcher;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

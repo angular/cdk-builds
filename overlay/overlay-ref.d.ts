@@ -32,8 +32,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _ngZone;
     private _keyboardDispatcher;
     private _document;
-    private _location?;
-    private _outsideClickDispatcher?;
+    private _location;
+    private _outsideClickDispatcher;
     private _backdropElement;
     private _backdropClick;
     private _attachments;
@@ -51,7 +51,7 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     _keydownEvents: Subject<KeyboardEvent>;
     /** Stream of mouse outside events dispatched to this overlay. */
     _outsidePointerEvents: Subject<MouseEvent>;
-    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location?: Location | undefined, _outsideClickDispatcher?: OverlayOutsideClickDispatcher | undefined);
+    constructor(_portalOutlet: PortalOutlet, _host: HTMLElement, _pane: HTMLElement, _config: ImmutableObject<OverlayConfig>, _ngZone: NgZone, _keyboardDispatcher: OverlayKeyboardDispatcher, _document: Document, _location: Location, _outsideClickDispatcher: OverlayOutsideClickDispatcher);
     /** The overlay's HTML element */
     get overlayElement(): HTMLElement;
     /** The overlay's backdrop HTML element. */
