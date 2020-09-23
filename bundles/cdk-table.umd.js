@@ -1794,7 +1794,6 @@
          */
         CdkTable.prototype.renderRows = function () {
             var _this = this;
-            var _a;
             this._renderRows = this._getAllRenderRows();
             var changes = this._dataDiffer.diff(this._renderRows);
             if (!changes) {
@@ -1802,13 +1801,32 @@
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;
-            // @breaking-change 11.0.0 Remove null check for `_viewRepeater`
-            // once it's a required parameter in the constructor.
-            (_a = this._viewRepeater) === null || _a === void 0 ? void 0 : _a.applyChanges(changes, viewContainer, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
-                if (change.operation === 1 /* INSERTED */ && change.context) {
-                    _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
-                }
-            });
+            // @breaking-change 11.0.0 Remove null check for `_viewRepeater` and the
+            // `else` clause once `_viewRepeater` is turned into a required parameter.
+            if (this._viewRepeater) {
+                this._viewRepeater.applyChanges(changes, viewContainer, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
+                    if (change.operation === 1 /* INSERTED */ && change.context) {
+                        _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
+                    }
+                });
+            }
+            else {
+                changes.forEachOperation(function (record, prevIndex, currentIndex) {
+                    if (record.previousIndex == null) {
+                        var renderRow = record.item;
+                        var rowDef = renderRow.rowDef;
+                        var context = { $implicit: renderRow.data };
+                        _this._renderRow(_this._rowOutlet, rowDef, currentIndex, context);
+                    }
+                    else if (currentIndex == null) {
+                        viewContainer.remove(prevIndex);
+                    }
+                    else {
+                        var view = viewContainer.get(prevIndex);
+                        viewContainer.move(view, currentIndex);
+                    }
+                });
+            }
             // Update the meta context of a row's context data (index, count, first, last, ...)
             this._updateRowIndexContext();
             // Update rows that did not get added/removed/moved but may have had their identity changed,
@@ -2194,10 +2212,10 @@
             return view;
         };
         CdkTable.prototype._renderCellTemplateForItem = function (rowDef, context) {
-            var e_1, _b;
+            var e_1, _a;
             try {
-                for (var _c = __values(this._getCellTemplates(rowDef)), _d = _c.next(); !_d.done; _d = _c.next()) {
-                    var cellTemplate = _d.value;
+                for (var _b = __values(this._getCellTemplates(rowDef)), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var cellTemplate = _c.value;
                     if (CdkCellOutlet.mostRecentCellOutlet) {
                         CdkCellOutlet.mostRecentCellOutlet._viewContainer.createEmbeddedView(cellTemplate, context);
                     }
@@ -2206,7 +2224,7 @@
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -2251,7 +2269,7 @@
         };
         /** Adds native table sections (e.g. tbody) and moves the row outlets into them. */
         CdkTable.prototype._applyNativeTableSections = function () {
-            var e_2, _b, e_3, _c;
+            var e_2, _a, e_3, _b;
             var documentFragment = this._document.createDocumentFragment();
             var sections = [
                 { tag: 'thead', outlets: [this._headerRowOutlet] },
@@ -2264,15 +2282,15 @@
                     var element = this._document.createElement(section.tag);
                     element.setAttribute('role', 'rowgroup');
                     try {
-                        for (var _d = (e_3 = void 0, __values(section.outlets)), _e = _d.next(); !_e.done; _e = _d.next()) {
-                            var outlet = _e.value;
+                        for (var _c = (e_3 = void 0, __values(section.outlets)), _d = _c.next(); !_d.done; _d = _c.next()) {
+                            var outlet = _d.value;
                             element.appendChild(outlet.elementRef.nativeElement);
                         }
                     }
                     catch (e_3_1) { e_3 = { error: e_3_1 }; }
                     finally {
                         try {
-                            if (_e && !_e.done && (_c = _d.return)) _c.call(_d);
+                            if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
                         }
                         finally { if (e_3) throw e_3.error; }
                     }
@@ -2282,7 +2300,7 @@
             catch (e_2_1) { e_2 = { error: e_2_1 }; }
             finally {
                 try {
-                    if (sections_1_1 && !sections_1_1.done && (_b = sections_1.return)) _b.call(sections_1);
+                    if (sections_1_1 && !sections_1_1.done && (_a = sections_1.return)) _a.call(sections_1);
                 }
                 finally { if (e_2) throw e_2.error; }
             }
