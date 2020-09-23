@@ -386,7 +386,7 @@
                 return __generator(this, function (_e) {
                     switch (_e.label) {
                         case 0:
-                            offsetArgs = args.length ? [{ x: args[0], y: args[1] }] : [];
+                            offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
                             _b = (_a = (_d = protractor.browser.actions())
                                 .mouseMove).apply;
                             _c = [_d];

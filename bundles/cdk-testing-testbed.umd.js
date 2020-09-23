@@ -778,23 +778,31 @@
                 args[_i] = arguments[_i];
             }
             return __awaiter(this, void 0, void 0, function () {
-                var _a, left, top, width, height, relativeX, relativeY, clientX, clientY;
+                var clientX, clientY, _a, left, top, width, height, relativeX, relativeY;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
-                        case 0: return [4 /*yield*/, this.getDimensions()];
+                        case 0:
+                            clientX = undefined;
+                            clientY = undefined;
+                            if (!args.length) return [3 /*break*/, 2];
+                            return [4 /*yield*/, this.getDimensions()];
                         case 1:
                             _a = _b.sent(), left = _a.left, top = _a.top, width = _a.width, height = _a.height;
-                            relativeX = args.length ? args[0] : width / 2;
-                            relativeY = args.length ? args[1] : height / 2;
+                            relativeX = args[0] === 'center' ? width / 2 : args[0];
+                            relativeY = args[0] === 'center' ? height / 2 : args[1];
+                            // Round the computed click position as decimal pixels are not
+                            // supported by mouse events and could lead to unexpected results.
                             clientX = Math.round(left + relativeX);
                             clientY = Math.round(top + relativeY);
+                            _b.label = 2;
+                        case 2:
                             this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
                             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
                             this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);
                             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
                             dispatchMouseEvent(this.element, 'click', clientX, clientY);
                             return [4 /*yield*/, this._stabilize()];
-                        case 2:
+                        case 3:
                             _b.sent();
                             return [2 /*return*/];
                     }

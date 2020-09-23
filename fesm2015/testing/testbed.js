@@ -439,13 +439,17 @@ class UnitTestElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { left, top, width, height } = yield this.getDimensions();
-            const relativeX = args.length ? args[0] : width / 2;
-            const relativeY = args.length ? args[1] : height / 2;
-            // Round the computed click position as decimal pixels are not
-            // supported by mouse events and could lead to unexpected results.
-            const clientX = Math.round(left + relativeX);
-            const clientY = Math.round(top + relativeY);
+            let clientX = undefined;
+            let clientY = undefined;
+            if (args.length) {
+                const { left, top, width, height } = yield this.getDimensions();
+                const relativeX = args[0] === 'center' ? width / 2 : args[0];
+                const relativeY = args[0] === 'center' ? height / 2 : args[1];
+                // Round the computed click position as decimal pixels are not
+                // supported by mouse events and could lead to unexpected results.
+                clientX = Math.round(left + relativeX);
+                clientY = Math.round(top + relativeY);
+            }
             this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
             this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);

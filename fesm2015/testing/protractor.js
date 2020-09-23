@@ -79,7 +79,7 @@ class ProtractorElement {
             // Omitting the offset argument to mouseMove results in clicking the center.
             // This is the default behavior we want, so we use an empty array of offsetArgs if no args are
             // passed to this method.
-            const offsetArgs = args.length ? [{ x: args[0], y: args[1] }] : [];
+            const offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
             yield browser.actions()
                 .mouseMove(yield this.element.getWebElement(), ...offsetArgs)
                 .click()
