@@ -8,6 +8,7 @@
 import * as ts from 'typescript';
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
 import { Migration } from '../../update-tool/migration';
+import { CssSelectorUpgradeData } from '../data/css-selectors';
 import { UpgradeData } from '../upgrade-data';
 /**
  * Migration that walks through every string literal, template and stylesheet in
@@ -15,8 +16,8 @@ import { UpgradeData } from '../upgrade-data';
  */
 export declare class CssSelectorsMigration extends Migration<UpgradeData> {
     /** Change data that upgrades to the specified target version. */
-    data: any;
-    enabled: any;
+    data: CssSelectorUpgradeData[];
+    enabled: boolean;
     visitNode(node: ts.Node): void;
     visitTemplate(template: ResolvedResource): void;
     visitStylesheet(stylesheet: ResolvedResource): void;
