@@ -1627,12 +1627,12 @@ class CdkAriaLive {
         this._liveAnnouncer = _liveAnnouncer;
         this._contentObserver = _contentObserver;
         this._ngZone = _ngZone;
-        this._politeness = 'off';
+        this._politeness = 'polite';
     }
     /** The aria-live politeness level to use when announcing messages. */
     get politeness() { return this._politeness; }
     set politeness(value) {
-        this._politeness = value === 'polite' || value === 'assertive' ? value : 'off';
+        this._politeness = value === 'off' || value === 'assertive' ? value : 'polite';
         if (this._politeness === 'off') {
             if (this._subscription) {
                 this._subscription.unsubscribe();
