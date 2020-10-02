@@ -578,16 +578,55 @@
             return _super !== null && _super.apply(this, arguments) || this;
         }
         ContentContainerComponentHarness.prototype.getChildLoader = function (selector) {
-            return this.locatorFactory.harnessLoaderFor(selector);
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, this.getRootHarnessLoader()];
+                        case 1: return [2 /*return*/, (_b.sent()).getChildLoader(selector)];
+                    }
+                });
+            });
         };
         ContentContainerComponentHarness.prototype.getAllChildLoaders = function (selector) {
-            return this.locatorFactory.harnessLoaderForAll(selector);
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, this.getRootHarnessLoader()];
+                        case 1: return [2 /*return*/, (_b.sent()).getAllChildLoaders(selector)];
+                    }
+                });
+            });
         };
         ContentContainerComponentHarness.prototype.getHarness = function (query) {
-            return this.locatorFor(query)();
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, this.getRootHarnessLoader()];
+                        case 1: return [2 /*return*/, (_b.sent()).getHarness(query)];
+                    }
+                });
+            });
         };
         ContentContainerComponentHarness.prototype.getAllHarnesses = function (query) {
-            return this.locatorForAll(query)();
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0: return [4 /*yield*/, this.getRootHarnessLoader()];
+                        case 1: return [2 /*return*/, (_b.sent()).getAllHarnesses(query)];
+                    }
+                });
+            });
+        };
+        /**
+         * Gets the root harness loader from which to start
+         * searching for content contained by this harness.
+         */
+        ContentContainerComponentHarness.prototype.getRootHarnessLoader = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_b) {
+                    return [2 /*return*/, this.locatorFactory.rootHarnessLoader()];
+                });
+            });
         };
         return ContentContainerComponentHarness;
     }(ComponentHarness));

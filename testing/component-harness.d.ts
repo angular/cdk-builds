@@ -327,6 +327,11 @@ export declare abstract class ContentContainerComponentHarness<S extends string 
     getAllChildLoaders(selector: S): Promise<HarnessLoader[]>;
     getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
     getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
+    /**
+     * Gets the root harness loader from which to start
+     * searching for content contained by this harness.
+     */
+    protected getRootHarnessLoader(): Promise<HarnessLoader>;
 }
 /** Constructor for a ComponentHarness subclass. */
 export interface ComponentHarnessConstructor<T extends ComponentHarness> {

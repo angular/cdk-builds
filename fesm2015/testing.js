@@ -252,16 +252,33 @@ class ComponentHarness {
  */
 class ContentContainerComponentHarness extends ComponentHarness {
     getChildLoader(selector) {
-        return this.locatorFactory.harnessLoaderFor(selector);
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).getChildLoader(selector);
+        });
     }
     getAllChildLoaders(selector) {
-        return this.locatorFactory.harnessLoaderForAll(selector);
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).getAllChildLoaders(selector);
+        });
     }
     getHarness(query) {
-        return this.locatorFor(query)();
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).getHarness(query);
+        });
     }
     getAllHarnesses(query) {
-        return this.locatorForAll(query)();
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).getAllHarnesses(query);
+        });
+    }
+    /**
+     * Gets the root harness loader from which to start
+     * searching for content contained by this harness.
+     */
+    getRootHarnessLoader() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.locatorFactory.rootHarnessLoader();
+        });
     }
 }
 /**
