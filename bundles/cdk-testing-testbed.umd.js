@@ -1079,6 +1079,10 @@
             testing.stopHandlingAutoChangeDetectionStatus();
         }
     }
+    /** Whether we are currently in the fake async zone. */
+    function isInFakeAsyncZone() {
+        return Zone.current.get('FakeAsyncTestZoneSpec') != null;
+    }
     /**
      * Triggers change detection for a specific fixture.
      * @param fixture The fixture to trigger change detection for.
@@ -1089,10 +1093,14 @@
                 switch (_a.label) {
                     case 0:
                         fixture.detectChanges();
-                        return [4 /*yield*/, fixture.whenStable()];
-                    case 1:
+                        if (!isInFakeAsyncZone()) return [3 /*break*/, 1];
+                        testing$1.flush();
+                        return [3 /*break*/, 3];
+                    case 1: return [4 /*yield*/, fixture.whenStable()];
+                    case 2:
                         _a.sent();
-                        return [2 /*return*/];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -1182,7 +1190,7 @@
                             // cannot just rely on the task state observable to become stable because the state will
                             // never change. This is because the task queue will be only drained if the fake async
                             // zone is being flushed.
-                            if (Zone.current.get('FakeAsyncTestZoneSpec')) {
+                            if (isInFakeAsyncZone()) {
                                 testing$1.flush();
                             }
                             // Wait until the task queue has been drained and the zone is stable. Note that

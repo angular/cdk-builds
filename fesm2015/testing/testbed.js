@@ -626,6 +626,10 @@ function uninstallAutoChangeDetectionStatusHandler(fixture) {
         stopHandlingAutoChangeDetectionStatus();
     }
 }
+/** Whether we are currently in the fake async zone. */
+function isInFakeAsyncZone() {
+    return Zone.current.get('FakeAsyncTestZoneSpec') != null;
+}
 /**
  * Triggers change detection for a specific fixture.
  * @param fixture The fixture to trigger change detection for.
@@ -633,7 +637,12 @@ function uninstallAutoChangeDetectionStatusHandler(fixture) {
 function detectChanges(fixture) {
     return __awaiter(this, void 0, void 0, function* () {
         fixture.detectChanges();
-        yield fixture.whenStable();
+        if (isInFakeAsyncZone()) {
+            flush();
+        }
+        else {
+            yield fixture.whenStable();
+        }
     });
 }
 /** A `HarnessEnvironment` implementation for Angular's Testbed. */
@@ -700,7 +709,7 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
             // cannot just rely on the task state observable to become stable because the state will
             // never change. This is because the task queue will be only drained if the fake async
             // zone is being flushed.
-            if (Zone.current.get('FakeAsyncTestZoneSpec')) {
+            if (isInFakeAsyncZone()) {
                 flush();
             }
             // Wait until the task queue has been drained and the zone is stable. Note that
