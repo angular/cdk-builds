@@ -171,6 +171,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * built-in footer row as *its* content child.
      */
     private _customFooterRowDefs;
+    /** No data row that was defined outside of the direct content children of the table. */
+    private _customNoDataRow;
     /**
      * Whether the header row definition has been changed. Triggers an update to the header row after
      * content is checked. Initialized as true so that the table renders the initial set of rows.
@@ -338,6 +340,8 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     addFooterRowDef(footerRowDef: CdkFooterRowDef): void;
     /** Removes a footer row definition that was not included as part of the content children. */
     removeFooterRowDef(footerRowDef: CdkFooterRowDef): void;
+    /** Sets a no data row definition that was not included as a part of the content children. */
+    setNoDataRow(noDataRow: CdkNoDataRow | null): void;
     /**
      * Updates the header sticky styles. First resets all applied styles with respect to the cells
      * sticking to the top. Then, evaluating which cells need to be stuck to the top. This is

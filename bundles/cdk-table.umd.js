@@ -1874,6 +1874,10 @@
             this._customFooterRowDefs.delete(footerRowDef);
             this._footerRowDefChanged = true;
         };
+        /** Sets a no data row definition that was not included as a part of the content children. */
+        CdkTable.prototype.setNoDataRow = function (noDataRow) {
+            this._customNoDataRow = noDataRow;
+        };
         /**
          * Updates the header sticky styles. First resets all applied styles with respect to the cells
          * sticking to the top. Then, evaluating which cells need to be stuck to the top. This is
@@ -2363,11 +2367,12 @@
         };
         /** Creates or removes the no data row, depending on whether any data is being shown. */
         CdkTable.prototype._updateNoDataRow = function () {
-            if (this._noDataRow) {
+            var noDataRow = this._customNoDataRow || this._noDataRow;
+            if (noDataRow) {
                 var shouldShow = this._rowOutlet.viewContainer.length === 0;
                 if (shouldShow !== this._isShowingNoDataRow) {
                     var container = this._noDataRowOutlet.viewContainer;
-                    shouldShow ? container.createEmbeddedView(this._noDataRow.templateRef) : container.clear();
+                    shouldShow ? container.createEmbeddedView(noDataRow.templateRef) : container.clear();
                     this._isShowingNoDataRow = shouldShow;
                 }
             }
