@@ -2148,11 +2148,11 @@
         }
         FocusMonitor.prototype.monitor = function (element, checkChildren) {
             if (checkChildren === void 0) { checkChildren = false; }
-            // Do nothing if we're not on the browser platform.
-            if (!this._platform.isBrowser) {
+            var nativeElement = coercion.coerceElement(element);
+            // Do nothing if we're not on the browser platform or the passed in node isn't an element.
+            if (!this._platform.isBrowser || nativeElement.nodeType !== 1) {
                 return rxjs.of(null);
             }
-            var nativeElement = coercion.coerceElement(element);
             // If the element is inside the shadow DOM, we need to bind our focus/blur listeners to
             // the shadow root, rather than the `document`, because the browser won't emit focus events
             // to the `document`, if focus is moving within the same shadow root.
@@ -2424,7 +2424,8 @@
         }
         CdkMonitorFocus.prototype.ngAfterViewInit = function () {
             var _this = this;
-            this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
+            var element = this._elementRef.nativeElement;
+            this._monitorSubscription = this._focusMonitor.monitor(element, element.nodeType === 1 && element.hasAttribute('cdkMonitorSubtreeFocus'))
                 .subscribe(function (origin) { return _this.cdkFocusChange.emit(origin); });
         };
         CdkMonitorFocus.prototype.ngOnDestroy = function () {
