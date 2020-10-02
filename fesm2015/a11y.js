@@ -1627,12 +1627,12 @@ class CdkAriaLive {
         this._liveAnnouncer = _liveAnnouncer;
         this._contentObserver = _contentObserver;
         this._ngZone = _ngZone;
-        this._politeness = 'off';
+        this._politeness = 'polite';
     }
     /** The aria-live politeness level to use when announcing messages. */
     get politeness() { return this._politeness; }
     set politeness(value) {
-        this._politeness = value === 'polite' || value === 'assertive' ? value : 'off';
+        this._politeness = value === 'off' || value === 'assertive' ? value : 'polite';
         if (this._politeness === 'off') {
             if (this._subscription) {
                 this._subscription.unsubscribe();
@@ -1801,11 +1801,11 @@ class FocusMonitor {
         this._detectionMode = (options === null || options === void 0 ? void 0 : options.detectionMode) || 0 /* IMMEDIATE */;
     }
     monitor(element, checkChildren = false) {
-        // Do nothing if we're not on the browser platform.
-        if (!this._platform.isBrowser) {
+        const nativeElement = coerceElement(element);
+        // Do nothing if we're not on the browser platform or the passed in node isn't an element.
+        if (!this._platform.isBrowser || nativeElement.nodeType !== 1) {
             return of(null);
         }
-        const nativeElement = coerceElement(element);
         // If the element is inside the shadow DOM, we need to bind our focus/blur listeners to
         // the shadow root, rather than the `document`, because the browser won't emit focus events
         // to the `document`, if focus is moving within the same shadow root.
@@ -2072,7 +2072,8 @@ class CdkMonitorFocus {
         this.cdkFocusChange = new EventEmitter();
     }
     ngAfterViewInit() {
-        this._monitorSubscription = this._focusMonitor.monitor(this._elementRef, this._elementRef.nativeElement.hasAttribute('cdkMonitorSubtreeFocus'))
+        const element = this._elementRef.nativeElement;
+        this._monitorSubscription = this._focusMonitor.monitor(element, element.nodeType === 1 && element.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(origin => this.cdkFocusChange.emit(origin));
     }
     ngOnDestroy() {
