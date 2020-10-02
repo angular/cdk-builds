@@ -23,7 +23,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     element: ElementRef<HTMLElement>;
     /** Droppable container that the draggable is a part of. */
     dropContainer: CdkDropList;
-    private _document;
     private _ngZone;
     private _viewContainerRef;
     private _dir;
@@ -102,7 +101,12 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropList, _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined);
+    dropContainer: CdkDropList, 
+    /**
+     * @deprecated `_document` parameter no longer being used and will be removed.
+     * @breaking-change 12.0.0
+     */
+    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.

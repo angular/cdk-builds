@@ -2474,6 +2474,25 @@ const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Asserts that a particular node is an element.
+ * @param node Node to be checked.
+ * @param name Name to attach to the error message.
+ */
+function assertElementNode(node, name) {
+    if (node.nodeType !== 1) {
+        throw Error(`${name} must be attached to an element node. ` +
+            `Currently attached to "${node.nodeName}".`);
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Counter used to generate unique ids for drop zones. */
 let _uniqueIdCounter = 0;
 /**
@@ -2534,6 +2553,9 @@ class CdkDropList {
          * and then we sort them based on their position in the DOM.
          */
         this._unsortedItems = new Set();
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            assertElementNode(element.nativeElement, 'cdkDropList');
+        }
         this._dropListRef = dragDrop.createDropList(element);
         this._dropListRef.data = this;
         if (config) {
@@ -2718,7 +2740,7 @@ CdkDropList.decorators = [
                 ],
                 host: {
                     'class': 'cdk-drop-list',
-                    '[id]': 'id',
+                    '[attr.id]': 'id',
                     '[class.cdk-drop-list-disabled]': 'disabled',
                     '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
                     '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
@@ -2771,6 +2793,9 @@ class CdkDragHandle {
         /** Emits when the state of the handle has changed. */
         this._stateChanges = new Subject();
         this._disabled = false;
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            assertElementNode(element.nativeElement, 'cdkDragHandle');
+        }
         this._parentDrag = parentDrag;
     }
     /** Whether starting to drag through this handle is disabled. */
@@ -2888,10 +2913,14 @@ class CdkDrag {
     /** Element that the draggable is attached to. */
     element, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer, _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle) {
+    dropContainer, 
+    /**
+     * @deprecated `_document` parameter no longer being used and will be removed.
+     * @breaking-change 12.0.0
+     */
+    _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle) {
         this.element = element;
         this.dropContainer = dropContainer;
-        this._document = _document;
         this._ngZone = _ngZone;
         this._viewContainerRef = _viewContainerRef;
         this._dir = _dir;
@@ -3046,10 +3075,8 @@ class CdkDrag {
         const element = this.element.nativeElement;
         const rootElement = this.rootElementSelector ?
             getClosestMatchingAncestor(element, this.rootElementSelector) : element;
-        if (rootElement && rootElement.nodeType !== this._document.ELEMENT_NODE &&
-            (typeof ngDevMode === 'undefined' || ngDevMode)) {
-            throw Error(`cdkDrag must be attached to an element node. ` +
-                `Currently attached to "${rootElement.nodeName}".`);
+        if (rootElement && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            assertElementNode(rootElement, 'cdkDrag');
         }
         this._dragRef.withRootElement(rootElement || element);
     }
