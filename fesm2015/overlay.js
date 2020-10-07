@@ -2657,6 +2657,8 @@ class CdkConnectedOverlay {
         this.viewportMargin = 0;
         /** Whether the overlay is open. */
         this.open = false;
+        /** Whether the overlay can be closed by user interaction. */
+        this.disableClose = false;
         /** Event emitted when the backdrop is clicked. */
         this.backdropClick = new EventEmitter();
         /** Event emitted when the position has changed. */
@@ -2750,7 +2752,7 @@ class CdkConnectedOverlay {
         this._detachSubscription = overlayRef.detachments().subscribe(() => this.detach.emit());
         overlayRef.keydownEvents().subscribe((event) => {
             this.overlayKeydown.next(event);
-            if (event.keyCode === ESCAPE && !hasModifierKey(event)) {
+            if (event.keyCode === ESCAPE && !this.disableClose && !hasModifierKey(event)) {
                 event.preventDefault();
                 this._detachOverlay();
             }
@@ -2887,6 +2889,7 @@ CdkConnectedOverlay.propDecorators = {
     viewportMargin: [{ type: Input, args: ['cdkConnectedOverlayViewportMargin',] }],
     scrollStrategy: [{ type: Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
     open: [{ type: Input, args: ['cdkConnectedOverlayOpen',] }],
+    disableClose: [{ type: Input, args: ['cdkConnectedOverlayDisableClose',] }],
     transformOriginSelector: [{ type: Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
     hasBackdrop: [{ type: Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
     lockPosition: [{ type: Input, args: ['cdkConnectedOverlayLockPosition',] }],

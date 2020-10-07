@@ -81,6 +81,8 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     scrollStrategy: ScrollStrategy;
     /** Whether the overlay is open. */
     open: boolean;
+    /** Whether the overlay can be closed by user interaction. */
+    disableClose: boolean;
     /** CSS selector which to set the transform origin. */
     transformOriginSelector: string;
     /** Whether or not the overlay should attach a backdrop. */

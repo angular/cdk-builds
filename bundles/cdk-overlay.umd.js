@@ -3032,6 +3032,8 @@
             this.viewportMargin = 0;
             /** Whether the overlay is open. */
             this.open = false;
+            /** Whether the overlay can be closed by user interaction. */
+            this.disableClose = false;
             /** Event emitted when the backdrop is clicked. */
             this.backdropClick = new i0.EventEmitter();
             /** Event emitted when the position has changed. */
@@ -3162,7 +3164,7 @@
             this._detachSubscription = overlayRef.detachments().subscribe(function () { return _this.detach.emit(); });
             overlayRef.keydownEvents().subscribe(function (event) {
                 _this.overlayKeydown.next(event);
-                if (event.keyCode === keycodes.ESCAPE && !keycodes.hasModifierKey(event)) {
+                if (event.keyCode === keycodes.ESCAPE && !_this.disableClose && !keycodes.hasModifierKey(event)) {
                     event.preventDefault();
                     _this._detachOverlay();
                 }
@@ -3302,6 +3304,7 @@
         viewportMargin: [{ type: i0.Input, args: ['cdkConnectedOverlayViewportMargin',] }],
         scrollStrategy: [{ type: i0.Input, args: ['cdkConnectedOverlayScrollStrategy',] }],
         open: [{ type: i0.Input, args: ['cdkConnectedOverlayOpen',] }],
+        disableClose: [{ type: i0.Input, args: ['cdkConnectedOverlayDisableClose',] }],
         transformOriginSelector: [{ type: i0.Input, args: ['cdkConnectedOverlayTransformOriginOn',] }],
         hasBackdrop: [{ type: i0.Input, args: ['cdkConnectedOverlayHasBackdrop',] }],
         lockPosition: [{ type: i0.Input, args: ['cdkConnectedOverlayLockPosition',] }],
