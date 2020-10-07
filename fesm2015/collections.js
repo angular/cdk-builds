@@ -449,9 +449,7 @@ UniqueSelectionDispatcher.decorators = [
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Injection token for {@link _ViewRepeater}.
- *
- * INTERNAL ONLY - not for public consumption.
+ * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
  * @docs-private
  */
 const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
