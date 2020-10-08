@@ -29,6 +29,7 @@ export declare class UnitTestElement implements TestElement {
     selectOptions(...optionIndexes: number[]): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
+    dispatchEvent(name: string): Promise<void>;
     /**
      * Dispatches a pointer event on the current element if the browser supports it.
      * @param name Name of the pointer event to be dispatched.

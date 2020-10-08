@@ -201,6 +201,21 @@ class ProtractorElement {
             return this.element.equals(browser.driver.switchTo().activeElement());
         });
     }
+    dispatchEvent(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return browser.executeScript(_dispatchEvent, name, this.element);
+        });
+    }
+}
+/**
+ * Dispatches an event with a particular name and data to an element.
+ * Note that this needs to be a pure function, because it gets stringified by
+ * Protractor and is executed inside the browser.
+ */
+function _dispatchEvent(name, element) {
+    const event = document.createEvent('Event');
+    event.initEvent(name);
+    element.dispatchEvent(event);
 }
 
 /**

@@ -29,4 +29,5 @@ export declare class ProtractorElement implements TestElement {
     selectOptions(...optionIndexes: number[]): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
+    dispatchEvent(name: string): Promise<void>;
 }

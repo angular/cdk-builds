@@ -594,8 +594,25 @@
                 });
             });
         };
+        ProtractorElement.prototype.dispatchEvent = function (name) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, protractor.browser.executeScript(_dispatchEvent, name, this.element)];
+                });
+            });
+        };
         return ProtractorElement;
     }());
+    /**
+     * Dispatches an event with a particular name and data to an element.
+     * Note that this needs to be a pure function, because it gets stringified by
+     * Protractor and is executed inside the browser.
+     */
+    function _dispatchEvent(name, element) {
+        var event = document.createEvent('Event');
+        event.initEvent(name);
+        element.dispatchEvent(event);
+    }
 
     /** The default environment options. */
     var defaultEnvironmentOptions = {

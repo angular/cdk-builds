@@ -567,6 +567,12 @@ class UnitTestElement {
             return document.activeElement === this.element;
         });
     }
+    dispatchEvent(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            dispatchFakeEvent(this.element, name);
+            yield this._stabilize();
+        });
+    }
     /**
      * Dispatches a pointer event on the current element if the browser supports it.
      * @param name Name of the pointer event to be dispatched.

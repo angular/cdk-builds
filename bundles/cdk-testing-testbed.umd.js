@@ -1025,6 +1025,20 @@
                 });
             });
         };
+        UnitTestElement.prototype.dispatchEvent = function (name) {
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            dispatchFakeEvent(this.element, name);
+                            return [4 /*yield*/, this._stabilize()];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
         /**
          * Dispatches a pointer event on the current element if the browser supports it.
          * @param name Name of the pointer event to be dispatched.
