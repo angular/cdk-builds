@@ -26,7 +26,7 @@ export declare function dispatchKeyboardEvent(node: Node, type: string, keyCode?
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-export declare function dispatchMouseEvent(node: Node, type: string, clientX?: number, clientY?: number): MouseEvent;
+export declare function dispatchMouseEvent(node: Node, type: string, clientX?: number, clientY?: number, button?: number): MouseEvent;
 /**
  * Shorthand to dispatch a pointer event on the specified coordinates.
  * @docs-private

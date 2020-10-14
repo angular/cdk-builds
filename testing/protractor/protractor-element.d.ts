@@ -14,6 +14,7 @@ export declare class ProtractorElement implements TestElement {
     blur(): Promise<void>;
     clear(): Promise<void>;
     click(...args: [] | ['center'] | [number, number]): Promise<void>;
+    rightClick(...args: [] | ['center'] | [number, number]): Promise<void>;
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;
@@ -30,4 +31,6 @@ export declare class ProtractorElement implements TestElement {
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
     dispatchEvent(name: string): Promise<void>;
+    /** Dispatches all the events that are part of a click event sequence. */
+    private _dispatchClickEventSequence;
 }

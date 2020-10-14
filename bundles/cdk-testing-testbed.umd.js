@@ -573,10 +573,10 @@
      * Shorthand to dispatch a mouse event on the specified coordinates.
      * @docs-private
      */
-    function dispatchMouseEvent(node, type, clientX, clientY) {
+    function dispatchMouseEvent(node, type, clientX, clientY, button) {
         if (clientX === void 0) { clientX = 0; }
         if (clientY === void 0) { clientY = 0; }
-        return dispatchEvent(node, createMouseEvent(type, clientX, clientY));
+        return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button));
     }
     /**
      * Shorthand to dispatch a pointer event on the specified coordinates.
@@ -778,32 +778,33 @@
                 args[_i] = arguments[_i];
             }
             return __awaiter(this, void 0, void 0, function () {
-                var clientX, clientY, _a, left, top, width, height, relativeX, relativeY;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
-                        case 0:
-                            clientX = undefined;
-                            clientY = undefined;
-                            if (!args.length) return [3 /*break*/, 2];
-                            return [4 /*yield*/, this.getDimensions()];
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._dispatchMouseEventSequence('click', args)];
                         case 1:
-                            _a = _b.sent(), left = _a.left, top = _a.top, width = _a.width, height = _a.height;
-                            relativeX = args[0] === 'center' ? width / 2 : args[0];
-                            relativeY = args[0] === 'center' ? height / 2 : args[1];
-                            // Round the computed click position as decimal pixels are not
-                            // supported by mouse events and could lead to unexpected results.
-                            clientX = Math.round(left + relativeX);
-                            clientY = Math.round(top + relativeY);
-                            _b.label = 2;
-                        case 2:
-                            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
-                            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
-                            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);
-                            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
-                            dispatchMouseEvent(this.element, 'click', clientX, clientY);
+                            _a.sent();
                             return [4 /*yield*/, this._stabilize()];
-                        case 3:
-                            _b.sent();
+                        case 2:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        UnitTestElement.prototype.rightClick = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._dispatchMouseEventSequence('contextmenu', args, 2)];
+                        case 1:
+                            _a.sent();
+                            return [4 /*yield*/, this._stabilize()];
+                        case 2:
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });
@@ -1044,15 +1045,50 @@
          * @param name Name of the pointer event to be dispatched.
          * @param clientX Coordinate of the user's pointer along the X axis.
          * @param clientY Coordinate of the user's pointer along the Y axis.
+         * @param button Mouse button that should be pressed when dispatching the event.
          */
-        UnitTestElement.prototype._dispatchPointerEventIfSupported = function (name, clientX, clientY) {
+        UnitTestElement.prototype._dispatchPointerEventIfSupported = function (name, clientX, clientY, button) {
             // The latest versions of all browsers we support have the new `PointerEvent` API.
             // Though since we capture the two most recent versions of these browsers, we also
             // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
             // so we need to conditionally create and dispatch these events based on feature detection.
             if (typeof PointerEvent !== 'undefined' && PointerEvent) {
-                dispatchPointerEvent(this.element, name, clientX, clientY);
+                dispatchPointerEvent(this.element, name, clientX, clientY, { isPrimary: true, button: button });
             }
+        };
+        /** Dispatches all the events that are part of a mouse event sequence. */
+        UnitTestElement.prototype._dispatchMouseEventSequence = function (name, args, button) {
+            return __awaiter(this, void 0, void 0, function () {
+                var clientX, clientY, _a, left, top, width, height, relativeX, relativeY;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            clientX = undefined;
+                            clientY = undefined;
+                            if (!args.length) return [3 /*break*/, 2];
+                            return [4 /*yield*/, this.getDimensions()];
+                        case 1:
+                            _a = _b.sent(), left = _a.left, top = _a.top, width = _a.width, height = _a.height;
+                            relativeX = args[0] === 'center' ? width / 2 : args[0];
+                            relativeY = args[0] === 'center' ? height / 2 : args[1];
+                            // Round the computed click position as decimal pixels are not
+                            // supported by mouse events and could lead to unexpected results.
+                            clientX = Math.round(left + relativeX);
+                            clientY = Math.round(top + relativeY);
+                            _b.label = 2;
+                        case 2:
+                            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, button);
+                            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button);
+                            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
+                            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button);
+                            dispatchMouseEvent(this.element, name, clientX, clientY, button);
+                            return [4 /*yield*/, this._stabilize()];
+                        case 3:
+                            _b.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
         };
         return UnitTestElement;
     }());

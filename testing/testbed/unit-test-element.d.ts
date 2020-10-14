@@ -14,6 +14,7 @@ export declare class UnitTestElement implements TestElement {
     blur(): Promise<void>;
     clear(): Promise<void>;
     click(...args: [] | ['center'] | [number, number]): Promise<void>;
+    rightClick(...args: [] | ['center'] | [number, number]): Promise<void>;
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;
@@ -35,6 +36,9 @@ export declare class UnitTestElement implements TestElement {
      * @param name Name of the pointer event to be dispatched.
      * @param clientX Coordinate of the user's pointer along the X axis.
      * @param clientY Coordinate of the user's pointer along the Y axis.
+     * @param button Mouse button that should be pressed when dispatching the event.
      */
     private _dispatchPointerEventIfSupported;
+    /** Dispatches all the events that are part of a mouse event sequence. */
+    private _dispatchMouseEventSequence;
 }

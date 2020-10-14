@@ -381,20 +381,27 @@
                 args[_i] = arguments[_i];
             }
             return __awaiter(this, void 0, void 0, function () {
-                var offsetArgs, _a, _b, _c;
-                var _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
-                        case 0:
-                            offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
-                            _b = (_a = (_d = protractor.browser.actions())
-                                .mouseMove).apply;
-                            _c = [_d];
-                            return [4 /*yield*/, this.element.getWebElement()];
-                        case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([__spread.apply(void 0, [[_e.sent()], offsetArgs])])).click()
-                                .perform()];
-                        case 2:
-                            _e.sent();
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._dispatchClickEventSequence(args)];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        ProtractorElement.prototype.rightClick = function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return __awaiter(this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this._dispatchClickEventSequence(args, protractor.Button.RIGHT)];
+                        case 1:
+                            _a.sent();
                             return [2 /*return*/];
                     }
                 });
@@ -598,6 +605,28 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     return [2 /*return*/, protractor.browser.executeScript(_dispatchEvent, name, this.element)];
+                });
+            });
+        };
+        /** Dispatches all the events that are part of a click event sequence. */
+        ProtractorElement.prototype._dispatchClickEventSequence = function (args, button) {
+            return __awaiter(this, void 0, void 0, function () {
+                var offsetArgs, _a, _b, _c;
+                var _d;
+                return __generator(this, function (_e) {
+                    switch (_e.label) {
+                        case 0:
+                            offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
+                            _b = (_a = (_d = protractor.browser.actions())
+                                .mouseMove).apply;
+                            _c = [_d];
+                            return [4 /*yield*/, this.element.getWebElement()];
+                        case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([__spread.apply(void 0, [[_e.sent()], offsetArgs])])).click(button)
+                                .perform()];
+                        case 2:
+                            _e.sent();
+                            return [2 /*return*/];
+                    }
                 });
             });
         };

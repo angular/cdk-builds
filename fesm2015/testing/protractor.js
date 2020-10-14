@@ -1,6 +1,6 @@
 import { __awaiter } from 'tslib';
 import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
-import { Key, browser, by, element } from 'protractor';
+import { Key, browser, Button, by, element } from 'protractor';
 
 /**
  * @license
@@ -76,14 +76,12 @@ class ProtractorElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            // Omitting the offset argument to mouseMove results in clicking the center.
-            // This is the default behavior we want, so we use an empty array of offsetArgs if no args are
-            // passed to this method.
-            const offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
-            yield browser.actions()
-                .mouseMove(yield this.element.getWebElement(), ...offsetArgs)
-                .click()
-                .perform();
+            yield this._dispatchClickEventSequence(args);
+        });
+    }
+    rightClick(...args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._dispatchClickEventSequence(args, Button.RIGHT);
         });
     }
     focus() {
@@ -204,6 +202,19 @@ class ProtractorElement {
     dispatchEvent(name) {
         return __awaiter(this, void 0, void 0, function* () {
             return browser.executeScript(_dispatchEvent, name, this.element);
+        });
+    }
+    /** Dispatches all the events that are part of a click event sequence. */
+    _dispatchClickEventSequence(args, button) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // Omitting the offset argument to mouseMove results in clicking the center.
+            // This is the default behavior we want, so we use an empty array of offsetArgs if no args are
+            // passed to this method.
+            const offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
+            yield browser.actions()
+                .mouseMove(yield this.element.getWebElement(), ...offsetArgs)
+                .click(button)
+                .perform();
         });
     }
 }

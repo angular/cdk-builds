@@ -69,6 +69,13 @@ export interface TestElement {
      * @param relativeY Coordinate within the element, along the Y-axis at which to click.
      */
     click(relativeX: number, relativeY: number): Promise<void>;
+    /**
+     * Right clicks on the element at the specified coordinates relative to the top-left of it.
+     * @param relativeX Coordinate within the element, along the X-axis at which to click.
+     * @param relativeY Coordinate within the element, along the Y-axis at which to click.
+     * @breaking-change 11.0.0 To become a required method.
+     */
+    rightClick?(relativeX: number, relativeY: number): Promise<void>;
     /** Focus the element. */
     focus(): Promise<void>;
     /** Get the computed value of the given CSS property for the element. */

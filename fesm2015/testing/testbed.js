@@ -262,8 +262,8 @@ function dispatchKeyboardEvent(node, type, keyCode, key, modifiers) {
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-function dispatchMouseEvent(node, type, clientX = 0, clientY = 0) {
-    return dispatchEvent(node, createMouseEvent(type, clientX, clientY));
+function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, button) {
+    return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button));
 }
 /**
  * Shorthand to dispatch a pointer event on the specified coordinates.
@@ -439,22 +439,13 @@ class UnitTestElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            let clientX = undefined;
-            let clientY = undefined;
-            if (args.length) {
-                const { left, top, width, height } = yield this.getDimensions();
-                const relativeX = args[0] === 'center' ? width / 2 : args[0];
-                const relativeY = args[0] === 'center' ? height / 2 : args[1];
-                // Round the computed click position as decimal pixels are not
-                // supported by mouse events and could lead to unexpected results.
-                clientX = Math.round(left + relativeX);
-                clientY = Math.round(top + relativeY);
-            }
-            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY);
-            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY);
-            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY);
-            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY);
-            dispatchMouseEvent(this.element, 'click', clientX, clientY);
+            yield this._dispatchMouseEventSequence('click', args);
+            yield this._stabilize();
+        });
+    }
+    rightClick(...args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._dispatchMouseEventSequence('contextmenu', args, 2);
             yield this._stabilize();
         });
     }
@@ -578,15 +569,38 @@ class UnitTestElement {
      * @param name Name of the pointer event to be dispatched.
      * @param clientX Coordinate of the user's pointer along the X axis.
      * @param clientY Coordinate of the user's pointer along the Y axis.
+     * @param button Mouse button that should be pressed when dispatching the event.
      */
-    _dispatchPointerEventIfSupported(name, clientX, clientY) {
+    _dispatchPointerEventIfSupported(name, clientX, clientY, button) {
         // The latest versions of all browsers we support have the new `PointerEvent` API.
         // Though since we capture the two most recent versions of these browsers, we also
         // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
         // so we need to conditionally create and dispatch these events based on feature detection.
         if (typeof PointerEvent !== 'undefined' && PointerEvent) {
-            dispatchPointerEvent(this.element, name, clientX, clientY);
+            dispatchPointerEvent(this.element, name, clientX, clientY, { isPrimary: true, button });
         }
+    }
+    /** Dispatches all the events that are part of a mouse event sequence. */
+    _dispatchMouseEventSequence(name, args, button) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let clientX = undefined;
+            let clientY = undefined;
+            if (args.length) {
+                const { left, top, width, height } = yield this.getDimensions();
+                const relativeX = args[0] === 'center' ? width / 2 : args[0];
+                const relativeY = args[0] === 'center' ? height / 2 : args[1];
+                // Round the computed click position as decimal pixels are not
+                // supported by mouse events and could lead to unexpected results.
+                clientX = Math.round(left + relativeX);
+                clientY = Math.round(top + relativeY);
+            }
+            this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, button);
+            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button);
+            this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
+            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button);
+            dispatchMouseEvent(this.element, name, clientX, clientY, button);
+            yield this._stabilize();
+        });
     }
 }
 
