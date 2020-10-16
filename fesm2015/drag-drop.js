@@ -44,6 +44,18 @@ function toggleNativeDragInteractions(element, enable) {
         MozUserSelect: userSelect
     });
 }
+/**
+ * Toggles whether an element is visible while preserving its dimensions.
+ * @param element Element whose visibility to toggle
+ * @param enable Whether the element should be visible.
+ * @docs-private
+ */
+function toggleVisibility(element, enable) {
+    const styles = element.style;
+    styles.position = enable ? '' : 'fixed';
+    styles.top = styles.opacity = enable ? '' : '0';
+    styles.left = enable ? '' : '-999em';
+}
 
 /**
  * @license
@@ -729,7 +741,7 @@ class DragRef {
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
-            element.style.display = 'none';
+            toggleVisibility(element, false);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             getPreviewInsertionPoint(this._document).appendChild(preview);
             this.started.next({ source: this }); // Emit before notifying the container.
@@ -814,7 +826,7 @@ class DragRef {
         // It's important that we maintain the position, because moving the element around in the DOM
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
         // while moving the existing elements in all other cases.
-        this._rootElement.style.display = '';
+        toggleVisibility(this._rootElement, true);
         this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
