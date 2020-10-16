@@ -44,6 +44,18 @@ function toggleNativeDragInteractions(element, enable) {
         MozUserSelect: userSelect
     });
 }
+/**
+ * Toggles whether an element is visible while preserving its dimensions.
+ * @param element Element whose visibility to toggle
+ * @param enable Whether the element should be visible.
+ * @docs-private
+ */
+function toggleVisibility(element, enable) {
+    const styles = element.style;
+    styles.position = enable ? '' : 'fixed';
+    styles.top = styles.opacity = enable ? '' : '0';
+    styles.left = enable ? '' : '-999em';
+}
 
 /**
  * @license
@@ -252,7 +264,10 @@ function transferData(selector, node, clone, callback) {
 let cloneUniqueId = 0;
 /** Transfers the data of one input element to another. */
 function transferInputData(source, clone) {
-    clone.value = source.value;
+    // Browsers throw an error when assigning the value of a file input programmatically.
+    if (clone.type !== 'file') {
+        clone.value = source.value;
+    }
     // Radio button `name` attributes must be unique for radio button groups
     // otherwise original radio buttons can lose their checked state
     // once the clone is inserted in the DOM.
@@ -388,6 +403,7 @@ class DragRef {
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold) {
                     const isDelayElapsed = Date.now() >= this._dragStartTime + this._getDragStartDelay(event);
+                    const container = this._dropContainer;
                     if (!isDelayElapsed) {
                         this._endDragSequence(event);
                         return;
@@ -395,7 +411,7 @@ class DragRef {
                     // Prevent other drag sequences from starting while something in the container is still
                     // being dragged. This can happen while we're waiting for the drop animation to finish
                     // and can cause errors, because some elements might still be moving around.
-                    if (!this._dropContainer || !this._dropContainer.isDragging()) {
+                    if (!container || (!container.isDragging() && !container.isReceiving())) {
                         this._hasStartedDragging = true;
                         this._ngZone.run(() => this._startDragSequence(event));
                     }
@@ -725,7 +741,7 @@ class DragRef {
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
-            element.style.display = 'none';
+            toggleVisibility(element, false);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             getPreviewInsertionPoint(this._document).appendChild(preview);
             this.started.next({ source: this }); // Emit before notifying the container.
@@ -810,7 +826,7 @@ class DragRef {
         // It's important that we maintain the position, because moving the element around in the DOM
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
         // while moving the existing elements in all other cases.
-        this._rootElement.style.display = '';
+        toggleVisibility(this._rootElement, true);
         this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
