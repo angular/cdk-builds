@@ -251,7 +251,10 @@
     var cloneUniqueId = 0;
     /** Transfers the data of one input element to another. */
     function transferInputData(source, clone) {
-        clone.value = source.value;
+        // Browsers throw an error when assigning the value of a file input programmatically.
+        if (clone.type !== 'file') {
+            clone.value = source.value;
+        }
         // Radio button `name` attributes must be unique for radio button groups
         // otherwise original radio buttons can lose their checked state
         // once the clone is inserted in the DOM.
@@ -388,6 +391,7 @@
                     // per pixel of movement (e.g. if the user moves their pointer quickly).
                     if (isOverThreshold) {
                         var isDelayElapsed = Date.now() >= _this._dragStartTime + _this._getDragStartDelay(event);
+                        var container = _this._dropContainer;
                         if (!isDelayElapsed) {
                             _this._endDragSequence(event);
                             return;
@@ -395,7 +399,7 @@
                         // Prevent other drag sequences from starting while something in the container is still
                         // being dragged. This can happen while we're waiting for the drop animation to finish
                         // and can cause errors, because some elements might still be moving around.
-                        if (!_this._dropContainer || !_this._dropContainer.isDragging()) {
+                        if (!container || (!container.isDragging() && !container.isReceiving())) {
                             _this._hasStartedDragging = true;
                             _this._ngZone.run(function () { return _this._startDragSequence(event); });
                         }
