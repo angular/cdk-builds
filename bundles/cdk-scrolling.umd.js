@@ -1422,8 +1422,8 @@
                     this._dataSourceChanges.next(value);
                 }
                 else {
-                    // Slice the value if its an NgIterable to ensure we're working with an array.
-                    this._dataSourceChanges.next(new collections.ArrayDataSource(rxjs.isObservable(value) ? value : Array.prototype.slice.call(value || [])));
+                    // If value is an an NgIterable, convert it to an array.
+                    this._dataSourceChanges.next(new collections.ArrayDataSource(rxjs.isObservable(value) ? value : Array.from(value || [])));
                 }
             },
             enumerable: false,

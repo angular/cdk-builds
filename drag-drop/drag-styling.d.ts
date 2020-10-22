@@ -31,4 +31,11 @@ export declare function extendStyles(dest: Writeable<CSSStyleDeclaration>, sourc
  * @docs-private
  */
 export declare function toggleNativeDragInteractions(element: HTMLElement, enable: boolean): void;
+/**
+ * Toggles whether an element is visible while preserving its dimensions.
+ * @param element Element whose visibility to toggle
+ * @param enable Whether the element should be visible.
+ * @docs-private
+ */
+export declare function toggleVisibility(element: HTMLElement, enable: boolean): void;
 export {};
