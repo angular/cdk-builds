@@ -1026,12 +1026,18 @@
                 });
             });
         };
-        UnitTestElement.prototype.dispatchEvent = function (name) {
+        UnitTestElement.prototype.dispatchEvent = function (name, data) {
             return __awaiter(this, void 0, void 0, function () {
+                var event;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            dispatchFakeEvent(this.element, name);
+                            event = createFakeEvent(name);
+                            if (data) {
+                                // tslint:disable-next-line:ban Have to use `Object.assign` to preserve the original object.
+                                Object.assign(event, data);
+                            }
+                            dispatchEvent(this.element, event);
                             return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();

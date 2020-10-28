@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementDimensions, ModifierKeys, TestElement, TestKey, TextOptions } from '@angular/cdk/testing';
+import { ElementDimensions, ModifierKeys, TestElement, TestKey, TextOptions, EventData } from '@angular/cdk/testing';
 /** A `TestElement` implementation for unit tests. */
 export declare class UnitTestElement implements TestElement {
     readonly element: Element;
@@ -30,7 +30,7 @@ export declare class UnitTestElement implements TestElement {
     selectOptions(...optionIndexes: number[]): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
-    dispatchEvent(name: string): Promise<void>;
+    dispatchEvent(name: string, data?: Record<string, EventData>): Promise<void>;
     /**
      * Dispatches a pointer event on the current element if the browser supports it.
      * @param name Name of the pointer event to be dispatched.

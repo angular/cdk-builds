@@ -199,9 +199,9 @@ class ProtractorElement {
             return this.element.equals(browser.driver.switchTo().activeElement());
         });
     }
-    dispatchEvent(name) {
+    dispatchEvent(name, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            return browser.executeScript(_dispatchEvent, name, this.element);
+            return browser.executeScript(_dispatchEvent, name, this.element, data);
         });
     }
     /** Dispatches all the events that are part of a click event sequence. */
@@ -223,9 +223,13 @@ class ProtractorElement {
  * Note that this needs to be a pure function, because it gets stringified by
  * Protractor and is executed inside the browser.
  */
-function _dispatchEvent(name, element) {
+function _dispatchEvent(name, element, data) {
     const event = document.createEvent('Event');
     event.initEvent(name);
+    if (data) {
+        // tslint:disable-next-line:ban Have to use `Object.assign` to preserve the original object.
+        Object.assign(event, data);
+    }
     // This type has a string index signature, so we cannot access it using a dotted property access.
     element['dispatchEvent'](event);
 }

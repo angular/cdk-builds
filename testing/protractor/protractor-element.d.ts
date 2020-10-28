@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ElementDimensions, ModifierKeys, TestElement, TestKey, TextOptions } from '@angular/cdk/testing';
+import { ElementDimensions, ModifierKeys, TestElement, TestKey, TextOptions, EventData } from '@angular/cdk/testing';
 import { ElementFinder } from 'protractor';
 /** A `TestElement` implementation for Protractor. */
 export declare class ProtractorElement implements TestElement {
@@ -30,7 +30,7 @@ export declare class ProtractorElement implements TestElement {
     selectOptions(...optionIndexes: number[]): Promise<void>;
     matchesSelector(selector: string): Promise<boolean>;
     isFocused(): Promise<boolean>;
-    dispatchEvent(name: string): Promise<void>;
+    dispatchEvent(name: string, data?: Record<string, EventData>): Promise<void>;
     /** Dispatches all the events that are part of a click event sequence. */
     private _dispatchClickEventSequence;
 }

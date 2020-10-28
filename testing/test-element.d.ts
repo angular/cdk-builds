@@ -13,6 +13,10 @@ export interface ModifierKeys {
     shift?: boolean;
     meta?: boolean;
 }
+/** Data that can be attached to a custom event dispatched from a `TestElement`. */
+export declare type EventData = string | number | boolean | undefined | null | EventData[] | {
+    [key: string]: EventData;
+};
 /** An enum of non-text keys that can be used with the `sendKeys` method. */
 export declare enum TestKey {
     BACKSPACE = 0,
@@ -126,7 +130,7 @@ export interface TestElement {
      * @param name Name of the event to be dispatched.
      * @breaking-change 12.0.0 To be a required method.
      */
-    dispatchEvent?(name: string): Promise<void>;
+    dispatchEvent?(name: string, data?: Record<string, EventData>): Promise<void>;
 }
 export interface TextOptions {
     /** Optional selector for elements to exclude. */

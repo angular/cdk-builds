@@ -558,9 +558,14 @@ class UnitTestElement {
             return document.activeElement === this.element;
         });
     }
-    dispatchEvent(name) {
+    dispatchEvent(name, data) {
         return __awaiter(this, void 0, void 0, function* () {
-            dispatchFakeEvent(this.element, name);
+            const event = createFakeEvent(name);
+            if (data) {
+                // tslint:disable-next-line:ban Have to use `Object.assign` to preserve the original object.
+                Object.assign(event, data);
+            }
+            dispatchEvent(this.element, event);
             yield this._stabilize();
         });
     }
