@@ -186,6 +186,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     private _layoutDirection;
     /** Checks whether the stepper contains the focused element. */
     private _containsFocus;
+    /** Checks whether the passed-in index is a valid step index. */
+    private _isValidIndex;
     static ngAcceptInputType_editable: BooleanInput;
     static ngAcceptInputType_optional: BooleanInput;
     static ngAcceptInputType_completed: BooleanInput;

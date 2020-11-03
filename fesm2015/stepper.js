@@ -215,11 +215,10 @@ class CdkStepper {
         const newIndex = coerceNumberProperty(index);
         if (this.steps && this._steps) {
             // Ensure that the index can't be out of bounds.
-            if ((newIndex < 0 || newIndex > this.steps.length - 1) &&
-                (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            if (!this._isValidIndex(index) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
-            if (this._selectedIndex != newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
+            if (this._selectedIndex !== newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                 (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                 this._updateSelectedItemIndex(index);
             }
@@ -262,6 +261,12 @@ class CdkStepper {
                 this._selectedIndex = Math.max(this._selectedIndex - 1, 0);
             }
         });
+        // The logic which asserts that the selected index is within bounds doesn't run before the
+        // steps are initialized, because we don't how many steps there are yet so we may have an
+        // invalid index on init. If that's the case, auto-correct to the default so we don't throw.
+        if (!this._isValidIndex(this._selectedIndex)) {
+            this._selectedIndex = 0;
+        }
     }
     ngOnDestroy() {
         this.steps.destroy();
@@ -400,6 +405,10 @@ class CdkStepper {
         const stepperElement = this._elementRef.nativeElement;
         const focusedElement = this._document.activeElement;
         return stepperElement === focusedElement || stepperElement.contains(focusedElement);
+    }
+    /** Checks whether the passed-in index is a valid step index. */
+    _isValidIndex(index) {
+        return index > -1 && (!this.steps || index < this.steps.length);
     }
 }
 CdkStepper.decorators = [
