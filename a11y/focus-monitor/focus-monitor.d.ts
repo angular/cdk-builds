@@ -182,6 +182,8 @@ export declare class FocusMonitor implements OnDestroy {
     private _emitOrigin;
     private _registerGlobalListeners;
     private _removeGlobalListeners;
+    /** Updates all the state on an element once its focus origin has changed. */
+    private _originChanged;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or

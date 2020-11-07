@@ -2190,11 +2190,19 @@
         };
         FocusMonitor.prototype.focusVia = function (element, origin, options) {
             var nativeElement = coercion.coerceElement(element);
-            this._setOriginForCurrentEventQueue(origin);
-            // `focus` isn't available on the server
-            if (typeof nativeElement.focus === 'function') {
-                // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
-                nativeElement.focus(options);
+            var focusedElement = this._getDocument().activeElement;
+            // If the element is focused already, calling `focus` again won't trigger the event listener
+            // which means that the focus classes won't be updated. If that's the case, update the classes
+            // directly without waiting for an event.
+            if (nativeElement === focusedElement && this._elementInfo.has(nativeElement)) {
+                this._originChanged(nativeElement, origin, this._elementInfo.get(nativeElement));
+            }
+            else {
+                this._setOriginForCurrentEventQueue(origin);
+                // `focus` isn't available on the server
+                if (typeof nativeElement.focus === 'function') {
+                    nativeElement.focus(options);
+                }
             }
         };
         FocusMonitor.prototype.ngOnDestroy = function () {
@@ -2310,10 +2318,7 @@
             if (!elementInfo || (!elementInfo.checkChildren && element !== getTarget(event))) {
                 return;
             }
-            var origin = this._getFocusOrigin(event);
-            this._setClasses(element, origin);
-            this._emitOrigin(elementInfo.subject, origin);
-            this._lastFocusOrigin = origin;
+            this._originChanged(element, this._getFocusOrigin(event), elementInfo);
         };
         /**
          * Handles blur events on a registered element.
@@ -2388,6 +2393,12 @@
                 clearTimeout(this._touchTimeoutId);
                 clearTimeout(this._originTimeoutId);
             }
+        };
+        /** Updates all the state on an element once its focus origin has changed. */
+        FocusMonitor.prototype._originChanged = function (element, origin, elementInfo) {
+            this._setClasses(element, origin);
+            this._emitOrigin(elementInfo.subject, origin);
+            this._lastFocusOrigin = origin;
         };
         return FocusMonitor;
     }());
