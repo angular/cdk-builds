@@ -1843,11 +1843,19 @@ class FocusMonitor {
     }
     focusVia(element, origin, options) {
         const nativeElement = coerceElement(element);
-        this._setOriginForCurrentEventQueue(origin);
-        // `focus` isn't available on the server
-        if (typeof nativeElement.focus === 'function') {
-            // Cast the element to `any`, because the TS typings don't have the `options` parameter yet.
-            nativeElement.focus(options);
+        const focusedElement = this._getDocument().activeElement;
+        // If the element is focused already, calling `focus` again won't trigger the event listener
+        // which means that the focus classes won't be updated. If that's the case, update the classes
+        // directly without waiting for an event.
+        if (nativeElement === focusedElement && this._elementInfo.has(nativeElement)) {
+            this._originChanged(nativeElement, origin, this._elementInfo.get(nativeElement));
+        }
+        else {
+            this._setOriginForCurrentEventQueue(origin);
+            // `focus` isn't available on the server
+            if (typeof nativeElement.focus === 'function') {
+                nativeElement.focus(options);
+            }
         }
     }
     ngOnDestroy() {
@@ -1961,10 +1969,7 @@ class FocusMonitor {
         if (!elementInfo || (!elementInfo.checkChildren && element !== getTarget(event))) {
             return;
         }
-        const origin = this._getFocusOrigin(event);
-        this._setClasses(element, origin);
-        this._emitOrigin(elementInfo.subject, origin);
-        this._lastFocusOrigin = origin;
+        this._originChanged(element, this._getFocusOrigin(event), elementInfo);
     }
     /**
      * Handles blur events on a registered element.
@@ -2038,6 +2043,12 @@ class FocusMonitor {
             clearTimeout(this._touchTimeoutId);
             clearTimeout(this._originTimeoutId);
         }
+    }
+    /** Updates all the state on an element once its focus origin has changed. */
+    _originChanged(element, origin, elementInfo) {
+        this._setClasses(element, origin);
+        this._emitOrigin(elementInfo.subject, origin);
+        this._lastFocusOrigin = origin;
     }
 }
 FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
