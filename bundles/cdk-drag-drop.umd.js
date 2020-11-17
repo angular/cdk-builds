@@ -509,6 +509,17 @@
             this._handles = handles.map(function (handle) { return coercion.coerceElement(handle); });
             this._handles.forEach(function (handle) { return toggleNativeDragInteractions(handle, _this.disabled); });
             this._toggleNativeDragInteractions();
+            // Delete any lingering disabled handles that may have been destroyed. Note that we re-create
+            // the set, rather than iterate over it and filter out the destroyed handles, because while
+            // the ES spec allows for sets to be modified while they're being iterated over, some polyfills
+            // use an array internally which may throw an error.
+            var disabledHandles = new Set();
+            this._disabledHandles.forEach(function (handle) {
+                if (_this._handles.indexOf(handle) > -1) {
+                    disabledHandles.add(handle);
+                }
+            });
+            this._disabledHandles = disabledHandles;
             return this;
         };
         /**
