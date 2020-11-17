@@ -479,6 +479,7 @@
                 if (newValue !== this._disabled) {
                     this._disabled = newValue;
                     this._toggleNativeDragInteractions();
+                    this._handles.forEach(function (handle) { return toggleNativeDragInteractions(handle, newValue); });
                 }
             },
             enumerable: false,
@@ -504,8 +505,9 @@
         };
         /** Registers the handles that can be used to drag the element. */
         DragRef.prototype.withHandles = function (handles) {
+            var _this = this;
             this._handles = handles.map(function (handle) { return coercion.coerceElement(handle); });
-            this._handles.forEach(function (handle) { return toggleNativeDragInteractions(handle, false); });
+            this._handles.forEach(function (handle) { return toggleNativeDragInteractions(handle, _this.disabled); });
             this._toggleNativeDragInteractions();
             return this;
         };
@@ -609,8 +611,9 @@
          * @param handle Handle element that should be disabled.
          */
         DragRef.prototype.disableHandle = function (handle) {
-            if (this._handles.indexOf(handle) > -1) {
+            if (!this._disabledHandles.has(handle) && this._handles.indexOf(handle) > -1) {
                 this._disabledHandles.add(handle);
+                toggleNativeDragInteractions(handle, true);
             }
         };
         /**
@@ -618,7 +621,10 @@
          * @param handle Handle element to be enabled.
          */
         DragRef.prototype.enableHandle = function (handle) {
-            this._disabledHandles.delete(handle);
+            if (this._disabledHandles.has(handle)) {
+                this._disabledHandles.delete(handle);
+                toggleNativeDragInteractions(handle, this.disabled);
+            }
         };
         /** Sets the layout direction of the draggable item. */
         DragRef.prototype.withDirection = function (direction) {

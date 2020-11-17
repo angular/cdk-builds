@@ -478,6 +478,7 @@ class DragRef {
         if (newValue !== this._disabled) {
             this._disabled = newValue;
             this._toggleNativeDragInteractions();
+            this._handles.forEach(handle => toggleNativeDragInteractions(handle, newValue));
         }
     }
     /**
@@ -501,7 +502,7 @@ class DragRef {
     /** Registers the handles that can be used to drag the element. */
     withHandles(handles) {
         this._handles = handles.map(handle => coerceElement(handle));
-        this._handles.forEach(handle => toggleNativeDragInteractions(handle, false));
+        this._handles.forEach(handle => toggleNativeDragInteractions(handle, this.disabled));
         this._toggleNativeDragInteractions();
         return this;
     }
@@ -603,8 +604,9 @@ class DragRef {
      * @param handle Handle element that should be disabled.
      */
     disableHandle(handle) {
-        if (this._handles.indexOf(handle) > -1) {
+        if (!this._disabledHandles.has(handle) && this._handles.indexOf(handle) > -1) {
             this._disabledHandles.add(handle);
+            toggleNativeDragInteractions(handle, true);
         }
     }
     /**
@@ -612,7 +614,10 @@ class DragRef {
      * @param handle Handle element to be enabled.
      */
     enableHandle(handle) {
-        this._disabledHandles.delete(handle);
+        if (this._disabledHandles.has(handle)) {
+            this._disabledHandles.delete(handle);
+            toggleNativeDragInteractions(handle, this.disabled);
+        }
     }
     /** Sets the layout direction of the draggable item. */
     withDirection(direction) {
