@@ -84,41 +84,37 @@ class AriaDescriber {
         this._platform = _platform;
         this._document = _document;
     }
-    /**
-     * Adds to the host element an aria-describedby reference to a hidden element that contains
-     * the message. If the same message has already been registered, then it will reuse the created
-     * message element.
-     */
-    describe(hostElement, message) {
+    describe(hostElement, message, role) {
         if (!this._canBeDescribed(hostElement, message)) {
             return;
         }
+        const key = getKey(message, role);
         if (typeof message !== 'string') {
             // We need to ensure that the element has an ID.
-            this._setMessageId(message);
-            messageRegistry.set(message, { messageElement: message, referenceCount: 0 });
+            setMessageId(message);
+            messageRegistry.set(key, { messageElement: message, referenceCount: 0 });
         }
-        else if (!messageRegistry.has(message)) {
-            this._createMessageElement(message);
+        else if (!messageRegistry.has(key)) {
+            this._createMessageElement(message, role);
         }
-        if (!this._isElementDescribedByMessage(hostElement, message)) {
-            this._addMessageReference(hostElement, message);
+        if (!this._isElementDescribedByMessage(hostElement, key)) {
+            this._addMessageReference(hostElement, key);
         }
     }
-    /** Removes the host element's aria-describedby reference to the message element. */
-    removeDescription(hostElement, message) {
+    removeDescription(hostElement, message, role) {
         if (!message || !this._isElementNode(hostElement)) {
             return;
         }
-        if (this._isElementDescribedByMessage(hostElement, message)) {
-            this._removeMessageReference(hostElement, message);
+        const key = getKey(message, role);
+        if (this._isElementDescribedByMessage(hostElement, key)) {
+            this._removeMessageReference(hostElement, key);
         }
         // If the message is a string, it means that it's one that we created for the
         // consumer so we can remove it safely, otherwise we should leave it in place.
         if (typeof message === 'string') {
-            const registeredMessage = messageRegistry.get(message);
+            const registeredMessage = messageRegistry.get(key);
             if (registeredMessage && registeredMessage.referenceCount === 0) {
-                this._deleteMessageElement(message);
+                this._deleteMessageElement(key);
             }
         }
         if (messagesContainer && messagesContainer.childNodes.length === 0) {
@@ -141,28 +137,25 @@ class AriaDescriber {
      * Creates a new element in the visually hidden message container element with the message
      * as its content and adds it to the message registry.
      */
-    _createMessageElement(message) {
+    _createMessageElement(message, role) {
         const messageElement = this._document.createElement('div');
-        this._setMessageId(messageElement);
+        setMessageId(messageElement);
         messageElement.textContent = message;
+        if (role) {
+            messageElement.setAttribute('role', role);
+        }
         this._createMessagesContainer();
         messagesContainer.appendChild(messageElement);
-        messageRegistry.set(message, { messageElement, referenceCount: 0 });
-    }
-    /** Assigns a unique ID to an element, if it doesn't have one already. */
-    _setMessageId(element) {
-        if (!element.id) {
-            element.id = `${CDK_DESCRIBEDBY_ID_PREFIX}-${nextId++}`;
-        }
+        messageRegistry.set(getKey(message, role), { messageElement, referenceCount: 0 });
     }
     /** Deletes the message element from the global messages container. */
-    _deleteMessageElement(message) {
-        const registeredMessage = messageRegistry.get(message);
+    _deleteMessageElement(key) {
+        const registeredMessage = messageRegistry.get(key);
         const messageElement = registeredMessage && registeredMessage.messageElement;
         if (messagesContainer && messageElement) {
             messagesContainer.removeChild(messageElement);
         }
-        messageRegistry.delete(message);
+        messageRegistry.delete(key);
     }
     /** Creates the global container for all aria-describedby messages. */
     _createMessagesContainer() {
@@ -206,8 +199,8 @@ class AriaDescriber {
      * Adds a message reference to the element using aria-describedby and increments the registered
      * message's reference count.
      */
-    _addMessageReference(element, message) {
-        const registeredMessage = messageRegistry.get(message);
+    _addMessageReference(element, key) {
+        const registeredMessage = messageRegistry.get(key);
         // Add the aria-describedby reference and set the
         // describedby_host attribute to mark the element.
         addAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
@@ -218,16 +211,16 @@ class AriaDescriber {
      * Removes a message reference from the element using aria-describedby
      * and decrements the registered message's reference count.
      */
-    _removeMessageReference(element, message) {
-        const registeredMessage = messageRegistry.get(message);
+    _removeMessageReference(element, key) {
+        const registeredMessage = messageRegistry.get(key);
         registeredMessage.referenceCount--;
         removeAriaReferencedId(element, 'aria-describedby', registeredMessage.messageElement.id);
         element.removeAttribute(CDK_DESCRIBEDBY_HOST_ATTRIBUTE);
     }
     /** Returns true if the element has been described by the provided message ID. */
-    _isElementDescribedByMessage(element, message) {
+    _isElementDescribedByMessage(element, key) {
         const referenceIds = getAriaReferenceIds(element, 'aria-describedby');
-        const registeredMessage = messageRegistry.get(message);
+        const registeredMessage = messageRegistry.get(key);
         const messageId = registeredMessage && registeredMessage.messageElement.id;
         return !!messageId && referenceIds.indexOf(messageId) != -1;
     }
@@ -261,6 +254,16 @@ AriaDescriber.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Platform }
 ];
+/** Gets a key that can be used to look messages up in the registry. */
+function getKey(message, role) {
+    return typeof message === 'string' ? `${role || ''}/${message}` : message;
+}
+/** Assigns a unique ID to an element, if it doesn't have one already. */
+function setMessageId(element) {
+    if (!element.id) {
+        element.id = `${CDK_DESCRIBEDBY_ID_PREFIX}-${nextId++}`;
+    }
+}
 
 /**
  * @license
