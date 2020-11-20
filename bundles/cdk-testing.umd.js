@@ -401,13 +401,6 @@
             });
         });
     }
-    /**
-     * Resolves the given list of async values in parallel (i.e. via Promise.all) while batching change
-     * detection over the entire operation such that change detection occurs exactly once before
-     * resolving the values and once after.
-     * @param values A getter for the async values to resolve in parallel with batched change detection.
-     * @return The resolved values.
-     */
     function parallel(values) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_b) {
@@ -949,12 +942,12 @@
                                         switch (_a.label) {
                                             case 0:
                                                 testElement = this.createTestElement(rawElement);
-                                                return [4 /*yield*/, Promise.all(
+                                                return [4 /*yield*/, parallel(
                                                     // For each query, get `null` if it doesn't match, or a `TestElement` or
                                                     // `ComponentHarness` as appropriate if it does match. This gives us everything that
                                                     // matches the current raw element, but it may contain duplicate entries (e.g.
                                                     // multiple `TestElement` or multiple `ComponentHarness` of the same type).
-                                                    allQueries.map(function (query) { return _this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck); }))];
+                                                    function () { return allQueries.map(function (query) { return _this._getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck); }); })];
                                             case 1:
                                                 allResultsForElement = _a.sent();
                                                 return [2 /*return*/, _removeDuplicateQueryResults(allResultsForElement)];
