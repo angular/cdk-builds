@@ -12,7 +12,8 @@ export declare enum TargetVersion {
     V8 = "version 8",
     V9 = "version 9",
     V10 = "version 10",
-    V11 = "version 11"
+    V11 = "version 11",
+    V12 = "version 12"
 }
 /**
  * Returns all versions that are supported by "ng update". The versions are determined

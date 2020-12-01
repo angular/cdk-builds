@@ -26,4 +26,5 @@ export declare class DevkitFileSystem extends FileSystem {
     delete(filePath: Path): void;
     read(filePath: Path): string | null;
     readDirectory(dirPath: Path): DirectoryEntry;
+    private _isExistingDirectory;
 }
