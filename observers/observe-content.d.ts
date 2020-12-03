@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { BooleanInput } from '@angular/cdk/coercion';
+import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { AfterContentInit, ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 /**
@@ -73,7 +73,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _subscribe;
     private _unsubscribe;
     static ngAcceptInputType_disabled: BooleanInput;
-    static ngAcceptInputType_debounce: BooleanInput;
+    static ngAcceptInputType_debounce: NumberInput;
 }
 export declare class ObserversModule {
 }
