@@ -147,9 +147,8 @@ class CdkObserveContent {
         });
     }
     _unsubscribe() {
-        if (this._currentSubscription) {
-            this._currentSubscription.unsubscribe();
-        }
+        var _a;
+        (_a = this._currentSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
     }
 }
 CdkObserveContent.decorators = [

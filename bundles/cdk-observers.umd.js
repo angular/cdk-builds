@@ -87,7 +87,7 @@
         /** Clean up the underlying MutationObserver for the specified element. */
         ContentObserver.prototype._cleanupObserver = function (element) {
             if (this._observedElements.has(element)) {
-                var _a = this._observedElements.get(element), observer = _a.observer, stream = _a.stream;
+                var _b = this._observedElements.get(element), observer = _b.observer, stream = _b.stream;
                 if (observer) {
                     observer.disconnect();
                 }
@@ -163,9 +163,8 @@
             });
         };
         CdkObserveContent.prototype._unsubscribe = function () {
-            if (this._currentSubscription) {
-                this._currentSubscription.unsubscribe();
-            }
+            var _a;
+            (_a = this._currentSubscription) === null || _a === void 0 ? void 0 : _a.unsubscribe();
         };
         return CdkObserveContent;
     }());
