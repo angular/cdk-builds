@@ -46,21 +46,21 @@ export declare class FocusTrap {
      * Waits for the zone to stabilize, then either focuses the first element that the
      * user specified, or the first tabbable element.
      * @returns Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
+     * on whether focus was moved successfully.
      */
     focusInitialElementWhenReady(): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the first tabbable element within the focus trap region.
      * @returns Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
+     * on whether focus was moved successfully.
      */
     focusFirstTabbableElementWhenReady(): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the last tabbable element within the focus trap region.
      * @returns Returns a promise that resolves with a boolean, depending
-     * on whether focus was moved successfuly.
+     * on whether focus was moved successfully.
      */
     focusLastTabbableElementWhenReady(): Promise<boolean>;
     /**
@@ -71,21 +71,21 @@ export declare class FocusTrap {
     private _getRegionBoundary;
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
-     * @returns Whether focus was moved successfuly.
+     * @returns Whether focus was moved successfully.
      */
     focusInitialElement(): boolean;
     /**
      * Focuses the first tabbable element within the focus trap region.
-     * @returns Whether focus was moved successfuly.
+     * @returns Whether focus was moved successfully.
      */
     focusFirstTabbableElement(): boolean;
     /**
      * Focuses the last tabbable element within the focus trap region.
-     * @returns Whether focus was moved successfuly.
+     * @returns Whether focus was moved successfully.
      */
     focusLastTabbableElement(): boolean;
     /**
-     * Checks whether the focus trap has successfuly been attached.
+     * Checks whether the focus trap has successfully been attached.
      */
     hasAttached(): boolean;
     /** Get the first tabbable element from a DOM subtree (inclusive). */
@@ -140,7 +140,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     get enabled(): boolean;
     set enabled(value: boolean);
     /**
-     * Whether the directive should automatially move focus into the trapped region upon
+     * Whether the directive should automatically move focus into the trapped region upon
      * initialization and return focus to the previous activeElement upon destruction.
      */
     get autoCapture(): boolean;
