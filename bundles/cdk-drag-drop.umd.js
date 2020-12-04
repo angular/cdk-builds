@@ -760,6 +760,8 @@
                 var preview = this._preview = this._createPreviewElement();
                 var placeholder = this._placeholder = this._createPlaceholderElement();
                 var anchor = this._anchor = this._anchor || this._document.createComment('');
+                // Needs to happen before the root element is moved.
+                var shadowRoot = this._getShadowRoot();
                 // Insert an anchor node so that we can restore the element's position in the DOM.
                 parent.insertBefore(anchor, element);
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
@@ -767,7 +769,7 @@
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 toggleVisibility(element, false);
                 this._document.body.appendChild(parent.replaceChild(placeholder, element));
-                getPreviewInsertionPoint(this._document).appendChild(preview);
+                getPreviewInsertionPoint(this._document, shadowRoot).appendChild(preview);
                 this.started.next({ source: this }); // Emit before notifying the container.
                 dropContainer.start();
                 this._initialContainer = dropContainer;
@@ -1260,6 +1262,18 @@
             return cachedPosition ? cachedPosition.scrollPosition :
                 this._viewportRuler.getViewportScrollPosition();
         };
+        /**
+         * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
+         * than saving it in property directly on init, because we want to resolve it as late as possible
+         * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
+         * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
+         */
+        DragRef.prototype._getShadowRoot = function () {
+            if (this._cachedShadowRoot === undefined) {
+                this._cachedShadowRoot = platform._getShadowRoot(this._rootElement);
+            }
+            return this._cachedShadowRoot;
+        };
         return DragRef;
     }());
     /**
@@ -1293,11 +1307,12 @@
         return event.type[0] === 't';
     }
     /** Gets the element into which the drag preview should be inserted. */
-    function getPreviewInsertionPoint(documentRef) {
+    function getPreviewInsertionPoint(documentRef, shadowRoot) {
         // We can't use the body if the user is in fullscreen mode,
         // because the preview will render under the fullscreen element.
         // TODO(crisbeto): dedupe this with the `FullscreenOverlayContainer` eventually.
-        return documentRef.fullscreenElement ||
+        return shadowRoot ||
+            documentRef.fullscreenElement ||
             documentRef.webkitFullscreenElement ||
             documentRef.mozFullScreenElement ||
             documentRef.msFullscreenElement ||
