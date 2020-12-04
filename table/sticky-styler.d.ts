@@ -33,7 +33,6 @@ export declare class StickyStyler {
     private _isBrowser;
     private readonly _needsPositionStickyOnElement;
     private _cachedCellWidths;
-    private readonly _borderCellCss;
     /**
      * @param _isNativeHtmlTable Whether the sticky logic should be based on a table
      *     that uses the native `<table>` element.
@@ -101,7 +100,7 @@ export declare class StickyStyler {
      * to be sticky (and -webkit-sticky), setting the appropriate zIndex, and adding a sticky
      * direction and value.
      */
-    _addStickyStyle(element: HTMLElement, dir: StickyDirection, dirValue: number, isBorderElement: boolean): void;
+    _addStickyStyle(element: HTMLElement, dir: StickyDirection, dirValue: number): void;
     /**
      * Calculate what the z-index should be for the element, depending on what directions (top,
      * bottom, left, right) have been set. It should be true that elements with a top direction

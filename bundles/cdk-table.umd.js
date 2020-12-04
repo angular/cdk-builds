@@ -1000,12 +1000,6 @@
             this._isBrowser = _isBrowser;
             this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
             this._cachedCellWidths = [];
-            this._borderCellCss = {
-                'top': _stickCellCss + "-border-elem-top",
-                'bottom': _stickCellCss + "-border-elem-bottom",
-                'left': _stickCellCss + "-border-elem-left",
-                'right': _stickCellCss + "-border-elem-right",
-            };
         }
         /**
          * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -1079,8 +1073,6 @@
             var cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
             var startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
             var endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
-            var lastStickyStart = stickyStartStates.lastIndexOf(true);
-            var firstStickyEnd = stickyEndStates.indexOf(true);
             // Coalesce with sticky row updates (and potentially other changes like column resize).
             this._scheduleStyleChanges(function () {
                 var e_3, _a;
@@ -1093,10 +1085,10 @@
                         for (var i = 0; i < numCells; i++) {
                             var cell = row.children[i];
                             if (stickyStartStates[i]) {
-                                _this._addStickyStyle(cell, start, startPositions[i], i === lastStickyStart);
+                                _this._addStickyStyle(cell, start, startPositions[i]);
                             }
                             if (stickyEndStates[i]) {
-                                _this._addStickyStyle(cell, end, endPositions[i], i === firstStickyEnd);
+                                _this._addStickyStyle(cell, end, endPositions[i]);
                             }
                         }
                     }
@@ -1147,7 +1139,6 @@
                     stickyHeight += row.getBoundingClientRect().height;
                 }
             }
-            var borderedRowIndex = states.lastIndexOf(true);
             // Coalesce with other sticky row updates (top/bottom), sticky columns updates
             // (and potentially other changes like column resize).
             this._scheduleStyleChanges(function () {
@@ -1157,11 +1148,10 @@
                         continue;
                     }
                     var height = stickyHeights[rowIndex];
-                    var isBorderedRowIndex = rowIndex === borderedRowIndex;
                     try {
                         for (var _b = (e_4 = void 0, __values(elementsToStick[rowIndex])), _c = _b.next(); !_c.done; _c = _b.next()) {
                             var element = _c.value;
-                            _this._addStickyStyle(element, position, height, isBorderedRowIndex);
+                            _this._addStickyStyle(element, position, height);
                         }
                     }
                     catch (e_4_1) { e_4 = { error: e_4_1 }; }
@@ -1192,7 +1182,7 @@
                     _this._removeStickyStyle(tfoot, ['bottom']);
                 }
                 else {
-                    _this._addStickyStyle(tfoot, 'bottom', 0, false);
+                    _this._addStickyStyle(tfoot, 'bottom', 0);
                 }
             });
         };
@@ -1207,7 +1197,6 @@
                 for (var stickyDirections_1 = __values(stickyDirections), stickyDirections_1_1 = stickyDirections_1.next(); !stickyDirections_1_1.done; stickyDirections_1_1 = stickyDirections_1.next()) {
                     var dir = stickyDirections_1_1.value;
                     element.style[dir] = '';
-                    element.classList.remove(this._borderCellCss[dir]);
                 }
             }
             catch (e_5_1) { e_5 = { error: e_5_1 }; }
@@ -1239,11 +1228,8 @@
          * to be sticky (and -webkit-sticky), setting the appropriate zIndex, and adding a sticky
          * direction and value.
          */
-        StickyStyler.prototype._addStickyStyle = function (element, dir, dirValue, isBorderElement) {
+        StickyStyler.prototype._addStickyStyle = function (element, dir, dirValue) {
             element.classList.add(this._stickCellCss);
-            if (isBorderElement) {
-                element.classList.add(this._borderCellCss[dir]);
-            }
             element.style[dir] = dirValue + "px";
             element.style.zIndex = this._getCalculatedZIndex(element);
             if (this._needsPositionStickyOnElement) {

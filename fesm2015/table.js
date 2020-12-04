@@ -629,12 +629,6 @@ class StickyStyler {
         this._isBrowser = _isBrowser;
         this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
         this._cachedCellWidths = [];
-        this._borderCellCss = {
-            'top': `${_stickCellCss}-border-elem-top`,
-            'bottom': `${_stickCellCss}-border-elem-bottom`,
-            'left': `${_stickCellCss}-border-elem-left`,
-            'right': `${_stickCellCss}-border-elem-right`,
-        };
     }
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
@@ -683,8 +677,6 @@ class StickyStyler {
         const cellWidths = this._getCellWidths(firstRow, recalculateCellWidths);
         const startPositions = this._getStickyStartColumnPositions(cellWidths, stickyStartStates);
         const endPositions = this._getStickyEndColumnPositions(cellWidths, stickyEndStates);
-        const lastStickyStart = stickyStartStates.lastIndexOf(true);
-        const firstStickyEnd = stickyEndStates.indexOf(true);
         // Coalesce with sticky row updates (and potentially other changes like column resize).
         this._scheduleStyleChanges(() => {
             const isRtl = this.direction === 'rtl';
@@ -694,10 +686,10 @@ class StickyStyler {
                 for (let i = 0; i < numCells; i++) {
                     const cell = row.children[i];
                     if (stickyStartStates[i]) {
-                        this._addStickyStyle(cell, start, startPositions[i], i === lastStickyStart);
+                        this._addStickyStyle(cell, start, startPositions[i]);
                     }
                     if (stickyEndStates[i]) {
-                        this._addStickyStyle(cell, end, endPositions[i], i === firstStickyEnd);
+                        this._addStickyStyle(cell, end, endPositions[i]);
                     }
                 }
             }
@@ -739,7 +731,6 @@ class StickyStyler {
                 stickyHeight += row.getBoundingClientRect().height;
             }
         }
-        const borderedRowIndex = states.lastIndexOf(true);
         // Coalesce with other sticky row updates (top/bottom), sticky columns updates
         // (and potentially other changes like column resize).
         this._scheduleStyleChanges(() => {
@@ -748,9 +739,8 @@ class StickyStyler {
                     continue;
                 }
                 const height = stickyHeights[rowIndex];
-                const isBorderedRowIndex = rowIndex === borderedRowIndex;
                 for (const element of elementsToStick[rowIndex]) {
-                    this._addStickyStyle(element, position, height, isBorderedRowIndex);
+                    this._addStickyStyle(element, position, height);
                 }
             }
         });
@@ -772,7 +762,7 @@ class StickyStyler {
                 this._removeStickyStyle(tfoot, ['bottom']);
             }
             else {
-                this._addStickyStyle(tfoot, 'bottom', 0, false);
+                this._addStickyStyle(tfoot, 'bottom', 0);
             }
         });
     }
@@ -784,7 +774,6 @@ class StickyStyler {
     _removeStickyStyle(element, stickyDirections) {
         for (const dir of stickyDirections) {
             element.style[dir] = '';
-            element.classList.remove(this._borderCellCss[dir]);
         }
         // If the element no longer has any more sticky directions, remove sticky positioning and
         // the sticky CSS class.
@@ -808,11 +797,8 @@ class StickyStyler {
      * to be sticky (and -webkit-sticky), setting the appropriate zIndex, and adding a sticky
      * direction and value.
      */
-    _addStickyStyle(element, dir, dirValue, isBorderElement) {
+    _addStickyStyle(element, dir, dirValue) {
         element.classList.add(this._stickCellCss);
-        if (isBorderElement) {
-            element.classList.add(this._borderCellCss[dir]);
-        }
         element.style[dir] = `${dirValue}px`;
         element.style.zIndex = this._getCalculatedZIndex(element);
         if (this._needsPositionStickyOnElement) {
