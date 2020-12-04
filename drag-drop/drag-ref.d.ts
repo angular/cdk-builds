@@ -156,6 +156,12 @@ export declare class DragRef<T = any> {
     private _dropContainer?;
     /** Layout direction of the item. */
     private _direction;
+    /**
+     * Cached shadow root that the element is placed in. `null` means that the element isn't in
+     * the shadow DOM and `undefined` means that it hasn't been resolved yet. Should be read via
+     * `_getShadowRoot`, not directly.
+     */
+    private _cachedShadowRoot;
     /** Axis along which dragging is locked. */
     lockAxis: 'x' | 'y';
     /**
@@ -385,5 +391,12 @@ export declare class DragRef<T = any> {
     private _updateOnScroll;
     /** Gets the scroll position of the viewport. */
     private _getViewportScrollPosition;
+    /**
+     * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
+     * than saving it in property directly on init, because we want to resolve it as late as possible
+     * in order to ensure that the element has been moved into the shadow DOM. Doing it inside the
+     * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
+     */
+    private _getShadowRoot;
 }
 export {};
