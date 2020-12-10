@@ -1,10 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
-import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
+import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -76,12 +76,7 @@ let messagesContainer = null;
  * content.
  */
 class AriaDescriber {
-    constructor(_document, 
-    /**
-     * @breaking-change 8.0.0 `_platform` parameter to be made required.
-     */
-    _platform) {
-        this._platform = _platform;
+    constructor(_document) {
         this._document = _document;
     }
     describe(hostElement, message, role) {
@@ -160,8 +155,6 @@ class AriaDescriber {
     /** Creates the global container for all aria-describedby messages. */
     _createMessagesContainer() {
         if (!messagesContainer) {
-            // @breaking-change 8.0.0 `_platform` null check can be removed once the parameter is required
-            const canBeAriaHidden = !this._platform || (!this._platform.EDGE && !this._platform.TRIDENT);
             const preExistingContainer = this._document.getElementById(MESSAGES_CONTAINER_ID);
             // When going from the server to the client, we may end up in a situation where there's
             // already a container on the page, but we don't have a reference to it. Clear the
@@ -172,12 +165,14 @@ class AriaDescriber {
             }
             messagesContainer = this._document.createElement('div');
             messagesContainer.id = MESSAGES_CONTAINER_ID;
+            // We add `visibility: hidden` in order to prevent text in this container from
+            // being searchable by the browser's Ctrl + F functionality.
+            // Screen-readers will still read the description for elements with aria-describedby even
+            // when the description element is not visible.
+            messagesContainer.style.visibility = 'hidden';
+            // Even though we use `visibility: hidden`, we still apply `cdk-visually-hidden` so that
+            // the description element doesn't impact page layout.
             messagesContainer.classList.add('cdk-visually-hidden');
-            // IE and Edge won't read out the messages if they're in an `aria-hidden` container.
-            // We only disable `aria-hidden` for these platforms, because it comes with the
-            // disadvantage that people might hit the messages when they've navigated past
-            // the end of the document using the arrow keys.
-            messagesContainer.setAttribute('aria-hidden', canBeAriaHidden + '');
             this._document.body.appendChild(messagesContainer);
         }
     }
@@ -246,13 +241,12 @@ class AriaDescriber {
         return element.nodeType === this._document.ELEMENT_NODE;
     }
 }
-AriaDescriber.ɵprov = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: AriaDescriber, providedIn: "root" });
+AriaDescriber.ɵprov = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 AriaDescriber.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
 AriaDescriber.ctorParameters = () => [
-    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
-    { type: Platform }
+    { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] }
 ];
 /** Gets a key that can be used to look messages up in the registry. */
 function getKey(message, role) {
