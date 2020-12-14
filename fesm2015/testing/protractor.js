@@ -76,7 +76,7 @@ class ProtractorElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._dispatchClickEventSequence(args);
+            yield this._dispatchClickEventSequence(args, Button.LEFT);
         });
     }
     rightClick(...args) {
@@ -207,14 +207,26 @@ class ProtractorElement {
     /** Dispatches all the events that are part of a click event sequence. */
     _dispatchClickEventSequence(args, button) {
         return __awaiter(this, void 0, void 0, function* () {
+            let modifiers = {};
+            if (args.length && typeof args[args.length - 1] === 'object') {
+                modifiers = args.pop();
+            }
+            const modifierKeys = toProtractorModifierKeys(modifiers);
             // Omitting the offset argument to mouseMove results in clicking the center.
-            // This is the default behavior we want, so we use an empty array of offsetArgs if no args are
-            // passed to this method.
-            const offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
-            yield browser.actions()
-                .mouseMove(yield this.element.getWebElement(), ...offsetArgs)
-                .click(button)
-                .perform();
+            // This is the default behavior we want, so we use an empty array of offsetArgs if
+            // no args remain after popping the modifiers from the args passed to this function.
+            const offsetArgs = (args.length === 2 ?
+                [{ x: args[0], y: args[1] }] : []);
+            let actions = browser.actions()
+                .mouseMove(yield this.element.getWebElement(), ...offsetArgs);
+            for (const modifierKey of modifierKeys) {
+                actions = actions.keyDown(modifierKey);
+            }
+            actions = actions.click(button);
+            for (const modifierKey of modifierKeys) {
+                actions = actions.keyUp(modifierKey);
+            }
+            yield actions.perform();
         });
     }
 }

@@ -395,10 +395,11 @@
      * Creates a browser MouseEvent with the specified options.
      * @docs-private
      */
-    function createMouseEvent(type, clientX, clientY, button) {
+    function createMouseEvent(type, clientX, clientY, button, modifiers) {
         if (clientX === void 0) { clientX = 0; }
         if (clientY === void 0) { clientY = 0; }
         if (button === void 0) { button = 0; }
+        if (modifiers === void 0) { modifiers = {}; }
         var event = document.createEvent('MouseEvent');
         var originalPreventDefault = event.preventDefault.bind(event);
         // Note: We cannot determine the position of the mouse event based on the screen
@@ -416,10 +417,10 @@
         /* screenY */ screenY, 
         /* clientX */ clientX, 
         /* clientY */ clientY, 
-        /* ctrlKey */ false, 
-        /* altKey */ false, 
-        /* shiftKey */ false, 
-        /* metaKey */ false, 
+        /* ctrlKey */ !!modifiers.control, 
+        /* altKey */ !!modifiers.alt, 
+        /* shiftKey */ !!modifiers.shift, 
+        /* metaKey */ !!modifiers.meta, 
         /* button */ button, 
         /* relatedTarget */ null);
         // `initMouseEvent` doesn't allow us to pass the `buttons` and
@@ -573,10 +574,10 @@
      * Shorthand to dispatch a mouse event on the specified coordinates.
      * @docs-private
      */
-    function dispatchMouseEvent(node, type, clientX, clientY, button) {
+    function dispatchMouseEvent(node, type, clientX, clientY, button, modifiers) {
         if (clientX === void 0) { clientX = 0; }
         if (clientY === void 0) { clientY = 0; }
-        return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button));
+        return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button, modifiers));
     }
     /**
      * Shorthand to dispatch a pointer event on the specified coordinates.
@@ -780,7 +781,7 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this._dispatchMouseEventSequence('click', args)];
+                        case 0: return [4 /*yield*/, this._dispatchMouseEventSequence('click', args, 0)];
                         case 1:
                             _a.sent();
                             return [4 /*yield*/, this._stabilize()];
@@ -1065,12 +1066,16 @@
         /** Dispatches all the events that are part of a mouse event sequence. */
         UnitTestElement.prototype._dispatchMouseEventSequence = function (name, args, button) {
             return __awaiter(this, void 0, void 0, function () {
-                var clientX, clientY, _a, left, top, width, height, relativeX, relativeY;
+                var clientX, clientY, modifiers, _a, left, top, width, height, relativeX, relativeY;
                 return __generator(this, function (_b) {
                     switch (_b.label) {
                         case 0:
                             clientX = undefined;
                             clientY = undefined;
+                            modifiers = {};
+                            if (args.length && typeof args[args.length - 1] === 'object') {
+                                modifiers = args.pop();
+                            }
                             if (!args.length) return [3 /*break*/, 2];
                             return [4 /*yield*/, this.getDimensions()];
                         case 1:
@@ -1084,12 +1089,18 @@
                             _b.label = 2;
                         case 2:
                             this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, button);
-                            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button);
+                            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button, modifiers);
                             this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
-                            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button);
-                            dispatchMouseEvent(this.element, name, clientX, clientY, button);
+                            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button, modifiers);
+                            dispatchMouseEvent(this.element, name, clientX, clientY, button, modifiers);
+                            // This call to _stabilize should not be needed since the callers will already do that them-
+                            // selves. Nevertheless it breaks some tests in g3 without it. It needs to be investigated
+                            // why removing breaks those tests.
                             return [4 /*yield*/, this._stabilize()];
                         case 3:
+                            // This call to _stabilize should not be needed since the callers will already do that them-
+                            // selves. Nevertheless it breaks some tests in g3 without it. It needs to be investigated
+                            // why removing breaks those tests.
                             _b.sent();
                             return [2 /*return*/];
                     }

@@ -10,7 +10,7 @@ import { ModifierKeys } from '@angular/cdk/testing';
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-export declare function createMouseEvent(type: string, clientX?: number, clientY?: number, button?: number): MouseEvent;
+export declare function createMouseEvent(type: string, clientX?: number, clientY?: number, button?: number, modifiers?: ModifierKeys): MouseEvent;
 /**
  * Creates a browser `PointerEvent` with the specified options. Pointer events
  * by default will appear as if they are the primary pointer of their type.

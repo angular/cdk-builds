@@ -97,7 +97,7 @@ class TaskStateZoneInterceptor {
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-function createMouseEvent(type, clientX = 0, clientY = 0, button = 0) {
+function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers = {}) {
     const event = document.createEvent('MouseEvent');
     const originalPreventDefault = event.preventDefault.bind(event);
     // Note: We cannot determine the position of the mouse event based on the screen
@@ -115,10 +115,10 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0) {
     /* screenY */ screenY, 
     /* clientX */ clientX, 
     /* clientY */ clientY, 
-    /* ctrlKey */ false, 
-    /* altKey */ false, 
-    /* shiftKey */ false, 
-    /* metaKey */ false, 
+    /* ctrlKey */ !!modifiers.control, 
+    /* altKey */ !!modifiers.alt, 
+    /* shiftKey */ !!modifiers.shift, 
+    /* metaKey */ !!modifiers.meta, 
     /* button */ button, 
     /* relatedTarget */ null);
     // `initMouseEvent` doesn't allow us to pass the `buttons` and
@@ -262,8 +262,8 @@ function dispatchKeyboardEvent(node, type, keyCode, key, modifiers) {
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, button) {
-    return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button));
+function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, button, modifiers) {
+    return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button, modifiers));
 }
 /**
  * Shorthand to dispatch a pointer event on the specified coordinates.
@@ -439,7 +439,7 @@ class UnitTestElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._dispatchMouseEventSequence('click', args);
+            yield this._dispatchMouseEventSequence('click', args, 0);
             yield this._stabilize();
         });
     }
@@ -590,6 +590,10 @@ class UnitTestElement {
         return __awaiter(this, void 0, void 0, function* () {
             let clientX = undefined;
             let clientY = undefined;
+            let modifiers = {};
+            if (args.length && typeof args[args.length - 1] === 'object') {
+                modifiers = args.pop();
+            }
             if (args.length) {
                 const { left, top, width, height } = yield this.getDimensions();
                 const relativeX = args[0] === 'center' ? width / 2 : args[0];
@@ -600,10 +604,13 @@ class UnitTestElement {
                 clientY = Math.round(top + relativeY);
             }
             this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, button);
-            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button);
+            dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button, modifiers);
             this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
-            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button);
-            dispatchMouseEvent(this.element, name, clientX, clientY, button);
+            dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button, modifiers);
+            dispatchMouseEvent(this.element, name, clientX, clientY, button, modifiers);
+            // This call to _stabilize should not be needed since the callers will already do that them-
+            // selves. Nevertheless it breaks some tests in g3 without it. It needs to be investigated
+            // why removing breaks those tests.
             yield this._stabilize();
         });
     }

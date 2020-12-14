@@ -13,8 +13,16 @@ export declare class ProtractorElement implements TestElement {
     constructor(element: ElementFinder);
     blur(): Promise<void>;
     clear(): Promise<void>;
-    click(...args: [] | ['center'] | [number, number]): Promise<void>;
-    rightClick(...args: [] | ['center'] | [number, number]): Promise<void>;
+    click(...args: [ModifierKeys?] | ['center', ModifierKeys?] | [
+        number,
+        number,
+        ModifierKeys?
+    ]): Promise<void>;
+    rightClick(...args: [ModifierKeys?] | ['center', ModifierKeys?] | [
+        number,
+        number,
+        ModifierKeys?
+    ]): Promise<void>;
     focus(): Promise<void>;
     getCssValue(property: string): Promise<string>;
     hover(): Promise<void>;

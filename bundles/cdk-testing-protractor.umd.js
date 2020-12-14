@@ -383,7 +383,7 @@
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, this._dispatchClickEventSequence(args)];
+                        case 0: return [4 /*yield*/, this._dispatchClickEventSequence(args, protractor.Button.LEFT)];
                         case 1:
                             _a.sent();
                             return [2 /*return*/];
@@ -611,20 +611,54 @@
         /** Dispatches all the events that are part of a click event sequence. */
         ProtractorElement.prototype._dispatchClickEventSequence = function (args, button) {
             return __awaiter(this, void 0, void 0, function () {
-                var offsetArgs, _a, _b, _c;
-                var _d;
-                return __generator(this, function (_e) {
-                    switch (_e.label) {
+                var modifiers, modifierKeys, offsetArgs, actions, _a, _b, _c, modifierKeys_1, modifierKeys_1_1, modifierKey, modifierKeys_2, modifierKeys_2_1, modifierKey;
+                var _d, e_1, _e, e_2, _f;
+                return __generator(this, function (_g) {
+                    switch (_g.label) {
                         case 0:
-                            offsetArgs = args.length === 2 ? [{ x: args[0], y: args[1] }] : [];
+                            modifiers = {};
+                            if (args.length && typeof args[args.length - 1] === 'object') {
+                                modifiers = args.pop();
+                            }
+                            modifierKeys = toProtractorModifierKeys(modifiers);
+                            offsetArgs = (args.length === 2 ?
+                                [{ x: args[0], y: args[1] }] : []);
                             _b = (_a = (_d = protractor.browser.actions())
                                 .mouseMove).apply;
                             _c = [_d];
                             return [4 /*yield*/, this.element.getWebElement()];
-                        case 1: return [4 /*yield*/, _b.apply(_a, _c.concat([__spread.apply(void 0, [[_e.sent()], offsetArgs])])).click(button)
-                                .perform()];
+                        case 1:
+                            actions = _b.apply(_a, _c.concat([__spread.apply(void 0, [[_g.sent()], offsetArgs])]));
+                            try {
+                                for (modifierKeys_1 = __values(modifierKeys), modifierKeys_1_1 = modifierKeys_1.next(); !modifierKeys_1_1.done; modifierKeys_1_1 = modifierKeys_1.next()) {
+                                    modifierKey = modifierKeys_1_1.value;
+                                    actions = actions.keyDown(modifierKey);
+                                }
+                            }
+                            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                            finally {
+                                try {
+                                    if (modifierKeys_1_1 && !modifierKeys_1_1.done && (_e = modifierKeys_1.return)) _e.call(modifierKeys_1);
+                                }
+                                finally { if (e_1) throw e_1.error; }
+                            }
+                            actions = actions.click(button);
+                            try {
+                                for (modifierKeys_2 = __values(modifierKeys), modifierKeys_2_1 = modifierKeys_2.next(); !modifierKeys_2_1.done; modifierKeys_2_1 = modifierKeys_2.next()) {
+                                    modifierKey = modifierKeys_2_1.value;
+                                    actions = actions.keyUp(modifierKey);
+                                }
+                            }
+                            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                            finally {
+                                try {
+                                    if (modifierKeys_2_1 && !modifierKeys_2_1.done && (_f = modifierKeys_2.return)) _f.call(modifierKeys_2);
+                                }
+                                finally { if (e_2) throw e_2.error; }
+                            }
+                            return [4 /*yield*/, actions.perform()];
                         case 2:
-                            _e.sent();
+                            _g.sent();
                             return [2 /*return*/];
                     }
                 });
