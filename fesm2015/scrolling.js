@@ -1185,7 +1185,11 @@ class CdkVirtualForOf {
         }
         this._renderedItems = this._data.slice(this._renderedRange.start, this._renderedRange.end);
         if (!this._differ) {
-            this._differ = this._differs.find(this._renderedItems).create(this.cdkVirtualForTrackBy);
+            // Use a wrapper function for the `trackBy` so any new values are
+            // picked up automatically without having to recreate the differ.
+            this._differ = this._differs.find(this._renderedItems).create((index, item) => {
+                return this.cdkVirtualForTrackBy ? this.cdkVirtualForTrackBy(index, item) : item;
+            });
         }
         this._needsUpdate = true;
     }
@@ -1202,7 +1206,7 @@ class CdkVirtualForOf {
         const count = this._data.length;
         let i = this._viewContainerRef.length;
         while (i--) {
-            let view = this._viewContainerRef.get(i);
+            const view = this._viewContainerRef.get(i);
             view.context.index = this._renderedRange.start + i;
             view.context.count = count;
             this._updateComputedContextProperties(view.context);
@@ -1211,7 +1215,7 @@ class CdkVirtualForOf {
     }
     /** Apply changes to the DOM. */
     _applyChanges(changes) {
-        this._viewRepeater.applyChanges(changes, this._viewContainerRef, (record, adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record, currentIndex), (record) => record.item);
+        this._viewRepeater.applyChanges(changes, this._viewContainerRef, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record, currentIndex), (record) => record.item);
         // Update $implicit for any items that had an identity change.
         changes.forEachIdentityChange((record) => {
             const view = this._viewContainerRef.get(record.currentIndex);

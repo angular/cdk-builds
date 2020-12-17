@@ -1538,12 +1538,17 @@
         };
         /** React to scroll state changes in the viewport. */
         CdkVirtualForOf.prototype._onRenderedDataChange = function () {
+            var _this = this;
             if (!this._renderedRange) {
                 return;
             }
             this._renderedItems = this._data.slice(this._renderedRange.start, this._renderedRange.end);
             if (!this._differ) {
-                this._differ = this._differs.find(this._renderedItems).create(this.cdkVirtualForTrackBy);
+                // Use a wrapper function for the `trackBy` so any new values are
+                // picked up automatically without having to recreate the differ.
+                this._differ = this._differs.find(this._renderedItems).create(function (index, item) {
+                    return _this.cdkVirtualForTrackBy ? _this.cdkVirtualForTrackBy(index, item) : item;
+                });
             }
             this._needsUpdate = true;
         };
@@ -1570,7 +1575,7 @@
         /** Apply changes to the DOM. */
         CdkVirtualForOf.prototype._applyChanges = function (changes) {
             var _this = this;
-            this._viewRepeater.applyChanges(changes, this._viewContainerRef, function (record, adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record, currentIndex); }, function (record) { return record.item; });
+            this._viewRepeater.applyChanges(changes, this._viewContainerRef, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record, currentIndex); }, function (record) { return record.item; });
             // Update $implicit for any items that had an identity change.
             changes.forEachIdentityChange(function (record) {
                 var view = _this._viewContainerRef.get(record.currentIndex);
