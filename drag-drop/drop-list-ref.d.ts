@@ -217,6 +217,8 @@ export declare class DropListRef<T = any> {
     _startScrollingIfNecessary(pointerX: number, pointerY: number): void;
     /** Stops any currently-running auto-scroll sequences. */
     _stopScrolling(): void;
+    /** Starts the dragging sequence within the list. */
+    private _draggingStarted;
     /** Caches the positions of the configured scrollable parents. */
     private _cacheParentPositions;
     /** Refreshes the position cache of the items and sibling containers. */
@@ -280,7 +282,7 @@ export declare class DropListRef<T = any> {
      * Called by one of the connected drop lists when a dragging sequence has started.
      * @param sibling Sibling in which dragging has started.
      */
-    _startReceiving(sibling: DropListRef): void;
+    _startReceiving(sibling: DropListRef, items: DragRef[]): void;
     /**
      * Called by a connected drop list when dragging has stopped.
      * @param sibling Sibling whose dragging has stopped.
@@ -298,4 +300,6 @@ export declare class DropListRef<T = any> {
      * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
      */
     private _getShadowRoot;
+    /** Notifies any siblings that may potentially receive the item. */
+    private _notifyReceivingSiblings;
 }

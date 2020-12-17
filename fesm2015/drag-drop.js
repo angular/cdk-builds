@@ -1458,6 +1458,8 @@ class DropListRef {
          * overlap with the swapped item after the swapping occurred.
          */
         this._previousSwap = { drag: null, delta: 0, overlaps: false };
+        /** Draggable items in the container. */
+        this._draggables = [];
         /** Drop lists that are connected to the current one. */
         this._siblings = [];
         /** Direction in which the list is oriented. */
@@ -1524,18 +1526,8 @@ class DropListRef {
     }
     /** Starts dragging an item. */
     start() {
-        const styles = coerceElement(this.element).style;
-        this.beforeStarted.next();
-        this._isDragging = true;
-        // We need to disable scroll snapping while the user is dragging, because it breaks automatic
-        // scrolling. The browser seems to round the value based on the snapping points which means
-        // that we can't increment/decrement the scroll position.
-        this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
-        styles.scrollSnapType = styles.msScrollSnapType = 'none';
-        this._cacheItems();
-        this._siblings.forEach(sibling => sibling._startReceiving(this));
-        this._viewportScrollSubscription.unsubscribe();
-        this._listenToScrollEvents();
+        this._draggingStarted();
+        this._notifyReceivingSiblings();
     }
     /**
      * Emits an event to indicate that the user moved an item into the container.
@@ -1546,7 +1538,7 @@ class DropListRef {
      *   out automatically.
      */
     enter(item, pointerX, pointerY, index) {
-        this.start();
+        this._draggingStarted();
         // If sorting is disabled, we want the item to return to its starting
         // position if the user is returning it to its initial container.
         let newIndex;
@@ -1598,6 +1590,8 @@ class DropListRef {
         // but we need to refresh them since the amount of items has changed and also parent rects.
         this._cacheItemPositions();
         this._cacheParentPositions();
+        // Notify siblings at the end so that the item has been inserted into the `activeDraggables`.
+        this._notifyReceivingSiblings();
         this.entered.next({ item, container: this, currentIndex: this.getItemIndex(item) });
     }
     /**
@@ -1720,7 +1714,7 @@ class DropListRef {
      */
     _sortItem(item, pointerX, pointerY, pointerDelta) {
         // Don't sort the item if sorting is disabled or it's out of range.
-        if (this.sortingDisabled ||
+        if (this.sortingDisabled || !this._clientRect ||
             !isPointerNearClientRect(this._clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
             return;
         }
@@ -1833,6 +1827,20 @@ class DropListRef {
     /** Stops any currently-running auto-scroll sequences. */
     _stopScrolling() {
         this._stopScrollTimers.next();
+    }
+    /** Starts the dragging sequence within the list. */
+    _draggingStarted() {
+        const styles = coerceElement(this.element).style;
+        this.beforeStarted.next();
+        this._isDragging = true;
+        // We need to disable scroll snapping while the user is dragging, because it breaks automatic
+        // scrolling. The browser seems to round the value based on the snapping points which means
+        // that we can't increment/decrement the scroll position.
+        this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
+        styles.scrollSnapType = styles.msScrollSnapType = 'none';
+        this._cacheItems();
+        this._viewportScrollSubscription.unsubscribe();
+        this._listenToScrollEvents();
     }
     /** Caches the positions of the configured scrollable parents. */
     _cacheParentPositions() {
@@ -1987,7 +1995,7 @@ class DropListRef {
      * @param y Pointer position along the Y axis.
      */
     _isOverContainer(x, y) {
-        return isInsideClientRect(this._clientRect, x, y);
+        return this._clientRect != null && isInsideClientRect(this._clientRect, x, y);
     }
     /**
      * Figures out whether an item should be moved into a sibling
@@ -2006,7 +2014,8 @@ class DropListRef {
      * @param y Position of the item along the Y axis.
      */
     _canReceive(item, x, y) {
-        if (!isInsideClientRect(this._clientRect, x, y) || !this.enterPredicate(item, this)) {
+        if (!this._clientRect || !isInsideClientRect(this._clientRect, x, y) ||
+            !this.enterPredicate(item, this)) {
             return false;
         }
         const elementFromPoint = this._getShadowRoot().elementFromPoint(x, y);
@@ -2028,9 +2037,15 @@ class DropListRef {
      * Called by one of the connected drop lists when a dragging sequence has started.
      * @param sibling Sibling in which dragging has started.
      */
-    _startReceiving(sibling) {
+    _startReceiving(sibling, items) {
         const activeSiblings = this._activeSiblings;
-        if (!activeSiblings.has(sibling)) {
+        if (!activeSiblings.has(sibling) && items.every(item => {
+            // Note that we have to add an exception to the `enterPredicate` for items that started off
+            // in this drop list. The drag ref has logic that allows an item to return to its initial
+            // container, if it has left the initial container and none of the connected containers
+            // allow it to enter. See `DragRef._updateActiveDropContainer` for more context.
+            return this.enterPredicate(item, this) || this._draggables.indexOf(item) > -1;
+        })) {
             activeSiblings.add(sibling);
             this._cacheParentPositions();
             this._listenToScrollEvents();
@@ -2088,6 +2103,11 @@ class DropListRef {
             this._cachedShadowRoot = shadowRoot || this._document;
         }
         return this._cachedShadowRoot;
+    }
+    /** Notifies any siblings that may potentially receive the item. */
+    _notifyReceivingSiblings() {
+        const draggedItems = this._activeDraggables.filter(item => item.isDragging());
+        this._siblings.forEach(sibling => sibling._startReceiving(this, draggedItems));
     }
 }
 /**
