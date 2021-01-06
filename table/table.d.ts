@@ -209,7 +209,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     private _cachedRenderRowsMap;
     /** Whether the table is applied to a native `<table>`. */
-    private _isNativeHtmlTable;
+    protected _isNativeHtmlTable: boolean;
     /**
      * Utility class that is responsible for applying the appropriate sticky positioning styles to
      * the table's rows and cells.
