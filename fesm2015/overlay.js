@@ -3,9 +3,9 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import { DOCUMENT, Location } from '@angular/common';
 import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, Optional, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { supportsScrollBehavior, Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
-import { Platform } from '@angular/cdk/platform';
 import { Subject, Subscription, merge } from 'rxjs';
 import { take, takeUntil, takeWhile } from 'rxjs/operators';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
@@ -17,6 +17,7 @@ import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const scrollBehaviorSupported = supportsScrollBehavior();
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
  */
@@ -60,10 +61,17 @@ class BlockScrollStrategy {
             html.classList.remove('cdk-global-scrollblock');
             // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
             // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
-            htmlStyle.scrollBehavior = bodyStyle.scrollBehavior = 'auto';
+            // Note that we don't mutate the property if the browser doesn't support `scroll-behavior`,
+            // because it can throw off feature detections in `supportsScrollBehavior` which
+            // checks for `'scrollBehavior' in documentElement.style`.
+            if (scrollBehaviorSupported) {
+                htmlStyle.scrollBehavior = bodyStyle.scrollBehavior = 'auto';
+            }
             window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
-            htmlStyle.scrollBehavior = previousHtmlScrollBehavior;
-            bodyStyle.scrollBehavior = previousBodyScrollBehavior;
+            if (scrollBehaviorSupported) {
+                htmlStyle.scrollBehavior = previousHtmlScrollBehavior;
+                bodyStyle.scrollBehavior = previousBodyScrollBehavior;
+            }
         }
     }
     _canBeEnabled() {

@@ -207,6 +207,7 @@
             // If we're not in the browser, it can't be supported.
             if (typeof document !== 'object' || !document) {
                 scrollBehaviorSupported = false;
+                return scrollBehaviorSupported;
             }
             // If the element can have a `scrollBehavior` style, we can be sure that it's supported.
             if ('scrollBehavior' in document.documentElement.style) {
