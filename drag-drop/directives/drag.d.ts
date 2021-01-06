@@ -106,7 +106,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0
      */
-    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined);
+    _document: any, _ngZone: NgZone, _viewContainerRef: ViewContainerRef, config: DragDropConfig, _dir: Directionality, dragDrop: DragDrop, _changeDetectorRef: ChangeDetectorRef, _selfHandle?: CdkDragHandle | undefined, parentDrag?: CdkDrag);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.

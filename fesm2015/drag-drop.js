@@ -782,10 +782,11 @@ class DragRef {
      * @param event Browser event object that started the sequence.
      */
     _initializeDragSequence(referenceElement, event) {
-        // Always stop propagation for the event that initializes
-        // the dragging sequence, in order to prevent it from potentially
-        // starting another sequence for a draggable parent somewhere up the DOM tree.
-        event.stopPropagation();
+        // Stop propagation if the item is inside another
+        // draggable so we don't start multiple drag sequences.
+        if (this._config.parentDragRef) {
+            event.stopPropagation();
+        }
         const isDragging = this.isDragging();
         const isTouchSequence = isTouchEvent(event);
         const isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
@@ -2985,7 +2986,7 @@ class CdkDrag {
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0
      */
-    _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle) {
+    _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle, parentDrag) {
         this.element = element;
         this.dropContainer = dropContainer;
         this._ngZone = _ngZone;
@@ -3027,7 +3028,8 @@ class CdkDrag {
                 config.dragStartThreshold : 5,
             pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
                 config.pointerDirectionChangeThreshold : 5,
-            zIndex: config === null || config === void 0 ? void 0 : config.zIndex
+            zIndex: config === null || config === void 0 ? void 0 : config.zIndex,
+            parentDragRef: parentDrag === null || parentDrag === void 0 ? void 0 : parentDrag._dragRef
         });
         this._dragRef.data = this;
         if (config) {
@@ -3282,7 +3284,8 @@ CdkDrag.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: DragDrop },
     { type: ChangeDetectorRef },
-    { type: CdkDragHandle, decorators: [{ type: Optional }, { type: Self }, { type: Inject, args: [CDK_DRAG_HANDLE,] }] }
+    { type: CdkDragHandle, decorators: [{ type: Optional }, { type: Self }, { type: Inject, args: [CDK_DRAG_HANDLE,] }] },
+    { type: CdkDrag, decorators: [{ type: Optional }, { type: SkipSelf }, { type: Inject, args: [CDK_DRAG_PARENT,] }] }
 ];
 CdkDrag.propDecorators = {
     _handles: [{ type: ContentChildren, args: [CDK_DRAG_HANDLE, { descendants: true },] }],
