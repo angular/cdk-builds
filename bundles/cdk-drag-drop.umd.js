@@ -389,9 +389,6 @@
             };
             /** Handler that is invoked when the user moves their pointer after they've initiated a drag. */
             this._pointerMove = function (event) {
-                // Prevent the default action as early as possible in order to block
-                // native actions like dragging the selected text or images with the mouse.
-                event.preventDefault();
                 var pointerPosition = _this._getPointerPositionOnPage(event);
                 if (!_this._hasStartedDragging) {
                     var distanceX = Math.abs(pointerPosition.x - _this._pickupPositionOnPage.x);
@@ -426,6 +423,10 @@
                         _this._previewRect = (_this._preview || _this._rootElement).getBoundingClientRect();
                     }
                 }
+                // We prevent the default action down here so that we know that dragging has started. This is
+                // important for touch devices where doing this too early can unnecessarily block scrolling,
+                // if there's a dragging delay.
+                event.preventDefault();
                 var constrainedPointerPosition = _this._getConstrainedPointerPosition(pointerPosition);
                 _this._hasMoved = true;
                 _this._lastKnownPointerPosition = pointerPosition;
@@ -2578,9 +2579,14 @@
             /** Registered drag item instances. */
             this._dragInstances = new Set();
             /** Drag item instances that are currently being dragged. */
-            this._activeDragInstances = new Set();
+            this._activeDragInstances = [];
             /** Keeps track of the event listeners that we've bound to the `document`. */
             this._globalListeners = new Map();
+            /**
+             * Predicate function to check if an item is being dragged.  Moved out into a property,
+             * because it'll be called a lot and we don't want to create a new function every time.
+             */
+            this._draggingPredicate = function (item) { return item.isDragging(); };
             /**
              * Emits the `touchmove` or `mousemove` events that are dispatched
              * while the user is dragging a drag item instance.
@@ -2598,14 +2604,19 @@
              * @param event Event whose default action should be prevented.
              */
             this._preventDefaultWhileDragging = function (event) {
-                if (_this._activeDragInstances.size) {
+                if (_this._activeDragInstances.length > 0) {
                     event.preventDefault();
                 }
             };
             /** Event listener for `touchmove` that is bound even if no dragging is happening. */
             this._persistentTouchmoveListener = function (event) {
-                if (_this._activeDragInstances.size) {
-                    event.preventDefault();
+                if (_this._activeDragInstances.length > 0) {
+                    // Note that we only want to prevent the default action after dragging has actually started.
+                    // Usually this is the same time at which the item is added to the `_activeDragInstances`,
+                    // but it could be pushed back if the user has set up a drag delay or threshold.
+                    if (_this._activeDragInstances.some(_this._draggingPredicate)) {
+                        event.preventDefault();
+                    }
                     _this.pointerMove.next(event);
                 }
             };
@@ -2652,11 +2663,11 @@
         DragDropRegistry.prototype.startDragging = function (drag, event) {
             var _this = this;
             // Do not process the same drag twice to avoid memory leaks and redundant listeners
-            if (this._activeDragInstances.has(drag)) {
+            if (this._activeDragInstances.indexOf(drag) > -1) {
                 return;
             }
-            this._activeDragInstances.add(drag);
-            if (this._activeDragInstances.size === 1) {
+            this._activeDragInstances.push(drag);
+            if (this._activeDragInstances.length === 1) {
                 var isTouchEvent = event.type.startsWith('touch');
                 // We explicitly bind __active__ listeners here, because newer browsers will default to
                 // passive ones for `mousemove` and `touchmove`. The events need to be active, because we
@@ -2697,14 +2708,17 @@
         };
         /** Stops dragging a drag item instance. */
         DragDropRegistry.prototype.stopDragging = function (drag) {
-            this._activeDragInstances.delete(drag);
-            if (this._activeDragInstances.size === 0) {
-                this._clearGlobalListeners();
+            var index = this._activeDragInstances.indexOf(drag);
+            if (index > -1) {
+                this._activeDragInstances.splice(index, 1);
+                if (this._activeDragInstances.length === 0) {
+                    this._clearGlobalListeners();
+                }
             }
         };
         /** Gets whether a drag item instance is currently being dragged. */
         DragDropRegistry.prototype.isDragging = function (drag) {
-            return this._activeDragInstances.has(drag);
+            return this._activeDragInstances.indexOf(drag) > -1;
         };
         DragDropRegistry.prototype.ngOnDestroy = function () {
             var _this = this;

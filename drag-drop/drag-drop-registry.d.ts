@@ -12,7 +12,9 @@ import { Subject } from 'rxjs';
  * instances, and manages global event listeners on the `document`.
  * @docs-private
  */
-export declare class DragDropRegistry<I, C> implements OnDestroy {
+export declare class DragDropRegistry<I extends {
+    isDragging(): boolean;
+}, C> implements OnDestroy {
     private _ngZone;
     private _document;
     /** Registered drop container instances. */
@@ -23,6 +25,11 @@ export declare class DragDropRegistry<I, C> implements OnDestroy {
     private _activeDragInstances;
     /** Keeps track of the event listeners that we've bound to the `document`. */
     private _globalListeners;
+    /**
+     * Predicate function to check if an item is being dragged.  Moved out into a property,
+     * because it'll be called a lot and we don't want to create a new function every time.
+     */
+    private _draggingPredicate;
     /**
      * Emits the `touchmove` or `mousemove` events that are dispatched
      * while the user is dragging a drag item instance.
