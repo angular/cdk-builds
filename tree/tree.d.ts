@@ -16,7 +16,7 @@ import { CdkTreeNodeOutlet } from './outlet';
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
  */
-export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
+export declare class CdkTree<T, K = T> implements AfterContentChecked, CollectionViewer, OnDestroy, OnInit {
     private _differs;
     private _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
@@ -38,7 +38,7 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
     set dataSource(dataSource: DataSource<T> | Observable<T[]> | T[]);
     private _dataSource;
     /** The tree controller */
-    treeControl: TreeControl<T>;
+    treeControl: TreeControl<T, K>;
     /**
      * Tracking function that will be used to check the differences in data changes. Used similarly
      * to `ngFor` `trackBy` function. Optimize node operations by identifying a node based on its data
@@ -87,9 +87,9 @@ export declare class CdkTree<T> implements AfterContentChecked, CollectionViewer
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-export declare class CdkTreeNode<T> implements DoCheck, FocusableOption, OnDestroy, OnInit {
+export declare class CdkTreeNode<T, K = T> implements DoCheck, FocusableOption, OnDestroy, OnInit {
     protected _elementRef: ElementRef<HTMLElement>;
-    protected _tree: CdkTree<T>;
+    protected _tree: CdkTree<T, K>;
     /**
      * The role of the tree node.
      * @deprecated The correct role is 'treeitem', 'group' should not be used. This input will be
@@ -116,7 +116,7 @@ export declare class CdkTreeNode<T> implements DoCheck, FocusableOption, OnDestr
     private _setExpanded;
     protected _isAriaExpanded: boolean;
     get level(): number;
-    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>);
+    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>);
     ngOnInit(): void;
     ngDoCheck(): void;
     ngOnDestroy(): void;

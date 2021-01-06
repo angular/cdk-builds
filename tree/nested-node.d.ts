@@ -14,9 +14,9 @@ import { CdkTree, CdkTreeNode } from './tree';
  * be added in the `cdkTreeNodeOutlet` in tree node template.
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
-export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements AfterContentInit, DoCheck, OnDestroy, OnInit {
+export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> implements AfterContentInit, DoCheck, OnDestroy, OnInit {
     protected _elementRef: ElementRef<HTMLElement>;
-    protected _tree: CdkTree<T>;
+    protected _tree: CdkTree<T, K>;
     protected _differs: IterableDiffers;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
@@ -24,7 +24,7 @@ export declare class CdkNestedTreeNode<T> extends CdkTreeNode<T> implements Afte
     protected _children: T[];
     /** The children node placeholder. */
     nodeOutlet: QueryList<CdkTreeNodeOutlet>;
-    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T>, _differs: IterableDiffers);
+    constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>, _differs: IterableDiffers);
     ngAfterContentInit(): void;
     ngOnInit(): void;
     ngDoCheck(): void;

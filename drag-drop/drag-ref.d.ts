@@ -25,6 +25,8 @@ export interface DragRefConfig {
     pointerDirectionChangeThreshold: number;
     /** `z-index` for the absolutely-positioned elements that are created by the drag item. */
     zIndex?: number;
+    /** Ref that the current drag item is nested in. */
+    parentDragRef?: DragRef;
 }
 /**
  * Internal compile-time-only representation of a `DragRef`.

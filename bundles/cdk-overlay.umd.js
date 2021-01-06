@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/bidi', '@angular/cdk/portal', '@angular/cdk/platform', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.bidi, global.ng.cdk.portal, global.ng.cdk.platform, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes));
-}(this, (function (exports, i1, i1$1, i0, coercion, bidi, portal, i2, rxjs, operators, keycodes) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes'], factory) :
+    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes));
+}(this, (function (exports, i1, i1$1, i0, coercion, i2, bidi, portal, rxjs, operators, keycodes) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -312,6 +312,7 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var scrollBehaviorSupported = i2.supportsScrollBehavior();
     /**
      * Strategy that will prevent the user from scrolling while the overlay is visible.
      */
@@ -355,10 +356,17 @@
                 html.classList.remove('cdk-global-scrollblock');
                 // Disable user-defined smooth scrolling temporarily while we restore the scroll position.
                 // See https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior
-                htmlStyle.scrollBehavior = bodyStyle.scrollBehavior = 'auto';
+                // Note that we don't mutate the property if the browser doesn't support `scroll-behavior`,
+                // because it can throw off feature detections in `supportsScrollBehavior` which
+                // checks for `'scrollBehavior' in documentElement.style`.
+                if (scrollBehaviorSupported) {
+                    htmlStyle.scrollBehavior = bodyStyle.scrollBehavior = 'auto';
+                }
                 window.scroll(this._previousScrollPosition.left, this._previousScrollPosition.top);
-                htmlStyle.scrollBehavior = previousHtmlScrollBehavior;
-                bodyStyle.scrollBehavior = previousBodyScrollBehavior;
+                if (scrollBehaviorSupported) {
+                    htmlStyle.scrollBehavior = previousHtmlScrollBehavior;
+                    bodyStyle.scrollBehavior = previousBodyScrollBehavior;
+                }
             }
         };
         BlockScrollStrategy.prototype._canBeEnabled = function () {
