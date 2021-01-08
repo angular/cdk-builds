@@ -5,7 +5,7 @@ export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
-import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, Attribute, ViewChild, ContentChildren, NgModule } from '@angular/core';
+import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, Attribute, SkipSelf, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 
@@ -615,19 +615,22 @@ class StickyStyler {
      * @param _needsPositionStickyOnElement Whether we need to specify position: sticky on cells
      *     using inline styles. If false, it is assumed that position: sticky is included in
      *     the component stylesheet for _stickCellCss.
+     * @param _positionListener A listener that is notified of changes to sticky rows/columns
+     *     and their dimensions.
      */
     constructor(_isNativeHtmlTable, _stickCellCss, direction, 
     /**
      * @deprecated `_coalescedStyleScheduler` parameter to become required.
      * @breaking-change 11.0.0
      */
-    _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true) {
+    _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true, _positionListener) {
         this._isNativeHtmlTable = _isNativeHtmlTable;
         this._stickCellCss = _stickCellCss;
         this.direction = direction;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._isBrowser = _isBrowser;
         this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
+        this._positionListener = _positionListener;
         this._cachedCellWidths = [];
         this._borderCellCss = {
             'top': `${_stickCellCss}-border-elem-top`,
@@ -676,6 +679,10 @@ class StickyStyler {
     updateStickyColumns(rows, stickyStartStates, stickyEndStates, recalculateCellWidths = true) {
         if (!rows.length || !this._isBrowser || !(stickyStartStates.some(state => state) ||
             stickyEndStates.some(state => state))) {
+            if (this._positionListener) {
+                this._positionListener.stickyColumnsUpdated({ sizes: [] });
+                this._positionListener.stickyEndColumnsUpdated({ sizes: [] });
+            }
             return;
         }
         const firstRow = rows[0];
@@ -701,6 +708,23 @@ class StickyStyler {
                     }
                 }
             }
+            if (this._positionListener) {
+                this._positionListener.stickyColumnsUpdated({
+                    sizes: lastStickyStart === -1 ?
+                        [] :
+                        cellWidths
+                            .slice(0, lastStickyStart + 1)
+                            .map((width, index) => stickyStartStates[index] ? width : null)
+                });
+                this._positionListener.stickyEndColumnsUpdated({
+                    sizes: firstStickyEnd === -1 ?
+                        [] :
+                        cellWidths
+                            .slice(firstStickyEnd)
+                            .map((width, index) => stickyEndStates[index + firstStickyEnd] ? width : null)
+                            .reverse()
+                });
+            }
         });
     }
     /**
@@ -725,33 +749,41 @@ class StickyStyler {
         const rows = position === 'bottom' ? rowsToStick.slice().reverse() : rowsToStick;
         const states = position === 'bottom' ? stickyStates.slice().reverse() : stickyStates;
         // Measure row heights all at once before adding sticky styles to reduce layout thrashing.
-        const stickyHeights = [];
+        const stickyOffsets = [];
+        const stickyCellHeights = [];
         const elementsToStick = [];
-        for (let rowIndex = 0, stickyHeight = 0; rowIndex < rows.length; rowIndex++) {
-            stickyHeights[rowIndex] = stickyHeight;
+        for (let rowIndex = 0, stickyOffset = 0; rowIndex < rows.length; rowIndex++) {
+            stickyOffsets[rowIndex] = stickyOffset;
             if (!states[rowIndex]) {
                 continue;
             }
             const row = rows[rowIndex];
             elementsToStick[rowIndex] = this._isNativeHtmlTable ?
                 Array.from(row.children) : [row];
-            if (rowIndex !== rows.length - 1) {
-                stickyHeight += row.getBoundingClientRect().height;
-            }
+            const height = row.getBoundingClientRect().height;
+            stickyOffset += height;
+            stickyCellHeights[rowIndex] = height;
         }
         const borderedRowIndex = states.lastIndexOf(true);
         // Coalesce with other sticky row updates (top/bottom), sticky columns updates
         // (and potentially other changes like column resize).
         this._scheduleStyleChanges(() => {
+            var _a, _b;
             for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                 if (!states[rowIndex]) {
                     continue;
                 }
-                const height = stickyHeights[rowIndex];
+                const offset = stickyOffsets[rowIndex];
                 const isBorderedRowIndex = rowIndex === borderedRowIndex;
                 for (const element of elementsToStick[rowIndex]) {
-                    this._addStickyStyle(element, position, height, isBorderedRowIndex);
+                    this._addStickyStyle(element, position, offset, isBorderedRowIndex);
                 }
+            }
+            if (position === 'top') {
+                (_a = this._positionListener) === null || _a === void 0 ? void 0 : _a.stickyHeaderRowsUpdated({ sizes: stickyCellHeights });
+            }
+            else {
+                (_b = this._positionListener) === null || _b === void 0 ? void 0 : _b.stickyFooterRowsUpdated({ sizes: stickyCellHeights });
             }
         });
     }
@@ -983,6 +1015,16 @@ function getTableTextColumnMissingNameError() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** The injection token used to specify the StickyPositioningListener. */
+const STICKY_POSITIONING_LISTENER = new InjectionToken('CDK_SPL');
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
@@ -1087,7 +1129,7 @@ class CdkTable {
      *    parameters to become required.
      * @breaking-change 11.0.0
      */
-    _viewRepeater, _coalescedStyleScheduler, 
+    _viewRepeater, _coalescedStyleScheduler, _stickyPositioningListener, 
     // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
     // this property will never be null.
     // tslint:disable-next-line: lightweight-tokens
@@ -1099,6 +1141,7 @@ class CdkTable {
         this._platform = _platform;
         this._viewRepeater = _viewRepeater;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
+        this._stickyPositioningListener = _stickyPositioningListener;
         this._viewportRuler = _viewportRuler;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
@@ -1868,7 +1911,7 @@ class CdkTable {
      */
     _setupStickyStyler() {
         const direction = this._dir ? this._dir.value : 'ltr';
-        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement);
+        this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement, this._stickyPositioningListener);
         (this._dir ? this._dir.change : of())
             .pipe(takeUntil(this._onDestroy))
             .subscribe(value => {
@@ -1912,6 +1955,8 @@ CdkTable.decorators = [
                     { provide: CDK_TABLE, useExisting: CdkTable },
                     { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
                     { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
+                    // Prevent nested tables from seeing this table's StickyPositioningListener.
+                    { provide: STICKY_POSITIONING_LISTENER, useValue: null },
                 ],
                 styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"]
             },] }
@@ -1926,6 +1971,7 @@ CdkTable.ctorParameters = () => [
     { type: Platform },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] },
     { type: _CoalescedStyleScheduler, decorators: [{ type: Optional }, { type: Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: SkipSelf }, { type: Inject, args: [STICKY_POSITIONING_LISTENER,] }] },
     { type: ViewportRuler, decorators: [{ type: Optional }] }
 ];
 CdkTable.propDecorators = {
@@ -2126,5 +2172,5 @@ CdkTableModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

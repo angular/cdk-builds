@@ -15,6 +15,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkNoDataRow, CdkRowDef } from './row';
+import { StickyPositioningListener } from './sticky-position-listener';
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;
@@ -110,6 +111,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     protected readonly _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined;
     protected readonly _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined;
+    protected readonly _stickyPositioningListener?: StickyPositioningListener | undefined;
     private readonly _viewportRuler?;
     private _document;
     /** Latest data provided by the data source. */
@@ -309,7 +311,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      *    parameters to become required.
      * @breaking-change 11.0.0
      */
-    _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined, _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined, _viewportRuler?: ViewportRuler | undefined);
+    _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined, _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined, _stickyPositioningListener?: StickyPositioningListener | undefined, _viewportRuler?: ViewportRuler | undefined);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;

@@ -984,13 +984,15 @@
          * @param _needsPositionStickyOnElement Whether we need to specify position: sticky on cells
          *     using inline styles. If false, it is assumed that position: sticky is included in
          *     the component stylesheet for _stickCellCss.
+         * @param _positionListener A listener that is notified of changes to sticky rows/columns
+         *     and their dimensions.
          */
         function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, 
         /**
          * @deprecated `_coalescedStyleScheduler` parameter to become required.
          * @breaking-change 11.0.0
          */
-        _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement) {
+        _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement, _positionListener) {
             if (_isBrowser === void 0) { _isBrowser = true; }
             if (_needsPositionStickyOnElement === void 0) { _needsPositionStickyOnElement = true; }
             this._isNativeHtmlTable = _isNativeHtmlTable;
@@ -999,6 +1001,7 @@
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
             this._isBrowser = _isBrowser;
             this._needsPositionStickyOnElement = _needsPositionStickyOnElement;
+            this._positionListener = _positionListener;
             this._cachedCellWidths = [];
             this._borderCellCss = {
                 'top': _stickCellCss + "-border-elem-top",
@@ -1014,7 +1017,7 @@
          * @param stickyDirections The directions that should no longer be set as sticky on the rows.
          */
         StickyStyler.prototype.clearStickyPositioning = function (rows, stickyDirections) {
-            var e_1, _a;
+            var e_1, _c;
             var _this = this;
             var elementsToClear = [];
             try {
@@ -1034,13 +1037,13 @@
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (rows_1_1 && !rows_1_1.done && (_a = rows_1.return)) _a.call(rows_1);
+                    if (rows_1_1 && !rows_1_1.done && (_c = rows_1.return)) _c.call(rows_1);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
             // Coalesce with sticky row/column updates (and potentially other changes like column resize).
             this._scheduleStyleChanges(function () {
-                var e_2, _a;
+                var e_2, _c;
                 try {
                     for (var elementsToClear_1 = __values(elementsToClear), elementsToClear_1_1 = elementsToClear_1.next(); !elementsToClear_1_1.done; elementsToClear_1_1 = elementsToClear_1.next()) {
                         var element = elementsToClear_1_1.value;
@@ -1050,7 +1053,7 @@
                 catch (e_2_1) { e_2 = { error: e_2_1 }; }
                 finally {
                     try {
-                        if (elementsToClear_1_1 && !elementsToClear_1_1.done && (_a = elementsToClear_1.return)) _a.call(elementsToClear_1);
+                        if (elementsToClear_1_1 && !elementsToClear_1_1.done && (_c = elementsToClear_1.return)) _c.call(elementsToClear_1);
                     }
                     finally { if (e_2) throw e_2.error; }
                 }
@@ -1072,6 +1075,10 @@
             if (recalculateCellWidths === void 0) { recalculateCellWidths = true; }
             if (!rows.length || !this._isBrowser || !(stickyStartStates.some(function (state) { return state; }) ||
                 stickyEndStates.some(function (state) { return state; }))) {
+                if (this._positionListener) {
+                    this._positionListener.stickyColumnsUpdated({ sizes: [] });
+                    this._positionListener.stickyEndColumnsUpdated({ sizes: [] });
+                }
                 return;
             }
             var firstRow = rows[0];
@@ -1083,7 +1090,7 @@
             var firstStickyEnd = stickyEndStates.indexOf(true);
             // Coalesce with sticky row updates (and potentially other changes like column resize).
             this._scheduleStyleChanges(function () {
-                var e_3, _a;
+                var e_3, _c;
                 var isRtl = _this.direction === 'rtl';
                 var start = isRtl ? 'right' : 'left';
                 var end = isRtl ? 'left' : 'right';
@@ -1104,9 +1111,26 @@
                 catch (e_3_1) { e_3 = { error: e_3_1 }; }
                 finally {
                     try {
-                        if (rows_2_1 && !rows_2_1.done && (_a = rows_2.return)) _a.call(rows_2);
+                        if (rows_2_1 && !rows_2_1.done && (_c = rows_2.return)) _c.call(rows_2);
                     }
                     finally { if (e_3) throw e_3.error; }
+                }
+                if (_this._positionListener) {
+                    _this._positionListener.stickyColumnsUpdated({
+                        sizes: lastStickyStart === -1 ?
+                            [] :
+                            cellWidths
+                                .slice(0, lastStickyStart + 1)
+                                .map(function (width, index) { return stickyStartStates[index] ? width : null; })
+                    });
+                    _this._positionListener.stickyEndColumnsUpdated({
+                        sizes: firstStickyEnd === -1 ?
+                            [] :
+                            cellWidths
+                                .slice(firstStickyEnd)
+                                .map(function (width, index) { return stickyEndStates[index + firstStickyEnd] ? width : null; })
+                                .reverse()
+                    });
                 }
             });
         };
@@ -1133,44 +1157,52 @@
             var rows = position === 'bottom' ? rowsToStick.slice().reverse() : rowsToStick;
             var states = position === 'bottom' ? stickyStates.slice().reverse() : stickyStates;
             // Measure row heights all at once before adding sticky styles to reduce layout thrashing.
-            var stickyHeights = [];
+            var stickyOffsets = [];
+            var stickyCellHeights = [];
             var elementsToStick = [];
-            for (var rowIndex = 0, stickyHeight = 0; rowIndex < rows.length; rowIndex++) {
-                stickyHeights[rowIndex] = stickyHeight;
+            for (var rowIndex = 0, stickyOffset = 0; rowIndex < rows.length; rowIndex++) {
+                stickyOffsets[rowIndex] = stickyOffset;
                 if (!states[rowIndex]) {
                     continue;
                 }
                 var row = rows[rowIndex];
                 elementsToStick[rowIndex] = this._isNativeHtmlTable ?
                     Array.from(row.children) : [row];
-                if (rowIndex !== rows.length - 1) {
-                    stickyHeight += row.getBoundingClientRect().height;
-                }
+                var height = row.getBoundingClientRect().height;
+                stickyOffset += height;
+                stickyCellHeights[rowIndex] = height;
             }
             var borderedRowIndex = states.lastIndexOf(true);
             // Coalesce with other sticky row updates (top/bottom), sticky columns updates
             // (and potentially other changes like column resize).
             this._scheduleStyleChanges(function () {
-                var e_4, _a;
+                var e_4, _c;
+                var _a, _b;
                 for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                     if (!states[rowIndex]) {
                         continue;
                     }
-                    var height = stickyHeights[rowIndex];
+                    var offset = stickyOffsets[rowIndex];
                     var isBorderedRowIndex = rowIndex === borderedRowIndex;
                     try {
-                        for (var _b = (e_4 = void 0, __values(elementsToStick[rowIndex])), _c = _b.next(); !_c.done; _c = _b.next()) {
-                            var element = _c.value;
-                            _this._addStickyStyle(element, position, height, isBorderedRowIndex);
+                        for (var _d = (e_4 = void 0, __values(elementsToStick[rowIndex])), _e = _d.next(); !_e.done; _e = _d.next()) {
+                            var element = _e.value;
+                            _this._addStickyStyle(element, position, offset, isBorderedRowIndex);
                         }
                     }
                     catch (e_4_1) { e_4 = { error: e_4_1 }; }
                     finally {
                         try {
-                            if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
+                            if (_e && !_e.done && (_c = _d.return)) _c.call(_d);
                         }
                         finally { if (e_4) throw e_4.error; }
                     }
+                }
+                if (position === 'top') {
+                    (_a = _this._positionListener) === null || _a === void 0 ? void 0 : _a.stickyHeaderRowsUpdated({ sizes: stickyCellHeights });
+                }
+                else {
+                    (_b = _this._positionListener) === null || _b === void 0 ? void 0 : _b.stickyFooterRowsUpdated({ sizes: stickyCellHeights });
                 }
             });
         };
@@ -1202,7 +1234,7 @@
          * sticky position if there are no more directions.
          */
         StickyStyler.prototype._removeStickyStyle = function (element, stickyDirections) {
-            var e_5, _a;
+            var e_5, _c;
             try {
                 for (var stickyDirections_1 = __values(stickyDirections), stickyDirections_1_1 = stickyDirections_1.next(); !stickyDirections_1_1.done; stickyDirections_1_1 = stickyDirections_1.next()) {
                     var dir = stickyDirections_1_1.value;
@@ -1213,7 +1245,7 @@
             catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
-                    if (stickyDirections_1_1 && !stickyDirections_1_1.done && (_a = stickyDirections_1.return)) _a.call(stickyDirections_1);
+                    if (stickyDirections_1_1 && !stickyDirections_1_1.done && (_c = stickyDirections_1.return)) _c.call(stickyDirections_1);
                 }
                 finally { if (e_5) throw e_5.error; }
             }
@@ -1262,7 +1294,7 @@
          * elements.
          */
         StickyStyler.prototype._getCalculatedZIndex = function (element) {
-            var e_6, _a;
+            var e_6, _c;
             var zIndexIncrements = {
                 top: 100,
                 bottom: 10,
@@ -1284,7 +1316,7 @@
             catch (e_6_1) { e_6 = { error: e_6_1 }; }
             finally {
                 try {
-                    if (STICKY_DIRECTIONS_1_1 && !STICKY_DIRECTIONS_1_1.done && (_a = STICKY_DIRECTIONS_1.return)) _a.call(STICKY_DIRECTIONS_1);
+                    if (STICKY_DIRECTIONS_1_1 && !STICKY_DIRECTIONS_1_1.done && (_c = STICKY_DIRECTIONS_1.return)) _c.call(STICKY_DIRECTIONS_1);
                 }
                 finally { if (e_6) throw e_6.error; }
             }
@@ -1421,6 +1453,16 @@
     }
 
     /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    /** The injection token used to specify the StickyPositioningListener. */
+    var STICKY_POSITIONING_LISTENER = new core.InjectionToken('CDK_SPL');
+
+    /**
      * Provides a handle for the table to grab the view container's ng-container to insert data rows.
      * @docs-private
      */
@@ -1526,7 +1568,7 @@
          *    parameters to become required.
          * @breaking-change 11.0.0
          */
-        _viewRepeater, _coalescedStyleScheduler, 
+        _viewRepeater, _coalescedStyleScheduler, _stickyPositioningListener, 
         // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
         // this property will never be null.
         // tslint:disable-next-line: lightweight-tokens
@@ -1538,6 +1580,7 @@
             this._platform = _platform;
             this._viewRepeater = _viewRepeater;
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
+            this._stickyPositioningListener = _stickyPositioningListener;
             this._viewportRuler = _viewportRuler;
             /** Subject that emits when the component has been destroyed. */
             this._onDestroy = new rxjs.Subject();
@@ -2366,7 +2409,7 @@
         CdkTable.prototype._setupStickyStyler = function () {
             var _this = this;
             var direction = this._dir ? this._dir.value : 'ltr';
-            this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement);
+            this._stickyStyler = new StickyStyler(this._isNativeHtmlTable, this.stickyCssClass, direction, this._coalescedStyleScheduler, this._platform.isBrowser, this.needsPositionStickyOnElement, this._stickyPositioningListener);
             (this._dir ? this._dir.change : rxjs.of())
                 .pipe(operators.takeUntil(this._onDestroy))
                 .subscribe(function (value) {
@@ -2412,6 +2455,8 @@
                         { provide: CDK_TABLE, useExisting: CdkTable },
                         { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._DisposeViewRepeaterStrategy },
                         { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
+                        // Prevent nested tables from seeing this table's StickyPositioningListener.
+                        { provide: STICKY_POSITIONING_LISTENER, useValue: null },
                     ],
                     styles: [".cdk-table-fixed-layout{table-layout:fixed}\n"]
                 },] }
@@ -2426,6 +2471,7 @@
         { type: platform.Platform },
         { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
         { type: _CoalescedStyleScheduler, decorators: [{ type: core.Optional }, { type: core.Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.SkipSelf }, { type: core.Inject, args: [STICKY_POSITIONING_LISTENER,] }] },
         { type: scrolling.ViewportRuler, decorators: [{ type: core.Optional }] }
     ]; };
     CdkTable.propDecorators = {
@@ -2659,6 +2705,7 @@
     exports.HeaderRowOutlet = HeaderRowOutlet;
     exports.NoDataRowOutlet = NoDataRowOutlet;
     exports.STICKY_DIRECTIONS = STICKY_DIRECTIONS;
+    exports.STICKY_POSITIONING_LISTENER = STICKY_POSITIONING_LISTENER;
     exports.StickyStyler = StickyStyler;
     exports.TEXT_COLUMN_OPTIONS = TEXT_COLUMN_OPTIONS;
     exports._COALESCED_STYLE_SCHEDULER = _COALESCED_STYLE_SCHEDULER;
