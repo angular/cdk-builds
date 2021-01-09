@@ -2043,13 +2043,6 @@
         return event.buttons === 0;
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     // This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
     // that a value of around 650ms seems appropriate.
     var TOUCH_BUFFER_MS = 650;
@@ -2191,13 +2184,18 @@
             }
         };
         FocusMonitor.prototype.focusVia = function (element, origin, options) {
+            var _this = this;
             var nativeElement = coercion.coerceElement(element);
             var focusedElement = this._getDocument().activeElement;
             // If the element is focused already, calling `focus` again won't trigger the event listener
             // which means that the focus classes won't be updated. If that's the case, update the classes
             // directly without waiting for an event.
-            if (nativeElement === focusedElement && this._elementInfo.has(nativeElement)) {
-                this._originChanged(nativeElement, origin, this._elementInfo.get(nativeElement));
+            if (nativeElement === focusedElement) {
+                this._getClosestElementsInfo(nativeElement)
+                    .forEach(function (_a) {
+                    var _b = __read(_a, 2), currentElement = _b[0], info = _b[1];
+                    return _this._originChanged(currentElement, origin, info);
+                });
             }
             else {
                 this._setOriginForCurrentEventQueue(origin);
@@ -2401,6 +2399,20 @@
             this._setClasses(element, origin);
             this._emitOrigin(elementInfo.subject, origin);
             this._lastFocusOrigin = origin;
+        };
+        /**
+         * Collects the `MonitoredElementInfo` of a particular element and
+         * all of its ancestors that have enabled `checkChildren`.
+         * @param element Element from which to start the search.
+         */
+        FocusMonitor.prototype._getClosestElementsInfo = function (element) {
+            var results = [];
+            this._elementInfo.forEach(function (info, currentElement) {
+                if (currentElement === element || (info.checkChildren && currentElement.contains(element))) {
+                    results.push([currentElement, info]);
+                }
+            });
+            return results;
         };
         return FocusMonitor;
     }());

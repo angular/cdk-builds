@@ -1849,8 +1849,9 @@ class FocusMonitor {
         // If the element is focused already, calling `focus` again won't trigger the event listener
         // which means that the focus classes won't be updated. If that's the case, update the classes
         // directly without waiting for an event.
-        if (nativeElement === focusedElement && this._elementInfo.has(nativeElement)) {
-            this._originChanged(nativeElement, origin, this._elementInfo.get(nativeElement));
+        if (nativeElement === focusedElement) {
+            this._getClosestElementsInfo(nativeElement)
+                .forEach(([currentElement, info]) => this._originChanged(currentElement, origin, info));
         }
         else {
             this._setOriginForCurrentEventQueue(origin);
@@ -2051,6 +2052,20 @@ class FocusMonitor {
         this._setClasses(element, origin);
         this._emitOrigin(elementInfo.subject, origin);
         this._lastFocusOrigin = origin;
+    }
+    /**
+     * Collects the `MonitoredElementInfo` of a particular element and
+     * all of its ancestors that have enabled `checkChildren`.
+     * @param element Element from which to start the search.
+     */
+    _getClosestElementsInfo(element) {
+        const results = [];
+        this._elementInfo.forEach((info, currentElement) => {
+            if (currentElement === element || (info.checkChildren && currentElement.contains(element))) {
+                results.push([currentElement, info]);
+            }
+        });
+        return results;
     }
 }
 FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });

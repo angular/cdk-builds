@@ -184,6 +184,12 @@ export declare class FocusMonitor implements OnDestroy {
     private _removeGlobalListeners;
     /** Updates all the state on an element once its focus origin has changed. */
     private _originChanged;
+    /**
+     * Collects the `MonitoredElementInfo` of a particular element and
+     * all of its ancestors that have enabled `checkChildren`.
+     * @param element Element from which to start the search.
+     */
+    private _getClosestElementsInfo;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
