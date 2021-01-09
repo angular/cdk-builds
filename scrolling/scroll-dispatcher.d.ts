@@ -58,12 +58,12 @@ export declare class ScrollDispatcher implements OnDestroy {
     /**
      * Returns an observable that emits whenever any of the
      * scrollable ancestors of an element are scrolled.
-     * @param elementRef Element whose ancestors to listen for.
+     * @param elementOrElementRef Element whose ancestors to listen for.
      * @param auditTimeInMs Time to throttle the scroll events.
      */
-    ancestorScrolled(elementRef: ElementRef, auditTimeInMs?: number): Observable<CdkScrollable | void>;
+    ancestorScrolled(elementOrElementRef: ElementRef | HTMLElement, auditTimeInMs?: number): Observable<CdkScrollable | void>;
     /** Returns all registered Scrollables that contain the provided element. */
-    getAncestorScrollContainers(elementRef: ElementRef): CdkScrollable[];
+    getAncestorScrollContainers(elementOrElementRef: ElementRef | HTMLElement): CdkScrollable[];
     /** Use defaultView of injected document if available or fallback to global window reference */
     private _getWindow;
     /** Returns true if the element is contained within the provided Scrollable. */

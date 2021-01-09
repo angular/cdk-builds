@@ -308,21 +308,21 @@
         /**
          * Returns an observable that emits whenever any of the
          * scrollable ancestors of an element are scrolled.
-         * @param elementRef Element whose ancestors to listen for.
+         * @param elementOrElementRef Element whose ancestors to listen for.
          * @param auditTimeInMs Time to throttle the scroll events.
          */
-        ScrollDispatcher.prototype.ancestorScrolled = function (elementRef, auditTimeInMs) {
-            var ancestors = this.getAncestorScrollContainers(elementRef);
+        ScrollDispatcher.prototype.ancestorScrolled = function (elementOrElementRef, auditTimeInMs) {
+            var ancestors = this.getAncestorScrollContainers(elementOrElementRef);
             return this.scrolled(auditTimeInMs).pipe(operators.filter(function (target) {
                 return !target || ancestors.indexOf(target) > -1;
             }));
         };
         /** Returns all registered Scrollables that contain the provided element. */
-        ScrollDispatcher.prototype.getAncestorScrollContainers = function (elementRef) {
+        ScrollDispatcher.prototype.getAncestorScrollContainers = function (elementOrElementRef) {
             var _this = this;
             var scrollingContainers = [];
             this.scrollContainers.forEach(function (_subscription, scrollable) {
-                if (_this._scrollableContainsElement(scrollable, elementRef)) {
+                if (_this._scrollableContainsElement(scrollable, elementOrElementRef)) {
                     scrollingContainers.push(scrollable);
                 }
             });
@@ -333,8 +333,8 @@
             return this._document.defaultView || window;
         };
         /** Returns true if the element is contained within the provided Scrollable. */
-        ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementRef) {
-            var element = elementRef.nativeElement;
+        ScrollDispatcher.prototype._scrollableContainsElement = function (scrollable, elementOrElementRef) {
+            var element = coercion.coerceElement(elementOrElementRef);
             var scrollableElement = scrollable.getElementRef().nativeElement;
             // Traverse through the element parents until we reach null, checking if any of the elements
             // are the scrollable's element.

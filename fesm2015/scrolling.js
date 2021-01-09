@@ -1,4 +1,4 @@
-import { coerceNumberProperty } from '@angular/cdk/coercion';
+import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import { InjectionToken, Directive, forwardRef, Input, ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Optional, Inject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
@@ -293,20 +293,20 @@ class ScrollDispatcher {
     /**
      * Returns an observable that emits whenever any of the
      * scrollable ancestors of an element are scrolled.
-     * @param elementRef Element whose ancestors to listen for.
+     * @param elementOrElementRef Element whose ancestors to listen for.
      * @param auditTimeInMs Time to throttle the scroll events.
      */
-    ancestorScrolled(elementRef, auditTimeInMs) {
-        const ancestors = this.getAncestorScrollContainers(elementRef);
+    ancestorScrolled(elementOrElementRef, auditTimeInMs) {
+        const ancestors = this.getAncestorScrollContainers(elementOrElementRef);
         return this.scrolled(auditTimeInMs).pipe(filter(target => {
             return !target || ancestors.indexOf(target) > -1;
         }));
     }
     /** Returns all registered Scrollables that contain the provided element. */
-    getAncestorScrollContainers(elementRef) {
+    getAncestorScrollContainers(elementOrElementRef) {
         const scrollingContainers = [];
         this.scrollContainers.forEach((_subscription, scrollable) => {
-            if (this._scrollableContainsElement(scrollable, elementRef)) {
+            if (this._scrollableContainsElement(scrollable, elementOrElementRef)) {
                 scrollingContainers.push(scrollable);
             }
         });
@@ -317,8 +317,8 @@ class ScrollDispatcher {
         return this._document.defaultView || window;
     }
     /** Returns true if the element is contained within the provided Scrollable. */
-    _scrollableContainsElement(scrollable, elementRef) {
-        let element = elementRef.nativeElement;
+    _scrollableContainsElement(scrollable, elementOrElementRef) {
+        let element = coerceElement(elementOrElementRef);
         let scrollableElement = scrollable.getElementRef().nativeElement;
         // Traverse through the element parents until we reach null, checking if any of the elements
         // are the scrollable's element.
