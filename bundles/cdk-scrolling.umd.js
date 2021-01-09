@@ -108,7 +108,8 @@
             var viewportSize = this._viewport.getViewportSize();
             var dataLength = this._viewport.getDataLength();
             var scrollOffset = this._viewport.measureScrollOffset();
-            var firstVisibleIndex = scrollOffset / this._itemSize;
+            // Prevent NaN as result when dividing by zero.
+            var firstVisibleIndex = (this._itemSize > 0) ? scrollOffset / this._itemSize : 0;
             // If user scrolls to the bottom of the list and data changes to a smaller list
             if (newRange.end > dataLength) {
                 // We have to recalculate the first visible index based on new data length and viewport size.
