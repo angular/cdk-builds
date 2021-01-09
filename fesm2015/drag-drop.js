@@ -1407,11 +1407,6 @@ const DROP_PROXIMITY_THRESHOLD = 0.05;
  */
 const SCROLL_PROXIMITY_THRESHOLD = 0.05;
 /**
- * Number of pixels to scroll for each frame when auto-scrolling an element.
- * The value comes from trying it out manually until it feels right.
- */
-const AUTO_SCROLL_STEP = 2;
-/**
  * Reference to a drop list. Used to manipulate or dispose of the container.
  */
 class DropListRef {
@@ -1428,6 +1423,8 @@ class DropListRef {
          * moves their pointer close to the edges is disabled.
          */
         this.autoScrollDisabled = false;
+        /** Number of pixels to scroll for each frame when auto-scrolling an element. */
+        this.autoScrollStep = 2;
         /**
          * Function that is used to determine whether an item
          * is allowed to be moved into a drop container.
@@ -1487,17 +1484,18 @@ class DropListRef {
                 .pipe(takeUntil(this._stopScrollTimers))
                 .subscribe(() => {
                 const node = this._scrollNode;
+                const scrollStep = this.autoScrollStep;
                 if (this._verticalScrollDirection === 1 /* UP */) {
-                    incrementVerticalScroll(node, -AUTO_SCROLL_STEP);
+                    incrementVerticalScroll(node, -scrollStep);
                 }
                 else if (this._verticalScrollDirection === 2 /* DOWN */) {
-                    incrementVerticalScroll(node, AUTO_SCROLL_STEP);
+                    incrementVerticalScroll(node, scrollStep);
                 }
                 if (this._horizontalScrollDirection === 1 /* LEFT */) {
-                    incrementHorizontalScroll(node, -AUTO_SCROLL_STEP);
+                    incrementHorizontalScroll(node, -scrollStep);
                 }
                 else if (this._horizontalScrollDirection === 2 /* RIGHT */) {
-                    incrementHorizontalScroll(node, AUTO_SCROLL_STEP);
+                    incrementHorizontalScroll(node, scrollStep);
                 }
             });
         };
@@ -2745,6 +2743,7 @@ class CdkDropList {
             ref.lockAxis = this.lockAxis;
             ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
             ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
+            ref.autoScrollStep = coerceNumberProperty(this.autoScrollStep, 2);
             ref
                 .connectedTo(siblings.filter(drop => drop && drop !== this).map(list => list._dropListRef))
                 .withOrientation(this.orientation);
@@ -2849,6 +2848,7 @@ CdkDropList.propDecorators = {
     enterPredicate: [{ type: Input, args: ['cdkDropListEnterPredicate',] }],
     sortPredicate: [{ type: Input, args: ['cdkDropListSortPredicate',] }],
     autoScrollDisabled: [{ type: Input, args: ['cdkDropListAutoScrollDisabled',] }],
+    autoScrollStep: [{ type: Input, args: ['cdkDropListAutoScrollStep',] }],
     dropped: [{ type: Output, args: ['cdkDropListDropped',] }],
     entered: [{ type: Output, args: ['cdkDropListEntered',] }],
     exited: [{ type: Output, args: ['cdkDropListExited',] }],

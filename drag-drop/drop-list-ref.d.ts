@@ -38,6 +38,8 @@ export declare class DropListRef<T = any> {
      * moves their pointer close to the edges is disabled.
      */
     autoScrollDisabled: boolean;
+    /** Number of pixels to scroll for each frame when auto-scrolling an element. */
+    autoScrollStep: number;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.

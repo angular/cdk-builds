@@ -5,7 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { BooleanInput } from '@angular/cdk/coercion';
+import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { ElementRef, EventEmitter, OnDestroy, ChangeDetectorRef, InjectionToken } from '@angular/core';
 import { Directionality } from '@angular/cdk/bidi';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -76,6 +76,8 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     sortPredicate: (index: number, drag: CdkDrag, drop: CdkDropList) => boolean;
     /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
     autoScrollDisabled: boolean;
+    /** Number of pixels to scroll for each frame when auto-scrolling an element. */
+    autoScrollStep: number;
     /** Emits when the user drops an item inside the container. */
     dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
@@ -118,4 +120,5 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     static ngAcceptInputType_disabled: BooleanInput;
     static ngAcceptInputType_sortingDisabled: BooleanInput;
     static ngAcceptInputType_autoScrollDisabled: BooleanInput;
+    static ngAcceptInputType_autoScrollStep: NumberInput;
 }

@@ -1716,11 +1716,6 @@
      */
     var SCROLL_PROXIMITY_THRESHOLD = 0.05;
     /**
-     * Number of pixels to scroll for each frame when auto-scrolling an element.
-     * The value comes from trying it out manually until it feels right.
-     */
-    var AUTO_SCROLL_STEP = 2;
-    /**
      * Reference to a drop list. Used to manipulate or dispose of the container.
      */
     var DropListRef = /** @class */ (function () {
@@ -1738,6 +1733,8 @@
              * moves their pointer close to the edges is disabled.
              */
             this.autoScrollDisabled = false;
+            /** Number of pixels to scroll for each frame when auto-scrolling an element. */
+            this.autoScrollStep = 2;
             /**
              * Function that is used to determine whether an item
              * is allowed to be moved into a drop container.
@@ -1797,17 +1794,18 @@
                     .pipe(operators.takeUntil(_this._stopScrollTimers))
                     .subscribe(function () {
                     var node = _this._scrollNode;
+                    var scrollStep = _this.autoScrollStep;
                     if (_this._verticalScrollDirection === 1 /* UP */) {
-                        incrementVerticalScroll(node, -AUTO_SCROLL_STEP);
+                        incrementVerticalScroll(node, -scrollStep);
                     }
                     else if (_this._verticalScrollDirection === 2 /* DOWN */) {
-                        incrementVerticalScroll(node, AUTO_SCROLL_STEP);
+                        incrementVerticalScroll(node, scrollStep);
                     }
                     if (_this._horizontalScrollDirection === 1 /* LEFT */) {
-                        incrementHorizontalScroll(node, -AUTO_SCROLL_STEP);
+                        incrementHorizontalScroll(node, -scrollStep);
                     }
                     else if (_this._horizontalScrollDirection === 2 /* RIGHT */) {
-                        incrementHorizontalScroll(node, AUTO_SCROLL_STEP);
+                        incrementHorizontalScroll(node, scrollStep);
                     }
                 });
             };
@@ -3078,6 +3076,7 @@
                 ref.lockAxis = _this.lockAxis;
                 ref.sortingDisabled = coercion.coerceBooleanProperty(_this.sortingDisabled);
                 ref.autoScrollDisabled = coercion.coerceBooleanProperty(_this.autoScrollDisabled);
+                ref.autoScrollStep = coercion.coerceNumberProperty(_this.autoScrollStep, 2);
                 ref
                     .connectedTo(siblings.filter(function (drop) { return drop && drop !== _this; }).map(function (list) { return list._dropListRef; }))
                     .withOrientation(_this.orientation);
@@ -3184,6 +3183,7 @@
         enterPredicate: [{ type: i0.Input, args: ['cdkDropListEnterPredicate',] }],
         sortPredicate: [{ type: i0.Input, args: ['cdkDropListSortPredicate',] }],
         autoScrollDisabled: [{ type: i0.Input, args: ['cdkDropListAutoScrollDisabled',] }],
+        autoScrollStep: [{ type: i0.Input, args: ['cdkDropListAutoScrollStep',] }],
         dropped: [{ type: i0.Output, args: ['cdkDropListDropped',] }],
         entered: [{ type: i0.Output, args: ['cdkDropListEntered',] }],
         exited: [{ type: i0.Output, args: ['cdkDropListExited',] }],
