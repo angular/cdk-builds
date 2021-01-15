@@ -1902,7 +1902,10 @@
             };
         };
         /** Gets how well an overlay at the given point will fit within the viewport. */
-        FlexibleConnectedPositionStrategy.prototype._getOverlayFit = function (point, overlay, viewport, position) {
+        FlexibleConnectedPositionStrategy.prototype._getOverlayFit = function (point, rawOverlayRect, viewport, position) {
+            // Round the overlay rect when comparing against the
+            // viewport, because the viewport is always rounded.
+            var overlay = getRoundedBoundingClientRect(rawOverlayRect);
             var x = point.x, y = point.y;
             var offsetX = this._getOffset(position, 'x');
             var offsetY = this._getOffset(position, 'y');
@@ -1960,7 +1963,7 @@
          * @returns The point at which to position the overlay after pushing. This is effectively a new
          *     originPoint.
          */
-        FlexibleConnectedPositionStrategy.prototype._pushOverlayOnScreen = function (start, overlay, scrollPosition) {
+        FlexibleConnectedPositionStrategy.prototype._pushOverlayOnScreen = function (start, rawOverlayRect, scrollPosition) {
             // If the position is locked and we've pushed the overlay already, reuse the previous push
             // amount, rather than pushing it again. If we were to continue pushing, the element would
             // remain in the viewport, which goes against the expectations when position locking is enabled.
@@ -1970,6 +1973,9 @@
                     y: start.y + this._previousPushAmount.y
                 };
             }
+            // Round the overlay rect when comparing against the
+            // viewport, because the viewport is always rounded.
+            var overlay = getRoundedBoundingClientRect(rawOverlayRect);
             var viewport = this._viewportRect;
             // Determine how much the overlay goes outside the viewport on each
             // side, which we'll use to decide which direction to push it.
@@ -2447,6 +2453,22 @@
             return (!units || units === 'px') ? parseFloat(value) : null;
         }
         return input || null;
+    }
+    /**
+     * Gets a version of an element's bounding `ClientRect` where all the values are rounded down to
+     * the nearest pixel. This allows us to account for the cases where there may be sub-pixel
+     * deviations in the `ClientRect` returned by the browser (e.g. when zoomed in with a percentage
+     * size, see #21350).
+     */
+    function getRoundedBoundingClientRect(clientRect) {
+        return {
+            top: Math.floor(clientRect.top),
+            right: Math.floor(clientRect.right),
+            bottom: Math.floor(clientRect.bottom),
+            left: Math.floor(clientRect.left),
+            width: Math.floor(clientRect.width),
+            height: Math.floor(clientRect.height)
+        };
     }
 
     /**
