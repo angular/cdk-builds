@@ -1019,7 +1019,7 @@ class OverlayRef {
     }
     /** Toggles the pointer events for the overlay pane element. */
     _togglePointerEvents(enablePointer) {
-        this._pane.style.pointerEvents = enablePointer ? 'auto' : 'none';
+        this._pane.style.pointerEvents = enablePointer ? '' : 'none';
     }
     /** Attaches a backdrop for this overlay. */
     _attachBackdrop() {

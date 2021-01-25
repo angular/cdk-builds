@@ -1351,7 +1351,7 @@
         };
         /** Toggles the pointer events for the overlay pane element. */
         OverlayRef.prototype._togglePointerEvents = function (enablePointer) {
-            this._pane.style.pointerEvents = enablePointer ? 'auto' : 'none';
+            this._pane.style.pointerEvents = enablePointer ? '' : 'none';
         };
         /** Attaches a backdrop for this overlay. */
         OverlayRef.prototype._attachBackdrop = function () {
