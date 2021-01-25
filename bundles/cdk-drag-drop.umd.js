@@ -466,7 +466,7 @@
             this._pointerUp = function (event) {
                 _this._endDragSequence(event);
             };
-            this.withRootElement(element);
+            this.withRootElement(element).withParent(_config.parentDragRef || null);
             this._parentPositions = new ParentPositionTracker(_document, _viewportRuler);
             _dragDropRegistry.registerDragItem(this);
         }
@@ -577,6 +577,11 @@
             }
             return this;
         };
+        /** Sets the parent ref that the ref is nested in.  */
+        DragRef.prototype.withParent = function (parent) {
+            this._parentDragRef = parent;
+            return this;
+        };
         /** Removes the dragging functionality from the DOM element. */
         DragRef.prototype.dispose = function () {
             this._removeRootElementListeners(this._rootElement);
@@ -606,7 +611,7 @@
             this._resizeSubscription.unsubscribe();
             this._parentPositions.clear();
             this._boundaryElement = this._rootElement = this._ownerSVGElement = this._placeholderTemplate =
-                this._previewTemplate = this._anchor = null;
+                this._previewTemplate = this._anchor = this._parentDragRef = null;
         };
         /** Checks whether the element is currently being dragged. */
         DragRef.prototype.isDragging = function () {
@@ -794,7 +799,7 @@
             var _this = this;
             // Stop propagation if the item is inside another
             // draggable so we don't start multiple drag sequences.
-            if (this._config.parentDragRef) {
+            if (this._parentDragRef) {
                 event.stopPropagation();
             }
             var isDragging = this.isDragging();
@@ -3336,6 +3341,7 @@
         matchSize: [{ type: i0.Input }]
     };
 
+    var DRAG_HOST_CLASS = 'cdk-drag';
     /** Element that can be moved inside a CdkDropList container. */
     var CdkDrag = /** @class */ (function () {
         function CdkDrag(
@@ -3347,7 +3353,7 @@
          * @deprecated `_document` parameter no longer being used and will be removed.
          * @breaking-change 12.0.0
          */
-        _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle, parentDrag) {
+        _document, _ngZone, _viewContainerRef, config, _dir, dragDrop, _changeDetectorRef, _selfHandle, _parentDrag) {
             var _this = this;
             this.element = element;
             this.dropContainer = dropContainer;
@@ -3356,6 +3362,7 @@
             this._dir = _dir;
             this._changeDetectorRef = _changeDetectorRef;
             this._selfHandle = _selfHandle;
+            this._parentDrag = _parentDrag;
             this._destroyed = new rxjs.Subject();
             /** Emits when the user starts dragging the item. */
             this.started = new i0.EventEmitter();
@@ -3391,9 +3398,12 @@
                 pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
                     config.pointerDirectionChangeThreshold : 5,
                 zIndex: config === null || config === void 0 ? void 0 : config.zIndex,
-                parentDragRef: parentDrag === null || parentDrag === void 0 ? void 0 : parentDrag._dragRef
             });
             this._dragRef.data = this;
+            // We have to keep track of the drag instances in order to be able to match an element to
+            // a drag instance. We can't go through the global registry of `DragRef`, because the root
+            // element could be different.
+            CdkDrag._dragInstances.push(this);
             if (config) {
                 this._assignDefaults(config);
             }
@@ -3502,6 +3512,10 @@
             if (this.dropContainer) {
                 this.dropContainer.removeItem(this);
             }
+            var index = CdkDrag._dragInstances.indexOf(this);
+            if (index > -1) {
+                CdkDrag._dragInstances.splice(index, -1);
+            }
             this._destroyed.next();
             this._destroyed.complete();
             this._dragRef.dispose();
@@ -3563,6 +3577,28 @@
                     if (dir) {
                         ref.withDirection(dir.value);
                     }
+                }
+            });
+            // This only needs to be resolved once.
+            ref.beforeStarted.pipe(operators.take(1)).subscribe(function () {
+                var _a, _b;
+                // If we managed to resolve a parent through DI, use it.
+                if (_this._parentDrag) {
+                    ref.withParent(_this._parentDrag._dragRef);
+                    return;
+                }
+                // Otherwise fall back to resolving the parent by looking up the DOM. This can happen if
+                // the item was projected into another item by something like `ngTemplateOutlet`.
+                var parent = _this.element.nativeElement.parentElement;
+                while (parent) {
+                    // `classList` needs to be null checked, because IE doesn't have it on some elements.
+                    if ((_a = parent.classList) === null || _a === void 0 ? void 0 : _a.contains(DRAG_HOST_CLASS)) {
+                        ref.withParent(((_b = CdkDrag._dragInstances.find(function (drag) {
+                            return drag.element.nativeElement === parent;
+                        })) === null || _b === void 0 ? void 0 : _b._dragRef) || null);
+                        break;
+                    }
+                    parent = parent.parentElement;
                 }
             });
         };
@@ -3632,12 +3668,13 @@
         };
         return CdkDrag;
     }());
+    CdkDrag._dragInstances = [];
     CdkDrag.decorators = [
         { type: i0.Directive, args: [{
                     selector: '[cdkDrag]',
                     exportAs: 'cdkDrag',
                     host: {
-                        'class': 'cdk-drag',
+                        'class': DRAG_HOST_CLASS,
                         '[class.cdk-drag-disabled]': 'disabled',
                         '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
                     },

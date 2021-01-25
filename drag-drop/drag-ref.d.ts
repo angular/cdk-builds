@@ -158,6 +158,8 @@ export declare class DragRef<T = any> {
     private _dropContainer?;
     /** Layout direction of the item. */
     private _direction;
+    /** Ref that the current drag item is nested in. */
+    private _parentDragRef;
     /**
      * Cached shadow root that the element is placed in. `null` means that the element isn't in
      * the shadow DOM and `undefined` means that it hasn't been resolved yet. Should be read via
@@ -277,6 +279,8 @@ export declare class DragRef<T = any> {
      * Element to which the draggable's position will be constrained.
      */
     withBoundaryElement(boundaryElement: ElementRef<HTMLElement> | HTMLElement | null): this;
+    /** Sets the parent ref that the ref is nested in.  */
+    withParent(parent: DragRef<unknown> | null): this;
     /** Removes the dragging functionality from the DOM element. */
     dispose(): void;
     /** Checks whether the element is currently being dragged. */
