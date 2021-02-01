@@ -477,6 +477,7 @@
                 }
                 finally { if (e_1) throw e_1.error; }
             }
+            this._viewCache = [];
         };
         /**
          * Inserts a view for a new item, either from the cache or by creating a new
@@ -493,7 +494,7 @@
         };
         /** Detaches the view at the given index and inserts into the view cache. */
         _RecycleViewRepeaterStrategy.prototype._detachAndCacheView = function (index, viewContainerRef) {
-            var detachedView = this._detachView(index, viewContainerRef);
+            var detachedView = viewContainerRef.detach(index);
             this._maybeCacheView(detachedView, viewContainerRef);
         };
         /** Moves view at the previous index to the current index. */
@@ -532,10 +533,6 @@
                 viewContainerRef.insert(cachedView, index);
             }
             return cachedView || null;
-        };
-        /** Detaches the embedded view at the given index. */
-        _RecycleViewRepeaterStrategy.prototype._detachView = function (index, viewContainerRef) {
-            return viewContainerRef.detach(index);
         };
         return _RecycleViewRepeaterStrategy;
     }());

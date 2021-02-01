@@ -51,6 +51,4 @@ export declare class _RecycleViewRepeaterStrategy<T, R, C extends _ViewRepeaterI
     private _maybeCacheView;
     /** Inserts a recycled view from the cache at the given index. */
     private _insertViewFromCache;
-    /** Detaches the embedded view at the given index. */
-    private _detachView;
 }
