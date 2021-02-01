@@ -159,13 +159,14 @@ class _RecycleViewRepeaterStrategy {
         for (const view of this._viewCache) {
             view.destroy();
         }
+        this._viewCache = [];
     }
     /**
      * Inserts a view for a new item, either from the cache or by creating a new
      * one. Returns `undefined` if the item was inserted into a cached view.
      */
     _insertView(viewArgsFactory, currentIndex, viewContainerRef, value) {
-        let cachedView = this._insertViewFromCache(currentIndex, viewContainerRef);
+        const cachedView = this._insertViewFromCache(currentIndex, viewContainerRef);
         if (cachedView) {
             cachedView.context.$implicit = value;
             return undefined;
@@ -175,7 +176,7 @@ class _RecycleViewRepeaterStrategy {
     }
     /** Detaches the view at the given index and inserts into the view cache. */
     _detachAndCacheView(index, viewContainerRef) {
-        const detachedView = this._detachView(index, viewContainerRef);
+        const detachedView = viewContainerRef.detach(index);
         this._maybeCacheView(detachedView, viewContainerRef);
     }
     /** Moves view at the previous index to the current index. */
@@ -214,10 +215,6 @@ class _RecycleViewRepeaterStrategy {
             viewContainerRef.insert(cachedView, index);
         }
         return cachedView || null;
-    }
-    /** Detaches the embedded view at the given index. */
-    _detachView(index, viewContainerRef) {
-        return viewContainerRef.detach(index);
     }
 }
 
