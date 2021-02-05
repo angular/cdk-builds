@@ -16,6 +16,12 @@ import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkNoDataRow, CdkRowDef } from './row';
 import { StickyPositioningListener } from './sticky-position-listener';
+/**
+ * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
+ * tables that animate rows.
+ */
+export declare class CdkRecycleRows {
+}
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
     viewContainer: ViewContainerRef;

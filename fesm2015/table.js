@@ -1,6 +1,6 @@
 import { Directionality } from '@angular/cdk/bidi';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import { isDataSource, _VIEW_REPEATER_STRATEGY, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
+import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
@@ -1025,6 +1025,20 @@ const STICKY_POSITIONING_LISTENER = new InjectionToken('CDK_SPL');
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/**
+ * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
+ * tables that animate rows.
+ */
+class CdkRecycleRows {
+}
+CdkRecycleRows.decorators = [
+    { type: Directive, args: [{
+                selector: 'cdk-table[recycleRows], table[cdk-table][recycleRows]',
+                providers: [
+                    { provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy },
+                ],
+            },] }
+];
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
@@ -2148,6 +2162,7 @@ const EXPORTED_DECLARATIONS = [
     FooterRowOutlet,
     CdkTextColumn,
     CdkNoDataRow,
+    CdkRecycleRows,
     NoDataRowOutlet,
 ];
 class CdkTableModule {
@@ -2172,5 +2187,5 @@ CdkTableModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
+export { BaseCdkCell, BaseRowDef, CDK_ROW_TEMPLATE, CDK_TABLE, CDK_TABLE_TEMPLATE, CdkCell, CdkCellDef, CdkCellOutlet, CdkColumnDef, CdkFooterCell, CdkFooterCellDef, CdkFooterRow, CdkFooterRowDef, CdkHeaderCell, CdkHeaderCellDef, CdkHeaderRow, CdkHeaderRowDef, CdkNoDataRow, CdkRecycleRows, CdkRow, CdkRowDef, CdkTable, CdkTableModule, CdkTextColumn, DataRowOutlet, FooterRowOutlet, HeaderRowOutlet, NoDataRowOutlet, STICKY_DIRECTIONS, STICKY_POSITIONING_LISTENER, StickyStyler, TEXT_COLUMN_OPTIONS, _COALESCED_STYLE_SCHEDULER, _CoalescedStyleScheduler, _Schedule, mixinHasStickyInput };
 //# sourceMappingURL=table.js.map

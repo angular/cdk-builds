@@ -1471,6 +1471,23 @@
     var STICKY_POSITIONING_LISTENER = new core.InjectionToken('CDK_SPL');
 
     /**
+     * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
+     * tables that animate rows.
+     */
+    var CdkRecycleRows = /** @class */ (function () {
+        function CdkRecycleRows() {
+        }
+        return CdkRecycleRows;
+    }());
+    CdkRecycleRows.decorators = [
+        { type: core.Directive, args: [{
+                    selector: 'cdk-table[recycleRows], table[cdk-table][recycleRows]',
+                    providers: [
+                        { provide: collections._VIEW_REPEATER_STRATEGY, useClass: collections._RecycleViewRepeaterStrategy },
+                    ],
+                },] }
+    ];
+    /**
      * Provides a handle for the table to grab the view container's ng-container to insert data rows.
      * @docs-private
      */
@@ -2652,6 +2669,7 @@
         FooterRowOutlet,
         CdkTextColumn,
         CdkNoDataRow,
+        CdkRecycleRows,
         NoDataRowOutlet,
     ];
     var CdkTableModule = /** @class */ (function () {
@@ -2703,6 +2721,7 @@
     exports.CdkHeaderRow = CdkHeaderRow;
     exports.CdkHeaderRowDef = CdkHeaderRowDef;
     exports.CdkNoDataRow = CdkNoDataRow;
+    exports.CdkRecycleRows = CdkRecycleRows;
     exports.CdkRow = CdkRow;
     exports.CdkRowDef = CdkRowDef;
     exports.CdkTable = CdkTable;
