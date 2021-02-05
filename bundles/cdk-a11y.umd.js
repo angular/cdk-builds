@@ -1276,10 +1276,10 @@
          * @returns Returns a promise that resolves with a boolean, depending
          * on whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusInitialElementWhenReady = function () {
+        FocusTrap.prototype.focusInitialElementWhenReady = function (options) {
             var _this = this;
             return new Promise(function (resolve) {
-                _this._executeOnStable(function () { return resolve(_this.focusInitialElement()); });
+                _this._executeOnStable(function () { return resolve(_this.focusInitialElement(options)); });
             });
         };
         /**
@@ -1288,10 +1288,10 @@
          * @returns Returns a promise that resolves with a boolean, depending
          * on whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusFirstTabbableElementWhenReady = function () {
+        FocusTrap.prototype.focusFirstTabbableElementWhenReady = function (options) {
             var _this = this;
             return new Promise(function (resolve) {
-                _this._executeOnStable(function () { return resolve(_this.focusFirstTabbableElement()); });
+                _this._executeOnStable(function () { return resolve(_this.focusFirstTabbableElement(options)); });
             });
         };
         /**
@@ -1300,10 +1300,10 @@
          * @returns Returns a promise that resolves with a boolean, depending
          * on whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusLastTabbableElementWhenReady = function () {
+        FocusTrap.prototype.focusLastTabbableElementWhenReady = function (options) {
             var _this = this;
             return new Promise(function (resolve) {
-                _this._executeOnStable(function () { return resolve(_this.focusLastTabbableElement()); });
+                _this._executeOnStable(function () { return resolve(_this.focusLastTabbableElement(options)); });
             });
         };
         /**
@@ -1339,7 +1339,7 @@
          * Focuses the element that should be focused when the focus trap is initialized.
          * @returns Whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusInitialElement = function () {
+        FocusTrap.prototype.focusInitialElement = function (options) {
             // Contains the deprecated version of selector, for temporary backwards comparability.
             var redirectToElement = this._element.querySelector("[cdk-focus-initial], " +
                 "[cdkFocusInitial]");
@@ -1358,22 +1358,22 @@
                 }
                 if (!this._checker.isFocusable(redirectToElement)) {
                     var focusableChild = this._getFirstTabbableElement(redirectToElement);
-                    focusableChild === null || focusableChild === void 0 ? void 0 : focusableChild.focus();
+                    focusableChild === null || focusableChild === void 0 ? void 0 : focusableChild.focus(options);
                     return !!focusableChild;
                 }
-                redirectToElement.focus();
+                redirectToElement.focus(options);
                 return true;
             }
-            return this.focusFirstTabbableElement();
+            return this.focusFirstTabbableElement(options);
         };
         /**
          * Focuses the first tabbable element within the focus trap region.
          * @returns Whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusFirstTabbableElement = function () {
+        FocusTrap.prototype.focusFirstTabbableElement = function (options) {
             var redirectToElement = this._getRegionBoundary('start');
             if (redirectToElement) {
-                redirectToElement.focus();
+                redirectToElement.focus(options);
             }
             return !!redirectToElement;
         };
@@ -1381,10 +1381,10 @@
          * Focuses the last tabbable element within the focus trap region.
          * @returns Whether focus was moved successfully.
          */
-        FocusTrap.prototype.focusLastTabbableElement = function () {
+        FocusTrap.prototype.focusLastTabbableElement = function (options) {
             var redirectToElement = this._getRegionBoundary('end');
             if (redirectToElement) {
-                redirectToElement.focus();
+                redirectToElement.focus(options);
             }
             return !!redirectToElement;
         };

@@ -950,9 +950,9 @@ class FocusTrap {
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusInitialElementWhenReady() {
+    focusInitialElementWhenReady(options) {
         return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusInitialElement()));
+            this._executeOnStable(() => resolve(this.focusInitialElement(options)));
         });
     }
     /**
@@ -961,9 +961,9 @@ class FocusTrap {
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusFirstTabbableElementWhenReady() {
+    focusFirstTabbableElementWhenReady(options) {
         return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusFirstTabbableElement()));
+            this._executeOnStable(() => resolve(this.focusFirstTabbableElement(options)));
         });
     }
     /**
@@ -972,9 +972,9 @@ class FocusTrap {
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusLastTabbableElementWhenReady() {
+    focusLastTabbableElementWhenReady(options) {
         return new Promise(resolve => {
-            this._executeOnStable(() => resolve(this.focusLastTabbableElement()));
+            this._executeOnStable(() => resolve(this.focusLastTabbableElement(options)));
         });
     }
     /**
@@ -1010,7 +1010,7 @@ class FocusTrap {
      * Focuses the element that should be focused when the focus trap is initialized.
      * @returns Whether focus was moved successfully.
      */
-    focusInitialElement() {
+    focusInitialElement(options) {
         // Contains the deprecated version of selector, for temporary backwards comparability.
         const redirectToElement = this._element.querySelector(`[cdk-focus-initial], ` +
             `[cdkFocusInitial]`);
@@ -1029,22 +1029,22 @@ class FocusTrap {
             }
             if (!this._checker.isFocusable(redirectToElement)) {
                 const focusableChild = this._getFirstTabbableElement(redirectToElement);
-                focusableChild === null || focusableChild === void 0 ? void 0 : focusableChild.focus();
+                focusableChild === null || focusableChild === void 0 ? void 0 : focusableChild.focus(options);
                 return !!focusableChild;
             }
-            redirectToElement.focus();
+            redirectToElement.focus(options);
             return true;
         }
-        return this.focusFirstTabbableElement();
+        return this.focusFirstTabbableElement(options);
     }
     /**
      * Focuses the first tabbable element within the focus trap region.
      * @returns Whether focus was moved successfully.
      */
-    focusFirstTabbableElement() {
+    focusFirstTabbableElement(options) {
         const redirectToElement = this._getRegionBoundary('start');
         if (redirectToElement) {
-            redirectToElement.focus();
+            redirectToElement.focus(options);
         }
         return !!redirectToElement;
     }
@@ -1052,10 +1052,10 @@ class FocusTrap {
      * Focuses the last tabbable element within the focus trap region.
      * @returns Whether focus was moved successfully.
      */
-    focusLastTabbableElement() {
+    focusLastTabbableElement(options) {
         const redirectToElement = this._getRegionBoundary('end');
         if (redirectToElement) {
-            redirectToElement.focus();
+            redirectToElement.focus(options);
         }
         return !!redirectToElement;
     }

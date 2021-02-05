@@ -48,21 +48,21 @@ export declare class FocusTrap {
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusInitialElementWhenReady(): Promise<boolean>;
+    focusInitialElementWhenReady(options?: FocusOptions): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the first tabbable element within the focus trap region.
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusFirstTabbableElementWhenReady(): Promise<boolean>;
+    focusFirstTabbableElementWhenReady(options?: FocusOptions): Promise<boolean>;
     /**
      * Waits for the zone to stabilize, then focuses
      * the last tabbable element within the focus trap region.
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
-    focusLastTabbableElementWhenReady(): Promise<boolean>;
+    focusLastTabbableElementWhenReady(options?: FocusOptions): Promise<boolean>;
     /**
      * Get the specified boundary element of the trapped region.
      * @param bound The boundary to get (start or end of trapped region).
@@ -73,17 +73,17 @@ export declare class FocusTrap {
      * Focuses the element that should be focused when the focus trap is initialized.
      * @returns Whether focus was moved successfully.
      */
-    focusInitialElement(): boolean;
+    focusInitialElement(options?: FocusOptions): boolean;
     /**
      * Focuses the first tabbable element within the focus trap region.
      * @returns Whether focus was moved successfully.
      */
-    focusFirstTabbableElement(): boolean;
+    focusFirstTabbableElement(options?: FocusOptions): boolean;
     /**
      * Focuses the last tabbable element within the focus trap region.
      * @returns Whether focus was moved successfully.
      */
-    focusLastTabbableElement(): boolean;
+    focusLastTabbableElement(options?: FocusOptions): boolean;
     /**
      * Checks whether the focus trap has successfully been attached.
      */
