@@ -8,4 +8,4 @@
 /** Checks whether the user's browser support Shadow DOM. */
 export declare function _supportsShadowDom(): boolean;
 /** Gets the shadow root of an element, if supported and the element is inside the Shadow DOM. */
-export declare function _getShadowRoot(element: HTMLElement): Node | null;
+export declare function _getShadowRoot(element: HTMLElement): ShadowRoot | null;
