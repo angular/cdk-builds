@@ -242,6 +242,12 @@
                     if (!this._isValidIndex(index) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                         throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                     }
+                    var selectedStep = this.selected;
+                    if (selectedStep) {
+                        // TODO: this should really be called something like `visited` instead. Just because
+                        // the user has seen the step doesn't guarantee that they've interacted with it.
+                        selectedStep.interacted = true;
+                    }
                     if (this._selectedIndex !== newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                         (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                         this._updateSelectedItemIndex(index);
@@ -418,10 +424,8 @@
             }
         };
         CdkStepper.prototype._anyControlsInvalidOrPending = function (index) {
-            var steps = this.steps.toArray();
-            steps[this._selectedIndex].interacted = true;
             if (this._linear && index >= 0) {
-                return steps.slice(0, index).some(function (step) {
+                return this.steps.toArray().slice(0, index).some(function (step) {
                     var control = step.stepControl;
                     var isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
                     return isIncomplete && !step.optional && !step._completedOverride;
