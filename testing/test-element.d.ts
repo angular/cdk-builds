@@ -79,9 +79,8 @@ export interface TestElement {
      * @param relativeX Coordinate within the element, along the X-axis at which to click.
      * @param relativeY Coordinate within the element, along the Y-axis at which to click.
      * @param modifiers Modifier keys held while clicking
-     * @breaking-change 11.0.0 To become a required method.
      */
-    rightClick?(relativeX: number, relativeY: number, modifiers?: ModifierKeys): Promise<void>;
+    rightClick(relativeX: number, relativeY: number, modifiers?: ModifierKeys): Promise<void>;
     /** Focus the element. */
     focus(): Promise<void>;
     /** Get the computed value of the given CSS property for the element. */
@@ -119,20 +118,17 @@ export interface TestElement {
     isFocused(): Promise<boolean>;
     /**
      * Sets the value of a property of an input.
-     * @breaking-change 11.0.0 To become a required method.
      */
-    setInputValue?(value: string): Promise<void>;
+    setInputValue(value: string): Promise<void>;
     /**
      * Selects the options at the specified indexes inside of a native `select` element.
-     * @breaking-change 12.0.0 To become a required method.
      */
-    selectOptions?(...optionIndexes: number[]): Promise<void>;
+    selectOptions(...optionIndexes: number[]): Promise<void>;
     /**
      * Dispatches an event with a particular name.
      * @param name Name of the event to be dispatched.
-     * @breaking-change 12.0.0 To be a required method.
      */
-    dispatchEvent?(name: string, data?: Record<string, EventData>): Promise<void>;
+    dispatchEvent(name: string, data?: Record<string, EventData>): Promise<void>;
 }
 export interface TextOptions {
     /** Optional selector for elements to exclude. */
