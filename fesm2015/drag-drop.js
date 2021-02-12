@@ -3164,7 +3164,7 @@ class CdkDrag {
         }
         const index = CdkDrag._dragInstances.indexOf(this);
         if (index > -1) {
-            CdkDrag._dragInstances.splice(index, -1);
+            CdkDrag._dragInstances.splice(index, 1);
         }
         this._destroyed.next();
         this._destroyed.complete();
