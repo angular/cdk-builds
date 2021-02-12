@@ -51,6 +51,19 @@ export interface Point {
     y: number;
 }
 /**
+ * Possible places into which the preview of a drag item can be inserted.
+ * - `global` - Preview will be inserted at the bottom of the `<body>`. The advantage is that
+ * you don't have to worry about `overflow: hidden` or `z-index`, but the item won't retain
+ * its inherited styles.
+ * - `parent` - Preview will be inserted into the parent of the drag item. The advantage is that
+ * inherited styles will be preserved, but it may be clipped by `overflow: hidden` or not be
+ * visible due to `z-index`. Furthermore, the preview is going to have an effect over selectors
+ * like `:nth-child` and some flexbox configurations.
+ * - `ElementRef<HTMLElement> | HTMLElement` - Preview will be inserted into a specific element.
+ * Same advantages and disadvantages as `parent`.
+ */
+export declare type PreviewContainer = 'global' | 'parent' | ElementRef<HTMLElement> | HTMLElement;
+/**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  */
 export declare class DragRef<T = any> {
@@ -63,6 +76,8 @@ export declare class DragRef<T = any> {
     private _preview;
     /** Reference to the view of the preview element. */
     private _previewRef;
+    /** Container into which to insert the preview. */
+    private _previewContainer;
     /** Reference to the view of the placeholder element. */
     private _placeholderRef;
     /** Element that is rendered instead of the draggable item while it is being sorted. */
@@ -310,6 +325,11 @@ export declare class DragRef<T = any> {
      * @param value New position to be set.
      */
     setFreeDragPosition(value: Point): this;
+    /**
+     * Sets the container into which to insert the preview element.
+     * @param value Container into which to insert the preview.
+     */
+    withPreviewContainer(value: PreviewContainer): this;
     /** Updates the item's sort order based on the last-known pointer position. */
     _sortFromLastPointerPosition(): void;
     /** Unsubscribes from the global subscriptions. */
@@ -404,5 +424,7 @@ export declare class DragRef<T = any> {
      * constructor might be too early if the element is inside of something like `ngFor` or `ngIf`.
      */
     private _getShadowRoot;
+    /** Gets the element into which the drag preview should be inserted. */
+    private _getPreviewInsertionPoint;
 }
 export {};

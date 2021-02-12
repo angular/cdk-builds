@@ -39,4 +39,5 @@ export interface DragDropConfig extends Partial<DragRefConfig> {
     listAutoScrollDisabled?: boolean;
     listOrientation?: DropListOrientation;
     zIndex?: number;
+    previewContainer?: 'global' | 'parent';
 }

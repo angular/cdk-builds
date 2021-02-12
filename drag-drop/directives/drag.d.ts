@@ -13,7 +13,7 @@ import { CdkDragDrop, CdkDragEnd, CdkDragEnter, CdkDragExit, CdkDragMove, CdkDra
 import { CdkDragHandle } from './drag-handle';
 import { CdkDragPlaceholder } from './drag-placeholder';
 import { CdkDragPreview } from './drag-preview';
-import { DragRef, Point } from '../drag-ref';
+import { DragRef, Point, PreviewContainer } from '../drag-ref';
 import { CdkDropListInternal as CdkDropList } from './drop-list';
 import { DragDrop } from '../drag-drop';
 import { DragDropConfig, DragStartDelay, DragAxis } from './config';
@@ -82,6 +82,20 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     constrainPosition?: (point: Point, dragRef: DragRef) => Point;
     /** Class to be added to the preview element. */
     previewClass: string | string[];
+    /**
+     * Configures the place into which the preview of the item will be inserted. Can be configured
+     * globally through `CDK_DROP_LIST`. Possible values:
+     * - `global` - Preview will be inserted at the bottom of the `<body>`. The advantage is that
+     * you don't have to worry about `overflow: hidden` or `z-index`, but the item won't retain
+     * its inherited styles.
+     * - `parent` - Preview will be inserted into the parent of the drag item. The advantage is that
+     * inherited styles will be preserved, but it may be clipped by `overflow: hidden` or not be
+     * visible due to `z-index`. Furthermore, the preview is going to have an effect over selectors
+     * like `:nth-child` and some flexbox configurations.
+     * - `ElementRef<HTMLElement> | HTMLElement` - Preview will be inserted into a specific element.
+     * Same advantages and disadvantages as `parent`.
+     */
+    previewContainer: PreviewContainer;
     /** Emits when the user starts dragging the item. */
     started: EventEmitter<CdkDragStart>;
     /** Emits when the user has released a drag item, before any animations have started. */

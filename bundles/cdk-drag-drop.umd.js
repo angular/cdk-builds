@@ -675,6 +675,14 @@
             }
             return this;
         };
+        /**
+         * Sets the container into which to insert the preview element.
+         * @param value Container into which to insert the preview.
+         */
+        DragRef.prototype.withPreviewContainer = function (value) {
+            this._previewContainer = value;
+            return this;
+        };
         /** Updates the item's sort order based on the last-known pointer position. */
         DragRef.prototype._sortFromLastPointerPosition = function () {
             var position = this._lastKnownPointerPosition;
@@ -778,7 +786,7 @@
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 toggleVisibility(element, false);
                 this._document.body.appendChild(parent.replaceChild(placeholder, element));
-                getPreviewInsertionPoint(this._document, shadowRoot).appendChild(preview);
+                this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(preview);
                 this.started.next({ source: this }); // Emit before notifying the container.
                 dropContainer.start();
                 this._initialContainer = dropContainer;
@@ -1284,6 +1292,26 @@
             }
             return this._cachedShadowRoot;
         };
+        /** Gets the element into which the drag preview should be inserted. */
+        DragRef.prototype._getPreviewInsertionPoint = function (initialParent, shadowRoot) {
+            var previewContainer = this._previewContainer || 'global';
+            if (previewContainer === 'parent') {
+                return initialParent;
+            }
+            if (previewContainer === 'global') {
+                var documentRef = this._document;
+                // We can't use the body if the user is in fullscreen mode,
+                // because the preview will render under the fullscreen element.
+                // TODO(crisbeto): dedupe this with the `FullscreenOverlayContainer` eventually.
+                return shadowRoot ||
+                    documentRef.fullscreenElement ||
+                    documentRef.webkitFullscreenElement ||
+                    documentRef.mozFullScreenElement ||
+                    documentRef.msFullscreenElement ||
+                    documentRef.body;
+            }
+            return coercion.coerceElement(previewContainer);
+        };
         return DragRef;
     }());
     /**
@@ -1315,18 +1343,6 @@
         // as fast as possible. Since we only bind mouse events and touch events, we can assume
         // that if the event's name starts with `t`, it's a touch event.
         return event.type[0] === 't';
-    }
-    /** Gets the element into which the drag preview should be inserted. */
-    function getPreviewInsertionPoint(documentRef, shadowRoot) {
-        // We can't use the body if the user is in fullscreen mode,
-        // because the preview will render under the fullscreen element.
-        // TODO(crisbeto): dedupe this with the `FullscreenOverlayContainer` eventually.
-        return shadowRoot ||
-            documentRef.fullscreenElement ||
-            documentRef.webkitFullscreenElement ||
-            documentRef.mozFullScreenElement ||
-            documentRef.msFullscreenElement ||
-            documentRef.body;
     }
     /**
      * Gets the root HTML element of an embedded view.
@@ -3576,7 +3592,8 @@
                     ref
                         .withBoundaryElement(_this._getBoundaryElement())
                         .withPlaceholderTemplate(placeholder)
-                        .withPreviewTemplate(preview);
+                        .withPreviewTemplate(preview)
+                        .withPreviewContainer(_this.previewContainer || 'global');
                     if (dir) {
                         ref.withDirection(dir.value);
                     }
@@ -3650,7 +3667,7 @@
         };
         /** Assigns the default input values based on a provided config object. */
         CdkDrag.prototype._assignDefaults = function (config) {
-            var lockAxis = config.lockAxis, dragStartDelay = config.dragStartDelay, constrainPosition = config.constrainPosition, previewClass = config.previewClass, boundaryElement = config.boundaryElement, draggingDisabled = config.draggingDisabled, rootElementSelector = config.rootElementSelector;
+            var lockAxis = config.lockAxis, dragStartDelay = config.dragStartDelay, constrainPosition = config.constrainPosition, previewClass = config.previewClass, boundaryElement = config.boundaryElement, draggingDisabled = config.draggingDisabled, rootElementSelector = config.rootElementSelector, previewContainer = config.previewContainer;
             this.disabled = draggingDisabled == null ? false : draggingDisabled;
             this.dragStartDelay = dragStartDelay || 0;
             if (lockAxis) {
@@ -3667,6 +3684,9 @@
             }
             if (rootElementSelector) {
                 this.rootElementSelector = rootElementSelector;
+            }
+            if (previewContainer) {
+                this.previewContainer = previewContainer;
             }
         };
         return CdkDrag;
@@ -3710,6 +3730,7 @@
         disabled: [{ type: i0.Input, args: ['cdkDragDisabled',] }],
         constrainPosition: [{ type: i0.Input, args: ['cdkDragConstrainPosition',] }],
         previewClass: [{ type: i0.Input, args: ['cdkDragPreviewClass',] }],
+        previewContainer: [{ type: i0.Input, args: ['cdkDragPreviewContainer',] }],
         started: [{ type: i0.Output, args: ['cdkDragStarted',] }],
         released: [{ type: i0.Output, args: ['cdkDragReleased',] }],
         ended: [{ type: i0.Output, args: ['cdkDragEnded',] }],
