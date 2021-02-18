@@ -618,7 +618,12 @@ class StickyStyler {
      * @param _positionListener A listener that is notified of changes to sticky rows/columns
      *     and their dimensions.
      */
-    constructor(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true, _positionListener) {
+    constructor(_isNativeHtmlTable, _stickCellCss, direction, 
+    /**
+     * @deprecated `_coalescedStyleScheduler` parameter to become required.
+     * @breaking-change 11.0.0
+     */
+    _coalescedStyleScheduler, _isBrowser = true, _needsPositionStickyOnElement = true, _positionListener) {
         this._isNativeHtmlTable = _isNativeHtmlTable;
         this._stickCellCss = _stickCellCss;
         this.direction = direction;
@@ -654,7 +659,7 @@ class StickyStyler {
             }
         }
         // Coalesce with sticky row/column updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             for (const element of elementsToClear) {
                 this._removeStickyStyle(element, stickyDirections);
             }
@@ -688,7 +693,7 @@ class StickyStyler {
         const lastStickyStart = stickyStartStates.lastIndexOf(true);
         const firstStickyEnd = stickyEndStates.indexOf(true);
         // Coalesce with sticky row updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             const isRtl = this.direction === 'rtl';
             const start = isRtl ? 'right' : 'left';
             const end = isRtl ? 'left' : 'right';
@@ -762,7 +767,7 @@ class StickyStyler {
         const borderedRowIndex = states.lastIndexOf(true);
         // Coalesce with other sticky row updates (top/bottom), sticky columns updates
         // (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             var _a, _b;
             for (let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
                 if (!states[rowIndex]) {
@@ -794,7 +799,7 @@ class StickyStyler {
         }
         const tfoot = tableElement.querySelector('tfoot');
         // Coalesce with other sticky updates (and potentially other changes like column resize).
-        this._coalescedStyleScheduler.schedule(() => {
+        this._scheduleStyleChanges(() => {
             if (stickyStates.some(state => !state)) {
                 this._removeStickyStyle(tfoot, ['bottom']);
             }
@@ -920,6 +925,19 @@ class StickyStyler {
             }
         }
         return positions;
+    }
+    /**
+     * Schedules styles to be applied when the style scheduler deems appropriate.
+     * @breaking-change 11.0.0 This method can be removed in favor of calling
+     * `CoalescedStyleScheduler.schedule` directly once the scheduler is a required parameter.
+     */
+    _scheduleStyleChanges(changes) {
+        if (this._coalescedStyleScheduler) {
+            this._coalescedStyleScheduler.schedule(changes);
+        }
+        else {
+            changes();
+        }
     }
 }
 
@@ -1119,12 +1137,17 @@ class RowViewRef extends EmbeddedViewRef {
  * connect function that will return an Observable stream that emits the data array to render.
  */
 class CdkTable {
-    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, _viewRepeater, _coalescedStyleScheduler, _viewportRuler, 
+    constructor(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, 
     /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
      */
-    _stickyPositioningListener) {
+    _viewRepeater, _coalescedStyleScheduler, _stickyPositioningListener, 
+    // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
+    // this property will never be null.
+    // tslint:disable-next-line: lightweight-tokens
+    _viewportRuler) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -1132,8 +1155,8 @@ class CdkTable {
         this._platform = _platform;
         this._viewRepeater = _viewRepeater;
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
-        this._viewportRuler = _viewportRuler;
         this._stickyPositioningListener = _stickyPositioningListener;
+        this._viewportRuler = _viewportRuler;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1316,9 +1339,14 @@ class CdkTable {
         this._dataDiffer = this._differs.find([]).create((_i, dataRow) => {
             return this.trackBy ? this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
         });
-        this._viewportRuler.change().pipe(takeUntil(this._onDestroy)).subscribe(() => {
-            this._forceRecalculateCellWidths = true;
-        });
+        // Table cell dimensions may change after resizing the window. Signal the sticky styler to
+        // refresh its cache of cell widths the next time sticky styles are updated.
+        // @breaking-change 11.0.0 Remove null check for _viewportRuler once it's a required parameter.
+        if (this._viewportRuler) {
+            this._viewportRuler.change().pipe(takeUntil(this._onDestroy)).subscribe(() => {
+                this._forceRecalculateCellWidths = true;
+            });
+        }
     }
     ngAfterContentChecked() {
         // Cache the row and column definitions gathered by ContentChildren and programmatic injection.
@@ -1387,11 +1415,32 @@ class CdkTable {
             return;
         }
         const viewContainer = this._rowOutlet.viewContainer;
-        this._viewRepeater.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
-            if (change.operation === 1 /* INSERTED */ && change.context) {
-                this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
-            }
-        });
+        // @breaking-change 11.0.0 Remove null check for `_viewRepeater` and the
+        // `else` clause once `_viewRepeater` is turned into a required parameter.
+        if (this._viewRepeater) {
+            this._viewRepeater.applyChanges(changes, viewContainer, (record, _adjustedPreviousIndex, currentIndex) => this._getEmbeddedViewArgs(record.item, currentIndex), (record) => record.item.data, (change) => {
+                if (change.operation === 1 /* INSERTED */ && change.context) {
+                    this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
+                }
+            });
+        }
+        else {
+            changes.forEachOperation((record, prevIndex, currentIndex) => {
+                if (record.previousIndex == null) {
+                    const renderRow = record.item;
+                    const rowDef = renderRow.rowDef;
+                    const context = { $implicit: renderRow.data };
+                    this._renderRow(this._rowOutlet, rowDef, currentIndex, context);
+                }
+                else if (currentIndex == null) {
+                    viewContainer.remove(prevIndex);
+                }
+                else {
+                    const view = viewContainer.get(prevIndex);
+                    viewContainer.move(view, currentIndex);
+                }
+            });
+        }
         // Update the meta context of a row's context data (index, count, first, last, ...)
         this._updateRowIndexContext();
         // Update rows that did not get added/removed/moved but may have had their identity changed,
@@ -1934,10 +1983,10 @@ CdkTable.ctorParameters = () => [
     { type: Directionality, decorators: [{ type: Optional }] },
     { type: undefined, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: Platform },
-    { type: undefined, decorators: [{ type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] },
-    { type: _CoalescedStyleScheduler, decorators: [{ type: Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
-    { type: ViewportRuler },
-    { type: undefined, decorators: [{ type: Optional }, { type: SkipSelf }, { type: Inject, args: [STICKY_POSITIONING_LISTENER,] }] }
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [_VIEW_REPEATER_STRATEGY,] }] },
+    { type: _CoalescedStyleScheduler, decorators: [{ type: Optional }, { type: Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: SkipSelf }, { type: Inject, args: [STICKY_POSITIONING_LISTENER,] }] },
+    { type: ViewportRuler, decorators: [{ type: Optional }] }
 ];
 CdkTable.propDecorators = {
     trackBy: [{ type: Input }],

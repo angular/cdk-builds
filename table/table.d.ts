@@ -110,14 +110,15 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _elementRef: ElementRef;
     protected readonly _dir: Directionality;
     private _platform;
-    protected readonly _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>;
-    protected readonly _coalescedStyleScheduler: _CoalescedStyleScheduler;
-    private readonly _viewportRuler;
     /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
      */
-    protected readonly _stickyPositioningListener: StickyPositioningListener;
+    protected readonly _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined;
+    protected readonly _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined;
+    protected readonly _stickyPositioningListener?: StickyPositioningListener | undefined;
+    private readonly _viewportRuler?;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: T[] | ReadonlyArray<T>;
@@ -310,12 +311,13 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     _contentFooterRowDefs: QueryList<CdkFooterRowDef>;
     /** Row definition that will only be rendered if there's no data in the table. */
     _noDataRow: CdkNoDataRow;
-    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, _viewRepeater: _ViewRepeater<T, RenderRow<T>, RowContext<T>>, _coalescedStyleScheduler: _CoalescedStyleScheduler, _viewportRuler: ViewportRuler, 
+    constructor(_differs: IterableDiffers, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef, role: string, _dir: Directionality, _document: any, _platform: Platform, 
     /**
-     * @deprecated `_stickyPositioningListener` parameter to become required.
-     * @breaking-change 13.0.0
+     * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
+     *    parameters to become required.
+     * @breaking-change 11.0.0
      */
-    _stickyPositioningListener: StickyPositioningListener);
+    _viewRepeater?: _ViewRepeater<T, RenderRow<T>, RowContext<T>> | undefined, _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined, _stickyPositioningListener?: StickyPositioningListener | undefined, _viewportRuler?: ViewportRuler | undefined);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
