@@ -26,11 +26,7 @@ export declare class StickyStyler {
     private _isNativeHtmlTable;
     private _stickCellCss;
     direction: Direction;
-    /**
-     * @deprecated `_coalescedStyleScheduler` parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    private _coalescedStyleScheduler?;
+    private _coalescedStyleScheduler;
     private _isBrowser;
     private readonly _needsPositionStickyOnElement;
     private readonly _positionListener?;
@@ -50,12 +46,7 @@ export declare class StickyStyler {
      * @param _positionListener A listener that is notified of changes to sticky rows/columns
      *     and their dimensions.
      */
-    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, 
-    /**
-     * @deprecated `_coalescedStyleScheduler` parameter to become required.
-     * @breaking-change 11.0.0
-     */
-    _coalescedStyleScheduler?: _CoalescedStyleScheduler | undefined, _isBrowser?: boolean, _needsPositionStickyOnElement?: boolean, _positionListener?: StickyPositioningListener | undefined);
+    constructor(_isNativeHtmlTable: boolean, _stickCellCss: string, direction: Direction, _coalescedStyleScheduler: _CoalescedStyleScheduler, _isBrowser?: boolean, _needsPositionStickyOnElement?: boolean, _positionListener?: StickyPositioningListener | undefined);
     /**
      * Clears the sticky positioning styles from the row and its cells by resetting the `position`
      * style, setting the zIndex to 0, and unsetting each provided sticky direction.
@@ -132,10 +123,4 @@ export declare class StickyStyler {
      * Non-sticky cells do not need to have a value set since their positions will not be applied.
      */
     _getStickyEndColumnPositions(widths: number[], stickyStates: boolean[]): number[];
-    /**
-     * Schedules styles to be applied when the style scheduler deems appropriate.
-     * @breaking-change 11.0.0 This method can be removed in favor of calling
-     * `CoalescedStyleScheduler.schedule` directly once the scheduler is a required parameter.
-     */
-    private _scheduleStyleChanges;
 }

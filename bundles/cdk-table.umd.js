@@ -995,12 +995,7 @@
          * @param _positionListener A listener that is notified of changes to sticky rows/columns
          *     and their dimensions.
          */
-        function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, 
-        /**
-         * @deprecated `_coalescedStyleScheduler` parameter to become required.
-         * @breaking-change 11.0.0
-         */
-        _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement, _positionListener) {
+        function StickyStyler(_isNativeHtmlTable, _stickCellCss, direction, _coalescedStyleScheduler, _isBrowser, _needsPositionStickyOnElement, _positionListener) {
             if (_isBrowser === void 0) { _isBrowser = true; }
             if (_needsPositionStickyOnElement === void 0) { _needsPositionStickyOnElement = true; }
             this._isNativeHtmlTable = _isNativeHtmlTable;
@@ -1050,7 +1045,7 @@
                 finally { if (e_1) throw e_1.error; }
             }
             // Coalesce with sticky row/column updates (and potentially other changes like column resize).
-            this._scheduleStyleChanges(function () {
+            this._coalescedStyleScheduler.schedule(function () {
                 var e_2, _c;
                 try {
                     for (var elementsToClear_1 = __values(elementsToClear), elementsToClear_1_1 = elementsToClear_1.next(); !elementsToClear_1_1.done; elementsToClear_1_1 = elementsToClear_1.next()) {
@@ -1097,7 +1092,7 @@
             var lastStickyStart = stickyStartStates.lastIndexOf(true);
             var firstStickyEnd = stickyEndStates.indexOf(true);
             // Coalesce with sticky row updates (and potentially other changes like column resize).
-            this._scheduleStyleChanges(function () {
+            this._coalescedStyleScheduler.schedule(function () {
                 var e_3, _c;
                 var isRtl = _this.direction === 'rtl';
                 var start = isRtl ? 'right' : 'left';
@@ -1183,7 +1178,7 @@
             var borderedRowIndex = states.lastIndexOf(true);
             // Coalesce with other sticky row updates (top/bottom), sticky columns updates
             // (and potentially other changes like column resize).
-            this._scheduleStyleChanges(function () {
+            this._coalescedStyleScheduler.schedule(function () {
                 var e_4, _c;
                 var _a, _b;
                 for (var rowIndex = 0; rowIndex < rows.length; rowIndex++) {
@@ -1227,7 +1222,7 @@
             }
             var tfoot = tableElement.querySelector('tfoot');
             // Coalesce with other sticky updates (and potentially other changes like column resize).
-            this._scheduleStyleChanges(function () {
+            this._coalescedStyleScheduler.schedule(function () {
                 if (stickyStates.some(function (state) { return !state; })) {
                     _this._removeStickyStyle(tfoot, ['bottom']);
                 }
@@ -1376,19 +1371,6 @@
                 }
             }
             return positions;
-        };
-        /**
-         * Schedules styles to be applied when the style scheduler deems appropriate.
-         * @breaking-change 11.0.0 This method can be removed in favor of calling
-         * `CoalescedStyleScheduler.schedule` directly once the scheduler is a required parameter.
-         */
-        StickyStyler.prototype._scheduleStyleChanges = function (changes) {
-            if (this._coalescedStyleScheduler) {
-                this._coalescedStyleScheduler.schedule(changes);
-            }
-            else {
-                changes();
-            }
         };
         return StickyStyler;
     }());
@@ -1587,17 +1569,12 @@
      * connect function that will return an Observable stream that emits the data array to render.
      */
     var CdkTable = /** @class */ (function () {
-        function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, 
+        function CdkTable(_differs, _changeDetectorRef, _elementRef, role, _dir, _document, _platform, _viewRepeater, _coalescedStyleScheduler, _viewportRuler, 
         /**
-         * @deprecated `_coalescedStyleScheduler`, `_viewRepeater` and `_viewportRuler`
-         *    parameters to become required.
-         * @breaking-change 11.0.0
+         * @deprecated `_stickyPositioningListener` parameter to become required.
+         * @breaking-change 13.0.0
          */
-        _viewRepeater, _coalescedStyleScheduler, _stickyPositioningListener, 
-        // Optional for backwards compatibility. The viewport ruler is provided in root. Therefore,
-        // this property will never be null.
-        // tslint:disable-next-line: lightweight-tokens
-        _viewportRuler) {
+        _stickyPositioningListener) {
             this._differs = _differs;
             this._changeDetectorRef = _changeDetectorRef;
             this._elementRef = _elementRef;
@@ -1605,8 +1582,8 @@
             this._platform = _platform;
             this._viewRepeater = _viewRepeater;
             this._coalescedStyleScheduler = _coalescedStyleScheduler;
-            this._stickyPositioningListener = _stickyPositioningListener;
             this._viewportRuler = _viewportRuler;
+            this._stickyPositioningListener = _stickyPositioningListener;
             /** Subject that emits when the component has been destroyed. */
             this._onDestroy = new rxjs.Subject();
             /**
@@ -1806,14 +1783,9 @@
             this._dataDiffer = this._differs.find([]).create(function (_i, dataRow) {
                 return _this.trackBy ? _this.trackBy(dataRow.dataIndex, dataRow.data) : dataRow;
             });
-            // Table cell dimensions may change after resizing the window. Signal the sticky styler to
-            // refresh its cache of cell widths the next time sticky styles are updated.
-            // @breaking-change 11.0.0 Remove null check for _viewportRuler once it's a required parameter.
-            if (this._viewportRuler) {
-                this._viewportRuler.change().pipe(operators.takeUntil(this._onDestroy)).subscribe(function () {
-                    _this._forceRecalculateCellWidths = true;
-                });
-            }
+            this._viewportRuler.change().pipe(operators.takeUntil(this._onDestroy)).subscribe(function () {
+                _this._forceRecalculateCellWidths = true;
+            });
         };
         CdkTable.prototype.ngAfterContentChecked = function () {
             // Cache the row and column definitions gathered by ContentChildren and programmatic injection.
@@ -1883,32 +1855,11 @@
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;
-            // @breaking-change 11.0.0 Remove null check for `_viewRepeater` and the
-            // `else` clause once `_viewRepeater` is turned into a required parameter.
-            if (this._viewRepeater) {
-                this._viewRepeater.applyChanges(changes, viewContainer, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
-                    if (change.operation === 1 /* INSERTED */ && change.context) {
-                        _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
-                    }
-                });
-            }
-            else {
-                changes.forEachOperation(function (record, prevIndex, currentIndex) {
-                    if (record.previousIndex == null) {
-                        var renderRow = record.item;
-                        var rowDef = renderRow.rowDef;
-                        var context = { $implicit: renderRow.data };
-                        _this._renderRow(_this._rowOutlet, rowDef, currentIndex, context);
-                    }
-                    else if (currentIndex == null) {
-                        viewContainer.remove(prevIndex);
-                    }
-                    else {
-                        var view = viewContainer.get(prevIndex);
-                        viewContainer.move(view, currentIndex);
-                    }
-                });
-            }
+            this._viewRepeater.applyChanges(changes, viewContainer, function (record, _adjustedPreviousIndex, currentIndex) { return _this._getEmbeddedViewArgs(record.item, currentIndex); }, function (record) { return record.item.data; }, function (change) {
+                if (change.operation === 1 /* INSERTED */ && change.context) {
+                    _this._renderCellTemplateForItem(change.record.item.rowDef, change.context);
+                }
+            });
             // Update the meta context of a row's context data (index, count, first, last, ...)
             this._updateRowIndexContext();
             // Update rows that did not get added/removed/moved but may have had their identity changed,
@@ -2494,10 +2445,10 @@
         { type: bidi.Directionality, decorators: [{ type: core.Optional }] },
         { type: undefined, decorators: [{ type: core.Inject, args: [common.DOCUMENT,] }] },
         { type: platform.Platform },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
-        { type: _CoalescedStyleScheduler, decorators: [{ type: core.Optional }, { type: core.Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
-        { type: undefined, decorators: [{ type: core.Optional }, { type: core.SkipSelf }, { type: core.Inject, args: [STICKY_POSITIONING_LISTENER,] }] },
-        { type: scrolling.ViewportRuler, decorators: [{ type: core.Optional }] }
+        { type: undefined, decorators: [{ type: core.Inject, args: [collections._VIEW_REPEATER_STRATEGY,] }] },
+        { type: _CoalescedStyleScheduler, decorators: [{ type: core.Inject, args: [_COALESCED_STYLE_SCHEDULER,] }] },
+        { type: scrolling.ViewportRuler },
+        { type: undefined, decorators: [{ type: core.Optional }, { type: core.SkipSelf }, { type: core.Inject, args: [STICKY_POSITIONING_LISTENER,] }] }
     ]; };
     CdkTable.propDecorators = {
         trackBy: [{ type: core.Input }],
