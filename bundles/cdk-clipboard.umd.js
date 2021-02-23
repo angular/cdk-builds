@@ -129,7 +129,12 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
-    var CKD_COPY_TO_CLIPBOARD_CONFIG = new i0.InjectionToken('CKD_COPY_TO_CLIPBOARD_CONFIG');
+    var CDK_COPY_TO_CLIPBOARD_CONFIG = new i0.InjectionToken('CDK_COPY_TO_CLIPBOARD_CONFIG');
+    /**
+     * @deprecated Use `CDK_COPY_TO_CLIPBOARD_CONFIG` instead.
+     * @breaking-change 13.0.0
+     */
+    var CKD_COPY_TO_CLIPBOARD_CONFIG = CDK_COPY_TO_CLIPBOARD_CONFIG;
     /**
      * Provides behavior for a button that when clicked copies content into user's
      * clipboard.
@@ -243,6 +248,7 @@
      * Generated bundle index. Do not edit.
      */
 
+    exports.CDK_COPY_TO_CLIPBOARD_CONFIG = CDK_COPY_TO_CLIPBOARD_CONFIG;
     exports.CKD_COPY_TO_CLIPBOARD_CONFIG = CKD_COPY_TO_CLIPBOARD_CONFIG;
     exports.CdkCopyToClipboard = CdkCopyToClipboard;
     exports.Clipboard = Clipboard;

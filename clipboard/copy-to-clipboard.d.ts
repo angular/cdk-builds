@@ -13,6 +13,11 @@ export interface CdkCopyToClipboardConfig {
     attempts?: number;
 }
 /** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
+export declare const CDK_COPY_TO_CLIPBOARD_CONFIG: InjectionToken<CdkCopyToClipboardConfig>;
+/**
+ * @deprecated Use `CDK_COPY_TO_CLIPBOARD_CONFIG` instead.
+ * @breaking-change 13.0.0
+ */
 export declare const CKD_COPY_TO_CLIPBOARD_CONFIG: InjectionToken<CdkCopyToClipboardConfig>;
 /**
  * Provides behavior for a button that when clicked copies content into user's
