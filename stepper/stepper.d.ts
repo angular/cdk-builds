@@ -154,6 +154,13 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     selectionChange: EventEmitter<StepperSelectionEvent>;
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
+    /** Orientation of the stepper. */
+    get orientation(): StepperOrientation;
+    set orientation(value: StepperOrientation);
+    /**
+     * @deprecated To be turned into a private property. Use `orientation` instead.
+     * @breaking-change 13.0.0
+     */
     protected _orientation: StepperOrientation;
     constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef?: ElementRef<HTMLElement> | undefined, _document?: any);
     ngAfterContentInit(): void;
@@ -175,6 +182,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     _getAnimationDirection(index: number): StepContentPositionState;
     /** Returns the type of icon to be displayed. */
     _getIndicatorType(index: number, state?: StepState): StepState;
+    /** Updates the stepper orientation. */
+    protected _updateOrientation(value: StepperOrientation): void;
     private _getDefaultIndicatorLogic;
     private _getGuidelineLogic;
     private _isCurrentStep;

@@ -215,6 +215,10 @@
             this._selectedIndex = 0;
             /** Event emitted when the selected step has changed. */
             this.selectionChange = new core.EventEmitter();
+            /**
+             * @deprecated To be turned into a private property. Use `orientation` instead.
+             * @breaking-change 13.0.0
+             */
             this._orientation = 'horizontal';
             this._groupId = nextId++;
             this._document = _document;
@@ -268,6 +272,16 @@
             },
             set: function (step) {
                 this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(CdkStepper.prototype, "orientation", {
+            // Note that this isn't an `Input` so it doesn't bleed into the Material stepper.
+            /** Orientation of the stepper. */
+            get: function () { return this._orientation; },
+            set: function (value) {
+                this._updateOrientation(value);
             },
             enumerable: false,
             configurable: true
@@ -356,6 +370,14 @@
             var isCurrentStep = this._isCurrentStep(index);
             return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
                 this._getGuidelineLogic(step, isCurrentStep, state);
+        };
+        /** Updates the stepper orientation. */
+        CdkStepper.prototype._updateOrientation = function (value) {
+            // This is a protected method so that `MatSteppter` can hook into it.
+            this._orientation = value;
+            if (this._keyManager) {
+                this._keyManager.withVerticalOrientation(value === 'vertical');
+            }
         };
         CdkStepper.prototype._getDefaultIndicatorLogic = function (step, isCurrentStep) {
             if (step._showError && step.hasError && !isCurrentStep) {
