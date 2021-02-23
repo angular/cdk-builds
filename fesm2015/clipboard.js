@@ -124,7 +124,12 @@ Clipboard.ctorParameters = () => [
  * found in the LICENSE file at https://angular.io/license
  */
 /** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
-const CKD_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CKD_COPY_TO_CLIPBOARD_CONFIG');
+const CDK_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CDK_COPY_TO_CLIPBOARD_CONFIG');
+/**
+ * @deprecated Use `CDK_COPY_TO_CLIPBOARD_CONFIG` instead.
+ * @breaking-change 13.0.0
+ */
+const CKD_COPY_TO_CLIPBOARD_CONFIG = CDK_COPY_TO_CLIPBOARD_CONFIG;
 /**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
@@ -232,5 +237,5 @@ ClipboardModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CKD_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
+export { CDK_COPY_TO_CLIPBOARD_CONFIG, CKD_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
 //# sourceMappingURL=clipboard.js.map
