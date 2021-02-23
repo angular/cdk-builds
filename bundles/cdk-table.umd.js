@@ -1164,10 +1164,10 @@
             var stickyCellHeights = [];
             var elementsToStick = [];
             for (var rowIndex = 0, stickyOffset = 0; rowIndex < rows.length; rowIndex++) {
-                stickyOffsets[rowIndex] = stickyOffset;
                 if (!states[rowIndex]) {
                     continue;
                 }
+                stickyOffsets[rowIndex] = stickyOffset;
                 var row = rows[rowIndex];
                 elementsToStick[rowIndex] = this._isNativeHtmlTable ?
                     Array.from(row.children) : [row];
@@ -1202,10 +1202,10 @@
                     }
                 }
                 if (position === 'top') {
-                    (_a = _this._positionListener) === null || _a === void 0 ? void 0 : _a.stickyHeaderRowsUpdated({ sizes: stickyCellHeights, elements: elementsToStick });
+                    (_a = _this._positionListener) === null || _a === void 0 ? void 0 : _a.stickyHeaderRowsUpdated({ sizes: stickyCellHeights, offsets: stickyOffsets, elements: elementsToStick });
                 }
                 else {
-                    (_b = _this._positionListener) === null || _b === void 0 ? void 0 : _b.stickyFooterRowsUpdated({ sizes: stickyCellHeights, elements: elementsToStick });
+                    (_b = _this._positionListener) === null || _b === void 0 ? void 0 : _b.stickyFooterRowsUpdated({ sizes: stickyCellHeights, offsets: stickyOffsets, elements: elementsToStick });
                 }
             });
         };

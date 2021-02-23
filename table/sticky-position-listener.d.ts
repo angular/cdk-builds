@@ -9,8 +9,10 @@ import { InjectionToken } from '@angular/core';
 /** The injection token used to specify the StickyPositioningListener. */
 export declare const STICKY_POSITIONING_LISTENER: InjectionToken<StickyPositioningListener>;
 export declare type StickySize = number | null | undefined;
+export declare type StickyOffset = number | null | undefined;
 export interface StickyUpdate {
     elements?: ReadonlyArray<HTMLElement[] | undefined>;
+    offsets?: StickyOffset[];
     sizes: StickySize[];
 }
 /**
