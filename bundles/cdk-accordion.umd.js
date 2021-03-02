@@ -41,22 +41,20 @@
         });
         /** Opens all enabled accordion items in an accordion where multi is enabled. */
         CdkAccordion.prototype.openAll = function () {
-            this._openCloseAll(true);
+            if (this._multi) {
+                this._openCloseAllActions.next(true);
+            }
         };
         /** Closes all enabled accordion items in an accordion where multi is enabled. */
         CdkAccordion.prototype.closeAll = function () {
-            this._openCloseAll(false);
+            this._openCloseAllActions.next(false);
         };
         CdkAccordion.prototype.ngOnChanges = function (changes) {
             this._stateChanges.next(changes);
         };
         CdkAccordion.prototype.ngOnDestroy = function () {
             this._stateChanges.complete();
-        };
-        CdkAccordion.prototype._openCloseAll = function (expanded) {
-            if (this.multi) {
-                this._openCloseAllActions.next(expanded);
-            }
+            this._openCloseAllActions.complete();
         };
         return CdkAccordion;
     }());

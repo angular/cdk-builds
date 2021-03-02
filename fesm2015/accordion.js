@@ -36,22 +36,20 @@ class CdkAccordion {
     set multi(multi) { this._multi = coerceBooleanProperty(multi); }
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll() {
-        this._openCloseAll(true);
+        if (this._multi) {
+            this._openCloseAllActions.next(true);
+        }
     }
     /** Closes all enabled accordion items in an accordion where multi is enabled. */
     closeAll() {
-        this._openCloseAll(false);
+        this._openCloseAllActions.next(false);
     }
     ngOnChanges(changes) {
         this._stateChanges.next(changes);
     }
     ngOnDestroy() {
         this._stateChanges.complete();
-    }
-    _openCloseAll(expanded) {
-        if (this.multi) {
-            this._openCloseAllActions.next(expanded);
-        }
+        this._openCloseAllActions.complete();
     }
 }
 CdkAccordion.decorators = [
