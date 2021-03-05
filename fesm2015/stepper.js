@@ -77,14 +77,7 @@ const STEP_STATE = {
 };
 /** InjectionToken that can be used to specify the global stepper options. */
 const STEPPER_GLOBAL_OPTIONS = new InjectionToken('STEPPER_GLOBAL_OPTIONS');
-/**
- * InjectionToken that can be used to specify the global stepper options.
- * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
- * @breaking-change 8.0.0.
- */
-const MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
 class CdkStep {
-    /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
     constructor(_stepper, stepperOptions) {
         this._stepper = _stepper;
         /** Whether user has seen the expanded step content or not. */
@@ -182,9 +175,7 @@ CdkStep.propDecorators = {
     hasError: [{ type: Input }]
 };
 class CdkStepper {
-    constructor(_dir, _changeDetectorRef, 
-    // @breaking-change 8.0.0 `_elementRef` and `_document` parameters to become required.
-    _elementRef, _document) {
+    constructor(_dir, _changeDetectorRef, _elementRef, _document) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -239,11 +230,10 @@ class CdkStepper {
     }
     /** The step that is selected. */
     get selected() {
-        // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
         return this.steps ? this.steps.toArray()[this.selectedIndex] : undefined;
     }
     set selected(step) {
-        this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
+        this.selectedIndex = (step && this.steps) ? this.steps.toArray().indexOf(step) : -1;
     }
     // Note that this isn't an `Input` so it doesn't bleed into the Material stepper.
     /** Orientation of the stepper. */
@@ -421,9 +411,6 @@ class CdkStepper {
     }
     /** Checks whether the stepper contains the focused element. */
     _containsFocus() {
-        if (!this._document || !this._elementRef) {
-            return false;
-        }
         const stepperElement = this._elementRef.nativeElement;
         const focusedElement = this._document.activeElement;
         return stepperElement === focusedElement || stepperElement.contains(focusedElement);
@@ -567,5 +554,5 @@ CdkStepperModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, MAT_STEPPER_GLOBAL_OPTIONS, STEPPER_GLOBAL_OPTIONS, STEP_STATE, StepperSelectionEvent };
+export { CdkStep, CdkStepHeader, CdkStepLabel, CdkStepper, CdkStepperModule, CdkStepperNext, CdkStepperPrevious, STEPPER_GLOBAL_OPTIONS, STEP_STATE, StepperSelectionEvent };
 //# sourceMappingURL=stepper.js.map

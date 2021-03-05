@@ -79,14 +79,7 @@
     };
     /** InjectionToken that can be used to specify the global stepper options. */
     var STEPPER_GLOBAL_OPTIONS = new core.InjectionToken('STEPPER_GLOBAL_OPTIONS');
-    /**
-     * InjectionToken that can be used to specify the global stepper options.
-     * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
-     * @breaking-change 8.0.0.
-     */
-    var MAT_STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
     var CdkStep = /** @class */ (function () {
-        /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
         function CdkStep(_stepper, stepperOptions) {
             this._stepper = _stepper;
             /** Whether user has seen the expanded step content or not. */
@@ -201,9 +194,7 @@
         hasError: [{ type: core.Input }]
     };
     var CdkStepper = /** @class */ (function () {
-        function CdkStepper(_dir, _changeDetectorRef, 
-        // @breaking-change 8.0.0 `_elementRef` and `_document` parameters to become required.
-        _elementRef, _document) {
+        function CdkStepper(_dir, _changeDetectorRef, _elementRef, _document) {
             this._dir = _dir;
             this._changeDetectorRef = _changeDetectorRef;
             this._elementRef = _elementRef;
@@ -267,11 +258,10 @@
         Object.defineProperty(CdkStepper.prototype, "selected", {
             /** The step that is selected. */
             get: function () {
-                // @breaking-change 8.0.0 Change return type to `CdkStep | undefined`.
                 return this.steps ? this.steps.toArray()[this.selectedIndex] : undefined;
             },
             set: function (step) {
-                this.selectedIndex = this.steps ? this.steps.toArray().indexOf(step) : -1;
+                this.selectedIndex = (step && this.steps) ? this.steps.toArray().indexOf(step) : -1;
             },
             enumerable: false,
             configurable: true
@@ -460,9 +450,6 @@
         };
         /** Checks whether the stepper contains the focused element. */
         CdkStepper.prototype._containsFocus = function () {
-            if (!this._document || !this._elementRef) {
-                return false;
-            }
             var stepperElement = this._elementRef.nativeElement;
             var focusedElement = this._document.activeElement;
             return stepperElement === focusedElement || stepperElement.contains(focusedElement);
@@ -619,7 +606,6 @@
     exports.CdkStepperModule = CdkStepperModule;
     exports.CdkStepperNext = CdkStepperNext;
     exports.CdkStepperPrevious = CdkStepperPrevious;
-    exports.MAT_STEPPER_GLOBAL_OPTIONS = MAT_STEPPER_GLOBAL_OPTIONS;
     exports.STEPPER_GLOBAL_OPTIONS = STEPPER_GLOBAL_OPTIONS;
     exports.STEP_STATE = STEP_STATE;
     exports.StepperSelectionEvent = StepperSelectionEvent;

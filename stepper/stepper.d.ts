@@ -5,11 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { FocusableOption } from '@angular/cdk/a11y';
 import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef, AfterContentInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { CdkStepHeader } from './step-header';
 import { CdkStepLabel } from './step-label';
 /**
  * Position state of the content of each step in stepper that is used for transitioning
@@ -40,12 +40,6 @@ export declare const STEP_STATE: {
 };
 /** InjectionToken that can be used to specify the global stepper options. */
 export declare const STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
-/**
- * InjectionToken that can be used to specify the global stepper options.
- * @deprecated Use `STEPPER_GLOBAL_OPTIONS` instead.
- * @breaking-change 8.0.0.
- */
-export declare const MAT_STEPPER_GLOBAL_OPTIONS: InjectionToken<StepperOptions>;
 /** Configurable options for stepper. */
 export interface StepperOptions {
     /**
@@ -104,7 +98,6 @@ export declare class CdkStep implements OnChanges {
     set hasError(value: boolean);
     private _customError;
     private _getDefaultError;
-    /** @breaking-change 8.0.0 remove the `?` after `stepperOptions` */
     constructor(_stepper: CdkStepper, stepperOptions?: StepperOptions);
     /** Selects this step component. */
     select(): void;
@@ -119,26 +112,18 @@ export declare class CdkStep implements OnChanges {
 export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
     private _changeDetectorRef;
-    private _elementRef?;
+    private _elementRef;
     /** Emits when the component is destroyed. */
     protected _destroyed: Subject<void>;
     /** Used for managing keyboard focus. */
     private _keyManager;
-    /**
-     * @breaking-change 8.0.0 Remove `| undefined` once the `_document`
-     * constructor param is required.
-     */
     private _document;
     /** Full list of steps inside the stepper, including inside nested steppers. */
     _steps: QueryList<CdkStep>;
     /** Steps that belong to the current stepper, excluding ones from nested steppers. */
     readonly steps: QueryList<CdkStep>;
-    /**
-     * The list of step headers of the steps in the stepper.
-     * @deprecated Type to be changed to `QueryList<CdkStepHeader>`.
-     * @breaking-change 8.0.0
-     */
-    _stepHeader: QueryList<FocusableOption>;
+    /** The list of step headers of the steps in the stepper. */
+    _stepHeader: QueryList<CdkStepHeader>;
     /** Whether the validity of previous steps should be checked or not. */
     get linear(): boolean;
     set linear(value: boolean);
@@ -148,8 +133,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     set selectedIndex(index: number);
     private _selectedIndex;
     /** The step that is selected. */
-    get selected(): CdkStep;
-    set selected(step: CdkStep);
+    get selected(): CdkStep | undefined;
+    set selected(step: CdkStep | undefined);
     /** Event emitted when the selected step has changed. */
     selectionChange: EventEmitter<StepperSelectionEvent>;
     /** Used to track unique ID for each stepper component. */
@@ -162,7 +147,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
      * @breaking-change 13.0.0
      */
     protected _orientation: StepperOrientation;
-    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef?: ElementRef<HTMLElement> | undefined, _document?: any);
+    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef<HTMLElement>, _document: any);
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
