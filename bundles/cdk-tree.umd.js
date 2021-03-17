@@ -350,16 +350,16 @@
             var _a;
             var _this = this;
             var toBeProcessed = [dataNode];
-            toBeProcessed.push.apply(toBeProcessed, __spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).select.apply(_a, __spread(toBeProcessed.map(function (value) { return _this._trackByValue(value); })));
+            toBeProcessed.push.apply(toBeProcessed, __spreadArray([], __read(this.getDescendants(dataNode))));
+            (_a = this.expansionModel).select.apply(_a, __spreadArray([], __read(toBeProcessed.map(function (value) { return _this._trackByValue(value); }))));
         };
         /** Collapses a subtree rooted at given data node recursively. */
         BaseTreeControl.prototype.collapseDescendants = function (dataNode) {
             var _a;
             var _this = this;
             var toBeProcessed = [dataNode];
-            toBeProcessed.push.apply(toBeProcessed, __spread(this.getDescendants(dataNode)));
-            (_a = this.expansionModel).deselect.apply(_a, __spread(toBeProcessed.map(function (value) { return _this._trackByValue(value); })));
+            toBeProcessed.push.apply(toBeProcessed, __spreadArray([], __read(this.getDescendants(dataNode))));
+            (_a = this.expansionModel).deselect.apply(_a, __spreadArray([], __read(toBeProcessed.map(function (value) { return _this._trackByValue(value); }))));
         };
         BaseTreeControl.prototype._trackByValue = function (value) {
             return this.trackBy ? this.trackBy(value) : value;
@@ -410,7 +410,7 @@
         FlatTreeControl.prototype.expandAll = function () {
             var _a;
             var _this = this;
-            (_a = this.expansionModel).select.apply(_a, __spread(this.dataNodes.map(function (node) { return _this._trackByValue(node); })));
+            (_a = this.expansionModel).select.apply(_a, __spreadArray([], __read(this.dataNodes.map(function (node) { return _this._trackByValue(node); }))));
         };
         return FlatTreeControl;
     }(BaseTreeControl));
@@ -438,8 +438,8 @@
             var _a;
             var _this = this;
             this.expansionModel.clear();
-            var allNodes = this.dataNodes.reduce(function (accumulator, dataNode) { return __spread(accumulator, _this.getDescendants(dataNode), [dataNode]); }, []);
-            (_a = this.expansionModel).select.apply(_a, __spread(allNodes.map(function (node) { return _this._trackByValue(node); })));
+            var allNodes = this.dataNodes.reduce(function (accumulator, dataNode) { return __spreadArray(__spreadArray(__spreadArray([], __read(accumulator)), __read(_this.getDescendants(dataNode))), [dataNode]); }, []);
+            (_a = this.expansionModel).select.apply(_a, __spreadArray([], __read(allNodes.map(function (node) { return _this._trackByValue(node); }))));
         };
         /** Gets a list of descendant dataNodes of a subtree rooted at given data node recursively. */
         NestedTreeControl.prototype.getDescendants = function (dataNode) {

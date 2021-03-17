@@ -384,8 +384,8 @@
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
-                zoneSpecOnHasTask.apply(void 0, __spread(args));
-                interceptor.onHasTask.apply(interceptor, __spread(args));
+                zoneSpecOnHasTask.apply(void 0, __spreadArray([], __read(args)));
+                interceptor.onHasTask.apply(interceptor, __spreadArray([], __read(args)));
             };
             return zoneSpec[stateObservableSymbol] = interceptor.state;
         };
@@ -888,7 +888,7 @@
                     switch (_a.label) {
                         case 0:
                             args = modifiersAndKeys.map(function (k) { return typeof k === 'number' ? keyMap[k] : k; });
-                            typeInElement.apply(void 0, __spread([this.element], args));
+                            typeInElement.apply(void 0, __spreadArray([this.element], __read(args)));
                             return [4 /*yield*/, this._stabilize()];
                         case 1:
                             _a.sent();

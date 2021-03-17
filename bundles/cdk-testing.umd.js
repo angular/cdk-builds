@@ -469,7 +469,7 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 queries[_i] = arguments[_i];
             }
-            return (_b = this.locatorFactory).locatorFor.apply(_b, __spread(queries));
+            return (_b = this.locatorFactory).locatorFor.apply(_b, __spreadArray([], __read(queries)));
         };
         /**
          * Creates an asynchronous locator function that can be used to find a `ComponentHarness` instance
@@ -498,7 +498,7 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 queries[_i] = arguments[_i];
             }
-            return (_b = this.locatorFactory).locatorForOptional.apply(_b, __spread(queries));
+            return (_b = this.locatorFactory).locatorForOptional.apply(_b, __spreadArray([], __read(queries)));
         };
         /**
          * Creates an asynchronous locator function that can be used to find `ComponentHarness` instances
@@ -542,7 +542,7 @@
             for (var _i = 0; _i < arguments.length; _i++) {
                 queries[_i] = arguments[_i];
             }
-            return (_b = this.locatorFactory).locatorForAll.apply(_b, __spread(queries));
+            return (_b = this.locatorFactory).locatorForAll.apply(_b, __spreadArray([], __read(queries)));
         };
         /**
          * Flushes change detection and async tasks in the Angular zone.
@@ -938,7 +938,7 @@
                     switch (_b.label) {
                         case 0:
                             _a = _parseQueries(queries), allQueries = _a.allQueries, harnessQueries = _a.harnessQueries, elementQueries = _a.elementQueries, harnessTypes = _a.harnessTypes;
-                            return [4 /*yield*/, this.getAllRawElements(__spread(elementQueries, harnessQueries.map(function (predicate) { return predicate.getSelector(); })).join(','))];
+                            return [4 /*yield*/, this.getAllRawElements(__spreadArray(__spreadArray([], __read(elementQueries)), __read(harnessQueries.map(function (predicate) { return predicate.getSelector(); }))).join(','))];
                         case 1:
                             rawElements = _b.sent();
                             skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
@@ -964,7 +964,7 @@
                                 }); }); })];
                         case 2:
                             perElementMatches = _b.sent();
-                            return [2 /*return*/, [].concat.apply([], __spread(perElementMatches))];
+                            return [2 /*return*/, [].concat.apply([], __spreadArray([], __read(perElementMatches)))];
                     }
                 });
             });

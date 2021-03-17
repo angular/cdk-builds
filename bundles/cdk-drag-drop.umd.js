@@ -2019,7 +2019,7 @@
             // We always allow the current element to be scrollable
             // so we need to ensure that it's in the array.
             this._scrollableElements =
-                elements.indexOf(element) === -1 ? __spread([element], elements) : elements.slice();
+                elements.indexOf(element) === -1 ? __spreadArray([element], __read(elements)) : elements.slice();
             return this;
         };
         /** Gets the scrollable parents that are registered with this drop container. */
@@ -3500,9 +3500,9 @@
                 }), 
                 // Listen if the state of any of the handles changes.
                 operators.switchMap(function (handles) {
-                    return rxjs.merge.apply(void 0, __spread(handles.map(function (item) {
+                    return rxjs.merge.apply(void 0, __spreadArray([], __read(handles.map(function (item) {
                         return item._stateChanges.pipe(operators.startWith(item));
-                    })));
+                    }))));
                 }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
                     // Enabled/disable the handle that changed in the DragRef.
                     var dragRef = _this._dragRef;
