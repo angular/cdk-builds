@@ -1,8 +1,32 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.bidi));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.bidi));
 }(this, (function (exports, i0, i1, i2, platform, coercion, rxjs, operators, bidi) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
+    var i2__namespace = /*#__PURE__*/_interopNamespace(i2);
 
     /**
      * @license
@@ -1112,8 +1136,8 @@
                 var maxY = boundaryRect.bottom - (previewRect.height - pickupY);
                 var minX = boundaryRect.left + pickupX;
                 var maxX = boundaryRect.right - (previewRect.width - pickupX);
-                x = clamp(x, minX, maxX);
-                y = clamp(y, minY, maxY);
+                x = clamp$1(x, minX, maxX);
+                y = clamp$1(y, minY, maxY);
             }
             return { x: x, y: y };
         };
@@ -1325,7 +1349,7 @@
         return "translate3d(" + Math.round(x) + "px, " + Math.round(y) + "px, 0)";
     }
     /** Clamps a value between a minimum and a maximum. */
-    function clamp(value, min, max) {
+    function clamp$1(value, min, max) {
         return Math.max(min, Math.min(max, value));
     }
     /**
@@ -1691,8 +1715,8 @@
      * @param toIndex Index to which the item should be moved.
      */
     function moveItemInArray(array, fromIndex, toIndex) {
-        var from = clamp$1(fromIndex, array.length - 1);
-        var to = clamp$1(toIndex, array.length - 1);
+        var from = clamp(fromIndex, array.length - 1);
+        var to = clamp(toIndex, array.length - 1);
         if (from === to) {
             return;
         }
@@ -1711,8 +1735,8 @@
      * @param targetIndex Index at which to insert the item.
      */
     function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-        var from = clamp$1(currentIndex, currentArray.length - 1);
-        var to = clamp$1(targetIndex, targetArray.length);
+        var from = clamp(currentIndex, currentArray.length - 1);
+        var to = clamp(targetIndex, targetArray.length);
         if (currentArray.length) {
             targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
         }
@@ -1727,13 +1751,13 @@
      *
      */
     function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-        var to = clamp$1(targetIndex, targetArray.length);
+        var to = clamp(targetIndex, targetArray.length);
         if (currentArray.length) {
             targetArray.splice(to, 0, currentArray[currentIndex]);
         }
     }
     /** Clamps a number between zero and a maximum. */
-    function clamp$1(value, max) {
+    function clamp(value, max) {
         return Math.max(0, Math.min(max, value));
     }
 
@@ -2768,7 +2792,7 @@
         };
         return DragDropRegistry;
     }());
-    DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+    DragDropRegistry.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i1__namespace.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
     DragDropRegistry.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -2817,7 +2841,7 @@
         };
         return DragDrop;
     }());
-    DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+    DragDrop.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0__namespace.ɵɵinject(i1__namespace.DOCUMENT), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i2__namespace.ViewportRuler), i0__namespace.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
     DragDrop.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

@@ -1,5 +1,7 @@
+import * as i1 from '@angular/cdk/platform';
 import { normalizePassiveListenerOptions, Platform, PlatformModule } from '@angular/cdk/platform';
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, NgZone, EventEmitter, Directive, ElementRef, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -78,7 +80,7 @@ class AutofillMonitor {
         this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
     }
 }
-AutofillMonitor.ɵprov = ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(ɵɵinject(Platform), ɵɵinject(NgZone)); }, token: AutofillMonitor, providedIn: "root" });
+AutofillMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function AutofillMonitor_Factory() { return new AutofillMonitor(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone)); }, token: AutofillMonitor, providedIn: "root" });
 AutofillMonitor.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

@@ -1,8 +1,33 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/scrolling'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/bidi'), require('@angular/cdk/portal'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/overlay', ['exports', '@angular/cdk/scrolling', '@angular/common', '@angular/core', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/bidi', '@angular/cdk/portal', 'rxjs', 'rxjs/operators', '@angular/cdk/keycodes'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.overlay = {}), global.ng.cdk.scrolling, global.ng.common, global.ng.core, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.bidi, global.ng.cdk.portal, global.rxjs, global.rxjs.operators, global.ng.cdk.keycodes));
 }(this, (function (exports, i1, i1$1, i0, coercion, i2, bidi, portal, rxjs, operators, keycodes) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
+    var i1__namespace$1 = /*#__PURE__*/_interopNamespace(i1$1);
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
+    var i2__namespace = /*#__PURE__*/_interopNamespace(i2);
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -630,7 +655,7 @@
         }
         return ScrollStrategyOptions;
     }());
-    ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+    ScrollStrategyOptions.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0__namespace.ɵɵinject(i1__namespace.ScrollDispatcher), i0__namespace.ɵɵinject(i1__namespace.ViewportRuler), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
     ScrollStrategyOptions.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -835,7 +860,7 @@
         };
         return BaseOverlayDispatcher;
     }());
-    BaseOverlayDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function BaseOverlayDispatcher_Factory() { return new BaseOverlayDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: BaseOverlayDispatcher, providedIn: "root" });
+    BaseOverlayDispatcher.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function BaseOverlayDispatcher_Factory() { return new BaseOverlayDispatcher(i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT)); }, token: BaseOverlayDispatcher, providedIn: "root" });
     BaseOverlayDispatcher.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -888,7 +913,7 @@
         };
         return OverlayKeyboardDispatcher;
     }(BaseOverlayDispatcher));
-    OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+    OverlayKeyboardDispatcher.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
     OverlayKeyboardDispatcher.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -972,7 +997,7 @@
         };
         return OverlayOutsideClickDispatcher;
     }(BaseOverlayDispatcher));
-    OverlayOutsideClickDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayOutsideClickDispatcher_Factory() { return new OverlayOutsideClickDispatcher(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayOutsideClickDispatcher, providedIn: "root" });
+    OverlayOutsideClickDispatcher.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function OverlayOutsideClickDispatcher_Factory() { return new OverlayOutsideClickDispatcher(i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT), i0__namespace.ɵɵinject(i2__namespace.Platform)); }, token: OverlayOutsideClickDispatcher, providedIn: "root" });
     OverlayOutsideClickDispatcher.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1055,7 +1080,7 @@
         };
         return OverlayContainer;
     }());
-    OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayContainer, providedIn: "root" });
+    OverlayContainer.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT), i0__namespace.ɵɵinject(i2__namespace.Platform)); }, token: OverlayContainer, providedIn: "root" });
     OverlayContainer.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -2871,7 +2896,7 @@
         };
         return OverlayPositionBuilder;
     }());
-    OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+    OverlayPositionBuilder.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0__namespace.ɵɵinject(i1__namespace.ViewportRuler), i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT), i0__namespace.ɵɵinject(i2__namespace.Platform), i0__namespace.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
     OverlayPositionBuilder.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -3473,7 +3498,7 @@
         };
         return FullscreenOverlayContainer;
     }(OverlayContainer));
-    FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+    FullscreenOverlayContainer.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0__namespace.ɵɵinject(i1__namespace$1.DOCUMENT), i0__namespace.ɵɵinject(i2__namespace.Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
     FullscreenOverlayContainer.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

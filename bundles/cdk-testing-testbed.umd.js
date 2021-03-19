@@ -1,8 +1,30 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/testing'), require('@angular/core/testing'), require('rxjs/operators'), require('rxjs'), require('@angular/cdk/keycodes')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/testbed', ['exports', '@angular/cdk/testing', '@angular/core/testing', 'rxjs/operators', 'rxjs', '@angular/cdk/keycodes'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.testbed = {}), global.ng.cdk.testing, global.ng.core.testing, global.rxjs.operators, global.rxjs, global.ng.cdk.keycodes));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.testbed = {}), global.ng.cdk.testing, global.ng.core.testing, global.rxjs.operators, global.rxjs, global.ng.cdk.keycodes));
 }(this, (function (exports, testing, testing$1, operators, rxjs, keyCodes) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var keyCodes__namespace = /*#__PURE__*/_interopNamespace(keyCodes);
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation.
@@ -713,36 +735,36 @@
     var _a;
     /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
     var keyMap = (_a = {},
-        _a[testing.TestKey.BACKSPACE] = { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
-        _a[testing.TestKey.TAB] = { keyCode: keyCodes.TAB, key: 'Tab' },
-        _a[testing.TestKey.ENTER] = { keyCode: keyCodes.ENTER, key: 'Enter' },
-        _a[testing.TestKey.SHIFT] = { keyCode: keyCodes.SHIFT, key: 'Shift' },
-        _a[testing.TestKey.CONTROL] = { keyCode: keyCodes.CONTROL, key: 'Control' },
-        _a[testing.TestKey.ALT] = { keyCode: keyCodes.ALT, key: 'Alt' },
-        _a[testing.TestKey.ESCAPE] = { keyCode: keyCodes.ESCAPE, key: 'Escape' },
-        _a[testing.TestKey.PAGE_UP] = { keyCode: keyCodes.PAGE_UP, key: 'PageUp' },
-        _a[testing.TestKey.PAGE_DOWN] = { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown' },
-        _a[testing.TestKey.END] = { keyCode: keyCodes.END, key: 'End' },
-        _a[testing.TestKey.HOME] = { keyCode: keyCodes.HOME, key: 'Home' },
-        _a[testing.TestKey.LEFT_ARROW] = { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft' },
-        _a[testing.TestKey.UP_ARROW] = { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp' },
-        _a[testing.TestKey.RIGHT_ARROW] = { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight' },
-        _a[testing.TestKey.DOWN_ARROW] = { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown' },
-        _a[testing.TestKey.INSERT] = { keyCode: keyCodes.INSERT, key: 'Insert' },
-        _a[testing.TestKey.DELETE] = { keyCode: keyCodes.DELETE, key: 'Delete' },
-        _a[testing.TestKey.F1] = { keyCode: keyCodes.F1, key: 'F1' },
-        _a[testing.TestKey.F2] = { keyCode: keyCodes.F2, key: 'F2' },
-        _a[testing.TestKey.F3] = { keyCode: keyCodes.F3, key: 'F3' },
-        _a[testing.TestKey.F4] = { keyCode: keyCodes.F4, key: 'F4' },
-        _a[testing.TestKey.F5] = { keyCode: keyCodes.F5, key: 'F5' },
-        _a[testing.TestKey.F6] = { keyCode: keyCodes.F6, key: 'F6' },
-        _a[testing.TestKey.F7] = { keyCode: keyCodes.F7, key: 'F7' },
-        _a[testing.TestKey.F8] = { keyCode: keyCodes.F8, key: 'F8' },
-        _a[testing.TestKey.F9] = { keyCode: keyCodes.F9, key: 'F9' },
-        _a[testing.TestKey.F10] = { keyCode: keyCodes.F10, key: 'F10' },
-        _a[testing.TestKey.F11] = { keyCode: keyCodes.F11, key: 'F11' },
-        _a[testing.TestKey.F12] = { keyCode: keyCodes.F12, key: 'F12' },
-        _a[testing.TestKey.META] = { keyCode: keyCodes.META, key: 'Meta' },
+        _a[testing.TestKey.BACKSPACE] = { keyCode: keyCodes__namespace.BACKSPACE, key: 'Backspace' },
+        _a[testing.TestKey.TAB] = { keyCode: keyCodes__namespace.TAB, key: 'Tab' },
+        _a[testing.TestKey.ENTER] = { keyCode: keyCodes__namespace.ENTER, key: 'Enter' },
+        _a[testing.TestKey.SHIFT] = { keyCode: keyCodes__namespace.SHIFT, key: 'Shift' },
+        _a[testing.TestKey.CONTROL] = { keyCode: keyCodes__namespace.CONTROL, key: 'Control' },
+        _a[testing.TestKey.ALT] = { keyCode: keyCodes__namespace.ALT, key: 'Alt' },
+        _a[testing.TestKey.ESCAPE] = { keyCode: keyCodes__namespace.ESCAPE, key: 'Escape' },
+        _a[testing.TestKey.PAGE_UP] = { keyCode: keyCodes__namespace.PAGE_UP, key: 'PageUp' },
+        _a[testing.TestKey.PAGE_DOWN] = { keyCode: keyCodes__namespace.PAGE_DOWN, key: 'PageDown' },
+        _a[testing.TestKey.END] = { keyCode: keyCodes__namespace.END, key: 'End' },
+        _a[testing.TestKey.HOME] = { keyCode: keyCodes__namespace.HOME, key: 'Home' },
+        _a[testing.TestKey.LEFT_ARROW] = { keyCode: keyCodes__namespace.LEFT_ARROW, key: 'ArrowLeft' },
+        _a[testing.TestKey.UP_ARROW] = { keyCode: keyCodes__namespace.UP_ARROW, key: 'ArrowUp' },
+        _a[testing.TestKey.RIGHT_ARROW] = { keyCode: keyCodes__namespace.RIGHT_ARROW, key: 'ArrowRight' },
+        _a[testing.TestKey.DOWN_ARROW] = { keyCode: keyCodes__namespace.DOWN_ARROW, key: 'ArrowDown' },
+        _a[testing.TestKey.INSERT] = { keyCode: keyCodes__namespace.INSERT, key: 'Insert' },
+        _a[testing.TestKey.DELETE] = { keyCode: keyCodes__namespace.DELETE, key: 'Delete' },
+        _a[testing.TestKey.F1] = { keyCode: keyCodes__namespace.F1, key: 'F1' },
+        _a[testing.TestKey.F2] = { keyCode: keyCodes__namespace.F2, key: 'F2' },
+        _a[testing.TestKey.F3] = { keyCode: keyCodes__namespace.F3, key: 'F3' },
+        _a[testing.TestKey.F4] = { keyCode: keyCodes__namespace.F4, key: 'F4' },
+        _a[testing.TestKey.F5] = { keyCode: keyCodes__namespace.F5, key: 'F5' },
+        _a[testing.TestKey.F6] = { keyCode: keyCodes__namespace.F6, key: 'F6' },
+        _a[testing.TestKey.F7] = { keyCode: keyCodes__namespace.F7, key: 'F7' },
+        _a[testing.TestKey.F8] = { keyCode: keyCodes__namespace.F8, key: 'F8' },
+        _a[testing.TestKey.F9] = { keyCode: keyCodes__namespace.F9, key: 'F9' },
+        _a[testing.TestKey.F10] = { keyCode: keyCodes__namespace.F10, key: 'F10' },
+        _a[testing.TestKey.F11] = { keyCode: keyCodes__namespace.F11, key: 'F11' },
+        _a[testing.TestKey.F12] = { keyCode: keyCodes__namespace.F12, key: 'F12' },
+        _a[testing.TestKey.META] = { keyCode: keyCodes__namespace.META, key: 'Meta' },
         _a);
     /** A `TestElement` implementation for unit tests. */
     var UnitTestElement = /** @class */ (function () {

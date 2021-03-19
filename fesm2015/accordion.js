@@ -11,7 +11,7 @@ import { Subject, Subscription } from 'rxjs';
  * found in the LICENSE file at https://angular.io/license
  */
 /** Used to generate unique ID for each accordion. */
-let nextId = 0;
+let nextId$1 = 0;
 /**
  * Injection token that can be used to reference instances of `CdkAccordion`. It serves
  * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
@@ -28,7 +28,7 @@ class CdkAccordion {
         /** Stream that emits true/false when openAll/closeAll is triggered. */
         this._openCloseAllActions = new Subject();
         /** A readonly id value to use for unique selection coordination. */
-        this.id = `cdk-accordion-${nextId++}`;
+        this.id = `cdk-accordion-${nextId$1++}`;
         this._multi = false;
     }
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
@@ -71,7 +71,7 @@ CdkAccordion.propDecorators = {
  * found in the LICENSE file at https://angular.io/license
  */
 /** Used to generate unique ID for each accordion item. */
-let nextId$1 = 0;
+let nextId = 0;
 const ɵ0 = undefined;
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
@@ -97,7 +97,7 @@ class CdkAccordionItem {
          */
         this.expandedChange = new EventEmitter();
         /** The unique AccordionItem id. */
-        this.id = `cdk-accordion-child-${nextId$1++}`;
+        this.id = `cdk-accordion-child-${nextId++}`;
         this._expanded = false;
         this._disabled = false;
         /** Unregister function for _expansionDispatcher. */

@@ -1,8 +1,11 @@
 import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
-import { InjectionToken, Directive, forwardRef, Input, ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Optional, Inject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { InjectionToken, Directive, forwardRef, Input, Injectable, NgZone, Optional, Inject, ElementRef, Component, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, Output, ViewChild, ViewContainerRef, TemplateRef, IterableDiffers, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
+import * as i1 from '@angular/cdk/platform';
 import { Platform, getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
+import * as i2 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { isDataSource, ArrayDataSource, _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy } from '@angular/cdk/collections';
@@ -344,7 +347,7 @@ class ScrollDispatcher {
         }
     }
 }
-ScrollDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
+ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
 ScrollDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -641,7 +644,7 @@ class ViewportRuler {
             { width: 0, height: 0 };
     }
 }
-ViewportRuler.ɵprov = ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(ɵɵinject(Platform), ɵɵinject(NgZone), ɵɵinject(DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
+ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
 ViewportRuler.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

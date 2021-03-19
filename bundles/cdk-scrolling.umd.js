@@ -1,8 +1,32 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/coercion'), require('@angular/core'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform'), require('@angular/common'), require('@angular/cdk/bidi'), require('@angular/cdk/collections')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/scrolling', ['exports', '@angular/cdk/coercion', '@angular/core', 'rxjs', 'rxjs/operators', '@angular/cdk/platform', '@angular/common', '@angular/cdk/bidi', '@angular/cdk/collections'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.common, global.ng.cdk.bidi, global.ng.cdk.collections));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.scrolling = {}), global.ng.cdk.coercion, global.ng.core, global.rxjs, global.rxjs.operators, global.ng.cdk.platform, global.ng.common, global.ng.cdk.bidi, global.ng.cdk.collections));
 }(this, (function (exports, coercion, i0, rxjs, operators, i1, i2, bidi, collections) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
+    var i2__namespace = /*#__PURE__*/_interopNamespace(i2);
 
     /**
      * @license
@@ -362,7 +386,7 @@
         };
         return ScrollDispatcher;
     }());
-    ScrollDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
+    ScrollDispatcher.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function ScrollDispatcher_Factory() { return new ScrollDispatcher(i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i1__namespace.Platform), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT, 8)); }, token: ScrollDispatcher, providedIn: "root" });
     ScrollDispatcher.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -973,7 +997,7 @@
         };
         return ViewportRuler;
     }());
-    ViewportRuler.ɵprov = i0.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
+    ViewportRuler.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function ViewportRuler_Factory() { return new ViewportRuler(i0__namespace.ɵɵinject(i1__namespace.Platform), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT, 8)); }, token: ViewportRuler, providedIn: "root" });
     ViewportRuler.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

@@ -1,8 +1,31 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/platform')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/layout', ['exports', '@angular/core', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', '@angular/cdk/platform'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}), global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.platform));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.layout = {}), global.ng.core, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.platform));
 }(this, (function (exports, i0, coercion, rxjs, operators, i1) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
 
     /**
      * @license
@@ -55,7 +78,7 @@
         };
         return MediaMatcher;
     }());
-    MediaMatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(i0.ɵɵinject(i1.Platform)); }, token: MediaMatcher, providedIn: "root" });
+    MediaMatcher.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function MediaMatcher_Factory() { return new MediaMatcher(i0__namespace.ɵɵinject(i1__namespace.Platform)); }, token: MediaMatcher, providedIn: "root" });
     MediaMatcher.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -187,7 +210,7 @@
         };
         return BreakpointObserver;
     }());
-    BreakpointObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(i0.ɵɵinject(MediaMatcher), i0.ɵɵinject(i0.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
+    BreakpointObserver.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function BreakpointObserver_Factory() { return new BreakpointObserver(i0__namespace.ɵɵinject(MediaMatcher), i0__namespace.ɵɵinject(i0__namespace.NgZone)); }, token: BreakpointObserver, providedIn: "root" });
     BreakpointObserver.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

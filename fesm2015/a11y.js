@@ -1,9 +1,12 @@
+import * as i2 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, QueryList, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, Inject, QueryList, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import { Subject, Subscription, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
+import * as i1 from '@angular/cdk/platform';
 import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
@@ -241,7 +244,7 @@ class AriaDescriber {
         return element.nodeType === this._document.ELEMENT_NODE;
     }
 }
-AriaDescriber.ɵprov = ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(ɵɵinject(DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
 AriaDescriber.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -752,7 +755,7 @@ class InteractivityChecker {
             ((config === null || config === void 0 ? void 0 : config.ignoreVisibility) || this.isVisible(element));
     }
 }
-InteractivityChecker.ɵprov = ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(ɵɵinject(Platform)); }, token: InteractivityChecker, providedIn: "root" });
+InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
 InteractivityChecker.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -1161,7 +1164,7 @@ class FocusTrapFactory {
         return new FocusTrap(element, this._checker, this._ngZone, this._document, deferCaptureElements);
     }
 }
-FocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+FocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
 FocusTrapFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -1456,7 +1459,7 @@ class FocusTrapManager {
         }
     }
 }
-FocusTrapManager.ɵprov = ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
+FocusTrapManager.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
 FocusTrapManager.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -1490,7 +1493,7 @@ class ConfigurableFocusTrapFactory {
         return new ConfigurableFocusTrap(element, this._checker, this._ngZone, this._document, this._focusTrapManager, this._inertStrategy, configObject);
     }
 }
-ConfigurableFocusTrapFactory.ɵprov = ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(ɵɵinject(InteractivityChecker), ɵɵinject(NgZone), ɵɵinject(FocusTrapManager), ɵɵinject(DOCUMENT), ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
+ConfigurableFocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(FocusTrapManager), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
 ConfigurableFocusTrapFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -1609,7 +1612,7 @@ class LiveAnnouncer {
         return liveEl;
     }
 }
-LiveAnnouncer.ɵprov = ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), ɵɵinject(NgZone), ɵɵinject(DOCUMENT), ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+LiveAnnouncer.ɵprov = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
 LiveAnnouncer.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -2084,7 +2087,7 @@ class FocusMonitor {
         return results;
     }
 }
-FocusMonitor.ɵprov = ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(ɵɵinject(NgZone), ɵɵinject(Platform), ɵɵinject(DOCUMENT, 8), ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
+FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
 FocusMonitor.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -2216,7 +2219,7 @@ class HighContrastModeDetector {
         }
     }
 }
-HighContrastModeDetector.ɵprov = ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(ɵɵinject(Platform), ɵɵinject(DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
+HighContrastModeDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
 HighContrastModeDetector.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

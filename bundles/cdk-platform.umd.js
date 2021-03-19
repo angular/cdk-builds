@@ -1,8 +1,30 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/platform', ['exports', '@angular/core', '@angular/common'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}), global.ng.core, global.ng.common));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.platform = {}), global.ng.core, global.ng.common));
 }(this, (function (exports, i0, common) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
 
     /**
      * @license
@@ -71,7 +93,7 @@
         }
         return Platform;
     }());
-    Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
+    Platform.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0__namespace.ɵɵinject(i0__namespace.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
     Platform.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

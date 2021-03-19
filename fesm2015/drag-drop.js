@@ -1,5 +1,8 @@
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, NgZone, Inject, InjectionToken, Directive, Input, EventEmitter, ElementRef, ChangeDetectorRef, Optional, SkipSelf, Output, TemplateRef, ViewContainerRef, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import * as i1 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
+import * as i2 from '@angular/cdk/scrolling';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceArray, coerceNumberProperty } from '@angular/cdk/coercion';
@@ -1098,8 +1101,8 @@ class DragRef {
             const maxY = boundaryRect.bottom - (previewRect.height - pickupY);
             const minX = boundaryRect.left + pickupX;
             const maxX = boundaryRect.right - (previewRect.width - pickupX);
-            x = clamp(x, minX, maxX);
-            y = clamp(y, minY, maxY);
+            x = clamp$1(x, minX, maxX);
+            y = clamp$1(y, minY, maxY);
         }
         return { x, y };
     }
@@ -1310,7 +1313,7 @@ function getTransform(x, y) {
     return `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
 }
 /** Clamps a value between a minimum and a maximum. */
-function clamp(value, min, max) {
+function clamp$1(value, min, max) {
     return Math.max(min, Math.min(max, value));
 }
 /**
@@ -1367,8 +1370,8 @@ function matchElementSize(target, sourceRect) {
  * @param toIndex Index to which the item should be moved.
  */
 function moveItemInArray(array, fromIndex, toIndex) {
-    const from = clamp$1(fromIndex, array.length - 1);
-    const to = clamp$1(toIndex, array.length - 1);
+    const from = clamp(fromIndex, array.length - 1);
+    const to = clamp(toIndex, array.length - 1);
     if (from === to) {
         return;
     }
@@ -1387,8 +1390,8 @@ function moveItemInArray(array, fromIndex, toIndex) {
  * @param targetIndex Index at which to insert the item.
  */
 function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-    const from = clamp$1(currentIndex, currentArray.length - 1);
-    const to = clamp$1(targetIndex, targetArray.length);
+    const from = clamp(currentIndex, currentArray.length - 1);
+    const to = clamp(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray.splice(from, 1)[0]);
     }
@@ -1403,13 +1406,13 @@ function transferArrayItem(currentArray, targetArray, currentIndex, targetIndex)
  *
  */
 function copyArrayItem(currentArray, targetArray, currentIndex, targetIndex) {
-    const to = clamp$1(targetIndex, targetArray.length);
+    const to = clamp(targetIndex, targetArray.length);
     if (currentArray.length) {
         targetArray.splice(to, 0, currentArray[currentIndex]);
     }
 }
 /** Clamps a number between zero and a maximum. */
-function clamp$1(value, max) {
+function clamp(value, max) {
     return Math.max(0, Math.min(max, value));
 }
 
@@ -2432,7 +2435,7 @@ class DragDropRegistry {
         this._globalListeners.clear();
     }
 }
-DragDropRegistry.ɵprov = ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
+DragDropRegistry.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDropRegistry_Factory() { return new DragDropRegistry(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.DOCUMENT)); }, token: DragDropRegistry, providedIn: "root" });
 DragDropRegistry.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -2479,7 +2482,7 @@ class DragDrop {
         return new DropListRef(element, this._dragDropRegistry, this._document, this._ngZone, this._viewportRuler);
     }
 }
-DragDrop.ɵprov = ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(ɵɵinject(DOCUMENT), ɵɵinject(NgZone), ɵɵinject(ViewportRuler), ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
+DragDrop.ɵprov = i0.ɵɵdefineInjectable({ factory: function DragDrop_Factory() { return new DragDrop(i0.ɵɵinject(i1.DOCUMENT), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.ViewportRuler), i0.ɵɵinject(DragDropRegistry)); }, token: DragDrop, providedIn: "root" });
 DragDrop.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

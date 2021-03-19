@@ -1,8 +1,31 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/clipboard', ['exports', '@angular/common', '@angular/core'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.clipboard = {}), global.ng.common, global.ng.core));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.clipboard = {}), global.ng.common, global.ng.core));
 }(this, (function (exports, i1, i0) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
 
     /**
      * @license
@@ -113,7 +136,7 @@
         };
         return Clipboard;
     }());
-    Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+    Clipboard.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0__namespace.ɵɵinject(i1__namespace.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
     Clipboard.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

@@ -1,8 +1,32 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs'), require('@angular/cdk/keycodes'), require('rxjs/operators'), require('@angular/cdk/coercion'), require('@angular/cdk/platform'), require('@angular/cdk/observers')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/a11y', ['exports', '@angular/common', '@angular/core', 'rxjs', '@angular/cdk/keycodes', 'rxjs/operators', '@angular/cdk/coercion', '@angular/cdk/platform', '@angular/cdk/observers'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}), global.ng.common, global.ng.core, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.observers));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.a11y = {}), global.ng.common, global.ng.core, global.rxjs, global.ng.cdk.keycodes, global.rxjs.operators, global.ng.cdk.coercion, global.ng.cdk.platform, global.ng.cdk.observers));
 }(this, (function (exports, i2, i0, rxjs, keycodes, operators, coercion, i1, observers) { 'use strict';
+
+    function _interopNamespace(e) {
+        if (e && e.__esModule) return e;
+        var n = Object.create(null);
+        if (e) {
+            Object.keys(e).forEach(function (k) {
+                if (k !== 'default') {
+                    var d = Object.getOwnPropertyDescriptor(e, k);
+                    Object.defineProperty(n, k, d.get ? d : {
+                        enumerable: true,
+                        get: function () {
+                            return e[k];
+                        }
+                    });
+                }
+            });
+        }
+        n['default'] = e;
+        return Object.freeze(n);
+    }
+
+    var i2__namespace = /*#__PURE__*/_interopNamespace(i2);
+    var i0__namespace = /*#__PURE__*/_interopNamespace(i0);
+    var i1__namespace = /*#__PURE__*/_interopNamespace(i1);
 
     /**
      * @license
@@ -239,7 +263,7 @@
         };
         return AriaDescriber;
     }());
-    AriaDescriber.ɵprov = i0.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0.ɵɵinject(i2.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
+    AriaDescriber.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function AriaDescriber_Factory() { return new AriaDescriber(i0__namespace.ɵɵinject(i2__namespace.DOCUMENT)); }, token: AriaDescriber, providedIn: "root" });
     AriaDescriber.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1071,7 +1095,7 @@
         };
         return InteractivityChecker;
     }());
-    InteractivityChecker.ɵprov = i0.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0.ɵɵinject(i1.Platform)); }, token: InteractivityChecker, providedIn: "root" });
+    InteractivityChecker.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function InteractivityChecker_Factory() { return new InteractivityChecker(i0__namespace.ɵɵinject(i1__namespace.Platform)); }, token: InteractivityChecker, providedIn: "root" });
     InteractivityChecker.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1493,7 +1517,7 @@
         };
         return FocusTrapFactory;
     }());
-    FocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
+    FocusTrapFactory.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function FocusTrapFactory_Factory() { return new FocusTrapFactory(i0__namespace.ɵɵinject(InteractivityChecker), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT)); }, token: FocusTrapFactory, providedIn: "root" });
     FocusTrapFactory.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1801,7 +1825,7 @@
         };
         return FocusTrapManager;
     }());
-    FocusTrapManager.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
+    FocusTrapManager.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function FocusTrapManager_Factory() { return new FocusTrapManager(); }, token: FocusTrapManager, providedIn: "root" });
     FocusTrapManager.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1837,7 +1861,7 @@
         };
         return ConfigurableFocusTrapFactory;
     }());
-    ConfigurableFocusTrapFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(i0.ɵɵinject(InteractivityChecker), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(FocusTrapManager), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
+    ConfigurableFocusTrapFactory.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function ConfigurableFocusTrapFactory_Factory() { return new ConfigurableFocusTrapFactory(i0__namespace.ɵɵinject(InteractivityChecker), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(FocusTrapManager), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT), i0__namespace.ɵɵinject(FOCUS_TRAP_INERT_STRATEGY, 8)); }, token: ConfigurableFocusTrapFactory, providedIn: "root" });
     ConfigurableFocusTrapFactory.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -1956,7 +1980,7 @@
         };
         return LiveAnnouncer;
     }());
-    LiveAnnouncer.ɵprov = i0.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
+    LiveAnnouncer.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function LiveAnnouncer_Factory() { return new LiveAnnouncer(i0__namespace.ɵɵinject(LIVE_ANNOUNCER_ELEMENT_TOKEN, 8), i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT), i0__namespace.ɵɵinject(LIVE_ANNOUNCER_DEFAULT_OPTIONS, 8)); }, token: LiveAnnouncer, providedIn: "root" });
     LiveAnnouncer.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -2440,7 +2464,7 @@
         };
         return FocusMonitor;
     }());
-    FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
+    FocusMonitor.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0__namespace.ɵɵinject(i0__namespace.NgZone), i0__namespace.ɵɵinject(i1__namespace.Platform), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT, 8), i0__namespace.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
     FocusMonitor.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];
@@ -2575,7 +2599,7 @@
         };
         return HighContrastModeDetector;
     }());
-    HighContrastModeDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
+    HighContrastModeDetector.ɵprov = i0__namespace.ɵɵdefineInjectable({ factory: function HighContrastModeDetector_Factory() { return new HighContrastModeDetector(i0__namespace.ɵɵinject(i1__namespace.Platform), i0__namespace.ɵɵinject(i2__namespace.DOCUMENT)); }, token: HighContrastModeDetector, providedIn: "root" });
     HighContrastModeDetector.decorators = [
         { type: i0.Injectable, args: [{ providedIn: 'root' },] }
     ];

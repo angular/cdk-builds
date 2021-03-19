@@ -1,4 +1,5 @@
-import { ɵɵdefineInjectable, ɵɵinject, PLATFORM_ID, Injectable, Inject, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, NgModule } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 /**
@@ -67,7 +68,7 @@ class Platform {
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
 }
-Platform.ɵprov = ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(ɵɵinject(PLATFORM_ID)); }, token: Platform, providedIn: "root" });
+Platform.ɵprov = i0.ɵɵdefineInjectable({ factory: function Platform_Factory() { return new Platform(i0.ɵɵinject(i0.PLATFORM_ID)); }, token: Platform, providedIn: "root" });
 Platform.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

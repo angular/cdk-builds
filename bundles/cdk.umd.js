@@ -1,7 +1,7 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) :
 	typeof define === 'function' && define.amd ? define('@angular/cdk', ['exports', '@angular/core'], factory) :
-	(global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = {}), global.ng.core));
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = {}), global.ng.core));
 }(this, (function (exports, core) { 'use strict';
 
 	/**
@@ -12,7 +12,7 @@
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	/** Current version of the Angular Component Development Kit. */
-	var VERSION = new core.Version('12.0.0-next.3-sha-efd17f5b6');
+	var VERSION = new core.Version('12.0.0-next.3-sha-e4974b82f');
 
 	/**
 	 * @license

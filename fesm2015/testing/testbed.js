@@ -3,7 +3,7 @@ import { TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus,
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import { BACKSPACE, TAB, ENTER, SHIFT, CONTROL, ALT, ESCAPE, PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW, INSERT, DELETE, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, META } from '@angular/cdk/keycodes';
+import * as keyCodes from '@angular/cdk/keycodes';
 
 /**
  * @license
@@ -385,36 +385,36 @@ function clearElement(element) {
  */
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
-    [TestKey.BACKSPACE]: { keyCode: BACKSPACE, key: 'Backspace' },
-    [TestKey.TAB]: { keyCode: TAB, key: 'Tab' },
-    [TestKey.ENTER]: { keyCode: ENTER, key: 'Enter' },
-    [TestKey.SHIFT]: { keyCode: SHIFT, key: 'Shift' },
-    [TestKey.CONTROL]: { keyCode: CONTROL, key: 'Control' },
-    [TestKey.ALT]: { keyCode: ALT, key: 'Alt' },
-    [TestKey.ESCAPE]: { keyCode: ESCAPE, key: 'Escape' },
-    [TestKey.PAGE_UP]: { keyCode: PAGE_UP, key: 'PageUp' },
-    [TestKey.PAGE_DOWN]: { keyCode: PAGE_DOWN, key: 'PageDown' },
-    [TestKey.END]: { keyCode: END, key: 'End' },
-    [TestKey.HOME]: { keyCode: HOME, key: 'Home' },
-    [TestKey.LEFT_ARROW]: { keyCode: LEFT_ARROW, key: 'ArrowLeft' },
-    [TestKey.UP_ARROW]: { keyCode: UP_ARROW, key: 'ArrowUp' },
-    [TestKey.RIGHT_ARROW]: { keyCode: RIGHT_ARROW, key: 'ArrowRight' },
-    [TestKey.DOWN_ARROW]: { keyCode: DOWN_ARROW, key: 'ArrowDown' },
-    [TestKey.INSERT]: { keyCode: INSERT, key: 'Insert' },
-    [TestKey.DELETE]: { keyCode: DELETE, key: 'Delete' },
-    [TestKey.F1]: { keyCode: F1, key: 'F1' },
-    [TestKey.F2]: { keyCode: F2, key: 'F2' },
-    [TestKey.F3]: { keyCode: F3, key: 'F3' },
-    [TestKey.F4]: { keyCode: F4, key: 'F4' },
-    [TestKey.F5]: { keyCode: F5, key: 'F5' },
-    [TestKey.F6]: { keyCode: F6, key: 'F6' },
-    [TestKey.F7]: { keyCode: F7, key: 'F7' },
-    [TestKey.F8]: { keyCode: F8, key: 'F8' },
-    [TestKey.F9]: { keyCode: F9, key: 'F9' },
-    [TestKey.F10]: { keyCode: F10, key: 'F10' },
-    [TestKey.F11]: { keyCode: F11, key: 'F11' },
-    [TestKey.F12]: { keyCode: F12, key: 'F12' },
-    [TestKey.META]: { keyCode: META, key: 'Meta' }
+    [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
+    [TestKey.TAB]: { keyCode: keyCodes.TAB, key: 'Tab' },
+    [TestKey.ENTER]: { keyCode: keyCodes.ENTER, key: 'Enter' },
+    [TestKey.SHIFT]: { keyCode: keyCodes.SHIFT, key: 'Shift' },
+    [TestKey.CONTROL]: { keyCode: keyCodes.CONTROL, key: 'Control' },
+    [TestKey.ALT]: { keyCode: keyCodes.ALT, key: 'Alt' },
+    [TestKey.ESCAPE]: { keyCode: keyCodes.ESCAPE, key: 'Escape' },
+    [TestKey.PAGE_UP]: { keyCode: keyCodes.PAGE_UP, key: 'PageUp' },
+    [TestKey.PAGE_DOWN]: { keyCode: keyCodes.PAGE_DOWN, key: 'PageDown' },
+    [TestKey.END]: { keyCode: keyCodes.END, key: 'End' },
+    [TestKey.HOME]: { keyCode: keyCodes.HOME, key: 'Home' },
+    [TestKey.LEFT_ARROW]: { keyCode: keyCodes.LEFT_ARROW, key: 'ArrowLeft' },
+    [TestKey.UP_ARROW]: { keyCode: keyCodes.UP_ARROW, key: 'ArrowUp' },
+    [TestKey.RIGHT_ARROW]: { keyCode: keyCodes.RIGHT_ARROW, key: 'ArrowRight' },
+    [TestKey.DOWN_ARROW]: { keyCode: keyCodes.DOWN_ARROW, key: 'ArrowDown' },
+    [TestKey.INSERT]: { keyCode: keyCodes.INSERT, key: 'Insert' },
+    [TestKey.DELETE]: { keyCode: keyCodes.DELETE, key: 'Delete' },
+    [TestKey.F1]: { keyCode: keyCodes.F1, key: 'F1' },
+    [TestKey.F2]: { keyCode: keyCodes.F2, key: 'F2' },
+    [TestKey.F3]: { keyCode: keyCodes.F3, key: 'F3' },
+    [TestKey.F4]: { keyCode: keyCodes.F4, key: 'F4' },
+    [TestKey.F5]: { keyCode: keyCodes.F5, key: 'F5' },
+    [TestKey.F6]: { keyCode: keyCodes.F6, key: 'F6' },
+    [TestKey.F7]: { keyCode: keyCodes.F7, key: 'F7' },
+    [TestKey.F8]: { keyCode: keyCodes.F8, key: 'F8' },
+    [TestKey.F9]: { keyCode: keyCodes.F9, key: 'F9' },
+    [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10' },
+    [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11' },
+    [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12' },
+    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta' }
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {

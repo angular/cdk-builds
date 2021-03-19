@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/testing'), require('protractor')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing/protractor', ['exports', '@angular/cdk/testing', 'protractor'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.ng.cdk.testing, global.protractor));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.protractor = {}), global.ng.cdk.testing, global.protractor));
 }(this, (function (exports, testing, protractor) { 'use strict';
 
     /*! *****************************************************************************

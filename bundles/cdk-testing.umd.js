@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/testing', ['exports', 'rxjs'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {}), global.rxjs));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = {}), global.rxjs));
 }(this, (function (exports, rxjs) { 'use strict';
 
     /*! *****************************************************************************
@@ -1132,6 +1132,14 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /** An enum of non-text keys that can be used with the `sendKeys` method. */
+    // NOTE: This is a separate enum from `@angular/cdk/keycodes` because we don't necessarily want to
+    // support every possible keyCode. We also can't rely on Protractor's `Key` because we don't want a
+    // dependency on any particular testing framework here. Instead we'll just maintain this supported
+    // list of keys and let individual concrete `HarnessEnvironment` classes map them to whatever key
+    // representation is used in its respective testing framework.
+    // tslint:disable-next-line:prefer-const-enum Seems like this causes some issues with System.js
+    exports.TestKey = void 0;
     (function (TestKey) {
         TestKey[TestKey["BACKSPACE"] = 0] = "BACKSPACE";
         TestKey[TestKey["TAB"] = 1] = "TAB";

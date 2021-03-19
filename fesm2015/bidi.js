@@ -1,4 +1,5 @@
-import { InjectionToken, inject, EventEmitter, ɵɵdefineInjectable, ɵɵinject, Injectable, Optional, Inject, Directive, Output, Input, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { InjectionToken, inject, EventEmitter, Injectable, Optional, Inject, Directive, Output, Input, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -64,7 +65,7 @@ class Directionality {
         this.change.complete();
     }
 }
-Directionality.ɵprov = ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
+Directionality.ɵprov = i0.ɵɵdefineInjectable({ factory: function Directionality_Factory() { return new Directionality(i0.ɵɵinject(DIR_DOCUMENT, 8)); }, token: Directionality, providedIn: "root" });
 Directionality.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

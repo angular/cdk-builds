@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/cdk/collections'), require('@angular/cdk/coercion'), require('rxjs')) :
     typeof define === 'function' && define.amd ? define('@angular/cdk/accordion', ['exports', '@angular/core', '@angular/cdk/collections', '@angular/cdk/coercion', 'rxjs'], factory) :
-    (global = global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}), global.ng.core, global.ng.cdk.collections, global.ng.cdk.coercion, global.rxjs));
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.accordion = {}), global.ng.core, global.ng.cdk.collections, global.ng.cdk.coercion, global.rxjs));
 }(this, (function (exports, core, collections, coercion, rxjs) { 'use strict';
 
     /**
@@ -12,7 +12,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /** Used to generate unique ID for each accordion. */
-    var nextId = 0;
+    var nextId$1 = 0;
     /**
      * Injection token that can be used to reference instances of `CdkAccordion`. It serves
      * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
@@ -29,7 +29,7 @@
             /** Stream that emits true/false when openAll/closeAll is triggered. */
             this._openCloseAllActions = new rxjs.Subject();
             /** A readonly id value to use for unique selection coordination. */
-            this.id = "cdk-accordion-" + nextId++;
+            this.id = "cdk-accordion-" + nextId$1++;
             this._multi = false;
         }
         Object.defineProperty(CdkAccordion.prototype, "multi", {
@@ -77,7 +77,7 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /** Used to generate unique ID for each accordion item. */
-    var nextId$1 = 0;
+    var nextId = 0;
     var ɵ0 = undefined;
     /**
      * An basic directive expected to be extended and decorated as a component.  Sets up all
@@ -104,7 +104,7 @@
              */
             this.expandedChange = new core.EventEmitter();
             /** The unique AccordionItem id. */
-            this.id = "cdk-accordion-child-" + nextId$1++;
+            this.id = "cdk-accordion-child-" + nextId++;
             this._expanded = false;
             this._disabled = false;
             /** Unregister function for _expansionDispatcher. */

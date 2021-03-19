@@ -1,8 +1,12 @@
+import * as i1 from '@angular/cdk/scrolling';
 import { ScrollDispatcher, ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scrolling';
+import * as i1$1 from '@angular/common';
 import { DOCUMENT, Location } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, NgZone, Injectable, Inject, Optional, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, NgZone, Inject, Optional, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
+import * as i2 from '@angular/cdk/platform';
 import { supportsScrollBehavior, Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -316,7 +320,7 @@ class ScrollStrategyOptions {
         this._document = document;
     }
 }
-ScrollStrategyOptions.ɵprov = ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(ɵɵinject(ScrollDispatcher), ɵɵinject(ViewportRuler), ɵɵinject(NgZone), ɵɵinject(DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
+ScrollStrategyOptions.ɵprov = i0.ɵɵdefineInjectable({ factory: function ScrollStrategyOptions_Factory() { return new ScrollStrategyOptions(i0.ɵɵinject(i1.ScrollDispatcher), i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1$1.DOCUMENT)); }, token: ScrollStrategyOptions, providedIn: "root" });
 ScrollStrategyOptions.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -510,7 +514,7 @@ class BaseOverlayDispatcher {
         }
     }
 }
-BaseOverlayDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function BaseOverlayDispatcher_Factory() { return new BaseOverlayDispatcher(ɵɵinject(DOCUMENT)); }, token: BaseOverlayDispatcher, providedIn: "root" });
+BaseOverlayDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function BaseOverlayDispatcher_Factory() { return new BaseOverlayDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: BaseOverlayDispatcher, providedIn: "root" });
 BaseOverlayDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -567,7 +571,7 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
         }
     }
 }
-OverlayKeyboardDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(ɵɵinject(DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
+OverlayKeyboardDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayKeyboardDispatcher_Factory() { return new OverlayKeyboardDispatcher(i0.ɵɵinject(i1$1.DOCUMENT)); }, token: OverlayKeyboardDispatcher, providedIn: "root" });
 OverlayKeyboardDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -655,7 +659,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         }
     }
 }
-OverlayOutsideClickDispatcher.ɵprov = ɵɵdefineInjectable({ factory: function OverlayOutsideClickDispatcher_Factory() { return new OverlayOutsideClickDispatcher(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayOutsideClickDispatcher, providedIn: "root" });
+OverlayOutsideClickDispatcher.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayOutsideClickDispatcher_Factory() { return new OverlayOutsideClickDispatcher(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayOutsideClickDispatcher, providedIn: "root" });
 OverlayOutsideClickDispatcher.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -737,7 +741,7 @@ class OverlayContainer {
         this._containerElement = container;
     }
 }
-OverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: OverlayContainer, providedIn: "root" });
+OverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayContainer_Factory() { return new OverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: OverlayContainer, providedIn: "root" });
 OverlayContainer.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -2490,7 +2494,7 @@ class OverlayPositionBuilder {
         return new FlexibleConnectedPositionStrategy(origin, this._viewportRuler, this._document, this._platform, this._overlayContainer);
     }
 }
-OverlayPositionBuilder.ɵprov = ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(ɵɵinject(ViewportRuler), ɵɵinject(DOCUMENT), ɵɵinject(Platform), ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
+OverlayPositionBuilder.ɵprov = i0.ɵɵdefineInjectable({ factory: function OverlayPositionBuilder_Factory() { return new OverlayPositionBuilder(i0.ɵɵinject(i1.ViewportRuler), i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform), i0.ɵɵinject(OverlayContainer)); }, token: OverlayPositionBuilder, providedIn: "root" });
 OverlayPositionBuilder.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -3051,7 +3055,7 @@ class FullscreenOverlayContainer extends OverlayContainer {
             null;
     }
 }
-FullscreenOverlayContainer.ɵprov = ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(ɵɵinject(DOCUMENT), ɵɵinject(Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
+FullscreenOverlayContainer.ɵprov = i0.ɵɵdefineInjectable({ factory: function FullscreenOverlayContainer_Factory() { return new FullscreenOverlayContainer(i0.ɵɵinject(i1$1.DOCUMENT), i0.ɵɵinject(i2.Platform)); }, token: FullscreenOverlayContainer, providedIn: "root" });
 FullscreenOverlayContainer.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

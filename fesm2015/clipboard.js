@@ -1,5 +1,7 @@
+import * as i1 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
-import { ɵɵdefineInjectable, ɵɵinject, Injectable, Inject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, Inject, InjectionToken, EventEmitter, Directive, NgZone, Optional, Input, Output, NgModule } from '@angular/core';
 
 /**
  * @license
@@ -108,7 +110,7 @@ class Clipboard {
         return new PendingCopy(text, this._document);
     }
 }
-Clipboard.ɵprov = ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(ɵɵinject(DOCUMENT)); }, token: Clipboard, providedIn: "root" });
+Clipboard.ɵprov = i0.ɵɵdefineInjectable({ factory: function Clipboard_Factory() { return new Clipboard(i0.ɵɵinject(i1.DOCUMENT)); }, token: Clipboard, providedIn: "root" });
 Clipboard.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];

@@ -1,5 +1,6 @@
 import { coerceElement, coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
+import * as i0 from '@angular/core';
+import { Injectable, EventEmitter, Directive, ElementRef, NgZone, Output, Input, NgModule } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -19,7 +20,7 @@ class MutationObserverFactory {
         return typeof MutationObserver === 'undefined' ? null : new MutationObserver(callback);
     }
 }
-MutationObserverFactory.ɵprov = ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
+MutationObserverFactory.ɵprov = i0.ɵɵdefineInjectable({ factory: function MutationObserverFactory_Factory() { return new MutationObserverFactory(); }, token: MutationObserverFactory, providedIn: "root" });
 MutationObserverFactory.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
@@ -90,7 +91,7 @@ class ContentObserver {
         }
     }
 }
-ContentObserver.ɵprov = ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
+ContentObserver.ɵprov = i0.ɵɵdefineInjectable({ factory: function ContentObserver_Factory() { return new ContentObserver(i0.ɵɵinject(MutationObserverFactory)); }, token: ContentObserver, providedIn: "root" });
 ContentObserver.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
