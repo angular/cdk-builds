@@ -1657,6 +1657,16 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    /** The injection token used to specify the inert strategy. */
+    var FOCUS_TRAP_INERT_STRATEGY = new i0.InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
     /** IE 11 compatible closest implementation that is able to start from non-Element Nodes. */
     function closest(element, selector) {
         if (!(element instanceof Node)) {
@@ -1755,38 +1765,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    /**
-     * Configuration for creating a ConfigurableFocusTrap.
-     */
-    var ConfigurableFocusTrapConfig = /** @class */ (function () {
-        function ConfigurableFocusTrapConfig() {
-            /**
-             * Whether to defer the creation of FocusTrap elements to be
-             * done manually by the user. Default is to create them
-             * automatically.
-             */
-            this.defer = false;
-        }
-        return ConfigurableFocusTrapConfig;
-    }());
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /** The injection token used to specify the inert strategy. */
-    var FOCUS_TRAP_INERT_STRATEGY = new i0.InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
-
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /** Injectable that ensures only the most recently enabled FocusTrap is active. */
     var FocusTrapManager = /** @class */ (function () {
         function FocusTrapManager() {
@@ -1848,11 +1826,10 @@
             this._inertStrategy = _inertStrategy || new EventListenerFocusTrapInertStrategy();
         }
         ConfigurableFocusTrapFactory.prototype.create = function (element, config) {
-            if (config === void 0) { config = new ConfigurableFocusTrapConfig(); }
+            if (config === void 0) { config = { defer: false }; }
             var configObject;
             if (typeof config === 'boolean') {
-                configObject = new ConfigurableFocusTrapConfig();
-                configObject.defer = config;
+                configObject = { defer: config };
             }
             else {
                 configObject = config;
@@ -2674,7 +2651,6 @@
     exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
     exports.isFakeTouchstartFromScreenReader = isFakeTouchstartFromScreenReader;
     exports.ɵangular_material_src_cdk_a11y_a11y_a = FocusTrapManager;
-    exports.ɵangular_material_src_cdk_a11y_a11y_b = ConfigurableFocusTrapConfig;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
