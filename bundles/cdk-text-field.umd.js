@@ -206,6 +206,16 @@
             enumerable: false,
             configurable: true
         });
+        Object.defineProperty(CdkTextareaAutosize.prototype, "placeholder", {
+            get: function () { return this._textareaElement.placeholder; },
+            set: function (value) {
+                this._cachedPlaceholderHeight = undefined;
+                this._textareaElement.placeholder = value;
+                this._cacheTextareaPlaceholderHeight();
+            },
+            enumerable: false,
+            configurable: true
+        });
         /** Sets the minimum height of the textarea as determined by minRows. */
         CdkTextareaAutosize.prototype._setMinHeight = function () {
             var minHeight = this.minRows && this._cachedLineHeight ?
@@ -277,6 +287,25 @@
             this._setMinHeight();
             this._setMaxHeight();
         };
+        CdkTextareaAutosize.prototype._measureScrollHeight = function () {
+            // Reset the textarea height to auto in order to shrink back to its default size.
+            // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
+            this._textareaElement.classList.add(this._measuringClass);
+            // The measuring class includes a 2px padding to workaround an issue with Chrome,
+            // so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
+            var scrollHeight = this._textareaElement.scrollHeight - 4;
+            this._textareaElement.classList.remove(this._measuringClass);
+            return scrollHeight;
+        };
+        CdkTextareaAutosize.prototype._cacheTextareaPlaceholderHeight = function () {
+            if (this._cachedPlaceholderHeight) {
+                return;
+            }
+            var value = this._textareaElement.value;
+            this._textareaElement.value = this._textareaElement.placeholder;
+            this._cachedPlaceholderHeight = this._measureScrollHeight();
+            this._textareaElement.value = value;
+        };
         CdkTextareaAutosize.prototype.ngDoCheck = function () {
             if (this._platform.isBrowser) {
                 this.resizeToFitContent();
@@ -295,6 +324,7 @@
                 return;
             }
             this._cacheTextareaLineHeight();
+            this._cacheTextareaPlaceholderHeight();
             // If we haven't determined the line-height yet, we know we're still hidden and there's no point
             // in checking the height of the textarea.
             if (!this._cachedLineHeight) {
@@ -306,21 +336,12 @@
             if (!force && this._minRows === this._previousMinRows && value === this._previousValue) {
                 return;
             }
-            var placeholderText = textarea.placeholder;
-            // Reset the textarea height to auto in order to shrink back to its default size.
-            // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
-            // Long placeholders that are wider than the textarea width may lead to a bigger scrollHeight
-            // value. To ensure that the scrollHeight is not bigger than the content, the placeholders
-            // need to be removed temporarily.
-            textarea.classList.add(this._measuringClass);
-            textarea.placeholder = '';
+            var scrollHeight = this._measureScrollHeight();
             // The measuring class includes a 2px padding to workaround an issue with Chrome,
             // so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
-            var height = textarea.scrollHeight - 4;
+            var height = Math.max(scrollHeight, this._cachedPlaceholderHeight || 0);
             // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
             textarea.style.height = height + "px";
-            textarea.classList.remove(this._measuringClass);
-            textarea.placeholder = placeholderText;
             this._ngZone.runOutsideAngular(function () {
                 if (typeof requestAnimationFrame !== 'undefined') {
                     requestAnimationFrame(function () { return _this._scrollToCaretPosition(textarea); });
@@ -400,6 +421,7 @@
         minRows: [{ type: i0.Input, args: ['cdkAutosizeMinRows',] }],
         maxRows: [{ type: i0.Input, args: ['cdkAutosizeMaxRows',] }],
         enabled: [{ type: i0.Input, args: ['cdkTextareaAutosize',] }],
+        placeholder: [{ type: i0.Input }],
         _noopInputHandler: [{ type: i0.HostListener, args: ['input',] }]
     };
 
