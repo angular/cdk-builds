@@ -204,8 +204,9 @@
     /** Check whether the browser supports scroll behaviors. */
     function supportsScrollBehavior() {
         if (scrollBehaviorSupported == null) {
-            // If we're not in the browser, it can't be supported.
-            if (typeof document !== 'object' || !document) {
+            // If we're not in the browser, it can't be supported. Also check for `Element`, because
+            // some projects stub out the global `document` during SSR which can throw us off.
+            if (typeof document !== 'object' || !document || typeof Element !== 'function' || !Element) {
                 scrollBehaviorSupported = false;
                 return scrollBehaviorSupported;
             }
