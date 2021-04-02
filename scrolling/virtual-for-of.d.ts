@@ -69,7 +69,7 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     get cdkVirtualForTemplateCacheSize(): number;
     set cdkVirtualForTemplateCacheSize(size: number);
     /** Emits whenever the data in the current DataSource changes. */
-    dataStream: Observable<T[] | ReadonlyArray<T>>;
+    dataStream: Observable<readonly T[]>;
     /** The differ used to calculate changes to the data. */
     private _differ;
     /** The most recent data emitted from the DataSource. */

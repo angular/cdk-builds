@@ -189,7 +189,7 @@ export declare class DropListRef<T = any> {
      */
     withScrollableParents(elements: HTMLElement[]): this;
     /** Gets the scrollable parents that are registered with this drop container. */
-    getScrollableParents(): ReadonlyArray<HTMLElement>;
+    getScrollableParents(): readonly HTMLElement[];
     /**
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.

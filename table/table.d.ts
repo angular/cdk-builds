@@ -30,7 +30,7 @@ export interface RowOutlet {
  * Union of the types that can be set as the data source for a `CdkTable`.
  * @docs-private
  */
-declare type CdkTableDataSourceInput<T> = DataSource<T> | Observable<ReadonlyArray<T> | T[]> | ReadonlyArray<T> | T[];
+declare type CdkTableDataSourceInput<T> = readonly T[] | DataSource<T> | Observable<readonly T[]>;
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert data rows.
  * @docs-private
@@ -120,7 +120,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     protected readonly _stickyPositioningListener: StickyPositioningListener;
     private _document;
     /** Latest data provided by the data source. */
-    protected _data: T[] | ReadonlyArray<T>;
+    protected _data: readonly T[];
     /** Subject that emits when the component has been destroyed. */
     private _onDestroy;
     /** List of the rendered rows as identified by their `RenderRow` object. */

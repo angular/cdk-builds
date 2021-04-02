@@ -24,7 +24,7 @@ export declare class ParentPositionTracker {
     /** Clears the cached positions. */
     clear(): void;
     /** Caches the positions. Should be called at the beginning of a drag sequence. */
-    cache(elements: HTMLElement[] | ReadonlyArray<HTMLElement>): void;
+    cache(elements: readonly HTMLElement[]): void;
     /** Handles scrolling while a drag is taking place. */
     handleScroll(event: Event): ScrollPosition | null;
 }

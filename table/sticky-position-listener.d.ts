@@ -11,7 +11,7 @@ export declare const STICKY_POSITIONING_LISTENER: InjectionToken<StickyPositioni
 export declare type StickySize = number | null | undefined;
 export declare type StickyOffset = number | null | undefined;
 export interface StickyUpdate {
-    elements?: ReadonlyArray<HTMLElement[] | undefined>;
+    elements?: readonly (HTMLElement[] | undefined)[];
     offsets?: StickyOffset[];
     sizes: StickySize[];
 }

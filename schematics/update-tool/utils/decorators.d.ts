@@ -18,5 +18,5 @@ export interface NgDecorator {
  * Gets all decorators which are imported from an Angular package
  * (e.g. "@angular/core") from a list of decorators.
  */
-export declare function getAngularDecorators(typeChecker: ts.TypeChecker, decorators: ReadonlyArray<ts.Decorator>): NgDecorator[];
+export declare function getAngularDecorators(typeChecker: ts.TypeChecker, decorators: readonly ts.Decorator[]): readonly NgDecorator[];
 export declare function getCallDecoratorImport(typeChecker: ts.TypeChecker, decorator: ts.Decorator): Import | null;
