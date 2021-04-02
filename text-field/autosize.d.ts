@@ -36,12 +36,17 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     /** Whether autosizing is enabled or not */
     get enabled(): boolean;
     set enabled(value: boolean);
+    get placeholder(): string;
+    set placeholder(value: string);
     /** Cached height of a textarea with a single row. */
     private _cachedLineHeight;
+    /** Cached height of a textarea with only the placeholder. */
+    private _cachedPlaceholderHeight?;
     /** Used to reference correct document/window */
     protected _document?: Document;
     /** Class that should be applied to the textarea while it's being measured. */
     private _measuringClass;
+    private _isViewInited;
     constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone, 
     /** @breaking-change 11.0.0 make document required */
     document?: any);
@@ -59,6 +64,8 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      * textarea does not ever change.
      */
     private _cacheTextareaLineHeight;
+    private _measureScrollHeight;
+    private _cacheTextareaPlaceholderHeight;
     ngDoCheck(): void;
     /**
      * Resize the textarea to fit its content.
