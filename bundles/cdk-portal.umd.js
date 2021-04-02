@@ -601,6 +601,7 @@
                 var anchorNode = _this._document.createComment('dom-portal');
                 element.parentNode.insertBefore(anchorNode, element);
                 _this.outletElement.appendChild(element);
+                _this._attachedPortal = portal;
                 _super.prototype.setDisposeFn.call(_this, function () {
                     // We can't use `replaceWith` here because IE doesn't support it.
                     if (anchorNode.parentNode) {
@@ -640,6 +641,7 @@
             // At this point the component has been instantiated, so we move it to the location in the DOM
             // where we want it to be rendered.
             this.outletElement.appendChild(this._getComponentRootNode(componentRef));
+            this._attachedPortal = portal;
             return componentRef;
         };
         /**
@@ -666,6 +668,7 @@
                     viewContainer.remove(index);
                 }
             }));
+            this._attachedPortal = portal;
             // TODO(jelbourn): Return locals from view.
             return viewRef;
         };
@@ -782,6 +785,7 @@
                 portal.setAttachedHost(_this);
                 element.parentNode.insertBefore(anchorNode, element);
                 _this._getRootNode().appendChild(element);
+                _this._attachedPortal = portal;
                 _super.prototype.setDisposeFn.call(_this, function () {
                     if (anchorNode.parentNode) {
                         anchorNode.parentNode.replaceChild(element, anchorNode);

@@ -275,6 +275,7 @@ class DomPortalOutlet extends BasePortalOutlet {
             const anchorNode = this._document.createComment('dom-portal');
             element.parentNode.insertBefore(anchorNode, element);
             this.outletElement.appendChild(element);
+            this._attachedPortal = portal;
             super.setDisposeFn(() => {
                 // We can't use `replaceWith` here because IE doesn't support it.
                 if (anchorNode.parentNode) {
@@ -312,6 +313,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         // At this point the component has been instantiated, so we move it to the location in the DOM
         // where we want it to be rendered.
         this.outletElement.appendChild(this._getComponentRootNode(componentRef));
+        this._attachedPortal = portal;
         return componentRef;
     }
     /**
@@ -337,6 +339,7 @@ class DomPortalOutlet extends BasePortalOutlet {
                 viewContainer.remove(index);
             }
         }));
+        this._attachedPortal = portal;
         // TODO(jelbourn): Return locals from view.
         return viewRef;
     }
@@ -446,6 +449,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
             portal.setAttachedHost(this);
             element.parentNode.insertBefore(anchorNode, element);
             this._getRootNode().appendChild(element);
+            this._attachedPortal = portal;
             super.setDisposeFn(() => {
                 if (anchorNode.parentNode) {
                     anchorNode.parentNode.replaceChild(element, anchorNode);
