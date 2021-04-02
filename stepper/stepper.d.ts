@@ -167,8 +167,6 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     _getAnimationDirection(index: number): StepContentPositionState;
     /** Returns the type of icon to be displayed. */
     _getIndicatorType(index: number, state?: StepState): StepState;
-    /** Updates the stepper orientation. */
-    protected _updateOrientation(value: StepperOrientation): void;
     private _getDefaultIndicatorLogic;
     private _getGuidelineLogic;
     private _isCurrentStep;

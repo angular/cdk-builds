@@ -235,11 +235,14 @@ class CdkStepper {
     set selected(step) {
         this.selectedIndex = (step && this.steps) ? this.steps.toArray().indexOf(step) : -1;
     }
-    // Note that this isn't an `Input` so it doesn't bleed into the Material stepper.
     /** Orientation of the stepper. */
     get orientation() { return this._orientation; }
     set orientation(value) {
-        this._updateOrientation(value);
+        // This is a protected method so that `MatSteppter` can hook into it.
+        this._orientation = value;
+        if (this._keyManager) {
+            this._keyManager.withVerticalOrientation(value === 'vertical');
+        }
     }
     ngAfterContentInit() {
         this._steps.changes
@@ -322,14 +325,6 @@ class CdkStepper {
         const isCurrentStep = this._isCurrentStep(index);
         return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
             this._getGuidelineLogic(step, isCurrentStep, state);
-    }
-    /** Updates the stepper orientation. */
-    _updateOrientation(value) {
-        // This is a protected method so that `MatSteppter` can hook into it.
-        this._orientation = value;
-        if (this._keyManager) {
-            this._keyManager.withVerticalOrientation(value === 'vertical');
-        }
     }
     _getDefaultIndicatorLogic(step, isCurrentStep) {
         if (step._showError && step.hasError && !isCurrentStep) {
@@ -438,7 +433,8 @@ CdkStepper.propDecorators = {
     linear: [{ type: Input }],
     selectedIndex: [{ type: Input }],
     selected: [{ type: Input }],
-    selectionChange: [{ type: Output }]
+    selectionChange: [{ type: Output }],
+    orientation: [{ type: Input }]
 };
 
 /**

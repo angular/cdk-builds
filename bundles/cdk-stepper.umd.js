@@ -267,11 +267,14 @@
             configurable: true
         });
         Object.defineProperty(CdkStepper.prototype, "orientation", {
-            // Note that this isn't an `Input` so it doesn't bleed into the Material stepper.
             /** Orientation of the stepper. */
             get: function () { return this._orientation; },
             set: function (value) {
-                this._updateOrientation(value);
+                // This is a protected method so that `MatSteppter` can hook into it.
+                this._orientation = value;
+                if (this._keyManager) {
+                    this._keyManager.withVerticalOrientation(value === 'vertical');
+                }
             },
             enumerable: false,
             configurable: true
@@ -360,14 +363,6 @@
             var isCurrentStep = this._isCurrentStep(index);
             return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
                 this._getGuidelineLogic(step, isCurrentStep, state);
-        };
-        /** Updates the stepper orientation. */
-        CdkStepper.prototype._updateOrientation = function (value) {
-            // This is a protected method so that `MatSteppter` can hook into it.
-            this._orientation = value;
-            if (this._keyManager) {
-                this._keyManager.withVerticalOrientation(value === 'vertical');
-            }
         };
         CdkStepper.prototype._getDefaultIndicatorLogic = function (step, isCurrentStep) {
             if (step._showError && step.hasError && !isCurrentStep) {
@@ -478,7 +473,8 @@
         linear: [{ type: core.Input }],
         selectedIndex: [{ type: core.Input }],
         selected: [{ type: core.Input }],
-        selectionChange: [{ type: core.Output }]
+        selectionChange: [{ type: core.Output }],
+        orientation: [{ type: core.Input }]
     };
 
     /**
