@@ -211,6 +211,7 @@ export declare class DragRef<T = any> {
     ended: Subject<{
         source: DragRef;
         distance: Point;
+        dropPoint: Point;
     }>;
     /** Emits when the user has moved the item into a new container. */
     entered: Subject<{
@@ -231,6 +232,7 @@ export declare class DragRef<T = any> {
         container: DropListRef;
         previousContainer: DropListRef;
         distance: Point;
+        dropPoint: Point;
         isPointerOverContainer: boolean;
     }>;
     /**

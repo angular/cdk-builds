@@ -777,11 +777,13 @@
                 // the user starts dragging the item, its position will be calculated relatively
                 // to the new passive transform.
                 this._passiveTransform.x = this._activeTransform.x;
+                var pointerPosition_1 = this._getPointerPositionOnPage(event);
                 this._passiveTransform.y = this._activeTransform.y;
                 this._ngZone.run(function () {
                     _this.ended.next({
                         source: _this,
-                        distance: _this._getDragDistance(_this._getPointerPositionOnPage(event))
+                        distance: _this._getDragDistance(pointerPosition_1),
+                        dropPoint: pointerPosition_1
                     });
                 });
                 this._cleanupCachedDimensions();
@@ -906,9 +908,9 @@
                 var container = _this._dropContainer;
                 var currentIndex = container.getItemIndex(_this);
                 var pointerPosition = _this._getPointerPositionOnPage(event);
-                var distance = _this._getDragDistance(_this._getPointerPositionOnPage(event));
+                var distance = _this._getDragDistance(pointerPosition);
                 var isPointerOverContainer = container._isOverContainer(pointerPosition.x, pointerPosition.y);
-                _this.ended.next({ source: _this, distance: distance });
+                _this.ended.next({ source: _this, distance: distance, dropPoint: pointerPosition });
                 _this.dropped.next({
                     item: _this,
                     currentIndex: currentIndex,
@@ -916,9 +918,10 @@
                     container: container,
                     previousContainer: _this._initialContainer,
                     isPointerOverContainer: isPointerOverContainer,
-                    distance: distance
+                    distance: distance,
+                    dropPoint: pointerPosition
                 });
-                container.drop(_this, currentIndex, _this._initialIndex, _this._initialContainer, isPointerOverContainer, distance);
+                container.drop(_this, currentIndex, _this._initialIndex, _this._initialContainer, isPointerOverContainer, distance, pointerPosition);
                 _this._dropContainer = _this._initialContainer;
             });
         };
@@ -1978,7 +1981,7 @@
          *    container when the item was dropped.
          * @param distance Distance the user has dragged since the start of the dragging sequence.
          */
-        DropListRef.prototype.drop = function (item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance) {
+        DropListRef.prototype.drop = function (item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint) {
             this._reset();
             this.dropped.next({
                 item: item,
@@ -1987,7 +1990,8 @@
                 container: this,
                 previousContainer: previousContainer,
                 isPointerOverContainer: isPointerOverContainer,
-                distance: distance
+                distance: distance,
+                dropPoint: dropPoint
             });
         };
         /**
@@ -3175,7 +3179,8 @@
                     container: event.container.data,
                     item: event.item.data,
                     isPointerOverContainer: event.isPointerOverContainer,
-                    distance: event.distance
+                    distance: event.distance,
+                    dropPoint: event.dropPoint
                 });
                 // Mark for check since all of these events run outside of change
                 // detection and we're not guaranteed for something else to have triggered it.
@@ -3659,7 +3664,11 @@
                 _this.released.emit({ source: _this });
             });
             ref.ended.subscribe(function (event) {
-                _this.ended.emit({ source: _this, distance: event.distance });
+                _this.ended.emit({
+                    source: _this,
+                    distance: event.distance,
+                    dropPoint: event.dropPoint
+                });
                 // Since all of these events run outside of change detection,
                 // we need to ensure that everything is marked correctly.
                 _this._changeDetectorRef.markForCheck();
@@ -3685,7 +3694,8 @@
                     container: event.container.data,
                     isPointerOverContainer: event.isPointerOverContainer,
                     item: _this,
-                    distance: event.distance
+                    distance: event.distance,
+                    dropPoint: event.dropPoint
                 });
             });
         };

@@ -748,11 +748,13 @@ class DragRef {
             // the user starts dragging the item, its position will be calculated relatively
             // to the new passive transform.
             this._passiveTransform.x = this._activeTransform.x;
+            const pointerPosition = this._getPointerPositionOnPage(event);
             this._passiveTransform.y = this._activeTransform.y;
             this._ngZone.run(() => {
                 this.ended.next({
                     source: this,
-                    distance: this._getDragDistance(this._getPointerPositionOnPage(event))
+                    distance: this._getDragDistance(pointerPosition),
+                    dropPoint: pointerPosition
                 });
             });
             this._cleanupCachedDimensions();
@@ -875,9 +877,9 @@ class DragRef {
             const container = this._dropContainer;
             const currentIndex = container.getItemIndex(this);
             const pointerPosition = this._getPointerPositionOnPage(event);
-            const distance = this._getDragDistance(this._getPointerPositionOnPage(event));
+            const distance = this._getDragDistance(pointerPosition);
             const isPointerOverContainer = container._isOverContainer(pointerPosition.x, pointerPosition.y);
-            this.ended.next({ source: this, distance });
+            this.ended.next({ source: this, distance, dropPoint: pointerPosition });
             this.dropped.next({
                 item: this,
                 currentIndex,
@@ -885,9 +887,10 @@ class DragRef {
                 container: container,
                 previousContainer: this._initialContainer,
                 isPointerOverContainer,
-                distance
+                distance,
+                dropPoint: pointerPosition
             });
-            container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance);
+            container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance, pointerPosition);
             this._dropContainer = this._initialContainer;
         });
     }
@@ -1639,7 +1642,7 @@ class DropListRef {
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
      */
-    drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance) {
+    drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint) {
         this._reset();
         this.dropped.next({
             item,
@@ -1648,7 +1651,8 @@ class DropListRef {
             container: this,
             previousContainer,
             isPointerOverContainer,
-            distance
+            distance,
+            dropPoint
         });
     }
     /**
@@ -2812,7 +2816,8 @@ class CdkDropList {
                 container: event.container.data,
                 item: event.item.data,
                 isPointerOverContainer: event.isPointerOverContainer,
-                distance: event.distance
+                distance: event.distance,
+                dropPoint: event.dropPoint
             });
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.
@@ -3283,7 +3288,11 @@ class CdkDrag {
             this.released.emit({ source: this });
         });
         ref.ended.subscribe(event => {
-            this.ended.emit({ source: this, distance: event.distance });
+            this.ended.emit({
+                source: this,
+                distance: event.distance,
+                dropPoint: event.dropPoint
+            });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             this._changeDetectorRef.markForCheck();
@@ -3309,7 +3318,8 @@ class CdkDrag {
                 container: event.container.data,
                 isPointerOverContainer: event.isPointerOverContainer,
                 item: this,
-                distance: event.distance
+                distance: event.distance,
+                dropPoint: event.dropPoint
             });
         });
     }

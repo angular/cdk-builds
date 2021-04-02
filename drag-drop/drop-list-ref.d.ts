@@ -74,6 +74,7 @@ export declare class DropListRef<T = any> {
         previousContainer: DropListRef;
         isPointerOverContainer: boolean;
         distance: Point;
+        dropPoint: Point;
     }>;
     /** Emits as the user is swapping items while actively dragging. */
     sorted: Subject<{
@@ -163,7 +164,7 @@ export declare class DropListRef<T = any> {
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
      */
-    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point): void;
+    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.
