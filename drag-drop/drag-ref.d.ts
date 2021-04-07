@@ -116,7 +116,7 @@ export declare class DragRef<T = any> {
     /** Cached positions of scrollable parent elements. */
     private _parentPositions;
     /** Emits when the item is being moved. */
-    private _moveEvents;
+    private readonly _moveEvents;
     /** Keeps track of the direction in which the user is dragging along each axis. */
     private _pointerDirectionDelta;
     /** Pointer position at which the last change in the delta occurred. */
@@ -198,34 +198,34 @@ export declare class DragRef<T = any> {
     set disabled(value: boolean);
     private _disabled;
     /** Emits as the drag sequence is being prepared. */
-    beforeStarted: Subject<void>;
+    readonly beforeStarted: Subject<void>;
     /** Emits when the user starts dragging the item. */
-    started: Subject<{
+    readonly started: Subject<{
         source: DragRef;
     }>;
     /** Emits when the user has released a drag item, before any animations have started. */
-    released: Subject<{
+    readonly released: Subject<{
         source: DragRef;
     }>;
     /** Emits when the user stops dragging an item in the container. */
-    ended: Subject<{
+    readonly ended: Subject<{
         source: DragRef;
         distance: Point;
         dropPoint: Point;
     }>;
     /** Emits when the user has moved the item into a new container. */
-    entered: Subject<{
+    readonly entered: Subject<{
         container: DropListRef;
         item: DragRef;
         currentIndex: number;
     }>;
     /** Emits when the user removes the item its container by dragging it into another container. */
-    exited: Subject<{
+    readonly exited: Subject<{
         container: DropListRef;
         item: DragRef;
     }>;
     /** Emits when the user drops the item inside a container. */
-    dropped: Subject<{
+    readonly dropped: Subject<{
         previousIndex: number;
         currentIndex: number;
         item: DragRef;
@@ -239,7 +239,7 @@ export declare class DragRef<T = any> {
      * Emits as the user is dragging the item. Use with caution,
      * because this event will fire for every pixel that the user has dragged.
      */
-    moved: Observable<{
+    readonly moved: Observable<{
         source: DragRef;
         pointerPosition: {
             x: number;

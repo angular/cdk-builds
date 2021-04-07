@@ -20,7 +20,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
     private _differs;
     private _changeDetectorRef;
     /** Subject that emits when the component has been destroyed. */
-    private _onDestroy;
+    private readonly _onDestroy;
     /** Differ used to find the changes in the data provided by the data source. */
     private _dataDiffer;
     /** Stores the node definition that does not have a when predicate. */
@@ -53,7 +53,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      * Stream containing the latest information on what rows are being displayed on screen.
      * Can be used by the data source to as a heuristic of what data should be provided.
      */
-    viewChange: BehaviorSubject<{
+    readonly viewChange: BehaviorSubject<{
         start: number;
         end: number;
     }>;
@@ -104,9 +104,9 @@ export declare class CdkTreeNode<T, K = T> implements DoCheck, FocusableOption, 
      */
     static mostRecentTreeNode: CdkTreeNode<any> | null;
     /** Subject that emits when the component has been destroyed. */
-    protected _destroyed: Subject<void>;
+    protected readonly _destroyed: Subject<void>;
     /** Emits when the node's data has changed. */
-    _dataChanges: Subject<void>;
+    readonly _dataChanges: Subject<void>;
     private _parentNodeAriaLevel;
     /** The tree node's data. */
     get data(): T;

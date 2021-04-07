@@ -50,7 +50,7 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
     protected scrollDispatcher: ScrollDispatcher;
     protected ngZone: NgZone;
     protected dir?: Directionality | undefined;
-    private _destroyed;
+    private readonly _destroyed;
     private _elementScrolled;
     constructor(elementRef: ElementRef<HTMLElement>, scrollDispatcher: ScrollDispatcher, ngZone: NgZone, dir?: Directionality | undefined);
     ngOnInit(): void;

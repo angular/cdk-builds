@@ -27,7 +27,7 @@ export declare class BreakpointObserver implements OnDestroy {
     /**  A map of all media queries currently being listened for. */
     private _queries;
     /** A subject for all other observables to takeUntil based on. */
-    private _destroySubject;
+    private readonly _destroySubject;
     constructor(_mediaMatcher: MediaMatcher, _zone: NgZone);
     /** Completes the active subject, signalling to all other observables to complete. */
     ngOnDestroy(): void;

@@ -12,7 +12,7 @@ import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
 /** Virtual scrolling strategy for lists with items of known fixed size. */
 export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStrategy {
-    private _scrolledIndexChange;
+    private readonly _scrolledIndexChange;
     /** @docs-private Implemented as part of VirtualScrollStrategy. */
     scrolledIndexChange: Observable<number>;
     /** The attached viewport. */

@@ -24,7 +24,7 @@ export declare class ViewportRuler implements OnDestroy {
     /** Cached viewport dimensions. */
     private _viewportSize;
     /** Stream of viewport change events. */
-    private _change;
+    private readonly _change;
     /** Event listener that will be used to handle the viewport change events. */
     private _changeListener;
     /** Used to reference correct document/window */

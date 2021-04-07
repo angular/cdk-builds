@@ -21,7 +21,7 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     /** Direction as passed in by the consumer. */
     _rawDir: string;
     /** Event emitted when the direction changes. */
-    change: EventEmitter<Direction>;
+    readonly change: EventEmitter<Direction>;
     /** @docs-private */
     get dir(): Direction;
     set dir(value: Direction);

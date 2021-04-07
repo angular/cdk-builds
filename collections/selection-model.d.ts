@@ -23,7 +23,7 @@ export declare class SelectionModel<T> {
     /** Selected values. */
     get selected(): T[];
     /** Event emitted when the value has changed. */
-    changed: Subject<SelectionChange<T>>;
+    readonly changed: Subject<SelectionChange<T>>;
     constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
     /**
      * Selects a value or an array of values.

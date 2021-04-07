@@ -54,7 +54,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _elementRef;
     private _ngZone;
     /** Event emitted for each change in the element's content. */
-    event: EventEmitter<MutationRecord[]>;
+    readonly event: EventEmitter<MutationRecord[]>;
     /**
      * Whether observing content is disabled. This option can be used
      * to disconnect the underlying MutationObserver until it is needed.

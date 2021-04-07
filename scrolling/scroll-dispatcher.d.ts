@@ -22,7 +22,7 @@ export declare class ScrollDispatcher implements OnDestroy {
     protected _document: Document;
     constructor(_ngZone: NgZone, _platform: Platform, document: any);
     /** Subject for notifying that a registered scrollable reference element has been scrolled. */
-    private _scrolled;
+    private readonly _scrolled;
     /** Keeps track of the global `scroll` and `resize` subscriptions. */
     _globalSubscription: Subscription | null;
     /** Keeps track of the amount of subscriptions to `scrolled`. Used for cleaning up afterwards. */

@@ -20,7 +20,7 @@ export declare class CdkDragHandle implements OnDestroy {
     /** Closest parent draggable instance. */
     _parentDrag: {} | undefined;
     /** Emits when the state of the handle has changed. */
-    _stateChanges: Subject<CdkDragHandle>;
+    readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
     get disabled(): boolean;
     set disabled(value: boolean);

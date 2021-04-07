@@ -122,7 +122,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Latest data provided by the data source. */
     protected _data: readonly T[];
     /** Subject that emits when the component has been destroyed. */
-    private _onDestroy;
+    private readonly _onDestroy;
     /** List of the rendered rows as identified by their `RenderRow` object. */
     private _renderRows;
     /** Subscription that listens for the data provided by the data source. */
@@ -289,7 +289,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      *
      * @docs-private
      */
-    viewChange: BehaviorSubject<{
+    readonly viewChange: BehaviorSubject<{
         start: number;
         end: number;
     }>;

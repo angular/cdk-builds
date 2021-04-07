@@ -48,11 +48,11 @@ export declare class DropListRef<T = any> {
     /** Functions that is used to determine whether an item can be sorted into a particular index. */
     sortPredicate: (index: number, drag: DragRef, drop: DropListRef) => boolean;
     /** Emits right before dragging has started. */
-    beforeStarted: Subject<void>;
+    readonly beforeStarted: Subject<void>;
     /**
      * Emits when the user has moved a new drag item into this container.
      */
-    entered: Subject<{
+    readonly entered: Subject<{
         item: DragRef;
         container: DropListRef;
         currentIndex: number;
@@ -61,12 +61,12 @@ export declare class DropListRef<T = any> {
      * Emits when the user removes an item from the container
      * by dragging it into another container.
      */
-    exited: Subject<{
+    readonly exited: Subject<{
         item: DragRef;
         container: DropListRef;
     }>;
     /** Emits when the user drops an item inside the container. */
-    dropped: Subject<{
+    readonly dropped: Subject<{
         item: DragRef;
         currentIndex: number;
         previousIndex: number;
@@ -77,7 +77,7 @@ export declare class DropListRef<T = any> {
         dropPoint: Point;
     }>;
     /** Emits as the user is swapping items while actively dragging. */
-    sorted: Subject<{
+    readonly sorted: Subject<{
         previousIndex: number;
         currentIndex: number;
         container: DropListRef;
@@ -124,7 +124,7 @@ export declare class DropListRef<T = any> {
     /** Node that is being auto-scrolled. */
     private _scrollNode;
     /** Used to signal to the current auto-scroll sequence when to stop. */
-    private _stopScrollTimers;
+    private readonly _stopScrollTimers;
     /** Shadow root of the current element. Necessary for `elementFromPoint` to resolve correctly. */
     private _cachedShadowRoot;
     /** Reference to the document. */

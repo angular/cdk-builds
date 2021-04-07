@@ -46,9 +46,9 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     /** The virtual scrolling viewport that these items are being rendered in. */
     private _viewport;
     /** Emits when the rendered view of the data changes. */
-    viewChange: Subject<ListRange>;
+    readonly viewChange: Subject<ListRange>;
     /** Subject that emits when a new DataSource instance is given. */
-    private _dataSourceChanges;
+    private readonly _dataSourceChanges;
     /** The DataSource to display. */
     get cdkVirtualForOf(): DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined;
     set cdkVirtualForOf(value: DataSource<T> | Observable<T[]> | NgIterable<T> | null | undefined);
@@ -69,7 +69,7 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     get cdkVirtualForTemplateCacheSize(): number;
     set cdkVirtualForTemplateCacheSize(size: number);
     /** Emits whenever the data in the current DataSource changes. */
-    dataStream: Observable<readonly T[]>;
+    readonly dataStream: Observable<readonly T[]>;
     /** The differ used to calculate changes to the data. */
     private _differ;
     /** The most recent data emitted from the DataSource. */
@@ -80,7 +80,7 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _renderedRange;
     /** Whether the rendered data should be updated during the next ngDoCheck cycle. */
     private _needsUpdate;
-    private _destroyed;
+    private readonly _destroyed;
     constructor(
     /** The view container to add items to. */
     _viewContainerRef: ViewContainerRef, 

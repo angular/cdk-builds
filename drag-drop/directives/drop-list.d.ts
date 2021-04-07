@@ -37,7 +37,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _dir?;
     private _group?;
     /** Emits when the list has been destroyed. */
-    private _destroyed;
+    private readonly _destroyed;
     /** Whether the element's scrollable parents have been resolved. */
     private _scrollableParentsResolved;
     /** Keeps track of the drop lists that are currently on the page. */
@@ -79,18 +79,18 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Number of pixels to scroll for each frame when auto-scrolling an element. */
     autoScrollStep: number;
     /** Emits when the user drops an item inside the container. */
-    dropped: EventEmitter<CdkDragDrop<T, any>>;
+    readonly dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
      * Emits when the user has moved a new drag item into this container.
      */
-    entered: EventEmitter<CdkDragEnter<T>>;
+    readonly entered: EventEmitter<CdkDragEnter<T>>;
     /**
      * Emits when the user removes an item from the container
      * by dragging it into another container.
      */
-    exited: EventEmitter<CdkDragExit<T>>;
+    readonly exited: EventEmitter<CdkDragExit<T>>;
     /** Emits as the user is swapping items while actively dragging. */
-    sorted: EventEmitter<CdkDragSortEvent<T>>;
+    readonly sorted: EventEmitter<CdkDragSortEvent<T>>;
     /**
      * Keeps track of the items that are registered with this container. Historically we used to
      * do this with a `ContentChildren` query, however queries don't handle transplanted views very

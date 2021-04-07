@@ -204,7 +204,7 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     private _elementRef;
     private _focusMonitor;
     private _monitorSubscription;
-    cdkFocusChange: EventEmitter<FocusOrigin>;
+    readonly cdkFocusChange: EventEmitter<FocusOrigin>;
     constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;

@@ -21,7 +21,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     /** Current padding value applied to the element. Used to avoid unnecessarily hitting the DOM. */
     private _currentPadding;
     /** Subject that emits when the component has been destroyed. */
-    private _destroyed;
+    private readonly _destroyed;
     /** CSS units used for the indentation value. */
     indentUnits: string;
     /** The level of depth of the tree node. The padding will be `level * indent` pixels. */

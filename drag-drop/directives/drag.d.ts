@@ -29,7 +29,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _changeDetectorRef;
     private _selfHandle?;
     private _parentDrag?;
-    private _destroyed;
+    private readonly _destroyed;
     private static _dragInstances;
     /** Reference to the underlying drag instance. */
     _dragRef: DragRef<CdkDrag<T>>;
@@ -97,22 +97,22 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      */
     previewContainer: PreviewContainer;
     /** Emits when the user starts dragging the item. */
-    started: EventEmitter<CdkDragStart>;
+    readonly started: EventEmitter<CdkDragStart>;
     /** Emits when the user has released a drag item, before any animations have started. */
-    released: EventEmitter<CdkDragRelease>;
+    readonly released: EventEmitter<CdkDragRelease>;
     /** Emits when the user stops dragging an item in the container. */
-    ended: EventEmitter<CdkDragEnd>;
+    readonly ended: EventEmitter<CdkDragEnd>;
     /** Emits when the user has moved the item into a new container. */
-    entered: EventEmitter<CdkDragEnter<any>>;
+    readonly entered: EventEmitter<CdkDragEnter<any>>;
     /** Emits when the user removes the item its container by dragging it into another container. */
-    exited: EventEmitter<CdkDragExit<any>>;
+    readonly exited: EventEmitter<CdkDragExit<any>>;
     /** Emits when the user drops the item inside a container. */
-    dropped: EventEmitter<CdkDragDrop<any>>;
+    readonly dropped: EventEmitter<CdkDragDrop<any>>;
     /**
      * Emits as the user is dragging the item. Use with caution,
      * because this event will fire for every pixel that the user has dragged.
      */
-    moved: Observable<CdkDragMove<T>>;
+    readonly moved: Observable<CdkDragMove<T>>;
     constructor(
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 

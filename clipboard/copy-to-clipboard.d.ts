@@ -37,7 +37,7 @@ export declare class CdkCopyToClipboard implements OnDestroy {
      * Emits when some text is copied to the clipboard. The
      * emitted value indicates whether copying was successful.
      */
-    copied: EventEmitter<boolean>;
+    readonly copied: EventEmitter<boolean>;
     /** Copies that are currently being attempted. */
     private _pending;
     /** Whether the directive has been destroyed. */

@@ -20,19 +20,19 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _changeDetectorRef;
     private _scrollStrategy;
     /** Emits when the viewport is detached from a CdkVirtualForOf. */
-    private _detachedSubject;
+    private readonly _detachedSubject;
     /** Emits when the rendered range changes. */
-    private _renderedRangeSubject;
+    private readonly _renderedRangeSubject;
     /** The direction the viewport scrolls. */
     get orientation(): 'horizontal' | 'vertical';
     set orientation(orientation: 'horizontal' | 'vertical');
     private _orientation;
     /** Emits when the index of the first element visible in the viewport changes. */
-    scrolledIndexChange: Observable<number>;
+    readonly scrolledIndexChange: Observable<number>;
     /** The element that wraps the rendered content. */
     _contentWrapper: ElementRef<HTMLElement>;
     /** A stream that emits whenever the rendered range changes. */
-    renderedRangeStream: Observable<ListRange>;
+    readonly renderedRangeStream: Observable<ListRange>;
     /**
      * The total size of all content (in pixels), including content that is not currently rendered.
      */

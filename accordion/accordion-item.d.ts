@@ -20,17 +20,17 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** Subscription to openAll/closeAll events. */
     private _openCloseAllSubscription;
     /** Event emitted every time the AccordionItem is closed. */
-    closed: EventEmitter<void>;
+    readonly closed: EventEmitter<void>;
     /** Event emitted every time the AccordionItem is opened. */
-    opened: EventEmitter<void>;
+    readonly opened: EventEmitter<void>;
     /** Event emitted when the AccordionItem is destroyed. */
-    destroyed: EventEmitter<void>;
+    readonly destroyed: EventEmitter<void>;
     /**
      * Emits whenever the expanded state of the accordion changes.
      * Primarily used to facilitate two-way binding.
      * @docs-private
      */
-    expandedChange: EventEmitter<boolean>;
+    readonly expandedChange: EventEmitter<boolean>;
     /** The unique AccordionItem id. */
     readonly id: string;
     /** Whether the AccordionItem is expanded. */

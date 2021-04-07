@@ -72,7 +72,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /** The last position to have been calculated as the best fit position. */
     private _lastPosition;
     /** Subject that emits whenever the position changes. */
-    private _positionChanges;
+    private readonly _positionChanges;
     /** Subscription to viewport size changes. */
     private _resizeSubscription;
     /** Default offset for the overlay along the x axis. */

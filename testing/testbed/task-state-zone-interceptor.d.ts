@@ -20,7 +20,7 @@ export interface TaskState {
 export declare class TaskStateZoneInterceptor {
     private _lastState;
     /** Subject that can be used to emit a new state change. */
-    private _stateSubject;
+    private readonly _stateSubject;
     /** Public observable that emits whenever the task state changes. */
     readonly state: Observable<TaskState>;
     constructor(_lastState: HasTaskState | null);
