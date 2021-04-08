@@ -1,0 +1,378 @@
+import { __awaiter } from 'tslib';
+import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
+import * as webdriver from 'selenium-webdriver';
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
+ * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
+ */
+const webDriverKeyMap = {
+    [TestKey.BACKSPACE]: webdriver.Key.BACK_SPACE,
+    [TestKey.TAB]: webdriver.Key.TAB,
+    [TestKey.ENTER]: webdriver.Key.ENTER,
+    [TestKey.SHIFT]: webdriver.Key.SHIFT,
+    [TestKey.CONTROL]: webdriver.Key.CONTROL,
+    [TestKey.ALT]: webdriver.Key.ALT,
+    [TestKey.ESCAPE]: webdriver.Key.ESCAPE,
+    [TestKey.PAGE_UP]: webdriver.Key.PAGE_UP,
+    [TestKey.PAGE_DOWN]: webdriver.Key.PAGE_DOWN,
+    [TestKey.END]: webdriver.Key.END,
+    [TestKey.HOME]: webdriver.Key.HOME,
+    [TestKey.LEFT_ARROW]: webdriver.Key.ARROW_LEFT,
+    [TestKey.UP_ARROW]: webdriver.Key.ARROW_UP,
+    [TestKey.RIGHT_ARROW]: webdriver.Key.ARROW_RIGHT,
+    [TestKey.DOWN_ARROW]: webdriver.Key.ARROW_DOWN,
+    [TestKey.INSERT]: webdriver.Key.INSERT,
+    [TestKey.DELETE]: webdriver.Key.DELETE,
+    [TestKey.F1]: webdriver.Key.F1,
+    [TestKey.F2]: webdriver.Key.F2,
+    [TestKey.F3]: webdriver.Key.F3,
+    [TestKey.F4]: webdriver.Key.F4,
+    [TestKey.F5]: webdriver.Key.F5,
+    [TestKey.F6]: webdriver.Key.F6,
+    [TestKey.F7]: webdriver.Key.F7,
+    [TestKey.F8]: webdriver.Key.F8,
+    [TestKey.F9]: webdriver.Key.F9,
+    [TestKey.F10]: webdriver.Key.F10,
+    [TestKey.F11]: webdriver.Key.F11,
+    [TestKey.F12]: webdriver.Key.F12,
+    [TestKey.META]: webdriver.Key.META
+};
+/** Gets a list of WebDriver `Key`s for the given `ModifierKeys`. */
+function getWebDriverModifierKeys(modifiers) {
+    const result = [];
+    if (modifiers.control) {
+        result.push(webdriver.Key.CONTROL);
+    }
+    if (modifiers.alt) {
+        result.push(webdriver.Key.ALT);
+    }
+    if (modifiers.shift) {
+        result.push(webdriver.Key.SHIFT);
+    }
+    if (modifiers.meta) {
+        result.push(webdriver.Key.META);
+    }
+    return result;
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** A `TestElement` implementation for WebDriver. */
+class WebDriverElement {
+    constructor(element, _stabilize) {
+        this.element = element;
+        this._stabilize = _stabilize;
+    }
+    blur() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._executeScript(((element) => element.blur()), this.element());
+            yield this._stabilize();
+        });
+    }
+    clear() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.element().clear();
+            yield this._stabilize();
+        });
+    }
+    click(...args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._dispatchClickEventSequence(args, webdriver.Button.LEFT);
+            yield this._stabilize();
+        });
+    }
+    rightClick(...args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._dispatchClickEventSequence(args, webdriver.Button.RIGHT);
+            yield this._stabilize();
+        });
+    }
+    focus() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._executeScript((element) => element.focus(), this.element());
+            yield this._stabilize();
+        });
+    }
+    getCssValue(property) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return this.element().getCssValue(property);
+        });
+    }
+    hover() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._actions().mouseMove(this.element()).perform();
+            yield this._stabilize();
+        });
+    }
+    mouseAway() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._actions().mouseMove(this.element(), { x: -1, y: -1 }).perform();
+            yield this._stabilize();
+        });
+    }
+    sendKeys(...modifiersAndKeys) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const first = modifiersAndKeys[0];
+            let modifiers;
+            let rest;
+            if (typeof first !== 'string' && typeof first !== 'number') {
+                modifiers = first;
+                rest = modifiersAndKeys.slice(1);
+            }
+            else {
+                modifiers = {};
+                rest = modifiersAndKeys;
+            }
+            const modifierKeys = getWebDriverModifierKeys(modifiers);
+            const keys = rest.map(k => typeof k === 'string' ? k.split('') : [webDriverKeyMap[k]])
+                .reduce((arr, k) => arr.concat(k), [])
+                // webdriver.Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
+                // so avoid it if no modifier keys are required.
+                .map(k => modifierKeys.length > 0 ? webdriver.Key.chord(...modifierKeys, k) : k);
+            yield this.element().sendKeys(...keys);
+            yield this._stabilize();
+        });
+    }
+    text(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            if (options === null || options === void 0 ? void 0 : options.exclude) {
+                return this._executeScript(_getTextWithExcludedElements, this.element(), options.exclude);
+            }
+            return this.element().getText();
+        });
+    }
+    getAttribute(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return this._executeScript((element, attribute) => element.getAttribute(attribute), this.element(), name);
+        });
+    }
+    hasClass(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            const classes = (yield this.getAttribute('class')) || '';
+            return new Set(classes.split(/\s+/).filter(c => c)).has(name);
+        });
+    }
+    getDimensions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            const { width, height } = yield this.element().getSize();
+            const { x: left, y: top } = yield this.element().getLocation();
+            return { width, height, left, top };
+        });
+    }
+    getProperty(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return this._executeScript((element, property) => element[property], this.element(), name);
+        });
+    }
+    setInputValue(newValue) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._executeScript((element, value) => element.value = value, this.element(), newValue);
+            yield this._stabilize();
+        });
+    }
+    selectOptions(...optionIndexes) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            const options = yield this.element().findElements(webdriver.By.css('option'));
+            const indexes = new Set(optionIndexes); // Convert to a set to remove duplicates.
+            if (options.length && indexes.size) {
+                // Reset the value so all the selected states are cleared. We can
+                // reuse the input-specific method since the logic is the same.
+                yield this.setInputValue('');
+                for (let i = 0; i < options.length; i++) {
+                    if (indexes.has(i)) {
+                        // We have to hold the control key while clicking on options so that multiple can be
+                        // selected in multi-selection mode. The key doesn't do anything for single selection.
+                        yield this._actions().keyDown(webdriver.Key.CONTROL).perform();
+                        yield options[i].click();
+                        yield this._actions().keyUp(webdriver.Key.CONTROL).perform();
+                    }
+                }
+                yield this._stabilize();
+            }
+        });
+    }
+    matchesSelector(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return this._executeScript((element, s) => (Element.prototype.matches || Element.prototype.msMatchesSelector)
+                .call(element, s), this.element(), selector);
+        });
+    }
+    isFocused() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._stabilize();
+            return webdriver.WebElement.equals(this.element(), this.element().getDriver().switchTo().activeElement());
+        });
+    }
+    dispatchEvent(name, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this._executeScript(dispatchEvent, name, this.element(), data);
+            yield this._stabilize();
+        });
+    }
+    /** Gets the webdriver action sequence. */
+    _actions() {
+        return this.element().getDriver().actions();
+    }
+    /** Executes a function in the browser. */
+    _executeScript(script, ...var_args) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.element().getDriver().executeScript(script, ...var_args);
+        });
+    }
+    /** Dispatches all the events that are part of a click event sequence. */
+    _dispatchClickEventSequence(args, button) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let modifiers = {};
+            if (args.length && typeof args[args.length - 1] === 'object') {
+                modifiers = args.pop();
+            }
+            const modifierKeys = getWebDriverModifierKeys(modifiers);
+            // Omitting the offset argument to mouseMove results in clicking the center.
+            // This is the default behavior we want, so we use an empty array of offsetArgs if
+            // no args remain after popping the modifiers from the args passed to this function.
+            const offsetArgs = (args.length === 2 ?
+                [{ x: args[0], y: args[1] }] : []);
+            let actions = this._actions().mouseMove(this.element(), ...offsetArgs);
+            for (const modifierKey of modifierKeys) {
+                actions = actions.keyDown(modifierKey);
+            }
+            actions = actions.click(button);
+            for (const modifierKey of modifierKeys) {
+                actions = actions.keyUp(modifierKey);
+            }
+            yield actions.perform();
+        });
+    }
+}
+/**
+ * Dispatches an event with a particular name and data to an element. Note that this needs to be a
+ * pure function, because it gets stringified by WebDriver and is executed inside the browser.
+ */
+function dispatchEvent(name, element, data) {
+    const event = document.createEvent('Event');
+    event.initEvent(name);
+    // tslint:disable-next-line:ban Have to use `Object.assign` to preserve the original object.
+    Object.assign(event, data || {});
+    element.dispatchEvent(event);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** The default environment options. */
+const defaultEnvironmentOptions = {
+    queryFn: (selector, root) => __awaiter(void 0, void 0, void 0, function* () { return root().findElements(webdriver.By.css(selector)); })
+};
+/**
+ * This function is meant to be executed in the browser. It taps into the hooks exposed by Angular
+ * and invokes the specified `callback` when the application is stable (no more pending tasks).
+ */
+function whenStable(callback) {
+    Promise.all(window.frameworkStabilizers.map(stabilizer => new Promise(stabilizer)))
+        .then(callback);
+}
+/**
+ * This function is meant to be executed in the browser. It checks whether the Angular framework has
+ * bootstrapped yet.
+ */
+function isBootstrapped() {
+    return !!window.frameworkStabilizers;
+}
+/** Waits for angular to be ready after the page load. */
+function waitForAngularReady(wd) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield wd.wait(() => wd.executeScript(isBootstrapped));
+        yield wd.executeAsyncScript(whenStable);
+    });
+}
+/** A `HarnessEnvironment` implementation for WebDriver. */
+class WebDriverHarnessEnvironment extends HarnessEnvironment {
+    constructor(rawRootElement, options) {
+        super(rawRootElement);
+        this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
+    }
+    /** Gets the ElementFinder corresponding to the given TestElement. */
+    static getNativeElement(el) {
+        if (el instanceof WebDriverElement) {
+            return el.element();
+        }
+        throw Error('This TestElement was not created by the WebDriverHarnessEnvironment');
+    }
+    /** Creates a `HarnessLoader` rooted at the document root. */
+    static loader(driver, options) {
+        return new WebDriverHarnessEnvironment(() => driver.findElement(webdriver.By.css('body')), options);
+    }
+    forceStabilize() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield this.rawRootElement().getDriver().executeAsyncScript(whenStable);
+        });
+    }
+    waitForTasksOutsideAngular() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // TODO: figure out how we can do this for the webdriver environment.
+            //  https://github.com/angular/components/issues/17412
+        });
+    }
+    getDocumentRoot() {
+        return () => this.rawRootElement().getDriver().findElement(webdriver.By.css('body'));
+    }
+    createTestElement(element) {
+        return new WebDriverElement(element, () => this.forceStabilize());
+    }
+    createEnvironment(element) {
+        return new WebDriverHarnessEnvironment(element, this._options);
+    }
+    // Note: This seems to be working, though we may need to re-evaluate if we encounter issues with
+    // stale element references. `() => Promise<webdriver.WebElement[]>` seems like a more correct
+    // return type, though supporting it would require changes to the public harness API.
+    getAllRawElements(selector) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const els = yield this._options.queryFn(selector, this.rawRootElement);
+            return els.map((x) => () => x);
+        });
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+export { WebDriverElement, WebDriverHarnessEnvironment, waitForAngularReady };
+//# sourceMappingURL=webdriver.js.map
