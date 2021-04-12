@@ -76,12 +76,14 @@ class WebDriverElement {
         this.element = element;
         this._stabilize = _stabilize;
     }
+    /** Blur the element. */
     blur() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._executeScript(((element) => element.blur()), this.element());
             yield this._stabilize();
         });
     }
+    /** Clear the element's input (for input and textarea elements only). */
     clear() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.element().clear();
@@ -100,24 +102,28 @@ class WebDriverElement {
             yield this._stabilize();
         });
     }
+    /** Focus the element. */
     focus() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._executeScript((element) => element.focus(), this.element());
             yield this._stabilize();
         });
     }
+    /** Get the computed value of the given CSS property for the element. */
     getCssValue(property) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element().getCssValue(property);
         });
     }
+    /** Hovers the mouse over the element. */
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._actions().mouseMove(this.element()).perform();
             yield this._stabilize();
         });
     }
+    /** Moves the mouse away from the element. */
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._actions().mouseMove(this.element(), { x: -1, y: -1 }).perform();
@@ -147,6 +153,10 @@ class WebDriverElement {
             yield this._stabilize();
         });
     }
+    /**
+     * Gets the text from the element.
+     * @param options Options that affect what text is included.
+     */
     text(options) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -156,12 +166,14 @@ class WebDriverElement {
             return this.element().getText();
         });
     }
+    /** Gets the value for the given attribute from the element. */
     getAttribute(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this._executeScript((element, attribute) => element.getAttribute(attribute), this.element(), name);
         });
     }
+    /** Checks whether the element has the given class. */
     hasClass(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -169,6 +181,7 @@ class WebDriverElement {
             return new Set(classes.split(/\s+/).filter(c => c)).has(name);
         });
     }
+    /** Gets the dimensions of the element. */
     getDimensions() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -177,18 +190,21 @@ class WebDriverElement {
             return { width, height, left, top };
         });
     }
+    /** Gets the value of a property of an element. */
     getProperty(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this._executeScript((element, property) => element[property], this.element(), name);
         });
     }
+    /** Sets the value of a property of an input. */
     setInputValue(newValue) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._executeScript((element, value) => element.value = value, this.element(), newValue);
             yield this._stabilize();
         });
     }
+    /** Selects the options at the specified indexes inside of a native `select` element. */
     selectOptions(...optionIndexes) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -211,6 +227,7 @@ class WebDriverElement {
             }
         });
     }
+    /** Checks whether this element matches the given selector. */
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -218,12 +235,17 @@ class WebDriverElement {
                 .call(element, s), this.element(), selector);
         });
     }
+    /** Checks whether the element is focused. */
     isFocused() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return webdriver.WebElement.equals(this.element(), this.element().getDriver().switchTo().activeElement());
         });
     }
+    /**
+     * Dispatches an event with a particular name.
+     * @param name Name of the event to be dispatched.
+     */
     dispatchEvent(name, data) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._executeScript(dispatchEvent, name, this.element(), data);
@@ -327,29 +349,41 @@ class WebDriverHarnessEnvironment extends HarnessEnvironment {
     static loader(driver, options) {
         return new WebDriverHarnessEnvironment(() => driver.findElement(webdriver.By.css('body')), options);
     }
+    /**
+     * Flushes change detection and async tasks captured in the Angular zone.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.rawRootElement().getDriver().executeAsyncScript(whenStable);
         });
     }
+    /** @docs-private */
     waitForTasksOutsideAngular() {
         return __awaiter(this, void 0, void 0, function* () {
             // TODO: figure out how we can do this for the webdriver environment.
             //  https://github.com/angular/components/issues/17412
         });
     }
+    /** Gets the root element for the document. */
     getDocumentRoot() {
         return () => this.rawRootElement().getDriver().findElement(webdriver.By.css('body'));
     }
+    /** Creates a `TestElement` from a raw element. */
     createTestElement(element) {
         return new WebDriverElement(element, () => this.forceStabilize());
     }
+    /** Creates a `HarnessLoader` rooted at the given raw element. */
     createEnvironment(element) {
         return new WebDriverHarnessEnvironment(element, this._options);
     }
     // Note: This seems to be working, though we may need to re-evaluate if we encounter issues with
     // stale element references. `() => Promise<webdriver.WebElement[]>` seems like a more correct
     // return type, though supporting it would require changes to the public harness API.
+    /**
+     * Gets a list of all elements matching the given selector under this environment's root element.
+     */
     getAllRawElements(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             const els = yield this._options.queryFn(selector, this.rawRootElement);

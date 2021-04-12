@@ -42,11 +42,23 @@ export declare class WebDriverHarnessEnvironment extends HarnessEnvironment<() =
     static getNativeElement(el: TestElement): webdriver.WebElement;
     /** Creates a `HarnessLoader` rooted at the document root. */
     static loader(driver: webdriver.WebDriver, options?: WebDriverHarnessEnvironmentOptions): HarnessLoader;
+    /**
+     * Flushes change detection and async tasks captured in the Angular zone.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
     forceStabilize(): Promise<void>;
+    /** @docs-private */
     waitForTasksOutsideAngular(): Promise<void>;
+    /** Gets the root element for the document. */
     protected getDocumentRoot(): () => webdriver.WebElement;
+    /** Creates a `TestElement` from a raw element. */
     protected createTestElement(element: () => webdriver.WebElement): TestElement;
+    /** Creates a `HarnessLoader` rooted at the given raw element. */
     protected createEnvironment(element: () => webdriver.WebElement): HarnessEnvironment<() => webdriver.WebElement>;
+    /**
+     * Gets a list of all elements matching the given selector under this environment's root element.
+     */
     protected getAllRawElements(selector: string): Promise<(() => webdriver.WebElement)[]>;
 }
 export {};

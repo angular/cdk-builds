@@ -422,12 +422,14 @@ class UnitTestElement {
         this.element = element;
         this._stabilize = _stabilize;
     }
+    /** Blur the element. */
     blur() {
         return __awaiter(this, void 0, void 0, function* () {
             triggerBlur(this.element);
             yield this._stabilize();
         });
     }
+    /** Clear the element's input (for input and textarea elements only). */
     clear() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!isTextInput(this.element)) {
@@ -449,12 +451,14 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
+    /** Focus the element. */
     focus() {
         return __awaiter(this, void 0, void 0, function* () {
             triggerFocus(this.element);
             yield this._stabilize();
         });
     }
+    /** Get the computed value of the given CSS property for the element. */
     getCssValue(property) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -463,6 +467,7 @@ class UnitTestElement {
             return getComputedStyle(this.element).getPropertyValue(property);
         });
     }
+    /** Hovers the mouse over the element. */
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
             this._dispatchPointerEventIfSupported('pointerenter');
@@ -470,6 +475,7 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
+    /** Moves the mouse away from the element. */
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
             this._dispatchPointerEventIfSupported('pointerleave');
@@ -484,6 +490,10 @@ class UnitTestElement {
             yield this._stabilize();
         });
     }
+    /**
+     * Gets the text from the element.
+     * @param options Options that affect what text is included.
+     */
     text(options) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -493,36 +503,42 @@ class UnitTestElement {
             return (this.element.textContent || '').trim();
         });
     }
+    /** Gets the value for the given attribute from the element. */
     getAttribute(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.getAttribute(name);
         });
     }
+    /** Checks whether the element has the given class. */
     hasClass(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.classList.contains(name);
         });
     }
+    /** Gets the dimensions of the element. */
     getDimensions() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element.getBoundingClientRect();
         });
     }
+    /** Gets the value of a property of an element. */
     getProperty(name) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return this.element[name];
         });
     }
+    /** Sets the value of a property of an input. */
     setInputValue(value) {
         return __awaiter(this, void 0, void 0, function* () {
             this.element.value = value;
             yield this._stabilize();
         });
     }
+    /** Selects the options at the specified indexes inside of a native `select` element. */
     selectOptions(...optionIndexes) {
         return __awaiter(this, void 0, void 0, function* () {
             let hasChanged = false;
@@ -544,6 +560,7 @@ class UnitTestElement {
             }
         });
     }
+    /** Checks whether this element matches the given selector. */
     matchesSelector(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
@@ -552,12 +569,17 @@ class UnitTestElement {
                 .call(this.element, selector);
         });
     }
+    /** Checks whether the element is focused. */
     isFocused() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             return document.activeElement === this.element;
         });
     }
+    /**
+     * Dispatches an event with a particular name.
+     * @param name Name of the event to be dispatched.
+     */
     dispatchEvent(name, data) {
         return __awaiter(this, void 0, void 0, function* () {
             const event = createFakeEvent(name);
@@ -723,6 +745,11 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
             return environment.createComponentHarness(harnessType, fixture.nativeElement);
         });
     }
+    /**
+     * Flushes change detection and async tasks captured in the Angular zone.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
     forceStabilize() {
         return __awaiter(this, void 0, void 0, function* () {
             if (!disableAutoChangeDetection) {
@@ -733,6 +760,10 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
             }
         });
     }
+    /**
+     * Waits for all scheduled or running async tasks to complete. This allows harness
+     * authors to wait for async tasks outside of the Angular zone.
+     */
     waitForTasksOutsideAngular() {
         return __awaiter(this, void 0, void 0, function* () {
             // If we run in the fake async zone, we run "flush" to run any scheduled tasks. This
@@ -751,15 +782,21 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
             yield this._taskState.pipe(takeWhile(state => !state.stable)).toPromise();
         });
     }
+    /** Gets the root element for the document. */
     getDocumentRoot() {
         return document.body;
     }
+    /** Creates a `TestElement` from a raw element. */
     createTestElement(element) {
         return new UnitTestElement(element, () => this.forceStabilize());
     }
+    /** Creates a `HarnessLoader` rooted at the given raw element. */
     createEnvironment(element) {
         return new TestbedHarnessEnvironment(element, this._fixture, this._options);
     }
+    /**
+     * Gets a list of all elements matching the given selector under this environment's root element.
+     */
     getAllRawElements(selector) {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.forceStabilize();

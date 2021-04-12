@@ -364,11 +364,16 @@
         }
         return result;
     }
-    /** A `TestElement` implementation for Protractor. */
+    /**
+     * A `TestElement` implementation for Protractor.
+     * @deprecated
+     * @breaking-change 13.0.0
+     */
     var ProtractorElement = /** @class */ (function () {
         function ProtractorElement(element) {
             this.element = element;
         }
+        /** Blur the element. */
         ProtractorElement.prototype.blur = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -376,6 +381,7 @@
                 });
             });
         };
+        /** Clear the element's input (for input and textarea elements only). */
         ProtractorElement.prototype.clear = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -415,6 +421,7 @@
                 });
             });
         };
+        /** Focus the element. */
         ProtractorElement.prototype.focus = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -422,6 +429,7 @@
                 });
             });
         };
+        /** Get the computed value of the given CSS property for the element. */
         ProtractorElement.prototype.getCssValue = function (property) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -429,6 +437,7 @@
                 });
             });
         };
+        /** Hovers the mouse over the element. */
         ProtractorElement.prototype.hover = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _a, _b;
@@ -444,6 +453,7 @@
                 });
             });
         };
+        /** Moves the mouse away from the element. */
         ProtractorElement.prototype.mouseAway = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _a, _b;
@@ -487,6 +497,10 @@
                 });
             });
         };
+        /**
+         * Gets the text from the element.
+         * @param options Options that affect what text is included.
+         */
         ProtractorElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -497,6 +511,7 @@
                 });
             });
         };
+        /** Gets the value for the given attribute from the element. */
         ProtractorElement.prototype.getAttribute = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -504,6 +519,7 @@
                 });
             });
         };
+        /** Checks whether the element has the given class. */
         ProtractorElement.prototype.hasClass = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 var classes;
@@ -517,6 +533,7 @@
                 });
             });
         };
+        /** Gets the dimensions of the element. */
         ProtractorElement.prototype.getDimensions = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _a, width, height, _b, left, top;
@@ -533,6 +550,7 @@
                 });
             });
         };
+        /** Gets the value of a property of an element. */
         ProtractorElement.prototype.getProperty = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -540,6 +558,7 @@
                 });
             });
         };
+        /** Sets the value of a property of an input. */
         ProtractorElement.prototype.setInputValue = function (value) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -547,6 +566,7 @@
                 });
             });
         };
+        /** Selects the options at the specified indexes inside of a native `select` element. */
         ProtractorElement.prototype.selectOptions = function () {
             var optionIndexes = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -595,6 +615,7 @@
                 });
             });
         };
+        /** Checks whether this element matches the given selector. */
         ProtractorElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -602,6 +623,7 @@
                 });
             });
         };
+        /** Checks whether the element is focused. */
         ProtractorElement.prototype.isFocused = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -609,6 +631,10 @@
                 });
             });
         };
+        /**
+         * Dispatches an event with a particular name.
+         * @param name Name of the event to be dispatched.
+         */
         ProtractorElement.prototype.dispatchEvent = function (name, data) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -694,7 +720,11 @@
     var defaultEnvironmentOptions = {
         queryFn: function (selector, root) { return root.all(protractor.by.css(selector)); }
     };
-    /** A `HarnessEnvironment` implementation for Protractor. */
+    /**
+     * A `HarnessEnvironment` implementation for Protractor.
+     * @deprecated
+     * @breaking-change 13.0.0
+     */
     var ProtractorHarnessEnvironment = /** @class */ (function (_super) {
         __extends(ProtractorHarnessEnvironment, _super);
         function ProtractorHarnessEnvironment(rawRootElement, options) {
@@ -713,11 +743,17 @@
             }
             throw Error('This TestElement was not created by the ProtractorHarnessEnvironment');
         };
+        /**
+         * Flushes change detection and async tasks captured in the Angular zone.
+         * In most cases it should not be necessary to call this manually. However, there may be some edge
+         * cases where it is needed to fully flush animation events.
+         */
         ProtractorHarnessEnvironment.prototype.forceStabilize = function () {
             return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
                 return [2 /*return*/];
             }); });
         };
+        /** @docs-private */
         ProtractorHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -725,15 +761,21 @@
                 });
             });
         };
+        /** Gets the root element for the document. */
         ProtractorHarnessEnvironment.prototype.getDocumentRoot = function () {
             return protractor.element(protractor.by.css('body'));
         };
+        /** Creates a `TestElement` from a raw element. */
         ProtractorHarnessEnvironment.prototype.createTestElement = function (element) {
             return new ProtractorElement(element);
         };
+        /** Creates a `HarnessLoader` rooted at the given raw element. */
         ProtractorHarnessEnvironment.prototype.createEnvironment = function (element) {
             return new ProtractorHarnessEnvironment(element, this._options);
         };
+        /**
+         * Gets a list of all elements matching the given selector under this environment's root element.
+         */
         ProtractorHarnessEnvironment.prototype.getAllRawElements = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var elementArrayFinder, length, elements, i;

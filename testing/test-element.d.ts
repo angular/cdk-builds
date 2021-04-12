@@ -116,13 +116,9 @@ export interface TestElement {
     matchesSelector(selector: string): Promise<boolean>;
     /** Checks whether the element is focused. */
     isFocused(): Promise<boolean>;
-    /**
-     * Sets the value of a property of an input.
-     */
+    /** Sets the value of a property of an input. */
     setInputValue(value: string): Promise<void>;
-    /**
-     * Selects the options at the specified indexes inside of a native `select` element.
-     */
+    /** Selects the options at the specified indexes inside of a native `select` element. */
     selectOptions(...optionIndexes: number[]): Promise<void>;
     /**
      * Dispatches an event with a particular name.

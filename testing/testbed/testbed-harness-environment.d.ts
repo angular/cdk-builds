@@ -38,10 +38,25 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
      * of the fixture.
      */
     static harnessForFixture<T extends ComponentHarness>(fixture: ComponentFixture<unknown>, harnessType: ComponentHarnessConstructor<T>, options?: TestbedHarnessEnvironmentOptions): Promise<T>;
+    /**
+     * Flushes change detection and async tasks captured in the Angular zone.
+     * In most cases it should not be necessary to call this manually. However, there may be some edge
+     * cases where it is needed to fully flush animation events.
+     */
     forceStabilize(): Promise<void>;
+    /**
+     * Waits for all scheduled or running async tasks to complete. This allows harness
+     * authors to wait for async tasks outside of the Angular zone.
+     */
     waitForTasksOutsideAngular(): Promise<void>;
+    /** Gets the root element for the document. */
     protected getDocumentRoot(): Element;
+    /** Creates a `TestElement` from a raw element. */
     protected createTestElement(element: Element): TestElement;
+    /** Creates a `HarnessLoader` rooted at the given raw element. */
     protected createEnvironment(element: Element): HarnessEnvironment<Element>;
+    /**
+     * Gets a list of all elements matching the given selector under this environment's root element.
+     */
     protected getAllRawElements(selector: string): Promise<Element[]>;
 }

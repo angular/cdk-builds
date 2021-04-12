@@ -396,6 +396,7 @@
             this.element = element;
             this._stabilize = _stabilize;
         }
+        /** Blur the element. */
         WebDriverElement.prototype.blur = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -411,6 +412,7 @@
                 });
             });
         };
+        /** Clear the element's input (for input and textarea elements only). */
         WebDriverElement.prototype.clear = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -464,6 +466,7 @@
                 });
             });
         };
+        /** Focus the element. */
         WebDriverElement.prototype.focus = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -479,6 +482,7 @@
                 });
             });
         };
+        /** Get the computed value of the given CSS property for the element. */
         WebDriverElement.prototype.getCssValue = function (property) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -491,6 +495,7 @@
                 });
             });
         };
+        /** Hovers the mouse over the element. */
         WebDriverElement.prototype.hover = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -506,6 +511,7 @@
                 });
             });
         };
+        /** Moves the mouse away from the element. */
         WebDriverElement.prototype.mouseAway = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -561,6 +567,10 @@
                 });
             });
         };
+        /**
+         * Gets the text from the element.
+         * @param options Options that affect what text is included.
+         */
         WebDriverElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -576,6 +586,7 @@
                 });
             });
         };
+        /** Gets the value for the given attribute from the element. */
         WebDriverElement.prototype.getAttribute = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -588,6 +599,7 @@
                 });
             });
         };
+        /** Checks whether the element has the given class. */
         WebDriverElement.prototype.hasClass = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 var classes;
@@ -604,6 +616,7 @@
                 });
             });
         };
+        /** Gets the dimensions of the element. */
         WebDriverElement.prototype.getDimensions = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _a, width, height, _b, left, top;
@@ -623,6 +636,7 @@
                 });
             });
         };
+        /** Gets the value of a property of an element. */
         WebDriverElement.prototype.getProperty = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -635,6 +649,7 @@
                 });
             });
         };
+        /** Sets the value of a property of an input. */
         WebDriverElement.prototype.setInputValue = function (newValue) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -650,6 +665,7 @@
                 });
             });
         };
+        /** Selects the options at the specified indexes inside of a native `select` element. */
         WebDriverElement.prototype.selectOptions = function () {
             var optionIndexes = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -705,6 +721,7 @@
                 });
             });
         };
+        /** Checks whether this element matches the given selector. */
         WebDriverElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -718,6 +735,7 @@
                 });
             });
         };
+        /** Checks whether the element is focused. */
         WebDriverElement.prototype.isFocused = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -730,6 +748,10 @@
                 });
             });
         };
+        /**
+         * Dispatches an event with a particular name.
+         * @param name Name of the event to be dispatched.
+         */
         WebDriverElement.prototype.dispatchEvent = function (name, data) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -883,6 +905,11 @@
         WebDriverHarnessEnvironment.loader = function (driver, options) {
             return new WebDriverHarnessEnvironment(function () { return driver.findElement(webdriver__namespace.By.css('body')); }, options);
         };
+        /**
+         * Flushes change detection and async tasks captured in the Angular zone.
+         * In most cases it should not be necessary to call this manually. However, there may be some edge
+         * cases where it is needed to fully flush animation events.
+         */
         WebDriverHarnessEnvironment.prototype.forceStabilize = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -895,6 +922,7 @@
                 });
             });
         };
+        /** @docs-private */
         WebDriverHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -902,20 +930,26 @@
                 });
             });
         };
+        /** Gets the root element for the document. */
         WebDriverHarnessEnvironment.prototype.getDocumentRoot = function () {
             var _this = this;
             return function () { return _this.rawRootElement().getDriver().findElement(webdriver__namespace.By.css('body')); };
         };
+        /** Creates a `TestElement` from a raw element. */
         WebDriverHarnessEnvironment.prototype.createTestElement = function (element) {
             var _this = this;
             return new WebDriverElement(element, function () { return _this.forceStabilize(); });
         };
+        /** Creates a `HarnessLoader` rooted at the given raw element. */
         WebDriverHarnessEnvironment.prototype.createEnvironment = function (element) {
             return new WebDriverHarnessEnvironment(element, this._options);
         };
         // Note: This seems to be working, though we may need to re-evaluate if we encounter issues with
         // stale element references. `() => Promise<webdriver.WebElement[]>` seems like a more correct
         // return type, though supporting it would require changes to the public harness API.
+        /**
+         * Gets a list of all elements matching the given selector under this environment's root element.
+         */
         WebDriverHarnessEnvironment.prototype.getAllRawElements = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var els;

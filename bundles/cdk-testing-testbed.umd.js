@@ -772,6 +772,7 @@
             this.element = element;
             this._stabilize = _stabilize;
         }
+        /** Blur the element. */
         UnitTestElement.prototype.blur = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -786,6 +787,7 @@
                 });
             });
         };
+        /** Clear the element's input (for input and textarea elements only). */
         UnitTestElement.prototype.clear = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -841,6 +843,7 @@
                 });
             });
         };
+        /** Focus the element. */
         UnitTestElement.prototype.focus = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -855,6 +858,7 @@
                 });
             });
         };
+        /** Get the computed value of the given CSS property for the element. */
         UnitTestElement.prototype.getCssValue = function (property) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -869,6 +873,7 @@
                 });
             });
         };
+        /** Hovers the mouse over the element. */
         UnitTestElement.prototype.hover = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -884,6 +889,7 @@
                 });
             });
         };
+        /** Moves the mouse away from the element. */
         UnitTestElement.prototype.mouseAway = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -919,6 +925,10 @@
                 });
             });
         };
+        /**
+         * Gets the text from the element.
+         * @param options Options that affect what text is included.
+         */
         UnitTestElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -934,6 +944,7 @@
                 });
             });
         };
+        /** Gets the value for the given attribute from the element. */
         UnitTestElement.prototype.getAttribute = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -946,6 +957,7 @@
                 });
             });
         };
+        /** Checks whether the element has the given class. */
         UnitTestElement.prototype.hasClass = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -958,6 +970,7 @@
                 });
             });
         };
+        /** Gets the dimensions of the element. */
         UnitTestElement.prototype.getDimensions = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -970,6 +983,7 @@
                 });
             });
         };
+        /** Gets the value of a property of an element. */
         UnitTestElement.prototype.getProperty = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -982,6 +996,7 @@
                 });
             });
         };
+        /** Sets the value of a property of an input. */
         UnitTestElement.prototype.setInputValue = function (value) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -996,6 +1011,7 @@
                 });
             });
         };
+        /** Selects the options at the specified indexes inside of a native `select` element. */
         UnitTestElement.prototype.selectOptions = function () {
             var optionIndexes = [];
             for (var _i = 0; _i < arguments.length; _i++) {
@@ -1030,6 +1046,7 @@
                 });
             });
         };
+        /** Checks whether this element matches the given selector. */
         UnitTestElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var elementPrototype;
@@ -1045,6 +1062,7 @@
                 });
             });
         };
+        /** Checks whether the element is focused. */
         UnitTestElement.prototype.isFocused = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -1057,6 +1075,10 @@
                 });
             });
         };
+        /**
+         * Dispatches an event with a particular name.
+         * @param name Name of the event to be dispatched.
+         */
         UnitTestElement.prototype.dispatchEvent = function (name, data) {
             return __awaiter(this, void 0, void 0, function () {
                 var event;
@@ -1258,6 +1280,11 @@
                 });
             });
         };
+        /**
+         * Flushes change detection and async tasks captured in the Angular zone.
+         * In most cases it should not be necessary to call this manually. However, there may be some edge
+         * cases where it is needed to fully flush animation events.
+         */
         TestbedHarnessEnvironment.prototype.forceStabilize = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -1276,6 +1303,10 @@
                 });
             });
         };
+        /**
+         * Waits for all scheduled or running async tasks to complete. This allows harness
+         * authors to wait for async tasks outside of the Angular zone.
+         */
         TestbedHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
@@ -1306,16 +1337,22 @@
                 });
             });
         };
+        /** Gets the root element for the document. */
         TestbedHarnessEnvironment.prototype.getDocumentRoot = function () {
             return document.body;
         };
+        /** Creates a `TestElement` from a raw element. */
         TestbedHarnessEnvironment.prototype.createTestElement = function (element) {
             var _this = this;
             return new UnitTestElement(element, function () { return _this.forceStabilize(); });
         };
+        /** Creates a `HarnessLoader` rooted at the given raw element. */
         TestbedHarnessEnvironment.prototype.createEnvironment = function (element) {
             return new TestbedHarnessEnvironment(element, this._fixture, this._options);
         };
+        /**
+         * Gets a list of all elements matching the given selector under this environment's root element.
+         */
         TestbedHarnessEnvironment.prototype.getAllRawElements = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
