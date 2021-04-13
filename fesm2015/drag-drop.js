@@ -59,6 +59,13 @@ function toggleVisibility(element, enable) {
     styles.top = styles.opacity = enable ? '' : '0';
     styles.left = enable ? '' : '-999em';
 }
+/**
+ * Combines a transform string with an optional other transform
+ * that exited before the base transform was applied.
+ */
+function combineTransforms(transform, initialTransform) {
+    return initialTransform ? (transform + ' ' + initialTransform) : transform;
+}
 
 /**
  * @license
@@ -771,19 +778,24 @@ class DragRef {
         if (dropContainer) {
             const element = this._rootElement;
             const parent = element.parentNode;
-            const preview = this._preview = this._createPreviewElement();
             const placeholder = this._placeholder = this._createPlaceholderElement();
             const anchor = this._anchor = this._anchor || this._document.createComment('');
             // Needs to happen before the root element is moved.
             const shadowRoot = this._getShadowRoot();
             // Insert an anchor node so that we can restore the element's position in the DOM.
             parent.insertBefore(anchor, element);
+            // There's no risk of transforms stacking when inside a drop container so
+            // we can keep the initial transform up to date any time dragging starts.
+            this._initialTransform = element.style.transform || '';
+            // Create the preview after the initial transform has
+            // been cached, because it can be affected by the transform.
+            this._preview = this._createPreviewElement();
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
             toggleVisibility(element, false);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
-            this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(preview);
+            this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
             this.started.next({ source: this }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
@@ -871,7 +883,7 @@ class DragRef {
         this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
-        this._boundaryRect = this._previewRect = undefined;
+        this._boundaryRect = this._previewRect = this._initialTransform = undefined;
         // Re-enter the NgZone since we bound `document` events on the outside.
         this._ngZone.run(() => {
             const container = this._dropContainer;
@@ -929,8 +941,7 @@ class DragRef {
         }
         this._dropContainer._startScrollingIfNecessary(rawX, rawY);
         this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
-        this._preview.style.transform =
-            getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
+        this._applyPreviewTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
     }
     /**
      * Creates the element that will be rendered next to the user's pointer
@@ -961,6 +972,9 @@ class DragRef {
             const element = this._rootElement;
             preview = deepCloneNode(element);
             matchElementSize(preview, element.getBoundingClientRect());
+            if (this._initialTransform) {
+                preview.style.transform = this._initialTransform;
+            }
         }
         extendStyles(preview.style, {
             // It's important that we disable the pointer events on the preview, because
@@ -999,7 +1013,7 @@ class DragRef {
         // Apply the class that adds a transition to the preview.
         this._preview.classList.add('cdk-drag-animating');
         // Move the preview to the placeholder position.
-        this._preview.style.transform = getTransform(placeholderRect.left, placeholderRect.top);
+        this._applyPreviewTransform(placeholderRect.left, placeholderRect.top);
         // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
         // we need to trigger a style recalculation in order for the `cdk-drag-animating` class to
         // apply its style, we take advantage of the available info to figure out whether we need to
@@ -1162,8 +1176,20 @@ class DragRef {
         // Preserve the previous `transform` value, if there was one. Note that we apply our own
         // transform before the user's, because things like rotation can affect which direction
         // the element will be translated towards.
-        this._rootElement.style.transform = this._initialTransform ?
-            transform + ' ' + this._initialTransform : transform;
+        this._rootElement.style.transform = combineTransforms(transform, this._initialTransform);
+    }
+    /**
+     * Applies a `transform` to the preview, taking into account any existing transforms on it.
+     * @param x New transform value along the X axis.
+     * @param y New transform value along the Y axis.
+     */
+    _applyPreviewTransform(x, y) {
+        var _a;
+        // Only apply the initial transform if the preview is a clone of the original element, otherwise
+        // it could be completely different and the transform might not make sense anymore.
+        const initialTransform = ((_a = this._previewTemplate) === null || _a === void 0 ? void 0 : _a.template) ? undefined : this._initialTransform;
+        const transform = getTransform(x, y);
+        this._preview.style.transform = combineTransforms(transform, initialTransform);
     }
     /**
      * Gets the distance that the user has dragged during the current drag sequence.
@@ -1793,11 +1819,11 @@ class DropListRef {
             if (isHorizontal) {
                 // Round the transforms since some browsers will
                 // blur the elements, for sub-pixel transforms.
-                elementToOffset.style.transform = `translate3d(${Math.round(sibling.offset)}px, 0, 0)`;
+                elementToOffset.style.transform = combineTransforms(`translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
                 adjustClientRect(sibling.clientRect, 0, offset);
             }
             else {
-                elementToOffset.style.transform = `translate3d(0, ${Math.round(sibling.offset)}px, 0)`;
+                elementToOffset.style.transform = combineTransforms(`translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
                 adjustClientRect(sibling.clientRect, offset, 0);
             }
         });
@@ -1886,7 +1912,12 @@ class DropListRef {
         const isHorizontal = this._orientation === 'horizontal';
         this._itemPositions = this._activeDraggables.map(drag => {
             const elementToMeasure = drag.getVisibleElement();
-            return { drag, offset: 0, clientRect: getMutableClientRect(elementToMeasure) };
+            return {
+                drag,
+                offset: 0,
+                initialTransform: elementToMeasure.style.transform || '',
+                clientRect: getMutableClientRect(elementToMeasure),
+            };
         }).sort((a, b) => {
             return isHorizontal ? a.clientRect.left - b.clientRect.left :
                 a.clientRect.top - b.clientRect.top;
@@ -1899,9 +1930,12 @@ class DropListRef {
         styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
         // TODO(crisbeto): may have to wait for the animations to finish.
         this._activeDraggables.forEach(item => {
+            var _a;
             const rootElement = item.getRootElement();
             if (rootElement) {
-                rootElement.style.transform = '';
+                const initialTransform = (_a = this._itemPositions
+                    .find(current => current.drag === item)) === null || _a === void 0 ? void 0 : _a.initialTransform;
+                rootElement.style.transform = initialTransform || '';
             }
         });
         this._siblings.forEach(sibling => sibling._stopReceiving(this));

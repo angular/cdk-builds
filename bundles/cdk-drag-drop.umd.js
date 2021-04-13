@@ -77,6 +77,13 @@
         styles.top = styles.opacity = enable ? '' : '0';
         styles.left = enable ? '' : '-999em';
     }
+    /**
+     * Combines a transform string with an optional other transform
+     * that exited before the base transform was applied.
+     */
+    function combineTransforms(transform, initialTransform) {
+        return initialTransform ? (transform + ' ' + initialTransform) : transform;
+    }
 
     /**
      * @license
@@ -800,19 +807,24 @@
             if (dropContainer) {
                 var element = this._rootElement;
                 var parent = element.parentNode;
-                var preview = this._preview = this._createPreviewElement();
                 var placeholder = this._placeholder = this._createPlaceholderElement();
                 var anchor = this._anchor = this._anchor || this._document.createComment('');
                 // Needs to happen before the root element is moved.
                 var shadowRoot = this._getShadowRoot();
                 // Insert an anchor node so that we can restore the element's position in the DOM.
                 parent.insertBefore(anchor, element);
+                // There's no risk of transforms stacking when inside a drop container so
+                // we can keep the initial transform up to date any time dragging starts.
+                this._initialTransform = element.style.transform || '';
+                // Create the preview after the initial transform has
+                // been cached, because it can be affected by the transform.
+                this._preview = this._createPreviewElement();
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
                 toggleVisibility(element, false);
                 this._document.body.appendChild(parent.replaceChild(placeholder, element));
-                this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(preview);
+                this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
                 this.started.next({ source: this }); // Emit before notifying the container.
                 dropContainer.start();
                 this._initialContainer = dropContainer;
@@ -902,7 +914,7 @@
             this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
             this._destroyPreview();
             this._destroyPlaceholder();
-            this._boundaryRect = this._previewRect = undefined;
+            this._boundaryRect = this._previewRect = this._initialTransform = undefined;
             // Re-enter the NgZone since we bound `document` events on the outside.
             this._ngZone.run(function () {
                 var container = _this._dropContainer;
@@ -929,10 +941,10 @@
          * Updates the item's position in its drop container, or moves it
          * into a new one, depending on its current drag position.
          */
-        DragRef.prototype._updateActiveDropContainer = function (_a, _b) {
+        DragRef.prototype._updateActiveDropContainer = function (_b, _c) {
             var _this = this;
-            var x = _a.x, y = _a.y;
-            var rawX = _b.x, rawY = _b.y;
+            var x = _b.x, y = _b.y;
+            var rawX = _c.x, rawY = _c.y;
             // Drop container that draggable has been moved into.
             var newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
             // If we couldn't find a new container to move the item into, and the item has left its
@@ -963,8 +975,7 @@
             }
             this._dropContainer._startScrollingIfNecessary(rawX, rawY);
             this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
-            this._preview.style.transform =
-                getTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
+            this._applyPreviewTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
         };
         /**
          * Creates the element that will be rendered next to the user's pointer
@@ -995,6 +1006,9 @@
                 var element = this._rootElement;
                 preview = deepCloneNode(element);
                 matchElementSize(preview, element.getBoundingClientRect());
+                if (this._initialTransform) {
+                    preview.style.transform = this._initialTransform;
+                }
             }
             extendStyles(preview.style, {
                 // It's important that we disable the pointer events on the preview, because
@@ -1034,7 +1048,7 @@
             // Apply the class that adds a transition to the preview.
             this._preview.classList.add('cdk-drag-animating');
             // Move the preview to the placeholder position.
-            this._preview.style.transform = getTransform(placeholderRect.left, placeholderRect.top);
+            this._applyPreviewTransform(placeholderRect.left, placeholderRect.top);
             // If the element doesn't have a `transition`, the `transitionend` event won't fire. Since
             // we need to trigger a style recalculation in order for the `cdk-drag-animating` class to
             // apply its style, we take advantage of the available info to figure out whether we need to
@@ -1124,7 +1138,7 @@
         /** Gets the pointer position on the page, accounting for any position constraints. */
         DragRef.prototype._getConstrainedPointerPosition = function (point) {
             var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
-            var _a = this.constrainPosition ? this.constrainPosition(point, this) : point, x = _a.x, y = _a.y;
+            var _b = this.constrainPosition ? this.constrainPosition(point, this) : point, x = _b.x, y = _b.y;
             if (this.lockAxis === 'x' || dropContainerLock === 'x') {
                 y = this._pickupPositionOnPage.y;
             }
@@ -1132,7 +1146,7 @@
                 x = this._pickupPositionOnPage.x;
             }
             if (this._boundaryRect) {
-                var _b = this._pickupPositionInElement, pickupX = _b.x, pickupY = _b.y;
+                var _c = this._pickupPositionInElement, pickupX = _c.x, pickupY = _c.y;
                 var boundaryRect = this._boundaryRect;
                 var previewRect = this._previewRect;
                 var minY = boundaryRect.top + pickupY;
@@ -1197,8 +1211,20 @@
             // Preserve the previous `transform` value, if there was one. Note that we apply our own
             // transform before the user's, because things like rotation can affect which direction
             // the element will be translated towards.
-            this._rootElement.style.transform = this._initialTransform ?
-                transform + ' ' + this._initialTransform : transform;
+            this._rootElement.style.transform = combineTransforms(transform, this._initialTransform);
+        };
+        /**
+         * Applies a `transform` to the preview, taking into account any existing transforms on it.
+         * @param x New transform value along the X axis.
+         * @param y New transform value along the Y axis.
+         */
+        DragRef.prototype._applyPreviewTransform = function (x, y) {
+            var _a;
+            // Only apply the initial transform if the preview is a clone of the original element, otherwise
+            // it could be completely different and the transform might not make sense anymore.
+            var initialTransform = ((_a = this._previewTemplate) === null || _a === void 0 ? void 0 : _a.template) ? undefined : this._initialTransform;
+            var transform = getTransform(x, y);
+            this._preview.style.transform = combineTransforms(transform, initialTransform);
         };
         /**
          * Gets the distance that the user has dragged during the current drag sequence.
@@ -1221,7 +1247,7 @@
          * If not, the position is adjusted so that the element fits again.
          */
         DragRef.prototype._containInsideBoundaryOnResize = function () {
-            var _a = this._passiveTransform, x = _a.x, y = _a.y;
+            var _b = this._passiveTransform, x = _b.x, y = _b.y;
             if ((x === 0 && y === 0) || this.isDragging() || !this._boundaryElement) {
                 return;
             }
@@ -2133,11 +2159,11 @@
                 if (isHorizontal) {
                     // Round the transforms since some browsers will
                     // blur the elements, for sub-pixel transforms.
-                    elementToOffset.style.transform = "translate3d(" + Math.round(sibling.offset) + "px, 0, 0)";
+                    elementToOffset.style.transform = combineTransforms("translate3d(" + Math.round(sibling.offset) + "px, 0, 0)", sibling.initialTransform);
                     adjustClientRect(sibling.clientRect, 0, offset);
                 }
                 else {
-                    elementToOffset.style.transform = "translate3d(0, " + Math.round(sibling.offset) + "px, 0)";
+                    elementToOffset.style.transform = combineTransforms("translate3d(0, " + Math.round(sibling.offset) + "px, 0)", sibling.initialTransform);
                     adjustClientRect(sibling.clientRect, offset, 0);
                 }
             });
@@ -2162,14 +2188,14 @@
             var horizontalScrollDirection = 0 /* NONE */;
             // Check whether we should start scrolling any of the parent containers.
             this._parentPositions.positions.forEach(function (position, element) {
-                var _a;
+                var _b;
                 // We have special handling for the `document` below. Also this would be
                 // nicer with a  for...of loop, but it requires changing a compiler flag.
                 if (element === _this._document || !position.clientRect || scrollNode) {
                     return;
                 }
                 if (isPointerNearClientRect(position.clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
-                    _a = __read(getElementScrollDirections(element, position.clientRect, pointerX, pointerY), 2), verticalScrollDirection = _a[0], horizontalScrollDirection = _a[1];
+                    _b = __read(getElementScrollDirections(element, position.clientRect, pointerX, pointerY), 2), verticalScrollDirection = _b[0], horizontalScrollDirection = _b[1];
                     if (verticalScrollDirection || horizontalScrollDirection) {
                         scrollNode = element;
                     }
@@ -2177,7 +2203,7 @@
             });
             // Otherwise check if we can start scrolling the viewport.
             if (!verticalScrollDirection && !horizontalScrollDirection) {
-                var _a = this._viewportRuler.getViewportSize(), width = _a.width, height = _a.height;
+                var _b = this._viewportRuler.getViewportSize(), width = _b.width, height = _b.height;
                 var clientRect = { width: width, height: height, top: 0, right: width, bottom: height, left: 0 };
                 verticalScrollDirection = getVerticalScrollDirection(clientRect, pointerY);
                 horizontalScrollDirection = getHorizontalScrollDirection(clientRect, pointerX);
@@ -2228,7 +2254,12 @@
             var isHorizontal = this._orientation === 'horizontal';
             this._itemPositions = this._activeDraggables.map(function (drag) {
                 var elementToMeasure = drag.getVisibleElement();
-                return { drag: drag, offset: 0, clientRect: getMutableClientRect(elementToMeasure) };
+                return {
+                    drag: drag,
+                    offset: 0,
+                    initialTransform: elementToMeasure.style.transform || '',
+                    clientRect: getMutableClientRect(elementToMeasure),
+                };
             }).sort(function (a, b) {
                 return isHorizontal ? a.clientRect.left - b.clientRect.left :
                     a.clientRect.top - b.clientRect.top;
@@ -2242,9 +2273,12 @@
             styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
             // TODO(crisbeto): may have to wait for the animations to finish.
             this._activeDraggables.forEach(function (item) {
+                var _a;
                 var rootElement = item.getRootElement();
                 if (rootElement) {
-                    rootElement.style.transform = '';
+                    var initialTransform = (_a = _this._itemPositions
+                        .find(function (current) { return current.drag === item; })) === null || _a === void 0 ? void 0 : _a.initialTransform;
+                    rootElement.style.transform = initialTransform || '';
                 }
             });
             this._siblings.forEach(function (sibling) { return sibling._stopReceiving(_this); });
@@ -2334,8 +2368,8 @@
         DropListRef.prototype._getItemIndexFromPointerPosition = function (item, pointerX, pointerY, delta) {
             var _this = this;
             var isHorizontal = this._orientation === 'horizontal';
-            var index = findIndex(this._itemPositions, function (_a, _, array) {
-                var drag = _a.drag, clientRect = _a.clientRect;
+            var index = findIndex(this._itemPositions, function (_b, _, array) {
+                var drag = _b.drag, clientRect = _b.clientRect;
                 if (drag === item) {
                     // If there's only one item left in the container, it must be
                     // the dragged item itself so we use it as a reference.
@@ -2450,14 +2484,14 @@
                         // client rectangles ourselves. This is cheaper than re-measuring everything and
                         // we can avoid inconsistent behavior where we might be measuring the element before
                         // its position has changed.
-                        _this._itemPositions.forEach(function (_a) {
-                            var clientRect = _a.clientRect;
+                        _this._itemPositions.forEach(function (_b) {
+                            var clientRect = _b.clientRect;
                             adjustClientRect(clientRect, scrollDifference_1.top, scrollDifference_1.left);
                         });
                         // We need two loops for this, because we want all of the cached
                         // positions to be up-to-date before we re-sort the item.
-                        _this._itemPositions.forEach(function (_a) {
-                            var drag = _a.drag;
+                        _this._itemPositions.forEach(function (_b) {
+                            var drag = _b.drag;
                             if (_this._dragDropRegistry.isDragging(drag)) {
                                 // We need to re-sort the item manually, because the pointer move
                                 // events won't be dispatched while the user is scrolling.

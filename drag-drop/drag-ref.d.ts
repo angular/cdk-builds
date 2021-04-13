@@ -402,6 +402,12 @@ export declare class DragRef<T = any> {
      */
     private _applyRootElementTransform;
     /**
+     * Applies a `transform` to the preview, taking into account any existing transforms on it.
+     * @param x New transform value along the X axis.
+     * @param y New transform value along the Y axis.
+     */
+    private _applyPreviewTransform;
+    /**
      * Gets the distance that the user has dragged during the current drag sequence.
      * @param currentPosition Current position of the user's pointer.
      */

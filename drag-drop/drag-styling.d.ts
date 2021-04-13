@@ -38,4 +38,9 @@ export declare function toggleNativeDragInteractions(element: HTMLElement, enabl
  * @docs-private
  */
 export declare function toggleVisibility(element: HTMLElement, enable: boolean): void;
+/**
+ * Combines a transform string with an optional other transform
+ * that exited before the base transform was applied.
+ */
+export declare function combineTransforms(transform: string, initialTransform?: string): string;
 export {};
