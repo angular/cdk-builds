@@ -121,6 +121,7 @@
     var EQUALS = 187; // Firefox (Gecko) fires 61 for EQUALS
     var COMMA = 188;
     var DASH = 189; // Firefox (Gecko) fires 173 for DASH/MINUS
+    var PERIOD = 190;
     var SLASH = 191;
     var APOSTROPHE = 192;
     var TILDE = 192;
@@ -252,6 +253,7 @@
     exports.PAGE_DOWN = PAGE_DOWN;
     exports.PAGE_UP = PAGE_UP;
     exports.PAUSE = PAUSE;
+    exports.PERIOD = PERIOD;
     exports.PLUS_SIGN = PLUS_SIGN;
     exports.PRINT_SCREEN = PRINT_SCREEN;
     exports.Q = Q;

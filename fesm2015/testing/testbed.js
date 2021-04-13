@@ -4,6 +4,7 @@ import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import * as keyCodes from '@angular/cdk/keycodes';
+import { PERIOD } from '@angular/cdk/keycodes';
 
 /**
  * @license
@@ -323,6 +324,8 @@ function triggerBlur(element) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** Input types for which the value can be entered incrementally. */
+const incrementalInputTypes = new Set(['text', 'email', 'hidden', 'password', 'search', 'tel', 'url']);
 /**
  * Checks whether the given Element is a text input element.
  * @docs-private
@@ -343,19 +346,41 @@ function typeInElement(element, ...modifiersAndKeys) {
         modifiers = {};
         rest = modifiersAndKeys;
     }
+    const isInput = isTextInput(element);
+    const inputType = element.getAttribute('type') || 'text';
     const keys = rest
         .map(k => typeof k === 'string' ?
         k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c })) : [k])
         .reduce((arr, k) => arr.concat(k), []);
+    // We simulate the user typing in a value by incrementally assigning the value below. The problem
+    // is that for some input types, the browser won't allow for an invalid value to be set via the
+    // `value` property which will always be the case when going character-by-character. If we detect
+    // such an input, we have to set the value all at once or listeners to the `input` event (e.g.
+    // the `ReactiveFormsModule` uses such an approach) won't receive the correct value.
+    const enterValueIncrementally = inputType === 'number' && keys.length > 0 ?
+        // The value can be set character by character in number inputs if it doesn't have any decimals.
+        keys.every(key => key.key !== '.' && key.keyCode !== PERIOD) :
+        incrementalInputTypes.has(inputType);
     triggerFocus(element);
+    // When we aren't entering the value incrementally, assign it all at once ahead
+    // of time so that any listeners to the key events below will have access to it.
+    if (!enterValueIncrementally) {
+        element.value = keys.reduce((value, key) => value + (key.key || ''), '');
+    }
     for (const key of keys) {
         dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, modifiers);
         dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, modifiers);
-        if (isTextInput(element) && key.key && key.key.length === 1) {
-            element.value += key.key;
-            dispatchFakeEvent(element, 'input');
+        if (isInput && key.key && key.key.length === 1) {
+            if (enterValueIncrementally) {
+                element.value += key.key;
+                dispatchFakeEvent(element, 'input');
+            }
         }
         dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers);
+    }
+    // Since we weren't dispatching `input` events while sending the keys, we have to do it now.
+    if (!enterValueIncrementally) {
+        dispatchFakeEvent(element, 'input');
     }
 }
 /**
