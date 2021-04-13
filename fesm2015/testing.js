@@ -52,7 +52,7 @@ function batchChangeDetection(fn, triggerBeforeAndAfter) {
         }
         // If nothing is handling change detection batching, install the default handler.
         if (!autoChangeDetectionSubscription) {
-            autoChangeDetectionSubject.subscribe(defaultAutoChangeDetectionHandler);
+            handleAutoChangeDetectionStatus(defaultAutoChangeDetectionHandler);
         }
         if (triggerBeforeAndAfter) {
             yield new Promise(resolve => autoChangeDetectionSubject.next({
