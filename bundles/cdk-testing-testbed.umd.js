@@ -642,6 +642,8 @@
         triggerFocusChange(element, 'blur');
     }
 
+    /** Input types for which the value can be entered incrementally. */
+    var incrementalInputTypes = new Set(['text', 'email', 'hidden', 'password', 'search', 'tel', 'url']);
     /**
      * Checks whether the given Element is a text input element.
      * @docs-private
@@ -667,19 +669,37 @@
             modifiers = {};
             rest = modifiersAndKeys;
         }
+        var isInput = isTextInput(element);
+        var inputType = element.getAttribute('type') || 'text';
         var keys = rest
             .map(function (k) { return typeof k === 'string' ?
             k.split('').map(function (c) { return ({ keyCode: c.toUpperCase().charCodeAt(0), key: c }); }) : [k]; })
             .reduce(function (arr, k) { return arr.concat(k); }, []);
+        // We simulate the user typing in a value by incrementally assigning the value below. The problem
+        // is that for some input types, the browser won't allow for an invalid value to be set via the
+        // `value` property which will always be the case when going character-by-character. If we detect
+        // such an input, we have to set the value all at once or listeners to the `input` event (e.g.
+        // the `ReactiveFormsModule` uses such an approach) won't receive the correct value.
+        var enterValueIncrementally = inputType === 'number' && keys.length > 0 ?
+            // The value can be set character by character in number inputs if it doesn't have any decimals.
+            keys.every(function (key) { return key.key !== '.' && key.keyCode !== keyCodes.PERIOD; }) :
+            incrementalInputTypes.has(inputType);
         triggerFocus(element);
+        // When we aren't entering the value incrementally, assign it all at once ahead
+        // of time so that any listeners to the key events below will have access to it.
+        if (!enterValueIncrementally) {
+            element.value = keys.reduce(function (value, key) { return value + (key.key || ''); }, '');
+        }
         try {
             for (var keys_1 = __values(keys), keys_1_1 = keys_1.next(); !keys_1_1.done; keys_1_1 = keys_1.next()) {
                 var key = keys_1_1.value;
                 dispatchKeyboardEvent(element, 'keydown', key.keyCode, key.key, modifiers);
                 dispatchKeyboardEvent(element, 'keypress', key.keyCode, key.key, modifiers);
-                if (isTextInput(element) && key.key && key.key.length === 1) {
-                    element.value += key.key;
-                    dispatchFakeEvent(element, 'input');
+                if (isInput && key.key && key.key.length === 1) {
+                    if (enterValueIncrementally) {
+                        element.value += key.key;
+                        dispatchFakeEvent(element, 'input');
+                    }
                 }
                 dispatchKeyboardEvent(element, 'keyup', key.keyCode, key.key, modifiers);
             }
@@ -690,6 +710,10 @@
                 if (keys_1_1 && !keys_1_1.done && (_a = keys_1.return)) _a.call(keys_1);
             }
             finally { if (e_1) throw e_1.error; }
+        }
+        // Since we weren't dispatching `input` events while sending the keys, we have to do it now.
+        if (!enterValueIncrementally) {
+            dispatchFakeEvent(element, 'input');
         }
     }
     /**

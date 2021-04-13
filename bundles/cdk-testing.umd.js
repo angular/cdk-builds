@@ -360,7 +360,7 @@
                     case 2:
                         // If nothing is handling change detection batching, install the default handler.
                         if (!autoChangeDetectionSubscription) {
-                            autoChangeDetectionSubject.subscribe(defaultAutoChangeDetectionHandler);
+                            handleAutoChangeDetectionStatus(defaultAutoChangeDetectionHandler);
                         }
                         if (!triggerBeforeAndAfter) return [3 /*break*/, 9];
                         return [4 /*yield*/, new Promise(function (resolve) { return autoChangeDetectionSubject.next({

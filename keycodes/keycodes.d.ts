@@ -115,6 +115,7 @@ export declare const SEMICOLON = 186;
 export declare const EQUALS = 187;
 export declare const COMMA = 188;
 export declare const DASH = 189;
+export declare const PERIOD = 190;
 export declare const SLASH = 191;
 export declare const APOSTROPHE = 192;
 export declare const TILDE = 192;
