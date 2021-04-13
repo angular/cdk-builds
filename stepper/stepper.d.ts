@@ -65,8 +65,10 @@ export declare class CdkStep implements OnChanges {
     content: TemplateRef<any>;
     /** The top level abstract control of the step. */
     stepControl: AbstractControlLike;
-    /** Whether user has seen the expanded step content or not. */
+    /** Whether user has attempted to move away from the step. */
     interacted: boolean;
+    /** Emits when the user has attempted to move away from the step. */
+    readonly interactedStream: EventEmitter<CdkStep>;
     /** Plain text label of the step. */
     label: string;
     /** Error message to display when there's an error. */
@@ -104,6 +106,7 @@ export declare class CdkStep implements OnChanges {
     /** Resets the step to its initial state. Note that this includes resetting form data. */
     reset(): void;
     ngOnChanges(): void;
+    _markAsInteracted(): void;
     static ngAcceptInputType_editable: BooleanInput;
     static ngAcceptInputType_hasError: BooleanInput;
     static ngAcceptInputType_optional: BooleanInput;

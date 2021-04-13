@@ -82,8 +82,10 @@
     var CdkStep = /** @class */ (function () {
         function CdkStep(_stepper, stepperOptions) {
             this._stepper = _stepper;
-            /** Whether user has seen the expanded step content or not. */
+            /** Whether user has attempted to move away from the step. */
             this.interacted = false;
+            /** Emits when the user has attempted to move away from the step. */
+            this.interactedStream = new core.EventEmitter();
             this._editable = true;
             this._optional = false;
             this._completedOverride = null;
@@ -164,6 +166,12 @@
             // underlying MatStepHeader, we have to make sure that change detection runs correctly.
             this._stepper._stateChanged();
         };
+        CdkStep.prototype._markAsInteracted = function () {
+            if (!this.interacted) {
+                this.interacted = true;
+                this.interactedStream.emit(this);
+            }
+        };
         return CdkStep;
     }());
     CdkStep.decorators = [
@@ -183,6 +191,7 @@
         stepLabel: [{ type: core.ContentChild, args: [CdkStepLabel,] }],
         content: [{ type: core.ViewChild, args: [core.TemplateRef, { static: true },] }],
         stepControl: [{ type: core.Input }],
+        interactedStream: [{ type: core.Output, args: ['interacted',] }],
         label: [{ type: core.Input }],
         errorMessage: [{ type: core.Input }],
         ariaLabel: [{ type: core.Input, args: ['aria-label',] }],
@@ -231,18 +240,14 @@
                 return this._selectedIndex;
             },
             set: function (index) {
+                var _a;
                 var newIndex = coercion.coerceNumberProperty(index);
                 if (this.steps && this._steps) {
                     // Ensure that the index can't be out of bounds.
                     if (!this._isValidIndex(index) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                         throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
                     }
-                    var selectedStep = this.selected;
-                    if (selectedStep) {
-                        // TODO: this should really be called something like `visited` instead. Just because
-                        // the user has seen the step doesn't guarantee that they've interacted with it.
-                        selectedStep.interacted = true;
-                    }
+                    (_a = this.selected) === null || _a === void 0 ? void 0 : _a._markAsInteracted();
                     if (this._selectedIndex !== newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                         (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                         this._updateSelectedItemIndex(index);

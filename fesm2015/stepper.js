@@ -3,7 +3,7 @@ import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
-import { Directive, ElementRef, TemplateRef, InjectionToken, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, QueryList, EventEmitter, ChangeDetectorRef, ContentChildren, Output, HostListener, NgModule } from '@angular/core';
+import { Directive, ElementRef, TemplateRef, InjectionToken, EventEmitter, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, Output, QueryList, ChangeDetectorRef, ContentChildren, HostListener, NgModule } from '@angular/core';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
@@ -80,8 +80,10 @@ const STEPPER_GLOBAL_OPTIONS = new InjectionToken('STEPPER_GLOBAL_OPTIONS');
 class CdkStep {
     constructor(_stepper, stepperOptions) {
         this._stepper = _stepper;
-        /** Whether user has seen the expanded step content or not. */
+        /** Whether user has attempted to move away from the step. */
         this.interacted = false;
+        /** Emits when the user has attempted to move away from the step. */
+        this.interactedStream = new EventEmitter();
         this._editable = true;
         this._optional = false;
         this._completedOverride = null;
@@ -146,6 +148,12 @@ class CdkStep {
         // underlying MatStepHeader, we have to make sure that change detection runs correctly.
         this._stepper._stateChanged();
     }
+    _markAsInteracted() {
+        if (!this.interacted) {
+            this.interacted = true;
+            this.interactedStream.emit(this);
+        }
+    }
 }
 CdkStep.decorators = [
     { type: Component, args: [{
@@ -164,6 +172,7 @@ CdkStep.propDecorators = {
     stepLabel: [{ type: ContentChild, args: [CdkStepLabel,] }],
     content: [{ type: ViewChild, args: [TemplateRef, { static: true },] }],
     stepControl: [{ type: Input }],
+    interactedStream: [{ type: Output, args: ['interacted',] }],
     label: [{ type: Input }],
     errorMessage: [{ type: Input }],
     ariaLabel: [{ type: Input, args: ['aria-label',] }],
@@ -207,18 +216,14 @@ class CdkStepper {
         return this._selectedIndex;
     }
     set selectedIndex(index) {
+        var _a;
         const newIndex = coerceNumberProperty(index);
         if (this.steps && this._steps) {
             // Ensure that the index can't be out of bounds.
             if (!this._isValidIndex(index) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
-            const selectedStep = this.selected;
-            if (selectedStep) {
-                // TODO: this should really be called something like `visited` instead. Just because
-                // the user has seen the step doesn't guarantee that they've interacted with it.
-                selectedStep.interacted = true;
-            }
+            (_a = this.selected) === null || _a === void 0 ? void 0 : _a._markAsInteracted();
             if (this._selectedIndex !== newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
                 (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                 this._updateSelectedItemIndex(index);
