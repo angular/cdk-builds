@@ -57,7 +57,6 @@ export interface StepperOptions {
 export declare class CdkStep implements OnChanges {
     _stepper: CdkStepper;
     private _stepperOptions;
-    _showError: boolean;
     _displayDefaultIndicatorType: boolean;
     /** Template for step label if it exists. */
     stepLabel: CdkStepLabel;
@@ -107,6 +106,8 @@ export declare class CdkStep implements OnChanges {
     reset(): void;
     ngOnChanges(): void;
     _markAsInteracted(): void;
+    /** Determines whether the error state can be shown. */
+    _showError(): boolean;
     static ngAcceptInputType_editable: BooleanInput;
     static ngAcceptInputType_hasError: BooleanInput;
     static ngAcceptInputType_optional: BooleanInput;

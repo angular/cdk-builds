@@ -92,7 +92,6 @@
             this._customError = null;
             this._stepperOptions = stepperOptions ? stepperOptions : {};
             this._displayDefaultIndicatorType = this._stepperOptions.displayDefaultIndicatorType !== false;
-            this._showError = !!this._stepperOptions.showError;
         }
         Object.defineProperty(CdkStep.prototype, "editable", {
             /** Whether the user can return to this step once it has been marked as completed. */
@@ -171,6 +170,13 @@
                 this.interacted = true;
                 this.interactedStream.emit(this);
             }
+        };
+        /** Determines whether the error state can be shown. */
+        CdkStep.prototype._showError = function () {
+            var _a;
+            // We want to show the error state either if the user opted into/out of it using the
+            // global options, or if they've explicitly set it through the `hasError` input.
+            return (_a = this._stepperOptions.showError) !== null && _a !== void 0 ? _a : this._customError != null;
         };
         return CdkStep;
     }());
@@ -370,7 +376,7 @@
                 this._getGuidelineLogic(step, isCurrentStep, state);
         };
         CdkStepper.prototype._getDefaultIndicatorLogic = function (step, isCurrentStep) {
-            if (step._showError && step.hasError && !isCurrentStep) {
+            if (step._showError() && step.hasError && !isCurrentStep) {
                 return STEP_STATE.ERROR;
             }
             else if (!step.completed || isCurrentStep) {
@@ -382,7 +388,7 @@
         };
         CdkStepper.prototype._getGuidelineLogic = function (step, isCurrentStep, state) {
             if (state === void 0) { state = STEP_STATE.NUMBER; }
-            if (step._showError && step.hasError && !isCurrentStep) {
+            if (step._showError() && step.hasError && !isCurrentStep) {
                 return STEP_STATE.ERROR;
             }
             else if (step.completed && !isCurrentStep) {
