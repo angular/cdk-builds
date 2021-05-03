@@ -13,7 +13,7 @@ import * as webdriver from 'selenium-webdriver';
  * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
  * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
  */
-const webDriverKeyMap = {
+const seleniumWebDriverKeyMap = {
     [TestKey.BACKSPACE]: webdriver.Key.BACK_SPACE,
     [TestKey.TAB]: webdriver.Key.TAB,
     [TestKey.ENTER]: webdriver.Key.ENTER,
@@ -46,7 +46,7 @@ const webDriverKeyMap = {
     [TestKey.META]: webdriver.Key.META
 };
 /** Gets a list of WebDriver `Key`s for the given `ModifierKeys`. */
-function getWebDriverModifierKeys(modifiers) {
+function getSeleniumWebDriverModifierKeys(modifiers) {
     const result = [];
     if (modifiers.control) {
         result.push(webdriver.Key.CONTROL);
@@ -71,7 +71,7 @@ function getWebDriverModifierKeys(modifiers) {
  * found in the LICENSE file at https://angular.io/license
  */
 /** A `TestElement` implementation for WebDriver. */
-class WebDriverElement {
+class SeleniumWebDriverElement {
     constructor(element, _stabilize) {
         this.element = element;
         this._stabilize = _stabilize;
@@ -143,8 +143,8 @@ class WebDriverElement {
                 modifiers = {};
                 rest = modifiersAndKeys;
             }
-            const modifierKeys = getWebDriverModifierKeys(modifiers);
-            const keys = rest.map(k => typeof k === 'string' ? k.split('') : [webDriverKeyMap[k]])
+            const modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
+            const keys = rest.map(k => typeof k === 'string' ? k.split('') : [seleniumWebDriverKeyMap[k]])
                 .reduce((arr, k) => arr.concat(k), [])
                 // webdriver.Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
                 // so avoid it if no modifier keys are required.
@@ -269,7 +269,7 @@ class WebDriverElement {
             if (args.length && typeof args[args.length - 1] === 'object') {
                 modifiers = args.pop();
             }
-            const modifierKeys = getWebDriverModifierKeys(modifiers);
+            const modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
             // Omitting the offset argument to mouseMove results in clicking the center.
             // This is the default behavior we want, so we use an empty array of offsetArgs if
             // no args remain after popping the modifiers from the args passed to this function.
@@ -333,21 +333,21 @@ function waitForAngularReady(wd) {
     });
 }
 /** A `HarnessEnvironment` implementation for WebDriver. */
-class WebDriverHarnessEnvironment extends HarnessEnvironment {
+class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
     constructor(rawRootElement, options) {
         super(rawRootElement);
         this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
     }
     /** Gets the ElementFinder corresponding to the given TestElement. */
     static getNativeElement(el) {
-        if (el instanceof WebDriverElement) {
+        if (el instanceof SeleniumWebDriverElement) {
             return el.element();
         }
         throw Error('This TestElement was not created by the WebDriverHarnessEnvironment');
     }
     /** Creates a `HarnessLoader` rooted at the document root. */
     static loader(driver, options) {
-        return new WebDriverHarnessEnvironment(() => driver.findElement(webdriver.By.css('body')), options);
+        return new SeleniumWebDriverHarnessEnvironment(() => driver.findElement(webdriver.By.css('body')), options);
     }
     /**
      * Flushes change detection and async tasks captured in the Angular zone.
@@ -372,11 +372,11 @@ class WebDriverHarnessEnvironment extends HarnessEnvironment {
     }
     /** Creates a `TestElement` from a raw element. */
     createTestElement(element) {
-        return new WebDriverElement(element, () => this.forceStabilize());
+        return new SeleniumWebDriverElement(element, () => this.forceStabilize());
     }
     /** Creates a `HarnessLoader` rooted at the given raw element. */
     createEnvironment(element) {
-        return new WebDriverHarnessEnvironment(element, this._options);
+        return new SeleniumWebDriverHarnessEnvironment(element, this._options);
     }
     // Note: This seems to be working, though we may need to re-evaluate if we encounter issues with
     // stale element references. `() => Promise<webdriver.WebElement[]>` seems like a more correct
@@ -408,5 +408,5 @@ class WebDriverHarnessEnvironment extends HarnessEnvironment {
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { WebDriverElement, WebDriverHarnessEnvironment, waitForAngularReady };
-//# sourceMappingURL=webdriver.js.map
+export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
+//# sourceMappingURL=selenium-webdriver.js.map

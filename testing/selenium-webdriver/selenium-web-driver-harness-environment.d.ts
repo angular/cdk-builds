@@ -34,7 +34,7 @@ export interface WebDriverHarnessEnvironmentOptions {
 /** Waits for angular to be ready after the page load. */
 export declare function waitForAngularReady(wd: webdriver.WebDriver): Promise<void>;
 /** A `HarnessEnvironment` implementation for WebDriver. */
-export declare class WebDriverHarnessEnvironment extends HarnessEnvironment<() => webdriver.WebElement> {
+export declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() => webdriver.WebElement> {
     /** The options for this environment. */
     private _options;
     protected constructor(rawRootElement: () => webdriver.WebElement, options?: WebDriverHarnessEnvironmentOptions);
