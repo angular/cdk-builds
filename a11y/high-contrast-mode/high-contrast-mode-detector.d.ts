@@ -31,6 +31,11 @@ export declare const HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS = "cdk-high-contrast-ac
  */
 export declare class HighContrastModeDetector {
     private _platform;
+    /**
+     * Figuring out the high contrast mode and adding the body classes can cause
+     * some expensive layouts. This flag is used to ensure that we only do it once.
+     */
+    private _hasCheckedHighContrastMode;
     private _document;
     constructor(_platform: Platform, document: any);
     /** Gets the current high-contrast-mode for the page. */
