@@ -2557,12 +2557,13 @@
         };
         /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
         HighContrastModeDetector.prototype._applyBodyHighContrastModeCssClasses = function () {
-            if (this._platform.isBrowser && this._document.body) {
+            if (!this._hasCheckedHighContrastMode && this._platform.isBrowser && this._document.body) {
                 var bodyClasses = this._document.body.classList;
                 // IE11 doesn't support `classList` operations with multiple arguments
                 bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
                 bodyClasses.remove(BLACK_ON_WHITE_CSS_CLASS);
                 bodyClasses.remove(WHITE_ON_BLACK_CSS_CLASS);
+                this._hasCheckedHighContrastMode = true;
                 var mode = this.getHighContrastMode();
                 if (mode === 1 /* BLACK_ON_WHITE */) {
                     bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);

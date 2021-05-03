@@ -10,7 +10,7 @@ import { ModifierKeys } from '@angular/cdk/testing';
  * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
  * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
  */
-export declare const webDriverKeyMap: {
+export declare const seleniumWebDriverKeyMap: {
     0: string;
     1: string;
     2: string;
@@ -43,4 +43,4 @@ export declare const webDriverKeyMap: {
     29: string;
 };
 /** Gets a list of WebDriver `Key`s for the given `ModifierKeys`. */
-export declare function getWebDriverModifierKeys(modifiers: ModifierKeys): string[];
+export declare function getSeleniumWebDriverModifierKeys(modifiers: ModifierKeys): string[];

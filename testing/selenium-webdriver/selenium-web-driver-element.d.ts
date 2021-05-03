@@ -8,7 +8,7 @@
 import { ElementDimensions, EventData, ModifierKeys, TestElement, TestKey, TextOptions } from '@angular/cdk/testing';
 import * as webdriver from 'selenium-webdriver';
 /** A `TestElement` implementation for WebDriver. */
-export declare class WebDriverElement implements TestElement {
+export declare class SeleniumWebDriverElement implements TestElement {
     readonly element: () => webdriver.WebElement;
     private _stabilize;
     constructor(element: () => webdriver.WebElement, _stabilize: () => Promise<void>);

@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/testing'), require('selenium-webdriver')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/testing/webdriver', ['exports', '@angular/cdk/testing', 'selenium-webdriver'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.webdriver = {}), global.ng.cdk.testing, global['selenium-webdriver']));
+    typeof define === 'function' && define.amd ? define('@angular/cdk/testing/selenium-webdriver', ['exports', '@angular/cdk/testing', 'selenium-webdriver'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.testing = global.ng.cdk.testing || {}, global.ng.cdk.testing.seleniumWebdriver = {}), global.ng.cdk.testing, global['selenium-webdriver']));
 }(this, (function (exports, testing, webdriver) { 'use strict';
 
     function _interopNamespace(e) {
@@ -340,7 +340,7 @@
      * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
      * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
      */
-    var webDriverKeyMap = (_a = {},
+    var seleniumWebDriverKeyMap = (_a = {},
         _a[testing.TestKey.BACKSPACE] = webdriver__namespace.Key.BACK_SPACE,
         _a[testing.TestKey.TAB] = webdriver__namespace.Key.TAB,
         _a[testing.TestKey.ENTER] = webdriver__namespace.Key.ENTER,
@@ -373,7 +373,7 @@
         _a[testing.TestKey.META] = webdriver__namespace.Key.META,
         _a);
     /** Gets a list of WebDriver `Key`s for the given `ModifierKeys`. */
-    function getWebDriverModifierKeys(modifiers) {
+    function getSeleniumWebDriverModifierKeys(modifiers) {
         var result = [];
         if (modifiers.control) {
             result.push(webdriver__namespace.Key.CONTROL);
@@ -391,13 +391,13 @@
     }
 
     /** A `TestElement` implementation for WebDriver. */
-    var WebDriverElement = /** @class */ (function () {
-        function WebDriverElement(element, _stabilize) {
+    var SeleniumWebDriverElement = /** @class */ (function () {
+        function SeleniumWebDriverElement(element, _stabilize) {
             this.element = element;
             this._stabilize = _stabilize;
         }
         /** Blur the element. */
-        WebDriverElement.prototype.blur = function () {
+        SeleniumWebDriverElement.prototype.blur = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -413,7 +413,7 @@
             });
         };
         /** Clear the element's input (for input and textarea elements only). */
-        WebDriverElement.prototype.clear = function () {
+        SeleniumWebDriverElement.prototype.clear = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -428,7 +428,7 @@
                 });
             });
         };
-        WebDriverElement.prototype.click = function () {
+        SeleniumWebDriverElement.prototype.click = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
@@ -447,7 +447,7 @@
                 });
             });
         };
-        WebDriverElement.prototype.rightClick = function () {
+        SeleniumWebDriverElement.prototype.rightClick = function () {
             var args = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 args[_i] = arguments[_i];
@@ -467,7 +467,7 @@
             });
         };
         /** Focus the element. */
-        WebDriverElement.prototype.focus = function () {
+        SeleniumWebDriverElement.prototype.focus = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -483,7 +483,7 @@
             });
         };
         /** Get the computed value of the given CSS property for the element. */
-        WebDriverElement.prototype.getCssValue = function (property) {
+        SeleniumWebDriverElement.prototype.getCssValue = function (property) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -496,7 +496,7 @@
             });
         };
         /** Hovers the mouse over the element. */
-        WebDriverElement.prototype.hover = function () {
+        SeleniumWebDriverElement.prototype.hover = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -512,7 +512,7 @@
             });
         };
         /** Moves the mouse away from the element. */
-        WebDriverElement.prototype.mouseAway = function () {
+        SeleniumWebDriverElement.prototype.mouseAway = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -527,7 +527,7 @@
                 });
             });
         };
-        WebDriverElement.prototype.sendKeys = function () {
+        SeleniumWebDriverElement.prototype.sendKeys = function () {
             var modifiersAndKeys = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 modifiersAndKeys[_i] = arguments[_i];
@@ -547,8 +547,8 @@
                                 modifiers = {};
                                 rest = modifiersAndKeys;
                             }
-                            modifierKeys = getWebDriverModifierKeys(modifiers);
-                            keys = rest.map(function (k) { return typeof k === 'string' ? k.split('') : [webDriverKeyMap[k]]; })
+                            modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
+                            keys = rest.map(function (k) { return typeof k === 'string' ? k.split('') : [seleniumWebDriverKeyMap[k]]; })
                                 .reduce(function (arr, k) { return arr.concat(k); }, [])
                                 // webdriver.Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
                                 // so avoid it if no modifier keys are required.
@@ -571,7 +571,7 @@
          * Gets the text from the element.
          * @param options Options that affect what text is included.
          */
-        WebDriverElement.prototype.text = function (options) {
+        SeleniumWebDriverElement.prototype.text = function (options) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -587,7 +587,7 @@
             });
         };
         /** Gets the value for the given attribute from the element. */
-        WebDriverElement.prototype.getAttribute = function (name) {
+        SeleniumWebDriverElement.prototype.getAttribute = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -600,7 +600,7 @@
             });
         };
         /** Checks whether the element has the given class. */
-        WebDriverElement.prototype.hasClass = function (name) {
+        SeleniumWebDriverElement.prototype.hasClass = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 var classes;
                 return __generator(this, function (_a) {
@@ -617,7 +617,7 @@
             });
         };
         /** Gets the dimensions of the element. */
-        WebDriverElement.prototype.getDimensions = function () {
+        SeleniumWebDriverElement.prototype.getDimensions = function () {
             return __awaiter(this, void 0, void 0, function () {
                 var _a, width, height, _b, left, top;
                 return __generator(this, function (_c) {
@@ -637,7 +637,7 @@
             });
         };
         /** Gets the value of a property of an element. */
-        WebDriverElement.prototype.getProperty = function (name) {
+        SeleniumWebDriverElement.prototype.getProperty = function (name) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -650,7 +650,7 @@
             });
         };
         /** Sets the value of a property of an input. */
-        WebDriverElement.prototype.setInputValue = function (newValue) {
+        SeleniumWebDriverElement.prototype.setInputValue = function (newValue) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -666,7 +666,7 @@
             });
         };
         /** Selects the options at the specified indexes inside of a native `select` element. */
-        WebDriverElement.prototype.selectOptions = function () {
+        SeleniumWebDriverElement.prototype.selectOptions = function () {
             var optionIndexes = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 optionIndexes[_i] = arguments[_i];
@@ -722,7 +722,7 @@
             });
         };
         /** Checks whether this element matches the given selector. */
-        WebDriverElement.prototype.matchesSelector = function (selector) {
+        SeleniumWebDriverElement.prototype.matchesSelector = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -736,7 +736,7 @@
             });
         };
         /** Checks whether the element is focused. */
-        WebDriverElement.prototype.isFocused = function () {
+        SeleniumWebDriverElement.prototype.isFocused = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -752,7 +752,7 @@
          * Dispatches an event with a particular name.
          * @param name Name of the event to be dispatched.
          */
-        WebDriverElement.prototype.dispatchEvent = function (name, data) {
+        SeleniumWebDriverElement.prototype.dispatchEvent = function (name, data) {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -768,11 +768,11 @@
             });
         };
         /** Gets the webdriver action sequence. */
-        WebDriverElement.prototype._actions = function () {
+        SeleniumWebDriverElement.prototype._actions = function () {
             return this.element().getDriver().actions();
         };
         /** Executes a function in the browser. */
-        WebDriverElement.prototype._executeScript = function (script) {
+        SeleniumWebDriverElement.prototype._executeScript = function (script) {
             var var_args = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 var_args[_i - 1] = arguments[_i];
@@ -785,7 +785,7 @@
             });
         };
         /** Dispatches all the events that are part of a click event sequence. */
-        WebDriverElement.prototype._dispatchClickEventSequence = function (args, button) {
+        SeleniumWebDriverElement.prototype._dispatchClickEventSequence = function (args, button) {
             return __awaiter(this, void 0, void 0, function () {
                 var modifiers, modifierKeys, offsetArgs, actions, modifierKeys_1, modifierKeys_1_1, modifierKey, modifierKeys_2, modifierKeys_2_1, modifierKey;
                 var _a, e_1, _b, e_2, _c;
@@ -796,7 +796,7 @@
                             if (args.length && typeof args[args.length - 1] === 'object') {
                                 modifiers = args.pop();
                             }
-                            modifierKeys = getWebDriverModifierKeys(modifiers);
+                            modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
                             offsetArgs = (args.length === 2 ?
                                 [{ x: args[0], y: args[1] }] : []);
                             actions = (_a = this._actions()).mouseMove.apply(_a, __spreadArray([this.element()], __read(offsetArgs)));
@@ -835,7 +835,7 @@
                 });
             });
         };
-        return WebDriverElement;
+        return SeleniumWebDriverElement;
     }());
     /**
      * Dispatches an event with a particular name and data to an element. Note that this needs to be a
@@ -887,30 +887,30 @@
         });
     }
     /** A `HarnessEnvironment` implementation for WebDriver. */
-    var WebDriverHarnessEnvironment = /** @class */ (function (_super) {
-        __extends(WebDriverHarnessEnvironment, _super);
-        function WebDriverHarnessEnvironment(rawRootElement, options) {
+    var SeleniumWebDriverHarnessEnvironment = /** @class */ (function (_super) {
+        __extends(SeleniumWebDriverHarnessEnvironment, _super);
+        function SeleniumWebDriverHarnessEnvironment(rawRootElement, options) {
             var _this = _super.call(this, rawRootElement) || this;
             _this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
             return _this;
         }
         /** Gets the ElementFinder corresponding to the given TestElement. */
-        WebDriverHarnessEnvironment.getNativeElement = function (el) {
-            if (el instanceof WebDriverElement) {
+        SeleniumWebDriverHarnessEnvironment.getNativeElement = function (el) {
+            if (el instanceof SeleniumWebDriverElement) {
                 return el.element();
             }
             throw Error('This TestElement was not created by the WebDriverHarnessEnvironment');
         };
         /** Creates a `HarnessLoader` rooted at the document root. */
-        WebDriverHarnessEnvironment.loader = function (driver, options) {
-            return new WebDriverHarnessEnvironment(function () { return driver.findElement(webdriver__namespace.By.css('body')); }, options);
+        SeleniumWebDriverHarnessEnvironment.loader = function (driver, options) {
+            return new SeleniumWebDriverHarnessEnvironment(function () { return driver.findElement(webdriver__namespace.By.css('body')); }, options);
         };
         /**
          * Flushes change detection and async tasks captured in the Angular zone.
          * In most cases it should not be necessary to call this manually. However, there may be some edge
          * cases where it is needed to fully flush animation events.
          */
-        WebDriverHarnessEnvironment.prototype.forceStabilize = function () {
+        SeleniumWebDriverHarnessEnvironment.prototype.forceStabilize = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -923,7 +923,7 @@
             });
         };
         /** @docs-private */
-        WebDriverHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
+        SeleniumWebDriverHarnessEnvironment.prototype.waitForTasksOutsideAngular = function () {
             return __awaiter(this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     return [2 /*return*/];
@@ -931,18 +931,18 @@
             });
         };
         /** Gets the root element for the document. */
-        WebDriverHarnessEnvironment.prototype.getDocumentRoot = function () {
+        SeleniumWebDriverHarnessEnvironment.prototype.getDocumentRoot = function () {
             var _this = this;
             return function () { return _this.rawRootElement().getDriver().findElement(webdriver__namespace.By.css('body')); };
         };
         /** Creates a `TestElement` from a raw element. */
-        WebDriverHarnessEnvironment.prototype.createTestElement = function (element) {
+        SeleniumWebDriverHarnessEnvironment.prototype.createTestElement = function (element) {
             var _this = this;
-            return new WebDriverElement(element, function () { return _this.forceStabilize(); });
+            return new SeleniumWebDriverElement(element, function () { return _this.forceStabilize(); });
         };
         /** Creates a `HarnessLoader` rooted at the given raw element. */
-        WebDriverHarnessEnvironment.prototype.createEnvironment = function (element) {
-            return new WebDriverHarnessEnvironment(element, this._options);
+        SeleniumWebDriverHarnessEnvironment.prototype.createEnvironment = function (element) {
+            return new SeleniumWebDriverHarnessEnvironment(element, this._options);
         };
         // Note: This seems to be working, though we may need to re-evaluate if we encounter issues with
         // stale element references. `() => Promise<webdriver.WebElement[]>` seems like a more correct
@@ -950,7 +950,7 @@
         /**
          * Gets a list of all elements matching the given selector under this environment's root element.
          */
-        WebDriverHarnessEnvironment.prototype.getAllRawElements = function (selector) {
+        SeleniumWebDriverHarnessEnvironment.prototype.getAllRawElements = function (selector) {
             return __awaiter(this, void 0, void 0, function () {
                 var els;
                 return __generator(this, function (_a) {
@@ -963,7 +963,7 @@
                 });
             });
         };
-        return WebDriverHarnessEnvironment;
+        return SeleniumWebDriverHarnessEnvironment;
     }(testing.HarnessEnvironment));
 
     /**
@@ -982,11 +982,11 @@
      * found in the LICENSE file at https://angular.io/license
      */
 
-    exports.WebDriverElement = WebDriverElement;
-    exports.WebDriverHarnessEnvironment = WebDriverHarnessEnvironment;
+    exports.SeleniumWebDriverElement = SeleniumWebDriverElement;
+    exports.SeleniumWebDriverHarnessEnvironment = SeleniumWebDriverHarnessEnvironment;
     exports.waitForAngularReady = waitForAngularReady;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=cdk-testing-webdriver.umd.js.map
+//# sourceMappingURL=cdk-testing-selenium-webdriver.umd.js.map
