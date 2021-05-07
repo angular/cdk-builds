@@ -1557,7 +1557,12 @@
             }
         };
         CdkTrapFocus.prototype._captureFocus = function () {
-            this._previouslyFocusedElement = this._document.activeElement;
+            var _a, _b;
+            // If the `activeElement` is inside a shadow root, `document.activeElement` will
+            // point to the shadow root so we have to descend into it ourselves.
+            var activeElement = (_a = this._document) === null || _a === void 0 ? void 0 : _a.activeElement;
+            this._previouslyFocusedElement =
+                ((_b = activeElement === null || activeElement === void 0 ? void 0 : activeElement.shadowRoot) === null || _b === void 0 ? void 0 : _b.activeElement) || activeElement;
             this.focusTrap.focusInitialElementWhenReady();
         };
         return CdkTrapFocus;

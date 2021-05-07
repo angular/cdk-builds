@@ -937,22 +937,22 @@
         /** Add a new overlay to the list of attached overlay refs. */
         OverlayOutsideClickDispatcher.prototype.add = function (overlayRef) {
             _super.prototype.add.call(this, overlayRef);
-            // tslint:disable: max-line-length
             // Safari on iOS does not generate click events for non-interactive
             // elements. However, we want to receive a click for any element outside
             // the overlay. We can force a "clickable" state by setting
-            // `cursor: pointer` on the document body.
-            // See https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#Safari_Mobile
-            // and https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html
-            // tslint:enable: max-line-length
+            // `cursor: pointer` on the document body. See:
+            // https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event#Safari_Mobile
+            // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html
             if (!this._isAttached) {
-                this._document.body.addEventListener('click', this._clickListener, true);
-                this._document.body.addEventListener('contextmenu', this._clickListener, true);
+                var body = this._document.body;
+                body.addEventListener('click', this._clickListener, true);
+                body.addEventListener('auxclick', this._clickListener, true);
+                body.addEventListener('contextmenu', this._clickListener, true);
                 // click event is not fired on iOS. To make element "clickable" we are
                 // setting the cursor to pointer
                 if (this._platform.IOS && !this._cursorStyleIsSet) {
-                    this._cursorOriginalValue = this._document.body.style.cursor;
-                    this._document.body.style.cursor = 'pointer';
+                    this._cursorOriginalValue = body.style.cursor;
+                    body.style.cursor = 'pointer';
                     this._cursorStyleIsSet = true;
                 }
                 this._isAttached = true;
@@ -961,10 +961,12 @@
         /** Detaches the global keyboard event listener. */
         OverlayOutsideClickDispatcher.prototype.detach = function () {
             if (this._isAttached) {
-                this._document.body.removeEventListener('click', this._clickListener, true);
-                this._document.body.removeEventListener('contextmenu', this._clickListener, true);
+                var body = this._document.body;
+                body.removeEventListener('click', this._clickListener, true);
+                body.removeEventListener('auxclick', this._clickListener, true);
+                body.removeEventListener('contextmenu', this._clickListener, true);
                 if (this._platform.IOS && this._cursorStyleIsSet) {
-                    this._document.body.style.cursor = this._cursorOriginalValue;
+                    body.style.cursor = this._cursorOriginalValue;
                     this._cursorStyleIsSet = false;
                 }
                 this._isAttached = false;
