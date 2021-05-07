@@ -743,10 +743,20 @@
         };
         /** Gets the selector used to find candidate elements. */
         HarnessPredicate.prototype.getSelector = function () {
-            var _this = this;
-            return this._ancestor.split(',')
-                .map(function (part) { return (part.trim() + " " + _this.harnessType.hostSelector).trim(); })
-                .join(',');
+            // We don't have to go through the extra trouble if there are no ancestors.
+            if (!this._ancestor) {
+                return (this.harnessType.hostSelector || '').trim();
+            }
+            var _b = __read(_splitAndEscapeSelector(this._ancestor), 2), ancestors = _b[0], ancestorPlaceholders = _b[1];
+            var _c = __read(_splitAndEscapeSelector(this.harnessType.hostSelector || ''), 2), selectors = _c[0], selectorPlaceholders = _c[1];
+            var result = [];
+            // We have to add the ancestor to each part of the host compound selector, otherwise we can get
+            // incorrect results. E.g. `.ancestor .a, .ancestor .b` vs `.ancestor .a, .b`.
+            ancestors.forEach(function (escapedAncestor) {
+                var ancestor = _restoreSelector(escapedAncestor, ancestorPlaceholders);
+                return selectors.forEach(function (escapedSelector) { return result.push(ancestor + " " + _restoreSelector(escapedSelector, selectorPlaceholders)); });
+            });
+            return result.join(', ');
         };
         /** Adds base options common to all harness types. */
         HarnessPredicate.prototype._addBaseOptions = function (options) {
@@ -788,6 +798,33 @@
             // in this case the best we can do is report the value as `{...}`.
             return '{...}';
         }
+    }
+    /**
+     * Splits up a compound selector into its parts and escapes any quoted content. The quoted content
+     * has to be escaped, because it can contain commas which will throw throw us off when trying to
+     * split it.
+     * @param selector Selector to be split.
+     * @returns The escaped string where any quoted content is replaced with a placeholder. E.g.
+     * `[foo="bar"]` turns into `[foo=__cdkPlaceholder-0__]`. Use `_restoreSelector` to restore
+     * the placeholders.
+     */
+    function _splitAndEscapeSelector(selector) {
+        var placeholders = [];
+        // Note that the regex doesn't account for nested quotes so something like `"ab'cd'e"` will be
+        // considered as two blocks. It's a bit of an edge case, but if we find that it's a problem,
+        // we can make it a bit smarter using a loop. Use this for now since it's more readable and
+        // compact. More complete implementation:
+        // https://github.com/angular/angular/blob/bd34bc9e89f18a/packages/compiler/src/shadow_css.ts#L655
+        var result = selector.replace(/(["'][^["']*["'])/g, function (_, keep) {
+            var replaceBy = "__cdkPlaceholder-" + placeholders.length + "__";
+            placeholders.push(keep);
+            return replaceBy;
+        });
+        return [result.split(',').map(function (part) { return part.trim(); }), placeholders];
+    }
+    /** Restores a selector whose content was escaped in `_splitAndEscapeSelector`. */
+    function _restoreSelector(selector, placeholders) {
+        return selector.replace(/__cdkPlaceholder-(\d+)__/g, function (_, index) { return placeholders[+index]; });
     }
 
     /**
