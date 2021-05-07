@@ -36,4 +36,4 @@ export declare function dispatchPointerEvent(node: Node, type: string, clientX?:
  * Shorthand to dispatch a touch event on the specified coordinates.
  * @docs-private
  */
-export declare function dispatchTouchEvent(node: Node, type: string, x?: number, y?: number): UIEvent;
+export declare function dispatchTouchEvent(node: Node, type: string, pageX?: number, pageY?: number, clientX?: number, clientY?: number): UIEvent;

@@ -484,13 +484,15 @@
      * Creates a browser TouchEvent with the specified pointer coordinates.
      * @docs-private
      */
-    function createTouchEvent(type, pageX, pageY) {
+    function createTouchEvent(type, pageX, pageY, clientX, clientY) {
         if (pageX === void 0) { pageX = 0; }
         if (pageY === void 0) { pageY = 0; }
+        if (clientX === void 0) { clientX = 0; }
+        if (clientY === void 0) { clientY = 0; }
         // In favor of creating events that work for most of the browsers, the event is created
         // as a basic UI Event. The necessary details for the event will be set manually.
         var event = document.createEvent('UIEvent');
-        var touchDetails = { pageX: pageX, pageY: pageY };
+        var touchDetails = { pageX: pageX, pageY: pageY, clientX: clientX, clientY: clientY };
         // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
         event.initUIEvent(type, true, true, window, 0);
         // Most of the browsers don't have a "initTouchEvent" method that can be used to define
@@ -622,10 +624,12 @@
      * Shorthand to dispatch a touch event on the specified coordinates.
      * @docs-private
      */
-    function dispatchTouchEvent(node, type, x, y) {
-        if (x === void 0) { x = 0; }
-        if (y === void 0) { y = 0; }
-        return dispatchEvent(node, createTouchEvent(type, x, y));
+    function dispatchTouchEvent(node, type, pageX, pageY, clientX, clientY) {
+        if (pageX === void 0) { pageX = 0; }
+        if (pageY === void 0) { pageY = 0; }
+        if (clientX === void 0) { clientX = 0; }
+        if (clientY === void 0) { clientY = 0; }
+        return dispatchEvent(node, createTouchEvent(type, pageX, pageY, clientX, clientY));
     }
 
     /**

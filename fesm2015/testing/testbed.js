@@ -150,11 +150,11 @@ function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimar
  * Creates a browser TouchEvent with the specified pointer coordinates.
  * @docs-private
  */
-function createTouchEvent(type, pageX = 0, pageY = 0) {
+function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
     // In favor of creating events that work for most of the browsers, the event is created
     // as a basic UI Event. The necessary details for the event will be set manually.
     const event = document.createEvent('UIEvent');
-    const touchDetails = { pageX, pageY };
+    const touchDetails = { pageX, pageY, clientX, clientY };
     // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
     event.initUIEvent(type, true, true, window, 0);
     // Most of the browsers don't have a "initTouchEvent" method that can be used to define
@@ -277,8 +277,8 @@ function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, options) {
  * Shorthand to dispatch a touch event on the specified coordinates.
  * @docs-private
  */
-function dispatchTouchEvent(node, type, x = 0, y = 0) {
-    return dispatchEvent(node, createTouchEvent(type, x, y));
+function dispatchTouchEvent(node, type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
+    return dispatchEvent(node, createTouchEvent(type, pageX, pageY, clientX, clientY));
 }
 
 /**

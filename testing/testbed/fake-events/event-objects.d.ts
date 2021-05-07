@@ -26,7 +26,7 @@ export declare function createPointerEvent(type: string, clientX?: number, clien
  * Creates a browser TouchEvent with the specified pointer coordinates.
  * @docs-private
  */
-export declare function createTouchEvent(type: string, pageX?: number, pageY?: number): UIEvent;
+export declare function createTouchEvent(type: string, pageX?: number, pageY?: number, clientX?: number, clientY?: number): UIEvent;
 /**
  * Creates a keyboard event with the specified key and modifiers.
  * @docs-private
