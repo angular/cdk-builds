@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "12.1.0-next.0-sha-d11ed521e",
+  "version": "12.1.0-next.0-sha-a01d8f6fb",
   "description": "Angular Material Component Development Kit",
   "repository": {
     "type": "git",
@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/angular/components#readme",
   "peerDependencies": {
-    "@angular/core": "^12.0.0-0 || ^13.0.0-0",
-    "@angular/common": "^12.0.0-0 || ^13.0.0-0",
+    "@angular/core": "^12.0.0 || ^13.0.0-0",
+    "@angular/common": "^12.0.0 || ^13.0.0-0",
     "rxjs": "^6.5.3"
   },
   "dependencies": {
