@@ -297,6 +297,24 @@ function _getShadowRoot(element) {
     }
     return null;
 }
+/**
+ * Gets the currently-focused element on the page while
+ * also piercing through Shadow DOM boundaries.
+ */
+function _getFocusedElementPierceShadowDom() {
+    let activeElement = typeof document !== 'undefined' && document ?
+        document.activeElement : null;
+    while (activeElement && activeElement.shadowRoot) {
+        const newActiveElement = activeElement.shadowRoot.activeElement;
+        if (newActiveElement === activeElement) {
+            break;
+        }
+        else {
+            activeElement = newActiveElement;
+        }
+    }
+    return activeElement;
+}
 
 /**
  * @license
@@ -310,5 +328,5 @@ function _getShadowRoot(element) {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

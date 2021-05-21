@@ -7,7 +7,7 @@ import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, U
 import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1 from '@angular/cdk/platform';
-import { Platform, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
+import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -1175,12 +1175,16 @@ FocusTrapFactory.ctorParameters = () => [
 ];
 /** Directive for trapping focus within a region. */
 class CdkTrapFocus {
-    constructor(_elementRef, _focusTrapFactory, _document) {
+    constructor(_elementRef, _focusTrapFactory, 
+    /**
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 13.0.0
+     */
+    _document) {
         this._elementRef = _elementRef;
         this._focusTrapFactory = _focusTrapFactory;
         /** Previously focused element to restore focus to upon destroy when using autoCapture. */
         this._previouslyFocusedElement = null;
-        this._document = _document;
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
     /** Whether the focus trap is active. */
@@ -1220,12 +1224,7 @@ class CdkTrapFocus {
         }
     }
     _captureFocus() {
-        var _a, _b;
-        // If the `activeElement` is inside a shadow root, `document.activeElement` will
-        // point to the shadow root so we have to descend into it ourselves.
-        const activeElement = (_a = this._document) === null || _a === void 0 ? void 0 : _a.activeElement;
-        this._previouslyFocusedElement =
-            ((_b = activeElement === null || activeElement === void 0 ? void 0 : activeElement.shadowRoot) === null || _b === void 0 ? void 0 : _b.activeElement) || activeElement;
+        this._previouslyFocusedElement = _getFocusedElementPierceShadowDom();
         this.focusTrap.focusInitialElementWhenReady();
     }
 }

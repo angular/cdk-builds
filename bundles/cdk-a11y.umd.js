@@ -1528,12 +1528,16 @@
     ]; };
     /** Directive for trapping focus within a region. */
     var CdkTrapFocus = /** @class */ (function () {
-        function CdkTrapFocus(_elementRef, _focusTrapFactory, _document) {
+        function CdkTrapFocus(_elementRef, _focusTrapFactory, 
+        /**
+         * @deprecated No longer being used. To be removed.
+         * @breaking-change 13.0.0
+         */
+        _document) {
             this._elementRef = _elementRef;
             this._focusTrapFactory = _focusTrapFactory;
             /** Previously focused element to restore focus to upon destroy when using autoCapture. */
             this._previouslyFocusedElement = null;
-            this._document = _document;
             this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
         }
         Object.defineProperty(CdkTrapFocus.prototype, "enabled", {
@@ -1581,12 +1585,7 @@
             }
         };
         CdkTrapFocus.prototype._captureFocus = function () {
-            var _a, _b;
-            // If the `activeElement` is inside a shadow root, `document.activeElement` will
-            // point to the shadow root so we have to descend into it ourselves.
-            var activeElement = (_a = this._document) === null || _a === void 0 ? void 0 : _a.activeElement;
-            this._previouslyFocusedElement =
-                ((_b = activeElement === null || activeElement === void 0 ? void 0 : activeElement.shadowRoot) === null || _b === void 0 ? void 0 : _b.activeElement) || activeElement;
+            this._previouslyFocusedElement = i1._getFocusedElementPierceShadowDom();
             this.focusTrap.focusInitialElementWhenReady();
         };
         return CdkTrapFocus;
