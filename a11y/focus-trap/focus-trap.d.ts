@@ -131,7 +131,6 @@ export declare class FocusTrapFactory {
 export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, DoCheck {
     private _elementRef;
     private _focusTrapFactory;
-    private _document;
     /** Underlying FocusTrap instance. */
     focusTrap: FocusTrap;
     /** Previously focused element to restore focus to upon destroy when using autoCapture. */
@@ -146,7 +145,12 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     get autoCapture(): boolean;
     set autoCapture(value: boolean);
     private _autoCapture;
-    constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, _document: any);
+    constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, 
+    /**
+     * @deprecated No longer being used. To be removed.
+     * @breaking-change 13.0.0
+     */
+    _document: any);
     ngOnDestroy(): void;
     ngAfterContentInit(): void;
     ngDoCheck(): void;

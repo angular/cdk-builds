@@ -325,6 +325,24 @@
         }
         return null;
     }
+    /**
+     * Gets the currently-focused element on the page while
+     * also piercing through Shadow DOM boundaries.
+     */
+    function _getFocusedElementPierceShadowDom() {
+        var activeElement = typeof document !== 'undefined' && document ?
+            document.activeElement : null;
+        while (activeElement && activeElement.shadowRoot) {
+            var newActiveElement = activeElement.shadowRoot.activeElement;
+            if (newActiveElement === activeElement) {
+                break;
+            }
+            else {
+                activeElement = newActiveElement;
+            }
+        }
+        return activeElement;
+    }
 
     /**
      * @license
@@ -340,6 +358,7 @@
 
     exports.Platform = Platform;
     exports.PlatformModule = PlatformModule;
+    exports._getFocusedElementPierceShadowDom = _getFocusedElementPierceShadowDom;
     exports._getShadowRoot = _getShadowRoot;
     exports._supportsShadowDom = _supportsShadowDom;
     exports.getRtlScrollAxisType = getRtlScrollAxisType;
