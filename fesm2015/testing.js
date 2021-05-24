@@ -96,6 +96,13 @@ function manualChangeDetection(fn) {
         return batchChangeDetection(fn, false);
     });
 }
+/**
+ * Resolves the given list of async values in parallel (i.e. via Promise.all) while batching change
+ * detection over the entire operation such that change detection occurs exactly once before
+ * resolving the values and once after.
+ * @param values A getter for the async values to resolve in parallel with batched change detection.
+ * @return The resolved values.
+ */
 function parallel(values) {
     return __awaiter(this, void 0, void 0, function* () {
         return batchChangeDetection(() => Promise.all(values()), true);
