@@ -42,6 +42,7 @@ export declare class ViewportRuler implements OnDestroy {
     getViewportScrollPosition(): ViewportScrollPosition;
     /**
      * Returns a stream that emits whenever the size of the viewport changes.
+     * This stream emits outside of the Angular zone.
      * @param throttleTime Time in milliseconds to throttle the stream.
      */
     change(throttleTime?: number): Observable<Event>;
