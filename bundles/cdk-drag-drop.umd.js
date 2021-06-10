@@ -356,6 +356,11 @@
             this._passiveTransform = { x: 0, y: 0 };
             /** CSS `transform` that is applied to the element while it's being dragged. */
             this._activeTransform = { x: 0, y: 0 };
+            /**
+             * Whether the dragging sequence has been started. Doesn't
+             * necessarily mean that the element has been moved.
+             */
+            this._hasStartedDragging = false;
             /** Emits when the item is being moved. */
             this._moveEvents = new rxjs.Subject();
             /** Subscription to pointer movement events. */
@@ -973,9 +978,12 @@
                     });
                 });
             }
-            this._dropContainer._startScrollingIfNecessary(rawX, rawY);
-            this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
-            this._applyPreviewTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
+            // Dragging may have been interrupted as a result of the events above.
+            if (this.isDragging()) {
+                this._dropContainer._startScrollingIfNecessary(rawX, rawY);
+                this._dropContainer._sortItem(this, x, y, this._pointerDirectionDelta);
+                this._applyPreviewTransform(x - this._pickupPositionInElement.x, y - this._pickupPositionInElement.y);
+            }
         };
         /**
          * Creates the element that will be rendered next to the user's pointer
