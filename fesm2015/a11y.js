@@ -2,9 +2,9 @@ import * as i2 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { Injectable, Inject, QueryList, NgZone, Directive, ElementRef, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
-import { Subject, Subscription, of } from 'rxjs';
-import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB } from '@angular/cdk/keycodes';
-import { tap, debounceTime, filter, map, take } from 'rxjs/operators';
+import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
+import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
+import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1 from '@angular/cdk/platform';
 import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
@@ -1502,6 +1502,202 @@ ConfigurableFocusTrapFactory.ctorParameters = () => [
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
+function isFakeMousedownFromScreenReader(event) {
+    // We can typically distinguish between these faked mousedown events and real mousedown events
+    // using the "buttons" property. While real mousedowns will indicate the mouse button that was
+    // pressed (e.g. "1" for the left mouse button), faked mousedowns will usually set the property
+    // value to 0.
+    return event.buttons === 0;
+}
+/** Gets whether an event could be a faked `touchstart` event dispatched by a screen reader. */
+function isFakeTouchstartFromScreenReader(event) {
+    const touch = (event.touches && event.touches[0]) ||
+        (event.changedTouches && event.changedTouches[0]);
+    // A fake `touchstart` can be distinguished from a real one by looking at the `identifier`
+    // which is typically >= 0 on a real device versus -1 from a screen reader. Just to be safe,
+    // we can also look at `radiusX` and `radiusY`. This behavior was observed against a Windows 10
+    // device with a touch screen running NVDA v2020.4 and Firefox 85 or Chrome 88.
+    return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) &&
+        (touch.radiusY == null || touch.radiusY === 1);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * Injectable options for the InputModalityDetector. These are shallowly merged with the default
+ * options.
+ */
+const INPUT_MODALITY_DETECTOR_OPTIONS = new InjectionToken('cdk-input-modality-detector-options');
+/**
+ * Default options for the InputModalityDetector.
+ *
+ * Modifier keys are ignored by default (i.e. when pressed won't cause the service to detect
+ * keyboard input modality) for two reasons:
+ *
+ * 1. Modifier keys are commonly used with mouse to perform actions such as 'right click' or 'open
+ *    in new tab', and are thus less representative of actual keyboard interaction.
+ * 2. VoiceOver triggers some keyboard events when linearly navigating with Control + Option (but
+ *    confusingly not with Caps Lock). Thus, to have parity with other screen readers, we ignore
+ *    these keys so as to not update the input modality.
+ *
+ * Note that we do not by default ignore the right Meta key on Safari because it has the same key
+ * code as the ContextMenu key on other browsers. When we switch to using event.key, we can
+ * distinguish between the two.
+ */
+const INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS = {
+    ignoreKeys: [ALT, CONTROL, MAC_META, META, SHIFT],
+};
+/**
+ * The amount of time needed to pass after a touchstart event in order for a subsequent mousedown
+ * event to be attributed as mouse and not touch.
+ *
+ * This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
+ * that a value of around 650ms seems appropriate.
+ */
+const TOUCH_BUFFER_MS = 650;
+/**
+ * Event listener options that enable capturing and also mark the listener as passive if the browser
+ * supports it.
+ */
+const modalityEventListenerOptions = normalizePassiveListenerOptions({
+    passive: true,
+    capture: true,
+});
+/**
+ * Service that detects the user's input modality.
+ *
+ * This service does not update the input modality when a user navigates with a screen reader
+ * (e.g. linear navigation with VoiceOver, object navigation / browse mode with NVDA, virtual PC
+ * cursor mode with JAWS). This is in part due to technical limitations (i.e. keyboard events do not
+ * fire as expected in these modes) but is also arguably the correct behavior. Navigating with a
+ * screen reader is akin to visually scanning a page, and should not be interpreted as actual user
+ * input interaction.
+ *
+ * When a user is not navigating but *interacting* with a screen reader, this service attempts to
+ * update the input modality to keyboard, but in general this service's behavior is largely
+ * undefined.
+ */
+class InputModalityDetector {
+    constructor(_platform, ngZone, document, options) {
+        this._platform = _platform;
+        /**
+         * The most recently detected input modality event target. Is null if no input modality has been
+         * detected or if the associated event target is null for some unknown reason.
+         */
+        this._mostRecentTarget = null;
+        /** The underlying BehaviorSubject that emits whenever an input modality is detected. */
+        this._modality = new BehaviorSubject(null);
+        /**
+         * The timestamp of the last touch input modality. Used to determine whether mousedown events
+         * should be attributed to mouse or touch.
+         */
+        this._lastTouchMs = 0;
+        /**
+         * Handles keydown events. Must be an arrow function in order to preserve the context when it gets
+         * bound.
+         */
+        this._onKeydown = (event) => {
+            var _a, _b;
+            // If this is one of the keys we should ignore, then ignore it and don't update the input
+            // modality to keyboard.
+            if ((_b = (_a = this._options) === null || _a === void 0 ? void 0 : _a.ignoreKeys) === null || _b === void 0 ? void 0 : _b.some(keyCode => keyCode === event.keyCode)) {
+                return;
+            }
+            this._modality.next('keyboard');
+            this._mostRecentTarget = getTarget(event);
+        };
+        /**
+         * Handles mousedown events. Must be an arrow function in order to preserve the context when it
+         * gets bound.
+         */
+        this._onMousedown = (event) => {
+            // Touches trigger both touch and mouse events, so we need to distinguish between mouse events
+            // that were triggered via mouse vs touch. To do so, check if the mouse event occurs closely
+            // after the previous touch event.
+            if (Date.now() - this._lastTouchMs < TOUCH_BUFFER_MS) {
+                return;
+            }
+            // Fake mousedown events are fired by some screen readers when controls are activated by the
+            // screen reader. Attribute them to keyboard input modality.
+            this._modality.next(isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse');
+            this._mostRecentTarget = getTarget(event);
+        };
+        /**
+         * Handles touchstart events. Must be an arrow function in order to preserve the context when it
+         * gets bound.
+         */
+        this._onTouchstart = (event) => {
+            // Same scenario as mentioned in _onMousedown, but on touch screen devices, fake touchstart
+            // events are fired. Again, attribute to keyboard input modality.
+            if (isFakeTouchstartFromScreenReader(event)) {
+                this._modality.next('keyboard');
+                return;
+            }
+            // Store the timestamp of this touch event, as it's used to distinguish between mouse events
+            // triggered via mouse vs touch.
+            this._lastTouchMs = Date.now();
+            this._modality.next('touch');
+            this._mostRecentTarget = getTarget(event);
+        };
+        this._options = Object.assign(Object.assign({}, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS), options);
+        // Skip the first emission as it's null.
+        this.modalityDetected = this._modality.pipe(skip(1));
+        this.modalityChanged = this.modalityDetected.pipe(distinctUntilChanged());
+        // If we're not in a browser, this service should do nothing, as there's no relevant input
+        // modality to detect.
+        if (!_platform.isBrowser) {
+            return;
+        }
+        // Add the event listeners used to detect the user's input modality.
+        ngZone.runOutsideAngular(() => {
+            document.addEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
+            document.addEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
+            document.addEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
+        });
+    }
+    /** The most recently detected input modality. */
+    get mostRecentModality() {
+        return this._modality.value;
+    }
+    ngOnDestroy() {
+        if (!this._platform.isBrowser) {
+            return;
+        }
+        document.removeEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
+        document.removeEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
+        document.removeEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
+    }
+}
+InputModalityDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function InputModalityDetector_Factory() { return new InputModalityDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(INPUT_MODALITY_DETECTOR_OPTIONS, 8)); }, token: InputModalityDetector, providedIn: "root" });
+InputModalityDetector.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+InputModalityDetector.ctorParameters = () => [
+    { type: Platform },
+    { type: NgZone },
+    { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [INPUT_MODALITY_DETECTOR_OPTIONS,] }] }
+];
+/** Gets the target of an event, accounting for Shadow DOM. */
+function getTarget(event) {
+    // If an event is bound outside the Shadow DOM, the `event.target` will
+    // point to the shadow root so we have to use `composedPath` instead.
+    return (event.composedPath ? event.composedPath()[0] : event.target);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
@@ -1680,36 +1876,6 @@ CdkAriaLive.propDecorators = {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
-function isFakeMousedownFromScreenReader(event) {
-    // We can typically distinguish between these faked mousedown events and real mousedown events
-    // using the "buttons" property. While real mousedowns will indicate the mouse button that was
-    // pressed (e.g. "1" for the left mouse button), faked mousedowns will usually set the property
-    // value to 0.
-    return event.buttons === 0;
-}
-/** Gets whether an event could be a faked `touchstart` event dispatched by a screen reader. */
-function isFakeTouchstartFromScreenReader(event) {
-    const touch = (event.touches && event.touches[0]) ||
-        (event.changedTouches && event.changedTouches[0]);
-    // A fake `touchstart` can be distinguished from a real one by looking at the `identifier`
-    // which is typically >= 0 on a real device versus -1 from a screen reader. Just to be safe,
-    // we can also look at `radiusX` and `radiusY`. This behavior was observed against a Windows 10
-    // device with a touch screen running NVDA v2020.4 and Firefox 85 or Chrome 88.
-    return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) &&
-        (touch.radiusY == null || touch.radiusY === 1);
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-// This is the value used by AngularJS Material. Through trial and error (on iPhone 6S) they found
-// that a value of around 650ms seems appropriate.
-const TOUCH_BUFFER_MS = 650;
 /** InjectionToken for FocusMonitorOptions. */
 const FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-default-options');
 /**
@@ -1722,15 +1888,21 @@ const captureEventListenerOptions = normalizePassiveListenerOptions({
 });
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
 class FocusMonitor {
-    constructor(_ngZone, _platform, 
+    constructor(_ngZone, _platform, _inputModalityDetector, 
     /** @breaking-change 11.0.0 make document required */
     document, options) {
         this._ngZone = _ngZone;
         this._platform = _platform;
+        this._inputModalityDetector = _inputModalityDetector;
         /** The focus origin that the next focus event is a result of. */
         this._origin = null;
         /** Whether the window has just been focused. */
         this._windowFocused = false;
+        /**
+         * Whether the origin was determined via a touch interaction. Necessary as properly attributing
+         * focus events to touch interactions requires special logic.
+         */
+        this._originFromTouchInteraction = false;
         /** Map of elements being monitored to their info. */
         this._elementInfo = new Map();
         /** The number of elements currently being monitored. */
@@ -1743,50 +1915,6 @@ class FocusMonitor {
          */
         this._rootNodeFocusListenerCount = new Map();
         /**
-         * Event listener for `keydown` events on the document.
-         * Needs to be an arrow function in order to preserve the context when it gets bound.
-         */
-        this._documentKeydownListener = () => {
-            // On keydown record the origin and clear any touch event that may be in progress.
-            this._lastTouchTarget = null;
-            this._setOriginForCurrentEventQueue('keyboard');
-        };
-        /**
-         * Event listener for `mousedown` events on the document.
-         * Needs to be an arrow function in order to preserve the context when it gets bound.
-         */
-        this._documentMousedownListener = (event) => {
-            // On mousedown record the origin only if there is not touch
-            // target, since a mousedown can happen as a result of a touch event.
-            if (!this._lastTouchTarget) {
-                // In some cases screen readers fire fake `mousedown` events instead of `keydown`.
-                // Resolve the focus source to `keyboard` if we detect one of them.
-                const source = isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse';
-                this._setOriginForCurrentEventQueue(source);
-            }
-        };
-        /**
-         * Event listener for `touchstart` events on the document.
-         * Needs to be an arrow function in order to preserve the context when it gets bound.
-         */
-        this._documentTouchstartListener = (event) => {
-            // Some screen readers will fire a fake `touchstart` event if an element is activated using
-            // the keyboard while on a device with a touchsreen. Consider such events as keyboard focus.
-            if (!isFakeTouchstartFromScreenReader(event)) {
-                // When the touchstart event fires the focus event is not yet in the event queue. This means
-                // we can't rely on the trick used above (setting timeout of 1ms). Instead we wait 650ms to
-                // see if a focus happens.
-                if (this._touchTimeoutId != null) {
-                    clearTimeout(this._touchTimeoutId);
-                }
-                this._lastTouchTarget = getTarget(event);
-                this._touchTimeoutId = setTimeout(() => this._lastTouchTarget = null, TOUCH_BUFFER_MS);
-            }
-            else if (!this._lastTouchTarget) {
-                this._setOriginForCurrentEventQueue('keyboard');
-            }
-        };
-        /**
          * Event listener for `focus` events on the window.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
@@ -1796,6 +1924,8 @@ class FocusMonitor {
             this._windowFocused = true;
             this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false);
         };
+        /** Subject for stopping our InputModalityDetector subscription. */
+        this._stopInputModalityDetector = new Subject();
         /**
          * Event listener for `focus` and 'blur' events on the document.
          * Needs to be an arrow function in order to preserve the context when it gets bound.
@@ -1863,7 +1993,7 @@ class FocusMonitor {
                 .forEach(([currentElement, info]) => this._originChanged(currentElement, origin, info));
         }
         else {
-            this._setOriginForCurrentEventQueue(origin);
+            this._setOrigin(origin);
             // `focus` isn't available on the server
             if (typeof nativeElement.focus === 'function') {
                 nativeElement.focus(options);
@@ -1890,25 +2020,49 @@ class FocusMonitor {
             element.classList.remove(className);
         }
     }
-    _getFocusOrigin(event) {
-        // If we couldn't detect a cause for the focus event, it's due to one of three reasons:
-        // 1) The window has just regained focus, in which case we want to restore the focused state of
-        //    the element from before the window blurred.
-        // 2) It was caused by a touch event, in which case we mark the origin as 'touch'.
-        // 3) The element was programmatically focused, in which case we should mark the origin as
-        //    'program'.
+    _getFocusOrigin(focusEventTarget) {
         if (this._origin) {
-            return this._origin;
+            // If the origin was realized via a touch interaction, we need to perform additional checks
+            // to determine whether the focus origin should be attributed to touch or program.
+            if (this._originFromTouchInteraction) {
+                return this._shouldBeAttributedToTouch(focusEventTarget) ? 'touch' : 'program';
+            }
+            else {
+                return this._origin;
+            }
         }
-        if (this._windowFocused && this._lastFocusOrigin) {
-            return this._lastFocusOrigin;
-        }
-        else if (this._wasCausedByTouch(event)) {
-            return 'touch';
-        }
-        else {
-            return 'program';
-        }
+        // If the window has just regained focus, we can restore the most recent origin from before the
+        // window blurred. Otherwise, we've reached the point where we can't identify the source of the
+        // focus. This typically means one of two things happened:
+        //
+        // 1) The element was programmatically focused, or
+        // 2) The element was focused via screen reader navigation (which generally doesn't fire
+        //    events).
+        //
+        // Because we can't distinguish between these two cases, we default to setting `program`.
+        return (this._windowFocused && this._lastFocusOrigin) ? this._lastFocusOrigin : 'program';
+    }
+    /**
+     * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a
+     * touch origin isn't immediately reset at the next tick (see _setOrigin). This means that when we
+     * handle a focus event following a touch interaction, we need to determine whether (1) the focus
+     * event was directly caused by the touch interaction or (2) the focus event was caused by a
+     * subsequent programmatic focus call triggered by the touch interaction.
+     * @param focusEventTarget The target of the focus event under examination.
+     */
+    _shouldBeAttributedToTouch(focusEventTarget) {
+        // Please note that this check is not perfect. Consider the following edge case:
+        //
+        // <div #parent tabindex="0">
+        //   <div #child tabindex="0" (click)="#parent.focus()"></div>
+        // </div>
+        //
+        // Suppose there is a FocusMonitor in IMMEDIATE mode attached to #parent. When the user touches
+        // #child, #parent is programmatically focused. This code will attribute the focus to touch
+        // instead of program. This is a relatively minor edge-case that can be worked around by using
+        // focusVia(parent, 'program') to focus #parent.
+        return (this._detectionMode === 1 /* EVENTUAL */) ||
+            !!(focusEventTarget === null || focusEventTarget === void 0 ? void 0 : focusEventTarget.contains(this._inputModalityDetector._mostRecentTarget));
     }
     /**
      * Sets the focus classes on the element based on the given focus origin.
@@ -1923,47 +2077,27 @@ class FocusMonitor {
         this._toggleClass(element, 'cdk-program-focused', origin === 'program');
     }
     /**
-     * Sets the origin and schedules an async function to clear it at the end of the event queue.
-     * If the detection mode is 'eventual', the origin is never cleared.
+     * Updates the focus origin. If we're using immediate detection mode, we schedule an async
+     * function to clear the origin at the end of a timeout. The duration of the timeout depends on
+     * the origin being set.
      * @param origin The origin to set.
+     * @param isFromInteraction Whether we are setting the origin from an interaction event.
      */
-    _setOriginForCurrentEventQueue(origin) {
+    _setOrigin(origin, isFromInteraction = false) {
         this._ngZone.runOutsideAngular(() => {
             this._origin = origin;
+            this._originFromTouchInteraction = (origin === 'touch') && isFromInteraction;
+            // If we're in IMMEDIATE mode, reset the origin at the next tick (or in `TOUCH_BUFFER_MS` ms
+            // for a touch event). We reset the origin at the next tick because Firefox focuses one tick
+            // after the interaction event. We wait `TOUCH_BUFFER_MS` ms before resetting the origin for
+            // a touch event because when a touch event is fired, the associated focus event isn't yet in
+            // the event queue. Before doing so, clear any pending timeouts.
             if (this._detectionMode === 0 /* IMMEDIATE */) {
-                // Sometimes the focus origin won't be valid in Firefox because Firefox seems to focus *one*
-                // tick after the interaction event fired. To ensure the focus origin is always correct,
-                // the focus origin will be determined at the beginning of the next tick.
-                this._originTimeoutId = setTimeout(() => this._origin = null, 1);
+                clearTimeout(this._originTimeoutId);
+                const ms = this._originFromTouchInteraction ? TOUCH_BUFFER_MS : 1;
+                this._originTimeoutId = setTimeout(() => this._origin = null, ms);
             }
         });
-    }
-    /**
-     * Checks whether the given focus event was caused by a touchstart event.
-     * @param event The focus event to check.
-     * @returns Whether the event was caused by a touch.
-     */
-    _wasCausedByTouch(event) {
-        // Note(mmalerba): This implementation is not quite perfect, there is a small edge case.
-        // Consider the following dom structure:
-        //
-        // <div #parent tabindex="0" cdkFocusClasses>
-        //   <div #child (click)="#parent.focus()"></div>
-        // </div>
-        //
-        // If the user touches the #child element and the #parent is programmatically focused as a
-        // result, this code will still consider it to have been caused by the touch event and will
-        // apply the cdk-touch-focused class rather than the cdk-program-focused class. This is a
-        // relatively small edge-case that can be worked around by using
-        // focusVia(parentEl, 'program') to focus the parent element.
-        //
-        // If we decide that we absolutely must handle this case correctly, we can do so by listening
-        // for the first focus event after the touchstart, and then the first blur event after that
-        // focus event. When that blur event fires we know that whatever follows is not a result of the
-        // touchstart.
-        const focusTarget = getTarget(event);
-        return this._lastTouchTarget instanceof Node && focusTarget instanceof Node &&
-            (focusTarget === this._lastTouchTarget || focusTarget.contains(this._lastTouchTarget));
     }
     /**
      * Handles focus events on a registered element.
@@ -1978,10 +2112,11 @@ class FocusMonitor {
         // If we are not counting child-element-focus as focused, make sure that the event target is the
         // monitored element itself.
         const elementInfo = this._elementInfo.get(element);
-        if (!elementInfo || (!elementInfo.checkChildren && element !== getTarget(event))) {
+        const focusEventTarget = getTarget(event);
+        if (!elementInfo || (!elementInfo.checkChildren && element !== focusEventTarget)) {
             return;
         }
-        this._originChanged(element, this._getFocusOrigin(event), elementInfo);
+        this._originChanged(element, this._getFocusOrigin(focusEventTarget), elementInfo);
     }
     /**
      * Handles blur events on a registered element.
@@ -2020,13 +2155,13 @@ class FocusMonitor {
             // Note: we listen to events in the capture phase so we
             // can detect them even if the user stops propagation.
             this._ngZone.runOutsideAngular(() => {
-                const document = this._getDocument();
                 const window = this._getWindow();
-                document.addEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
-                document.addEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
-                document.addEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
                 window.addEventListener('focus', this._windowFocusListener);
             });
+            // The InputModalityDetector is also just a collection of global listeners.
+            this._inputModalityDetector.modalityDetected
+                .pipe(takeUntil(this._stopInputModalityDetector))
+                .subscribe(modality => { this._setOrigin(modality, true /* isFromInteraction */); });
         }
     }
     _removeGlobalListeners(elementInfo) {
@@ -2044,15 +2179,12 @@ class FocusMonitor {
         }
         // Unregister global listeners when last element is unmonitored.
         if (!--this._monitoredElementCount) {
-            const document = this._getDocument();
             const window = this._getWindow();
-            document.removeEventListener('keydown', this._documentKeydownListener, captureEventListenerOptions);
-            document.removeEventListener('mousedown', this._documentMousedownListener, captureEventListenerOptions);
-            document.removeEventListener('touchstart', this._documentTouchstartListener, captureEventListenerOptions);
             window.removeEventListener('focus', this._windowFocusListener);
+            // Equivalently, stop our InputModalityDetector subscription.
+            this._stopInputModalityDetector.next();
             // Clear timeouts for all potentially pending timeouts to prevent the leaks.
             clearTimeout(this._windowFocusTimeoutId);
-            clearTimeout(this._touchTimeoutId);
             clearTimeout(this._originTimeoutId);
         }
     }
@@ -2077,22 +2209,17 @@ class FocusMonitor {
         return results;
     }
 }
-FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
+FocusMonitor.ɵprov = i0.ɵɵdefineInjectable({ factory: function FocusMonitor_Factory() { return new FocusMonitor(i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i1.Platform), i0.ɵɵinject(InputModalityDetector), i0.ɵɵinject(i2.DOCUMENT, 8), i0.ɵɵinject(FOCUS_MONITOR_DEFAULT_OPTIONS, 8)); }, token: FocusMonitor, providedIn: "root" });
 FocusMonitor.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
 FocusMonitor.ctorParameters = () => [
     { type: NgZone },
     { type: Platform },
+    { type: InputModalityDetector },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [DOCUMENT,] }] },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [FOCUS_MONITOR_DEFAULT_OPTIONS,] }] }
 ];
-/** Gets the target of an event, accounting for Shadow DOM. */
-function getTarget(event) {
-    // If an event is bound outside the Shadow DOM, the `event.target` will
-    // point to the shadow root so we have to use `composedPath` instead.
-    return (event.composedPath ? event.composedPath()[0] : event.target);
-}
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
  * programmatically) and adds corresponding classes to the element.
@@ -2254,5 +2381,5 @@ A11yModule.ctorParameters = () => [
  * Generated bundle index. Do not edit.
  */
 
-export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, TOUCH_BUFFER_MS, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a };
+export { A11yModule, ActiveDescendantKeyManager, AriaDescriber, CDK_DESCRIBEDBY_HOST_ATTRIBUTE, CDK_DESCRIBEDBY_ID_PREFIX, CdkAriaLive, CdkMonitorFocus, CdkTrapFocus, ConfigurableFocusTrap, ConfigurableFocusTrapFactory, EventListenerFocusTrapInertStrategy, FOCUS_MONITOR_DEFAULT_OPTIONS, FOCUS_TRAP_INERT_STRATEGY, FocusKeyManager, FocusMonitor, FocusTrap, FocusTrapFactory, HighContrastModeDetector, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS, INPUT_MODALITY_DETECTOR_OPTIONS, InputModalityDetector, InteractivityChecker, IsFocusableConfig, LIVE_ANNOUNCER_DEFAULT_OPTIONS, LIVE_ANNOUNCER_ELEMENT_TOKEN, LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY, ListKeyManager, LiveAnnouncer, MESSAGES_CONTAINER_ID, isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader, FocusTrapManager as ɵangular_material_src_cdk_a11y_a11y_a };
 //# sourceMappingURL=a11y.js.map

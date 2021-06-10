@@ -8,7 +8,7 @@
 import { Platform } from '@angular/cdk/platform';
 import { ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
-export declare const TOUCH_BUFFER_MS = 650;
+import { InputModalityDetector } from '../input-modality/input-modality-detector';
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
 /**
  * Corresponds to the options that can be passed to the native `focus` event.
@@ -28,7 +28,7 @@ export declare const enum FocusMonitorDetectionMode {
     IMMEDIATE = 0,
     /**
      * A focus event's origin is always attributed to the last corresponding
-     * mousedown, keydown, or touchstart event, no matter how long ago it occured.
+     * mousedown, keydown, or touchstart event, no matter how long ago it occurred.
      */
     EVENTUAL = 1
 }
@@ -42,20 +42,22 @@ export declare const FOCUS_MONITOR_DEFAULT_OPTIONS: InjectionToken<FocusMonitorO
 export declare class FocusMonitor implements OnDestroy {
     private _ngZone;
     private _platform;
+    private readonly _inputModalityDetector;
     /** The focus origin that the next focus event is a result of. */
     private _origin;
     /** The FocusOrigin of the last focus event tracked by the FocusMonitor. */
     private _lastFocusOrigin;
     /** Whether the window has just been focused. */
     private _windowFocused;
-    /** The target of the last touch event. */
-    private _lastTouchTarget;
-    /** The timeout id of the touch timeout, used to cancel timeout later. */
-    private _touchTimeoutId;
     /** The timeout id of the window focus timeout. */
     private _windowFocusTimeoutId;
     /** The timeout id of the origin clearing timeout. */
     private _originTimeoutId;
+    /**
+     * Whether the origin was determined via a touch interaction. Necessary as properly attributing
+     * focus events to touch interactions requires special logic.
+     */
+    private _originFromTouchInteraction;
     /** Map of elements being monitored to their info. */
     private _elementInfo;
     /** The number of elements currently being monitored. */
@@ -73,28 +75,15 @@ export declare class FocusMonitor implements OnDestroy {
      */
     private readonly _detectionMode;
     /**
-     * Event listener for `keydown` events on the document.
-     * Needs to be an arrow function in order to preserve the context when it gets bound.
-     */
-    private _documentKeydownListener;
-    /**
-     * Event listener for `mousedown` events on the document.
-     * Needs to be an arrow function in order to preserve the context when it gets bound.
-     */
-    private _documentMousedownListener;
-    /**
-     * Event listener for `touchstart` events on the document.
-     * Needs to be an arrow function in order to preserve the context when it gets bound.
-     */
-    private _documentTouchstartListener;
-    /**
      * Event listener for `focus` events on the window.
      * Needs to be an arrow function in order to preserve the context when it gets bound.
      */
     private _windowFocusListener;
     /** Used to reference correct document/window */
     protected _document?: Document;
-    constructor(_ngZone: NgZone, _platform: Platform, 
+    /** Subject for stopping our InputModalityDetector subscription. */
+    private readonly _stopInputModalityDetector;
+    constructor(_ngZone: NgZone, _platform: Platform, _inputModalityDetector: InputModalityDetector, 
     /** @breaking-change 11.0.0 make document required */
     document: any | null, options: FocusMonitorOptions | null);
     /**
@@ -150,23 +139,28 @@ export declare class FocusMonitor implements OnDestroy {
     private _toggleClass;
     private _getFocusOrigin;
     /**
+     * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a
+     * touch origin isn't immediately reset at the next tick (see _setOrigin). This means that when we
+     * handle a focus event following a touch interaction, we need to determine whether (1) the focus
+     * event was directly caused by the touch interaction or (2) the focus event was caused by a
+     * subsequent programmatic focus call triggered by the touch interaction.
+     * @param focusEventTarget The target of the focus event under examination.
+     */
+    private _shouldBeAttributedToTouch;
+    /**
      * Sets the focus classes on the element based on the given focus origin.
      * @param element The element to update the classes on.
      * @param origin The focus origin.
      */
     private _setClasses;
     /**
-     * Sets the origin and schedules an async function to clear it at the end of the event queue.
-     * If the detection mode is 'eventual', the origin is never cleared.
+     * Updates the focus origin. If we're using immediate detection mode, we schedule an async
+     * function to clear the origin at the end of a timeout. The duration of the timeout depends on
+     * the origin being set.
      * @param origin The origin to set.
+     * @param isFromInteraction Whether we are setting the origin from an interaction event.
      */
-    private _setOriginForCurrentEventQueue;
-    /**
-     * Checks whether the given focus event was caused by a touchstart event.
-     * @param event The focus event to check.
-     * @returns Whether the event was caused by a touch.
-     */
-    private _wasCausedByTouch;
+    private _setOrigin;
     /**
      * Handles focus events on a registered element.
      * @param event The focus event.
