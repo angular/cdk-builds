@@ -20,11 +20,11 @@ export declare class DevkitFileSystem extends FileSystem {
     resolve(...segments: string[]): Path;
     edit(filePath: Path): UpdateRecorder;
     commitEdits(): void;
-    exists(fileOrDirPath: Path): boolean;
+    fileExists(filePath: Path): boolean;
+    directoryExists(dirPath: Path): boolean;
     overwrite(filePath: Path, content: string): void;
     create(filePath: Path, content: string): void;
     delete(filePath: Path): void;
     read(filePath: Path): string | null;
     readDirectory(dirPath: Path): DirectoryEntry;
-    private _isExistingDirectory;
 }
