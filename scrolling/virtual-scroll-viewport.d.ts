@@ -14,6 +14,7 @@ import { CdkScrollable } from './scrollable';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 import { ViewportRuler } from './viewport-ruler';
 import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
+import { BooleanInput } from '@angular/cdk/coercion';
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
@@ -27,6 +28,13 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     get orientation(): 'horizontal' | 'vertical';
     set orientation(orientation: 'horizontal' | 'vertical');
     private _orientation;
+    /**
+     * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
+     * will be removed.
+     */
+    get appendOnly(): boolean;
+    set appendOnly(value: boolean);
+    private _appendOnly;
     /** Emits when the index of the first element visible in the viewport changes. */
     readonly scrolledIndexChange: Observable<number>;
     /** The element that wraps the rendered content. */
@@ -133,4 +141,5 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _doChangeDetection;
     /** Calculates the `style.width` and `style.height` for the spacer element. */
     private _calculateSpacerSize;
+    static ngAcceptInputType_appendOnly: BooleanInput;
 }

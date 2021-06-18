@@ -1034,6 +1034,7 @@
             /** Emits when the rendered range changes. */
             _this._renderedRangeSubject = new rxjs.Subject();
             _this._orientation = 'vertical';
+            _this._appendOnly = false;
             // Note: we don't use the typical EventEmitter here because we need to subscribe to the scroll
             // strategy lazily (i.e. only if the user is actually listening to the events). We do this because
             // depending on how the strategy calculates the scrolled index, it may come at a cost to
@@ -1087,6 +1088,20 @@
                     this._orientation = orientation;
                     this._calculateSpacerSize();
                 }
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(CdkVirtualScrollViewport.prototype, "appendOnly", {
+            /**
+             * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
+             * will be removed.
+             */
+            get: function () {
+                return this._appendOnly;
+            },
+            set: function (value) {
+                this._appendOnly = coercion.coerceBooleanProperty(value);
             },
             enumerable: false,
             configurable: true
@@ -1179,6 +1194,9 @@
         CdkVirtualScrollViewport.prototype.setRenderedRange = function (range) {
             var _this = this;
             if (!rangesEqual(this._renderedRange, range)) {
+                if (this.appendOnly) {
+                    range = { start: 0, end: Math.max(this._renderedRange.end, range.end) };
+                }
                 this._renderedRangeSubject.next(this._renderedRange = range);
                 this._markChangeDetectionNeeded(function () { return _this._scrollStrategy.onContentRendered(); });
             }
@@ -1374,6 +1392,7 @@
     ]; };
     CdkVirtualScrollViewport.propDecorators = {
         orientation: [{ type: i0.Input }],
+        appendOnly: [{ type: i0.Input }],
         scrolledIndexChange: [{ type: i0.Output }],
         _contentWrapper: [{ type: i0.ViewChild, args: ['contentWrapper', { static: true },] }]
     };
