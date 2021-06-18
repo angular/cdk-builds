@@ -969,16 +969,14 @@
      */
     var CdkNestedTreeNode = /** @class */ (function (_super) {
         __extends(CdkNestedTreeNode, _super);
-        function CdkNestedTreeNode(_elementRef, _tree, _differs) {
-            var _this = _super.call(this, _elementRef, _tree) || this;
-            _this._elementRef = _elementRef;
-            _this._tree = _tree;
+        function CdkNestedTreeNode(elementRef, tree, _differs) {
+            var _this = _super.call(this, elementRef, tree) || this;
             _this._differs = _differs;
             // The classes are directly added here instead of in the host property because classes on
             // the host property are not inherited with View Engine. It is not set as a @HostBinding because
             // it is not set by the time it's children nodes try to read the class from it.
             // TODO: move to host after View Engine deprecation
-            _this._elementRef.nativeElement.classList.add('cdk-nested-tree-node');
+            elementRef.nativeElement.classList.add('cdk-nested-tree-node');
             return _this;
         }
         CdkNestedTreeNode.prototype.ngAfterContentInit = function () {
