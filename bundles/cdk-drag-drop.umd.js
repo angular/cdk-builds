@@ -216,7 +216,7 @@
         };
         /** Handles scrolling while a drag is taking place. */
         ParentPositionTracker.prototype.handleScroll = function (event) {
-            var target = event.target;
+            var target = getEventTarget(event);
             var cachedPosition = this.positions.get(target);
             if (!cachedPosition) {
                 return null;
@@ -252,6 +252,10 @@
         };
         return ParentPositionTracker;
     }());
+    /** Gets the target of an event while accounting for shadow dom. */
+    function getEventTarget(event) {
+        return (event.composedPath ? event.composedPath()[0] : event.target);
+    }
 
     /**
      * @license
@@ -412,7 +416,7 @@
                 // Delegate the event based on whether it started from a handle or the element itself.
                 if (_this._handles.length) {
                     var targetHandle = _this._handles.find(function (handle) {
-                        var target = event.target;
+                        var target = getEventTarget(event);
                         return !!target && (target === handle || handle.contains(target));
                     });
                     if (targetHandle && !_this._disabledHandles.has(targetHandle) && !_this.disabled) {
@@ -860,6 +864,7 @@
             var isTouchSequence = isTouchEvent(event);
             var isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
             var rootElement = this._rootElement;
+            var target = getEventTarget(event);
             var isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
                 this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
             // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -868,7 +873,7 @@
             // it's flaky and it fails if the user drags it away quickly. Also note that we only want
             // to do this for `mousedown` since doing the same for `touchstart` will stop any `click`
             // events from firing on touch devices.
-            if (event.target && event.target.draggable && event.type === 'mousedown') {
+            if (target && target.draggable && event.type === 'mousedown') {
                 event.preventDefault();
             }
             // Abort if the user is already dragging or is using a mouse button other than the primary one.
@@ -888,9 +893,9 @@
             this._removeSubscriptions();
             this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
             this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
-            this._scrollSubscription = this._dragDropRegistry.scroll.subscribe(function (scrollEvent) {
-                _this._updateOnScroll(scrollEvent);
-            });
+            this._scrollSubscription = this._dragDropRegistry
+                .scrolled(this._getShadowRoot())
+                .subscribe(function (scrollEvent) { return _this._updateOnScroll(scrollEvent); });
             if (this._boundaryElement) {
                 this._boundaryRect = getMutableClientRect(this._boundaryElement);
             }
@@ -1068,7 +1073,8 @@
             return this._ngZone.runOutsideAngular(function () {
                 return new Promise(function (resolve) {
                     var handler = (function (event) {
-                        if (!event || (event.target === _this._preview && event.propertyName === 'transform')) {
+                        if (!event || (getEventTarget(event) === _this._preview &&
+                            event.propertyName === 'transform')) {
                             _this._preview.removeEventListener('transitionend', handler);
                             resolve();
                             clearTimeout(timeout);
@@ -1316,7 +1322,7 @@
         DragRef.prototype._updateOnScroll = function (event) {
             var scrollDifference = this._parentPositions.handleScroll(event);
             if (scrollDifference) {
-                var target = event.target;
+                var target = getEventTarget(event);
                 // ClientRect dimensions are based on the scroll position of the page and its parent node so
                 // we have to update the cached boundary ClientRect if the user has scrolled. Check for
                 // the `document` specifically since IE doesn't support `contains` on it.
@@ -2487,7 +2493,9 @@
          */
         DropListRef.prototype._listenToScrollEvents = function () {
             var _this = this;
-            this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe(function (event) {
+            this._viewportScrollSubscription = this._dragDropRegistry
+                .scrolled(this._getShadowRoot())
+                .subscribe(function (event) {
                 if (_this.isDragging()) {
                     var scrollDifference_1 = _this._parentPositions.handleScroll(event);
                     if (scrollDifference_1) {
@@ -2653,13 +2661,6 @@
         return [verticalScrollDirection, horizontalScrollDirection];
     }
 
-    /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
     /** Event options that can be used to bind an active, capturing event. */
     var activeCapturingEventOptions = platform.normalizePassiveListenerOptions({
         passive: false,
@@ -2700,7 +2701,11 @@
              * while the user is dragging a drag item instance.
              */
             this.pointerUp = new rxjs.Subject();
-            /** Emits when the viewport has been scrolled while the user is dragging an item. */
+            /**
+             * Emits when the viewport has been scrolled while the user is dragging an item.
+             * @deprecated To be turned into a private member. Use the `scrolled` method instead.
+             * @breaking-change 13.0.0
+             */
             this.scroll = new rxjs.Subject();
             /**
              * Event listener that will prevent the default browser action while the user is dragging.
@@ -2822,6 +2827,37 @@
         /** Gets whether a drag item instance is currently being dragged. */
         DragDropRegistry.prototype.isDragging = function (drag) {
             return this._activeDragInstances.indexOf(drag) > -1;
+        };
+        /**
+         * Gets a stream that will emit when any element on the page is scrolled while an item is being
+         * dragged.
+         * @param shadowRoot Optional shadow root that the current dragging sequence started from.
+         *   Top-level listeners won't pick up events coming from the shadow DOM so this parameter can
+         *   be used to include an additional top-level listener at the shadow root level.
+         */
+        DragDropRegistry.prototype.scrolled = function (shadowRoot) {
+            var _this = this;
+            var streams = [this.scroll];
+            if (shadowRoot && shadowRoot !== this._document) {
+                // Note that this is basically the same as `fromEvent` from rjxs, but we do it ourselves,
+                // because we want to guarantee that the event is bound outside of the `NgZone`. With
+                // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
+                streams.push(new rxjs.Observable(function (observer) {
+                    return _this._ngZone.runOutsideAngular(function () {
+                        var eventOptions = true;
+                        var callback = function (event) {
+                            if (_this._activeDragInstances.length) {
+                                observer.next(event);
+                            }
+                        };
+                        shadowRoot.addEventListener('scroll', callback, eventOptions);
+                        return function () {
+                            shadowRoot.removeEventListener('scroll', callback, eventOptions);
+                        };
+                    });
+                }));
+            }
+            return rxjs.merge.apply(void 0, __spreadArray([], __read(streams)));
         };
         DragDropRegistry.prototype.ngOnDestroy = function () {
             var _this = this;

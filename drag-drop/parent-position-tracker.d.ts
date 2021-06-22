@@ -28,4 +28,6 @@ export declare class ParentPositionTracker {
     /** Handles scrolling while a drag is taking place. */
     handleScroll(event: Event): ScrollPosition | null;
 }
+/** Gets the target of an event while accounting for shadow dom. */
+export declare function getEventTarget(event: Event): HTMLElement | Document;
 export {};
