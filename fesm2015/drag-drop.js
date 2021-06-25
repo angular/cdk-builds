@@ -197,7 +197,7 @@ class ParentPositionTracker {
     }
     /** Handles scrolling while a drag is taking place. */
     handleScroll(event) {
-        const target = event.target;
+        const target = getEventTarget(event);
         const cachedPosition = this.positions.get(target);
         if (!cachedPosition) {
             return null;
@@ -231,6 +231,10 @@ class ParentPositionTracker {
         scrollPosition.left = newLeft;
         return { top: topDifference, left: leftDifference };
     }
+}
+/** Gets the target of an event while accounting for shadow dom. */
+function getEventTarget(event) {
+    return (event.composedPath ? event.composedPath()[0] : event.target);
 }
 
 /**
@@ -391,7 +395,7 @@ class DragRef {
             // Delegate the event based on whether it started from a handle or the element itself.
             if (this._handles.length) {
                 const targetHandle = this._handles.find(handle => {
-                    const target = event.target;
+                    const target = getEventTarget(event);
                     return !!target && (target === handle || handle.contains(target));
                 });
                 if (targetHandle && !this._disabledHandles.has(targetHandle) && !this.disabled) {
@@ -830,6 +834,7 @@ class DragRef {
         const isTouchSequence = isTouchEvent(event);
         const isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
         const rootElement = this._rootElement;
+        const target = getEventTarget(event);
         const isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -838,7 +843,7 @@ class DragRef {
         // it's flaky and it fails if the user drags it away quickly. Also note that we only want
         // to do this for `mousedown` since doing the same for `touchstart` will stop any `click`
         // events from firing on touch devices.
-        if (event.target && event.target.draggable && event.type === 'mousedown') {
+        if (target && target.draggable && event.type === 'mousedown') {
             event.preventDefault();
         }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
@@ -858,9 +863,9 @@ class DragRef {
         this._removeSubscriptions();
         this._pointerMoveSubscription = this._dragDropRegistry.pointerMove.subscribe(this._pointerMove);
         this._pointerUpSubscription = this._dragDropRegistry.pointerUp.subscribe(this._pointerUp);
-        this._scrollSubscription = this._dragDropRegistry.scroll.subscribe(scrollEvent => {
-            this._updateOnScroll(scrollEvent);
-        });
+        this._scrollSubscription = this._dragDropRegistry
+            .scrolled(this._getShadowRoot())
+            .subscribe(scrollEvent => this._updateOnScroll(scrollEvent));
         if (this._boundaryElement) {
             this._boundaryRect = getMutableClientRect(this._boundaryElement);
         }
@@ -1033,7 +1038,8 @@ class DragRef {
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
                 const handler = ((event) => {
-                    if (!event || (event.target === this._preview && event.propertyName === 'transform')) {
+                    if (!event || (getEventTarget(event) === this._preview &&
+                        event.propertyName === 'transform')) {
                         this._preview.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
@@ -1281,7 +1287,7 @@ class DragRef {
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
-            const target = event.target;
+            const target = getEventTarget(event);
             // ClientRect dimensions are based on the scroll position of the page and its parent node so
             // we have to update the cached boundary ClientRect if the user has scrolled. Check for
             // the `document` specifically since IE doesn't support `contains` on it.
@@ -2137,7 +2143,9 @@ class DropListRef {
      * Used for updating the internal state of the list.
      */
     _listenToScrollEvents() {
-        this._viewportScrollSubscription = this._dragDropRegistry.scroll.subscribe(event => {
+        this._viewportScrollSubscription = this._dragDropRegistry
+            .scrolled(this._getShadowRoot())
+            .subscribe(event => {
             if (this.isDragging()) {
                 const scrollDifference = this._parentPositions.handleScroll(event);
                 if (scrollDifference) {
@@ -2345,7 +2353,11 @@ class DragDropRegistry {
          * while the user is dragging a drag item instance.
          */
         this.pointerUp = new Subject();
-        /** Emits when the viewport has been scrolled while the user is dragging an item. */
+        /**
+         * Emits when the viewport has been scrolled while the user is dragging an item.
+         * @deprecated To be turned into a private member. Use the `scrolled` method instead.
+         * @breaking-change 13.0.0
+         */
         this.scroll = new Subject();
         /**
          * Event listener that will prevent the default browser action while the user is dragging.
@@ -2465,6 +2477,36 @@ class DragDropRegistry {
     /** Gets whether a drag item instance is currently being dragged. */
     isDragging(drag) {
         return this._activeDragInstances.indexOf(drag) > -1;
+    }
+    /**
+     * Gets a stream that will emit when any element on the page is scrolled while an item is being
+     * dragged.
+     * @param shadowRoot Optional shadow root that the current dragging sequence started from.
+     *   Top-level listeners won't pick up events coming from the shadow DOM so this parameter can
+     *   be used to include an additional top-level listener at the shadow root level.
+     */
+    scrolled(shadowRoot) {
+        const streams = [this.scroll];
+        if (shadowRoot && shadowRoot !== this._document) {
+            // Note that this is basically the same as `fromEvent` from rjxs, but we do it ourselves,
+            // because we want to guarantee that the event is bound outside of the `NgZone`. With
+            // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
+            streams.push(new Observable((observer) => {
+                return this._ngZone.runOutsideAngular(() => {
+                    const eventOptions = true;
+                    const callback = (event) => {
+                        if (this._activeDragInstances.length) {
+                            observer.next(event);
+                        }
+                    };
+                    shadowRoot.addEventListener('scroll', callback, eventOptions);
+                    return () => {
+                        shadowRoot.removeEventListener('scroll', callback, eventOptions);
+                    };
+                });
+            }));
+        }
+        return merge(...streams);
     }
     ngOnDestroy() {
         this._dragInstances.forEach(instance => this.removeDragItem(instance));

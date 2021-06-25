@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgZone, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 /**
  * Service that keeps track of all the drag item and drop container
  * instances, and manages global event listeners on the `document`.
@@ -40,7 +40,11 @@ export declare class DragDropRegistry<I extends {
      * while the user is dragging a drag item instance.
      */
     readonly pointerUp: Subject<TouchEvent | MouseEvent>;
-    /** Emits when the viewport has been scrolled while the user is dragging an item. */
+    /**
+     * Emits when the viewport has been scrolled while the user is dragging an item.
+     * @deprecated To be turned into a private member. Use the `scrolled` method instead.
+     * @breaking-change 13.0.0
+     */
     readonly scroll: Subject<Event>;
     constructor(_ngZone: NgZone, _document: any);
     /** Adds a drop container to the registry. */
@@ -61,6 +65,14 @@ export declare class DragDropRegistry<I extends {
     stopDragging(drag: I): void;
     /** Gets whether a drag item instance is currently being dragged. */
     isDragging(drag: I): boolean;
+    /**
+     * Gets a stream that will emit when any element on the page is scrolled while an item is being
+     * dragged.
+     * @param shadowRoot Optional shadow root that the current dragging sequence started from.
+     *   Top-level listeners won't pick up events coming from the shadow DOM so this parameter can
+     *   be used to include an additional top-level listener at the shadow root level.
+     */
+    scrolled(shadowRoot?: DocumentOrShadowRoot | null): Observable<Event>;
     ngOnDestroy(): void;
     /**
      * Event listener that will prevent the default browser action while the user is dragging.
