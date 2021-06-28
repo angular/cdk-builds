@@ -121,7 +121,6 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     protected readonly _destroyed: Subject<void>;
     /** Used for managing keyboard focus. */
     private _keyManager;
-    private _document;
     /** Full list of steps inside the stepper, including inside nested steppers. */
     _steps: QueryList<CdkStep>;
     /** Steps that belong to the current stepper, excluding ones from nested steppers. */
@@ -151,7 +150,12 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
      * @breaking-change 13.0.0
      */
     protected _orientation: StepperOrientation;
-    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef<HTMLElement>, _document: any);
+    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef<HTMLElement>, 
+    /**
+     * @deprecated No longer in use, to be removed.
+     * @breaking-change 13.0.0
+     */
+    _document: any);
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;

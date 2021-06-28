@@ -677,15 +677,16 @@ OverlayOutsideClickDispatcher.ctorParameters = () => [
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const globalsForTest = (typeof window !== 'undefined' ? window : {});
 /**
  * Whether we're in a testing environment.
  * TODO(crisbeto): remove this once we have an overlay testing module or Angular starts tearing
  * down the testing `NgModule` (see https://github.com/angular/angular/issues/18831).
  */
-const isTestEnvironment = (typeof __karma__ !== 'undefined' && !!__karma__) ||
-    (typeof jasmine !== 'undefined' && !!jasmine) ||
-    (typeof jest !== 'undefined' && !!jest) ||
-    (typeof Mocha !== 'undefined' && !!Mocha);
+const isTestEnvironment = (typeof globalsForTest.__karma__ !== 'undefined' && !!globalsForTest.__karma__) ||
+    (typeof globalsForTest.jasmine !== 'undefined' && !!globalsForTest.jasmine) ||
+    (typeof globalsForTest.jest !== 'undefined' && !!globalsForTest.jest) ||
+    (typeof globalsForTest.Mocha !== 'undefined' && !!globalsForTest.Mocha);
 /** Container inside which all overlays will render. */
 class OverlayContainer {
     constructor(document, _platform) {

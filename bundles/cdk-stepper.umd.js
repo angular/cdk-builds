@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/common'), require('@angular/core'), require('rxjs'), require('rxjs/operators')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/common', '@angular/core', 'rxjs', 'rxjs/operators'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}), global.ng.cdk.a11y, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.keycodes, global.ng.common, global.ng.core, global.rxjs, global.rxjs.operators));
-}(this, (function (exports, a11y, bidi, coercion, keycodes, common, core, rxjs, operators) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/cdk/a11y'), require('@angular/cdk/bidi'), require('@angular/cdk/coercion'), require('@angular/cdk/keycodes'), require('@angular/common'), require('@angular/core'), require('@angular/cdk/platform'), require('rxjs'), require('rxjs/operators')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/stepper', ['exports', '@angular/cdk/a11y', '@angular/cdk/bidi', '@angular/cdk/coercion', '@angular/cdk/keycodes', '@angular/common', '@angular/core', '@angular/cdk/platform', 'rxjs', 'rxjs/operators'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.stepper = {}), global.ng.cdk.a11y, global.ng.cdk.bidi, global.ng.cdk.coercion, global.ng.cdk.keycodes, global.ng.common, global.ng.core, global.ng.cdk.platform, global.rxjs, global.rxjs.operators));
+}(this, (function (exports, a11y, bidi, coercion, keycodes, common, core, platform, rxjs, operators) { 'use strict';
 
     /**
      * @license
@@ -209,7 +209,12 @@
         hasError: [{ type: core.Input }]
     };
     var CdkStepper = /** @class */ (function () {
-        function CdkStepper(_dir, _changeDetectorRef, _elementRef, _document) {
+        function CdkStepper(_dir, _changeDetectorRef, _elementRef, 
+        /**
+         * @deprecated No longer in use, to be removed.
+         * @breaking-change 13.0.0
+         */
+        _document) {
             this._dir = _dir;
             this._changeDetectorRef = _changeDetectorRef;
             this._elementRef = _elementRef;
@@ -227,7 +232,6 @@
              */
             this._orientation = 'horizontal';
             this._groupId = nextId++;
-            this._document = _document;
         }
         Object.defineProperty(CdkStepper.prototype, "linear", {
             /** Whether the validity of previous steps should be checked or not. */
@@ -457,7 +461,7 @@
         /** Checks whether the stepper contains the focused element. */
         CdkStepper.prototype._containsFocus = function () {
             var stepperElement = this._elementRef.nativeElement;
-            var focusedElement = this._document.activeElement;
+            var focusedElement = platform._getFocusedElementPierceShadowDom();
             return stepperElement === focusedElement || stepperElement.contains(focusedElement);
         };
         /** Checks whether the passed-in index is a valid step index. */
