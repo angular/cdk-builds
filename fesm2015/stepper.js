@@ -4,6 +4,7 @@ import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coerci
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
 import { Directive, ElementRef, TemplateRef, InjectionToken, EventEmitter, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, forwardRef, Optional, ContentChild, ViewChild, Input, Output, QueryList, ChangeDetectorRef, ContentChildren, HostListener, NgModule } from '@angular/core';
+import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 
@@ -190,7 +191,12 @@ CdkStep.propDecorators = {
     hasError: [{ type: Input }]
 };
 class CdkStepper {
-    constructor(_dir, _changeDetectorRef, _elementRef, _document) {
+    constructor(_dir, _changeDetectorRef, _elementRef, 
+    /**
+     * @deprecated No longer in use, to be removed.
+     * @breaking-change 13.0.0
+     */
+    _document) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -208,7 +214,6 @@ class CdkStepper {
          */
         this._orientation = 'horizontal';
         this._groupId = nextId++;
-        this._document = _document;
     }
     /** Whether the validity of previous steps should be checked or not. */
     get linear() {
@@ -418,7 +423,7 @@ class CdkStepper {
     /** Checks whether the stepper contains the focused element. */
     _containsFocus() {
         const stepperElement = this._elementRef.nativeElement;
-        const focusedElement = this._document.activeElement;
+        const focusedElement = _getFocusedElementPierceShadowDom();
         return stepperElement === focusedElement || stepperElement.contains(focusedElement);
     }
     /** Checks whether the passed-in index is a valid step index. */
