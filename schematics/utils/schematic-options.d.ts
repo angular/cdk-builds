@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
+import { Schema } from '@schematics/angular/component/schema';
 /**
  * Returns the default options for the `@schematics/angular:component` schematic which would
  * have been specified at project initialization (ng new or ng init).
@@ -13,9 +14,4 @@ import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
  * This is necessary because the Angular CLI only exposes the default values for the "--style",
  * "--inlineStyle", "--skipTests" and "--inlineTemplate" options to the "component" schematic.
  */
-export declare function getDefaultComponentOptions(project: ProjectDefinition): {
-    style: string;
-    inlineStyle: boolean;
-    inlineTemplate: boolean;
-    skipTests: boolean;
-};
+export declare function getDefaultComponentOptions(project: ProjectDefinition): Partial<Schema>;
