@@ -8,6 +8,7 @@
 import * as ts from 'typescript';
 import { ResolvedResource } from '../../update-tool/component-resource-collector';
 import { Migration } from '../../update-tool/migration';
+import { AttributeSelectorUpgradeData } from '../data/attribute-selectors';
 import { UpgradeData } from '../upgrade-data';
 /**
  * Migration that walks through every string literal, template and stylesheet
@@ -15,8 +16,8 @@ import { UpgradeData } from '../upgrade-data';
  */
 export declare class AttributeSelectorsMigration extends Migration<UpgradeData> {
     /** Required upgrade changes for specified target version. */
-    data: any;
-    enabled: any;
+    data: AttributeSelectorUpgradeData[];
+    enabled: boolean;
     visitNode(node: ts.Node): void;
     visitTemplate(template: ResolvedResource): void;
     visitStylesheet(stylesheet: ResolvedResource): void;
