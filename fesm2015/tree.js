@@ -629,16 +629,14 @@ function isNodeElement(element) {
  * The children of node will be automatically added to `cdkTreeNodeOutlet`.
  */
 class CdkNestedTreeNode extends CdkTreeNode {
-    constructor(_elementRef, _tree, _differs) {
-        super(_elementRef, _tree);
-        this._elementRef = _elementRef;
-        this._tree = _tree;
+    constructor(elementRef, tree, _differs) {
+        super(elementRef, tree);
         this._differs = _differs;
         // The classes are directly added here instead of in the host property because classes on
         // the host property are not inherited with View Engine. It is not set as a @HostBinding because
         // it is not set by the time it's children nodes try to read the class from it.
         // TODO: move to host after View Engine deprecation
-        this._elementRef.nativeElement.classList.add('cdk-nested-tree-node');
+        elementRef.nativeElement.classList.add('cdk-nested-tree-node');
     }
     ngAfterContentInit() {
         this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
