@@ -68,7 +68,7 @@ export declare class SeleniumWebDriverElement implements TestElement {
     /** Gets the dimensions of the element. */
     getDimensions(): Promise<ElementDimensions>;
     /** Gets the value of a property of an element. */
-    getProperty(name: string): Promise<any>;
+    getProperty<T = any>(name: string): Promise<T>;
     /** Sets the value of a property of an input. */
     setInputValue(newValue: string): Promise<void>;
     /** Selects the options at the specified indexes inside of a native `select` element. */
