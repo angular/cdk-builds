@@ -36,20 +36,13 @@
      * found in the LICENSE file at https://angular.io/license
      */
     /**
-     * Shallow-extends a stylesheet object with another stylesheet-like object.
-     * Note that the keys in `source` have to be dash-cased.
+     * Shallow-extends a stylesheet object with another stylesheet object.
      * @docs-private
      */
-    function extendStyles(dest, source, importantProperties) {
+    function extendStyles(dest, source) {
         for (var key in source) {
             if (source.hasOwnProperty(key)) {
-                var value = source[key];
-                if (value) {
-                    dest.setProperty(key, value, (importantProperties === null || importantProperties === void 0 ? void 0 : importantProperties.has(key)) ? 'important' : '');
-                }
-                else {
-                    dest.removeProperty(key);
-                }
+                dest[key] = source[key];
             }
         }
         return dest;
@@ -63,29 +56,26 @@
     function toggleNativeDragInteractions(element, enable) {
         var userSelect = enable ? '' : 'none';
         extendStyles(element.style, {
-            'touch-action': enable ? '' : 'none',
-            '-webkit-user-drag': enable ? '' : 'none',
-            '-webkit-tap-highlight-color': enable ? '' : 'transparent',
-            'user-select': userSelect,
-            '-ms-user-select': userSelect,
-            '-webkit-user-select': userSelect,
-            '-moz-user-select': userSelect
+            touchAction: enable ? '' : 'none',
+            webkitUserDrag: enable ? '' : 'none',
+            webkitTapHighlightColor: enable ? '' : 'transparent',
+            userSelect: userSelect,
+            msUserSelect: userSelect,
+            webkitUserSelect: userSelect,
+            MozUserSelect: userSelect
         });
     }
     /**
      * Toggles whether an element is visible while preserving its dimensions.
      * @param element Element whose visibility to toggle
      * @param enable Whether the element should be visible.
-     * @param importantProperties Properties to be set as `!important`.
      * @docs-private
      */
-    function toggleVisibility(element, enable, importantProperties) {
-        extendStyles(element.style, {
-            position: enable ? '' : 'fixed',
-            top: enable ? '' : '0',
-            opacity: enable ? '' : '0',
-            left: enable ? '' : '-999em'
-        }, importantProperties);
+    function toggleVisibility(element, enable) {
+        var styles = element.style;
+        styles.position = enable ? '' : 'fixed';
+        styles.top = styles.opacity = enable ? '' : '0';
+        styles.left = enable ? '' : '-999em';
     }
     /**
      * Combines a transform string with an optional other transform
@@ -350,11 +340,6 @@
      * addition to touch events.
      */
     var MOUSE_EVENT_IGNORE_TIME = 800;
-    /** Inline styles to be set as `!important` while dragging. */
-    var dragImportantProperties = new Set([
-        // Needs to be important, because some `mat-table` sets `position: sticky !important`. See #22781.
-        'position'
-    ]);
     /**
      * Reference to a draggable item. Used to manipulate or dispose of the item.
      */
@@ -846,7 +831,7 @@
                 // We move the element out at the end of the body and we make it hidden, because keeping it in
                 // place will throw off the consumer's `:last-child` selectors. We can't remove the element
                 // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
-                toggleVisibility(element, false, dragImportantProperties);
+                toggleVisibility(element, false);
                 this._document.body.appendChild(parent.replaceChild(placeholder, element));
                 this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
                 this.started.next({ source: this }); // Emit before notifying the container.
@@ -935,7 +920,7 @@
             // It's important that we maintain the position, because moving the element around in the DOM
             // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
             // while moving the existing elements in all other cases.
-            toggleVisibility(this._rootElement, true, dragImportantProperties);
+            toggleVisibility(this._rootElement, true);
             this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
             this._destroyPreview();
             this._destroyPlaceholder();
@@ -1041,14 +1026,14 @@
             extendStyles(preview.style, {
                 // It's important that we disable the pointer events on the preview, because
                 // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
-                'pointer-events': 'none',
+                pointerEvents: 'none',
                 // We have to reset the margin, because it can throw off positioning relative to the viewport.
-                'margin': '0',
-                'position': 'fixed',
-                'top': '0',
-                'left': '0',
-                'z-index': "" + (this._config.zIndex || 1000)
-            }, dragImportantProperties);
+                margin: '0',
+                position: 'fixed',
+                top: '0',
+                left: '0',
+                zIndex: "" + (this._config.zIndex || 1000)
+            });
             toggleNativeDragInteractions(preview, false);
             preview.classList.add('cdk-drag-preview');
             preview.setAttribute('dir', this._direction);
