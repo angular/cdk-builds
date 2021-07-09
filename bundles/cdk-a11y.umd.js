@@ -1974,7 +1974,7 @@
                     return;
                 }
                 _this._modality.next('keyboard');
-                _this._mostRecentTarget = getTarget(event);
+                _this._mostRecentTarget = i1._getEventTarget(event);
             };
             /**
              * Handles mousedown events. Must be an arrow function in order to preserve the context when it
@@ -1990,7 +1990,7 @@
                 // Fake mousedown events are fired by some screen readers when controls are activated by the
                 // screen reader. Attribute them to keyboard input modality.
                 _this._modality.next(isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse');
-                _this._mostRecentTarget = getTarget(event);
+                _this._mostRecentTarget = i1._getEventTarget(event);
             };
             /**
              * Handles touchstart events. Must be an arrow function in order to preserve the context when it
@@ -2007,7 +2007,7 @@
                 // triggered via mouse vs touch.
                 _this._lastTouchMs = Date.now();
                 _this._modality.next('touch');
-                _this._mostRecentTarget = getTarget(event);
+                _this._mostRecentTarget = i1._getEventTarget(event);
             };
             this._options = Object.assign(Object.assign({}, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS), options);
             // Skip the first emission as it's null.
@@ -2053,12 +2053,6 @@
         { type: Document, decorators: [{ type: i0.Inject, args: [i2.DOCUMENT,] }] },
         { type: undefined, decorators: [{ type: i0.Optional }, { type: i0.Inject, args: [INPUT_MODALITY_DETECTOR_OPTIONS,] }] }
     ]; };
-    /** Gets the target of an event, accounting for Shadow DOM. */
-    function getTarget(event) {
-        // If an event is bound outside the Shadow DOM, the `event.target` will
-        // point to the shadow root so we have to use `composedPath` instead.
-        return (event.composedPath ? event.composedPath()[0] : event.target);
-    }
 
     /**
      * @license
@@ -2300,7 +2294,7 @@
              * Needs to be an arrow function in order to preserve the context when it gets bound.
              */
             this._rootNodeFocusAndBlurListener = function (event) {
-                var target = getTarget(event);
+                var target = i1._getEventTarget(event);
                 var handler = event.type === 'focus' ? _this._onFocus : _this._onBlur;
                 // We need to walk up the ancestor chain in order to support `checkChildren`.
                 for (var element = target; element; element = element.parentElement) {
@@ -2489,7 +2483,7 @@
             // If we are not counting child-element-focus as focused, make sure that the event target is the
             // monitored element itself.
             var elementInfo = this._elementInfo.get(element);
-            var focusEventTarget = getTarget(event);
+            var focusEventTarget = i1._getEventTarget(event);
             if (!elementInfo || (!elementInfo.checkChildren && element !== focusEventTarget)) {
                 return;
             }

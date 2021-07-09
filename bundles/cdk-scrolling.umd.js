@@ -909,9 +909,9 @@
                     window.addEventListener('resize', _this._changeListener);
                     window.addEventListener('orientationchange', _this._changeListener);
                 }
-                // We don't need to keep track of the subscription,
-                // because we complete the `change` stream on destroy.
-                _this.change().subscribe(function () { return _this._updateViewportSize(); });
+                // Clear the cached position so that the viewport is re-measured next time it is required.
+                // We don't need to keep track of the subscription, because it is completed on destroy.
+                _this.change().subscribe(function () { return _this._viewportSize = null; });
             });
         }
         ViewportRuler.prototype.ngOnDestroy = function () {

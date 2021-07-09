@@ -4,7 +4,7 @@ import * as i1 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i2 from '@angular/cdk/scrolling';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
-import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
+import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceArray, coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
 import { takeUntil, startWith, map, take, tap, switchMap } from 'rxjs/operators';
@@ -18,13 +18,20 @@ import { Directionality } from '@angular/cdk/bidi';
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Shallow-extends a stylesheet object with another stylesheet object.
+ * Shallow-extends a stylesheet object with another stylesheet-like object.
+ * Note that the keys in `source` have to be dash-cased.
  * @docs-private
  */
-function extendStyles(dest, source) {
+function extendStyles(dest, source, importantProperties) {
     for (let key in source) {
         if (source.hasOwnProperty(key)) {
-            dest[key] = source[key];
+            const value = source[key];
+            if (value) {
+                dest.setProperty(key, value, (importantProperties === null || importantProperties === void 0 ? void 0 : importantProperties.has(key)) ? 'important' : '');
+            }
+            else {
+                dest.removeProperty(key);
+            }
         }
     }
     return dest;
@@ -38,26 +45,29 @@ function extendStyles(dest, source) {
 function toggleNativeDragInteractions(element, enable) {
     const userSelect = enable ? '' : 'none';
     extendStyles(element.style, {
-        touchAction: enable ? '' : 'none',
-        webkitUserDrag: enable ? '' : 'none',
-        webkitTapHighlightColor: enable ? '' : 'transparent',
-        userSelect: userSelect,
-        msUserSelect: userSelect,
-        webkitUserSelect: userSelect,
-        MozUserSelect: userSelect
+        'touch-action': enable ? '' : 'none',
+        '-webkit-user-drag': enable ? '' : 'none',
+        '-webkit-tap-highlight-color': enable ? '' : 'transparent',
+        'user-select': userSelect,
+        '-ms-user-select': userSelect,
+        '-webkit-user-select': userSelect,
+        '-moz-user-select': userSelect
     });
 }
 /**
  * Toggles whether an element is visible while preserving its dimensions.
  * @param element Element whose visibility to toggle
  * @param enable Whether the element should be visible.
+ * @param importantProperties Properties to be set as `!important`.
  * @docs-private
  */
-function toggleVisibility(element, enable) {
-    const styles = element.style;
-    styles.position = enable ? '' : 'fixed';
-    styles.top = styles.opacity = enable ? '' : '0';
-    styles.left = enable ? '' : '-999em';
+function toggleVisibility(element, enable, importantProperties) {
+    extendStyles(element.style, {
+        position: enable ? '' : 'fixed',
+        top: enable ? '' : '0',
+        opacity: enable ? '' : '0',
+        left: enable ? '' : '-999em'
+    }, importantProperties);
 }
 /**
  * Combines a transform string with an optional other transform
@@ -197,7 +207,7 @@ class ParentPositionTracker {
     }
     /** Handles scrolling while a drag is taking place. */
     handleScroll(event) {
-        const target = getEventTarget(event);
+        const target = _getEventTarget(event);
         const cachedPosition = this.positions.get(target);
         if (!cachedPosition) {
             return null;
@@ -231,10 +241,6 @@ class ParentPositionTracker {
         scrollPosition.left = newLeft;
         return { top: topDifference, left: leftDifference };
     }
-}
-/** Gets the target of an event while accounting for shadow dom. */
-function getEventTarget(event) {
-    return (event.composedPath ? event.composedPath()[0] : event.target);
 }
 
 /**
@@ -320,6 +326,11 @@ const activeEventListenerOptions = normalizePassiveListenerOptions({ passive: fa
  * addition to touch events.
  */
 const MOUSE_EVENT_IGNORE_TIME = 800;
+/** Inline styles to be set as `!important` while dragging. */
+const dragImportantProperties = new Set([
+    // Needs to be important, because some `mat-table` sets `position: sticky !important`. See #22781.
+    'position'
+]);
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
  */
@@ -395,7 +406,7 @@ class DragRef {
             // Delegate the event based on whether it started from a handle or the element itself.
             if (this._handles.length) {
                 const targetHandle = this._handles.find(handle => {
-                    const target = getEventTarget(event);
+                    const target = _getEventTarget(event);
                     return !!target && (target === handle || handle.contains(target));
                 });
                 if (targetHandle && !this._disabledHandles.has(targetHandle) && !this.disabled) {
@@ -802,7 +813,7 @@ class DragRef {
             // We move the element out at the end of the body and we make it hidden, because keeping it in
             // place will throw off the consumer's `:last-child` selectors. We can't remove the element
             // from the DOM completely, because iOS will stop firing all subsequent events in the chain.
-            toggleVisibility(element, false);
+            toggleVisibility(element, false, dragImportantProperties);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
             this.started.next({ source: this }); // Emit before notifying the container.
@@ -834,7 +845,7 @@ class DragRef {
         const isTouchSequence = isTouchEvent(event);
         const isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
         const rootElement = this._rootElement;
-        const target = getEventTarget(event);
+        const target = _getEventTarget(event);
         const isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -889,7 +900,7 @@ class DragRef {
         // It's important that we maintain the position, because moving the element around in the DOM
         // can throw off `NgFor` which does smart diffing and re-creates elements only when necessary,
         // while moving the existing elements in all other cases.
-        toggleVisibility(this._rootElement, true);
+        toggleVisibility(this._rootElement, true, dragImportantProperties);
         this._anchor.parentNode.replaceChild(this._rootElement, this._anchor);
         this._destroyPreview();
         this._destroyPlaceholder();
@@ -992,14 +1003,14 @@ class DragRef {
         extendStyles(preview.style, {
             // It's important that we disable the pointer events on the preview, because
             // it can throw off the `document.elementFromPoint` calls in the `CdkDropList`.
-            pointerEvents: 'none',
+            'pointer-events': 'none',
             // We have to reset the margin, because it can throw off positioning relative to the viewport.
-            margin: '0',
-            position: 'fixed',
-            top: '0',
-            left: '0',
-            zIndex: `${this._config.zIndex || 1000}`
-        });
+            'margin': '0',
+            'position': 'fixed',
+            'top': '0',
+            'left': '0',
+            'z-index': `${this._config.zIndex || 1000}`
+        }, dragImportantProperties);
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
         preview.setAttribute('dir', this._direction);
@@ -1038,7 +1049,7 @@ class DragRef {
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
                 const handler = ((event) => {
-                    if (!event || (getEventTarget(event) === this._preview &&
+                    if (!event || (_getEventTarget(event) === this._preview &&
                         event.propertyName === 'transform')) {
                         this._preview.removeEventListener('transitionend', handler);
                         resolve();
@@ -1287,7 +1298,7 @@ class DragRef {
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
-            const target = getEventTarget(event);
+            const target = _getEventTarget(event);
             // ClientRect dimensions are based on the scroll position of the page and its parent node so
             // we have to update the cached boundary ClientRect if the user has scrolled. Check for
             // the `document` specifically since IE doesn't support `contains` on it.

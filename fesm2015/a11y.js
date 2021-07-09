@@ -7,7 +7,7 @@ import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, U
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1 from '@angular/cdk/platform';
-import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
+import { Platform, _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
 import { ContentObserver, ObserversModule } from '@angular/cdk/observers';
 
 /**
@@ -1611,7 +1611,7 @@ class InputModalityDetector {
                 return;
             }
             this._modality.next('keyboard');
-            this._mostRecentTarget = getTarget(event);
+            this._mostRecentTarget = _getEventTarget(event);
         };
         /**
          * Handles mousedown events. Must be an arrow function in order to preserve the context when it
@@ -1627,7 +1627,7 @@ class InputModalityDetector {
             // Fake mousedown events are fired by some screen readers when controls are activated by the
             // screen reader. Attribute them to keyboard input modality.
             this._modality.next(isFakeMousedownFromScreenReader(event) ? 'keyboard' : 'mouse');
-            this._mostRecentTarget = getTarget(event);
+            this._mostRecentTarget = _getEventTarget(event);
         };
         /**
          * Handles touchstart events. Must be an arrow function in order to preserve the context when it
@@ -1644,7 +1644,7 @@ class InputModalityDetector {
             // triggered via mouse vs touch.
             this._lastTouchMs = Date.now();
             this._modality.next('touch');
-            this._mostRecentTarget = getTarget(event);
+            this._mostRecentTarget = _getEventTarget(event);
         };
         this._options = Object.assign(Object.assign({}, INPUT_MODALITY_DETECTOR_DEFAULT_OPTIONS), options);
         // Skip the first emission as it's null.
@@ -1685,12 +1685,6 @@ InputModalityDetector.ctorParameters = () => [
     { type: Document, decorators: [{ type: Inject, args: [DOCUMENT,] }] },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [INPUT_MODALITY_DETECTOR_OPTIONS,] }] }
 ];
-/** Gets the target of an event, accounting for Shadow DOM. */
-function getTarget(event) {
-    // If an event is bound outside the Shadow DOM, the `event.target` will
-    // point to the shadow root so we have to use `composedPath` instead.
-    return (event.composedPath ? event.composedPath()[0] : event.target);
-}
 
 /**
  * @license
@@ -1932,7 +1926,7 @@ class FocusMonitor {
          * Needs to be an arrow function in order to preserve the context when it gets bound.
          */
         this._rootNodeFocusAndBlurListener = (event) => {
-            const target = getTarget(event);
+            const target = _getEventTarget(event);
             const handler = event.type === 'focus' ? this._onFocus : this._onBlur;
             // We need to walk up the ancestor chain in order to support `checkChildren`.
             for (let element = target; element; element = element.parentElement) {
@@ -2113,7 +2107,7 @@ class FocusMonitor {
         // If we are not counting child-element-focus as focused, make sure that the event target is the
         // monitored element itself.
         const elementInfo = this._elementInfo.get(element);
-        const focusEventTarget = getTarget(event);
+        const focusEventTarget = _getEventTarget(event);
         if (!elementInfo || (!elementInfo.checkChildren && element !== focusEventTarget)) {
             return;
         }
