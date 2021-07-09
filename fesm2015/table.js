@@ -5,7 +5,7 @@ export { DataSource } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler, ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
-import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, ChangeDetectorRef, Attribute, SkipSelf, ViewChild, ContentChildren, NgModule } from '@angular/core';
+import { InjectionToken, Directive, TemplateRef, Inject, Optional, Input, ContentChild, ElementRef, Injectable, NgZone, IterableDiffers, ViewContainerRef, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, ChangeDetectorRef, Attribute, SkipSelf, Output, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 
@@ -1216,6 +1216,11 @@ class CdkTable {
         this._isShowingNoDataRow = false;
         this._multiTemplateDataRows = false;
         this._fixedLayout = false;
+        /**
+         * Emits when the table completes rendering a set of data rows based on the latest data from the
+         * data source, even if the set of rows is empty.
+         */
+        this.contentChanged = new EventEmitter();
         // TODO(andrewseguin): Remove max value as the end index
         //   and instead calculate the view on init and scroll.
         /**
@@ -1384,6 +1389,7 @@ class CdkTable {
         const changes = this._dataDiffer.diff(this._renderRows);
         if (!changes) {
             this._updateNoDataRow();
+            this.contentChanged.next();
             return;
         }
         const viewContainer = this._rowOutlet.viewContainer;
@@ -1402,6 +1408,7 @@ class CdkTable {
         });
         this._updateNoDataRow();
         this.updateStickyColumnStyles();
+        this.contentChanged.next();
     }
     /** Adds a column definition that was not included as part of the content children. */
     addColumnDef(columnDef) {
@@ -1944,6 +1951,7 @@ CdkTable.propDecorators = {
     dataSource: [{ type: Input }],
     multiTemplateDataRows: [{ type: Input }],
     fixedLayout: [{ type: Input }],
+    contentChanged: [{ type: Output }],
     _rowOutlet: [{ type: ViewChild, args: [DataRowOutlet, { static: true },] }],
     _headerRowOutlet: [{ type: ViewChild, args: [HeaderRowOutlet, { static: true },] }],
     _footerRowOutlet: [{ type: ViewChild, args: [FooterRowOutlet, { static: true },] }],

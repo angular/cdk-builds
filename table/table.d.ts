@@ -10,7 +10,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { CollectionViewer, DataSource, _ViewRepeater } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, EventEmitter, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
@@ -283,6 +283,11 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     get fixedLayout(): boolean;
     set fixedLayout(v: boolean);
     private _fixedLayout;
+    /**
+     * Emits when the table completes rendering a set of data rows based on the latest data from the
+     * data source, even if the set of rows is empty.
+     */
+    readonly contentChanged: EventEmitter<void>;
     /**
      * Stream containing the latest information on what rows are being displayed on screen.
      * Can be used by the data source to as a heuristic of what data should be provided.

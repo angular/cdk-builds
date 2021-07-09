@@ -1669,6 +1669,11 @@
             this._isShowingNoDataRow = false;
             this._multiTemplateDataRows = false;
             this._fixedLayout = false;
+            /**
+             * Emits when the table completes rendering a set of data rows based on the latest data from the
+             * data source, even if the set of rows is empty.
+             */
+            this.contentChanged = new core.EventEmitter();
             // TODO(andrewseguin): Remove max value as the end index
             //   and instead calculate the view on init and scroll.
             /**
@@ -1855,6 +1860,7 @@
             var changes = this._dataDiffer.diff(this._renderRows);
             if (!changes) {
                 this._updateNoDataRow();
+                this.contentChanged.next();
                 return;
             }
             var viewContainer = this._rowOutlet.viewContainer;
@@ -1873,6 +1879,7 @@
             });
             this._updateNoDataRow();
             this.updateStickyColumnStyles();
+            this.contentChanged.next();
         };
         /** Adds a column definition that was not included as part of the content children. */
         CdkTable.prototype.addColumnDef = function (columnDef) {
@@ -2458,6 +2465,7 @@
         dataSource: [{ type: core.Input }],
         multiTemplateDataRows: [{ type: core.Input }],
         fixedLayout: [{ type: core.Input }],
+        contentChanged: [{ type: core.Output }],
         _rowOutlet: [{ type: core.ViewChild, args: [DataRowOutlet, { static: true },] }],
         _headerRowOutlet: [{ type: core.ViewChild, args: [HeaderRowOutlet, { static: true },] }],
         _footerRowOutlet: [{ type: core.ViewChild, args: [FooterRowOutlet, { static: true },] }],
