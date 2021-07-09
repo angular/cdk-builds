@@ -101,5 +101,3 @@ export declare class InputModalityDetector implements OnDestroy {
     constructor(_platform: Platform, ngZone: NgZone, document: Document, options?: InputModalityDetectorOptions);
     ngOnDestroy(): void;
 }
-/** Gets the target of an event, accounting for Shadow DOM. */
-export declare function getTarget(event: Event): HTMLElement | null;

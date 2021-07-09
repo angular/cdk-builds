@@ -4,7 +4,7 @@ import * as i1 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i2 from '@angular/cdk/scrolling';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
-import { normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
+import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceArray, coerceNumberProperty } from '@angular/cdk/coercion';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
 import { takeUntil, startWith, map, take, tap, switchMap } from 'rxjs/operators';
@@ -207,7 +207,7 @@ class ParentPositionTracker {
     }
     /** Handles scrolling while a drag is taking place. */
     handleScroll(event) {
-        const target = getEventTarget(event);
+        const target = _getEventTarget(event);
         const cachedPosition = this.positions.get(target);
         if (!cachedPosition) {
             return null;
@@ -241,10 +241,6 @@ class ParentPositionTracker {
         scrollPosition.left = newLeft;
         return { top: topDifference, left: leftDifference };
     }
-}
-/** Gets the target of an event while accounting for shadow dom. */
-function getEventTarget(event) {
-    return (event.composedPath ? event.composedPath()[0] : event.target);
 }
 
 /**
@@ -410,7 +406,7 @@ class DragRef {
             // Delegate the event based on whether it started from a handle or the element itself.
             if (this._handles.length) {
                 const targetHandle = this._handles.find(handle => {
-                    const target = getEventTarget(event);
+                    const target = _getEventTarget(event);
                     return !!target && (target === handle || handle.contains(target));
                 });
                 if (targetHandle && !this._disabledHandles.has(targetHandle) && !this.disabled) {
@@ -849,7 +845,7 @@ class DragRef {
         const isTouchSequence = isTouchEvent(event);
         const isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
         const rootElement = this._rootElement;
-        const target = getEventTarget(event);
+        const target = _getEventTarget(event);
         const isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
         // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -1053,7 +1049,7 @@ class DragRef {
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
                 const handler = ((event) => {
-                    if (!event || (getEventTarget(event) === this._preview &&
+                    if (!event || (_getEventTarget(event) === this._preview &&
                         event.propertyName === 'transform')) {
                         this._preview.removeEventListener('transitionend', handler);
                         resolve();
@@ -1302,7 +1298,7 @@ class DragRef {
     _updateOnScroll(event) {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
-            const target = getEventTarget(event);
+            const target = _getEventTarget(event);
             // ClientRect dimensions are based on the scroll position of the page and its parent node so
             // we have to update the cached boundary ClientRect if the user has scrolled. Check for
             // the `document` specifically since IE doesn't support `contains` on it.

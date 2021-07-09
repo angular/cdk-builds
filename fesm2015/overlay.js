@@ -7,7 +7,7 @@ import * as i0 from '@angular/core';
 import { Injectable, NgZone, Inject, Optional, ElementRef, ApplicationRef, ComponentFactoryResolver, Injector, InjectionToken, Directive, EventEmitter, TemplateRef, ViewContainerRef, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i2 from '@angular/cdk/platform';
-import { supportsScrollBehavior, Platform } from '@angular/cdk/platform';
+import { supportsScrollBehavior, _getEventTarget, Platform } from '@angular/cdk/platform';
 import { Directionality, BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Subject, Subscription, merge } from 'rxjs';
@@ -598,8 +598,7 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         this._cursorStyleIsSet = false;
         /** Click event listener that will be attached to the body propagate phase. */
         this._clickListener = (event) => {
-            // Get the target through the `composedPath` if possible to account for shadow DOM.
-            const target = event.composedPath ? event.composedPath()[0] : event.target;
+            const target = _getEventTarget(event);
             // We copy the array because the original may be modified asynchronously if the
             // outsidePointerEvents listener decides to detach overlays resulting in index errors inside
             // the for loop.

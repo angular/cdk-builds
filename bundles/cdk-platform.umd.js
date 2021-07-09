@@ -343,6 +343,12 @@
         }
         return activeElement;
     }
+    /** Gets the target of an event while accounting for Shadow DOM. */
+    function _getEventTarget(event) {
+        // If an event is bound outside the Shadow DOM, the `event.target` will
+        // point to the shadow root so we have to use `composedPath` instead.
+        return (event.composedPath ? event.composedPath()[0] : event.target);
+    }
 
     /**
      * @license
@@ -358,6 +364,7 @@
 
     exports.Platform = Platform;
     exports.PlatformModule = PlatformModule;
+    exports._getEventTarget = _getEventTarget;
     exports._getFocusedElementPierceShadowDom = _getFocusedElementPierceShadowDom;
     exports._getShadowRoot = _getShadowRoot;
     exports._supportsShadowDom = _supportsShadowDom;

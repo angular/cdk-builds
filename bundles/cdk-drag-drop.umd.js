@@ -226,7 +226,7 @@
         };
         /** Handles scrolling while a drag is taking place. */
         ParentPositionTracker.prototype.handleScroll = function (event) {
-            var target = getEventTarget(event);
+            var target = platform._getEventTarget(event);
             var cachedPosition = this.positions.get(target);
             if (!cachedPosition) {
                 return null;
@@ -262,10 +262,6 @@
         };
         return ParentPositionTracker;
     }());
-    /** Gets the target of an event while accounting for shadow dom. */
-    function getEventTarget(event) {
-        return (event.composedPath ? event.composedPath()[0] : event.target);
-    }
 
     /**
      * @license
@@ -431,7 +427,7 @@
                 // Delegate the event based on whether it started from a handle or the element itself.
                 if (_this._handles.length) {
                     var targetHandle = _this._handles.find(function (handle) {
-                        var target = getEventTarget(event);
+                        var target = platform._getEventTarget(event);
                         return !!target && (target === handle || handle.contains(target));
                     });
                     if (targetHandle && !_this._disabledHandles.has(targetHandle) && !_this.disabled) {
@@ -879,7 +875,7 @@
             var isTouchSequence = isTouchEvent(event);
             var isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
             var rootElement = this._rootElement;
-            var target = getEventTarget(event);
+            var target = platform._getEventTarget(event);
             var isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
                 this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
             // If the event started from an element with the native HTML drag&drop, it'll interfere
@@ -1088,7 +1084,7 @@
             return this._ngZone.runOutsideAngular(function () {
                 return new Promise(function (resolve) {
                     var handler = (function (event) {
-                        if (!event || (getEventTarget(event) === _this._preview &&
+                        if (!event || (platform._getEventTarget(event) === _this._preview &&
                             event.propertyName === 'transform')) {
                             _this._preview.removeEventListener('transitionend', handler);
                             resolve();
@@ -1337,7 +1333,7 @@
         DragRef.prototype._updateOnScroll = function (event) {
             var scrollDifference = this._parentPositions.handleScroll(event);
             if (scrollDifference) {
-                var target = getEventTarget(event);
+                var target = platform._getEventTarget(event);
                 // ClientRect dimensions are based on the scroll position of the page and its parent node so
                 // we have to update the cached boundary ClientRect if the user has scrolled. Check for
                 // the `document` specifically since IE doesn't support `contains` on it.

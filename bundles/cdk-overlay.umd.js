@@ -937,8 +937,7 @@
             _this._cursorStyleIsSet = false;
             /** Click event listener that will be attached to the body propagate phase. */
             _this._clickListener = function (event) {
-                // Get the target through the `composedPath` if possible to account for shadow DOM.
-                var target = event.composedPath ? event.composedPath()[0] : event.target;
+                var target = i2._getEventTarget(event);
                 // We copy the array because the original may be modified asynchronously if the
                 // outsidePointerEvents listener decides to detach overlays resulting in index errors inside
                 // the for loop.

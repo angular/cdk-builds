@@ -315,6 +315,12 @@ function _getFocusedElementPierceShadowDom() {
     }
     return activeElement;
 }
+/** Gets the target of an event while accounting for Shadow DOM. */
+function _getEventTarget(event) {
+    // If an event is bound outside the Shadow DOM, the `event.target` will
+    // point to the shadow root so we have to use `composedPath` instead.
+    return (event.composedPath ? event.composedPath()[0] : event.target);
+}
 
 /**
  * @license
@@ -328,5 +334,5 @@ function _getFocusedElementPierceShadowDom() {
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

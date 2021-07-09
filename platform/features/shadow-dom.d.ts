@@ -14,3 +14,5 @@ export declare function _getShadowRoot(element: HTMLElement): ShadowRoot | null;
  * also piercing through Shadow DOM boundaries.
  */
 export declare function _getFocusedElementPierceShadowDom(): HTMLElement | null;
+/** Gets the target of an event while accounting for Shadow DOM. */
+export declare function _getEventTarget<T extends EventTarget>(event: Event): T | null;
