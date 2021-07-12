@@ -224,14 +224,7 @@ CdkHeaderCell.ctorParameters = () => [
 /** Footer cell template container that adds the right classes and role. */
 class CdkFooterCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
-        var _a;
         super(columnDef, elementRef);
-        if (((_a = columnDef._table) === null || _a === void 0 ? void 0 : _a._elementRef.nativeElement.nodeType) === 1) {
-            const tableRole = columnDef._table._elementRef.nativeElement
-                .getAttribute('role');
-            const role = (tableRole === 'grid' || tableRole === 'treegrid') ? 'gridcell' : 'cell';
-            elementRef.nativeElement.setAttribute('role', role);
-        }
     }
 }
 CdkFooterCell.decorators = [
@@ -239,6 +232,7 @@ CdkFooterCell.decorators = [
                 selector: 'cdk-footer-cell, td[cdk-footer-cell]',
                 host: {
                     'class': 'cdk-footer-cell',
+                    'role': 'gridcell',
                 },
             },] }
 ];
@@ -249,14 +243,7 @@ CdkFooterCell.ctorParameters = () => [
 /** Cell template container that adds the right classes and role. */
 class CdkCell extends BaseCdkCell {
     constructor(columnDef, elementRef) {
-        var _a;
         super(columnDef, elementRef);
-        if (((_a = columnDef._table) === null || _a === void 0 ? void 0 : _a._elementRef.nativeElement.nodeType) === 1) {
-            const tableRole = columnDef._table._elementRef.nativeElement
-                .getAttribute('role');
-            const role = (tableRole === 'grid' || tableRole === 'treegrid') ? 'gridcell' : 'cell';
-            elementRef.nativeElement.setAttribute('role', role);
-        }
     }
 }
 CdkCell.decorators = [
@@ -264,6 +251,7 @@ CdkCell.decorators = [
                 selector: 'cdk-cell, td[cdk-cell]',
                 host: {
                     'class': 'cdk-cell',
+                    'role': 'gridcell',
                 },
             },] }
 ];
@@ -1243,7 +1231,7 @@ class CdkTable {
          */
         this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
         if (!role) {
-            this._elementRef.nativeElement.setAttribute('role', 'table');
+            this._elementRef.nativeElement.setAttribute('role', 'grid');
         }
         this._document = _document;
         this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';

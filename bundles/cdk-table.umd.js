@@ -515,20 +515,20 @@
     /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
     var BaseCdkCell = /** @class */ (function () {
         function BaseCdkCell(columnDef, elementRef) {
-            var e_1, _b;
+            var e_1, _a;
             // If IE 11 is dropped before we switch to setting a single class name, change to multi param
             // with destructuring.
             var classList = elementRef.nativeElement.classList;
             try {
-                for (var _c = __values(columnDef._columnCssClassName), _d = _c.next(); !_d.done; _d = _c.next()) {
-                    var className = _d.value;
+                for (var _b = __values(columnDef._columnCssClassName), _c = _b.next(); !_c.done; _c = _b.next()) {
+                    var className = _c.value;
                     classList.add(className);
                 }
             }
             catch (e_1_1) { e_1 = { error: e_1_1 }; }
             finally {
                 try {
-                    if (_d && !_d.done && (_b = _c.return)) _b.call(_c);
+                    if (_c && !_c.done && (_a = _b.return)) _a.call(_b);
                 }
                 finally { if (e_1) throw e_1.error; }
             }
@@ -560,16 +560,7 @@
     var CdkFooterCell = /** @class */ (function (_super) {
         __extends(CdkFooterCell, _super);
         function CdkFooterCell(columnDef, elementRef) {
-            var _this = this;
-            var _a;
-            _this = _super.call(this, columnDef, elementRef) || this;
-            if (((_a = columnDef._table) === null || _a === void 0 ? void 0 : _a._elementRef.nativeElement.nodeType) === 1) {
-                var tableRole = columnDef._table._elementRef.nativeElement
-                    .getAttribute('role');
-                var role = (tableRole === 'grid' || tableRole === 'treegrid') ? 'gridcell' : 'cell';
-                elementRef.nativeElement.setAttribute('role', role);
-            }
-            return _this;
+            return _super.call(this, columnDef, elementRef) || this;
         }
         return CdkFooterCell;
     }(BaseCdkCell));
@@ -578,6 +569,7 @@
                     selector: 'cdk-footer-cell, td[cdk-footer-cell]',
                     host: {
                         'class': 'cdk-footer-cell',
+                        'role': 'gridcell',
                     },
                 },] }
     ];
@@ -589,16 +581,7 @@
     var CdkCell = /** @class */ (function (_super) {
         __extends(CdkCell, _super);
         function CdkCell(columnDef, elementRef) {
-            var _this = this;
-            var _a;
-            _this = _super.call(this, columnDef, elementRef) || this;
-            if (((_a = columnDef._table) === null || _a === void 0 ? void 0 : _a._elementRef.nativeElement.nodeType) === 1) {
-                var tableRole = columnDef._table._elementRef.nativeElement
-                    .getAttribute('role');
-                var role = (tableRole === 'grid' || tableRole === 'treegrid') ? 'gridcell' : 'cell';
-                elementRef.nativeElement.setAttribute('role', role);
-            }
-            return _this;
+            return _super.call(this, columnDef, elementRef) || this;
         }
         return CdkCell;
     }(BaseCdkCell));
@@ -607,6 +590,7 @@
                     selector: 'cdk-cell, td[cdk-cell]',
                     host: {
                         'class': 'cdk-cell',
+                        'role': 'gridcell',
                     },
                 },] }
     ];
@@ -1700,7 +1684,7 @@
              */
             this.viewChange = new rxjs.BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
             if (!role) {
-                this._elementRef.nativeElement.setAttribute('role', 'table');
+                this._elementRef.nativeElement.setAttribute('role', 'grid');
             }
             this._document = _document;
             this._isNativeHtmlTable = this._elementRef.nativeElement.nodeName === 'TABLE';
