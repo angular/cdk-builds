@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi')) :
-    typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi'], factory) :
-    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.rxjs, global.rxjs.operators, global.ng.cdk.bidi));
-}(this, (function (exports, i0, i1, i2, platform, coercion, rxjs, operators, bidi) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/common'), require('@angular/cdk/scrolling'), require('@angular/cdk/platform'), require('@angular/cdk/coercion'), require('@angular/cdk/a11y'), require('rxjs'), require('rxjs/operators'), require('@angular/cdk/bidi')) :
+    typeof define === 'function' && define.amd ? define('@angular/cdk/drag-drop', ['exports', '@angular/core', '@angular/common', '@angular/cdk/scrolling', '@angular/cdk/platform', '@angular/cdk/coercion', '@angular/cdk/a11y', 'rxjs', 'rxjs/operators', '@angular/cdk/bidi'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory((global.ng = global.ng || {}, global.ng.cdk = global.ng.cdk || {}, global.ng.cdk.dragDrop = {}), global.ng.core, global.ng.common, global.ng.cdk.scrolling, global.ng.cdk.platform, global.ng.cdk.coercion, global.ng.cdk.a11y, global.rxjs, global.rxjs.operators, global.ng.cdk.bidi));
+}(this, (function (exports, i0, i1, i2, platform, coercion, a11y, rxjs, operators, bidi) { 'use strict';
 
     function _interopNamespace(e) {
         if (e && e.__esModule) return e;
@@ -878,6 +878,8 @@
             var target = platform._getEventTarget(event);
             var isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
                 this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
+            var isFakeEvent = isTouchSequence ? a11y.isFakeTouchstartFromScreenReader(event) :
+                a11y.isFakeMousedownFromScreenReader(event);
             // If the event started from an element with the native HTML drag&drop, it'll interfere
             // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
             // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -888,7 +890,7 @@
                 event.preventDefault();
             }
             // Abort if the user is already dragging or is using a mouse button other than the primary one.
-            if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
+            if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent || isFakeEvent) {
                 return;
             }
             // If we've got handles, we need to disable the tap highlight on the entire root element,

@@ -6,6 +6,7 @@ import * as i2 from '@angular/cdk/scrolling';
 import { ViewportRuler, ScrollDispatcher, CdkScrollableModule } from '@angular/cdk/scrolling';
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
 import { coerceBooleanProperty, coerceElement, coerceArray, coerceNumberProperty } from '@angular/cdk/coercion';
+import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
 import { takeUntil, startWith, map, take, tap, switchMap } from 'rxjs/operators';
 import { Directionality } from '@angular/cdk/bidi';
@@ -848,6 +849,8 @@ class DragRef {
         const target = _getEventTarget(event);
         const isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
+        const isFakeEvent = isTouchSequence ? isFakeTouchstartFromScreenReader(event) :
+            isFakeMousedownFromScreenReader(event);
         // If the event started from an element with the native HTML drag&drop, it'll interfere
         // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
         // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -858,7 +861,7 @@ class DragRef {
             event.preventDefault();
         }
         // Abort if the user is already dragging or is using a mouse button other than the primary one.
-        if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent) {
+        if (isDragging || isAuxiliaryMouseButton || isSyntheticEvent || isFakeEvent) {
             return;
         }
         // If we've got handles, we need to disable the tap highlight on the entire root element,
