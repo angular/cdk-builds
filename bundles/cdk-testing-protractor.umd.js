@@ -510,7 +510,8 @@
                     if (options === null || options === void 0 ? void 0 : options.exclude) {
                         return [2 /*return*/, protractor.browser.executeScript(testing._getTextWithExcludedElements, this.element, options.exclude)];
                     }
-                    return [2 /*return*/, this.element.getText()];
+                    // We don't go through Protractor's `getText`, because it excludes text from hidden elements.
+                    return [2 /*return*/, protractor.browser.executeScript("return (arguments[0].textContent || '').trim()", this.element)];
                 });
             });
         };
