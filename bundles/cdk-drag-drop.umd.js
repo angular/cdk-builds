@@ -92,7 +92,9 @@
      * that exited before the base transform was applied.
      */
     function combineTransforms(transform, initialTransform) {
-        return initialTransform ? (transform + ' ' + initialTransform) : transform;
+        return initialTransform && initialTransform != 'none' ?
+            (transform + ' ' + initialTransform) :
+            transform;
     }
 
     /**
@@ -1232,8 +1234,12 @@
             var transform = getTransform(x, y);
             // Cache the previous transform amount only after the first drag sequence, because
             // we don't want our own transforms to stack on top of each other.
+            // Should be excluded none because none + translate3d(x, y, x) is invalid css
             if (this._initialTransform == null) {
-                this._initialTransform = this._rootElement.style.transform || '';
+                this._initialTransform = this._rootElement.style.transform
+                    && this._rootElement.style.transform != 'none'
+                    ? this._rootElement.style.transform
+                    : '';
             }
             // Preserve the previous `transform` value, if there was one. Note that we apply our own
             // transform before the user's, because things like rotation can affect which direction
