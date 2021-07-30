@@ -3292,8 +3292,7 @@
                 offsetY: currentPosition.offsetY || _this.offsetY,
                 panelClass: currentPosition.panelClass || undefined,
             }); });
-            return positionStrategy
-                .setOrigin(this.origin.elementRef)
+            return positionStrategy.setOrigin(this._getFlexibleConnectedPositionStrategyOrigin())
                 .withPositions(positions)
                 .withFlexibleDimensions(this.flexibleDimensions)
                 .withPush(this.push)
@@ -3304,9 +3303,17 @@
         };
         /** Returns the position strategy of the overlay to be set on the overlay config */
         CdkConnectedOverlay.prototype._createPositionStrategy = function () {
-            var strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
+            var strategy = this._overlay.position().flexibleConnectedTo(this._getFlexibleConnectedPositionStrategyOrigin());
             this._updatePositionStrategy(strategy);
             return strategy;
+        };
+        CdkConnectedOverlay.prototype._getFlexibleConnectedPositionStrategyOrigin = function () {
+            if (this.origin instanceof CdkOverlayOrigin) {
+                return this.origin.elementRef;
+            }
+            else {
+                return this.origin;
+            }
         };
         /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
         CdkConnectedOverlay.prototype._attachOverlay = function () {

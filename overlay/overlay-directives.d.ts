@@ -11,7 +11,7 @@ import { ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, SimpleC
 import { Overlay } from './overlay';
 import { OverlayRef } from './overlay-ref';
 import { ConnectedOverlayPositionChange } from './position/connected-position';
-import { ConnectedPosition, FlexibleConnectedPositionStrategy } from './position/flexible-connected-position-strategy';
+import { ConnectedPosition, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin } from './position/flexible-connected-position-strategy';
 import { RepositionScrollStrategy, ScrollStrategy } from './scroll/index';
 /** Injection token that determines the scroll handling while the connected overlay is open. */
 export declare const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY: InjectionToken<() => ScrollStrategy>;
@@ -49,7 +49,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _position;
     private _scrollStrategyFactory;
     /** Origin for the connected overlay. */
-    origin: CdkOverlayOrigin;
+    origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
     /** Registered connected position pairs. */
     positions: ConnectedPosition[];
     /**
@@ -127,6 +127,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _updatePositionStrategy;
     /** Returns the position strategy of the overlay to be set on the overlay config */
     private _createPositionStrategy;
+    private _getFlexibleConnectedPositionStrategyOrigin;
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */

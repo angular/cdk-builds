@@ -2841,8 +2841,7 @@ class CdkConnectedOverlay {
             offsetY: currentPosition.offsetY || this.offsetY,
             panelClass: currentPosition.panelClass || undefined,
         }));
-        return positionStrategy
-            .setOrigin(this.origin.elementRef)
+        return positionStrategy.setOrigin(this._getFlexibleConnectedPositionStrategyOrigin())
             .withPositions(positions)
             .withFlexibleDimensions(this.flexibleDimensions)
             .withPush(this.push)
@@ -2853,9 +2852,17 @@ class CdkConnectedOverlay {
     }
     /** Returns the position strategy of the overlay to be set on the overlay config */
     _createPositionStrategy() {
-        const strategy = this._overlay.position().flexibleConnectedTo(this.origin.elementRef);
+        const strategy = this._overlay.position().flexibleConnectedTo(this._getFlexibleConnectedPositionStrategyOrigin());
         this._updatePositionStrategy(strategy);
         return strategy;
+    }
+    _getFlexibleConnectedPositionStrategyOrigin() {
+        if (this.origin instanceof CdkOverlayOrigin) {
+            return this.origin.elementRef;
+        }
+        else {
+            return this.origin;
+        }
     }
     /** Attaches the overlay and subscribes to backdrop clicks if backdrop exists */
     _attachOverlay() {
