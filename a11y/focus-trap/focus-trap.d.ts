@@ -43,8 +43,7 @@ export declare class FocusTrap {
      */
     attachAnchors(): boolean;
     /**
-     * Waits for the zone to stabilize, then either focuses the first element that the
-     * user specified, or the first tabbable element.
+     * Waits for the zone to stabilize, then focuses the first tabbable element.
      * @returns Returns a promise that resolves with a boolean, depending
      * on whether focus was moved successfully.
      */
