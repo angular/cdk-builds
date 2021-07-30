@@ -812,10 +812,6 @@ function hasValidTabIndex(element) {
         return false;
     }
     let tabIndex = element.getAttribute('tabindex');
-    // IE11 parses tabindex="" as the value "-32768"
-    if (tabIndex == '-32768') {
-        return false;
-    }
     return !!(tabIndex && !isNaN(parseInt(tabIndex, 10)));
 }
 /**
