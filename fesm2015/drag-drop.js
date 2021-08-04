@@ -215,10 +215,6 @@ class ParentPositionTracker {
         if (!cachedPosition) {
             return null;
         }
-        // Used when figuring out whether an element is inside the scroll parent. If the scrolled
-        // parent is the `document`, we use the `documentElement`, because IE doesn't support
-        // `contains` on the `document`.
-        const scrolledParentNode = target === this._document ? target.documentElement : target;
         const scrollPosition = cachedPosition.scrollPosition;
         let newTop;
         let newLeft;
@@ -236,7 +232,7 @@ class ParentPositionTracker {
         // Go through and update the cached positions of the scroll
         // parents that are inside the element that was scrolled.
         this.positions.forEach((position, node) => {
-            if (position.clientRect && target !== node && scrolledParentNode.contains(node)) {
+            if (position.clientRect && target !== node && target.contains(node)) {
                 adjustClientRect(position.clientRect, topDifference, leftDifference);
             }
         });
@@ -477,11 +473,6 @@ class DragRef {
                 activeTransform.y =
                     constrainedPointerPosition.y - this._pickupPositionOnPage.y + this._passiveTransform.y;
                 this._applyRootElementTransform(activeTransform.x, activeTransform.y);
-                // Apply transform as attribute if dragging and svg element to work for IE
-                if (typeof SVGElement !== 'undefined' && this._rootElement instanceof SVGElement) {
-                    const appliedTransform = `translate(${activeTransform.x} ${activeTransform.y})`;
-                    this._rootElement.setAttribute('transform', appliedTransform);
-                }
             }
             // Since this event gets fired for every pixel while dragging, we only
             // want to fire it if the consumer opted into it. Also we have to
@@ -1198,19 +1189,18 @@ class DragRef {
      */
     _applyRootElementTransform(x, y) {
         const transform = getTransform(x, y);
+        const styles = this._rootElement.style;
         // Cache the previous transform amount only after the first drag sequence, because
         // we don't want our own transforms to stack on top of each other.
         // Should be excluded none because none + translate3d(x, y, x) is invalid css
         if (this._initialTransform == null) {
-            this._initialTransform = this._rootElement.style.transform
-                && this._rootElement.style.transform != 'none'
-                ? this._rootElement.style.transform
-                : '';
+            this._initialTransform =
+                styles.transform && styles.transform != 'none' ? styles.transform : '';
         }
         // Preserve the previous `transform` value, if there was one. Note that we apply our own
         // transform before the user's, because things like rotation can affect which direction
         // the element will be translated towards.
-        this._rootElement.style.transform = combineTransforms(transform, this._initialTransform);
+        styles.transform = combineTransforms(transform, this._initialTransform);
     }
     /**
      * Applies a `transform` to the preview, taking into account any existing transforms on it.
@@ -1308,11 +1298,9 @@ class DragRef {
         const scrollDifference = this._parentPositions.handleScroll(event);
         if (scrollDifference) {
             const target = _getEventTarget(event);
-            // ClientRect dimensions are based on the scroll position of the page and its parent node so
-            // we have to update the cached boundary ClientRect if the user has scrolled. Check for
-            // the `document` specifically since IE doesn't support `contains` on it.
-            if (this._boundaryRect && (target === this._document ||
-                (target !== this._boundaryElement && target.contains(this._boundaryElement)))) {
+            // ClientRect dimensions are based on the scroll position of the page and its parent
+            // node so we have to update the cached boundary ClientRect if the user has scrolled.
+            if (this._boundaryRect && target.contains(this._boundaryElement)) {
                 adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
             }
             this._pickupPositionOnPage.x += scrollDifference.left;
@@ -1576,16 +1564,16 @@ class DropListRef {
                 const node = this._scrollNode;
                 const scrollStep = this.autoScrollStep;
                 if (this._verticalScrollDirection === 1 /* UP */) {
-                    incrementVerticalScroll(node, -scrollStep);
+                    node.scrollBy(0, -scrollStep);
                 }
                 else if (this._verticalScrollDirection === 2 /* DOWN */) {
-                    incrementVerticalScroll(node, scrollStep);
+                    node.scrollBy(0, scrollStep);
                 }
                 if (this._horizontalScrollDirection === 1 /* LEFT */) {
-                    incrementHorizontalScroll(node, -scrollStep);
+                    node.scrollBy(-scrollStep, 0);
                 }
                 else if (this._horizontalScrollDirection === 2 /* RIGHT */) {
-                    incrementHorizontalScroll(node, scrollStep);
+                    node.scrollBy(scrollStep, 0);
                 }
             });
         };
@@ -1787,7 +1775,7 @@ class DropListRef {
         // we need to invert the array when determining the index.
         const items = this._orientation === 'horizontal' && this._direction === 'rtl' ?
             this._itemPositions.slice().reverse() : this._itemPositions;
-        return findIndex(items, currentItem => currentItem.drag === item);
+        return items.findIndex(currentItem => currentItem.drag === item);
     }
     /**
      * Whether the list is able to receive the item that
@@ -1815,7 +1803,7 @@ class DropListRef {
             return;
         }
         const isHorizontal = this._orientation === 'horizontal';
-        const currentIndex = findIndex(siblings, currentItem => currentItem.drag === item);
+        const currentIndex = siblings.findIndex(currentItem => currentItem.drag === item);
         const siblingAtNewPosition = siblings[newIndex];
         const currentPosition = siblings[currentIndex].clientRect;
         const newPosition = siblingAtNewPosition.clientRect;
@@ -2058,7 +2046,7 @@ class DropListRef {
      */
     _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta) {
         const isHorizontal = this._orientation === 'horizontal';
-        const index = findIndex(this._itemPositions, ({ drag, clientRect }, _, array) => {
+        const index = this._itemPositions.findIndex(({ drag, clientRect }, _, array) => {
             if (drag === item) {
                 // If there's only one item left in the container, it must be
                 // the dragged item itself so we use it as a reference.
@@ -2209,48 +2197,6 @@ class DropListRef {
     _notifyReceivingSiblings() {
         const draggedItems = this._activeDraggables.filter(item => item.isDragging());
         this._siblings.forEach(sibling => sibling._startReceiving(this, draggedItems));
-    }
-}
-/**
- * Finds the index of an item that matches a predicate function. Used as an equivalent
- * of `Array.prototype.findIndex` which isn't part of the standard Google typings.
- * @param array Array in which to look for matches.
- * @param predicate Function used to determine whether an item is a match.
- */
-function findIndex(array, predicate) {
-    for (let i = 0; i < array.length; i++) {
-        if (predicate(array[i], i, array)) {
-            return i;
-        }
-    }
-    return -1;
-}
-/**
- * Increments the vertical scroll position of a node.
- * @param node Node whose scroll position should change.
- * @param amount Amount of pixels that the `node` should be scrolled.
- */
-function incrementVerticalScroll(node, amount) {
-    if (node === window) {
-        node.scrollBy(0, amount);
-    }
-    else {
-        // Ideally we could use `Element.scrollBy` here as well, but IE and Edge don't support it.
-        node.scrollTop += amount;
-    }
-}
-/**
- * Increments the horizontal scroll position of a node.
- * @param node Node whose scroll position should change.
- * @param amount Amount of pixels that the `node` should be scrolled.
- */
-function incrementHorizontalScroll(node, amount) {
-    if (node === window) {
-        node.scrollBy(amount, 0);
-    }
-    else {
-        // Ideally we could use `Element.scrollBy` here as well, but IE and Edge don't support it.
-        node.scrollLeft += amount;
     }
 }
 /**
@@ -3302,7 +3248,7 @@ class CdkDrag {
     _updateRootElement() {
         const element = this.element.nativeElement;
         const rootElement = this.rootElementSelector ?
-            getClosestMatchingAncestor(element, this.rootElementSelector) : element;
+            element.closest(this.rootElementSelector) : element;
         if (rootElement && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             assertElementNode(rootElement, 'cdkDrag');
         }
@@ -3315,7 +3261,7 @@ class CdkDrag {
             return null;
         }
         if (typeof boundary === 'string') {
-            return getClosestMatchingAncestor(this.element.nativeElement, boundary);
+            return this.element.nativeElement.closest(boundary);
         }
         const element = coerceElement(boundary);
         if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
@@ -3359,7 +3305,7 @@ class CdkDrag {
         });
         // This only needs to be resolved once.
         ref.beforeStarted.pipe(take(1)).subscribe(() => {
-            var _a, _b;
+            var _a;
             // If we managed to resolve a parent through DI, use it.
             if (this._parentDrag) {
                 ref.withParent(this._parentDrag._dragRef);
@@ -3369,11 +3315,10 @@ class CdkDrag {
             // the item was projected into another item by something like `ngTemplateOutlet`.
             let parent = this.element.nativeElement.parentElement;
             while (parent) {
-                // `classList` needs to be null checked, because IE doesn't have it on some elements.
-                if ((_a = parent.classList) === null || _a === void 0 ? void 0 : _a.contains(DRAG_HOST_CLASS)) {
-                    ref.withParent(((_b = CdkDrag._dragInstances.find(drag => {
+                if (parent.classList.contains(DRAG_HOST_CLASS)) {
+                    ref.withParent(((_a = CdkDrag._dragInstances.find(drag => {
                         return drag.element.nativeElement === parent;
-                    })) === null || _b === void 0 ? void 0 : _b._dragRef) || null);
+                    })) === null || _a === void 0 ? void 0 : _a._dragRef) || null);
                     break;
                 }
                 parent = parent.parentElement;
@@ -3500,19 +3445,6 @@ CdkDrag.propDecorators = {
     dropped: [{ type: Output, args: ['cdkDragDropped',] }],
     moved: [{ type: Output, args: ['cdkDragMoved',] }]
 };
-/** Gets the closest ancestor of an element that matches a selector. */
-function getClosestMatchingAncestor(element, selector) {
-    let currentElement = element.parentElement;
-    while (currentElement) {
-        // IE doesn't support `matches` so we have to fall back to `msMatchesSelector`.
-        if (currentElement.matches ? currentElement.matches(selector) :
-            currentElement.msMatchesSelector(selector)) {
-            return currentElement;
-        }
-        currentElement = currentElement.parentElement;
-    }
-    return null;
-}
 
 /**
  * @license
