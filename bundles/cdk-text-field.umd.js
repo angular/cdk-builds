@@ -155,6 +155,7 @@
         function CdkTextareaAutosize(_elementRef, _platform, _ngZone, 
         /** @breaking-change 11.0.0 make document required */
         document) {
+            var _this = this;
             this._elementRef = _elementRef;
             this._platform = _platform;
             this._ngZone = _ngZone;
@@ -167,11 +168,12 @@
              */
             this._previousMinRows = -1;
             this._isViewInited = false;
+            /** Handles `focus` and `blur` events. */
+            this._handleFocusEvent = function (event) {
+                _this._hasFocus = event.type === 'focus';
+            };
             this._document = document;
             this._textareaElement = this._elementRef.nativeElement;
-            this._measuringClass = _platform.FIREFOX ?
-                'cdk-textarea-autosize-measuring-firefox' :
-                'cdk-textarea-autosize-measuring';
         }
         Object.defineProperty(CdkTextareaAutosize.prototype, "minRows", {
             /** Minimum amount of rows in the textarea. */
@@ -244,12 +246,16 @@
                     rxjs.fromEvent(window, 'resize')
                         .pipe(operators.auditTime(16), operators.takeUntil(_this._destroyed))
                         .subscribe(function () { return _this.resizeToFitContent(true); });
+                    _this._textareaElement.addEventListener('focus', _this._handleFocusEvent);
+                    _this._textareaElement.addEventListener('blur', _this._handleFocusEvent);
                 });
                 this._isViewInited = true;
                 this.resizeToFitContent(true);
             }
         };
         CdkTextareaAutosize.prototype.ngOnDestroy = function () {
+            this._textareaElement.removeEventListener('focus', this._handleFocusEvent);
+            this._textareaElement.removeEventListener('blur', this._handleFocusEvent);
             this._destroyed.next();
             this._destroyed.complete();
         };
@@ -291,13 +297,29 @@
             this._setMaxHeight();
         };
         CdkTextareaAutosize.prototype._measureScrollHeight = function () {
+            var element = this._textareaElement;
+            var previousMargin = element.style.marginBottom || '';
+            var isFirefox = this._platform.FIREFOX;
+            var needsMarginFiller = isFirefox && this._hasFocus;
+            var measuringClass = isFirefox ?
+                'cdk-textarea-autosize-measuring-firefox' :
+                'cdk-textarea-autosize-measuring';
+            // In some cases the page might move around while we're measuring the `textarea` on Firefox. We
+            // work around it by assigning a temporary margin with the same height as the `textarea` so that
+            // it occupies the same amount of space. See #23233.
+            if (needsMarginFiller) {
+                element.style.marginBottom = element.clientHeight + "px";
+            }
             // Reset the textarea height to auto in order to shrink back to its default size.
             // Also temporarily force overflow:hidden, so scroll bars do not interfere with calculations.
-            this._textareaElement.classList.add(this._measuringClass);
+            element.classList.add(measuringClass);
             // The measuring class includes a 2px padding to workaround an issue with Chrome,
             // so we account for that extra space here by subtracting 4 (2px top + 2px bottom).
-            var scrollHeight = this._textareaElement.scrollHeight - 4;
-            this._textareaElement.classList.remove(this._measuringClass);
+            var scrollHeight = element.scrollHeight - 4;
+            element.classList.remove(measuringClass);
+            if (needsMarginFiller) {
+                element.style.marginBottom = previousMargin;
+            }
             return scrollHeight;
         };
         CdkTextareaAutosize.prototype._cacheTextareaPlaceholderHeight = function () {
@@ -391,14 +413,13 @@
          */
         CdkTextareaAutosize.prototype._scrollToCaretPosition = function (textarea) {
             var selectionStart = textarea.selectionStart, selectionEnd = textarea.selectionEnd;
-            var document = this._getDocument();
             // IE will throw an "Unspecified error" if we try to set the selection range after the
             // element has been removed from the DOM. Assert that the directive hasn't been destroyed
             // between the time we requested the animation frame and when it was executed.
             // Also note that we have to assert that the textarea is focused before we set the
             // selection range. Setting the selection range on a non-focused textarea will cause
             // it to receive focus on IE and Edge.
-            if (!this._destroyed.isStopped && document.activeElement === textarea) {
+            if (!this._destroyed.isStopped && this._hasFocus) {
                 textarea.setSelectionRange(selectionStart, selectionEnd);
             }
         };

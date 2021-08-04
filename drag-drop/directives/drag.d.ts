@@ -152,5 +152,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _handleEvents;
     /** Assigns the default input values based on a provided config object. */
     private _assignDefaults;
+    /** Sets up the listener that syncs the handles with the drag ref. */
+    private _setupHandlesListener;
     static ngAcceptInputType_disabled: BooleanInput;
 }
