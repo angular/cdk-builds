@@ -7,7 +7,7 @@
  */
 import { Portal } from '@angular/cdk/portal';
 import { Direction, Directionality } from '@angular/cdk/bidi';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 /**
  * Basic interface for an overlay. Used to avoid circular type references between
  * `OverlayRef`, `PositionStrategy` and `ScrollStrategy`, and `OverlayConfig`.
@@ -19,12 +19,20 @@ export interface OverlayReference {
     dispose: () => void;
     overlayElement: HTMLElement;
     hostElement: HTMLElement;
+    backdropElement: HTMLElement | null;
     getConfig: () => any;
     hasAttached: () => boolean;
     updateSize: (config: any) => void;
     updatePosition: () => void;
     getDirection: () => Direction;
     setDirection: (dir: Direction | Directionality) => void;
+    backdropClick: () => Observable<MouseEvent>;
+    attachments: () => Observable<void>;
+    detachments: () => Observable<void>;
+    keydownEvents: () => Observable<KeyboardEvent>;
+    outsidePointerEvents: () => Observable<MouseEvent>;
+    addPanelClass: (classes: string | string[]) => void;
+    removePanelClass: (classes: string | string[]) => void;
     readonly _outsidePointerEvents: Subject<MouseEvent>;
     readonly _keydownEvents: Subject<KeyboardEvent>;
 }
