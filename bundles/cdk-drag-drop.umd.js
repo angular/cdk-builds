@@ -3610,43 +3610,22 @@
         };
         CdkDrag.prototype.ngAfterViewInit = function () {
             var _this = this;
-            // We need to wait for the zone to stabilize, in order for the reference
-            // element to be in the proper place in the DOM. This is mostly relevant
-            // for draggable elements inside portals since they get stamped out in
-            // their original DOM position and then they get transferred to the portal.
-            this._ngZone.onStable
-                .pipe(operators.take(1), operators.takeUntil(this._destroyed))
-                .subscribe(function () {
-                _this._updateRootElement();
-                // Listen for any newly-added handles.
-                _this._handles.changes.pipe(operators.startWith(_this._handles), 
-                // Sync the new handles with the DragRef.
-                operators.tap(function (handles) {
-                    var childHandleElements = handles
-                        .filter(function (handle) { return handle._parentDrag === _this; })
-                        .map(function (handle) { return handle.element; });
-                    // Usually handles are only allowed to be a descendant of the drag element, but if
-                    // the consumer defined a different drag root, we should allow the drag element
-                    // itself to be a handle too.
-                    if (_this._selfHandle && _this.rootElementSelector) {
-                        childHandleElements.push(_this.element);
+            // Normally this isn't in the zone, but it can cause major performance regressions for apps
+            // using `zone-patch-rxjs` because it'll trigger a change detection when it unsubscribes.
+            this._ngZone.runOutsideAngular(function () {
+                // We need to wait for the zone to stabilize, in order for the reference
+                // element to be in the proper place in the DOM. This is mostly relevant
+                // for draggable elements inside portals since they get stamped out in
+                // their original DOM position and then they get transferred to the portal.
+                _this._ngZone.onStable
+                    .pipe(operators.take(1), operators.takeUntil(_this._destroyed))
+                    .subscribe(function () {
+                    _this._updateRootElement();
+                    _this._setupHandlesListener();
+                    if (_this.freeDragPosition) {
+                        _this._dragRef.setFreeDragPosition(_this.freeDragPosition);
                     }
-                    _this._dragRef.withHandles(childHandleElements);
-                }), 
-                // Listen if the state of any of the handles changes.
-                operators.switchMap(function (handles) {
-                    return rxjs.merge.apply(void 0, __spreadArray([], __read(handles.map(function (item) {
-                        return item._stateChanges.pipe(operators.startWith(item));
-                    }))));
-                }), operators.takeUntil(_this._destroyed)).subscribe(function (handleInstance) {
-                    // Enabled/disable the handle that changed in the DragRef.
-                    var dragRef = _this._dragRef;
-                    var handle = handleInstance.element.nativeElement;
-                    handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
                 });
-                if (_this.freeDragPosition) {
-                    _this._dragRef.setFreeDragPosition(_this.freeDragPosition);
-                }
             });
         };
         CdkDrag.prototype.ngOnChanges = function (changes) {
@@ -3663,6 +3642,7 @@
             }
         };
         CdkDrag.prototype.ngOnDestroy = function () {
+            var _this = this;
             if (this.dropContainer) {
                 this.dropContainer.removeItem(this);
             }
@@ -3670,9 +3650,12 @@
             if (index > -1) {
                 CdkDrag._dragInstances.splice(index, 1);
             }
-            this._destroyed.next();
-            this._destroyed.complete();
-            this._dragRef.dispose();
+            // Unnecessary in most cases, but used to avoid extra change detections with `zone-paths-rxjs`.
+            this._ngZone.runOutsideAngular(function () {
+                _this._destroyed.next();
+                _this._destroyed.complete();
+                _this._dragRef.dispose();
+            });
         };
         /** Syncs the root element with the `DragRef`. */
         CdkDrag.prototype._updateRootElement = function () {
@@ -3828,6 +3811,36 @@
             if (previewContainer) {
                 this.previewContainer = previewContainer;
             }
+        };
+        /** Sets up the listener that syncs the handles with the drag ref. */
+        CdkDrag.prototype._setupHandlesListener = function () {
+            var _this = this;
+            // Listen for any newly-added handles.
+            this._handles.changes.pipe(operators.startWith(this._handles), 
+            // Sync the new handles with the DragRef.
+            operators.tap(function (handles) {
+                var childHandleElements = handles
+                    .filter(function (handle) { return handle._parentDrag === _this; })
+                    .map(function (handle) { return handle.element; });
+                // Usually handles are only allowed to be a descendant of the drag element, but if
+                // the consumer defined a different drag root, we should allow the drag element
+                // itself to be a handle too.
+                if (_this._selfHandle && _this.rootElementSelector) {
+                    childHandleElements.push(_this.element);
+                }
+                _this._dragRef.withHandles(childHandleElements);
+            }), 
+            // Listen if the state of any of the handles changes.
+            operators.switchMap(function (handles) {
+                return rxjs.merge.apply(void 0, __spreadArray([], __read(handles.map(function (item) {
+                    return item._stateChanges.pipe(operators.startWith(item));
+                }))));
+            }), operators.takeUntil(this._destroyed)).subscribe(function (handleInstance) {
+                // Enabled/disable the handle that changed in the DragRef.
+                var dragRef = _this._dragRef;
+                var handle = handleInstance.element.nativeElement;
+                handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
+            });
         };
         return CdkDrag;
     }());
