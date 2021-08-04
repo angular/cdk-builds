@@ -44,8 +44,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _cachedPlaceholderHeight?;
     /** Used to reference correct document/window */
     protected _document?: Document;
-    /** Class that should be applied to the textarea while it's being measured. */
-    private _measuringClass;
+    private _hasFocus;
     private _isViewInited;
     constructor(_elementRef: ElementRef<HTMLElement>, _platform: Platform, _ngZone: NgZone, 
     /** @breaking-change 11.0.0 make document required */
@@ -66,6 +65,8 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _cacheTextareaLineHeight;
     private _measureScrollHeight;
     private _cacheTextareaPlaceholderHeight;
+    /** Handles `focus` and `blur` events. */
+    private _handleFocusEvent;
     ngDoCheck(): void;
     /**
      * Resize the textarea to fit its content.
