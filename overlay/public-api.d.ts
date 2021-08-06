@@ -20,5 +20,4 @@ export { ComponentType } from '@angular/cdk/portal';
 export { OverlayPositionBuilder } from './position/overlay-position-builder';
 export { PositionStrategy } from './position/position-strategy';
 export { GlobalPositionStrategy } from './position/global-position-strategy';
-export { ConnectedPositionStrategy } from './position/connected-position-strategy';
 export { ConnectedPosition, FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin, } from './position/flexible-connected-position-strategy';

@@ -7,10 +7,7 @@
  */
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { ElementRef } from '@angular/core';
 import { OverlayContainer } from '../overlay-container';
-import { OriginConnectionPosition, OverlayConnectionPosition } from './connected-position';
-import { ConnectedPositionStrategy } from './connected-position-strategy';
 import { FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin } from './flexible-connected-position-strategy';
 import { GlobalPositionStrategy } from './global-position-strategy';
 /** Builder for overlay position strategy. */
@@ -24,15 +21,6 @@ export declare class OverlayPositionBuilder {
      * Creates a global position strategy.
      */
     global(): GlobalPositionStrategy;
-    /**
-     * Creates a relative position strategy.
-     * @param elementRef
-     * @param originPos
-     * @param overlayPos
-     * @deprecated Use `flexibleConnectedTo` instead.
-     * @breaking-change 8.0.0
-     */
-    connectedTo(elementRef: ElementRef, originPos: OriginConnectionPosition, overlayPos: OverlayConnectionPosition): ConnectedPositionStrategy;
     /**
      * Creates a flexible position strategy.
      * @param origin Origin relative to which to position the overlay.
