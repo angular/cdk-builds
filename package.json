@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "13.0.0-next.0-sha-ec7d16468",
+  "version": "13.0.0-next.0-sha-0114ccdb9",
   "description": "Angular Material Component Development Kit",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "peerDependencies": {
     "@angular/core": "^13.0.0-0 || ^14.0.0-0",
     "@angular/common": "^13.0.0-0 || ^14.0.0-0",
-    "rxjs": "^6.5.3"
+    "rxjs": "^6.5.3 || ^7.0.0"
   },
   "dependencies": {
     "tslib": "^2.2.0"
