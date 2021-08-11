@@ -1300,7 +1300,8 @@ class DragRef {
             const target = _getEventTarget(event);
             // ClientRect dimensions are based on the scroll position of the page and its parent
             // node so we have to update the cached boundary ClientRect if the user has scrolled.
-            if (this._boundaryRect && target.contains(this._boundaryElement)) {
+            if (this._boundaryRect && target !== this._boundaryElement &&
+                target.contains(this._boundaryElement)) {
                 adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
             }
             this._pickupPositionOnPage.x += scrollDifference.left;
