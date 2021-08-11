@@ -1,6 +1,6 @@
 {
   "name": "@angular/cdk",
-  "version": "12.2.0-sha-7a97590ae",
+  "version": "12.2.0",
   "description": "Angular Material Component Development Kit",
   "repository": {
     "type": "git",
@@ -34,9 +34,6 @@
     "migrations": "./schematics/migration.json"
   },
   "sideEffects": false,
-  "publishConfig": {
-    "registry": "https://wombat-dressing-room.appspot.com"
-  },
   "main": "./bundles/cdk.umd.js",
   "fesm2015": "./fesm2015/cdk.js",
   "esm2015": "./esm2015/index.js",
