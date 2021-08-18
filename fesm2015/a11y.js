@@ -1068,11 +1068,9 @@ class FocusTrap {
         if (this._checker.isFocusable(root) && this._checker.isTabbable(root)) {
             return root;
         }
-        // Iterate in DOM order. Note that IE doesn't have `children` for SVG so we fall
-        // back to `childNodes` which includes text nodes, comments etc.
-        let children = root.children || root.childNodes;
+        const children = root.children;
         for (let i = 0; i < children.length; i++) {
-            let tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getFirstTabbableElement(children[i]) :
                 null;
             if (tabbableChild) {
@@ -1087,9 +1085,9 @@ class FocusTrap {
             return root;
         }
         // Iterate in reverse DOM order.
-        let children = root.children || root.childNodes;
+        const children = root.children;
         for (let i = children.length - 1; i >= 0; i--) {
-            let tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
+            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
                 this._getLastTabbableElement(children[i]) :
                 null;
             if (tabbableChild) {
@@ -1312,41 +1310,6 @@ const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY'
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/** IE 11 compatible closest implementation that is able to start from non-Element Nodes. */
-function closest(element, selector) {
-    if (!(element instanceof Node)) {
-        return null;
-    }
-    let curr = element;
-    while (curr != null && !(curr instanceof Element)) {
-        curr = curr.parentNode;
-    }
-    return curr && (hasNativeClosest ?
-        curr.closest(selector) : polyfillClosest(curr, selector));
-}
-/** Polyfill for browsers without Element.closest. */
-function polyfillClosest(element, selector) {
-    let curr = element;
-    while (curr != null && !(curr instanceof Element && matches(curr, selector))) {
-        curr = curr.parentNode;
-    }
-    return (curr || null);
-}
-const hasNativeClosest = typeof Element != 'undefined' && !!Element.prototype.closest;
-/** IE 11 compatible matches implementation. */
-function matches(element, selector) {
-    return element.matches ?
-        element.matches(selector) :
-        element['msMatchesSelector'](selector);
-}
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Lightweight FocusTrapInertStrategy that adds a document focus event
  * listener to redirect focus back inside the FocusTrap.
@@ -1387,7 +1350,8 @@ class EventListenerFocusTrapInertStrategy {
         const focusTrapRoot = focusTrap._element;
         // Don't refocus if target was in an overlay, because the overlay might be associated
         // with an element inside the FocusTrap, ex. mat-select.
-        if (!focusTrapRoot.contains(target) && closest(target, 'div.cdk-overlay-pane') === null) {
+        if (target && !focusTrapRoot.contains(target) &&
+            target.closest('div.cdk-overlay-pane') === null) {
             // Some legacy FocusTrap usages have logic that focuses some element on the page
             // just before FocusTrap is destroyed. For backwards compatibility, wait
             // to be sure FocusTrap is still enabled before refocusing.
