@@ -1710,12 +1710,12 @@
          * so all this code runs outside Angular as well.
          */
         EventListenerFocusTrapInertStrategy.prototype._trapFocus = function (focusTrap, event) {
+            var _a;
             var target = event.target;
             var focusTrapRoot = focusTrap._element;
             // Don't refocus if target was in an overlay, because the overlay might be associated
             // with an element inside the FocusTrap, ex. mat-select.
-            if (target && !focusTrapRoot.contains(target) &&
-                target.closest('div.cdk-overlay-pane') === null) {
+            if (target && !focusTrapRoot.contains(target) && !((_a = target.closest) === null || _a === void 0 ? void 0 : _a.call(target, 'div.cdk-overlay-pane'))) {
                 // Some legacy FocusTrap usages have logic that focuses some element on the page
                 // just before FocusTrap is destroyed. For backwards compatibility, wait
                 // to be sure FocusTrap is still enabled before refocusing.
