@@ -101,39 +101,33 @@ let uniqueIds = 0;
  * @docs-private
  */
 function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers = {}) {
-    const event = document.createEvent('MouseEvent');
-    const originalPreventDefault = event.preventDefault.bind(event);
     // Note: We cannot determine the position of the mouse event based on the screen
     // because the dimensions and position of the browser window are not available
     // To provide reasonable `screenX` and `screenY` coordinates, we simply use the
     // client coordinates as if the browser is opened in fullscreen.
     const screenX = clientX;
     const screenY = clientY;
-    event.initMouseEvent(type, 
-    /* canBubble */ true, 
-    /* cancelable */ true, 
-    /* view */ window, 
-    /* detail */ 0, 
-    /* screenX */ screenX, 
-    /* screenY */ screenY, 
-    /* clientX */ clientX, 
-    /* clientY */ clientY, 
-    /* ctrlKey */ !!modifiers.control, 
-    /* altKey */ !!modifiers.alt, 
-    /* shiftKey */ !!modifiers.shift, 
-    /* metaKey */ !!modifiers.meta, 
-    /* button */ button, 
-    /* relatedTarget */ null);
-    // `initMouseEvent` doesn't allow us to pass these properties into the constructor.
-    // Override them to 1, because they're used for fake screen reader event detection.
-    defineReadonlyEventProperty(event, 'buttons', 1);
+    const event = new MouseEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        detail: 0,
+        relatedTarget: null,
+        screenX,
+        screenY,
+        clientX,
+        clientY,
+        ctrlKey: modifiers.control,
+        altKey: modifiers.alt,
+        shiftKey: modifiers.shift,
+        metaKey: modifiers.meta,
+        button: button,
+        buttons: 1,
+    });
+    // The `MouseEvent` constructor doesn't allow us to pass these properties into the constructor.
+    // Override them to `1`, because they're used for fake screen reader event detection.
     defineReadonlyEventProperty(event, 'offsetX', 1);
     defineReadonlyEventProperty(event, 'offsetY', 1);
-    // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
-    event.preventDefault = function () {
-        defineReadonlyEventProperty(event, 'defaultPrevented', true);
-        return originalPreventDefault();
-    };
     return event;
 }
 /**
@@ -155,10 +149,10 @@ function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimar
  * @docs-private
  */
 function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
-    // In favor of creating events that work for most of the browsers, the event is created
-    // as a basic UI Event. The necessary details for the event will be set manually.
+    // We cannot use the `TouchEvent` or `Touch` because Firefox and Safari lack support.
+    // TODO: Switch to the constructor API when it is available for Firefox and Safari.
     const event = document.createEvent('UIEvent');
-    const touchDetails = { pageX, pageY, clientX, clientY, id: uniqueIds++ };
+    const touchDetails = { pageX, pageY, clientX, clientY, identifier: uniqueIds++ };
     // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
     event.initUIEvent(type, true, true, window, 0);
     // Most of the browsers don't have a "initTouchEvent" method that can be used to define
@@ -173,57 +167,24 @@ function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) 
  * @docs-private
  */
 function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
-    const event = document.createEvent('KeyboardEvent');
-    const originalPreventDefault = event.preventDefault.bind(event);
-    // Firefox does not support `initKeyboardEvent`, but supports `initKeyEvent`.
-    // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyEvent.
-    if (event.initKeyEvent !== undefined) {
-        event.initKeyEvent(type, true, true, window, modifiers.control, modifiers.alt, modifiers.shift, modifiers.meta, keyCode);
-    }
-    else {
-        // `initKeyboardEvent` expects to receive modifiers as a whitespace-delimited string
-        // See https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyboardEvent
-        let modifiersList = '';
-        if (modifiers.control) {
-            modifiersList += 'Control ';
-        }
-        if (modifiers.alt) {
-            modifiersList += 'Alt ';
-        }
-        if (modifiers.shift) {
-            modifiersList += 'Shift ';
-        }
-        if (modifiers.meta) {
-            modifiersList += 'Meta ';
-        }
-        // TS3.6 removed the `initKeyboardEvent` method and suggested porting to
-        // `new KeyboardEvent()` constructor. We cannot use that as we support IE11.
-        // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/initKeyboardEvent.
-        event.initKeyboardEvent(type, true, /* canBubble */ true, /* cancelable */ window, /* view */ 0, /* char */ key, /* key */ 0, /* location */ modifiersList.trim(), /* modifiersList */ false /* repeat */);
-    }
-    // Webkit Browsers don't set the keyCode when calling the init function.
-    // See related bug https://bugs.webkit.org/show_bug.cgi?id=16735
-    defineReadonlyEventProperty(event, 'keyCode', keyCode);
-    defineReadonlyEventProperty(event, 'key', key);
-    defineReadonlyEventProperty(event, 'ctrlKey', !!modifiers.control);
-    defineReadonlyEventProperty(event, 'altKey', !!modifiers.alt);
-    defineReadonlyEventProperty(event, 'shiftKey', !!modifiers.shift);
-    defineReadonlyEventProperty(event, 'metaKey', !!modifiers.meta);
-    // IE won't set `defaultPrevented` on synthetic events so we need to do it manually.
-    event.preventDefault = function () {
-        defineReadonlyEventProperty(event, 'defaultPrevented', true);
-        return originalPreventDefault();
-    };
-    return event;
+    return new KeyboardEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        keyCode: keyCode,
+        key: key,
+        shiftKey: modifiers.shift,
+        metaKey: modifiers.meta,
+        altKey: modifiers.alt,
+        ctrlKey: modifiers.control,
+    });
 }
 /**
  * Creates a fake event object with any desired event type.
  * @docs-private
  */
-function createFakeEvent(type, canBubble = false, cancelable = true) {
-    const event = document.createEvent('Event');
-    event.initEvent(type, canBubble, cancelable);
-    return event;
+function createFakeEvent(type, bubbles = false, cancelable = true) {
+    return new Event(type, { bubbles, cancelable });
 }
 /**
  * Defines a readonly property on the given event object. Readonly properties on an event object
@@ -252,8 +213,8 @@ function dispatchEvent(node, event) {
  * Shorthand to dispatch a fake event on a specified node.
  * @docs-private
  */
-function dispatchFakeEvent(node, type, canBubble) {
-    return dispatchEvent(node, createFakeEvent(type, canBubble));
+function dispatchFakeEvent(node, type, bubbles) {
+    return dispatchEvent(node, createFakeEvent(type, bubbles));
 }
 /**
  * Shorthand to dispatch a keyboard event with a specified key code and
@@ -304,10 +265,12 @@ function triggerFocusChange(element, event) {
 }
 /**
  * Patches an elements focus and blur methods to emit events consistently and predictably.
- * This is necessary, because some browsers, like IE11, will call the focus handlers asynchronously,
+ * This is necessary, because some browsers can call the focus handlers asynchronously,
  * while others won't fire them at all if the browser window is not focused.
  * @docs-private
  */
+// TODO: Check if this element focus patching is still needed for local testing,
+// where browser is not necessarily focused.
 function patchElementFocus(element) {
     element.focus = () => dispatchFakeEvent(element, 'focus');
     element.blur = () => dispatchFakeEvent(element, 'blur');

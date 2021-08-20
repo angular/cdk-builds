@@ -15,7 +15,7 @@ export declare function dispatchEvent<T extends Event>(node: Node | Window, even
  * Shorthand to dispatch a fake event on a specified node.
  * @docs-private
  */
-export declare function dispatchFakeEvent(node: Node | Window, type: string, canBubble?: boolean): Event;
+export declare function dispatchFakeEvent(node: Node | Window, type: string, bubbles?: boolean): Event;
 /**
  * Shorthand to dispatch a keyboard event with a specified key code and
  * optional modifiers.
