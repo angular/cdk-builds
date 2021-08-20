@@ -128,11 +128,6 @@ Clipboard.ctorParameters = () => [
 /** Injection token that can be used to provide the default options to `CdkCopyToClipboard`. */
 const CDK_COPY_TO_CLIPBOARD_CONFIG = new InjectionToken('CDK_COPY_TO_CLIPBOARD_CONFIG');
 /**
- * @deprecated Use `CDK_COPY_TO_CLIPBOARD_CONFIG` instead.
- * @breaking-change 13.0.0
- */
-const CKD_COPY_TO_CLIPBOARD_CONFIG = CDK_COPY_TO_CLIPBOARD_CONFIG;
-/**
  * Provides behavior for a button that when clicked copies content into user's
  * clipboard.
  */
@@ -203,7 +198,7 @@ CdkCopyToClipboard.decorators = [
 CdkCopyToClipboard.ctorParameters = () => [
     { type: Clipboard },
     { type: NgZone },
-    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CKD_COPY_TO_CLIPBOARD_CONFIG,] }] }
+    { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: [CDK_COPY_TO_CLIPBOARD_CONFIG,] }] }
 ];
 CdkCopyToClipboard.propDecorators = {
     text: [{ type: Input, args: ['cdkCopyToClipboard',] }],
@@ -239,5 +234,5 @@ ClipboardModule.decorators = [
  * Generated bundle index. Do not edit.
  */
 
-export { CDK_COPY_TO_CLIPBOARD_CONFIG, CKD_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
+export { CDK_COPY_TO_CLIPBOARD_CONFIG, CdkCopyToClipboard, Clipboard, ClipboardModule, PendingCopy };
 //# sourceMappingURL=clipboard.js.map
