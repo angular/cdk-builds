@@ -800,14 +800,18 @@
         if (value === undefined) {
             return 'undefined';
         }
-        // `JSON.stringify` doesn't handle RegExp properly, so we need a custom replacer.
         try {
-            return JSON.stringify(value, function (_, v) {
-                if (v instanceof RegExp) {
-                    return "/" + v.toString() + "/";
-                }
-                return typeof v === 'string' ? v.replace('/\//g', '\\/') : v;
-            }).replace(/"\/\//g, '\\/').replace(/\/\/"/g, '\\/').replace(/\\\//g, '/');
+            // `JSON.stringify` doesn't handle RegExp properly, so we need a custom replacer.
+            // Use a character that is unlikely to appear in real strings to denote the start and end of
+            // the regex. This allows us to strip out the extra quotes around the value added by
+            // `JSON.stringify`. Also do custom escaping on `"` characters to prevent `JSON.stringify`
+            // from escaping them as if they were part of a string.
+            var stringifiedValue = JSON.stringify(value, function (_, v) { return v instanceof RegExp ?
+                "\u25ECMAT_RE_ESCAPE\u25EC" + v.toString().replace(/"/g, '◬MAT_RE_ESCAPE◬') + "\u25ECMAT_RE_ESCAPE\u25EC" : v; });
+            // Strip out the extra quotes around regexes and put back the manually escaped `"` characters.
+            return stringifiedValue
+                .replace(/"◬MAT_RE_ESCAPE◬|◬MAT_RE_ESCAPE◬"/g, '')
+                .replace(/◬MAT_RE_ESCAPE◬/g, '"');
         }
         catch (_a) {
             // `JSON.stringify` will throw if the object is cyclical,
