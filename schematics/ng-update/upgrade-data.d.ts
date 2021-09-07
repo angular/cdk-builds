@@ -7,7 +7,7 @@
  */
 import { Migration } from '../update-tool/migration';
 import { ValueOfChanges, VersionChanges } from '../update-tool/version-changes';
-import { AttributeSelectorUpgradeData, ClassNameUpgradeData, ConstructorChecksUpgradeData, CssSelectorUpgradeData, ElementSelectorUpgradeData, InputNameUpgradeData, MethodCallUpgradeData, OutputNameUpgradeData, PropertyNameUpgradeData } from './data';
+import { AttributeSelectorUpgradeData, ClassNameUpgradeData, ConstructorChecksUpgradeData, CssSelectorUpgradeData, ElementSelectorUpgradeData, InputNameUpgradeData, MethodCallUpgradeData, OutputNameUpgradeData, PropertyNameUpgradeData, SymbolRemovalUpgradeData } from './data';
 /** Upgrade data for the Angular CDK. */
 export declare const cdkUpgradeData: UpgradeData;
 /**
@@ -24,6 +24,7 @@ export interface UpgradeData {
     methodCallChecks: VersionChanges<MethodCallUpgradeData>;
     outputNames: VersionChanges<OutputNameUpgradeData>;
     propertyNames: VersionChanges<PropertyNameUpgradeData>;
+    symbolRemoval: VersionChanges<SymbolRemovalUpgradeData>;
 }
 /**
  * Gets the reduced upgrade data for the specified data key. The function reads out the
