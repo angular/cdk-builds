@@ -1652,27 +1652,25 @@ class InputModalityDetector {
         this.modalityChanged = this.modalityDetected.pipe(distinctUntilChanged());
         // If we're not in a browser, this service should do nothing, as there's no relevant input
         // modality to detect.
-        if (!_platform.isBrowser) {
-            return;
+        if (_platform.isBrowser) {
+            ngZone.runOutsideAngular(() => {
+                document.addEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
+                document.addEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
+                document.addEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
+            });
         }
-        // Add the event listeners used to detect the user's input modality.
-        ngZone.runOutsideAngular(() => {
-            document.addEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
-            document.addEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
-            document.addEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
-        });
     }
     /** The most recently detected input modality. */
     get mostRecentModality() {
         return this._modality.value;
     }
     ngOnDestroy() {
-        if (!this._platform.isBrowser) {
-            return;
+        this._modality.complete();
+        if (this._platform.isBrowser) {
+            document.removeEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
+            document.removeEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
+            document.removeEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
         }
-        document.removeEventListener('keydown', this._onKeydown, modalityEventListenerOptions);
-        document.removeEventListener('mousedown', this._onMousedown, modalityEventListenerOptions);
-        document.removeEventListener('touchstart', this._onTouchstart, modalityEventListenerOptions);
     }
 }
 InputModalityDetector.ɵprov = i0.ɵɵdefineInjectable({ factory: function InputModalityDetector_Factory() { return new InputModalityDetector(i0.ɵɵinject(i1.Platform), i0.ɵɵinject(i0.NgZone), i0.ɵɵinject(i2.DOCUMENT), i0.ɵɵinject(INPUT_MODALITY_DETECTOR_OPTIONS, 8)); }, token: InputModalityDetector, providedIn: "root" });

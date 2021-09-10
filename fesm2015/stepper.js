@@ -204,6 +204,8 @@ class CdkStepper {
         this._destroyed = new Subject();
         /** Steps that belong to the current stepper, excluding ones from nested steppers. */
         this.steps = new QueryList();
+        /** List of step headers sorted based on their DOM order. */
+        this._sortedHeaders = new QueryList();
         this._linear = false;
         this._selectedIndex = 0;
         /** Event emitted when the selected step has changed. */
@@ -269,10 +271,28 @@ class CdkStepper {
         });
     }
     ngAfterViewInit() {
+        // If the step headers are defined outside of the `ngFor` that renders the steps, like in the
+        // Material stepper, they won't appear in the `QueryList` in the same order as they're
+        // rendered in the DOM which will lead to incorrect keyboard navigation. We need to sort
+        // them manually to ensure that they're correct. Alternatively, we can change the Material
+        // template to inline the headers in the `ngFor`, but that'll result in a lot of
+        // code duplciation. See #23539.
+        this._stepHeader.changes
+            .pipe(startWith(this._stepHeader), takeUntil(this._destroyed))
+            .subscribe((headers) => {
+            this._sortedHeaders.reset(headers.toArray().sort((a, b) => {
+                const documentPosition = a._elementRef.nativeElement.compareDocumentPosition(b._elementRef.nativeElement);
+                // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
+                // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+                // tslint:disable-next-line:no-bitwise
+                return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+            }));
+            this._sortedHeaders.notifyOnChanges();
+        });
         // Note that while the step headers are content children by default, any components that
         // extend this one might have them as view children. We initialize the keyboard handling in
         // AfterViewInit so we're guaranteed for both view and content children to be defined.
-        this._keyManager = new FocusKeyManager(this._stepHeader)
+        this._keyManager = new FocusKeyManager(this._sortedHeaders)
             .withWrap()
             .withHomeAndEnd()
             .withVerticalOrientation(this._orientation === 'vertical');
@@ -295,6 +315,7 @@ class CdkStepper {
     }
     ngOnDestroy() {
         this.steps.destroy();
+        this._sortedHeaders.destroy();
         this._destroyed.next();
         this._destroyed.complete();
     }

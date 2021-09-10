@@ -127,6 +127,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     readonly steps: QueryList<CdkStep>;
     /** The list of step headers of the steps in the stepper. */
     _stepHeader: QueryList<CdkStepHeader>;
+    /** List of step headers sorted based on their DOM order. */
+    private _sortedHeaders;
     /** Whether the validity of previous steps should be checked or not. */
     get linear(): boolean;
     set linear(value: boolean);
