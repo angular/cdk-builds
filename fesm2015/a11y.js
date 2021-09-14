@@ -1964,14 +1964,6 @@ class FocusMonitor {
         const doc = this._getDocument();
         return doc.defaultView || window;
     }
-    _toggleClass(element, className, shouldSet) {
-        if (shouldSet) {
-            element.classList.add(className);
-        }
-        else {
-            element.classList.remove(className);
-        }
-    }
     _getFocusOrigin(focusEventTarget) {
         if (this._origin) {
             // If the origin was realized via a touch interaction, we need to perform additional checks
@@ -2022,11 +2014,11 @@ class FocusMonitor {
      * @param origin The focus origin.
      */
     _setClasses(element, origin) {
-        this._toggleClass(element, 'cdk-focused', !!origin);
-        this._toggleClass(element, 'cdk-touch-focused', origin === 'touch');
-        this._toggleClass(element, 'cdk-keyboard-focused', origin === 'keyboard');
-        this._toggleClass(element, 'cdk-mouse-focused', origin === 'mouse');
-        this._toggleClass(element, 'cdk-program-focused', origin === 'program');
+        element.classList.toggle('cdk-focused', !!origin);
+        element.classList.toggle('cdk-touch-focused', origin === 'touch');
+        element.classList.toggle('cdk-keyboard-focused', origin === 'keyboard');
+        element.classList.toggle('cdk-mouse-focused', origin === 'mouse');
+        element.classList.toggle('cdk-program-focused', origin === 'program');
     }
     /**
      * Updates the focus origin. If we're using immediate detection mode, we schedule an async

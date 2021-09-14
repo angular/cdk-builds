@@ -1111,14 +1111,10 @@ class OverlayRef {
     }
     /** Toggles a single CSS class or an array of classes on an element. */
     _toggleClasses(element, cssClasses, isAdd) {
-        const classList = element.classList;
-        coerceArray(cssClasses).forEach(cssClass => {
-            // We can't do a spread here, because IE doesn't support setting multiple classes.
-            // Also trying to add an empty string to a DOMTokenList will throw.
-            if (cssClass) {
-                isAdd ? classList.add(cssClass) : classList.remove(cssClass);
-            }
-        });
+        const classes = coerceArray(cssClasses || []).filter(c => !!c);
+        if (classes.length) {
+            isAdd ? element.classList.add(...classes) : element.classList.remove(...classes);
+        }
     }
     /** Detaches the overlay content next time the zone stabilizes. */
     _detachContentWhenStable() {

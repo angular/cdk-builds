@@ -136,7 +136,6 @@ export declare class FocusMonitor implements OnDestroy {
     private _getDocument;
     /** Use defaultView of injected document if available or fallback to global window reference */
     private _getWindow;
-    private _toggleClass;
     private _getFocusOrigin;
     /**
      * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a

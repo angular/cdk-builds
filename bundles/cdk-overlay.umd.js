@@ -1104,13 +1104,6 @@
     ]; };
 
     /**
-     * @license
-     * Copyright Google LLC All Rights Reserved.
-     *
-     * Use of this source code is governed by an MIT-style license that can be
-     * found in the LICENSE file at https://angular.io/license
-     */
-    /**
      * Reference to an overlay that has been created with the Overlay service.
      * Used to manipulate or dispose of said overlay.
      */
@@ -1475,14 +1468,11 @@
         };
         /** Toggles a single CSS class or an array of classes on an element. */
         OverlayRef.prototype._toggleClasses = function (element, cssClasses, isAdd) {
-            var classList = element.classList;
-            coercion.coerceArray(cssClasses).forEach(function (cssClass) {
-                // We can't do a spread here, because IE doesn't support setting multiple classes.
-                // Also trying to add an empty string to a DOMTokenList will throw.
-                if (cssClass) {
-                    isAdd ? classList.add(cssClass) : classList.remove(cssClass);
-                }
-            });
+            var _a, _b;
+            var classes = coercion.coerceArray(cssClasses || []).filter(function (c) { return !!c; });
+            if (classes.length) {
+                isAdd ? (_a = element.classList).add.apply(_a, __spreadArray([], __read(classes))) : (_b = element.classList).remove.apply(_b, __spreadArray([], __read(classes)));
+            }
         };
         /** Detaches the overlay content next time the zone stabilizes. */
         OverlayRef.prototype._detachContentWhenStable = function () {
