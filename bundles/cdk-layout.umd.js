@@ -71,7 +71,7 @@
          * MediaQueryList for the query provided.
          */
         MediaMatcher.prototype.matchMedia = function (query) {
-            if (this._platform.WEBKIT) {
+            if (this._platform.WEBKIT || this._platform.BLINK) {
                 createEmptyStyleRule(query);
             }
             return this._matchMedia(query);
@@ -86,8 +86,13 @@
         { type: i1.Platform }
     ]; };
     /**
-     * For Webkit engines that only trigger the MediaQueryListListener when
-     * there is at least one CSS selector for the respective media query.
+     * Creates an empty stylesheet that is used to work around browser inconsistencies related to
+     * `matchMedia`. At the time of writing, it handles the following cases:
+     * 1. On WebKit browsers, a media query has to have at least one rule in order for `matchMedia`
+     * to fire. We work around it by declaring a dummy stylesheet with a `@media` declaration.
+     * 2. In some cases Blink browsers will stop firing the `matchMedia` listener if none of the rules
+     * inside the `@media` match existing elements on the page. We work around it by having one rule
+     * targeting the `body`. See https://github.com/angular/components/issues/23546.
      */
     function createEmptyStyleRule(query) {
         if (mediaQueriesForWebkitCompatibility.has(query)) {
@@ -100,8 +105,7 @@
                 document.head.appendChild(mediaQueryStyleNode);
             }
             if (mediaQueryStyleNode.sheet) {
-                mediaQueryStyleNode.sheet
-                    .insertRule("@media " + query + " {.fx-query-test{ }}", 0);
+                mediaQueryStyleNode.sheet.insertRule("@media " + query + " {body{ }}", 0);
                 mediaQueriesForWebkitCompatibility.add(query);
             }
         }
