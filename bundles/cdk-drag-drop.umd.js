@@ -2399,12 +2399,11 @@
         DropListRef.prototype._getItemIndexFromPointerPosition = function (item, pointerX, pointerY, delta) {
             var _this = this;
             var isHorizontal = this._orientation === 'horizontal';
-            var index = this._itemPositions.findIndex(function (_b, _, array) {
+            var index = this._itemPositions.findIndex(function (_b) {
                 var drag = _b.drag, clientRect = _b.clientRect;
+                // Skip the item itself.
                 if (drag === item) {
-                    // If there's only one item left in the container, it must be
-                    // the dragged item itself so we use it as a reference.
-                    return array.length < 2;
+                    return false;
                 }
                 if (delta) {
                     var direction = isHorizontal ? delta.x : delta.y;
