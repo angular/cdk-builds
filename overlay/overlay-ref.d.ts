@@ -128,6 +128,8 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _detachContentWhenStable;
     /** Disposes of a scroll strategy. */
     private _disposeScrollStrategy;
+    /** Removes a backdrop element from the DOM. */
+    private _disposeBackdrop;
 }
 /** Size properties for an overlay. */
 export interface OverlaySizeConfig {

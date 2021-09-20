@@ -1260,7 +1260,7 @@
                 this._positionStrategy.dispose();
             }
             this._disposeScrollStrategy();
-            this.detachBackdrop();
+            this._disposeBackdrop(this._backdropElement);
             this._locationChanges.unsubscribe();
             this._keyboardDispatcher.remove(this);
             this._portalOutlet.dispose();
@@ -1446,15 +1446,7 @@
                 if (backdropToDetach) {
                     backdropToDetach.removeEventListener('click', _this._backdropClickHandler);
                     backdropToDetach.removeEventListener('transitionend', finishDetach);
-                    if (backdropToDetach.parentNode) {
-                        backdropToDetach.parentNode.removeChild(backdropToDetach);
-                    }
-                }
-                // It is possible that a new portal has been attached to this overlay since we started
-                // removing the backdrop. If that is the case, only clear the backdrop reference if it
-                // is still the same instance that we started to remove.
-                if (_this._backdropElement == backdropToDetach) {
-                    _this._backdropElement = null;
+                    _this._disposeBackdrop(backdropToDetach);
                 }
                 if (_this._config.backdropClass) {
                     _this._toggleClasses(backdropToDetach, _this._config.backdropClass, false);
@@ -1519,6 +1511,20 @@
                 scrollStrategy.disable();
                 if (scrollStrategy.detach) {
                     scrollStrategy.detach();
+                }
+            }
+        };
+        /** Removes a backdrop element from the DOM. */
+        OverlayRef.prototype._disposeBackdrop = function (backdrop) {
+            if (backdrop) {
+                if (backdrop.parentNode) {
+                    backdrop.parentNode.removeChild(backdrop);
+                }
+                // It is possible that a new portal has been attached to this overlay since we started
+                // removing the backdrop. If that is the case, only clear the backdrop reference if it
+                // is still the same instance that we started to remove.
+                if (this._backdropElement === backdrop) {
+                    this._backdropElement = null;
                 }
             }
         };

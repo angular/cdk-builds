@@ -898,7 +898,7 @@ class OverlayRef {
             this._positionStrategy.dispose();
         }
         this._disposeScrollStrategy();
-        this.detachBackdrop();
+        this._disposeBackdrop(this._backdropElement);
         this._locationChanges.unsubscribe();
         this._keyboardDispatcher.remove(this);
         this._portalOutlet.dispose();
@@ -1072,25 +1072,17 @@ class OverlayRef {
     }
     /** Detaches the backdrop (if any) associated with the overlay. */
     detachBackdrop() {
-        let backdropToDetach = this._backdropElement;
+        const backdropToDetach = this._backdropElement;
         if (!backdropToDetach) {
             return;
         }
         let timeoutId;
-        let finishDetach = () => {
+        const finishDetach = () => {
             // It may not be attached to anything in certain cases (e.g. unit tests).
             if (backdropToDetach) {
                 backdropToDetach.removeEventListener('click', this._backdropClickHandler);
                 backdropToDetach.removeEventListener('transitionend', finishDetach);
-                if (backdropToDetach.parentNode) {
-                    backdropToDetach.parentNode.removeChild(backdropToDetach);
-                }
-            }
-            // It is possible that a new portal has been attached to this overlay since we started
-            // removing the backdrop. If that is the case, only clear the backdrop reference if it
-            // is still the same instance that we started to remove.
-            if (this._backdropElement == backdropToDetach) {
-                this._backdropElement = null;
+                this._disposeBackdrop(backdropToDetach);
             }
             if (this._config.backdropClass) {
                 this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
@@ -1154,6 +1146,20 @@ class OverlayRef {
             scrollStrategy.disable();
             if (scrollStrategy.detach) {
                 scrollStrategy.detach();
+            }
+        }
+    }
+    /** Removes a backdrop element from the DOM. */
+    _disposeBackdrop(backdrop) {
+        if (backdrop) {
+            if (backdrop.parentNode) {
+                backdrop.parentNode.removeChild(backdrop);
+            }
+            // It is possible that a new portal has been attached to this overlay since we started
+            // removing the backdrop. If that is the case, only clear the backdrop reference if it
+            // is still the same instance that we started to remove.
+            if (this._backdropElement === backdrop) {
+                this._backdropElement = null;
             }
         }
     }
