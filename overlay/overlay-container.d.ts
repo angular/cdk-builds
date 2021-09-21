@@ -16,7 +16,7 @@ export declare class OverlayContainer implements OnDestroy {
     ngOnDestroy(): void;
     /**
      * This method returns the overlay container element. It will lazily
-     * create the element the first time  it is called to facilitate using
+     * create the element the first time it is called to facilitate using
      * the container in non-browser environments.
      * @returns the container element
      */

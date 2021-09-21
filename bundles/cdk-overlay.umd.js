@@ -1023,16 +1023,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    var globalsForTest = (typeof window !== 'undefined' ? window : {});
-    /**
-     * Whether we're in a testing environment.
-     * TODO(crisbeto): remove this once we have an overlay testing module or Angular starts tearing
-     * down the testing `NgModule` (see https://github.com/angular/angular/issues/18831).
-     */
-    var isTestEnvironment = (typeof globalsForTest.__karma__ !== 'undefined' && !!globalsForTest.__karma__) ||
-        (typeof globalsForTest.jasmine !== 'undefined' && !!globalsForTest.jasmine) ||
-        (typeof globalsForTest.jest !== 'undefined' && !!globalsForTest.jest) ||
-        (typeof globalsForTest.Mocha !== 'undefined' && !!globalsForTest.Mocha);
     /** Container inside which all overlays will render. */
     var OverlayContainer = /** @class */ (function () {
         function OverlayContainer(document, _platform) {
@@ -1047,7 +1037,7 @@
         };
         /**
          * This method returns the overlay container element. It will lazily
-         * create the element the first time  it is called to facilitate using
+         * create the element the first time it is called to facilitate using
          * the container in non-browser environments.
          * @returns the container element
          */
@@ -1063,7 +1053,10 @@
          */
         OverlayContainer.prototype._createContainer = function () {
             var containerClass = 'cdk-overlay-container';
-            if (this._platform.isBrowser || isTestEnvironment) {
+            // TODO(crisbeto): remove the testing check once we have an overlay testing
+            // module or Angular starts tearing down the testing `NgModule`. See:
+            // https://github.com/angular/angular/issues/18831
+            if (this._platform.isBrowser || i2._isTestEnvironment()) {
                 var oppositePlatformContainers = this._document.querySelectorAll("." + containerClass + "[platform=\"server\"], " +
                     ("." + containerClass + "[platform=\"test\"]"));
                 // Remove any old containers from the opposite platform.
@@ -1083,7 +1076,7 @@
             // module which does the cleanup, we try to detect that we're in a test environment and we
             // always clear the container. See #17006.
             // TODO(crisbeto): remove the test environment check once we have an overlay testing module.
-            if (isTestEnvironment) {
+            if (i2._isTestEnvironment()) {
                 container.setAttribute('platform', 'test');
             }
             else if (!this._platform.isBrowser) {
