@@ -329,10 +329,26 @@ function _getEventTarget(event) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+const testGlobals = (typeof window !== 'undefined' ? window : {});
+/** Gets whether the code is currently running in a test environment. */
+function _isTestEnvironment() {
+    return (typeof testGlobals.__karma__ !== 'undefined' && !!testGlobals.__karma__) ||
+        (typeof testGlobals.jasmine !== 'undefined' && !!testGlobals.jasmine) ||
+        (typeof testGlobals.jest !== 'undefined' && !!testGlobals.jest) ||
+        (typeof testGlobals.Mocha !== 'undefined' && !!testGlobals.Mocha);
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 
 /**
  * Generated bundle index. Do not edit.
  */
 
-export { Platform, PlatformModule, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
+export { Platform, PlatformModule, _getEventTarget, _getFocusedElementPierceShadowDom, _getShadowRoot, _isTestEnvironment, _supportsShadowDom, getRtlScrollAxisType, getSupportedInputTypes, normalizePassiveListenerOptions, supportsPassiveEventListeners, supportsScrollBehavior };
 //# sourceMappingURL=platform.js.map

@@ -357,6 +357,22 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
+    var testGlobals = (typeof window !== 'undefined' ? window : {});
+    /** Gets whether the code is currently running in a test environment. */
+    function _isTestEnvironment() {
+        return (typeof testGlobals.__karma__ !== 'undefined' && !!testGlobals.__karma__) ||
+            (typeof testGlobals.jasmine !== 'undefined' && !!testGlobals.jasmine) ||
+            (typeof testGlobals.jest !== 'undefined' && !!testGlobals.jest) ||
+            (typeof testGlobals.Mocha !== 'undefined' && !!testGlobals.Mocha);
+    }
+
+    /**
+     * @license
+     * Copyright Google LLC All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
 
     /**
      * Generated bundle index. Do not edit.
@@ -367,6 +383,7 @@
     exports._getEventTarget = _getEventTarget;
     exports._getFocusedElementPierceShadowDom = _getFocusedElementPierceShadowDom;
     exports._getShadowRoot = _getShadowRoot;
+    exports._isTestEnvironment = _isTestEnvironment;
     exports._supportsShadowDom = _supportsShadowDom;
     exports.getRtlScrollAxisType = getRtlScrollAxisType;
     exports.getSupportedInputTypes = getSupportedInputTypes;
