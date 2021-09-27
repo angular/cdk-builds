@@ -3228,9 +3228,15 @@ class CdkDrag {
     }
     /** Syncs the root element with the `DragRef`. */
     _updateRootElement() {
+        var _a;
         const element = this.element.nativeElement;
-        const rootElement = this.rootElementSelector ?
-            element.closest(this.rootElementSelector) : element;
+        let rootElement = element;
+        if (this.rootElementSelector) {
+            rootElement = element.closest !== undefined
+                ? element.closest(this.rootElementSelector)
+                // Comment tag doesn't have closest method, so use parent's one.
+                : (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.closest(this.rootElementSelector);
+        }
         if (rootElement && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             assertElementNode(rootElement, 'cdkDrag');
         }
