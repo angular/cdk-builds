@@ -20,7 +20,14 @@ export declare function isInsideClientRect(clientRect: ClientRect, x: number, y:
  * @param top Amount to add to the `top` position.
  * @param left Amount to add to the `left` position.
  */
-export declare function adjustClientRect(clientRect: ClientRect, top: number, left: number): void;
+export declare function adjustClientRect(clientRect: {
+    top: number;
+    bottom: number;
+    left: number;
+    right: number;
+    width: number;
+    height: number;
+}, top: number, left: number): void;
 /**
  * Checks whether the pointer coordinates are close to a ClientRect.
  * @param rect ClientRect to check against.

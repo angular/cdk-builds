@@ -190,8 +190,6 @@ class NoopScrollStrategy {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-// TODO(jelbourn): move this to live with the rest of the scrolling code
-// TODO(jelbourn): someday replace this with IntersectionObservers
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
  * @param element Dimensions of the element (from getBoundingClientRect)

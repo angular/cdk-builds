@@ -563,9 +563,9 @@
                                 // so avoid it if no modifier keys are required.
                                 .map(function (k) {
                                 var _a;
-                                return modifierKeys.length > 0 ? (_a = webdriver__namespace.Key).chord.apply(_a, __spreadArray(__spreadArray([], __read(modifierKeys)), [k])) : k;
+                                return modifierKeys.length > 0 ? (_a = webdriver__namespace.Key).chord.apply(_a, __spreadArray(__spreadArray([], __read(modifierKeys), false), [k], false)) : k;
                             });
-                            return [4 /*yield*/, (_a = this.element()).sendKeys.apply(_a, __spreadArray([], __read(keys)))];
+                            return [4 /*yield*/, (_a = this.element()).sendKeys.apply(_a, __spreadArray([], __read(keys), false))];
                         case 1:
                             _b.sent();
                             return [4 /*yield*/, this._stabilize()];
@@ -790,7 +790,7 @@
             return __awaiter(this, void 0, void 0, function () {
                 var _a;
                 return __generator(this, function (_b) {
-                    return [2 /*return*/, (_a = this.element().getDriver()).executeScript.apply(_a, __spreadArray([script], __read(var_args)))];
+                    return [2 /*return*/, (_a = this.element().getDriver()).executeScript.apply(_a, __spreadArray([script], __read(var_args), false))];
                 });
             });
         };
@@ -809,7 +809,7 @@
                             modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
                             offsetArgs = (args.length === 2 ?
                                 [{ x: args[0], y: args[1] }] : []);
-                            actions = (_a = this._actions()).mouseMove.apply(_a, __spreadArray([this.element()], __read(offsetArgs)));
+                            actions = (_a = this._actions()).mouseMove.apply(_a, __spreadArray([this.element()], __read(offsetArgs), false));
                             try {
                                 for (modifierKeys_1 = __values(modifierKeys), modifierKeys_1_1 = modifierKeys_1.next(); !modifierKeys_1_1.done; modifierKeys_1_1 = modifierKeys_1.next()) {
                                     modifierKey = modifierKeys_1_1.value;

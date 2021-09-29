@@ -37,7 +37,14 @@ export declare class ViewportRuler implements OnDestroy {
         height: number;
     }>;
     /** Gets a ClientRect for the viewport's bounds. */
-    getViewportRect(): ClientRect;
+    getViewportRect(): {
+        top: number;
+        left: number;
+        bottom: number;
+        right: number;
+        height: number;
+        width: number;
+    };
     /** Gets the (top, left) scroll position of the viewport. */
     getViewportScrollPosition(): ViewportScrollPosition;
     /**

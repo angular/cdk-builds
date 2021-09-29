@@ -501,8 +501,8 @@
                         .reduce(function (arr, k) { return arr.concat(k); }, [])
                         // Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
                         // so avoid it if no modifier keys are required.
-                        .map(function (k) { return modifierKeys.length > 0 ? protractor.Key.chord.apply(protractor.Key, __spreadArray(__spreadArray([], __read(modifierKeys)), [k])) : k; });
-                    return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, __spreadArray([], __read(keys)))];
+                        .map(function (k) { return modifierKeys.length > 0 ? protractor.Key.chord.apply(protractor.Key, __spreadArray(__spreadArray([], __read(modifierKeys), false), [k], false)) : k; });
+                    return [2 /*return*/, (_a = this.element).sendKeys.apply(_a, __spreadArray([], __read(keys), false))];
                 });
             });
         };
@@ -672,7 +672,7 @@
                             _c = [_d];
                             return [4 /*yield*/, this.element.getWebElement()];
                         case 1:
-                            actions = _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [[_g.sent()], __read(offsetArgs)])]));
+                            actions = _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [[_g.sent()], __read(offsetArgs), false])]));
                             try {
                                 for (modifierKeys_1 = __values(modifierKeys), modifierKeys_1_1 = modifierKeys_1.next(); !modifierKeys_1_1.done; modifierKeys_1_1 = modifierKeys_1.next()) {
                                     modifierKey = modifierKeys_1_1.value;

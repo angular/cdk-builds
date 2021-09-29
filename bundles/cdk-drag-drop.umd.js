@@ -153,7 +153,9 @@
             bottom: clientRect.bottom,
             left: clientRect.left,
             width: clientRect.width,
-            height: clientRect.height
+            height: clientRect.height,
+            x: clientRect.x,
+            y: clientRect.y
         };
     }
     /**
@@ -890,8 +892,9 @@
             // otherwise iOS will still add it, even though all the drag interactions on the handle
             // are disabled.
             if (this._handles.length) {
-                this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor || '';
-                rootElement.style.webkitTapHighlightColor = 'transparent';
+                var rootStyles = rootElement.style;
+                this._rootElementTapHighlight = rootStyles.webkitTapHighlightColor || '';
+                rootStyles.webkitTapHighlightColor = 'transparent';
             }
             this._hasStartedDragging = this._hasMoved = false;
             // Avoid multiple subscriptions and memory leaks when multi touch
@@ -2104,7 +2107,7 @@
             // We always allow the current element to be scrollable
             // so we need to ensure that it's in the array.
             this._scrollableElements =
-                elements.indexOf(element) === -1 ? __spreadArray([element], __read(elements)) : elements.slice();
+                elements.indexOf(element) === -1 ? __spreadArray([element], __read(elements), false) : elements.slice();
             return this;
         };
         /** Gets the scrollable parents that are registered with this drop container. */
@@ -2546,7 +2549,7 @@
         DropListRef.prototype._getShadowRoot = function () {
             if (!this._cachedShadowRoot) {
                 var shadowRoot = platform._getShadowRoot(coercion.coerceElement(this.element));
-                this._cachedShadowRoot = shadowRoot || this._document;
+                this._cachedShadowRoot = (shadowRoot || this._document);
             }
             return this._cachedShadowRoot;
         };
@@ -2828,7 +2831,7 @@
                     });
                 }));
             }
-            return rxjs.merge.apply(void 0, __spreadArray([], __read(streams)));
+            return rxjs.merge.apply(void 0, __spreadArray([], __read(streams), false));
         };
         DragDropRegistry.prototype.ngOnDestroy = function () {
             var _this = this;
@@ -3785,7 +3788,7 @@
             operators.switchMap(function (handles) {
                 return rxjs.merge.apply(void 0, __spreadArray([], __read(handles.map(function (item) {
                     return item._stateChanges.pipe(operators.startWith(item));
-                }))));
+                })), false));
             }), operators.takeUntil(this._destroyed)).subscribe(function (handleInstance) {
                 // Enabled/disable the handle that changed in the DragRef.
                 var dragRef = _this._dragRef;

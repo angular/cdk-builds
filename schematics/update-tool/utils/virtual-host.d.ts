@@ -12,7 +12,7 @@ declare module 'typescript' {
         readonly files: readonly string[];
         readonly directories: readonly string[];
     }
-    const matchFiles: undefined | ((path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string) => string[]);
+    const matchFiles: undefined | ((path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string, directoryExists: (path: string) => boolean) => string[]);
 }
 /**
  * Implementation of a TypeScript parse config host that relies fully on

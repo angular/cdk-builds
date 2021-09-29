@@ -336,7 +336,7 @@
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i] = arguments[_i];
                 }
-                var _this = _super.apply(this, __spreadArray([], __read(args))) || this;
+                var _this = _super.apply(this, __spreadArray([], __read(args), false)) || this;
                 _this._sticky = false;
                 /** Whether the sticky input has changed since it was last checked. */
                 _this._hasStickyChanged = false;
@@ -2010,7 +2010,7 @@
                 || this._stickyColumnStylesNeedReset) {
                 // Clear the left and right positioning from all columns in the table across all rows since
                 // sticky columns span across all table sections (header, data, footer)
-                this._stickyStyler.clearStickyPositioning(__spreadArray(__spreadArray(__spreadArray([], __read(headerRows)), __read(dataRows)), __read(footerRows)), ['left', 'right']);
+                this._stickyStyler.clearStickyPositioning(__spreadArray(__spreadArray(__spreadArray([], __read(headerRows), false), __read(dataRows), false), __read(footerRows), false), ['left', 'right']);
                 this._stickyColumnStylesNeedReset = false;
             }
             // Update the sticky styles for each header row depending on the def's sticky state

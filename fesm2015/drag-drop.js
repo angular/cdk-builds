@@ -136,7 +136,9 @@ function getMutableClientRect(element) {
         bottom: clientRect.bottom,
         left: clientRect.left,
         width: clientRect.width,
-        height: clientRect.height
+        height: clientRect.height,
+        x: clientRect.x,
+        y: clientRect.y
     };
 }
 /**
@@ -861,8 +863,9 @@ class DragRef {
         // otherwise iOS will still add it, even though all the drag interactions on the handle
         // are disabled.
         if (this._handles.length) {
-            this._rootElementTapHighlight = rootElement.style.webkitTapHighlightColor || '';
-            rootElement.style.webkitTapHighlightColor = 'transparent';
+            const rootStyles = rootElement.style;
+            this._rootElementTapHighlight = rootStyles.webkitTapHighlightColor || '';
+            rootStyles.webkitTapHighlightColor = 'transparent';
         }
         this._hasStartedDragging = this._hasMoved = false;
         // Avoid multiple subscriptions and memory leaks when multi touch
@@ -2189,7 +2192,7 @@ class DropListRef {
     _getShadowRoot() {
         if (!this._cachedShadowRoot) {
             const shadowRoot = _getShadowRoot(coerceElement(this.element));
-            this._cachedShadowRoot = shadowRoot || this._document;
+            this._cachedShadowRoot = (shadowRoot || this._document);
         }
         return this._cachedShadowRoot;
     }

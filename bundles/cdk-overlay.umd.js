@@ -530,8 +530,6 @@
      * Use of this source code is governed by an MIT-style license that can be
      * found in the LICENSE file at https://angular.io/license
      */
-    // TODO(jelbourn): move this to live with the rest of the scrolling code
-    // TODO(jelbourn): someday replace this with IntersectionObservers
     /**
      * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
      * @param element Dimensions of the element (from getBoundingClientRect)
@@ -1456,7 +1454,7 @@
             var _a, _b;
             var classes = coercion.coerceArray(cssClasses || []).filter(function (c) { return !!c; });
             if (classes.length) {
-                isAdd ? (_a = element.classList).add.apply(_a, __spreadArray([], __read(classes))) : (_b = element.classList).remove.apply(_b, __spreadArray([], __read(classes)));
+                isAdd ? (_a = element.classList).add.apply(_a, __spreadArray([], __read(classes), false)) : (_b = element.classList).remove.apply(_b, __spreadArray([], __read(classes), false));
             }
         };
         /** Detaches the overlay content next time the zone stabilizes. */

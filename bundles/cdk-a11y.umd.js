@@ -948,7 +948,7 @@
     var FocusKeyManager = /** @class */ (function (_super) {
         __extends(FocusKeyManager, _super);
         function FocusKeyManager() {
-            var _this = _super.apply(this, __spreadArray([], __read(arguments))) || this;
+            var _this = _super.apply(this, __spreadArray([], __read(arguments), false)) || this;
             _this._origin = 'program';
             return _this;
         }
