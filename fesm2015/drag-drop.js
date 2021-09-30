@@ -1054,9 +1054,10 @@ class DragRef {
         return this._ngZone.runOutsideAngular(() => {
             return new Promise(resolve => {
                 const handler = ((event) => {
+                    var _a;
                     if (!event || (_getEventTarget(event) === this._preview &&
                         event.propertyName === 'transform')) {
-                        this._preview.removeEventListener('transitionend', handler);
+                        (_a = this._preview) === null || _a === void 0 ? void 0 : _a.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
                     }

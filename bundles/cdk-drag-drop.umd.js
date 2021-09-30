@@ -1088,9 +1088,10 @@
             return this._ngZone.runOutsideAngular(function () {
                 return new Promise(function (resolve) {
                     var handler = (function (event) {
+                        var _a;
                         if (!event || (platform._getEventTarget(event) === _this._preview &&
                             event.propertyName === 'transform')) {
-                            _this._preview.removeEventListener('transitionend', handler);
+                            (_a = _this._preview) === null || _a === void 0 ? void 0 : _a.removeEventListener('transitionend', handler);
                             resolve();
                             clearTimeout(timeout);
                         }
