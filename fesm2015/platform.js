@@ -329,7 +329,18 @@ function _getEventTarget(event) {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const testGlobals = (typeof window !== 'undefined' ? window : {});
+let testGlobals;
+// We check the Node-specific `global` first, because tools tend to add a fake
+// `window` in Node environments which won't actually receive global variables.
+if (typeof global !== 'undefined') {
+    testGlobals = global;
+}
+else if (typeof window !== 'undefined') {
+    testGlobals = window;
+}
+else {
+    testGlobals = {};
+}
 /** Gets whether the code is currently running in a test environment. */
 function _isTestEnvironment() {
     return (typeof testGlobals.__karma__ !== 'undefined' && !!testGlobals.__karma__) ||

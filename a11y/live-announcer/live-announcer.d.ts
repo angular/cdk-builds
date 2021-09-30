@@ -13,7 +13,7 @@ export declare class LiveAnnouncer implements OnDestroy {
     private _defaultOptions?;
     private _liveElement;
     private _document;
-    private _previousTimeout?;
+    private _previousTimeout;
     constructor(elementToken: any, _ngZone: NgZone, _document: any, _defaultOptions?: LiveAnnouncerDefaultOptions | undefined);
     /**
      * Announces a message to screenreaders.
