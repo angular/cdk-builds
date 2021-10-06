@@ -166,11 +166,9 @@
         };
         /** Deletes the message element from the global messages container. */
         AriaDescriber.prototype._deleteMessageElement = function (key) {
+            var _a;
             var registeredMessage = messageRegistry.get(key);
-            var messageElement = registeredMessage && registeredMessage.messageElement;
-            if (messagesContainer && messageElement) {
-                messagesContainer.removeChild(messageElement);
-            }
+            (_a = registeredMessage === null || registeredMessage === void 0 ? void 0 : registeredMessage.messageElement) === null || _a === void 0 ? void 0 : _a.remove();
             messageRegistry.delete(key);
         };
         /** Creates the global container for all aria-describedby messages. */
@@ -181,9 +179,7 @@
                 // already a container on the page, but we don't have a reference to it. Clear the
                 // old container so we don't get duplicates. Doing this, instead of emptying the previous
                 // container, should be slightly faster.
-                if (preExistingContainer && preExistingContainer.parentNode) {
-                    preExistingContainer.parentNode.removeChild(preExistingContainer);
-                }
+                preExistingContainer === null || preExistingContainer === void 0 ? void 0 : preExistingContainer.remove();
                 messagesContainer = this._document.createElement('div');
                 messagesContainer.id = MESSAGES_CONTAINER_ID;
                 // We add `visibility: hidden` in order to prevent text in this container from
@@ -199,8 +195,8 @@
         };
         /** Deletes the global messages container. */
         AriaDescriber.prototype._deleteMessagesContainer = function () {
-            if (messagesContainer && messagesContainer.parentNode) {
-                messagesContainer.parentNode.removeChild(messagesContainer);
+            if (messagesContainer) {
+                messagesContainer.remove();
                 messagesContainer = null;
             }
         };
@@ -1257,15 +1253,11 @@
             var endAnchor = this._endAnchor;
             if (startAnchor) {
                 startAnchor.removeEventListener('focus', this.startAnchorListener);
-                if (startAnchor.parentNode) {
-                    startAnchor.parentNode.removeChild(startAnchor);
-                }
+                startAnchor.remove();
             }
             if (endAnchor) {
                 endAnchor.removeEventListener('focus', this.endAnchorListener);
-                if (endAnchor.parentNode) {
-                    endAnchor.parentNode.removeChild(endAnchor);
-                }
+                endAnchor.remove();
             }
             this._startAnchor = this._endAnchor = null;
             this._hasAttached = false;
@@ -2046,7 +2038,7 @@
             this._liveElement = elementToken || this._createLiveElement();
         }
         LiveAnnouncer.prototype.announce = function (message) {
-            var _a;
+            var _b;
             var _this = this;
             var args = [];
             for (var _i = 1; _i < arguments.length; _i++) {
@@ -2059,7 +2051,7 @@
                 duration = args[0];
             }
             else {
-                _a = __read(args, 2), politeness = _a[0], duration = _a[1];
+                _b = __read(args, 2), politeness = _b[0], duration = _b[1];
             }
             this.clear();
             clearTimeout(this._previousTimeout);
@@ -2101,11 +2093,10 @@
             }
         };
         LiveAnnouncer.prototype.ngOnDestroy = function () {
+            var _a;
             clearTimeout(this._previousTimeout);
-            if (this._liveElement && this._liveElement.parentNode) {
-                this._liveElement.parentNode.removeChild(this._liveElement);
-                this._liveElement = null;
-            }
+            (_a = this._liveElement) === null || _a === void 0 ? void 0 : _a.remove();
+            this._liveElement = null;
         };
         LiveAnnouncer.prototype._createLiveElement = function () {
             var elementClass = 'cdk-live-announcer-element';
@@ -2113,7 +2104,7 @@
             var liveEl = this._document.createElement('div');
             // Remove any old containers. This can happen when coming in from a server-side-rendered page.
             for (var i = 0; i < previousElements.length; i++) {
-                previousElements[i].parentNode.removeChild(previousElements[i]);
+                previousElements[i].remove();
             }
             liveEl.classList.add(elementClass);
             liveEl.classList.add('cdk-visually-hidden');
@@ -2639,7 +2630,7 @@
             var computedStyle = (documentWindow && documentWindow.getComputedStyle) ?
                 documentWindow.getComputedStyle(testElement) : null;
             var computedColor = (computedStyle && computedStyle.backgroundColor || '').replace(/ /g, '');
-            this._document.body.removeChild(testElement);
+            testElement.remove();
             switch (computedColor) {
                 case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
                 case 'rgb(255,255,255)': return 1 /* BLACK_ON_WHITE */;

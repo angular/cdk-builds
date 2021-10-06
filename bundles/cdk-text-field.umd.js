@@ -291,7 +291,7 @@
             textareaClone.style.overflow = 'hidden';
             this._textareaElement.parentNode.appendChild(textareaClone);
             this._cachedLineHeight = textareaClone.clientHeight;
-            this._textareaElement.parentNode.removeChild(textareaClone);
+            textareaClone.remove();
             // Min and max heights have to be re-calculated if the cached line height changes
             this._setMinHeight();
             this._setMaxHeight();

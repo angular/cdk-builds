@@ -148,11 +148,9 @@ class AriaDescriber {
     }
     /** Deletes the message element from the global messages container. */
     _deleteMessageElement(key) {
+        var _a;
         const registeredMessage = messageRegistry.get(key);
-        const messageElement = registeredMessage && registeredMessage.messageElement;
-        if (messagesContainer && messageElement) {
-            messagesContainer.removeChild(messageElement);
-        }
+        (_a = registeredMessage === null || registeredMessage === void 0 ? void 0 : registeredMessage.messageElement) === null || _a === void 0 ? void 0 : _a.remove();
         messageRegistry.delete(key);
     }
     /** Creates the global container for all aria-describedby messages. */
@@ -163,9 +161,7 @@ class AriaDescriber {
             // already a container on the page, but we don't have a reference to it. Clear the
             // old container so we don't get duplicates. Doing this, instead of emptying the previous
             // container, should be slightly faster.
-            if (preExistingContainer && preExistingContainer.parentNode) {
-                preExistingContainer.parentNode.removeChild(preExistingContainer);
-            }
+            preExistingContainer === null || preExistingContainer === void 0 ? void 0 : preExistingContainer.remove();
             messagesContainer = this._document.createElement('div');
             messagesContainer.id = MESSAGES_CONTAINER_ID;
             // We add `visibility: hidden` in order to prevent text in this container from
@@ -181,8 +177,8 @@ class AriaDescriber {
     }
     /** Deletes the global messages container. */
     _deleteMessagesContainer() {
-        if (messagesContainer && messagesContainer.parentNode) {
-            messagesContainer.parentNode.removeChild(messagesContainer);
+        if (messagesContainer) {
+            messagesContainer.remove();
             messagesContainer = null;
         }
     }
@@ -902,15 +898,11 @@ class FocusTrap {
         const endAnchor = this._endAnchor;
         if (startAnchor) {
             startAnchor.removeEventListener('focus', this.startAnchorListener);
-            if (startAnchor.parentNode) {
-                startAnchor.parentNode.removeChild(startAnchor);
-            }
+            startAnchor.remove();
         }
         if (endAnchor) {
             endAnchor.removeEventListener('focus', this.endAnchorListener);
-            if (endAnchor.parentNode) {
-                endAnchor.parentNode.removeChild(endAnchor);
-            }
+            endAnchor.remove();
         }
         this._startAnchor = this._endAnchor = null;
         this._hasAttached = false;
@@ -1728,11 +1720,10 @@ class LiveAnnouncer {
         }
     }
     ngOnDestroy() {
+        var _a;
         clearTimeout(this._previousTimeout);
-        if (this._liveElement && this._liveElement.parentNode) {
-            this._liveElement.parentNode.removeChild(this._liveElement);
-            this._liveElement = null;
-        }
+        (_a = this._liveElement) === null || _a === void 0 ? void 0 : _a.remove();
+        this._liveElement = null;
     }
     _createLiveElement() {
         const elementClass = 'cdk-live-announcer-element';
@@ -1740,7 +1731,7 @@ class LiveAnnouncer {
         const liveEl = this._document.createElement('div');
         // Remove any old containers. This can happen when coming in from a server-side-rendered page.
         for (let i = 0; i < previousElements.length; i++) {
-            previousElements[i].parentNode.removeChild(previousElements[i]);
+            previousElements[i].remove();
         }
         liveEl.classList.add(elementClass);
         liveEl.classList.add('cdk-visually-hidden');
@@ -2253,7 +2244,7 @@ class HighContrastModeDetector {
         const computedStyle = (documentWindow && documentWindow.getComputedStyle) ?
             documentWindow.getComputedStyle(testElement) : null;
         const computedColor = (computedStyle && computedStyle.backgroundColor || '').replace(/ /g, '');
-        this._document.body.removeChild(testElement);
+        testElement.remove();
         switch (computedColor) {
             case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
             case 'rgb(255,255,255)': return 1 /* BLACK_ON_WHITE */;

@@ -633,15 +633,16 @@
         };
         /** Removes the dragging functionality from the DOM element. */
         DragRef.prototype.dispose = function () {
+            var _a, _b;
             this._removeRootElementListeners(this._rootElement);
             // Do this check before removing from the registry since it'll
             // stop being considered as dragged once it is removed.
             if (this.isDragging()) {
                 // Since we move out the element to the end of the body while it's being
                 // dragged, we have to make sure that it's removed if it gets destroyed.
-                removeNode(this._rootElement);
+                (_a = this._rootElement) === null || _a === void 0 ? void 0 : _a.remove();
             }
-            removeNode(this._anchor);
+            (_b = this._anchor) === null || _b === void 0 ? void 0 : _b.remove();
             this._destroyPreview();
             this._destroyPlaceholder();
             this._dragDropRegistry.removeDragItem(this);
@@ -744,22 +745,16 @@
         };
         /** Destroys the preview element and its ViewRef. */
         DragRef.prototype._destroyPreview = function () {
-            if (this._preview) {
-                removeNode(this._preview);
-            }
-            if (this._previewRef) {
-                this._previewRef.destroy();
-            }
+            var _a, _b;
+            (_a = this._preview) === null || _a === void 0 ? void 0 : _a.remove();
+            (_b = this._previewRef) === null || _b === void 0 ? void 0 : _b.destroy();
             this._preview = this._previewRef = null;
         };
         /** Destroys the placeholder element and its ViewRef. */
         DragRef.prototype._destroyPlaceholder = function () {
-            if (this._placeholder) {
-                removeNode(this._placeholder);
-            }
-            if (this._placeholderRef) {
-                this._placeholderRef.destroy();
-            }
+            var _a, _b;
+            (_a = this._placeholder) === null || _a === void 0 ? void 0 : _a.remove();
+            (_b = this._placeholderRef) === null || _b === void 0 ? void 0 : _b.destroy();
             this._placeholder = this._placeholderRef = null;
         };
         /**
@@ -960,10 +955,10 @@
          * Updates the item's position in its drop container, or moves it
          * into a new one, depending on its current drag position.
          */
-        DragRef.prototype._updateActiveDropContainer = function (_b, _c) {
+        DragRef.prototype._updateActiveDropContainer = function (_c, _d) {
             var _this = this;
-            var x = _b.x, y = _b.y;
-            var rawX = _c.x, rawY = _c.y;
+            var x = _c.x, y = _c.y;
+            var rawX = _d.x, rawY = _d.y;
             // Drop container that draggable has been moved into.
             var newContainer = this._initialContainer._getSiblingContainerFromPosition(this, x, y);
             // If we couldn't find a new container to move the item into, and the item has left its
@@ -1162,7 +1157,7 @@
         /** Gets the pointer position on the page, accounting for any position constraints. */
         DragRef.prototype._getConstrainedPointerPosition = function (point) {
             var dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
-            var _b = this.constrainPosition ? this.constrainPosition(point, this) : point, x = _b.x, y = _b.y;
+            var _c = this.constrainPosition ? this.constrainPosition(point, this) : point, x = _c.x, y = _c.y;
             if (this.lockAxis === 'x' || dropContainerLock === 'x') {
                 y = this._pickupPositionOnPage.y;
             }
@@ -1170,7 +1165,7 @@
                 x = this._pickupPositionOnPage.x;
             }
             if (this._boundaryRect) {
-                var _c = this._pickupPositionInElement, pickupX = _c.x, pickupY = _c.y;
+                var _d = this._pickupPositionInElement, pickupX = _d.x, pickupY = _d.y;
                 var boundaryRect = this._boundaryRect;
                 var previewRect = this._previewRect;
                 var minY = boundaryRect.top + pickupY;
@@ -1274,7 +1269,7 @@
          * If not, the position is adjusted so that the element fits again.
          */
         DragRef.prototype._containInsideBoundaryOnResize = function () {
-            var _b = this._passiveTransform, x = _b.x, y = _b.y;
+            var _c = this._passiveTransform, x = _c.x, y = _c.y;
             if ((x === 0 && y === 0) || this.isDragging() || !this._boundaryElement) {
                 return;
             }
@@ -1406,15 +1401,6 @@
     /** Clamps a value between a minimum and a maximum. */
     function clamp$1(value, min, max) {
         return Math.max(min, Math.min(max, value));
-    }
-    /**
-     * Helper to remove a node from the DOM and to do all the necessary null checks.
-     * @param node Node to be removed.
-     */
-    function removeNode(node) {
-        if (node && node.parentNode) {
-            node.parentNode.removeChild(node);
-        }
     }
     /** Determines whether an event is a touch event. */
     function isTouchEvent(event) {

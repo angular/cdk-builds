@@ -736,12 +736,10 @@ var TestKey;
  * @param excludeSelector Selector identifying which elements to exclude,
  */
 function _getTextWithExcludedElements(element, excludeSelector) {
-    var _a;
     const clone = element.cloneNode(true);
     const exclusions = clone.querySelectorAll(excludeSelector);
     for (let i = 0; i < exclusions.length; i++) {
-        let child = exclusions[i];
-        (_a = child.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(child);
+        exclusions[i].remove();
     }
     return (clone.textContent || '').trim();
 }

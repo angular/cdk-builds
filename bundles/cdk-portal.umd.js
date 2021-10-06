@@ -686,9 +686,7 @@
          */
         DomPortalOutlet.prototype.dispose = function () {
             _super.prototype.dispose.call(this);
-            if (this.outletElement.parentNode != null) {
-                this.outletElement.parentNode.removeChild(this.outletElement);
-            }
+            this.outletElement.remove();
         };
         /** Gets the root HTMLElement for an instantiated component. */
         DomPortalOutlet.prototype._getComponentRootNode = function (componentRef) {

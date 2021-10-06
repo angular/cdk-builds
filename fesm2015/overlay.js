@@ -681,10 +681,8 @@ class OverlayContainer {
         this._document = document;
     }
     ngOnDestroy() {
-        const container = this._containerElement;
-        if (container && container.parentNode) {
-            container.parentNode.removeChild(container);
-        }
+        var _a;
+        (_a = this._containerElement) === null || _a === void 0 ? void 0 : _a.remove();
     }
     /**
      * This method returns the overlay container element. It will lazily
@@ -713,7 +711,7 @@ class OverlayContainer {
             // Remove any old containers from the opposite platform.
             // This can happen when transitioning from the server to the client.
             for (let i = 0; i < oppositePlatformContainers.length; i++) {
-                oppositePlatformContainers[i].parentNode.removeChild(oppositePlatformContainers[i]);
+                oppositePlatformContainers[i].remove();
             }
         }
         const container = this._document.createElement('div');
@@ -884,6 +882,7 @@ class OverlayRef {
     }
     /** Cleans up the overlay from the DOM. */
     dispose() {
+        var _a;
         const isAttached = this.hasAttached();
         if (this._positionStrategy) {
             this._positionStrategy.dispose();
@@ -898,11 +897,8 @@ class OverlayRef {
         this._keydownEvents.complete();
         this._outsidePointerEvents.complete();
         this._outsideClickDispatcher.remove(this);
-        if (this._host && this._host.parentNode) {
-            this._host.parentNode.removeChild(this._host);
-            this._host = null;
-        }
-        this._previousHostParent = this._pane = null;
+        (_a = this._host) === null || _a === void 0 ? void 0 : _a.remove();
+        this._previousHostParent = this._pane = this._host = null;
         if (isAttached) {
             this._detachments.next();
         }
@@ -1119,7 +1115,7 @@ class OverlayRef {
                     }
                     if (this._host && this._host.parentElement) {
                         this._previousHostParent = this._host.parentElement;
-                        this._previousHostParent.removeChild(this._host);
+                        this._host.remove();
                     }
                     subscription.unsubscribe();
                 }
@@ -1139,9 +1135,7 @@ class OverlayRef {
     /** Removes a backdrop element from the DOM. */
     _disposeBackdrop(backdrop) {
         if (backdrop) {
-            if (backdrop.parentNode) {
-                backdrop.parentNode.removeChild(backdrop);
-            }
+            backdrop.remove();
             // It is possible that a new portal has been attached to this overlay since we started
             // removing the backdrop. If that is the case, only clear the backdrop reference if it
             // is still the same instance that we started to remove.

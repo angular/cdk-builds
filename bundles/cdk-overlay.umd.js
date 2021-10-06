@@ -1028,10 +1028,8 @@
             this._document = document;
         }
         OverlayContainer.prototype.ngOnDestroy = function () {
-            var container = this._containerElement;
-            if (container && container.parentNode) {
-                container.parentNode.removeChild(container);
-            }
+            var _a;
+            (_a = this._containerElement) === null || _a === void 0 ? void 0 : _a.remove();
         };
         /**
          * This method returns the overlay container element. It will lazily
@@ -1060,7 +1058,7 @@
                 // Remove any old containers from the opposite platform.
                 // This can happen when transitioning from the server to the client.
                 for (var i = 0; i < oppositePlatformContainers.length; i++) {
-                    oppositePlatformContainers[i].parentNode.removeChild(oppositePlatformContainers[i]);
+                    oppositePlatformContainers[i].remove();
                 }
             }
             var container = this._document.createElement('div');
@@ -1239,6 +1237,7 @@
         };
         /** Cleans up the overlay from the DOM. */
         OverlayRef.prototype.dispose = function () {
+            var _a;
             var isAttached = this.hasAttached();
             if (this._positionStrategy) {
                 this._positionStrategy.dispose();
@@ -1253,11 +1252,8 @@
             this._keydownEvents.complete();
             this._outsidePointerEvents.complete();
             this._outsideClickDispatcher.remove(this);
-            if (this._host && this._host.parentNode) {
-                this._host.parentNode.removeChild(this._host);
-                this._host = null;
-            }
-            this._previousHostParent = this._pane = null;
+            (_a = this._host) === null || _a === void 0 ? void 0 : _a.remove();
+            this._previousHostParent = this._pane = this._host = null;
             if (isAttached) {
                 this._detachments.next();
             }
@@ -1451,10 +1447,10 @@
         };
         /** Toggles a single CSS class or an array of classes on an element. */
         OverlayRef.prototype._toggleClasses = function (element, cssClasses, isAdd) {
-            var _a, _b;
+            var _b, _c;
             var classes = coercion.coerceArray(cssClasses || []).filter(function (c) { return !!c; });
             if (classes.length) {
-                isAdd ? (_a = element.classList).add.apply(_a, __spreadArray([], __read(classes), false)) : (_b = element.classList).remove.apply(_b, __spreadArray([], __read(classes), false));
+                isAdd ? (_b = element.classList).add.apply(_b, __spreadArray([], __read(classes), false)) : (_c = element.classList).remove.apply(_c, __spreadArray([], __read(classes), false));
             }
         };
         /** Detaches the overlay content next time the zone stabilizes. */
@@ -1478,7 +1474,7 @@
                         }
                         if (_this._host && _this._host.parentElement) {
                             _this._previousHostParent = _this._host.parentElement;
-                            _this._previousHostParent.removeChild(_this._host);
+                            _this._host.remove();
                         }
                         subscription.unsubscribe();
                     }
@@ -1498,9 +1494,7 @@
         /** Removes a backdrop element from the DOM. */
         OverlayRef.prototype._disposeBackdrop = function (backdrop) {
             if (backdrop) {
-                if (backdrop.parentNode) {
-                    backdrop.parentNode.removeChild(backdrop);
-                }
+                backdrop.remove();
                 // It is possible that a new portal has been attached to this overlay since we started
                 // removing the backdrop. If that is the case, only clear the backdrop reference if it
                 // is still the same instance that we started to remove.

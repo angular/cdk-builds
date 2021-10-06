@@ -348,9 +348,7 @@ class DomPortalOutlet extends BasePortalOutlet {
      */
     dispose() {
         super.dispose();
-        if (this.outletElement.parentNode != null) {
-            this.outletElement.parentNode.removeChild(this.outletElement);
-        }
+        this.outletElement.remove();
     }
     /** Gets the root HTMLElement for an instantiated component. */
     _getComponentRootNode(componentRef) {

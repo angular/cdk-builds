@@ -264,7 +264,7 @@ function getRtlScrollAxisType() {
             rtlScrollAxisType =
                 scrollContainer.scrollLeft === 0 ? 1 /* NEGATED */ : 2 /* INVERTED */;
         }
-        scrollContainer.parentNode.removeChild(scrollContainer);
+        scrollContainer.remove();
     }
     return rtlScrollAxisType;
 }
