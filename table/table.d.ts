@@ -16,11 +16,14 @@ import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
 import { CdkCellOutletMultiRowContext, CdkCellOutletRowContext, CdkFooterRowDef, CdkHeaderRowDef, CdkNoDataRow, CdkRowDef } from './row';
 import { StickyPositioningListener } from './sticky-position-listener';
+import * as i0 from "@angular/core";
 /**
  * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
  * tables that animate rows.
  */
 export declare class CdkRecycleRows {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never>;
 }
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
@@ -39,6 +42,8 @@ export declare class DataRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never>;
 }
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
@@ -48,6 +53,8 @@ export declare class HeaderRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never>;
 }
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the footer.
@@ -57,6 +64,8 @@ export declare class FooterRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never>;
 }
 /**
  * Provides a handle for the table to grab the view
@@ -67,6 +76,8 @@ export declare class NoDataRowOutlet implements RowOutlet {
     viewContainer: ViewContainerRef;
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never>;
 }
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
@@ -469,5 +480,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _updateNoDataRow;
     static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
     static ngAcceptInputType_fixedLayout: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"]>;
 }
 export {};

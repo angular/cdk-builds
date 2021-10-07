@@ -1,13 +1,7 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { InjectionToken, OnDestroy, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 import { Observable } from 'rxjs';
+import * as i0 from "@angular/core";
 /**
  * The input modalities detected by this service. Null is used if the input modality is unknown.
  */
@@ -100,4 +94,6 @@ export declare class InputModalityDetector implements OnDestroy {
     private _onTouchstart;
     constructor(_platform: Platform, ngZone: NgZone, document: Document, options?: InputModalityDetectorOptions);
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<InputModalityDetector, [null, null, null, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<InputModalityDetector>;
 }

@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/collections",
-  "main": "../bundles/cdk-collections.umd.js",
-  "fesm2015": "../fesm2015/collections.js",
-  "esm2015": "../esm2015/collections/index.js",
+  "fesm2020": "../fesm2020/collections.mjs",
+  "fesm2015": "../fesm2015/collections.mjs",
+  "esm2020": "../esm2020/collections/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/collections.js",
-  "es2015": "../fesm2015/collections.js"
+  "module": "../fesm2015/collections.mjs",
+  "es2020": "../fesm2020/collections.mjs"
 }

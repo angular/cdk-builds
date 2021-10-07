@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/accordion",
-  "main": "../bundles/cdk-accordion.umd.js",
-  "fesm2015": "../fesm2015/accordion.js",
-  "esm2015": "../esm2015/accordion/index.js",
+  "fesm2020": "../fesm2020/accordion.mjs",
+  "fesm2015": "../fesm2015/accordion.mjs",
+  "esm2020": "../esm2020/accordion/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/accordion.js",
-  "es2015": "../fesm2015/accordion.js"
+  "module": "../fesm2015/accordion.mjs",
+  "es2020": "../fesm2020/accordion.mjs"
 }

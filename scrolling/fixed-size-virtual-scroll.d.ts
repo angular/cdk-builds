@@ -10,6 +10,7 @@ import { OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
+import * as i0 from "@angular/core";
 /** Virtual scrolling strategy for lists with items of known fixed size. */
 export declare class FixedSizeVirtualScrollStrategy implements VirtualScrollStrategy {
     private readonly _scrolledIndexChange;
@@ -94,4 +95,6 @@ export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     static ngAcceptInputType_itemSize: NumberInput;
     static ngAcceptInputType_minBufferPx: NumberInput;
     static ngAcceptInputType_maxBufferPx: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFixedSizeVirtualScroll, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": "itemSize"; "minBufferPx": "minBufferPx"; "maxBufferPx": "maxBufferPx"; }, {}, never>;
 }

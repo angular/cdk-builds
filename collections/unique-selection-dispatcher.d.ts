@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { OnDestroy } from '@angular/core';
+import * as i0 from "@angular/core";
 export declare type UniqueSelectionDispatcherListener = (id: string, name: string) => void;
 /**
  * Class to coordinate unique selection based on name.
@@ -30,4 +31,6 @@ export declare class UniqueSelectionDispatcher implements OnDestroy {
      */
     listen(listener: UniqueSelectionDispatcherListener): () => void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<UniqueSelectionDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<UniqueSelectionDispatcher>;
 }

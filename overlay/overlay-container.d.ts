@@ -1,12 +1,6 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /** Container inside which all overlays will render. */
 export declare class OverlayContainer implements OnDestroy {
     protected _platform: Platform;
@@ -26,4 +20,6 @@ export declare class OverlayContainer implements OnDestroy {
      * with the 'cdk-overlay-container' class on the document body.
      */
     protected _createContainer(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayContainer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayContainer>;
 }

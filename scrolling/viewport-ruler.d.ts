@@ -8,6 +8,7 @@
 import { Platform } from '@angular/cdk/platform';
 import { NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as i0 from "@angular/core";
 /** Time in ms to throttle the resize events by default. */
 export declare const DEFAULT_RESIZE_TIME = 20;
 /** Object that holds the scroll position of the viewport in each direction. */
@@ -57,4 +58,6 @@ export declare class ViewportRuler implements OnDestroy {
     private _getWindow;
     /** Updates the cached viewport size. */
     private _updateViewportSize;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ViewportRuler, [null, null, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ViewportRuler>;
 }

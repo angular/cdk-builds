@@ -1,10 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+import * as i0 from "@angular/core";
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
@@ -30,4 +24,6 @@ export declare class Platform {
     /** Whether the current browser is Safari. */
     SAFARI: boolean;
     constructor(_platformId: Object);
+    static ɵfac: i0.ɵɵFactoryDeclaration<Platform, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Platform>;
 }

@@ -9,6 +9,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ScrollDispatcher } from './scroll-dispatcher';
+import * as i0 from "@angular/core";
 export declare type _Without<T> = {
     [P in keyof T]?: never;
 };
@@ -79,4 +80,6 @@ export declare class CdkScrollable implements OnInit, OnDestroy {
      * @param from The edge to measure from.
      */
     measureScrollOffset(from: 'top' | 'left' | 'right' | 'bottom' | 'start' | 'end'): number;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkScrollable, [null, null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkScrollable, "[cdk-scrollable], [cdkScrollable]", never, {}, {}, never>;
 }

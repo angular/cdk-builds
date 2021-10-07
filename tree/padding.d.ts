@@ -9,6 +9,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import { NumberInput } from '@angular/cdk/coercion';
 import { ElementRef, OnDestroy } from '@angular/core';
 import { CdkTree, CdkTreeNode } from './tree';
+import * as i0 from "@angular/core";
 /**
  * Indent for the children tree dataNodes.
  * This directive will add left-padding to the node to show hierarchy.
@@ -55,4 +56,6 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      */
     protected _setIndentInput(indent: number | string): void;
     static ngAcceptInputType_level: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, [null, null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": "cdkTreeNodePadding"; "indent": "cdkTreeNodePaddingIndent"; }, {}, never>;
 }

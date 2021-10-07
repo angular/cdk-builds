@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { NgZone, OnDestroy, InjectionToken } from '@angular/core';
+import * as i0 from "@angular/core";
 /**
  * @docs-private
  */
@@ -40,4 +41,6 @@ export declare class _CoalescedStyleScheduler implements OnDestroy {
     ngOnDestroy(): void;
     private _createScheduleIfNeeded;
     private _getScheduleObservable;
+    static ɵfac: i0.ɵɵFactoryDeclaration<_CoalescedStyleScheduler, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<_CoalescedStyleScheduler>;
 }

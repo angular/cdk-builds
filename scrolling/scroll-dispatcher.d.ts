@@ -1,14 +1,8 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { Platform } from '@angular/cdk/platform';
 import { ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { CdkScrollable } from './scrollable';
+import * as i0 from "@angular/core";
 /** Time in ms to throttle the scrolling events by default. */
 export declare const DEFAULT_SCROLL_TIME = 20;
 /**
@@ -72,4 +66,6 @@ export declare class ScrollDispatcher implements OnDestroy {
     private _addGlobalListener;
     /** Cleans up the global scroll listener. */
     private _removeGlobalListener;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollDispatcher, [null, null, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollDispatcher>;
 }

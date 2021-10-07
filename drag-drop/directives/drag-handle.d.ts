@@ -8,6 +8,7 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, InjectionToken, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
+import * as i0 from "@angular/core";
 /**
  * Injection token that can be used to reference instances of `CdkDragHandle`. It serves as
  * alternative token to the actual `CdkDragHandle` class which could cause unnecessary
@@ -28,4 +29,6 @@ export declare class CdkDragHandle implements OnDestroy {
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;
     static ngAcceptInputType_disabled: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": "cdkDragHandleDisabled"; }, {}, never>;
 }

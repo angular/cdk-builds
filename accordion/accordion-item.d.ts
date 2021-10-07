@@ -9,6 +9,7 @@ import { EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { CdkAccordion } from './accordion';
 import { BooleanInput } from '@angular/cdk/coercion';
+import * as i0 from "@angular/core";
 /**
  * An basic directive expected to be extended and decorated as a component.  Sets up all
  * events and attributes needed to be managed by a CdkAccordion parent.
@@ -55,4 +56,6 @@ export declare class CdkAccordionItem implements OnDestroy {
     private _subscribeToOpenCloseAllActions;
     static ngAcceptInputType_expanded: BooleanInput;
     static ngAcceptInputType_disabled: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, [{ optional: true; skipSelf: true; }, null, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": "expanded"; "disabled": "disabled"; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never>;
 }

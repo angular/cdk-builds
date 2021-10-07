@@ -8,6 +8,7 @@
 import { Platform } from '@angular/cdk/platform';
 import { ElementRef, EventEmitter, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as i0 from "@angular/core";
 /** An event that is emitted when the autofill state of an input changes. */
 export declare type AutofillEvent = {
     /** The element whose autofill state changes. */
@@ -48,6 +49,8 @@ export declare class AutofillMonitor implements OnDestroy {
      */
     stopMonitoring(element: ElementRef<Element>): void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<AutofillMonitor, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<AutofillMonitor>;
 }
 /** A directive that can be used to monitor the autofill state of an input. */
 export declare class CdkAutofill implements OnDestroy, OnInit {
@@ -58,4 +61,6 @@ export declare class CdkAutofill implements OnDestroy, OnInit {
     constructor(_elementRef: ElementRef<HTMLElement>, _autofillMonitor: AutofillMonitor);
     ngOnInit(): void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAutofill, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAutofill, "[cdkAutofill]", never, {}, { "cdkAutofill": "cdkAutofill"; }, never>;
 }

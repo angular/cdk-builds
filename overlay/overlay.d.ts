@@ -15,6 +15,7 @@ import { OverlayContainer } from './overlay-container';
 import { OverlayRef } from './overlay-ref';
 import { OverlayPositionBuilder } from './position/overlay-position-builder';
 import { ScrollStrategyOptions } from './scroll/index';
+import * as i0 from "@angular/core";
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
  * used as a low-level building block for other components. Dialogs, tooltips, menus,
@@ -69,4 +70,6 @@ export declare class Overlay {
      * @returns A portal outlet for the given DOM element.
      */
     private _createPortalOutlet;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Overlay, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Overlay>;
 }

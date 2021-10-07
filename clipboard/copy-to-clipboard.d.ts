@@ -7,6 +7,7 @@
  */
 import { EventEmitter, NgZone, InjectionToken, OnDestroy } from '@angular/core';
 import { Clipboard } from './clipboard';
+import * as i0 from "@angular/core";
 /** Object that can be used to configure the default options for `CdkCopyToClipboard`. */
 export interface CdkCopyToClipboardConfig {
     /** Default number of attempts to make when copying text to the clipboard. */
@@ -43,4 +44,6 @@ export declare class CdkCopyToClipboard implements OnDestroy {
     /** Copies the current text to the clipboard. */
     copy(attempts?: number): void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCopyToClipboard, [null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": "cdkCopyToClipboard"; "attempts": "cdkCopyToClipboardAttempts"; }, { "copied": "cdkCopyToClipboardCopied"; }, never>;
 }

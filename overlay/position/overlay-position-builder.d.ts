@@ -10,6 +10,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { OverlayContainer } from '../overlay-container';
 import { FlexibleConnectedPositionStrategy, FlexibleConnectedPositionStrategyOrigin } from './flexible-connected-position-strategy';
 import { GlobalPositionStrategy } from './global-position-strategy';
+import * as i0 from "@angular/core";
 /** Builder for overlay position strategy. */
 export declare class OverlayPositionBuilder {
     private _viewportRuler;
@@ -26,4 +27,6 @@ export declare class OverlayPositionBuilder {
      * @param origin Origin relative to which to position the overlay.
      */
     flexibleConnectedTo(origin: FlexibleConnectedPositionStrategyOrigin): FlexibleConnectedPositionStrategy;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayPositionBuilder, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayPositionBuilder>;
 }

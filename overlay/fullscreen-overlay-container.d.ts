@@ -8,6 +8,7 @@
 import { OnDestroy } from '@angular/core';
 import { OverlayContainer } from './overlay-container';
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
  * Fullscreen mode
@@ -29,4 +30,6 @@ export declare class FullscreenOverlayContainer extends OverlayContainer impleme
      * Only that element and its children are visible when in fullscreen mode.
      */
     getFullscreenElement(): Element;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FullscreenOverlayContainer, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<FullscreenOverlayContainer>;
 }

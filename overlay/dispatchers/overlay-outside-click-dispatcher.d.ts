@@ -1,13 +1,7 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { OverlayReference } from '../overlay-reference';
 import { Platform } from '@angular/cdk/platform';
 import { BaseOverlayDispatcher } from './base-overlay-dispatcher';
+import * as i0 from "@angular/core";
 /**
  * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -24,4 +18,6 @@ export declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher
     protected detach(): void;
     /** Click event listener that will be attached to the body propagate phase. */
     private _clickListener;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayOutsideClickDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayOutsideClickDispatcher>;
 }

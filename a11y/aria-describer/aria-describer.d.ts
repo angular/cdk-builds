@@ -1,11 +1,5 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { OnDestroy } from '@angular/core';
+import * as i0 from "@angular/core";
 /**
  * Interface used to register message elements and keep a count of how many registrations have
  * the same message and the reference to the message element used for the `aria-describedby`.
@@ -75,4 +69,6 @@ export declare class AriaDescriber implements OnDestroy {
     private _canBeDescribed;
     /** Checks whether a node is an Element node. */
     private _isElementNode;
+    static ɵfac: i0.ɵɵFactoryDeclaration<AriaDescriber, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<AriaDescriber>;
 }

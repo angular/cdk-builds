@@ -1,4 +1,5 @@
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /** A utility for calling matchMedia queries. */
 export declare class MediaMatcher {
     private _platform;
@@ -12,4 +13,6 @@ export declare class MediaMatcher {
      * MediaQueryList for the query provided.
      */
     matchMedia(query: string): MediaQueryList;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
 }

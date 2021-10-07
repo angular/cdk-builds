@@ -10,6 +10,7 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
 import { DragRef, DragRefConfig } from './drag-ref';
 import { DropListRef } from './drop-list-ref';
 import { DragDropRegistry } from './drag-drop-registry';
+import * as i0 from "@angular/core";
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
  */
@@ -30,4 +31,6 @@ export declare class DragDrop {
      * @param element Element to which to attach the drop list functionality.
      */
     createDropList<T = any>(element: ElementRef<HTMLElement> | HTMLElement): DropListRef<T>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DragDrop, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<DragDrop>;
 }

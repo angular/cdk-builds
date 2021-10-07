@@ -1,13 +1,7 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MediaMatcher } from './media-matcher';
+import * as i0 from "@angular/core";
 /** The current state of a layout breakpoint. */
 export interface BreakpointState {
     /** Whether the breakpoint is currently matching. */
@@ -46,4 +40,6 @@ export declare class BreakpointObserver implements OnDestroy {
     observe(value: string | readonly string[]): Observable<BreakpointState>;
     /** Registers a specific query to be listened for. */
     private _registerQuery;
+    static ɵfac: i0.ɵɵFactoryDeclaration<BreakpointObserver, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<BreakpointObserver>;
 }

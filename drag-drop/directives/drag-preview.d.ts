@@ -7,6 +7,7 @@
  */
 import { BooleanInput } from '@angular/cdk/coercion';
 import { InjectionToken, TemplateRef } from '@angular/core';
+import * as i0 from "@angular/core";
 /**
  * Injection token that can be used to reference instances of `CdkDragPreview`. It serves as
  * alternative token to the actual `CdkDragPreview` class which could cause unnecessary
@@ -27,4 +28,6 @@ export declare class CdkDragPreview<T = any> {
     private _matchSize;
     constructor(templateRef: TemplateRef<T>);
     static ngAcceptInputType_matchSize: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": "data"; "matchSize": "matchSize"; }, {}, never>;
 }

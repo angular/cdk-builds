@@ -1,10 +1,4 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+import * as i0 from "@angular/core";
 /**
  * A FocusTrap managed by FocusTrapManager.
  * Implemented by ConfigurableFocusTrap to avoid circular dependency.
@@ -27,4 +21,6 @@ export declare class FocusTrapManager {
      * FocusTrap that is the new top of the stack.
      */
     deregister(focusTrap: ManagedFocusTrap): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FocusTrapManager, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<FocusTrapManager>;
 }
