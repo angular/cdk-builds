@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { EventEmitter, OnDestroy } from '@angular/core';
+import * as i0 from "@angular/core";
 export declare type Direction = 'ltr' | 'rtl';
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
@@ -18,4 +19,6 @@ export declare class Directionality implements OnDestroy {
     readonly change: EventEmitter<Direction>;
     constructor(_document?: any);
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Directionality, [{ optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<Directionality>;
 }

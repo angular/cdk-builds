@@ -15,6 +15,7 @@ import { VirtualScrollStrategy } from './virtual-scroll-strategy';
 import { ViewportRuler } from './viewport-ruler';
 import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
 import { BooleanInput } from '@angular/cdk/coercion';
+import * as i0 from "@angular/core";
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
 export declare class CdkVirtualScrollViewport extends CdkScrollable implements OnInit, OnDestroy {
     elementRef: ElementRef<HTMLElement>;
@@ -142,4 +143,6 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     /** Calculates the `style.width` and `style.height` for the spacer element. */
     private _calculateSpacerSize;
     static ngAcceptInputType_appendOnly: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollViewport, [null, null, null, { optional: true; }, { optional: true; }, null, null]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkVirtualScrollViewport, "cdk-virtual-scroll-viewport", never, { "orientation": "orientation"; "appendOnly": "appendOnly"; }, { "scrolledIndexChange": "scrolledIndexChange"; }, never, ["*"]>;
 }

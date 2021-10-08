@@ -1,0 +1,113 @@
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Used to generate unique IDs for events. */
+let uniqueIds = 0;
+/**
+ * Creates a browser MouseEvent with the specified options.
+ * @docs-private
+ */
+export function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers = {}) {
+    // Note: We cannot determine the position of the mouse event based on the screen
+    // because the dimensions and position of the browser window are not available
+    // To provide reasonable `screenX` and `screenY` coordinates, we simply use the
+    // client coordinates as if the browser is opened in fullscreen.
+    const screenX = clientX;
+    const screenY = clientY;
+    const event = new MouseEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        detail: 0,
+        relatedTarget: null,
+        screenX,
+        screenY,
+        clientX,
+        clientY,
+        ctrlKey: modifiers.control,
+        altKey: modifiers.alt,
+        shiftKey: modifiers.shift,
+        metaKey: modifiers.meta,
+        button: button,
+        buttons: 1,
+    });
+    // The `MouseEvent` constructor doesn't allow us to pass these properties into the constructor.
+    // Override them to `1`, because they're used for fake screen reader event detection.
+    defineReadonlyEventProperty(event, 'offsetX', 1);
+    defineReadonlyEventProperty(event, 'offsetY', 1);
+    return event;
+}
+/**
+ * Creates a browser `PointerEvent` with the specified options. Pointer events
+ * by default will appear as if they are the primary pointer of their type.
+ * https://www.w3.org/TR/pointerevents2/#dom-pointerevent-isprimary.
+ *
+ * For example, if pointer events for a multi-touch interaction are created, the non-primary
+ * pointer touches would need to be represented by non-primary pointer events.
+ *
+ * @docs-private
+ */
+export function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimary: true }) {
+    return new PointerEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX,
+        clientY,
+        ...options,
+    });
+}
+/**
+ * Creates a browser TouchEvent with the specified pointer coordinates.
+ * @docs-private
+ */
+export function createTouchEvent(type, pageX = 0, pageY = 0, clientX = 0, clientY = 0) {
+    // We cannot use the `TouchEvent` or `Touch` because Firefox and Safari lack support.
+    // TODO: Switch to the constructor API when it is available for Firefox and Safari.
+    const event = document.createEvent('UIEvent');
+    const touchDetails = { pageX, pageY, clientX, clientY, identifier: uniqueIds++ };
+    // TS3.6 removes the initUIEvent method and suggests porting to "new UIEvent()".
+    event.initUIEvent(type, true, true, window, 0);
+    // Most of the browsers don't have a "initTouchEvent" method that can be used to define
+    // the touch details.
+    defineReadonlyEventProperty(event, 'touches', [touchDetails]);
+    defineReadonlyEventProperty(event, 'targetTouches', [touchDetails]);
+    defineReadonlyEventProperty(event, 'changedTouches', [touchDetails]);
+    return event;
+}
+/**
+ * Creates a keyboard event with the specified key and modifiers.
+ * @docs-private
+ */
+export function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
+    return new KeyboardEvent(type, {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        keyCode: keyCode,
+        key: key,
+        shiftKey: modifiers.shift,
+        metaKey: modifiers.meta,
+        altKey: modifiers.alt,
+        ctrlKey: modifiers.control,
+    });
+}
+/**
+ * Creates a fake event object with any desired event type.
+ * @docs-private
+ */
+export function createFakeEvent(type, bubbles = false, cancelable = true) {
+    return new Event(type, { bubbles, cancelable });
+}
+/**
+ * Defines a readonly property on the given event object. Readonly properties on an event object
+ * are always set as configurable as that matches default readonly properties for DOM event objects.
+ */
+function defineReadonlyEventProperty(event, propertyName, value) {
+    Object.defineProperty(event, propertyName, { get: () => value, configurable: true });
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZXZlbnQtb2JqZWN0cy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uLy4uLy4uLy4uL3NyYy9jZGsvdGVzdGluZy90ZXN0YmVkL2Zha2UtZXZlbnRzL2V2ZW50LW9iamVjdHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBSUgsOENBQThDO0FBQzlDLElBQUksU0FBUyxHQUFHLENBQUMsQ0FBQztBQUVsQjs7O0dBR0c7QUFDSCxNQUFNLFVBQVUsZ0JBQWdCLENBQzlCLElBQVksRUFBRSxPQUFPLEdBQUcsQ0FBQyxFQUFFLE9BQU8sR0FBRyxDQUFDLEVBQUUsTUFBTSxHQUFHLENBQUMsRUFBRSxZQUEwQixFQUFFO0lBQ2hGLGdGQUFnRjtJQUNoRiw4RUFBOEU7SUFDOUUsK0VBQStFO0lBQy9FLGdFQUFnRTtJQUNoRSxNQUFNLE9BQU8sR0FBRyxPQUFPLENBQUM7SUFDeEIsTUFBTSxPQUFPLEdBQUcsT0FBTyxDQUFDO0lBRXhCLE1BQU0sS0FBSyxHQUFHLElBQUksVUFBVSxDQUFDLElBQUksRUFBRTtRQUNqQyxPQUFPLEVBQUUsSUFBSTtRQUNiLFVBQVUsRUFBRSxJQUFJO1FBQ2hCLElBQUksRUFBRSxNQUFNO1FBQ1osTUFBTSxFQUFFLENBQUM7UUFDVCxhQUFhLEVBQUUsSUFBSTtRQUNuQixPQUFPO1FBQ1AsT0FBTztRQUNQLE9BQU87UUFDUCxPQUFPO1FBQ1AsT0FBTyxFQUFFLFNBQVMsQ0FBQyxPQUFPO1FBQzFCLE1BQU0sRUFBRSxTQUFTLENBQUMsR0FBRztRQUNyQixRQUFRLEVBQUUsU0FBUyxDQUFDLEtBQUs7UUFDekIsT0FBTyxFQUFFLFNBQVMsQ0FBQyxJQUFJO1FBQ3ZCLE1BQU0sRUFBRSxNQUFNO1FBQ2QsT0FBTyxFQUFFLENBQUM7S0FDWCxDQUFDLENBQUM7SUFFSCwrRkFBK0Y7SUFDL0YscUZBQXFGO0lBQ3JGLDJCQUEyQixDQUFDLEtBQUssRUFBRSxTQUFTLEVBQUUsQ0FBQyxD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Z2h0IEdvb2dsZSBMTEMgQWxsIFJpZ2h0cyBSZXNlcnZlZC5cbiAqXG4gKiBVc2Ugb2YgdGhpcyBzb3VyY2UgY29kZSBpcyBnb3Zlcm5lZCBieSBhbiBNSVQtc3R5bGUgbGljZW5zZSB0aGF0IGNhbiBiZVxuICogZm91bmQgaW4gdGhlIExJQ0VOU0UgZmlsZSBhdCBodHRwczovL2FuZ3VsYXIuaW8vbGljZW5zZVxuICovXG5cbmltcG9ydCB7TW9kaWZpZXJLZXlzfSBmcm9tICdAYW5ndWxhci9jZGsvdGVzdGluZyc7XG5cbi8qKiBVc2VkIHRvIGdlbmVyYXRlIHVuaXF1ZSBJRHMgZm9yIGV2ZW50cy4gKi9cbmxldCB1bmlxdWVJZHMgPSAwO1xuXG4vKipcbiAqIENyZWF0ZXMgYSBicm93c2VyIE1vdXNlRXZlbnQgd2l0aCB0aGUgc3BlY2lmaWVkIG9wdGlvbnMuXG4gKiBAZG9jcy1wcml2YXRlXG4gKi9cbmV4cG9ydCBmdW5jdGlvbiBjcmVhdGVNb3VzZUV2ZW50KFxuICB0eXBlOiBzdHJpbmcsIGNsaWVudFggPSAwLCBjbGllbnRZID0gMCwgYnV0dG9uID0gMCwgbW9kaWZpZXJzOiBNb2RpZmllcktleXMgPSB7fSkge1xuICAvLyBOb3RlOiBXZSBjYW5ub3QgZGV0ZXJtaW5lIHRoZSBwb3NpdGlvbiBvZiB0aGUgbW91c2UgZXZlbnQgYmFzZWQgb24gdGhlIHNjcmVlblxuICAvLyBiZWNhdXNlIHRoZSBkaW1lbnNpb25zIGFuZCBwb3NpdGlvbiBvZiB0aGUgYnJvd3NlciB3aW5kb3cgYXJlIG5vdCBhdmFpbGFibGVcbiAgLy8gVG8gcHJvdmlkZSByZWFzb25hYmxlIGBzY3JlZW5YYCBhbmQgYHNjcmVlbllgIGNvb3JkaW5hdGVzLCB3ZSBzaW1wbHkgdXNlIHRoZVxuICAvLyBjbGllbnQgY29vcmRpbmF0ZXMgYXMgaWYgdGhlIGJyb3dzZXIgaXMgb3BlbmVkIGluIGZ1bGxzY3JlZW4uXG4gIGNvbnN0IHNjcmVlblggPSBjbGllbnRYO1xuICBjb25zdCBzY3JlZW5ZID0gY2xpZW50WTtcblxuICBjb25zdCBldmVudCA9IG5ldyBNb3VzZUV2ZW50KHR5cGUsIHtcbiAgICBidWJibGVzOiB0cnVlLFxuICAgIGNhbmNlbGFibGU6IHRydWUsXG4gICAgdmlldzogd2luZG93LFxuICAgIGRldGFpbDogMCxcbiAgICByZWxhdGVkVGFyZ2V0OiBudWxsLFxuICAgIHNjcmVlblgsXG4gICAgc2NyZWVuWSxcbiAgICBjbGllbnRYLFxuICAgIGNsaWVudFksXG4gICAgY3RybEtleTogbW9kaWZpZXJzLmNvbnRyb2wsXG4gICAgYWx0S2V5OiBtb2RpZmllcnMuYWx0LFxuICAgIHNoaWZ0S2V5OiBtb2RpZmllcnMuc2hpZnQsXG4gICAgbWV0YUtleTogbW9kaWZpZXJzLm1ldGEsXG4gICAgYnV0dG9uOiBidXR0b24sXG4gICAgYnV0dG9uczogMSxcbiAgfSk7XG5cbiAgLy8gVGhlIGBNb3VzZUV2ZW50YCBjb25zdHJ1Y3RvciBkb2Vzbid0IGFsbG93IHVzIHRvIHBhc3MgdGhlc2UgcHJvcGVydGllcyBpbnRvIHRoZSBjb25zdHJ1Y3Rvci5cbiAgLy8gT3ZlcnJpZGUgdGhlbSB0byBgMWAsIGJlY2F1c2UgdGhleSdyZSB1c2VkIGZvciBmYWtlIHNjcmVlbiByZWFkZXIgZXZlbnQgZGV0ZWN0aW9uLlxuICBkZWZpbmVSZWFkb25seUV2ZW50UHJvcGVydHkoZXZlbnQsICdvZmZzZXRYJywgMSk7XG4gIGRlZmluZVJlYWRvbmx5RXZlbnRQcm9wZXJ0eShldmVudCwgJ29mZnNldFknLCAxKTtcblxuICByZXR1cm4gZXZlbnQ7XG59XG5cbi8qKlxuICogQ3JlYXRlcyBhIGJyb3dzZXIgYFBvaW50ZXJFdmVudGAgd2l0aCB0aGUgc3BlY2lmaWVkIG9wdGlvbnMuIFBvaW50ZXIgZXZlbnRzXG4gKiBieSBkZWZhdWx0IHdpbGwgYXBwZWFyIGFzIGlmIHRoZXkgYXJlIHRoZSBwcmltYXJ5IHBvaW50ZXIgb2YgdGhlaXIgdHlwZS5cbiAqIGh0dHBzOi8vd3d3LnczLm9yZy9UUi9wb2ludGVyZXZlbnRzMi8jZG9tLXBvaW50ZXJldmVudC1pc3ByaW1hcnkuXG4gKlxuICogRm9yIGV4YW1wbGUsIGlmIHBvaW50ZXIgZXZlbnRzIGZvciBhIG11bHRpLXRvdWNoIGludGVyYWN0aW9uIGFyZSBjcmVhdGVkLCB0aGUgbm9uLXByaW1hcnlcbiAqIHBvaW50ZXIgdG91Y2hlcyB3b3VsZCBuZWVkIHRvIGJlIHJlcHJlc2VudGVkIGJ5IG5vbi1wcmltYXJ5IHBvaW50ZXIgZXZlbnRzLlxuICpcbiAqIEBkb2NzLXByaXZhdGVcbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIGNyZWF0ZVBvaW50ZXJFdmVudCh0eXBlOiBzdHJpbmcsIGNsaWVudFggPSAwLCBjbGllbnRZID0gMCxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgb3B0aW9uczogUG9pbnRlckV2ZW50SW5pdCA9IHtpc1ByaW1hcnk6IHRydWV9KSB7XG4gIHJldHVybiBuZXcgUG9pbnRlckV2ZW50KHR5cGUsIHtcbiAgICBidWJibGVzOiB0cnVlLFxuICAgIGNhbmNlbGFibGU6IHRydWUsXG4gICAgdmlldzogd2luZG93LFxuICAgIGNsaWVudFgsXG4gICAgY2xpZW50WSxcbiAgICAuLi5vcHRpb25zLFxuICB9KTtcbn1cblxuLyoqXG4gKiBDcmVhdGVzIGEgYnJvd3NlciBUb3VjaEV2ZW50IHdpdGggdGhlIHNwZWNpZmllZCBwb2ludGVyIGNvb3JkaW5hdGVzLlxuICogQGRvY3MtcHJpdmF0ZVxuICovXG5leHBvcnQgZnVuY3Rpb24gY3JlYXRlVG91Y2hFdmVudCh0eXBlOiBzdHJpbmcsIHBhZ2VYID0gMCwgcGFnZVkgPSAwLCBjbGllbnRYID0gMCwgY2xpZW50WSA9IDApIHtcbiAgLy8gV2UgY2Fubm90IHVzZSB0aGUgYFRvdWNoRXZlbnRgIG9yIGBUb3VjaGAgYmVjYXVzZSBGaXJlZm94IGFuZCBTYWZhcmkgbGFjayBzdXBwb3J0LlxuICAvLyBUT0RPOiBTd2l0Y2ggdG8gdGhlIGNvbnN0cnVjdG9yIEFQSSB3aGVuIGl0IGlzIGF2YWlsYWJsZSBmb3IgRmlyZWZveCBhbmQgU2FmYXJpLlxuICBjb25zdCBldmVudCA9IGRvY3VtZW50LmNyZWF0ZUV2ZW50KCdVSUV2ZW50Jyk7XG4gIGNvbnN0IHRvdWNoRGV0YWlscyA9IHtwYWdlWCwgcGFnZVksIGNsaWVudFgsIGNsaWVudFksIGlkZW50aWZpZXI6IHVuaXF1ZUlkcysrfTtcblxuICAvLyBUUzMuNiByZW1vdmVzIHRoZSBpbml0VUlFdmVudCBtZXRob2QgYW5kIHN1Z2dlc3RzIHBvcnRpbmcgdG8gXCJuZXcgVUlFdmVudCgpXCIuXG4gIChldmVudCBhcyBhbnkpLmluaXRVSUV2ZW50KHR5cGUsIHRydWUsIHRydWUsIHdpbmRvdywgMCk7XG5cbiAgLy8gTW9zdCBvZiB0aGUgYnJvd3NlcnMgZG9uJ3QgaGF2ZSBhIFwiaW5pdFRvdWNoRXZlbnRcIiBtZXRob2QgdGhhdCBjYW4gYmUgdXNlZCB0byBkZWZpbmVcbiAgLy8gdGhlIHRvdWNoIGRldGFpbHMuXG4gIGRlZmluZVJlYWRvbmx5RXZlbnRQcm9wZXJ0eShldmVudCwgJ3RvdWNoZXMnLCBbdG91Y2hEZXRhaWxzXSk7XG4gIGRlZmluZVJlYWRvbmx5RXZlbnRQcm9wZXJ0eShldmVudCwgJ3RhcmdldFRvdWNoZXMnLCBbdG91Y2hEZXRhaWxzXSk7XG4gIGRlZmluZVJlYWRvbmx5RXZlbnRQcm9wZXJ0eShldmVudCwgJ2NoYW5nZWRUb3VjaGVzJywgW3RvdWNoRGV0YWlsc10pO1xuXG4gIHJldHVybiBldmVudDtcbn1cblxuLyoqXG4gKiBDcmVhdGVzIGEga2V5Ym9hcmQgZXZlbnQgd2l0aCB0aGUgc3BlY2lmaWVkIGtleSBhbmQgbW9kaWZpZXJzLlxuICogQGRvY3MtcHJpdmF0ZVxuICovXG5leHBvcnQgZnVuY3Rpb24gY3JlYXRlS2V5Ym9hcmRFdmVudCh0eXBlOiBzdHJpbmcsIGtleUNvZGU6IG51bWJlciA9IDAsIGtleTogc3RyaW5nID0gJycsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBtb2RpZmllcnM6IE1vZGlmaWVyS2V5cyA9IHt9KSB7XG4gIHJldHVybiBuZXcgS2V5Ym9hcmRFdmVudCh0eXBlLCB7XG4gICAgYnViYmxlczogdHJ1ZSxcbiAgICBjYW5jZWxhYmxlOiB0cnVlLFxuICAgIHZpZXc6IHdpbmRvdyxcbiAgICBrZXlDb2RlOiBrZXlDb2RlLFxuICAgIGtleToga2V5LFxuICAgIHNoaWZ0S2V5OiBtb2RpZmllcnMuc2hpZnQsXG4gICAgbWV0YUtleTogbW9kaWZpZXJzLm1ldGEsXG4gICAgYWx0S2V5OiBtb2RpZmllcnMuYWx0LFxuICAgIGN0cmxLZXk6IG1vZGlmaWVycy5jb250cm9sLFxuICB9KTtcbn1cblxuLyoqXG4gKiBDcmVhdGVzIGEgZmFrZSBldmVudCBvYmplY3Qgd2l0aCBhbnkgZGVzaXJlZCBldmVudCB0eXBlLlxuICogQGRvY3MtcHJpdmF0ZVxuICovXG5leHBvcnQgZnVuY3Rpb24gY3JlYXRlRmFrZUV2ZW50KHR5cGU6IHN0cmluZywgYnViYmxlcyA9IGZhbHNlLCBjYW5jZWxhYmxlID0gdHJ1ZSkge1xuICByZXR1cm4gbmV3IEV2ZW50KHR5cGUsIHtidWJibGVzLCBjYW5jZWxhYmxlfSk7XG59XG5cbi8qKlxuICogRGVmaW5lcyBhIHJlYWRvbmx5IHByb3BlcnR5IG9uIHRoZSBnaXZlbiBldmVudCBvYmplY3QuIFJlYWRvbmx5IHByb3BlcnRpZXMgb24gYW4gZXZlbnQgb2JqZWN0XG4gKiBhcmUgYWx3YXlzIHNldCBhcyBjb25maWd1cmFibGUgYXMgdGhhdCBtYXRjaGVzIGRlZmF1bHQgcmVhZG9ubHkgcHJvcGVydGllcyBmb3IgRE9NIGV2ZW50IG9iamVjdHMuXG4gKi9cbmZ1bmN0aW9uIGRlZmluZVJlYWRvbmx5RXZlbnRQcm9wZXJ0eShldmVudDogRXZlbnQsIHByb3BlcnR5TmFtZTogc3RyaW5nLCB2YWx1ZTogYW55KSB7XG4gIE9iamVjdC5kZWZpbmVQcm9wZXJ0eShldmVudCwgcHJvcGVydHlOYW1lLCB7Z2V0OiAoKSA9PiB2YWx1ZSwgY29uZmlndXJhYmxlOiB0cnVlfSk7XG59XG4iXX0=

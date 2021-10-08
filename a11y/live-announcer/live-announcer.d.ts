@@ -8,6 +8,7 @@
 import { ContentObserver } from '@angular/cdk/observers';
 import { ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { AriaLivePoliteness, LiveAnnouncerDefaultOptions } from './live-announcer-tokens';
+import * as i0 from "@angular/core";
 export declare class LiveAnnouncer implements OnDestroy {
     private _ngZone;
     private _defaultOptions?;
@@ -55,6 +56,8 @@ export declare class LiveAnnouncer implements OnDestroy {
     clear(): void;
     ngOnDestroy(): void;
     private _createLiveElement;
+    static ɵfac: i0.ɵɵFactoryDeclaration<LiveAnnouncer, [{ optional: true; }, null, null, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<LiveAnnouncer>;
 }
 /**
  * A directive that works similarly to aria-live, but uses the LiveAnnouncer to ensure compatibility
@@ -73,4 +76,6 @@ export declare class CdkAriaLive implements OnDestroy {
     private _subscription;
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": "cdkAriaLive"; }, {}, never>;
 }

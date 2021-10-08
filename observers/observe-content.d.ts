@@ -8,12 +8,15 @@
 import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { AfterContentInit, ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as i0 from "@angular/core";
 /**
  * Factory that creates a new MutationObserver and allows us to stub it out in unit tests.
  * @docs-private
  */
 export declare class MutationObserverFactory {
     create(callback: MutationCallback): MutationObserver | null;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MutationObserverFactory, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<MutationObserverFactory>;
 }
 /** An injectable service that allows watching elements for changes to their content. */
 export declare class ContentObserver implements OnDestroy {
@@ -44,6 +47,8 @@ export declare class ContentObserver implements OnDestroy {
     private _unobserveElement;
     /** Clean up the underlying MutationObserver for the specified element. */
     private _cleanupObserver;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ContentObserver, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ContentObserver>;
 }
 /**
  * Directive that triggers a callback whenever the content of
@@ -74,6 +79,11 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _unsubscribe;
     static ngAcceptInputType_disabled: BooleanInput;
     static ngAcceptInputType_debounce: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkObserveContent, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": "cdkObserveContentDisabled"; "debounce": "debounce"; }, { "event": "cdkObserveContent"; }, never>;
 }
 export declare class ObserversModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<ObserversModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<ObserversModule, [typeof CdkObserveContent], never, [typeof CdkObserveContent]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<ObserversModule>;
 }

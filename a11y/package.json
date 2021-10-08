@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/a11y",
-  "main": "../bundles/cdk-a11y.umd.js",
-  "fesm2015": "../fesm2015/a11y.js",
-  "esm2015": "../esm2015/a11y/index.js",
+  "fesm2020": "../fesm2020/a11y.mjs",
+  "fesm2015": "../fesm2015/a11y.mjs",
+  "esm2020": "../esm2020/a11y/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/a11y.js",
-  "es2015": "../fesm2015/a11y.js"
+  "module": "../fesm2015/a11y.mjs",
+  "es2020": "../fesm2020/a11y.mjs"
 }

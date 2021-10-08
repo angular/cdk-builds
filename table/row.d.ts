@@ -9,6 +9,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CanStick, CanStickCtor } from './can-stick';
 import { CdkCellDef, CdkColumnDef } from './cell';
+import * as i0 from "@angular/core";
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -35,6 +36,8 @@ export declare abstract class BaseRowDef implements OnChanges {
     getColumnsDiff(): IterableChanges<any> | null;
     /** Gets this row def's relevant cell template from the provided column def. */
     extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<BaseRowDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never>;
 }
 /** @docs-private */
 declare class CdkHeaderRowDefBase extends BaseRowDef {
@@ -49,6 +52,8 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ngAcceptInputType_sticky: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, [null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": "cdkHeaderRowDef"; "sticky": "cdkHeaderRowDefSticky"; }, {}, never>;
 }
 /** @docs-private */
 declare class CdkFooterRowDefBase extends BaseRowDef {
@@ -63,6 +68,8 @@ export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements Can
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ngAcceptInputType_sticky: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, [null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": "cdkFooterRowDef"; "sticky": "cdkFooterRowDefSticky"; }, {}, never>;
 }
 /**
  * Data row definition for the CDK table.
@@ -79,6 +86,8 @@ export declare class CdkRowDef<T> extends BaseRowDef {
      */
     when: (index: number, rowData: T) => boolean;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, [null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": "cdkRowDefColumns"; "when": "cdkRowDefWhen"; }, {}, never>;
 }
 /** Context provided to the row cells when `multiTemplateDataRows` is false */
 export interface CdkCellOutletRowContext<T> {
@@ -140,19 +149,29 @@ export declare class CdkCellOutlet implements OnDestroy {
     static mostRecentCellOutlet: CdkCellOutlet | null;
     constructor(_viewContainer: ViewContainerRef);
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never>;
 }
 /** Header template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkHeaderRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkHeaderRow, "cdk-header-row, tr[cdk-header-row]", never, {}, {}, never, never>;
 }
 /** Footer template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkFooterRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkFooterRow, "cdk-footer-row, tr[cdk-footer-row]", never, {}, {}, never, never>;
 }
 /** Data row template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkRow {
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkRow, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkRow, "cdk-row, tr[cdk-row]", never, {}, {}, never, never>;
 }
 /** Row that can be used to display a message when no data is shown in the table. */
 export declare class CdkNoDataRow {
     templateRef: TemplateRef<any>;
     constructor(templateRef: TemplateRef<any>);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never>;
 }
 export {};

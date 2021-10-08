@@ -7,6 +7,7 @@
  */
 import { NgZone, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import * as i0 from "@angular/core";
 /**
  * Service that keeps track of all the drag item and drop container
  * instances, and manages global event listeners on the `document`.
@@ -83,4 +84,6 @@ export declare class DragDropRegistry<I extends {
     private _persistentTouchmoveListener;
     /** Clears out the global event listeners from the `document`. */
     private _clearGlobalListeners;
+    static ɵfac: i0.ɵɵFactoryDeclaration<DragDropRegistry<any, any>, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<DragDropRegistry<any, any>>;
 }

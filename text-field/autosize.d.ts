@@ -8,6 +8,7 @@
 import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { ElementRef, AfterViewInit, DoCheck, OnDestroy, NgZone } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /** Directive to automatically resize a textarea to fit its content. */
 export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDestroy {
     private _elementRef;
@@ -92,4 +93,6 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     static ngAcceptInputType_minRows: NumberInput;
     static ngAcceptInputType_maxRows: NumberInput;
     static ngAcceptInputType_enabled: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, [null, null, null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": "cdkAutosizeMinRows"; "maxRows": "cdkAutosizeMaxRows"; "enabled": "cdkTextareaAutosize"; "placeholder": "placeholder"; }, {}, never>;
 }

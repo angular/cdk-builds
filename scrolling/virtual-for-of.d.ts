@@ -11,6 +11,7 @@ import { NumberInput } from '@angular/cdk/coercion';
 import { Observable, Subject } from 'rxjs';
 import { CdkVirtualScrollRepeater } from './virtual-scroll-repeater';
 import { CdkVirtualScrollViewport } from './virtual-scroll-viewport';
+import * as i0 from "@angular/core";
 /** The context for an item rendered by `CdkVirtualForOf` */
 export declare type CdkVirtualForOfContext<T> = {
     /** The item value. */
@@ -112,4 +113,6 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _updateComputedContextProperties;
     private _getEmbeddedViewArgs;
     static ngAcceptInputType_cdkVirtualForTemplateCacheSize: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualForOf<any>, [null, null, null, null, { skipSelf: true; }, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": "cdkVirtualForOf"; "cdkVirtualForTrackBy": "cdkVirtualForTrackBy"; "cdkVirtualForTemplate": "cdkVirtualForTemplate"; "cdkVirtualForTemplateCacheSize": "cdkVirtualForTemplateCacheSize"; }, {}, never>;
 }

@@ -1,12 +1,6 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { OnDestroy } from '@angular/core';
 import { OverlayReference } from '../overlay-reference';
+import * as i0 from "@angular/core";
 /**
  * Service for dispatching events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -25,4 +19,6 @@ export declare abstract class BaseOverlayDispatcher implements OnDestroy {
     remove(overlayRef: OverlayReference): void;
     /** Detaches the global event listener. */
     protected abstract detach(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<BaseOverlayDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<BaseOverlayDispatcher>;
 }

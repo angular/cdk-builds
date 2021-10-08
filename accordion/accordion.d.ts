@@ -8,6 +8,7 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { InjectionToken, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Subject } from 'rxjs';
+import * as i0 from "@angular/core";
 /**
  * Injection token that can be used to reference instances of `CdkAccordion`. It serves
  * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
@@ -35,4 +36,6 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     static ngAcceptInputType_multi: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordion, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": "multi"; }, {}, never>;
 }

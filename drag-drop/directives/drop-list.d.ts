@@ -15,6 +15,7 @@ import { CdkDropListGroup } from './drop-list-group';
 import { DropListRef } from '../drop-list-ref';
 import { DragDrop } from '../drag-drop';
 import { DropListOrientation, DragAxis, DragDropConfig } from './config';
+import * as i0 from "@angular/core";
 /**
  * Internal compile-time-only representation of a `CdkDropList`.
  * Used to avoid circular import issues between the `CdkDropList` and the `CdkDrag`.
@@ -121,4 +122,6 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     static ngAcceptInputType_sortingDisabled: BooleanInput;
     static ngAcceptInputType_autoScrollDisabled: BooleanInput;
     static ngAcceptInputType_autoScrollStep: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, [null, null, null, null, { optional: true; }, { optional: true; skipSelf: true; }, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": "cdkDropListConnectedTo"; "data": "cdkDropListData"; "orientation": "cdkDropListOrientation"; "id": "id"; "lockAxis": "cdkDropListLockAxis"; "disabled": "cdkDropListDisabled"; "sortingDisabled": "cdkDropListSortingDisabled"; "enterPredicate": "cdkDropListEnterPredicate"; "sortPredicate": "cdkDropListSortPredicate"; "autoScrollDisabled": "cdkDropListAutoScrollDisabled"; "autoScrollStep": "cdkDropListAutoScrollStep"; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never>;
 }

@@ -8,6 +8,7 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { AfterContentInit, ElementRef, NgZone, OnDestroy, DoCheck, SimpleChanges, OnChanges } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
+import * as i0 from "@angular/core";
 /**
  * Class that allows for trapping focus within a DOM element.
  *
@@ -125,6 +126,8 @@ export declare class FocusTrapFactory {
      * @returns The created focus trap instance.
      */
     create(element: HTMLElement, deferCaptureElements?: boolean): FocusTrap;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FocusTrapFactory, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<FocusTrapFactory>;
 }
 /** Directive for trapping focus within a region. */
 export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChanges, DoCheck {
@@ -157,4 +160,6 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     private _captureFocus;
     static ngAcceptInputType_enabled: BooleanInput;
     static ngAcceptInputType_autoCapture: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never>;
 }

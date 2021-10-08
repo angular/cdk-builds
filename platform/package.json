@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/platform",
-  "main": "../bundles/cdk-platform.umd.js",
-  "fesm2015": "../fesm2015/platform.js",
-  "esm2015": "../esm2015/platform/index.js",
+  "fesm2020": "../fesm2020/platform.mjs",
+  "fesm2015": "../fesm2015/platform.mjs",
+  "esm2020": "../esm2020/platform/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/platform.js",
-  "es2015": "../fesm2015/platform.js"
+  "module": "../fesm2015/platform.mjs",
+  "es2020": "../fesm2020/platform.mjs"
 }

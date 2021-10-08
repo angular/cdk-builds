@@ -8,6 +8,7 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef, TemplateRef } from '@angular/core';
 import { CanStick, CanStickCtor } from './can-stick';
+import * as i0 from "@angular/core";
 /** Base interface for a cell definition. Captures a column's cell template definition. */
 export interface CellDef {
     template: TemplateRef<any>;
@@ -19,6 +20,8 @@ export interface CellDef {
 export declare class CdkCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellDef, "[cdkCellDef]", never, {}, {}, never>;
 }
 /**
  * Header cell definition for a CDK table.
@@ -27,6 +30,8 @@ export declare class CdkCellDef implements CellDef {
 export declare class CdkHeaderCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCellDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never>;
 }
 /**
  * Footer cell definition for a CDK table.
@@ -35,6 +40,8 @@ export declare class CdkHeaderCellDef implements CellDef {
 export declare class CdkFooterCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCellDef, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never>;
 }
 /** @docs-private */
 declare class CdkColumnDefBase {
@@ -93,6 +100,8 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
     protected _setNameInput(value: string): void;
     static ngAcceptInputType_sticky: BooleanInput;
     static ngAcceptInputType_stickyEnd: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, [{ optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "sticky": "sticky"; "name": "cdkColumnDef"; "stickyEnd": "stickyEnd"; }, {}, ["cell", "headerCell", "footerCell"]>;
 }
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
 export declare class BaseCdkCell {
@@ -101,13 +110,19 @@ export declare class BaseCdkCell {
 /** Header cell template container that adds the right classes and role. */
 export declare class CdkHeaderCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCell, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCell, "cdk-header-cell, th[cdk-header-cell]", never, {}, {}, never>;
 }
 /** Footer cell template container that adds the right classes and role. */
 export declare class CdkFooterCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCell, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never>;
 }
 /** Cell template container that adds the right classes and role. */
 export declare class CdkCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never>;
 }
 export {};

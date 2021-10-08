@@ -7,18 +7,23 @@
  */
 import { ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, EventEmitter, OnDestroy, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { BasePortalOutlet, ComponentPortal, Portal, TemplatePortal, DomPortal } from './portal';
+import * as i0 from "@angular/core";
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
  */
 export declare class CdkPortal extends TemplatePortal {
     constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortal, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortal, "[cdkPortal]", ["cdkPortal"], {}, {}, never>;
 }
 /**
  * @deprecated Use `CdkPortal` instead.
  * @breaking-change 9.0.0
  */
 export declare class TemplatePortalDirective extends CdkPortal {
+    static ɵfac: i0.ɵɵFactoryDeclaration<TemplatePortalDirective, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<TemplatePortalDirective, "[cdk-portal], [portal]", ["cdkPortal"], {}, {}, never>;
 }
 /**
  * Possible attached references to the CdkPortalOutlet.
@@ -77,12 +82,19 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     /** Gets the root node of the portal outlet. */
     private _getRootNode;
     static ngAcceptInputType_portal: Portal<any> | null | undefined | '';
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": "cdkPortalOutlet"; }, { "attached": "attached"; }, never>;
 }
 /**
  * @deprecated Use `CdkPortalOutlet` instead.
  * @breaking-change 9.0.0
  */
 export declare class PortalHostDirective extends CdkPortalOutlet {
+    static ɵfac: i0.ɵɵFactoryDeclaration<PortalHostDirective, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": "cdkPortalHost"; }, {}, never>;
 }
 export declare class PortalModule {
+    static ɵfac: i0.ɵɵFactoryDeclaration<PortalModule, never>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<PortalModule, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective], never, [typeof CdkPortal, typeof CdkPortalOutlet, typeof TemplatePortalDirective, typeof PortalHostDirective]>;
+    static ɵinj: i0.ɵɵInjectorDeclaration<PortalModule>;
 }

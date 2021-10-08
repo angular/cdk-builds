@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /** Set of possible high-contrast mode backgrounds. */
 export declare const enum HighContrastMode {
     NONE = 0,
@@ -42,4 +43,6 @@ export declare class HighContrastModeDetector {
     getHighContrastMode(): HighContrastMode;
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<HighContrastModeDetector, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<HighContrastModeDetector>;
 }

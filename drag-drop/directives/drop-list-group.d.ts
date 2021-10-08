@@ -7,6 +7,7 @@
  */
 import { OnDestroy, InjectionToken } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
+import * as i0 from "@angular/core";
 /**
  * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
  * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
@@ -28,4 +29,6 @@ export declare class CdkDropListGroup<T> implements OnDestroy {
     private _disabled;
     ngOnDestroy(): void;
     static ngAcceptInputType_disabled: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropListGroup<any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropListGroup<any>, "[cdkDropListGroup]", ["cdkDropListGroup"], { "disabled": "cdkDropListGroupDisabled"; }, {}, never>;
 }

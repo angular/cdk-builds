@@ -12,6 +12,7 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
 import { CdkTreeNodeOutlet } from './outlet';
+import * as i0 from "@angular/core";
 /**
  * CDK tree component that connects with a data source to retrieve data of type `T` and renders
  * dataNodes with hierarchy. Updates the dataNodes when new data is provided by the data source.
@@ -83,6 +84,8 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      * within the data node view container.
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": "dataSource"; "treeControl": "treeControl"; "trackBy": "trackBy"; }, {}, ["_nodeDefs"], never>;
 }
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
@@ -123,4 +126,6 @@ export declare class CdkTreeNode<T, K = T> implements DoCheck, FocusableOption, 
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;
     protected _setRoleFromData(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNode<any, any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": "role"; }, {}, never>;
 }

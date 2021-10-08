@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/keycodes",
-  "main": "../bundles/cdk-keycodes.umd.js",
-  "fesm2015": "../fesm2015/keycodes.js",
-  "esm2015": "../esm2015/keycodes/index.js",
+  "fesm2020": "../fesm2020/keycodes.mjs",
+  "fesm2015": "../fesm2015/keycodes.mjs",
+  "esm2020": "../esm2020/keycodes/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/keycodes.js",
-  "es2015": "../fesm2015/keycodes.js"
+  "module": "../fesm2015/keycodes.mjs",
+  "es2020": "../fesm2020/keycodes.mjs"
 }

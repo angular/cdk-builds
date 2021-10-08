@@ -7,6 +7,7 @@
  */
 import { EventEmitter, AfterContentInit, OnDestroy } from '@angular/core';
 import { Direction, Directionality } from './directionality';
+import * as i0 from "@angular/core";
 /**
  * Directive to listen for changes of direction of part of the DOM.
  *
@@ -30,4 +31,6 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     /** Initialize once default value has been set. */
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Dir, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": "dir"; }, { "change": "dirChange"; }, never>;
 }

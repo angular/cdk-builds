@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Platform } from '@angular/cdk/platform';
+import * as i0 from "@angular/core";
 /**
  * Configuration for the isFocusable method.
  */
@@ -54,4 +55,6 @@ export declare class InteractivityChecker {
      * @returns Whether the element is focusable.
      */
     isFocusable(element: HTMLElement, config?: IsFocusableConfig): boolean;
+    static ɵfac: i0.ɵɵFactoryDeclaration<InteractivityChecker, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<InteractivityChecker>;
 }

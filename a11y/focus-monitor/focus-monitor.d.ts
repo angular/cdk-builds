@@ -9,6 +9,7 @@ import { Platform } from '@angular/cdk/platform';
 import { ElementRef, EventEmitter, InjectionToken, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { InputModalityDetector } from '../input-modality/input-modality-detector';
+import * as i0 from "@angular/core";
 export declare type FocusOrigin = 'touch' | 'mouse' | 'keyboard' | 'program' | null;
 /**
  * Corresponds to the options that can be passed to the native `focus` event.
@@ -183,6 +184,8 @@ export declare class FocusMonitor implements OnDestroy {
      * @param element Element from which to start the search.
      */
     private _getClosestElementsInfo;
+    static ɵfac: i0.ɵɵFactoryDeclaration<FocusMonitor, [null, null, null, { optional: true; }, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<FocusMonitor>;
 }
 /**
  * Directive that determines how a particular element was focused (via keyboard, mouse, touch, or
@@ -201,4 +204,6 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMonitorFocus, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", never, {}, { "cdkFocusChange": "cdkFocusChange"; }, never>;
 }

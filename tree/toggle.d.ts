@@ -7,6 +7,7 @@
  */
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkTree, CdkTreeNode } from './tree';
+import * as i0 from "@angular/core";
 /**
  * Node toggle to expand/collapse the node.
  */
@@ -20,4 +21,6 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
     _toggle(event: Event): void;
     static ngAcceptInputType_recursive: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never>;
 }

@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/clipboard",
-  "main": "../bundles/cdk-clipboard.umd.js",
-  "fesm2015": "../fesm2015/clipboard.js",
-  "esm2015": "../esm2015/clipboard/index.js",
+  "fesm2020": "../fesm2020/clipboard.mjs",
+  "fesm2015": "../fesm2015/clipboard.mjs",
+  "esm2020": "../esm2020/clipboard/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/clipboard.js",
-  "es2015": "../fesm2015/clipboard.js"
+  "module": "../fesm2015/clipboard.mjs",
+  "es2020": "../fesm2020/clipboard.mjs"
 }

@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/layout",
-  "main": "../bundles/cdk-layout.umd.js",
-  "fesm2015": "../fesm2015/layout.js",
-  "esm2015": "../esm2015/layout/index.js",
+  "fesm2020": "../fesm2020/layout.mjs",
+  "fesm2015": "../fesm2015/layout.mjs",
+  "esm2020": "../esm2020/layout/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../fesm2015/layout.js",
-  "es2015": "../fesm2015/layout.js"
+  "module": "../fesm2015/layout.mjs",
+  "es2020": "../fesm2020/layout.mjs"
 }

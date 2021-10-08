@@ -1,16 +1,10 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { Directionality } from '@angular/cdk/bidi';
 import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
 import { AfterViewInit, ChangeDetectorRef, ElementRef, EventEmitter, InjectionToken, OnChanges, OnDestroy, QueryList, TemplateRef, AfterContentInit } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { CdkStepHeader } from './step-header';
 import { CdkStepLabel } from './step-label';
+import * as i0 from "@angular/core";
 /**
  * Position state of the content of each step in stepper that is used for transitioning
  * the content into correct position upon step selection change.
@@ -112,6 +106,8 @@ export declare class CdkStep implements OnChanges {
     static ngAcceptInputType_hasError: BooleanInput;
     static ngAcceptInputType_optional: BooleanInput;
     static ngAcceptInputType_completed: BooleanInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"]>;
 }
 export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
@@ -196,6 +192,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     static ngAcceptInputType_hasError: BooleanInput;
     static ngAcceptInputType_linear: BooleanInput;
     static ngAcceptInputType_selectedIndex: NumberInput;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null, null]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"]>;
 }
 /**
  * Simplified representation of an "AbstractControl" from @angular/forms.

@@ -1,16 +1,10 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { NgZone } from '@angular/core';
 import { InteractivityChecker } from '../interactivity-checker/interactivity-checker';
 import { ConfigurableFocusTrap } from './configurable-focus-trap';
 import { ConfigurableFocusTrapConfig } from './configurable-focus-trap-config';
 import { FocusTrapInertStrategy } from './focus-trap-inert-strategy';
 import { FocusTrapManager } from './focus-trap-manager';
+import * as i0 from "@angular/core";
 /** Factory that allows easy instantiation of configurable focus traps. */
 export declare class ConfigurableFocusTrapFactory {
     private _checker;
@@ -31,4 +25,6 @@ export declare class ConfigurableFocusTrapFactory {
      * @breaking-change 11.0.0
      */
     create(element: HTMLElement, deferCaptureElements: boolean): ConfigurableFocusTrap;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ConfigurableFocusTrapFactory, [null, null, null, null, { optional: true; }]>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ConfigurableFocusTrapFactory>;
 }

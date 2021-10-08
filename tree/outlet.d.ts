@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { InjectionToken, ViewContainerRef } from '@angular/core';
+import * as i0 from "@angular/core";
 /**
  * Injection token used to provide a `CdkTreeNode` to its outlet.
  * Used primarily to avoid circular imports.
@@ -20,4 +21,6 @@ export declare class CdkTreeNodeOutlet {
     viewContainer: ViewContainerRef;
     _node?: any;
     constructor(viewContainer: ViewContainerRef, _node?: any);
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never>;
 }

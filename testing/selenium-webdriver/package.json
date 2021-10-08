@@ -1,9 +1,9 @@
 {
   "name": "@angular/cdk/testing/selenium-webdriver",
-  "main": "../../bundles/cdk-testing-selenium-webdriver.umd.js",
-  "fesm2015": "../../fesm2015/testing/selenium-webdriver.js",
-  "esm2015": "../../esm2015/testing/selenium-webdriver/index.js",
+  "fesm2020": "../../fesm2020/testing/selenium-webdriver.mjs",
+  "fesm2015": "../../fesm2015/testing/selenium-webdriver.mjs",
+  "esm2020": "../../esm2020/testing/selenium-webdriver/index.mjs",
   "typings": "./index.d.ts",
-  "module": "../../fesm2015/testing/selenium-webdriver.js",
-  "es2015": "../../fesm2015/testing/selenium-webdriver.js"
+  "module": "../../fesm2015/testing/selenium-webdriver.mjs",
+  "es2020": "../../fesm2020/testing/selenium-webdriver.mjs"
 }

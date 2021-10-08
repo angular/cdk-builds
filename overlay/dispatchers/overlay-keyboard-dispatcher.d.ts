@@ -1,12 +1,6 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 import { OverlayReference } from '../overlay-reference';
 import { BaseOverlayDispatcher } from './base-overlay-dispatcher';
+import * as i0 from "@angular/core";
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -20,4 +14,6 @@ export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     protected detach(): void;
     /** Keyboard event listener that will be attached to the body. */
     private _keydownListener;
+    static ɵfac: i0.ɵɵFactoryDeclaration<OverlayKeyboardDispatcher, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<OverlayKeyboardDispatcher>;
 }

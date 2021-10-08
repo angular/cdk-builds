@@ -11,6 +11,7 @@ import { BlockScrollStrategy } from './block-scroll-strategy';
 import { CloseScrollStrategy, CloseScrollStrategyConfig } from './close-scroll-strategy';
 import { NoopScrollStrategy } from './noop-scroll-strategy';
 import { RepositionScrollStrategy, RepositionScrollStrategyConfig } from './reposition-scroll-strategy';
+import * as i0 from "@angular/core";
 /**
  * Options for how an overlay will handle scrolling.
  *
@@ -38,4 +39,6 @@ export declare class ScrollStrategyOptions {
      * Allows debouncing the reposition calls.
      */
     reposition: (config?: RepositionScrollStrategyConfig | undefined) => RepositionScrollStrategy;
+    static ɵfac: i0.ɵɵFactoryDeclaration<ScrollStrategyOptions, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
 }
