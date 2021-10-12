@@ -46,6 +46,9 @@
     "./text-field-prebuilt": {
       "style": "./text-field-prebuilt.css"
     },
+    "./schematics": {
+      "default": "./schematics/index.js"
+    },
     "./package.json": {
       "default": "./package.json"
     },
