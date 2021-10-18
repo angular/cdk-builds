@@ -42,7 +42,7 @@ const seleniumWebDriverKeyMap = {
     [TestKey.F10]: webdriver.Key.F10,
     [TestKey.F11]: webdriver.Key.F11,
     [TestKey.F12]: webdriver.Key.F12,
-    [TestKey.META]: webdriver.Key.META
+    [TestKey.META]: webdriver.Key.META,
 };
 /** Gets a list of WebDriver `Key`s for the given `ModifierKeys`. */
 function getSeleniumWebDriverModifierKeys(modifiers) {
@@ -77,7 +77,7 @@ class SeleniumWebDriverElement {
     }
     /** Blur the element. */
     async blur() {
-        await this._executeScript(((element) => element.blur()), this.element());
+        await this._executeScript((element) => element.blur(), this.element());
         await this._stabilize();
     }
     /** Clear the element's input (for input and textarea elements only). */
@@ -126,11 +126,12 @@ class SeleniumWebDriverElement {
             rest = modifiersAndKeys;
         }
         const modifierKeys = getSeleniumWebDriverModifierKeys(modifiers);
-        const keys = rest.map(k => typeof k === 'string' ? k.split('') : [seleniumWebDriverKeyMap[k]])
+        const keys = rest
+            .map(k => (typeof k === 'string' ? k.split('') : [seleniumWebDriverKeyMap[k]]))
             .reduce((arr, k) => arr.concat(k), [])
             // webdriver.Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
             // so avoid it if no modifier keys are required.
-            .map(k => modifierKeys.length > 0 ? webdriver.Key.chord(...modifierKeys, k) : k);
+            .map(k => (modifierKeys.length > 0 ? webdriver.Key.chord(...modifierKeys, k) : k));
         await this.element().sendKeys(...keys);
         await this._stabilize();
     }
@@ -171,7 +172,7 @@ class SeleniumWebDriverElement {
     }
     /** Sets the value of a property of an input. */
     async setInputValue(newValue) {
-        await this._executeScript((element, value) => element.value = value, this.element(), newValue);
+        await this._executeScript((element, value) => (element.value = value), this.element(), newValue);
         await this._stabilize();
     }
     /** Selects the options at the specified indexes inside of a native `select` element. */
@@ -198,8 +199,7 @@ class SeleniumWebDriverElement {
     /** Checks whether this element matches the given selector. */
     async matchesSelector(selector) {
         await this._stabilize();
-        return this._executeScript((element, s) => (Element.prototype.matches || Element.prototype.msMatchesSelector)
-            .call(element, s), this.element(), selector);
+        return this._executeScript((element, s) => (Element.prototype.matches || Element.prototype.msMatchesSelector).call(element, s), this.element(), selector);
     }
     /** Checks whether the element is focused. */
     async isFocused() {
@@ -220,7 +220,9 @@ class SeleniumWebDriverElement {
     }
     /** Executes a function in the browser. */
     async _executeScript(script, ...var_args) {
-        return this.element().getDriver().executeScript(script, ...var_args);
+        return this.element()
+            .getDriver()
+            .executeScript(script, ...var_args);
     }
     /** Dispatches all the events that are part of a click event sequence. */
     async _dispatchClickEventSequence(args, button) {
@@ -232,8 +234,7 @@ class SeleniumWebDriverElement {
         // Omitting the offset argument to mouseMove results in clicking the center.
         // This is the default behavior we want, so we use an empty array of offsetArgs if
         // no args remain after popping the modifiers from the args passed to this function.
-        const offsetArgs = (args.length === 2 ?
-            [{ x: args[0], y: args[1] }] : []);
+        const offsetArgs = (args.length === 2 ? [{ x: args[0], y: args[1] }] : []);
         let actions = this._actions().mouseMove(this.element(), ...offsetArgs);
         for (const modifierKey of modifierKeys) {
             actions = actions.keyDown(modifierKey);
@@ -266,15 +267,14 @@ function dispatchEvent(name, element, data) {
  */
 /** The default environment options. */
 const defaultEnvironmentOptions = {
-    queryFn: async (selector, root) => root().findElements(webdriver.By.css(selector))
+    queryFn: async (selector, root) => root().findElements(webdriver.By.css(selector)),
 };
 /**
  * This function is meant to be executed in the browser. It taps into the hooks exposed by Angular
  * and invokes the specified `callback` when the application is stable (no more pending tasks).
  */
 function whenStable(callback) {
-    Promise.all(window.frameworkStabilizers.map(stabilizer => new Promise(stabilizer)))
-        .then(callback);
+    Promise.all(window.frameworkStabilizers.map(stabilizer => new Promise(stabilizer))).then(callback);
 }
 /**
  * This function is meant to be executed in the browser. It checks whether the Angular framework has

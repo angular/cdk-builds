@@ -37,9 +37,9 @@ class BaseTreeControl {
     }
     /** Toggles a subtree rooted at `node` recursively. */
     toggleDescendants(dataNode) {
-        this.expansionModel.isSelected(this._trackByValue(dataNode)) ?
-            this.collapseDescendants(dataNode) :
-            this.expandDescendants(dataNode);
+        this.expansionModel.isSelected(this._trackByValue(dataNode))
+            ? this.collapseDescendants(dataNode)
+            : this.expandDescendants(dataNode);
     }
     /** Collapse all dataNodes in the tree. */
     collapseAll() {
@@ -158,8 +158,7 @@ class NestedTreeControl extends BaseTreeControl {
         else if (isObservable(childrenNodes)) {
             // TypeScript as of version 3.5 doesn't seem to treat `Boolean` like a function that
             // returns a `boolean` specifically in the context of `filter`, so we manually clarify that.
-            childrenNodes.pipe(take(1), filter(Boolean))
-                .subscribe(children => {
+            childrenNodes.pipe(take(1), filter(Boolean)).subscribe(children => {
                 for (const child of children) {
                     this._getDescendants(descendants, child);
                 }
@@ -196,7 +195,7 @@ CdkTreeNodeOutlet.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", vers
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkTreeNodeOutlet, decorators: [{
             type: Directive,
             args: [{
-                    selector: '[cdkTreeNodeOutlet]'
+                    selector: '[cdkTreeNodeOutlet]',
                 }]
         }], ctorParameters: function () { return [{ type: i0.ViewContainerRef }, { type: undefined, decorators: [{
                     type: Inject,
@@ -234,9 +233,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
             type: Directive,
             args: [{
                     selector: '[cdkTreeNodeDef]',
-                    inputs: [
-                        'when: cdkTreeNodeDefWhen'
-                    ],
+                    inputs: ['when: cdkTreeNodeDefWhen'],
                 }]
         }], ctorParameters: function () { return [{ type: i0.TemplateRef }]; } });
 
@@ -301,14 +298,19 @@ class CdkTree {
          * Stream containing the latest information on what rows are being displayed on screen.
          * Can be used by the data source to as a heuristic of what data should be provided.
          */
-        this.viewChange = new BehaviorSubject({ start: 0, end: Number.MAX_VALUE });
+        this.viewChange = new BehaviorSubject({
+            start: 0,
+            end: Number.MAX_VALUE,
+        });
     }
     /**
      * Provides a stream containing the latest data array to render. Influenced by the tree's
      * stream of view window (what dataNodes are currently on screen).
      * Data source can be an observable of data array, or a data array to render.
      */
-    get dataSource() { return this._dataSource; }
+    get dataSource() {
+        return this._dataSource;
+    }
     set dataSource(dataSource) {
         if (this._dataSource !== dataSource) {
             this._switchDataSource(dataSource);
@@ -380,7 +382,8 @@ class CdkTree {
             dataStream = of(this._dataSource);
         }
         if (dataStream) {
-            this._dataSubscription = dataStream.pipe(takeUntil(this._onDestroy))
+            this._dataSubscription = dataStream
+                .pipe(takeUntil(this._onDestroy))
                 .subscribe(data => this.renderNodeChanges(data));
         }
         else if (typeof ngDevMode === 'undefined' || ngDevMode) {
@@ -472,7 +475,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                     // The view for `CdkTree` consists entirely of templates declared in other views. As they are
                     // declared elsewhere, they are checked when their declaration points are checked.
                     // tslint:disable-next-line:validate-decorators
-                    changeDetection: ChangeDetectionStrategy.Default
+                    changeDetection: ChangeDetectionStrategy.Default,
                 }]
         }], ctorParameters: function () { return [{ type: i0.IterableDiffers }, { type: i0.ChangeDetectorRef }]; }, propDecorators: { dataSource: [{
                 type: Input
@@ -488,7 +491,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                 args: [CdkTreeNodeDef, {
                         // We need to use `descendants: true`, because Ivy will no longer match
                         // indirect descendants if it's left as false.
-                        descendants: true
+                        descendants: true,
                     }]
             }] } });
 /**
@@ -516,13 +519,17 @@ class CdkTreeNode {
      *   removed in a future version.
      * @breaking-change 12.0.0 Remove this input
      */
-    get role() { return 'treeitem'; }
+    get role() {
+        return 'treeitem';
+    }
     set role(_role) {
         // TODO: move to host after View Engine deprecation
         this._elementRef.nativeElement.setAttribute('role', _role);
     }
     /** The tree node's data. */
-    get data() { return this._data; }
+    get data() {
+        return this._data;
+    }
     set data(value) {
         if (value !== this._data) {
             this._data = value;
@@ -541,8 +548,9 @@ class CdkTreeNode {
         // If the treeControl has a getLevel method, use it to get the level. Otherwise read the
         // aria-level off the parent node and use it as the level for this node (note aria-level is
         // 1-indexed, while this property is 0-indexed, so we don't need to increment).
-        return this._tree.treeControl.getLevel ?
-            this._tree.treeControl.getLevel(this._data) : this._parentNodeAriaLevel;
+        return this._tree.treeControl.getLevel
+            ? this._tree.treeControl.getLevel(this._data)
+            : this._parentNodeAriaLevel;
     }
     ngOnInit() {
         this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
@@ -573,7 +581,8 @@ class CdkTreeNode {
     }
     // TODO: role should eventually just be set in the component host
     _setRoleFromData() {
-        if (!this._tree.treeControl.isExpandable && !this._tree.treeControl.getChildren &&
+        if (!this._tree.treeControl.isExpandable &&
+            !this._tree.treeControl.getChildren &&
             (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getTreeControlFunctionsMissingError();
         }
@@ -655,10 +664,12 @@ class CdkNestedTreeNode extends CdkTreeNode {
             this.updateChildrenNodes(childrenNodes);
         }
         else if (isObservable(childrenNodes)) {
-            childrenNodes.pipe(takeUntil(this._destroyed))
+            childrenNodes
+                .pipe(takeUntil(this._destroyed))
                 .subscribe(result => this.updateChildrenNodes(result));
         }
-        this.nodeOutlet.changes.pipe(takeUntil(this._destroyed))
+        this.nodeOutlet.changes
+            .pipe(takeUntil(this._destroyed))
             .subscribe(() => this.updateChildrenNodes());
     }
     // This is a workaround for https://github.com/angular/angular/issues/23091
@@ -707,7 +718,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
 CdkNestedTreeNode.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkNestedTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }, { token: i0.IterableDiffers }], target: i0.ɵɵFactoryTarget.Directive });
 CdkNestedTreeNode.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0-next.15", type: CdkNestedTreeNode, selector: "cdk-nested-tree-node", inputs: { role: "role", disabled: "disabled", tabIndex: "tabIndex" }, providers: [
         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
-        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
+        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
     ], queries: [{ propertyName: "nodeOutlet", predicate: CdkTreeNodeOutlet, descendants: true }], exportAs: ["cdkNestedTreeNode"], usesInheritance: true, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkNestedTreeNode, decorators: [{
             type: Directive,
@@ -717,15 +728,15 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                     inputs: ['role', 'disabled', 'tabIndex'],
                     providers: [
                         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
-                        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode }
-                    ]
+                        { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
+                    ],
                 }]
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: CdkTree }, { type: i0.IterableDiffers }]; }, propDecorators: { nodeOutlet: [{
                 type: ContentChildren,
                 args: [CdkTreeNodeOutlet, {
                         // We need to use `descendants: true`, because Ivy will no longer match
                         // indirect descendants if it's left as false.
-                        descendants: true
+                        descendants: true,
                     }]
             }] } });
 
@@ -763,21 +774,29 @@ class CdkTreeNodePadding {
         _treeNode._dataChanges.subscribe(() => this._setPadding());
     }
     /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
-    get level() { return this._level; }
-    set level(value) { this._setLevelInput(value); }
+    get level() {
+        return this._level;
+    }
+    set level(value) {
+        this._setLevelInput(value);
+    }
     /**
      * The indent for each level. Can be a number or a CSS string.
      * Default number 40px from material design menu sub-menu spec.
      */
-    get indent() { return this._indent; }
-    set indent(indent) { this._setIndentInput(indent); }
+    get indent() {
+        return this._indent;
+    }
+    set indent(indent) {
+        this._setIndentInput(indent);
+    }
     ngOnDestroy() {
         this._destroyed.next();
         this._destroyed.complete();
     }
     /** The padding indent value for the tree node. Returns a string with px numbers if not null. */
     _paddingIndent() {
-        const nodeLevel = (this._treeNode.data && this._tree.treeControl.getLevel)
+        const nodeLevel = this._treeNode.data && this._tree.treeControl.getLevel
             ? this._tree.treeControl.getLevel(this._treeNode.data)
             : null;
         const level = this._level == null ? nodeLevel : this._level;
@@ -860,8 +879,12 @@ class CdkTreeNodeToggle {
         this._recursive = false;
     }
     /** Whether expand/collapse the node recursively. */
-    get recursive() { return this._recursive; }
-    set recursive(value) { this._recursive = coerceBooleanProperty(value); }
+    get recursive() {
+        return this._recursive;
+    }
+    set recursive(value) {
+        this._recursive = coerceBooleanProperty(value);
+    }
     // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
     // In Ivy the `host` bindings will be merged when this class is extended, whereas in
     // ViewEngine they're overwritten.

@@ -30,5 +30,5 @@ export declare abstract class DevkitMigration<Data> extends Migration<Data, Devk
     static globalPostMigration?(tree: Tree, context: SchematicContext): PostMigrationAction;
 }
 export declare type DevkitMigrationCtor<Data> = Constructor<DevkitMigration<Data>> & {
-    [m in keyof typeof DevkitMigration]: (typeof DevkitMigration)[m];
+    [m in keyof typeof DevkitMigration]: typeof DevkitMigration[m];
 };

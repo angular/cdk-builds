@@ -58,7 +58,7 @@ class Directionality {
             const bodyDir = _document.body ? _document.body.dir : null;
             const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
             const value = bodyDir || htmlDir;
-            this.value = (value === 'ltr' || value === 'rtl') ? value : 'ltr';
+            this.value = value === 'ltr' || value === 'rtl' ? value : 'ltr';
         }
     }
     ngOnDestroy() {
@@ -100,18 +100,22 @@ class Dir {
         this.change = new EventEmitter();
     }
     /** @docs-private */
-    get dir() { return this._dir; }
+    get dir() {
+        return this._dir;
+    }
     set dir(value) {
         const old = this._dir;
         const normalizedValue = value ? value.toLowerCase() : value;
         this._rawDir = value;
-        this._dir = (normalizedValue === 'ltr' || normalizedValue === 'rtl') ? normalizedValue : 'ltr';
+        this._dir = normalizedValue === 'ltr' || normalizedValue === 'rtl' ? normalizedValue : 'ltr';
         if (old !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
         }
     }
     /** Current layout direction of the element. */
-    get value() { return this.dir; }
+    get value() {
+        return this.dir;
+    }
     /** Initialize once default value has been set. */
     ngAfterContentInit() {
         this._isInitialized = true;

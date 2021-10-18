@@ -59,7 +59,7 @@ class ContentObserver {
                 observer.observe(element, {
                     characterData: true,
                     childList: true,
-                    subtree: true
+                    subtree: true,
                 });
             }
             this._observedElements.set(element, { observer, stream, count: 1 });
@@ -117,13 +117,17 @@ class CdkObserveContent {
      * Whether observing content is disabled. This option can be used
      * to disconnect the underlying MutationObserver until it is needed.
      */
-    get disabled() { return this._disabled; }
+    get disabled() {
+        return this._disabled;
+    }
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
         this._disabled ? this._unsubscribe() : this._subscribe();
     }
     /** Debounce interval for emitting the changes. */
-    get debounce() { return this._debounce; }
+    get debounce() {
+        return this._debounce;
+    }
     set debounce(value) {
         this._debounce = coerceNumberProperty(value);
         this._subscribe();
@@ -144,8 +148,7 @@ class CdkObserveContent {
         // Bringing it back inside can cause things like infinite change detection loops and changed
         // after checked errors if people's code isn't handling it properly.
         this._ngZone.runOutsideAngular(() => {
-            this._currentSubscription =
-                (this.debounce ? stream.pipe(debounceTime(this.debounce)) : stream).subscribe(this.event);
+            this._currentSubscription = (this.debounce ? stream.pipe(debounceTime(this.debounce)) : stream).subscribe(this.event);
         });
     }
     _unsubscribe() {
@@ -179,7 +182,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
             args: [{
                     exports: [CdkObserveContent],
                     declarations: [CdkObserveContent],
-                    providers: [MutationObserverFactory]
+                    providers: [MutationObserverFactory],
                 }]
         }] });
 

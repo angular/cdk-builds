@@ -82,8 +82,7 @@ class _DisposeViewRepeaterStrategy {
             }
         });
     }
-    detach() {
-    }
+    detach() { }
 }
 
 /**
@@ -126,16 +125,19 @@ class _RecycleViewRepeaterStrategy {
         changes.forEachOperation((record, adjustedPreviousIndex, currentIndex) => {
             let view;
             let operation;
-            if (record.previousIndex == null) { // Item added.
+            if (record.previousIndex == null) {
+                // Item added.
                 const viewArgsFactory = () => itemContextFactory(record, adjustedPreviousIndex, currentIndex);
                 view = this._insertView(viewArgsFactory, currentIndex, viewContainerRef, itemValueResolver(record));
                 operation = view ? 1 /* INSERTED */ : 0 /* REPLACED */;
             }
-            else if (currentIndex == null) { // Item removed.
+            else if (currentIndex == null) {
+                // Item removed.
                 this._detachAndCacheView(adjustedPreviousIndex, viewContainerRef);
                 operation = 3 /* REMOVED */;
             }
-            else { // Item moved.
+            else {
+                // Item moved.
                 view = this._moveView(adjustedPreviousIndex, currentIndex, viewContainerRef, itemValueResolver(record));
                 operation = 2 /* MOVED */;
             }
@@ -320,7 +322,7 @@ class SelectionModel {
             this.changed.next({
                 source: this,
                 added: this._selectedToEmit,
-                removed: this._deselectedToEmit
+                removed: this._deselectedToEmit,
             });
             this._deselectedToEmit = [];
             this._selectedToEmit = [];

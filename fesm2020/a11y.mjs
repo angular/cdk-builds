@@ -184,8 +184,7 @@ class AriaDescriber {
     /** Removes all cdk-describedby messages that are hosted through the element. */
     _removeCdkDescribedByReferenceIds(element) {
         // Remove all aria-describedby reference IDs that are prefixed by CDK_DESCRIBEDBY_ID_PREFIX
-        const originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby')
-            .filter(id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0);
+        const originalReferenceIds = getAriaReferenceIds(element, 'aria-describedby').filter(id => id.indexOf(CDK_DESCRIBEDBY_ID_PREFIX) != 0);
         element.setAttribute('aria-describedby', originalReferenceIds.join(' '));
     }
     /**
@@ -232,7 +231,7 @@ class AriaDescriber {
         const ariaLabel = element.getAttribute('aria-label');
         // We shouldn't set descriptions if they're exactly the same as the `aria-label` of the
         // element, because screen readers will end up reading out the same text twice in a row.
-        return trimmedMessage ? (!ariaLabel || ariaLabel.trim() !== trimmedMessage) : false;
+        return trimmedMessage ? !ariaLabel || ariaLabel.trim() !== trimmedMessage : false;
     }
     /** Checks whether a node is an Element node. */
     _isElementNode(element) {
@@ -358,15 +357,18 @@ class ListKeyManager {
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
     withTypeAhead(debounceInterval = 200) {
-        if ((typeof ngDevMode === 'undefined' || ngDevMode) && (this._items.length &&
-            this._items.some(item => typeof item.getLabel !== 'function'))) {
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+            this._items.length &&
+            this._items.some(item => typeof item.getLabel !== 'function')) {
             throw Error('ListKeyManager items in typeahead mode must implement the `getLabel` method.');
         }
         this._typeaheadSubscription.unsubscribe();
         // Debounce the presses of non-navigational keys, collect the ones that correspond to letters
         // and convert those letters back into a string. Afterwards find the first item that starts
         // with that string and select it.
-        this._typeaheadSubscription = this._letterKeyStream.pipe(tap(letter => this._pressedLetters.push(letter)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join(''))).subscribe(inputString => {
+        this._typeaheadSubscription = this._letterKeyStream
+            .pipe(tap(letter => this._pressedLetters.push(letter)), debounceTime(debounceInterval), filter(() => this._pressedLetters.length > 0), map(() => this._pressedLetters.join('')))
+            .subscribe(inputString => {
             const items = this._getItemsArray();
             // Start at 1 because we want to start searching at the item immediately
             // following the current active item.
@@ -505,7 +507,8 @@ class ListKeyManager {
     }
     /** Sets the active item to a previous enabled item in the list. */
     setPreviousItemActive() {
-        this._activeItemIndex < 0 && this._wrap ? this.setLastItemActive()
+        this._activeItemIndex < 0 && this._wrap
+            ? this.setLastItemActive()
             : this._setActiveItemByDelta(-1);
     }
     updateActiveItem(item) {
@@ -532,7 +535,7 @@ class ListKeyManager {
     _setActiveInWrapMode(delta) {
         const items = this._getItemsArray();
         for (let i = 1; i <= items.length; i++) {
-            const index = (this._activeItemIndex + (delta * i) + items.length) % items.length;
+            const index = (this._activeItemIndex + delta * i + items.length) % items.length;
             const item = items[index];
             if (!this._skipPredicateFn(item)) {
                 this.setActiveItem(index);
@@ -748,8 +751,9 @@ class InteractivityChecker {
     isFocusable(element, config) {
         // Perform checks in order of left to most expensive.
         // Again, naive approach that does not capture many edge cases and browser quirks.
-        return isPotentiallyFocusable(element) && !this.isDisabled(element) &&
-            (config?.ignoreVisibility || this.isVisible(element));
+        return (isPotentiallyFocusable(element) &&
+            !this.isDisabled(element) &&
+            (config?.ignoreVisibility || this.isVisible(element)));
     }
 }
 InteractivityChecker.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: InteractivityChecker, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
@@ -775,16 +779,17 @@ function getFrameElement(window) {
 function hasGeometry(element) {
     // Use logic from jQuery to check for an invisible element.
     // See https://github.com/jquery/jquery/blob/master/src/css/hiddenVisibleSelectors.js#L12
-    return !!(element.offsetWidth || element.offsetHeight ||
+    return !!(element.offsetWidth ||
+        element.offsetHeight ||
         (typeof element.getClientRects === 'function' && element.getClientRects().length));
 }
 /** Gets whether an element's  */
 function isNativeFormElement(element) {
     let nodeName = element.nodeName.toLowerCase();
-    return nodeName === 'input' ||
+    return (nodeName === 'input' ||
         nodeName === 'select' ||
         nodeName === 'button' ||
-        nodeName === 'textarea';
+        nodeName === 'textarea');
 }
 /** Gets whether an element is an `<input type="hidden">`. */
 function isHiddenInput(element) {
@@ -826,10 +831,10 @@ function getTabIndexValue(element) {
 function isPotentiallyTabbableIOS(element) {
     let nodeName = element.nodeName.toLowerCase();
     let inputType = nodeName === 'input' && element.type;
-    return inputType === 'text'
-        || inputType === 'password'
-        || nodeName === 'select'
-        || nodeName === 'textarea';
+    return (inputType === 'text' ||
+        inputType === 'password' ||
+        nodeName === 'select' ||
+        nodeName === 'textarea');
 }
 /**
  * Gets whether an element is potentially focusable without taking current visible/disabled state
@@ -840,15 +845,15 @@ function isPotentiallyFocusable(element) {
     if (isHiddenInput(element)) {
         return false;
     }
-    return isNativeFormElement(element) ||
+    return (isNativeFormElement(element) ||
         isAnchorWithHref(element) ||
         element.hasAttribute('contenteditable') ||
-        hasValidTabIndex(element);
+        hasValidTabIndex(element));
 }
 /** Gets the parent window of a DOM node with regards of being inside of an iframe. */
 function getWindow(node) {
     // ownerDocument is null if `node` itself *is* a document.
-    return node.ownerDocument && node.ownerDocument.defaultView || window;
+    return (node.ownerDocument && node.ownerDocument.defaultView) || window;
 }
 
 /**
@@ -884,7 +889,9 @@ class FocusTrap {
         }
     }
     /** Whether the focus trap is active. */
-    get enabled() { return this._enabled; }
+    get enabled() {
+        return this._enabled;
+    }
     set enabled(value) {
         this._enabled = value;
         if (this._startAnchor && this._endAnchor) {
@@ -974,9 +981,7 @@ class FocusTrap {
      */
     _getRegionBoundary(bound) {
         // Contains the deprecated version of selector, for temporary backwards comparability.
-        let markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` +
-            `[cdkFocusRegion${bound}], ` +
-            `[cdk-focus-${bound}]`);
+        let markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` + `[cdkFocusRegion${bound}], ` + `[cdk-focus-${bound}]`);
         for (let i = 0; i < markers.length; i++) {
             // @breaking-change 8.0.0
             if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
@@ -993,8 +998,9 @@ class FocusTrap {
         if (bound == 'start') {
             return markers.length ? markers[0] : this._getFirstTabbableElement(this._element);
         }
-        return markers.length ?
-            markers[markers.length - 1] : this._getLastTabbableElement(this._element);
+        return markers.length
+            ? markers[markers.length - 1]
+            : this._getLastTabbableElement(this._element);
     }
     /**
      * Focuses the element that should be focused when the focus trap is initialized.
@@ -1002,8 +1008,7 @@ class FocusTrap {
      */
     focusInitialElement(options) {
         // Contains the deprecated version of selector, for temporary backwards comparability.
-        const redirectToElement = this._element.querySelector(`[cdk-focus-initial], ` +
-            `[cdkFocusInitial]`);
+        const redirectToElement = this._element.querySelector(`[cdk-focus-initial], ` + `[cdkFocusInitial]`);
         if (redirectToElement) {
             // @breaking-change 8.0.0
             if (redirectToElement.hasAttribute(`cdk-focus-initial`)) {
@@ -1062,9 +1067,9 @@ class FocusTrap {
         }
         const children = root.children;
         for (let i = 0; i < children.length; i++) {
-            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
-                this._getFirstTabbableElement(children[i]) :
-                null;
+            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE
+                ? this._getFirstTabbableElement(children[i])
+                : null;
             if (tabbableChild) {
                 return tabbableChild;
             }
@@ -1079,9 +1084,9 @@ class FocusTrap {
         // Iterate in reverse DOM order.
         const children = root.children;
         for (let i = children.length - 1; i >= 0; i--) {
-            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE ?
-                this._getLastTabbableElement(children[i]) :
-                null;
+            const tabbableChild = children[i].nodeType === this._document.ELEMENT_NODE
+                ? this._getLastTabbableElement(children[i])
+                : null;
             if (tabbableChild) {
                 return tabbableChild;
             }
@@ -1173,14 +1178,22 @@ class CdkTrapFocus {
         this.focusTrap = this._focusTrapFactory.create(this._elementRef.nativeElement, true);
     }
     /** Whether the focus trap is active. */
-    get enabled() { return this.focusTrap.enabled; }
-    set enabled(value) { this.focusTrap.enabled = coerceBooleanProperty(value); }
+    get enabled() {
+        return this.focusTrap.enabled;
+    }
+    set enabled(value) {
+        this.focusTrap.enabled = coerceBooleanProperty(value);
+    }
     /**
      * Whether the directive should automatically move focus into the trapped region upon
      * initialization and return focus to the previous activeElement upon destruction.
      */
-    get autoCapture() { return this._autoCapture; }
-    set autoCapture(value) { this._autoCapture = coerceBooleanProperty(value); }
+    get autoCapture() {
+        return this._autoCapture;
+    }
+    set autoCapture(value) {
+        this._autoCapture = coerceBooleanProperty(value);
+    }
     ngOnDestroy() {
         this.focusTrap.destroy();
         // If we stored a previously focused element when using autoCapture, return focus to that
@@ -1203,7 +1216,9 @@ class CdkTrapFocus {
     }
     ngOnChanges(changes) {
         const autoCaptureChange = changes['autoCapture'];
-        if (autoCaptureChange && !autoCaptureChange.firstChange && this.autoCapture &&
+        if (autoCaptureChange &&
+            !autoCaptureChange.firstChange &&
+            this.autoCapture &&
             this.focusTrap.hasAttached()) {
             this._captureFocus();
         }
@@ -1253,7 +1268,9 @@ class ConfigurableFocusTrap extends FocusTrap {
         this._focusTrapManager.register(this);
     }
     /** Whether the FocusTrap is enabled. */
-    get enabled() { return this._enabled; }
+    get enabled() {
+        return this._enabled;
+    }
     set enabled(value) {
         this._enabled = value;
         if (this._enabled) {
@@ -1379,7 +1396,7 @@ class FocusTrapManager {
      */
     register(focusTrap) {
         // Dedupe focusTraps that register multiple times.
-        this._focusTrapStack = this._focusTrapStack.filter((ft) => ft !== focusTrap);
+        this._focusTrapStack = this._focusTrapStack.filter(ft => ft !== focusTrap);
         let stack = this._focusTrapStack;
         if (stack.length) {
             stack[stack.length - 1]._disable();
@@ -1471,14 +1488,15 @@ function isFakeMousedownFromScreenReader(event) {
 }
 /** Gets whether an event could be a faked `touchstart` event dispatched by a screen reader. */
 function isFakeTouchstartFromScreenReader(event) {
-    const touch = (event.touches && event.touches[0]) ||
-        (event.changedTouches && event.changedTouches[0]);
+    const touch = (event.touches && event.touches[0]) || (event.changedTouches && event.changedTouches[0]);
     // A fake `touchstart` can be distinguished from a real one by looking at the `identifier`
     // which is typically >= 0 on a real device versus -1 from a screen reader. Just to be safe,
     // we can also look at `radiusX` and `radiusY`. This behavior was observed against a Windows 10
     // device with a touch screen running NVDA v2020.4 and Firefox 85 or Chrome 88.
-    return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) &&
-        (touch.radiusY == null || touch.radiusY === 1);
+    return (!!touch &&
+        touch.identifier === -1 &&
+        (touch.radiusX == null || touch.radiusX === 1) &&
+        (touch.radiusY == null || touch.radiusY === 1));
 }
 
 /**
@@ -1697,7 +1715,7 @@ class LiveAnnouncer {
         clearTimeout(this._previousTimeout);
         if (!politeness) {
             politeness =
-                (defaultOptions && defaultOptions.politeness) ? defaultOptions.politeness : 'polite';
+                defaultOptions && defaultOptions.politeness ? defaultOptions.politeness : 'polite';
         }
         if (duration == null && defaultOptions) {
             duration = defaultOptions.duration;
@@ -1785,7 +1803,9 @@ class CdkAriaLive {
         this._politeness = 'polite';
     }
     /** The aria-live politeness level to use when announcing messages. */
-    get politeness() { return this._politeness; }
+    get politeness() {
+        return this._politeness;
+    }
     set politeness(value) {
         this._politeness = value === 'off' || value === 'assertive' ? value : 'polite';
         if (this._politeness === 'off') {
@@ -1796,9 +1816,7 @@ class CdkAriaLive {
         }
         else if (!this._subscription) {
             this._subscription = this._ngZone.runOutsideAngular(() => {
-                return this._contentObserver
-                    .observe(this._elementRef)
-                    .subscribe(() => {
+                return this._contentObserver.observe(this._elementRef).subscribe(() => {
                     // Note that we use textContent here, rather than innerText, in order to avoid a reflow.
                     const elementText = this._elementRef.nativeElement.textContent;
                     // The `MutationObserver` fires also for attribute
@@ -1845,7 +1863,7 @@ const FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-defa
  */
 const captureEventListenerOptions = normalizePassiveListenerOptions({
     passive: true,
-    capture: true
+    capture: true,
 });
 /** Monitors mouse and keyboard events to determine the cause of focus events. */
 class FocusMonitor {
@@ -1883,7 +1901,7 @@ class FocusMonitor {
             // Make a note of when the window regains focus, so we can
             // restore the origin info for the focused element.
             this._windowFocused = true;
-            this._windowFocusTimeoutId = setTimeout(() => this._windowFocused = false);
+            this._windowFocusTimeoutId = setTimeout(() => (this._windowFocused = false));
         };
         /** Subject for stopping our InputModalityDetector subscription. */
         this._stopInputModalityDetector = new Subject();
@@ -1927,7 +1945,7 @@ class FocusMonitor {
         const info = {
             checkChildren: checkChildren,
             subject: new Subject(),
-            rootNode
+            rootNode,
         };
         this._elementInfo.set(nativeElement, info);
         this._registerGlobalListeners(info);
@@ -1950,8 +1968,7 @@ class FocusMonitor {
         // which means that the focus classes won't be updated. If that's the case, update the classes
         // directly without waiting for an event.
         if (nativeElement === focusedElement) {
-            this._getClosestElementsInfo(nativeElement)
-                .forEach(([currentElement, info]) => this._originChanged(currentElement, origin, info));
+            this._getClosestElementsInfo(nativeElement).forEach(([currentElement, info]) => this._originChanged(currentElement, origin, info));
         }
         else {
             this._setOrigin(origin);
@@ -1993,7 +2010,7 @@ class FocusMonitor {
         //    events).
         //
         // Because we can't distinguish between these two cases, we default to setting `program`.
-        return (this._windowFocused && this._lastFocusOrigin) ? this._lastFocusOrigin : 'program';
+        return this._windowFocused && this._lastFocusOrigin ? this._lastFocusOrigin : 'program';
     }
     /**
      * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a
@@ -2014,8 +2031,8 @@ class FocusMonitor {
         // #child, #parent is programmatically focused. This code will attribute the focus to touch
         // instead of program. This is a relatively minor edge-case that can be worked around by using
         // focusVia(parent, 'program') to focus #parent.
-        return (this._detectionMode === 1 /* EVENTUAL */) ||
-            !!focusEventTarget?.contains(this._inputModalityDetector._mostRecentTarget);
+        return (this._detectionMode === 1 /* EVENTUAL */ ||
+            !!focusEventTarget?.contains(this._inputModalityDetector._mostRecentTarget));
     }
     /**
      * Sets the focus classes on the element based on the given focus origin.
@@ -2039,7 +2056,7 @@ class FocusMonitor {
     _setOrigin(origin, isFromInteraction = false) {
         this._ngZone.runOutsideAngular(() => {
             this._origin = origin;
-            this._originFromTouchInteraction = (origin === 'touch') && isFromInteraction;
+            this._originFromTouchInteraction = origin === 'touch' && isFromInteraction;
             // If we're in IMMEDIATE mode, reset the origin at the next tick (or in `TOUCH_BUFFER_MS` ms
             // for a touch event). We reset the origin at the next tick because Firefox focuses one tick
             // after the interaction event. We wait `TOUCH_BUFFER_MS` ms before resetting the origin for
@@ -2048,7 +2065,7 @@ class FocusMonitor {
             if (this._detectionMode === 0 /* IMMEDIATE */) {
                 clearTimeout(this._originTimeoutId);
                 const ms = this._originFromTouchInteraction ? TOUCH_BUFFER_MS : 1;
-                this._originTimeoutId = setTimeout(() => this._origin = null, ms);
+                this._originTimeoutId = setTimeout(() => (this._origin = null), ms);
             }
         });
     }
@@ -2080,8 +2097,10 @@ class FocusMonitor {
         // If we are counting child-element-focus as focused, make sure that we aren't just blurring in
         // order to focus another child of the monitored element.
         const elementInfo = this._elementInfo.get(element);
-        if (!elementInfo || (elementInfo.checkChildren && event.relatedTarget instanceof Node &&
-            element.contains(event.relatedTarget))) {
+        if (!elementInfo ||
+            (elementInfo.checkChildren &&
+                event.relatedTarget instanceof Node &&
+                element.contains(event.relatedTarget))) {
             return;
         }
         this._setClasses(element);
@@ -2114,7 +2133,9 @@ class FocusMonitor {
             // The InputModalityDetector is also just a collection of global listeners.
             this._inputModalityDetector.modalityDetected
                 .pipe(takeUntil(this._stopInputModalityDetector))
-                .subscribe(modality => { this._setOrigin(modality, true /* isFromInteraction */); });
+                .subscribe(modality => {
+                this._setOrigin(modality, true /* isFromInteraction */);
+            });
         }
     }
     _removeGlobalListeners(elementInfo) {
@@ -2195,7 +2216,8 @@ class CdkMonitorFocus {
     }
     ngAfterViewInit() {
         const element = this._elementRef.nativeElement;
-        this._monitorSubscription = this._focusMonitor.monitor(element, element.nodeType === 1 && element.hasAttribute('cdkMonitorSubtreeFocus'))
+        this._monitorSubscription = this._focusMonitor
+            .monitor(element, element.nodeType === 1 && element.hasAttribute('cdkMonitorSubtreeFocus'))
             .subscribe(origin => this.cdkFocusChange.emit(origin));
     }
     ngOnDestroy() {
@@ -2262,13 +2284,16 @@ class HighContrastModeDetector {
         // via the document so we can fake it in tests. Note that we have extra null checks, because
         // this logic will likely run during app bootstrap and throwing can break the entire app.
         const documentWindow = this._document.defaultView || window;
-        const computedStyle = (documentWindow && documentWindow.getComputedStyle) ?
-            documentWindow.getComputedStyle(testElement) : null;
-        const computedColor = (computedStyle && computedStyle.backgroundColor || '').replace(/ /g, '');
+        const computedStyle = documentWindow && documentWindow.getComputedStyle
+            ? documentWindow.getComputedStyle(testElement)
+            : null;
+        const computedColor = ((computedStyle && computedStyle.backgroundColor) || '').replace(/ /g, '');
         testElement.remove();
         switch (computedColor) {
-            case 'rgb(0,0,0)': return 2 /* WHITE_ON_BLACK */;
-            case 'rgb(255,255,255)': return 1 /* BLACK_ON_WHITE */;
+            case 'rgb(0,0,0)':
+                return 2 /* WHITE_ON_BLACK */;
+            case 'rgb(255,255,255)':
+                return 1 /* BLACK_ON_WHITE */;
         }
         return 0 /* NONE */;
     }

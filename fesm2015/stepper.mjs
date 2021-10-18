@@ -76,7 +76,7 @@ const STEP_STATE = {
     NUMBER: 'number',
     EDIT: 'edit',
     DONE: 'done',
-    ERROR: 'error'
+    ERROR: 'error',
 };
 /** InjectionToken that can be used to specify the global stepper options. */
 const STEPPER_GLOBAL_OPTIONS = new InjectionToken('STEPPER_GLOBAL_OPTIONS');
@@ -264,7 +264,8 @@ class CdkStepper {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
             (_a = this.selected) === null || _a === void 0 ? void 0 : _a._markAsInteracted();
-            if (this._selectedIndex !== newIndex && !this._anyControlsInvalidOrPending(newIndex) &&
+            if (this._selectedIndex !== newIndex &&
+                !this._anyControlsInvalidOrPending(newIndex) &&
                 (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
                 this._updateSelectedItemIndex(index);
             }
@@ -278,10 +279,12 @@ class CdkStepper {
         return this.steps ? this.steps.toArray()[this.selectedIndex] : undefined;
     }
     set selected(step) {
-        this.selectedIndex = (step && this.steps) ? this.steps.toArray().indexOf(step) : -1;
+        this.selectedIndex = step && this.steps ? this.steps.toArray().indexOf(step) : -1;
     }
     /** Orientation of the stepper. */
-    get orientation() { return this._orientation; }
+    get orientation() {
+        return this._orientation;
+    }
     set orientation(value) {
         // This is a protected method so that `MatSteppter` can hook into it.
         this._orientation = value;
@@ -387,8 +390,9 @@ class CdkStepper {
     _getIndicatorType(index, state = STEP_STATE.NUMBER) {
         const step = this.steps.toArray()[index];
         const isCurrentStep = this._isCurrentStep(index);
-        return step._displayDefaultIndicatorType ? this._getDefaultIndicatorLogic(step, isCurrentStep) :
-            this._getGuidelineLogic(step, isCurrentStep, state);
+        return step._displayDefaultIndicatorType
+            ? this._getDefaultIndicatorLogic(step, isCurrentStep)
+            : this._getGuidelineLogic(step, isCurrentStep, state);
     }
     _getDefaultIndicatorLogic(step, isCurrentStep) {
         if (step._showError() && step.hasError && !isCurrentStep) {
@@ -437,8 +441,9 @@ class CdkStepper {
         // lost when the active step content is hidden. We can't be more granular with the check
         // (e.g. checking whether focus is inside the active step), because we don't have a
         // reference to the elements that are rendering out the content.
-        this._containsFocus() ? this._keyManager.setActiveItem(newIndex) :
-            this._keyManager.updateActiveItem(newIndex);
+        this._containsFocus()
+            ? this._keyManager.setActiveItem(newIndex)
+            : this._keyManager.updateActiveItem(newIndex);
         this._selectedIndex = newIndex;
         this._stateChanged();
     }
@@ -446,7 +451,8 @@ class CdkStepper {
         const hasModifier = hasModifierKey(event);
         const keyCode = event.keyCode;
         const manager = this._keyManager;
-        if (manager.activeItemIndex != null && !hasModifier &&
+        if (manager.activeItemIndex != null &&
+            !hasModifier &&
             (keyCode === SPACE || keyCode === ENTER)) {
             this.selectedIndex = manager.activeItemIndex;
             event.preventDefault();
@@ -457,9 +463,14 @@ class CdkStepper {
     }
     _anyControlsInvalidOrPending(index) {
         if (this._linear && index >= 0) {
-            return this.steps.toArray().slice(0, index).some(step => {
+            return this.steps
+                .toArray()
+                .slice(0, index)
+                .some(step => {
                 const control = step.stepControl;
-                const isIncomplete = control ? (control.invalid || control.pending || !step.interacted) : !step.completed;
+                const isIncomplete = control
+                    ? control.invalid || control.pending || !step.interacted
+                    : !step.completed;
                 return isIncomplete && !step.optional && !step._completedOverride;
             });
         }
@@ -543,7 +554,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                     selector: 'button[cdkStepperNext]',
                     host: {
                         '[type]': 'type',
-                    }
+                    },
                 }]
         }], ctorParameters: function () { return [{ type: CdkStepper }]; }, propDecorators: { type: [{
                 type: Input
@@ -575,7 +586,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                     selector: 'button[cdkStepperPrevious]',
                     host: {
                         '[type]': 'type',
-                    }
+                    },
                 }]
         }], ctorParameters: function () { return [{ type: CdkStepper }]; }, propDecorators: { type: [{
                 type: Input
@@ -599,25 +610,13 @@ CdkStepperModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", versio
         CdkStepHeader,
         CdkStepLabel,
         CdkStepperNext,
-        CdkStepperPrevious], imports: [BidiModule], exports: [CdkStep,
-        CdkStepper,
-        CdkStepHeader,
-        CdkStepLabel,
-        CdkStepperNext,
-        CdkStepperPrevious] });
+        CdkStepperPrevious], imports: [BidiModule], exports: [CdkStep, CdkStepper, CdkStepHeader, CdkStepLabel, CdkStepperNext, CdkStepperPrevious] });
 CdkStepperModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkStepperModule, imports: [[BidiModule]] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkStepperModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [BidiModule],
-                    exports: [
-                        CdkStep,
-                        CdkStepper,
-                        CdkStepHeader,
-                        CdkStepLabel,
-                        CdkStepperNext,
-                        CdkStepperPrevious,
-                    ],
+                    exports: [CdkStep, CdkStepper, CdkStepHeader, CdkStepLabel, CdkStepperNext, CdkStepperPrevious],
                     declarations: [
                         CdkStep,
                         CdkStepper,
@@ -625,7 +624,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                         CdkStepLabel,
                         CdkStepperNext,
                         CdkStepperPrevious,
-                    ]
+                    ],
                 }]
         }] });
 

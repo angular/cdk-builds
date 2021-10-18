@@ -33,7 +33,7 @@ export declare abstract class BaseTreeControl<T, K = T> implements TreeControl<T
      */
     isExpandable: (dataNode: T) => boolean;
     /** Gets a stream that emits whenever the given data node's children change. */
-    getChildren: (dataNode: T) => (Observable<T[]> | T[] | undefined | null);
+    getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
     /** Toggles one single data node's expanded/collapsed state. */
     toggle(dataNode: T): void;
     /** Expands one single data node. */
