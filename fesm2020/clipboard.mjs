@@ -25,7 +25,7 @@ import { Injectable, Inject, InjectionToken, EventEmitter, Directive, Optional, 
 class PendingCopy {
     constructor(text, _document) {
         this._document = _document;
-        const textarea = this._textarea = this._document.createElement('textarea');
+        const textarea = (this._textarea = this._document.createElement('textarea'));
         const styles = textarea.style;
         // Hide the element for display and accessibility. Set a fixed position so the page layout
         // isn't affected. We use `fixed` with `top: 0`, because focus is moved into the textarea
@@ -41,7 +41,8 @@ class PendingCopy {
     copy() {
         const textarea = this._textarea;
         let successful = false;
-        try { // Older browsers could throw if copy is not supported.
+        try {
+            // Older browsers could throw if copy is not supported.
             if (textarea) {
                 const currentFocus = this._document.activeElement;
                 textarea.select();
@@ -194,7 +195,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                     selector: '[cdkCopyToClipboard]',
                     host: {
                         '(click)': 'copy()',
-                    }
+                    },
                 }]
         }], ctorParameters: function () { return [{ type: Clipboard }, { type: i0.NgZone }, { type: undefined, decorators: [{
                     type: Optional

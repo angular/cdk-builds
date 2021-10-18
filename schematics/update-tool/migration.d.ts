@@ -21,7 +21,7 @@ export declare type PostMigrationAction = void | {
     runPackageManager: boolean;
 };
 /** Creates a constructor type for the specified type. */
-export declare type Constructor<T> = (new (...args: any[]) => T);
+export declare type Constructor<T> = new (...args: any[]) => T;
 /** Gets a constructor type for the passed migration data. */
 export declare type MigrationCtor<Data, Context = any> = Constructor<Migration<Data, Context>>;
 export declare abstract class Migration<Data, Context = any> {

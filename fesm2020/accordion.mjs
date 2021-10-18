@@ -33,8 +33,12 @@ class CdkAccordion {
         this._multi = false;
     }
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
-    get multi() { return this._multi; }
-    set multi(multi) { this._multi = coerceBooleanProperty(multi); }
+    get multi() {
+        return this._multi;
+    }
+    set multi(multi) {
+        this._multi = coerceBooleanProperty(multi);
+    }
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll() {
         if (this._multi) {
@@ -104,20 +108,23 @@ class CdkAccordionItem {
         this._disabled = false;
         /** Unregister function for _expansionDispatcher. */
         this._removeUniqueSelectionListener = () => { };
-        this._removeUniqueSelectionListener =
-            _expansionDispatcher.listen((id, accordionId) => {
-                if (this.accordion && !this.accordion.multi &&
-                    this.accordion.id === accordionId && this.id !== id) {
-                    this.expanded = false;
-                }
-            });
+        this._removeUniqueSelectionListener = _expansionDispatcher.listen((id, accordionId) => {
+            if (this.accordion &&
+                !this.accordion.multi &&
+                this.accordion.id === accordionId &&
+                this.id !== id) {
+                this.expanded = false;
+            }
+        });
         // When an accordion item is hosted in an accordion, subscribe to open/close events.
         if (this.accordion) {
             this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
         }
     }
     /** Whether the AccordionItem is expanded. */
-    get expanded() { return this._expanded; }
+    get expanded() {
+        return this._expanded;
+    }
     set expanded(expanded) {
         expanded = coerceBooleanProperty(expanded);
         // Only emit events and update the internal value if the value changes.
@@ -142,8 +149,12 @@ class CdkAccordionItem {
         }
     }
     /** Whether the AccordionItem is disabled. */
-    get disabled() { return this._disabled; }
-    set disabled(disabled) { this._disabled = coerceBooleanProperty(disabled); }
+    get disabled() {
+        return this._disabled;
+    }
+    set disabled(disabled) {
+        this._disabled = coerceBooleanProperty(disabled);
+    }
     /** Emits an event for the accordion item being destroyed. */
     ngOnDestroy() {
         this.opened.complete();

@@ -9,7 +9,7 @@ import { BehaviorSubject } from 'rxjs';
  */
 /** Subject used to dispatch and listen for changes to the auto change detection status . */
 const autoChangeDetectionSubject = new BehaviorSubject({
-    isDisabled: false
+    isDisabled: false,
 });
 /** The current subscription to `autoChangeDetectionSubject`. */
 let autoChangeDetectionSubscription;
@@ -380,8 +380,9 @@ function _valueAsString(value) {
         // the regex. This allows us to strip out the extra quotes around the value added by
         // `JSON.stringify`. Also do custom escaping on `"` characters to prevent `JSON.stringify`
         // from escaping them as if they were part of a string.
-        const stringifiedValue = JSON.stringify(value, (_, v) => v instanceof RegExp ?
-            `◬MAT_RE_ESCAPE◬${v.toString().replace(/"/g, '◬MAT_RE_ESCAPE◬')}◬MAT_RE_ESCAPE◬` : v);
+        const stringifiedValue = JSON.stringify(value, (_, v) => v instanceof RegExp
+            ? `◬MAT_RE_ESCAPE◬${v.toString().replace(/"/g, '◬MAT_RE_ESCAPE◬')}◬MAT_RE_ESCAPE◬`
+            : v);
         // Strip out the extra quotes around regexes and put back the manually escaped `"` characters.
         return stringifiedValue
             .replace(/"◬MAT_RE_ESCAPE◬|◬MAT_RE_ESCAPE◬"/g, '')
@@ -461,7 +462,9 @@ class HarnessEnvironment {
     }
     // Implemented as part of the `LocatorFactory` interface.
     async harnessLoaderFor(selector) {
-        return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)]));
+        return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [
+            _getDescriptionForHarnessLoaderQuery(selector),
+        ]));
     }
     // Implemented as part of the `LocatorFactory` interface.
     async harnessLoaderForOptional(selector) {
@@ -483,7 +486,9 @@ class HarnessEnvironment {
     }
     // Implemented as part of the `HarnessLoader` interface.
     async getChildLoader(selector) {
-        return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [_getDescriptionForHarnessLoaderQuery(selector)]));
+        return this.createEnvironment(await _assertResultFound(this.getAllRawElements(selector), [
+            _getDescriptionForHarnessLoaderQuery(selector),
+        ]));
     }
     // Implemented as part of the `HarnessLoader` interface.
     async getAllChildLoaders(selector) {
@@ -506,8 +511,7 @@ class HarnessEnvironment {
         // to an instance of that subclass. Likewise, if every query is for a `TestElement`, we know
         // every result corresponds to a `TestElement`. Otherwise we need to verify which result was
         // found by which selector so it can be matched to the appropriate instance.
-        const skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) ||
-            harnessQueries.length === 0;
+        const skipSelectorCheck = (elementQueries.length === 0 && harnessTypes.size === 1) || harnessQueries.length === 0;
         const perElementMatches = await parallel(() => rawElements.map(async (rawElement) => {
             const testElement = this.createTestElement(rawElement);
             const allResultsForElement = await parallel(
@@ -528,9 +532,9 @@ class HarnessEnvironment {
      */
     async _getQueryResultForElement(query, rawElement, testElement, skipSelectorCheck = false) {
         if (typeof query === 'string') {
-            return ((skipSelectorCheck || await testElement.matchesSelector(query)) ? testElement : null);
+            return skipSelectorCheck || (await testElement.matchesSelector(query)) ? testElement : null;
         }
-        if (skipSelectorCheck || await testElement.matchesSelector(query.getSelector())) {
+        if (skipSelectorCheck || (await testElement.matchesSelector(query.getSelector()))) {
             const harness = this.createComponentHarness(query.harnessType, rawElement);
             return (await query.evaluate(harness)) ? harness : null;
         }
@@ -596,8 +600,9 @@ async function _assertResultFound(results, queryDescriptions) {
 }
 /** Gets a list of description strings from a list of queries. */
 function _getDescriptionForLocatorForQueries(queries) {
-    return queries.map(query => typeof query === 'string' ?
-        _getDescriptionForTestElementQuery(query) : _getDescriptionForComponentHarnessQuery(query));
+    return queries.map(query => typeof query === 'string'
+        ? _getDescriptionForTestElementQuery(query)
+        : _getDescriptionForComponentHarnessQuery(query));
 }
 /** Gets a description string for a `ComponentHarness` query. */
 function _getDescriptionForComponentHarnessQuery(query) {
@@ -605,8 +610,8 @@ function _getDescriptionForComponentHarnessQuery(query) {
     const { name, hostSelector } = harnessPredicate.harnessType;
     const description = `${name} with host element matching selector: "${hostSelector}"`;
     const constraints = harnessPredicate.getDescription();
-    return description + (constraints ?
-        ` satisfying the constraints: ${harnessPredicate.getDescription()}` : '');
+    return (description +
+        (constraints ? ` satisfying the constraints: ${harnessPredicate.getDescription()}` : ''));
 }
 /** Gets a description string for a `TestElement` query. */
 function _getDescriptionForTestElementQuery(selector) {

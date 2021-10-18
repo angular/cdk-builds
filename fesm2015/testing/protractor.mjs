@@ -33,7 +33,7 @@ const keyMap = {
     [TestKey.F10]: Key.F10,
     [TestKey.F11]: Key.F11,
     [TestKey.F12]: Key.F12,
-    [TestKey.META]: Key.META
+    [TestKey.META]: Key.META,
 };
 /** Converts a `ModifierKeys` object to a list of Protractor `Key`s. */
 function toProtractorModifierKeys(modifiers) {
@@ -98,7 +98,8 @@ class ProtractorElement {
     /** Hovers the mouse over the element. */
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
-            return browser.actions()
+            return browser
+                .actions()
                 .mouseMove(yield this.element.getWebElement())
                 .perform();
         });
@@ -106,7 +107,8 @@ class ProtractorElement {
     /** Moves the mouse away from the element. */
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
-            return browser.actions()
+            return browser
+                .actions()
                 .mouseMove(yield this.element.getWebElement(), { x: -1, y: -1 })
                 .perform();
         });
@@ -125,11 +127,12 @@ class ProtractorElement {
                 rest = modifiersAndKeys;
             }
             const modifierKeys = toProtractorModifierKeys(modifiers);
-            const keys = rest.map(k => typeof k === 'string' ? k.split('') : [keyMap[k]])
+            const keys = rest
+                .map(k => (typeof k === 'string' ? k.split('') : [keyMap[k]]))
                 .reduce((arr, k) => arr.concat(k), [])
                 // Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
                 // so avoid it if no modifier keys are required.
-                .map(k => modifierKeys.length > 0 ? Key.chord(...modifierKeys, k) : k);
+                .map(k => (modifierKeys.length > 0 ? Key.chord(...modifierKeys, k) : k));
             return this.element.sendKeys(...keys);
         });
     }
@@ -235,10 +238,8 @@ class ProtractorElement {
             // Omitting the offset argument to mouseMove results in clicking the center.
             // This is the default behavior we want, so we use an empty array of offsetArgs if
             // no args remain after popping the modifiers from the args passed to this function.
-            const offsetArgs = (args.length === 2 ?
-                [{ x: args[0], y: args[1] }] : []);
-            let actions = browser.actions()
-                .mouseMove(yield this.element.getWebElement(), ...offsetArgs);
+            const offsetArgs = (args.length === 2 ? [{ x: args[0], y: args[1] }] : []);
+            let actions = browser.actions().mouseMove(yield this.element.getWebElement(), ...offsetArgs);
             for (const modifierKey of modifierKeys) {
                 actions = actions.keyDown(modifierKey);
             }
@@ -268,7 +269,7 @@ function _dispatchEvent(name, element, data) {
 
 /** The default environment options. */
 const defaultEnvironmentOptions = {
-    queryFn: (selector, root) => root.all(by.css(selector))
+    queryFn: (selector, root) => root.all(by.css(selector)),
 };
 /**
  * A `HarnessEnvironment` implementation for Protractor.

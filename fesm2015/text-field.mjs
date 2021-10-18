@@ -61,7 +61,7 @@ class AutofillMonitor {
             subject: result,
             unlisten: () => {
                 element.removeEventListener('animationstart', listener, listenerOptions);
-            }
+            },
         });
         return result;
     }
@@ -146,19 +146,25 @@ class CdkTextareaAutosize {
         this._textareaElement = this._elementRef.nativeElement;
     }
     /** Minimum amount of rows in the textarea. */
-    get minRows() { return this._minRows; }
+    get minRows() {
+        return this._minRows;
+    }
     set minRows(value) {
         this._minRows = coerceNumberProperty(value);
         this._setMinHeight();
     }
     /** Maximum amount of rows in the textarea. */
-    get maxRows() { return this._maxRows; }
+    get maxRows() {
+        return this._maxRows;
+    }
     set maxRows(value) {
         this._maxRows = coerceNumberProperty(value);
         this._setMaxHeight();
     }
     /** Whether autosizing is enabled or not */
-    get enabled() { return this._enabled; }
+    get enabled() {
+        return this._enabled;
+    }
     set enabled(value) {
         value = coerceBooleanProperty(value);
         // Only act if the actual value changed. This specifically helps to not run
@@ -167,7 +173,9 @@ class CdkTextareaAutosize {
             (this._enabled = value) ? this.resizeToFitContent(true) : this.reset();
         }
     }
-    get placeholder() { return this._textareaElement.placeholder; }
+    get placeholder() {
+        return this._textareaElement.placeholder;
+    }
     set placeholder(value) {
         this._cachedPlaceholderHeight = undefined;
         this._textareaElement.placeholder = value;
@@ -175,16 +183,14 @@ class CdkTextareaAutosize {
     }
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight() {
-        const minHeight = this.minRows && this._cachedLineHeight ?
-            `${this.minRows * this._cachedLineHeight}px` : null;
+        const minHeight = this.minRows && this._cachedLineHeight ? `${this.minRows * this._cachedLineHeight}px` : null;
         if (minHeight) {
             this._textareaElement.style.minHeight = minHeight;
         }
     }
     /** Sets the maximum height of the textarea as determined by maxRows. */
     _setMaxHeight() {
-        const maxHeight = this.maxRows && this._cachedLineHeight ?
-            `${this.maxRows * this._cachedLineHeight}px` : null;
+        const maxHeight = this.maxRows && this._cachedLineHeight ? `${this.maxRows * this._cachedLineHeight}px` : null;
         if (maxHeight) {
             this._textareaElement.style.maxHeight = maxHeight;
         }
@@ -254,9 +260,9 @@ class CdkTextareaAutosize {
         const previousMargin = element.style.marginBottom || '';
         const isFirefox = this._platform.FIREFOX;
         const needsMarginFiller = isFirefox && this._hasFocus;
-        const measuringClass = isFirefox ?
-            'cdk-textarea-autosize-measuring-firefox' :
-            'cdk-textarea-autosize-measuring';
+        const measuringClass = isFirefox
+            ? 'cdk-textarea-autosize-measuring-firefox'
+            : 'cdk-textarea-autosize-measuring';
         // In some cases the page might move around while we're measuring the `textarea` on Firefox. We
         // work around it by assigning a temporary margin with the same height as the `textarea` so that
         // it occupies the same amount of space. See #23233.

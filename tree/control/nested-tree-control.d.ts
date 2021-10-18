@@ -13,10 +13,10 @@ export interface NestedTreeControlOptions<T, K> {
 }
 /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
 export declare class NestedTreeControl<T, K = T> extends BaseTreeControl<T, K> {
-    getChildren: (dataNode: T) => (Observable<T[]> | T[] | undefined | null);
+    getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null;
     options?: NestedTreeControlOptions<T, K> | undefined;
     /** Construct with nested tree function getChildren. */
-    constructor(getChildren: (dataNode: T) => (Observable<T[]> | T[] | undefined | null), options?: NestedTreeControlOptions<T, K> | undefined);
+    constructor(getChildren: (dataNode: T) => Observable<T[]> | T[] | undefined | null, options?: NestedTreeControlOptions<T, K> | undefined);
     /**
      * Expands all dataNodes in the tree.
      *

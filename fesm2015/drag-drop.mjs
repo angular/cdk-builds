@@ -51,7 +51,7 @@ function toggleNativeDragInteractions(element, enable) {
         'user-select': userSelect,
         '-ms-user-select': userSelect,
         '-webkit-user-select': userSelect,
-        '-moz-user-select': userSelect
+        '-moz-user-select': userSelect,
     });
 }
 /**
@@ -66,7 +66,7 @@ function toggleVisibility(element, enable, importantProperties) {
         position: enable ? '' : 'fixed',
         top: enable ? '' : '0',
         opacity: enable ? '' : '0',
-        left: enable ? '' : '-999em'
+        left: enable ? '' : '-999em',
     }, importantProperties);
 }
 /**
@@ -74,9 +74,9 @@ function toggleVisibility(element, enable, importantProperties) {
  * that exited before the base transform was applied.
  */
 function combineTransforms(transform, initialTransform) {
-    return initialTransform && initialTransform != 'none' ?
-        (transform + ' ' + initialTransform) :
-        transform;
+    return initialTransform && initialTransform != 'none'
+        ? transform + ' ' + initialTransform
+        : transform;
 }
 
 /**
@@ -106,8 +106,8 @@ function getTransformTransitionDurationInMs(element) {
     const propertyIndex = transitionedProperties.indexOf(property);
     const rawDurations = parseCssPropertyValue(computedStyle, 'transition-duration');
     const rawDelays = parseCssPropertyValue(computedStyle, 'transition-delay');
-    return parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
-        parseCssTimeUnitsToMs(rawDelays[propertyIndex]);
+    return (parseCssTimeUnitsToMs(rawDurations[propertyIndex]) +
+        parseCssTimeUnitsToMs(rawDelays[propertyIndex]));
 }
 /** Parses out multiple values from a computed style into an array. */
 function parseCssPropertyValue(computedStyle, name) {
@@ -137,7 +137,7 @@ function getMutableClientRect(element) {
         width: clientRect.width,
         height: clientRect.height,
         x: clientRect.x,
-        y: clientRect.y
+        y: clientRect.y,
     };
 }
 /**
@@ -173,8 +173,10 @@ function isPointerNearClientRect(rect, threshold, pointerX, pointerY) {
     const { top, right, bottom, left, width, height } = rect;
     const xThreshold = width * threshold;
     const yThreshold = height * threshold;
-    return pointerY > top - yThreshold && pointerY < bottom + yThreshold &&
-        pointerX > left - xThreshold && pointerX < right + xThreshold;
+    return (pointerY > top - yThreshold &&
+        pointerY < bottom + yThreshold &&
+        pointerX > left - xThreshold &&
+        pointerX < right + xThreshold);
 }
 
 /**
@@ -205,7 +207,7 @@ class ParentPositionTracker {
         elements.forEach(element => {
             this.positions.set(element, {
                 scrollPosition: { top: element.scrollTop, left: element.scrollLeft },
-                clientRect: getMutableClientRect(element)
+                clientRect: getMutableClientRect(element),
             });
         });
     }
@@ -329,7 +331,7 @@ const MOUSE_EVENT_IGNORE_TIME = 800;
 /** Inline styles to be set as `!important` while dragging. */
 const dragImportantProperties = new Set([
     // Needs to be important, because some `mat-table` sets `position: sticky !important`. See #22781.
-    'position'
+    'position',
 ]);
 /**
  * Reference to a draggable item. Used to manipulate or dispose of the item.
@@ -485,7 +487,7 @@ class DragRef {
                         pointerPosition: constrainedPointerPosition,
                         event,
                         distance: this._getDragDistance(constrainedPointerPosition),
-                        delta: this._pointerDirectionDelta
+                        delta: this._pointerDirectionDelta,
                     });
                 });
             }
@@ -632,8 +634,14 @@ class DragRef {
         this._dropContainer = undefined;
         this._resizeSubscription.unsubscribe();
         this._parentPositions.clear();
-        this._boundaryElement = this._rootElement = this._ownerSVGElement = this._placeholderTemplate =
-            this._previewTemplate = this._anchor = this._parentDragRef = null;
+        this._boundaryElement =
+            this._rootElement =
+                this._ownerSVGElement =
+                    this._placeholderTemplate =
+                        this._previewTemplate =
+                            this._anchor =
+                                this._parentDragRef =
+                                    null;
     }
     /** Checks whether the element is currently being dragged. */
     isDragging() {
@@ -771,7 +779,7 @@ class DragRef {
                 this.ended.next({
                     source: this,
                     distance: this._getDragDistance(pointerPosition),
-                    dropPoint: pointerPosition
+                    dropPoint: pointerPosition,
                 });
             });
             this._cleanupCachedDimensions();
@@ -788,8 +796,8 @@ class DragRef {
         if (dropContainer) {
             const element = this._rootElement;
             const parent = element.parentNode;
-            const placeholder = this._placeholder = this._createPlaceholderElement();
-            const anchor = this._anchor = this._anchor || this._document.createComment('');
+            const placeholder = (this._placeholder = this._createPlaceholderElement());
+            const anchor = (this._anchor = this._anchor || this._document.createComment(''));
             // Needs to happen before the root element is moved.
             const shadowRoot = this._getShadowRoot();
             // Insert an anchor node so that we can restore the element's position in the DOM.
@@ -836,10 +844,12 @@ class DragRef {
         const isAuxiliaryMouseButton = !isTouchSequence && event.button !== 0;
         const rootElement = this._rootElement;
         const target = _getEventTarget(event);
-        const isSyntheticEvent = !isTouchSequence && this._lastTouchEventTime &&
+        const isSyntheticEvent = !isTouchSequence &&
+            this._lastTouchEventTime &&
             this._lastTouchEventTime + MOUSE_EVENT_IGNORE_TIME > Date.now();
-        const isFakeEvent = isTouchSequence ? isFakeTouchstartFromScreenReader(event) :
-            isFakeMousedownFromScreenReader(event);
+        const isFakeEvent = isTouchSequence
+            ? isFakeTouchstartFromScreenReader(event)
+            : isFakeMousedownFromScreenReader(event);
         // If the event started from an element with the native HTML drag&drop, it'll interfere
         // with our own dragging (e.g. `img` tags do it by default). Prevent the default action
         // to stop it from happening. Note that preventing on `dragstart` also seems to work, but
@@ -877,11 +887,13 @@ class DragRef {
         // it next to the cursor. The exception is when the consumer has opted into making the preview
         // the same size as the root element, in which case we do know the size.
         const previewTemplate = this._previewTemplate;
-        this._pickupPositionInElement = previewTemplate && previewTemplate.template &&
-            !previewTemplate.matchSize ? { x: 0, y: 0 } :
-            this._getPointerPositionInElement(referenceElement, event);
-        const pointerPosition = this._pickupPositionOnPage = this._lastKnownPointerPosition =
-            this._getPointerPositionOnPage(event);
+        this._pickupPositionInElement =
+            previewTemplate && previewTemplate.template && !previewTemplate.matchSize
+                ? { x: 0, y: 0 }
+                : this._getPointerPositionInElement(referenceElement, event);
+        const pointerPosition = (this._pickupPositionOnPage =
+            this._lastKnownPointerPosition =
+                this._getPointerPositionOnPage(event));
         this._pointerDirectionDelta = { x: 0, y: 0 };
         this._pointerPositionAtLastDirectionChange = { x: pointerPosition.x, y: pointerPosition.y };
         this._dragStartTime = Date.now();
@@ -914,7 +926,7 @@ class DragRef {
                 previousContainer: this._initialContainer,
                 isPointerOverContainer,
                 distance,
-                dropPoint: pointerPosition
+                dropPoint: pointerPosition,
             });
             container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance, pointerPosition);
             this._dropContainer = this._initialContainer;
@@ -931,7 +943,8 @@ class DragRef {
         // initial container, check whether the it's over the initial container. This handles the
         // case where two containers are connected one way and the user tries to undo dragging an
         // item into a new container.
-        if (!newContainer && this._dropContainer !== this._initialContainer &&
+        if (!newContainer &&
+            this._dropContainer !== this._initialContainer &&
             this._initialContainer._isOverContainer(x, y)) {
             newContainer = this._initialContainer;
         }
@@ -945,11 +958,13 @@ class DragRef {
                 this._dropContainer.enter(this, x, y, newContainer === this._initialContainer &&
                     // If we're re-entering the initial container and sorting is disabled,
                     // put item the into its starting index to begin with.
-                    newContainer.sortingDisabled ? this._initialIndex : undefined);
+                    newContainer.sortingDisabled
+                    ? this._initialIndex
+                    : undefined);
                 this.entered.next({
                     item: this,
                     container: newContainer,
-                    currentIndex: newContainer.getItemIndex(this)
+                    currentIndex: newContainer.getItemIndex(this),
                 });
             });
         }
@@ -981,8 +996,7 @@ class DragRef {
                 matchElementSize(preview, rootRect);
             }
             else {
-                preview.style.transform =
-                    getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
+                preview.style.transform = getTransform(this._pickupPositionOnPage.x, this._pickupPositionOnPage.y);
             }
         }
         else {
@@ -1002,7 +1016,7 @@ class DragRef {
             'position': 'fixed',
             'top': '0',
             'left': '0',
-            'z-index': `${this._config.zIndex || 1000}`
+            'z-index': `${this._config.zIndex || 1000}`,
         }, dragImportantProperties);
         toggleNativeDragInteractions(preview, false);
         preview.classList.add('cdk-drag-preview');
@@ -1043,8 +1057,8 @@ class DragRef {
             return new Promise(resolve => {
                 const handler = ((event) => {
                     var _a;
-                    if (!event || (_getEventTarget(event) === this._preview &&
-                        event.propertyName === 'transform')) {
+                    if (!event ||
+                        (_getEventTarget(event) === this._preview && event.propertyName === 'transform')) {
                         (_a = this._preview) === null || _a === void 0 ? void 0 : _a.removeEventListener('transitionend', handler);
                         resolve();
                         clearTimeout(timeout);
@@ -1089,21 +1103,22 @@ class DragRef {
         const y = point.pageY - referenceRect.top - scrollPosition.top;
         return {
             x: referenceRect.left - elementRect.left + x,
-            y: referenceRect.top - elementRect.top + y
+            y: referenceRect.top - elementRect.top + y,
         };
     }
     /** Determines the point of the page that was touched by the user. */
     _getPointerPositionOnPage(event) {
         const scrollPosition = this._getViewportScrollPosition();
-        const point = isTouchEvent(event) ?
-            // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
-            // Also note that on real devices we're guaranteed for either `touches` or `changedTouches`
-            // to have a value, but Firefox in device emulation mode has a bug where both can be empty
-            // for `touchstart` and `touchend` so we fall back to a dummy object in order to avoid
-            // throwing an error. The value returned here will be incorrect, but since this only
-            // breaks inside a developer tool and the value is only used for secondary information,
-            // we can get away with it. See https://bugzilla.mozilla.org/show_bug.cgi?id=1615824.
-            (event.touches[0] || event.changedTouches[0] || { pageX: 0, pageY: 0 }) : event;
+        const point = isTouchEvent(event)
+            ? // `touches` will be empty for start/end events so we have to fall back to `changedTouches`.
+                // Also note that on real devices we're guaranteed for either `touches` or `changedTouches`
+                // to have a value, but Firefox in device emulation mode has a bug where both can be empty
+                // for `touchstart` and `touchend` so we fall back to a dummy object in order to avoid
+                // throwing an error. The value returned here will be incorrect, but since this only
+                // breaks inside a developer tool and the value is only used for secondary information,
+                // we can get away with it. See https://bugzilla.mozilla.org/show_bug.cgi?id=1615824.
+                event.touches[0] || event.changedTouches[0] || { pageX: 0, pageY: 0 }
+            : event;
         const x = point.pageX - scrollPosition.left;
         const y = point.pageY - scrollPosition.top;
         // if dragging SVG element, try to convert from the screen coordinate system to the SVG
@@ -1298,7 +1313,8 @@ class DragRef {
             const target = _getEventTarget(event);
             // ClientRect dimensions are based on the scroll position of the page and its parent
             // node so we have to update the cached boundary ClientRect if the user has scrolled.
-            if (this._boundaryRect && target !== this._boundaryElement &&
+            if (this._boundaryRect &&
+                target !== this._boundaryElement &&
                 target.contains(this._boundaryElement)) {
                 adjustClientRect(this._boundaryRect, scrollDifference.top, scrollDifference.left);
             }
@@ -1316,8 +1332,9 @@ class DragRef {
     /** Gets the scroll position of the viewport. */
     _getViewportScrollPosition() {
         const cachedPosition = this._parentPositions.positions.get(this._document);
-        return cachedPosition ? cachedPosition.scrollPosition :
-            this._viewportRuler.getViewportScrollPosition();
+        return cachedPosition
+            ? cachedPosition.scrollPosition
+            : this._viewportRuler.getViewportScrollPosition();
     }
     /**
      * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
@@ -1342,12 +1359,12 @@ class DragRef {
             // We can't use the body if the user is in fullscreen mode,
             // because the preview will render under the fullscreen element.
             // TODO(crisbeto): dedupe this with the `FullscreenOverlayContainer` eventually.
-            return shadowRoot ||
+            return (shadowRoot ||
                 documentRef.fullscreenElement ||
                 documentRef.webkitFullscreenElement ||
                 documentRef.mozFullScreenElement ||
                 documentRef.msFullscreenElement ||
-                documentRef.body;
+                documentRef.body);
         }
         return coerceElement(previewContainer);
     }
@@ -1690,7 +1707,7 @@ class DropListRef {
             previousContainer,
             isPointerOverContainer,
             distance,
-            dropPoint
+            dropPoint,
         });
     }
     /**
@@ -1763,8 +1780,9 @@ class DropListRef {
         // Items are sorted always by top/left in the cache, however they flow differently in RTL.
         // The rest of the logic still stands no matter what orientation we're in, however
         // we need to invert the array when determining the index.
-        const items = this._orientation === 'horizontal' && this._direction === 'rtl' ?
-            this._itemPositions.slice().reverse() : this._itemPositions;
+        const items = this._orientation === 'horizontal' && this._direction === 'rtl'
+            ? this._itemPositions.slice().reverse()
+            : this._itemPositions;
         return items.findIndex(currentItem => currentItem.drag === item);
     }
     /**
@@ -1783,7 +1801,8 @@ class DropListRef {
      */
     _sortItem(item, pointerX, pointerY, pointerDelta) {
         // Don't sort the item if sorting is disabled or it's out of range.
-        if (this.sortingDisabled || !this._clientRect ||
+        if (this.sortingDisabled ||
+            !this._clientRect ||
             !isPointerNearClientRect(this._clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
             return;
         }
@@ -1811,7 +1830,7 @@ class DropListRef {
             previousIndex: currentIndex,
             currentIndex: newIndex,
             container: this,
-            item
+            item,
         });
         siblings.forEach((sibling, index) => {
             // Don't do anything if the position hasn't changed.
@@ -1820,8 +1839,9 @@ class DropListRef {
             }
             const isDraggedItem = sibling.drag === item;
             const offset = isDraggedItem ? itemOffset : siblingOffset;
-            const elementToOffset = isDraggedItem ? item.getPlaceholderElement() :
-                sibling.drag.getRootElement();
+            const elementToOffset = isDraggedItem
+                ? item.getPlaceholderElement()
+                : sibling.drag.getRootElement();
             // Update the offset to reflect the new position.
             sibling.offset += offset;
             // Since we're moving the items with a `transform`, we need to adjust their cached
@@ -1874,14 +1894,22 @@ class DropListRef {
         // Otherwise check if we can start scrolling the viewport.
         if (!verticalScrollDirection && !horizontalScrollDirection) {
             const { width, height } = this._viewportRuler.getViewportSize();
-            const clientRect = { width, height, top: 0, right: width, bottom: height, left: 0 };
+            const clientRect = {
+                width,
+                height,
+                top: 0,
+                right: width,
+                bottom: height,
+                left: 0,
+            };
             verticalScrollDirection = getVerticalScrollDirection(clientRect, pointerY);
             horizontalScrollDirection = getHorizontalScrollDirection(clientRect, pointerX);
             scrollNode = window;
         }
-        if (scrollNode && (verticalScrollDirection !== this._verticalScrollDirection ||
-            horizontalScrollDirection !== this._horizontalScrollDirection ||
-            scrollNode !== this._scrollNode)) {
+        if (scrollNode &&
+            (verticalScrollDirection !== this._verticalScrollDirection ||
+                horizontalScrollDirection !== this._horizontalScrollDirection ||
+                scrollNode !== this._scrollNode)) {
             this._verticalScrollDirection = verticalScrollDirection;
             this._horizontalScrollDirection = horizontalScrollDirection;
             this._scrollNode = scrollNode;
@@ -1922,7 +1950,8 @@ class DropListRef {
     /** Refreshes the position cache of the items and sibling containers. */
     _cacheItemPositions() {
         const isHorizontal = this._orientation === 'horizontal';
-        this._itemPositions = this._activeDraggables.map(drag => {
+        this._itemPositions = this._activeDraggables
+            .map(drag => {
             const elementToMeasure = drag.getVisibleElement();
             return {
                 drag,
@@ -1930,9 +1959,11 @@ class DropListRef {
                 initialTransform: elementToMeasure.style.transform || '',
                 clientRect: getMutableClientRect(elementToMeasure),
             };
-        }).sort((a, b) => {
-            return isHorizontal ? a.clientRect.left - b.clientRect.left :
-                a.clientRect.top - b.clientRect.top;
+        })
+            .sort((a, b) => {
+            return isHorizontal
+                ? a.clientRect.left - b.clientRect.left
+                : a.clientRect.top - b.clientRect.top;
         });
     }
     /** Resets the container to its initial state. */
@@ -1945,8 +1976,7 @@ class DropListRef {
             var _a;
             const rootElement = item.getRootElement();
             if (rootElement) {
-                const initialTransform = (_a = this._itemPositions
-                    .find(current => current.drag === item)) === null || _a === void 0 ? void 0 : _a.initialTransform;
+                const initialTransform = (_a = this._itemPositions.find(current => current.drag === item)) === null || _a === void 0 ? void 0 : _a.initialTransform;
                 rootElement.style.transform = initialTransform || '';
             }
         });
@@ -1995,12 +2025,14 @@ class DropListRef {
      */
     _getItemOffsetPx(currentPosition, newPosition, delta) {
         const isHorizontal = this._orientation === 'horizontal';
-        let itemOffset = isHorizontal ? newPosition.left - currentPosition.left :
-            newPosition.top - currentPosition.top;
+        let itemOffset = isHorizontal
+            ? newPosition.left - currentPosition.left
+            : newPosition.top - currentPosition.top;
         // Account for differences in the item width/height.
         if (delta === -1) {
-            itemOffset += isHorizontal ? newPosition.width - currentPosition.width :
-                newPosition.height - currentPosition.height;
+            itemOffset += isHorizontal
+                ? newPosition.width - currentPosition.width
+                : newPosition.height - currentPosition.height;
         }
         return itemOffset;
     }
@@ -2046,18 +2078,19 @@ class DropListRef {
                 // If the user is still hovering over the same item as last time, their cursor hasn't left
                 // the item after we made the swap, and they didn't change the direction in which they're
                 // dragging, we don't consider it a direction swap.
-                if (drag === this._previousSwap.drag && this._previousSwap.overlaps &&
+                if (drag === this._previousSwap.drag &&
+                    this._previousSwap.overlaps &&
                     direction === this._previousSwap.delta) {
                     return false;
                 }
             }
-            return isHorizontal ?
-                // Round these down since most browsers report client rects with
-                // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
-                pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right) :
-                pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
+            return isHorizontal
+                ? // Round these down since most browsers report client rects with
+                    // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
+                    pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right)
+                : pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
         });
-        return (index === -1 || !this.sortPredicate(index, item, this)) ? -1 : index;
+        return index === -1 || !this.sortPredicate(index, item, this) ? -1 : index;
     }
     /** Caches the current items in the list and their positions. */
     _cacheItems() {
@@ -2090,7 +2123,8 @@ class DropListRef {
      * @param y Position of the item along the Y axis.
      */
     _canReceive(item, x, y) {
-        if (!this._clientRect || !isInsideClientRect(this._clientRect, x, y) ||
+        if (!this._clientRect ||
+            !isInsideClientRect(this._clientRect, x, y) ||
             !this.enterPredicate(item, this)) {
             return false;
         }
@@ -2115,13 +2149,14 @@ class DropListRef {
      */
     _startReceiving(sibling, items) {
         const activeSiblings = this._activeSiblings;
-        if (!activeSiblings.has(sibling) && items.every(item => {
-            // Note that we have to add an exception to the `enterPredicate` for items that started off
-            // in this drop list. The drag ref has logic that allows an item to return to its initial
-            // container, if it has left the initial container and none of the connected containers
-            // allow it to enter. See `DragRef._updateActiveDropContainer` for more context.
-            return this.enterPredicate(item, this) || this._draggables.indexOf(item) > -1;
-        })) {
+        if (!activeSiblings.has(sibling) &&
+            items.every(item => {
+                // Note that we have to add an exception to the `enterPredicate` for items that started off
+                // in this drop list. The drag ref has logic that allows an item to return to its initial
+                // container, if it has left the initial container and none of the connected containers
+                // allow it to enter. See `DragRef._updateActiveDropContainer` for more context.
+                return this.enterPredicate(item, this) || this._draggables.indexOf(item) > -1;
+            })) {
             activeSiblings.add(sibling);
             this._cacheParentPositions();
             this._listenToScrollEvents();
@@ -2272,7 +2307,7 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
 /** Event options that can be used to bind an active, capturing event. */
 const activeCapturingEventOptions = normalizePassiveListenerOptions({
     passive: false,
-    capture: true
+    capture: true,
 });
 /**
  * Service that keeps track of all the drag item and drop container
@@ -2388,13 +2423,13 @@ class DragDropRegistry {
             this._globalListeners
                 .set(isTouchEvent ? 'touchend' : 'mouseup', {
                 handler: (e) => this.pointerUp.next(e),
-                options: true
+                options: true,
             })
                 .set('scroll', {
                 handler: (e) => this.scroll.next(e),
                 // Use capturing so that we pick up scroll changes in any scrollable nodes that aren't
                 // the document. See https://github.com/angular/components/issues/17144.
-                options: true
+                options: true,
             })
                 // Preventing the default action on `mousemove` isn't enough to disable text selection
                 // on Safari so we need to prevent the selection event as well. Alternatively this can
@@ -2402,14 +2437,14 @@ class DragDropRegistry {
                 // recalculation which can be expensive on pages with a lot of elements.
                 .set('selectstart', {
                 handler: this._preventDefaultWhileDragging,
-                options: activeCapturingEventOptions
+                options: activeCapturingEventOptions,
             });
             // We don't have to bind a move event for touch drag sequences, because
             // we already have a persistent global one bound from `registerDragItem`.
             if (!isTouchEvent) {
                 this._globalListeners.set('mousemove', {
                     handler: (e) => this.pointerMove.next(e),
-                    options: activeCapturingEventOptions
+                    options: activeCapturingEventOptions,
                 });
             }
             this._ngZone.runOutsideAngular(() => {
@@ -2500,7 +2535,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
     dragStartThreshold: 5,
-    pointerDirectionChangeThreshold: 5
+    pointerDirectionChangeThreshold: 5,
 };
 /**
  * Service that allows for drag-and-drop functionality to be attached to DOM elements.
@@ -2581,7 +2616,9 @@ class CdkDropListGroup {
         this._disabled = false;
     }
     /** Whether starting a dragging sequence from inside this group is disabled. */
-    get disabled() { return this._disabled; }
+    get disabled() {
+        return this._disabled;
+    }
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
     }
@@ -2630,8 +2667,7 @@ const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
  */
 function assertElementNode(node, name) {
     if (node.nodeType !== 1) {
-        throw Error(`${name} must be attached to an element node. ` +
-            `Currently attached to "${node.nodeName}".`);
+        throw Error(`${name} must be attached to an element node. ` + `Currently attached to "${node.nodeName}".`);
     }
 }
 
@@ -2712,10 +2748,9 @@ class CdkDropList {
         this._dropListRef.enterPredicate = (drag, drop) => {
             return this.enterPredicate(drag.data, drop.data);
         };
-        this._dropListRef.sortPredicate =
-            (index, drag, drop) => {
-                return this.sortPredicate(index, drag.data, drop.data);
-            };
+        this._dropListRef.sortPredicate = (index, drag, drop) => {
+            return this.sortPredicate(index, drag.data, drop.data);
+        };
         this._setupInputSyncSubscription(this._dropListRef);
         this._handleEvents(this._dropListRef);
         CdkDropList._dropLists.push(this);
@@ -2751,7 +2786,9 @@ class CdkDropList {
     /** Gets the registered items in the list, sorted by their position in the DOM. */
     getSortedItems() {
         return Array.from(this._unsortedItems).sort((a, b) => {
-            const documentPosition = a._dragRef.getVisibleElement().compareDocumentPosition(b._dragRef.getVisibleElement());
+            const documentPosition = a._dragRef
+                .getVisibleElement()
+                .compareDocumentPosition(b._dragRef.getVisibleElement());
             // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
             // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
             // tslint:disable-next-line:no-bitwise
@@ -2827,13 +2864,13 @@ class CdkDropList {
             this.entered.emit({
                 container: this,
                 item: event.item.data,
-                currentIndex: event.currentIndex
+                currentIndex: event.currentIndex,
             });
         });
         ref.exited.subscribe(event => {
             this.exited.emit({
                 container: this,
-                item: event.item.data
+                item: event.item.data,
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -2842,7 +2879,7 @@ class CdkDropList {
                 previousIndex: event.previousIndex,
                 currentIndex: event.currentIndex,
                 container: this,
-                item: event.item.data
+                item: event.item.data,
             });
         });
         ref.dropped.subscribe(event => {
@@ -2854,7 +2891,7 @@ class CdkDropList {
                 item: event.item.data,
                 isPointerOverContainer: event.isPointerOverContainer,
                 distance: event.distance,
-                dropPoint: event.dropPoint
+                dropPoint: event.dropPoint,
             });
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.
@@ -2901,7 +2938,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                         '[class.cdk-drop-list-disabled]': 'disabled',
                         '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
                         '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
-                    }
+                    },
                 }]
         }], ctorParameters: function () {
         return [{ type: i0.ElementRef }, { type: DragDrop }, { type: i0.ChangeDetectorRef }, { type: i1.ScrollDispatcher }, { type: i3.Directionality, decorators: [{
@@ -2991,7 +3028,9 @@ class CdkDragHandle {
         this._parentDrag = parentDrag;
     }
     /** Whether starting to drag through this handle is disabled. */
-    get disabled() { return this._disabled; }
+    get disabled() {
+        return this._disabled;
+    }
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
         this._stateChanges.next(this);
@@ -3007,7 +3046,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
             args: [{
                     selector: '[cdkDragHandle]',
                     host: {
-                        'class': 'cdk-drag-handle'
+                        'class': 'cdk-drag-handle',
                     },
                     providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }],
                 }]
@@ -3082,8 +3121,12 @@ class CdkDragPreview {
         this._matchSize = false;
     }
     /** Whether the preview should preserve the same size as the item that is being dragged. */
-    get matchSize() { return this._matchSize; }
-    set matchSize(value) { this._matchSize = coerceBooleanProperty(value); }
+    get matchSize() {
+        return this._matchSize;
+    }
+    set matchSize(value) {
+        this._matchSize = coerceBooleanProperty(value);
+    }
 }
 CdkDragPreview.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
 CdkDragPreview.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0-next.15", type: CdkDragPreview, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: "matchSize" }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 });
@@ -3138,22 +3181,24 @@ class CdkDrag {
          * because this event will fire for every pixel that the user has dragged.
          */
         this.moved = new Observable((observer) => {
-            const subscription = this._dragRef.moved.pipe(map(movedEvent => ({
+            const subscription = this._dragRef.moved
+                .pipe(map(movedEvent => ({
                 source: this,
                 pointerPosition: movedEvent.pointerPosition,
                 event: movedEvent.event,
                 delta: movedEvent.delta,
-                distance: movedEvent.distance
-            }))).subscribe(observer);
+                distance: movedEvent.distance,
+            })))
+                .subscribe(observer);
             return () => {
                 subscription.unsubscribe();
             };
         });
         this._dragRef = dragDrop.createDrag(element, {
-            dragStartThreshold: config && config.dragStartThreshold != null ?
-                config.dragStartThreshold : 5,
-            pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null ?
-                config.pointerDirectionChangeThreshold : 5,
+            dragStartThreshold: config && config.dragStartThreshold != null ? config.dragStartThreshold : 5,
+            pointerDirectionChangeThreshold: config && config.pointerDirectionChangeThreshold != null
+                ? config.pointerDirectionChangeThreshold
+                : 5,
             zIndex: config === null || config === void 0 ? void 0 : config.zIndex,
         });
         this._dragRef.data = this;
@@ -3215,9 +3260,7 @@ class CdkDrag {
             // element to be in the proper place in the DOM. This is mostly relevant
             // for draggable elements inside portals since they get stamped out in
             // their original DOM position and then they get transferred to the portal.
-            this._ngZone.onStable
-                .pipe(take(1), takeUntil(this._destroyed))
-                .subscribe(() => {
+            this._ngZone.onStable.pipe(take(1), takeUntil(this._destroyed)).subscribe(() => {
                 this._updateRootElement();
                 this._setupHandlesListener();
                 if (this.freeDragPosition) {
@@ -3260,10 +3303,11 @@ class CdkDrag {
         const element = this.element.nativeElement;
         let rootElement = element;
         if (this.rootElementSelector) {
-            rootElement = element.closest !== undefined
-                ? element.closest(this.rootElementSelector)
-                // Comment tag doesn't have closest method, so use parent's one.
-                : (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.closest(this.rootElementSelector);
+            rootElement =
+                element.closest !== undefined
+                    ? element.closest(this.rootElementSelector)
+                    : // Comment tag doesn't have closest method, so use parent's one.
+                        (_a = element.parentElement) === null || _a === void 0 ? void 0 : _a.closest(this.rootElementSelector);
         }
         if (rootElement && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             assertElementNode(rootElement, 'cdkDrag');
@@ -3292,21 +3336,27 @@ class CdkDrag {
             if (!ref.isDragging()) {
                 const dir = this._dir;
                 const dragStartDelay = this.dragStartDelay;
-                const placeholder = this._placeholderTemplate ? {
-                    template: this._placeholderTemplate.templateRef,
-                    context: this._placeholderTemplate.data,
-                    viewContainer: this._viewContainerRef
-                } : null;
-                const preview = this._previewTemplate ? {
-                    template: this._previewTemplate.templateRef,
-                    context: this._previewTemplate.data,
-                    matchSize: this._previewTemplate.matchSize,
-                    viewContainer: this._viewContainerRef
-                } : null;
+                const placeholder = this._placeholderTemplate
+                    ? {
+                        template: this._placeholderTemplate.templateRef,
+                        context: this._placeholderTemplate.data,
+                        viewContainer: this._viewContainerRef,
+                    }
+                    : null;
+                const preview = this._previewTemplate
+                    ? {
+                        template: this._previewTemplate.templateRef,
+                        context: this._previewTemplate.data,
+                        matchSize: this._previewTemplate.matchSize,
+                        viewContainer: this._viewContainerRef,
+                    }
+                    : null;
                 ref.disabled = this.disabled;
                 ref.lockAxis = this.lockAxis;
-                ref.dragStartDelay = (typeof dragStartDelay === 'object' && dragStartDelay) ?
-                    dragStartDelay : coerceNumberProperty(dragStartDelay);
+                ref.dragStartDelay =
+                    typeof dragStartDelay === 'object' && dragStartDelay
+                        ? dragStartDelay
+                        : coerceNumberProperty(dragStartDelay);
                 ref.constrainPosition = this.constrainPosition;
                 ref.previewClass = this.previewClass;
                 ref
@@ -3356,7 +3406,7 @@ class CdkDrag {
             this.ended.emit({
                 source: this,
                 distance: event.distance,
-                dropPoint: event.dropPoint
+                dropPoint: event.dropPoint,
             });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
@@ -3366,13 +3416,13 @@ class CdkDrag {
             this.entered.emit({
                 container: event.container.data,
                 item: this,
-                currentIndex: event.currentIndex
+                currentIndex: event.currentIndex,
             });
         });
         ref.exited.subscribe(event => {
             this.exited.emit({
                 container: event.container.data,
-                item: this
+                item: this,
             });
         });
         ref.dropped.subscribe(event => {
@@ -3384,13 +3434,13 @@ class CdkDrag {
                 isPointerOverContainer: event.isPointerOverContainer,
                 item: this,
                 distance: event.distance,
-                dropPoint: event.dropPoint
+                dropPoint: event.dropPoint,
             });
         });
     }
     /** Assigns the default input values based on a provided config object. */
     _assignDefaults(config) {
-        const { lockAxis, dragStartDelay, constrainPosition, previewClass, boundaryElement, draggingDisabled, rootElementSelector, previewContainer } = config;
+        const { lockAxis, dragStartDelay, constrainPosition, previewClass, boundaryElement, draggingDisabled, rootElementSelector, previewContainer, } = config;
         this.disabled = draggingDisabled == null ? false : draggingDisabled;
         this.dragStartDelay = dragStartDelay || 0;
         if (lockAxis) {
@@ -3415,7 +3465,8 @@ class CdkDrag {
     /** Sets up the listener that syncs the handles with the drag ref. */
     _setupHandlesListener() {
         // Listen for any newly-added handles.
-        this._handles.changes.pipe(startWith(this._handles), 
+        this._handles.changes
+            .pipe(startWith(this._handles), 
         // Sync the new handles with the DragRef.
         tap((handles) => {
             const childHandleElements = handles
@@ -3434,7 +3485,8 @@ class CdkDrag {
             return merge(...handles.map(item => {
                 return item._stateChanges.pipe(startWith(item));
             }));
-        }), takeUntil(this._destroyed)).subscribe(handleInstance => {
+        }), takeUntil(this._destroyed))
+            .subscribe(handleInstance => {
             // Enabled/disable the handle that changed in the DragRef.
             const dragRef = this._dragRef;
             const handle = handleInstance.element.nativeElement;
@@ -3455,7 +3507,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                         '[class.cdk-drag-disabled]': 'disabled',
                         '[class.cdk-drag-dragging]': '_dragRef.isDragging()',
                     },
-                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }]
+                    providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }],
                 }]
         }], ctorParameters: function () {
         return [{ type: i0.ElementRef }, { type: undefined, decorators: [{
@@ -3574,9 +3626,7 @@ DragDropModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version:
         CdkDragHandle,
         CdkDragPreview,
         CdkDragPlaceholder] });
-DragDropModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: DragDropModule, providers: [
-        DragDrop,
-    ], imports: [CdkScrollableModule] });
+DragDropModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: DragDropModule, decorators: [{
             type: NgModule,
             args: [{
@@ -3597,9 +3647,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
                         CdkDragPreview,
                         CdkDragPlaceholder,
                     ],
-                    providers: [
-                        DragDrop,
-                    ]
+                    providers: [DragDrop],
                 }]
         }] });
 

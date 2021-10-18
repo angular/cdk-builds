@@ -83,7 +83,7 @@ class TaskStateZoneInterceptor {
             zoneSpecOnHasTask(...args);
             interceptor.onHasTask(...args);
         };
-        return zoneSpec[stateObservableSymbol] = interceptor.state;
+        return (zoneSpec[stateObservableSymbol] = interceptor.state);
     }
 }
 
@@ -255,7 +255,7 @@ function dispatchTouchEvent(node, type, pageX = 0, pageY = 0, clientX = 0, clien
  */
 function triggerFocusChange(element, event) {
     let eventFired = false;
-    const handler = () => eventFired = true;
+    const handler = () => (eventFired = true);
     element.addEventListener(event, handler);
     element[event]();
     element.removeEventListener(event, handler);
@@ -292,7 +292,15 @@ function triggerBlur(element) {
  * found in the LICENSE file at https://angular.io/license
  */
 /** Input types for which the value can be entered incrementally. */
-const incrementalInputTypes = new Set(['text', 'email', 'hidden', 'password', 'search', 'tel', 'url']);
+const incrementalInputTypes = new Set([
+    'text',
+    'email',
+    'hidden',
+    'password',
+    'search',
+    'tel',
+    'url',
+]);
 /**
  * Checks whether the given Element is a text input element.
  * @docs-private
@@ -316,18 +324,19 @@ function typeInElement(element, ...modifiersAndKeys) {
     const isInput = isTextInput(element);
     const inputType = element.getAttribute('type') || 'text';
     const keys = rest
-        .map(k => typeof k === 'string' ?
-        k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c })) : [k])
+        .map(k => typeof k === 'string'
+        ? k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c }))
+        : [k])
         .reduce((arr, k) => arr.concat(k), []);
     // We simulate the user typing in a value by incrementally assigning the value below. The problem
     // is that for some input types, the browser won't allow for an invalid value to be set via the
     // `value` property which will always be the case when going character-by-character. If we detect
     // such an input, we have to set the value all at once or listeners to the `input` event (e.g.
     // the `ReactiveFormsModule` uses such an approach) won't receive the correct value.
-    const enterValueIncrementally = inputType === 'number' && keys.length > 0 ?
-        // The value can be set character by character in number inputs if it doesn't have any decimals.
-        keys.every(key => key.key !== '.' && key.keyCode !== PERIOD) :
-        incrementalInputTypes.has(inputType);
+    const enterValueIncrementally = inputType === 'number' && keys.length > 0
+        ? // The value can be set character by character in number inputs if it doesn't have any decimals.
+            keys.every(key => key.key !== '.' && key.keyCode !== PERIOD)
+        : incrementalInputTypes.has(inputType);
     triggerFocus(element);
     // When we aren't entering the value incrementally, assign it all at once ahead
     // of time so that any listeners to the key events below will have access to it.
@@ -399,7 +408,7 @@ const keyMap = {
     [TestKey.F10]: { keyCode: keyCodes.F10, key: 'F10' },
     [TestKey.F11]: { keyCode: keyCodes.F11, key: 'F11' },
     [TestKey.F12]: { keyCode: keyCodes.F12, key: 'F12' },
-    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta' }
+    [TestKey.META]: { keyCode: keyCodes.META, key: 'Meta' },
 };
 /** A `TestElement` implementation for unit tests. */
 class UnitTestElement {
@@ -470,7 +479,7 @@ class UnitTestElement {
     }
     sendKeys(...modifiersAndKeys) {
         return __awaiter(this, void 0, void 0, function* () {
-            const args = modifiersAndKeys.map(k => typeof k === 'number' ? keyMap[k] : k);
+            const args = modifiersAndKeys.map(k => (typeof k === 'number' ? keyMap[k] : k));
             typeInElement(this.element, ...args);
             yield this._stabilize();
         });
@@ -550,8 +559,7 @@ class UnitTestElement {
         return __awaiter(this, void 0, void 0, function* () {
             yield this._stabilize();
             const elementPrototype = Element.prototype;
-            return (elementPrototype['matches'] || elementPrototype['msMatchesSelector'])
-                .call(this.element, selector);
+            return (elementPrototype['matches'] || elementPrototype['msMatchesSelector']).call(this.element, selector);
         });
     }
     /** Checks whether the element is focused. */
@@ -625,7 +633,7 @@ class UnitTestElement {
 
 /** The default environment options. */
 const defaultEnvironmentOptions = {
-    queryFn: (selector, root) => root.querySelectorAll(selector)
+    queryFn: (selector, root) => root.querySelectorAll(selector),
 };
 /** Whether auto change detection is currently disabled. */
 let disableAutoChangeDetection = false;

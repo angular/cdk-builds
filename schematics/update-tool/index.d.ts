@@ -18,6 +18,7 @@ import { TargetVersion } from './target-version';
  * the context can provide the necessary specifics to the migrations in a type-safe way.
  */
 export declare class UpdateProject<Context> {
+    /** Context provided to all migrations. */
     private _context;
     /** TypeScript program using workspace paths. */
     private _program;
@@ -31,7 +32,9 @@ export declare class UpdateProject<Context> {
     /** Logger used for printing messages. */
     private _logger;
     private readonly _typeChecker;
-    constructor(/** Context provided to all migrations. */ _context: Context, 
+    constructor(
+    /** Context provided to all migrations. */
+    _context: Context, 
     /** TypeScript program using workspace paths. */
     _program: ts.Program, 
     /** File system used for reading, writing and editing files. */

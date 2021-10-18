@@ -37,11 +37,12 @@ let mediaQueryStyleNode;
 class MediaMatcher {
     constructor(_platform) {
         this._platform = _platform;
-        this._matchMedia = this._platform.isBrowser && window.matchMedia ?
-            // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
-            // call it from a different scope.
-            window.matchMedia.bind(window) :
-            noopMatchMedia;
+        this._matchMedia =
+            this._platform.isBrowser && window.matchMedia
+                ? // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
+                    // call it from a different scope.
+                    window.matchMedia.bind(window)
+                : noopMatchMedia;
     }
     /**
      * Evaluates the given media query and returns the native MediaQueryList from which results
@@ -98,7 +99,7 @@ function noopMatchMedia(query) {
         matches: query === 'all' || query === '',
         media: query,
         addListener: () => { },
-        removeListener: () => { }
+        removeListener: () => { },
     };
 }
 
@@ -194,7 +195,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
  * separated.
  */
 function splitQueries(queries) {
-    return queries.map(query => query.split(','))
+    return queries
+        .map(query => query.split(','))
         .reduce((a1, a2) => a1.concat(a2))
         .map(query => query.trim());
 }
