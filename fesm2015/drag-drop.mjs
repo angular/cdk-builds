@@ -753,7 +753,8 @@ class DragRef {
         this._dragDropRegistry.stopDragging(this);
         this._toggleNativeDragInteractions();
         if (this._handles) {
-            this._rootElement.style.webkitTapHighlightColor = this._rootElementTapHighlight;
+            this._rootElement.style.webkitTapHighlightColor =
+                this._rootElementTapHighlight;
         }
         if (!this._hasStartedDragging) {
             return;

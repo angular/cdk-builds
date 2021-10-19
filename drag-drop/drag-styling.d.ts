@@ -12,6 +12,7 @@
 export interface DragCSSStyleDeclaration extends CSSStyleDeclaration {
     msScrollSnapType: string;
     scrollSnapType: string;
+    webkitTapHighlightColor: string;
 }
 /**
  * Shallow-extends a stylesheet object with another stylesheet-like object.
