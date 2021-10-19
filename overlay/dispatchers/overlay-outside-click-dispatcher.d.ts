@@ -17,11 +17,14 @@ export declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher
     private _platform;
     private _cursorOriginalValue;
     private _cursorStyleIsSet;
+    private _pointerDownEventTarget;
     constructor(document: any, _platform: Platform);
     /** Add a new overlay to the list of attached overlay refs. */
     add(overlayRef: OverlayReference): void;
     /** Detaches the global keyboard event listener. */
     protected detach(): void;
+    /** Store pointerdown event target to track origin of click. */
+    private _pointerDownListener;
     /** Click event listener that will be attached to the body propagate phase. */
     private _clickListener;
 }
