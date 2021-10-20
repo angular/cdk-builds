@@ -298,16 +298,9 @@ function triggerFocusChange(element, event) {
     element.addEventListener(event, handler);
     element[event]();
     element.removeEventListener(event, handler);
-    // Some browsers won't move focus if the browser window is blurred while other will move it
-    // asynchronously. If that is the case, we fake the event sequence as a fallback.
     if (!eventFired) {
-        simulateFocusSequence(element, event);
+        dispatchFakeEvent(element, event);
     }
-}
-/** Simulates the full event sequence for a focus event. */
-function simulateFocusSequence(element, event) {
-    dispatchFakeEvent(element, event);
-    dispatchFakeEvent(element, event === 'focus' ? 'focusin' : 'focusout');
 }
 /**
  * Patches an elements focus and blur methods to emit events consistently and predictably.
@@ -316,8 +309,8 @@ function simulateFocusSequence(element, event) {
  * @docs-private
  */
 function patchElementFocus(element) {
-    element.focus = () => simulateFocusSequence(element, 'focus');
-    element.blur = () => simulateFocusSequence(element, 'blur');
+    element.focus = () => dispatchFakeEvent(element, 'focus');
+    element.blur = () => dispatchFakeEvent(element, 'blur');
 }
 /** @docs-private */
 function triggerFocus(element) {
