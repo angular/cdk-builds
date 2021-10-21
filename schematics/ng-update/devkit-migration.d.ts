@@ -8,6 +8,7 @@
 import { SchematicContext, Tree } from '@angular-devkit/schematics';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import { Constructor, Migration, PostMigrationAction } from '../update-tool/migration';
+import { TargetVersion } from '../update-tool/target-version';
 export declare type DevkitContext = {
     /** Devkit tree for the current migrations. Can be used to insert/remove files. */
     tree: Tree;
@@ -27,7 +28,7 @@ export declare abstract class DevkitMigration<Data> extends Migration<Data, Devk
      * migration result of all individual targets. e.g. removing HammerJS if it
      * is not needed in any project target.
      */
-    static globalPostMigration?(tree: Tree, context: SchematicContext): PostMigrationAction;
+    static globalPostMigration?(tree: Tree, targetVersion: TargetVersion, context: SchematicContext): PostMigrationAction;
 }
 export declare type DevkitMigrationCtor<Data> = Constructor<DevkitMigration<Data>> & {
     [m in keyof typeof DevkitMigration]: typeof DevkitMigration[m];
