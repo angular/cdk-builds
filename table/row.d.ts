@@ -170,6 +170,7 @@ export declare class CdkRow {
 /** Row that can be used to display a message when no data is shown in the table. */
 export declare class CdkNoDataRow {
     templateRef: TemplateRef<any>;
+    _contentClassName: string;
     constructor(templateRef: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never>;

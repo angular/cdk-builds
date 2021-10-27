@@ -612,6 +612,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0-next.15",
 class CdkNoDataRow {
     constructor(templateRef) {
         this.templateRef = templateRef;
+        this._contentClassName = 'cdk-no-data-row';
     }
 }
 CdkNoDataRow.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkNoDataRow, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive });
@@ -1949,14 +1950,28 @@ class CdkTable {
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     _updateNoDataRow() {
         const noDataRow = this._customNoDataRow || this._noDataRow;
-        if (noDataRow) {
-            const shouldShow = this._rowOutlet.viewContainer.length === 0;
-            if (shouldShow !== this._isShowingNoDataRow) {
-                const container = this._noDataRowOutlet.viewContainer;
-                shouldShow ? container.createEmbeddedView(noDataRow.templateRef) : container.clear();
-                this._isShowingNoDataRow = shouldShow;
+        if (!noDataRow) {
+            return;
+        }
+        const shouldShow = this._rowOutlet.viewContainer.length === 0;
+        if (shouldShow === this._isShowingNoDataRow) {
+            return;
+        }
+        const container = this._noDataRowOutlet.viewContainer;
+        if (shouldShow) {
+            const view = container.createEmbeddedView(noDataRow.templateRef);
+            const rootNode = view.rootNodes[0];
+            // Only add the attributes if we have a single root node since it's hard
+            // to figure out which one to add it to when there are multiple.
+            if (view.rootNodes.length === 1 && rootNode?.nodeType === this._document.ELEMENT_NODE) {
+                rootNode.setAttribute('role', 'row');
+                rootNode.classList.add(noDataRow._contentClassName);
             }
         }
+        else {
+            container.clear();
+        }
+        this._isShowingNoDataRow = shouldShow;
     }
 }
 CdkTable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0-next.15", ngImport: i0, type: CdkTable, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: 'role', attribute: true }, { token: i1.Directionality, optional: true }, { token: DOCUMENT }, { token: i2.Platform }, { token: _VIEW_REPEATER_STRATEGY }, { token: _COALESCED_STYLE_SCHEDULER }, { token: i3.ViewportRuler }, { token: STICKY_POSITIONING_LISTENER, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Component });
