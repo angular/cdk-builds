@@ -7,7 +7,7 @@
  */
 import { FocusableOption } from '@angular/cdk/a11y';
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
-import { AfterContentChecked, ChangeDetectorRef, DoCheck, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, IterableDiffer, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TreeControl } from './control/tree-control';
 import { CdkTreeNodeDef } from './node';
@@ -90,7 +90,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
  */
-export declare class CdkTreeNode<T, K = T> implements DoCheck, FocusableOption, OnDestroy, OnInit {
+export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy, OnInit {
     protected _elementRef: ElementRef<HTMLElement>;
     protected _tree: CdkTree<T, K>;
     /**
@@ -116,12 +116,9 @@ export declare class CdkTreeNode<T, K = T> implements DoCheck, FocusableOption, 
     set data(value: T);
     protected _data: T;
     get isExpanded(): boolean;
-    private _setExpanded;
-    protected _isAriaExpanded: boolean;
     get level(): number;
     constructor(_elementRef: ElementRef<HTMLElement>, _tree: CdkTree<T, K>);
     ngOnInit(): void;
-    ngDoCheck(): void;
     ngOnDestroy(): void;
     /** Focuses the menu item. Implements for FocusableOption. */
     focus(): void;

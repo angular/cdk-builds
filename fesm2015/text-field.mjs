@@ -1,7 +1,7 @@
 import * as i1 from '@angular/cdk/platform';
 import { normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Injectable, EventEmitter, Directive, Output, Optional, Inject, Input, HostListener, NgModule } from '@angular/core';
+import { Injectable, EventEmitter, Directive, Output, Optional, Inject, Input, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
@@ -347,10 +347,6 @@ class CdkTextareaAutosize {
             this._textareaElement.style.height = this._initialHeight;
         }
     }
-    // In Ivy the `host` metadata will be merged, whereas in ViewEngine it is overridden. In order
-    // to avoid double event listeners, we need to use `HostListener`. Once Ivy is the default, we
-    // can move this back into `host`.
-    // tslint:disable:no-host-decorator-in-concrete
     _noopInputHandler() {
         // no-op handler that ensures we're running change detection on input events.
     }
@@ -393,6 +389,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImpor
                         // Textarea elements that have the directive applied should have a single row by default.
                         // Browsers normally show two rows by default and therefore this limits the minRows binding.
                         'rows': '1',
+                        '(input)': '_noopInputHandler()',
                     },
                 }]
         }], ctorParameters: function () {
@@ -413,9 +410,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImpor
                 args: ['cdkTextareaAutosize']
             }], placeholder: [{
                 type: Input
-            }], _noopInputHandler: [{
-                type: HostListener,
-                args: ['input']
             }] } });
 
 /**

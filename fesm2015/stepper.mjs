@@ -3,7 +3,7 @@ import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coerci
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, EventEmitter, forwardRef, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ViewChild, Input, Output, QueryList, ContentChildren, HostListener, NgModule } from '@angular/core';
+import { Directive, InjectionToken, EventEmitter, forwardRef, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ViewChild, Input, Output, QueryList, ContentChildren, NgModule } from '@angular/core';
 import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
 import { Subject, of } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
@@ -537,30 +537,20 @@ class CdkStepperNext {
         /** Type of the next button. Defaults to "submit" if not specified. */
         this.type = 'submit';
     }
-    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-    // ViewEngine they're overwritten.
-    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-    // tslint:disable-next-line:no-host-decorator-in-concrete
-    _handleClick() {
-        this._stepper.next();
-    }
 }
 CdkStepperNext.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkStepperNext, deps: [{ token: CdkStepper }], target: i0.ɵɵFactoryTarget.Directive });
-CdkStepperNext.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkStepperNext, selector: "button[cdkStepperNext]", inputs: { type: "type" }, host: { listeners: { "click": "_handleClick()" }, properties: { "type": "type" } }, ngImport: i0 });
+CdkStepperNext.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkStepperNext, selector: "button[cdkStepperNext]", inputs: { type: "type" }, host: { listeners: { "click": "_stepper.next()" }, properties: { "type": "type" } }, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkStepperNext, decorators: [{
             type: Directive,
             args: [{
                     selector: 'button[cdkStepperNext]',
                     host: {
                         '[type]': 'type',
+                        '(click)': '_stepper.next()',
                     },
                 }]
         }], ctorParameters: function () { return [{ type: CdkStepper }]; }, propDecorators: { type: [{
                 type: Input
-            }], _handleClick: [{
-                type: HostListener,
-                args: ['click']
             }] } });
 /** Button that moves to the previous step in a stepper workflow. */
 class CdkStepperPrevious {
@@ -569,30 +559,20 @@ class CdkStepperPrevious {
         /** Type of the previous button. Defaults to "button" if not specified. */
         this.type = 'button';
     }
-    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-    // ViewEngine they're overwritten.
-    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-    // tslint:disable-next-line:no-host-decorator-in-concrete
-    _handleClick() {
-        this._stepper.previous();
-    }
 }
 CdkStepperPrevious.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkStepperPrevious, deps: [{ token: CdkStepper }], target: i0.ɵɵFactoryTarget.Directive });
-CdkStepperPrevious.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkStepperPrevious, selector: "button[cdkStepperPrevious]", inputs: { type: "type" }, host: { listeners: { "click": "_handleClick()" }, properties: { "type": "type" } }, ngImport: i0 });
+CdkStepperPrevious.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkStepperPrevious, selector: "button[cdkStepperPrevious]", inputs: { type: "type" }, host: { listeners: { "click": "_stepper.previous()" }, properties: { "type": "type" } }, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkStepperPrevious, decorators: [{
             type: Directive,
             args: [{
                     selector: 'button[cdkStepperPrevious]',
                     host: {
                         '[type]': 'type',
+                        '(click)': '_stepper.previous()',
                     },
                 }]
         }], ctorParameters: function () { return [{ type: CdkStepper }]; }, propDecorators: { type: [{
                 type: Input
-            }], _handleClick: [{
-                type: HostListener,
-                args: ['click']
             }] } });
 
 /**
