@@ -6,7 +6,6 @@ export declare class CdkStepperNext {
     /** Type of the next button. Defaults to "submit" if not specified. */
     type: string;
     constructor(_stepper: CdkStepper);
-    _handleClick(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperNext, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": "type"; }, {}, never>;
 }
@@ -16,7 +15,6 @@ export declare class CdkStepperPrevious {
     /** Type of the previous button. Defaults to "button" if not specified. */
     type: string;
     constructor(_stepper: CdkStepper);
-    _handleClick(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperPrevious, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": "type"; }, {}, never>;
 }

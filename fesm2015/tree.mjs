@@ -2,7 +2,7 @@ import { SelectionModel, isDataSource } from '@angular/cdk/collections';
 import { isObservable, Subject, BehaviorSubject, of } from 'rxjs';
 import { take, filter, takeUntil } from 'rxjs/operators';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, HostListener, NgModule } from '@angular/core';
+import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i2 from '@angular/cdk/bidi';
 
@@ -508,11 +508,6 @@ class CdkTreeNode {
         /** Emits when the node's data has changed. */
         this._dataChanges = new Subject();
         CdkTreeNode.mostRecentTreeNode = this;
-        // The classes are directly added here instead of in the host property because classes on
-        // the host property are not inherited with View Engine. It is not set as a @HostBinding because
-        // it is not set by the time it's children nodes try to read the class from it.
-        // TODO: move to host after View Engine deprecation
-        this._elementRef.nativeElement.classList.add('cdk-tree-node');
         this.role = 'treeitem';
     }
     /**
@@ -542,10 +537,6 @@ class CdkTreeNode {
     get isExpanded() {
         return this._tree.treeControl.isExpanded(this._data);
     }
-    _setExpanded(_expanded) {
-        this._isAriaExpanded = _expanded;
-        this._elementRef.nativeElement.setAttribute('aria-expanded', `${_expanded}`);
-    }
     get level() {
         // If the treeControl has a getLevel method, use it to get the level. Otherwise read the
         // aria-level off the parent node and use it as the level for this node (note aria-level is
@@ -557,15 +548,6 @@ class CdkTreeNode {
     ngOnInit() {
         this._parentNodeAriaLevel = getParentNodeAriaLevel(this._elementRef.nativeElement);
         this._elementRef.nativeElement.setAttribute('aria-level', `${this.level + 1}`);
-    }
-    ngDoCheck() {
-        // aria-expanded is be set here because the expanded state is stored in the tree control and
-        // the node isn't aware when the state is changed.
-        // It is not set using a @HostBinding because they sometimes get lost with Mixin based classes.
-        // TODO: move to host after View Engine deprecation
-        if (this.isExpanded != this._isAriaExpanded) {
-            this._setExpanded(this.isExpanded);
-        }
     }
     ngOnDestroy() {
         // If this is the last tree node being destroyed,
@@ -597,12 +579,16 @@ class CdkTreeNode {
  */
 CdkTreeNode.mostRecentTreeNode = null;
 CdkTreeNode.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }], target: i0.ɵɵFactoryTarget.Directive });
-CdkTreeNode.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkTreeNode, selector: "cdk-tree-node", inputs: { role: "role" }, exportAs: ["cdkTreeNode"], ngImport: i0 });
+CdkTreeNode.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkTreeNode, selector: "cdk-tree-node", inputs: { role: "role" }, host: { properties: { "attr.aria-expanded": "isExpanded" }, classAttribute: "cdk-tree-node" }, exportAs: ["cdkTreeNode"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkTreeNode, decorators: [{
             type: Directive,
             args: [{
                     selector: 'cdk-tree-node',
                     exportAs: 'cdkTreeNode',
+                    host: {
+                        'class': 'cdk-tree-node',
+                        '[attr.aria-expanded]': 'isExpanded',
+                    },
                 }]
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: CdkTree }]; }, propDecorators: { role: [{
                 type: Input
@@ -650,11 +636,6 @@ class CdkNestedTreeNode extends CdkTreeNode {
     constructor(elementRef, tree, _differs) {
         super(elementRef, tree);
         this._differs = _differs;
-        // The classes are directly added here instead of in the host property because classes on
-        // the host property are not inherited with View Engine. It is not set as a @HostBinding because
-        // it is not set by the time it's children nodes try to read the class from it.
-        // TODO: move to host after View Engine deprecation
-        elementRef.nativeElement.classList.add('cdk-nested-tree-node');
     }
     ngAfterContentInit() {
         this._dataDiffer = this._differs.find([]).create(this._tree.trackBy);
@@ -678,9 +659,6 @@ class CdkNestedTreeNode extends CdkTreeNode {
     // In aot mode, the lifecycle hooks from parent class are not called.
     ngOnInit() {
         super.ngOnInit();
-    }
-    ngDoCheck() {
-        super.ngDoCheck();
     }
     ngOnDestroy() {
         this._clear();
@@ -718,7 +696,7 @@ class CdkNestedTreeNode extends CdkTreeNode {
     }
 }
 CdkNestedTreeNode.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkNestedTreeNode, deps: [{ token: i0.ElementRef }, { token: CdkTree }, { token: i0.IterableDiffers }], target: i0.ɵɵFactoryTarget.Directive });
-CdkNestedTreeNode.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkNestedTreeNode, selector: "cdk-nested-tree-node", inputs: { role: "role", disabled: "disabled", tabIndex: "tabIndex" }, providers: [
+CdkNestedTreeNode.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkNestedTreeNode, selector: "cdk-nested-tree-node", inputs: { role: "role", disabled: "disabled", tabIndex: "tabIndex" }, host: { classAttribute: "cdk-nested-tree-node" }, providers: [
         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
         { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
     ], queries: [{ propertyName: "nodeOutlet", predicate: CdkTreeNodeOutlet, descendants: true }], exportAs: ["cdkNestedTreeNode"], usesInheritance: true, ngImport: i0 });
@@ -732,6 +710,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImpor
                         { provide: CdkTreeNode, useExisting: CdkNestedTreeNode },
                         { provide: CDK_TREE_NODE_OUTLET_NODE, useExisting: CdkNestedTreeNode },
                     ],
+                    host: {
+                        'class': 'cdk-nested-tree-node',
+                    },
                 }]
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: CdkTree }, { type: i0.IterableDiffers }]; }, propDecorators: { nodeOutlet: [{
                 type: ContentChildren,
@@ -882,11 +863,6 @@ class CdkTreeNodeToggle {
     set recursive(value) {
         this._recursive = coerceBooleanProperty(value);
     }
-    // We have to use a `HostListener` here in order to support both Ivy and ViewEngine.
-    // In Ivy the `host` bindings will be merged when this class is extended, whereas in
-    // ViewEngine they're overwritten.
-    // TODO(crisbeto): we move this back into `host` once Ivy is turned on by default.
-    // tslint:disable-next-line:no-host-decorator-in-concrete
     _toggle(event) {
         this.recursive
             ? this._tree.treeControl.toggleDescendants(this._treeNode.data)
@@ -898,13 +874,15 @@ CdkTreeNodeToggle.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", versio
 CdkTreeNodeToggle.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.0.0", type: CdkTreeNodeToggle, selector: "[cdkTreeNodeToggle]", inputs: { recursive: ["cdkTreeNodeToggleRecursive", "recursive"] }, host: { listeners: { "click": "_toggle($event)" } }, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.0.0", ngImport: i0, type: CdkTreeNodeToggle, decorators: [{
             type: Directive,
-            args: [{ selector: '[cdkTreeNodeToggle]' }]
+            args: [{
+                    selector: '[cdkTreeNodeToggle]',
+                    host: {
+                        '(click)': '_toggle($event)',
+                    },
+                }]
         }], ctorParameters: function () { return [{ type: CdkTree }, { type: CdkTreeNode }]; }, propDecorators: { recursive: [{
                 type: Input,
                 args: ['cdkTreeNodeToggleRecursive']
-            }], _toggle: [{
-                type: HostListener,
-                args: ['click', ['$event']]
             }] } });
 
 /**
