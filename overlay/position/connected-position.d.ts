@@ -5,6 +5,7 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
 export declare type HorizontalConnectionPos = 'start' | 'center' | 'end';
 /** Vertical dimension of a connection point on the perimeter of the origin or overlay element. */
 export declare type VerticalConnectionPos = 'top' | 'center' | 'bottom';
