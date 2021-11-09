@@ -4,11 +4,10 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, Optional, ElementRef, ApplicationRef, InjectionToken, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, ElementRef, ApplicationRef, InjectionToken, Directive, EventEmitter, Optional, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
-import { __decorate, __param, __metadata } from 'tslib';
 import * as i5 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
@@ -435,7 +434,7 @@ class ConnectionPositionPair {
 class ScrollingVisibility {
 }
 /** The change event emitted by the strategy when a fallback position is used. */
-let ConnectedOverlayPositionChange = class ConnectedOverlayPositionChange {
+class ConnectedOverlayPositionChange {
     constructor(
     /** The position used as a result of this change. */
     connectionPair, 
@@ -444,12 +443,7 @@ let ConnectedOverlayPositionChange = class ConnectedOverlayPositionChange {
         this.connectionPair = connectionPair;
         this.scrollableViewProperties = scrollableViewProperties;
     }
-};
-ConnectedOverlayPositionChange = __decorate([
-    __param(1, Optional()),
-    __metadata("design:paramtypes", [ConnectionPositionPair,
-        ScrollingVisibility])
-], ConnectedOverlayPositionChange);
+}
 /**
  * Validates whether a vertical position property matches the expected values.
  * @param property Name of the property being validated.
