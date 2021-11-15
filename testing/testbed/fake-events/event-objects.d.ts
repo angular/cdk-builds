@@ -36,4 +36,4 @@ export declare function createKeyboardEvent(type: string, keyCode?: number, key?
  * Creates a fake event object with any desired event type.
  * @docs-private
  */
-export declare function createFakeEvent(type: string, bubbles?: boolean, cancelable?: boolean): Event;
+export declare function createFakeEvent(type: string, bubbles?: boolean, cancelable?: boolean, composed?: boolean): Event;
