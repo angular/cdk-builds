@@ -25,7 +25,7 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     readonly change: EventEmitter<Direction>;
     /** @docs-private */
     get dir(): Direction;
-    set dir(value: Direction);
+    set dir(value: Direction | 'auto');
     /** Current layout direction of the element. */
     get value(): Direction;
     /** Initialize once default value has been set. */

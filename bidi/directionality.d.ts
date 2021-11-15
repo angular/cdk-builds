@@ -8,6 +8,8 @@
 import { EventEmitter, OnDestroy } from '@angular/core';
 import * as i0 from "@angular/core";
 export declare type Direction = 'ltr' | 'rtl';
+/** Resolves a string value to a specific direction. */
+export declare function _resolveDirectionality(rawValue: string): Direction;
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.

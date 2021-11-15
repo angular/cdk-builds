@@ -40,6 +40,16 @@ function DIR_DOCUMENT_FACTORY() {
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
+/** Regex that matches locales with an RTL script. Taken from `goog.i18n.bidi.isRtlLanguage`. */
+const RTL_LOCALE_PATTERN = /^(ar|ckb|dv|he|iw|fa|nqo|ps|sd|ug|ur|yi|.*[-_](Adlm|Arab|Hebr|Nkoo|Rohg|Thaa))(?!.*[-_](Latn|Cyrl)($|-|_))($|-|_)/i;
+/** Resolves a string value to a specific direction. */
+function _resolveDirectionality(rawValue) {
+    const value = rawValue?.toLowerCase() || '';
+    if (value === 'auto' && typeof navigator !== 'undefined' && navigator?.language) {
+        return RTL_LOCALE_PATTERN.test(navigator.language) ? 'rtl' : 'ltr';
+    }
+    return value === 'rtl' ? 'rtl' : 'ltr';
+}
 /**
  * The directionality (LTR / RTL) context for the application (or a subtree of it).
  * Exposes the current direction and a stream of direction changes.
@@ -51,14 +61,9 @@ class Directionality {
         /** Stream that emits whenever the 'ltr' / 'rtl' state changes. */
         this.change = new EventEmitter();
         if (_document) {
-            // TODO: handle 'auto' value -
-            // We still need to account for dir="auto".
-            // It looks like HTMLElemenet.dir is also "auto" when that's set to the attribute,
-            // but getComputedStyle return either "ltr" or "rtl". avoiding getComputedStyle for now
             const bodyDir = _document.body ? _document.body.dir : null;
             const htmlDir = _document.documentElement ? _document.documentElement.dir : null;
-            const value = bodyDir || htmlDir;
-            this.value = value === 'ltr' || value === 'rtl' ? value : 'ltr';
+            this.value = _resolveDirectionality(bodyDir || htmlDir || 'ltr');
         }
     }
     ngOnDestroy() {
@@ -104,11 +109,13 @@ class Dir {
         return this._dir;
     }
     set dir(value) {
-        const old = this._dir;
-        const normalizedValue = value ? value.toLowerCase() : value;
+        const previousValue = this._dir;
+        // Note: `_resolveDirectionality` resolves the language based on the browser's language,
+        // whereas the browser does it based on the content of the element. Since doing so based
+        // on the content can be expensive, for now we're doing the simpler matching.
+        this._dir = _resolveDirectionality(value);
         this._rawDir = value;
-        this._dir = normalizedValue === 'ltr' || normalizedValue === 'rtl' ? normalizedValue : 'ltr';
-        if (old !== this._dir && this._isInitialized) {
+        if (previousValue !== this._dir && this._isInitialized) {
             this.change.emit(this._dir);
         }
     }
