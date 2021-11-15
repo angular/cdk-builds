@@ -408,8 +408,7 @@ class DragRef {
             // Delegate the event based on whether it started from a handle or the element itself.
             if (this._handles.length) {
                 const targetHandle = this._handles.find(handle => {
-                    const target = _getEventTarget(event);
-                    return !!target && (target === handle || handle.contains(target));
+                    return event.target && (event.target === handle || handle.contains(event.target));
                 });
                 if (targetHandle && !this._disabledHandles.has(targetHandle) && !this.disabled) {
                     this._initializeDragSequence(targetHandle, event);

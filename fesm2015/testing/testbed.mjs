@@ -110,6 +110,7 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers 
     const event = new MouseEvent(type, {
         bubbles: true,
         cancelable: true,
+        composed: true,
         view: window,
         detail: 0,
         relatedTarget: null,
@@ -141,7 +142,7 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers 
  * @docs-private
  */
 function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimary: true }) {
-    return new PointerEvent(type, Object.assign({ bubbles: true, cancelable: true, view: window, clientX,
+    return new PointerEvent(type, Object.assign({ bubbles: true, cancelable: true, composed: true, view: window, clientX,
         clientY }, options));
 }
 /**
@@ -170,6 +171,7 @@ function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
     return new KeyboardEvent(type, {
         bubbles: true,
         cancelable: true,
+        composed: true,
         view: window,
         keyCode: keyCode,
         key: key,
@@ -183,8 +185,8 @@ function createKeyboardEvent(type, keyCode = 0, key = '', modifiers = {}) {
  * Creates a fake event object with any desired event type.
  * @docs-private
  */
-function createFakeEvent(type, bubbles = false, cancelable = true) {
-    return new Event(type, { bubbles, cancelable });
+function createFakeEvent(type, bubbles = false, cancelable = true, composed = true) {
+    return new Event(type, { bubbles, cancelable, composed });
 }
 /**
  * Defines a readonly property on the given event object. Readonly properties on an event object
