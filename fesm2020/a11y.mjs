@@ -981,18 +981,20 @@ class FocusTrap {
      */
     _getRegionBoundary(bound) {
         // Contains the deprecated version of selector, for temporary backwards comparability.
-        let markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` + `[cdkFocusRegion${bound}], ` + `[cdk-focus-${bound}]`);
-        for (let i = 0; i < markers.length; i++) {
-            // @breaking-change 8.0.0
-            if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
-                console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}', ` +
-                    `use 'cdkFocusRegion${bound}' instead. The deprecated ` +
-                    `attribute will be removed in 8.0.0.`, markers[i]);
-            }
-            else if (markers[i].hasAttribute(`cdk-focus-region-${bound}`)) {
-                console.warn(`Found use of deprecated attribute 'cdk-focus-region-${bound}', ` +
-                    `use 'cdkFocusRegion${bound}' instead. The deprecated attribute ` +
-                    `will be removed in 8.0.0.`, markers[i]);
+        const markers = this._element.querySelectorAll(`[cdk-focus-region-${bound}], ` + `[cdkFocusRegion${bound}], ` + `[cdk-focus-${bound}]`);
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            for (let i = 0; i < markers.length; i++) {
+                // @breaking-change 8.0.0
+                if (markers[i].hasAttribute(`cdk-focus-${bound}`)) {
+                    console.warn(`Found use of deprecated attribute 'cdk-focus-${bound}', ` +
+                        `use 'cdkFocusRegion${bound}' instead. The deprecated ` +
+                        `attribute will be removed in 8.0.0.`, markers[i]);
+                }
+                else if (markers[i].hasAttribute(`cdk-focus-region-${bound}`)) {
+                    console.warn(`Found use of deprecated attribute 'cdk-focus-region-${bound}', ` +
+                        `use 'cdkFocusRegion${bound}' instead. The deprecated attribute ` +
+                        `will be removed in 8.0.0.`, markers[i]);
+                }
             }
         }
         if (bound == 'start') {
@@ -1011,7 +1013,8 @@ class FocusTrap {
         const redirectToElement = this._element.querySelector(`[cdk-focus-initial], ` + `[cdkFocusInitial]`);
         if (redirectToElement) {
             // @breaking-change 8.0.0
-            if (redirectToElement.hasAttribute(`cdk-focus-initial`)) {
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) &&
+                redirectToElement.hasAttribute(`cdk-focus-initial`)) {
                 console.warn(`Found use of deprecated attribute 'cdk-focus-initial', ` +
                     `use 'cdkFocusInitial' instead. The deprecated attribute ` +
                     `will be removed in 8.0.0`, redirectToElement);
