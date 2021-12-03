@@ -1648,6 +1648,13 @@ class DropListRef {
         if (newPositionReference === item) {
             newPositionReference = activeDraggables[newIndex + 1];
         }
+        // If we didn't find a new position reference, it means that either the item didn't start off
+        // in this container, or that the item requested to be inserted at the end of the list.
+        if (!newPositionReference &&
+            (newIndex == null || newIndex === -1 || newIndex < activeDraggables.length - 1) &&
+            this._shouldEnterAsFirstChild(pointerX, pointerY)) {
+            newPositionReference = activeDraggables[0];
+        }
         // Since the item may be in the `activeDraggables` already (e.g. if the user dragged it
         // into another container and back again), we have to ensure that it isn't duplicated.
         if (currentIndex > -1) {
@@ -1659,11 +1666,6 @@ class DropListRef {
             const element = newPositionReference.getRootElement();
             element.parentElement.insertBefore(placeholder, element);
             activeDraggables.splice(newIndex, 0, item);
-        }
-        else if (this._shouldEnterAsFirstChild(pointerX, pointerY)) {
-            const reference = activeDraggables[0].getRootElement();
-            reference.parentNode.insertBefore(placeholder, reference);
-            activeDraggables.unshift(item);
         }
         else {
             coerceElement(this.element).appendChild(placeholder);
