@@ -2277,7 +2277,8 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
             // Every click event caused by a pointer device has a preceding pointerdown
             // event, unless the click was programmatically triggered (e.g. in a unit test).
             const origin = event.type === 'click' && this._pointerDownEventTarget
-                ? this._pointerDownEventTarget : target;
+                ? this._pointerDownEventTarget
+                : target;
             // Reset the stored pointerdown event target, to avoid having it interfere
             // in subsequent events.
             this._pointerDownEventTarget = null;
