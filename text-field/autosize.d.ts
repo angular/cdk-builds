@@ -30,13 +30,13 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _textareaElement;
     /** Minimum amount of rows in the textarea. */
     get minRows(): number;
-    set minRows(value: number);
+    set minRows(value: NumberInput);
     /** Maximum amount of rows in the textarea. */
     get maxRows(): number;
-    set maxRows(value: number);
+    set maxRows(value: NumberInput);
     /** Whether autosizing is enabled or not */
     get enabled(): boolean;
-    set enabled(value: boolean);
+    set enabled(value: BooleanInput);
     get placeholder(): string;
     set placeholder(value: string);
     /** Cached height of a textarea with a single row. */
@@ -90,9 +90,6 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      * in order for it to scroll to the proper position.
      */
     private _scrollToCaretPosition;
-    static ngAcceptInputType_minRows: NumberInput;
-    static ngAcceptInputType_maxRows: NumberInput;
-    static ngAcceptInputType_enabled: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, [null, null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": "cdkAutosizeMinRows"; "maxRows": "cdkAutosizeMaxRows"; "enabled": "cdkTextareaAutosize"; "placeholder": "placeholder"; }, {}, never>;
 }

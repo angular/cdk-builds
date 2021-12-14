@@ -52,7 +52,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     _document?: any);
     /** Portal associated with the Portal outlet. */
     get portal(): Portal<any> | null;
-    set portal(portal: Portal<any> | null);
+    set portal(portal: Portal<any> | null | undefined | '');
     /** Emits when a portal is attached to the outlet. */
     readonly attached: EventEmitter<CdkPortalOutletAttachedRef>;
     /** Component or view reference that is attached to the portal. */
@@ -81,7 +81,6 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     attachDomPortal: (portal: DomPortal) => void;
     /** Gets the root node of the portal outlet. */
     private _getRootNode;
-    static ngAcceptInputType_portal: Portal<any> | null | undefined | '';
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": "cdkPortalOutlet"; }, { "attached": "attached"; }, never>;
 }

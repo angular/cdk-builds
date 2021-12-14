@@ -484,7 +484,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
         if (portal) {
             super.attach(portal);
         }
-        this._attachedPortal = portal;
+        this._attachedPortal = portal || null;
     }
     /** Component or view reference that is attached to the portal. */
     get attachedRef() {

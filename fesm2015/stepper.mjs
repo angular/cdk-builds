@@ -260,14 +260,14 @@ class CdkStepper {
         const newIndex = coerceNumberProperty(index);
         if (this.steps && this._steps) {
             // Ensure that the index can't be out of bounds.
-            if (!this._isValidIndex(index) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            if (!this._isValidIndex(newIndex) && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throw Error('cdkStepper: Cannot assign out-of-bounds value to `selectedIndex`.');
             }
             (_a = this.selected) === null || _a === void 0 ? void 0 : _a._markAsInteracted();
             if (this._selectedIndex !== newIndex &&
                 !this._anyControlsInvalidOrPending(newIndex) &&
                 (newIndex >= this._selectedIndex || this.steps.toArray()[newIndex].editable)) {
-                this._updateSelectedItemIndex(index);
+                this._updateSelectedItemIndex(newIndex);
             }
         }
         else {

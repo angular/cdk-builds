@@ -139,13 +139,13 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     private _previouslyFocusedElement;
     /** Whether the focus trap is active. */
     get enabled(): boolean;
-    set enabled(value: boolean);
+    set enabled(value: BooleanInput);
     /**
      * Whether the directive should automatically move focus into the trapped region upon
      * initialization and return focus to the previous activeElement upon destruction.
      */
     get autoCapture(): boolean;
-    set autoCapture(value: boolean);
+    set autoCapture(value: BooleanInput);
     private _autoCapture;
     constructor(_elementRef: ElementRef<HTMLElement>, _focusTrapFactory: FocusTrapFactory, 
     /**
@@ -158,8 +158,6 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     ngDoCheck(): void;
     ngOnChanges(changes: SimpleChanges): void;
     private _captureFocus;
-    static ngAcceptInputType_enabled: BooleanInput;
-    static ngAcceptInputType_autoCapture: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never>;
 }

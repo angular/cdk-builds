@@ -27,7 +27,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     readonly id: string;
     /** Whether the accordion should allow multiple expanded accordion items simultaneously. */
     get multi(): boolean;
-    set multi(multi: boolean);
+    set multi(multi: BooleanInput);
     private _multi;
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll(): void;
@@ -35,7 +35,6 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     closeAll(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
-    static ngAcceptInputType_multi: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordion, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": "multi"; }, {}, never>;
 }

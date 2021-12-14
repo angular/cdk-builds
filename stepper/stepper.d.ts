@@ -77,20 +77,20 @@ export declare class CdkStep implements OnChanges {
     state: StepState;
     /** Whether the user can return to this step once it has been marked as completed. */
     get editable(): boolean;
-    set editable(value: boolean);
+    set editable(value: BooleanInput);
     private _editable;
     /** Whether the completion of step is optional. */
     get optional(): boolean;
-    set optional(value: boolean);
+    set optional(value: BooleanInput);
     private _optional;
     /** Whether step is marked as completed. */
     get completed(): boolean;
-    set completed(value: boolean);
+    set completed(value: BooleanInput);
     _completedOverride: boolean | null;
     private _getDefaultCompleted;
     /** Whether step has an error. */
     get hasError(): boolean;
-    set hasError(value: boolean);
+    set hasError(value: BooleanInput);
     private _customError;
     private _getDefaultError;
     constructor(_stepper: CdkStepper, stepperOptions?: StepperOptions);
@@ -102,10 +102,6 @@ export declare class CdkStep implements OnChanges {
     _markAsInteracted(): void;
     /** Determines whether the error state can be shown. */
     _showError(): boolean;
-    static ngAcceptInputType_editable: BooleanInput;
-    static ngAcceptInputType_hasError: BooleanInput;
-    static ngAcceptInputType_optional: BooleanInput;
-    static ngAcceptInputType_completed: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"]>;
 }
@@ -127,11 +123,11 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     private _sortedHeaders;
     /** Whether the validity of previous steps should be checked or not. */
     get linear(): boolean;
-    set linear(value: boolean);
+    set linear(value: BooleanInput);
     private _linear;
     /** The index of the selected step. */
     get selectedIndex(): number;
-    set selectedIndex(index: number);
+    set selectedIndex(index: NumberInput);
     private _selectedIndex;
     /** The step that is selected. */
     get selected(): CdkStep | undefined;
@@ -186,12 +182,6 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     private _containsFocus;
     /** Checks whether the passed-in index is a valid step index. */
     private _isValidIndex;
-    static ngAcceptInputType_editable: BooleanInput;
-    static ngAcceptInputType_optional: BooleanInput;
-    static ngAcceptInputType_completed: BooleanInput;
-    static ngAcceptInputType_hasError: BooleanInput;
-    static ngAcceptInputType_linear: BooleanInput;
-    static ngAcceptInputType_selectedIndex: NumberInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"]>;
 }

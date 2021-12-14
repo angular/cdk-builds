@@ -34,7 +34,7 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
      * will be removed.
      */
     get appendOnly(): boolean;
-    set appendOnly(value: boolean);
+    set appendOnly(value: BooleanInput);
     private _appendOnly;
     /** Emits when the index of the first element visible in the viewport changes. */
     readonly scrolledIndexChange: Observable<number>;
@@ -142,7 +142,6 @@ export declare class CdkVirtualScrollViewport extends CdkScrollable implements O
     private _doChangeDetection;
     /** Calculates the `style.width` and `style.height` for the spacer element. */
     private _calculateSpacerSize;
-    static ngAcceptInputType_appendOnly: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollViewport, [null, null, null, { optional: true; }, { optional: true; }, null, null]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkVirtualScrollViewport, "cdk-virtual-scroll-viewport", never, { "orientation": "orientation"; "appendOnly": "appendOnly"; }, { "scrolledIndexChange": "scrolledIndexChange"; }, never, ["*"]>;
 }
