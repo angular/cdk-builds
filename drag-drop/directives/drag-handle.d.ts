@@ -24,11 +24,10 @@ export declare class CdkDragHandle implements OnDestroy {
     readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;
-    static ngAcceptInputType_disabled: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": "cdkDragHandleDisabled"; }, {}, never>;
 }

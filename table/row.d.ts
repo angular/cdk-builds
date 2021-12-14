@@ -5,7 +5,6 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { BooleanInput } from '@angular/cdk/coercion';
 import { IterableChanges, IterableDiffer, IterableDiffers, OnChanges, OnDestroy, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 import { CanStick, CanStickCtor } from './can-stick';
 import { CdkCellDef, CdkColumnDef } from './cell';
@@ -51,7 +50,6 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
     _table?: any;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, [null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": "cdkHeaderRowDef"; "sticky": "cdkHeaderRowDefSticky"; }, {}, never>;
 }
@@ -67,7 +65,6 @@ export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements Can
     _table?: any;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
-    static ngAcceptInputType_sticky: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, [null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": "cdkFooterRowDef"; "sticky": "cdkFooterRowDefSticky"; }, {}, never>;
 }

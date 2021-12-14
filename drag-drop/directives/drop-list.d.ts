@@ -64,10 +64,10 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     lockAxis: DragAxis;
     /** Whether starting a dragging sequence from this container is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     /** Whether sorting within this drop list is disabled. */
-    sortingDisabled: boolean;
+    sortingDisabled: BooleanInput;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
@@ -76,9 +76,9 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Functions that is used to determine whether an item can be sorted into a particular index. */
     sortPredicate: (index: number, drag: CdkDrag, drop: CdkDropList) => boolean;
     /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-    autoScrollDisabled: boolean;
+    autoScrollDisabled: BooleanInput;
     /** Number of pixels to scroll for each frame when auto-scrolling an element. */
-    autoScrollStep: number;
+    autoScrollStep: NumberInput;
     /** Emits when the user drops an item inside the container. */
     readonly dropped: EventEmitter<CdkDragDrop<T, any>>;
     /**
@@ -118,10 +118,6 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _assignDefaults;
     /** Syncs up the registered drag items with underlying drop list ref. */
     private _syncItemsWithRef;
-    static ngAcceptInputType_disabled: BooleanInput;
-    static ngAcceptInputType_sortingDisabled: BooleanInput;
-    static ngAcceptInputType_autoScrollDisabled: BooleanInput;
-    static ngAcceptInputType_autoScrollStep: NumberInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, [null, null, null, null, { optional: true; }, { optional: true; skipSelf: true; }, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": "cdkDropListConnectedTo"; "data": "cdkDropListData"; "orientation": "cdkDropListOrientation"; "id": "id"; "lockAxis": "cdkDropListLockAxis"; "disabled": "cdkDropListDisabled"; "sortingDisabled": "cdkDropListSortingDisabled"; "enterPredicate": "cdkDropListEnterPredicate"; "sortPredicate": "cdkDropListSortPredicate"; "autoScrollDisabled": "cdkDropListAutoScrollDisabled"; "autoScrollStep": "cdkDropListAutoScrollStep"; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never>;
 }

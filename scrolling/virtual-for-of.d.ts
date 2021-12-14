@@ -68,7 +68,7 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
      * Setting the cache size to `0` will disable caching. Defaults to 20 templates.
      */
     get cdkVirtualForTemplateCacheSize(): number;
-    set cdkVirtualForTemplateCacheSize(size: number);
+    set cdkVirtualForTemplateCacheSize(size: NumberInput);
     /** Emits whenever the data in the current DataSource changes. */
     readonly dataStream: Observable<readonly T[]>;
     /** The differ used to calculate changes to the data. */
@@ -112,7 +112,6 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     /** Update the computed properties on the `CdkVirtualForOfContext`. */
     private _updateComputedContextProperties;
     private _getEmbeddedViewArgs;
-    static ngAcceptInputType_cdkVirtualForTemplateCacheSize: NumberInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualForOf<any>, [null, null, null, null, { skipSelf: true; }, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": "cdkVirtualForOf"; "cdkVirtualForTrackBy": "cdkVirtualForTrackBy"; "cdkVirtualForTemplate": "cdkVirtualForTemplate"; "cdkVirtualForTemplateCacheSize": "cdkVirtualForTemplateCacheSize"; }, {}, never>;
 }

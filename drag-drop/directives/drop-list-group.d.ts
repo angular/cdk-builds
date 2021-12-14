@@ -25,10 +25,9 @@ export declare class CdkDropListGroup<T> implements OnDestroy {
     readonly _items: Set<T>;
     /** Whether starting a dragging sequence from inside this group is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     ngOnDestroy(): void;
-    static ngAcceptInputType_disabled: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropListGroup<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropListGroup<any>, "[cdkDropListGroup]", ["cdkDropListGroup"], { "disabled": "cdkDropListGroupDisabled"; }, {}, never>;
 }

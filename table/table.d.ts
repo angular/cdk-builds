@@ -285,14 +285,14 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * defined in the table, or otherwise the default row which does not have a when predicate.
      */
     get multiTemplateDataRows(): boolean;
-    set multiTemplateDataRows(v: boolean);
+    set multiTemplateDataRows(v: BooleanInput);
     _multiTemplateDataRows: boolean;
     /**
      * Whether to use a fixed table layout. Enabling this option will enforce consistent column widths
      * and optimize rendering sticky styles for native tables. No-op for flex tables.
      */
     get fixedLayout(): boolean;
-    set fixedLayout(v: boolean);
+    set fixedLayout(v: BooleanInput);
     private _fixedLayout;
     /**
      * Emits when the table completes rendering a set of data rows based on the latest data from the
@@ -478,8 +478,6 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _getOwnDefs;
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
-    static ngAcceptInputType_multiTemplateDataRows: BooleanInput;
-    static ngAcceptInputType_fixedLayout: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"]>;
 }

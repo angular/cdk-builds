@@ -16,11 +16,10 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     protected _treeNode: CdkTreeNode<T, K>;
     /** Whether expand/collapse the node recursively. */
     get recursive(): boolean;
-    set recursive(value: boolean);
+    set recursive(value: BooleanInput);
     protected _recursive: boolean;
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
     _toggle(event: Event): void;
-    static ngAcceptInputType_recursive: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never>;
 }

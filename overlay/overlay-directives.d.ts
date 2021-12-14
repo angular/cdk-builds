@@ -89,20 +89,20 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** CSS selector which to set the transform origin. */
     transformOriginSelector: string;
     /** Whether or not the overlay should attach a backdrop. */
-    get hasBackdrop(): any;
-    set hasBackdrop(value: any);
+    get hasBackdrop(): boolean;
+    set hasBackdrop(value: BooleanInput);
     /** Whether or not the overlay should be locked when scrolling. */
-    get lockPosition(): any;
-    set lockPosition(value: any);
+    get lockPosition(): boolean;
+    set lockPosition(value: BooleanInput);
     /** Whether the overlay's width and height can be constrained to fit within the viewport. */
     get flexibleDimensions(): boolean;
-    set flexibleDimensions(value: boolean);
+    set flexibleDimensions(value: BooleanInput);
     /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
     get growAfterOpen(): boolean;
-    set growAfterOpen(value: boolean);
+    set growAfterOpen(value: BooleanInput);
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
     get push(): boolean;
-    set push(value: boolean);
+    set push(value: BooleanInput);
     /** Event emitted when the backdrop is clicked. */
     readonly backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
@@ -135,11 +135,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _attachOverlay;
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
-    static ngAcceptInputType_hasBackdrop: BooleanInput;
-    static ngAcceptInputType_lockPosition: BooleanInput;
-    static ngAcceptInputType_flexibleDimensions: BooleanInput;
-    static ngAcceptInputType_growAfterOpen: BooleanInput;
-    static ngAcceptInputType_push: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, [null, null, null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": "cdkConnectedOverlayOrigin"; "positions": "cdkConnectedOverlayPositions"; "positionStrategy": "cdkConnectedOverlayPositionStrategy"; "offsetX": "cdkConnectedOverlayOffsetX"; "offsetY": "cdkConnectedOverlayOffsetY"; "width": "cdkConnectedOverlayWidth"; "height": "cdkConnectedOverlayHeight"; "minWidth": "cdkConnectedOverlayMinWidth"; "minHeight": "cdkConnectedOverlayMinHeight"; "backdropClass": "cdkConnectedOverlayBackdropClass"; "panelClass": "cdkConnectedOverlayPanelClass"; "viewportMargin": "cdkConnectedOverlayViewportMargin"; "scrollStrategy": "cdkConnectedOverlayScrollStrategy"; "open": "cdkConnectedOverlayOpen"; "disableClose": "cdkConnectedOverlayDisableClose"; "transformOriginSelector": "cdkConnectedOverlayTransformOriginOn"; "hasBackdrop": "cdkConnectedOverlayHasBackdrop"; "lockPosition": "cdkConnectedOverlayLockPosition"; "flexibleDimensions": "cdkConnectedOverlayFlexibleDimensions"; "growAfterOpen": "cdkConnectedOverlayGrowAfterOpen"; "push": "cdkConnectedOverlayPush"; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never>;
 }

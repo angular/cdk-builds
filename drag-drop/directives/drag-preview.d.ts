@@ -24,10 +24,9 @@ export declare class CdkDragPreview<T = any> {
     data: T;
     /** Whether the preview should preserve the same size as the item that is being dragged. */
     get matchSize(): boolean;
-    set matchSize(value: boolean);
+    set matchSize(value: BooleanInput);
     private _matchSize;
     constructor(templateRef: TemplateRef<T>);
-    static ngAcceptInputType_matchSize: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": "data"; "matchSize": "matchSize"; }, {}, never>;
 }

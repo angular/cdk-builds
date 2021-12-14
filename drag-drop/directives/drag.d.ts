@@ -72,7 +72,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     };
     /** Whether starting to drag this element is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     /**
      * Function that can be used to customize the logic of how the position of the drag item
@@ -155,7 +155,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _assignDefaults;
     /** Sets up the listener that syncs the handles with the drag ref. */
     private _setupHandlesListener;
-    static ngAcceptInputType_disabled: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, [null, { optional: true; skipSelf: true; }, null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; self: true; }, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": "cdkDragData"; "lockAxis": "cdkDragLockAxis"; "rootElementSelector": "cdkDragRootElement"; "boundaryElement": "cdkDragBoundary"; "dragStartDelay": "cdkDragStartDelay"; "freeDragPosition": "cdkDragFreeDragPosition"; "disabled": "cdkDragDisabled"; "constrainPosition": "cdkDragConstrainPosition"; "previewClass": "cdkDragPreviewClass"; "previewContainer": "cdkDragPreviewContainer"; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, ["_previewTemplate", "_placeholderTemplate", "_handles"]>;
 }

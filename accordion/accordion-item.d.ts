@@ -36,11 +36,11 @@ export declare class CdkAccordionItem implements OnDestroy {
     readonly id: string;
     /** Whether the AccordionItem is expanded. */
     get expanded(): boolean;
-    set expanded(expanded: boolean);
+    set expanded(expanded: BooleanInput);
     private _expanded;
     /** Whether the AccordionItem is disabled. */
     get disabled(): boolean;
-    set disabled(disabled: boolean);
+    set disabled(disabled: BooleanInput);
     private _disabled;
     /** Unregister function for _expansionDispatcher. */
     private _removeUniqueSelectionListener;
@@ -54,8 +54,6 @@ export declare class CdkAccordionItem implements OnDestroy {
     /** Sets the expanded state of the accordion item to true. */
     open(): void;
     private _subscribeToOpenCloseAllActions;
-    static ngAcceptInputType_expanded: BooleanInput;
-    static ngAcceptInputType_disabled: BooleanInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, [{ optional: true; skipSelf: true; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": "expanded"; "disabled": "disabled"; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never>;
 }

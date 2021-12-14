@@ -74,27 +74,24 @@ export declare function _fixedSizeVirtualScrollStrategyFactory(fixedSizeDir: Cdk
 export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     /** The size of the items in the list (in pixels). */
     get itemSize(): number;
-    set itemSize(value: number);
+    set itemSize(value: NumberInput);
     _itemSize: number;
     /**
      * The minimum amount of buffer rendered beyond the viewport (in pixels).
      * If the amount of buffer dips below this number, more items will be rendered. Defaults to 100px.
      */
     get minBufferPx(): number;
-    set minBufferPx(value: number);
+    set minBufferPx(value: NumberInput);
     _minBufferPx: number;
     /**
      * The number of pixels worth of buffer to render for when rendering new items. Defaults to 200px.
      */
     get maxBufferPx(): number;
-    set maxBufferPx(value: number);
+    set maxBufferPx(value: NumberInput);
     _maxBufferPx: number;
     /** The scroll strategy used by this directive. */
     _scrollStrategy: FixedSizeVirtualScrollStrategy;
     ngOnChanges(): void;
-    static ngAcceptInputType_itemSize: NumberInput;
-    static ngAcceptInputType_minBufferPx: NumberInput;
-    static ngAcceptInputType_maxBufferPx: NumberInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFixedSizeVirtualScroll, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": "itemSize"; "minBufferPx": "minBufferPx"; "maxBufferPx": "maxBufferPx"; }, {}, never>;
 }

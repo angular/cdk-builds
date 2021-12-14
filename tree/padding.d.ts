@@ -27,7 +27,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
     indentUnits: string;
     /** The level of depth of the tree node. The padding will be `level * indent` pixels. */
     get level(): number;
-    set level(value: number);
+    set level(value: NumberInput);
     _level: number;
     /**
      * The indent for each level. Can be a number or a CSS string.
@@ -47,7 +47,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      * TS 4.0 doesn't allow properties to override accessors or vice-versa.
      * @docs-private
      */
-    protected _setLevelInput(value: number): void;
+    protected _setLevelInput(value: NumberInput): void;
     /**
      * This has been extracted to a util because of TS 4 and VE.
      * View Engine doesn't support property rename inheritance.
@@ -55,7 +55,6 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      * @docs-private
      */
     protected _setIndentInput(indent: number | string): void;
-    static ngAcceptInputType_level: NumberInput;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, [null, null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": "cdkTreeNodePadding"; "indent": "cdkTreeNodePaddingIndent"; }, {}, never>;
 }
