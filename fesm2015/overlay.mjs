@@ -1058,15 +1058,17 @@ class FlexibleConnectedPositionStrategy {
         this._clearPanelClasses();
         this._resetOverlayElementStyles();
         this._resetBoundingBoxStyles();
-        // We need the bounding rects for the origin and the overlay to determine how to position
+        // We need the bounding rects for the origin, the overlay and the container to determine how to position
         // the overlay relative to the origin.
         // We use the viewport rect to determine whether a position would go off-screen.
         this._viewportRect = this._getNarrowedViewportRect();
         this._originRect = this._getOriginRect();
         this._overlayRect = this._pane.getBoundingClientRect();
+        this._containerRect = this._overlayContainer.getContainerElement().getBoundingClientRect();
         const originRect = this._originRect;
         const overlayRect = this._overlayRect;
         const viewportRect = this._viewportRect;
+        const containerRect = this._containerRect;
         // Positions where the overlay will fit with flexible dimensions.
         const flexibleFits = [];
         // Fallback if none of the preferred positions fit within the viewport.
@@ -1075,7 +1077,7 @@ class FlexibleConnectedPositionStrategy {
         // If a good fit is found, it will be applied immediately.
         for (let pos of this._preferredPositions) {
             // Get the exact (x, y) coordinate for the point-of-origin on the origin element.
-            let originPoint = this._getOriginPoint(originRect, pos);
+            let originPoint = this._getOriginPoint(originRect, containerRect, pos);
             // From that point-of-origin, get the exact (x, y) coordinate for the top-left corner of the
             // overlay in this position. We use the top-left corner for calculations and later translate
             // this into an appropriate (top, left, bottom, right) style.
@@ -1182,8 +1184,9 @@ class FlexibleConnectedPositionStrategy {
             this._originRect = this._getOriginRect();
             this._overlayRect = this._pane.getBoundingClientRect();
             this._viewportRect = this._getNarrowedViewportRect();
+            this._containerRect = this._overlayContainer.getContainerElement().getBoundingClientRect();
             const lastPosition = this._lastPosition || this._preferredPositions[0];
-            const originPoint = this._getOriginPoint(this._originRect, lastPosition);
+            const originPoint = this._getOriginPoint(this._originRect, this._containerRect, lastPosition);
             this._applyPosition(lastPosition, originPoint);
         }
     }
@@ -1285,7 +1288,7 @@ class FlexibleConnectedPositionStrategy {
     /**
      * Gets the (x, y) coordinate of a connection point on the origin based on a relative position.
      */
-    _getOriginPoint(originRect, pos) {
+    _getOriginPoint(originRect, containerRect, pos) {
         let x;
         if (pos.originX == 'center') {
             // Note: when centering we should always use the `left`
@@ -1297,12 +1300,25 @@ class FlexibleConnectedPositionStrategy {
             const endX = this._isRtl() ? originRect.left : originRect.right;
             x = pos.originX == 'start' ? startX : endX;
         }
+        // When zooming in Safari the container rectangle contains negative values for the position
+        // and we need to re-add them to the calculated coordinates.
+        if (containerRect.left < 0) {
+            x -= containerRect.left;
+        }
         let y;
         if (pos.originY == 'center') {
             y = originRect.top + originRect.height / 2;
         }
         else {
             y = pos.originY == 'top' ? originRect.top : originRect.bottom;
+        }
+        // Normally the containerRect's top value would be zero, however when the overlay is attached to an input
+        // (e.g. in an autocomplete), mobile browsers will shift everything in order to put the input in the middle
+        // of the screen and to make space for the virtual keyboard. We need to account for this offset,
+        // otherwise our positioning will be thrown off.
+        // Additionally, when zooming in Safari this fixes the vertical position.
+        if (containerRect.top < 0) {
+            y -= containerRect.top;
         }
         return { x, y };
     }
@@ -1370,7 +1386,7 @@ class FlexibleConnectedPositionStrategy {
     /**
      * Whether the overlay can fit within the viewport when it may resize either its width or height.
      * @param fit How well the overlay fits in the viewport at some position.
-     * @param point The (x, y) coordinates of the overlat at some position.
+     * @param point The (x, y) coordinates of the overlay at some position.
      * @param viewport The geometry of the viewport.
      */
     _canFitWithFlexibleDimensions(fit, point, viewport) {
@@ -1391,7 +1407,7 @@ class FlexibleConnectedPositionStrategy {
      * right and bottom).
      *
      * @param start Starting point from which the overlay is pushed.
-     * @param overlay Dimensions of the overlay.
+     * @param rawOverlayRect Dimensions of the overlay.
      * @param scrollPosition Current viewport scroll position.
      * @returns The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
@@ -1686,14 +1702,6 @@ class FlexibleConnectedPositionStrategy {
         if (this._isPushed) {
             overlayPoint = this._pushOverlayOnScreen(overlayPoint, this._overlayRect, scrollPosition);
         }
-        let virtualKeyboardOffset = this._overlayContainer
-            .getContainerElement()
-            .getBoundingClientRect().top;
-        // Normally this would be zero, however when the overlay is attached to an input (e.g. in an
-        // autocomplete), mobile browsers will shift everything in order to put the input in the middle
-        // of the screen and to make space for the virtual keyboard. We need to account for this offset,
-        // otherwise our positioning will be thrown off.
-        overlayPoint.y -= virtualKeyboardOffset;
         // We want to set either `top` or `bottom` based on whether the overlay wants to appear
         // above or below the origin and the direction in which the element will expand.
         if (position.overlayY === 'bottom') {

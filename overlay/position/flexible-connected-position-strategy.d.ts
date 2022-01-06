@@ -52,6 +52,8 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _overlayRect;
     /** Cached viewport dimensions */
     private _viewportRect;
+    /** Cached container dimensions */
+    private _containerRect;
     /** Amount of space that must be maintained between the overlay and the edge of the viewport. */
     private _viewportMargin;
     /** The Scrollable containers used to check scrollable view properties on position change. */
@@ -186,7 +188,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /**
      * Whether the overlay can fit within the viewport when it may resize either its width or height.
      * @param fit How well the overlay fits in the viewport at some position.
-     * @param point The (x, y) coordinates of the overlat at some position.
+     * @param point The (x, y) coordinates of the overlay at some position.
      * @param viewport The geometry of the viewport.
      */
     private _canFitWithFlexibleDimensions;
@@ -196,7 +198,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * right and bottom).
      *
      * @param start Starting point from which the overlay is pushed.
-     * @param overlay Dimensions of the overlay.
+     * @param rawOverlayRect Dimensions of the overlay.
      * @param scrollPosition Current viewport scroll position.
      * @returns The point at which to position the overlay after pushing. This is effectively a new
      *     originPoint.
