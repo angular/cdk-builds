@@ -15,7 +15,9 @@ import { TestElement } from './test-element';
  */
 export declare abstract class HarnessEnvironment<E> implements HarnessLoader, LocatorFactory {
     protected rawRootElement: E;
-    rootElement: TestElement;
+    get rootElement(): TestElement;
+    set rootElement(element: TestElement);
+    private _rootElement;
     protected constructor(rawRootElement: E);
     documentRootLocatorFactory(): LocatorFactory;
     locatorFor<T extends (HarnessQuery<any> | string)[]>(...queries: T): AsyncFactoryFn<LocatorFnResult<T>>;

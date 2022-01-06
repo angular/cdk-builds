@@ -21,6 +21,8 @@ export declare class TestbedHarnessEnvironment extends HarnessEnvironment<Elemen
     private _taskState;
     /** The options for this environment. */
     private _options;
+    /** Environment stabilization callback passed to the created test elements. */
+    private _stabilizeCallback;
     protected constructor(rawRootElement: Element, _fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions);
     /** Creates a `HarnessLoader` rooted at the given fixture's root element. */
     static loader(fixture: ComponentFixture<unknown>, options?: TestbedHarnessEnvironmentOptions): HarnessLoader;
