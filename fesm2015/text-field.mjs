@@ -178,7 +178,12 @@ class CdkTextareaAutosize {
     }
     set placeholder(value) {
         this._cachedPlaceholderHeight = undefined;
-        this._textareaElement.placeholder = value;
+        if (value) {
+            this._textareaElement.setAttribute('placeholder', value);
+        }
+        else {
+            this._textareaElement.removeAttribute('placeholder');
+        }
         this._cacheTextareaPlaceholderHeight();
     }
     /** Sets the minimum height of the textarea as determined by minRows. */
