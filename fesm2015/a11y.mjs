@@ -1895,7 +1895,7 @@ class FocusMonitor {
             // Make a note of when the window regains focus, so we can
             // restore the origin info for the focused element.
             this._windowFocused = true;
-            this._windowFocusTimeoutId = setTimeout(() => (this._windowFocused = false));
+            this._windowFocusTimeoutId = window.setTimeout(() => (this._windowFocused = false));
         };
         /** Subject for stopping our InputModalityDetector subscription. */
         this._stopInputModalityDetector = new Subject();
