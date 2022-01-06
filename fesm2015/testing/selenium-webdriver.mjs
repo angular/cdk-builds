@@ -324,6 +324,7 @@ class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
     constructor(rawRootElement, options) {
         super(rawRootElement);
         this._options = Object.assign(Object.assign({}, defaultEnvironmentOptions), options);
+        this._stabilizeCallback = () => this.forceStabilize();
     }
     /** Gets the ElementFinder corresponding to the given TestElement. */
     static getNativeElement(el) {
@@ -359,7 +360,7 @@ class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
     }
     /** Creates a `TestElement` from a raw element. */
     createTestElement(element) {
-        return new SeleniumWebDriverElement(element, () => this.forceStabilize());
+        return new SeleniumWebDriverElement(element, this._stabilizeCallback);
     }
     /** Creates a `HarnessLoader` rooted at the given raw element. */
     createEnvironment(element) {

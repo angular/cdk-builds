@@ -37,6 +37,8 @@ export declare function waitForAngularReady(wd: webdriver.WebDriver): Promise<vo
 export declare class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment<() => webdriver.WebElement> {
     /** The options for this environment. */
     private _options;
+    /** Environment stabilization callback passed to the created test elements. */
+    private _stabilizeCallback;
     protected constructor(rawRootElement: () => webdriver.WebElement, options?: WebDriverHarnessEnvironmentOptions);
     /** Gets the ElementFinder corresponding to the given TestElement. */
     static getNativeElement(el: TestElement): webdriver.WebElement;

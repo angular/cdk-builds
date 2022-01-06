@@ -674,6 +674,7 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         this._destroyed = false;
         this._options = { ...defaultEnvironmentOptions, ...options };
         this._taskState = TaskStateZoneInterceptor.setup();
+        this._stabilizeCallback = () => this.forceStabilize();
         installAutoChangeDetectionStatusHandler(_fixture);
         _fixture.componentRef.onDestroy(() => {
             uninstallAutoChangeDetectionStatusHandler(_fixture);
@@ -748,7 +749,7 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
     }
     /** Creates a `TestElement` from a raw element. */
     createTestElement(element) {
-        return new UnitTestElement(element, () => this.forceStabilize());
+        return new UnitTestElement(element, this._stabilizeCallback);
     }
     /** Creates a `HarnessLoader` rooted at the given raw element. */
     createEnvironment(element) {
