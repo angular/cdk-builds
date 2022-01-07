@@ -217,12 +217,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0", ngImpor
 /** Base class for the cells. Adds a CSS classname that identifies the column it renders in. */
 class BaseCdkCell {
     constructor(columnDef, elementRef) {
-        // If IE 11 is dropped before we switch to setting a single class name, change to multi param
-        // with destructuring.
-        const classList = elementRef.nativeElement.classList;
-        for (const className of columnDef._columnCssClassName) {
-            classList.add(className);
-        }
+        elementRef.nativeElement.classList.add(...columnDef._columnCssClassName);
     }
 }
 /** Header cell template container that adds the right classes and role. */
