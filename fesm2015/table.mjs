@@ -3,7 +3,7 @@ import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _D
 export { DataSource } from '@angular/cdk/collections';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, Attribute, SkipSelf, Output, ViewChild, ContentChildren, NgModule } from '@angular/core';
+import { InjectionToken, Directive, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/bidi';
@@ -1173,7 +1173,12 @@ class CdkTable {
      * @deprecated `_stickyPositioningListener` parameter to become required.
      * @breaking-change 13.0.0
      */
-    _stickyPositioningListener) {
+    _stickyPositioningListener, 
+    /**
+     * @deprecated `_ngZone` parameter to become required.
+     * @breaking-change 14.0.0
+     */
+    _ngZone) {
         this._differs = _differs;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -1183,6 +1188,7 @@ class CdkTable {
         this._coalescedStyleScheduler = _coalescedStyleScheduler;
         this._viewportRuler = _viewportRuler;
         this._stickyPositioningListener = _stickyPositioningListener;
+        this._ngZone = _ngZone;
         /** Subject that emits when the component has been destroyed. */
         this._onDestroy = new Subject();
         /**
@@ -1464,7 +1470,16 @@ class CdkTable {
             rowView.context.$implicit = record.item.data;
         });
         this._updateNoDataRow();
-        this.updateStickyColumnStyles();
+        // Allow the new row data to render before measuring it.
+        // @breaking-change 14.0.0 Remove undefined check once _ngZone is required.
+        if (this._ngZone && NgZone.isInAngularZone()) {
+            this._ngZone.onStable.pipe(take(1), takeUntil(this._onDestroy)).subscribe(() => {
+                this.updateStickyColumnStyles();
+            });
+        }
+        else {
+            this.updateStickyColumnStyles();
+        }
         this.contentChanged.next();
     }
     /** Adds a column definition that was not included as part of the content children. */
@@ -1980,7 +1995,7 @@ class CdkTable {
         this._isShowingNoDataRow = shouldShow;
     }
 }
-CdkTable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0", ngImport: i0, type: CdkTable, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: 'role', attribute: true }, { token: i1.Directionality, optional: true }, { token: DOCUMENT }, { token: i2.Platform }, { token: _VIEW_REPEATER_STRATEGY }, { token: _COALESCED_STYLE_SCHEDULER }, { token: i3.ViewportRuler }, { token: STICKY_POSITIONING_LISTENER, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Component });
+CdkTable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.1.0", ngImport: i0, type: CdkTable, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: 'role', attribute: true }, { token: i1.Directionality, optional: true }, { token: DOCUMENT }, { token: i2.Platform }, { token: _VIEW_REPEATER_STRATEGY }, { token: _COALESCED_STYLE_SCHEDULER }, { token: i3.ViewportRuler }, { token: STICKY_POSITIONING_LISTENER, optional: true, skipSelf: true }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Component });
 CdkTable.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "13.1.0", type: CdkTable, selector: "cdk-table, table[cdk-table]", inputs: { trackBy: "trackBy", dataSource: "dataSource", multiTemplateDataRows: "multiTemplateDataRows", fixedLayout: "fixedLayout" }, outputs: { contentChanged: "contentChanged" }, host: { properties: { "class.cdk-table-fixed-layout": "fixedLayout" }, classAttribute: "cdk-table" }, providers: [
         { provide: CDK_TABLE, useExisting: CdkTable },
         { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
@@ -2022,6 +2037,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.1.0", ngImpor
                     }, {
                         type: Inject,
                         args: [STICKY_POSITIONING_LISTENER]
+                    }] }, { type: i0.NgZone, decorators: [{
+                        type: Optional
                     }] }];
     }, propDecorators: { trackBy: [{
                 type: Input

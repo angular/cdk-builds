@@ -10,7 +10,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { CollectionViewer, DataSource, _ViewRepeater } from '@angular/cdk/collections';
 import { Platform } from '@angular/cdk/platform';
 import { ViewportRuler } from '@angular/cdk/scrolling';
-import { AfterContentChecked, ChangeDetectorRef, ElementRef, EventEmitter, IterableDiffers, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, ElementRef, EventEmitter, IterableDiffers, NgZone, OnDestroy, OnInit, QueryList, TrackByFunction, ViewContainerRef } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CdkColumnDef } from './cell';
 import { _CoalescedStyleScheduler } from './coalesced-style-scheduler';
@@ -129,6 +129,11 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * @breaking-change 13.0.0
      */
     protected readonly _stickyPositioningListener: StickyPositioningListener;
+    /**
+     * @deprecated `_ngZone` parameter to become required.
+     * @breaking-change 14.0.0
+     */
+    protected readonly _ngZone: NgZone;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: readonly T[];
@@ -331,7 +336,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * @deprecated `_stickyPositioningListener` parameter to become required.
      * @breaking-change 13.0.0
      */
-    _stickyPositioningListener: StickyPositioningListener);
+    _stickyPositioningListener: StickyPositioningListener, 
+    /**
+     * @deprecated `_ngZone` parameter to become required.
+     * @breaking-change 14.0.0
+     */
+    _ngZone: NgZone);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
@@ -478,7 +488,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     private _getOwnDefs;
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
     static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"]>;
 }
 export {};
