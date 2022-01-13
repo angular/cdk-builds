@@ -1426,11 +1426,22 @@ class CdkTable {
         this._checkStickyStates();
     }
     ngOnDestroy() {
-        this._rowOutlet.viewContainer.clear();
-        this._noDataRowOutlet.viewContainer.clear();
-        this._headerRowOutlet.viewContainer.clear();
-        this._footerRowOutlet.viewContainer.clear();
-        this._cachedRenderRowsMap.clear();
+        [
+            this._rowOutlet.viewContainer,
+            this._headerRowOutlet.viewContainer,
+            this._footerRowOutlet.viewContainer,
+            this._cachedRenderRowsMap,
+            this._customColumnDefs,
+            this._customRowDefs,
+            this._customHeaderRowDefs,
+            this._customFooterRowDefs,
+            this._columnDefsByName
+        ].forEach(def => {
+            def.clear();
+        });
+        this._headerRowDefs = [];
+        this._footerRowDefs = [];
+        this._defaultRowDef = null;
         this._onDestroy.next();
         this._onDestroy.complete();
         if (isDataSource(this.dataSource)) {
