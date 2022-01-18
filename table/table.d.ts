@@ -133,7 +133,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * @deprecated `_ngZone` parameter to become required.
      * @breaking-change 14.0.0
      */
-    protected readonly _ngZone: NgZone;
+    protected readonly _ngZone?: NgZone | undefined;
     private _document;
     /** Latest data provided by the data source. */
     protected _data: readonly T[];
@@ -341,7 +341,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      * @deprecated `_ngZone` parameter to become required.
      * @breaking-change 14.0.0
      */
-    _ngZone: NgZone);
+    _ngZone?: NgZone | undefined);
     ngOnInit(): void;
     ngAfterContentChecked(): void;
     ngOnDestroy(): void;
