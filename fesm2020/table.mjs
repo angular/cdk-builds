@@ -1431,7 +1431,7 @@ class CdkTable {
             this._customRowDefs,
             this._customHeaderRowDefs,
             this._customFooterRowDefs,
-            this._columnDefsByName
+            this._columnDefsByName,
         ].forEach(def => {
             def.clear();
         });
