@@ -308,7 +308,7 @@ class ListKeyManager {
                     if (newIndex !== this._activeItemIndex) {
                         // Timeout is required to avoid "changed after checked" errors.
                         setTimeout(() => {
-                            this.updateActiveItem(newIndex > -1 ? newIndex : this._activeItemIndex);
+                            this.setActiveItem(newIndex > -1 ? newIndex : this._activeItemIndex);
                         }, 0);
                     }
                 }
