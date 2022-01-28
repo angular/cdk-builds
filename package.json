@@ -188,14 +188,6 @@
       "node": "./fesm2015/testing.mjs",
       "default": "./fesm2020/testing.mjs"
     },
-    "./testing/protractor": {
-      "types": "./testing/protractor/index.d.ts",
-      "esm2020": "./esm2020/testing/protractor/index.mjs",
-      "es2020": "./fesm2020/testing/protractor.mjs",
-      "es2015": "./fesm2015/testing/protractor.mjs",
-      "node": "./fesm2015/testing/protractor.mjs",
-      "default": "./fesm2020/testing/protractor.mjs"
-    },
     "./testing/selenium-webdriver": {
       "types": "./testing/selenium-webdriver/index.d.ts",
       "esm2020": "./esm2020/testing/selenium-webdriver/index.mjs",
