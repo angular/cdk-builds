@@ -1,4 +1,5 @@
 import { OnDestroy } from '@angular/core';
+import { Platform } from '@angular/cdk/platform';
 import * as i0 from "@angular/core";
 /**
  * Interface used to register message elements and keep a count of how many registrations have
@@ -10,11 +11,23 @@ export interface RegisteredMessage {
     /** The number of elements that reference this message element via `aria-describedby`. */
     referenceCount: number;
 }
-/** ID used for the body container where all messages are appended. */
+/**
+ * ID used for the body container where all messages are appended.
+ * @deprecated No longer being used. To be removed.
+ * @breaking-change 14.0.0
+ */
 export declare const MESSAGES_CONTAINER_ID = "cdk-describedby-message-container";
-/** ID prefix used for each created message element. */
+/**
+ * ID prefix used for each created message element.
+ * @deprecated To be turned into a private variable.
+ * @breaking-change 14.0.0
+ */
 export declare const CDK_DESCRIBEDBY_ID_PREFIX = "cdk-describedby-message";
-/** Attribute given to each host element that is described by a message element. */
+/**
+ * Attribute given to each host element that is described by a message element.
+ * @deprecated To be turned into a private variable.
+ * @breaking-change 14.0.0
+ */
 export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
@@ -22,8 +35,24 @@ export declare const CDK_DESCRIBEDBY_HOST_ATTRIBUTE = "cdk-describedby-host";
  * content.
  */
 export declare class AriaDescriber implements OnDestroy {
+    /**
+     * @deprecated To be turned into a required parameter.
+     * @breaking-change 14.0.0
+     */
+    private _platform?;
     private _document;
-    constructor(_document: any);
+    /** Map of all registered message elements that have been placed into the document. */
+    private _messageRegistry;
+    /** Container for all registered messages. */
+    private _messagesContainer;
+    /** Unique ID for the service. */
+    private readonly _id;
+    constructor(_document: any, 
+    /**
+     * @deprecated To be turned into a required parameter.
+     * @breaking-change 14.0.0
+     */
+    _platform?: Platform | undefined);
     /**
      * Adds to the host element an aria-describedby reference to a hidden element that contains
      * the message. If the same message has already been registered, then it will reuse the created
@@ -49,8 +78,6 @@ export declare class AriaDescriber implements OnDestroy {
     private _deleteMessageElement;
     /** Creates the global container for all aria-describedby messages. */
     private _createMessagesContainer;
-    /** Deletes the global messages container. */
-    private _deleteMessagesContainer;
     /** Removes all cdk-describedby messages that are hosted through the element. */
     private _removeCdkDescribedByReferenceIds;
     /**
