@@ -14,10 +14,10 @@ import * as i1 from '@angular/cdk/platform';
  */
 class LayoutModule {
 }
-LayoutModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-LayoutModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: LayoutModule });
-LayoutModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: LayoutModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: LayoutModule, decorators: [{
+LayoutModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+LayoutModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: LayoutModule });
+LayoutModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: LayoutModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: LayoutModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });
@@ -57,9 +57,9 @@ class MediaMatcher {
         return this._matchMedia(query);
     }
 }
-MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
-MediaMatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: MediaMatcher, decorators: [{
+MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
+MediaMatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Platform }]; } });
@@ -184,9 +184,9 @@ class BreakpointObserver {
         return output;
     }
 }
-BreakpointObserver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: BreakpointObserver, deps: [{ token: MediaMatcher }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable });
-BreakpointObserver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: BreakpointObserver, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0-rc.1", ngImport: i0, type: BreakpointObserver, decorators: [{
+BreakpointObserver.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: BreakpointObserver, deps: [{ token: MediaMatcher }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable });
+BreakpointObserver.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: BreakpointObserver, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: BreakpointObserver, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: MediaMatcher }, { type: i0.NgZone }]; } });
