@@ -4,7 +4,7 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, ElementRef, ApplicationRef, InjectionToken, Directive, EventEmitter, Optional, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, Optional, ElementRef, ApplicationRef, InjectionToken, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
@@ -531,8 +531,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
  * on event target and order of overlay opens.
  */
 class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
-    constructor(document) {
+    constructor(document, 
+    /** @breaking-change 14.0.0 _ngZone will be required. */
+    _ngZone) {
         super(document);
+        this._ngZone = _ngZone;
         /** Keyboard event listener that will be attached to the body. */
         this._keydownListener = (event) => {
             const overlays = this._attachedOverlays;
@@ -544,7 +547,14 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
                 // because we don't want overlays that don't handle keyboard events to block the ones below
                 // them that do.
                 if (overlays[i]._keydownEvents.observers.length > 0) {
-                    overlays[i]._keydownEvents.next(event);
+                    const keydownEvents = overlays[i]._keydownEvents;
+                    /** @breaking-change 14.0.0 _ngZone will be required. */
+                    if (this._ngZone) {
+                        this._ngZone.run(() => keydownEvents.next(event));
+                    }
+                    else {
+                        keydownEvents.next(event);
+                    }
                     break;
                 }
             }
@@ -555,7 +565,13 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
         super.add(overlayRef);
         // Lazily start dispatcher once first overlay is added
         if (!this._isAttached) {
-            this._document.body.addEventListener('keydown', this._keydownListener);
+            /** @breaking-change 14.0.0 _ngZone will be required. */
+            if (this._ngZone) {
+                this._ngZone.runOutsideAngular(() => this._document.body.addEventListener('keydown', this._keydownListener));
+            }
+            else {
+                this._document.body.addEventListener('keydown', this._keydownListener);
+            }
             this._isAttached = true;
         }
     }
@@ -567,7 +583,7 @@ class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
         }
     }
 }
-OverlayKeyboardDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayKeyboardDispatcher, deps: [{ token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+OverlayKeyboardDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayKeyboardDispatcher, deps: [{ token: DOCUMENT }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
 OverlayKeyboardDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayKeyboardDispatcher, providedIn: 'root' });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayKeyboardDispatcher, decorators: [{
             type: Injectable,
@@ -575,6 +591,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
         }], ctorParameters: function () { return [{ type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
+                }] }, { type: i0.NgZone, decorators: [{
+                    type: Optional
                 }] }]; } });
 
 /**
@@ -590,9 +608,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
  * on event target and order of overlay opens.
  */
 class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
-    constructor(document, _platform) {
+    constructor(document, _platform, 
+    /** @breaking-change 14.0.0 _ngZone will be required. */
+    _ngZone) {
         super(document);
         this._platform = _platform;
+        this._ngZone = _ngZone;
         this._cursorStyleIsSet = false;
         /** Store pointerdown event target to track origin of click. */
         this._pointerDownListener = (event) => {
@@ -633,7 +654,14 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
                     overlayRef.overlayElement.contains(origin)) {
                     break;
                 }
-                overlayRef._outsidePointerEvents.next(event);
+                const outsidePointerEvents = overlayRef._outsidePointerEvents;
+                /** @breaking-change 14.0.0 _ngZone will be required. */
+                if (this._ngZone) {
+                    this._ngZone.run(() => outsidePointerEvents.next(event));
+                }
+                else {
+                    outsidePointerEvents.next(event);
+                }
             }
         };
     }
@@ -648,10 +676,13 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
         // https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html
         if (!this._isAttached) {
             const body = this._document.body;
-            body.addEventListener('pointerdown', this._pointerDownListener, true);
-            body.addEventListener('click', this._clickListener, true);
-            body.addEventListener('auxclick', this._clickListener, true);
-            body.addEventListener('contextmenu', this._clickListener, true);
+            /** @breaking-change 14.0.0 _ngZone will be required. */
+            if (this._ngZone) {
+                this._ngZone.runOutsideAngular(() => this._addEventListeners(body));
+            }
+            else {
+                this._addEventListeners(body);
+            }
             // click event is not fired on iOS. To make element "clickable" we are
             // setting the cursor to pointer
             if (this._platform.IOS && !this._cursorStyleIsSet) {
@@ -677,8 +708,14 @@ class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher {
             this._isAttached = false;
         }
     }
+    _addEventListeners(body) {
+        body.addEventListener('pointerdown', this._pointerDownListener, true);
+        body.addEventListener('click', this._clickListener, true);
+        body.addEventListener('auxclick', this._clickListener, true);
+        body.addEventListener('contextmenu', this._clickListener, true);
+    }
 }
-OverlayOutsideClickDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayOutsideClickDispatcher, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
+OverlayOutsideClickDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayOutsideClickDispatcher, deps: [{ token: DOCUMENT }, { token: i1$1.Platform }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
 OverlayOutsideClickDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayOutsideClickDispatcher, providedIn: 'root' });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: OverlayOutsideClickDispatcher, decorators: [{
             type: Injectable,
@@ -686,7 +723,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
         }], ctorParameters: function () { return [{ type: undefined, decorators: [{
                     type: Inject,
                     args: [DOCUMENT]
-                }] }, { type: i1$1.Platform }]; } });
+                }] }, { type: i1$1.Platform }, { type: i0.NgZone, decorators: [{
+                    type: Optional
+                }] }]; } });
 
 /**
  * @license
