@@ -252,9 +252,19 @@ class ContentContainerComponentHarness extends ComponentHarness {
             return (yield this.getRootHarnessLoader()).getHarness(query);
         });
     }
+    getHarnessOrNull(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).getHarnessOrNull(query);
+        });
+    }
     getAllHarnesses(query) {
         return __awaiter(this, void 0, void 0, function* () {
             return (yield this.getRootHarnessLoader()).getAllHarnesses(query);
+        });
+    }
+    hasHarness(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.getRootHarnessLoader()).hasHarness(query);
         });
     }
     /**
@@ -505,8 +515,18 @@ class HarnessEnvironment {
         return this.locatorFor(query)();
     }
     // Implemented as part of the `HarnessLoader` interface.
+    getHarnessOrNull(query) {
+        return this.locatorForOptional(query)();
+    }
+    // Implemented as part of the `HarnessLoader` interface.
     getAllHarnesses(query) {
         return this.locatorForAll(query)();
+    }
+    // Implemented as part of the `HarnessLoader` interface.
+    hasHarness(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return (yield this.locatorForOptional(query)()) !== null;
+        });
     }
     // Implemented as part of the `HarnessLoader` interface.
     getChildLoader(selector) {
