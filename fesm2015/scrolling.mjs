@@ -880,6 +880,8 @@ class CdkVirtualScrollViewport extends CdkScrollable {
         const axis = isHorizontal ? 'X' : 'Y';
         const axisDirection = isHorizontal && isRtl ? -1 : 1;
         let transform = `translate${axis}(${Number(axisDirection * offset)}px)`;
+        // in appendOnly, we always start from the top
+        offset = this.appendOnly && to === 'to-start' ? 0 : offset;
         this._renderedContentOffset = offset;
         if (to === 'to-end') {
             transform += ` translate${axis}(-100%)`;
