@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { Injectable, Inject, QueryList, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
-import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot, PlatformModule } from '@angular/cdk/platform';
+import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -2367,12 +2367,12 @@ class A11yModule {
     }
 }
 A11yModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, deps: [{ token: HighContrastModeDetector }], target: i0.ɵɵFactoryTarget.NgModule });
-A11yModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus], imports: [PlatformModule, ObserversModule], exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus] });
-A11yModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, imports: [[PlatformModule, ObserversModule]] });
+A11yModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus], imports: [ObserversModule], exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus] });
+A11yModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, imports: [[ObserversModule]] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: A11yModule, decorators: [{
             type: NgModule,
             args: [{
-                    imports: [PlatformModule, ObserversModule],
+                    imports: [ObserversModule],
                     declarations: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                     exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 }]
