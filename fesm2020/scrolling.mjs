@@ -4,7 +4,7 @@ import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inj
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
-import { getRtlScrollAxisType, supportsScrollBehavior, PlatformModule } from '@angular/cdk/platform';
+import { getRtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import * as i2 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
@@ -1372,14 +1372,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
 class ScrollingModule {
 }
 ScrollingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, declarations: [CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport], imports: [BidiModule, PlatformModule, CdkScrollableModule], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
+ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, declarations: [CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport], imports: [BidiModule, CdkScrollableModule], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
         CdkVirtualForOf,
         CdkVirtualScrollViewport] });
-ScrollingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, imports: [[BidiModule, PlatformModule, CdkScrollableModule], BidiModule, CdkScrollableModule] });
+ScrollingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, imports: [[BidiModule, CdkScrollableModule], BidiModule, CdkScrollableModule] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: ScrollingModule, decorators: [{
             type: NgModule,
             args: [{
-                    imports: [BidiModule, PlatformModule, CdkScrollableModule],
+                    imports: [BidiModule, CdkScrollableModule],
                     exports: [
                         BidiModule,
                         CdkScrollableModule,

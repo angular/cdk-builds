@@ -1,5 +1,5 @@
 import * as i1 from '@angular/cdk/platform';
-import { normalizePassiveListenerOptions, PlatformModule } from '@angular/cdk/platform';
+import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
 import { Injectable, EventEmitter, Directive, Output, Optional, Inject, Input, NgModule } from '@angular/core';
 import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
@@ -425,13 +425,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
 class TextFieldModule {
 }
 TextFieldModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], imports: [PlatformModule], exports: [CdkAutofill, CdkTextareaAutosize] });
-TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule, imports: [[PlatformModule]] });
+TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] });
+TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: TextFieldModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: [CdkAutofill, CdkTextareaAutosize],
-                    imports: [PlatformModule],
                     exports: [CdkAutofill, CdkTextareaAutosize],
                 }]
         }] });
