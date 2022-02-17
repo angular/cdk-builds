@@ -577,6 +577,9 @@ class DragRef {
             this._ngZone.runOutsideAngular(() => {
                 element.addEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
                 element.addEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+                // Usually this isn't necessary since the we prevent the default action in `pointerDown`,
+                // but some cases like dragging of links can slip through (see #24403).
+                element.addEventListener('dragstart', preventDefault, activeEventListenerOptions);
             });
             this._initialTransform = undefined;
             this._rootElement = element;
@@ -1081,6 +1084,9 @@ class DragRef {
         else {
             placeholder = deepCloneNode(this._rootElement);
         }
+        // Stop pointer events on the preview so the user can't
+        // interact with it while the preview is animating.
+        placeholder.style.pointerEvents = 'none';
         placeholder.classList.add('cdk-drag-placeholder');
         return placeholder;
     }
@@ -1190,6 +1196,7 @@ class DragRef {
     _removeRootElementListeners(element) {
         element.removeEventListener('mousedown', this._pointerDown, activeEventListenerOptions);
         element.removeEventListener('touchstart', this._pointerDown, passiveEventListenerOptions);
+        element.removeEventListener('dragstart', preventDefault, activeEventListenerOptions);
     }
     /**
      * Applies a `transform` to the root element, taking into account any existing transforms on it.
@@ -1407,6 +1414,10 @@ function matchElementSize(target, sourceRect) {
     target.style.width = `${sourceRect.width}px`;
     target.style.height = `${sourceRect.height}px`;
     target.style.transform = getTransform(sourceRect.left, sourceRect.top);
+}
+/** Utility to prevent the default action of an event. */
+function preventDefault(event) {
+    event.preventDefault();
 }
 
 /**
