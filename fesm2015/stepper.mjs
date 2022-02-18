@@ -1,7 +1,6 @@
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty, coerceNumberProperty } from '@angular/cdk/coercion';
 import { hasModifierKey, SPACE, ENTER } from '@angular/cdk/keycodes';
-import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { Directive, InjectionToken, EventEmitter, forwardRef, TemplateRef, Component, ViewEncapsulation, ChangeDetectionStrategy, Inject, Optional, ContentChild, ViewChild, Input, Output, QueryList, ContentChildren, NgModule } from '@angular/core';
 import { _getFocusedElementPierceShadowDom } from '@angular/cdk/platform';
@@ -218,12 +217,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
                 type: Input
             }] } });
 class CdkStepper {
-    constructor(_dir, _changeDetectorRef, _elementRef, 
-    /**
-     * @deprecated No longer in use, to be removed.
-     * @breaking-change 13.0.0
-     */
-    _document) {
+    constructor(_dir, _changeDetectorRef, _elementRef) {
         this._dir = _dir;
         this._changeDetectorRef = _changeDetectorRef;
         this._elementRef = _elementRef;
@@ -237,10 +231,6 @@ class CdkStepper {
         this._selectedIndex = 0;
         /** Event emitted when the selected step has changed. */
         this.selectionChange = new EventEmitter();
-        /**
-         * @deprecated To be turned into a private property. Use `orientation` instead.
-         * @breaking-change 13.0.0
-         */
         this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
@@ -490,7 +480,7 @@ class CdkStepper {
         return index > -1 && (!this.steps || index < this.steps.length);
     }
 }
-CdkStepper.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: CdkStepper, deps: [{ token: i1.Directionality, optional: true }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive });
+CdkStepper.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: CdkStepper, deps: [{ token: i1.Directionality, optional: true }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
 CdkStepper.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.2.0", type: CdkStepper, selector: "[cdkStepper]", inputs: { linear: "linear", selectedIndex: "selectedIndex", selected: "selected", orientation: "orientation" }, outputs: { selectionChange: "selectionChange" }, queries: [{ propertyName: "_steps", predicate: CdkStep, descendants: true }, { propertyName: "_stepHeader", predicate: CdkStepHeader, descendants: true }], exportAs: ["cdkStepper"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: CdkStepper, decorators: [{
             type: Directive,
@@ -501,10 +491,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
         }], ctorParameters: function () {
         return [{ type: i1.Directionality, decorators: [{
                         type: Optional
-                    }] }, { type: i0.ChangeDetectorRef }, { type: i0.ElementRef }, { type: undefined, decorators: [{
-                        type: Inject,
-                        args: [DOCUMENT]
-                    }] }];
+                    }] }, { type: i0.ChangeDetectorRef }, { type: i0.ElementRef }];
     }, propDecorators: { _steps: [{
                 type: ContentChildren,
                 args: [CdkStep, { descendants: true }]

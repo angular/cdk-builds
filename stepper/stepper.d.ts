@@ -139,17 +139,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** Orientation of the stepper. */
     get orientation(): StepperOrientation;
     set orientation(value: StepperOrientation);
-    /**
-     * @deprecated To be turned into a private property. Use `orientation` instead.
-     * @breaking-change 13.0.0
-     */
-    protected _orientation: StepperOrientation;
-    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef<HTMLElement>, 
-    /**
-     * @deprecated No longer in use, to be removed.
-     * @breaking-change 13.0.0
-     */
-    _document: any);
+    private _orientation;
+    constructor(_dir: Directionality, _changeDetectorRef: ChangeDetectorRef, _elementRef: ElementRef<HTMLElement>);
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
@@ -182,7 +173,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     private _containsFocus;
     /** Checks whether the passed-in index is a valid step index. */
     private _isValidIndex;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null, null]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"]>;
 }
 /**
