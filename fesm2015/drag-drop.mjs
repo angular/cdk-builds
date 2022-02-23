@@ -188,9 +188,8 @@ function isPointerNearClientRect(rect, threshold, pointerX, pointerY) {
  */
 /** Keeps track of the scroll position and dimensions of the parents of an element. */
 class ParentPositionTracker {
-    constructor(_document, _viewportRuler) {
+    constructor(_document) {
         this._document = _document;
-        this._viewportRuler = _viewportRuler;
         /** Cached positions of the scrollable parent elements. */
         this.positions = new Map();
     }
@@ -202,7 +201,7 @@ class ParentPositionTracker {
     cache(elements) {
         this.clear();
         this.positions.set(this._document, {
-            scrollPosition: this._viewportRuler.getViewportScrollPosition(),
+            scrollPosition: this.getViewportScrollPosition(),
         });
         elements.forEach(element => {
             this.positions.set(element, {
@@ -222,7 +221,7 @@ class ParentPositionTracker {
         let newTop;
         let newLeft;
         if (target === this._document) {
-            const viewportScrollPosition = this._viewportRuler.getViewportScrollPosition();
+            const viewportScrollPosition = this.getViewportScrollPosition();
             newTop = viewportScrollPosition.top;
             newLeft = viewportScrollPosition.left;
         }
@@ -242,6 +241,15 @@ class ParentPositionTracker {
         scrollPosition.top = newTop;
         scrollPosition.left = newLeft;
         return { top: topDifference, left: leftDifference };
+    }
+    /**
+     * Gets the scroll position of the viewport. Note that we use the scrollX and scrollY directly,
+     * instead of going through the `ViewportRuler`, because the first value the ruler looks at is
+     * the top/left offset of the `document.documentElement` which works for most cases, but breaks
+     * if the element is offset by something like the `BlockScrollStrategy`.
+     */
+    getViewportScrollPosition() {
+        return { top: window.scrollY, left: window.scrollX };
     }
 }
 
@@ -496,7 +504,7 @@ class DragRef {
             this._endDragSequence(event);
         };
         this.withRootElement(element).withParent(_config.parentDragRef || null);
-        this._parentPositions = new ParentPositionTracker(_document, _viewportRuler);
+        this._parentPositions = new ParentPositionTracker(_document);
         _dragDropRegistry.registerDragItem(this);
     }
     /** Whether starting to drag this element is disabled. */
@@ -1338,10 +1346,9 @@ class DragRef {
     }
     /** Gets the scroll position of the viewport. */
     _getViewportScrollPosition() {
-        const cachedPosition = this._parentPositions.positions.get(this._document);
-        return cachedPosition
-            ? cachedPosition.scrollPosition
-            : this._viewportRuler.getViewportScrollPosition();
+        var _a;
+        return (((_a = this._parentPositions.positions.get(this._document)) === null || _a === void 0 ? void 0 : _a.scrollPosition) ||
+            this._parentPositions.getViewportScrollPosition());
     }
     /**
      * Lazily resolves and returns the shadow root of the element. We do this in a function, rather
@@ -1599,7 +1606,7 @@ class DropListRef {
         this._document = _document;
         this.withScrollableParents([this.element]);
         _dragDropRegistry.registerDropContainer(this);
-        this._parentPositions = new ParentPositionTracker(_document, _viewportRuler);
+        this._parentPositions = new ParentPositionTracker(_document);
     }
     /** Removes the drop list functionality from the DOM element. */
     dispose() {
