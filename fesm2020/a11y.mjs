@@ -2327,19 +2327,14 @@ class HighContrastModeDetector {
     _applyBodyHighContrastModeCssClasses() {
         if (!this._hasCheckedHighContrastMode && this._platform.isBrowser && this._document.body) {
             const bodyClasses = this._document.body.classList;
-            // IE11 doesn't support `classList` operations with multiple arguments
-            bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
-            bodyClasses.remove(BLACK_ON_WHITE_CSS_CLASS);
-            bodyClasses.remove(WHITE_ON_BLACK_CSS_CLASS);
+            bodyClasses.remove(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             this._hasCheckedHighContrastMode = true;
             const mode = this.getHighContrastMode();
             if (mode === 1 /* BLACK_ON_WHITE */) {
-                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
-                bodyClasses.add(BLACK_ON_WHITE_CSS_CLASS);
+                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, BLACK_ON_WHITE_CSS_CLASS);
             }
             else if (mode === 2 /* WHITE_ON_BLACK */) {
-                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS);
-                bodyClasses.add(WHITE_ON_BLACK_CSS_CLASS);
+                bodyClasses.add(HIGH_CONTRAST_MODE_ACTIVE_CSS_CLASS, WHITE_ON_BLACK_CSS_CLASS);
             }
         }
     }
