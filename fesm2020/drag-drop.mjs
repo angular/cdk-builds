@@ -766,7 +766,7 @@ class DragRef {
         if (!this._hasStartedDragging) {
             return;
         }
-        this.released.next({ source: this });
+        this.released.next({ source: this, event });
         if (this._dropContainer) {
             // Stop scrolling immediately, instead of waiting for the animation to finish.
             this._dropContainer._stopScrolling();
@@ -788,6 +788,7 @@ class DragRef {
                     source: this,
                     distance: this._getDragDistance(pointerPosition),
                     dropPoint: pointerPosition,
+                    event,
                 });
             });
             this._cleanupCachedDimensions();
@@ -822,13 +823,13 @@ class DragRef {
             toggleVisibility(element, false, dragImportantProperties);
             this._document.body.appendChild(parent.replaceChild(placeholder, element));
             this._getPreviewInsertionPoint(parent, shadowRoot).appendChild(this._preview);
-            this.started.next({ source: this }); // Emit before notifying the container.
+            this.started.next({ source: this, event }); // Emit before notifying the container.
             dropContainer.start();
             this._initialContainer = dropContainer;
             this._initialIndex = dropContainer.getItemIndex(this);
         }
         else {
-            this.started.next({ source: this });
+            this.started.next({ source: this, event });
             this._initialContainer = this._initialIndex = undefined;
         }
         // Important to run after we've called `start` on the parent container
@@ -925,7 +926,7 @@ class DragRef {
             const pointerPosition = this._getPointerPositionOnPage(event);
             const distance = this._getDragDistance(pointerPosition);
             const isPointerOverContainer = container._isOverContainer(pointerPosition.x, pointerPosition.y);
-            this.ended.next({ source: this, distance, dropPoint: pointerPosition });
+            this.ended.next({ source: this, distance, dropPoint: pointerPosition, event });
             this.dropped.next({
                 item: this,
                 currentIndex,
@@ -935,6 +936,7 @@ class DragRef {
                 isPointerOverContainer,
                 distance,
                 dropPoint: pointerPosition,
+                event,
             });
             container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance, pointerPosition);
             this._dropContainer = this._initialContainer;
@@ -1710,8 +1712,11 @@ class DropListRef {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
+     * @param event Event that triggered the dropping sequence.
+     *
+     * @breaking-change 15.0.0 `previousIndex` and `event` parameters to become required.
      */
-    drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint) {
+    drop(item, currentIndex, previousIndex, previousContainer, isPointerOverContainer, distance, dropPoint, event = {}) {
         this._reset();
         this.dropped.next({
             item,
@@ -1722,6 +1727,7 @@ class DropListRef {
             isPointerOverContainer,
             distance,
             dropPoint,
+            event,
         });
     }
     /**
@@ -2899,16 +2905,17 @@ class CdkDropList {
                 item: event.item.data,
             });
         });
-        ref.dropped.subscribe(event => {
+        ref.dropped.subscribe(dropEvent => {
             this.dropped.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                previousContainer: event.previousContainer.data,
-                container: event.container.data,
-                item: event.item.data,
-                isPointerOverContainer: event.isPointerOverContainer,
-                distance: event.distance,
-                dropPoint: event.dropPoint,
+                previousIndex: dropEvent.previousIndex,
+                currentIndex: dropEvent.currentIndex,
+                previousContainer: dropEvent.previousContainer.data,
+                container: dropEvent.container.data,
+                item: dropEvent.item.data,
+                isPointerOverContainer: dropEvent.isPointerOverContainer,
+                distance: dropEvent.distance,
+                dropPoint: dropEvent.dropPoint,
+                event: dropEvent.event,
             });
             // Mark for check since all of these events run outside of change
             // detection and we're not guaranteed for something else to have triggered it.
@@ -3406,48 +3413,50 @@ class CdkDrag {
     }
     /** Handles the events from the underlying `DragRef`. */
     _handleEvents(ref) {
-        ref.started.subscribe(() => {
-            this.started.emit({ source: this });
+        ref.started.subscribe(startEvent => {
+            this.started.emit({ source: this, event: startEvent.event });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             this._changeDetectorRef.markForCheck();
         });
-        ref.released.subscribe(() => {
-            this.released.emit({ source: this });
+        ref.released.subscribe(releaseEvent => {
+            this.released.emit({ source: this, event: releaseEvent.event });
         });
-        ref.ended.subscribe(event => {
+        ref.ended.subscribe(endEvent => {
             this.ended.emit({
                 source: this,
-                distance: event.distance,
-                dropPoint: event.dropPoint,
+                distance: endEvent.distance,
+                dropPoint: endEvent.dropPoint,
+                event: endEvent.event,
             });
             // Since all of these events run outside of change detection,
             // we need to ensure that everything is marked correctly.
             this._changeDetectorRef.markForCheck();
         });
-        ref.entered.subscribe(event => {
+        ref.entered.subscribe(enterEvent => {
             this.entered.emit({
-                container: event.container.data,
+                container: enterEvent.container.data,
                 item: this,
-                currentIndex: event.currentIndex,
+                currentIndex: enterEvent.currentIndex,
             });
         });
-        ref.exited.subscribe(event => {
+        ref.exited.subscribe(exitEvent => {
             this.exited.emit({
-                container: event.container.data,
+                container: exitEvent.container.data,
                 item: this,
             });
         });
-        ref.dropped.subscribe(event => {
+        ref.dropped.subscribe(dropEvent => {
             this.dropped.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                previousContainer: event.previousContainer.data,
-                container: event.container.data,
-                isPointerOverContainer: event.isPointerOverContainer,
+                previousIndex: dropEvent.previousIndex,
+                currentIndex: dropEvent.currentIndex,
+                previousContainer: dropEvent.previousContainer.data,
+                container: dropEvent.container.data,
+                isPointerOverContainer: dropEvent.isPointerOverContainer,
                 item: this,
-                distance: event.distance,
-                dropPoint: event.dropPoint,
+                distance: dropEvent.distance,
+                dropPoint: dropEvent.dropPoint,
+                event: dropEvent.event,
             });
         });
     }
