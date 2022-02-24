@@ -437,7 +437,14 @@ class UnitTestElement {
     }
     click(...args) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this._dispatchMouseEventSequence('click', args, 0);
+            const isDisabled = this.element.disabled === true;
+            // If the element is `disabled` and has a `disabled` property, we emit the mouse event
+            // sequence but not dispatch the `click` event. This is necessary to keep the behavior
+            // consistent with an actual user interaction. The click event is not necessarily
+            // automatically prevented by the browser. There is mismatch between Firefox and Chromium:
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=329509.
+            // https://bugs.chromium.org/p/chromium/issues/detail?id=1115661.
+            yield this._dispatchMouseEventSequence(isDisabled ? null : 'click', args, 0);
             yield this._stabilize();
         });
     }
@@ -602,8 +609,11 @@ class UnitTestElement {
             dispatchPointerEvent(this.element, name, clientX, clientY, { isPrimary: true, button });
         }
     }
-    /** Dispatches all the events that are part of a mouse event sequence. */
-    _dispatchMouseEventSequence(name, args, button) {
+    /**
+     * Dispatches all the events that are part of a mouse event sequence
+     * and then emits a given primary event at the end, if speciifed.
+     */
+    _dispatchMouseEventSequence(primaryEventName, args, button) {
         return __awaiter(this, void 0, void 0, function* () {
             let clientX = undefined;
             let clientY = undefined;
@@ -624,10 +634,14 @@ class UnitTestElement {
             dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button, modifiers);
             this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
             dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button, modifiers);
-            dispatchMouseEvent(this.element, name, clientX, clientY, button, modifiers);
+            // If a primary event name is specified, emit it after the mouse event sequence.
+            if (primaryEventName !== null) {
+                dispatchMouseEvent(this.element, primaryEventName, clientX, clientY, button, modifiers);
+            }
             // This call to _stabilize should not be needed since the callers will already do that them-
             // selves. Nevertheless it breaks some tests in g3 without it. It needs to be investigated
             // why removing breaks those tests.
+            // See: https://github.com/angular/components/pull/20758/files#r520886256.
             yield this._stabilize();
         });
     }
