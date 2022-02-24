@@ -90,6 +90,9 @@ export declare class UnitTestElement implements TestElement {
      * @param button Mouse button that should be pressed when dispatching the event.
      */
     private _dispatchPointerEventIfSupported;
-    /** Dispatches all the events that are part of a mouse event sequence. */
+    /**
+     * Dispatches all the events that are part of a mouse event sequence
+     * and then emits a given primary event at the end, if speciifed.
+     */
     private _dispatchMouseEventSequence;
 }
