@@ -1848,7 +1848,7 @@ class CdkAriaLive {
                     // The `MutationObserver` fires also for attribute
                     // changes which we don't want to announce.
                     if (elementText !== this._previousAnnouncedText) {
-                        this._liveAnnouncer.announce(elementText, this._politeness);
+                        this._liveAnnouncer.announce(elementText, this._politeness, this.duration);
                         this._previousAnnouncedText = elementText;
                     }
                 });
@@ -1862,7 +1862,7 @@ class CdkAriaLive {
     }
 }
 CdkAriaLive.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: CdkAriaLive, deps: [{ token: i0.ElementRef }, { token: LiveAnnouncer }, { token: i1$1.ContentObserver }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive });
-CdkAriaLive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.2.0", type: CdkAriaLive, selector: "[cdkAriaLive]", inputs: { politeness: ["cdkAriaLive", "politeness"] }, exportAs: ["cdkAriaLive"], ngImport: i0 });
+CdkAriaLive.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "13.2.0", type: CdkAriaLive, selector: "[cdkAriaLive]", inputs: { politeness: ["cdkAriaLive", "politeness"], duration: ["cdkAriaLiveDuration", "duration"] }, exportAs: ["cdkAriaLive"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImport: i0, type: CdkAriaLive, decorators: [{
             type: Directive,
             args: [{
@@ -1872,6 +1872,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "13.2.0", ngImpor
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: LiveAnnouncer }, { type: i1$1.ContentObserver }, { type: i0.NgZone }]; }, propDecorators: { politeness: [{
                 type: Input,
                 args: ['cdkAriaLive']
+            }], duration: [{
+                type: Input,
+                args: ['cdkAriaLiveDuration']
             }] } });
 
 /**
