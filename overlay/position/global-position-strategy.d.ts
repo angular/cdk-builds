@@ -19,10 +19,9 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _cssPosition;
     private _topOffset;
     private _bottomOffset;
-    private _leftOffset;
-    private _rightOffset;
     private _alignItems;
-    private _justifyContent;
+    private _xPosition;
+    private _xOffset;
     private _width;
     private _height;
     private _isDisposed;
@@ -47,6 +46,18 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
      * @param value New right offset.
      */
     right(value?: string): this;
+    /**
+     * Sets the overlay to the start of the viewport, depending on the overlay direction.
+     * This will be to the left in LTR layouts and to the right in RTL.
+     * @param offset Offset from the edge of the screen.
+     */
+    start(value?: string): this;
+    /**
+     * Sets the overlay to the end of the viewport, depending on the overlay direction.
+     * This will be to the right in LTR layouts and to the left in RTL.
+     * @param offset Offset from the edge of the screen.
+     */
+    end(value?: string): this;
     /**
      * Sets the overlay width and clears any previously set width.
      * @param value New width for the overlay
