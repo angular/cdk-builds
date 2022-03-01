@@ -157,7 +157,7 @@ export declare class DragRef<T = any> {
     private _boundaryElement;
     /** Whether the native dragging interactions have been enabled on the root element. */
     private _nativeInteractionsEnabled;
-    /** Cached dimensions of the preview element. */
+    /** Cached dimensions of the preview element. Should be read via `_getPreviewRect`. */
     private _previewRect?;
     /** Cached dimensions of the boundary element. */
     private _boundaryRect?;
@@ -438,5 +438,7 @@ export declare class DragRef<T = any> {
     private _getShadowRoot;
     /** Gets the element into which the drag preview should be inserted. */
     private _getPreviewInsertionPoint;
+    /** Lazily resolves and returns the dimensions of the preview. */
+    private _getPreviewRect;
 }
 export {};
