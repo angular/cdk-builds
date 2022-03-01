@@ -457,14 +457,6 @@ class DragRef {
                 }
                 return;
             }
-            // We only need the preview dimensions if we have a boundary element.
-            if (this._boundaryElement) {
-                // Cache the preview element rect if we haven't cached it already or if
-                // we cached it too early before the element dimensions were computed.
-                if (!this._previewRect || (!this._previewRect.width && !this._previewRect.height)) {
-                    this._previewRect = (this._preview || this._rootElement).getBoundingClientRect();
-                }
-            }
             // We prevent the default action down here so that we know that dragging has started. This is
             // important for touch devices where doing this too early can unnecessarily block scrolling,
             // if there's a dragging delay.
@@ -1161,11 +1153,11 @@ class DragRef {
         if (this._boundaryRect) {
             const { x: pickupX, y: pickupY } = this._pickupPositionInElement;
             const boundaryRect = this._boundaryRect;
-            const previewRect = this._previewRect;
+            const { width: previewWidth, height: previewHeight } = this._getPreviewRect();
             const minY = boundaryRect.top + pickupY;
-            const maxY = boundaryRect.bottom - (previewRect.height - pickupY);
+            const maxY = boundaryRect.bottom - (previewHeight - pickupY);
             const minX = boundaryRect.left + pickupX;
-            const maxX = boundaryRect.right - (previewRect.width - pickupX);
+            const maxX = boundaryRect.right - (previewWidth - pickupX);
             x = clamp$1(x, minX, maxX);
             y = clamp$1(y, minY, maxY);
         }
@@ -1381,6 +1373,15 @@ class DragRef {
                 documentRef.body);
         }
         return coerceElement(previewContainer);
+    }
+    /** Lazily resolves and returns the dimensions of the preview. */
+    _getPreviewRect() {
+        // Cache the preview element rect if we haven't cached it already or if
+        // we cached it too early before the element dimensions were computed.
+        if (!this._previewRect || (!this._previewRect.width && !this._previewRect.height)) {
+            this._previewRect = (this._preview || this._rootElement).getBoundingClientRect();
+        }
+        return this._previewRect;
     }
 }
 /**
