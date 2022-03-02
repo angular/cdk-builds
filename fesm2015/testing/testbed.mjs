@@ -1,5 +1,5 @@
 import { __awaiter } from 'tslib';
-import { TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus, HarnessEnvironment } from '@angular/cdk/testing';
+import { getNoKeysSpecifiedError, TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, stopHandlingAutoChangeDetectionStatus, HarnessEnvironment } from '@angular/cdk/testing';
 import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
@@ -315,7 +315,10 @@ function typeInElement(element, ...modifiersAndKeys) {
     const first = modifiersAndKeys[0];
     let modifiers;
     let rest;
-    if (typeof first !== 'string' && first.keyCode === undefined && first.key === undefined) {
+    if (first !== undefined &&
+        typeof first !== 'string' &&
+        first.keyCode === undefined &&
+        first.key === undefined) {
         modifiers = first;
         rest = modifiersAndKeys.slice(1);
     }
@@ -330,12 +333,17 @@ function typeInElement(element, ...modifiersAndKeys) {
         ? k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c }))
         : [k])
         .reduce((arr, k) => arr.concat(k), []);
+    // Throw an error if no keys have been specified. Calling this function with no
+    // keys should not result in a focus event being dispatched unexpectedly.
+    if (keys.length === 0) {
+        throw getNoKeysSpecifiedError();
+    }
     // We simulate the user typing in a value by incrementally assigning the value below. The problem
     // is that for some input types, the browser won't allow for an invalid value to be set via the
     // `value` property which will always be the case when going character-by-character. If we detect
     // such an input, we have to set the value all at once or listeners to the `input` event (e.g.
     // the `ReactiveFormsModule` uses such an approach) won't receive the correct value.
-    const enterValueIncrementally = inputType === 'number' && keys.length > 0
+    const enterValueIncrementally = inputType === 'number'
         ? // The value can be set character by character in number inputs if it doesn't have any decimals.
             keys.every(key => key.key !== '.' && key.keyCode !== PERIOD)
         : incrementalInputTypes.has(inputType);

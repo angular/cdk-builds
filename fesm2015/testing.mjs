@@ -734,6 +734,21 @@ var TestKey;
  * found in the LICENSE file at https://angular.io/license
  */
 /**
+ * Returns an error which reports that no keys have been specified.
+ * @docs-private
+ */
+function getNoKeysSpecifiedError() {
+    return Error('No keys have been specified.');
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Gets text of element excluding certain selectors within the element.
  * @param element Element to get text from,
  * @param excludeSelector Selector identifying which elements to exclude,
@@ -763,5 +778,5 @@ function _getTextWithExcludedElements(element, excludeSelector) {
  * found in the LICENSE file at https://angular.io/license
  */
 
-export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
+export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
 //# sourceMappingURL=testing.mjs.map
