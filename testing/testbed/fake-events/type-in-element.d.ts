@@ -12,7 +12,7 @@ import { ModifierKeys } from '@angular/cdk/testing';
  */
 export declare function isTextInput(element: Element): element is HTMLInputElement | HTMLTextAreaElement;
 /**
- * Focuses an input, sets its value and dispatches
+ * If keys have been specified, focuses an input, sets its value and dispatches
  * the `input` event, simulating the user typing.
  * @param element Element onto which to set the value.
  * @param keys The keys to send to the element.
@@ -23,7 +23,7 @@ export declare function typeInElement(element: HTMLElement, ...keys: (string | {
     key?: string;
 })[]): void;
 /**
- * Focuses an input, sets its value and dispatches
+ * If keys have been specified, focuses an input, sets its value and dispatches
  * the `input` event, simulating the user typing.
  * @param element Element onto which to set the value.
  * @param modifiers Modifier keys that are held while typing.

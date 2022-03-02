@@ -1,4 +1,4 @@
-import { TestKey, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
+import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, HarnessEnvironment } from '@angular/cdk/testing';
 import { Key, browser, Button, by, element } from 'protractor';
 
 /**
@@ -107,7 +107,7 @@ class ProtractorElement {
         const first = modifiersAndKeys[0];
         let modifiers;
         let rest;
-        if (typeof first !== 'string' && typeof first !== 'number') {
+        if (first !== undefined && typeof first !== 'string' && typeof first !== 'number') {
             modifiers = first;
             rest = modifiersAndKeys.slice(1);
         }
@@ -122,6 +122,11 @@ class ProtractorElement {
             // Key.chord doesn't work well with geckodriver (mozilla/geckodriver#1502),
             // so avoid it if no modifier keys are required.
             .map(k => (modifierKeys.length > 0 ? Key.chord(...modifierKeys, k) : k));
+        // Throw an error if no keys have been specified. Calling this function with no
+        // keys should not result in a focus event being dispatched unexpectedly.
+        if (keys.length === 0) {
+            throw getNoKeysSpecifiedError();
+        }
         return this.element.sendKeys(...keys);
     }
     /**
