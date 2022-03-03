@@ -39,7 +39,7 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
      */
     dataAccessor: (data: T, name: string) => string;
     /** Alignment of the cell values. */
-    justify: 'start' | 'end';
+    justify: 'start' | 'end' | 'center';
     /** @docs-private */
     columnDef: CdkColumnDef;
     /**
