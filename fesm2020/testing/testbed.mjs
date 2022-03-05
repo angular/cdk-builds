@@ -482,12 +482,14 @@ class UnitTestElement {
     /** Hovers the mouse over the element. */
     async hover() {
         this._dispatchPointerEventIfSupported('pointerenter');
+        dispatchMouseEvent(this.element, 'mouseover');
         dispatchMouseEvent(this.element, 'mouseenter');
         await this._stabilize();
     }
     /** Moves the mouse away from the element. */
     async mouseAway() {
         this._dispatchPointerEventIfSupported('pointerleave');
+        dispatchMouseEvent(this.element, 'mouseout');
         dispatchMouseEvent(this.element, 'mouseleave');
         await this._stabilize();
     }
