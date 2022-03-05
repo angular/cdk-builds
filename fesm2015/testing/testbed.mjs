@@ -482,6 +482,7 @@ class UnitTestElement {
     hover() {
         return __awaiter(this, void 0, void 0, function* () {
             this._dispatchPointerEventIfSupported('pointerenter');
+            dispatchMouseEvent(this.element, 'mouseover');
             dispatchMouseEvent(this.element, 'mouseenter');
             yield this._stabilize();
         });
@@ -490,6 +491,7 @@ class UnitTestElement {
     mouseAway() {
         return __awaiter(this, void 0, void 0, function* () {
             this._dispatchPointerEventIfSupported('pointerleave');
+            dispatchMouseEvent(this.element, 'mouseout');
             dispatchMouseEvent(this.element, 'mouseleave');
             yield this._stabilize();
         });
