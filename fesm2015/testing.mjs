@@ -532,6 +532,9 @@ class HarnessEnvironment {
      */
     _getAllHarnessesAndTestElements(queries) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!queries.length) {
+                throw Error('CDK Component harness query must contain at least one element.');
+            }
             const { allQueries, harnessQueries, elementQueries, harnessTypes } = _parseQueries(queries);
             // Combine all of the queries into one large comma-delimited selector and use it to get all raw
             // elements matching any of the individual queries.
