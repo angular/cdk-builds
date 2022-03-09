@@ -5,8 +5,8 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, ApplicationRef, Injector } from '@angular/core';
-import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from './portal';
+import { ApplicationRef, ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, Injector } from '@angular/core';
+import { BasePortalOutlet, ComponentPortal, DomPortal, TemplatePortal } from './portal';
 /**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.

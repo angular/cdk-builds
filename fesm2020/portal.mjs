@@ -117,11 +117,20 @@ class ComponentPortal extends Portal {
  * A `TemplatePortal` is a portal that represents some embedded template (TemplateRef).
  */
 class TemplatePortal extends Portal {
-    constructor(template, viewContainerRef, context) {
+    constructor(
+    /** The embedded template that will be used to instantiate an embedded View in the host. */
+    templateRef, 
+    /** Reference to the ViewContainer into which the template will be stamped out. */
+    viewContainerRef, 
+    /** Contextual data to be passed in to the embedded view. */
+    context, 
+    /** The injector to use for the embedded view. */
+    injector) {
         super();
-        this.templateRef = template;
+        this.templateRef = templateRef;
         this.viewContainerRef = viewContainerRef;
         this.context = context;
+        this.injector = injector;
     }
     get origin() {
         return this.templateRef.elementRef;
@@ -324,7 +333,9 @@ class DomPortalOutlet extends BasePortalOutlet {
      */
     attachTemplatePortal(portal) {
         let viewContainer = portal.viewContainerRef;
-        let viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context);
+        let viewRef = viewContainer.createEmbeddedView(portal.templateRef, portal.context, {
+            injector: portal.injector,
+        });
         // The method `createEmbeddedView` will add the view as a child of the viewContainer.
         // But for the DomPortalOutlet the view can be added everywhere in the DOM
         // (e.g Overlay Container) To move the view to the specified host element. We just
@@ -531,7 +542,9 @@ class CdkPortalOutlet extends BasePortalOutlet {
      */
     attachTemplatePortal(portal) {
         portal.setAttachedHost(this);
-        const viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context);
+        const viewRef = this._viewContainerRef.createEmbeddedView(portal.templateRef, portal.context, {
+            injector: portal.injector,
+        });
         super.setDisposeFn(() => this._viewContainerRef.clear());
         this._attachedPortal = portal;
         this._attachedRef = viewRef;
