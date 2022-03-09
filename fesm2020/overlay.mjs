@@ -831,6 +831,9 @@ class OverlayRef {
         this._detachments = new Subject();
         this._locationChanges = Subscription.EMPTY;
         this._backdropClickHandler = (event) => this._backdropClick.next(event);
+        this._backdropTransitionendHandler = (event) => {
+            this._disposeBackdrop(event.target);
+        };
         /** Stream of keydown events dispatched to this overlay. */
         this._keydownEvents = new Subject();
         /** Stream of mouse outside events dispatched to this overlay. */
@@ -1119,22 +1122,9 @@ class OverlayRef {
         if (!backdropToDetach) {
             return;
         }
-        let timeoutId;
-        const finishDetach = () => {
-            // It may not be attached to anything in certain cases (e.g. unit tests).
-            if (backdropToDetach) {
-                backdropToDetach.removeEventListener('click', this._backdropClickHandler);
-                backdropToDetach.removeEventListener('transitionend', finishDetach);
-                this._disposeBackdrop(backdropToDetach);
-            }
-            if (this._config.backdropClass) {
-                this._toggleClasses(backdropToDetach, this._config.backdropClass, false);
-            }
-            clearTimeout(timeoutId);
-        };
         backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
         this._ngZone.runOutsideAngular(() => {
-            backdropToDetach.addEventListener('transitionend', finishDetach);
+            backdropToDetach.addEventListener('transitionend', this._backdropTransitionendHandler);
         });
         // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
         // In this case we make it unclickable and we try to remove it after a delay.
@@ -1142,7 +1132,10 @@ class OverlayRef {
         // Run this outside the Angular zone because there's nothing that Angular cares about.
         // If it were to run inside the Angular zone, every test that used Overlay would have to be
         // either async or fakeAsync.
-        timeoutId = this._ngZone.runOutsideAngular(() => setTimeout(finishDetach, 500));
+        this._backdropTimeout = this._ngZone.runOutsideAngular(() => setTimeout(() => {
+            console.log('fallback');
+            this._disposeBackdrop(backdropToDetach);
+        }, 500));
     }
     /** Toggles a single CSS class or an array of classes on an element. */
     _toggleClasses(element, cssClasses, isAdd) {
@@ -1191,6 +1184,8 @@ class OverlayRef {
     /** Removes a backdrop element from the DOM. */
     _disposeBackdrop(backdrop) {
         if (backdrop) {
+            backdrop.removeEventListener('click', this._backdropClickHandler);
+            backdrop.removeEventListener('transitionend', this._backdropTransitionendHandler);
             backdrop.remove();
             // It is possible that a new portal has been attached to this overlay since we started
             // removing the backdrop. If that is the case, only clear the backdrop reference if it
@@ -1198,6 +1193,10 @@ class OverlayRef {
             if (this._backdropElement === backdrop) {
                 this._backdropElement = null;
             }
+        }
+        if (this._backdropTimeout) {
+            clearTimeout(this._backdropTimeout);
+            this._backdropTimeout = undefined;
         }
     }
 }
