@@ -1133,7 +1133,6 @@ class OverlayRef {
         // If it were to run inside the Angular zone, every test that used Overlay would have to be
         // either async or fakeAsync.
         this._backdropTimeout = this._ngZone.runOutsideAngular(() => setTimeout(() => {
-            console.log('fallback');
             this._disposeBackdrop(backdropToDetach);
         }, 500));
     }
