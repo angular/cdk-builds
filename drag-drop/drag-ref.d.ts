@@ -440,5 +440,9 @@ export declare class DragRef<T = any> {
     private _getPreviewInsertionPoint;
     /** Lazily resolves and returns the dimensions of the preview. */
     private _getPreviewRect;
+    /** Handles a native `dragstart` event. */
+    private _nativeDragStart;
+    /** Gets a handle that is the target of an event. */
+    private _getTargetHandle;
 }
 export {};
