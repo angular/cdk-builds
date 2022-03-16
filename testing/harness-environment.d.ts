@@ -28,9 +28,7 @@ export declare abstract class HarnessEnvironment<E> implements HarnessLoader, Lo
     harnessLoaderForOptional(selector: string): Promise<HarnessLoader | null>;
     harnessLoaderForAll(selector: string): Promise<HarnessLoader[]>;
     getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
-    getHarnessOrNull<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T | null>;
     getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
-    hasHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<boolean>;
     getChildLoader(selector: string): Promise<HarnessLoader>;
     getAllChildLoaders(selector: string): Promise<HarnessLoader[]>;
     /** Creates a `ComponentHarness` for the given harness type with the given raw host element. */

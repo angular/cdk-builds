@@ -58,18 +58,8 @@ export declare class TemplatePortal<C = any> extends Portal<EmbeddedViewRef<C>> 
     /** Reference to the ViewContainer into which the template will be stamped out. */
     viewContainerRef: ViewContainerRef;
     /** Contextual data to be passed in to the embedded view. */
-    context?: C | undefined;
-    /** The injector to use for the embedded view. */
-    injector?: Injector | undefined;
-    constructor(
-    /** The embedded template that will be used to instantiate an embedded View in the host. */
-    templateRef: TemplateRef<C>, 
-    /** Reference to the ViewContainer into which the template will be stamped out. */
-    viewContainerRef: ViewContainerRef, 
-    /** Contextual data to be passed in to the embedded view. */
-    context?: C | undefined, 
-    /** The injector to use for the embedded view. */
-    injector?: Injector | undefined);
+    context: C | undefined;
+    constructor(template: TemplateRef<C>, viewContainerRef: ViewContainerRef, context?: C);
     get origin(): ElementRef;
     /**
      * Attach the portal to the provided `PortalOutlet`.

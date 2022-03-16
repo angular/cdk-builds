@@ -75,7 +75,6 @@ export declare class DropListRef<T = any> {
         isPointerOverContainer: boolean;
         distance: Point;
         dropPoint: Point;
-        event: MouseEvent | TouchEvent;
     }>;
     /** Emits as the user is swapping items while actively dragging. */
     readonly sorted: Subject<{
@@ -164,11 +163,8 @@ export declare class DropListRef<T = any> {
      * @param isPointerOverContainer Whether the user's pointer was over the
      *    container when the item was dropped.
      * @param distance Distance the user has dragged since the start of the dragging sequence.
-     * @param event Event that triggered the dropping sequence.
-     *
-     * @breaking-change 15.0.0 `previousIndex` and `event` parameters to become required.
      */
-    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point, event?: MouseEvent | TouchEvent): void;
+    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.

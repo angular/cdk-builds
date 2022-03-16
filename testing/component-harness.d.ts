@@ -77,28 +77,12 @@ export interface HarnessLoader {
      */
     getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
     /**
-     * Searches for an instance of the component corresponding to the given harness type under the
-     * `HarnessLoader`'s root element, and returns a `ComponentHarness` for that instance. If multiple
-     * matching components are found, a harness for the first one is returned. If no matching
-     * component is found, null is returned.
-     * @param query A query for a harness to create
-     * @return An instance of the given harness type (or null if not found).
-     */
-    getHarnessOrNull<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T | null>;
-    /**
      * Searches for all instances of the component corresponding to the given harness type under the
      * `HarnessLoader`'s root element, and returns a list `ComponentHarness` for each instance.
      * @param query A query for a harness to create
      * @return A list instances of the given harness type.
      */
     getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
-    /**
-     * Searches for an instance of the component corresponding to the given harness type under the
-     * `HarnessLoader`'s root element, and returns a boolean indicating if any were found.
-     * @param query A query for a harness to create
-     * @return A boolean indicating if an instance was found.
-     */
-    hasHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<boolean>;
 }
 /**
  * Interface used to create asynchronous locator functions used find elements and component
@@ -342,9 +326,7 @@ export declare abstract class ContentContainerComponentHarness<S extends string 
     getChildLoader(selector: S): Promise<HarnessLoader>;
     getAllChildLoaders(selector: S): Promise<HarnessLoader[]>;
     getHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T>;
-    getHarnessOrNull<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T | null>;
     getAllHarnesses<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<T[]>;
-    hasHarness<T extends ComponentHarness>(query: HarnessQuery<T>): Promise<boolean>;
     /**
      * Gets the root harness loader from which to start
      * searching for content contained by this harness.

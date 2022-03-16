@@ -246,14 +246,8 @@ class ContentContainerComponentHarness extends ComponentHarness {
     async getHarness(query) {
         return (await this.getRootHarnessLoader()).getHarness(query);
     }
-    async getHarnessOrNull(query) {
-        return (await this.getRootHarnessLoader()).getHarnessOrNull(query);
-    }
     async getAllHarnesses(query) {
         return (await this.getRootHarnessLoader()).getAllHarnesses(query);
-    }
-    async hasHarness(query) {
-        return (await this.getRootHarnessLoader()).hasHarness(query);
     }
     /**
      * Gets the root harness loader from which to start
@@ -494,16 +488,8 @@ class HarnessEnvironment {
         return this.locatorFor(query)();
     }
     // Implemented as part of the `HarnessLoader` interface.
-    getHarnessOrNull(query) {
-        return this.locatorForOptional(query)();
-    }
-    // Implemented as part of the `HarnessLoader` interface.
     getAllHarnesses(query) {
         return this.locatorForAll(query)();
-    }
-    // Implemented as part of the `HarnessLoader` interface.
-    async hasHarness(query) {
-        return (await this.locatorForOptional(query)()) !== null;
     }
     // Implemented as part of the `HarnessLoader` interface.
     async getChildLoader(selector) {

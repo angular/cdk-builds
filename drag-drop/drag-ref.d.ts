@@ -202,19 +202,16 @@ export declare class DragRef<T = any> {
     /** Emits when the user starts dragging the item. */
     readonly started: Subject<{
         source: DragRef;
-        event: MouseEvent | TouchEvent;
     }>;
     /** Emits when the user has released a drag item, before any animations have started. */
     readonly released: Subject<{
         source: DragRef;
-        event: MouseEvent | TouchEvent;
     }>;
     /** Emits when the user stops dragging an item in the container. */
     readonly ended: Subject<{
         source: DragRef;
         distance: Point;
         dropPoint: Point;
-        event: MouseEvent | TouchEvent;
     }>;
     /** Emits when the user has moved the item into a new container. */
     readonly entered: Subject<{
@@ -237,7 +234,6 @@ export declare class DragRef<T = any> {
         distance: Point;
         dropPoint: Point;
         isPointerOverContainer: boolean;
-        event: MouseEvent | TouchEvent;
     }>;
     /**
      * Emits as the user is dragging the item. Use with caution,
