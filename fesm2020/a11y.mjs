@@ -2133,10 +2133,12 @@ class FocusMonitor {
             return;
         }
         this._setClasses(element);
-        this._emitOrigin(elementInfo.subject, null);
+        this._emitOrigin(elementInfo, null);
     }
-    _emitOrigin(subject, origin) {
-        this._ngZone.run(() => subject.next(origin));
+    _emitOrigin(info, origin) {
+        if (info.subject.observers.length) {
+            this._ngZone.run(() => info.subject.next(origin));
+        }
     }
     _registerGlobalListeners(elementInfo) {
         if (!this._platform.isBrowser) {
@@ -2194,7 +2196,7 @@ class FocusMonitor {
     /** Updates all the state on an element once its focus origin has changed. */
     _originChanged(element, origin, elementInfo) {
         this._setClasses(element, origin);
-        this._emitOrigin(elementInfo.subject, origin);
+        this._emitOrigin(elementInfo, origin);
         this._lastFocusOrigin = origin;
     }
     /**
