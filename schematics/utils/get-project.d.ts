@@ -10,4 +10,4 @@ import { ProjectDefinition, WorkspaceDefinition } from '@angular-devkit/core/src
  * Finds the specified project configuration in the workspace. Throws an error if the project
  * couldn't be found.
  */
-export declare function getProjectFromWorkspace(workspace: WorkspaceDefinition, projectName?: string): ProjectDefinition;
+export declare function getProjectFromWorkspace(workspace: WorkspaceDefinition, projectName: string | undefined): ProjectDefinition;
