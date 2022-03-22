@@ -277,4 +277,6 @@ export interface ConnectedPosition {
     offsetY?: number;
     panelClass?: string | string[];
 }
+export declare const STANDARD_DROPDOWN_BELOW_POSITIONS: ConnectedPosition[];
+export declare const STANDARD_DROPDOWN_ADJACENT_POSITIONS: ConnectedPosition[];
 export {};

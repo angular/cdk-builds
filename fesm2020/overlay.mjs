@@ -2167,6 +2167,18 @@ function getRoundedBoundingClientRect(clientRect) {
         height: Math.floor(clientRect.height),
     };
 }
+const STANDARD_DROPDOWN_BELOW_POSITIONS = [
+    { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+    { originX: 'end', originY: 'bottom', overlayX: 'end', overlayY: 'top' },
+    { originX: 'end', originY: 'top', overlayX: 'end', overlayY: 'bottom' },
+];
+const STANDARD_DROPDOWN_ADJACENT_POSITIONS = [
+    { originX: 'end', originY: 'top', overlayX: 'start', overlayY: 'top' },
+    { originX: 'end', originY: 'bottom', overlayX: 'start', overlayY: 'bottom' },
+    { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top' },
+    { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom' },
+];
 
 /**
  * @license
@@ -3096,5 +3108,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.6", 
  * Generated bundle index. Do not edit.
  */
 
-export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
+export { BlockScrollStrategy, CdkConnectedOverlay, CdkOverlayOrigin, CloseScrollStrategy, ConnectedOverlayPositionChange, ConnectionPositionPair, FlexibleConnectedPositionStrategy, FullscreenOverlayContainer, GlobalPositionStrategy, NoopScrollStrategy, Overlay, OverlayConfig, OverlayContainer, OverlayKeyboardDispatcher, OverlayModule, OverlayOutsideClickDispatcher, OverlayPositionBuilder, OverlayRef, RepositionScrollStrategy, STANDARD_DROPDOWN_ADJACENT_POSITIONS, STANDARD_DROPDOWN_BELOW_POSITIONS, ScrollStrategyOptions, ScrollingVisibility, validateHorizontalPosition, validateVerticalPosition };
 //# sourceMappingURL=overlay.mjs.map
