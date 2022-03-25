@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { ElementRef, Directive, EventEmitter, Inject, Output, NgModule } from '@angular/core';
+import { ElementRef, Injector, Directive, EventEmitter, Inject, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 /**
@@ -251,6 +251,17 @@ class BasePortalHost extends BasePortalOutlet {
  * application context.
  */
 class DomPortalOutlet extends BasePortalOutlet {
+    /**
+     * @param outletElement Element into which the content is projected.
+     * @param _componentFactoryResolver Used to resolve the component factory.
+     *   Only required when attaching component portals.
+     * @param _appRef Reference to the application. Only used in component portals when there
+     *   is no `ViewContainerRef` available.
+     * @param _defaultInjector Injector to use as a fallback when the portal being attached doesn't
+     *   have one. Only used for component portals.
+     * @param _document Reference to the document. Used when attaching a DOM portal. Will eventually
+     *   become a required parameter.
+     */
     constructor(
     /** Element into which the content is projected. */
     outletElement, _componentFactoryResolver, _appRef, _defaultInjector, 
@@ -301,7 +312,10 @@ class DomPortalOutlet extends BasePortalOutlet {
      * @returns Reference to the created component.
      */
     attachComponentPortal(portal) {
-        const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
+        const resolver = (portal.componentFactoryResolver || this._componentFactoryResolver);
+        if ((typeof ngDevMode === 'undefined' || ngDevMode) && !resolver) {
+            throw Error('Cannot attach component portal to outlet without a ComponentFactoryResolver.');
+        }
         const componentFactory = resolver.resolveComponentFactory(portal.component);
         let componentRef;
         // If the portal specifies a ViewContainerRef, we will use that as the attachment point
@@ -313,7 +327,10 @@ class DomPortalOutlet extends BasePortalOutlet {
             this.setDisposeFn(() => componentRef.destroy());
         }
         else {
-            componentRef = componentFactory.create(portal.injector || this._defaultInjector);
+            if ((typeof ngDevMode === 'undefined' || ngDevMode) && !this._appRef) {
+                throw Error('Cannot attach component portal to outlet without an ApplicationRef.');
+            }
+            componentRef = componentFactory.create(portal.injector || this._defaultInjector || Injector.NULL);
             this._appRef.attachView(componentRef.hostView);
             this.setDisposeFn(() => {
                 this._appRef.detachView(componentRef.hostView);
