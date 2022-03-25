@@ -14,13 +14,24 @@ import { BasePortalOutlet, ComponentPortal, TemplatePortal, DomPortal } from './
 export declare class DomPortalOutlet extends BasePortalOutlet {
     /** Element into which the content is projected. */
     outletElement: Element;
-    private _componentFactoryResolver;
-    private _appRef;
-    private _defaultInjector;
+    private _componentFactoryResolver?;
+    private _appRef?;
+    private _defaultInjector?;
     private _document;
+    /**
+     * @param outletElement Element into which the content is projected.
+     * @param _componentFactoryResolver Used to resolve the component factory.
+     *   Only required when attaching component portals.
+     * @param _appRef Reference to the application. Only used in component portals when there
+     *   is no `ViewContainerRef` available.
+     * @param _defaultInjector Injector to use as a fallback when the portal being attached doesn't
+     *   have one. Only used for component portals.
+     * @param _document Reference to the document. Used when attaching a DOM portal. Will eventually
+     *   become a required parameter.
+     */
     constructor(
     /** Element into which the content is projected. */
-    outletElement: Element, _componentFactoryResolver: ComponentFactoryResolver, _appRef: ApplicationRef, _defaultInjector: Injector, 
+    outletElement: Element, _componentFactoryResolver?: ComponentFactoryResolver | undefined, _appRef?: ApplicationRef | undefined, _defaultInjector?: Injector | undefined, 
     /**
      * @deprecated `_document` Parameter to be made required.
      * @breaking-change 10.0.0
