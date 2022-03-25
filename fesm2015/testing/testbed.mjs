@@ -345,7 +345,7 @@ function typeInElement(element, ...modifiersAndKeys) {
     // the `ReactiveFormsModule` uses such an approach) won't receive the correct value.
     const enterValueIncrementally = inputType === 'number'
         ? // The value can be set character by character in number inputs if it doesn't have any decimals.
-            keys.every(key => key.key !== '.' && key.keyCode !== PERIOD)
+            keys.every(key => key.key !== '.' && key.key !== '-' && key.keyCode !== PERIOD)
         : incrementalInputTypes.has(inputType);
     triggerFocus(element);
     // When we aren't entering the value incrementally, assign it all at once ahead
