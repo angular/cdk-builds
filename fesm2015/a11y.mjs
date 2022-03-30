@@ -1744,16 +1744,19 @@ class LiveAnnouncer {
         //   second time without clearing and then using a non-zero delay.
         // (using JAWS 17 at time of this writing).
         return this._ngZone.runOutsideAngular(() => {
-            return new Promise(resolve => {
-                clearTimeout(this._previousTimeout);
-                this._previousTimeout = setTimeout(() => {
-                    this._liveElement.textContent = message;
-                    resolve();
-                    if (typeof duration === 'number') {
-                        this._previousTimeout = setTimeout(() => this.clear(), duration);
-                    }
-                }, 100);
-            });
+            if (!this._currentPromise) {
+                this._currentPromise = new Promise(resolve => (this._currentResolve = resolve));
+            }
+            clearTimeout(this._previousTimeout);
+            this._previousTimeout = setTimeout(() => {
+                this._liveElement.textContent = message;
+                if (typeof duration === 'number') {
+                    this._previousTimeout = setTimeout(() => this.clear(), duration);
+                }
+                this._currentResolve();
+                this._currentPromise = this._currentResolve = undefined;
+            }, 100);
+            return this._currentPromise;
         });
     }
     /**
@@ -1767,10 +1770,12 @@ class LiveAnnouncer {
         }
     }
     ngOnDestroy() {
-        var _a;
+        var _a, _b;
         clearTimeout(this._previousTimeout);
         (_a = this._liveElement) === null || _a === void 0 ? void 0 : _a.remove();
         this._liveElement = null;
+        (_b = this._currentResolve) === null || _b === void 0 ? void 0 : _b.call(this);
+        this._currentPromise = this._currentResolve = undefined;
     }
     _createLiveElement() {
         const elementClass = 'cdk-live-announcer-element';
