@@ -4,7 +4,7 @@ export { CdkScrollable, ScrollDispatcher, ViewportRuler } from '@angular/cdk/scr
 import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, ElementRef, Optional, ApplicationRef, InjectionToken, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, ElementRef, Optional, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, Directive, EventEmitter, Input, Output, NgModule } from '@angular/core';
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _isTestEnvironment, _getEventTarget } from '@angular/cdk/platform';
@@ -476,7 +476,7 @@ function validateHorizontalPosition(property, value) {
  * Used to manipulate or dispose of said overlay.
  */
 class OverlayRef {
-    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher) {
+    constructor(_portalOutlet, _host, _pane, _config, _ngZone, _keyboardDispatcher, _document, _location, _outsideClickDispatcher, _animationsDisabled = false) {
         this._portalOutlet = _portalOutlet;
         this._host = _host;
         this._pane = _pane;
@@ -486,6 +486,7 @@ class OverlayRef {
         this._document = _document;
         this._location = _location;
         this._outsideClickDispatcher = _outsideClickDispatcher;
+        this._animationsDisabled = _animationsDisabled;
         this._backdropElement = null;
         this._backdropClick = new Subject();
         this._attachments = new Subject();
@@ -743,6 +744,9 @@ class OverlayRef {
         const showingClass = 'cdk-overlay-backdrop-showing';
         this._backdropElement = this._document.createElement('div');
         this._backdropElement.classList.add('cdk-overlay-backdrop');
+        if (this._animationsDisabled) {
+            this._backdropElement.classList.add('cdk-overlay-backdrop-noop-animation');
+        }
         if (this._config.backdropClass) {
             this._toggleClasses(this._backdropElement, this._config.backdropClass, true);
         }
@@ -753,7 +757,7 @@ class OverlayRef {
         // action desired when such a click occurs (usually closing the overlay).
         this._backdropElement.addEventListener('click', this._backdropClickHandler);
         // Add class to fade-in the backdrop after one frame.
-        if (typeof requestAnimationFrame !== 'undefined') {
+        if (!this._animationsDisabled && typeof requestAnimationFrame !== 'undefined') {
             this._ngZone.runOutsideAngular(() => {
                 requestAnimationFrame(() => {
                     if (this._backdropElement) {
@@ -782,6 +786,10 @@ class OverlayRef {
     detachBackdrop() {
         const backdropToDetach = this._backdropElement;
         if (!backdropToDetach) {
+            return;
+        }
+        if (this._animationsDisabled) {
+            this._disposeBackdrop(backdropToDetach);
             return;
         }
         backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
@@ -2471,7 +2479,7 @@ let nextUniqueId = 0;
 class Overlay {
     constructor(
     /** Scrolling strategies that can be used when creating an overlay. */
-    scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location, _outsideClickDispatcher) {
+    scrollStrategies, _overlayContainer, _componentFactoryResolver, _positionBuilder, _keyboardDispatcher, _injector, _ngZone, _document, _directionality, _location, _outsideClickDispatcher, _animationsModuleType) {
         this.scrollStrategies = scrollStrategies;
         this._overlayContainer = _overlayContainer;
         this._componentFactoryResolver = _componentFactoryResolver;
@@ -2483,6 +2491,7 @@ class Overlay {
         this._directionality = _directionality;
         this._location = _location;
         this._outsideClickDispatcher = _outsideClickDispatcher;
+        this._animationsModuleType = _animationsModuleType;
     }
     /**
      * Creates an overlay.
@@ -2495,7 +2504,7 @@ class Overlay {
         const portalOutlet = this._createPortalOutlet(pane);
         const overlayConfig = new OverlayConfig(config);
         overlayConfig.direction = overlayConfig.direction || this._directionality.value;
-        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher);
+        return new OverlayRef(portalOutlet, host, pane, overlayConfig, this._ngZone, this._keyboardDispatcher, this._document, this._location, this._outsideClickDispatcher, this._animationsModuleType === 'NoopAnimations');
     }
     /**
      * Gets a position builder that can be used, via fluent API,
@@ -2540,7 +2549,7 @@ class Overlay {
         return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
     }
 }
-Overlay.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.9", ngImport: i0, type: Overlay, deps: [{ token: ScrollStrategyOptions }, { token: OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: OverlayPositionBuilder }, { token: OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: OverlayOutsideClickDispatcher }], target: i0.ɵɵFactoryTarget.Injectable });
+Overlay.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.9", ngImport: i0, type: Overlay, deps: [{ token: ScrollStrategyOptions }, { token: OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: OverlayPositionBuilder }, { token: OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: OverlayOutsideClickDispatcher }, { token: ANIMATION_MODULE_TYPE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
 Overlay.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.9", ngImport: i0, type: Overlay });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.9", ngImport: i0, type: Overlay, decorators: [{
             type: Injectable
@@ -2548,7 +2557,12 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.9", 
         return [{ type: ScrollStrategyOptions }, { type: OverlayContainer }, { type: i0.ComponentFactoryResolver }, { type: OverlayPositionBuilder }, { type: OverlayKeyboardDispatcher }, { type: i0.Injector }, { type: i0.NgZone }, { type: undefined, decorators: [{
                         type: Inject,
                         args: [DOCUMENT]
-                    }] }, { type: i5.Directionality }, { type: i6.Location }, { type: OverlayOutsideClickDispatcher }];
+                    }] }, { type: i5.Directionality }, { type: i6.Location }, { type: OverlayOutsideClickDispatcher }, { type: undefined, decorators: [{
+                        type: Inject,
+                        args: [ANIMATION_MODULE_TYPE]
+                    }, {
+                        type: Optional
+                    }] }];
     } });
 
 /** Default set of positions for the overlay. Follows the behavior of a dropdown. */

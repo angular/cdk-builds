@@ -37,10 +37,11 @@ export declare class Overlay {
     private _directionality;
     private _location;
     private _outsideClickDispatcher;
+    private _animationsModuleType?;
     private _appRef;
     constructor(
     /** Scrolling strategies that can be used when creating an overlay. */
-    scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality, _location: Location, _outsideClickDispatcher: OverlayOutsideClickDispatcher);
+    scrollStrategies: ScrollStrategyOptions, _overlayContainer: OverlayContainer, _componentFactoryResolver: ComponentFactoryResolver, _positionBuilder: OverlayPositionBuilder, _keyboardDispatcher: OverlayKeyboardDispatcher, _injector: Injector, _ngZone: NgZone, _document: any, _directionality: Directionality, _location: Location, _outsideClickDispatcher: OverlayOutsideClickDispatcher, _animationsModuleType?: string | undefined);
     /**
      * Creates an overlay.
      * @param config Configuration applied to the overlay.
@@ -70,6 +71,6 @@ export declare class Overlay {
      * @returns A portal outlet for the given DOM element.
      */
     private _createPortalOutlet;
-    static ɵfac: i0.ɵɵFactoryDeclaration<Overlay, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<Overlay, [null, null, null, null, null, null, null, null, null, null, null, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Overlay>;
 }
