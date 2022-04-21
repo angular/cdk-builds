@@ -3292,6 +3292,13 @@ class CdkDrag {
     getFreeDragPosition() {
         return this._dragRef.getFreeDragPosition();
     }
+    /**
+     * Sets the current position in pixels the draggable outside of a drop container.
+     * @param value New position to be set.
+     */
+    setFreeDragPosition(value) {
+        this._dragRef.setFreeDragPosition(value);
+    }
     ngAfterViewInit() {
         // Normally this isn't in the zone, but it can cause major performance regressions for apps
         // using `zone-patch-rxjs` because it'll trigger a change detection when it unsubscribes.
