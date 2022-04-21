@@ -91,5 +91,5 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
      */
     private _scrollToCaretPosition;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, [null, null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": "cdkAutosizeMinRows"; "maxRows": "cdkAutosizeMaxRows"; "enabled": "cdkTextareaAutosize"; "placeholder": "placeholder"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": "cdkAutosizeMinRows"; "maxRows": "cdkAutosizeMaxRows"; "enabled": "cdkTextareaAutosize"; "placeholder": "placeholder"; }, {}, never, never, false>;
 }

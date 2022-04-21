@@ -23,5 +23,5 @@ export declare class CdkDragPlaceholder<T = any> {
     data: T;
     constructor(templateRef: TemplateRef<T>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPlaceholder<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPlaceholder<any>, "ng-template[cdkDragPlaceholder]", never, { "data": "data"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPlaceholder<any>, "ng-template[cdkDragPlaceholder]", never, { "data": "data"; }, {}, never, never, false>;
 }

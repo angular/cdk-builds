@@ -28,5 +28,5 @@ export declare class CdkDragPreview<T = any> {
     private _matchSize;
     constructor(templateRef: TemplateRef<T>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": "data"; "matchSize": "matchSize"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": "data"; "matchSize": "matchSize"; }, {}, never, never, false>;
 }

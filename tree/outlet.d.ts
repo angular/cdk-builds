@@ -22,5 +22,5 @@ export declare class CdkTreeNodeOutlet {
     _node?: any;
     constructor(viewContainer: ViewContainerRef, _node?: any);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, false>;
 }

@@ -21,5 +21,5 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
     _toggle(event: Event): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never, never, false>;
 }

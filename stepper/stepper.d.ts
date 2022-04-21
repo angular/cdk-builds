@@ -103,7 +103,7 @@ export declare class CdkStep implements OnChanges {
     /** Determines whether the error state can be shown. */
     _showError(): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"], false>;
 }
 export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
     private _dir;
@@ -174,7 +174,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** Checks whether the passed-in index is a valid step index. */
     private _isValidIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"]>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"], never, false>;
 }
 /**
  * Simplified representation of an "AbstractControl" from @angular/forms.

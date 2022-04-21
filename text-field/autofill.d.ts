@@ -62,5 +62,5 @@ export declare class CdkAutofill implements OnDestroy, OnInit {
     ngOnInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAutofill, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAutofill, "[cdkAutofill]", never, {}, { "cdkAutofill": "cdkAutofill"; }, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAutofill, "[cdkAutofill]", never, {}, { "cdkAutofill": "cdkAutofill"; }, never, never, false>;
 }

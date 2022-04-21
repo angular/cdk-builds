@@ -23,7 +23,7 @@ import * as i0 from "@angular/core";
  */
 export declare class CdkRecycleRows {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never, never, false>;
 }
 /** Interface used to provide an outlet for rows to be inserted into. */
 export interface RowOutlet {
@@ -40,7 +40,7 @@ export declare class DataRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, false>;
 }
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the header.
@@ -51,7 +51,7 @@ export declare class HeaderRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, false>;
 }
 /**
  * Provides a handle for the table to grab the view container's ng-container to insert the footer.
@@ -62,7 +62,7 @@ export declare class FooterRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, false>;
 }
 /**
  * Provides a handle for the table to grab the view
@@ -74,7 +74,7 @@ export declare class NoDataRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, false>;
 }
 /**
  * The table template that can be used by the mat-table. Should not be used outside of the
@@ -486,5 +486,5 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"]>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"], false>;
 }

@@ -14,5 +14,5 @@ export declare class CdkStepHeader implements FocusableOption {
     /** Focuses the step header. */
     focus(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepHeader, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never, never, false>;
 }

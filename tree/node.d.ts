@@ -36,5 +36,5 @@ export declare class CdkTreeNodeDef<T> {
     /** @docs-private */
     constructor(template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": "cdkTreeNodeDefWhen"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": "cdkTreeNodeDefWhen"; }, {}, never, never, false>;
 }

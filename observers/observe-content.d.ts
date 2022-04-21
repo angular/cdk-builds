@@ -78,7 +78,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _subscribe;
     private _unsubscribe;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkObserveContent, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": "cdkObserveContentDisabled"; "debounce": "debounce"; }, { "event": "cdkObserveContent"; }, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": "cdkObserveContentDisabled"; "debounce": "debounce"; }, { "event": "cdkObserveContent"; }, never, never, false>;
 }
 export declare class ObserversModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<ObserversModule, never>;

@@ -91,5 +91,5 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     /** Sets up the listener that handles clicks on the dialog backdrop. */
     private _handleBackdropClicks;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDialogContainer<any>, [null, null, { optional: true; }, null, null, null, null, null]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkDialogContainer<any>, "cdk-dialog-container", never, {}, {}, never, never, false>;
 }

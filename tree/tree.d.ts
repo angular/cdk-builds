@@ -85,7 +85,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": "dataSource"; "treeControl": "treeControl"; "trackBy": "trackBy"; }, {}, ["_nodeDefs"], never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": "dataSource"; "treeControl": "treeControl"; "trackBy": "trackBy"; }, {}, ["_nodeDefs"], never, false>;
 }
 /**
  * Tree node for CdkTree. It contains the data in the tree node.
@@ -124,5 +124,5 @@ export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy
     focus(): void;
     protected _setRoleFromData(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": "role"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": "role"; }, {}, never, never, false>;
 }

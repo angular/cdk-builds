@@ -7,7 +7,7 @@ export declare class CdkStepperNext {
     type: string;
     constructor(_stepper: CdkStepper);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperNext, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": "type"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": "type"; }, {}, never, never, false>;
 }
 /** Button that moves to the previous step in a stepper workflow. */
 export declare class CdkStepperPrevious {
@@ -16,5 +16,5 @@ export declare class CdkStepperPrevious {
     type: string;
     constructor(_stepper: CdkStepper);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperPrevious, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": "type"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": "type"; }, {}, never, never, false>;
 }

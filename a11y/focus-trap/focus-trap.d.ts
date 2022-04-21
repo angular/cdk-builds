@@ -159,5 +159,5 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     ngOnChanges(changes: SimpleChanges): void;
     private _captureFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never, never, false>;
 }
