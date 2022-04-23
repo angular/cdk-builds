@@ -132,6 +132,14 @@
       "node": "./fesm2015/layout.mjs",
       "default": "./fesm2020/layout.mjs"
     },
+    "./menu": {
+      "types": "./menu/menu_public_index.d.ts",
+      "esm2020": "./esm2020/menu/menu_public_index.mjs",
+      "es2020": "./fesm2020/menu.mjs",
+      "es2015": "./fesm2015/menu.mjs",
+      "node": "./fesm2015/menu.mjs",
+      "default": "./fesm2020/menu.mjs"
+    },
     "./observers": {
       "types": "./observers/observers_public_index.d.ts",
       "esm2020": "./esm2020/observers/observers_public_index.mjs",
