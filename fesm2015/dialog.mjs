@@ -54,8 +54,12 @@ class DialogConfig {
          */
         this.autoFocus = 'first-tabbable';
         /**
-         * Whether the dialog should restore focus to the
-         * previously-focused element upon closing.
+         * Whether the dialog should restore focus to the previously-focused element upon closing.
+         * Has the following behavior based on the type that is passed in:
+         * - `boolean` - when true, will return focus to the element that was focused before the dialog
+         *    was opened, otherwise won't restore focus at all.
+         * - `string` - focus will be restored to the first element that matches the CSS selector.
+         * - `HTMLElement` - focus will be restored to the specific element.
          */
         this.restoreFocus = true;
         /**
@@ -216,11 +220,21 @@ class CdkDialogContainer extends BasePortalOutlet {
     }
     /** Restores focus to the element that was focused before the dialog opened. */
     _restoreFocus() {
-        const previousElement = this._elementFocusedBeforeDialogWasOpened;
+        const focusConfig = this._config.restoreFocus;
+        let focusTargetElement = null;
+        if (typeof focusConfig === 'string') {
+            focusTargetElement = this._document.querySelector(focusConfig);
+        }
+        else if (typeof focusConfig === 'boolean') {
+            focusTargetElement = focusConfig ? this._elementFocusedBeforeDialogWasOpened : null;
+        }
+        else if (focusConfig) {
+            focusTargetElement = focusConfig;
+        }
         // We need the extra check, because IE can set the `activeElement` to null in some cases.
         if (this._config.restoreFocus &&
-            previousElement &&
-            typeof previousElement.focus === 'function') {
+            focusTargetElement &&
+            typeof focusTargetElement.focus === 'function') {
             const activeElement = _getFocusedElementPierceShadowDom();
             const element = this._elementRef.nativeElement;
             // Make sure that focus is still inside the dialog or is on the body (usually because a
@@ -232,11 +246,11 @@ class CdkDialogContainer extends BasePortalOutlet {
                 activeElement === element ||
                 element.contains(activeElement)) {
                 if (this._focusMonitor) {
-                    this._focusMonitor.focusVia(previousElement, this._closeInteractionType);
+                    this._focusMonitor.focusVia(focusTargetElement, this._closeInteractionType);
                     this._closeInteractionType = null;
                 }
                 else {
-                    previousElement.focus();
+                    focusTargetElement.focus();
                 }
             }
         }
@@ -354,7 +368,7 @@ class DialogRef {
             this.componentInstance = this.containerInstance = null;
         }
     }
-    /** Updates the dialog's position. */
+    /** Updates the position of the dialog based on the current position strategy. */
     updatePosition() {
         this.overlayRef.updatePosition();
         return this;
@@ -366,7 +380,6 @@ class DialogRef {
      */
     updateSize(width = '', height = '') {
         this.overlayRef.updateSize({ width, height });
-        this.overlayRef.updatePosition();
         return this;
     }
     /** Add a CSS class or an array of classes to the overlay pane. */

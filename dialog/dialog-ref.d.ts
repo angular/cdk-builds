@@ -25,9 +25,9 @@ export declare class DialogRef<R = unknown, C = unknown> {
      * Instance of component opened into the dialog. Will be
      * null when the dialog is opened using a `TemplateRef`.
      */
-    componentInstance: C | null;
+    readonly componentInstance: C | null;
     /** Instance of the container that is rendering out the dialog content. */
-    containerInstance: BasePortalOutlet & {
+    readonly containerInstance: BasePortalOutlet & {
         _closeInteractionType?: FocusOrigin;
     };
     /** Whether the user is allowed to close the dialog. */
@@ -49,14 +49,14 @@ export declare class DialogRef<R = unknown, C = unknown> {
      * @param options Additional options to customize the closing behavior.
      */
     close(result?: R, options?: DialogCloseOptions): void;
-    /** Updates the dialog's position. */
+    /** Updates the position of the dialog based on the current position strategy. */
     updatePosition(): this;
     /**
      * Updates the dialog's width and height.
      * @param width New width of the dialog.
      * @param height New height of the dialog.
      */
-    updateSize(width?: string, height?: string): this;
+    updateSize(width?: string | number, height?: string | number): this;
     /** Add a CSS class or an array of classes to the overlay pane. */
     addPanelClass(classes: string | string[]): this;
     /** Remove a CSS class or an array of classes from the overlay pane. */

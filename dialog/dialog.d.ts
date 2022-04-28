@@ -23,7 +23,7 @@ export declare class Dialog implements OnDestroy {
     private _ariaHiddenElements;
     private _scrollStrategy;
     /** Keeps track of the currently-open dialogs. */
-    get openDialogs(): DialogRef<any, any>[];
+    get openDialogs(): readonly DialogRef<any, any>[];
     /** Stream that emits when a dialog has been opened. */
     get afterOpened(): Subject<DialogRef<any, any>>;
     /**
