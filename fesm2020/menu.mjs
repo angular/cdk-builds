@@ -703,7 +703,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     _getOverlayConfig() {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(),
-            scrollStrategy: this._overlay.scrollStrategies.block(),
+            scrollStrategy: this._overlay.scrollStrategies.reposition(),
             direction: this._directionality,
         });
     }
@@ -712,6 +712,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         return this._overlay
             .position()
             .flexibleConnectedTo(this._elementRef)
+            .withLockedPosition()
+            .withGrowAfterOpen()
             .withPositions(this._getOverlayPositions());
     }
     /** Get the preferred positions for the opened menu relative to the menu item. */
@@ -1925,7 +1927,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     _getOverlayConfig(coordinates) {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(coordinates),
-            scrollStrategy: this._overlay.scrollStrategies.block(),
+            scrollStrategy: this._overlay.scrollStrategies.reposition(),
             direction: this._directionality,
         });
     }
@@ -1937,6 +1939,8 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         return this._overlay
             .position()
             .flexibleConnectedTo(coordinates)
+            .withLockedPosition()
+            .withGrowAfterOpen()
             .withPositions(this.menuPosition ?? CONTEXT_MENU_POSITIONS);
     }
     /** Subscribe to the menu stack close events and close this menu when requested. */
