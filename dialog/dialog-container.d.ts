@@ -8,7 +8,7 @@
 import { FocusMonitor, FocusOrigin, FocusTrapFactory, InteractivityChecker } from '@angular/cdk/a11y';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, DomPortal, TemplatePortal } from '@angular/cdk/portal';
-import { AfterViewInit, ComponentRef, ElementRef, EmbeddedViewRef, NgZone, OnDestroy } from '@angular/core';
+import { ComponentRef, ElementRef, EmbeddedViewRef, NgZone, OnDestroy } from '@angular/core';
 import { DialogConfig } from './dialog-config';
 import * as i0 from "@angular/core";
 export declare function throwDialogContentAlreadyAttachedError(): void;
@@ -16,7 +16,7 @@ export declare function throwDialogContentAlreadyAttachedError(): void;
  * Internal component that wraps user-provided dialog content.
  * @docs-private
  */
-export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements AfterViewInit, OnDestroy {
+export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> extends BasePortalOutlet implements OnDestroy {
     protected _elementRef: ElementRef;
     protected _focusTrapFactory: FocusTrapFactory;
     readonly _config: C;
@@ -40,7 +40,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     /** ID of the element that should be considered as the dialog's label. */
     _ariaLabelledBy: string | null;
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
-    ngAfterViewInit(): void;
+    protected _contentAttached(): void;
     /**
      * Can be used by child classes to customize the initial focus
      * capturing behavior (e.g. if it's tied to an animation).
@@ -64,6 +64,8 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
      * @breaking-change 10.0.0
      */
     attachDomPortal: (portal: DomPortal) => void;
+    /** Captures focus if it isn't already inside the dialog. */
+    _recaptureFocus(): void;
     /**
      * Focuses the provided element. If the element is not focusable, it will add a tabIndex
      * attribute to forcefully focus it. The attribute is removed after focus is moved.

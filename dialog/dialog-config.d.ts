@@ -91,6 +91,11 @@ export declare class DialogConfig<D = unknown, R = unknown, C extends BasePortal
      * routing (`HashLocationStrategy` in the Angular router).
      */
     closeOnNavigation?: boolean;
+    /**
+     * Whether the dialog should close when the dialog service is destroyed. This is useful if
+     * another service is wrapping the dialog and is managing the destruction instead.
+     */
+    closeOnDestroy?: boolean;
     /** Alternate `ComponentFactoryResolver` to use when resolving the associated component. */
     componentFactoryResolver?: ComponentFactoryResolver;
     /**

@@ -91,12 +91,11 @@ export declare class Dialog implements OnDestroy {
     /**
      * Removes a dialog from the array of open dialogs.
      * @param dialogRef Dialog to be removed.
+     * @param emitEvent Whether to emit an event if this is the last dialog.
      */
     private _removeOpenDialog;
     /** Hides all of the content that isn't an overlay from assistive technology. */
     private _hideNonDialogContentFromAssistiveTechnology;
-    /** Closes all of the dialogs in an array. */
-    private _closeDialogs;
     private _getAfterAllClosed;
     static ɵfac: i0.ɵɵFactoryDeclaration<Dialog, [null, null, { optional: true; }, { optional: true; skipSelf: true; }, null, null]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<Dialog>;

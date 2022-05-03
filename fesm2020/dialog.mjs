@@ -68,6 +68,11 @@ class DialogConfig {
          * routing (`HashLocationStrategy` in the Angular router).
          */
         this.closeOnNavigation = true;
+        /**
+         * Whether the dialog should close when the dialog service is destroyed. This is useful if
+         * another service is wrapping the dialog and is managing the destruction instead.
+         */
+        this.closeOnDestroy = true;
     }
 }
 
@@ -113,12 +118,14 @@ class CdkDialogContainer extends BasePortalOutlet {
             if (this._portalOutlet.hasAttached() && (typeof ngDevMode === 'undefined' || ngDevMode)) {
                 throwDialogContentAlreadyAttachedError();
             }
-            return this._portalOutlet.attachDomPortal(portal);
+            const result = this._portalOutlet.attachDomPortal(portal);
+            this._contentAttached();
+            return result;
         };
         this._ariaLabelledBy = this._config.ariaLabelledBy || null;
         this._document = _document;
     }
-    ngAfterViewInit() {
+    _contentAttached() {
         this._initializeFocusTrap();
         this._handleBackdropClicks();
         this._captureInitialFocus();
@@ -141,7 +148,9 @@ class CdkDialogContainer extends BasePortalOutlet {
         if (this._portalOutlet.hasAttached() && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throwDialogContentAlreadyAttachedError();
         }
-        return this._portalOutlet.attachComponentPortal(portal);
+        const result = this._portalOutlet.attachComponentPortal(portal);
+        this._contentAttached();
+        return result;
     }
     /**
      * Attach a TemplatePortal as content to this dialog container.
@@ -151,7 +160,16 @@ class CdkDialogContainer extends BasePortalOutlet {
         if (this._portalOutlet.hasAttached() && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throwDialogContentAlreadyAttachedError();
         }
-        return this._portalOutlet.attachTemplatePortal(portal);
+        const result = this._portalOutlet.attachTemplatePortal(portal);
+        this._contentAttached();
+        return result;
+    }
+    // TODO(crisbeto): this shouldn't be exposed, but there are internal references to it.
+    /** Captures focus if it isn't already inside the dialog. */
+    _recaptureFocus() {
+        if (!this._containsFocus()) {
+            this._trapFocus();
+        }
     }
     /**
      * Focuses the provided element. If the element is not focusable, it will add a tabIndex
@@ -292,8 +310,8 @@ class CdkDialogContainer extends BasePortalOutlet {
         // Clicking on the backdrop will move focus out of dialog.
         // Recapture it if closing via the backdrop is disabled.
         this._overlayRef.backdropClick().subscribe(() => {
-            if (this._config.disableClose && !this._containsFocus()) {
-                this._trapFocus();
+            if (this._config.disableClose) {
+                this._recaptureFocus();
             }
         });
     }
@@ -480,7 +498,7 @@ class Dialog {
             this._hideNonDialogContentFromAssistiveTechnology();
         }
         this.openDialogs.push(dialogRef);
-        dialogRef.closed.subscribe(() => this._removeOpenDialog(dialogRef));
+        dialogRef.closed.subscribe(() => this._removeOpenDialog(dialogRef, true));
         this.afterOpened.next(dialogRef);
         return dialogRef;
     }
@@ -488,7 +506,7 @@ class Dialog {
      * Closes all of the currently-open dialogs.
      */
     closeAll() {
-        this._closeDialogs(this.openDialogs);
+        reverseForEach(this.openDialogs, dialog => dialog.close());
     }
     /**
      * Finds an open dialog by its id.
@@ -498,11 +516,22 @@ class Dialog {
         return this.openDialogs.find(dialog => dialog.id === id);
     }
     ngOnDestroy() {
-        // Only close the dialogs at this level on destroy
-        // since the parent service may still be active.
-        this._closeDialogs(this._openDialogsAtThisLevel);
+        // Make one pass over all the dialogs that need to be untracked, but should not be closed. We
+        // want to stop tracking the open dialog even if it hasn't been closed, because the tracking
+        // determines when `aria-hidden` is removed from elements outside the dialog.
+        reverseForEach(this._openDialogsAtThisLevel, dialog => {
+            // Check for `false` specifically since we want `undefined` to be interpreted as `true`.
+            if (dialog.config.closeOnDestroy === false) {
+                this._removeOpenDialog(dialog, false);
+            }
+        });
+        // Make a second pass and close the remaining dialogs. We do this second pass in order to
+        // correctly dispatch the `afterAllClosed` event in case we have a mixed array of dialogs
+        // that should be closed and dialogs that should not.
+        reverseForEach(this._openDialogsAtThisLevel, dialog => dialog.close());
         this._afterAllClosedAtThisLevel.complete();
         this._afterOpenedAtThisLevel.complete();
+        this._openDialogsAtThisLevel = [];
     }
     /**
      * Creates an overlay config from a dialog config.
@@ -622,8 +651,9 @@ class Dialog {
     /**
      * Removes a dialog from the array of open dialogs.
      * @param dialogRef Dialog to be removed.
+     * @param emitEvent Whether to emit an event if this is the last dialog.
      */
-    _removeOpenDialog(dialogRef) {
+    _removeOpenDialog(dialogRef, emitEvent) {
         const index = this.openDialogs.indexOf(dialogRef);
         if (index > -1) {
             this.openDialogs.splice(index, 1);
@@ -639,7 +669,9 @@ class Dialog {
                     }
                 });
                 this._ariaHiddenElements.clear();
-                this._getAfterAllClosed().next();
+                if (emitEvent) {
+                    this._getAfterAllClosed().next();
+                }
             }
         }
     }
@@ -659,17 +691,6 @@ class Dialog {
                     sibling.setAttribute('aria-hidden', 'true');
                 }
             }
-        }
-    }
-    /** Closes all of the dialogs in an array. */
-    _closeDialogs(dialogs) {
-        let i = dialogs.length;
-        while (i--) {
-            // The `_openDialogs` property isn't updated after close until the rxjs subscription
-            // runs on the next microtask, in addition to modifying the array as we're going
-            // through it. We loop through all of them and call close without assuming that
-            // they'll be removed from the list instantaneously.
-            dialogs[i].close();
         }
     }
     _getAfterAllClosed() {
@@ -694,6 +715,16 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15",
                     type: Inject,
                     args: [DIALOG_SCROLL_STRATEGY]
                 }] }]; } });
+/**
+ * Executes a callback against all elements in an array while iterating in reverse.
+ * Useful if the array is being modified as it is being iterated.
+ */
+function reverseForEach(items, callback) {
+    let i = items.length;
+    while (i--) {
+        callback(items[i]);
+    }
+}
 
 /**
  * @license
