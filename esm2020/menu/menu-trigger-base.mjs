@@ -97,9 +97,9 @@ export class CdkMenuTriggerBase {
         return this._childMenuInjector;
     }
 }
-CdkMenuTriggerBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.14", ngImport: i0, type: CdkMenuTriggerBase, deps: [{ token: i0.Injector }, { token: i0.ViewContainerRef }, { token: MENU_STACK }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTriggerBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.14", type: CdkMenuTriggerBase, host: { properties: { "attr.aria-controls": "childMenu?.id", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.14", ngImport: i0, type: CdkMenuTriggerBase, decorators: [{
+CdkMenuTriggerBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuTriggerBase, deps: [{ token: i0.Injector }, { token: i0.ViewContainerRef }, { token: MENU_STACK }], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuTriggerBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.15", type: CdkMenuTriggerBase, host: { properties: { "attr.aria-controls": "childMenu?.id", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuTriggerBase, decorators: [{
             type: Directive,
             args: [{
                     host: {
