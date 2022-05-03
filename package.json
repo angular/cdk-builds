@@ -53,7 +53,7 @@
       "default": "./package.json"
     },
     "./a11y": {
-      "types": "./a11y/a11y_public_index.d.ts",
+      "types": "./a11y/index.d.ts",
       "esm2020": "./esm2020/a11y/a11y_public_index.mjs",
       "es2020": "./fesm2020/a11y.mjs",
       "es2015": "./fesm2015/a11y.mjs",
@@ -61,7 +61,7 @@
       "default": "./fesm2020/a11y.mjs"
     },
     "./accordion": {
-      "types": "./accordion/accordion_public_index.d.ts",
+      "types": "./accordion/index.d.ts",
       "esm2020": "./esm2020/accordion/accordion_public_index.mjs",
       "es2020": "./fesm2020/accordion.mjs",
       "es2015": "./fesm2015/accordion.mjs",
@@ -69,7 +69,7 @@
       "default": "./fesm2020/accordion.mjs"
     },
     "./bidi": {
-      "types": "./bidi/bidi_public_index.d.ts",
+      "types": "./bidi/index.d.ts",
       "esm2020": "./esm2020/bidi/bidi_public_index.mjs",
       "es2020": "./fesm2020/bidi.mjs",
       "es2015": "./fesm2015/bidi.mjs",
@@ -77,7 +77,7 @@
       "default": "./fesm2020/bidi.mjs"
     },
     "./clipboard": {
-      "types": "./clipboard/clipboard_public_index.d.ts",
+      "types": "./clipboard/index.d.ts",
       "esm2020": "./esm2020/clipboard/clipboard_public_index.mjs",
       "es2020": "./fesm2020/clipboard.mjs",
       "es2015": "./fesm2015/clipboard.mjs",
@@ -93,7 +93,7 @@
       "default": "./fesm2020/coercion.mjs"
     },
     "./collections": {
-      "types": "./collections/collections_public_index.d.ts",
+      "types": "./collections/index.d.ts",
       "esm2020": "./esm2020/collections/collections_public_index.mjs",
       "es2020": "./fesm2020/collections.mjs",
       "es2015": "./fesm2015/collections.mjs",
@@ -101,7 +101,7 @@
       "default": "./fesm2020/collections.mjs"
     },
     "./dialog": {
-      "types": "./dialog/dialog_public_index.d.ts",
+      "types": "./dialog/index.d.ts",
       "esm2020": "./esm2020/dialog/dialog_public_index.mjs",
       "es2020": "./fesm2020/dialog.mjs",
       "es2015": "./fesm2015/dialog.mjs",
@@ -109,7 +109,7 @@
       "default": "./fesm2020/dialog.mjs"
     },
     "./drag-drop": {
-      "types": "./drag-drop/drag-drop_public_index.d.ts",
+      "types": "./drag-drop/index.d.ts",
       "esm2020": "./esm2020/drag-drop/drag-drop_public_index.mjs",
       "es2020": "./fesm2020/drag-drop.mjs",
       "es2015": "./fesm2015/drag-drop.mjs",
@@ -117,7 +117,7 @@
       "default": "./fesm2020/drag-drop.mjs"
     },
     "./keycodes": {
-      "types": "./keycodes/keycodes_public_index.d.ts",
+      "types": "./keycodes/index.d.ts",
       "esm2020": "./esm2020/keycodes/keycodes_public_index.mjs",
       "es2020": "./fesm2020/keycodes.mjs",
       "es2015": "./fesm2015/keycodes.mjs",
@@ -125,7 +125,7 @@
       "default": "./fesm2020/keycodes.mjs"
     },
     "./layout": {
-      "types": "./layout/layout_public_index.d.ts",
+      "types": "./layout/index.d.ts",
       "esm2020": "./esm2020/layout/layout_public_index.mjs",
       "es2020": "./fesm2020/layout.mjs",
       "es2015": "./fesm2015/layout.mjs",
@@ -133,7 +133,7 @@
       "default": "./fesm2020/layout.mjs"
     },
     "./menu": {
-      "types": "./menu/menu_public_index.d.ts",
+      "types": "./menu/index.d.ts",
       "esm2020": "./esm2020/menu/menu_public_index.mjs",
       "es2020": "./fesm2020/menu.mjs",
       "es2015": "./fesm2015/menu.mjs",
@@ -141,7 +141,7 @@
       "default": "./fesm2020/menu.mjs"
     },
     "./observers": {
-      "types": "./observers/observers_public_index.d.ts",
+      "types": "./observers/index.d.ts",
       "esm2020": "./esm2020/observers/observers_public_index.mjs",
       "es2020": "./fesm2020/observers.mjs",
       "es2015": "./fesm2015/observers.mjs",
@@ -149,7 +149,7 @@
       "default": "./fesm2020/observers.mjs"
     },
     "./overlay": {
-      "types": "./overlay/overlay_public_index.d.ts",
+      "types": "./overlay/index.d.ts",
       "esm2020": "./esm2020/overlay/overlay_public_index.mjs",
       "es2020": "./fesm2020/overlay.mjs",
       "es2015": "./fesm2015/overlay.mjs",
@@ -157,7 +157,7 @@
       "default": "./fesm2020/overlay.mjs"
     },
     "./platform": {
-      "types": "./platform/platform_public_index.d.ts",
+      "types": "./platform/index.d.ts",
       "esm2020": "./esm2020/platform/platform_public_index.mjs",
       "es2020": "./fesm2020/platform.mjs",
       "es2015": "./fesm2015/platform.mjs",
@@ -165,7 +165,7 @@
       "default": "./fesm2020/platform.mjs"
     },
     "./portal": {
-      "types": "./portal/portal_public_index.d.ts",
+      "types": "./portal/index.d.ts",
       "esm2020": "./esm2020/portal/portal_public_index.mjs",
       "es2020": "./fesm2020/portal.mjs",
       "es2015": "./fesm2015/portal.mjs",
@@ -173,7 +173,7 @@
       "default": "./fesm2020/portal.mjs"
     },
     "./scrolling": {
-      "types": "./scrolling/scrolling_public_index.d.ts",
+      "types": "./scrolling/index.d.ts",
       "esm2020": "./esm2020/scrolling/scrolling_public_index.mjs",
       "es2020": "./fesm2020/scrolling.mjs",
       "es2015": "./fesm2015/scrolling.mjs",
@@ -181,7 +181,7 @@
       "default": "./fesm2020/scrolling.mjs"
     },
     "./stepper": {
-      "types": "./stepper/stepper_public_index.d.ts",
+      "types": "./stepper/index.d.ts",
       "esm2020": "./esm2020/stepper/stepper_public_index.mjs",
       "es2020": "./fesm2020/stepper.mjs",
       "es2015": "./fesm2015/stepper.mjs",
@@ -189,7 +189,7 @@
       "default": "./fesm2020/stepper.mjs"
     },
     "./table": {
-      "types": "./table/table_public_index.d.ts",
+      "types": "./table/index.d.ts",
       "esm2020": "./esm2020/table/table_public_index.mjs",
       "es2020": "./fesm2020/table.mjs",
       "es2015": "./fesm2015/table.mjs",
@@ -221,7 +221,7 @@
       "default": "./fesm2020/testing/testbed.mjs"
     },
     "./text-field": {
-      "types": "./text-field/text-field_public_index.d.ts",
+      "types": "./text-field/index.d.ts",
       "esm2020": "./esm2020/text-field/text-field_public_index.mjs",
       "es2020": "./fesm2020/text-field.mjs",
       "es2015": "./fesm2015/text-field.mjs",
@@ -229,7 +229,7 @@
       "default": "./fesm2020/text-field.mjs"
     },
     "./tree": {
-      "types": "./tree/tree_public_index.d.ts",
+      "types": "./tree/index.d.ts",
       "esm2020": "./esm2020/tree/tree_public_index.mjs",
       "es2020": "./fesm2020/tree.mjs",
       "es2015": "./fesm2015/tree.mjs",
