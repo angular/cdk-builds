@@ -109,9 +109,9 @@ export class Overlay {
         return new DomPortalOutlet(pane, this._componentFactoryResolver, this._appRef, this._injector, this._document);
     }
 }
-Overlay.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Overlay, deps: [{ token: i1.ScrollStrategyOptions }, { token: i2.OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: i3.OverlayPositionBuilder }, { token: i4.OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: i7.OverlayOutsideClickDispatcher }, { token: ANIMATION_MODULE_TYPE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-Overlay.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Overlay });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Overlay, decorators: [{
+Overlay.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Overlay, deps: [{ token: i1.ScrollStrategyOptions }, { token: i2.OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: i3.OverlayPositionBuilder }, { token: i4.OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: i7.OverlayOutsideClickDispatcher }, { token: ANIMATION_MODULE_TYPE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+Overlay.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Overlay });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Overlay, decorators: [{
             type: Injectable
         }], ctorParameters: function () { return [{ type: i1.ScrollStrategyOptions }, { type: i2.OverlayContainer }, { type: i0.ComponentFactoryResolver }, { type: i3.OverlayPositionBuilder }, { type: i4.OverlayKeyboardDispatcher }, { type: i0.Injector }, { type: i0.NgZone }, { type: undefined, decorators: [{
                     type: Inject,

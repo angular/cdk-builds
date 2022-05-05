@@ -74,9 +74,9 @@ class Platform {
         this.SAFARI = this.isBrowser && /safari/i.test(navigator.userAgent) && this.WEBKIT;
     }
 }
-Platform.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable });
-Platform.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Platform, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: Platform, decorators: [{
+Platform.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Platform, deps: [{ token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Injectable });
+Platform.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Platform, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: Platform, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: Object, decorators: [{
@@ -93,10 +93,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15",
  */
 class PlatformModule {
 }
-PlatformModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-PlatformModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: PlatformModule });
-PlatformModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: PlatformModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: PlatformModule, decorators: [{
+PlatformModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+PlatformModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.0-next.16", ngImport: i0, type: PlatformModule });
+PlatformModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: PlatformModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: PlatformModule, decorators: [{
             type: NgModule,
             args: [{}]
         }] });
@@ -245,7 +245,7 @@ function supportsScrollBehavior() {
 function getRtlScrollAxisType() {
     // We can't check unless we're on the browser. Just assume 'normal' if we're not.
     if (typeof document !== 'object' || !document) {
-        return 0 /* NORMAL */;
+        return 0 /* RtlScrollAxisType.NORMAL */;
     }
     if (rtlScrollAxisType == null) {
         // Create a 1px wide scrolling container and a 2px wide content element.
@@ -263,7 +263,7 @@ function getRtlScrollAxisType() {
         contentStyle.height = '1px';
         scrollContainer.appendChild(content);
         document.body.appendChild(scrollContainer);
-        rtlScrollAxisType = 0 /* NORMAL */;
+        rtlScrollAxisType = 0 /* RtlScrollAxisType.NORMAL */;
         // The viewport starts scrolled all the way to the right in RTL mode. If we are in a NORMAL
         // browser this would mean that the scrollLeft should be 1. If it's zero instead we know we're
         // dealing with one of the other two types of browsers.
@@ -274,7 +274,7 @@ function getRtlScrollAxisType() {
             // return 0 when we read it again.
             scrollContainer.scrollLeft = 1;
             rtlScrollAxisType =
-                scrollContainer.scrollLeft === 0 ? 1 /* NEGATED */ : 2 /* INVERTED */;
+                scrollContainer.scrollLeft === 0 ? 1 /* RtlScrollAxisType.NEGATED */ : 2 /* RtlScrollAxisType.INVERTED */;
         }
         scrollContainer.remove();
     }
