@@ -32,8 +32,8 @@ const EXPORTED_DECLARATIONS = [
 /** Module that declares components and directives for the CDK menu. */
 export class CdkMenuModule {
 }
-CdkMenuModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuModule, declarations: [CdkMenuBar,
+CdkMenuModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuModule, declarations: [CdkMenuBar,
         CdkMenu,
         CdkMenuItem,
         CdkMenuItemRadio,
@@ -50,8 +50,8 @@ CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "12.0.0", version: 
         CdkMenuGroup,
         CdkContextMenuTrigger,
         CdkTargetMenuAim] });
-CdkMenuModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuModule, imports: [OverlayModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuModule, decorators: [{
+CdkMenuModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuModule, imports: [OverlayModule] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [OverlayModule],

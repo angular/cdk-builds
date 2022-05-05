@@ -96,17 +96,17 @@ export class CdkMenuBar extends CdkMenuBase {
     _toggleOpenMenu(focusNext) {
         const keyManager = this.keyManager;
         switch (focusNext) {
-            case 0 /* nextItem */:
+            case 0 /* FocusNext.nextItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setNextItemActive();
                 keyManager.activeItem?.getMenuTrigger()?.open();
                 break;
-            case 1 /* previousItem */:
+            case 1 /* FocusNext.previousItem */:
                 keyManager.setFocusOrigin('keyboard');
                 keyManager.setPreviousItemActive();
                 keyManager.activeItem?.getMenuTrigger()?.open();
                 break;
-            case 2 /* currentItem */:
+            case 2 /* FocusNext.currentItem */:
                 if (keyManager.activeItem) {
                     keyManager.setFocusOrigin('keyboard');
                     keyManager.setActiveItem(keyManager.activeItem);
@@ -121,13 +121,13 @@ export class CdkMenuBar extends CdkMenuBase {
             .subscribe(event => this._toggleOpenMenu(event));
     }
 }
-CdkMenuBar.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuBar, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: MENU_AIM, optional: true, self: true }, { token: i1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuBar.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "12.0.0", version: "14.0.0-next.15", type: CdkMenuBar, selector: "[cdkMenuBar]", host: { attributes: { "role": "menubar" }, listeners: { "keydown": "_handleKeyEvent($event)" }, classAttribute: "cdk-menu-bar" }, providers: [
+CdkMenuBar.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuBar, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: MENU_AIM, optional: true, self: true }, { token: i1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuBar.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-next.16", type: CdkMenuBar, selector: "[cdkMenuBar]", host: { attributes: { "role": "menubar" }, listeners: { "keydown": "_handleKeyEvent($event)" }, classAttribute: "cdk-menu-bar" }, providers: [
         { provide: CdkMenuGroup, useExisting: CdkMenuBar },
         { provide: CDK_MENU, useExisting: CdkMenuBar },
         { provide: MENU_STACK, useFactory: () => MenuStack.inline('horizontal') },
     ], exportAs: ["cdkMenuBar"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: CdkMenuBar, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: CdkMenuBar, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuBar]',

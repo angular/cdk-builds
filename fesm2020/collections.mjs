@@ -70,16 +70,16 @@ class _DisposeViewRepeaterStrategy {
             if (record.previousIndex == null) {
                 const insertContext = itemContextFactory(record, adjustedPreviousIndex, currentIndex);
                 view = viewContainerRef.createEmbeddedView(insertContext.templateRef, insertContext.context, insertContext.index);
-                operation = 1 /* INSERTED */;
+                operation = 1 /* _ViewRepeaterOperation.INSERTED */;
             }
             else if (currentIndex == null) {
                 viewContainerRef.remove(adjustedPreviousIndex);
-                operation = 3 /* REMOVED */;
+                operation = 3 /* _ViewRepeaterOperation.REMOVED */;
             }
             else {
                 view = viewContainerRef.get(adjustedPreviousIndex);
                 viewContainerRef.move(view, currentIndex);
-                operation = 2 /* MOVED */;
+                operation = 2 /* _ViewRepeaterOperation.MOVED */;
             }
             if (itemViewChanged) {
                 itemViewChanged({
@@ -137,17 +137,17 @@ class _RecycleViewRepeaterStrategy {
                 // Item added.
                 const viewArgsFactory = () => itemContextFactory(record, adjustedPreviousIndex, currentIndex);
                 view = this._insertView(viewArgsFactory, currentIndex, viewContainerRef, itemValueResolver(record));
-                operation = view ? 1 /* INSERTED */ : 0 /* REPLACED */;
+                operation = view ? 1 /* _ViewRepeaterOperation.INSERTED */ : 0 /* _ViewRepeaterOperation.REPLACED */;
             }
             else if (currentIndex == null) {
                 // Item removed.
                 this._detachAndCacheView(adjustedPreviousIndex, viewContainerRef);
-                operation = 3 /* REMOVED */;
+                operation = 3 /* _ViewRepeaterOperation.REMOVED */;
             }
             else {
                 // Item moved.
                 view = this._moveView(adjustedPreviousIndex, currentIndex, viewContainerRef, itemValueResolver(record));
-                operation = 2 /* MOVED */;
+                operation = 2 /* _ViewRepeaterOperation.MOVED */;
             }
             if (itemViewChanged) {
                 itemViewChanged({
@@ -428,9 +428,9 @@ class UniqueSelectionDispatcher {
         this._listeners = [];
     }
 }
-UniqueSelectionDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-UniqueSelectionDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.15", ngImport: i0, type: UniqueSelectionDispatcher, decorators: [{
+UniqueSelectionDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: UniqueSelectionDispatcher, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+UniqueSelectionDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: UniqueSelectionDispatcher, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-next.16", ngImport: i0, type: UniqueSelectionDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
