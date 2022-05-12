@@ -1164,7 +1164,7 @@ export declare class ScrollStrategyOptions {
      * Close the overlay as soon as the user scrolls.
      * @param config Configuration to be used inside the scroll strategy.
      */
-    close: (config?: CloseScrollStrategyConfig | undefined) => CloseScrollStrategy;
+    close: (config?: CloseScrollStrategyConfig) => CloseScrollStrategy;
     /** Block scrolling. */
     block: () => BlockScrollStrategy;
     /**
@@ -1172,7 +1172,7 @@ export declare class ScrollStrategyOptions {
      * @param config Configuration to be used inside the scroll strategy.
      * Allows debouncing the reposition calls.
      */
-    reposition: (config?: RepositionScrollStrategyConfig | undefined) => RepositionScrollStrategy;
+    reposition: (config?: RepositionScrollStrategyConfig) => RepositionScrollStrategy;
     static ɵfac: i0.ɵɵFactoryDeclaration<ScrollStrategyOptions, never>;
     static ɵprov: i0.ɵɵInjectableDeclaration<ScrollStrategyOptions>;
 }
