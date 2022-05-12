@@ -566,6 +566,8 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private _subscribeToMenuStackHasFocus;
     /** Subscribe to the MenuStack closed events. */
     private _subscribeToMenuStackClosed;
+    /** Sets the role attribute for this trigger if needed. */
+    private _setRole;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, [null, null, null, null, null, null, { optional: true; }, { optional: true; }, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false>;
 }

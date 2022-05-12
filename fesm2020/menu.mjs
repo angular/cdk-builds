@@ -571,6 +571,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         this._parentMenu = _parentMenu;
         this._menuAim = _menuAim;
         this._directionality = _directionality;
+        this._setRole();
         this._registerCloseHandler();
         this._subscribeToMenuStackClosed();
         this._subscribeToMouseEnter();
@@ -774,6 +775,14 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
                     this._elementRef.nativeElement.focus();
                 }
             });
+        }
+    }
+    /** Sets the role attribute for this trigger if needed. */
+    _setRole() {
+        // If this trigger is part of another menu, the cdkMenuItem directive will handle setting the
+        // role, otherwise this is a standalone trigger, and we should ensure it has role="button".
+        if (!this._parentMenu) {
+            this._elementRef.nativeElement.setAttribute('role', 'button');
         }
     }
 }
@@ -1735,7 +1744,7 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
     }
 }
 CdkMenuItemRadio.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemRadio, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: i1$2.UniqueSelectionDispatcher }, { token: MENU_STACK }, { token: CDK_MENU, optional: true }, { token: MENU_AIM, optional: true }, { token: i1$1.Directionality, optional: true }, { token: CdkMenuTrigger, optional: true, self: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItemRadio.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemRadio, selector: "[cdkMenuItemRadio]", host: { attributes: { "role": "menuitemradio" } }, providers: [
+CdkMenuItemRadio.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemRadio, selector: "[cdkMenuItemRadio]", host: { attributes: { "role": "menuitemradio" }, properties: { "class.cdk-menu-item-radio": "true" } }, providers: [
         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemRadio },
         { provide: CdkMenuItem, useExisting: CdkMenuItemSelectable },
     ], exportAs: ["cdkMenuItemRadio"], usesInheritance: true, ngImport: i0 });
@@ -1746,6 +1755,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                     exportAs: 'cdkMenuItemRadio',
                     host: {
                         'role': 'menuitemradio',
+                        '[class.cdk-menu-item-radio]': 'true',
                     },
                     providers: [
                         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemRadio },
@@ -1798,7 +1808,7 @@ class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
     }
 }
 CdkMenuItemCheckbox.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemCheckbox, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItemCheckbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemCheckbox, selector: "[cdkMenuItemCheckbox]", host: { attributes: { "role": "menuitemcheckbox" } }, providers: [
+CdkMenuItemCheckbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemCheckbox, selector: "[cdkMenuItemCheckbox]", host: { attributes: { "role": "menuitemcheckbox" }, properties: { "class.cdk-menu-item-checkbox": "true" } }, providers: [
         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemCheckbox },
         { provide: CdkMenuItem, useExisting: CdkMenuItemSelectable },
     ], exportAs: ["cdkMenuItemCheckbox"], usesInheritance: true, ngImport: i0 });
@@ -1809,6 +1819,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                     exportAs: 'cdkMenuItemCheckbox',
                     host: {
                         'role': 'menuitemcheckbox',
+                        '[class.cdk-menu-item-checkbox]': 'true',
                     },
                     providers: [
                         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemCheckbox },
