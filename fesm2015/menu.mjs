@@ -1,16 +1,14 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, EventEmitter, Injector, Self, Input, Output, ContentChildren, NgModule } from '@angular/core';
-import * as i1 from '@angular/cdk/overlay';
-import { OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, InjectFlags, Input, Output, ContentChildren, NgModule } from '@angular/core';
+import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, ENTER, SPACE, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
-import * as i1$2 from '@angular/cdk/collections';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
-import { Subject, fromEvent, merge, defer, partition } from 'rxjs';
+import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import * as i1$1 from '@angular/cdk/bidi';
+import { Directionality } from '@angular/cdk/bidi';
 
 /**
  * @license
@@ -24,9 +22,9 @@ import * as i1$1 from '@angular/cdk/bidi';
  */
 class CdkMenuGroup {
 }
-CdkMenuGroup.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuGroup.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuGroup, selector: "[cdkMenuGroup]", host: { attributes: { "role": "group" }, classAttribute: "cdk-menu-group" }, providers: [{ provide: UniqueSelectionDispatcher, useClass: UniqueSelectionDispatcher }], exportAs: ["cdkMenuGroup"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuGroup, decorators: [{
+CdkMenuGroup.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuGroup.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuGroup, selector: "[cdkMenuGroup]", host: { attributes: { "role": "group" }, classAttribute: "cdk-menu-group" }, providers: [{ provide: UniqueSelectionDispatcher, useClass: UniqueSelectionDispatcher }], exportAs: ["cdkMenuGroup"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuGroup, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuGroup]',
@@ -195,10 +193,115 @@ class MenuStack {
         this._hasFocus.next(hasFocus);
     }
 }
-MenuStack.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: MenuStack, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-MenuStack.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: MenuStack });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: MenuStack, decorators: [{
+MenuStack.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: MenuStack, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+MenuStack.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: MenuStack });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: MenuStack, decorators: [{
             type: Injectable
+        }] });
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/** Injection token used for an implementation of MenuStack. */
+const MENU_TRIGGER = new InjectionToken('cdk-menu-trigger');
+/**
+ * Abstract directive that implements shared logic common to all menu triggers.
+ * This class can be extended to create custom menu trigger types.
+ */
+class CdkMenuTriggerBase {
+    constructor() {
+        /** The DI injector for this component. */
+        this.injector = inject(Injector);
+        /** The view container ref for this component */
+        this.viewContainerRef = inject(ViewContainerRef);
+        /** The menu stack in which this menu resides. */
+        this.menuStack = inject(MENU_STACK);
+        /** Emits when the attached menu is requested to open */
+        this.opened = new EventEmitter();
+        /** Emits when the attached menu is requested to close */
+        this.closed = new EventEmitter();
+        /** A reference to the overlay which manages the triggered menu */
+        this.overlayRef = null;
+        /** Emits when this trigger is destroyed. */
+        this.destroyed = new Subject();
+        /** Emits when the outside pointer events listener on the overlay should be stopped. */
+        this.stopOutsideClicksListener = merge(this.closed, this.destroyed);
+    }
+    ngOnDestroy() {
+        this._destroyOverlay();
+        this.destroyed.next();
+        this.destroyed.complete();
+    }
+    /** Whether the attached menu is open. */
+    isOpen() {
+        var _a;
+        return !!((_a = this.overlayRef) === null || _a === void 0 ? void 0 : _a.hasAttached());
+    }
+    /** Registers a child menu as having been opened by this trigger. */
+    registerChildMenu(child) {
+        this.childMenu = child;
+    }
+    /**
+     * Get the portal to be attached to the overlay which contains the menu. Allows for the menu
+     * content to change dynamically and be reflected in the application.
+     */
+    getMenuContentPortal() {
+        var _a;
+        const hasMenuContentChanged = this.menuTemplateRef !== ((_a = this._menuPortal) === null || _a === void 0 ? void 0 : _a.templateRef);
+        if (this.menuTemplateRef && (!this._menuPortal || hasMenuContentChanged)) {
+            this._menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, undefined, this._getChildMenuInjector());
+        }
+        return this._menuPortal;
+    }
+    /**
+     * Whether the given element is inside the scope of this trigger's menu stack.
+     * @param element The element to check.
+     * @return Whether the element is inside the scope of this trigger's menu stack.
+     */
+    isElementInsideMenuStack(element) {
+        var _a;
+        for (let el = element; el; el = (_a = el === null || el === void 0 ? void 0 : el.parentElement) !== null && _a !== void 0 ? _a : null) {
+            if (el.getAttribute('data-cdk-menu-stack-id') === this.menuStack.id) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /** Destroy and unset the overlay reference it if exists */
+    _destroyOverlay() {
+        if (this.overlayRef) {
+            this.overlayRef.dispose();
+            this.overlayRef = null;
+        }
+    }
+    /** Gets the injector to use when creating a child menu. */
+    _getChildMenuInjector() {
+        this._childMenuInjector =
+            this._childMenuInjector ||
+                Injector.create({
+                    providers: [
+                        { provide: MENU_TRIGGER, useValue: this },
+                        { provide: MENU_STACK, useValue: this.menuStack },
+                    ],
+                    parent: this.injector,
+                });
+        return this._childMenuInjector;
+    }
+}
+CdkMenuTriggerBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuTriggerBase, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuTriggerBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuTriggerBase, host: { properties: { "attr.aria-controls": "childMenu?.id", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuTriggerBase, decorators: [{
+            type: Directive,
+            args: [{
+                    host: {
+                        '[attr.aria-controls]': 'childMenu?.id',
+                        '[attr.data-cdk-menu-stack-id]': 'menuStack.id',
+                    },
+                }]
         }] });
 
 /**
@@ -278,10 +381,9 @@ function isWithinSubmenu(submenuPoints, m, b) {
  * to submenu.
  */
 class TargetMenuAim {
-    constructor(
-    /** The Angular zone. */
-    _ngZone) {
-        this._ngZone = _ngZone;
+    constructor() {
+        /** The Angular zone. */
+        this._ngZone = inject(NgZone);
         /** The last NUM_POINTS mouse move events. */
         this._points = [];
         /** Emits when this service is destroyed. */
@@ -401,20 +503,20 @@ class TargetMenuAim {
         });
     }
 }
-TargetMenuAim.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: TargetMenuAim, deps: [{ token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable });
-TargetMenuAim.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: TargetMenuAim });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: TargetMenuAim, decorators: [{
+TargetMenuAim.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: TargetMenuAim, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+TargetMenuAim.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: TargetMenuAim });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: TargetMenuAim, decorators: [{
             type: Injectable
-        }], ctorParameters: function () { return [{ type: i0.NgZone }]; } });
+        }] });
 /**
  * CdkTargetMenuAim is a provider for the TargetMenuAim service. It can be added to an
  * element with either the `cdkMenu` or `cdkMenuBar` directive and child menu items.
  */
 class CdkTargetMenuAim {
 }
-CdkTargetMenuAim.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkTargetMenuAim, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkTargetMenuAim.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkTargetMenuAim, selector: "[cdkTargetMenuAim]", providers: [{ provide: MENU_AIM, useClass: TargetMenuAim }], exportAs: ["cdkTargetMenuAim"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkTargetMenuAim, decorators: [{
+CdkTargetMenuAim.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkTargetMenuAim, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkTargetMenuAim.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkTargetMenuAim, selector: "[cdkTargetMenuAim]", providers: [{ provide: MENU_AIM, useClass: TargetMenuAim }], exportAs: ["cdkTargetMenuAim"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkTargetMenuAim, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkTargetMenuAim]',
@@ -422,119 +524,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                     providers: [{ provide: MENU_AIM, useClass: TargetMenuAim }],
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/** Injection token used for an implementation of MenuStack. */
-const MENU_TRIGGER = new InjectionToken('cdk-menu-trigger');
-/**
- * Abstract directive that implements shared logic common to all menu triggers.
- * This class can be extended to create custom menu trigger types.
- */
-class CdkMenuTriggerBase {
-    constructor(
-    /** The DI injector for this component */
-    injector, 
-    /** The view container ref for this component */
-    viewContainerRef, 
-    /** The menu stack this menu is part of. */
-    menuStack) {
-        this.injector = injector;
-        this.viewContainerRef = viewContainerRef;
-        this.menuStack = menuStack;
-        /** Emits when the attached menu is requested to open */
-        this.opened = new EventEmitter();
-        /** Emits when the attached menu is requested to close */
-        this.closed = new EventEmitter();
-        /** A reference to the overlay which manages the triggered menu */
-        this.overlayRef = null;
-        /** Emits when this trigger is destroyed. */
-        this.destroyed = new Subject();
-        /** Emits when the outside pointer events listener on the overlay should be stopped. */
-        this.stopOutsideClicksListener = merge(this.closed, this.destroyed);
-    }
-    ngOnDestroy() {
-        this._destroyOverlay();
-        this.destroyed.next();
-        this.destroyed.complete();
-    }
-    /** Whether the attached menu is open. */
-    isOpen() {
-        var _a;
-        return !!((_a = this.overlayRef) === null || _a === void 0 ? void 0 : _a.hasAttached());
-    }
-    /** Registers a child menu as having been opened by this trigger. */
-    registerChildMenu(child) {
-        this.childMenu = child;
-    }
-    /**
-     * Get the portal to be attached to the overlay which contains the menu. Allows for the menu
-     * content to change dynamically and be reflected in the application.
-     */
-    getMenuContentPortal() {
-        var _a;
-        const hasMenuContentChanged = this.menuTemplateRef !== ((_a = this._menuPortal) === null || _a === void 0 ? void 0 : _a.templateRef);
-        if (this.menuTemplateRef && (!this._menuPortal || hasMenuContentChanged)) {
-            this._menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, undefined, this._getChildMenuInjector());
-        }
-        return this._menuPortal;
-    }
-    /**
-     * Whether the given element is inside the scope of this trigger's menu stack.
-     * @param element The element to check.
-     * @return Whether the element is inside the scope of this trigger's menu stack.
-     */
-    isElementInsideMenuStack(element) {
-        var _a;
-        for (let el = element; el; el = (_a = el === null || el === void 0 ? void 0 : el.parentElement) !== null && _a !== void 0 ? _a : null) {
-            if (el.getAttribute('data-cdk-menu-stack-id') === this.menuStack.id) {
-                return true;
-            }
-        }
-        return false;
-    }
-    /** Destroy and unset the overlay reference it if exists */
-    _destroyOverlay() {
-        if (this.overlayRef) {
-            this.overlayRef.dispose();
-            this.overlayRef = null;
-        }
-    }
-    /** Gets the injector to use when creating a child menu. */
-    _getChildMenuInjector() {
-        this._childMenuInjector =
-            this._childMenuInjector ||
-                Injector.create({
-                    providers: [
-                        { provide: MENU_TRIGGER, useValue: this },
-                        { provide: MENU_STACK, useValue: this.menuStack },
-                    ],
-                    parent: this.injector,
-                });
-        return this._childMenuInjector;
-    }
-}
-CdkMenuTriggerBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuTriggerBase, deps: [{ token: i0.Injector }, { token: i0.ViewContainerRef }, { token: MENU_STACK }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTriggerBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuTriggerBase, host: { properties: { "attr.aria-controls": "childMenu?.id", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuTriggerBase, decorators: [{
-            type: Directive,
-            args: [{
-                    host: {
-                        '[attr.aria-controls]': 'childMenu?.id',
-                        '[attr.data-cdk-menu-stack-id]': 'menuStack.id',
-                    },
-                }]
-        }], ctorParameters: function () {
-        return [{ type: i0.Injector }, { type: i0.ViewContainerRef }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }];
-    } });
 
 /**
  * @license
@@ -551,32 +540,20 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
  * state.
  */
 class CdkMenuTrigger extends CdkMenuTriggerBase {
-    constructor(
-    /** The DI injector for this component. */
-    injector, 
-    /** The host element. */
-    _elementRef, 
-    /** The view container ref for this component. */
-    viewContainerRef, 
-    /** The CDK overlay service. */
-    _overlay, 
-    /** The Angular zone. */
-    _ngZone, 
-    /** The menu stack this trigger belongs to. */
-    menuStack, 
-    /** The parent menu this trigger belongs to. */
-    _parentMenu, 
-    /** The menu aim service used by this menu. */
-    _menuAim, 
-    /** The directionality of the page. */
-    _directionality) {
-        super(injector, viewContainerRef, menuStack);
-        this._elementRef = _elementRef;
-        this._overlay = _overlay;
-        this._ngZone = _ngZone;
-        this._parentMenu = _parentMenu;
-        this._menuAim = _menuAim;
-        this._directionality = _directionality;
+    constructor() {
+        super();
+        /** The host element. */
+        this._elementRef = inject(ElementRef);
+        /** The CDK overlay service. */
+        this._overlay = inject(Overlay);
+        /** The Angular zone. */
+        this._ngZone = inject(NgZone);
+        /** The parent menu this trigger belongs to. */
+        this._parentMenu = inject(CDK_MENU, InjectFlags.Optional);
+        /** The menu aim service used by this menu. */
+        this._menuAim = inject(MENU_AIM, InjectFlags.Optional);
+        /** The directionality of the page. */
+        this._directionality = inject(Directionality, InjectFlags.Optional);
         this._setRole();
         this._registerCloseHandler();
         this._subscribeToMenuStackClosed();
@@ -712,7 +689,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(),
             scrollStrategy: this._overlay.scrollStrategies.reposition(),
-            direction: this._directionality,
+            direction: this._directionality || undefined,
         });
     }
     /** Build the position strategy for the overlay which specifies where to place the menu. */
@@ -793,12 +770,12 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         }
     }
 }
-CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuTrigger, deps: [{ token: i0.Injector }, { token: i0.ElementRef }, { token: i0.ViewContainerRef }, { token: i1.Overlay }, { token: i0.NgZone }, { token: MENU_STACK }, { token: CDK_MENU, optional: true }, { token: MENU_AIM, optional: true }, { token: i1$1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuTrigger, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
+CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuTrigger, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
         PARENT_OR_NEW_MENU_STACK_PROVIDER,
     ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuTrigger, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuTrigger, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuTriggerFor]',
@@ -819,24 +796,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         PARENT_OR_NEW_MENU_STACK_PROVIDER,
                     ],
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.Injector }, { type: i0.ElementRef }, { type: i0.ViewContainerRef }, { type: i1.Overlay }, { type: i0.NgZone }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [CDK_MENU]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }];
-    } });
+        }], ctorParameters: function () { return []; } });
 
 /**
  * @license
@@ -851,29 +811,21 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
  * behavior when clicked.
  */
 class CdkMenuItem {
-    constructor(
-    /** The host element for this item. */
-    _elementRef, 
-    /** The Angular zone. */
-    _ngZone, 
-    /** The menu stack this item belongs to. */
-    _menuStack, 
-    /** The parent menu this item belongs to. */
-    _parentMenu, 
-    /** The menu aim service used for this item. */
-    _menuAim, 
-    /** The directionality of the page. */
-    _dir, 
-    /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-    // tslint:disable-next-line: lightweight-tokens
-    _menuTrigger) {
-        this._elementRef = _elementRef;
-        this._ngZone = _ngZone;
-        this._menuStack = _menuStack;
-        this._parentMenu = _parentMenu;
-        this._menuAim = _menuAim;
-        this._dir = _dir;
-        this._menuTrigger = _menuTrigger;
+    constructor() {
+        /** The directionality (text direction) of the current page. */
+        this._dir = inject(Directionality, InjectFlags.Optional);
+        /** The menu's native DOM host element. */
+        this._elementRef = inject(ElementRef);
+        /** The Angular zone. */
+        this._ngZone = inject(NgZone);
+        /** The menu aim service used by this menu. */
+        this._menuAim = inject(MENU_AIM, InjectFlags.Optional);
+        /** The stack of menus this menu belongs to. */
+        this._menuStack = inject(MENU_STACK);
+        /** The parent menu in which this menuitem resides. */
+        this._parentMenu = inject(CDK_MENU, InjectFlags.Optional);
+        /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
+        this._menuTrigger = inject(CdkMenuTrigger, InjectFlags.Optional | InjectFlags.Self);
         this._disabled = false;
         /**
          * If this MenuItem is a regular MenuItem, outputs when it is triggered by a keyboard or mouse
@@ -1070,9 +1022,9 @@ class CdkMenuItem {
         return ((_a = this._parentMenu) === null || _a === void 0 ? void 0 : _a.orientation) === 'vertical';
     }
 }
-CdkMenuItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItem, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: CDK_MENU, optional: true }, { token: MENU_AIM, optional: true }, { token: i1$1.Directionality, optional: true }, { token: CdkMenuTrigger, optional: true, self: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItem, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItem, decorators: [{
+CdkMenuItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuItem, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItem, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuItem]',
@@ -1088,28 +1040,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         '(keydown)': '_onKeydown($event)',
                     },
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [CDK_MENU]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }, { type: CdkMenuTrigger, decorators: [{
-                        type: Self
-                    }, {
-                        type: Optional
-                    }] }];
-    }, propDecorators: { disabled: [{
+        }], ctorParameters: function () { return []; }, propDecorators: { disabled: [{
                 type: Input,
                 args: ['cdkMenuItemDisabled']
             }], typeaheadLabel: [{
@@ -1183,33 +1114,31 @@ let nextId$1 = 0;
  * This class can be extended to create custom menu types.
  */
 class CdkMenuBase extends CdkMenuGroup {
-    constructor(
-    /** The host element. */
-    elementRef, 
-    /** The Angular zone. */
-    ngZone, 
-    /** The stack of menus this menu belongs to. */
-    menuStack, 
-    /** The menu aim service used by this menu. */
-    menuAim, 
-    /** The directionality of the current page. */
-    dir) {
-        super();
-        this.ngZone = ngZone;
-        this.menuStack = menuStack;
-        this.menuAim = menuAim;
-        this.dir = dir;
+    constructor() {
+        super(...arguments);
+        /** The menu's native DOM host element. */
+        this.nativeElement = inject(ElementRef).nativeElement;
+        /** The Angular zone. */
+        this.ngZone = inject(NgZone);
+        /** The stack of menus this menu belongs to. */
+        this.menuStack = inject(MENU_STACK);
+        /** The menu aim service used by this menu. */
+        this.menuAim = inject(MENU_AIM, InjectFlags.Optional | InjectFlags.Self);
+        /** The directionality (text direction) of the current page. */
+        this.dir = inject(Directionality, InjectFlags.Optional);
         /** The id of the menu's host element. */
         this.id = `cdk-menu-${nextId$1++}`;
         /** The direction items in the menu flow. */
         this.orientation = 'vertical';
-        /** Whether the menu is displayed inline (i.e. always present vs a conditional popup that the user triggers with a trigger element). */
+        /**
+         * Whether the menu is displayed inline (i.e. always present vs a conditional popup that the
+         * user triggers with a trigger element).
+         */
         this.isInline = false;
         /** Emits when the MenuBar is destroyed. */
         this.destroyed = new Subject();
         /** Whether this menu's menu stack has focus. */
         this._menuStackHasFocus = false;
-        this.nativeElement = elementRef.nativeElement;
     }
     ngAfterContentInit() {
         if (!this.isInline) {
@@ -1326,9 +1255,9 @@ class CdkMenuBase extends CdkMenuGroup {
         }
     }
 }
-CdkMenuBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuBase, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: MENU_AIM, optional: true, self: true }, { token: i1$1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuBase, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focus": "focusFirstItem()", "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "items", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuBase, decorators: [{
+CdkMenuBase.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuBase, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuBase.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuBase, inputs: { id: "id" }, host: { attributes: { "role": "menu" }, listeners: { "focus": "focusFirstItem()", "focusin": "menuStack.setHasFocus(true)", "focusout": "menuStack.setHasFocus(false)" }, properties: { "tabindex": "_getTabIndex()", "id": "id", "attr.aria-orientation": "orientation", "attr.data-cdk-menu-stack-id": "menuStack.id" } }, queries: [{ propertyName: "items", predicate: CdkMenuItem, descendants: true }], usesInheritance: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuBase, decorators: [{
             type: Directive,
             args: [{
                     host: {
@@ -1343,21 +1272,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         '(focusout)': 'menuStack.setHasFocus(false)',
                     },
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: undefined, decorators: [{
-                        type: Self
-                    }, {
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }];
-    }, propDecorators: { id: [{
+        }], propDecorators: { id: [{
                 type: Input
             }], items: [{
                 type: ContentChildren,
@@ -1379,22 +1294,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
  * It also acts as a RadioGroup for elements marked with role `menuitemradio`.
  */
 class CdkMenu extends CdkMenuBase {
-    constructor(
-    /** The host element. */
-    elementRef, 
-    /** The Angular zone. */
-    ngZone, 
-    /** The menu stack this menu is part of. */
-    menuStack, 
-    /** The trigger that opened this menu. */
-    _parentTrigger, 
-    /** The menu aim service used by this menu. */
-    menuAim, 
-    /** The directionality of the page. */
-    dir) {
+    constructor() {
         var _a;
-        super(elementRef, ngZone, menuStack, menuAim, dir);
-        this._parentTrigger = _parentTrigger;
+        super();
+        this._parentTrigger = inject(MENU_TRIGGER, InjectFlags.Optional);
         /** Event emitted when the menu is closed. */
         this.closed = new EventEmitter();
         /** The direction items in the menu flow. */
@@ -1475,13 +1378,13 @@ class CdkMenu extends CdkMenuBase {
             .subscribe(event => this._toggleMenuFocus(event));
     }
 }
-CdkMenu.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenu, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: MENU_TRIGGER, optional: true }, { token: MENU_AIM, optional: true, self: true }, { token: i1$1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenu.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenu, selector: "[cdkMenu]", outputs: { closed: "closed" }, host: { attributes: { "role": "menu" }, listeners: { "keydown": "_handleKeyEvent($event)" }, properties: { "class.cdk-menu-inline": "isInline" }, classAttribute: "cdk-menu" }, providers: [
+CdkMenu.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenu, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenu.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenu, selector: "[cdkMenu]", outputs: { closed: "closed" }, host: { attributes: { "role": "menu" }, listeners: { "keydown": "_handleKeyEvent($event)" }, properties: { "class.cdk-menu-inline": "isInline" }, classAttribute: "cdk-menu" }, providers: [
         { provide: CdkMenuGroup, useExisting: CdkMenu },
         { provide: CDK_MENU, useExisting: CdkMenu },
         PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER('vertical'),
     ], exportAs: ["cdkMenu"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenu, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenu, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenu]',
@@ -1498,26 +1401,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         PARENT_OR_NEW_INLINE_MENU_STACK_PROVIDER('vertical'),
                     ],
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: CdkMenuTriggerBase, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_TRIGGER]
-                    }] }, { type: undefined, decorators: [{
-                        type: Self
-                    }, {
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }];
-    }, propDecorators: { closed: [{
+        }], ctorParameters: function () { return []; }, propDecorators: { closed: [{
                 type: Output
             }] } });
 
@@ -1535,18 +1419,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
  *
  */
 class CdkMenuBar extends CdkMenuBase {
-    constructor(
-    /** The host element. */
-    elementRef, 
-    /** The Angular zone. */
-    ngZone, 
-    /** The menu stack this menu is part of. */
-    menuStack, 
-    /** The menu aim service used by this menu. */
-    menuAim, 
-    /** The directionality of the page. */
-    dir) {
-        super(elementRef, ngZone, menuStack, menuAim, dir);
+    constructor() {
+        super(...arguments);
         /** The direction items in the menu flow. */
         this.orientation = 'horizontal';
         /** Whether the menu is displayed inline (i.e. always present vs a conditional popup that the user triggers with a trigger element). */
@@ -1633,13 +1507,13 @@ class CdkMenuBar extends CdkMenuBase {
         (_a = this.menuStack) === null || _a === void 0 ? void 0 : _a.emptied.pipe(takeUntil(this.destroyed)).subscribe(event => this._toggleOpenMenu(event));
     }
 }
-CdkMenuBar.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuBar, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: MENU_STACK }, { token: MENU_AIM, optional: true, self: true }, { token: i1$1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuBar.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuBar, selector: "[cdkMenuBar]", host: { attributes: { "role": "menubar" }, listeners: { "keydown": "_handleKeyEvent($event)" }, classAttribute: "cdk-menu-bar" }, providers: [
+CdkMenuBar.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuBar, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuBar.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuBar, selector: "[cdkMenuBar]", host: { attributes: { "role": "menubar" }, listeners: { "keydown": "_handleKeyEvent($event)" }, classAttribute: "cdk-menu-bar" }, providers: [
         { provide: CdkMenuGroup, useExisting: CdkMenuBar },
         { provide: CDK_MENU, useExisting: CdkMenuBar },
         { provide: MENU_STACK, useFactory: () => MenuStack.inline('horizontal') },
     ], exportAs: ["cdkMenuBar"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuBar, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuBar, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuBar]',
@@ -1655,21 +1529,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         { provide: MENU_STACK, useFactory: () => MenuStack.inline('horizontal') },
                     ],
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: undefined, decorators: [{
-                        type: Self
-                    }, {
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }];
-    } });
+        }] });
 
 /**
  * @license
@@ -1694,9 +1554,9 @@ class CdkMenuItemSelectable extends CdkMenuItem {
         this._checked = coerceBooleanProperty(value);
     }
 }
-CdkMenuItemSelectable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemSelectable, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItemSelectable.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemSelectable, inputs: { checked: ["cdkMenuItemChecked", "checked"] }, host: { properties: { "attr.aria-checked": "!!checked", "attr.aria-disabled": "disabled || null" } }, usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemSelectable, decorators: [{
+CdkMenuItemSelectable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemSelectable, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuItemSelectable.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuItemSelectable, inputs: { checked: ["cdkMenuItemChecked", "checked"] }, host: { properties: { "attr.aria-checked": "!!checked", "attr.aria-disabled": "disabled || null" } }, usesInheritance: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemSelectable, decorators: [{
             type: Directive,
             args: [{
                     host: {
@@ -1709,6 +1569,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                 args: ['cdkMenuItemChecked']
             }] } });
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** Counter used to set a unique id and name for a selectable item */
 let nextId = 0;
 /**
@@ -1717,26 +1584,10 @@ let nextId = 0;
  * or `CdkMenuGroup` comprise a radio group with unique selection enforced.
  */
 class CdkMenuItemRadio extends CdkMenuItemSelectable {
-    constructor(
-    /** The host element for this radio item. */
-    element, 
-    /** The Angular zone. */
-    ngZone, 
-    /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
-    _selectionDispatcher, 
-    /** The menu stack this item belongs to. */
-    menuStack, 
-    /** The parent menu for this item. */
-    parentMenu, 
-    /** The menu aim used for this item. */
-    menuAim, 
-    /** The directionality of the page. */
-    dir, 
-    /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-    // tslint:disable-next-line: lightweight-tokens
-    menuTrigger) {
-        super(element, ngZone, menuStack, parentMenu, menuAim, dir, menuTrigger);
-        this._selectionDispatcher = _selectionDispatcher;
+    constructor() {
+        super();
+        /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
+        this._selectionDispatcher = inject(UniqueSelectionDispatcher);
         /** An ID to identify this radio item to the `UniqueSelectionDisptcher`. */
         this._id = `${nextId++}`;
         this._registerDispatcherListener();
@@ -1763,12 +1614,12 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
         });
     }
 }
-CdkMenuItemRadio.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemRadio, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: i1$2.UniqueSelectionDispatcher }, { token: MENU_STACK }, { token: CDK_MENU, optional: true }, { token: MENU_AIM, optional: true }, { token: i1$1.Directionality, optional: true }, { token: CdkMenuTrigger, optional: true, self: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItemRadio.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemRadio, selector: "[cdkMenuItemRadio]", host: { attributes: { "role": "menuitemradio" }, properties: { "class.cdk-menu-item-radio": "true" } }, providers: [
+CdkMenuItemRadio.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemRadio, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuItemRadio.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuItemRadio, selector: "[cdkMenuItemRadio]", host: { attributes: { "role": "menuitemradio" }, properties: { "class.cdk-menu-item-radio": "true" } }, providers: [
         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemRadio },
         { provide: CdkMenuItem, useExisting: CdkMenuItemSelectable },
     ], exportAs: ["cdkMenuItemRadio"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemRadio, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemRadio, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuItemRadio]',
@@ -1782,28 +1633,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         { provide: CdkMenuItem, useExisting: CdkMenuItemSelectable },
                     ],
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: i1$2.UniqueSelectionDispatcher }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [CDK_MENU]
-                    }] }, { type: undefined, decorators: [{
-                        type: Optional
-                    }, {
-                        type: Inject,
-                        args: [MENU_AIM]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }, { type: CdkMenuTrigger, decorators: [{
-                        type: Self
-                    }, {
-                        type: Optional
-                    }] }];
-    } });
+        }], ctorParameters: function () { return []; } });
 
 /**
  * @license
@@ -1829,12 +1659,12 @@ class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
         }
     }
 }
-CdkMenuItemCheckbox.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemCheckbox, deps: null, target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItemCheckbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkMenuItemCheckbox, selector: "[cdkMenuItemCheckbox]", host: { attributes: { "role": "menuitemcheckbox" }, properties: { "class.cdk-menu-item-checkbox": "true" } }, providers: [
+CdkMenuItemCheckbox.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemCheckbox, deps: null, target: i0.ɵɵFactoryTarget.Directive });
+CdkMenuItemCheckbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkMenuItemCheckbox, selector: "[cdkMenuItemCheckbox]", host: { attributes: { "role": "menuitemcheckbox" }, properties: { "class.cdk-menu-item-checkbox": "true" } }, providers: [
         { provide: CdkMenuItemSelectable, useExisting: CdkMenuItemCheckbox },
         { provide: CdkMenuItem, useExisting: CdkMenuItemSelectable },
     ], exportAs: ["cdkMenuItemCheckbox"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuItemCheckbox, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuItemCheckbox, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMenuItemCheckbox]',
@@ -1879,9 +1709,9 @@ class ContextMenuTracker {
         }
     }
 }
-ContextMenuTracker.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: ContextMenuTracker, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-ContextMenuTracker.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: ContextMenuTracker, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: ContextMenuTracker, decorators: [{
+ContextMenuTracker.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: ContextMenuTracker, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
+ContextMenuTracker.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: ContextMenuTracker, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: ContextMenuTracker, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }] });
@@ -1890,23 +1720,14 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
  */
 class CdkContextMenuTrigger extends CdkMenuTriggerBase {
-    constructor(
-    /** The DI injector for this component */
-    injector, 
-    /** The view container ref for this component */
-    viewContainerRef, 
-    /** The CDK overlay service */
-    _overlay, 
-    /** The app's context menu tracking registry */
-    _contextMenuTracker, 
-    /** The menu stack this menu is part of. */
-    menuStack, 
-    /** The directionality of the current page */
-    _directionality) {
-        super(injector, viewContainerRef, menuStack);
-        this._overlay = _overlay;
-        this._contextMenuTracker = _contextMenuTracker;
-        this._directionality = _directionality;
+    constructor() {
+        super();
+        /** The CDK overlay service. */
+        this._overlay = inject(Overlay);
+        /** The directionality of the page. */
+        this._directionality = inject(Directionality, InjectFlags.Optional);
+        /** The app's context menu tracking registry */
+        this._contextMenuTracker = inject(ContextMenuTracker);
         this._disabled = false;
         this._setMenuStackCloseListener();
     }
@@ -1963,7 +1784,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         return new OverlayConfig({
             positionStrategy: this._getOverlayPositionStrategy(coordinates),
             scrollStrategy: this._overlay.scrollStrategies.reposition(),
-            direction: this._directionality,
+            direction: this._directionality || undefined,
         });
     }
     /**
@@ -2039,12 +1860,12 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         }
     }
 }
-CdkContextMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkContextMenuTrigger, deps: [{ token: i0.Injector }, { token: i0.ViewContainerRef }, { token: i1.Overlay }, { token: ContextMenuTracker }, { token: MENU_STACK }, { token: i1$1.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkContextMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.0", type: CdkContextMenuTrigger, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], disabled: ["cdkContextMenuDisabled", "disabled"] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
+CdkContextMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkContextMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkContextMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.0-rc.1", type: CdkContextMenuTrigger, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], disabled: ["cdkContextMenuDisabled", "disabled"] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkContextMenuTrigger },
         { provide: MENU_STACK, useClass: MenuStack },
     ], exportAs: ["cdkContextMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkContextMenuTrigger, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkContextMenuTrigger, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkContextMenuTriggerFor]',
@@ -2060,14 +1881,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ng
                         { provide: MENU_STACK, useClass: MenuStack },
                     ],
                 }]
-        }], ctorParameters: function () {
-        return [{ type: i0.Injector }, { type: i0.ViewContainerRef }, { type: i1.Overlay }, { type: ContextMenuTracker }, { type: MenuStack, decorators: [{
-                        type: Inject,
-                        args: [MENU_STACK]
-                    }] }, { type: i1$1.Directionality, decorators: [{
-                        type: Optional
-                    }] }];
-    }, propDecorators: { disabled: [{
+        }], ctorParameters: function () { return []; }, propDecorators: { disabled: [{
                 type: Input,
                 args: ['cdkContextMenuDisabled']
             }] } });
@@ -2094,8 +1908,8 @@ const EXPORTED_DECLARATIONS = [
 /** Module that declares components and directives for the CDK menu. */
 class CdkMenuModule {
 }
-CdkMenuModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuModule, declarations: [CdkMenuBar,
+CdkMenuModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuModule, declarations: [CdkMenuBar,
         CdkMenu,
         CdkMenuItem,
         CdkMenuItemRadio,
@@ -2112,8 +1926,8 @@ CdkMenuModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: 
         CdkMenuGroup,
         CdkContextMenuTrigger,
         CdkTargetMenuAim] });
-CdkMenuModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuModule, imports: [OverlayModule] });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.0", ngImport: i0, type: CdkMenuModule, decorators: [{
+CdkMenuModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuModule, imports: [OverlayModule] });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.0-rc.1", ngImport: i0, type: CdkMenuModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: [OverlayModule],

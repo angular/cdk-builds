@@ -15,13 +15,11 @@ import { NgZone } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { Optional } from '@angular/core';
-import { Overlay } from '@angular/cdk/overlay';
 import { OverlayRef } from '@angular/cdk/overlay';
 import { QueryList } from '@angular/core';
 import { Subject } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { TemplateRef } from '@angular/core';
-import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { ViewContainerRef } from '@angular/core';
 
 /** Injection token used to return classes implementing the Menu interface */
@@ -32,29 +30,17 @@ export declare const CDK_MENU: InjectionToken<Menu>;
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
  */
 export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements OnDestroy {
-    /** The CDK overlay service */
+    /** The CDK overlay service. */
     private readonly _overlay;
+    /** The directionality of the page. */
+    private readonly _directionality;
     /** The app's context menu tracking registry */
     private readonly _contextMenuTracker;
-    /** The directionality of the current page */
-    private readonly _directionality?;
     /** Whether the context menu is disabled. */
     get disabled(): boolean;
     set disabled(value: BooleanInput);
     private _disabled;
-    constructor(
-    /** The DI injector for this component */
-    injector: Injector, 
-    /** The view container ref for this component */
-    viewContainerRef: ViewContainerRef, 
-    /** The CDK overlay service */
-    _overlay: Overlay, 
-    /** The app's context menu tracking registry */
-    _contextMenuTracker: ContextMenuTracker, 
-    /** The menu stack this menu is part of. */
-    menuStack: MenuStack, 
-    /** The directionality of the current page */
-    _directionality?: Directionality | undefined);
+    constructor();
     /**
      * Open the attached menu at the specified location.
      * @param coordinates where to open the context menu
@@ -91,7 +77,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
      * @param ignoreFirstOutsideAuxClick Whether to ignore the first auxclick outside the menu after opening.
      */
     private _open;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, [null, null, null, null, null, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, false>;
 }
 
@@ -103,27 +89,14 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
  * It also acts as a RadioGroup for elements marked with role `menuitemradio`.
  */
 export declare class CdkMenu extends CdkMenuBase implements AfterContentInit, OnDestroy {
-    /** The trigger that opened this menu. */
-    private _parentTrigger?;
+    private _parentTrigger;
     /** Event emitted when the menu is closed. */
     readonly closed: EventEmitter<void>;
     /** The direction items in the menu flow. */
     readonly orientation = "vertical";
     /** Whether the menu is displayed inline (i.e. always present vs a conditional popup that the user triggers with a trigger element). */
     readonly isInline: boolean;
-    constructor(
-    /** The host element. */
-    elementRef: ElementRef<HTMLElement>, 
-    /** The Angular zone. */
-    ngZone: NgZone, 
-    /** The menu stack this menu is part of. */
-    menuStack: MenuStack, 
-    /** The trigger that opened this menu. */
-    _parentTrigger?: CdkMenuTriggerBase | undefined, 
-    /** The menu aim service used by this menu. */
-    menuAim?: MenuAim, 
-    /** The directionality of the page. */
-    dir?: Directionality);
+    constructor();
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -138,7 +111,7 @@ export declare class CdkMenu extends CdkMenuBase implements AfterContentInit, On
     private _toggleMenuFocus;
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenu, [null, null, null, { optional: true; }, { optional: true; self: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenu, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenu, "[cdkMenu]", ["cdkMenu"], {}, { "closed": "closed"; }, never, never, false>;
 }
 
@@ -153,17 +126,6 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
     readonly orientation = "horizontal";
     /** Whether the menu is displayed inline (i.e. always present vs a conditional popup that the user triggers with a trigger element). */
     readonly isInline = true;
-    constructor(
-    /** The host element. */
-    elementRef: ElementRef<HTMLElement>, 
-    /** The Angular zone. */
-    ngZone: NgZone, 
-    /** The menu stack this menu is part of. */
-    menuStack: MenuStack, 
-    /** The menu aim service used by this menu. */
-    menuAim?: MenuAim, 
-    /** The directionality of the page. */
-    dir?: Directionality);
     ngAfterContentInit(): void;
     /**
      * Handle keyboard events for the Menu.
@@ -178,7 +140,7 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
     private _toggleOpenMenu;
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBar, [null, null, null, { optional: true; self: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBar, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBar, "[cdkMenuBar]", ["cdkMenuBar"], {}, {}, never, never, false>;
 }
 
@@ -187,24 +149,27 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
  * This class can be extended to create custom menu types.
  */
 export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, AfterContentInit, OnDestroy {
+    /** The menu's native DOM host element. */
+    readonly nativeElement: HTMLElement;
     /** The Angular zone. */
     protected ngZone: NgZone;
     /** The stack of menus this menu belongs to. */
     readonly menuStack: MenuStack;
     /** The menu aim service used by this menu. */
-    protected readonly menuAim?: MenuAim | undefined;
-    /** The directionality of the current page. */
-    protected readonly dir?: Directionality | undefined;
+    protected readonly menuAim: MenuAim | null;
+    /** The directionality (text direction) of the current page. */
+    protected readonly dir: Directionality | null;
     /** The id of the menu's host element. */
     id: string;
     /** All child MenuItem elements nested in this Menu. */
     readonly items: QueryList<CdkMenuItem>;
     /** The direction items in the menu flow. */
     orientation: 'horizontal' | 'vertical';
-    /** Whether the menu is displayed inline (i.e. always present vs a conditional popup that the user triggers with a trigger element). */
+    /**
+     * Whether the menu is displayed inline (i.e. always present vs a conditional popup that the
+     * user triggers with a trigger element).
+     */
     isInline: boolean;
-    /** The menu's native DOM host element. */
-    readonly nativeElement: HTMLElement;
     /** Handles keyboard events for the menu. */
     protected keyManager: FocusKeyManager<CdkMenuItem>;
     /** Emits when the MenuBar is destroyed. */
@@ -215,17 +180,6 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
     protected pointerTracker?: PointerFocusTracker<CdkMenuItem>;
     /** Whether this menu's menu stack has focus. */
     private _menuStackHasFocus;
-    protected constructor(
-    /** The host element. */
-    elementRef: ElementRef<HTMLElement>, 
-    /** The Angular zone. */
-    ngZone: NgZone, 
-    /** The stack of menus this menu belongs to. */
-    menuStack: MenuStack, 
-    /** The menu aim service used by this menu. */
-    menuAim?: MenuAim | undefined, 
-    /** The directionality of the current page. */
-    dir?: Directionality | undefined);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -265,7 +219,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
      * with the latest menu item under mouse focus.
      */
     private _setUpPointerTracker;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, [null, null, null, { optional: true; self: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": "id"; }, {}, ["items"], never, false>;
 }
 
@@ -283,20 +237,20 @@ export declare class CdkMenuGroup {
  * behavior when clicked.
  */
 export declare class CdkMenuItem implements FocusableOption, FocusableElement, Toggler, OnDestroy {
-    /** The host element for this item. */
-    readonly _elementRef: ElementRef<HTMLElement>;
+    /** The directionality (text direction) of the current page. */
+    protected readonly _dir: Directionality | null;
+    /** The menu's native DOM host element. */
+    readonly _elementRef: ElementRef<any>;
     /** The Angular zone. */
-    private readonly _ngZone;
-    /** The menu stack this item belongs to. */
+    protected _ngZone: NgZone;
+    /** The menu aim service used by this menu. */
+    private readonly _menuAim;
+    /** The stack of menus this menu belongs to. */
     private readonly _menuStack;
-    /** The parent menu this item belongs to. */
-    private readonly _parentMenu?;
-    /** The menu aim service used for this item. */
-    private readonly _menuAim?;
-    /** The directionality of the page. */
-    private readonly _dir?;
+    /** The parent menu in which this menuitem resides. */
+    private readonly _parentMenu;
     /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-    private readonly _menuTrigger?;
+    private readonly _menuTrigger;
     /**  Whether the CdkMenuItem is disabled - defaults to false */
     get disabled(): boolean;
     set disabled(value: BooleanInput);
@@ -322,21 +276,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     protected closeOnSpacebarTrigger: boolean;
     /** Emits when the menu item is destroyed. */
     protected readonly destroyed: Subject<void>;
-    constructor(
-    /** The host element for this item. */
-    _elementRef: ElementRef<HTMLElement>, 
-    /** The Angular zone. */
-    _ngZone: NgZone, 
-    /** The menu stack this item belongs to. */
-    _menuStack: MenuStack, 
-    /** The parent menu this item belongs to. */
-    _parentMenu?: Menu | undefined, 
-    /** The menu aim service used for this item. */
-    _menuAim?: MenuAim | undefined, 
-    /** The directionality of the page. */
-    _dir?: Directionality | undefined, 
-    /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-    _menuTrigger?: CdkMenuTrigger | undefined);
+    constructor();
     ngOnDestroy(): void;
     /** Place focus on the element. */
     focus(): void;
@@ -357,7 +297,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      */
     getMenu(): Menu | undefined;
     /** Get the CdkMenuTrigger associated with this element. */
-    getMenuTrigger(): CdkMenuTrigger | undefined;
+    getMenuTrigger(): CdkMenuTrigger | null;
     /** Get the label for this element which is required by the FocusableOption interface. */
     getLabel(): string;
     /** Reset the tabindex to -1. */
@@ -396,7 +336,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      * otherwise or if no parent.
      */
     private _isParentVertical;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, [null, null, null, { optional: true; }, { optional: true; }, { optional: true; }, { optional: true; self: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": "cdkMenuItemDisabled"; "typeaheadLabel": "cdkMenuitemTypeaheadLabel"; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, false>;
 }
 
@@ -429,23 +369,7 @@ export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements O
     private _id;
     /** Function to unregister the selection dispatcher */
     private _removeDispatcherListener;
-    constructor(
-    /** The host element for this radio item. */
-    element: ElementRef<HTMLElement>, 
-    /** The Angular zone. */
-    ngZone: NgZone, 
-    /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
-    _selectionDispatcher: UniqueSelectionDispatcher, 
-    /** The menu stack this item belongs to. */
-    menuStack: MenuStack, 
-    /** The parent menu for this item. */
-    parentMenu?: Menu, 
-    /** The menu aim used for this item. */
-    menuAim?: MenuAim, 
-    /** The directionality of the page. */
-    dir?: Directionality, 
-    /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-    menuTrigger?: CdkMenuTrigger);
+    constructor();
     ngOnDestroy(): void;
     /**
      * Toggles the checked state of the radio-button.
@@ -457,7 +381,7 @@ export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements O
     }): void;
     /** Configure the unique selection dispatcher listener in order to toggle the checked state  */
     private _registerDispatcherListener;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemRadio, [null, null, null, null, { optional: true; }, { optional: true; }, { optional: true; }, { optional: true; self: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemRadio, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, false>;
 }
 
@@ -495,30 +419,12 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     /** The Angular zone. */
     private readonly _ngZone;
     /** The parent menu this trigger belongs to. */
-    private readonly _parentMenu?;
+    private readonly _parentMenu;
     /** The menu aim service used by this menu. */
-    private readonly _menuAim?;
+    private readonly _menuAim;
     /** The directionality of the page. */
-    private readonly _directionality?;
-    constructor(
-    /** The DI injector for this component. */
-    injector: Injector, 
-    /** The host element. */
-    _elementRef: ElementRef<HTMLElement>, 
-    /** The view container ref for this component. */
-    viewContainerRef: ViewContainerRef, 
-    /** The CDK overlay service. */
-    _overlay: Overlay, 
-    /** The Angular zone. */
-    _ngZone: NgZone, 
-    /** The menu stack this trigger belongs to. */
-    menuStack: MenuStack, 
-    /** The parent menu this trigger belongs to. */
-    _parentMenu?: Menu | undefined, 
-    /** The menu aim service used by this menu. */
-    _menuAim?: MenuAim | undefined, 
-    /** The directionality of the page. */
-    _directionality?: Directionality | undefined);
+    private readonly _directionality;
+    constructor();
     /** Toggle the attached menu. */
     toggle(): void;
     /** Open the attached menu. */
@@ -568,7 +474,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private _subscribeToMenuStackClosed;
     /** Sets the role attribute for this trigger if needed. */
     private _setRole;
-    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, [null, null, null, null, null, null, { optional: true; }, { optional: true; }, { optional: true; }]>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false>;
 }
 
@@ -577,13 +483,16 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
  * This class can be extended to create custom menu trigger types.
  */
 export declare abstract class CdkMenuTriggerBase implements OnDestroy {
-    /** The DI injector for this component */
-    protected readonly injector: Injector;
+    /** The DI injector for this component. */
+    readonly injector: Injector;
     /** The view container ref for this component */
     protected readonly viewContainerRef: ViewContainerRef;
-    /** The menu stack this menu is part of. */
+    /** The menu stack in which this menu resides. */
     protected readonly menuStack: MenuStack;
-    /** A list of preferred menu positions to be used when constructing the `FlexibleConnectedPositionStrategy` for this trigger's menu. */
+    /**
+     * A list of preferred menu positions to be used when constructing the
+     * `FlexibleConnectedPositionStrategy` for this trigger's menu.
+     */
     menuPosition: ConnectedPosition[];
     /** Emits when the attached menu is requested to open */
     readonly opened: EventEmitter<void>;
@@ -603,13 +512,6 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
     private _menuPortal;
     /** The injector to use for the child menu opened by this trigger. */
     private _childMenuInjector?;
-    protected constructor(
-    /** The DI injector for this component */
-    injector: Injector, 
-    /** The view container ref for this component */
-    viewContainerRef: ViewContainerRef, 
-    /** The menu stack this menu is part of. */
-    menuStack: MenuStack);
     ngOnDestroy(): void;
     /** Whether the attached menu is open. */
     isOpen(): boolean;
@@ -945,9 +847,6 @@ export declare class TargetMenuAim implements MenuAim, OnDestroy {
     private _timeoutId;
     /** Emits when this service is destroyed. */
     private readonly _destroyed;
-    constructor(
-    /** The Angular zone. */
-    _ngZone: NgZone);
     ngOnDestroy(): void;
     /**
      * Set the Menu and its PointerFocusTracker.
