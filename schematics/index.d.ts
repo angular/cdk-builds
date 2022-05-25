@@ -8,6 +8,7 @@
 export * from './utils';
 export * from './ng-update/public-api';
 export * from './update-tool/public-api';
-export * from './utils/vendored-ast-utils';
+export * from '@schematics/angular/utility/ast-utils';
+export * from '@schematics/angular/utility/ng-ast-utils';
 import * as parse5 from 'parse5';
 export { parse5 };
