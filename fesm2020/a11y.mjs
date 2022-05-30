@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Injectable, Inject, QueryList, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
@@ -101,6 +101,7 @@ class AriaDescriber {
         /** Unique ID for the service. */
         this._id = `${nextId++}`;
         this._document = _document;
+        this._id = inject(APP_ID) + '-' + nextId++;
     }
     describe(hostElement, message, role) {
         if (!this._canBeDescribed(hostElement, message)) {
@@ -109,7 +110,7 @@ class AriaDescriber {
         const key = getKey(message, role);
         if (typeof message !== 'string') {
             // We need to ensure that the element has an ID.
-            setMessageId(message);
+            setMessageId(message, this._id);
             this._messageRegistry.set(key, { messageElement: message, referenceCount: 0 });
         }
         else if (!this._messageRegistry.has(key)) {
@@ -157,7 +158,7 @@ class AriaDescriber {
      */
     _createMessageElement(message, role) {
         const messageElement = this._document.createElement('div');
-        setMessageId(messageElement);
+        setMessageId(messageElement, this._id);
         messageElement.textContent = message;
         if (role) {
             messageElement.setAttribute('role', role);
@@ -273,9 +274,9 @@ function getKey(message, role) {
     return typeof message === 'string' ? `${role || ''}/${message}` : message;
 }
 /** Assigns a unique ID to an element, if it doesn't have one already. */
-function setMessageId(element) {
+function setMessageId(element, serviceId) {
     if (!element.id) {
-        element.id = `${CDK_DESCRIBEDBY_ID_PREFIX}-${nextId++}`;
+        element.id = `${CDK_DESCRIBEDBY_ID_PREFIX}-${serviceId}-${nextId++}`;
     }
 }
 
