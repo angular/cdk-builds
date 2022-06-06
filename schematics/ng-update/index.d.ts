@@ -24,3 +24,5 @@ export declare function updateToV12(): Rule;
 export declare function updateToV13(): Rule;
 /** Entry point for the migration schematics with target of Angular CDK 14.0.0 */
 export declare function updateToV14(): Rule;
+/** Entry point for the migration schematics with target of Angular CDK 15.0.0 */
+export declare function updateToV15(): Rule;
