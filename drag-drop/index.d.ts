@@ -1102,7 +1102,7 @@ export declare class DropListRef<T = any> {
      * is allowed to be moved into a drop container.
      */
     enterPredicate: (drag: DragRefInternal, drop: DropListRef) => boolean;
-    /** Functions that is used to determine whether an item can be sorted into a particular index. */
+    /** Function that is used to determine whether an item can be sorted into a particular index. */
     sortPredicate: (index: number, drag: DragRefInternal, drop: DropListRef) => boolean;
     /** Emits right before dragging has started. */
     readonly beforeStarted: Subject<void>;
@@ -1145,34 +1145,18 @@ export declare class DropListRef<T = any> {
     data: T;
     /** Whether an item in the list is being dragged. */
     private _isDragging;
-    /** Cache of the dimensions of all the items inside the container. */
-    private _itemPositions;
     /** Keeps track of the positions of any parent scrollable elements. */
     private _parentPositions;
+    /** Strategy being used to sort items within the list. */
+    private _sortStrategy;
     /** Cached `ClientRect` of the drop list. */
     private _clientRect;
-    /**
-     * Draggable items that are currently active inside the container. Includes the items
-     * from `_draggables`, as well as any items that have been dragged in, but haven't
-     * been dropped yet.
-     */
-    private _activeDraggables;
-    /**
-     * Keeps track of the item that was last swapped with the dragged item, as well as what direction
-     * the pointer was moving in when the swap occured and whether the user's pointer continued to
-     * overlap with the swapped item after the swapping occurred.
-     */
-    private _previousSwap;
     /** Draggable items in the container. */
     private _draggables;
     /** Drop lists that are connected to the current one. */
     private _siblings;
-    /** Direction in which the list is oriented. */
-    private _orientation;
     /** Connected siblings that currently have a dragged item. */
     private _activeSiblings;
-    /** Layout direction of the drop list. */
-    private _direction;
     /** Subscription to the window being scrolled. */
     private _viewportScrollSubscription;
     /** Vertical direction in which the list is currently scrolling. */
@@ -1199,7 +1183,7 @@ export declare class DropListRef<T = any> {
     /** Starts dragging an item. */
     start(): void;
     /**
-     * Emits an event to indicate that the user moved an item into the container.
+     * Attempts to move an item into the container.
      * @param item Item that was moved into the container.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
@@ -1285,40 +1269,8 @@ export declare class DropListRef<T = any> {
     private _draggingStarted;
     /** Caches the positions of the configured scrollable parents. */
     private _cacheParentPositions;
-    /** Refreshes the position cache of the items and sibling containers. */
-    private _cacheItemPositions;
     /** Resets the container to its initial state. */
     private _reset;
-    /**
-     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
-     * @param currentIndex Index of the item currently being dragged.
-     * @param siblings All of the items in the list.
-     * @param delta Direction in which the user is moving.
-     */
-    private _getSiblingOffsetPx;
-    /**
-     * Gets the offset in pixels by which the item that is being dragged should be moved.
-     * @param currentPosition Current position of the item.
-     * @param newPosition Position of the item where the current item should be moved.
-     * @param delta Direction in which the user is moving.
-     */
-    private _getItemOffsetPx;
-    /**
-     * Checks if pointer is entering in the first position
-     * @param pointerX Position of the user's pointer along the X axis.
-     * @param pointerY Position of the user's pointer along the Y axis.
-     */
-    private _shouldEnterAsFirstChild;
-    /**
-     * Gets the index of an item in the drop container, based on the position of the user's pointer.
-     * @param item Item that is being sorted.
-     * @param pointerX Position of the user's pointer along the X axis.
-     * @param pointerY Position of the user's pointer along the Y axis.
-     * @param delta Direction in which the user is moving their pointer.
-     */
-    private _getItemIndexFromPointerPosition;
-    /** Caches the current items in the list and their positions. */
-    private _cacheItems;
     /** Starts the interval that'll auto-scroll the element. */
     private _startScrollInterval;
     /**
