@@ -1515,6 +1515,344 @@ function clamp(value, max) {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
+ * Strategy that only supports sorting along a single axis.
+ * Items are reordered using CSS transforms which allows for sorting to be animated.
+ * @docs-private
+ */
+class SingleAxisSortStrategy {
+    constructor(_element, _dragDropRegistry) {
+        this._element = _element;
+        this._dragDropRegistry = _dragDropRegistry;
+        /** Cache of the dimensions of all the items inside the container. */
+        this._itemPositions = [];
+        /** Direction in which the list is oriented. */
+        this.orientation = 'vertical';
+        /**
+         * Keeps track of the item that was last swapped with the dragged item, as well as what direction
+         * the pointer was moving in when the swap occured and whether the user's pointer continued to
+         * overlap with the swapped item after the swapping occurred.
+         */
+        this._previousSwap = {
+            drag: null,
+            delta: 0,
+            overlaps: false,
+        };
+    }
+    /**
+     * To be called when the drag sequence starts.
+     * @param items Items that are currently in the list.
+     */
+    start(items) {
+        this.withItems(items);
+    }
+    /**
+     * To be called when an item is being sorted.
+     * @param item Item to be sorted.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
+     * @param pointerDelta Direction in which the pointer is moving along each axis.
+     */
+    sort(item, pointerX, pointerY, pointerDelta) {
+        const siblings = this._itemPositions;
+        const newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
+        if (newIndex === -1 && siblings.length > 0) {
+            return null;
+        }
+        const isHorizontal = this.orientation === 'horizontal';
+        const currentIndex = siblings.findIndex(currentItem => currentItem.drag === item);
+        const siblingAtNewPosition = siblings[newIndex];
+        const currentPosition = siblings[currentIndex].clientRect;
+        const newPosition = siblingAtNewPosition.clientRect;
+        const delta = currentIndex > newIndex ? 1 : -1;
+        // How many pixels the item's placeholder should be offset.
+        const itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
+        // How many pixels all the other items should be offset.
+        const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
+        // Save the previous order of the items before moving the item to its new index.
+        // We use this to check whether an item has been moved as a result of the sorting.
+        const oldOrder = siblings.slice();
+        // Shuffle the array in place.
+        moveItemInArray(siblings, currentIndex, newIndex);
+        siblings.forEach((sibling, index) => {
+            // Don't do anything if the position hasn't changed.
+            if (oldOrder[index] === sibling) {
+                return;
+            }
+            const isDraggedItem = sibling.drag === item;
+            const offset = isDraggedItem ? itemOffset : siblingOffset;
+            const elementToOffset = isDraggedItem
+                ? item.getPlaceholderElement()
+                : sibling.drag.getRootElement();
+            // Update the offset to reflect the new position.
+            sibling.offset += offset;
+            // Since we're moving the items with a `transform`, we need to adjust their cached
+            // client rects to reflect their new position, as well as swap their positions in the cache.
+            // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
+            // elements may be mid-animation which will give us a wrong result.
+            if (isHorizontal) {
+                // Round the transforms since some browsers will
+                // blur the elements, for sub-pixel transforms.
+                elementToOffset.style.transform = combineTransforms(`translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
+                adjustClientRect(sibling.clientRect, 0, offset);
+            }
+            else {
+                elementToOffset.style.transform = combineTransforms(`translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
+                adjustClientRect(sibling.clientRect, offset, 0);
+            }
+        });
+        // Note that it's important that we do this after the client rects have been adjusted.
+        this._previousSwap.overlaps = isInsideClientRect(newPosition, pointerX, pointerY);
+        this._previousSwap.drag = siblingAtNewPosition.drag;
+        this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
+        return { previousIndex: currentIndex, currentIndex: newIndex };
+    }
+    /**
+     * Called when an item is being moved into the container.
+     * @param item Item that was moved into the container.
+     * @param pointerX Position of the item along the X axis.
+     * @param pointerY Position of the item along the Y axis.
+     * @param index Index at which the item entered. If omitted, the container will try to figure it
+     *   out automatically.
+     */
+    enter(item, pointerX, pointerY, index) {
+        const newIndex = index == null || index < 0
+            ? // We use the coordinates of where the item entered the drop
+                // zone to figure out at which index it should be inserted.
+                this._getItemIndexFromPointerPosition(item, pointerX, pointerY)
+            : index;
+        const activeDraggables = this._activeDraggables;
+        const currentIndex = activeDraggables.indexOf(item);
+        const placeholder = item.getPlaceholderElement();
+        let newPositionReference = activeDraggables[newIndex];
+        // If the item at the new position is the same as the item that is being dragged,
+        // it means that we're trying to restore the item to its initial position. In this
+        // case we should use the next item from the list as the reference.
+        if (newPositionReference === item) {
+            newPositionReference = activeDraggables[newIndex + 1];
+        }
+        // If we didn't find a new position reference, it means that either the item didn't start off
+        // in this container, or that the item requested to be inserted at the end of the list.
+        if (!newPositionReference &&
+            (newIndex == null || newIndex === -1 || newIndex < activeDraggables.length - 1) &&
+            this._shouldEnterAsFirstChild(pointerX, pointerY)) {
+            newPositionReference = activeDraggables[0];
+        }
+        // Since the item may be in the `activeDraggables` already (e.g. if the user dragged it
+        // into another container and back again), we have to ensure that it isn't duplicated.
+        if (currentIndex > -1) {
+            activeDraggables.splice(currentIndex, 1);
+        }
+        // Don't use items that are being dragged as a reference, because
+        // their element has been moved down to the bottom of the body.
+        if (newPositionReference && !this._dragDropRegistry.isDragging(newPositionReference)) {
+            const element = newPositionReference.getRootElement();
+            element.parentElement.insertBefore(placeholder, element);
+            activeDraggables.splice(newIndex, 0, item);
+        }
+        else {
+            coerceElement(this._element).appendChild(placeholder);
+            activeDraggables.push(item);
+        }
+        // The transform needs to be cleared so it doesn't throw off the measurements.
+        placeholder.style.transform = '';
+        // Note that usually `start` is called together with `enter` when an item goes into a new
+        // container. This will cache item positions, but we need to refresh them since the amount
+        // of items has changed.
+        this._cacheItemPositions();
+    }
+    /** Sets the items that are currently part of the list. */
+    withItems(items) {
+        this._activeDraggables = items.slice();
+        this._cacheItemPositions();
+    }
+    /** Assigns a sort predicate to the strategy. */
+    withSortPredicate(predicate) {
+        this._sortPredicate = predicate;
+    }
+    /** Resets the strategy to its initial state before dragging was started. */
+    reset() {
+        // TODO(crisbeto): may have to wait for the animations to finish.
+        this._activeDraggables.forEach(item => {
+            var _a;
+            const rootElement = item.getRootElement();
+            if (rootElement) {
+                const initialTransform = (_a = this._itemPositions.find(p => p.drag === item)) === null || _a === void 0 ? void 0 : _a.initialTransform;
+                rootElement.style.transform = initialTransform || '';
+            }
+        });
+        this._itemPositions = [];
+        this._activeDraggables = [];
+        this._previousSwap.drag = null;
+        this._previousSwap.delta = 0;
+        this._previousSwap.overlaps = false;
+    }
+    /**
+     * Gets a snapshot of items currently in the list.
+     * Can include items that we dragged in from another list.
+     */
+    getActiveItemsSnapshot() {
+        return this._activeDraggables;
+    }
+    /** Gets the index of a specific item. */
+    getItemIndex(item) {
+        // Items are sorted always by top/left in the cache, however they flow differently in RTL.
+        // The rest of the logic still stands no matter what orientation we're in, however
+        // we need to invert the array when determining the index.
+        const items = this.orientation === 'horizontal' && this.direction === 'rtl'
+            ? this._itemPositions.slice().reverse()
+            : this._itemPositions;
+        return items.findIndex(currentItem => currentItem.drag === item);
+    }
+    /** Used to notify the strategy that the scroll position has changed. */
+    updateOnScroll(topDifference, leftDifference) {
+        // Since we know the amount that the user has scrolled we can shift all of the
+        // client rectangles ourselves. This is cheaper than re-measuring everything and
+        // we can avoid inconsistent behavior where we might be measuring the element before
+        // its position has changed.
+        this._itemPositions.forEach(({ clientRect }) => {
+            adjustClientRect(clientRect, topDifference, leftDifference);
+        });
+        // We need two loops for this, because we want all of the cached
+        // positions to be up-to-date before we re-sort the item.
+        this._itemPositions.forEach(({ drag }) => {
+            if (this._dragDropRegistry.isDragging(drag)) {
+                // We need to re-sort the item manually, because the pointer move
+                // events won't be dispatched while the user is scrolling.
+                drag._sortFromLastPointerPosition();
+            }
+        });
+    }
+    /** Refreshes the position cache of the items and sibling containers. */
+    _cacheItemPositions() {
+        const isHorizontal = this.orientation === 'horizontal';
+        this._itemPositions = this._activeDraggables
+            .map(drag => {
+            const elementToMeasure = drag.getVisibleElement();
+            return {
+                drag,
+                offset: 0,
+                initialTransform: elementToMeasure.style.transform || '',
+                clientRect: getMutableClientRect(elementToMeasure),
+            };
+        })
+            .sort((a, b) => {
+            return isHorizontal
+                ? a.clientRect.left - b.clientRect.left
+                : a.clientRect.top - b.clientRect.top;
+        });
+    }
+    /**
+     * Gets the offset in pixels by which the item that is being dragged should be moved.
+     * @param currentPosition Current position of the item.
+     * @param newPosition Position of the item where the current item should be moved.
+     * @param delta Direction in which the user is moving.
+     */
+    _getItemOffsetPx(currentPosition, newPosition, delta) {
+        const isHorizontal = this.orientation === 'horizontal';
+        let itemOffset = isHorizontal
+            ? newPosition.left - currentPosition.left
+            : newPosition.top - currentPosition.top;
+        // Account for differences in the item width/height.
+        if (delta === -1) {
+            itemOffset += isHorizontal
+                ? newPosition.width - currentPosition.width
+                : newPosition.height - currentPosition.height;
+        }
+        return itemOffset;
+    }
+    /**
+     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
+     * @param currentIndex Index of the item currently being dragged.
+     * @param siblings All of the items in the list.
+     * @param delta Direction in which the user is moving.
+     */
+    _getSiblingOffsetPx(currentIndex, siblings, delta) {
+        const isHorizontal = this.orientation === 'horizontal';
+        const currentPosition = siblings[currentIndex].clientRect;
+        const immediateSibling = siblings[currentIndex + delta * -1];
+        let siblingOffset = currentPosition[isHorizontal ? 'width' : 'height'] * delta;
+        if (immediateSibling) {
+            const start = isHorizontal ? 'left' : 'top';
+            const end = isHorizontal ? 'right' : 'bottom';
+            // Get the spacing between the start of the current item and the end of the one immediately
+            // after it in the direction in which the user is dragging, or vice versa. We add it to the
+            // offset in order to push the element to where it will be when it's inline and is influenced
+            // by the `margin` of its siblings.
+            if (delta === -1) {
+                siblingOffset -= immediateSibling.clientRect[start] - currentPosition[end];
+            }
+            else {
+                siblingOffset += currentPosition[start] - immediateSibling.clientRect[end];
+            }
+        }
+        return siblingOffset;
+    }
+    /**
+     * Checks if pointer is entering in the first position
+     * @param pointerX Position of the user's pointer along the X axis.
+     * @param pointerY Position of the user's pointer along the Y axis.
+     */
+    _shouldEnterAsFirstChild(pointerX, pointerY) {
+        if (!this._activeDraggables.length) {
+            return false;
+        }
+        const itemPositions = this._itemPositions;
+        const isHorizontal = this.orientation === 'horizontal';
+        // `itemPositions` are sorted by position while `activeDraggables` are sorted by child index
+        // check if container is using some sort of "reverse" ordering (eg: flex-direction: row-reverse)
+        const reversed = itemPositions[0].drag !== this._activeDraggables[0];
+        if (reversed) {
+            const lastItemRect = itemPositions[itemPositions.length - 1].clientRect;
+            return isHorizontal ? pointerX >= lastItemRect.right : pointerY >= lastItemRect.bottom;
+        }
+        else {
+            const firstItemRect = itemPositions[0].clientRect;
+            return isHorizontal ? pointerX <= firstItemRect.left : pointerY <= firstItemRect.top;
+        }
+    }
+    /**
+     * Gets the index of an item in the drop container, based on the position of the user's pointer.
+     * @param item Item that is being sorted.
+     * @param pointerX Position of the user's pointer along the X axis.
+     * @param pointerY Position of the user's pointer along the Y axis.
+     * @param delta Direction in which the user is moving their pointer.
+     */
+    _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta) {
+        const isHorizontal = this.orientation === 'horizontal';
+        const index = this._itemPositions.findIndex(({ drag, clientRect }) => {
+            // Skip the item itself.
+            if (drag === item) {
+                return false;
+            }
+            if (delta) {
+                const direction = isHorizontal ? delta.x : delta.y;
+                // If the user is still hovering over the same item as last time, their cursor hasn't left
+                // the item after we made the swap, and they didn't change the direction in which they're
+                // dragging, we don't consider it a direction swap.
+                if (drag === this._previousSwap.drag &&
+                    this._previousSwap.overlaps &&
+                    direction === this._previousSwap.delta) {
+                    return false;
+                }
+            }
+            return isHorizontal
+                ? // Round these down since most browsers report client rects with
+                    // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
+                    pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right)
+                : pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
+        });
+        return index === -1 || !this._sortPredicate(index, item) ? -1 : index;
+    }
+}
+
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
  * Proximity, as a ratio to width/height, at which a
  * dragged item will affect the drop container.
  */
@@ -1548,7 +1886,7 @@ class DropListRef {
          * is allowed to be moved into a drop container.
          */
         this.enterPredicate = () => true;
-        /** Functions that is used to determine whether an item can be sorted into a particular index. */
+        /** Function that is used to determine whether an item can be sorted into a particular index. */
         this.sortPredicate = () => true;
         /** Emits right before dragging has started. */
         this.beforeStarted = new Subject();
@@ -1567,24 +1905,12 @@ class DropListRef {
         this.sorted = new Subject();
         /** Whether an item in the list is being dragged. */
         this._isDragging = false;
-        /** Cache of the dimensions of all the items inside the container. */
-        this._itemPositions = [];
-        /**
-         * Keeps track of the item that was last swapped with the dragged item, as well as what direction
-         * the pointer was moving in when the swap occured and whether the user's pointer continued to
-         * overlap with the swapped item after the swapping occurred.
-         */
-        this._previousSwap = { drag: null, delta: 0, overlaps: false };
         /** Draggable items in the container. */
         this._draggables = [];
         /** Drop lists that are connected to the current one. */
         this._siblings = [];
-        /** Direction in which the list is oriented. */
-        this._orientation = 'vertical';
         /** Connected siblings that currently have a dragged item. */
         this._activeSiblings = new Set();
-        /** Layout direction of the drop list. */
-        this._direction = 'ltr';
         /** Subscription to the window being scrolled. */
         this._viewportScrollSubscription = Subscription.EMPTY;
         /** Vertical direction in which the list is currently scrolling. */
@@ -1622,6 +1948,8 @@ class DropListRef {
         this.withScrollableParents([this.element]);
         _dragDropRegistry.registerDropContainer(this);
         this._parentPositions = new ParentPositionTracker(_document);
+        this._sortStrategy = new SingleAxisSortStrategy(this.element, _dragDropRegistry);
+        this._sortStrategy.withSortPredicate((index, item) => this.sortPredicate(index, item, this));
     }
     /** Removes the drop list functionality from the DOM element. */
     dispose() {
@@ -1648,7 +1976,7 @@ class DropListRef {
         this._notifyReceivingSiblings();
     }
     /**
-     * Emits an event to indicate that the user moved an item into the container.
+     * Attempts to move an item into the container.
      * @param item Item that was moved into the container.
      * @param pointerX Position of the item along the X axis.
      * @param pointerY Position of the item along the Y axis.
@@ -1659,56 +1987,12 @@ class DropListRef {
         this._draggingStarted();
         // If sorting is disabled, we want the item to return to its starting
         // position if the user is returning it to its initial container.
-        let newIndex;
-        if (index == null) {
-            newIndex = this.sortingDisabled ? this._draggables.indexOf(item) : -1;
-            if (newIndex === -1) {
-                // We use the coordinates of where the item entered the drop
-                // zone to figure out at which index it should be inserted.
-                newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY);
-            }
+        if (index == null && this.sortingDisabled) {
+            index = this._draggables.indexOf(item);
         }
-        else {
-            newIndex = index;
-        }
-        const activeDraggables = this._activeDraggables;
-        const currentIndex = activeDraggables.indexOf(item);
-        const placeholder = item.getPlaceholderElement();
-        let newPositionReference = activeDraggables[newIndex];
-        // If the item at the new position is the same as the item that is being dragged,
-        // it means that we're trying to restore the item to its initial position. In this
-        // case we should use the next item from the list as the reference.
-        if (newPositionReference === item) {
-            newPositionReference = activeDraggables[newIndex + 1];
-        }
-        // If we didn't find a new position reference, it means that either the item didn't start off
-        // in this container, or that the item requested to be inserted at the end of the list.
-        if (!newPositionReference &&
-            (newIndex == null || newIndex === -1 || newIndex < activeDraggables.length - 1) &&
-            this._shouldEnterAsFirstChild(pointerX, pointerY)) {
-            newPositionReference = activeDraggables[0];
-        }
-        // Since the item may be in the `activeDraggables` already (e.g. if the user dragged it
-        // into another container and back again), we have to ensure that it isn't duplicated.
-        if (currentIndex > -1) {
-            activeDraggables.splice(currentIndex, 1);
-        }
-        // Don't use items that are being dragged as a reference, because
-        // their element has been moved down to the bottom of the body.
-        if (newPositionReference && !this._dragDropRegistry.isDragging(newPositionReference)) {
-            const element = newPositionReference.getRootElement();
-            element.parentElement.insertBefore(placeholder, element);
-            activeDraggables.splice(newIndex, 0, item);
-        }
-        else {
-            coerceElement(this.element).appendChild(placeholder);
-            activeDraggables.push(item);
-        }
-        // The transform needs to be cleared so it doesn't throw off the measurements.
-        placeholder.style.transform = '';
-        // Note that the positions were already cached when we called `start` above,
-        // but we need to refresh them since the amount of items has changed and also parent rects.
-        this._cacheItemPositions();
+        this._sortStrategy.enter(item, pointerX, pointerY, index);
+        // Note that this usually happens inside `_draggingStarted` as well, but the dimensions
+        // can change when the sort strategy moves the item around inside `enter`.
         this._cacheParentPositions();
         // Notify siblings at the end so that the item has been inserted into the `activeDraggables`.
         this._notifyReceivingSiblings();
@@ -1765,14 +2049,14 @@ class DropListRef {
                 this._reset();
             }
             else {
-                this._cacheItems();
+                this._sortStrategy.withItems(this._draggables);
             }
         }
         return this;
     }
     /** Sets the layout direction of the drop list. */
     withDirection(direction) {
-        this._direction = direction;
+        this._sortStrategy.direction = direction;
         return this;
     }
     /**
@@ -1789,7 +2073,9 @@ class DropListRef {
      * @param orientation New orientation for the container.
      */
     withOrientation(orientation) {
-        this._orientation = orientation;
+        // TODO(crisbeto): eventually we should be constructing the new sort strategy here based on
+        // the new orientation. For now we can assume that it'll always be `SingleAxisSortStrategy`.
+        this._sortStrategy.orientation = orientation;
         return this;
     }
     /**
@@ -1813,16 +2099,9 @@ class DropListRef {
      * @param item Item whose index should be determined.
      */
     getItemIndex(item) {
-        if (!this._isDragging) {
-            return this._draggables.indexOf(item);
-        }
-        // Items are sorted always by top/left in the cache, however they flow differently in RTL.
-        // The rest of the logic still stands no matter what orientation we're in, however
-        // we need to invert the array when determining the index.
-        const items = this._orientation === 'horizontal' && this._direction === 'rtl'
-            ? this._itemPositions.slice().reverse()
-            : this._itemPositions;
-        return items.findIndex(currentItem => currentItem.drag === item);
+        return this._isDragging
+            ? this._sortStrategy.getItemIndex(item)
+            : this._draggables.indexOf(item);
     }
     /**
      * Whether the list is able to receive the item that
@@ -1845,63 +2124,15 @@ class DropListRef {
             !isPointerNearClientRect(this._clientRect, DROP_PROXIMITY_THRESHOLD, pointerX, pointerY)) {
             return;
         }
-        const siblings = this._itemPositions;
-        const newIndex = this._getItemIndexFromPointerPosition(item, pointerX, pointerY, pointerDelta);
-        if (newIndex === -1 && siblings.length > 0) {
-            return;
+        const result = this._sortStrategy.sort(item, pointerX, pointerY, pointerDelta);
+        if (result) {
+            this.sorted.next({
+                previousIndex: result.previousIndex,
+                currentIndex: result.currentIndex,
+                container: this,
+                item,
+            });
         }
-        const isHorizontal = this._orientation === 'horizontal';
-        const currentIndex = siblings.findIndex(currentItem => currentItem.drag === item);
-        const siblingAtNewPosition = siblings[newIndex];
-        const currentPosition = siblings[currentIndex].clientRect;
-        const newPosition = siblingAtNewPosition.clientRect;
-        const delta = currentIndex > newIndex ? 1 : -1;
-        // How many pixels the item's placeholder should be offset.
-        const itemOffset = this._getItemOffsetPx(currentPosition, newPosition, delta);
-        // How many pixels all the other items should be offset.
-        const siblingOffset = this._getSiblingOffsetPx(currentIndex, siblings, delta);
-        // Save the previous order of the items before moving the item to its new index.
-        // We use this to check whether an item has been moved as a result of the sorting.
-        const oldOrder = siblings.slice();
-        // Shuffle the array in place.
-        moveItemInArray(siblings, currentIndex, newIndex);
-        this.sorted.next({
-            previousIndex: currentIndex,
-            currentIndex: newIndex,
-            container: this,
-            item,
-        });
-        siblings.forEach((sibling, index) => {
-            // Don't do anything if the position hasn't changed.
-            if (oldOrder[index] === sibling) {
-                return;
-            }
-            const isDraggedItem = sibling.drag === item;
-            const offset = isDraggedItem ? itemOffset : siblingOffset;
-            const elementToOffset = isDraggedItem
-                ? item.getPlaceholderElement()
-                : sibling.drag.getRootElement();
-            // Update the offset to reflect the new position.
-            sibling.offset += offset;
-            // Since we're moving the items with a `transform`, we need to adjust their cached
-            // client rects to reflect their new position, as well as swap their positions in the cache.
-            // Note that we shouldn't use `getBoundingClientRect` here to update the cache, because the
-            // elements may be mid-animation which will give us a wrong result.
-            if (isHorizontal) {
-                // Round the transforms since some browsers will
-                // blur the elements, for sub-pixel transforms.
-                elementToOffset.style.transform = combineTransforms(`translate3d(${Math.round(sibling.offset)}px, 0, 0)`, sibling.initialTransform);
-                adjustClientRect(sibling.clientRect, 0, offset);
-            }
-            else {
-                elementToOffset.style.transform = combineTransforms(`translate3d(0, ${Math.round(sibling.offset)}px, 0)`, sibling.initialTransform);
-                adjustClientRect(sibling.clientRect, offset, 0);
-            }
-        });
-        // Note that it's important that we do this after the client rects have been adjusted.
-        this._previousSwap.overlaps = isInsideClientRect(newPosition, pointerX, pointerY);
-        this._previousSwap.drag = siblingAtNewPosition.drag;
-        this._previousSwap.delta = isHorizontal ? pointerDelta.x : pointerDelta.y;
     }
     /**
      * Checks whether the user's pointer is close to the edges of either the
@@ -1974,7 +2205,8 @@ class DropListRef {
         // that we can't increment/decrement the scroll position.
         this._initialScrollSnap = styles.msScrollSnapType || styles.scrollSnapType || '';
         styles.scrollSnapType = styles.msScrollSnapType = 'none';
-        this._cacheItems();
+        this._sortStrategy.start(this._draggables);
+        this._cacheParentPositions();
         this._viewportScrollSubscription.unsubscribe();
         this._listenToScrollEvents();
     }
@@ -1986,156 +2218,16 @@ class DropListRef {
         // so we can take advantage of the cached `ClientRect`.
         this._clientRect = this._parentPositions.positions.get(element).clientRect;
     }
-    /** Refreshes the position cache of the items and sibling containers. */
-    _cacheItemPositions() {
-        const isHorizontal = this._orientation === 'horizontal';
-        this._itemPositions = this._activeDraggables
-            .map(drag => {
-            const elementToMeasure = drag.getVisibleElement();
-            return {
-                drag,
-                offset: 0,
-                initialTransform: elementToMeasure.style.transform || '',
-                clientRect: getMutableClientRect(elementToMeasure),
-            };
-        })
-            .sort((a, b) => {
-            return isHorizontal
-                ? a.clientRect.left - b.clientRect.left
-                : a.clientRect.top - b.clientRect.top;
-        });
-    }
     /** Resets the container to its initial state. */
     _reset() {
         this._isDragging = false;
         const styles = coerceElement(this.element).style;
         styles.scrollSnapType = styles.msScrollSnapType = this._initialScrollSnap;
-        // TODO(crisbeto): may have to wait for the animations to finish.
-        this._activeDraggables.forEach(item => {
-            var _a;
-            const rootElement = item.getRootElement();
-            if (rootElement) {
-                const initialTransform = (_a = this._itemPositions.find(current => current.drag === item)) === null || _a === void 0 ? void 0 : _a.initialTransform;
-                rootElement.style.transform = initialTransform || '';
-            }
-        });
         this._siblings.forEach(sibling => sibling._stopReceiving(this));
-        this._activeDraggables = [];
-        this._itemPositions = [];
-        this._previousSwap.drag = null;
-        this._previousSwap.delta = 0;
-        this._previousSwap.overlaps = false;
+        this._sortStrategy.reset();
         this._stopScrolling();
         this._viewportScrollSubscription.unsubscribe();
         this._parentPositions.clear();
-    }
-    /**
-     * Gets the offset in pixels by which the items that aren't being dragged should be moved.
-     * @param currentIndex Index of the item currently being dragged.
-     * @param siblings All of the items in the list.
-     * @param delta Direction in which the user is moving.
-     */
-    _getSiblingOffsetPx(currentIndex, siblings, delta) {
-        const isHorizontal = this._orientation === 'horizontal';
-        const currentPosition = siblings[currentIndex].clientRect;
-        const immediateSibling = siblings[currentIndex + delta * -1];
-        let siblingOffset = currentPosition[isHorizontal ? 'width' : 'height'] * delta;
-        if (immediateSibling) {
-            const start = isHorizontal ? 'left' : 'top';
-            const end = isHorizontal ? 'right' : 'bottom';
-            // Get the spacing between the start of the current item and the end of the one immediately
-            // after it in the direction in which the user is dragging, or vice versa. We add it to the
-            // offset in order to push the element to where it will be when it's inline and is influenced
-            // by the `margin` of its siblings.
-            if (delta === -1) {
-                siblingOffset -= immediateSibling.clientRect[start] - currentPosition[end];
-            }
-            else {
-                siblingOffset += currentPosition[start] - immediateSibling.clientRect[end];
-            }
-        }
-        return siblingOffset;
-    }
-    /**
-     * Gets the offset in pixels by which the item that is being dragged should be moved.
-     * @param currentPosition Current position of the item.
-     * @param newPosition Position of the item where the current item should be moved.
-     * @param delta Direction in which the user is moving.
-     */
-    _getItemOffsetPx(currentPosition, newPosition, delta) {
-        const isHorizontal = this._orientation === 'horizontal';
-        let itemOffset = isHorizontal
-            ? newPosition.left - currentPosition.left
-            : newPosition.top - currentPosition.top;
-        // Account for differences in the item width/height.
-        if (delta === -1) {
-            itemOffset += isHorizontal
-                ? newPosition.width - currentPosition.width
-                : newPosition.height - currentPosition.height;
-        }
-        return itemOffset;
-    }
-    /**
-     * Checks if pointer is entering in the first position
-     * @param pointerX Position of the user's pointer along the X axis.
-     * @param pointerY Position of the user's pointer along the Y axis.
-     */
-    _shouldEnterAsFirstChild(pointerX, pointerY) {
-        if (!this._activeDraggables.length) {
-            return false;
-        }
-        const itemPositions = this._itemPositions;
-        const isHorizontal = this._orientation === 'horizontal';
-        // `itemPositions` are sorted by position while `activeDraggables` are sorted by child index
-        // check if container is using some sort of "reverse" ordering (eg: flex-direction: row-reverse)
-        const reversed = itemPositions[0].drag !== this._activeDraggables[0];
-        if (reversed) {
-            const lastItemRect = itemPositions[itemPositions.length - 1].clientRect;
-            return isHorizontal ? pointerX >= lastItemRect.right : pointerY >= lastItemRect.bottom;
-        }
-        else {
-            const firstItemRect = itemPositions[0].clientRect;
-            return isHorizontal ? pointerX <= firstItemRect.left : pointerY <= firstItemRect.top;
-        }
-    }
-    /**
-     * Gets the index of an item in the drop container, based on the position of the user's pointer.
-     * @param item Item that is being sorted.
-     * @param pointerX Position of the user's pointer along the X axis.
-     * @param pointerY Position of the user's pointer along the Y axis.
-     * @param delta Direction in which the user is moving their pointer.
-     */
-    _getItemIndexFromPointerPosition(item, pointerX, pointerY, delta) {
-        const isHorizontal = this._orientation === 'horizontal';
-        const index = this._itemPositions.findIndex(({ drag, clientRect }) => {
-            // Skip the item itself.
-            if (drag === item) {
-                return false;
-            }
-            if (delta) {
-                const direction = isHorizontal ? delta.x : delta.y;
-                // If the user is still hovering over the same item as last time, their cursor hasn't left
-                // the item after we made the swap, and they didn't change the direction in which they're
-                // dragging, we don't consider it a direction swap.
-                if (drag === this._previousSwap.drag &&
-                    this._previousSwap.overlaps &&
-                    direction === this._previousSwap.delta) {
-                    return false;
-                }
-            }
-            return isHorizontal
-                ? // Round these down since most browsers report client rects with
-                    // sub-pixel precision, whereas the pointer coordinates are rounded to pixels.
-                    pointerX >= Math.floor(clientRect.left) && pointerX < Math.floor(clientRect.right)
-                : pointerY >= Math.floor(clientRect.top) && pointerY < Math.floor(clientRect.bottom);
-        });
-        return index === -1 || !this.sortPredicate(index, item, this) ? -1 : index;
-    }
-    /** Caches the current items in the list and their positions. */
-    _cacheItems() {
-        this._activeDraggables = this._draggables.slice();
-        this._cacheItemPositions();
-        this._cacheParentPositions();
     }
     /**
      * Checks whether the user's pointer is positioned over the container.
@@ -2220,22 +2312,7 @@ class DropListRef {
             if (this.isDragging()) {
                 const scrollDifference = this._parentPositions.handleScroll(event);
                 if (scrollDifference) {
-                    // Since we know the amount that the user has scrolled we can shift all of the
-                    // client rectangles ourselves. This is cheaper than re-measuring everything and
-                    // we can avoid inconsistent behavior where we might be measuring the element before
-                    // its position has changed.
-                    this._itemPositions.forEach(({ clientRect }) => {
-                        adjustClientRect(clientRect, scrollDifference.top, scrollDifference.left);
-                    });
-                    // We need two loops for this, because we want all of the cached
-                    // positions to be up-to-date before we re-sort the item.
-                    this._itemPositions.forEach(({ drag }) => {
-                        if (this._dragDropRegistry.isDragging(drag)) {
-                            // We need to re-sort the item manually, because the pointer move
-                            // events won't be dispatched while the user is scrolling.
-                            drag._sortFromLastPointerPosition();
-                        }
-                    });
+                    this._sortStrategy.updateOnScroll(scrollDifference.top, scrollDifference.left);
                 }
             }
             else if (this.isReceiving()) {
@@ -2258,7 +2335,9 @@ class DropListRef {
     }
     /** Notifies any siblings that may potentially receive the item. */
     _notifyReceivingSiblings() {
-        const draggedItems = this._activeDraggables.filter(item => item.isDragging());
+        const draggedItems = this._sortStrategy
+            .getActiveItemsSnapshot()
+            .filter(item => item.isDragging());
         this._siblings.forEach(sibling => sibling._startReceiving(this, draggedItems));
     }
 }
