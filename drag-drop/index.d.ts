@@ -126,10 +126,10 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /**
      * Function that can be used to customize the logic of how the position of the drag item
      * is limited while it's being dragged. Gets called with a point containing the current position
-     * of the user's pointer on the page and should return a point describing where the item should
-     * be rendered.
+     * of the user's pointer on the page, a reference to the item being dragged and its dimenstions.
+     * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (point: Point, dragRef: DragRef) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect) => Point;
     /** Class to be added to the preview element. */
     previewClass: string | string[];
     /**
@@ -751,6 +751,8 @@ export declare class DragRef<T = any> {
     private _boundaryElement;
     /** Whether the native dragging interactions have been enabled on the root element. */
     private _nativeInteractionsEnabled;
+    /** Client rect of the root element when the dragging sequence has started. */
+    private _initialClientRect?;
     /** Cached dimensions of the preview element. Should be read via `_getPreviewRect`. */
     private _previewRect?;
     /** Cached dimensions of the boundary element. */
@@ -855,10 +857,10 @@ export declare class DragRef<T = any> {
     /**
      * Function that can be used to customize the logic of how the position of the drag item
      * is limited while it's being dragged. Gets called with a point containing the current position
-     * of the user's pointer on the page and should return a point describing where the item should
-     * be rendered.
+     * of the user's pointer on the page, a reference to the item being dragged and its dimenstions.
+     * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (point: Point, dragRef: DragRef) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRefInternal>);
     /**
      * Returns the element that is being used as a placeholder
