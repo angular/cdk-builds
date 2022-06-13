@@ -99,7 +99,7 @@ let uniqueIds = 0;
  * Creates a browser MouseEvent with the specified options.
  * @docs-private
  */
-function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers = {}) {
+function createMouseEvent(type, clientX = 0, clientY = 0, offsetX = 1, offsetY = 1, button = 0, modifiers = {}) {
     // Note: We cannot determine the position of the mouse event based on the screen
     // because the dimensions and position of the browser window are not available
     // To provide reasonable `screenX` and `screenY` coordinates, we simply use the
@@ -126,8 +126,12 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers 
     });
     // The `MouseEvent` constructor doesn't allow us to pass these properties into the constructor.
     // Override them to `1`, because they're used for fake screen reader event detection.
-    defineReadonlyEventProperty(event, 'offsetX', 1);
-    defineReadonlyEventProperty(event, 'offsetY', 1);
+    if (offsetX != null) {
+        defineReadonlyEventProperty(event, 'offsetX', offsetX);
+    }
+    if (offsetY != null) {
+        defineReadonlyEventProperty(event, 'offsetY', offsetY);
+    }
     return event;
 }
 /**
@@ -140,8 +144,8 @@ function createMouseEvent(type, clientX = 0, clientY = 0, button = 0, modifiers 
  *
  * @docs-private
  */
-function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimary: true }) {
-    return new PointerEvent(type, {
+function createPointerEvent(type, clientX = 0, clientY = 0, offsetX, offsetY, options = { isPrimary: true }) {
+    const event = new PointerEvent(type, {
         bubbles: true,
         cancelable: true,
         composed: true,
@@ -150,6 +154,13 @@ function createPointerEvent(type, clientX = 0, clientY = 0, options = { isPrimar
         clientY,
         ...options,
     });
+    if (offsetX != null) {
+        defineReadonlyEventProperty(event, 'offsetX', offsetX);
+    }
+    if (offsetY != null) {
+        defineReadonlyEventProperty(event, 'offsetY', offsetY);
+    }
+    return event;
 }
 /**
  * Creates a browser TouchEvent with the specified pointer coordinates.
@@ -236,15 +247,15 @@ function dispatchKeyboardEvent(node, type, keyCode, key, modifiers) {
  * Shorthand to dispatch a mouse event on the specified coordinates.
  * @docs-private
  */
-function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, button, modifiers) {
-    return dispatchEvent(node, createMouseEvent(type, clientX, clientY, button, modifiers));
+function dispatchMouseEvent(node, type, clientX = 0, clientY = 0, offsetX, offsetY, button, modifiers) {
+    return dispatchEvent(node, createMouseEvent(type, clientX, clientY, offsetX, offsetY, button, modifiers));
 }
 /**
  * Shorthand to dispatch a pointer event on the specified coordinates.
  * @docs-private
  */
-function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, options) {
-    return dispatchEvent(node, createPointerEvent(type, clientX, clientY, options));
+function dispatchPointerEvent(node, type, clientX = 0, clientY = 0, offsetX, offsetY, options) {
+    return dispatchEvent(node, createPointerEvent(type, clientX, clientY, offsetX, offsetY, options));
 }
 /**
  * Shorthand to dispatch a touch event on the specified coordinates.
@@ -585,13 +596,16 @@ class UnitTestElement {
      * @param clientY Coordinate of the user's pointer along the Y axis.
      * @param button Mouse button that should be pressed when dispatching the event.
      */
-    _dispatchPointerEventIfSupported(name, clientX, clientY, button) {
+    _dispatchPointerEventIfSupported(name, clientX, clientY, offsetX, offsetY, button) {
         // The latest versions of all browsers we support have the new `PointerEvent` API.
         // Though since we capture the two most recent versions of these browsers, we also
         // need to support Safari 12 at time of writing. Safari 12 does not have support for this,
         // so we need to conditionally create and dispatch these events based on feature detection.
         if (typeof PointerEvent !== 'undefined' && PointerEvent) {
-            dispatchPointerEvent(this.element, name, clientX, clientY, { isPrimary: true, button });
+            dispatchPointerEvent(this.element, name, clientX, clientY, offsetX, offsetY, {
+                isPrimary: true,
+                button,
+            });
         }
     }
     /**
@@ -601,26 +615,28 @@ class UnitTestElement {
     async _dispatchMouseEventSequence(primaryEventName, args, button) {
         let clientX = undefined;
         let clientY = undefined;
+        let offsetX = undefined;
+        let offsetY = undefined;
         let modifiers = {};
         if (args.length && typeof args[args.length - 1] === 'object') {
             modifiers = args.pop();
         }
         if (args.length) {
             const { left, top, width, height } = await this.getDimensions();
-            const relativeX = args[0] === 'center' ? width / 2 : args[0];
-            const relativeY = args[0] === 'center' ? height / 2 : args[1];
+            offsetX = args[0] === 'center' ? width / 2 : args[0];
+            offsetY = args[0] === 'center' ? height / 2 : args[1];
             // Round the computed click position as decimal pixels are not
             // supported by mouse events and could lead to unexpected results.
-            clientX = Math.round(left + relativeX);
-            clientY = Math.round(top + relativeY);
+            clientX = Math.round(left + offsetX);
+            clientY = Math.round(top + offsetY);
         }
-        this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, button);
-        dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, button, modifiers);
-        this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, button);
-        dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, button, modifiers);
+        this._dispatchPointerEventIfSupported('pointerdown', clientX, clientY, offsetX, offsetY, button);
+        dispatchMouseEvent(this.element, 'mousedown', clientX, clientY, offsetX, offsetY, button, modifiers);
+        this._dispatchPointerEventIfSupported('pointerup', clientX, clientY, offsetX, offsetY, button);
+        dispatchMouseEvent(this.element, 'mouseup', clientX, clientY, offsetX, offsetY, button, modifiers);
         // If a primary event name is specified, emit it after the mouse event sequence.
         if (primaryEventName !== null) {
-            dispatchMouseEvent(this.element, primaryEventName, clientX, clientY, button, modifiers);
+            dispatchMouseEvent(this.element, primaryEventName, clientX, clientY, offsetX, offsetY, button, modifiers);
         }
         // This call to _stabilize should not be needed since the callers will already do that them-
         // selves. Nevertheless it breaks some tests in g3 without it. It needs to be investigated
