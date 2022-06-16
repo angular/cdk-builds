@@ -668,7 +668,7 @@ export declare const enum HighContrastMode {
  * Mode. This service does not detect high-contrast mode as added by the Chrome "High Contrast"
  * browser extension.
  */
-export declare class HighContrastModeDetector {
+export declare class HighContrastModeDetector implements OnDestroy {
     private _platform;
     /**
      * Figuring out the high contrast mode and adding the body classes can cause
@@ -676,9 +676,11 @@ export declare class HighContrastModeDetector {
      */
     private _hasCheckedHighContrastMode;
     private _document;
+    private _breakpointSubscription;
     constructor(_platform: Platform, document: any);
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode(): HighContrastMode;
+    ngOnDestroy(): void;
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<HighContrastModeDetector, never>;

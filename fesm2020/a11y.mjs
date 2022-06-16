@@ -9,6 +9,7 @@ import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeU
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 /**
  * @license
@@ -2303,6 +2304,14 @@ class HighContrastModeDetector {
     constructor(_platform, document) {
         this._platform = _platform;
         this._document = document;
+        this._breakpointSubscription = inject(BreakpointObserver)
+            .observe('(forced-colors: active)')
+            .subscribe(() => {
+            if (this._hasCheckedHighContrastMode) {
+                this._hasCheckedHighContrastMode = false;
+                this._applyBodyHighContrastModeCssClasses();
+            }
+        });
     }
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode() {
@@ -2333,6 +2342,9 @@ class HighContrastModeDetector {
                 return 1 /* HighContrastMode.BLACK_ON_WHITE */;
         }
         return 0 /* HighContrastMode.NONE */;
+    }
+    ngOnDestroy() {
+        this._breakpointSubscription.unsubscribe();
     }
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses() {
