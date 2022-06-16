@@ -9,6 +9,7 @@ import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeU
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 /**
  * @license
@@ -2270,6 +2271,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
                 type: Output
             }] } });
 
+/**
+ * @license
+ * Copyright Google LLC All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 /** CSS class applied to the document body when in black-on-white high-contrast mode. */
 const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
 /** CSS class applied to the document body when in white-on-black high-contrast mode. */
@@ -2291,6 +2299,14 @@ class HighContrastModeDetector {
     constructor(_platform, document) {
         this._platform = _platform;
         this._document = document;
+        this._breakpointSubscription = inject(BreakpointObserver)
+            .observe('(forced-colors: active)')
+            .subscribe(() => {
+            if (this._hasCheckedHighContrastMode) {
+                this._hasCheckedHighContrastMode = false;
+                this._applyBodyHighContrastModeCssClasses();
+            }
+        });
     }
     /** Gets the current high-contrast-mode for the page. */
     getHighContrastMode() {
@@ -2321,6 +2337,9 @@ class HighContrastModeDetector {
                 return 1 /* HighContrastMode.BLACK_ON_WHITE */;
         }
         return 0 /* HighContrastMode.NONE */;
+    }
+    ngOnDestroy() {
+        this._breakpointSubscription.unsubscribe();
     }
     /** Applies CSS classes indicating high-contrast mode to document body (browser-only). */
     _applyBodyHighContrastModeCssClasses() {
