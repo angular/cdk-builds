@@ -933,6 +933,8 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
      * (in pixels).
      */
     setRenderedContentOffset(offset, to = 'to-start') {
+        // In appendOnly, we always start from the top
+        offset = this.appendOnly && to === 'to-start' ? 0 : offset;
         // For a horizontal viewport in a right-to-left language we need to translate along the x-axis
         // in the negative direction.
         const isRtl = this.dir && this.dir.value == 'rtl';
@@ -940,8 +942,6 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         const axis = isHorizontal ? 'X' : 'Y';
         const axisDirection = isHorizontal && isRtl ? -1 : 1;
         let transform = `translate${axis}(${Number(axisDirection * offset)}px)`;
-        // in appendOnly, we always start from the top
-        offset = this.appendOnly && to === 'to-start' ? 0 : offset;
         this._renderedContentOffset = offset;
         if (to === 'to-end') {
             transform += ` translate${axis}(-100%)`;
