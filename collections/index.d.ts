@@ -143,7 +143,6 @@ export declare interface SelectionChange<T> {
 export declare class SelectionModel<T> {
     private _multiple;
     private _emitChanges;
-    private _compareWith?;
     /** Currently-selected values. */
     private _selection;
     /** Keeps track of the deselected options that haven't been emitted by the change event. */
@@ -156,7 +155,7 @@ export declare class SelectionModel<T> {
     get selected(): T[];
     /** Event emitted when the value has changed. */
     readonly changed: Subject<SelectionChange<T>>;
-    constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean, _compareWith?: ((o1: T, o2: T) => boolean) | undefined);
+    constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean);
     /**
      * Selects a value or an array of values.
      */
@@ -165,7 +164,6 @@ export declare class SelectionModel<T> {
      * Deselects a value or an array of values.
      */
     deselect(...values: T[]): void;
-    setSelection(...values: T[]): void;
     /**
      * Toggles a value between selected and deselected.
      */

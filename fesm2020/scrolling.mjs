@@ -1,6 +1,6 @@
 import { coerceNumberProperty, coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
@@ -700,39 +700,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const VIRTUAL_SCROLLABLE = new InjectionToken('VIRTUAL_SCROLLABLE');
-/**
- * Extending the {@link CdkScrollable} to be used as scrolling container for virtual scrolling.
- */
-class CdkVirtualScrollable extends CdkScrollable {
-    constructor(elementRef, scrollDispatcher, ngZone, dir) {
-        super(elementRef, scrollDispatcher, ngZone, dir);
-    }
-    /**
-     * Measure the viewport size for the provided orientation.
-     *
-     * @param orientation The orientation to measure the size from.
-     */
-    measureViewportSize(orientation) {
-        const viewportEl = this.elementRef.nativeElement;
-        return orientation === 'horizontal' ? viewportEl.clientWidth : viewportEl.clientHeight;
-    }
-}
-CdkVirtualScrollable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollable, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualScrollable.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.1", type: CdkVirtualScrollable, usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollable, decorators: [{
-            type: Directive
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }]; } });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Checks if the given ranges are equal. */
 function rangesEqual(r1, r2) {
     return r1.start == r2.start && r1.end == r2.end;
@@ -744,13 +711,12 @@ function rangesEqual(r1, r2) {
  */
 const SCROLL_SCHEDULER = typeof requestAnimationFrame !== 'undefined' ? animationFrameScheduler : asapScheduler;
 /** A viewport that virtualizes its scrolling with the help of `CdkVirtualForOf`. */
-class CdkVirtualScrollViewport extends CdkVirtualScrollable {
-    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, viewportRuler, scrollable) {
+class CdkVirtualScrollViewport extends CdkScrollable {
+    constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, viewportRuler) {
         super(elementRef, scrollDispatcher, ngZone, dir);
         this.elementRef = elementRef;
         this._changeDetectorRef = _changeDetectorRef;
         this._scrollStrategy = _scrollStrategy;
-        this.scrollable = scrollable;
         /** Emits when the viewport is detached from a CdkVirtualForOf. */
         this._detachedSubject = new Subject();
         /** Emits when the rendered range changes. */
@@ -798,11 +764,6 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._viewportChanges = viewportRuler.change().subscribe(() => {
             this.checkViewportSize();
         });
-        if (!this.scrollable) {
-            // No scrollable is provided, so the virtual-scroll-viewport needs to become a scrollable
-            this.elementRef.nativeElement.classList.add('cdk-virtual-scrollable');
-            this.scrollable = this;
-        }
     }
     /** The direction the viewport scrolls. */
     get orientation() {
@@ -825,9 +786,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._appendOnly = coerceBooleanProperty(value);
     }
     ngOnInit() {
-        if (this.scrollable === this) {
-            super.ngOnInit();
-        }
+        super.ngOnInit();
         // It's still too early to measure the viewport at this point. Deferring with a promise allows
         // the Viewport to be rendered with the correct size before we measure. We run this outside the
         // zone to avoid causing more change detection cycles. We handle the change detection loop
@@ -835,8 +794,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this.ngZone.runOutsideAngular(() => Promise.resolve().then(() => {
             this._measureViewportSize();
             this._scrollStrategy.attach(this);
-            this.scrollable
-                .elementScrolled()
+            this.elementScrolled()
                 .pipe(
             // Start off with a fake scroll event so we properly detect our initial position.
             startWith(null), 
@@ -897,9 +855,6 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
     /** Get the current rendered range of items. */
     getRenderedRange() {
         return this._renderedRange;
-    }
-    measureBoundingClientRectWithScrollOffset(from) {
-        return this.getElementRef().nativeElement.getBoundingClientRect()[from];
     }
     /**
      * Sets the total size of all content (in pixels), including content that is not currently
@@ -981,7 +936,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         else {
             options.top = offset;
         }
-        this.scrollable.scrollTo(options);
+        this.scrollTo(options);
     }
     /**
      * Scrolls to the offset for the given index.
@@ -992,46 +947,14 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._scrollStrategy.scrollToIndex(index, behavior);
     }
     /**
-     * Gets the current scroll offset from the start of the scrollable (in pixels).
+     * Gets the current scroll offset from the start of the viewport (in pixels).
      * @param from The edge to measure the offset from. Defaults to 'top' in vertical mode and 'start'
      *     in horizontal mode.
      */
     measureScrollOffset(from) {
-        // This is to break the call cycle
-        let measureScrollOffset;
-        if (this.scrollable == this) {
-            measureScrollOffset = (_from) => super.measureScrollOffset(_from);
-        }
-        else {
-            measureScrollOffset = (_from) => this.scrollable.measureScrollOffset(_from);
-        }
-        return Math.max(0, measureScrollOffset(from ?? (this.orientation === 'horizontal' ? 'start' : 'top')) -
-            this.measureViewportOffset());
-    }
-    /**
-     * Measures the offset of the viewport from the scrolling container
-     * @param from The edge to measure from.
-     */
-    measureViewportOffset(from) {
-        let fromRect;
-        const LEFT = 'left';
-        const RIGHT = 'right';
-        const isRtl = this.dir?.value == 'rtl';
-        if (from == 'start') {
-            fromRect = isRtl ? RIGHT : LEFT;
-        }
-        else if (from == 'end') {
-            fromRect = isRtl ? LEFT : RIGHT;
-        }
-        else if (from) {
-            fromRect = from;
-        }
-        else {
-            fromRect = this.orientation === 'horizontal' ? 'left' : 'top';
-        }
-        const scrollerClientRect = this.scrollable.measureBoundingClientRectWithScrollOffset(fromRect);
-        const viewportClientRect = this.elementRef.nativeElement.getBoundingClientRect()[fromRect];
-        return viewportClientRect - scrollerClientRect;
+        return from
+            ? super.measureScrollOffset(from)
+            : super.measureScrollOffset(this.orientation === 'horizontal' ? 'start' : 'top');
     }
     /** Measure the combined size of all of the rendered items. */
     measureRenderedContentSize() {
@@ -1056,7 +979,9 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
     }
     /** Measure the viewport size. */
     _measureViewportSize() {
-        this._viewportSize = this.scrollable.measureViewportSize(this.orientation);
+        const viewportEl = this.elementRef.nativeElement;
+        this._viewportSize =
+            this.orientation === 'horizontal' ? viewportEl.clientWidth : viewportEl.clientHeight;
     }
     /** Queue up change detection to run. */
     _markChangeDetectionNeeded(runAfter) {
@@ -1098,14 +1023,13 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             this.orientation === 'horizontal' ? `${this._totalContentSize}px` : '';
     }
 }
-CdkVirtualScrollViewport.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollViewport, deps: [{ token: i0.ElementRef }, { token: i0.ChangeDetectorRef }, { token: i0.NgZone }, { token: VIRTUAL_SCROLL_STRATEGY, optional: true }, { token: i2.Directionality, optional: true }, { token: ScrollDispatcher }, { token: ViewportRuler }, { token: VIRTUAL_SCROLLABLE, optional: true }], target: i0.ɵɵFactoryTarget.Component });
+CdkVirtualScrollViewport.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollViewport, deps: [{ token: i0.ElementRef }, { token: i0.ChangeDetectorRef }, { token: i0.NgZone }, { token: VIRTUAL_SCROLL_STRATEGY, optional: true }, { token: i2.Directionality, optional: true }, { token: ScrollDispatcher }, { token: ViewportRuler }], target: i0.ɵɵFactoryTarget.Component });
 CdkVirtualScrollViewport.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "14.0.1", type: CdkVirtualScrollViewport, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: "appendOnly" }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
         {
             provide: CdkScrollable,
-            useFactory: (virtualScrollable, viewport) => virtualScrollable || viewport,
-            deps: [CdkVirtualScrollable, CdkVirtualScrollViewport],
+            useExisting: CdkVirtualScrollViewport,
         },
-    ], viewQueries: [{ propertyName: "_contentWrapper", first: true, predicate: ["contentWrapper"], descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n", styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;transform:translateZ(0)}.cdk-virtual-scrollable{overflow:auto;will-change:scroll-position;contain:strict;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{height:1px;transform-origin:0 0;flex:0 0 auto}[dir=rtl] .cdk-virtual-scroll-spacer{transform-origin:100% 0}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
+    ], viewQueries: [{ propertyName: "_contentWrapper", first: true, predicate: ["contentWrapper"], descendants: true, static: true }], usesInheritance: true, ngImport: i0, template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n", styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"], changeDetection: i0.ChangeDetectionStrategy.OnPush, encapsulation: i0.ViewEncapsulation.None });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollViewport, decorators: [{
             type: Component,
             args: [{ selector: 'cdk-virtual-scroll-viewport', host: {
@@ -1115,10 +1039,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
                     }, encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.OnPush, providers: [
                         {
                             provide: CdkScrollable,
-                            useFactory: (virtualScrollable, viewport) => virtualScrollable || viewport,
-                            deps: [CdkVirtualScrollable, CdkVirtualScrollViewport],
+                            useExisting: CdkVirtualScrollViewport,
                         },
-                    ], template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n", styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;transform:translateZ(0)}.cdk-virtual-scrollable{overflow:auto;will-change:scroll-position;contain:strict;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{height:1px;transform-origin:0 0;flex:0 0 auto}[dir=rtl] .cdk-virtual-scroll-spacer{transform-origin:100% 0}"] }]
+                    ], template: "<!--\n  Wrap the rendered content in an element that will be used to offset it based on the scroll\n  position.\n-->\n<div #contentWrapper class=\"cdk-virtual-scroll-content-wrapper\">\n  <ng-content></ng-content>\n</div>\n<!--\n  Spacer used to force the scrolling container to the correct size for the *total* number of items\n  so that the scrollbar captures the size of the entire data set.\n-->\n<div class=\"cdk-virtual-scroll-spacer\"\n     [style.width]=\"_totalContentWidth\" [style.height]=\"_totalContentHeight\"></div>\n", styles: ["cdk-virtual-scroll-viewport{display:block;position:relative;overflow:auto;contain:strict;transform:translateZ(0);will-change:scroll-position;-webkit-overflow-scrolling:touch}.cdk-virtual-scroll-content-wrapper{position:absolute;top:0;left:0;contain:content}[dir=rtl] .cdk-virtual-scroll-content-wrapper{right:0;left:auto}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper{min-height:100%}.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-horizontal .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-left:0;padding-right:0;margin-left:0;margin-right:0;border-left-width:0;border-right-width:0;outline:none}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper{min-width:100%}.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>dl:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ol:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>table:not([cdkVirtualFor]),.cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper>ul:not([cdkVirtualFor]){padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-top-width:0;border-bottom-width:0;outline:none}.cdk-virtual-scroll-spacer{position:absolute;top:0;left:0;height:1px;width:1px;transform-origin:0 0}[dir=rtl] .cdk-virtual-scroll-spacer{right:0;left:auto;transform-origin:100% 0}"] }]
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: i0.ChangeDetectorRef }, { type: i0.NgZone }, { type: undefined, decorators: [{
                     type: Optional
                 }, {
@@ -1126,12 +1049,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
                     args: [VIRTUAL_SCROLL_STRATEGY]
                 }] }, { type: i2.Directionality, decorators: [{
                     type: Optional
-                }] }, { type: ScrollDispatcher }, { type: ViewportRuler }, { type: CdkVirtualScrollable, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [VIRTUAL_SCROLLABLE]
-                }] }]; }, propDecorators: { orientation: [{
+                }] }, { type: ScrollDispatcher }, { type: ViewportRuler }]; }, propDecorators: { orientation: [{
                 type: Input
             }], appendOnly: [{
                 type: Input
@@ -1438,71 +1356,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-/**
- * Provides a virtual scrollable for the element it is attached to.
- */
-class CdkVirtualScrollableElement extends CdkVirtualScrollable {
-    constructor(elementRef, scrollDispatcher, ngZone, dir) {
-        super(elementRef, scrollDispatcher, ngZone, dir);
-    }
-    measureBoundingClientRectWithScrollOffset(from) {
-        return (this.getElementRef().nativeElement.getBoundingClientRect()[from] -
-            this.measureScrollOffset(from));
-    }
-}
-CdkVirtualScrollableElement.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollableElement, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualScrollableElement.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.1", type: CdkVirtualScrollableElement, selector: "[cdkVirtualScrollingElement]", host: { classAttribute: "cdk-virtual-scrollable" }, providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollableElement, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: '[cdkVirtualScrollingElement]',
-                    providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }],
-                    host: {
-                        'class': 'cdk-virtual-scrollable',
-                    },
-                }]
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }]; } });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
- * Provides as virtual scrollable for the global / window scrollbar.
- */
-class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
-    constructor(scrollDispatcher, ngZone, dir) {
-        super(new ElementRef(document.documentElement), scrollDispatcher, ngZone, dir);
-        this._elementScrolled = new Observable((observer) => this.ngZone.runOutsideAngular(() => fromEvent(document, 'scroll').pipe(takeUntil(this._destroyed)).subscribe(observer)));
-    }
-    measureBoundingClientRectWithScrollOffset(from) {
-        return this.getElementRef().nativeElement.getBoundingClientRect()[from];
-    }
-}
-CdkVirtualScrollableWindow.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollableWindow, deps: [{ token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualScrollableWindow.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.0.1", type: CdkVirtualScrollableWindow, selector: "cdk-virtual-scroll-viewport[scrollWindow]", providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }], usesInheritance: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkVirtualScrollableWindow, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: 'cdk-virtual-scroll-viewport[scrollWindow]',
-                    providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }],
-                }]
-        }], ctorParameters: function () { return [{ type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
-                    type: Optional
-                }] }]; } });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class CdkScrollableModule {
 }
 CdkScrollableModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: CdkScrollableModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
@@ -1521,15 +1374,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
 class ScrollingModule {
 }
 ScrollingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: ScrollingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.1", ngImport: i0, type: ScrollingModule, declarations: [CdkFixedSizeVirtualScroll,
+ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "14.0.1", ngImport: i0, type: ScrollingModule, declarations: [CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport], imports: [BidiModule, CdkScrollableModule], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
         CdkVirtualForOf,
-        CdkVirtualScrollViewport,
-        CdkVirtualScrollableWindow,
-        CdkVirtualScrollableElement], imports: [BidiModule, CdkScrollableModule], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
-        CdkVirtualForOf,
-        CdkVirtualScrollViewport,
-        CdkVirtualScrollableWindow,
-        CdkVirtualScrollableElement] });
+        CdkVirtualScrollViewport] });
 ScrollingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: ScrollingModule, imports: [BidiModule, CdkScrollableModule, BidiModule, CdkScrollableModule] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: ScrollingModule, decorators: [{
             type: NgModule,
@@ -1541,16 +1388,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
                         CdkFixedSizeVirtualScroll,
                         CdkVirtualForOf,
                         CdkVirtualScrollViewport,
-                        CdkVirtualScrollableWindow,
-                        CdkVirtualScrollableElement,
                     ],
-                    declarations: [
-                        CdkFixedSizeVirtualScroll,
-                        CdkVirtualForOf,
-                        CdkVirtualScrollViewport,
-                        CdkVirtualScrollableWindow,
-                        CdkVirtualScrollableElement,
-                    ],
+                    declarations: [CdkFixedSizeVirtualScroll, CdkVirtualForOf, CdkVirtualScrollViewport],
                 }]
         }] });
 
@@ -1582,5 +1421,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.0.1", ngImpor
  * Generated bundle index. Do not edit.
  */
 
-export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, CdkVirtualScrollable, CdkVirtualScrollableElement, CdkVirtualScrollableWindow, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLLABLE, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
+export { CdkFixedSizeVirtualScroll, CdkScrollable, CdkScrollableModule, CdkVirtualForOf, CdkVirtualScrollViewport, DEFAULT_RESIZE_TIME, DEFAULT_SCROLL_TIME, FixedSizeVirtualScrollStrategy, ScrollDispatcher, ScrollingModule, VIRTUAL_SCROLL_STRATEGY, ViewportRuler, _fixedSizeVirtualScrollStrategyFactory };
 //# sourceMappingURL=scrolling.mjs.map

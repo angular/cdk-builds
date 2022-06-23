@@ -224,10 +224,9 @@ class _RecycleViewRepeaterStrategy {
  * Class to be used to power selecting one or more options from a list.
  */
 class SelectionModel {
-    constructor(_multiple = false, initiallySelectedValues, _emitChanges = true, _compareWith) {
+    constructor(_multiple = false, initiallySelectedValues, _emitChanges = true) {
         this._multiple = _multiple;
         this._emitChanges = _emitChanges;
-        this._compareWith = _compareWith;
         /** Currently-selected values. */
         this._selection = new Set();
         /** Keeps track of the deselected options that haven't been emitted by the change event. */
@@ -270,16 +269,6 @@ class SelectionModel {
         values.forEach(value => this._unmarkSelected(value));
         this._emitChangeEvent();
     }
-    setSelection(...values) {
-        this._verifyValueAssignment(values);
-        const oldValues = this.selected;
-        const newSelectedSet = new Set(values);
-        values.forEach(value => this._markSelected(value));
-        oldValues
-            .filter(value => !newSelectedSet.has(value))
-            .forEach(value => this._unmarkSelected(value));
-        this._emitChangeEvent();
-    }
     /**
      * Toggles a value between selected and deselected.
      */
@@ -297,14 +286,6 @@ class SelectionModel {
      * Determines whether a value is selected.
      */
     isSelected(value) {
-        if (this._compareWith) {
-            for (const otherValue of this._selection) {
-                if (this._compareWith(otherValue, value)) {
-                    return true;
-                }
-            }
-            return false;
-        }
         return this._selection.has(value);
     }
     /**
@@ -353,9 +334,7 @@ class SelectionModel {
             if (!this._multiple) {
                 this._unmarkAll();
             }
-            if (!this.isSelected(value)) {
-                this._selection.add(value);
-            }
+            this._selection.add(value);
             if (this._emitChanges) {
                 this._selectedToEmit.push(value);
             }
