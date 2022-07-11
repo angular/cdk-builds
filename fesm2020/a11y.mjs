@@ -1947,10 +1947,14 @@ class FocusMonitor {
          */
         this._rootNodeFocusAndBlurListener = (event) => {
             const target = _getEventTarget(event);
-            const handler = event.type === 'focus' ? this._onFocus : this._onBlur;
             // We need to walk up the ancestor chain in order to support `checkChildren`.
             for (let element = target; element; element = element.parentElement) {
-                handler.call(this, event, element);
+                if (event.type === 'focus') {
+                    this._onFocus(event, element);
+                }
+                else {
+                    this._onBlur(event, element);
+                }
             }
         };
         this._document = document;
@@ -2046,7 +2050,17 @@ class FocusMonitor {
         //    events).
         //
         // Because we can't distinguish between these two cases, we default to setting `program`.
-        return this._windowFocused && this._lastFocusOrigin ? this._lastFocusOrigin : 'program';
+        if (this._windowFocused && this._lastFocusOrigin) {
+            return this._lastFocusOrigin;
+        }
+        // If the interaction is coming from an input label, we consider it a mouse interactions.
+        // This is a special case where focus moves on `click`, rather than `mousedown` which breaks
+        // our detection, because all our assumptions are for `mousedown`. We need to handle this
+        // special case, because it's very common for checkboxes and radio buttons.
+        if (focusEventTarget && this._isLastInteractionFromInputLabel(focusEventTarget)) {
+            return 'mouse';
+        }
+        return 'program';
     }
     /**
      * Returns whether the focus event should be attributed to touch. Recall that in IMMEDIATE mode, a
@@ -2219,6 +2233,33 @@ class FocusMonitor {
             }
         });
         return results;
+    }
+    /**
+     * Returns whether an interaction is likely to have come from the user clicking the `label` of
+     * an `input` or `textarea` in order to focus it.
+     * @param focusEventTarget Target currently receiving focus.
+     */
+    _isLastInteractionFromInputLabel(focusEventTarget) {
+        const { _mostRecentTarget: mostRecentTarget, mostRecentModality } = this._inputModalityDetector;
+        // If the last interaction used the mouse on an element contained by one of the labels
+        // of an `input`/`textarea` that is currently focused, it is very likely that the
+        // user redirected focus using the label.
+        if (mostRecentModality !== 'mouse' ||
+            !mostRecentTarget ||
+            mostRecentTarget === focusEventTarget ||
+            (focusEventTarget.nodeName !== 'INPUT' && focusEventTarget.nodeName !== 'TEXTAREA') ||
+            focusEventTarget.disabled) {
+            return false;
+        }
+        const labels = focusEventTarget.labels;
+        if (labels) {
+            for (let i = 0; i < labels.length; i++) {
+                if (labels[i].contains(mostRecentTarget)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 FocusMonitor.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.0.1", ngImport: i0, type: FocusMonitor, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: InputModalityDetector }, { token: DOCUMENT, optional: true }, { token: FOCUS_MONITOR_DEFAULT_OPTIONS, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
