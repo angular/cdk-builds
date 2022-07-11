@@ -464,6 +464,12 @@ export declare class FocusMonitor implements OnDestroy {
      * @param element Element from which to start the search.
      */
     private _getClosestElementsInfo;
+    /**
+     * Returns whether an interaction is likely to have come from the user clicking the `label` of
+     * an `input` or `textarea` in order to focus it.
+     * @param focusEventTarget Target currently receiving focus.
+     */
+    private _isLastInteractionFromInputLabel;
     static ɵfac: i0.ɵɵFactoryDeclaration<FocusMonitor, [null, null, null, { optional: true; }, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<FocusMonitor>;
 }
