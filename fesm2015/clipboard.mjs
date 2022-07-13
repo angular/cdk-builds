@@ -35,6 +35,8 @@ class PendingCopy {
         styles.left = '-999em';
         textarea.setAttribute('aria-hidden', 'true');
         textarea.value = text;
+        // Making the textarea `readonly` prevents the screen from jumping on iOS Safari (see #25169).
+        textarea.readOnly = true;
         this._document.body.appendChild(textarea);
     }
     /** Finishes copying the text. */
