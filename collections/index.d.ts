@@ -143,7 +143,7 @@ export declare interface SelectionChange<T> {
 export declare class SelectionModel<T> {
     private _multiple;
     private _emitChanges;
-    private _compareWith?;
+    compareWith?: ((o1: T, o2: T) => boolean) | undefined;
     /** Currently-selected values. */
     private _selection;
     /** Keeps track of the deselected options that haven't been emitted by the change event. */
@@ -156,24 +156,43 @@ export declare class SelectionModel<T> {
     get selected(): T[];
     /** Event emitted when the value has changed. */
     readonly changed: Subject<SelectionChange<T>>;
-    constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean, _compareWith?: ((o1: T, o2: T) => boolean) | undefined);
+    constructor(_multiple?: boolean, initiallySelectedValues?: T[], _emitChanges?: boolean, compareWith?: ((o1: T, o2: T) => boolean) | undefined);
     /**
      * Selects a value or an array of values.
+     * @param values The values to select
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
-    select(...values: T[]): void;
+    select(...values: T[]): boolean | void;
     /**
      * Deselects a value or an array of values.
+     * @param values The values to deselect
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
-    deselect(...values: T[]): void;
-    setSelection(...values: T[]): void;
+    deselect(...values: T[]): boolean | void;
+    /**
+     * Sets the selected values
+     * @param values The new selected values
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
+     */
+    setSelection(...values: T[]): boolean | void;
     /**
      * Toggles a value between selected and deselected.
+     * @param value The value to toggle
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
-    toggle(value: T): void;
+    toggle(value: T): boolean | void;
     /**
      * Clears all of the selected values.
+     * @param flushEvent Whether to flush the changes in an event.
+     *   If false, the changes to the selection will be flushed along with the next event.
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
-    clear(): void;
+    clear(flushEvent?: boolean): boolean | void;
     /**
      * Determines whether a value is selected.
      */
@@ -207,6 +226,8 @@ export declare class SelectionModel<T> {
      * including multiple values while the selection model is not supporting multiple values.
      */
     private _verifyValueAssignment;
+    /** Whether there are queued up change to be emitted. */
+    private _hasQueuedChanges;
 }
 
 /**

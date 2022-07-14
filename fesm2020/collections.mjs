@@ -232,10 +232,10 @@ class _RecycleViewRepeaterStrategy {
  * Class to be used to power selecting one or more options from a list.
  */
 class SelectionModel {
-    constructor(_multiple = false, initiallySelectedValues, _emitChanges = true, _compareWith) {
+    constructor(_multiple = false, initiallySelectedValues, _emitChanges = true, compareWith) {
         this._multiple = _multiple;
         this._emitChanges = _emitChanges;
-        this._compareWith = _compareWith;
+        this.compareWith = compareWith;
         /** Currently-selected values. */
         this._selection = new Set();
         /** Keeps track of the deselected options that haven't been emitted by the change event. */
@@ -264,20 +264,36 @@ class SelectionModel {
     }
     /**
      * Selects a value or an array of values.
+     * @param values The values to select
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
     select(...values) {
         this._verifyValueAssignment(values);
         values.forEach(value => this._markSelected(value));
+        const changed = this._hasQueuedChanges();
         this._emitChangeEvent();
+        return changed;
     }
     /**
      * Deselects a value or an array of values.
+     * @param values The values to deselect
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
     deselect(...values) {
         this._verifyValueAssignment(values);
         values.forEach(value => this._unmarkSelected(value));
+        const changed = this._hasQueuedChanges();
         this._emitChangeEvent();
+        return changed;
     }
+    /**
+     * Sets the selected values
+     * @param values The new selected values
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
+     */
     setSelection(...values) {
         this._verifyValueAssignment(values);
         const oldValues = this.selected;
@@ -286,28 +302,41 @@ class SelectionModel {
         oldValues
             .filter(value => !newSelectedSet.has(value))
             .forEach(value => this._unmarkSelected(value));
+        const changed = this._hasQueuedChanges();
         this._emitChangeEvent();
+        return changed;
     }
     /**
      * Toggles a value between selected and deselected.
+     * @param value The value to toggle
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
     toggle(value) {
-        this.isSelected(value) ? this.deselect(value) : this.select(value);
+        return this.isSelected(value) ? this.deselect(value) : this.select(value);
     }
     /**
      * Clears all of the selected values.
+     * @param flushEvent Whether to flush the changes in an event.
+     *   If false, the changes to the selection will be flushed along with the next event.
+     * @return Whether the selection changed as a result of this call
+     * @breaking-change 16.0.0 make return type boolean
      */
-    clear() {
+    clear(flushEvent = true) {
         this._unmarkAll();
-        this._emitChangeEvent();
+        const changed = this._hasQueuedChanges();
+        if (flushEvent) {
+            this._emitChangeEvent();
+        }
+        return changed;
     }
     /**
      * Determines whether a value is selected.
      */
     isSelected(value) {
-        if (this._compareWith) {
+        if (this.compareWith) {
             for (const otherValue of this._selection) {
-                if (this._compareWith(otherValue, value)) {
+                if (this.compareWith(otherValue, value)) {
                     return true;
                 }
             }
@@ -392,6 +421,10 @@ class SelectionModel {
         if (values.length > 1 && !this._multiple && (typeof ngDevMode === 'undefined' || ngDevMode)) {
             throw getMultipleValuesInSingleSelectionError();
         }
+    }
+    /** Whether there are queued up change to be emitted. */
+    _hasQueuedChanges() {
+        return !!(this._deselectedToEmit.length || this._selectedToEmit.length);
     }
 }
 /**
