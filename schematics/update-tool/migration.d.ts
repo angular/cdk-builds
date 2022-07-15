@@ -29,8 +29,11 @@ export declare abstract class Migration<Data, Context = any> {
     program: ts.Program;
     /** TypeChecker instance for the analysis program. */
     typeChecker: ts.TypeChecker;
-    /** Version for which the migration rule should run. */
-    targetVersion: TargetVersion;
+    /**
+     * Version for which the migration rule should run. Null if the migration
+     * is invoked manually.
+     */
+    targetVersion: TargetVersion | null;
     /** Context data for the migration. */
     context: Context;
     /** Upgrade data passed to the migration. */
@@ -48,8 +51,11 @@ export declare abstract class Migration<Data, Context = any> {
     program: ts.Program, 
     /** TypeChecker instance for the analysis program. */
     typeChecker: ts.TypeChecker, 
-    /** Version for which the migration rule should run. */
-    targetVersion: TargetVersion, 
+    /**
+     * Version for which the migration rule should run. Null if the migration
+     * is invoked manually.
+     */
+    targetVersion: TargetVersion | null, 
     /** Context data for the migration. */
     context: Context, 
     /** Upgrade data passed to the migration. */

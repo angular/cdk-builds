@@ -49,12 +49,13 @@ export declare class UpdateProject<Context> {
     /**
      * Migrates the project to the specified target version.
      * @param migrationTypes Migrations that should be run.
-     * @param target Version the project should be updated to.
+     * @param target Version the project should be updated to. Can be `null` if the set of
+     *   specified migrations runs regardless of a target version.
      * @param data Upgrade data that is passed to all migration rules.
      * @param additionalStylesheetPaths Additional stylesheets that should be migrated, if not
      *   referenced in an Angular component. This is helpful for global stylesheets in a project.
      */
-    migrate<Data>(migrationTypes: MigrationCtor<Data, Context>[], target: TargetVersion, data: Data, additionalStylesheetPaths?: string[]): {
+    migrate<Data>(migrationTypes: MigrationCtor<Data, Context>[], target: TargetVersion | null, data: Data, additionalStylesheetPaths?: string[]): {
         hasFailures: boolean;
     };
     /**
@@ -65,6 +66,8 @@ export declare class UpdateProject<Context> {
     /**
      * Creates a program form the specified tsconfig and patches the host
      * to read files and directories through the given file system.
+     *
+     * @throws {TsconfigParseError} If the tsconfig could not be parsed.
      */
     static createProgramFromTsconfig(tsconfigPath: WorkspacePath, fs: FileSystem): ts.Program;
 }

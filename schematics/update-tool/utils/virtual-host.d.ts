@@ -32,3 +32,5 @@ export declare class FileSystemHost implements ts.ParseConfigHost {
  * virtual file system. i.e. no interactions with the working directory.
  */
 export declare function createFileSystemCompilerHost(options: ts.CompilerOptions, fileSystem: FileSystem): ts.CompilerHost;
+/** Creates a format diagnostic host that works with the given file system. */
+export declare function createFormatDiagnosticHost(fileSystem: FileSystem): ts.FormatDiagnosticsHost;
