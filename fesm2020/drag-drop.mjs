@@ -432,7 +432,7 @@ class DragRef {
                 const distanceY = Math.abs(pointerPosition.y - this._pickupPositionOnPage.y);
                 const isOverThreshold = distanceX + distanceY >= this._config.dragStartThreshold;
                 // Only start dragging after the user has moved more than the minimum distance in either
-                // direction. Note that this is preferrable over doing something like `skip(minimumDistance)`
+                // direction. Note that this is preferable over doing something like `skip(minimumDistance)`
                 // in the `pointerMove` subscription, because we're not guaranteed to have one move event
                 // per pixel of movement (e.g. if the user moves their pointer quickly).
                 if (isOverThreshold) {
@@ -1537,7 +1537,7 @@ class SingleAxisSortStrategy {
         this.orientation = 'vertical';
         /**
          * Keeps track of the item that was last swapped with the dragged item, as well as what direction
-         * the pointer was moving in when the swap occured and whether the user's pointer continued to
+         * the pointer was moving in when the swap occurred and whether the user's pointer continued to
          * overlap with the swapped item after the swapping occurred.
          */
         this._previousSwap = {
@@ -2603,7 +2603,7 @@ class DragDropRegistry {
     scrolled(shadowRoot) {
         const streams = [this.scroll];
         if (shadowRoot && shadowRoot !== this._document) {
-            // Note that this is basically the same as `fromEvent` from rjxs, but we do it ourselves,
+            // Note that this is basically the same as `fromEvent` from rxjs, but we do it ourselves,
             // because we want to guarantee that the event is bound outside of the `NgZone`. With
             // `fromEvent` it'll only happen if the subscription is outside the `NgZone`.
             streams.push(new Observable((observer) => {
