@@ -1573,7 +1573,7 @@ class CdkMenuItemRadio extends CdkMenuItemSelectable {
         super();
         /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
         this._selectionDispatcher = inject(UniqueSelectionDispatcher);
-        /** An ID to identify this radio item to the `UniqueSelectionDisptcher`. */
+        /** An ID to identify this radio item to the `UniqueSelectionDispatcher`. */
         this._id = `${nextId++}`;
         this._registerDispatcherListener();
     }

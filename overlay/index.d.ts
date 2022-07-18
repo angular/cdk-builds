@@ -377,7 +377,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
      * The selection of a position goes as follows:
      *  - If any positions fit completely within the viewport as-is,
      *      choose the first position that does so.
-     *  - If flexible dimensions are enabled and at least one satifies the given minimum width/height,
+     *  - If flexible dimensions are enabled and at least one satisfies the given minimum width/height,
      *      choose the position with the greatest available size modified by the positions' weight.
      *  - If pushing is enabled, take the position that went off-screen the least and push it
      *      on-screen.
@@ -470,7 +470,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _canFitWithFlexibleDimensions;
     /**
      * Gets the point at which the overlay can be "pushed" on-screen. If the overlay is larger than
-     * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
+     * the viewport, the top-left corner will be pushed on-screen (with overflow occurring on the
      * right and bottom).
      *
      * @param start Starting point from which the overlay is pushed.
@@ -497,7 +497,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     private _calculateBoundingBoxRect;
     /**
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
-     * origin's connection point and stetches to the bounds of the viewport.
+     * origin's connection point and stretches to the bounds of the viewport.
      *
      * @param origin The point on the origin element where the overlay is connected.
      * @param position The position preference

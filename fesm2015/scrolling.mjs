@@ -273,7 +273,7 @@ class ScrollDispatcher {
         }
     }
     /**
-     * Deregisters a Scrollable reference and unsubscribes from its scroll event observable.
+     * De-registers a Scrollable reference and unsubscribes from its scroll event observable.
      * @param scrollable Scrollable instance to be deregistered.
      */
     deregister(scrollable) {

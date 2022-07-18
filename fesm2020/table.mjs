@@ -979,7 +979,7 @@ class StickyStyler {
  * found in the LICENSE file at https://angular.io/license
  */
 /**
- * Returns an error to be thrown when attempting to find an unexisting column.
+ * Returns an error to be thrown when attempting to find an nonexistent column.
  * @param id Id whose lookup failed.
  * @docs-private
  */
@@ -1253,12 +1253,12 @@ class CdkTable {
          */
         this._cachedRenderRowsMap = new Map();
         /**
-         * CSS class added to any row or cell that has sticky positioning applied. May be overriden by
+         * CSS class added to any row or cell that has sticky positioning applied. May be overridden by
          * table subclasses.
          */
         this.stickyCssClass = 'cdk-table-sticky';
         /**
-         * Whether to manually add positon: sticky to all sticky cell elements. Not needed if
+         * Whether to manually add position: sticky to all sticky cell elements. Not needed if
          * the position is set in a selector associated with the value of stickyCssClass. May be
          * overridden by table subclasses
          */
