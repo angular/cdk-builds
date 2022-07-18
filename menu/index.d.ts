@@ -365,7 +365,7 @@ export declare class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
 export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements OnDestroy {
     /** The unique selection dispatcher for this radio's `CdkMenuGroup`. */
     private readonly _selectionDispatcher;
-    /** An ID to identify this radio item to the `UniqueSelectionDisptcher`. */
+    /** An ID to identify this radio item to the `UniqueSelectionDispatcher`. */
     private _id;
     /** Function to unregister the selection dispatcher */
     private _removeDispatcherListener;

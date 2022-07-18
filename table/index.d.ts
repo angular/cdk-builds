@@ -499,12 +499,12 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
      */
     private _stickyStyler;
     /**
-     * CSS class added to any row or cell that has sticky positioning applied. May be overriden by
+     * CSS class added to any row or cell that has sticky positioning applied. May be overridden by
      * table subclasses.
      */
     protected stickyCssClass: string;
     /**
-     * Whether to manually add positon: sticky to all sticky cell elements. Not needed if
+     * Whether to manually add position: sticky to all sticky cell elements. Not needed if
      * the position is set in a selector associated with the value of stickyCssClass. May be
      * overridden by table subclasses
      */
@@ -984,7 +984,7 @@ export declare class NoDataRowOutlet implements RowOutlet {
  * is false, there is only one template per data object). For each pair of data object and row
  * template, a `RenderRow` is added to the list of rows to render. If the data object and row
  * template pair has already been rendered, the previously used `RenderRow` is added; else a new
- * `RenderRow` is * created. Once the list is complete and all data objects have been itereated
+ * `RenderRow` is * created. Once the list is complete and all data objects have been iterated
  * through, a diff is performed to determine the changes that need to be made to the rendered rows.
  *
  * @docs-private
@@ -1030,7 +1030,7 @@ export declare type StickyOffset = number | null | undefined;
 
 /**
  * If provided, CdkTable will call the methods below when it updates the size/
- * postion/etc of its sticky rows and columns.
+ * position/etc of its sticky rows and columns.
  */
 export declare interface StickyPositioningListener {
     /** Called when CdkTable updates its sticky start columns. */

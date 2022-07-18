@@ -1048,21 +1048,21 @@ export declare class LiveAnnouncer implements OnDestroy {
     private _currentResolve;
     constructor(elementToken: any, _ngZone: NgZone, _document: any, _defaultOptions?: LiveAnnouncerDefaultOptions | undefined);
     /**
-     * Announces a message to screenreaders.
-     * @param message Message to be announced to the screenreader.
+     * Announces a message to screen readers.
+     * @param message Message to be announced to the screen reader.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
     announce(message: string): Promise<void>;
     /**
-     * Announces a message to screenreaders.
-     * @param message Message to be announced to the screenreader.
+     * Announces a message to screen readers.
+     * @param message Message to be announced to the screen reader.
      * @param politeness The politeness of the announcer element.
      * @returns Promise that will be resolved when the message is added to the DOM.
      */
     announce(message: string, politeness?: AriaLivePoliteness): Promise<void>;
     /**
-     * Announces a message to screenreaders.
-     * @param message Message to be announced to the screenreader.
+     * Announces a message to screen readers.
+     * @param message Message to be announced to the screen reader.
      * @param duration Time in milliseconds after which to clear out the announcer element. Note
      *   that this takes effect after the message has been added to the DOM, which can be up to
      *   100ms after `announce` has been called.
@@ -1070,8 +1070,8 @@ export declare class LiveAnnouncer implements OnDestroy {
      */
     announce(message: string, duration?: number): Promise<void>;
     /**
-     * Announces a message to screenreaders.
-     * @param message Message to be announced to the screenreader.
+     * Announces a message to screen readers.
+     * @param message Message to be announced to the screen reader.
      * @param politeness The politeness of the announcer element.
      * @param duration Time in milliseconds after which to clear out the announcer element. Note
      *   that this takes effect after the message has been added to the DOM, which can be up to

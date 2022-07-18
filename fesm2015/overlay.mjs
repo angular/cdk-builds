@@ -365,7 +365,7 @@ class OverlayConfig {
                 if (config[key] !== undefined) {
                     // TypeScript, as of version 3.5, sees the left-hand-side of this expression
                     // as "I don't know *which* key this is, so the only valid value is the intersection
-                    // of all the posible values." In this case, that happens to be `undefined`. TypeScript
+                    // of all the possible values." In this case, that happens to be `undefined`. TypeScript
                     // is not smart enough to see that the right-hand-side is actually an access of the same
                     // exact type with the same exact key, meaning that the value type must be identical.
                     // So we use `any` to work around this.
@@ -1043,7 +1043,7 @@ class FlexibleConnectedPositionStrategy {
      * The selection of a position goes as follows:
      *  - If any positions fit completely within the viewport as-is,
      *      choose the first position that does so.
-     *  - If flexible dimensions are enabled and at least one satifies the given minimum width/height,
+     *  - If flexible dimensions are enabled and at least one satisfies the given minimum width/height,
      *      choose the position with the greatest available size modified by the positions' weight.
      *  - If pushing is enabled, take the position that went off-screen the least and push it
      *      on-screen.
@@ -1416,7 +1416,7 @@ class FlexibleConnectedPositionStrategy {
     }
     /**
      * Gets the point at which the overlay can be "pushed" on-screen. If the overlay is larger than
-     * the viewport, the top-left corner will be pushed on-screen (with overflow occuring on the
+     * the viewport, the top-left corner will be pushed on-screen (with overflow occurring on the
      * right and bottom).
      *
      * @param start Starting point from which the overlay is pushed.
@@ -1485,7 +1485,7 @@ class FlexibleConnectedPositionStrategy {
         this._lastPosition = position;
         // Notify that the position has been changed along with its change properties.
         // We only emit if we've got any subscriptions, because the scroll visibility
-        // calculcations can be somewhat expensive.
+        // calculations can be somewhat expensive.
         if (this._positionChanges.observers.length) {
             const scrollableViewProperties = this._getScrollVisibility();
             const changeEvent = new ConnectedOverlayPositionChange(position, scrollableViewProperties);
@@ -1579,7 +1579,7 @@ class FlexibleConnectedPositionStrategy {
     }
     /**
      * Sets the position and size of the overlay's sizing wrapper. The wrapper is positioned on the
-     * origin's connection point and stetches to the bounds of the viewport.
+     * origin's connection point and stretches to the bounds of the viewport.
      *
      * @param origin The point on the origin element where the overlay is connected.
      * @param position The position preference
@@ -1817,7 +1817,7 @@ class FlexibleConnectedPositionStrategy {
     _getOffset(position, axis) {
         if (axis === 'x') {
             // We don't do something like `position['offset' + axis]` in
-            // order to avoid breking minifiers that rename properties.
+            // order to avoid breaking minifiers that rename properties.
             return position.offsetX == null ? this._offsetX : position.offsetX;
         }
         return position.offsetY == null ? this._offsetY : position.offsetY;
