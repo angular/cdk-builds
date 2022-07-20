@@ -105,13 +105,12 @@ class Portal {
  * A `ComponentPortal` is a portal that instantiates some Component upon attachment.
  */
 class ComponentPortal extends Portal {
-    constructor(component, viewContainerRef, injector, componentFactoryResolver, projectableNodes) {
+    constructor(component, viewContainerRef, injector, componentFactoryResolver) {
         super();
         this.component = component;
         this.viewContainerRef = viewContainerRef;
         this.injector = injector;
         this.componentFactoryResolver = componentFactoryResolver;
-        this.projectableNodes = projectableNodes;
     }
 }
 /**
@@ -324,7 +323,7 @@ class DomPortalOutlet extends BasePortalOutlet {
         // When the ViewContainerRef is missing, we use the factory to create the component directly
         // and then manually attach the view to the application.
         if (portal.viewContainerRef) {
-            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector, portal.projectableNodes || undefined);
+            componentRef = portal.viewContainerRef.createComponent(componentFactory, portal.viewContainerRef.length, portal.injector || portal.viewContainerRef.injector);
             this.setDisposeFn(() => componentRef.destroy());
         }
         else {
@@ -528,7 +527,8 @@ class CdkPortalOutlet extends BasePortalOutlet {
     }
     ngOnDestroy() {
         super.dispose();
-        this._attachedRef = this._attachedPortal = null;
+        this._attachedPortal = null;
+        this._attachedRef = null;
     }
     /**
      * Attach the given ComponentPortal to this PortalOutlet using the ComponentFactoryResolver.
@@ -543,7 +543,7 @@ class CdkPortalOutlet extends BasePortalOutlet {
         const viewContainerRef = portal.viewContainerRef != null ? portal.viewContainerRef : this._viewContainerRef;
         const resolver = portal.componentFactoryResolver || this._componentFactoryResolver;
         const componentFactory = resolver.resolveComponentFactory(portal.component);
-        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector, portal.projectableNodes || undefined);
+        const ref = viewContainerRef.createComponent(componentFactory, viewContainerRef.length, portal.injector || viewContainerRef.injector);
         // If we're using a view container that's different from the injected one (e.g. when the portal
         // specifies its own) we need to move the component into the outlet, otherwise it'll be rendered
         // inside of the alternate view container.
