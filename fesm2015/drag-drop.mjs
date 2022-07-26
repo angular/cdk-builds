@@ -1165,7 +1165,7 @@ class DragRef {
     _getConstrainedPointerPosition(point) {
         const dropContainerLock = this._dropContainer ? this._dropContainer.lockAxis : null;
         let { x, y } = this.constrainPosition
-            ? this.constrainPosition(point, this, this._initialClientRect)
+            ? this.constrainPosition(point, this, this._initialClientRect, this._pickupPositionInElement)
             : point;
         if (this.lockAxis === 'x' || dropContainerLock === 'x') {
             y = this._pickupPositionOnPage.y;

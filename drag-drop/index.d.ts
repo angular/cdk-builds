@@ -129,7 +129,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect, pickupPositionInElement: Point) => Point;
     /** Class to be added to the preview element. */
     previewClass: string | string[];
     /**
@@ -860,7 +860,7 @@ export declare class DragRef<T = any> {
      * of the user's pointer on the page, a reference to the item being dragged and its dimensions.
      * Should return a point describing where the item should be rendered.
      */
-    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect) => Point;
+    constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect, pickupPositionInElement: Point) => Point;
     constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRefInternal>);
     /**
      * Returns the element that is being used as a placeholder
