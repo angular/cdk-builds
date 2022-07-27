@@ -646,7 +646,7 @@ class Dialog {
                 useValue: { value: config.direction, change: of() },
             });
         }
-        return Injector.create({ parent: userInjector || this._injector, providers });
+        return Injector.create({ parent: config.injector || userInjector || this._injector, providers });
     }
     /**
      * Removes a dialog from the array of open dialogs.
