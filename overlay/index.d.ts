@@ -337,7 +337,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     /** Ordered list of preferred positions, from most to least desirable. */
     _preferredPositions: ConnectionPositionPair[];
     /** The origin element against which the overlay will be positioned. */
-    _origin: FlexibleConnectedPositionStrategyOrigin;
+    private _origin;
     /** The overlay pane element. */
     private _pane;
     /** Whether the strategy has been disposed of already. */
