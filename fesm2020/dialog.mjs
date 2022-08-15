@@ -566,7 +566,7 @@ class Dialog {
      * @returns A promise resolving to a ComponentRef for the attached container.
      */
     _attachContainer(overlay, dialogRef, config) {
-        const userInjector = config.injector ?? config.viewContainerRef?.injector;
+        const userInjector = config.injector || config.viewContainerRef?.injector;
         const providers = [
             { provide: DialogConfig, useValue: config },
             { provide: DialogRef, useValue: dialogRef },
@@ -598,8 +598,8 @@ class Dialog {
      * @param config Configuration used to open the dialog.
      */
     _attachDialogContent(componentOrTemplateRef, dialogRef, dialogContainer, config) {
-        const injector = this._createInjector(config, dialogRef, dialogContainer);
         if (componentOrTemplateRef instanceof TemplateRef) {
+            const injector = this._createInjector(config, dialogRef, dialogContainer, undefined);
             let context = { $implicit: config.data, dialogRef };
             if (config.templateContext) {
                 context = {
@@ -612,6 +612,7 @@ class Dialog {
             dialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, null, context, injector));
         }
         else {
+            const injector = this._createInjector(config, dialogRef, dialogContainer, this._injector);
             const contentRef = dialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.viewContainerRef, injector, config.componentFactoryResolver));
             dialogRef.componentInstance = contentRef.instance;
         }
@@ -622,10 +623,12 @@ class Dialog {
      * @param config Config object that is used to construct the dialog.
      * @param dialogRef Reference to the dialog being opened.
      * @param dialogContainer Component that is going to wrap the dialog content.
+     * @param fallbackInjector Injector to use as a fallback when a lookup fails in the custom
+     * dialog injector, if the user didn't provide a custom one.
      * @returns The custom injector that can be used inside the dialog.
      */
-    _createInjector(config, dialogRef, dialogContainer) {
-        const userInjector = config && config.viewContainerRef && config.viewContainerRef.injector;
+    _createInjector(config, dialogRef, dialogContainer, fallbackInjector) {
+        const userInjector = config.injector || config.viewContainerRef?.injector;
         const providers = [
             { provide: DIALOG_DATA, useValue: config.data },
             { provide: DialogRef, useValue: dialogRef },
@@ -646,7 +649,7 @@ class Dialog {
                 useValue: { value: config.direction, change: of() },
             });
         }
-        return Injector.create({ parent: config.injector || userInjector || this._injector, providers });
+        return Injector.create({ parent: userInjector || fallbackInjector, providers });
     }
     /**
      * Removes a dialog from the array of open dialogs.
