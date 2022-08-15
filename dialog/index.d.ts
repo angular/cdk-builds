@@ -197,6 +197,8 @@ export declare class Dialog implements OnDestroy {
      * @param config Config object that is used to construct the dialog.
      * @param dialogRef Reference to the dialog being opened.
      * @param dialogContainer Component that is going to wrap the dialog content.
+     * @param fallbackInjector Injector to use as a fallback when a lookup fails in the custom
+     * dialog injector, if the user didn't provide a custom one.
      * @returns The custom injector that can be used inside the dialog.
      */
     private _createInjector;
