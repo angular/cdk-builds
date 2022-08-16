@@ -132,6 +132,14 @@
       "node": "./fesm2015/layout.mjs",
       "default": "./fesm2020/layout.mjs"
     },
+    "./listbox": {
+      "types": "./listbox/index.d.ts",
+      "esm2020": "./esm2020/listbox/listbox_public_index.mjs",
+      "es2020": "./fesm2020/listbox.mjs",
+      "es2015": "./fesm2015/listbox.mjs",
+      "node": "./fesm2015/listbox.mjs",
+      "default": "./fesm2020/listbox.mjs"
+    },
     "./menu": {
       "types": "./menu/index.d.ts",
       "esm2020": "./esm2020/menu/menu_public_index.mjs",
