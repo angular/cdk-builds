@@ -165,12 +165,14 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     private _elementRef;
     private _focusMonitor;
     private _monitorSubscription;
+    private _focusOrigin;
     readonly cdkFocusChange: EventEmitter<FocusOrigin>;
     constructor(_elementRef: ElementRef<HTMLElement>, _focusMonitor: FocusMonitor);
+    get focusOrigin(): FocusOrigin;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMonitorFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", never, {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, false>;
 }
 
 /** Directive for trapping focus within a region. */
