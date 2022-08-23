@@ -1,10 +1,10 @@
 import { coerceNumberProperty, coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
-import { getRtlScrollAxisType, supportsScrollBehavior } from '@angular/cdk/platform';
+import { getRtlScrollAxisType, supportsScrollBehavior, Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
 import * as i2 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
@@ -751,6 +751,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._changeDetectorRef = _changeDetectorRef;
         this._scrollStrategy = _scrollStrategy;
         this.scrollable = scrollable;
+        this._platform = inject(Platform);
         /** Emits when the viewport is detached from a CdkVirtualForOf. */
         this._detachedSubject = new Subject();
         /** Emits when the rendered range changes. */
@@ -825,6 +826,10 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         this._appendOnly = coerceBooleanProperty(value);
     }
     ngOnInit() {
+        // Scrolling depends on the element dimensions which we can't get during SSR.
+        if (!this._platform.isBrowser) {
+            return;
+        }
         if (this.scrollable === this) {
             super.ngOnInit();
         }
