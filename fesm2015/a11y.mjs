@@ -2286,13 +2286,20 @@ class CdkMonitorFocus {
     constructor(_elementRef, _focusMonitor) {
         this._elementRef = _elementRef;
         this._focusMonitor = _focusMonitor;
+        this._focusOrigin = null;
         this.cdkFocusChange = new EventEmitter();
+    }
+    get focusOrigin() {
+        return this._focusOrigin;
     }
     ngAfterViewInit() {
         const element = this._elementRef.nativeElement;
         this._monitorSubscription = this._focusMonitor
             .monitor(element, element.nodeType === 1 && element.hasAttribute('cdkMonitorSubtreeFocus'))
-            .subscribe(origin => this.cdkFocusChange.emit(origin));
+            .subscribe(origin => {
+            this._focusOrigin = origin;
+            this.cdkFocusChange.emit(origin);
+        });
     }
     ngOnDestroy() {
         this._focusMonitor.stopMonitoring(this._elementRef);
@@ -2302,11 +2309,12 @@ class CdkMonitorFocus {
     }
 }
 CdkMonitorFocus.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0-rc.0", ngImport: i0, type: CdkMonitorFocus, deps: [{ token: i0.ElementRef }, { token: FocusMonitor }], target: i0.ɵɵFactoryTarget.Directive });
-CdkMonitorFocus.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-rc.0", type: CdkMonitorFocus, selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", outputs: { cdkFocusChange: "cdkFocusChange" }, ngImport: i0 });
+CdkMonitorFocus.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0-rc.0", type: CdkMonitorFocus, selector: "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", outputs: { cdkFocusChange: "cdkFocusChange" }, exportAs: ["cdkMonitorFocus"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0-rc.0", ngImport: i0, type: CdkMonitorFocus, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]',
+                    exportAs: 'cdkMonitorFocus',
                 }]
         }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: FocusMonitor }]; }, propDecorators: { cdkFocusChange: [{
                 type: Output
