@@ -265,6 +265,7 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     private _changeDetectorRef;
     private _scrollStrategy;
     scrollable: CdkVirtualScrollable;
+    private _platform;
     /** Emits when the viewport is detached from a CdkVirtualForOf. */
     private readonly _detachedSubject;
     /** Emits when the rendered range changes. */
