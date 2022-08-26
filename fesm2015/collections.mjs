@@ -1,4 +1,4 @@
-import { isObservable, of, Subject } from 'rxjs';
+import { ConnectableObservable, isObservable, of, Subject } from 'rxjs';
 import * as i0 from '@angular/core';
 import { Injectable, InjectionToken } from '@angular/core';
 
@@ -15,8 +15,9 @@ class DataSource {
 function isDataSource(value) {
     // Check if the value is a DataSource by observing if it has a connect function. Cannot
     // be checked as an `instanceof DataSource` since people could create their own sources
-    // that match the interface, but don't extend DataSource.
-    return value && typeof value.connect === 'function';
+    // that match the interface, but don't extend DataSource. We also can't use `isObservable`
+    // here, because of some internal apps.
+    return value && typeof value.connect === 'function' && !(value instanceof ConnectableObservable);
 }
 
 /**
