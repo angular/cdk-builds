@@ -240,7 +240,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     /** The directionality (text direction) of the current page. */
     protected readonly _dir: Directionality | null;
     /** The menu's native DOM host element. */
-    readonly _elementRef: ElementRef<any>;
+    readonly _elementRef: ElementRef<HTMLElement>;
     /** The Angular zone. */
     protected _ngZone: NgZone;
     /** The menu aim service used by this menu. */
@@ -336,6 +336,8 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      * otherwise or if no parent.
      */
     private _isParentVertical;
+    /** Sets the `type` attribute of the menu item. */
+    private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": "cdkMenuItemDisabled"; "typeaheadLabel": "cdkMenuitemTypeaheadLabel"; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, false>;
 }
@@ -474,6 +476,8 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private _subscribeToMenuStackClosed;
     /** Sets the role attribute for this trigger if needed. */
     private _setRole;
+    /** Sets thte `type` attribute of the trigger. */
+    private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false>;
 }

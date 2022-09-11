@@ -250,10 +250,6 @@ class CdkListbox {
             this._validateUnexpectedMultipleValues,
             this._validateUnexpectedOptionValues,
         ]);
-        // Update the internal value whenever the selection model's selection changes.
-        this.selectionModel.changed.pipe(startWith(null), takeUntil(this.destroyed)).subscribe(() => {
-            this._updateInternalValue();
-        });
     }
     /** The id of the option's host element. */
     get id() {
@@ -285,7 +281,9 @@ class CdkListbox {
     }
     set multiple(value) {
         this.selectionModel.multiple = coerceBooleanProperty(value);
-        this._updateInternalValue();
+        if (this.options) {
+            this._updateInternalValue();
+        }
     }
     /** Whether the listbox is disabled. */
     get disabled() {
@@ -348,11 +346,10 @@ class CdkListbox {
             this._verifyNoOptionValueCollisions();
         }
         this._initKeyManager();
-        // Update the internal value whenever the options change, as this may change the validity of
-        // the current selection
-        this.options.changes.pipe(startWith(this.options), takeUntil(this.destroyed)).subscribe(() => {
-            this._updateInternalValue();
-        });
+        // Update the internal value whenever the options or the model value changes.
+        merge(this.selectionModel.changed, this.options.changes)
+            .pipe(startWith(null), takeUntil(this.destroyed))
+            .subscribe(() => this._updateInternalValue());
         this._optionClicked
             .pipe(filter(({ option }) => !option.disabled), takeUntil(this.destroyed))
             .subscribe(({ option, event }) => this._handleOptionClicked(option, event));
@@ -848,7 +845,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "14.2.0", ngImpor
                         },
                     ],
                 }]
-        }], ctorParameters: function () { return []; }, propDecorators: { id: [{
+        }], propDecorators: { id: [{
                 type: Input
             }], enabledTabIndex: [{
                 type: Input,

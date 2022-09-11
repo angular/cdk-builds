@@ -106,7 +106,6 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _validateUnexpectedOptionValues;
     /** The combined set of validators for this listbox. */
     private _validators;
-    constructor();
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
