@@ -555,6 +555,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         this._subscribeToMenuStackClosed();
         this._subscribeToMouseEnter();
         this._subscribeToMenuStackHasFocus();
+        this._setType();
     }
     /** Toggle the attached menu. */
     toggle() {
@@ -594,7 +595,6 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
-                    event.preventDefault();
                     this.toggle();
                     this.childMenu?.focusFirstItem('keyboard');
                 }
@@ -764,6 +764,14 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
             this._elementRef.nativeElement.setAttribute('role', 'button');
         }
     }
+    /** Sets thte `type` attribute of the trigger. */
+    _setType() {
+        const element = this._elementRef.nativeElement;
+        if (element.nodeName === 'BUTTON' && !element.getAttribute('type')) {
+            // Prevents form submissions.
+            element.setAttribute('type', 'button');
+        }
+    }
 }
 CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: CdkMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
 CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "14.2.0", type: CdkMenuTrigger, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
@@ -839,6 +847,7 @@ class CdkMenuItem {
         /** Emits when the menu item is destroyed. */
         this.destroyed = new Subject();
         this._setupMouseEnter();
+        this._setType();
         if (this._isStandaloneItem()) {
             this._tabindex = 0;
         }
@@ -922,7 +931,6 @@ class CdkMenuItem {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
-                    event.preventDefault();
                     this.trigger({ keepOpen: event.keyCode === SPACE && !this.closeOnSpacebarTrigger });
                 }
                 break;
@@ -1010,6 +1018,14 @@ class CdkMenuItem {
      */
     _isParentVertical() {
         return this._parentMenu?.orientation === 'vertical';
+    }
+    /** Sets the `type` attribute of the menu item. */
+    _setType() {
+        const element = this._elementRef.nativeElement;
+        if (element.nodeName === 'BUTTON' && !element.getAttribute('type')) {
+            // Prevent form submissions.
+            element.setAttribute('type', 'button');
+        }
     }
 }
 CdkMenuItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "14.2.0", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive });
