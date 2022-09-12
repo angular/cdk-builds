@@ -2385,9 +2385,16 @@ class HighContrastModeDetector {
         const computedColor = ((computedStyle && computedStyle.backgroundColor) || '').replace(/ /g, '');
         testElement.remove();
         switch (computedColor) {
+            // Pre Windows 11 dark theme.
             case 'rgb(0,0,0)':
+            // Windows 11 dark themes.
+            case 'rgb(45,50,54)':
+            case 'rgb(32,32,32)':
                 return 2 /* HighContrastMode.WHITE_ON_BLACK */;
+            // Pre Windows 11 light theme.
             case 'rgb(255,255,255)':
+            // Windows 11 light theme.
+            case 'rgb(255,250,239)':
                 return 1 /* HighContrastMode.BLACK_ON_WHITE */;
         }
         return 0 /* HighContrastMode.NONE */;
