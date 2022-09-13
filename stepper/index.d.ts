@@ -127,7 +127,7 @@ export declare class CdkStep implements OnChanges {
     /** Determines whether the error state can be shown. */
     _showError(): boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStep, [null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"], false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkStep, "cdk-step", ["cdkStep"], { "stepControl": "stepControl"; "label": "label"; "errorMessage": "errorMessage"; "ariaLabel": "aria-label"; "ariaLabelledby": "aria-labelledby"; "state": "state"; "editable": "editable"; "optional": "optional"; "completed": "completed"; "hasError": "hasError"; }, { "interactedStream": "interacted"; }, ["stepLabel"], ["*"], false, never>;
 }
 
 export declare class CdkStepHeader implements FocusableOption {
@@ -136,14 +136,14 @@ export declare class CdkStepHeader implements FocusableOption {
     /** Focuses the step header. */
     focus(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepHeader, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepHeader, "[cdkStepHeader]", never, {}, {}, never, never, false, never>;
 }
 
 export declare class CdkStepLabel {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepLabel, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepLabel, "[cdkStepLabel]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepLabel, "[cdkStepLabel]", never, {}, {}, never, never, false, never>;
 }
 
 export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDestroy {
@@ -215,7 +215,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** Checks whether the passed-in index is a valid step index. */
     private _isValidIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": "linear"; "selectedIndex": "selectedIndex"; "selected": "selected"; "orientation": "orientation"; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"], never, false, never>;
 }
 
 export declare class CdkStepperModule {
@@ -231,7 +231,7 @@ export declare class CdkStepperNext {
     type: string;
     constructor(_stepper: CdkStepper);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperNext, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": "type"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperNext, "button[cdkStepperNext]", never, { "type": "type"; }, {}, never, never, false, never>;
 }
 
 /** Button that moves to the previous step in a stepper workflow. */
@@ -241,7 +241,7 @@ export declare class CdkStepperPrevious {
     type: string;
     constructor(_stepper: CdkStepper);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepperPrevious, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": "type"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepperPrevious, "button[cdkStepperPrevious]", never, { "type": "type"; }, {}, never, never, false, never>;
 }
 
 declare namespace i1 {

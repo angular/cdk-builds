@@ -34,7 +34,7 @@ export declare class Dir implements Directionality, AfterContentInit, OnDestroy 
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<Dir, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": "dir"; }, { "change": "dirChange"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<Dir, "[dir]", ["dir"], { "dir": "dir"; }, { "change": "dirChange"; }, never, never, false, never>;
 }
 
 /**

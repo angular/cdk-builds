@@ -100,7 +100,7 @@ export declare class CdkNestedTreeNode<T, K = T> extends CdkTreeNode<T, K> imple
     /** Gets the outlet for the current node. */
     private _getNodeOutlet;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkNestedTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], { "role": "role"; "disabled": "disabled"; "tabIndex": "tabIndex"; }, {}, ["nodeOutlet"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNestedTreeNode<any, any>, "cdk-nested-tree-node", ["cdkNestedTreeNode"], { "role": "role"; "disabled": "disabled"; "tabIndex": "tabIndex"; }, {}, ["nodeOutlet"], never, false, never>;
 }
 
 /**
@@ -175,7 +175,7 @@ export declare class CdkTree<T, K = T> implements AfterContentChecked, Collectio
      */
     insertNode(nodeData: T, index: number, viewContainer?: ViewContainerRef, parentData?: T): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTree<any, any>, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": "dataSource"; "treeControl": "treeControl"; "trackBy": "trackBy"; }, {}, ["_nodeDefs"], never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTree<any, any>, "cdk-tree", ["cdkTree"], { "dataSource": "dataSource"; "treeControl": "treeControl"; "trackBy": "trackBy"; }, {}, ["_nodeDefs"], never, false, never>;
 }
 
 export declare class CdkTreeModule {
@@ -221,7 +221,7 @@ export declare class CdkTreeNode<T, K = T> implements FocusableOption, OnDestroy
     focus(): void;
     protected _setRoleFromData(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNode<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": "role"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNode<any, any>, "cdk-tree-node", ["cdkTreeNode"], { "role": "role"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -241,7 +241,7 @@ export declare class CdkTreeNodeDef<T> {
     /** @docs-private */
     constructor(template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeDef<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": "cdkTreeNodeDefWhen"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeDef<any>, "[cdkTreeNodeDef]", never, { "when": "cdkTreeNodeDefWhen"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -253,7 +253,7 @@ export declare class CdkTreeNodeOutlet {
     _node?: any;
     constructor(viewContainer: ViewContainerRef, _node?: any);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeOutlet, [null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeOutlet, "[cdkTreeNodeOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 /** Context provided to the tree node component. */
@@ -315,7 +315,7 @@ export declare class CdkTreeNodePadding<T, K = T> implements OnDestroy {
      */
     protected _setIndentInput(indent: number | string): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodePadding<any, any>, [null, null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": "cdkTreeNodePadding"; "indent": "cdkTreeNodePaddingIndent"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodePadding<any, any>, "[cdkTreeNodePadding]", never, { "level": "cdkTreeNodePadding"; "indent": "cdkTreeNodePaddingIndent"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -331,7 +331,7 @@ export declare class CdkTreeNodeToggle<T, K = T> {
     constructor(_tree: CdkTree<T, K>, _treeNode: CdkTreeNode<T, K>);
     _toggle(event: Event): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTreeNodeToggle<any, any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTreeNodeToggle<any, any>, "[cdkTreeNodeToggle]", never, { "recursive": "cdkTreeNodeToggleRecursive"; }, {}, never, never, false, never>;
 }
 
 /** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */

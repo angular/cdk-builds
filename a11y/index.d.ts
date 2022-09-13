@@ -149,7 +149,7 @@ export declare class CdkAriaLive implements OnDestroy {
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": "cdkAriaLive"; "duration": "cdkAriaLiveDuration"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": "cdkAriaLive"; "duration": "cdkAriaLiveDuration"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -172,7 +172,7 @@ export declare class CdkMonitorFocus implements AfterViewInit, OnDestroy {
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMonitorFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMonitorFocus, "[cdkMonitorElementFocus], [cdkMonitorSubtreeFocus]", ["cdkMonitorFocus"], {}, { "cdkFocusChange": "cdkFocusChange"; }, never, never, false, never>;
 }
 
 /** Directive for trapping focus within a region. */
@@ -205,7 +205,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     ngOnChanges(changes: SimpleChanges): void;
     private _captureFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never, never, false, never>;
 }
 
 /**

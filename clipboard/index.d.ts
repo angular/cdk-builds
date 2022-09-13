@@ -37,7 +37,7 @@ export declare class CdkCopyToClipboard implements OnDestroy {
     copy(attempts?: number): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCopyToClipboard, [null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": "cdkCopyToClipboard"; "attempts": "cdkCopyToClipboardAttempts"; }, { "copied": "cdkCopyToClipboardCopied"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCopyToClipboard, "[cdkCopyToClipboard]", never, { "text": "cdkCopyToClipboard"; "attempts": "cdkCopyToClipboardAttempts"; }, { "copied": "cdkCopyToClipboardCopied"; }, never, never, false, never>;
 }
 
 /** Object that can be used to configure the default options for `CdkCopyToClipboard`. */

@@ -55,7 +55,7 @@ export declare abstract class BaseRowDef implements OnChanges {
     /** Gets this row def's relevant cell template from the provided column def. */
     extractCellTemplate(column: CdkColumnDef): TemplateRef<any>;
     static ɵfac: i0.ɵɵFactoryDeclaration<BaseRowDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<BaseRowDef, never, never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -101,7 +101,7 @@ export declare const CDK_TABLE_TEMPLATE = "\n  <ng-content select=\"caption\"></
 export declare class CdkCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCell, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCell, "cdk-cell, td[cdk-cell]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -112,7 +112,7 @@ export declare class CdkCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellDef, "[cdkCellDef]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellDef, "[cdkCellDef]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -136,7 +136,7 @@ export declare class CdkCellOutlet implements OnDestroy {
     constructor(_viewContainer: ViewContainerRef);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkCellOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkCellOutlet, "[cdkCellOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -233,7 +233,7 @@ export declare class CdkColumnDef extends _CdkColumnDefBase implements CanStick 
      */
     protected _setNameInput(value: string): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkColumnDef, [{ optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "sticky": "sticky"; "name": "cdkColumnDef"; "stickyEnd": "stickyEnd"; }, {}, ["cell", "headerCell", "footerCell"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkColumnDef, "[cdkColumnDef]", never, { "sticky": "sticky"; "name": "cdkColumnDef"; "stickyEnd": "stickyEnd"; }, {}, ["cell", "headerCell", "footerCell"], never, false, never>;
 }
 
 /** @docs-private */
@@ -246,7 +246,7 @@ declare const _CdkColumnDefBase: CanStickCtor & typeof CdkColumnDefBase;
 export declare class CdkFooterCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCell, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCell, "cdk-footer-cell, td[cdk-footer-cell]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -257,13 +257,13 @@ export declare class CdkFooterCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterCellDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterCellDef, "[cdkFooterCellDef]", never, {}, {}, never, never, false, never>;
 }
 
 /** Footer template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkFooterRow {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkFooterRow, "cdk-footer-row, tr[cdk-footer-row]", never, {}, {}, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkFooterRow, "cdk-footer-row, tr[cdk-footer-row]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -275,7 +275,7 @@ export declare class CdkFooterRowDef extends _CdkFooterRowDefBase implements Can
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFooterRowDef, [null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": "cdkFooterRowDef"; "sticky": "cdkFooterRowDefSticky"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFooterRowDef, "[cdkFooterRowDef]", never, { "columns": "cdkFooterRowDef"; "sticky": "cdkFooterRowDefSticky"; }, {}, never, never, false, never>;
 }
 
 /** @docs-private */
@@ -288,7 +288,7 @@ declare const _CdkFooterRowDefBase: CanStickCtor & typeof CdkFooterRowDefBase;
 export declare class CdkHeaderCell extends BaseCdkCell {
     constructor(columnDef: CdkColumnDef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCell, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCell, "cdk-header-cell, th[cdk-header-cell]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCell, "cdk-header-cell, th[cdk-header-cell]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -299,13 +299,13 @@ export declare class CdkHeaderCellDef implements CellDef {
     template: TemplateRef<any>;
     constructor(/** @docs-private */ template: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderCellDef, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderCellDef, "[cdkHeaderCellDef]", never, {}, {}, never, never, false, never>;
 }
 
 /** Header template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkHeaderRow {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkHeaderRow, "cdk-header-row, tr[cdk-header-row]", never, {}, {}, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkHeaderRow, "cdk-header-row, tr[cdk-header-row]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -317,7 +317,7 @@ export declare class CdkHeaderRowDef extends _CdkHeaderRowDefBase implements Can
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     ngOnChanges(changes: SimpleChanges): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkHeaderRowDef, [null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": "cdkHeaderRowDef"; "sticky": "cdkHeaderRowDefSticky"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkHeaderRowDef, "[cdkHeaderRowDef]", never, { "columns": "cdkHeaderRowDef"; "sticky": "cdkHeaderRowDefSticky"; }, {}, never, never, false, never>;
 }
 
 /** @docs-private */
@@ -332,7 +332,7 @@ export declare class CdkNoDataRow {
     _contentClassName: string;
     constructor(templateRef: TemplateRef<any>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkNoDataRow, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkNoDataRow, "ng-template[cdkNoDataRow]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -341,13 +341,13 @@ export declare class CdkNoDataRow {
  */
 export declare class CdkRecycleRows {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRecycleRows, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRecycleRows, "cdk-table[recycleRows], table[cdk-table][recycleRows]", never, {}, {}, never, never, false, never>;
 }
 
 /** Data row template container that contains the cell outlet. Adds the right class and role. */
 export declare class CdkRow {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRow, never>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkRow, "cdk-row, tr[cdk-row]", never, {}, {}, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkRow, "cdk-row, tr[cdk-row]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -366,7 +366,7 @@ export declare class CdkRowDef<T> extends BaseRowDef {
     when: (index: number, rowData: T) => boolean;
     constructor(template: TemplateRef<any>, _differs: IterableDiffers, _table?: any);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkRowDef<any>, [null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": "cdkRowDefColumns"; "when": "cdkRowDefWhen"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkRowDef<any>, "[cdkRowDef]", never, { "columns": "cdkRowDefColumns"; "when": "cdkRowDefWhen"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -749,7 +749,7 @@ export declare class CdkTable<T> implements AfterContentChecked, CollectionViewe
     /** Creates or removes the no data row, depending on whether any data is being shown. */
     private _updateNoDataRow;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTable<any>, [null, null, null, { attribute: "role"; }, { optional: true; }, null, null, null, null, null, { optional: true; skipSelf: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"], false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTable<any>, "cdk-table, table[cdk-table]", ["cdkTable"], { "trackBy": "trackBy"; "dataSource": "dataSource"; "multiTemplateDataRows": "multiTemplateDataRows"; "fixedLayout": "fixedLayout"; }, { "contentChanged": "contentChanged"; }, ["_noDataRow", "_contentColumnDefs", "_contentRowDefs", "_contentHeaderRowDefs", "_contentFooterRowDefs"], ["caption", "colgroup, col"], false, never>;
 }
 
 /** Possible types that can be set as the data source for a `CdkTable`. */
@@ -820,7 +820,7 @@ export declare class CdkTextColumn<T> implements OnDestroy, OnInit {
     /** Synchronizes the column definition name with the text column name. */
     private _syncColumnDefName;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextColumn<any>, [{ optional: true; }, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTextColumn<any>, "cdk-text-column", never, { "name": "name"; "headerText": "headerText"; "dataAccessor": "dataAccessor"; "justify": "justify"; }, {}, never, never, false>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkTextColumn<any>, "cdk-text-column", never, { "name": "name"; "headerText": "headerText"; "dataAccessor": "dataAccessor"; "justify": "justify"; }, {}, never, never, false, never>;
 }
 
 /** Base interface for a cell definition. Captures a column's cell template definition. */
@@ -873,7 +873,7 @@ export declare class DataRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<DataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<DataRowOutlet, "[rowOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 export { DataSource }
@@ -887,7 +887,7 @@ export declare class FooterRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<FooterRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<FooterRowOutlet, "[footerRowOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 /**
@@ -899,7 +899,7 @@ export declare class HeaderRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<HeaderRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<HeaderRowOutlet, "[headerRowOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 declare namespace i1 {
@@ -973,7 +973,7 @@ export declare class NoDataRowOutlet implements RowOutlet {
     elementRef: ElementRef;
     constructor(viewContainer: ViewContainerRef, elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<NoDataRowOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<NoDataRowOutlet, "[noDataRowOutlet]", never, {}, {}, never, never, false, never>;
 }
 
 /**

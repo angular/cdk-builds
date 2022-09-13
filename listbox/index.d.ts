@@ -264,7 +264,7 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     /** Get the index of the last triggered option. */
     private _getLastTriggeredIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkListbox<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": "id"; "enabledTabIndex": "tabindex"; "value": "cdkListboxValue"; "multiple": "cdkListboxMultiple"; "disabled": "cdkListboxDisabled"; "useActiveDescendant": "cdkListboxUseActiveDescendant"; "orientation": "cdkListboxOrientation"; "compareWith": "cdkListboxCompareWith"; "navigationWrapDisabled": "cdkListboxNavigationWrapDisabled"; "navigateDisabledOptions": "cdkListboxNavigatesDisabledOptions"; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": "id"; "enabledTabIndex": "tabindex"; "value": "cdkListboxValue"; "multiple": "cdkListboxMultiple"; "disabled": "cdkListboxDisabled"; "useActiveDescendant": "cdkListboxUseActiveDescendant"; "orientation": "cdkListboxOrientation"; "compareWith": "cdkListboxCompareWith"; "navigationWrapDisabled": "cdkListboxNavigationWrapDisabled"; "navigateDisabledOptions": "cdkListboxNavigatesDisabledOptions"; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, false, never>;
 }
 
 export declare class CdkListboxModule {
@@ -335,7 +335,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     /** Get the tabindex for this option. */
     protected _getTabIndex(): number | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOption<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": "id"; "value": "cdkOption"; "typeaheadLabel": "cdkOptionTypeaheadLabel"; "disabled": "cdkOptionDisabled"; "enabledTabIndex": "tabindex"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": "id"; "value": "cdkOption"; "typeaheadLabel": "cdkOptionTypeaheadLabel"; "disabled": "cdkOptionDisabled"; "enabledTabIndex": "tabindex"; }, {}, never, never, false, never>;
 }
 
 declare namespace i1 {

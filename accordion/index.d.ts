@@ -37,7 +37,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordion, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": "multi"; }, {}, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordion, "cdk-accordion, [cdkAccordion]", ["cdkAccordion"], { "multi": "multi"; }, {}, never, never, false, never>;
 }
 
 /**
@@ -85,7 +85,7 @@ export declare class CdkAccordionItem implements OnDestroy {
     open(): void;
     private _subscribeToOpenCloseAllActions;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAccordionItem, [{ optional: true; skipSelf: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": "expanded"; "disabled": "disabled"; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAccordionItem, "cdk-accordion-item, [cdkAccordionItem]", ["cdkAccordionItem"], { "expanded": "expanded"; "disabled": "disabled"; }, { "closed": "closed"; "opened": "opened"; "destroyed": "destroyed"; "expandedChange": "expandedChange"; }, never, never, false, never>;
 }
 
 export declare class CdkAccordionModule {
