@@ -12,4 +12,5 @@ export * from './migration';
 export * from './target-version';
 export * from './utils/decorators';
 export * from './utils/imports';
+export * from './utils/property-name';
 export * from './version-changes';
