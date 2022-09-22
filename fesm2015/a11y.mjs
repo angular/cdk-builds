@@ -4,7 +4,7 @@ import { inject, APP_ID, Injectable, Inject, QueryList, Directive, Input, Inject
 import * as i1 from '@angular/cdk/platform';
 import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
-import { hasModifierKey, A, Z, ZERO, NINE, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
+import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/observers';
@@ -308,6 +308,7 @@ class ListKeyManager {
         this._vertical = true;
         this._allowedModifierKeys = [];
         this._homeAndEnd = false;
+        this._pageUpAndDown = { enabled: false, delta: 10 };
         /**
          * Predicate function that can be used to check whether an item should be skipped
          * by the key manager. By default, disabled items are skipped.
@@ -422,6 +423,16 @@ class ListKeyManager {
         this._homeAndEnd = enabled;
         return this;
     }
+    /**
+     * Configures the key manager to activate every 10th, configured or first/last element in up/down direction
+     * respectively when the Page-Up or Page-Down key is pressed.
+     * @param enabled Whether pressing the Page-Up or Page-Down key activates the first/last item.
+     * @param delta Whether pressing the Home or End key activates the first/last item.
+     */
+    withPageUpDown(enabled = true, delta = 10) {
+        this._pageUpAndDown = { enabled, delta };
+        return this;
+    }
     setActiveItem(item) {
         const previousActiveItem = this._activeItem;
         this.updateActiveItem(item);
@@ -486,6 +497,25 @@ class ListKeyManager {
             case END:
                 if (this._homeAndEnd && isModifierAllowed) {
                     this.setLastItemActive();
+                    break;
+                }
+                else {
+                    return;
+                }
+            case PAGE_UP:
+                if (this._pageUpAndDown.enabled && isModifierAllowed) {
+                    const targetIndex = this._activeItemIndex - this._pageUpAndDown.delta;
+                    this._setActiveItemByIndex(targetIndex > 0 ? targetIndex : 0, 1);
+                    break;
+                }
+                else {
+                    return;
+                }
+            case PAGE_DOWN:
+                if (this._pageUpAndDown.enabled && isModifierAllowed) {
+                    const targetIndex = this._activeItemIndex + this._pageUpAndDown.delta;
+                    const itemsLength = this._getItemsArray().length;
+                    this._setActiveItemByIndex(targetIndex < itemsLength ? targetIndex : itemsLength - 1, -1);
                     break;
                 }
                 else {

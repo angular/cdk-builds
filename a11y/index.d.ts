@@ -901,6 +901,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _horizontal;
     private _allowedModifierKeys;
     private _homeAndEnd;
+    private _pageUpAndDown;
     /**
      * Predicate function that can be used to check whether an item should be skipped
      * by the key manager. By default, disabled items are skipped.
@@ -954,6 +955,13 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param enabled Whether pressing the Home or End key activates the first/last item.
      */
     withHomeAndEnd(enabled?: boolean): this;
+    /**
+     * Configures the key manager to activate every 10th, configured or first/last element in up/down direction
+     * respectively when the Page-Up or Page-Down key is pressed.
+     * @param enabled Whether pressing the Page-Up or Page-Down key activates the first/last item.
+     * @param delta Whether pressing the Home or End key activates the first/last item.
+     */
+    withPageUpDown(enabled?: boolean, delta?: number): this;
     /**
      * Sets the active item to the item at the index specified.
      * @param index The index of the item to be set as active.
