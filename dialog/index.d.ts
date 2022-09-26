@@ -287,7 +287,7 @@ export declare class DialogConfig<D = unknown, R = unknown, C extends BasePortal
     ariaLabelledBy?: string | null;
     /** Dialog label applied via `aria-label` */
     ariaLabel?: string | null;
-    /** Whether this a modal dialog. Used to set the `aria-modal` attribute. */
+    /** Whether this is a modal dialog. Used to set the `aria-modal` attribute. */
     ariaModal?: boolean;
     /**
      * Where the dialog should focus on open.

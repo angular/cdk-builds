@@ -45,7 +45,7 @@ class DialogConfig {
         this.ariaLabelledBy = null;
         /** Dialog label applied via `aria-label` */
         this.ariaLabel = null;
-        /** Whether this a modal dialog. Used to set the `aria-modal` attribute. */
+        /** Whether this is a modal dialog. Used to set the `aria-modal` attribute. */
         this.ariaModal = true;
         /**
          * Where the dialog should focus on open.
