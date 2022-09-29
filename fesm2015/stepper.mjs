@@ -334,6 +334,8 @@ class CdkStepper {
         }
     }
     ngOnDestroy() {
+        var _a;
+        (_a = this._keyManager) === null || _a === void 0 ? void 0 : _a.destroy();
         this.steps.destroy();
         this._sortedHeaders.destroy();
         this._destroyed.next();

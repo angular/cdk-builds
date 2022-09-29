@@ -1167,10 +1167,11 @@ class CdkMenuBase extends CdkMenuGroup {
         this._setUpPointerTracker();
     }
     ngOnDestroy() {
-        var _a;
+        var _a, _b;
+        (_a = this.keyManager) === null || _a === void 0 ? void 0 : _a.destroy();
         this.destroyed.next();
         this.destroyed.complete();
-        (_a = this.pointerTracker) === null || _a === void 0 ? void 0 : _a.destroy();
+        (_b = this.pointerTracker) === null || _b === void 0 ? void 0 : _b.destroy();
     }
     /**
      * Place focus on the first MenuItem in the menu and set the focus origin.

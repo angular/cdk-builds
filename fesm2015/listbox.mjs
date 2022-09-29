@@ -355,7 +355,8 @@ class CdkListbox {
             .subscribe(({ option, event }) => this._handleOptionClicked(option, event));
     }
     ngOnDestroy() {
-        this.listKeyManager.change.complete();
+        var _a;
+        (_a = this.listKeyManager) === null || _a === void 0 ? void 0 : _a.destroy();
         this.destroyed.next();
         this.destroyed.complete();
     }
@@ -672,9 +673,7 @@ class CdkListbox {
         else {
             this.listKeyManager.withHorizontalOrientation(((_a = this._dir) === null || _a === void 0 ? void 0 : _a.value) || 'ltr');
         }
-        this.listKeyManager.change
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(() => this._focusActiveOption());
+        this.listKeyManager.change.subscribe(() => this._focusActiveOption());
     }
     /** Focus the active option. */
     _focusActiveOption() {

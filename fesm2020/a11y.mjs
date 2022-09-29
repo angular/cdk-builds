@@ -322,7 +322,7 @@ class ListKeyManager {
         // not have access to a QueryList of the items they want to manage (e.g. when the
         // items aren't being collected via `ViewChildren` or `ContentChildren`).
         if (_items instanceof QueryList) {
-            _items.changes.subscribe((newItems) => {
+            this._itemChangesSubscription = _items.changes.subscribe((newItems) => {
                 if (this._activeItem) {
                     const itemArray = newItems.toArray();
                     const newIndex = itemArray.indexOf(this._activeItem);
@@ -571,6 +571,15 @@ class ListKeyManager {
         // Explicitly check for `null` and `undefined` because other falsy values are valid.
         this._activeItem = activeItem == null ? null : activeItem;
         this._activeItemIndex = index;
+    }
+    /** Cleans up the key manager. */
+    destroy() {
+        this._typeaheadSubscription.unsubscribe();
+        this._itemChangesSubscription?.unsubscribe();
+        this._letterKeyStream.complete();
+        this.tabOut.complete();
+        this.change.complete();
+        this._pressedLetters = [];
     }
     /**
      * This method sets the active item, given a list of items and the delta between the

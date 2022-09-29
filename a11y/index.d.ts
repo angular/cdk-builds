@@ -897,6 +897,7 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
     private _wrap;
     private readonly _letterKeyStream;
     private _typeaheadSubscription;
+    private _itemChangesSubscription?;
     private _vertical;
     private _horizontal;
     private _allowedModifierKeys;
@@ -1001,6 +1002,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param item Item to be set as active.
      */
     updateActiveItem(item: T): void;
+    /** Cleans up the key manager. */
+    destroy(): void;
     /**
      * This method sets the active item, given a list of items and the delta between the
      * currently active item and the new active item. It will calculate differently

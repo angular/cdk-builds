@@ -351,7 +351,7 @@ class CdkListbox {
             .subscribe(({ option, event }) => this._handleOptionClicked(option, event));
     }
     ngOnDestroy() {
-        this.listKeyManager.change.complete();
+        this.listKeyManager?.destroy();
         this.destroyed.next();
         this.destroyed.complete();
     }
@@ -664,9 +664,7 @@ class CdkListbox {
         else {
             this.listKeyManager.withHorizontalOrientation(this._dir?.value || 'ltr');
         }
-        this.listKeyManager.change
-            .pipe(takeUntil(this.destroyed))
-            .subscribe(() => this._focusActiveOption());
+        this.listKeyManager.change.subscribe(() => this._focusActiveOption());
     }
     /** Focus the active option. */
     _focusActiveOption() {

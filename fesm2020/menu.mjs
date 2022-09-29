@@ -1157,6 +1157,7 @@ class CdkMenuBase extends CdkMenuGroup {
         this._setUpPointerTracker();
     }
     ngOnDestroy() {
+        this.keyManager?.destroy();
         this.destroyed.next();
         this.destroyed.complete();
         this.pointerTracker?.destroy();
