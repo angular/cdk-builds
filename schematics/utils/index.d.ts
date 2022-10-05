@@ -15,4 +15,5 @@ export * from './project-index-file';
 export * from './project-main-file';
 export * from './project-style-file';
 export * from './project-targets';
+export * from './project-tsconfig-paths';
 export * from './schematic-options';
