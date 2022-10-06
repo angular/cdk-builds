@@ -949,7 +949,7 @@ class DragRef {
                 dropPoint: pointerPosition,
                 event,
             });
-            container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance, pointerPosition);
+            container.drop(this, currentIndex, this._initialIndex, this._initialContainer, isPointerOverContainer, distance, pointerPosition, event);
             this._dropContainer = this._initialContainer;
         });
     }
