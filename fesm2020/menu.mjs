@@ -251,7 +251,7 @@ class CdkMenuTriggerBase {
     getMenuContentPortal() {
         const hasMenuContentChanged = this.menuTemplateRef !== this._menuPortal?.templateRef;
         if (this.menuTemplateRef && (!this._menuPortal || hasMenuContentChanged)) {
-            this._menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, undefined, this._getChildMenuInjector());
+            this._menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, this.menuData, this._getChildMenuInjector());
         }
         return this._menuPortal;
     }
@@ -774,7 +774,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
 }
 CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-next.1", ngImport: i0, type: CdkMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-next.1", type: CdkMenuTrigger, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
+CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-next.1", type: CdkMenuTrigger, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
         PARENT_OR_NEW_MENU_STACK_PROVIDER,
     ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
@@ -792,7 +792,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-next.1", 
                         '(keydown)': '_toggleOnKeydown($event)',
                         '(click)': 'toggle()',
                     },
-                    inputs: ['menuTemplateRef: cdkMenuTriggerFor', 'menuPosition: cdkMenuPosition'],
+                    inputs: [
+                        'menuTemplateRef: cdkMenuTriggerFor',
+                        'menuPosition: cdkMenuPosition',
+                        'menuData: cdkMenuTriggerData',
+                    ],
                     outputs: ['opened: cdkMenuOpened', 'closed: cdkMenuClosed'],
                     providers: [
                         { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
@@ -1860,7 +1864,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     }
 }
 CdkContextMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-next.1", ngImport: i0, type: CdkContextMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkContextMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-next.1", type: CdkContextMenuTrigger, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], disabled: ["cdkContextMenuDisabled", "disabled"] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
+CdkContextMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-next.1", type: CdkContextMenuTrigger, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], menuData: ["cdkContextMenuTriggerData", "menuData"], disabled: ["cdkContextMenuDisabled", "disabled"] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkContextMenuTrigger },
         { provide: MENU_STACK, useClass: MenuStack },
     ], exportAs: ["cdkContextMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
@@ -1873,7 +1877,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-next.1", 
                         '[attr.data-cdk-menu-stack-id]': 'null',
                         '(contextmenu)': '_openOnContextMenu($event)',
                     },
-                    inputs: ['menuTemplateRef: cdkContextMenuTriggerFor', 'menuPosition: cdkContextMenuPosition'],
+                    inputs: [
+                        'menuTemplateRef: cdkContextMenuTriggerFor',
+                        'menuPosition: cdkContextMenuPosition',
+                        'menuData: cdkContextMenuTriggerData',
+                    ],
                     outputs: ['opened: cdkContextMenuOpened', 'closed: cdkContextMenuClosed'],
                     providers: [
                         { provide: MENU_TRIGGER, useExisting: CdkContextMenuTrigger },

@@ -78,7 +78,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "menuData": "cdkContextMenuTriggerData"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, false, never>;
 }
 
 /**
@@ -479,7 +479,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     /** Sets thte `type` attribute of the trigger. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; "menuData": "cdkMenuTriggerData"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false, never>;
 }
 
 /**
@@ -504,6 +504,8 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
     readonly closed: EventEmitter<void>;
     /** Template reference variable to the menu this trigger opens */
     menuTemplateRef: TemplateRef<unknown>;
+    /** Context data to be passed along to the menu template */
+    menuData: unknown;
     /** A reference to the overlay which manages the triggered menu */
     protected overlayRef: OverlayRef | null;
     /** Emits when this trigger is destroyed. */
