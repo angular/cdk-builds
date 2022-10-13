@@ -45,7 +45,7 @@ class CdkAccordion {
             this._openCloseAllActions.next(true);
         }
     }
-    /** Closes all enabled accordion items in an accordion where multi is enabled. */
+    /** Closes all enabled accordion items. */
     closeAll() {
         this._openCloseAllActions.next(false);
     }

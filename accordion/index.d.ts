@@ -32,7 +32,7 @@ export declare class CdkAccordion implements OnDestroy, OnChanges {
     private _multi;
     /** Opens all enabled accordion items in an accordion where multi is enabled. */
     openAll(): void;
-    /** Closes all enabled accordion items in an accordion where multi is enabled. */
+    /** Closes all enabled accordion items. */
     closeAll(): void;
     ngOnChanges(changes: SimpleChanges): void;
     ngOnDestroy(): void;
