@@ -54,8 +54,9 @@ export declare class UpdateProject<Context> {
      * @param data Upgrade data that is passed to all migration rules.
      * @param additionalStylesheetPaths Additional stylesheets that should be migrated, if not
      *   referenced in an Angular component. This is helpful for global stylesheets in a project.
+     * @param limitToDirectory If specified, changes will be limited to the given directory.
      */
-    migrate<Data>(migrationTypes: MigrationCtor<Data, Context>[], target: TargetVersion | null, data: Data, additionalStylesheetPaths?: string[]): {
+    migrate<Data>(migrationTypes: MigrationCtor<Data, Context>[], target: TargetVersion | null, data: Data, additionalStylesheetPaths?: string[], limitToDirectory?: string): {
         hasFailures: boolean;
     };
     /**
