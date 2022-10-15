@@ -409,6 +409,11 @@ class ListKeyManager {
         });
         return this;
     }
+    /** Cancels the current typeahead sequence. */
+    cancelTypeahead() {
+        this._pressedLetters = [];
+        return this;
+    }
     /**
      * Configures the key manager to activate the first and last items
      * respectively when the Home or End key is pressed.
