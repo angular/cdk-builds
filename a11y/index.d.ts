@@ -950,6 +950,8 @@ export declare class ListKeyManager<T extends ListKeyManagerOption> {
      * @param debounceInterval Time to wait after the last keystroke before setting the active item.
      */
     withTypeAhead(debounceInterval?: number): this;
+    /** Cancels the current typeahead sequence. */
+    cancelTypeahead(): this;
     /**
      * Configures the key manager to activate the first and last items
      * respectively when the Home or End key is pressed.
