@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, Directive, Input, ChangeDetectorRef, InjectFlags, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { inject, ElementRef, Directive, Input, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
@@ -214,7 +214,7 @@ class CdkListbox {
         /** Emits when an option has been clicked. */
         this._optionClicked = defer(() => this.options.changes.pipe(startWith(this.options), switchMap(options => merge(...options.map(option => option._clicked.pipe(map(event => ({ option, event }))))))));
         /** The directionality of the page. */
-        this._dir = inject(Directionality, InjectFlags.Optional);
+        this._dir = inject(Directionality, { optional: true });
         /** A predicate that skips disabled options. */
         this._skipDisabledPredicate = (option) => option.disabled;
         /** A predicate that does not skip any options. */
