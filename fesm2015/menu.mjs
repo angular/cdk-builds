@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, InjectFlags, Input, Output, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, ENTER, SPACE, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
@@ -549,11 +549,11 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         /** The Angular zone. */
         this._ngZone = inject(NgZone);
         /** The parent menu this trigger belongs to. */
-        this._parentMenu = inject(CDK_MENU, InjectFlags.Optional);
+        this._parentMenu = inject(CDK_MENU, { optional: true });
         /** The menu aim service used by this menu. */
-        this._menuAim = inject(MENU_AIM, InjectFlags.Optional);
+        this._menuAim = inject(MENU_AIM, { optional: true });
         /** The directionality of the page. */
-        this._directionality = inject(Directionality, InjectFlags.Optional);
+        this._directionality = inject(Directionality, { optional: true });
         this._setRole();
         this._registerCloseHandler();
         this._subscribeToMenuStackClosed();
@@ -825,19 +825,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-next.1", 
 class CdkMenuItem {
     constructor() {
         /** The directionality (text direction) of the current page. */
-        this._dir = inject(Directionality, InjectFlags.Optional);
+        this._dir = inject(Directionality, { optional: true });
         /** The menu's native DOM host element. */
         this._elementRef = inject(ElementRef);
         /** The Angular zone. */
         this._ngZone = inject(NgZone);
         /** The menu aim service used by this menu. */
-        this._menuAim = inject(MENU_AIM, InjectFlags.Optional);
+        this._menuAim = inject(MENU_AIM, { optional: true });
         /** The stack of menus this menu belongs to. */
         this._menuStack = inject(MENU_STACK);
         /** The parent menu in which this menuitem resides. */
-        this._parentMenu = inject(CDK_MENU, InjectFlags.Optional);
+        this._parentMenu = inject(CDK_MENU, { optional: true });
         /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
-        this._menuTrigger = inject(CdkMenuTrigger, InjectFlags.Optional | InjectFlags.Self);
+        this._menuTrigger = inject(CdkMenuTrigger, { optional: true, self: true });
         this._disabled = false;
         /**
          * If this MenuItem is a regular MenuItem, outputs when it is triggered by a keyboard or mouse
@@ -1143,9 +1143,9 @@ class CdkMenuBase extends CdkMenuGroup {
         /** The stack of menus this menu belongs to. */
         this.menuStack = inject(MENU_STACK);
         /** The menu aim service used by this menu. */
-        this.menuAim = inject(MENU_AIM, InjectFlags.Optional | InjectFlags.Self);
+        this.menuAim = inject(MENU_AIM, { optional: true, self: true });
         /** The directionality (text direction) of the current page. */
-        this.dir = inject(Directionality, InjectFlags.Optional);
+        this.dir = inject(Directionality, { optional: true });
         /** The id of the menu's host element. */
         this.id = `cdk-menu-${nextId$1++}`;
         /** The direction items in the menu flow. */
@@ -1318,7 +1318,7 @@ class CdkMenu extends CdkMenuBase {
     constructor() {
         var _a;
         super();
-        this._parentTrigger = inject(MENU_TRIGGER, InjectFlags.Optional);
+        this._parentTrigger = inject(MENU_TRIGGER, { optional: true });
         /** Event emitted when the menu is closed. */
         this.closed = new EventEmitter();
         /** The direction items in the menu flow. */
@@ -1746,7 +1746,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         /** The CDK overlay service. */
         this._overlay = inject(Overlay);
         /** The directionality of the page. */
-        this._directionality = inject(Directionality, InjectFlags.Optional);
+        this._directionality = inject(Directionality, { optional: true });
         /** The app's context menu tracking registry */
         this._contextMenuTracker = inject(ContextMenuTracker);
         this._disabled = false;
