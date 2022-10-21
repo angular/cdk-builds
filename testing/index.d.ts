@@ -179,7 +179,7 @@ export declare interface ElementDimensions {
 }
 
 /** Data that can be attached to a custom event dispatched from a `TestElement`. */
-export declare type EventData = string | number | boolean | undefined | null | EventData[] | {
+export declare type EventData = string | number | boolean | Function | undefined | null | EventData[] | {
     [key: string]: EventData;
 };
 
