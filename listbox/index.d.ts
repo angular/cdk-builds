@@ -1,4 +1,3 @@
-import { AbstractControl } from '@angular/forms';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { AfterContentInit } from '@angular/core';
 import { BooleanInput } from '@angular/cdk/coercion';
@@ -11,10 +10,8 @@ import { OnDestroy } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject } from 'rxjs';
-import { ValidationErrors } from '@angular/forms';
-import { Validator } from '@angular/forms';
 
-export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDestroy, ControlValueAccessor, Validator {
+export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDestroy, ControlValueAccessor {
     /** The id of the option's host element. */
     get id(): string;
     set id(value: string);
@@ -81,8 +78,6 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _onTouched;
     /** Callback called when the listbox value changes */
     private _onChange;
-    /** Callback called when the form validator changes. */
-    private _onValidatorChange;
     /** Emits when an option has been clicked. */
     private _optionClicked;
     /** The directionality of the page. */
@@ -91,21 +86,6 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private readonly _skipDisabledPredicate;
     /** A predicate that does not skip any options. */
     private readonly _skipNonePredicate;
-    /**
-     * Validator that produces an error if multiple values are selected in a single selection
-     * listbox.
-     * @param control The control to validate
-     * @return A validation error or null
-     */
-    private _validateUnexpectedMultipleValues;
-    /**
-     * Validator that produces an error if any selected values are not valid options for this listbox.
-     * @param control The control to validate
-     * @return A validation error or null
-     */
-    private _validateUnexpectedOptionValues;
-    /** The combined set of validators for this listbox. */
-    private _validators;
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -177,17 +157,6 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
      * @docs-private
      */
     setDisabledState(isDisabled: boolean): void;
-    /**
-     * Validate the given control
-     * @docs-private
-     */
-    validate(control: AbstractControl<any, any>): ValidationErrors | null;
-    /**
-     * Registers a callback to be called when the form validator changes.
-     * @param fn The callback to call
-     * @docs-private
-     */
-    registerOnValidatorChange(fn: () => void): void;
     /** Focus the listbox's host element. */
     focus(): void;
     /**
