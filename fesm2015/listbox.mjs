@@ -694,6 +694,7 @@ class CdkListbox {
      */
     _handleOptionClicked(option, event) {
         var _a;
+        event.preventDefault();
         this.listKeyManager.setActiveItem(option);
         if (event.shiftKey && this.multiple) {
             this.triggerRange(option, (_a = this._getLastTriggeredIndex()) !== null && _a !== void 0 ? _a : this.listKeyManager.activeItemIndex, this.listKeyManager.activeItemIndex, !option.isSelected());
