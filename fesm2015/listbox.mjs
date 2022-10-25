@@ -6,7 +6,7 @@ import { coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Subject, defer, merge } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
-import { Validators, NG_VALUE_ACCESSOR, NG_VALIDATORS } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
 
 /**
@@ -209,8 +209,6 @@ class CdkListbox {
         this._onTouched = () => { };
         /** Callback called when the listbox value changes */
         this._onChange = () => { };
-        /** Callback called when the form validator changes. */
-        this._onValidatorChange = () => { };
         /** Emits when an option has been clicked. */
         this._optionClicked = defer(() => this.options.changes.pipe(startWith(this.options), switchMap(options => merge(...options.map(option => option._clicked.pipe(map(event => ({ option, event }))))))));
         /** The directionality of the page. */
@@ -219,37 +217,6 @@ class CdkListbox {
         this._skipDisabledPredicate = (option) => option.disabled;
         /** A predicate that does not skip any options. */
         this._skipNonePredicate = () => false;
-        /**
-         * Validator that produces an error if multiple values are selected in a single selection
-         * listbox.
-         * @param control The control to validate
-         * @return A validation error or null
-         */
-        this._validateUnexpectedMultipleValues = (control) => {
-            const controlValue = this._coerceValue(control.value);
-            if (!this.multiple && controlValue.length > 1) {
-                return { 'cdkListboxUnexpectedMultipleValues': true };
-            }
-            return null;
-        };
-        /**
-         * Validator that produces an error if any selected values are not valid options for this listbox.
-         * @param control The control to validate
-         * @return A validation error or null
-         */
-        this._validateUnexpectedOptionValues = (control) => {
-            const controlValue = this._coerceValue(control.value);
-            const invalidValues = this._getInvalidOptionValues(controlValue);
-            if (invalidValues.length) {
-                return { 'cdkListboxUnexpectedOptionValues': { 'values': invalidValues } };
-            }
-            return null;
-        };
-        /** The combined set of validators for this listbox. */
-        this._validators = Validators.compose([
-            this._validateUnexpectedMultipleValues,
-            this._validateUnexpectedOptionValues,
-        ]);
     }
     /** The id of the option's host element. */
     get id() {
@@ -466,6 +433,16 @@ class CdkListbox {
      */
     writeValue(value) {
         this._setSelection(value);
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            const selected = this.selectionModel.selected;
+            const invalidValues = this._getInvalidOptionValues(selected);
+            if (!this.multiple && selected.length > 1) {
+                throw Error('Listbox cannot have more than one selected value in multi-selection mode.');
+            }
+            if (invalidValues.length) {
+                throw Error('Listbox has selected values that do not match any of its options.');
+            }
+        }
     }
     /**
      * Sets the disabled state of the listbox.
@@ -474,21 +451,6 @@ class CdkListbox {
      */
     setDisabledState(isDisabled) {
         this.disabled = isDisabled;
-    }
-    /**
-     * Validate the given control
-     * @docs-private
-     */
-    validate(control) {
-        return this._validators(control);
-    }
-    /**
-     * Registers a callback to be called when the form validator changes.
-     * @param fn The callback to call
-     * @docs-private
-     */
-    registerOnValidatorChange(fn) {
-        this._onValidatorChange = fn;
     }
     /** Focus the listbox's host element. */
     focus() {
@@ -704,7 +666,6 @@ class CdkListbox {
         const selected = this.selectionModel.selected;
         this._invalid =
             (!this.multiple && selected.length > 1) || !!this._getInvalidOptionValues(selected).length;
-        this._onValidatorChange();
         this.changeDetectorRef.markForCheck();
     }
     /**
@@ -807,11 +768,6 @@ CdkListbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "1
             useExisting: forwardRef(() => CdkListbox),
             multi: true,
         },
-        {
-            provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => CdkListbox),
-            multi: true,
-        },
     ], queries: [{ propertyName: "options", predicate: CdkOption, descendants: true }], exportAs: ["cdkListbox"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-rc.0", ngImport: i0, type: CdkListbox, decorators: [{
             type: Directive,
@@ -834,11 +790,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-rc.0", ng
                     providers: [
                         {
                             provide: NG_VALUE_ACCESSOR,
-                            useExisting: forwardRef(() => CdkListbox),
-                            multi: true,
-                        },
-                        {
-                            provide: NG_VALIDATORS,
                             useExisting: forwardRef(() => CdkListbox),
                             multi: true,
                         },
