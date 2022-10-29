@@ -218,6 +218,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _handleOptionClicked;
     /** Verifies that no two options represent the same value under the compareWith function. */
     private _verifyNoOptionValueCollisions;
+    /** Verifies that the option values are valid. */
+    private _verifyOptionValues;
     /**
      * Coerces a value into an array representing a listbox selection.
      * @param value The value to coerce

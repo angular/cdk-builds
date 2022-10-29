@@ -311,6 +311,7 @@ class CdkListbox {
     ngAfterContentInit() {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
             this._verifyNoOptionValueCollisions();
+            this._verifyOptionValues();
         }
         this._initKeyManager();
         // Update the internal value whenever the options or the model value changes.
@@ -433,16 +434,7 @@ class CdkListbox {
      */
     writeValue(value) {
         this._setSelection(value);
-        if (typeof ngDevMode === 'undefined' || ngDevMode) {
-            const selected = this.selectionModel.selected;
-            const invalidValues = this._getInvalidOptionValues(selected);
-            if (!this.multiple && selected.length > 1) {
-                throw Error('Listbox cannot have more than one selected value in multi-selection mode.');
-            }
-            if (invalidValues.length) {
-                throw Error('Listbox has selected values that do not match any of its options.');
-            }
-        }
+        this._verifyOptionValues();
     }
     /**
      * Sets the disabled state of the listbox.
@@ -737,6 +729,19 @@ class CdkListbox {
                 }
             }
         });
+    }
+    /** Verifies that the option values are valid. */
+    _verifyOptionValues() {
+        if (this.options && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+            const selected = this.selectionModel.selected;
+            const invalidValues = this._getInvalidOptionValues(selected);
+            if (!this.multiple && selected.length > 1) {
+                throw Error('Listbox cannot have more than one selected value in multi-selection mode.');
+            }
+            if (invalidValues.length) {
+                throw Error('Listbox has selected values that do not match any of its options.');
+            }
+        }
     }
     /**
      * Coerces a value into an array representing a listbox selection.
