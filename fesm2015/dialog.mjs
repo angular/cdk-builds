@@ -3,7 +3,7 @@ import * as i3 from '@angular/cdk/portal';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, InjectFlags, Injectable, SkipSelf, NgModule } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Optional, Inject, ViewChild, InjectionToken, Injector, TemplateRef, Injectable, SkipSelf, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/a11y';
 import { A11yModule } from '@angular/cdk/a11y';
 import * as i1$1 from '@angular/cdk/overlay';
@@ -637,7 +637,7 @@ class Dialog {
         }
         if (config.direction &&
             (!userInjector ||
-                !userInjector.get(Directionality, null, InjectFlags.Optional))) {
+                !userInjector.get(Directionality, null, { optional: true }))) {
             providers.push({
                 provide: Directionality,
                 useValue: { value: config.direction, change: of() },
