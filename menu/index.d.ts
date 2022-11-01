@@ -8,7 +8,7 @@ import { FocusableOption } from '@angular/cdk/a11y';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { FocusOrigin } from '@angular/cdk/a11y';
 import * as i0 from '@angular/core';
-import * as i10 from '@angular/cdk/overlay';
+import * as i1 from '@angular/cdk/overlay';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { NgZone } from '@angular/core';
@@ -78,7 +78,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "menuData": "cdkContextMenuTriggerData"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "menuData": "cdkContextMenuTriggerData"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
 }
 
 /**
@@ -112,7 +112,7 @@ export declare class CdkMenu extends CdkMenuBase implements AfterContentInit, On
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenu, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenu, "[cdkMenu]", ["cdkMenu"], {}, { "closed": "closed"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenu, "[cdkMenu]", ["cdkMenu"], {}, { "closed": "closed"; }, never, never, true, never>;
 }
 
 /**
@@ -141,7 +141,7 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBar, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBar, "[cdkMenuBar]", ["cdkMenuBar"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBar, "[cdkMenuBar]", ["cdkMenuBar"], {}, {}, never, never, true, never>;
 }
 
 /**
@@ -228,7 +228,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
  */
 export declare class CdkMenuGroup {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuGroup, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuGroup, "[cdkMenuGroup]", ["cdkMenuGroup"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuGroup, "[cdkMenuGroup]", ["cdkMenuGroup"], {}, {}, never, never, true, never>;
 }
 
 /**
@@ -339,7 +339,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     /** Sets the `type` attribute of the menu item. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": "cdkMenuItemDisabled"; "typeaheadLabel": "cdkMenuitemTypeaheadLabel"; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": "cdkMenuItemDisabled"; "typeaheadLabel": "cdkMenuitemTypeaheadLabel"; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never>;
 }
 
 /**
@@ -356,7 +356,7 @@ export declare class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
         keepOpen: boolean;
     }): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemCheckbox, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemCheckbox, "[cdkMenuItemCheckbox]", ["cdkMenuItemCheckbox"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemCheckbox, "[cdkMenuItemCheckbox]", ["cdkMenuItemCheckbox"], {}, {}, never, never, true, never>;
 }
 
 /**
@@ -384,7 +384,7 @@ export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements O
     /** Configure the unique selection dispatcher listener in order to toggle the checked state  */
     private _registerDispatcherListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemRadio, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, true, never>;
 }
 
 /** Base class providing checked state for selectable MenuItems. */
@@ -402,7 +402,7 @@ export declare abstract class CdkMenuItemSelectable extends CdkMenuItem {
 /** Module that declares components and directives for the CDK menu. */
 export declare class CdkMenuModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkMenuModule, [typeof i1.CdkMenuBar, typeof i2.CdkMenu, typeof i3.CdkMenuItem, typeof i4.CdkMenuItemRadio, typeof i5.CdkMenuItemCheckbox, typeof i6.CdkMenuTrigger, typeof i7.CdkMenuGroup, typeof i8.CdkContextMenuTrigger, typeof i9.CdkTargetMenuAim], [typeof i10.OverlayModule], [typeof i1.CdkMenuBar, typeof i2.CdkMenu, typeof i3.CdkMenuItem, typeof i4.CdkMenuItemRadio, typeof i5.CdkMenuItemCheckbox, typeof i6.CdkMenuTrigger, typeof i7.CdkMenuGroup, typeof i8.CdkContextMenuTrigger, typeof i9.CdkTargetMenuAim]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<CdkMenuModule, never, [typeof i1.OverlayModule, typeof i2.CdkMenuBar, typeof i3.CdkMenu, typeof i4.CdkMenuItem, typeof i5.CdkMenuItemRadio, typeof i6.CdkMenuItemCheckbox, typeof i7.CdkMenuTrigger, typeof i8.CdkMenuGroup, typeof i9.CdkContextMenuTrigger, typeof i10.CdkTargetMenuAim], [typeof i2.CdkMenuBar, typeof i3.CdkMenu, typeof i4.CdkMenuItem, typeof i5.CdkMenuItemRadio, typeof i6.CdkMenuItemCheckbox, typeof i7.CdkMenuTrigger, typeof i8.CdkMenuGroup, typeof i9.CdkContextMenuTrigger, typeof i10.CdkTargetMenuAim]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<CdkMenuModule>;
 }
 
@@ -479,7 +479,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     /** Sets thte `type` attribute of the trigger. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; "menuData": "cdkMenuTriggerData"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; "menuData": "cdkMenuTriggerData"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
 }
 
 /**
@@ -548,7 +548,7 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
  */
 export declare class CdkTargetMenuAim {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTargetMenuAim, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTargetMenuAim, "[cdkTargetMenuAim]", ["cdkTargetMenuAim"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTargetMenuAim, "[cdkTargetMenuAim]", ["cdkTargetMenuAim"], {}, {}, never, never, true, never>;
 }
 
 /** Options that can be provided to the close or closeAll methods. */
@@ -591,63 +591,63 @@ export declare const enum FocusNext {
     currentItem = 2
 }
 
-declare namespace i1 {
-    export {
-        CdkMenuBar
-    }
-}
-
-declare namespace i2 {
-    export {
-        CdkMenu
-    }
-}
-
-declare namespace i3 {
-    export {
-        CdkMenuItem
-    }
-}
-
-declare namespace i4 {
-    export {
-        CdkMenuItemRadio
-    }
-}
-
-declare namespace i5 {
-    export {
-        CdkMenuItemCheckbox
-    }
-}
-
-declare namespace i6 {
-    export {
-        CdkMenuTrigger
-    }
-}
-
-declare namespace i7 {
-    export {
-        CdkMenuGroup
-    }
-}
-
-declare namespace i8 {
-    export {
-        ContextMenuTracker,
-        ContextMenuCoordinates,
-        CdkContextMenuTrigger
-    }
-}
-
-declare namespace i9 {
+declare namespace i10 {
     export {
         MenuAim,
         MENU_AIM,
         Toggler,
         TargetMenuAim,
         CdkTargetMenuAim
+    }
+}
+
+declare namespace i2 {
+    export {
+        CdkMenuBar
+    }
+}
+
+declare namespace i3 {
+    export {
+        CdkMenu
+    }
+}
+
+declare namespace i4 {
+    export {
+        CdkMenuItem
+    }
+}
+
+declare namespace i5 {
+    export {
+        CdkMenuItemRadio
+    }
+}
+
+declare namespace i6 {
+    export {
+        CdkMenuItemCheckbox
+    }
+}
+
+declare namespace i7 {
+    export {
+        CdkMenuTrigger
+    }
+}
+
+declare namespace i8 {
+    export {
+        CdkMenuGroup
+    }
+}
+
+declare namespace i9 {
+    export {
+        ContextMenuTracker,
+        ContextMenuCoordinates,
+        CdkContextMenuTrigger
     }
 }
 
