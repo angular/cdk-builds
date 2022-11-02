@@ -2569,9 +2569,10 @@ class Overlay {
     }
 }
 Overlay.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-rc.1", ngImport: i0, type: Overlay, deps: [{ token: ScrollStrategyOptions }, { token: OverlayContainer }, { token: i0.ComponentFactoryResolver }, { token: OverlayPositionBuilder }, { token: OverlayKeyboardDispatcher }, { token: i0.Injector }, { token: i0.NgZone }, { token: DOCUMENT }, { token: i5.Directionality }, { token: i6.Location }, { token: OverlayOutsideClickDispatcher }, { token: ANIMATION_MODULE_TYPE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-Overlay.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.0-rc.1", ngImport: i0, type: Overlay });
+Overlay.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.0.0-rc.1", ngImport: i0, type: Overlay, providedIn: 'root' });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-rc.1", ngImport: i0, type: Overlay, decorators: [{
-            type: Injectable
+            type: Injectable,
+            args: [{ providedIn: 'root' }]
         }], ctorParameters: function () {
         return [{ type: ScrollStrategyOptions }, { type: OverlayContainer }, { type: i0.ComponentFactoryResolver }, { type: OverlayPositionBuilder }, { type: OverlayKeyboardDispatcher }, { type: i0.Injector }, { type: i0.NgZone }, { type: undefined, decorators: [{
                         type: Inject,
