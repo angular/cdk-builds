@@ -266,7 +266,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      */
     readonly triggered: EventEmitter<void>;
     /** Whether the menu item opens a menu. */
-    readonly hasMenu: boolean;
+    get hasMenu(): boolean;
     /**
      * The tabindex for this menu item managed internally and used for implementing roving a
      * tab index.
@@ -503,7 +503,7 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
     /** Emits when the attached menu is requested to close */
     readonly closed: EventEmitter<void>;
     /** Template reference variable to the menu this trigger opens */
-    menuTemplateRef: TemplateRef<unknown>;
+    menuTemplateRef: TemplateRef<unknown> | null;
     /** Context data to be passed along to the menu template */
     menuData: unknown;
     /** A reference to the overlay which manages the triggered menu */

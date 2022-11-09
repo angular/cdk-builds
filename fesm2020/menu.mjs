@@ -565,7 +565,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
     /** Open the attached menu. */
     open() {
-        if (!this.isOpen()) {
+        if (!this.isOpen() && this.menuTemplateRef != null) {
             this.opened.next();
             this.overlayRef = this.overlayRef || this._overlay.create(this._getOverlayConfig());
             this.overlayRef.attach(this.getMenuContentPortal());
@@ -776,7 +776,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
 }
 CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0-rc.1", ngImport: i0, type: CdkMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-rc.1", type: CdkMenuTrigger, isStandalone: true, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { attributes: { "aria-haspopup": "menu" }, listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-expanded": "isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
+CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0-rc.1", type: CdkMenuTrigger, isStandalone: true, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-haspopup": "menuTemplateRef ? \"menu\" : null", "attr.aria-expanded": "menuTemplateRef == null ? null : isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
         PARENT_OR_NEW_MENU_STACK_PROVIDER,
     ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
@@ -788,8 +788,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0-rc.1", ng
                     standalone: true,
                     host: {
                         'class': 'cdk-menu-trigger',
-                        'aria-haspopup': 'menu',
-                        '[attr.aria-expanded]': 'isOpen()',
+                        '[attr.aria-haspopup]': 'menuTemplateRef ? "menu" : null',
+                        '[attr.aria-expanded]': 'menuTemplateRef == null ? null : isOpen()',
                         '(focusin)': '_setHasFocus(true)',
                         '(focusout)': '_setHasFocus(false)',
                         '(keydown)': '_toggleOnKeydown($event)',
@@ -842,8 +842,6 @@ class CdkMenuItem {
          * event.
          */
         this.triggered = new EventEmitter();
-        /** Whether the menu item opens a menu. */
-        this.hasMenu = !!this._menuTrigger;
         /**
          * The tabindex for this menu item managed internally and used for implementing roving a
          * tab index.
@@ -865,6 +863,10 @@ class CdkMenuItem {
     }
     set disabled(value) {
         this._disabled = coerceBooleanProperty(value);
+    }
+    /** Whether the menu item opens a menu. */
+    get hasMenu() {
+        return this._menuTrigger?.menuTemplateRef != null;
     }
     ngOnDestroy() {
         this.destroyed.next();
