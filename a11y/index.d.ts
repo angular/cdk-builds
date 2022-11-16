@@ -1102,6 +1102,12 @@ export declare class LiveAnnouncer implements OnDestroy {
     clear(): void;
     ngOnDestroy(): void;
     private _createLiveElement;
+    /**
+     * Some browsers won't expose the accessibility node of the live announcer element if there is an
+     * `aria-modal` and the live announcer is outside of it. This method works around the issue by
+     * pointing the `aria-owns` of all modals to the live announcer element.
+     */
+    private _exposeAnnouncerToModals;
     static ɵfac: i0.ɵɵFactoryDeclaration<LiveAnnouncer, [{ optional: true; }, null, null, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<LiveAnnouncer>;
 }
