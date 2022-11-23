@@ -592,11 +592,11 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
      */
     _toggleOnKeydown(event) {
         const isParentVertical = this._parentMenu?.orientation === 'vertical';
-        const keyCode = event.keyCode;
-        switch (keyCode) {
+        switch (event.keyCode) {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
+                    event.preventDefault();
                     this.toggle();
                     this.childMenu?.focusFirstItem('keyboard');
                 }
@@ -625,7 +625,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
                     if (!isParentVertical) {
                         event.preventDefault();
                         this.open();
-                        keyCode === DOWN_ARROW
+                        event.keyCode === DOWN_ARROW
                             ? this.childMenu?.focusFirstItem('keyboard')
                             : this.childMenu?.focusLastItem('keyboard');
                     }
@@ -940,6 +940,7 @@ class CdkMenuItem {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
+                    event.preventDefault();
                     this.trigger({ keepOpen: event.keyCode === SPACE && !this.closeOnSpacebarTrigger });
                 }
                 break;
