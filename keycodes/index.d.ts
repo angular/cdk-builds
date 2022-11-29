@@ -128,7 +128,7 @@ export declare const MAC_WK_CMD_RIGHT = 93;
 export declare const META = 91;
 
 
-declare type ModifierKey = 'altKey' | 'shiftKey' | 'ctrlKey' | 'metaKey';
+export declare type ModifierKey = 'altKey' | 'shiftKey' | 'ctrlKey' | 'metaKey';
 
 export declare const MUTE = 173;
 
