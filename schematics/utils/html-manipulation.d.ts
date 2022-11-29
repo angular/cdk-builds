@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { Tree } from '@angular-devkit/schematics';
-import { Element } from 'parse5';
+import { Element } from './parse5-element';
 /** Appends the given element HTML fragment to the `<head>` element of the specified HTML file. */
 export declare function appendHtmlElementToHead(host: Tree, htmlFilePath: string, elementHtml: string): void;
 /** Parses the given HTML file and returns the head element if available. */

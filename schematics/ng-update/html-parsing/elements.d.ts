@@ -5,12 +5,11 @@
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-import { Element } from 'parse5';
 /**
  * Parses a HTML fragment and traverses all AST nodes in order find elements that
  * include the specified attribute.
  */
-export declare function findElementsWithAttribute(html: string, attributeName: string): Element[];
+export declare function findElementsWithAttribute(html: string, attributeName: string): import("parse5/dist/tree-adapters/default").Element[];
 /**
  * Finds elements with explicit tag names that also contain the specified attribute. Returns the
  * attribute start offset based on the specified HTML.
