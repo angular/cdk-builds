@@ -9,6 +9,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
+import { _getEventTarget } from '@angular/cdk/platform';
 
 /**
  * @license
@@ -647,15 +648,15 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
      * into.
      */
     _subscribeToMouseEnter() {
-        // Closes any sibling menu items and opens the menu associated with this trigger.
-        const toggleMenus = () => this._ngZone.run(() => {
-            this._closeSiblingTriggers();
-            this.open();
-        });
         this._ngZone.runOutsideAngular(() => {
             fromEvent(this._elementRef.nativeElement, 'mouseenter')
                 .pipe(filter(() => !this.menuStack.isEmpty() && !this.isOpen()), takeUntil(this.destroyed))
                 .subscribe(() => {
+                // Closes any sibling menu items and opens the menu associated with this trigger.
+                const toggleMenus = () => this._ngZone.run(() => {
+                    this._closeSiblingTriggers();
+                    this.open();
+                });
                 if (this._menuAim) {
                     this._menuAim.toggle(toggleMenus);
                 }
@@ -726,14 +727,17 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         if (this.overlayRef) {
             this.overlayRef
                 .outsidePointerEvents()
-                .pipe(filter(e => e.target != this._elementRef.nativeElement &&
-                !this._elementRef.nativeElement.contains(e.target)), takeUntil(this.stopOutsideClicksListener))
+                .pipe(takeUntil(this.stopOutsideClicksListener))
                 .subscribe(event => {
-                if (!this.isElementInsideMenuStack(event.target)) {
-                    this.menuStack.closeAll();
-                }
-                else {
-                    this._closeSiblingTriggers();
+                const target = _getEventTarget(event);
+                const element = this._elementRef.nativeElement;
+                if (target !== element && !element.contains(target)) {
+                    if (!this.isElementInsideMenuStack(target)) {
+                        this.menuStack.closeAll();
+                    }
+                    else {
+                        this._closeSiblingTriggers();
+                    }
                 }
             });
         }
@@ -1836,7 +1840,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
                 outsideClicks = merge(nonAuxClicks, auxClicks.pipe(skip(1)));
             }
             outsideClicks.pipe(takeUntil(this.stopOutsideClicksListener)).subscribe(event => {
-                if (!this.isElementInsideMenuStack(event.target)) {
+                if (!this.isElementInsideMenuStack(_getEventTarget(event))) {
                     this.menuStack.closeAll();
                 }
             });
