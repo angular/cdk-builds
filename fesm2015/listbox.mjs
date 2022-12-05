@@ -58,8 +58,6 @@ class CdkOption {
         this.destroyed = new Subject();
         /** Emits when the option is clicked. */
         this._clicked = new Subject();
-        /** Whether the option is currently active. */
-        this._active = false;
     }
     /** The id of the option's host element. */
     get id() {
@@ -94,7 +92,7 @@ class CdkOption {
     }
     /** Whether this option is active. */
     isActive() {
-        return this._active;
+        return this.listbox.isActive(this);
     }
     /** Toggle the selected state of this option. */
     toggle() {
@@ -118,19 +116,15 @@ class CdkOption {
         return ((_a = this.typeaheadLabel) !== null && _a !== void 0 ? _a : (_b = this.element.textContent) === null || _b === void 0 ? void 0 : _b.trim()) || '';
     }
     /**
-     * Set the option as active.
+     * No-op implemented as a part of `Highlightable`.
      * @docs-private
      */
-    setActiveStyles() {
-        this._active = true;
-    }
+    setActiveStyles() { }
     /**
-     * Set the option as inactive.
+     * No-op implemented as a part of `Highlightable`.
      * @docs-private
      */
-    setInactiveStyles() {
-        this._active = false;
-    }
+    setInactiveStyles() { }
     /** Handle focus events on the option. */
     _handleFocus() {
         // Options can wind up getting focused in active descendant mode if the user clicks on them.
@@ -217,6 +211,8 @@ class CdkListbox {
         this._skipDisabledPredicate = (option) => option.disabled;
         /** A predicate that does not skip any options. */
         this._skipNonePredicate = () => false;
+        /** Whether the listbox currently has focus. */
+        this._hasFocus = false;
     }
     /** The id of the option's host element. */
     get id() {
@@ -402,6 +398,14 @@ class CdkListbox {
         return this.isValueSelected(option.value);
     }
     /**
+     * Get whether the given option is active.
+     * @param option The option to get the active state of
+     */
+    isActive(option) {
+        var _a;
+        return !!(((_a = this.listKeyManager) === null || _a === void 0 ? void 0 : _a.activeItem) === option);
+    }
+    /**
      * Get whether the given value is selected.
      * @param value The value to get the selected state of
      */
@@ -519,7 +523,12 @@ class CdkListbox {
     /** Called when the listbox receives focus. */
     _handleFocus() {
         if (!this.useActiveDescendant) {
-            this.listKeyManager.setNextItemActive();
+            if (this.selectionModel.selected.length > 0) {
+                this._setNextFocusToSelectedOption();
+            }
+            else {
+                this.listKeyManager.setNextItemActive();
+            }
             this._focusActiveOption();
         }
     }
@@ -590,6 +599,12 @@ class CdkListbox {
             this.triggerOption(this.listKeyManager.activeItem);
         }
     }
+    /** Called when a focus moves into the listbox. */
+    _handleFocusIn() {
+        // Note that we use a `focusin` handler for this instead of the existing `focus` handler,
+        // because focus won't land on the listbox if `useActiveDescendant` is enabled.
+        this._hasFocus = true;
+    }
     /**
      * Called when the focus leaves an element in the listbox.
      * @param event The focusout event
@@ -598,6 +613,8 @@ class CdkListbox {
         const otherElement = event.relatedTarget;
         if (this.element !== otherElement && !this.element.contains(otherElement)) {
             this._onTouched();
+            this._hasFocus = false;
+            this._setNextFocusToSelectedOption();
         }
     }
     /** Get the id of the active option if active descendant is being used. */
@@ -627,6 +644,9 @@ class CdkListbox {
         else {
             this.listKeyManager.withHorizontalOrientation(((_a = this._dir) === null || _a === void 0 ? void 0 : _a.value) || 'ltr');
         }
+        if (this.selectionModel.selected.length) {
+            Promise.resolve().then(() => this._setNextFocusToSelectedOption());
+        }
         this.listKeyManager.change.subscribe(() => this._focusActiveOption());
     }
     /** Focus the active option. */
@@ -646,6 +666,18 @@ class CdkListbox {
             this.selectionModel.clear(false);
         }
         this.selectionModel.setSelection(...this._coerceValue(value));
+        if (!this._hasFocus) {
+            this._setNextFocusToSelectedOption();
+        }
+    }
+    /** Sets the first selected option as first in the keyboard focus order. */
+    _setNextFocusToSelectedOption() {
+        var _a;
+        // Null check the options since they only get defined after `ngAfterContentInit`.
+        const selected = (_a = this.options) === null || _a === void 0 ? void 0 : _a.find(option => option.isSelected());
+        if (selected) {
+            this.listKeyManager.updateActiveItem(selected);
+        }
     }
     /** Update the internal value of the listbox based on the selection model. */
     _updateInternalValue() {
@@ -768,7 +800,7 @@ class CdkListbox {
     }
 }
 CdkListbox.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkListbox, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkListbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkListbox, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple"], disabled: ["cdkListboxDisabled", "disabled"], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant"], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled"], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions"] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [
+CdkListbox.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkListbox, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple"], disabled: ["cdkListboxDisabled", "disabled"], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant"], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled"], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions"] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)", "focusin": "_handleFocusIn()" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => CdkListbox),
@@ -792,6 +824,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImpor
                         '(focus)': '_handleFocus()',
                         '(keydown)': '_handleKeydown($event)',
                         '(focusout)': '_handleFocusOut($event)',
+                        '(focusin)': '_handleFocusIn()',
                     },
                     providers: [
                         {
