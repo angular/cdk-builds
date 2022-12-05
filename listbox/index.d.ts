@@ -86,6 +86,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private readonly _skipDisabledPredicate;
     /** A predicate that does not skip any options. */
     private readonly _skipNonePredicate;
+    /** Whether the listbox currently has focus. */
+    private _hasFocus;
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -128,6 +130,11 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
      * @param option The option to get the selected state of
      */
     isSelected(option: CdkOption<T>): boolean;
+    /**
+     * Get whether the given option is active.
+     * @param option The option to get the active state of
+     */
+    isActive(option: CdkOption<T>): boolean;
     /**
      * Get whether the given value is selected.
      * @param value The value to get the selected state of
@@ -184,6 +191,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     protected _handleFocus(): void;
     /** Called when the user presses keydown on the listbox. */
     protected _handleKeydown(event: KeyboardEvent): void;
+    /** Called when a focus moves into the listbox. */
+    protected _handleFocusIn(): void;
     /**
      * Called when the focus leaves an element in the listbox.
      * @param event The focusout event
@@ -202,6 +211,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
      * @param value The list of new selected values.
      */
     private _setSelection;
+    /** Sets the first selected option as first in the keyboard focus order. */
+    private _setNextFocusToSelectedOption;
     /** Update the internal value of the listbox based on the selection model. */
     private _updateInternalValue;
     /**
@@ -274,8 +285,6 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     protected destroyed: Subject<void>;
     /** Emits when the option is clicked. */
     readonly _clicked: Subject<MouseEvent>;
-    /** Whether the option is currently active. */
-    private _active;
     ngOnDestroy(): void;
     /** Whether this option is selected. */
     isSelected(): boolean;
@@ -292,12 +301,12 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     /** Get the label for this element which is required by the FocusableOption interface. */
     getLabel(): string;
     /**
-     * Set the option as active.
+     * No-op implemented as a part of `Highlightable`.
      * @docs-private
      */
     setActiveStyles(): void;
     /**
-     * Set the option as inactive.
+     * No-op implemented as a part of `Highlightable`.
      * @docs-private
      */
     setInactiveStyles(): void;
