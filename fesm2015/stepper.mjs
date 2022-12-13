@@ -450,7 +450,7 @@ class CdkStepper {
             event.preventDefault();
         }
         else {
-            manager.onKeydown(event);
+            manager.setFocusOrigin('keyboard').onKeydown(event);
         }
     }
     _anyControlsInvalidOrPending(index) {
