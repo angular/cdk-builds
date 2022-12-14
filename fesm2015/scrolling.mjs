@@ -205,7 +205,7 @@ class CdkFixedSizeVirtualScroll {
     }
 }
 CdkFixedSizeVirtualScroll.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkFixedSizeVirtualScroll, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkFixedSizeVirtualScroll.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkFixedSizeVirtualScroll, selector: "cdk-virtual-scroll-viewport[itemSize]", inputs: { itemSize: "itemSize", minBufferPx: "minBufferPx", maxBufferPx: "maxBufferPx" }, providers: [
+CdkFixedSizeVirtualScroll.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkFixedSizeVirtualScroll, isStandalone: true, selector: "cdk-virtual-scroll-viewport[itemSize]", inputs: { itemSize: "itemSize", minBufferPx: "minBufferPx", maxBufferPx: "maxBufferPx" }, providers: [
         {
             provide: VIRTUAL_SCROLL_STRATEGY,
             useFactory: _fixedSizeVirtualScrollStrategyFactory,
@@ -216,6 +216,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImpor
             type: Directive,
             args: [{
                     selector: 'cdk-virtual-scroll-viewport[itemSize]',
+                    standalone: true,
                     providers: [
                         {
                             provide: VIRTUAL_SCROLL_STRATEGY,
@@ -539,11 +540,12 @@ class CdkScrollable {
     }
 }
 CdkScrollable.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollable, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkScrollable.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkScrollable, selector: "[cdk-scrollable], [cdkScrollable]", ngImport: i0 });
+CdkScrollable.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkScrollable, isStandalone: true, selector: "[cdk-scrollable], [cdkScrollable]", ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollable, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdk-scrollable], [cdkScrollable]',
+                    standalone: true,
                 }]
         }], ctorParameters: function () {
         return [{ type: i0.ElementRef }, { type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
@@ -1085,7 +1087,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
     }
 }
 CdkVirtualScrollViewport.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualScrollViewport, deps: [{ token: i0.ElementRef }, { token: i0.ChangeDetectorRef }, { token: i0.NgZone }, { token: VIRTUAL_SCROLL_STRATEGY, optional: true }, { token: i2.Directionality, optional: true }, { token: ScrollDispatcher }, { token: ViewportRuler }, { token: VIRTUAL_SCROLLABLE, optional: true }], target: i0.ɵɵFactoryTarget.Component });
-CdkVirtualScrollViewport.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollViewport, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: "appendOnly" }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
+CdkVirtualScrollViewport.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollViewport, isStandalone: true, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: "appendOnly" }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
         {
             provide: CdkScrollable,
             useFactory: (virtualScrollable, viewport) => virtualScrollable || viewport,
@@ -1098,7 +1100,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImpor
                         'class': 'cdk-virtual-scroll-viewport',
                         '[class.cdk-virtual-scroll-orientation-horizontal]': 'orientation === "horizontal"',
                         '[class.cdk-virtual-scroll-orientation-vertical]': 'orientation !== "horizontal"',
-                    }, encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.OnPush, providers: [
+                    }, encapsulation: ViewEncapsulation.None, changeDetection: ChangeDetectionStrategy.OnPush, standalone: true, providers: [
                         {
                             provide: CdkScrollable,
                             useFactory: (virtualScrollable, viewport) => virtualScrollable || viewport,
@@ -1397,12 +1399,13 @@ class CdkVirtualForOf {
     }
 }
 CdkVirtualForOf.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualForOf, deps: [{ token: i0.ViewContainerRef }, { token: i0.TemplateRef }, { token: i0.IterableDiffers }, { token: _VIEW_REPEATER_STRATEGY }, { token: CdkVirtualScrollViewport, skipSelf: true }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualForOf.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualForOf, selector: "[cdkVirtualFor][cdkVirtualForOf]", inputs: { cdkVirtualForOf: "cdkVirtualForOf", cdkVirtualForTrackBy: "cdkVirtualForTrackBy", cdkVirtualForTemplate: "cdkVirtualForTemplate", cdkVirtualForTemplateCacheSize: "cdkVirtualForTemplateCacheSize" }, providers: [{ provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy }], ngImport: i0 });
+CdkVirtualForOf.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualForOf, isStandalone: true, selector: "[cdkVirtualFor][cdkVirtualForOf]", inputs: { cdkVirtualForOf: "cdkVirtualForOf", cdkVirtualForTrackBy: "cdkVirtualForTrackBy", cdkVirtualForTemplate: "cdkVirtualForTemplate", cdkVirtualForTemplateCacheSize: "cdkVirtualForTemplateCacheSize" }, providers: [{ provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy }], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualForOf, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkVirtualFor][cdkVirtualForOf]',
                     providers: [{ provide: _VIEW_REPEATER_STRATEGY, useClass: _RecycleViewRepeaterStrategy }],
+                    standalone: true,
                 }]
         }], ctorParameters: function () {
         return [{ type: i0.ViewContainerRef }, { type: i0.TemplateRef }, { type: i0.IterableDiffers }, { type: i2$1._RecycleViewRepeaterStrategy, decorators: [{
@@ -1434,12 +1437,13 @@ class CdkVirtualScrollableElement extends CdkVirtualScrollable {
     }
 }
 CdkVirtualScrollableElement.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualScrollableElement, deps: [{ token: i0.ElementRef }, { token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualScrollableElement.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollableElement, selector: "[cdkVirtualScrollingElement]", host: { classAttribute: "cdk-virtual-scrollable" }, providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }], usesInheritance: true, ngImport: i0 });
+CdkVirtualScrollableElement.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollableElement, isStandalone: true, selector: "[cdkVirtualScrollingElement]", host: { classAttribute: "cdk-virtual-scrollable" }, providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }], usesInheritance: true, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualScrollableElement, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkVirtualScrollingElement]',
                     providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableElement }],
+                    standalone: true,
                     host: {
                         'class': 'cdk-virtual-scrollable',
                     },
@@ -1463,12 +1467,13 @@ class CdkVirtualScrollableWindow extends CdkVirtualScrollable {
     }
 }
 CdkVirtualScrollableWindow.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualScrollableWindow, deps: [{ token: ScrollDispatcher }, { token: i0.NgZone }, { token: i2.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkVirtualScrollableWindow.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollableWindow, selector: "cdk-virtual-scroll-viewport[scrollWindow]", providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }], usesInheritance: true, ngImport: i0 });
+CdkVirtualScrollableWindow.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.0.0", type: CdkVirtualScrollableWindow, isStandalone: true, selector: "cdk-virtual-scroll-viewport[scrollWindow]", providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }], usesInheritance: true, ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkVirtualScrollableWindow, decorators: [{
             type: Directive,
             args: [{
                     selector: 'cdk-virtual-scroll-viewport[scrollWindow]',
                     providers: [{ provide: VIRTUAL_SCROLLABLE, useExisting: CdkVirtualScrollableWindow }],
+                    standalone: true,
                 }]
         }], ctorParameters: function () {
         return [{ type: ScrollDispatcher }, { type: i0.NgZone }, { type: i2.Directionality, decorators: [{
@@ -1486,13 +1491,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImpor
 class CdkScrollableModule {
 }
 CdkScrollableModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollableModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-CdkScrollableModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollableModule, declarations: [CdkScrollable], exports: [CdkScrollable] });
+CdkScrollableModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollableModule, imports: [CdkScrollable], exports: [CdkScrollable] });
 CdkScrollableModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollableModule });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: CdkScrollableModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [CdkScrollable],
-                    declarations: [CdkScrollable],
+                    imports: [CdkScrollable],
                 }]
         }] });
 /**
@@ -1501,30 +1506,33 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImpor
 class ScrollingModule {
 }
 ScrollingModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, declarations: [CdkFixedSizeVirtualScroll,
+ScrollingModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, imports: [BidiModule, CdkScrollableModule, CdkVirtualScrollViewport,
+        CdkFixedSizeVirtualScroll,
         CdkVirtualForOf,
-        CdkVirtualScrollViewport,
         CdkVirtualScrollableWindow,
-        CdkVirtualScrollableElement], imports: [BidiModule, CdkScrollableModule], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
+        CdkVirtualScrollableElement], exports: [BidiModule, CdkScrollableModule, CdkFixedSizeVirtualScroll,
         CdkVirtualForOf,
         CdkVirtualScrollViewport,
         CdkVirtualScrollableWindow,
         CdkVirtualScrollableElement] });
-ScrollingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, imports: [BidiModule, CdkScrollableModule, BidiModule, CdkScrollableModule] });
+ScrollingModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, imports: [BidiModule,
+        CdkScrollableModule,
+        CdkVirtualScrollViewport, BidiModule, CdkScrollableModule] });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.0.0", ngImport: i0, type: ScrollingModule, decorators: [{
             type: NgModule,
             args: [{
-                    imports: [BidiModule, CdkScrollableModule],
-                    exports: [
+                    imports: [
                         BidiModule,
                         CdkScrollableModule,
+                        CdkVirtualScrollViewport,
                         CdkFixedSizeVirtualScroll,
                         CdkVirtualForOf,
-                        CdkVirtualScrollViewport,
                         CdkVirtualScrollableWindow,
                         CdkVirtualScrollableElement,
                     ],
-                    declarations: [
+                    exports: [
+                        BidiModule,
+                        CdkScrollableModule,
                         CdkFixedSizeVirtualScroll,
                         CdkVirtualForOf,
                         CdkVirtualScrollViewport,
