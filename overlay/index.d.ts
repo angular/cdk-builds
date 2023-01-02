@@ -10,9 +10,9 @@ import { ElementRef } from '@angular/core';
 import { EmbeddedViewRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
-import * as i2 from '@angular/cdk/bidi';
-import * as i3 from '@angular/cdk/portal';
-import * as i4 from '@angular/cdk/scrolling';
+import * as i1 from '@angular/cdk/bidi';
+import * as i2 from '@angular/cdk/portal';
+import * as i3 from '@angular/cdk/scrolling';
 import { InjectionToken } from '@angular/core';
 import { Injector } from '@angular/core';
 import { Location as Location_2 } from '@angular/common';
@@ -192,7 +192,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, [null, null, null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": "cdkConnectedOverlayOrigin"; "positions": "cdkConnectedOverlayPositions"; "positionStrategy": "cdkConnectedOverlayPositionStrategy"; "offsetX": "cdkConnectedOverlayOffsetX"; "offsetY": "cdkConnectedOverlayOffsetY"; "width": "cdkConnectedOverlayWidth"; "height": "cdkConnectedOverlayHeight"; "minWidth": "cdkConnectedOverlayMinWidth"; "minHeight": "cdkConnectedOverlayMinHeight"; "backdropClass": "cdkConnectedOverlayBackdropClass"; "panelClass": "cdkConnectedOverlayPanelClass"; "viewportMargin": "cdkConnectedOverlayViewportMargin"; "scrollStrategy": "cdkConnectedOverlayScrollStrategy"; "open": "cdkConnectedOverlayOpen"; "disableClose": "cdkConnectedOverlayDisableClose"; "transformOriginSelector": "cdkConnectedOverlayTransformOriginOn"; "hasBackdrop": "cdkConnectedOverlayHasBackdrop"; "lockPosition": "cdkConnectedOverlayLockPosition"; "flexibleDimensions": "cdkConnectedOverlayFlexibleDimensions"; "growAfterOpen": "cdkConnectedOverlayGrowAfterOpen"; "push": "cdkConnectedOverlayPush"; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": "cdkConnectedOverlayOrigin"; "positions": "cdkConnectedOverlayPositions"; "positionStrategy": "cdkConnectedOverlayPositionStrategy"; "offsetX": "cdkConnectedOverlayOffsetX"; "offsetY": "cdkConnectedOverlayOffsetY"; "width": "cdkConnectedOverlayWidth"; "height": "cdkConnectedOverlayHeight"; "minWidth": "cdkConnectedOverlayMinWidth"; "minHeight": "cdkConnectedOverlayMinHeight"; "backdropClass": "cdkConnectedOverlayBackdropClass"; "panelClass": "cdkConnectedOverlayPanelClass"; "viewportMargin": "cdkConnectedOverlayViewportMargin"; "scrollStrategy": "cdkConnectedOverlayScrollStrategy"; "open": "cdkConnectedOverlayOpen"; "disableClose": "cdkConnectedOverlayDisableClose"; "transformOriginSelector": "cdkConnectedOverlayTransformOriginOn"; "hasBackdrop": "cdkConnectedOverlayHasBackdrop"; "lockPosition": "cdkConnectedOverlayLockPosition"; "flexibleDimensions": "cdkConnectedOverlayFlexibleDimensions"; "growAfterOpen": "cdkConnectedOverlayGrowAfterOpen"; "push": "cdkConnectedOverlayPush"; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
 }
 
 /**
@@ -206,7 +206,7 @@ export declare class CdkOverlayOrigin {
     /** Reference to the element on which the directive is applied. */
     elementRef: ElementRef);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOverlayOrigin, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOverlayOrigin, "[cdk-overlay-origin], [overlay-origin], [cdkOverlayOrigin]", ["cdkOverlayOrigin"], {}, {}, never, never, true, never>;
 }
 
 export { CdkScrollable }
@@ -664,7 +664,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
 /** Horizontal dimension of a connection point on the perimeter of the origin or overlay element. */
 export declare type HorizontalConnectionPos = 'start' | 'center' | 'end';
 
-declare namespace i1 {
+declare namespace i4 {
     export {
         CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
         CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY,
@@ -844,7 +844,7 @@ export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
 
 export declare class OverlayModule {
     static ɵfac: i0.ɵɵFactoryDeclaration<OverlayModule, never>;
-    static ɵmod: i0.ɵɵNgModuleDeclaration<OverlayModule, [typeof i1.CdkConnectedOverlay, typeof i1.CdkOverlayOrigin], [typeof i2.BidiModule, typeof i3.PortalModule, typeof i4.ScrollingModule], [typeof i1.CdkConnectedOverlay, typeof i1.CdkOverlayOrigin, typeof i4.ScrollingModule]>;
+    static ɵmod: i0.ɵɵNgModuleDeclaration<OverlayModule, never, [typeof i1.BidiModule, typeof i2.PortalModule, typeof i3.ScrollingModule, typeof i4.CdkConnectedOverlay, typeof i4.CdkOverlayOrigin], [typeof i4.CdkConnectedOverlay, typeof i4.CdkOverlayOrigin, typeof i3.ScrollingModule]>;
     static ɵinj: i0.ɵɵInjectorDeclaration<OverlayModule>;
 }
 
