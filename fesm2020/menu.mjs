@@ -6,7 +6,7 @@ import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, merge
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { FocusKeyManager } from '@angular/cdk/a11y';
+import { InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
@@ -541,18 +541,15 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
 class CdkMenuTrigger extends CdkMenuTriggerBase {
     constructor() {
         super();
-        /** The host element. */
         this._elementRef = inject(ElementRef);
-        /** The CDK overlay service. */
         this._overlay = inject(Overlay);
-        /** The Angular zone. */
         this._ngZone = inject(NgZone);
+        this._directionality = inject(Directionality, { optional: true });
+        this._inputModalityDetector = inject(InputModalityDetector);
         /** The parent menu this trigger belongs to. */
         this._parentMenu = inject(CDK_MENU, { optional: true });
         /** The menu aim service used by this menu. */
         this._menuAim = inject(MENU_AIM, { optional: true });
-        /** The directionality of the page. */
-        this._directionality = inject(Directionality, { optional: true });
         this._setRole();
         this._registerCloseHandler();
         this._subscribeToMenuStackClosed();
@@ -597,7 +594,6 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
-                    event.preventDefault();
                     this.toggle();
                     this.childMenu?.focusFirstItem('keyboard');
                 }
@@ -632,6 +628,14 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
                     }
                 }
                 break;
+        }
+    }
+    /** Handles clicks on the menu trigger. */
+    _handleClick() {
+        // Don't handle clicks originating from the keyboard since we
+        // already do the same on `keydown` events for enter and space.
+        if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
+            this.toggle();
         }
     }
     /**
@@ -780,7 +784,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
 }
 CdkMenuTrigger.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkMenuTrigger, isStandalone: true, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "toggle()" }, properties: { "attr.aria-haspopup": "menuTemplateRef ? \"menu\" : null", "attr.aria-expanded": "menuTemplateRef == null ? null : isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
+CdkMenuTrigger.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkMenuTrigger, isStandalone: true, selector: "[cdkMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkMenuPosition", "menuPosition"], menuData: ["cdkMenuTriggerData", "menuData"] }, outputs: { opened: "cdkMenuOpened", closed: "cdkMenuClosed" }, host: { listeners: { "focusin": "_setHasFocus(true)", "focusout": "_setHasFocus(false)", "keydown": "_toggleOnKeydown($event)", "click": "_handleClick()" }, properties: { "attr.aria-haspopup": "menuTemplateRef ? \"menu\" : null", "attr.aria-expanded": "menuTemplateRef == null ? null : isOpen()" }, classAttribute: "cdk-menu-trigger" }, providers: [
         { provide: MENU_TRIGGER, useExisting: CdkMenuTrigger },
         PARENT_OR_NEW_MENU_STACK_PROVIDER,
     ], exportAs: ["cdkMenuTriggerFor"], usesInheritance: true, ngImport: i0 });
@@ -797,7 +801,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
                         '(focusin)': '_setHasFocus(true)',
                         '(focusout)': '_setHasFocus(false)',
                         '(keydown)': '_toggleOnKeydown($event)',
-                        '(click)': 'toggle()',
+                        '(click)': '_handleClick()',
                     },
                     inputs: [
                         'menuTemplateRef: cdkMenuTriggerFor',
@@ -826,11 +830,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
  */
 class CdkMenuItem {
     constructor() {
-        /** The directionality (text direction) of the current page. */
         this._dir = inject(Directionality, { optional: true });
-        /** The menu's native DOM host element. */
+        this._inputModalityDetector = inject(InputModalityDetector);
         this._elementRef = inject(ElementRef);
-        /** The Angular zone. */
         this._ngZone = inject(NgZone);
         /** The menu aim service used by this menu. */
         this._menuAim = inject(MENU_AIM, { optional: true });
@@ -944,7 +946,6 @@ class CdkMenuItem {
             case SPACE:
             case ENTER:
                 if (!hasModifierKey(event)) {
-                    event.preventDefault();
                     this.trigger({ keepOpen: event.keyCode === SPACE && !this.closeOnSpacebarTrigger });
                 }
                 break;
@@ -972,6 +973,14 @@ class CdkMenuItem {
                     }
                 }
                 break;
+        }
+    }
+    /** Handles clicks on the menu item. */
+    _handleClick() {
+        // Don't handle clicks originating from the keyboard since we
+        // already do the same on `keydown` events for enter and space.
+        if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
+            this.trigger();
         }
     }
     /** Whether this menu item is standalone or within a menu or menu bar. */
@@ -1043,7 +1052,7 @@ class CdkMenuItem {
     }
 }
 CdkMenuItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkMenuItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
+CdkMenuItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "_handleClick()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkMenuItem, decorators: [{
             type: Directive,
             args: [{
@@ -1057,7 +1066,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
                         '[attr.aria-disabled]': 'disabled || null',
                         '(blur)': '_resetTabIndex()',
                         '(focus)': '_setTabIndex()',
-                        '(click)': 'trigger()',
+                        '(click)': '_handleClick()',
                         '(keydown)': '_onKeydown($event)',
                     },
                 }]

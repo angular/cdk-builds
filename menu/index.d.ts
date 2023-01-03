@@ -237,11 +237,9 @@ export declare class CdkMenuGroup {
  * behavior when clicked.
  */
 export declare class CdkMenuItem implements FocusableOption, FocusableElement, Toggler, OnDestroy {
-    /** The directionality (text direction) of the current page. */
     protected readonly _dir: Directionality | null;
-    /** The menu's native DOM host element. */
+    private readonly _inputModalityDetector;
     readonly _elementRef: ElementRef<HTMLElement>;
-    /** The Angular zone. */
     protected _ngZone: NgZone;
     /** The menu aim service used by this menu. */
     private readonly _menuAim;
@@ -314,6 +312,8 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      * @param event the keyboard event to handle
      */
     _onKeydown(event: KeyboardEvent): void;
+    /** Handles clicks on the menu item. */
+    _handleClick(): void;
     /** Whether this menu item is standalone or within a menu or menu bar. */
     private _isStandaloneItem;
     /**
@@ -414,18 +414,15 @@ export declare class CdkMenuModule {
  * state.
  */
 export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDestroy {
-    /** The host element. */
     private readonly _elementRef;
-    /** The CDK overlay service. */
     private readonly _overlay;
-    /** The Angular zone. */
     private readonly _ngZone;
+    private readonly _directionality;
+    private readonly _inputModalityDetector;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
     /** The menu aim service used by this menu. */
     private readonly _menuAim;
-    /** The directionality of the page. */
-    private readonly _directionality;
     constructor();
     /** Toggle the attached menu. */
     toggle(): void;
@@ -442,6 +439,8 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
      * @param event The keyboard event to handle
      */
     _toggleOnKeydown(event: KeyboardEvent): void;
+    /** Handles clicks on the menu trigger. */
+    _handleClick(): void;
     /**
      * Sets whether the trigger's menu stack has focus.
      * @param hasFocus Whether the menu stack has focus.
