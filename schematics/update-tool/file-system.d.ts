@@ -22,7 +22,7 @@ import { UpdateRecorder } from './update-recorder';
  *   1. The update-tool cannot have a dependency on the Angular devkit as that one
  *      is not synced into g3. We want to be able to run migrations in g3 if needed.
  */
-export declare type WorkspacePath = string & {
+export type WorkspacePath = string & {
     __PRIVATE_DEVKIT_PATH: void;
 };
 /** Interface that describes a directory. */

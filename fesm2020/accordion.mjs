@@ -57,9 +57,9 @@ class CdkAccordion {
         this._openCloseAllActions.complete();
     }
 }
-CdkAccordion.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordion, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkAccordion.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkAccordion, selector: "cdk-accordion, [cdkAccordion]", inputs: { multi: "multi" }, providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }], exportAs: ["cdkAccordion"], usesOnChanges: true, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordion, decorators: [{
+CdkAccordion.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordion, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkAccordion.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-rc.0", type: CdkAccordion, selector: "cdk-accordion, [cdkAccordion]", inputs: { multi: "multi" }, providers: [{ provide: CDK_ACCORDION, useExisting: CdkAccordion }], exportAs: ["cdkAccordion"], usesOnChanges: true, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordion, decorators: [{
             type: Directive,
             args: [{
                     selector: 'cdk-accordion, [cdkAccordion]',
@@ -84,6 +84,40 @@ let nextId = 0;
  * events and attributes needed to be managed by a CdkAccordion parent.
  */
 class CdkAccordionItem {
+    /** Whether the AccordionItem is expanded. */
+    get expanded() {
+        return this._expanded;
+    }
+    set expanded(expanded) {
+        expanded = coerceBooleanProperty(expanded);
+        // Only emit events and update the internal value if the value changes.
+        if (this._expanded !== expanded) {
+            this._expanded = expanded;
+            this.expandedChange.emit(expanded);
+            if (expanded) {
+                this.opened.emit();
+                /**
+                 * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
+                 * the name value is the id of the accordion.
+                 */
+                const accordionId = this.accordion ? this.accordion.id : this.id;
+                this._expansionDispatcher.notify(this.id, accordionId);
+            }
+            else {
+                this.closed.emit();
+            }
+            // Ensures that the animation will run when the value is set outside of an `@Input`.
+            // This includes cases like the open, close and toggle methods.
+            this._changeDetectorRef.markForCheck();
+        }
+    }
+    /** Whether the AccordionItem is disabled. */
+    get disabled() {
+        return this._disabled;
+    }
+    set disabled(disabled) {
+        this._disabled = coerceBooleanProperty(disabled);
+    }
     constructor(accordion, _changeDetectorRef, _expansionDispatcher) {
         this.accordion = accordion;
         this._changeDetectorRef = _changeDetectorRef;
@@ -121,40 +155,6 @@ class CdkAccordionItem {
             this._openCloseAllSubscription = this._subscribeToOpenCloseAllActions();
         }
     }
-    /** Whether the AccordionItem is expanded. */
-    get expanded() {
-        return this._expanded;
-    }
-    set expanded(expanded) {
-        expanded = coerceBooleanProperty(expanded);
-        // Only emit events and update the internal value if the value changes.
-        if (this._expanded !== expanded) {
-            this._expanded = expanded;
-            this.expandedChange.emit(expanded);
-            if (expanded) {
-                this.opened.emit();
-                /**
-                 * In the unique selection dispatcher, the id parameter is the id of the CdkAccordionItem,
-                 * the name value is the id of the accordion.
-                 */
-                const accordionId = this.accordion ? this.accordion.id : this.id;
-                this._expansionDispatcher.notify(this.id, accordionId);
-            }
-            else {
-                this.closed.emit();
-            }
-            // Ensures that the animation will run when the value is set outside of an `@Input`.
-            // This includes cases like the open, close and toggle methods.
-            this._changeDetectorRef.markForCheck();
-        }
-    }
-    /** Whether the AccordionItem is disabled. */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(disabled) {
-        this._disabled = coerceBooleanProperty(disabled);
-    }
     /** Emits an event for the accordion item being destroyed. */
     ngOnDestroy() {
         this.opened.complete();
@@ -191,13 +191,13 @@ class CdkAccordionItem {
         });
     }
 }
-CdkAccordionItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionItem, deps: [{ token: CDK_ACCORDION, optional: true, skipSelf: true }, { token: i0.ChangeDetectorRef }, { token: i1.UniqueSelectionDispatcher }], target: i0.ɵɵFactoryTarget.Directive });
-CdkAccordionItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkAccordionItem, selector: "cdk-accordion-item, [cdkAccordionItem]", inputs: { expanded: "expanded", disabled: "disabled" }, outputs: { closed: "closed", opened: "opened", destroyed: "destroyed", expandedChange: "expandedChange" }, providers: [
+CdkAccordionItem.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionItem, deps: [{ token: CDK_ACCORDION, optional: true, skipSelf: true }, { token: i0.ChangeDetectorRef }, { token: i1.UniqueSelectionDispatcher }], target: i0.ɵɵFactoryTarget.Directive });
+CdkAccordionItem.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-rc.0", type: CdkAccordionItem, selector: "cdk-accordion-item, [cdkAccordionItem]", inputs: { expanded: "expanded", disabled: "disabled" }, outputs: { closed: "closed", opened: "opened", destroyed: "destroyed", expandedChange: "expandedChange" }, providers: [
         // Provide `CDK_ACCORDION` as undefined to prevent nested accordion items from
         // registering to the same accordion.
         { provide: CDK_ACCORDION, useValue: undefined },
     ], exportAs: ["cdkAccordionItem"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionItem, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionItem, decorators: [{
             type: Directive,
             args: [{
                     selector: 'cdk-accordion-item, [cdkAccordionItem]',
@@ -238,10 +238,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
  */
 class CdkAccordionModule {
 }
-CdkAccordionModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-CdkAccordionModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionModule, declarations: [CdkAccordion, CdkAccordionItem], exports: [CdkAccordion, CdkAccordionItem] });
-CdkAccordionModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAccordionModule, decorators: [{
+CdkAccordionModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+CdkAccordionModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionModule, declarations: [CdkAccordion, CdkAccordionItem], exports: [CdkAccordion, CdkAccordionItem] });
+CdkAccordionModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAccordionModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: [CdkAccordion, CdkAccordionItem],

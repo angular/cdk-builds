@@ -80,9 +80,9 @@ class AutofillMonitor {
         this._monitoredElements.forEach((_info, element) => this.stopMonitoring(element));
     }
 }
-AutofillMonitor.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: AutofillMonitor, deps: [{ token: i1.Platform }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable });
-AutofillMonitor.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: AutofillMonitor, providedIn: 'root' });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: AutofillMonitor, decorators: [{
+AutofillMonitor.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: AutofillMonitor, deps: [{ token: i1.Platform }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Injectable });
+AutofillMonitor.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: AutofillMonitor, providedIn: 'root' });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: AutofillMonitor, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Platform }, { type: i0.NgZone }]; } });
@@ -103,9 +103,9 @@ class CdkAutofill {
         this._autofillMonitor.stopMonitoring(this._elementRef);
     }
 }
-CdkAutofill.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAutofill, deps: [{ token: i0.ElementRef }, { token: AutofillMonitor }], target: i0.ɵɵFactoryTarget.Directive });
-CdkAutofill.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkAutofill, selector: "[cdkAutofill]", outputs: { cdkAutofill: "cdkAutofill" }, ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkAutofill, decorators: [{
+CdkAutofill.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAutofill, deps: [{ token: i0.ElementRef }, { token: AutofillMonitor }], target: i0.ɵɵFactoryTarget.Directive });
+CdkAutofill.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-rc.0", type: CdkAutofill, selector: "[cdkAutofill]", outputs: { cdkAutofill: "cdkAutofill" }, ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkAutofill, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkAutofill]',
@@ -123,28 +123,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
  */
 /** Directive to automatically resize a textarea to fit its content. */
 class CdkTextareaAutosize {
-    constructor(_elementRef, _platform, _ngZone, 
-    /** @breaking-change 11.0.0 make document required */
-    document) {
-        this._elementRef = _elementRef;
-        this._platform = _platform;
-        this._ngZone = _ngZone;
-        this._destroyed = new Subject();
-        this._enabled = true;
-        /**
-         * Value of minRows as of last resize. If the minRows has decreased, the
-         * height of the textarea needs to be recomputed to reflect the new minimum. The maxHeight
-         * does not have the same problem because it does not affect the textarea's scrollHeight.
-         */
-        this._previousMinRows = -1;
-        this._isViewInited = false;
-        /** Handles `focus` and `blur` events. */
-        this._handleFocusEvent = (event) => {
-            this._hasFocus = event.type === 'focus';
-        };
-        this._document = document;
-        this._textareaElement = this._elementRef.nativeElement;
-    }
     /** Minimum amount of rows in the textarea. */
     get minRows() {
         return this._minRows;
@@ -185,6 +163,28 @@ class CdkTextareaAutosize {
             this._textareaElement.removeAttribute('placeholder');
         }
         this._cacheTextareaPlaceholderHeight();
+    }
+    constructor(_elementRef, _platform, _ngZone, 
+    /** @breaking-change 11.0.0 make document required */
+    document) {
+        this._elementRef = _elementRef;
+        this._platform = _platform;
+        this._ngZone = _ngZone;
+        this._destroyed = new Subject();
+        this._enabled = true;
+        /**
+         * Value of minRows as of last resize. If the minRows has decreased, the
+         * height of the textarea needs to be recomputed to reflect the new minimum. The maxHeight
+         * does not have the same problem because it does not affect the textarea's scrollHeight.
+         */
+        this._previousMinRows = -1;
+        this._isViewInited = false;
+        /** Handles `focus` and `blur` events. */
+        this._handleFocusEvent = (event) => {
+            this._hasFocus = event.type === 'focus';
+        };
+        this._document = document;
+        this._textareaElement = this._elementRef.nativeElement;
     }
     /** Sets the minimum height of the textarea as determined by minRows. */
     _setMinHeight() {
@@ -382,9 +382,9 @@ class CdkTextareaAutosize {
         }
     }
 }
-CdkTextareaAutosize.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkTextareaAutosize, deps: [{ token: i0.ElementRef }, { token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkTextareaAutosize.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-next.3", type: CdkTextareaAutosize, selector: "textarea[cdkTextareaAutosize]", inputs: { minRows: ["cdkAutosizeMinRows", "minRows"], maxRows: ["cdkAutosizeMaxRows", "maxRows"], enabled: ["cdkTextareaAutosize", "enabled"], placeholder: "placeholder" }, host: { attributes: { "rows": "1" }, listeners: { "input": "_noopInputHandler()" }, classAttribute: "cdk-textarea-autosize" }, exportAs: ["cdkTextareaAutosize"], ngImport: i0 });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: CdkTextareaAutosize, decorators: [{
+CdkTextareaAutosize.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkTextareaAutosize, deps: [{ token: i0.ElementRef }, { token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+CdkTextareaAutosize.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "15.1.0-rc.0", type: CdkTextareaAutosize, selector: "textarea[cdkTextareaAutosize]", inputs: { minRows: ["cdkAutosizeMinRows", "minRows"], maxRows: ["cdkAutosizeMaxRows", "maxRows"], enabled: ["cdkTextareaAutosize", "enabled"], placeholder: "placeholder" }, host: { attributes: { "rows": "1" }, listeners: { "input": "_noopInputHandler()" }, classAttribute: "cdk-textarea-autosize" }, exportAs: ["cdkTextareaAutosize"], ngImport: i0 });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: CdkTextareaAutosize, decorators: [{
             type: Directive,
             args: [{
                     selector: 'textarea[cdkTextareaAutosize]',
@@ -426,10 +426,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", 
  */
 class TextFieldModule {
 }
-TextFieldModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: TextFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-next.3", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] });
-TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: TextFieldModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-next.3", ngImport: i0, type: TextFieldModule, decorators: [{
+TextFieldModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: TextFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "15.1.0-rc.0", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] });
+TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: TextFieldModule });
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "15.1.0-rc.0", ngImport: i0, type: TextFieldModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: [CdkAutofill, CdkTextareaAutosize],

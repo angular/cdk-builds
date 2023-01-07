@@ -455,9 +455,6 @@ function _restoreSelector(selector, placeholders) {
  * element type, `E`, used by the particular test environment.
  */
 class HarnessEnvironment {
-    constructor(rawRootElement) {
-        this.rawRootElement = rawRootElement;
-    }
     // Implemented as part of the `LocatorFactory` interface.
     get rootElement() {
         this._rootElement = this._rootElement || this.createTestElement(this.rawRootElement);
@@ -465,6 +462,9 @@ class HarnessEnvironment {
     }
     set rootElement(element) {
         this._rootElement = element;
+    }
+    constructor(rawRootElement) {
+        this.rawRootElement = rawRootElement;
     }
     // Implemented as part of the `LocatorFactory` interface.
     documentRootLocatorFactory() {

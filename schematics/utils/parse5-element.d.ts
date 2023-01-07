@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { DefaultTreeAdapterMap } from 'parse5';
-export declare type Element = DefaultTreeAdapterMap['element'];
-export declare type ChildNode = DefaultTreeAdapterMap['childNode'];
+export type Element = DefaultTreeAdapterMap['element'];
+export type ChildNode = DefaultTreeAdapterMap['childNode'];
 /** Determines the indentation of child elements for the given Parse5 element. */
 export declare function getChildElementIndentation(element: Element): number;

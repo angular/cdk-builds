@@ -6,7 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { VersionChanges } from '../../update-tool/version-changes';
-export declare type ConstructorChecksUpgradeData = string;
+export type ConstructorChecksUpgradeData = string;
 /**
  * List of class names for which the constructor signature has been changed. The new constructor
  * signature types don't need to be stored here because the signature will be determined
