@@ -12,8 +12,8 @@ import { DevkitContext, DevkitMigrationCtor } from './devkit-migration';
 import { UpgradeData } from './upgrade-data';
 /** List of migrations which run for the CDK update. */
 export declare const cdkMigrations: MigrationCtor<UpgradeData>[];
-export declare type NullableDevkitMigration = MigrationCtor<UpgradeData | null, DevkitContext>;
-declare type PostMigrationFn = (context: SchematicContext, targetVersion: TargetVersion, hasFailure: boolean) => void;
+export type NullableDevkitMigration = MigrationCtor<UpgradeData | null, DevkitContext>;
+type PostMigrationFn = (context: SchematicContext, targetVersion: TargetVersion, hasFailure: boolean) => void;
 /**
  * Creates a Angular schematic rule that runs the upgrade for the
  * specified target version.

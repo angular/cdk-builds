@@ -9,7 +9,7 @@ import { SchematicContext, Tree } from '@angular-devkit/schematics';
 import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
 import { Constructor, Migration, PostMigrationAction } from '../update-tool/migration';
 import { TargetVersion } from '../update-tool/target-version';
-export declare type DevkitContext = {
+export type DevkitContext = {
     /** Devkit tree for the current migrations. Can be used to insert/remove files. */
     tree: Tree;
     /** Name of the project the migrations run against. */
@@ -30,6 +30,6 @@ export declare abstract class DevkitMigration<Data> extends Migration<Data, Devk
      */
     static globalPostMigration?(tree: Tree, targetVersion: TargetVersion, context: SchematicContext): PostMigrationAction;
 }
-export declare type DevkitMigrationCtor<Data> = Constructor<DevkitMigration<Data>> & {
+export type DevkitMigrationCtor<Data> = Constructor<DevkitMigration<Data>> & {
     [m in keyof typeof DevkitMigration]: typeof DevkitMigration[m];
 };

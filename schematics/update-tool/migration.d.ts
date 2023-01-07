@@ -16,14 +16,14 @@ export interface MigrationFailure {
     message: string;
     position?: LineAndCharacter;
 }
-export declare type PostMigrationAction = void | {
+export type PostMigrationAction = void | {
     /** Whether the package manager should run upon migration completion. */
     runPackageManager: boolean;
 };
 /** Creates a constructor type for the specified type. */
-export declare type Constructor<T> = new (...args: any[]) => T;
+export type Constructor<T> = new (...args: any[]) => T;
 /** Gets a constructor type for the passed migration data. */
-export declare type MigrationCtor<Data, Context = any> = Constructor<Migration<Data, Context>>;
+export type MigrationCtor<Data, Context = any> = Constructor<Migration<Data, Context>>;
 export declare abstract class Migration<Data, Context = any> {
     /** TypeScript program for the migration. */
     program: ts.Program;
