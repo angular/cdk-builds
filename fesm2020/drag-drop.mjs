@@ -1910,6 +1910,10 @@ class DropListRef {
         this.dropped = new Subject();
         /** Emits as the user is swapping items while actively dragging. */
         this.sorted = new Subject();
+        /** Emits when a dragging sequence is started in a list connected to the current one. */
+        this.receivingStarted = new Subject();
+        /** Emits when a dragging sequence is stopped from a list connected to the current one. */
+        this.receivingStopped = new Subject();
         /** Whether an item in the list is being dragged. */
         this._isDragging = false;
         /** Draggable items in the container. */
@@ -1968,6 +1972,8 @@ class DropListRef {
         this.exited.complete();
         this.dropped.complete();
         this.sorted.complete();
+        this.receivingStarted.complete();
+        this.receivingStopped.complete();
         this._activeSiblings.clear();
         this._scrollNode = null;
         this._parentPositions.clear();
@@ -2298,6 +2304,11 @@ class DropListRef {
             activeSiblings.add(sibling);
             this._cacheParentPositions();
             this._listenToScrollEvents();
+            this.receivingStarted.next({
+                initiator: sibling,
+                receiver: this,
+                items,
+            });
         }
     }
     /**
@@ -2307,6 +2318,7 @@ class DropListRef {
     _stopReceiving(sibling) {
         this._activeSiblings.delete(sibling);
         this._viewportScrollSubscription.unsubscribe();
+        this.receivingStopped.next({ initiator: sibling, receiver: this });
     }
     /**
      * Starts listening to scroll events on the viewport.
@@ -3028,6 +3040,7 @@ class CdkDropList {
             // detection and we're not guaranteed for something else to have triggered it.
             this._changeDetectorRef.markForCheck();
         });
+        merge(ref.receivingStarted, ref.receivingStopped).subscribe(() => this._changeDetectorRef.markForCheck());
     }
     /** Assigns the default input values based on a provided config object. */
     _assignDefaults(config) {
