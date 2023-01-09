@@ -1143,6 +1143,17 @@ export declare class DropListRef<T = any> {
         container: DropListRef;
         item: DragRefInternal;
     }>;
+    /** Emits when a dragging sequence is started in a list connected to the current one. */
+    readonly receivingStarted: Subject<{
+        receiver: DropListRef;
+        initiator: DropListRef;
+        items: DragRefInternal[];
+    }>;
+    /** Emits when a dragging sequence is stopped from a list connected to the current one. */
+    readonly receivingStopped: Subject<{
+        receiver: DropListRef;
+        initiator: DropListRef;
+    }>;
     /** Arbitrary data that can be attached to the drop list. */
     data: T;
     /** Whether an item in the list is being dragged. */
