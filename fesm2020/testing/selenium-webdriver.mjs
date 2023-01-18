@@ -152,6 +152,18 @@ class SeleniumWebDriverElement {
         // We don't go through the WebDriver `getText`, because it excludes text from hidden elements.
         return this._executeScript((element) => (element.textContent || '').trim(), this.element());
     }
+    /**
+     * Sets the value of a `contenteditable` element.
+     * @param value Value to be set on the element.
+     */
+    async setContenteditableValue(value) {
+        const contenteditableAttr = await this.getAttribute('contenteditable');
+        if (contenteditableAttr !== '' && contenteditableAttr !== 'true') {
+            throw new Error('setContenteditableValue can only be called on a `contenteditable` element.');
+        }
+        await this._stabilize();
+        return this._executeScript((element, valueToSet) => (element.textContent = valueToSet), this.element(), value);
+    }
     /** Gets the value for the given attribute from the element. */
     async getAttribute(name) {
         await this._stabilize();

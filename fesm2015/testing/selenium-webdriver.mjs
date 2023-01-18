@@ -166,6 +166,20 @@ class SeleniumWebDriverElement {
             return this._executeScript((element) => (element.textContent || '').trim(), this.element());
         });
     }
+    /**
+     * Sets the value of a `contenteditable` element.
+     * @param value Value to be set on the element.
+     */
+    setContenteditableValue(value) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const contenteditableAttr = yield this.getAttribute('contenteditable');
+            if (contenteditableAttr !== '' && contenteditableAttr !== 'true') {
+                throw new Error('setContenteditableValue can only be called on a `contenteditable` element.');
+            }
+            yield this._stabilize();
+            return this._executeScript((element, valueToSet) => (element.textContent = valueToSet), this.element(), value);
+        });
+    }
     /** Gets the value for the given attribute from the element. */
     getAttribute(name) {
         return __awaiter(this, void 0, void 0, function* () {

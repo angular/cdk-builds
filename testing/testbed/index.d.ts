@@ -122,6 +122,11 @@ export declare class UnitTestElement implements TestElement {
      * @param options Options that affect what text is included.
      */
     text(options?: TextOptions): Promise<string>;
+    /**
+     * Sets the value of a `contenteditable` element.
+     * @param value Value to be set on the element.
+     */
+    setContenteditableValue(value: string): Promise<void>;
     /** Gets the value for the given attribute from the element. */
     getAttribute(name: string): Promise<string | null>;
     /** Checks whether the element has the given class. */
