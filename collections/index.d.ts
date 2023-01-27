@@ -228,6 +228,8 @@ export declare class SelectionModel<T> {
     private _verifyValueAssignment;
     /** Whether there are queued up change to be emitted. */
     private _hasQueuedChanges;
+    /** Returns a value that is comparable to inputValue by applying compareWith function, returns the same inputValue otherwise. */
+    private _getConcreteValue;
 }
 
 /**
