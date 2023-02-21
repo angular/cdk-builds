@@ -73,6 +73,13 @@ class DialogConfig {
          * another service is wrapping the dialog and is managing the destruction instead.
          */
         this.closeOnDestroy = true;
+        /**
+         * Whether the dialog should close when the underlying overlay is detached. This is useful if
+         * another service is wrapping the dialog and is managing the destruction instead. E.g. an
+         * external detachment can happen as a result of a scroll strategy triggering it or when the
+         * browser location changes.
+         */
+        this.closeOnOverlayDetachments = true;
     }
 }
 
@@ -370,6 +377,12 @@ class DialogRef {
                 this.close(undefined, { focusOrigin: 'mouse' });
             }
         });
+        this._detachSubscription = overlayRef.detachments().subscribe(() => {
+            // Check specifically for `false`, because we want `undefined` to be treated like `true`.
+            if (config.closeOnOverlayDetachments !== false) {
+                this.close();
+            }
+        });
     }
     /**
      * Close the dialog.
@@ -380,6 +393,9 @@ class DialogRef {
         if (this.containerInstance) {
             const closedSubject = this.closed;
             this.containerInstance._closeInteractionType = (options === null || options === void 0 ? void 0 : options.focusOrigin) || 'program';
+            // Drop the detach subscription first since it can be triggered by the
+            // `dispose` call and override the result of this closing sequence.
+            this._detachSubscription.unsubscribe();
             this.overlayRef.dispose();
             closedSubject.next(result);
             closedSubject.complete();

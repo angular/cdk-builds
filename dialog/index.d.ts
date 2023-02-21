@@ -320,6 +320,13 @@ export declare class DialogConfig<D = unknown, R = unknown, C extends BasePortal
      * another service is wrapping the dialog and is managing the destruction instead.
      */
     closeOnDestroy?: boolean;
+    /**
+     * Whether the dialog should close when the underlying overlay is detached. This is useful if
+     * another service is wrapping the dialog and is managing the destruction instead. E.g. an
+     * external detachment can happen as a result of a scroll strategy triggering it or when the
+     * browser location changes.
+     */
+    closeOnOverlayDetachments?: boolean;
     /** Alternate `ComponentFactoryResolver` to use when resolving the associated component. */
     componentFactoryResolver?: ComponentFactoryResolver;
     /**
@@ -376,6 +383,8 @@ export declare class DialogRef<R = unknown, C = unknown> {
     readonly outsidePointerEvents: Observable<MouseEvent>;
     /** Unique ID for the dialog. */
     readonly id: string;
+    /** Subscription to external detachments of the dialog. */
+    private _detachSubscription;
     constructor(overlayRef: OverlayRef, config: DialogConfig<any, DialogRef<R, C>, BasePortalOutlet>);
     /**
      * Close the dialog.
