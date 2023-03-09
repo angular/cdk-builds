@@ -9,16 +9,17 @@ import { NgModule } from '@angular/core';
 import { CdkAutofill } from './autofill';
 import { CdkTextareaAutosize } from './autosize';
 import * as i0 from "@angular/core";
-export class TextFieldModule {
+class TextFieldModule {
 }
-TextFieldModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.0", ngImport: i0, type: TextFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.0", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] });
-TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.0", ngImport: i0, type: TextFieldModule });
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.0", ngImport: i0, type: TextFieldModule, decorators: [{
+TextFieldModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: TextFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+TextFieldModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.2", ngImport: i0, type: TextFieldModule, declarations: [CdkAutofill, CdkTextareaAutosize], exports: [CdkAutofill, CdkTextareaAutosize] });
+TextFieldModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: TextFieldModule });
+export { TextFieldModule };
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: TextFieldModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: [CdkAutofill, CdkTextareaAutosize],
                     exports: [CdkAutofill, CdkTextareaAutosize],
                 }]
         }] });
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC1maWVsZC1tb2R1bGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3RleHQtZmllbGQvdGV4dC1maWVsZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLFFBQVEsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUN2QyxPQUFPLEVBQUMsV0FBVyxFQUFDLE1BQU0sWUFBWSxDQUFDO0FBQ3ZDLE9BQU8sRUFBQyxtQkFBbUIsRUFBQyxNQUFNLFlBQVksQ0FBQzs7QUFNL0MsTUFBTSxPQUFPLGVBQWU7O21IQUFmLGVBQWU7b0hBQWYsZUFBZSxpQkFIWCxXQUFXLEVBQUUsbUJBQW1CLGFBQ3JDLFdBQVcsRUFBRSxtQkFBbUI7b0hBRS9CLGVBQWU7a0dBQWYsZUFBZTtrQkFKM0IsUUFBUTttQkFBQztvQkFDUixZQUFZLEVBQUUsQ0FBQyxXQUFXLEVBQUUsbUJBQW1CLENBQUM7b0JBQ2hELE9BQU8sRUFBRSxDQUFDLFdBQVcsRUFBRSxtQkFBbUIsQ0FBQztpQkFDNUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIEBsaWNlbnNlXG4gKiBDb3B5cmlnaHQgR29vZ2xlIExMQyBBbGwgUmlnaHRzIFJlc2VydmVkLlxuICpcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vYW5ndWxhci5pby9saWNlbnNlXG4gKi9cblxuaW1wb3J0IHtOZ01vZHVsZX0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQge0Nka0F1dG9maWxsfSBmcm9tICcuL2F1dG9maWxsJztcbmltcG9ydCB7Q2RrVGV4dGFyZWFBdXRvc2l6ZX0gZnJvbSAnLi9hdXRvc2l6ZSc7XG5cbkBOZ01vZHVsZSh7XG4gIGRlY2xhcmF0aW9uczogW0Nka0F1dG9maWxsLCBDZGtUZXh0YXJlYUF1dG9zaXplXSxcbiAgZXhwb3J0czogW0Nka0F1dG9maWxsLCBDZGtUZXh0YXJlYUF1dG9zaXplXSxcbn0pXG5leHBvcnQgY2xhc3MgVGV4dEZpZWxkTW9kdWxlIHt9XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC1maWVsZC1tb2R1bGUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9zcmMvY2RrL3RleHQtZmllbGQvdGV4dC1maWVsZC1tb2R1bGUudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7Ozs7OztHQU1HO0FBRUgsT0FBTyxFQUFDLFFBQVEsRUFBQyxNQUFNLGVBQWUsQ0FBQztBQUN2QyxPQUFPLEVBQUMsV0FBVyxFQUFDLE1BQU0sWUFBWSxDQUFDO0FBQ3ZDLE9BQU8sRUFBQyxtQkFBbUIsRUFBQyxNQUFNLFlBQVksQ0FBQzs7QUFFL0MsTUFJYSxlQUFlOzttSEFBZixlQUFlO29IQUFmLGVBQWUsaUJBSFgsV0FBVyxFQUFFLG1CQUFtQixhQUNyQyxXQUFXLEVBQUUsbUJBQW1CO29IQUUvQixlQUFlO1NBQWYsZUFBZTtrR0FBZixlQUFlO2tCQUozQixRQUFRO21CQUFDO29CQUNSLFlBQVksRUFBRSxDQUFDLFdBQVcsRUFBRSxtQkFBbUIsQ0FBQztvQkFDaEQsT0FBTyxFQUFFLENBQUMsV0FBVyxFQUFFLG1CQUFtQixDQUFDO2lCQUM1QyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQGxpY2Vuc2VcbiAqIENvcHlyaWdodCBHb29nbGUgTExDIEFsbCBSaWdodHMgUmVzZXJ2ZWQuXG4gKlxuICogVXNlIG9mIHRoaXMgc291cmNlIGNvZGUgaXMgZ292ZXJuZWQgYnkgYW4gTUlULXN0eWxlIGxpY2Vuc2UgdGhhdCBjYW4gYmVcbiAqIGZvdW5kIGluIHRoZSBMSUNFTlNFIGZpbGUgYXQgaHR0cHM6Ly9hbmd1bGFyLmlvL2xpY2Vuc2VcbiAqL1xuXG5pbXBvcnQge05nTW9kdWxlfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7Q2RrQXV0b2ZpbGx9IGZyb20gJy4vYXV0b2ZpbGwnO1xuaW1wb3J0IHtDZGtUZXh0YXJlYUF1dG9zaXplfSBmcm9tICcuL2F1dG9zaXplJztcblxuQE5nTW9kdWxlKHtcbiAgZGVjbGFyYXRpb25zOiBbQ2RrQXV0b2ZpbGwsIENka1RleHRhcmVhQXV0b3NpemVdLFxuICBleHBvcnRzOiBbQ2RrQXV0b2ZpbGwsIENka1RleHRhcmVhQXV0b3NpemVdLFxufSlcbmV4cG9ydCBjbGFzcyBUZXh0RmllbGRNb2R1bGUge31cbiJdfQ==
