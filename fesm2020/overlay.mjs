@@ -8,11 +8,11 @@ import { Injectable, Inject, Optional, ElementRef, ApplicationRef, ANIMATION_MOD
 import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
+import { filter, take, takeUntil, takeWhile } from 'rxjs/operators';
 import * as i5 from '@angular/cdk/bidi';
 import { BidiModule } from '@angular/cdk/bidi';
 import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/portal';
 import { Subject, Subscription, merge } from 'rxjs';
-import { take, takeUntil, takeWhile } from 'rxjs/operators';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
 /**
@@ -137,7 +137,10 @@ class CloseScrollStrategy {
         if (this._scrollSubscription) {
             return;
         }
-        const stream = this._scrollDispatcher.scrolled(0);
+        const stream = this._scrollDispatcher.scrolled(0).pipe(filter(scrollable => {
+            return (!scrollable ||
+                !this._overlayRef.overlayElement.contains(scrollable.getElementRef().nativeElement));
+        }));
         if (this._config && this._config.threshold && this._config.threshold > 1) {
             this._initialScrollPosition = this._viewportRuler.getViewportScrollPosition().top;
             this._scrollSubscription = stream.subscribe(() => {
