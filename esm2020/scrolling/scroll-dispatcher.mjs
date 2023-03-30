@@ -149,10 +149,10 @@ class ScrollDispatcher {
         }
     }
 }
-ScrollDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollDispatcher, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
-ScrollDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollDispatcher, providedIn: 'root' });
+ScrollDispatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollDispatcher, deps: [{ token: i0.NgZone }, { token: i1.Platform }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
+ScrollDispatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollDispatcher, providedIn: 'root' });
 export { ScrollDispatcher };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollDispatcher, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollDispatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i0.NgZone }, { type: i1.Platform }, { type: undefined, decorators: [{

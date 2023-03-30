@@ -16,10 +16,10 @@ class CdkStepHeader {
         this._elementRef.nativeElement.focus();
     }
 }
-CdkStepHeader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkStepHeader, deps: [{ token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
-CdkStepHeader.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.2", type: CdkStepHeader, selector: "[cdkStepHeader]", host: { attributes: { "role": "tab" } }, ngImport: i0 });
+CdkStepHeader.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkStepHeader, deps: [{ token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive });
+CdkStepHeader.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.5", type: CdkStepHeader, selector: "[cdkStepHeader]", host: { attributes: { "role": "tab" } }, ngImport: i0 });
 export { CdkStepHeader };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkStepHeader, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkStepHeader, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkStepHeader]',

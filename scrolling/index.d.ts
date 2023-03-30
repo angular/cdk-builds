@@ -52,7 +52,7 @@ export declare class CdkFixedSizeVirtualScroll implements OnChanges {
     _scrollStrategy: FixedSizeVirtualScrollStrategy;
     ngOnChanges(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkFixedSizeVirtualScroll, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": "itemSize"; "minBufferPx": "minBufferPx"; "maxBufferPx": "maxBufferPx"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkFixedSizeVirtualScroll, "cdk-virtual-scroll-viewport[itemSize]", never, { "itemSize": { "alias": "itemSize"; "required": false; }; "minBufferPx": { "alias": "minBufferPx"; "required": false; }; "maxBufferPx": { "alias": "maxBufferPx"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 /**
@@ -186,7 +186,7 @@ export declare class CdkVirtualForOf<T> implements CdkVirtualScrollRepeater<T>, 
     private _updateComputedContextProperties;
     private _getEmbeddedViewArgs;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualForOf<any>, [null, null, null, null, { skipSelf: true; }, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": "cdkVirtualForOf"; "cdkVirtualForTrackBy": "cdkVirtualForTrackBy"; "cdkVirtualForTemplate": "cdkVirtualForTemplate"; "cdkVirtualForTemplateCacheSize": "cdkVirtualForTemplateCacheSize"; }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkVirtualForOf<any>, "[cdkVirtualFor][cdkVirtualForOf]", never, { "cdkVirtualForOf": { "alias": "cdkVirtualForOf"; "required": false; }; "cdkVirtualForTrackBy": { "alias": "cdkVirtualForTrackBy"; "required": false; }; "cdkVirtualForTemplate": { "alias": "cdkVirtualForTemplate"; "required": false; }; "cdkVirtualForTemplateCacheSize": { "alias": "cdkVirtualForTemplateCacheSize"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 /** The context for an item rendered by `CdkVirtualForOf` */
@@ -394,7 +394,7 @@ export declare class CdkVirtualScrollViewport extends CdkVirtualScrollable imple
     /** Calculates the `style.width` and `style.height` for the spacer element. */
     private _calculateSpacerSize;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkVirtualScrollViewport, [null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; }]>;
-    static ɵcmp: i0.ɵɵComponentDeclaration<CdkVirtualScrollViewport, "cdk-virtual-scroll-viewport", never, { "orientation": "orientation"; "appendOnly": "appendOnly"; }, { "scrolledIndexChange": "scrolledIndexChange"; }, never, ["*"], true, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<CdkVirtualScrollViewport, "cdk-virtual-scroll-viewport", never, { "orientation": { "alias": "orientation"; "required": false; }; "appendOnly": { "alias": "appendOnly"; "required": false; }; }, { "scrolledIndexChange": "scrolledIndexChange"; }, never, ["*"], true, never>;
 }
 
 /** Time in ms to throttle the resize events by default. */

@@ -109,7 +109,7 @@ export declare class CdkPortalOutlet extends BasePortalOutlet implements OnInit,
     /** Gets the root node of the portal outlet. */
     private _getRootNode;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkPortalOutlet, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": "cdkPortalOutlet"; }, { "attached": "attached"; }, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkPortalOutlet, "[cdkPortalOutlet]", ["cdkPortalOutlet"], { "portal": { "alias": "cdkPortalOutlet"; "required": false; }; }, { "attached": "attached"; }, never, never, false, never>;
 }
 
 /**
@@ -254,7 +254,7 @@ export declare type PortalHost = PortalOutlet;
  */
 export declare class PortalHostDirective extends CdkPortalOutlet {
     static ɵfac: i0.ɵɵFactoryDeclaration<PortalHostDirective, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": "cdkPortalHost"; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<PortalHostDirective, "[cdkPortalHost], [portalHost]", ["cdkPortalHost"], { "portal": { "alias": "cdkPortalHost"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /**

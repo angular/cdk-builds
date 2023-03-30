@@ -149,7 +149,7 @@ export declare class CdkAriaLive implements OnDestroy {
     constructor(_elementRef: ElementRef, _liveAnnouncer: LiveAnnouncer, _contentObserver: ContentObserver, _ngZone: NgZone);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkAriaLive, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": "cdkAriaLive"; "duration": "cdkAriaLiveDuration"; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkAriaLive, "[cdkAriaLive]", ["cdkAriaLive"], { "politeness": { "alias": "cdkAriaLive"; "required": false; }; "duration": { "alias": "cdkAriaLiveDuration"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /**
@@ -205,7 +205,7 @@ export declare class CdkTrapFocus implements OnDestroy, AfterContentInit, OnChan
     ngOnChanges(changes: SimpleChanges): void;
     private _captureFocus;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTrapFocus, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": "cdkTrapFocus"; "autoCapture": "cdkTrapFocusAutoCapture"; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTrapFocus, "[cdkTrapFocus]", ["cdkTrapFocus"], { "enabled": { "alias": "cdkTrapFocus"; "required": false; }; "autoCapture": { "alias": "cdkTrapFocusAutoCapture"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /**

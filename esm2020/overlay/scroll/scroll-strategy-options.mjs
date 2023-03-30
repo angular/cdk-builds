@@ -43,10 +43,10 @@ class ScrollStrategyOptions {
         this._document = document;
     }
 }
-ScrollStrategyOptions.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollStrategyOptions, deps: [{ token: i1.ScrollDispatcher }, { token: i1.ViewportRuler }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
-ScrollStrategyOptions.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollStrategyOptions, providedIn: 'root' });
+ScrollStrategyOptions.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollStrategyOptions, deps: [{ token: i1.ScrollDispatcher }, { token: i1.ViewportRuler }, { token: i0.NgZone }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Injectable });
+ScrollStrategyOptions.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollStrategyOptions, providedIn: 'root' });
 export { ScrollStrategyOptions };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ScrollStrategyOptions, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ScrollStrategyOptions, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.ScrollDispatcher }, { type: i1.ViewportRuler }, { type: i0.NgZone }, { type: undefined, decorators: [{

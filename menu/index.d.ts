@@ -78,7 +78,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": "cdkContextMenuTriggerFor"; "menuPosition": "cdkContextMenuPosition"; "menuData": "cdkContextMenuTriggerData"; "disabled": "cdkContextMenuDisabled"; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
 }
 
 /**
@@ -220,7 +220,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
      */
     private _setUpPointerTracker;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": "id"; }, {}, ["items"], never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["items"], never, false, never>;
 }
 
 /**
@@ -339,7 +339,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     /** Sets the `type` attribute of the menu item. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": "cdkMenuItemDisabled"; "typeaheadLabel": "cdkMenuitemTypeaheadLabel"; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": { "alias": "cdkMenuItemDisabled"; "required": false; }; "typeaheadLabel": { "alias": "cdkMenuitemTypeaheadLabel"; "required": false; }; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never>;
 }
 
 /**
@@ -396,7 +396,7 @@ export declare abstract class CdkMenuItemSelectable extends CdkMenuItem {
     /** Whether the item should close the menu if triggered by the spacebar. */
     protected closeOnSpacebarTrigger: boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemSelectable, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemSelectable, never, never, { "checked": "cdkMenuItemChecked"; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemSelectable, never, never, { "checked": { "alias": "cdkMenuItemChecked"; "required": false; }; }, {}, never, never, false, never>;
 }
 
 /** Module that declares components and directives for the CDK menu. */
@@ -478,7 +478,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     /** Sets thte `type` attribute of the trigger. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": "cdkMenuTriggerFor"; "menuPosition": "cdkMenuPosition"; "menuData": "cdkMenuTriggerData"; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkMenuPosition"; "required": false; }; "menuData": { "alias": "cdkMenuTriggerData"; "required": false; }; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
 }
 
 /**

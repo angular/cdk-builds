@@ -71,10 +71,10 @@ class CdkCopyToClipboard {
         this._destroyed = true;
     }
 }
-CdkCopyToClipboard.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkCopyToClipboard, deps: [{ token: i1.Clipboard }, { token: i0.NgZone }, { token: CDK_COPY_TO_CLIPBOARD_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
-CdkCopyToClipboard.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.2", type: CdkCopyToClipboard, selector: "[cdkCopyToClipboard]", inputs: { text: ["cdkCopyToClipboard", "text"], attempts: ["cdkCopyToClipboardAttempts", "attempts"] }, outputs: { copied: "cdkCopyToClipboardCopied" }, host: { listeners: { "click": "copy()" } }, ngImport: i0 });
+CdkCopyToClipboard.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkCopyToClipboard, deps: [{ token: i1.Clipboard }, { token: i0.NgZone }, { token: CDK_COPY_TO_CLIPBOARD_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive });
+CdkCopyToClipboard.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.5", type: CdkCopyToClipboard, selector: "[cdkCopyToClipboard]", inputs: { text: ["cdkCopyToClipboard", "text"], attempts: ["cdkCopyToClipboardAttempts", "attempts"] }, outputs: { copied: "cdkCopyToClipboardCopied" }, host: { listeners: { "click": "copy()" } }, ngImport: i0 });
 export { CdkCopyToClipboard };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkCopyToClipboard, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkCopyToClipboard, decorators: [{
             type: Directive,
             args: [{
                     selector: '[cdkCopyToClipboard]',

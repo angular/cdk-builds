@@ -10,11 +10,11 @@ import { CdkCopyToClipboard } from './copy-to-clipboard';
 import * as i0 from "@angular/core";
 class ClipboardModule {
 }
-ClipboardModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ClipboardModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-ClipboardModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.2", ngImport: i0, type: ClipboardModule, declarations: [CdkCopyToClipboard], exports: [CdkCopyToClipboard] });
-ClipboardModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ClipboardModule });
+ClipboardModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ClipboardModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+ClipboardModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.5", ngImport: i0, type: ClipboardModule, declarations: [CdkCopyToClipboard], exports: [CdkCopyToClipboard] });
+ClipboardModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ClipboardModule });
 export { ClipboardModule };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: ClipboardModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: ClipboardModule, decorators: [{
             type: NgModule,
             args: [{
                     declarations: [CdkCopyToClipboard],

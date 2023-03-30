@@ -24,8 +24,8 @@ const EXPORTED_DECLARATIONS = [
 ];
 class CdkTreeModule {
 }
-CdkTreeModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkTreeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-CdkTreeModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkTreeModule, declarations: [CdkNestedTreeNode,
+CdkTreeModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkTreeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+CdkTreeModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkTreeModule, declarations: [CdkNestedTreeNode,
         CdkTreeNodeDef,
         CdkTreeNodePadding,
         CdkTreeNodeToggle,
@@ -38,9 +38,9 @@ CdkTreeModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: 
         CdkTree,
         CdkTreeNode,
         CdkTreeNodeOutlet] });
-CdkTreeModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkTreeModule });
+CdkTreeModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkTreeModule });
 export { CdkTreeModule };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkTreeModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkTreeModule, decorators: [{
             type: NgModule,
             args: [{
                     exports: EXPORTED_DECLARATIONS,

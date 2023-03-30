@@ -187,8 +187,8 @@ class CdkFixedSizeVirtualScroll {
         this._scrollStrategy.updateItemAndBufferSize(this.itemSize, this.minBufferPx, this.maxBufferPx);
     }
 }
-CdkFixedSizeVirtualScroll.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkFixedSizeVirtualScroll, deps: [], target: i0.ɵɵFactoryTarget.Directive });
-CdkFixedSizeVirtualScroll.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.2", type: CdkFixedSizeVirtualScroll, isStandalone: true, selector: "cdk-virtual-scroll-viewport[itemSize]", inputs: { itemSize: "itemSize", minBufferPx: "minBufferPx", maxBufferPx: "maxBufferPx" }, providers: [
+CdkFixedSizeVirtualScroll.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkFixedSizeVirtualScroll, deps: [], target: i0.ɵɵFactoryTarget.Directive });
+CdkFixedSizeVirtualScroll.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0-next.5", type: CdkFixedSizeVirtualScroll, isStandalone: true, selector: "cdk-virtual-scroll-viewport[itemSize]", inputs: { itemSize: "itemSize", minBufferPx: "minBufferPx", maxBufferPx: "maxBufferPx" }, providers: [
         {
             provide: VIRTUAL_SCROLL_STRATEGY,
             useFactory: _fixedSizeVirtualScrollStrategyFactory,
@@ -196,7 +196,7 @@ CdkFixedSizeVirtualScroll.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.
         },
     ], usesOnChanges: true, ngImport: i0 });
 export { CdkFixedSizeVirtualScroll };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.2", ngImport: i0, type: CdkFixedSizeVirtualScroll, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: CdkFixedSizeVirtualScroll, decorators: [{
             type: Directive,
             args: [{
                     selector: 'cdk-virtual-scroll-viewport[itemSize]',
