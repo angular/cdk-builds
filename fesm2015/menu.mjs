@@ -637,10 +637,12 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
     /** Handles clicks on the menu trigger. */
     _handleClick() {
+        var _a;
         // Don't handle clicks originating from the keyboard since we
         // already do the same on `keydown` events for enter and space.
         if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
             this.toggle();
+            (_a = this.childMenu) === null || _a === void 0 ? void 0 : _a.focusFirstItem('mouse');
         }
     }
     /**

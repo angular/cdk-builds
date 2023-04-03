@@ -636,6 +636,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         // already do the same on `keydown` events for enter and space.
         if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
             this.toggle();
+            this.childMenu?.focusFirstItem('mouse');
         }
     }
     /**
