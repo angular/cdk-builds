@@ -12,13 +12,6 @@ import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * A grouping container for `CdkMenuItemRadio` instances, similar to a `role="radiogroup"` element.
  */
 class CdkMenuGroup {
@@ -39,23 +32,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injection token used to return classes implementing the Menu interface */
 const CDK_MENU = new InjectionToken('cdk-menu');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injection token used for an implementation of MenuStack. */
 const MENU_STACK = new InjectionToken('cdk-menu-stack');
 /** Provider that provides the parent menu stack, or a new menu stack if there is no parent one. */
@@ -201,13 +180,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             type: Injectable
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injection token used for an implementation of MenuStack. */
 const MENU_TRIGGER = new InjectionToken('cdk-menu-trigger');
 /**
@@ -304,13 +276,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }] });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Throws an exception when an instance of the PointerFocusTracker is not provided.
  * @docs-private
  */
@@ -325,13 +290,6 @@ function throwMissingMenuReference() {
     throw Error('expected a reference to the parent menu');
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injection token used for an implementation of MenuAim. */
 const MENU_AIM = new InjectionToken('cdk-menu-aim');
 /** Capture every nth mouse move event. */
@@ -524,13 +482,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * A directive that turns its host element into a trigger for a popup menu.
  * It can be combined with cdkMenuItem to create sub-menus. If the element is in a top level
@@ -818,13 +769,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }], ctorParameters: function () { return []; } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Directive which provides the ability for an element to be focused and navigated to using the
  * keyboard when residing in a CdkMenu, CdkMenuBar, or CdkMenuGroup. It performs user defined
  * behavior when clicked.
@@ -1083,13 +1027,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * PointerFocusTracker keeps track of the currently active item under mouse focus. It also has
  * observables which emit when the users mouse enters and leaves a tracked element.
  */
@@ -1131,13 +1068,6 @@ class PointerFocusTracker {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Counter used to create unique IDs for menus. */
 let nextId$1 = 0;
 /**
@@ -1309,13 +1239,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Directive which configures the element as a Menu which should contain child elements marked as
  * CdkMenuItem or CdkMenuGroup. Sets the appropriate role and aria-attributes for a menu and
  * contains accessible keyboard and mouse handling logic.
@@ -1435,13 +1358,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Directive applied to an element which configures it as a MenuBar by setting the appropriate
  * role, aria attributes, and accessible keyboard and mouse handling logic. The component that
  * this directive is applied to should contain components marked with CdkMenuItem.
@@ -1560,13 +1476,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Base class providing checked state for selectable MenuItems. */
 class CdkMenuItemSelectable extends CdkMenuItem {
     constructor() {
@@ -1598,13 +1507,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: ['cdkMenuItemChecked']
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Counter used to set a unique id and name for a selectable item */
 let nextId = 0;
 /**
@@ -1666,13 +1568,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }], ctorParameters: function () { return []; } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * A directive providing behavior for the "menuitemcheckbox" ARIA role, which behaves similarly to a
  * conventional checkbox.
  */
@@ -1711,13 +1606,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The preferred menu positions for the context menu. */
 const CONTEXT_MENU_POSITIONS = STANDARD_DROPDOWN_BELOW_POSITIONS.map(position => {
     // In cases where the first menu item in the context menu is a trigger the submenu opens on a
@@ -1919,13 +1807,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: ['cdkContextMenuDisabled']
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const MENU_DIRECTIVES = [
     CdkMenuBar,
     CdkMenu,
@@ -1966,22 +1847,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     exports: MENU_DIRECTIVES,
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

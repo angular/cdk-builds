@@ -2,13 +2,6 @@ import { ConnectableObservable, isObservable, of, Subject } from 'rxjs';
 import * as i0 from '@angular/core';
 import { Injectable, InjectionToken } from '@angular/core';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class DataSource {
 }
 /** Checks whether an object is a data source. */
@@ -20,13 +13,6 @@ function isDataSource(value) {
     return value && typeof value.connect === 'function' && !(value instanceof ConnectableObservable);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** DataSource wrapper for a native array. */
 class ArrayDataSource extends DataSource {
     constructor(_data) {
@@ -39,21 +25,6 @@ class ArrayDataSource extends DataSource {
     disconnect() { }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * A repeater that destroys views when they are removed from a
  * {@link ViewContainerRef}. When new items are inserted into the container,
@@ -94,13 +65,6 @@ class _DisposeViewRepeaterStrategy {
     detach() { }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * A repeater that caches views when they are removed from a
  * {@link ViewContainerRef}. When new items are inserted into the container,
@@ -222,13 +186,6 @@ class _RecycleViewRepeaterStrategy {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Class to be used to power selecting one or more options from a list.
  */
@@ -446,13 +403,6 @@ function getMultipleValuesInSingleSelectionError() {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Class to coordinate unique selection based on name.
  * Intended to be consumed as an Angular service.
  * This service is needed because native radio change events are only fired on the item currently
@@ -499,41 +449,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }] });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token for {@link _ViewRepeater}. This token is for use by Angular Material only.
  * @docs-private
  */
 const _VIEW_REPEATER_STRATEGY = new InjectionToken('_ViewRepeater');
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

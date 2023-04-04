@@ -681,13 +681,6 @@ function _getDescriptionForHarnessLoaderQuery(selector) {
     return `HarnessLoader for element matching selector: "${selector}"`;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** An enum of non-text keys that can be used with the `sendKeys` method. */
 // NOTE: This is a separate enum from `@angular/cdk/keycodes` because we don't necessarily want to
 // support every possible keyCode. We also can't rely on Protractor's `Key` because we don't want a
@@ -730,13 +723,6 @@ var TestKey;
 })(TestKey || (TestKey = {}));
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Returns an error which reports that no keys have been specified.
  * @docs-private
  */
@@ -744,13 +730,6 @@ function getNoKeysSpecifiedError() {
     return Error('No keys have been specified.');
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Gets text of element excluding certain selectors within the element.
  * @param element Element to get text from,
@@ -764,22 +743,6 @@ function _getTextWithExcludedElements(element, excludeSelector) {
     }
     return (clone.textContent || '').trim();
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 export { ComponentHarness, ContentContainerComponentHarness, HarnessEnvironment, HarnessPredicate, TestKey, _getTextWithExcludedElements, getNoKeysSpecifiedError, handleAutoChangeDetectionStatus, manualChangeDetection, parallel, stopHandlingAutoChangeDetectionStatus };
 //# sourceMappingURL=testing.mjs.map

@@ -1,10 +1,3 @@
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const MAC_ENTER = 3;
 const BACKSPACE = 8;
 const TAB = 9;
@@ -126,13 +119,6 @@ const SINGLE_QUOTE = 222;
 const MAC_META = 224;
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Checks whether a modifier key is pressed.
  * @param event Event to be checked.
  */
@@ -142,22 +128,6 @@ function hasModifierKey(event, ...modifiers) {
     }
     return event.altKey || event.shiftKey || event.ctrlKey || event.metaKey;
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

@@ -11,13 +11,6 @@ import { takeUntil, startWith, map, take, tap, switchMap } from 'rxjs/operators'
 import * as i3 from '@angular/cdk/bidi';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Shallow-extends a stylesheet object with another stylesheet-like object.
  * Note that the keys in `source` have to be dash-cased.
  * @docs-private
@@ -79,13 +72,6 @@ function combineTransforms(transform, initialTransform) {
         : transform;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Parses a CSS time value to milliseconds. */
 function parseCssTimeUnitsToMs(value) {
     // Some browsers will return it in seconds, whereas others will return milliseconds.
@@ -115,13 +101,6 @@ function parseCssPropertyValue(computedStyle, name) {
     return value.split(',').map(part => part.trim());
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Gets a mutable version of an element's bounding `ClientRect`. */
 function getMutableClientRect(element) {
     const clientRect = element.getBoundingClientRect();
@@ -179,13 +158,6 @@ function isPointerNearClientRect(rect, threshold, pointerX, pointerY) {
         pointerX < right + xThreshold);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Keeps track of the scroll position and dimensions of the parents of an element. */
 class ParentPositionTracker {
     constructor(_document) {
@@ -253,13 +225,6 @@ class ParentPositionTracker {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Creates a deep clone of an element. */
 function deepCloneNode(node) {
     const clone = node.cloneNode(true);
@@ -318,13 +283,6 @@ function transferCanvasData(source, clone) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Options that can be used to bind a passive event listener. */
 const passiveEventListenerOptions = normalizePassiveListenerOptions({ passive: true });
 /** Options that can be used to bind an active event listener. */
@@ -1456,13 +1414,6 @@ function matchElementSize(target, sourceRect) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Moves an item one index in an array to another.
  * @param array Array in which to move the item.
  * @param fromIndex Starting index of the item.
@@ -1515,13 +1466,6 @@ function clamp(value, max) {
     return Math.max(0, Math.min(max, value));
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Strategy that only supports sorting along a single axis.
  * Items are reordered using CSS transforms which allows for sorting to be animated.
@@ -1852,13 +1796,6 @@ class SingleAxisSortStrategy {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Proximity, as a ratio to width/height, at which a
  * dragged item will affect the drop container.
@@ -2434,13 +2371,6 @@ function getElementScrollDirections(element, clientRect, pointerX, pointerY) {
     return [verticalScrollDirection, horizontalScrollDirection];
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Event options that can be used to bind an active, capturing event. */
 const activeCapturingEventOptions = normalizePassiveListenerOptions({
     passive: false,
@@ -2660,13 +2590,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     args: [DOCUMENT]
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Default configuration to be used when creating a `DragRef`. */
 const DEFAULT_CONFIG = {
     dragStartThreshold: 5,
@@ -2709,13 +2632,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }] }, { type: i0.NgZone }, { type: i1.ViewportRuler }, { type: DragDropRegistry }]; } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token that can be used for a `CdkDrag` to provide itself as a parent to the
  * drag-specific child directive (`CdkDragHandle`, `CdkDragPreview` etc.). Used primarily
  * to avoid circular imports.
@@ -2723,21 +2639,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
  */
 const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
  * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
@@ -2783,25 +2684,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token that can be used to configure the
  * behavior of the drag&drop-related components.
  */
 const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Asserts that a particular node is an element.
  * @param node Node to be checked.
@@ -2813,13 +2700,6 @@ function assertElementNode(node, name) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Counter used to generate unique ids for drop zones. */
 let _uniqueIdCounter = 0;
 /**
@@ -3146,13 +3026,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token that can be used to reference instances of `CdkDragHandle`. It serves as
  * alternative token to the actual `CdkDragHandle` class which could cause unnecessary
  * retention of the class and its directive metadata.
@@ -3207,13 +3080,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token that can be used to reference instances of `CdkDragPlaceholder`. It serves as
  * alternative token to the actual `CdkDragPlaceholder` class which could cause unnecessary
  * retention of the class and its directive metadata.
@@ -3241,13 +3107,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 type: Input
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Injection token that can be used to reference instances of `CdkDragPreview`. It serves as
  * alternative token to the actual `CdkDragPreview` class which could cause unnecessary
@@ -3286,13 +3145,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 type: Input
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const DRAG_HOST_CLASS = 'cdk-drag';
 /** Element that can be moved inside a CdkDropList container. */
 class CdkDrag {
@@ -3756,13 +3608,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: ['cdkDragMoved']
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const DRAG_DROP_DIRECTIVES = [
     CdkDropList,
     CdkDropListGroup,
@@ -3794,22 +3639,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     providers: [DragDrop],
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

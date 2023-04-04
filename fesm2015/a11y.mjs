@@ -11,13 +11,6 @@ import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** IDs are delimited by an empty space, as per the spec. */
 const ID_DELIMITER = ' ';
 /**
@@ -55,13 +48,6 @@ function getAriaReferenceIds(el, attr) {
     return (el.getAttribute(attr) || '').match(/\S+/g) || [];
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * ID used for the body container where all messages are appended.
  * @deprecated No longer being used. To be removed.
@@ -286,13 +272,6 @@ function setMessageId(element, serviceId) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of items, it will set the active item correctly when arrow events occur.
@@ -648,13 +627,6 @@ class ListKeyManager {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class ActiveDescendantKeyManager extends ListKeyManager {
     setActiveItem(index) {
         if (this.activeItem) {
@@ -667,13 +639,6 @@ class ActiveDescendantKeyManager extends ListKeyManager {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class FocusKeyManager extends ListKeyManager {
     constructor() {
         super(...arguments);
@@ -922,13 +887,6 @@ function getWindow(node) {
     return (node.ownerDocument && node.ownerDocument.defaultView) || window;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Class that allows for trapping focus within a DOM element.
  *
@@ -1321,13 +1279,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Class that allows for trapping focus within a DOM element.
  *
  * This class uses a strategy pattern that determines how it traps focus.
@@ -1370,23 +1321,9 @@ class ConfigurableFocusTrap extends FocusTrap {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The injection token used to specify the inert strategy. */
 const FOCUS_TRAP_INERT_STRATEGY = new InjectionToken('FOCUS_TRAP_INERT_STRATEGY');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Lightweight FocusTrapInertStrategy that adds a document focus event
  * listener to redirect focus back inside the FocusTrap.
@@ -1442,13 +1379,6 @@ class EventListenerFocusTrapInertStrategy {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injectable that ensures only the most recently enabled FocusTrap is active. */
 class FocusTrapManager {
     constructor() {
@@ -1493,13 +1423,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             args: [{ providedIn: 'root' }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Factory that allows easy instantiation of configurable focus traps. */
 class ConfigurableFocusTrapFactory {
     constructor(_checker, _ngZone, _focusTrapManager, _document, _inertStrategy) {
@@ -1538,13 +1461,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     }] }];
     } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Gets whether an event could be a faked `mousedown` event dispatched by a screen reader. */
 function isFakeMousedownFromScreenReader(event) {
     // Some screen readers will dispatch a fake `mousedown` event when pressing enter or space on
@@ -1569,13 +1485,6 @@ function isFakeTouchstartFromScreenReader(event) {
         (touch.radiusY == null || touch.radiusY === 1));
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Injectable options for the InputModalityDetector. These are shallowly merged with the default
  * options.
@@ -1736,13 +1645,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     }] }];
     } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const LIVE_ANNOUNCER_ELEMENT_TOKEN = new InjectionToken('liveAnnouncerElement', {
     providedIn: 'root',
     factory: LIVE_ANNOUNCER_ELEMENT_TOKEN_FACTORY,
@@ -1948,13 +1850,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: ['cdkAriaLiveDuration']
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** InjectionToken for FocusMonitorOptions. */
 const FOCUS_MONITOR_DEFAULT_OPTIONS = new InjectionToken('cdk-focus-monitor-default-options');
 /**
@@ -2391,13 +2286,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 type: Output
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** CSS class applied to the document body when in black-on-white high-contrast mode. */
 const BLACK_ON_WHITE_CSS_CLASS = 'cdk-high-contrast-black-on-white';
 /** CSS class applied to the document body when in white-on-black high-contrast mode. */
@@ -2496,13 +2384,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     }] }];
     } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class A11yModule {
     constructor(highContrastModeDetector) {
         highContrastModeDetector._applyBodyHighContrastModeCssClasses();
@@ -2519,22 +2400,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     exports: [CdkAriaLive, CdkTrapFocus, CdkMonitorFocus],
                 }]
         }], ctorParameters: function () { return [{ type: HighContrastModeDetector }]; } });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

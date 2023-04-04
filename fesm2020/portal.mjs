@@ -3,13 +3,6 @@ import { ElementRef, Injector, Directive, EventEmitter, Inject, Output, NgModule
 import { DOCUMENT } from '@angular/common';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Throws an exception when attempting to attach a null portal to a host.
  * @docs-private
  */
@@ -53,13 +46,6 @@ function throwNoPortalAttachedError() {
     throw Error('Attempting to detach a portal that is not attached to a host');
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * A `Portal` is something that you want to render somewhere else.
  * It can be attach to / detached from a `PortalOutlet`.
@@ -241,13 +227,6 @@ class BasePortalHost extends BasePortalOutlet {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * A PortalOutlet for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  */
@@ -396,13 +375,6 @@ class DomPortalOutlet extends BasePortalOutlet {
 class DomPortalHost extends DomPortalOutlet {
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
  * the directive instance itself can be attached to a host, enabling declarative use of portals.
@@ -638,13 +610,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }] });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Custom injector to be used when providing custom
  * injection tokens to components inside a portal.
  * @docs-private
@@ -664,22 +629,6 @@ class PortalInjector {
         return this._parentInjector.get(token, notFoundValue);
     }
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

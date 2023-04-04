@@ -15,13 +15,6 @@ import { DomPortalOutlet, TemplatePortal, PortalModule } from '@angular/cdk/port
 import { Subject, Subscription, merge } from 'rxjs';
 import { ESCAPE, hasModifierKey } from '@angular/cdk/keycodes';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const scrollBehaviorSupported = supportsScrollBehavior();
 /**
  * Strategy that will prevent the user from scrolling while the overlay is visible.
@@ -94,13 +87,6 @@ class BlockScrollStrategy {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Returns an error to be thrown when attempting to attach an already-attached scroll strategy.
  */
 function getMatScrollStrategyAlreadyAttachedError() {
@@ -170,13 +156,6 @@ class CloseScrollStrategy {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Scroll strategy that doesn't do anything. */
 class NoopScrollStrategy {
     /** Does nothing, as this scroll strategy is a no-op. */
@@ -187,13 +166,6 @@ class NoopScrollStrategy {
     attach() { }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Gets whether an element is scrolled outside of view by any of its parent scrolling containers.
  * @param element Dimensions of the element (from getBoundingClientRect)
@@ -227,13 +199,6 @@ function isElementClippedByScrolling(element, scrollContainers) {
     });
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Strategy that will update the element position as the user is scrolling.
  */
@@ -287,13 +252,6 @@ class RepositionScrollStrategy {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Options for how an overlay will handle scrolling.
  *
  * Users can provide a custom value for `ScrollStrategyOptions` to replace the default
@@ -332,21 +290,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     args: [DOCUMENT]
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Initial configuration used when creating an overlay. */
 class OverlayConfig {
     constructor(config) {
@@ -384,13 +327,6 @@ class OverlayConfig {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The points of the origin element and the overlay element to connect. */
 class ConnectionPositionPair {
     constructor(origin, overlay, 
@@ -473,13 +409,6 @@ function validateHorizontalPosition(property, value) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Service for dispatching events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
  * on event target and order of overlay opens.
@@ -521,13 +450,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     args: [DOCUMENT]
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Service for dispatching keyboard events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -598,13 +520,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     type: Optional
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Service for dispatching mouse click events that land on the body to appropriate overlay ref,
  * if any. It maintains a list of attached overlays to determine best suited overlay based
@@ -730,13 +645,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     type: Optional
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Container inside which all overlays will render. */
 class OverlayContainer {
     constructor(document, _platform) {
@@ -806,13 +714,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     args: [DOCUMENT]
                 }] }, { type: i1$1.Platform }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
@@ -1230,13 +1131,6 @@ class OverlayRef {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 // TODO: refactor clipping detection into a separate thing (part of scrolling module)
 // TODO: doesn't handle both flexible width and height when it has to scroll along both axis.
 /** Class to be added to the overlay bounding box. */
@@ -2210,13 +2104,6 @@ const STANDARD_DROPDOWN_ADJACENT_POSITIONS = [
     { originX: 'start', originY: 'bottom', overlayX: 'end', overlayY: 'bottom' },
 ];
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Class to be added to the overlay pane wrapper. */
 const wrapperClass = 'cdk-global-overlay-wrapper';
 /**
@@ -2447,13 +2334,6 @@ class GlobalPositionStrategy {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Builder for overlay position strategy. */
 class OverlayPositionBuilder {
     constructor(_viewportRuler, _document, _platform, _overlayContainer) {
@@ -2486,13 +2366,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     args: [DOCUMENT]
                 }] }, { type: i1$1.Platform }, { type: OverlayContainer }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Next overlay unique ID. */
 let nextUniqueId = 0;
 // Note that Overlay is *not* scoped to the app root because of the ComponentFactoryResolver
@@ -2593,13 +2466,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     type: Optional
                 }] }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Default set of positions for the overlay. Follows the behavior of a dropdown. */
 const defaultPositionList = [
     {
@@ -3009,13 +2875,6 @@ const CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER = {
     useFactory: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class OverlayModule {
 }
 OverlayModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: OverlayModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
@@ -3030,21 +2889,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Alternative to OverlayContainer that supports correct displaying of overlay elements in
  * Fullscreen mode
@@ -3125,22 +2969,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     type: Inject,
                     args: [DOCUMENT]
                 }] }, { type: i1$1.Platform }]; } });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

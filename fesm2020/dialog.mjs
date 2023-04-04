@@ -13,13 +13,6 @@ import { Subject, defer, of } from 'rxjs';
 import { Directionality } from '@angular/cdk/bidi';
 import { startWith } from 'rxjs/operators';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Configuration for opening a modal dialog. */
 class DialogConfig {
     constructor() {
@@ -83,13 +76,6 @@ class DialogConfig {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function throwDialogContentAlreadyAttachedError() {
     throw Error('Attempting to attach dialog content after content is already attached');
 }
@@ -351,13 +337,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Reference to a dialog opened via the Dialog service.
  */
 class DialogRef {
@@ -433,13 +412,6 @@ class DialogRef {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Injection token for the Dialog's ScrollStrategy. */
 const DIALOG_SCROLL_STRATEGY = new InjectionToken('DialogScrollStrategy');
 /** Injection token for the Dialog's Data. */
@@ -457,13 +429,6 @@ const DIALOG_SCROLL_STRATEGY_PROVIDER = {
     useFactory: DIALOG_SCROLL_STRATEGY_PROVIDER_FACTORY,
 };
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Unique id for the created dialog. */
 let uniqueId = 0;
 class Dialog {
@@ -745,13 +710,6 @@ function reverseForEach(items, callback) {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class DialogModule {
 }
 DialogModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: DialogModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
@@ -778,22 +736,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     providers: [Dialog, DIALOG_SCROLL_STRATEGY_PROVIDER],
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

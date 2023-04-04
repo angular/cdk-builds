@@ -2,13 +2,6 @@ import * as i0 from '@angular/core';
 import { PLATFORM_ID, Injectable, Inject, NgModule } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
 let hasV8BreakIterator;
@@ -86,13 +79,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     }] }];
     } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class PlatformModule {
 }
 PlatformModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: PlatformModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
@@ -103,13 +89,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             args: [{}]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Cached result Set of input types support by the current browser. */
 let supportedInputTypes;
 /** Types of `<input>` that *might* be supported. */
@@ -162,13 +141,6 @@ function getSupportedInputTypes() {
     return supportedInputTypes;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Cached result of whether the user's browser supports passive event listeners. */
 let supportsPassiveEvents;
 /**
@@ -198,13 +170,6 @@ function normalizePassiveListenerOptions(options) {
     return supportsPassiveEventListeners() ? options : !!options.capture;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Cached result of the way the browser handles the horizontal scroll axis in RTL mode. */
 let rtlScrollAxisType;
 /** Cached result of the check that indicates whether the browser supports scroll behaviors. */
@@ -283,13 +248,6 @@ function getRtlScrollAxisType() {
     return rtlScrollAxisType;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 let shadowDomIsSupported;
 /** Checks whether the user's browser support Shadow DOM. */
 function _supportsShadowDom() {
@@ -337,13 +295,6 @@ function _getEventTarget(event) {
     return (event.composedPath ? event.composedPath()[0] : event.target);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Gets whether the code is currently running in a test environment. */
 function _isTestEnvironment() {
     // We can't use `declare const` because it causes conflicts inside Google with the real typings
@@ -360,22 +311,6 @@ function _isTestEnvironment() {
         // @ts-ignore
         (typeof Mocha !== 'undefined' && !!Mocha));
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

@@ -3,13 +3,6 @@ import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, Harness
 import * as webdriver from 'selenium-webdriver';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
  * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
  */
@@ -398,22 +391,6 @@ class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
         });
     }
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
 //# sourceMappingURL=selenium-webdriver.mjs.map

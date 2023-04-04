@@ -5,13 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import * as keyCodes from '@angular/cdk/keycodes';
 import { PERIOD } from '@angular/cdk/keycodes';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
 /**
@@ -86,13 +79,6 @@ class TaskStateZoneInterceptor {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Used to generate unique IDs for events. */
 let uniqueIds = 0;
 /**
@@ -214,13 +200,6 @@ function defineReadonlyEventProperty(event, propertyName, value) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Utility to dispatch any event on a Node.
  * @docs-private
  */
@@ -265,13 +244,6 @@ function dispatchTouchEvent(node, type, pageX = 0, pageY = 0, clientX = 0, clien
     return dispatchEvent(node, createTouchEvent(type, pageX, pageY, clientX, clientY));
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function triggerFocusChange(element, event) {
     let eventFired = false;
     const handler = () => (eventFired = true);
@@ -303,13 +275,6 @@ function triggerBlur(element) {
     triggerFocusChange(element, 'blur');
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Input types for which the value can be entered incrementally. */
 const incrementalInputTypes = new Set([
     'text',
@@ -396,21 +361,8 @@ function clearElement(element) {
     dispatchFakeEvent(element, 'input');
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
+// These are private APIs that are used both by the public APIs inside of this package, as well
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Maps `TestKey` constants to the `keyCode` and `key` values used by native browser events. */
 const keyMap = {
     [TestKey.BACKSPACE]: { keyCode: keyCodes.BACKSPACE, key: 'Backspace' },
@@ -658,13 +610,6 @@ class UnitTestElement {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The default environment options. */
 const defaultEnvironmentOptions = {
     queryFn: (selector, root) => root.querySelectorAll(selector),
@@ -815,22 +760,6 @@ class TestbedHarnessEnvironment extends HarnessEnvironment {
         return Array.from(this._options.queryFn(selector, this.rawRootElement));
     }
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 export { TestbedHarnessEnvironment, UnitTestElement };
 //# sourceMappingURL=testbed.mjs.map

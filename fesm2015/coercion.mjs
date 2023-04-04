@@ -1,24 +1,10 @@
 import { ElementRef } from '@angular/core';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Coerces a data-bound value (typically a string) to a boolean. */
 function coerceBooleanProperty(value) {
     return value != null && `${value}` !== 'false';
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function coerceNumberProperty(value, fallbackValue = 0) {
     return _isNumberValue(value) ? Number(value) : fallbackValue;
 }
@@ -33,24 +19,10 @@ function _isNumberValue(value) {
     return !isNaN(parseFloat(value)) && !isNaN(Number(value));
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 function coerceArray(value) {
     return Array.isArray(value) ? value : [value];
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Coerces a value to a CSS pixel value. */
 function coerceCssPixelValue(value) {
     if (value == null) {
@@ -60,13 +32,6 @@ function coerceCssPixelValue(value) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Coerces an ElementRef or an Element into an element.
  * Useful for APIs that can accept either a ref or the native element itself.
  */
@@ -74,13 +39,6 @@ function coerceElement(elementOrRef) {
     return elementOrRef instanceof ElementRef ? elementOrRef.nativeElement : elementOrRef;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Coerces a value to an array of trimmed non-empty strings.
  * Any input that is not an array, `null` or `undefined` will be turned into a string
@@ -111,22 +69,6 @@ function coerceStringArray(value, separator = /\s+/) {
     }
     return result;
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 export { _isNumberValue, coerceArray, coerceBooleanProperty, coerceCssPixelValue, coerceElement, coerceNumberProperty, coerceStringArray };
 //# sourceMappingURL=coercion.mjs.map

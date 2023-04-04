@@ -5,13 +5,6 @@ import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 class LayoutModule {
 }
 LayoutModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: LayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
@@ -22,13 +15,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             args: [{}]
         }] });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Global registry for all dynamically-created, injected media queries. */
 const mediaQueriesForWebkitCompatibility = new Set();
 /** Style tag that holds all of the dynamically-created media queries. */
@@ -103,13 +89,6 @@ function noopMatchMedia(query) {
     };
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Utility for checking the matching state of @media queries. */
 class BreakpointObserver {
     constructor(_mediaMatcher, _zone) {
@@ -201,13 +180,6 @@ function splitQueries(queries) {
         .map(query => query.trim());
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 // PascalCase is being used as Breakpoints is used like an enum.
 // tslint:disable-next-line:variable-name
 const Breakpoints = {
@@ -229,22 +201,6 @@ const Breakpoints = {
     TabletLandscape: '(min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape)',
     WebLandscape: '(min-width: 1280px) and (orientation: landscape)',
 };
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

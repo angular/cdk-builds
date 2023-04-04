@@ -6,13 +6,6 @@ import { InjectionToken, Directive, Inject, Optional, Component, ViewEncapsulati
 import { coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
 import * as i2 from '@angular/cdk/bidi';
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Base tree control. It has basic toggle/expand/collapse operations on a single data node. */
 class BaseTreeControl {
     constructor() {
@@ -62,13 +55,6 @@ class BaseTreeControl {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Flat tree control. Able to expand/collapse a subtree recursively for flattened tree. */
 class FlatTreeControl extends BaseTreeControl {
     /** Construct with flat tree data node functions getLevel and isExpandable. */
@@ -112,13 +98,6 @@ class FlatTreeControl extends BaseTreeControl {
     }
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Nested tree control. Able to expand/collapse a subtree recursively for NestedNode type. */
 class NestedTreeControl extends BaseTreeControl {
     /** Construct with nested tree function getChildren. */
@@ -168,13 +147,6 @@ class NestedTreeControl extends BaseTreeControl {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Injection token used to provide a `CdkTreeNode` to its outlet.
  * Used primarily to avoid circular imports.
  * @docs-private
@@ -206,13 +178,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     }] }];
     } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** Context provided to the tree node component. */
 class CdkTreeNodeOutletContext {
     constructor(data) {
@@ -239,13 +204,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }], ctorParameters: function () { return [{ type: i0.TemplateRef }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Returns an error to be thrown when there is no usable data.
  * @docs-private
@@ -620,13 +578,6 @@ function isNodeElement(element) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Nested node is a child of `<cdk-tree>`. It works with nested tree.
  * By using `cdk-nested-tree-node` component in tree node template, children of the parent node will
  * be added in the `cdkTreeNodeOutlet` in tree node template.
@@ -841,13 +792,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             }] } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Node toggle to expand/collapse the node.
  */
 class CdkTreeNodeToggle {
@@ -885,13 +829,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: ['cdkTreeNodeToggleRecursive']
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const EXPORTED_DECLARATIONS = [
     CdkNestedTreeNode,
     CdkTreeNodeDef,
@@ -925,22 +862,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     declarations: EXPORTED_DECLARATIONS,
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

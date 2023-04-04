@@ -12,13 +12,6 @@ import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Mixin to provide a directive with a function that checks if the sticky input has been
  * changed since the last time the function was called. Essentially adds a dirty-check to the
  * sticky value.
@@ -55,13 +48,6 @@ function mixinHasStickyInput(base) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Used to provide a table to some of the sub-components without causing a circular dependency.
  * @docs-private
  */
@@ -69,13 +55,6 @@ const CDK_TABLE = new InjectionToken('CDK_TABLE');
 /** Injection token that can be used to specify the text column options. */
 const TEXT_COLUMN_OPTIONS = new InjectionToken('text-column-options');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Cell definition for a CDK table.
  * Captures the template of a column's data row cell as well as cell-specific properties.
@@ -282,13 +261,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
         }], ctorParameters: function () { return [{ type: CdkColumnDef }, { type: i0.ElementRef }]; } });
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * @docs-private
  */
 class _Schedule {
@@ -368,13 +340,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
             type: Injectable
         }], ctorParameters: function () { return [{ type: i0.NgZone }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * The row template that can be used by the mat-table. Should not be used outside of the
  * material library.
@@ -626,13 +591,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 }]
         }], ctorParameters: function () { return [{ type: i0.TemplateRef }]; } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * List of all possible directions that can be used for sticky positioning.
  * @docs-private
@@ -972,13 +930,6 @@ class StickyStyler {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Returns an error to be thrown when attempting to find an nonexistent column.
  * @param id Id whose lookup failed.
  * @docs-private
@@ -1038,23 +989,9 @@ function getTableTextColumnMissingNameError() {
     return Error(`Table text column must have a name.`);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The injection token used to specify the StickyPositioningListener. */
 const STICKY_POSITIONING_LISTENER = new InjectionToken('CDK_SPL');
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /**
  * Enables the recycle view repeater strategy, which reduces rendering latency. Not compatible with
  * tables that animate rows.
@@ -2094,13 +2031,6 @@ function mergeArrayAndSet(array, set) {
 }
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Column that simply shows text content for the header and row cells. Assumes that the table
  * is using the native table implementation (`<table>`).
  *
@@ -2238,13 +2168,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                 args: [CdkHeaderCellDef, { static: true }]
             }] } });
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 const EXPORTED_DECLARATIONS = [
     CdkTable,
     CdkRowDef,
@@ -2324,22 +2247,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", 
                     imports: [ScrollingModule],
                 }]
         }] });
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 /**
  * Generated bundle index. Do not edit.

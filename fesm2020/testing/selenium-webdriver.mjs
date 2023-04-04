@@ -2,13 +2,6 @@ import { TestKey, getNoKeysSpecifiedError, _getTextWithExcludedElements, Harness
 import * as webdriver from 'selenium-webdriver';
 
 /**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-/**
  * Maps the `TestKey` constants to WebDriver's `webdriver.Key` constants.
  * See https://github.com/SeleniumHQ/selenium/blob/trunk/javascript/webdriver/key.js#L29
  */
@@ -62,13 +55,6 @@ function getSeleniumWebDriverModifierKeys(modifiers) {
     return result;
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** A `TestElement` implementation for WebDriver. */
 class SeleniumWebDriverElement {
     constructor(element, _stabilize) {
@@ -275,13 +261,6 @@ function dispatchEvent(name, element, data) {
     element.dispatchEvent(event);
 }
 
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 /** The default environment options. */
 const defaultEnvironmentOptions = {
     queryFn: async (selector, root) => root().findElements(webdriver.By.css(selector)),
@@ -359,22 +338,6 @@ class SeleniumWebDriverHarnessEnvironment extends HarnessEnvironment {
         return els.map((x) => () => x);
     }
 }
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
-
-/**
- * @license
- * Copyright Google LLC All Rights Reserved.
- *
- * Use of this source code is governed by an MIT-style license that can be
- * found in the LICENSE file at https://angular.io/license
- */
 
 export { SeleniumWebDriverElement, SeleniumWebDriverHarnessEnvironment, waitForAngularReady };
 //# sourceMappingURL=selenium-webdriver.mjs.map
