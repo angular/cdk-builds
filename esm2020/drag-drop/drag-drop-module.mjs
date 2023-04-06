@@ -25,8 +25,8 @@ const DRAG_DROP_DIRECTIVES = [
 ];
 class DragDropModule {
 }
-DragDropModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-DragDropModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.5", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
+DragDropModule.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: DragDropModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+DragDropModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "16.0.0-next.7", ngImport: i0, type: DragDropModule, imports: [CdkDropList,
         CdkDropListGroup,
         CdkDrag,
         CdkDragHandle,
@@ -37,9 +37,9 @@ DragDropModule.ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version:
         CdkDragHandle,
         CdkDragPreview,
         CdkDragPlaceholder] });
-DragDropModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] });
+DragDropModule.ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: DragDropModule, providers: [DragDrop], imports: [CdkScrollableModule] });
 export { DragDropModule };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: DragDropModule, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: DragDropModule, decorators: [{
             type: NgModule,
             args: [{
                     imports: DRAG_DROP_DIRECTIVES,

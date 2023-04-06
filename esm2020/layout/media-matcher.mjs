@@ -37,10 +37,10 @@ class MediaMatcher {
         return this._matchMedia(query);
     }
 }
-MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
-MediaMatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
+MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
+MediaMatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
 export { MediaMatcher };
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.5", ngImport: i0, type: MediaMatcher, decorators: [{
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
         }], ctorParameters: function () { return [{ type: i1.Platform }]; } });
