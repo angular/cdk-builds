@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { NgModule, Injectable } from '@angular/core';
+import { NgModule, CSP_NONCE, Injectable, Optional, Inject } from '@angular/core';
 import { coerceArray } from '@angular/cdk/coercion';
 import { Subject, combineLatest, concat, Observable } from 'rxjs';
 import { take, skip, debounceTime, map, startWith, takeUntil } from 'rxjs/operators';
@@ -21,8 +21,9 @@ const mediaQueriesForWebkitCompatibility = new Set();
 let mediaQueryStyleNode;
 /** A utility for calling matchMedia queries. */
 class MediaMatcher {
-    constructor(_platform) {
+    constructor(_platform, _nonce) {
         this._platform = _platform;
+        this._nonce = _nonce;
         this._matchMedia =
             this._platform.isBrowser && window.matchMedia
                 ? // matchMedia is bound to the window scope intentionally as it is an illegal invocation to
@@ -38,17 +39,24 @@ class MediaMatcher {
      */
     matchMedia(query) {
         if (this._platform.WEBKIT || this._platform.BLINK) {
-            createEmptyStyleRule(query);
+            createEmptyStyleRule(query, this._nonce);
         }
         return this._matchMedia(query);
     }
 }
-MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }], target: i0.ɵɵFactoryTarget.Injectable });
+MediaMatcher.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, deps: [{ token: i1.Platform }, { token: CSP_NONCE, optional: true }], target: i0.ɵɵFactoryTarget.Injectable });
 MediaMatcher.ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, providedIn: 'root' });
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.7", ngImport: i0, type: MediaMatcher, decorators: [{
             type: Injectable,
             args: [{ providedIn: 'root' }]
-        }], ctorParameters: function () { return [{ type: i1.Platform }]; } });
+        }], ctorParameters: function () {
+        return [{ type: i1.Platform }, { type: undefined, decorators: [{
+                        type: Optional
+                    }, {
+                        type: Inject,
+                        args: [CSP_NONCE]
+                    }] }];
+    } });
 /**
  * Creates an empty stylesheet that is used to work around browser inconsistencies related to
  * `matchMedia`. At the time of writing, it handles the following cases:
@@ -58,13 +66,16 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0-next.7", 
  * inside the `@media` match existing elements on the page. We work around it by having one rule
  * targeting the `body`. See https://github.com/angular/components/issues/23546.
  */
-function createEmptyStyleRule(query) {
+function createEmptyStyleRule(query, nonce) {
     if (mediaQueriesForWebkitCompatibility.has(query)) {
         return;
     }
     try {
         if (!mediaQueryStyleNode) {
             mediaQueryStyleNode = document.createElement('style');
+            if (nonce) {
+                mediaQueryStyleNode.nonce = nonce;
+            }
             mediaQueryStyleNode.setAttribute('type', 'text/css');
             document.head.appendChild(mediaQueryStyleNode);
         }

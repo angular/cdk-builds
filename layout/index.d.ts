@@ -74,9 +74,10 @@ export declare class LayoutModule {
 /** A utility for calling matchMedia queries. */
 export declare class MediaMatcher {
     private _platform;
+    private _nonce?;
     /** The internal matchMedia method to return back a MediaQueryList like object. */
     private _matchMedia;
-    constructor(_platform: Platform);
+    constructor(_platform: Platform, _nonce?: string | null | undefined);
     /**
      * Evaluates the given media query and returns the native MediaQueryList from which results
      * can be retrieved.
@@ -84,7 +85,7 @@ export declare class MediaMatcher {
      * MediaQueryList for the query provided.
      */
     matchMedia(query: string): MediaQueryList;
-    static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<MediaMatcher, [null, { optional: true; }]>;
     static ɵprov: i0.ɵɵInjectableDeclaration<MediaMatcher>;
 }
 
