@@ -41,6 +41,13 @@ export declare class ActiveDescendantKeyManager<T> extends ListKeyManager<Highli
     setActiveItem(item: T): void;
 }
 
+
+/**
+ * Adds the given ID to the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ */
+export declare function addAriaReferencedId(el: Element, attr: `aria-${string}`, id: string): void;
+
 /**
  * Utility that creates visually hidden elements with a message content. Useful for elements that
  * want to use aria-describedby to further describe themselves without adding additional visual
@@ -658,6 +665,12 @@ declare class FocusTrapManager {
     static ɵprov: i0.ɵɵInjectableDeclaration<FocusTrapManager>;
 }
 
+/**
+ * Gets the list of IDs referenced by the given ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ */
+export declare function getAriaReferenceIds(el: Element, attr: string): string[];
+
 /** Set of possible high-contrast mode backgrounds. */
 export declare const enum HighContrastMode {
     NONE = 0,
@@ -1147,5 +1160,11 @@ export declare interface RegisteredMessage {
     /** The number of elements that reference this message element via `aria-describedby`. */
     referenceCount: number;
 }
+
+/**
+ * Removes the given ID from the specified ARIA attribute on an element.
+ * Used for attributes such as aria-labelledby, aria-owns, etc.
+ */
+export declare function removeAriaReferencedId(el: Element, attr: `aria-${string}`, id: string): void;
 
 export { }
