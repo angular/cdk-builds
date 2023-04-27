@@ -45,7 +45,7 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
     protected _focusTrapFactory: FocusTrapFactory;
     readonly _config: C;
     private _interactivityChecker;
-    private _ngZone;
+    protected _ngZone: NgZone;
     private _overlayRef;
     private _focusMonitor?;
     protected _document: Document;
