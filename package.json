@@ -128,6 +128,12 @@
       "esm": "./esm2022/observers/observers_public_index.mjs",
       "default": "./fesm2022/observers.mjs"
     },
+    "./observers/private": {
+      "types": "./observers/private/index.d.ts",
+      "esm2022": "./esm2022/observers/private/private_public_index.mjs",
+      "esm": "./esm2022/observers/private/private_public_index.mjs",
+      "default": "./fesm2022/observers/private.mjs"
+    },
     "./overlay": {
       "types": "./overlay/index.d.ts",
       "esm2022": "./esm2022/overlay/overlay_public_index.mjs",
