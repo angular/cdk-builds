@@ -1,14 +1,14 @@
 import * as i0 from '@angular/core';
-import { Injectable, Inject, InjectionToken, Directive, Input, EventEmitter, Optional, SkipSelf, Output, Self, ContentChildren, ContentChild, NgModule } from '@angular/core';
+import { Injectable, Inject, InjectionToken, Directive, Optional, SkipSelf, Input, EventEmitter, Self, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
-import { coerceBooleanProperty, coerceElement, coerceArray, coerceNumberProperty } from '@angular/cdk/coercion';
+import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
-import { takeUntil, startWith, map, take, tap, switchMap } from 'rxjs/operators';
-import * as i3 from '@angular/cdk/bidi';
+import { takeUntil, map, take, startWith, tap, switchMap } from 'rxjs/operators';
+import * as i1$1 from '@angular/cdk/bidi';
 
 /**
  * Shallow-extends a stylesheet object with another stylesheet-like object.
@@ -2640,56 +2640,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImpor
 const CDK_DRAG_PARENT = new InjectionToken('CDK_DRAG_PARENT');
 
 /**
- * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
- * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
- * retention of the class and its directive metadata.
- */
-const CDK_DROP_LIST_GROUP = new InjectionToken('CdkDropListGroup');
-/**
- * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
- * elements that are placed inside a `cdkDropListGroup` will be connected to each other
- * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
- * from `cdkDropList`.
- */
-class CdkDropListGroup {
-    constructor() {
-        /** Drop lists registered inside the group. */
-        this._items = new Set();
-        this._disabled = false;
-    }
-    /** Whether starting a dragging sequence from inside this group is disabled. */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-    }
-    ngOnDestroy() {
-        this._items.clear();
-    }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled"] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropListGroup, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: '[cdkDropListGroup]',
-                    exportAs: 'cdkDropListGroup',
-                    standalone: true,
-                    providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }],
-                }]
-        }], propDecorators: { disabled: [{
-                type: Input,
-                args: ['cdkDropListGroupDisabled']
-            }] } });
-
-/**
- * Injection token that can be used to configure the
- * behavior of the drag&drop-related components.
- */
-const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
-
-/**
  * Asserts that a particular node is an element.
  * @param node Node to be checked.
  * @param name Name to attach to the error message.
@@ -2699,331 +2649,6 @@ function assertElementNode(node, name) {
         throw Error(`${name} must be attached to an element node. ` + `Currently attached to "${node.nodeName}".`);
     }
 }
-
-/** Counter used to generate unique ids for drop zones. */
-let _uniqueIdCounter = 0;
-/**
- * Injection token that can be used to reference instances of `CdkDropList`. It serves as
- * alternative token to the actual `CdkDropList` class which could cause unnecessary
- * retention of the class and its directive metadata.
- */
-const CDK_DROP_LIST = new InjectionToken('CdkDropList');
-/** Container that wraps a set of draggable items. */
-class CdkDropList {
-    /** Keeps track of the drop lists that are currently on the page. */
-    static { this._dropLists = []; }
-    /** Whether starting a dragging sequence from this container is disabled. */
-    get disabled() {
-        return this._disabled || (!!this._group && this._group.disabled);
-    }
-    set disabled(value) {
-        // Usually we sync the directive and ref state right before dragging starts, in order to have
-        // a single point of failure and to avoid having to use setters for everything. `disabled` is
-        // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
-        // the user in a disabled state, so we also need to sync it as it's being set.
-        this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
-    }
-    constructor(
-    /** Element that the drop list is attached to. */
-    element, dragDrop, _changeDetectorRef, _scrollDispatcher, _dir, _group, config) {
-        this.element = element;
-        this._changeDetectorRef = _changeDetectorRef;
-        this._scrollDispatcher = _scrollDispatcher;
-        this._dir = _dir;
-        this._group = _group;
-        /** Emits when the list has been destroyed. */
-        this._destroyed = new Subject();
-        /**
-         * Other draggable containers that this container is connected to and into which the
-         * container's items can be transferred. Can either be references to other drop containers,
-         * or their unique IDs.
-         */
-        this.connectedTo = [];
-        /**
-         * Unique ID for the drop zone. Can be used as a reference
-         * in the `connectedTo` of another `CdkDropList`.
-         */
-        this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
-        /**
-         * Function that is used to determine whether an item
-         * is allowed to be moved into a drop container.
-         */
-        this.enterPredicate = () => true;
-        /** Functions that is used to determine whether an item can be sorted into a particular index. */
-        this.sortPredicate = () => true;
-        /** Emits when the user drops an item inside the container. */
-        this.dropped = new EventEmitter();
-        /**
-         * Emits when the user has moved a new drag item into this container.
-         */
-        this.entered = new EventEmitter();
-        /**
-         * Emits when the user removes an item from the container
-         * by dragging it into another container.
-         */
-        this.exited = new EventEmitter();
-        /** Emits as the user is swapping items while actively dragging. */
-        this.sorted = new EventEmitter();
-        /**
-         * Keeps track of the items that are registered with this container. Historically we used to
-         * do this with a `ContentChildren` query, however queries don't handle transplanted views very
-         * well which means that we can't handle cases like dragging the headers of a `mat-table`
-         * correctly. What we do instead is to have the items register themselves with the container
-         * and then we sort them based on their position in the DOM.
-         */
-        this._unsortedItems = new Set();
-        if (typeof ngDevMode === 'undefined' || ngDevMode) {
-            assertElementNode(element.nativeElement, 'cdkDropList');
-        }
-        this._dropListRef = dragDrop.createDropList(element);
-        this._dropListRef.data = this;
-        if (config) {
-            this._assignDefaults(config);
-        }
-        this._dropListRef.enterPredicate = (drag, drop) => {
-            return this.enterPredicate(drag.data, drop.data);
-        };
-        this._dropListRef.sortPredicate = (index, drag, drop) => {
-            return this.sortPredicate(index, drag.data, drop.data);
-        };
-        this._setupInputSyncSubscription(this._dropListRef);
-        this._handleEvents(this._dropListRef);
-        CdkDropList._dropLists.push(this);
-        if (_group) {
-            _group._items.add(this);
-        }
-    }
-    /** Registers an items with the drop list. */
-    addItem(item) {
-        this._unsortedItems.add(item);
-        if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
-        }
-    }
-    /** Removes an item from the drop list. */
-    removeItem(item) {
-        this._unsortedItems.delete(item);
-        if (this._dropListRef.isDragging()) {
-            this._syncItemsWithRef();
-        }
-    }
-    /** Gets the registered items in the list, sorted by their position in the DOM. */
-    getSortedItems() {
-        return Array.from(this._unsortedItems).sort((a, b) => {
-            const documentPosition = a._dragRef
-                .getVisibleElement()
-                .compareDocumentPosition(b._dragRef.getVisibleElement());
-            // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
-            // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
-            // tslint:disable-next-line:no-bitwise
-            return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-        });
-    }
-    ngOnDestroy() {
-        const index = CdkDropList._dropLists.indexOf(this);
-        if (index > -1) {
-            CdkDropList._dropLists.splice(index, 1);
-        }
-        if (this._group) {
-            this._group._items.delete(this);
-        }
-        this._unsortedItems.clear();
-        this._dropListRef.dispose();
-        this._destroyed.next();
-        this._destroyed.complete();
-    }
-    /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
-    _setupInputSyncSubscription(ref) {
-        if (this._dir) {
-            this._dir.change
-                .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
-                .subscribe(value => ref.withDirection(value));
-        }
-        ref.beforeStarted.subscribe(() => {
-            const siblings = coerceArray(this.connectedTo).map(drop => {
-                if (typeof drop === 'string') {
-                    const correspondingDropList = CdkDropList._dropLists.find(list => list.id === drop);
-                    if (!correspondingDropList && (typeof ngDevMode === 'undefined' || ngDevMode)) {
-                        console.warn(`CdkDropList could not find connected drop list with id "${drop}"`);
-                    }
-                    return correspondingDropList;
-                }
-                return drop;
-            });
-            if (this._group) {
-                this._group._items.forEach(drop => {
-                    if (siblings.indexOf(drop) === -1) {
-                        siblings.push(drop);
-                    }
-                });
-            }
-            // Note that we resolve the scrollable parents here so that we delay the resolution
-            // as long as possible, ensuring that the element is in its final place in the DOM.
-            if (!this._scrollableParentsResolved) {
-                const scrollableParents = this._scrollDispatcher
-                    .getAncestorScrollContainers(this.element)
-                    .map(scrollable => scrollable.getElementRef().nativeElement);
-                this._dropListRef.withScrollableParents(scrollableParents);
-                // Only do this once since it involves traversing the DOM and the parents
-                // shouldn't be able to change without the drop list being destroyed.
-                this._scrollableParentsResolved = true;
-            }
-            ref.disabled = this.disabled;
-            ref.lockAxis = this.lockAxis;
-            ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
-            ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
-            ref.autoScrollStep = coerceNumberProperty(this.autoScrollStep, 2);
-            ref
-                .connectedTo(siblings.filter(drop => drop && drop !== this).map(list => list._dropListRef))
-                .withOrientation(this.orientation);
-        });
-    }
-    /** Handles events from the underlying DropListRef. */
-    _handleEvents(ref) {
-        ref.beforeStarted.subscribe(() => {
-            this._syncItemsWithRef();
-            this._changeDetectorRef.markForCheck();
-        });
-        ref.entered.subscribe(event => {
-            this.entered.emit({
-                container: this,
-                item: event.item.data,
-                currentIndex: event.currentIndex,
-            });
-        });
-        ref.exited.subscribe(event => {
-            this.exited.emit({
-                container: this,
-                item: event.item.data,
-            });
-            this._changeDetectorRef.markForCheck();
-        });
-        ref.sorted.subscribe(event => {
-            this.sorted.emit({
-                previousIndex: event.previousIndex,
-                currentIndex: event.currentIndex,
-                container: this,
-                item: event.item.data,
-            });
-        });
-        ref.dropped.subscribe(dropEvent => {
-            this.dropped.emit({
-                previousIndex: dropEvent.previousIndex,
-                currentIndex: dropEvent.currentIndex,
-                previousContainer: dropEvent.previousContainer.data,
-                container: dropEvent.container.data,
-                item: dropEvent.item.data,
-                isPointerOverContainer: dropEvent.isPointerOverContainer,
-                distance: dropEvent.distance,
-                dropPoint: dropEvent.dropPoint,
-                event: dropEvent.event,
-            });
-            // Mark for check since all of these events run outside of change
-            // detection and we're not guaranteed for something else to have triggered it.
-            this._changeDetectorRef.markForCheck();
-        });
-        merge(ref.receivingStarted, ref.receivingStopped).subscribe(() => this._changeDetectorRef.markForCheck());
-    }
-    /** Assigns the default input values based on a provided config object. */
-    _assignDefaults(config) {
-        const { lockAxis, draggingDisabled, sortingDisabled, listAutoScrollDisabled, listOrientation } = config;
-        this.disabled = draggingDisabled == null ? false : draggingDisabled;
-        this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
-        this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
-        this.orientation = listOrientation || 'vertical';
-        if (lockAxis) {
-            this.lockAxis = lockAxis;
-        }
-    }
-    /** Syncs up the registered drag items with underlying drop list ref. */
-    _syncItemsWithRef() {
-        this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
-    }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i3.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled"], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled"], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled"], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
-            // Prevent child drop lists from picking up the same group as their parent.
-            { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
-            { provide: CDK_DROP_LIST, useExisting: CdkDropList },
-        ], exportAs: ["cdkDropList"], ngImport: i0 }); }
-}
-i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropList, decorators: [{
-            type: Directive,
-            args: [{
-                    selector: '[cdkDropList], cdk-drop-list',
-                    exportAs: 'cdkDropList',
-                    standalone: true,
-                    providers: [
-                        // Prevent child drop lists from picking up the same group as their parent.
-                        { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
-                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
-                    ],
-                    host: {
-                        'class': 'cdk-drop-list',
-                        '[attr.id]': 'id',
-                        '[class.cdk-drop-list-disabled]': 'disabled',
-                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
-                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
-                    },
-                }]
-        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: DragDrop }, { type: i0.ChangeDetectorRef }, { type: i1.ScrollDispatcher }, { type: i3.Directionality, decorators: [{
-                    type: Optional
-                }] }, { type: CdkDropListGroup, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [CDK_DROP_LIST_GROUP]
-                }, {
-                    type: SkipSelf
-                }] }, { type: undefined, decorators: [{
-                    type: Optional
-                }, {
-                    type: Inject,
-                    args: [CDK_DRAG_CONFIG]
-                }] }]; }, propDecorators: { connectedTo: [{
-                type: Input,
-                args: ['cdkDropListConnectedTo']
-            }], data: [{
-                type: Input,
-                args: ['cdkDropListData']
-            }], orientation: [{
-                type: Input,
-                args: ['cdkDropListOrientation']
-            }], id: [{
-                type: Input
-            }], lockAxis: [{
-                type: Input,
-                args: ['cdkDropListLockAxis']
-            }], disabled: [{
-                type: Input,
-                args: ['cdkDropListDisabled']
-            }], sortingDisabled: [{
-                type: Input,
-                args: ['cdkDropListSortingDisabled']
-            }], enterPredicate: [{
-                type: Input,
-                args: ['cdkDropListEnterPredicate']
-            }], sortPredicate: [{
-                type: Input,
-                args: ['cdkDropListSortPredicate']
-            }], autoScrollDisabled: [{
-                type: Input,
-                args: ['cdkDropListAutoScrollDisabled']
-            }], autoScrollStep: [{
-                type: Input,
-                args: ['cdkDropListAutoScrollStep']
-            }], dropped: [{
-                type: Output,
-                args: ['cdkDropListDropped']
-            }], entered: [{
-                type: Output,
-                args: ['cdkDropListEntered']
-            }], exited: [{
-                type: Output,
-                args: ['cdkDropListExited']
-            }], sorted: [{
-                type: Output,
-                args: ['cdkDropListSorted']
-            }] } });
 
 /**
  * Injection token that can be used to reference instances of `CdkDragHandle`. It serves as
@@ -3145,7 +2770,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImpor
                 type: Input
             }] } });
 
+/**
+ * Injection token that can be used to configure the
+ * behavior of the drag&drop-related components.
+ */
+const CDK_DRAG_CONFIG = new InjectionToken('CDK_DRAG_CONFIG');
+
 const DRAG_HOST_CLASS = 'cdk-drag';
+/**
+ * Injection token that can be used to reference instances of `CdkDropList`. It serves as
+ * alternative token to the actual `CdkDropList` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+const CDK_DROP_LIST = new InjectionToken('CdkDropList');
 /** Element that can be moved inside a CdkDropList container. */
 class CdkDrag {
     static { this._dragInstances = []; }
@@ -3499,7 +3136,7 @@ class CdkDrag {
             handleInstance.disabled ? dragRef.disableHandle(handle) : dragRef.enableHandle(handle);
         });
     }
-    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i3.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled"], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], queries: [{ propertyName: "_previewTemplate", first: true, predicate: CDK_DRAG_PREVIEW, descendants: true }, { propertyName: "_placeholderTemplate", first: true, predicate: CDK_DRAG_PLACEHOLDER, descendants: true }, { propertyName: "_handles", predicate: CDK_DRAG_HANDLE, descendants: true }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDrag, decorators: [{
@@ -3530,7 +3167,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImpor
                 }, {
                     type: Inject,
                     args: [CDK_DRAG_CONFIG]
-                }] }, { type: i3.Directionality, decorators: [{
+                }] }, { type: i1$1.Directionality, decorators: [{
                     type: Optional
                 }] }, { type: DragDrop }, { type: i0.ChangeDetectorRef }, { type: CdkDragHandle, decorators: [{
                     type: Optional
@@ -3606,6 +3243,369 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImpor
             }], moved: [{
                 type: Output,
                 args: ['cdkDragMoved']
+            }] } });
+
+/**
+ * Injection token that can be used to reference instances of `CdkDropListGroup`. It serves as
+ * alternative token to the actual `CdkDropListGroup` class which could cause unnecessary
+ * retention of the class and its directive metadata.
+ */
+const CDK_DROP_LIST_GROUP = new InjectionToken('CdkDropListGroup');
+/**
+ * Declaratively connects sibling `cdkDropList` instances together. All of the `cdkDropList`
+ * elements that are placed inside a `cdkDropListGroup` will be connected to each other
+ * automatically. Can be used as an alternative to the `cdkDropListConnectedTo` input
+ * from `cdkDropList`.
+ */
+class CdkDropListGroup {
+    constructor() {
+        /** Drop lists registered inside the group. */
+        this._items = new Set();
+        this._disabled = false;
+    }
+    /** Whether starting a dragging sequence from inside this group is disabled. */
+    get disabled() {
+        return this._disabled;
+    }
+    set disabled(value) {
+        this._disabled = coerceBooleanProperty(value);
+    }
+    ngOnDestroy() {
+        this._items.clear();
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled"] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropListGroup, decorators: [{
+            type: Directive,
+            args: [{
+                    selector: '[cdkDropListGroup]',
+                    exportAs: 'cdkDropListGroup',
+                    standalone: true,
+                    providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }],
+                }]
+        }], propDecorators: { disabled: [{
+                type: Input,
+                args: ['cdkDropListGroupDisabled']
+            }] } });
+
+/** Counter used to generate unique ids for drop zones. */
+let _uniqueIdCounter = 0;
+/** Container that wraps a set of draggable items. */
+class CdkDropList {
+    /** Keeps track of the drop lists that are currently on the page. */
+    static { this._dropLists = []; }
+    /** Whether starting a dragging sequence from this container is disabled. */
+    get disabled() {
+        return this._disabled || (!!this._group && this._group.disabled);
+    }
+    set disabled(value) {
+        // Usually we sync the directive and ref state right before dragging starts, in order to have
+        // a single point of failure and to avoid having to use setters for everything. `disabled` is
+        // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
+        // the user in a disabled state, so we also need to sync it as it's being set.
+        this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
+    }
+    constructor(
+    /** Element that the drop list is attached to. */
+    element, dragDrop, _changeDetectorRef, _scrollDispatcher, _dir, _group, config) {
+        this.element = element;
+        this._changeDetectorRef = _changeDetectorRef;
+        this._scrollDispatcher = _scrollDispatcher;
+        this._dir = _dir;
+        this._group = _group;
+        /** Emits when the list has been destroyed. */
+        this._destroyed = new Subject();
+        /**
+         * Other draggable containers that this container is connected to and into which the
+         * container's items can be transferred. Can either be references to other drop containers,
+         * or their unique IDs.
+         */
+        this.connectedTo = [];
+        /**
+         * Unique ID for the drop zone. Can be used as a reference
+         * in the `connectedTo` of another `CdkDropList`.
+         */
+        this.id = `cdk-drop-list-${_uniqueIdCounter++}`;
+        /**
+         * Function that is used to determine whether an item
+         * is allowed to be moved into a drop container.
+         */
+        this.enterPredicate = () => true;
+        /** Functions that is used to determine whether an item can be sorted into a particular index. */
+        this.sortPredicate = () => true;
+        /** Emits when the user drops an item inside the container. */
+        this.dropped = new EventEmitter();
+        /**
+         * Emits when the user has moved a new drag item into this container.
+         */
+        this.entered = new EventEmitter();
+        /**
+         * Emits when the user removes an item from the container
+         * by dragging it into another container.
+         */
+        this.exited = new EventEmitter();
+        /** Emits as the user is swapping items while actively dragging. */
+        this.sorted = new EventEmitter();
+        /**
+         * Keeps track of the items that are registered with this container. Historically we used to
+         * do this with a `ContentChildren` query, however queries don't handle transplanted views very
+         * well which means that we can't handle cases like dragging the headers of a `mat-table`
+         * correctly. What we do instead is to have the items register themselves with the container
+         * and then we sort them based on their position in the DOM.
+         */
+        this._unsortedItems = new Set();
+        if (typeof ngDevMode === 'undefined' || ngDevMode) {
+            assertElementNode(element.nativeElement, 'cdkDropList');
+        }
+        this._dropListRef = dragDrop.createDropList(element);
+        this._dropListRef.data = this;
+        if (config) {
+            this._assignDefaults(config);
+        }
+        this._dropListRef.enterPredicate = (drag, drop) => {
+            return this.enterPredicate(drag.data, drop.data);
+        };
+        this._dropListRef.sortPredicate = (index, drag, drop) => {
+            return this.sortPredicate(index, drag.data, drop.data);
+        };
+        this._setupInputSyncSubscription(this._dropListRef);
+        this._handleEvents(this._dropListRef);
+        CdkDropList._dropLists.push(this);
+        if (_group) {
+            _group._items.add(this);
+        }
+    }
+    /** Registers an items with the drop list. */
+    addItem(item) {
+        this._unsortedItems.add(item);
+        if (this._dropListRef.isDragging()) {
+            this._syncItemsWithRef();
+        }
+    }
+    /** Removes an item from the drop list. */
+    removeItem(item) {
+        this._unsortedItems.delete(item);
+        if (this._dropListRef.isDragging()) {
+            this._syncItemsWithRef();
+        }
+    }
+    /** Gets the registered items in the list, sorted by their position in the DOM. */
+    getSortedItems() {
+        return Array.from(this._unsortedItems).sort((a, b) => {
+            const documentPosition = a._dragRef
+                .getVisibleElement()
+                .compareDocumentPosition(b._dragRef.getVisibleElement());
+            // `compareDocumentPosition` returns a bitmask so we have to use a bitwise operator.
+            // https://developer.mozilla.org/en-US/docs/Web/API/Node/compareDocumentPosition
+            // tslint:disable-next-line:no-bitwise
+            return documentPosition & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+        });
+    }
+    ngOnDestroy() {
+        const index = CdkDropList._dropLists.indexOf(this);
+        if (index > -1) {
+            CdkDropList._dropLists.splice(index, 1);
+        }
+        if (this._group) {
+            this._group._items.delete(this);
+        }
+        this._unsortedItems.clear();
+        this._dropListRef.dispose();
+        this._destroyed.next();
+        this._destroyed.complete();
+    }
+    /** Syncs the inputs of the CdkDropList with the options of the underlying DropListRef. */
+    _setupInputSyncSubscription(ref) {
+        if (this._dir) {
+            this._dir.change
+                .pipe(startWith(this._dir.value), takeUntil(this._destroyed))
+                .subscribe(value => ref.withDirection(value));
+        }
+        ref.beforeStarted.subscribe(() => {
+            const siblings = coerceArray(this.connectedTo).map(drop => {
+                if (typeof drop === 'string') {
+                    const correspondingDropList = CdkDropList._dropLists.find(list => list.id === drop);
+                    if (!correspondingDropList && (typeof ngDevMode === 'undefined' || ngDevMode)) {
+                        console.warn(`CdkDropList could not find connected drop list with id "${drop}"`);
+                    }
+                    return correspondingDropList;
+                }
+                return drop;
+            });
+            if (this._group) {
+                this._group._items.forEach(drop => {
+                    if (siblings.indexOf(drop) === -1) {
+                        siblings.push(drop);
+                    }
+                });
+            }
+            // Note that we resolve the scrollable parents here so that we delay the resolution
+            // as long as possible, ensuring that the element is in its final place in the DOM.
+            if (!this._scrollableParentsResolved) {
+                const scrollableParents = this._scrollDispatcher
+                    .getAncestorScrollContainers(this.element)
+                    .map(scrollable => scrollable.getElementRef().nativeElement);
+                this._dropListRef.withScrollableParents(scrollableParents);
+                // Only do this once since it involves traversing the DOM and the parents
+                // shouldn't be able to change without the drop list being destroyed.
+                this._scrollableParentsResolved = true;
+            }
+            ref.disabled = this.disabled;
+            ref.lockAxis = this.lockAxis;
+            ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
+            ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
+            ref.autoScrollStep = coerceNumberProperty(this.autoScrollStep, 2);
+            ref
+                .connectedTo(siblings.filter(drop => drop && drop !== this).map(list => list._dropListRef))
+                .withOrientation(this.orientation);
+        });
+    }
+    /** Handles events from the underlying DropListRef. */
+    _handleEvents(ref) {
+        ref.beforeStarted.subscribe(() => {
+            this._syncItemsWithRef();
+            this._changeDetectorRef.markForCheck();
+        });
+        ref.entered.subscribe(event => {
+            this.entered.emit({
+                container: this,
+                item: event.item.data,
+                currentIndex: event.currentIndex,
+            });
+        });
+        ref.exited.subscribe(event => {
+            this.exited.emit({
+                container: this,
+                item: event.item.data,
+            });
+            this._changeDetectorRef.markForCheck();
+        });
+        ref.sorted.subscribe(event => {
+            this.sorted.emit({
+                previousIndex: event.previousIndex,
+                currentIndex: event.currentIndex,
+                container: this,
+                item: event.item.data,
+            });
+        });
+        ref.dropped.subscribe(dropEvent => {
+            this.dropped.emit({
+                previousIndex: dropEvent.previousIndex,
+                currentIndex: dropEvent.currentIndex,
+                previousContainer: dropEvent.previousContainer.data,
+                container: dropEvent.container.data,
+                item: dropEvent.item.data,
+                isPointerOverContainer: dropEvent.isPointerOverContainer,
+                distance: dropEvent.distance,
+                dropPoint: dropEvent.dropPoint,
+                event: dropEvent.event,
+            });
+            // Mark for check since all of these events run outside of change
+            // detection and we're not guaranteed for something else to have triggered it.
+            this._changeDetectorRef.markForCheck();
+        });
+        merge(ref.receivingStarted, ref.receivingStopped).subscribe(() => this._changeDetectorRef.markForCheck());
+    }
+    /** Assigns the default input values based on a provided config object. */
+    _assignDefaults(config) {
+        const { lockAxis, draggingDisabled, sortingDisabled, listAutoScrollDisabled, listOrientation } = config;
+        this.disabled = draggingDisabled == null ? false : draggingDisabled;
+        this.sortingDisabled = sortingDisabled == null ? false : sortingDisabled;
+        this.autoScrollDisabled = listAutoScrollDisabled == null ? false : listAutoScrollDisabled;
+        this.orientation = listOrientation || 'vertical';
+        if (lockAxis) {
+            this.lockAxis = lockAxis;
+        }
+    }
+    /** Syncs up the registered drag items with underlying drop list ref. */
+    _syncItemsWithRef() {
+        this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
+    }
+    static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i1$1.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.0.0", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled"], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled"], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled"], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
+            // Prevent child drop lists from picking up the same group as their parent.
+            { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
+            { provide: CDK_DROP_LIST, useExisting: CdkDropList },
+        ], exportAs: ["cdkDropList"], ngImport: i0 }); }
+}
+i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.0.0", ngImport: i0, type: CdkDropList, decorators: [{
+            type: Directive,
+            args: [{
+                    selector: '[cdkDropList], cdk-drop-list',
+                    exportAs: 'cdkDropList',
+                    standalone: true,
+                    providers: [
+                        // Prevent child drop lists from picking up the same group as their parent.
+                        { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
+                        { provide: CDK_DROP_LIST, useExisting: CdkDropList },
+                    ],
+                    host: {
+                        'class': 'cdk-drop-list',
+                        '[attr.id]': 'id',
+                        '[class.cdk-drop-list-disabled]': 'disabled',
+                        '[class.cdk-drop-list-dragging]': '_dropListRef.isDragging()',
+                        '[class.cdk-drop-list-receiving]': '_dropListRef.isReceiving()',
+                    },
+                }]
+        }], ctorParameters: function () { return [{ type: i0.ElementRef }, { type: DragDrop }, { type: i0.ChangeDetectorRef }, { type: i1.ScrollDispatcher }, { type: i1$1.Directionality, decorators: [{
+                    type: Optional
+                }] }, { type: CdkDropListGroup, decorators: [{
+                    type: Optional
+                }, {
+                    type: Inject,
+                    args: [CDK_DROP_LIST_GROUP]
+                }, {
+                    type: SkipSelf
+                }] }, { type: undefined, decorators: [{
+                    type: Optional
+                }, {
+                    type: Inject,
+                    args: [CDK_DRAG_CONFIG]
+                }] }]; }, propDecorators: { connectedTo: [{
+                type: Input,
+                args: ['cdkDropListConnectedTo']
+            }], data: [{
+                type: Input,
+                args: ['cdkDropListData']
+            }], orientation: [{
+                type: Input,
+                args: ['cdkDropListOrientation']
+            }], id: [{
+                type: Input
+            }], lockAxis: [{
+                type: Input,
+                args: ['cdkDropListLockAxis']
+            }], disabled: [{
+                type: Input,
+                args: ['cdkDropListDisabled']
+            }], sortingDisabled: [{
+                type: Input,
+                args: ['cdkDropListSortingDisabled']
+            }], enterPredicate: [{
+                type: Input,
+                args: ['cdkDropListEnterPredicate']
+            }], sortPredicate: [{
+                type: Input,
+                args: ['cdkDropListSortPredicate']
+            }], autoScrollDisabled: [{
+                type: Input,
+                args: ['cdkDropListAutoScrollDisabled']
+            }], autoScrollStep: [{
+                type: Input,
+                args: ['cdkDropListAutoScrollStep']
+            }], dropped: [{
+                type: Output,
+                args: ['cdkDropListDropped']
+            }], entered: [{
+                type: Output,
+                args: ['cdkDropListEntered']
+            }], exited: [{
+                type: Output,
+                args: ['cdkDropListExited']
+            }], sorted: [{
+                type: Output,
+                args: ['cdkDropListSorted']
             }] } });
 
 const DRAG_DROP_DIRECTIVES = [

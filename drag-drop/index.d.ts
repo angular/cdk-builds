@@ -75,7 +75,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>;
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropListInternal;
+    dropContainer: CdkDropList;
     private _ngZone;
     private _viewContainerRef;
     private _dir;
@@ -167,7 +167,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     /** Element that the draggable is attached to. */
     element: ElementRef<HTMLElement>, 
     /** Droppable container that the draggable is a part of. */
-    dropContainer: CdkDropListInternal, 
+    dropContainer: CdkDropList, 
     /**
      * @deprecated `_document` parameter no longer being used and will be removed.
      * @breaking-change 12.0.0
@@ -492,14 +492,6 @@ export declare class CdkDropListGroup<T> implements OnDestroy {
 }
 
 /**
- * Internal compile-time-only representation of a `CdkDropList`.
- * Used to avoid circular import issues between the `CdkDropList` and the `CdkDrag`.
- * @docs-private
- */
-declare interface CdkDropListInternal extends CdkDropList {
-}
-
-/**
  * Copies an item from one array to another, leaving it in its
  * original position in current array.
  * @param currentArray Array from which to copy the item.
@@ -814,13 +806,13 @@ export declare class DragRef<T = any> {
     }>;
     /** Emits when the user has moved the item into a new container. */
     readonly entered: Subject<{
-        container: DropListRefInternal;
+        container: DropListRef;
         item: DragRef;
         currentIndex: number;
     }>;
     /** Emits when the user removes the item its container by dragging it into another container. */
     readonly exited: Subject<{
-        container: DropListRefInternal;
+        container: DropListRef;
         item: DragRef;
     }>;
     /** Emits when the user drops the item inside a container. */
@@ -828,8 +820,8 @@ export declare class DragRef<T = any> {
         previousIndex: number;
         currentIndex: number;
         item: DragRef;
-        container: DropListRefInternal;
-        previousContainer: DropListRefInternal;
+        container: DropListRef;
+        previousContainer: DropListRef;
         distance: Point;
         dropPoint: Point;
         isPointerOverContainer: boolean;
@@ -861,7 +853,7 @@ export declare class DragRef<T = any> {
      * Should return a point describing where the item should be rendered.
      */
     constrainPosition?: (userPointerPosition: Point, dragRef: DragRef, dimensions: ClientRect, pickupPositionInElement: Point) => Point;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRefInternal>);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _config: DragRefConfig, _document: Document, _ngZone: NgZone, _viewportRuler: ViewportRuler, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>);
     /**
      * Returns the element that is being used as a placeholder
      * while the current element is being dragged.
@@ -917,7 +909,7 @@ export declare class DragRef<T = any> {
     /** Sets the layout direction of the draggable item. */
     withDirection(direction: Direction): this;
     /** Sets the container that the item is part of. */
-    _withDropContainer(container: DropListRefInternal): void;
+    _withDropContainer(container: DropListRef): void;
     /**
      * Gets the current position in pixels the draggable outside of a drop container.
      */
@@ -1060,14 +1052,6 @@ export declare interface DragRefConfig {
     parentDragRef?: DragRef;
 }
 
-/**
- * Internal compile-time-only representation of a `DragRef`.
- * Used to avoid circular import issues between the `DragRef` and the `DropListRef`.
- * @docs-private
- */
-declare interface DragRefInternal extends DragRef {
-}
-
 /** Possible values that can be used to configure the drag start delay. */
 export declare type DragStartDelay = number | {
     touch: number;
@@ -1103,16 +1087,16 @@ export declare class DropListRef<T = any> {
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
      */
-    enterPredicate: (drag: DragRefInternal, drop: DropListRef) => boolean;
+    enterPredicate: (drag: DragRef, drop: DropListRef) => boolean;
     /** Function that is used to determine whether an item can be sorted into a particular index. */
-    sortPredicate: (index: number, drag: DragRefInternal, drop: DropListRef) => boolean;
+    sortPredicate: (index: number, drag: DragRef, drop: DropListRef) => boolean;
     /** Emits right before dragging has started. */
     readonly beforeStarted: Subject<void>;
     /**
      * Emits when the user has moved a new drag item into this container.
      */
     readonly entered: Subject<{
-        item: DragRefInternal;
+        item: DragRef;
         container: DropListRef;
         currentIndex: number;
     }>;
@@ -1121,12 +1105,12 @@ export declare class DropListRef<T = any> {
      * by dragging it into another container.
      */
     readonly exited: Subject<{
-        item: DragRefInternal;
+        item: DragRef;
         container: DropListRef;
     }>;
     /** Emits when the user drops an item inside the container. */
     readonly dropped: Subject<{
-        item: DragRefInternal;
+        item: DragRef;
         currentIndex: number;
         previousIndex: number;
         container: DropListRef;
@@ -1141,13 +1125,13 @@ export declare class DropListRef<T = any> {
         previousIndex: number;
         currentIndex: number;
         container: DropListRef;
-        item: DragRefInternal;
+        item: DragRef;
     }>;
     /** Emits when a dragging sequence is started in a list connected to the current one. */
     readonly receivingStarted: Subject<{
         receiver: DropListRef;
         initiator: DropListRef;
-        items: DragRefInternal[];
+        items: DragRef[];
     }>;
     /** Emits when a dragging sequence is stopped from a list connected to the current one. */
     readonly receivingStopped: Subject<{
@@ -1188,7 +1172,7 @@ export declare class DropListRef<T = any> {
     private _scrollableElements;
     /** Initial value for the element's `scroll-snap-type` style. */
     private _initialScrollSnap;
-    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRefInternal, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
+    constructor(element: ElementRef<HTMLElement> | HTMLElement, _dragDropRegistry: DragDropRegistry<DragRef, DropListRef>, _document: any, _ngZone: NgZone, _viewportRuler: ViewportRuler);
     /** Removes the drop list functionality from the DOM element. */
     dispose(): void;
     /** Whether an item from this list is currently being dragged. */
@@ -1203,12 +1187,12 @@ export declare class DropListRef<T = any> {
      * @param index Index at which the item entered. If omitted, the container will try to figure it
      *   out automatically.
      */
-    enter(item: DragRefInternal, pointerX: number, pointerY: number, index?: number): void;
+    enter(item: DragRef, pointerX: number, pointerY: number, index?: number): void;
     /**
      * Removes an item from the container after it was dragged into another container by the user.
      * @param item Item that was dragged out.
      */
-    exit(item: DragRefInternal): void;
+    exit(item: DragRef): void;
     /**
      * Drops an item into this container.
      * @param item Item being dropped into the container.
@@ -1222,12 +1206,12 @@ export declare class DropListRef<T = any> {
      *
      * @breaking-change 15.0.0 `previousIndex` and `event` parameters to become required.
      */
-    drop(item: DragRefInternal, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point, event?: MouseEvent | TouchEvent): void;
+    drop(item: DragRef, currentIndex: number, previousIndex: number, previousContainer: DropListRef, isPointerOverContainer: boolean, distance: Point, dropPoint: Point, event?: MouseEvent | TouchEvent): void;
     /**
      * Sets the draggable items that are a part of this list.
      * @param items Items that are a part of this list.
      */
-    withItems(items: DragRefInternal[]): this;
+    withItems(items: DragRef[]): this;
     /** Sets the layout direction of the drop list. */
     withDirection(direction: Direction): this;
     /**
@@ -1252,7 +1236,7 @@ export declare class DropListRef<T = any> {
      * Figures out the index of an item in the container.
      * @param item Item whose index should be determined.
      */
-    getItemIndex(item: DragRefInternal): number;
+    getItemIndex(item: DragRef): number;
     /**
      * Whether the list is able to receive the item that
      * is currently being dragged inside a connected drop list.
@@ -1265,7 +1249,7 @@ export declare class DropListRef<T = any> {
      * @param pointerY Position of the item along the Y axis.
      * @param pointerDelta Direction in which the pointer is moving along each axis.
      */
-    _sortItem(item: DragRefInternal, pointerX: number, pointerY: number, pointerDelta: {
+    _sortItem(item: DragRef, pointerX: number, pointerY: number, pointerDelta: {
         x: number;
         y: number;
     }): void;
@@ -1299,19 +1283,19 @@ export declare class DropListRef<T = any> {
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _getSiblingContainerFromPosition(item: DragRefInternal, x: number, y: number): DropListRef | undefined;
+    _getSiblingContainerFromPosition(item: DragRef, x: number, y: number): DropListRef | undefined;
     /**
      * Checks whether the drop list can receive the passed-in item.
      * @param item Item that is being dragged into the list.
      * @param x Position of the item along the X axis.
      * @param y Position of the item along the Y axis.
      */
-    _canReceive(item: DragRefInternal, x: number, y: number): boolean;
+    _canReceive(item: DragRef, x: number, y: number): boolean;
     /**
      * Called by one of the connected drop lists when a dragging sequence has started.
      * @param sibling Sibling in which dragging has started.
      */
-    _startReceiving(sibling: DropListRef, items: DragRefInternal[]): void;
+    _startReceiving(sibling: DropListRef, items: DragRef[]): void;
     /**
      * Called by a connected drop list when dragging has stopped.
      * @param sibling Sibling whose dragging has stopped.
@@ -1333,18 +1317,8 @@ export declare class DropListRef<T = any> {
     private _notifyReceivingSiblings;
 }
 
-/**
- * Internal compile-time-only representation of a `DropListRef`.
- * Used to avoid circular import issues between the `DropListRef` and the `DragRef`.
- * @docs-private
- */
-declare interface DropListRefInternal extends DropListRef {
-}
-
 declare namespace i1 {
     export {
-        CdkDropListInternal,
-        CDK_DROP_LIST,
         CdkDropList
     }
 }
@@ -1358,6 +1332,7 @@ declare namespace i2 {
 
 declare namespace i3 {
     export {
+        CDK_DROP_LIST,
         CdkDrag
     }
 }
