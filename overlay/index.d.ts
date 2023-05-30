@@ -21,7 +21,6 @@ import { Observable } from 'rxjs';
 import { OnChanges } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-import { Portal } from '@angular/cdk/portal';
 import { PortalOutlet } from '@angular/cdk/portal';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { SimpleChanges } from '@angular/core';
@@ -38,15 +37,15 @@ import { ViewportRuler } from '@angular/cdk/scrolling';
  */
 declare abstract class BaseOverlayDispatcher implements OnDestroy {
     /** Currently attached overlays in the order they were attached. */
-    _attachedOverlays: OverlayReference[];
+    _attachedOverlays: OverlayRef[];
     protected _document: Document;
     protected _isAttached: boolean;
     constructor(document: any);
     ngOnDestroy(): void;
     /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayReference): void;
+    add(overlayRef: OverlayRef): void;
     /** Remove an overlay from the list of attached overlay refs. */
-    remove(overlayRef: OverlayReference): void;
+    remove(overlayRef: OverlayRef): void;
     /** Detaches the global event listener. */
     protected abstract detach(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<BaseOverlayDispatcher, never>;
@@ -224,7 +223,7 @@ export declare class CloseScrollStrategy implements ScrollStrategy {
     private _initialScrollPosition;
     constructor(_scrollDispatcher: ScrollDispatcher, _ngZone: NgZone, _viewportRuler: ViewportRuler, _config?: CloseScrollStrategyConfig | undefined);
     /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayReference): void;
+    attach(overlayRef: OverlayRef): void;
     /** Enables the closing of the attached overlay on scroll. */
     enable(): void;
     /** Disables the closing the attached overlay on scroll. */
@@ -369,7 +368,7 @@ export declare class FlexibleConnectedPositionStrategy implements PositionStrate
     get positions(): ConnectionPositionPair[];
     constructor(connectedTo: FlexibleConnectedPositionStrategyOrigin, _viewportRuler: ViewportRuler, _document: Document, _platform: Platform, _overlayContainer: OverlayContainer);
     /** Attaches this position strategy to an overlay. */
-    attach(overlayRef: OverlayReference): void;
+    attach(overlayRef: OverlayRef): void;
     /**
      * Updates the position of the overlay element, using whichever preferred position relative
      * to the origin best fits on-screen.
@@ -587,7 +586,7 @@ export declare class GlobalPositionStrategy implements PositionStrategy {
     private _width;
     private _height;
     private _isDisposed;
-    attach(overlayRef: OverlayReference): void;
+    attach(overlayRef: OverlayRef): void;
     /**
      * Sets the top position of the overlay. Clears any previously set vertical position.
      * @param value New top offset.
@@ -833,7 +832,7 @@ export declare class OverlayKeyboardDispatcher extends BaseOverlayDispatcher {
     /** @breaking-change 14.0.0 _ngZone will be required. */
     _ngZone?: NgZone | undefined);
     /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayReference): void;
+    add(overlayRef: OverlayRef): void;
     /** Detaches the global keyboard event listener. */
     protected detach(): void;
     /** Keyboard event listener that will be attached to the body. */
@@ -864,7 +863,7 @@ export declare class OverlayOutsideClickDispatcher extends BaseOverlayDispatcher
     /** @breaking-change 14.0.0 _ngZone will be required. */
     _ngZone?: NgZone | undefined);
     /** Add a new overlay to the list of attached overlay refs. */
-    add(overlayRef: OverlayReference): void;
+    add(overlayRef: OverlayRef): void;
     /** Detaches the global keyboard event listener. */
     protected detach(): void;
     private _addEventListeners;
@@ -900,7 +899,7 @@ export declare class OverlayPositionBuilder {
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
  */
-export declare class OverlayRef implements PortalOutlet, OverlayReference {
+export declare class OverlayRef implements PortalOutlet {
     private _portalOutlet;
     private _host;
     private _pane;
@@ -1011,35 +1010,6 @@ export declare class OverlayRef implements PortalOutlet, OverlayReference {
     private _disposeBackdrop;
 }
 
-/**
- * Basic interface for an overlay. Used to avoid circular type references between
- * `OverlayRef`, `PositionStrategy` and `ScrollStrategy`, and `OverlayConfig`.
- * @docs-private
- */
-declare interface OverlayReference {
-    attach: (portal: Portal<any>) => any;
-    detach: () => any;
-    dispose: () => void;
-    overlayElement: HTMLElement;
-    hostElement: HTMLElement;
-    backdropElement: HTMLElement | null;
-    getConfig: () => any;
-    hasAttached: () => boolean;
-    updateSize: (config: any) => void;
-    updatePosition: () => void;
-    getDirection: () => Direction;
-    setDirection: (dir: Direction | Directionality) => void;
-    backdropClick: () => Observable<MouseEvent>;
-    attachments: () => Observable<void>;
-    detachments: () => Observable<void>;
-    keydownEvents: () => Observable<KeyboardEvent>;
-    outsidePointerEvents: () => Observable<MouseEvent>;
-    addPanelClass: (classes: string | string[]) => void;
-    removePanelClass: (classes: string | string[]) => void;
-    readonly _outsidePointerEvents: Subject<MouseEvent>;
-    readonly _keydownEvents: Subject<KeyboardEvent>;
-}
-
 /** Size properties for an overlay. */
 export declare interface OverlaySizeConfig {
     width?: number | string;
@@ -1059,7 +1029,7 @@ declare interface Point {
 /** Strategy for setting the position on an overlay. */
 export declare interface PositionStrategy {
     /** Attaches this position strategy to an overlay. */
-    attach(overlayRef: OverlayReference): void;
+    attach(overlayRef: OverlayRef): void;
     /** Updates the position of the overlay element. */
     apply(): void;
     /** Called when the overlay is detached. */
@@ -1080,7 +1050,7 @@ export declare class RepositionScrollStrategy implements ScrollStrategy {
     private _overlayRef;
     constructor(_scrollDispatcher: ScrollDispatcher, _viewportRuler: ViewportRuler, _ngZone: NgZone, _config?: RepositionScrollStrategyConfig | undefined);
     /** Attaches this scroll strategy to an overlay. */
-    attach(overlayRef: OverlayReference): void;
+    attach(overlayRef: OverlayRef): void;
     /** Enables repositioning of the attached overlay on scroll. */
     enable(): void;
     /** Disables repositioning of the attached overlay on scroll. */
@@ -1141,7 +1111,7 @@ export declare interface ScrollStrategy {
     /** Disable this scroll strategy (called when the attached overlay is detached from a portal). */
     disable: () => void;
     /** Attaches this `ScrollStrategy` to an overlay. */
-    attach: (overlayRef: OverlayReference) => void;
+    attach: (overlayRef: OverlayRef) => void;
     /** Detaches the scroll strategy from the current overlay. */
     detach?: () => void;
 }
