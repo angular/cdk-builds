@@ -78,7 +78,7 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkContextMenuTrigger, "[cdkContextMenuTriggerFor]", ["cdkContextMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkContextMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkContextMenuPosition"; "required": false; }; "menuData": { "alias": "cdkContextMenuTriggerData"; "required": false; }; "disabled": { "alias": "cdkContextMenuDisabled"; "required": false; }; }, { "opened": "cdkContextMenuOpened"; "closed": "cdkContextMenuClosed"; }, never, never, true, never, false>;
 }
 
 /**
@@ -112,7 +112,7 @@ export declare class CdkMenu extends CdkMenuBase implements AfterContentInit, On
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenu, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenu, "[cdkMenu]", ["cdkMenu"], {}, { "closed": "closed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenu, "[cdkMenu]", ["cdkMenu"], {}, { "closed": "closed"; }, never, never, true, never, false>;
 }
 
 /**
@@ -141,7 +141,7 @@ export declare class CdkMenuBar extends CdkMenuBase implements AfterContentInit 
     /** Subscribe to the MenuStack emptied events. */
     private _subscribeToMenuStackEmptied;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBar, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBar, "[cdkMenuBar]", ["cdkMenuBar"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBar, "[cdkMenuBar]", ["cdkMenuBar"], {}, {}, never, never, true, never, false>;
 }
 
 /**
@@ -220,7 +220,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
      */
     private _setUpPointerTracker;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuBase, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["items"], never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuBase, never, never, { "id": { "alias": "id"; "required": false; }; }, {}, ["items"], never, false, never, false>;
 }
 
 /**
@@ -228,7 +228,7 @@ export declare abstract class CdkMenuBase extends CdkMenuGroup implements Menu, 
  */
 export declare class CdkMenuGroup {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuGroup, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuGroup, "[cdkMenuGroup]", ["cdkMenuGroup"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuGroup, "[cdkMenuGroup]", ["cdkMenuGroup"], {}, {}, never, never, true, never, false>;
 }
 
 /**
@@ -339,7 +339,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     /** Sets the `type` attribute of the menu item. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItem, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": { "alias": "cdkMenuItemDisabled"; "required": false; }; "typeaheadLabel": { "alias": "cdkMenuitemTypeaheadLabel"; "required": false; }; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItem, "[cdkMenuItem]", ["cdkMenuItem"], { "disabled": { "alias": "cdkMenuItemDisabled"; "required": false; }; "typeaheadLabel": { "alias": "cdkMenuitemTypeaheadLabel"; "required": false; }; }, { "triggered": "cdkMenuItemTriggered"; }, never, never, true, never, false>;
 }
 
 /**
@@ -356,7 +356,7 @@ export declare class CdkMenuItemCheckbox extends CdkMenuItemSelectable {
         keepOpen: boolean;
     }): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemCheckbox, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemCheckbox, "[cdkMenuItemCheckbox]", ["cdkMenuItemCheckbox"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemCheckbox, "[cdkMenuItemCheckbox]", ["cdkMenuItemCheckbox"], {}, {}, never, never, true, never, false>;
 }
 
 /**
@@ -384,7 +384,7 @@ export declare class CdkMenuItemRadio extends CdkMenuItemSelectable implements O
     /** Configure the unique selection dispatcher listener in order to toggle the checked state  */
     private _registerDispatcherListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemRadio, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemRadio, "[cdkMenuItemRadio]", ["cdkMenuItemRadio"], {}, {}, never, never, true, never, false>;
 }
 
 /** Base class providing checked state for selectable MenuItems. */
@@ -396,7 +396,7 @@ export declare abstract class CdkMenuItemSelectable extends CdkMenuItem {
     /** Whether the item should close the menu if triggered by the spacebar. */
     protected closeOnSpacebarTrigger: boolean;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuItemSelectable, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemSelectable, never, never, { "checked": { "alias": "cdkMenuItemChecked"; "required": false; }; }, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuItemSelectable, never, never, { "checked": { "alias": "cdkMenuItemChecked"; "required": false; }; }, {}, never, never, false, never, false>;
 }
 
 /** Module that declares components and directives for the CDK menu. */
@@ -478,7 +478,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     /** Sets thte `type` attribute of the trigger. */
     private _setType;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTrigger, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkMenuPosition"; "required": false; }; "menuData": { "alias": "cdkMenuTriggerData"; "required": false; }; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTrigger, "[cdkMenuTriggerFor]", ["cdkMenuTriggerFor"], { "menuTemplateRef": { "alias": "cdkMenuTriggerFor"; "required": false; }; "menuPosition": { "alias": "cdkMenuPosition"; "required": false; }; "menuData": { "alias": "cdkMenuTriggerData"; "required": false; }; }, { "opened": "cdkMenuOpened"; "closed": "cdkMenuClosed"; }, never, never, true, never, false>;
 }
 
 /**
@@ -538,7 +538,7 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
     /** Gets the injector to use when creating a child menu. */
     private _getChildMenuInjector;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkMenuTriggerBase, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTriggerBase, never, never, {}, {}, never, never, false, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkMenuTriggerBase, never, never, {}, {}, never, never, false, never, false>;
 }
 
 /**
@@ -547,7 +547,7 @@ export declare abstract class CdkMenuTriggerBase implements OnDestroy {
  */
 export declare class CdkTargetMenuAim {
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTargetMenuAim, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTargetMenuAim, "[cdkTargetMenuAim]", ["cdkTargetMenuAim"], {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTargetMenuAim, "[cdkTargetMenuAim]", ["cdkTargetMenuAim"], {}, {}, never, never, true, never, false>;
 }
 
 /** Options that can be provided to the close or closeAll methods. */
