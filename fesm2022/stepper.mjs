@@ -254,6 +254,8 @@ class CdkStepper {
         this._selectedIndex = 0;
         /** Event emitted when the selected step has changed. */
         this.selectionChange = new EventEmitter();
+        /** Output to support two-way binding on `[(selectedIndex)]` */
+        this.selectedIndexChange = new EventEmitter();
         this._orientation = 'horizontal';
         this._groupId = nextId++;
     }
@@ -411,6 +413,7 @@ class CdkStepper {
             ? this._keyManager.setActiveItem(newIndex)
             : this._keyManager.updateActiveItem(newIndex);
         this._selectedIndex = newIndex;
+        this.selectedIndexChange.emit(this._selectedIndex);
         this._stateChanged();
     }
     _onKeydown(event) {
@@ -456,7 +459,7 @@ class CdkStepper {
         return index > -1 && (!this.steps || index < this.steps.length);
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.0-next.3", ngImport: i0, type: CdkStepper, deps: [{ token: i1.Directionality, optional: true }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.0-next.3", type: CdkStepper, selector: "[cdkStepper]", inputs: { linear: "linear", selectedIndex: "selectedIndex", selected: "selected", orientation: "orientation" }, outputs: { selectionChange: "selectionChange" }, queries: [{ propertyName: "_steps", predicate: CdkStep, descendants: true }, { propertyName: "_stepHeader", predicate: CdkStepHeader, descendants: true }], exportAs: ["cdkStepper"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.0-next.3", type: CdkStepper, selector: "[cdkStepper]", inputs: { linear: "linear", selectedIndex: "selectedIndex", selected: "selected", orientation: "orientation" }, outputs: { selectionChange: "selectionChange", selectedIndexChange: "selectedIndexChange" }, queries: [{ propertyName: "_steps", predicate: CdkStep, descendants: true }, { propertyName: "_stepHeader", predicate: CdkStepHeader, descendants: true }], exportAs: ["cdkStepper"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.3", ngImport: i0, type: CdkStepper, decorators: [{
             type: Directive,
@@ -479,6 +482,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.0-next.3", 
             }], selected: [{
                 type: Input
             }], selectionChange: [{
+                type: Output
+            }], selectedIndexChange: [{
                 type: Output
             }], orientation: [{
                 type: Input

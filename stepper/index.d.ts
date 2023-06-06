@@ -175,6 +175,8 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     set selected(step: CdkStep | undefined);
     /** Event emitted when the selected step has changed. */
     readonly selectionChange: EventEmitter<StepperSelectionEvent>;
+    /** Output to support two-way binding on `[(selectedIndex)]` */
+    readonly selectedIndexChange: EventEmitter<number>;
     /** Used to track unique ID for each stepper component. */
     _groupId: number;
     /** Orientation of the stepper. */
@@ -215,7 +217,7 @@ export declare class CdkStepper implements AfterContentInit, AfterViewInit, OnDe
     /** Checks whether the passed-in index is a valid step index. */
     private _isValidIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkStepper, [{ optional: true; }, null, null]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": { "alias": "linear"; "required": false; }; "selectedIndex": { "alias": "selectedIndex"; "required": false; }; "selected": { "alias": "selected"; "required": false; }; "orientation": { "alias": "orientation"; "required": false; }; }, { "selectionChange": "selectionChange"; }, ["_steps", "_stepHeader"], never, false, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkStepper, "[cdkStepper]", ["cdkStepper"], { "linear": { "alias": "linear"; "required": false; }; "selectedIndex": { "alias": "selectedIndex"; "required": false; }; "selected": { "alias": "selected"; "required": false; }; "orientation": { "alias": "orientation"; "required": false; }; }, { "selectionChange": "selectionChange"; "selectedIndexChange": "selectedIndexChange"; }, ["_steps", "_stepHeader"], never, false, never, false>;
 }
 
 export declare class CdkStepperModule {
