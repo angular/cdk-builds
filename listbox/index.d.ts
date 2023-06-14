@@ -246,7 +246,7 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     /** Get the index of the last triggered option. */
     private _getLastTriggeredIndex;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkListbox<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": { "alias": "id"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; "value": { "alias": "cdkListboxValue"; "required": false; }; "multiple": { "alias": "cdkListboxMultiple"; "required": false; }; "disabled": { "alias": "cdkListboxDisabled"; "required": false; }; "useActiveDescendant": { "alias": "cdkListboxUseActiveDescendant"; "required": false; }; "orientation": { "alias": "cdkListboxOrientation"; "required": false; }; "compareWith": { "alias": "cdkListboxCompareWith"; "required": false; }; "navigationWrapDisabled": { "alias": "cdkListboxNavigationWrapDisabled"; "required": false; }; "navigateDisabledOptions": { "alias": "cdkListboxNavigatesDisabledOptions"; "required": false; }; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, true, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": { "alias": "id"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; "value": { "alias": "cdkListboxValue"; "required": false; }; "multiple": { "alias": "cdkListboxMultiple"; "required": false; }; "disabled": { "alias": "cdkListboxDisabled"; "required": false; }; "useActiveDescendant": { "alias": "cdkListboxUseActiveDescendant"; "required": false; }; "orientation": { "alias": "cdkListboxOrientation"; "required": false; }; "compareWith": { "alias": "cdkListboxCompareWith"; "required": false; }; "navigationWrapDisabled": { "alias": "cdkListboxNavigationWrapDisabled"; "required": false; }; "navigateDisabledOptions": { "alias": "cdkListboxNavigatesDisabledOptions"; "required": false; }; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, true, never>;
 }
 
 export declare class CdkListboxModule {
@@ -315,7 +315,7 @@ export declare class CdkOption<T = unknown> implements ListKeyManagerOption, Hig
     /** Get the tabindex for this option. */
     protected _getTabIndex(): number | null;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkOption<any>, never>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": { "alias": "id"; "required": false; }; "value": { "alias": "cdkOption"; "required": false; }; "typeaheadLabel": { "alias": "cdkOptionTypeaheadLabel"; "required": false; }; "disabled": { "alias": "cdkOptionDisabled"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; }, {}, never, never, true, never, false>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkOption<any>, "[cdkOption]", ["cdkOption"], { "id": { "alias": "id"; "required": false; }; "value": { "alias": "cdkOption"; "required": false; }; "typeaheadLabel": { "alias": "cdkOptionTypeaheadLabel"; "required": false; }; "disabled": { "alias": "cdkOptionDisabled"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; }, {}, never, never, true, never>;
 }
 
 declare namespace i1 {
