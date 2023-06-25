@@ -7,12 +7,12 @@
  */
 import { Tree } from '@angular-devkit/schematics';
 import { Schema as ComponentOptions } from '@schematics/angular/component/schema';
-import { ProjectDefinition } from '@angular-devkit/core/src/workspace';
+import { workspaces } from '@angular-devkit/core';
 import * as ts from 'typescript';
 /** Reads file given path and returns TypeScript source file. */
 export declare function parseSourceFile(host: Tree, path: string): ts.SourceFile;
 /** Import and add module to root app module. */
-export declare function addModuleImportToRootModule(host: Tree, moduleName: string, src: string, project: ProjectDefinition): void;
+export declare function addModuleImportToRootModule(host: Tree, moduleName: string, src: string, project: workspaces.ProjectDefinition): void;
 /**
  * Import and add module to specific module path.
  * @param host the tree we are updating
