@@ -1,12 +1,12 @@
 import * as i0 from '@angular/core';
 import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
-import { UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, ENTER, SPACE, TAB, ESCAPE } from '@angular/cdk/keycodes';
+import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
@@ -482,6 +482,26 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }]
         }] });
 
+/** Checks whether a keyboard event will trigger a native `click` event on an element. */
+function eventDispatchesNativeClick(elementRef, event) {
+    // Synthetic events won't trigger clicks.
+    if (!event.isTrusted) {
+        return false;
+    }
+    const el = elementRef.nativeElement;
+    const keyCode = event.keyCode;
+    // Buttons trigger clicks both on space and enter events.
+    if (el.nodeName === 'BUTTON' && !el.disabled) {
+        return keyCode === ENTER || keyCode === SPACE;
+    }
+    // Links only trigger clicks on enter.
+    if (el.nodeName === 'A') {
+        return keyCode === ENTER;
+    }
+    // Any other elements won't dispatch clicks from keyboard events.
+    return false;
+}
+
 /**
  * A directive that turns its host element into a trigger for a popup menu.
  * It can be combined with cdkMenuItem to create sub-menus. If the element is in a top level
@@ -496,7 +516,6 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         this._overlay = inject(Overlay);
         this._ngZone = inject(NgZone);
         this._directionality = inject(Directionality, { optional: true });
-        this._inputModalityDetector = inject(InputModalityDetector);
         /** The parent menu this trigger belongs to. */
         this._parentMenu = inject(CDK_MENU, { optional: true });
         /** The menu aim service used by this menu. */
@@ -544,7 +563,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         switch (event.keyCode) {
             case SPACE:
             case ENTER:
-                if (!hasModifierKey(event)) {
+                // Skip events that will trigger clicks so the handler doesn't get triggered twice.
+                if (!hasModifierKey(event) && !eventDispatchesNativeClick(this._elementRef, event)) {
                     this.toggle();
                     this.childMenu?.focusFirstItem('keyboard');
                 }
@@ -583,12 +603,8 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     }
     /** Handles clicks on the menu trigger. */
     _handleClick() {
-        // Don't handle clicks originating from the keyboard since we
-        // already do the same on `keydown` events for enter and space.
-        if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
-            this.toggle();
-            this.childMenu?.focusFirstItem('mouse');
-        }
+        this.toggle();
+        this.childMenu?.focusFirstItem('mouse');
     }
     /**
      * Sets whether the trigger's menu stack has focus.
@@ -787,7 +803,6 @@ class CdkMenuItem {
     }
     constructor() {
         this._dir = inject(Directionality, { optional: true });
-        this._inputModalityDetector = inject(InputModalityDetector);
         this._elementRef = inject(ElementRef);
         this._ngZone = inject(NgZone);
         /** The menu aim service used by this menu. */
@@ -890,7 +905,8 @@ class CdkMenuItem {
         switch (event.keyCode) {
             case SPACE:
             case ENTER:
-                if (!hasModifierKey(event)) {
+                // Skip events that will trigger clicks so the handler doesn't get triggered twice.
+                if (!hasModifierKey(event) && !eventDispatchesNativeClick(this._elementRef, event)) {
                     this.trigger({ keepOpen: event.keyCode === SPACE && !this.closeOnSpacebarTrigger });
                 }
                 break;
@@ -918,14 +934,6 @@ class CdkMenuItem {
                     }
                 }
                 break;
-        }
-    }
-    /** Handles clicks on the menu item. */
-    _handleClick() {
-        // Don't handle clicks originating from the keyboard since we
-        // already do the same on `keydown` events for enter and space.
-        if (this._inputModalityDetector.mostRecentModality !== 'keyboard') {
-            this.trigger();
         }
     }
     /** Whether this menu item is standalone or within a menu or menu bar. */
@@ -996,7 +1004,7 @@ class CdkMenuItem {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "_handleClick()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItem, decorators: [{
             type: Directive,
@@ -1011,7 +1019,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                         '[attr.aria-disabled]': 'disabled || null',
                         '(blur)': '_resetTabIndex()',
                         '(focus)': '_setTabIndex()',
-                        '(click)': '_handleClick()',
+                        '(click)': 'trigger()',
                         '(keydown)': '_onKeydown($event)',
                     },
                 }]
