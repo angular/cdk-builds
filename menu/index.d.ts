@@ -238,7 +238,6 @@ export declare class CdkMenuGroup {
  */
 export declare class CdkMenuItem implements FocusableOption, FocusableElement, Toggler, OnDestroy {
     protected readonly _dir: Directionality | null;
-    private readonly _inputModalityDetector;
     readonly _elementRef: ElementRef<HTMLElement>;
     protected _ngZone: NgZone;
     /** The menu aim service used by this menu. */
@@ -312,8 +311,6 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
      * @param event the keyboard event to handle
      */
     _onKeydown(event: KeyboardEvent): void;
-    /** Handles clicks on the menu item. */
-    _handleClick(): void;
     /** Whether this menu item is standalone or within a menu or menu bar. */
     private _isStandaloneItem;
     /**
@@ -418,7 +415,6 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private readonly _overlay;
     private readonly _ngZone;
     private readonly _directionality;
-    private readonly _inputModalityDetector;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
     /** The menu aim service used by this menu. */
