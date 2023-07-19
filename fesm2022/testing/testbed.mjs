@@ -3,7 +3,7 @@ import { flush } from '@angular/core/testing';
 import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import * as keyCodes from '@angular/cdk/keycodes';
-import { PERIOD } from '@angular/cdk/keycodes';
+import { COMMA, PERIOD } from '@angular/cdk/keycodes';
 
 /** Unique symbol that is used to patch a property to a proxy zone. */
 const stateObservableSymbol = Symbol('ProxyZone_PATCHED#stateObservable');
@@ -285,6 +285,10 @@ const incrementalInputTypes = new Set([
     'tel',
     'url',
 ]);
+/** Characters whose key code doesn't match their character code. */
+const KEYCODE_MISMATCHES = {
+    ',': COMMA,
+};
 /**
  * Checks whether the given Element is a text input element.
  * @docs-private
@@ -312,7 +316,12 @@ function typeInElement(element, ...modifiersAndKeys) {
     const inputType = element.getAttribute('type') || 'text';
     const keys = rest
         .map(k => typeof k === 'string'
-        ? k.split('').map(c => ({ keyCode: c.toUpperCase().charCodeAt(0), key: c }))
+        ? k.split('').map(c => ({
+            keyCode: KEYCODE_MISMATCHES.hasOwnProperty(c)
+                ? KEYCODE_MISMATCHES[c]
+                : c.toUpperCase().charCodeAt(0),
+            key: c,
+        }))
         : [k])
         .reduce((arr, k) => arr.concat(k), []);
     // Throw an error if no keys have been specified. Calling this function with no
