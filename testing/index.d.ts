@@ -724,7 +724,8 @@ export declare enum TestKey {
     F10 = 26,
     F11 = 27,
     F12 = 28,
-    META = 29
+    META = 29,
+    COMMA = 30
 }
 
 export declare interface TextOptions {

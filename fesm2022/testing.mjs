@@ -664,6 +664,7 @@ var TestKey;
     TestKey[TestKey["F11"] = 27] = "F11";
     TestKey[TestKey["F12"] = 28] = "F12";
     TestKey[TestKey["META"] = 29] = "META";
+    TestKey[TestKey["COMMA"] = 30] = "COMMA";
 })(TestKey || (TestKey = {}));
 
 /**
