@@ -1,10 +1,10 @@
 import * as i0 from '@angular/core';
-import { inject, ElementRef, Directive, Input, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
+import { inject, ElementRef, Directive, Input, NgZone, ChangeDetectorRef, forwardRef, Output, ContentChildren, NgModule } from '@angular/core';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { A, hasModifierKey, SPACE, ENTER, HOME, END, UP_ARROW, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW } from '@angular/cdk/keycodes';
 import { coerceBooleanProperty, coerceArray } from '@angular/cdk/coercion';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Subject, defer, merge } from 'rxjs';
+import { Subject, defer, merge, fromEvent } from 'rxjs';
 import { startWith, switchMap, map, takeUntil, filter } from 'rxjs/operators';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Directionality } from '@angular/cdk/bidi';
@@ -171,42 +171,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['tabindex']
             }] } });
 class CdkListbox {
-    constructor() {
-        this._generatedId = `cdk-listbox-${nextId++}`;
-        this._disabled = false;
-        this._useActiveDescendant = false;
-        this._orientation = 'vertical';
-        this._navigationWrapDisabled = false;
-        this._navigateDisabledOptions = false;
-        /** Emits when the selected value(s) in the listbox change. */
-        this.valueChange = new Subject();
-        /** The selection model used by the listbox. */
-        this.selectionModel = new ListboxSelectionModel();
-        /** Emits when the listbox is destroyed. */
-        this.destroyed = new Subject();
-        /** The host element of the listbox. */
-        this.element = inject(ElementRef).nativeElement;
-        /** The change detector for this listbox. */
-        this.changeDetectorRef = inject(ChangeDetectorRef);
-        /** Whether the currently selected value in the selection model is invalid. */
-        this._invalid = false;
-        /** The last user-triggered option. */
-        this._lastTriggered = null;
-        /** Callback called when the listbox has been touched */
-        this._onTouched = () => { };
-        /** Callback called when the listbox value changes */
-        this._onChange = () => { };
-        /** Emits when an option has been clicked. */
-        this._optionClicked = defer(() => this.options.changes.pipe(startWith(this.options), switchMap(options => merge(...options.map(option => option._clicked.pipe(map(event => ({ option, event }))))))));
-        /** The directionality of the page. */
-        this._dir = inject(Directionality, { optional: true });
-        /** A predicate that skips disabled options. */
-        this._skipDisabledPredicate = (option) => option.disabled;
-        /** A predicate that does not skip any options. */
-        this._skipNonePredicate = () => false;
-        /** Whether the listbox currently has focus. */
-        this._hasFocus = false;
-    }
     /** The id of the option's host element. */
     get id() {
         return this._id || this._generatedId;
@@ -293,6 +257,47 @@ class CdkListbox {
     set navigateDisabledOptions(skip) {
         this._navigateDisabledOptions = coerceBooleanProperty(skip);
         this.listKeyManager?.skipPredicate(this._navigateDisabledOptions ? this._skipNonePredicate : this._skipDisabledPredicate);
+    }
+    constructor() {
+        this._generatedId = `cdk-listbox-${nextId++}`;
+        this._disabled = false;
+        this._useActiveDescendant = false;
+        this._orientation = 'vertical';
+        this._navigationWrapDisabled = false;
+        this._navigateDisabledOptions = false;
+        /** Emits when the selected value(s) in the listbox change. */
+        this.valueChange = new Subject();
+        /** The selection model used by the listbox. */
+        this.selectionModel = new ListboxSelectionModel();
+        /** Emits when the listbox is destroyed. */
+        this.destroyed = new Subject();
+        /** The host element of the listbox. */
+        this.element = inject(ElementRef).nativeElement;
+        /** The Angular zone. */
+        this.ngZone = inject(NgZone);
+        /** The change detector for this listbox. */
+        this.changeDetectorRef = inject(ChangeDetectorRef);
+        /** Whether the currently selected value in the selection model is invalid. */
+        this._invalid = false;
+        /** The last user-triggered option. */
+        this._lastTriggered = null;
+        /** Callback called when the listbox has been touched */
+        this._onTouched = () => { };
+        /** Callback called when the listbox value changes */
+        this._onChange = () => { };
+        /** Emits when an option has been clicked. */
+        this._optionClicked = defer(() => this.options.changes.pipe(startWith(this.options), switchMap(options => merge(...options.map(option => option._clicked.pipe(map(event => ({ option, event }))))))));
+        /** The directionality of the page. */
+        this._dir = inject(Directionality, { optional: true });
+        /** A predicate that skips disabled options. */
+        this._skipDisabledPredicate = (option) => option.disabled;
+        /** A predicate that does not skip any options. */
+        this._skipNonePredicate = () => false;
+        /** Whether the listbox currently has focus. */
+        this._hasFocus = false;
+        /** A reference to the option that was active before the listbox lost focus. */
+        this._previousActiveOption = null;
+        this._setPreviousActiveOptionAsActiveOptionOnWindowBlur();
     }
     ngAfterContentInit() {
         if (typeof ngDevMode === 'undefined' || ngDevMode) {
@@ -596,6 +601,10 @@ class CdkListbox {
      * @param event The focusout event
      */
     _handleFocusOut(event) {
+        // Some browsers (e.g. Chrome and Firefox) trigger the focusout event when the user returns back to the document.
+        // To prevent losing the active option in this case, we store it in `_previousActiveOption` and restore it on the window `blur` event
+        // This ensures that the `activeItem` matches the actual focused element when the user returns to the document.
+        this._previousActiveOption = this.listKeyManager.activeItem;
         const otherElement = event.relatedTarget;
         if (this.element !== otherElement && !this.element.contains(otherElement)) {
             this._onTouched();
@@ -778,6 +787,22 @@ class CdkListbox {
         const index = this.options.toArray().indexOf(this._lastTriggered);
         return index === -1 ? null : index;
     }
+    /**
+     * Set previous active option as active option on window blur.
+     * This ensures that the `activeOption` matches the actual focused element when the user returns to the document.
+     */
+    _setPreviousActiveOptionAsActiveOptionOnWindowBlur() {
+        this.ngZone.runOutsideAngular(() => {
+            fromEvent(window, 'blur')
+                .pipe(takeUntil(this.destroyed))
+                .subscribe(() => {
+                if (this.element.contains(document.activeElement) && this._previousActiveOption) {
+                    this._setActiveOption(this._previousActiveOption);
+                    this._previousActiveOption = null;
+                }
+            });
+        });
+    }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkListbox, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
     static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkListbox, isStandalone: true, selector: "[cdkListbox]", inputs: { id: "id", enabledTabIndex: ["tabindex", "enabledTabIndex"], value: ["cdkListboxValue", "value"], multiple: ["cdkListboxMultiple", "multiple"], disabled: ["cdkListboxDisabled", "disabled"], useActiveDescendant: ["cdkListboxUseActiveDescendant", "useActiveDescendant"], orientation: ["cdkListboxOrientation", "orientation"], compareWith: ["cdkListboxCompareWith", "compareWith"], navigationWrapDisabled: ["cdkListboxNavigationWrapDisabled", "navigationWrapDisabled"], navigateDisabledOptions: ["cdkListboxNavigatesDisabledOptions", "navigateDisabledOptions"] }, outputs: { valueChange: "cdkListboxValueChange" }, host: { attributes: { "role": "listbox" }, listeners: { "focus": "_handleFocus()", "keydown": "_handleKeydown($event)", "focusout": "_handleFocusOut($event)", "focusin": "_handleFocusIn()" }, properties: { "id": "id", "attr.tabindex": "_getTabIndex()", "attr.aria-disabled": "disabled", "attr.aria-multiselectable": "multiple", "attr.aria-activedescendant": "_getAriaActiveDescendant()", "attr.aria-orientation": "orientation" }, classAttribute: "cdk-listbox" }, providers: [
             {
@@ -815,7 +840,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                         },
                     ],
                 }]
-        }], propDecorators: { id: [{
+        }], ctorParameters: function () { return []; }, propDecorators: { id: [{
                 type: Input
             }], enabledTabIndex: [{
                 type: Input,
