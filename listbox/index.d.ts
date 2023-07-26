@@ -6,6 +6,7 @@ import { ControlValueAccessor } from '@angular/forms';
 import { Highlightable } from '@angular/cdk/a11y';
 import * as i0 from '@angular/core';
 import { ListKeyManagerOption } from '@angular/cdk/a11y';
+import { NgZone } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { QueryList } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -68,6 +69,8 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     protected readonly destroyed: Subject<void>;
     /** The host element of the listbox. */
     protected readonly element: HTMLElement;
+    /** The Angular zone. */
+    protected readonly ngZone: NgZone;
     /** The change detector for this listbox. */
     protected readonly changeDetectorRef: ChangeDetectorRef;
     /** Whether the currently selected value in the selection model is invalid. */
@@ -88,6 +91,9 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private readonly _skipNonePredicate;
     /** Whether the listbox currently has focus. */
     private _hasFocus;
+    /** A reference to the option that was active before the listbox lost focus. */
+    private _previousActiveOption;
+    constructor();
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
     /**
@@ -245,6 +251,11 @@ export declare class CdkListbox<T = unknown> implements AfterContentInit, OnDest
     private _getInvalidOptionValues;
     /** Get the index of the last triggered option. */
     private _getLastTriggeredIndex;
+    /**
+     * Set previous active option as active option on window blur.
+     * This ensures that the `activeOption` matches the actual focused element when the user returns to the document.
+     */
+    private _setPreviousActiveOptionAsActiveOptionOnWindowBlur;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkListbox<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkListbox<any>, "[cdkListbox]", ["cdkListbox"], { "id": { "alias": "id"; "required": false; }; "enabledTabIndex": { "alias": "tabindex"; "required": false; }; "value": { "alias": "cdkListboxValue"; "required": false; }; "multiple": { "alias": "cdkListboxMultiple"; "required": false; }; "disabled": { "alias": "cdkListboxDisabled"; "required": false; }; "useActiveDescendant": { "alias": "cdkListboxUseActiveDescendant"; "required": false; }; "orientation": { "alias": "cdkListboxOrientation"; "required": false; }; "compareWith": { "alias": "cdkListboxCompareWith"; "required": false; }; "navigationWrapDisabled": { "alias": "cdkListboxNavigationWrapDisabled"; "required": false; }; "navigateDisabledOptions": { "alias": "cdkListboxNavigatesDisabledOptions"; "required": false; }; }, { "valueChange": "cdkListboxValueChange"; }, ["options"], never, true, never>;
 }
