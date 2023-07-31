@@ -367,6 +367,11 @@ export declare class DialogRef<R = unknown, C = unknown> {
      * null when the dialog is opened using a `TemplateRef`.
      */
     readonly componentInstance: C | null;
+    /**
+     * `ComponentRef` of the component opened into the dialog. Will be
+     * null when the dialog is opened using a `TemplateRef`.
+     */
+    readonly componentRef: ComponentRef<C> | null;
     /** Instance of the container that is rendering out the dialog content. */
     readonly containerInstance: BasePortalOutlet & {
         _closeInteractionType?: FocusOrigin;

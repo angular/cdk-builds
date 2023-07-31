@@ -595,6 +595,7 @@ class Dialog {
         else {
             const injector = this._createInjector(config, dialogRef, dialogContainer, this._injector);
             const contentRef = dialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.viewContainerRef, injector, config.componentFactoryResolver));
+            dialogRef.componentRef = contentRef;
             dialogRef.componentInstance = contentRef.instance;
         }
     }
