@@ -6,7 +6,7 @@ import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, merge
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { FocusKeyManager } from '@angular/cdk/a11y';
+import { InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
@@ -515,6 +515,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         this._elementRef = inject(ElementRef);
         this._overlay = inject(Overlay);
         this._ngZone = inject(NgZone);
+        this._inputModalityDetector = inject(InputModalityDetector);
         this._directionality = inject(Directionality, { optional: true });
         /** The parent menu this trigger belongs to. */
         this._parentMenu = inject(CDK_MENU, { optional: true });
@@ -622,7 +623,13 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
     _subscribeToMouseEnter() {
         this._ngZone.runOutsideAngular(() => {
             fromEvent(this._elementRef.nativeElement, 'mouseenter')
-                .pipe(filter(() => !this.menuStack.isEmpty() && !this.isOpen()), takeUntil(this.destroyed))
+                .pipe(filter(() => {
+                return (
+                // Skip fake `mouseenter` events dispatched by touch devices.
+                this._inputModalityDetector.mostRecentModality !== 'touch' &&
+                    !this.menuStack.isEmpty() &&
+                    !this.isOpen());
+            }), takeUntil(this.destroyed))
                 .subscribe(() => {
                 // Closes any sibling menu items and opens the menu associated with this trigger.
                 const toggleMenus = () => this._ngZone.run(() => {
@@ -805,6 +812,7 @@ class CdkMenuItem {
         this._dir = inject(Directionality, { optional: true });
         this._elementRef = inject(ElementRef);
         this._ngZone = inject(NgZone);
+        this._inputModalityDetector = inject(InputModalityDetector);
         /** The menu aim service used by this menu. */
         this._menuAim = inject(MENU_AIM, { optional: true });
         /** The stack of menus this menu belongs to. */
@@ -977,7 +985,13 @@ class CdkMenuItem {
         if (!this._isStandaloneItem()) {
             const closeOpenSiblings = () => this._ngZone.run(() => this._menuStack.closeSubMenuOf(this._parentMenu));
             this._ngZone.runOutsideAngular(() => fromEvent(this._elementRef.nativeElement, 'mouseenter')
-                .pipe(filter(() => !this._menuStack.isEmpty() && !this.hasMenu), takeUntil(this.destroyed))
+                .pipe(filter(() => {
+                return (
+                // Skip fake `mouseenter` events dispatched by touch devices.
+                this._inputModalityDetector.mostRecentModality !== 'touch' &&
+                    !this._menuStack.isEmpty() &&
+                    !this.hasMenu);
+            }), takeUntil(this.destroyed))
                 .subscribe(() => {
                 if (this._menuAim) {
                     this._menuAim.toggle(closeOpenSiblings);

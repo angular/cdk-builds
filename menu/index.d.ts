@@ -240,6 +240,7 @@ export declare class CdkMenuItem implements FocusableOption, FocusableElement, T
     protected readonly _dir: Directionality | null;
     readonly _elementRef: ElementRef<HTMLElement>;
     protected _ngZone: NgZone;
+    private readonly _inputModalityDetector;
     /** The menu aim service used by this menu. */
     private readonly _menuAim;
     /** The stack of menus this menu belongs to. */
@@ -414,6 +415,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private readonly _elementRef;
     private readonly _overlay;
     private readonly _ngZone;
+    private readonly _inputModalityDetector;
     private readonly _directionality;
     /** The parent menu this trigger belongs to. */
     private readonly _parentMenu;
