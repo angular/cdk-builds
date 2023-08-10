@@ -61,8 +61,13 @@ export declare class CdkDialogContainer<C extends DialogConfig = DialogConfig> e
      * after the dialog is closed.
      */
     _closeInteractionType: FocusOrigin | null;
-    /** ID of the element that should be considered as the dialog's label. */
-    _ariaLabelledBy: string | null;
+    /**
+     * Queue of the IDs of the dialog's label element, based on their definition order. The first
+     * ID will be used as the `aria-labelledby` value. We use a queue here to handle the case
+     * where there are two or more titles in the DOM at a time and the first one is destroyed while
+     * the rest are present.
+     */
+    _ariaLabelledByQueue: string[];
     constructor(_elementRef: ElementRef, _focusTrapFactory: FocusTrapFactory, _document: any, _config: C, _interactivityChecker: InteractivityChecker, _ngZone: NgZone, _overlayRef: OverlayRef, _focusMonitor?: FocusMonitor | undefined);
     protected _contentAttached(): void;
     /**
