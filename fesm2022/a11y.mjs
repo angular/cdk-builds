@@ -669,7 +669,7 @@ class IsFocusableConfig {
 // Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
 // supported.
 /**
- * Utility for checking the interactivity of an element, such as whether is is focusable or
+ * Utility for checking the interactivity of an element, such as whether it is focusable or
  * tabbable.
  */
 class InteractivityChecker {
