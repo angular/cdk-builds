@@ -840,7 +840,7 @@ export declare interface InputModalityDetectorOptions {
 }
 
 /**
- * Utility for checking the interactivity of an element, such as whether is is focusable or
+ * Utility for checking the interactivity of an element, such as whether it is focusable or
  * tabbable.
  */
 export declare class InteractivityChecker {
