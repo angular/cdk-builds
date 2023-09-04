@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
@@ -515,6 +515,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         this._elementRef = inject(ElementRef);
         this._overlay = inject(Overlay);
         this._ngZone = inject(NgZone);
+        this._changeDetectorRef = inject(ChangeDetectorRef);
         this._inputModalityDetector = inject(InputModalityDetector);
         this._directionality = inject(Directionality, { optional: true });
         /** The parent menu this trigger belongs to. */
@@ -538,6 +539,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
             this.opened.next();
             this.overlayRef = this.overlayRef || this._overlay.create(this._getOverlayConfig());
             this.overlayRef.attach(this.getMenuContentPortal());
+            this._changeDetectorRef.markForCheck();
             this._subscribeToOutsideClicks();
         }
     }
@@ -546,6 +548,7 @@ class CdkMenuTrigger extends CdkMenuTriggerBase {
         if (this.isOpen()) {
             this.closed.next();
             this.overlayRef.detach();
+            this._changeDetectorRef.markForCheck();
         }
         this._closeSiblingTriggers();
     }

@@ -415,6 +415,7 @@ export declare class CdkMenuTrigger extends CdkMenuTriggerBase implements OnDest
     private readonly _elementRef;
     private readonly _overlay;
     private readonly _ngZone;
+    private readonly _changeDetectorRef;
     private readonly _inputModalityDetector;
     private readonly _directionality;
     /** The parent menu this trigger belongs to. */
