@@ -1,10 +1,10 @@
 import * as i0 from '@angular/core';
-import { Injectable, Inject, InjectionToken, Directive, Optional, SkipSelf, Input, EventEmitter, Self, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
+import { Injectable, Inject, InjectionToken, booleanAttribute, Directive, Optional, SkipSelf, Input, EventEmitter, Self, ContentChildren, ContentChild, Output, NgModule } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import * as i1 from '@angular/cdk/scrolling';
 import { CdkScrollableModule } from '@angular/cdk/scrolling';
 import { _getEventTarget, normalizePassiveListenerOptions, _getShadowRoot } from '@angular/cdk/platform';
-import { coerceBooleanProperty, coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
+import { coerceElement, coerceNumberProperty, coerceArray } from '@angular/cdk/coercion';
 import { isFakeTouchstartFromScreenReader, isFakeMousedownFromScreenReader } from '@angular/cdk/a11y';
 import { Subject, Subscription, interval, animationFrameScheduler, Observable, merge } from 'rxjs';
 import { takeUntil, map, take, startWith, tap, switchMap } from 'rxjs/operators';
@@ -308,11 +308,10 @@ class DragRef {
         return this._disabled || !!(this._dropContainer && this._dropContainer.disabled);
     }
     set disabled(value) {
-        const newValue = coerceBooleanProperty(value);
-        if (newValue !== this._disabled) {
-            this._disabled = newValue;
+        if (value !== this._disabled) {
+            this._disabled = value;
             this._toggleNativeDragInteractions();
-            this._handles.forEach(handle => toggleNativeDragInteractions(handle, newValue));
+            this._handles.forEach(handle => toggleNativeDragInteractions(handle, value));
         }
     }
     constructor(element, _config, _document, _ngZone, _viewportRuler, _dragDropRegistry) {
@@ -2671,7 +2670,7 @@ class CdkDragHandle {
         return this._disabled;
     }
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        this._disabled = value;
         this._stateChanges.next(this);
     }
     constructor(element, parentDrag) {
@@ -2688,7 +2687,7 @@ class CdkDragHandle {
         this._stateChanges.complete();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDragHandle, deps: [{ token: i0.ElementRef }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled"] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDragHandle, isStandalone: true, selector: "[cdkDragHandle]", inputs: { disabled: ["cdkDragHandleDisabled", "disabled", booleanAttribute] }, host: { classAttribute: "cdk-drag-handle" }, providers: [{ provide: CDK_DRAG_HANDLE, useExisting: CdkDragHandle }], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDragHandle, decorators: [{
             type: Directive,
@@ -2709,7 +2708,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                     type: SkipSelf
                 }] }]; }, propDecorators: { disabled: [{
                 type: Input,
-                args: ['cdkDragHandleDisabled']
+                args: [{ alias: 'cdkDragHandleDisabled', transform: booleanAttribute }]
             }] } });
 
 /**
@@ -2751,19 +2750,13 @@ const CDK_DRAG_PREVIEW = new InjectionToken('CdkDragPreview');
  * of a CdkDrag when it is being dragged.
  */
 class CdkDragPreview {
-    /** Whether the preview should preserve the same size as the item that is being dragged. */
-    get matchSize() {
-        return this._matchSize;
-    }
-    set matchSize(value) {
-        this._matchSize = coerceBooleanProperty(value);
-    }
     constructor(templateRef) {
         this.templateRef = templateRef;
-        this._matchSize = false;
+        /** Whether the preview should preserve the same size as the item that is being dragged. */
+        this.matchSize = false;
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDragPreview, deps: [{ token: i0.TemplateRef }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: "matchSize" }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDragPreview, isStandalone: true, selector: "ng-template[cdkDragPreview]", inputs: { data: "data", matchSize: ["matchSize", "matchSize", booleanAttribute] }, providers: [{ provide: CDK_DRAG_PREVIEW, useExisting: CdkDragPreview }], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDragPreview, decorators: [{
             type: Directive,
@@ -2775,7 +2768,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
         }], ctorParameters: function () { return [{ type: i0.TemplateRef }]; }, propDecorators: { data: [{
                 type: Input
             }], matchSize: [{
-                type: Input
+                type: Input,
+                args: [{ transform: booleanAttribute }]
             }] } });
 
 /**
@@ -2799,7 +2793,7 @@ class CdkDrag {
         return this._disabled || (this.dropContainer && this.dropContainer.disabled);
     }
     set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        this._disabled = value;
         this._dragRef.disabled = this._disabled;
     }
     constructor(
@@ -3145,7 +3139,7 @@ class CdkDrag {
         });
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDrag, deps: [{ token: i0.ElementRef }, { token: CDK_DROP_LIST, optional: true, skipSelf: true }, { token: DOCUMENT }, { token: i0.NgZone }, { token: i0.ViewContainerRef }, { token: CDK_DRAG_CONFIG, optional: true }, { token: i1$1.Directionality, optional: true }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: CDK_DRAG_HANDLE, optional: true, self: true }, { token: CDK_DRAG_PARENT, optional: true, skipSelf: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled"], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], queries: [{ propertyName: "_previewTemplate", first: true, predicate: CDK_DRAG_PREVIEW, descendants: true }, { propertyName: "_placeholderTemplate", first: true, predicate: CDK_DRAG_PLACEHOLDER, descendants: true }, { propertyName: "_handles", predicate: CDK_DRAG_HANDLE, descendants: true }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDrag, isStandalone: true, selector: "[cdkDrag]", inputs: { data: ["cdkDragData", "data"], lockAxis: ["cdkDragLockAxis", "lockAxis"], rootElementSelector: ["cdkDragRootElement", "rootElementSelector"], boundaryElement: ["cdkDragBoundary", "boundaryElement"], dragStartDelay: ["cdkDragStartDelay", "dragStartDelay"], freeDragPosition: ["cdkDragFreeDragPosition", "freeDragPosition"], disabled: ["cdkDragDisabled", "disabled", booleanAttribute], constrainPosition: ["cdkDragConstrainPosition", "constrainPosition"], previewClass: ["cdkDragPreviewClass", "previewClass"], previewContainer: ["cdkDragPreviewContainer", "previewContainer"] }, outputs: { started: "cdkDragStarted", released: "cdkDragReleased", ended: "cdkDragEnded", entered: "cdkDragEntered", exited: "cdkDragExited", dropped: "cdkDragDropped", moved: "cdkDragMoved" }, host: { properties: { "class.cdk-drag-disabled": "disabled", "class.cdk-drag-dragging": "_dragRef.isDragging()" }, classAttribute: "cdk-drag" }, providers: [{ provide: CDK_DRAG_PARENT, useExisting: CdkDrag }], queries: [{ propertyName: "_previewTemplate", first: true, predicate: CDK_DRAG_PREVIEW, descendants: true }, { propertyName: "_placeholderTemplate", first: true, predicate: CDK_DRAG_PLACEHOLDER, descendants: true }, { propertyName: "_handles", predicate: CDK_DRAG_HANDLE, descendants: true }], exportAs: ["cdkDrag"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDrag, decorators: [{
             type: Directive,
@@ -3220,7 +3214,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkDragFreeDragPosition']
             }], disabled: [{
                 type: Input,
-                args: ['cdkDragDisabled']
+                args: [{ alias: 'cdkDragDisabled', transform: booleanAttribute }]
             }], constrainPosition: [{
                 type: Input,
                 args: ['cdkDragConstrainPosition']
@@ -3269,20 +3263,14 @@ class CdkDropListGroup {
     constructor() {
         /** Drop lists registered inside the group. */
         this._items = new Set();
-        this._disabled = false;
-    }
-    /** Whether starting a dragging sequence from inside this group is disabled. */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
+        /** Whether starting a dragging sequence from inside this group is disabled. */
+        this.disabled = false;
     }
     ngOnDestroy() {
         this._items.clear();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDropListGroup, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled"] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDropListGroup, isStandalone: true, selector: "[cdkDropListGroup]", inputs: { disabled: ["cdkDropListGroupDisabled", "disabled", booleanAttribute] }, providers: [{ provide: CDK_DROP_LIST_GROUP, useExisting: CdkDropListGroup }], exportAs: ["cdkDropListGroup"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDropListGroup, decorators: [{
             type: Directive,
@@ -3294,7 +3282,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }]
         }], propDecorators: { disabled: [{
                 type: Input,
-                args: ['cdkDropListGroupDisabled']
+                args: [{ alias: 'cdkDropListGroupDisabled', transform: booleanAttribute }]
             }] } });
 
 /** Counter used to generate unique ids for drop zones. */
@@ -3312,7 +3300,7 @@ class CdkDropList {
         // a single point of failure and to avoid having to use setters for everything. `disabled` is
         // a special case, because it can prevent the `beforeStarted` event from firing, which can lock
         // the user in a disabled state, so we also need to sync it as it's being set.
-        this._dropListRef.disabled = this._disabled = coerceBooleanProperty(value);
+        this._dropListRef.disabled = this._disabled = value;
     }
     constructor(
     /** Element that the drop list is attached to. */
@@ -3461,8 +3449,8 @@ class CdkDropList {
             }
             ref.disabled = this.disabled;
             ref.lockAxis = this.lockAxis;
-            ref.sortingDisabled = coerceBooleanProperty(this.sortingDisabled);
-            ref.autoScrollDisabled = coerceBooleanProperty(this.autoScrollDisabled);
+            ref.sortingDisabled = this.sortingDisabled;
+            ref.autoScrollDisabled = this.autoScrollDisabled;
             ref.autoScrollStep = coerceNumberProperty(this.autoScrollStep, 2);
             ref
                 .connectedTo(siblings.filter(drop => drop && drop !== this).map(list => list._dropListRef))
@@ -3531,7 +3519,7 @@ class CdkDropList {
         this._dropListRef.withItems(this.getSortedItems().map(item => item._dragRef));
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkDropList, deps: [{ token: i0.ElementRef }, { token: DragDrop }, { token: i0.ChangeDetectorRef }, { token: i1.ScrollDispatcher }, { token: i1$1.Directionality, optional: true }, { token: CDK_DROP_LIST_GROUP, optional: true, skipSelf: true }, { token: CDK_DRAG_CONFIG, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled"], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled"], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled"], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkDropList, isStandalone: true, selector: "[cdkDropList], cdk-drop-list", inputs: { connectedTo: ["cdkDropListConnectedTo", "connectedTo"], data: ["cdkDropListData", "data"], orientation: ["cdkDropListOrientation", "orientation"], id: "id", lockAxis: ["cdkDropListLockAxis", "lockAxis"], disabled: ["cdkDropListDisabled", "disabled", booleanAttribute], sortingDisabled: ["cdkDropListSortingDisabled", "sortingDisabled", booleanAttribute], enterPredicate: ["cdkDropListEnterPredicate", "enterPredicate"], sortPredicate: ["cdkDropListSortPredicate", "sortPredicate"], autoScrollDisabled: ["cdkDropListAutoScrollDisabled", "autoScrollDisabled", booleanAttribute], autoScrollStep: ["cdkDropListAutoScrollStep", "autoScrollStep"] }, outputs: { dropped: "cdkDropListDropped", entered: "cdkDropListEntered", exited: "cdkDropListExited", sorted: "cdkDropListSorted" }, host: { properties: { "attr.id": "id", "class.cdk-drop-list-disabled": "disabled", "class.cdk-drop-list-dragging": "_dropListRef.isDragging()", "class.cdk-drop-list-receiving": "_dropListRef.isReceiving()" }, classAttribute: "cdk-drop-list" }, providers: [
             // Prevent child drop lists from picking up the same group as their parent.
             { provide: CDK_DROP_LIST_GROUP, useValue: undefined },
             { provide: CDK_DROP_LIST, useExisting: CdkDropList },
@@ -3586,10 +3574,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkDropListLockAxis']
             }], disabled: [{
                 type: Input,
-                args: ['cdkDropListDisabled']
+                args: [{ alias: 'cdkDropListDisabled', transform: booleanAttribute }]
             }], sortingDisabled: [{
                 type: Input,
-                args: ['cdkDropListSortingDisabled']
+                args: [{ alias: 'cdkDropListSortingDisabled', transform: booleanAttribute }]
             }], enterPredicate: [{
                 type: Input,
                 args: ['cdkDropListEnterPredicate']
@@ -3598,7 +3586,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkDropListSortPredicate']
             }], autoScrollDisabled: [{
                 type: Input,
-                args: ['cdkDropListAutoScrollDisabled']
+                args: [{ alias: 'cdkDropListAutoScrollDisabled', transform: booleanAttribute }]
             }], autoScrollStep: [{
                 type: Input,
                 args: ['cdkDropListAutoScrollStep']

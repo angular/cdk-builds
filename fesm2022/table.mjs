@@ -1,5 +1,4 @@
 import * as i1 from '@angular/cdk/bidi';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { _VIEW_REPEATER_STRATEGY, _RecycleViewRepeaterStrategy, isDataSource, _DisposeViewRepeaterStrategy } from '@angular/cdk/collections';
 export { DataSource } from '@angular/cdk/collections';
 import * as i2 from '@angular/cdk/platform';
@@ -7,9 +6,10 @@ import * as i3 from '@angular/cdk/scrolling';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { InjectionToken, Directive, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ViewChild, ContentChildren, NgModule } from '@angular/core';
+import { InjectionToken, Directive, booleanAttribute, Inject, Optional, Input, ContentChild, Injectable, Component, ChangeDetectionStrategy, ViewEncapsulation, EmbeddedViewRef, EventEmitter, NgZone, Attribute, SkipSelf, Output, ViewChild, ContentChildren, NgModule } from '@angular/core';
 import { Subject, from, BehaviorSubject, isObservable, of } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 /**
  * Mixin to provide a directive with a function that checks if the sticky input has been
@@ -125,10 +125,11 @@ class CdkColumnDef extends _CdkColumnDefBase {
     get stickyEnd() {
         return this._stickyEnd;
     }
-    set stickyEnd(v) {
-        const prevValue = this._stickyEnd;
-        this._stickyEnd = coerceBooleanProperty(v);
-        this._hasStickyChanged = prevValue !== this._stickyEnd;
+    set stickyEnd(value) {
+        if (value !== this._stickyEnd) {
+            this._stickyEnd = value;
+            this._hasStickyChanged = true;
+        }
     }
     constructor(_table) {
         super();
@@ -161,7 +162,7 @@ class CdkColumnDef extends _CdkColumnDefBase {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkColumnDef, deps: [{ token: CDK_TABLE, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkColumnDef, selector: "[cdkColumnDef]", inputs: { sticky: "sticky", name: ["cdkColumnDef", "name"], stickyEnd: "stickyEnd" }, providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }], queries: [{ propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true }, { propertyName: "footerCell", first: true, predicate: CdkFooterCellDef, descendants: true }], usesInheritance: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkColumnDef, selector: "[cdkColumnDef]", inputs: { sticky: "sticky", name: ["cdkColumnDef", "name"], stickyEnd: ["stickyEnd", "stickyEnd", booleanAttribute] }, providers: [{ provide: 'MAT_SORT_HEADER_COLUMN_DEF', useExisting: CdkColumnDef }], queries: [{ propertyName: "cell", first: true, predicate: CdkCellDef, descendants: true }, { propertyName: "headerCell", first: true, predicate: CdkHeaderCellDef, descendants: true }, { propertyName: "footerCell", first: true, predicate: CdkFooterCellDef, descendants: true }], usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkColumnDef, decorators: [{
             type: Directive,
@@ -180,7 +181,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkColumnDef']
             }], stickyEnd: [{
                 type: Input,
-                args: ['stickyEnd']
+                args: [{ transform: booleanAttribute }]
             }], cell: [{
                 type: ContentChild,
                 args: [CdkCellDef]
@@ -1153,8 +1154,8 @@ class CdkTable {
     get multiTemplateDataRows() {
         return this._multiTemplateDataRows;
     }
-    set multiTemplateDataRows(v) {
-        this._multiTemplateDataRows = coerceBooleanProperty(v);
+    set multiTemplateDataRows(value) {
+        this._multiTemplateDataRows = value;
         // In Ivy if this value is set via a static attribute (e.g. <table multiTemplateDataRows>),
         // this setter will be invoked before the row outlet has been defined hence the null check.
         if (this._rowOutlet && this._rowOutlet.viewContainer.length) {
@@ -1169,8 +1170,8 @@ class CdkTable {
     get fixedLayout() {
         return this._fixedLayout;
     }
-    set fixedLayout(v) {
-        this._fixedLayout = coerceBooleanProperty(v);
+    set fixedLayout(value) {
+        this._fixedLayout = value;
         // Toggling `fixedLayout` may change column widths. Sticky column styles should be recalculated.
         this._forceRecalculateCellWidths = true;
         this._stickyColumnStylesNeedReset = true;
@@ -1940,7 +1941,7 @@ class CdkTable {
         this._changeDetectorRef.markForCheck();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTable, deps: [{ token: i0.IterableDiffers }, { token: i0.ChangeDetectorRef }, { token: i0.ElementRef }, { token: 'role', attribute: true }, { token: i1.Directionality, optional: true }, { token: DOCUMENT }, { token: i2.Platform }, { token: _VIEW_REPEATER_STRATEGY }, { token: _COALESCED_STYLE_SCHEDULER }, { token: i3.ViewportRuler }, { token: STICKY_POSITIONING_LISTENER, optional: true, skipSelf: true }, { token: i0.NgZone, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.1", type: CdkTable, selector: "cdk-table, table[cdk-table]", inputs: { trackBy: "trackBy", dataSource: "dataSource", multiTemplateDataRows: "multiTemplateDataRows", fixedLayout: "fixedLayout" }, outputs: { contentChanged: "contentChanged" }, host: { attributes: { "ngSkipHydration": "" }, properties: { "class.cdk-table-fixed-layout": "fixedLayout" }, classAttribute: "cdk-table" }, providers: [
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.1", type: CdkTable, selector: "cdk-table, table[cdk-table]", inputs: { trackBy: "trackBy", dataSource: "dataSource", multiTemplateDataRows: ["multiTemplateDataRows", "multiTemplateDataRows", booleanAttribute], fixedLayout: ["fixedLayout", "fixedLayout", booleanAttribute] }, outputs: { contentChanged: "contentChanged" }, host: { attributes: { "ngSkipHydration": "" }, properties: { "class.cdk-table-fixed-layout": "fixedLayout" }, classAttribute: "cdk-table" }, providers: [
             { provide: CDK_TABLE, useExisting: CdkTable },
             { provide: _VIEW_REPEATER_STRATEGY, useClass: _DisposeViewRepeaterStrategy },
             { provide: _COALESCED_STYLE_SCHEDULER, useClass: _CoalescedStyleScheduler },
@@ -1989,9 +1990,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
             }], dataSource: [{
                 type: Input
             }], multiTemplateDataRows: [{
-                type: Input
+                type: Input,
+                args: [{ transform: booleanAttribute }]
             }], fixedLayout: [{
-                type: Input
+                type: Input,
+                args: [{ transform: booleanAttribute }]
             }], contentChanged: [{
                 type: Output
             }], _rowOutlet: [{

@@ -1,5 +1,5 @@
 import * as i0 from '@angular/core';
-import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
+import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, booleanAttribute, Input, Output, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
 import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
@@ -7,7 +7,6 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { InputModalityDetector, FocusKeyManager } from '@angular/cdk/a11y';
-import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { Directionality } from '@angular/cdk/bidi';
 import { _getEventTarget } from '@angular/cdk/platform';
 
@@ -800,13 +799,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
  * behavior when clicked.
  */
 class CdkMenuItem {
-    /**  Whether the CdkMenuItem is disabled - defaults to false */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-    }
     /** Whether the menu item opens a menu. */
     get hasMenu() {
         return this._menuTrigger?.menuTemplateRef != null;
@@ -824,7 +816,8 @@ class CdkMenuItem {
         this._parentMenu = inject(CDK_MENU, { optional: true });
         /** Reference to the CdkMenuItemTrigger directive if one is added to the same element */
         this._menuTrigger = inject(CdkMenuTrigger, { optional: true, self: true });
-        this._disabled = false;
+        /**  Whether the CdkMenuItem is disabled - defaults to false */
+        this.disabled = false;
         /**
          * If this MenuItem is a regular MenuItem, outputs when it is triggered by a keyboard or mouse
          * event.
@@ -1021,7 +1014,7 @@ class CdkMenuItem {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItem, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled"], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItem, isStandalone: true, selector: "[cdkMenuItem]", inputs: { disabled: ["cdkMenuItemDisabled", "disabled", booleanAttribute], typeaheadLabel: ["cdkMenuitemTypeaheadLabel", "typeaheadLabel"] }, outputs: { triggered: "cdkMenuItemTriggered" }, host: { attributes: { "role": "menuitem" }, listeners: { "blur": "_resetTabIndex()", "focus": "_setTabIndex()", "click": "trigger()", "keydown": "_onKeydown($event)" }, properties: { "tabindex": "_tabindex", "attr.aria-disabled": "disabled || null" }, classAttribute: "cdk-menu-item" }, exportAs: ["cdkMenuItem"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItem, decorators: [{
             type: Directive,
@@ -1042,7 +1035,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }]
         }], ctorParameters: function () { return []; }, propDecorators: { disabled: [{
                 type: Input,
-                args: ['cdkMenuItemDisabled']
+                args: [{ alias: 'cdkMenuItemDisabled', transform: booleanAttribute }]
             }], typeaheadLabel: [{
                 type: Input,
                 args: ['cdkMenuitemTypeaheadLabel']
@@ -1505,19 +1498,13 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
 class CdkMenuItemSelectable extends CdkMenuItem {
     constructor() {
         super(...arguments);
-        this._checked = false;
+        /** Whether the element is checked */
+        this.checked = false;
         /** Whether the item should close the menu if triggered by the spacebar. */
         this.closeOnSpacebarTrigger = false;
     }
-    /** Whether the element is checked */
-    get checked() {
-        return this._checked;
-    }
-    set checked(value) {
-        this._checked = coerceBooleanProperty(value);
-    }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItemSelectable, deps: null, target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItemSelectable, inputs: { checked: ["cdkMenuItemChecked", "checked"] }, host: { properties: { "attr.aria-checked": "!!checked", "attr.aria-disabled": "disabled || null" } }, usesInheritance: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkMenuItemSelectable, inputs: { checked: ["cdkMenuItemChecked", "checked", booleanAttribute] }, host: { properties: { "attr.aria-checked": "!!checked", "attr.aria-disabled": "disabled || null" } }, usesInheritance: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkMenuItemSelectable, decorators: [{
             type: Directive,
@@ -1529,7 +1516,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }]
         }], propDecorators: { checked: [{
                 type: Input,
-                args: ['cdkMenuItemChecked']
+                args: [{ alias: 'cdkMenuItemChecked', transform: booleanAttribute }]
             }] } });
 
 /** Counter used to set a unique id and name for a selectable item */
@@ -1663,13 +1650,6 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
  * It is aware of nested context menus and will trigger only the lowest level non-disabled context menu.
  */
 class CdkContextMenuTrigger extends CdkMenuTriggerBase {
-    /** Whether the context menu is disabled. */
-    get disabled() {
-        return this._disabled;
-    }
-    set disabled(value) {
-        this._disabled = coerceBooleanProperty(value);
-    }
     constructor() {
         super();
         /** The CDK overlay service. */
@@ -1678,7 +1658,8 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         this._directionality = inject(Directionality, { optional: true });
         /** The app's context menu tracking registry */
         this._contextMenuTracker = inject(ContextMenuTracker);
-        this._disabled = false;
+        /** Whether the context menu is disabled. */
+        this.disabled = false;
         this._setMenuStackCloseListener();
     }
     /**
@@ -1801,7 +1782,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkContextMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkContextMenuTrigger, isStandalone: true, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], menuData: ["cdkContextMenuTriggerData", "menuData"], disabled: ["cdkContextMenuDisabled", "disabled"] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkContextMenuTrigger, isStandalone: true, selector: "[cdkContextMenuTriggerFor]", inputs: { menuTemplateRef: ["cdkContextMenuTriggerFor", "menuTemplateRef"], menuPosition: ["cdkContextMenuPosition", "menuPosition"], menuData: ["cdkContextMenuTriggerData", "menuData"], disabled: ["cdkContextMenuDisabled", "disabled", booleanAttribute] }, outputs: { opened: "cdkContextMenuOpened", closed: "cdkContextMenuClosed" }, host: { listeners: { "contextmenu": "_openOnContextMenu($event)" }, properties: { "attr.data-cdk-menu-stack-id": "null" } }, providers: [
             { provide: MENU_TRIGGER, useExisting: CdkContextMenuTrigger },
             { provide: MENU_STACK, useClass: MenuStack },
         ], exportAs: ["cdkContextMenuTriggerFor"], usesInheritance: true, ngImport: i0 }); }
@@ -1829,7 +1810,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }]
         }], ctorParameters: function () { return []; }, propDecorators: { disabled: [{
                 type: Input,
-                args: ['cdkContextMenuDisabled']
+                args: [{ alias: 'cdkContextMenuDisabled', transform: booleanAttribute }]
             }] } });
 
 const MENU_DIRECTIVES = [

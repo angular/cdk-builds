@@ -1,14 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
-import { inject, APP_ID, Injectable, Inject, QueryList, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
+import { inject, APP_ID, Injectable, Inject, QueryList, booleanAttribute, Directive, Input, InjectionToken, Optional, EventEmitter, Output, NgModule } from '@angular/core';
 import * as i1 from '@angular/cdk/platform';
 import { _getFocusedElementPierceShadowDom, normalizePassiveListenerOptions, _getEventTarget, _getShadowRoot } from '@angular/cdk/platform';
 import { Subject, Subscription, BehaviorSubject, of } from 'rxjs';
 import { hasModifierKey, A, Z, ZERO, NINE, PAGE_DOWN, PAGE_UP, END, HOME, LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW, TAB, ALT, CONTROL, MAC_META, META, SHIFT } from '@angular/cdk/keycodes';
 import { tap, debounceTime, filter, map, take, skip, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { coerceBooleanProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/observers';
 import { ObserversModule } from '@angular/cdk/observers';
+import { coerceElement } from '@angular/cdk/coercion';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 /** IDs are delimited by an empty space, as per the spec. */
@@ -1191,17 +1191,7 @@ class CdkTrapFocus {
         return this.focusTrap.enabled;
     }
     set enabled(value) {
-        this.focusTrap.enabled = coerceBooleanProperty(value);
-    }
-    /**
-     * Whether the directive should automatically move focus into the trapped region upon
-     * initialization and return focus to the previous activeElement upon destruction.
-     */
-    get autoCapture() {
-        return this._autoCapture;
-    }
-    set autoCapture(value) {
-        this._autoCapture = coerceBooleanProperty(value);
+        this.focusTrap.enabled = value;
     }
     constructor(_elementRef, _focusTrapFactory, 
     /**
@@ -1249,7 +1239,7 @@ class CdkTrapFocus {
         this.focusTrap.focusInitialElementWhenReady();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTrapFocus, deps: [{ token: i0.ElementRef }, { token: FocusTrapFactory }, { token: DOCUMENT }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkTrapFocus, selector: "[cdkTrapFocus]", inputs: { enabled: ["cdkTrapFocus", "enabled"], autoCapture: ["cdkTrapFocusAutoCapture", "autoCapture"] }, exportAs: ["cdkTrapFocus"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkTrapFocus, selector: "[cdkTrapFocus]", inputs: { enabled: ["cdkTrapFocus", "enabled", booleanAttribute], autoCapture: ["cdkTrapFocusAutoCapture", "autoCapture", booleanAttribute] }, exportAs: ["cdkTrapFocus"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTrapFocus, decorators: [{
             type: Directive,
@@ -1262,10 +1252,10 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                     args: [DOCUMENT]
                 }] }]; }, propDecorators: { enabled: [{
                 type: Input,
-                args: ['cdkTrapFocus']
+                args: [{ alias: 'cdkTrapFocus', transform: booleanAttribute }]
             }], autoCapture: [{
                 type: Input,
-                args: ['cdkTrapFocusAutoCapture']
+                args: [{ alias: 'cdkTrapFocusAutoCapture', transform: booleanAttribute }]
             }] } });
 
 /**

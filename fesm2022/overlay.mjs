@@ -5,7 +5,7 @@ import * as i6 from '@angular/common';
 import { DOCUMENT } from '@angular/common';
 import * as i0 from '@angular/core';
 import { Injectable, Inject, Optional, ElementRef, ApplicationRef, ANIMATION_MODULE_TYPE, InjectionToken, Directive, EventEmitter, booleanAttribute, Input, Output, NgModule } from '@angular/core';
-import { coerceCssPixelValue, coerceArray, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceCssPixelValue, coerceArray } from '@angular/cdk/coercion';
 import * as i1$1 from '@angular/cdk/platform';
 import { supportsScrollBehavior, _getEventTarget, _isTestEnvironment } from '@angular/cdk/platform';
 import { filter, take, takeUntil, takeWhile } from 'rxjs/operators';
@@ -2541,41 +2541,6 @@ class CdkConnectedOverlay {
             this._updatePositionStrategy(this._position);
         }
     }
-    /** Whether or not the overlay should attach a backdrop. */
-    get hasBackdrop() {
-        return this._hasBackdrop;
-    }
-    set hasBackdrop(value) {
-        this._hasBackdrop = coerceBooleanProperty(value);
-    }
-    /** Whether or not the overlay should be locked when scrolling. */
-    get lockPosition() {
-        return this._lockPosition;
-    }
-    set lockPosition(value) {
-        this._lockPosition = coerceBooleanProperty(value);
-    }
-    /** Whether the overlay's width and height can be constrained to fit within the viewport. */
-    get flexibleDimensions() {
-        return this._flexibleDimensions;
-    }
-    set flexibleDimensions(value) {
-        this._flexibleDimensions = coerceBooleanProperty(value);
-    }
-    /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
-    get growAfterOpen() {
-        return this._growAfterOpen;
-    }
-    set growAfterOpen(value) {
-        this._growAfterOpen = coerceBooleanProperty(value);
-    }
-    /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
-    get push() {
-        return this._push;
-    }
-    set push(value) {
-        this._push = coerceBooleanProperty(value);
-    }
     /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
     get disposeOnNavigation() {
         return this._disposeOnNavigation;
@@ -2587,11 +2552,6 @@ class CdkConnectedOverlay {
     constructor(_overlay, templateRef, viewContainerRef, scrollStrategyFactory, _dir) {
         this._overlay = _overlay;
         this._dir = _dir;
-        this._hasBackdrop = false;
-        this._lockPosition = false;
-        this._growAfterOpen = false;
-        this._flexibleDimensions = false;
-        this._push = false;
         this._backdropSubscription = Subscription.EMPTY;
         this._attachSubscription = Subscription.EMPTY;
         this._detachSubscription = Subscription.EMPTY;
@@ -2603,6 +2563,16 @@ class CdkConnectedOverlay {
         this.open = false;
         /** Whether the overlay can be closed by user interaction. */
         this.disableClose = false;
+        /** Whether or not the overlay should attach a backdrop. */
+        this.hasBackdrop = false;
+        /** Whether or not the overlay should be locked when scrolling. */
+        this.lockPosition = false;
+        /** Whether the overlay's width and height can be constrained to fit within the viewport. */
+        this.flexibleDimensions = false;
+        /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
+        this.growAfterOpen = false;
+        /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
+        this.push = false;
         /** Event emitted when the backdrop is clicked. */
         this.backdropClick = new EventEmitter();
         /** Event emitted when the position has changed. */
@@ -2783,7 +2753,7 @@ class CdkConnectedOverlay {
         this._positionSubscription.unsubscribe();
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkConnectedOverlay, deps: [{ token: Overlay }, { token: i0.TemplateRef }, { token: i0.ViewContainerRef }, { token: CDK_CONNECTED_OVERLAY_SCROLL_STRATEGY }, { token: i5.Directionality, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop"], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition"], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions"], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen"], push: ["cdkConnectedOverlayPush", "push"], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkConnectedOverlay, isStandalone: true, selector: "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", inputs: { origin: ["cdkConnectedOverlayOrigin", "origin"], positions: ["cdkConnectedOverlayPositions", "positions"], positionStrategy: ["cdkConnectedOverlayPositionStrategy", "positionStrategy"], offsetX: ["cdkConnectedOverlayOffsetX", "offsetX"], offsetY: ["cdkConnectedOverlayOffsetY", "offsetY"], width: ["cdkConnectedOverlayWidth", "width"], height: ["cdkConnectedOverlayHeight", "height"], minWidth: ["cdkConnectedOverlayMinWidth", "minWidth"], minHeight: ["cdkConnectedOverlayMinHeight", "minHeight"], backdropClass: ["cdkConnectedOverlayBackdropClass", "backdropClass"], panelClass: ["cdkConnectedOverlayPanelClass", "panelClass"], viewportMargin: ["cdkConnectedOverlayViewportMargin", "viewportMargin"], scrollStrategy: ["cdkConnectedOverlayScrollStrategy", "scrollStrategy"], open: ["cdkConnectedOverlayOpen", "open"], disableClose: ["cdkConnectedOverlayDisableClose", "disableClose"], transformOriginSelector: ["cdkConnectedOverlayTransformOriginOn", "transformOriginSelector"], hasBackdrop: ["cdkConnectedOverlayHasBackdrop", "hasBackdrop", booleanAttribute], lockPosition: ["cdkConnectedOverlayLockPosition", "lockPosition", booleanAttribute], flexibleDimensions: ["cdkConnectedOverlayFlexibleDimensions", "flexibleDimensions", booleanAttribute], growAfterOpen: ["cdkConnectedOverlayGrowAfterOpen", "growAfterOpen", booleanAttribute], push: ["cdkConnectedOverlayPush", "push", booleanAttribute], disposeOnNavigation: ["cdkConnectedOverlayDisposeOnNavigation", "disposeOnNavigation", booleanAttribute] }, outputs: { backdropClick: "backdropClick", positionChange: "positionChange", attach: "attach", detach: "detach", overlayKeydown: "overlayKeydown", overlayOutsideClick: "overlayOutsideClick" }, exportAs: ["cdkConnectedOverlay"], usesOnChanges: true, ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkConnectedOverlay, decorators: [{
             type: Directive,
@@ -2847,19 +2817,19 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkConnectedOverlayTransformOriginOn']
             }], hasBackdrop: [{
                 type: Input,
-                args: ['cdkConnectedOverlayHasBackdrop']
+                args: [{ alias: 'cdkConnectedOverlayHasBackdrop', transform: booleanAttribute }]
             }], lockPosition: [{
                 type: Input,
-                args: ['cdkConnectedOverlayLockPosition']
+                args: [{ alias: 'cdkConnectedOverlayLockPosition', transform: booleanAttribute }]
             }], flexibleDimensions: [{
                 type: Input,
-                args: ['cdkConnectedOverlayFlexibleDimensions']
+                args: [{ alias: 'cdkConnectedOverlayFlexibleDimensions', transform: booleanAttribute }]
             }], growAfterOpen: [{
                 type: Input,
-                args: ['cdkConnectedOverlayGrowAfterOpen']
+                args: [{ alias: 'cdkConnectedOverlayGrowAfterOpen', transform: booleanAttribute }]
             }], push: [{
                 type: Input,
-                args: ['cdkConnectedOverlayPush']
+                args: [{ alias: 'cdkConnectedOverlayPush', transform: booleanAttribute }]
             }], disposeOnNavigation: [{
                 type: Input,
                 args: [{ alias: 'cdkConnectedOverlayDisposeOnNavigation', transform: booleanAttribute }]

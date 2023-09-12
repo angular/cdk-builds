@@ -1,6 +1,6 @@
-import { coerceNumberProperty, coerceElement, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { coerceNumberProperty, coerceElement } from '@angular/cdk/coercion';
 import * as i0 from '@angular/core';
-import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
+import { InjectionToken, forwardRef, Directive, Input, Injectable, Optional, Inject, inject, booleanAttribute, Component, ViewEncapsulation, ChangeDetectionStrategy, Output, ViewChild, SkipSelf, ElementRef, NgModule } from '@angular/core';
 import { Subject, of, Observable, fromEvent, animationFrameScheduler, asapScheduler, Subscription, isObservable } from 'rxjs';
 import { distinctUntilChanged, auditTime, filter, takeUntil, startWith, pairwise, switchMap, shareReplay } from 'rxjs/operators';
 import * as i1 from '@angular/cdk/platform';
@@ -708,16 +708,6 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             this._calculateSpacerSize();
         }
     }
-    /**
-     * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
-     * will be removed.
-     */
-    get appendOnly() {
-        return this._appendOnly;
-    }
-    set appendOnly(value) {
-        this._appendOnly = coerceBooleanProperty(value);
-    }
     constructor(elementRef, _changeDetectorRef, ngZone, _scrollStrategy, dir, scrollDispatcher, viewportRuler, scrollable) {
         super(elementRef, scrollDispatcher, ngZone, dir);
         this.elementRef = elementRef;
@@ -730,7 +720,11 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
         /** Emits when the rendered range changes. */
         this._renderedRangeSubject = new Subject();
         this._orientation = 'vertical';
-        this._appendOnly = false;
+        /**
+         * Whether rendered items should persist in the DOM after scrolling out of view. By default, items
+         * will be removed.
+         */
+        this.appendOnly = false;
         // Note: we don't use the typical EventEmitter here because we need to subscribe to the scroll
         // strategy lazily (i.e. only if the user is actually listening to the events). We do this because
         // depending on how the strategy calculates the scrolled index, it may come at a cost to
@@ -1056,7 +1050,7 @@ class CdkVirtualScrollViewport extends CdkVirtualScrollable {
             this.orientation === 'horizontal' ? `${this._totalContentSize}px` : '';
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkVirtualScrollViewport, deps: [{ token: i0.ElementRef }, { token: i0.ChangeDetectorRef }, { token: i0.NgZone }, { token: VIRTUAL_SCROLL_STRATEGY, optional: true }, { token: i2.Directionality, optional: true }, { token: ScrollDispatcher }, { token: ViewportRuler }, { token: VIRTUAL_SCROLLABLE, optional: true }], target: i0.ɵɵFactoryTarget.Component }); }
-    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.1", type: CdkVirtualScrollViewport, isStandalone: true, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: "appendOnly" }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
+    static { this.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "16.1.1", type: CdkVirtualScrollViewport, isStandalone: true, selector: "cdk-virtual-scroll-viewport", inputs: { orientation: "orientation", appendOnly: ["appendOnly", "appendOnly", booleanAttribute] }, outputs: { scrolledIndexChange: "scrolledIndexChange" }, host: { properties: { "class.cdk-virtual-scroll-orientation-horizontal": "orientation === \"horizontal\"", "class.cdk-virtual-scroll-orientation-vertical": "orientation !== \"horizontal\"" }, classAttribute: "cdk-virtual-scroll-viewport" }, providers: [
             {
                 provide: CdkScrollable,
                 useFactory: (virtualScrollable, viewport) => virtualScrollable || viewport,
@@ -1092,7 +1086,8 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 }] }]; }, propDecorators: { orientation: [{
                 type: Input
             }], appendOnly: [{
-                type: Input
+                type: Input,
+                args: [{ transform: booleanAttribute }]
             }], scrolledIndexChange: [{
                 type: Output
             }], _contentWrapper: [{

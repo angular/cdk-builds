@@ -1,8 +1,8 @@
 import * as i1 from '@angular/cdk/platform';
 import { normalizePassiveListenerOptions } from '@angular/cdk/platform';
 import * as i0 from '@angular/core';
-import { Injectable, EventEmitter, Directive, Output, Optional, Inject, Input, NgModule } from '@angular/core';
-import { coerceElement, coerceNumberProperty, coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Injectable, EventEmitter, Directive, Output, booleanAttribute, Optional, Inject, Input, NgModule } from '@angular/core';
+import { coerceElement, coerceNumberProperty } from '@angular/cdk/coercion';
 import { EMPTY, Subject, fromEvent } from 'rxjs';
 import { auditTime, takeUntil } from 'rxjs/operators';
 import { DOCUMENT } from '@angular/common';
@@ -130,7 +130,6 @@ class CdkTextareaAutosize {
         return this._enabled;
     }
     set enabled(value) {
-        value = coerceBooleanProperty(value);
         // Only act if the actual value changed. This specifically helps to not run
         // resizeToFitContent too early (i.e. before ngAfterViewInit)
         if (this._enabled !== value) {
@@ -368,7 +367,7 @@ class CdkTextareaAutosize {
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTextareaAutosize, deps: [{ token: i0.ElementRef }, { token: i1.Platform }, { token: i0.NgZone }, { token: DOCUMENT, optional: true }], target: i0.ɵɵFactoryTarget.Directive }); }
-    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkTextareaAutosize, selector: "textarea[cdkTextareaAutosize]", inputs: { minRows: ["cdkAutosizeMinRows", "minRows"], maxRows: ["cdkAutosizeMaxRows", "maxRows"], enabled: ["cdkTextareaAutosize", "enabled"], placeholder: "placeholder" }, host: { attributes: { "rows": "1" }, listeners: { "input": "_noopInputHandler()" }, classAttribute: "cdk-textarea-autosize" }, exportAs: ["cdkTextareaAutosize"], ngImport: i0 }); }
+    static { this.ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "16.1.1", type: CdkTextareaAutosize, selector: "textarea[cdkTextareaAutosize]", inputs: { minRows: ["cdkAutosizeMinRows", "minRows"], maxRows: ["cdkAutosizeMaxRows", "maxRows"], enabled: ["cdkTextareaAutosize", "enabled", booleanAttribute], placeholder: "placeholder" }, host: { attributes: { "rows": "1" }, listeners: { "input": "_noopInputHandler()" }, classAttribute: "cdk-textarea-autosize" }, exportAs: ["cdkTextareaAutosize"], ngImport: i0 }); }
 }
 i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkTextareaAutosize, decorators: [{
             type: Directive,
@@ -396,7 +395,7 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "16.1.1", ngImpor
                 args: ['cdkAutosizeMaxRows']
             }], enabled: [{
                 type: Input,
-                args: ['cdkTextareaAutosize']
+                args: [{ alias: 'cdkTextareaAutosize', transform: booleanAttribute }]
             }], placeholder: [{
                 type: Input
             }] } });
