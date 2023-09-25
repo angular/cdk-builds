@@ -65,13 +65,13 @@ export declare class CdkContextMenuTrigger extends CdkMenuTriggerBase implements
     /**
      * Subscribe to the overlays outside pointer events stream and handle closing out the stack if a
      * click occurs outside the menus.
-     * @param ignoreFirstAuxClick Whether to ignore the first auxclick event outside the menu.
+     * @param userEvent User-generated event that opened the menu.
      */
     private _subscribeToOutsideClicks;
     /**
      * Open the attached menu at the specified location.
+     * @param userEvent User-generated event that opened the menu
      * @param coordinates where to open the context menu
-     * @param ignoreFirstOutsideAuxClick Whether to ignore the first auxclick outside the menu after opening.
      */
     private _open;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkContextMenuTrigger, never>;
