@@ -2,7 +2,7 @@ import * as i0 from '@angular/core';
 import { Directive, InjectionToken, Optional, SkipSelf, Inject, Injectable, inject, Injector, ViewContainerRef, EventEmitter, NgZone, ElementRef, ChangeDetectorRef, Input, Output, ContentChildren, NgModule } from '@angular/core';
 import { Overlay, OverlayConfig, STANDARD_DROPDOWN_BELOW_POSITIONS, STANDARD_DROPDOWN_ADJACENT_POSITIONS, OverlayModule } from '@angular/cdk/overlay';
 import { ENTER, SPACE, UP_ARROW, hasModifierKey, DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, TAB, ESCAPE } from '@angular/cdk/keycodes';
-import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skip } from 'rxjs/operators';
+import { startWith, debounceTime, distinctUntilChanged, filter, takeUntil, mergeMap, mapTo, mergeAll, switchMap, skipWhile, skip } from 'rxjs/operators';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
 import { Subject, merge, fromEvent, defer, partition } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -1686,7 +1686,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
      * @param coordinates where to open the context menu
      */
     open(coordinates) {
-        this._open(coordinates, false);
+        this._open(null, coordinates);
     }
     /** Close the currently opened context menu. */
     close() {
@@ -1705,7 +1705,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
             // resulting in multiple stacked context menus being displayed.
             event.stopPropagation();
             this._contextMenuTracker.update(this);
-            this._open({ x: event.clientX, y: event.clientY }, true);
+            this._open(event, { x: event.clientX, y: event.clientY });
             // A context menu can be triggered via a mouse right click or a keyboard shortcut.
             if (event.button === 2) {
                 this.childMenu?.focusFirstItem('mouse');
@@ -1753,16 +1753,24 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     /**
      * Subscribe to the overlays outside pointer events stream and handle closing out the stack if a
      * click occurs outside the menus.
-     * @param ignoreFirstAuxClick Whether to ignore the first auxclick event outside the menu.
+     * @param userEvent User-generated event that opened the menu.
      */
-    _subscribeToOutsideClicks(ignoreFirstAuxClick) {
+    _subscribeToOutsideClicks(userEvent) {
         if (this.overlayRef) {
             let outsideClicks = this.overlayRef.outsidePointerEvents();
-            // If the menu was triggered by the `contextmenu` event, skip the first `auxclick` event
-            // because it fires when the mouse is released on the same click that opened the menu.
-            if (ignoreFirstAuxClick) {
+            if (userEvent) {
                 const [auxClicks, nonAuxClicks] = partition(outsideClicks, ({ type }) => type === 'auxclick');
-                outsideClicks = merge(nonAuxClicks, auxClicks.pipe(skip(1)));
+                outsideClicks = merge(
+                // Using a mouse, the `contextmenu` event can fire either when pressing the right button
+                // or left button + control. Most browsers won't dispatch a `click` event right after
+                // a `contextmenu` event triggered by left button + control, but Safari will (see #27832).
+                // This closes the menu immediately. To work around it, we check that both the triggering
+                // event and the current outside click event both had the control key pressed, and that
+                // that this is the first outside click event.
+                nonAuxClicks.pipe(skipWhile((event, index) => userEvent.ctrlKey && index === 0 && event.ctrlKey)), 
+                // If the menu was triggered by the `contextmenu` event, skip the first `auxclick` event
+                // because it fires when the mouse is released on the same click that opened the menu.
+                auxClicks.pipe(skip(1)));
             }
             outsideClicks.pipe(takeUntil(this.stopOutsideClicksListener)).subscribe(event => {
                 if (!this.isElementInsideMenuStack(_getEventTarget(event))) {
@@ -1773,10 +1781,10 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
     }
     /**
      * Open the attached menu at the specified location.
+     * @param userEvent User-generated event that opened the menu
      * @param coordinates where to open the context menu
-     * @param ignoreFirstOutsideAuxClick Whether to ignore the first auxclick outside the menu after opening.
      */
-    _open(coordinates, ignoreFirstOutsideAuxClick) {
+    _open(userEvent, coordinates) {
         if (this.disabled) {
             return;
         }
@@ -1797,7 +1805,7 @@ class CdkContextMenuTrigger extends CdkMenuTriggerBase {
                 this.overlayRef = this._overlay.create(this._getOverlayConfig(coordinates));
             }
             this.overlayRef.attach(this.getMenuContentPortal());
-            this._subscribeToOutsideClicks(ignoreFirstOutsideAuxClick);
+            this._subscribeToOutsideClicks(userEvent);
         }
     }
     static { this.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "16.1.1", ngImport: i0, type: CdkContextMenuTrigger, deps: [], target: i0.ɵɵFactoryTarget.Directive }); }
