@@ -1,4 +1,5 @@
 import { AfterViewInit } from '@angular/core';
+import { BooleanInput } from '@angular/cdk/coercion';
 import { ChangeDetectorRef } from '@angular/core';
 import { Direction } from '@angular/cdk/bidi';
 import { Directionality } from '@angular/cdk/bidi';
@@ -120,7 +121,7 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     freeDragPosition: Point;
     /** Whether starting to drag this element is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     /**
      * Function that can be used to customize the logic of how the position of the drag item
@@ -207,7 +208,6 @@ export declare class CdkDrag<T = any> implements AfterViewInit, OnChanges, OnDes
     private _setupHandlesListener;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDrag<any>, [null, { optional: true; skipSelf: true; }, null, null, null, { optional: true; }, { optional: true; }, null, null, { optional: true; self: true; }, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDrag<any>, "[cdkDrag]", ["cdkDrag"], { "data": { "alias": "cdkDragData"; "required": false; }; "lockAxis": { "alias": "cdkDragLockAxis"; "required": false; }; "rootElementSelector": { "alias": "cdkDragRootElement"; "required": false; }; "boundaryElement": { "alias": "cdkDragBoundary"; "required": false; }; "dragStartDelay": { "alias": "cdkDragStartDelay"; "required": false; }; "freeDragPosition": { "alias": "cdkDragFreeDragPosition"; "required": false; }; "disabled": { "alias": "cdkDragDisabled"; "required": false; }; "constrainPosition": { "alias": "cdkDragConstrainPosition"; "required": false; }; "previewClass": { "alias": "cdkDragPreviewClass"; "required": false; }; "previewContainer": { "alias": "cdkDragPreviewContainer"; "required": false; }; }, { "started": "cdkDragStarted"; "released": "cdkDragReleased"; "ended": "cdkDragEnded"; "entered": "cdkDragEntered"; "exited": "cdkDragExited"; "dropped": "cdkDragDropped"; "moved": "cdkDragMoved"; }, ["_previewTemplate", "_placeholderTemplate", "_handles"], never, true, never>;
-    static ngAcceptInputType_disabled: unknown;
 }
 
 /** Event emitted when the user drops a draggable item inside a drop container. */
@@ -286,13 +286,12 @@ export declare class CdkDragHandle implements OnDestroy {
     readonly _stateChanges: Subject<CdkDragHandle>;
     /** Whether starting to drag through this handle is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     constructor(element: ElementRef<HTMLElement>, parentDrag?: any);
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragHandle, [null, { optional: true; skipSelf: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragHandle, "[cdkDragHandle]", never, { "disabled": { "alias": "cdkDragHandleDisabled"; "required": false; }; }, {}, never, never, true, never>;
-    static ngAcceptInputType_disabled: unknown;
 }
 
 /** Event emitted as the user is dragging a draggable item. */
@@ -345,11 +344,12 @@ export declare class CdkDragPreview<T = any> {
     /** Context data to be added to the preview template instance. */
     data: T;
     /** Whether the preview should preserve the same size as the item that is being dragged. */
-    matchSize: boolean;
+    get matchSize(): boolean;
+    set matchSize(value: BooleanInput);
+    private _matchSize;
     constructor(templateRef: TemplateRef<T>);
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDragPreview<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDragPreview<any>, "ng-template[cdkDragPreview]", never, { "data": { "alias": "data"; "required": false; }; "matchSize": { "alias": "matchSize"; "required": false; }; }, {}, never, never, true, never>;
-    static ngAcceptInputType_matchSize: unknown;
 }
 
 /** Event emitted when the user releases an item, before any animations have started. */
@@ -415,10 +415,10 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     lockAxis: DragAxis;
     /** Whether starting a dragging sequence from this container is disabled. */
     get disabled(): boolean;
-    set disabled(value: boolean);
+    set disabled(value: BooleanInput);
     private _disabled;
     /** Whether sorting within this drop list is disabled. */
-    sortingDisabled: boolean;
+    sortingDisabled: BooleanInput;
     /**
      * Function that is used to determine whether an item
      * is allowed to be moved into a drop container.
@@ -427,7 +427,7 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     /** Functions that is used to determine whether an item can be sorted into a particular index. */
     sortPredicate: (index: number, drag: CdkDrag, drop: CdkDropList) => boolean;
     /** Whether to auto-scroll the view when the user moves their pointer close to the edges. */
-    autoScrollDisabled: boolean;
+    autoScrollDisabled: BooleanInput;
     /** Number of pixels to scroll for each frame when auto-scrolling an element. */
     autoScrollStep: NumberInput;
     /** Emits when the user drops an item inside the container. */
@@ -471,9 +471,6 @@ export declare class CdkDropList<T = any> implements OnDestroy {
     private _syncItemsWithRef;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropList<any>, [null, null, null, null, { optional: true; }, { optional: true; skipSelf: true; }, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropList<any>, "[cdkDropList], cdk-drop-list", ["cdkDropList"], { "connectedTo": { "alias": "cdkDropListConnectedTo"; "required": false; }; "data": { "alias": "cdkDropListData"; "required": false; }; "orientation": { "alias": "cdkDropListOrientation"; "required": false; }; "id": { "alias": "id"; "required": false; }; "lockAxis": { "alias": "cdkDropListLockAxis"; "required": false; }; "disabled": { "alias": "cdkDropListDisabled"; "required": false; }; "sortingDisabled": { "alias": "cdkDropListSortingDisabled"; "required": false; }; "enterPredicate": { "alias": "cdkDropListEnterPredicate"; "required": false; }; "sortPredicate": { "alias": "cdkDropListSortPredicate"; "required": false; }; "autoScrollDisabled": { "alias": "cdkDropListAutoScrollDisabled"; "required": false; }; "autoScrollStep": { "alias": "cdkDropListAutoScrollStep"; "required": false; }; }, { "dropped": "cdkDropListDropped"; "entered": "cdkDropListEntered"; "exited": "cdkDropListExited"; "sorted": "cdkDropListSorted"; }, never, never, true, never>;
-    static ngAcceptInputType_disabled: unknown;
-    static ngAcceptInputType_sortingDisabled: unknown;
-    static ngAcceptInputType_autoScrollDisabled: unknown;
 }
 
 /**
@@ -486,11 +483,12 @@ export declare class CdkDropListGroup<T> implements OnDestroy {
     /** Drop lists registered inside the group. */
     readonly _items: Set<T>;
     /** Whether starting a dragging sequence from inside this group is disabled. */
-    disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: BooleanInput);
+    private _disabled;
     ngOnDestroy(): void;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkDropListGroup<any>, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkDropListGroup<any>, "[cdkDropListGroup]", ["cdkDropListGroup"], { "disabled": { "alias": "cdkDropListGroupDisabled"; "required": false; }; }, {}, never, never, true, never>;
-    static ngAcceptInputType_disabled: unknown;
 }
 
 /**
