@@ -1,3 +1,4 @@
+import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { ComponentFactoryResolver } from '@angular/core';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -92,6 +93,11 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _dir;
     private _overlayRef;
     private _templatePortal;
+    private _hasBackdrop;
+    private _lockPosition;
+    private _growAfterOpen;
+    private _flexibleDimensions;
+    private _push;
     private _backdropSubscription;
     private _attachSubscription;
     private _detachSubscription;
@@ -100,7 +106,6 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     private _offsetY;
     private _position;
     private _scrollStrategyFactory;
-    private _disposeOnNavigation;
     /** Origin for the connected overlay. */
     origin: CdkOverlayOrigin | FlexibleConnectedPositionStrategyOrigin;
     /** Registered connected position pairs. */
@@ -139,18 +144,20 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** CSS selector which to set the transform origin. */
     transformOriginSelector: string;
     /** Whether or not the overlay should attach a backdrop. */
-    hasBackdrop: boolean;
+    get hasBackdrop(): boolean;
+    set hasBackdrop(value: BooleanInput);
     /** Whether or not the overlay should be locked when scrolling. */
-    lockPosition: boolean;
+    get lockPosition(): boolean;
+    set lockPosition(value: BooleanInput);
     /** Whether the overlay's width and height can be constrained to fit within the viewport. */
-    flexibleDimensions: boolean;
+    get flexibleDimensions(): boolean;
+    set flexibleDimensions(value: BooleanInput);
     /** Whether the overlay can grow after the initial open when flexible positioning is turned on. */
-    growAfterOpen: boolean;
+    get growAfterOpen(): boolean;
+    set growAfterOpen(value: BooleanInput);
     /** Whether the overlay can be pushed on-screen if none of the provided positions fit. */
-    push: boolean;
-    /** Whether the overlay should be disposed of when the user goes backwards/forwards in history. */
-    get disposeOnNavigation(): boolean;
-    set disposeOnNavigation(value: boolean);
+    get push(): boolean;
+    set push(value: BooleanInput);
     /** Event emitted when the backdrop is clicked. */
     readonly backdropClick: EventEmitter<MouseEvent>;
     /** Event emitted when the position has changed. */
@@ -184,13 +191,7 @@ export declare class CdkConnectedOverlay implements OnDestroy, OnChanges {
     /** Detaches the overlay and unsubscribes to backdrop clicks if backdrop exists */
     private _detachOverlay;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkConnectedOverlay, [null, null, null, null, { optional: true; }]>;
-    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; "disposeOnNavigation": { "alias": "cdkConnectedOverlayDisposeOnNavigation"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
-    static ngAcceptInputType_hasBackdrop: unknown;
-    static ngAcceptInputType_lockPosition: unknown;
-    static ngAcceptInputType_flexibleDimensions: unknown;
-    static ngAcceptInputType_growAfterOpen: unknown;
-    static ngAcceptInputType_push: unknown;
-    static ngAcceptInputType_disposeOnNavigation: unknown;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<CdkConnectedOverlay, "[cdk-connected-overlay], [connected-overlay], [cdkConnectedOverlay]", ["cdkConnectedOverlay"], { "origin": { "alias": "cdkConnectedOverlayOrigin"; "required": false; }; "positions": { "alias": "cdkConnectedOverlayPositions"; "required": false; }; "positionStrategy": { "alias": "cdkConnectedOverlayPositionStrategy"; "required": false; }; "offsetX": { "alias": "cdkConnectedOverlayOffsetX"; "required": false; }; "offsetY": { "alias": "cdkConnectedOverlayOffsetY"; "required": false; }; "width": { "alias": "cdkConnectedOverlayWidth"; "required": false; }; "height": { "alias": "cdkConnectedOverlayHeight"; "required": false; }; "minWidth": { "alias": "cdkConnectedOverlayMinWidth"; "required": false; }; "minHeight": { "alias": "cdkConnectedOverlayMinHeight"; "required": false; }; "backdropClass": { "alias": "cdkConnectedOverlayBackdropClass"; "required": false; }; "panelClass": { "alias": "cdkConnectedOverlayPanelClass"; "required": false; }; "viewportMargin": { "alias": "cdkConnectedOverlayViewportMargin"; "required": false; }; "scrollStrategy": { "alias": "cdkConnectedOverlayScrollStrategy"; "required": false; }; "open": { "alias": "cdkConnectedOverlayOpen"; "required": false; }; "disableClose": { "alias": "cdkConnectedOverlayDisableClose"; "required": false; }; "transformOriginSelector": { "alias": "cdkConnectedOverlayTransformOriginOn"; "required": false; }; "hasBackdrop": { "alias": "cdkConnectedOverlayHasBackdrop"; "required": false; }; "lockPosition": { "alias": "cdkConnectedOverlayLockPosition"; "required": false; }; "flexibleDimensions": { "alias": "cdkConnectedOverlayFlexibleDimensions"; "required": false; }; "growAfterOpen": { "alias": "cdkConnectedOverlayGrowAfterOpen"; "required": false; }; "push": { "alias": "cdkConnectedOverlayPush"; "required": false; }; }, { "backdropClick": "backdropClick"; "positionChange": "positionChange"; "attach": "attach"; "detach": "detach"; "overlayKeydown": "overlayKeydown"; "overlayOutsideClick": "overlayOutsideClick"; }, never, never, true, never>;
 }
 
 /**
