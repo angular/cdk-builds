@@ -1,5 +1,4 @@
 import { AfterViewInit } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { DoCheck } from '@angular/core';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
@@ -96,7 +95,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     set maxRows(value: NumberInput);
     /** Whether autosizing is enabled or not */
     get enabled(): boolean;
-    set enabled(value: BooleanInput);
+    set enabled(value: boolean);
     get placeholder(): string;
     set placeholder(value: string);
     /** Cached height of a textarea with a single row. */
@@ -152,6 +151,7 @@ export declare class CdkTextareaAutosize implements AfterViewInit, DoCheck, OnDe
     private _scrollToCaretPosition;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkTextareaAutosize, [null, null, null, { optional: true; }]>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkTextareaAutosize, "textarea[cdkTextareaAutosize]", ["cdkTextareaAutosize"], { "minRows": { "alias": "cdkAutosizeMinRows"; "required": false; }; "maxRows": { "alias": "cdkAutosizeMaxRows"; "required": false; }; "enabled": { "alias": "cdkTextareaAutosize"; "required": false; }; "placeholder": { "alias": "placeholder"; "required": false; }; }, {}, never, never, false, never>;
+    static ngAcceptInputType_enabled: unknown;
 }
 
 declare namespace i1 {
