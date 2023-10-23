@@ -1,5 +1,4 @@
 import { AfterContentInit } from '@angular/core';
-import { BooleanInput } from '@angular/cdk/coercion';
 import { ElementRef } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 import * as i0 from '@angular/core';
@@ -23,7 +22,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
      * to disconnect the underlying MutationObserver until it is needed.
      */
     get disabled(): boolean;
-    set disabled(value: BooleanInput);
+    set disabled(value: boolean);
     private _disabled;
     /** Debounce interval for emitting the changes. */
     get debounce(): number;
@@ -37,6 +36,7 @@ export declare class CdkObserveContent implements AfterContentInit, OnDestroy {
     private _unsubscribe;
     static ɵfac: i0.ɵɵFactoryDeclaration<CdkObserveContent, never>;
     static ɵdir: i0.ɵɵDirectiveDeclaration<CdkObserveContent, "[cdkObserveContent]", ["cdkObserveContent"], { "disabled": { "alias": "cdkObserveContentDisabled"; "required": false; }; "debounce": { "alias": "debounce"; "required": false; }; }, { "event": "cdkObserveContent"; }, never, never, false, never>;
+    static ngAcceptInputType_disabled: unknown;
 }
 
 /** An injectable service that allows watching elements for changes to their content. */
