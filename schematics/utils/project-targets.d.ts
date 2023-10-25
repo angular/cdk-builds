@@ -6,9 +6,12 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import { JsonValue, workspaces } from '@angular-devkit/core';
+/** Object that maps a CLI target to its default builder name. */
+export declare const defaultTargetBuilders: {
+    build: string;
+    test: string;
+};
 /** Resolves the architect options for the build target of the given project. */
 export declare function getProjectTargetOptions(project: workspaces.ProjectDefinition, buildTarget: string): Record<string, JsonValue | undefined>;
-/** Gets all of the default CLI-provided build targets in a project. */
-export declare function getProjectBuildTargets(project: workspaces.ProjectDefinition): workspaces.TargetDefinition[];
-/** Gets all of the default CLI-provided testing targets in a project. */
-export declare function getProjectTestTargets(project: workspaces.ProjectDefinition): workspaces.TargetDefinition[];
+/** Gets all targets from the given project that match the specified builder name. */
+export declare function getTargetsByBuilderName(project: workspaces.ProjectDefinition, builderName: string): workspaces.TargetDefinition[];
