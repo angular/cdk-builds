@@ -7,7 +7,6 @@
     "outDir": "../../../dist/packages/cdk/schematics",
     "noEmitOnError": false,
     "strictNullChecks": true,
-    "noPropertyAccessFromIndexSignature": true,
     "useUnknownInCatchVariables": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
