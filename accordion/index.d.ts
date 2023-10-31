@@ -13,7 +13,7 @@ import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
  * as alternative token to the actual `CdkAccordion` class which could cause unnecessary
  * retention of the class and its directive metadata.
  */
-declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
+export declare const CDK_ACCORDION: InjectionToken<CdkAccordion>;
 
 /**
  * Directive whose purpose is to manage the expanded state of CdkAccordionItem children.

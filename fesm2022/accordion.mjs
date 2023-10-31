@@ -221,5 +221,5 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.0.0-rc.0", ng
  * Generated bundle index. Do not edit.
  */
 
-export { CdkAccordion, CdkAccordionItem, CdkAccordionModule };
+export { CDK_ACCORDION, CdkAccordion, CdkAccordionItem, CdkAccordionModule };
 //# sourceMappingURL=accordion.mjs.map
